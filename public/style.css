@@ -1,0 +1,155 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+.navbar {
+    background-color: #006666;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+}
+.navbar img {
+    height: 50px;
+    margin-right: 20px;
+}
+.navbar .title {
+    color: #ffcc00;
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: auto;
+}
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 16px;
+}
+.navbar .dropdown {
+    position: relative;
+    display: inline-block;
+}
+.navbar .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #006666;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+.navbar .dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+.navbar .dropdown:hover .dropdown-content {
+    display: block;
+}
+.navbar .login {
+    border: 2px solid white;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+.main-image {
+    width: 100vw; /* Lebar penuh layar */
+    height: 100vh; /* Tinggi penuh layar */
+    object-fit: cover; /* Menjaga proporsi gambar */
+}
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .navbar a {
+        margin: 5px 0;
+    }
+    .navbar .login {
+        margin-top: 10px;
+    }
+}
+
+/* Additional styles for the second part of the page */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.header h1 {
+    font-size: 2em;
+    margin: 0;
+}
+.header hr {
+    width: 50px;
+    border: 2px solid #00695c;
+    margin: 10px auto;
+}
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.main-news {
+    flex: 2;
+}
+.side-news {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.news-item {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+.news-item img {
+    width: 100%;
+    height: auto;
+}
+.news-content {
+    padding: 15px;
+}
+.news-content .date {
+    font-size: 0.8em;
+    color: #757575;
+    margin-bottom: 10px;
+}
+.news-content .title {
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.news-content .description {
+    font-size: 0.8em;
+    color: #333;
+}
+.news-content .read-more {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #00695c;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+.news-content .read-more:hover {
+    background-color: #004d40;
+}
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+    }
+}
