@@ -9,17 +9,43 @@
     <title>Direktorat Pemeringkatan</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet" />
+
     <link rel="stylesheet" href="{{ asset('style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
     @include('navbar')
-    <img alt="Image of Universitas Negeri Jakarta" class="main-image" height="1080"
-        src="https://maukuliah.ap-south-1.linodeobjects.com/gallery/001037/Gedung%203%20UNJ-thumbnail.jpg"
-        width="1920" />
-    <div class="content section-animation">
-        <h2 style="border-bottom: 2px solid #000; display: inline-block;">BERITA TERKINI</h2>
+
+
+
+    <div id="imageCarousel" class="carousel slide mb-2" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        </div>
+        
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://maukuliah.ap-south-1.linodeobjects.com/gallery/001037/Gedung%203%20UNJ-thumbnail.jpg" alt="Image of Universitas Negeri Jakarta">
+            </div>
+            <div class="carousel-item">
+                <img src="https://www.unj.ac.id/wp-content/uploads/2025/01/WhatsApp-Image-2025-01-16-at-11.47.23.jpeg" alt="Second Image">
+            </div>
+        </div>
+        
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
+
     <div class="news">
         <div class="news-item section-animation">
             <img alt="News Image 1" height="400"
