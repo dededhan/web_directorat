@@ -1,3 +1,5 @@
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <footer class="text-white footer-custom">
     <style>
         .footer-custom {
@@ -17,20 +19,22 @@
 
         .map-container {
             width: 100%;
-            height: 200px;
+            height: 100px;
             margin-top: 1rem;
         }
     </style>
 
-    <!-- Main Footer Content -->
-    <div class="container p-4">
-        <div class="row my-4">
-            <!-- Logo Section -->
-            <div class="col-lg-4 col-md-6 mb-4 mb-md-0 text-center">
+    <div class="p-4">
+        <div class="row my-5 mt-4">
+            <div class="container col-lg-4 col-md-12 text-center">
+                
                 <div class="d-flex flex-column align-items-center">
                     <div class="rounded-circle bg-white shadow d-flex align-items-center justify-content-center mb-4"
                         style="width: 150px; height: 150px;">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" height="70"
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" 
+                            height="120%"
+                            width="120%"
+
                             alt="UNJ Logo" />
                     </div>
                     <h4>Universitas Negeri Jakarta</h4>
@@ -47,8 +51,8 @@
 
 
             <!-- Contact Info Section -->
-            <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
-                <h5 class="text-uppercase mb-4">Address</h5>
+            <div class="col-lg-4 col-md-16 mb-5 mb-md-0 text-start">
+                <h5 class="text-uppercase mb-4 text-center">Address</h5>
 
                 <div class="contact-item">
                     <i class="fas fa-map-marker-alt"></i>
@@ -72,26 +76,25 @@
                     <p class="mb-0">Whatsapp</p>
                 </div>
 
-                <!-- Google Maps placeholder -->
-                <div class="map-container">
+                {{-- <div class="map-container">
                     <img src="/api/placeholder/400/200" alt="Location Map" class="img-fluid rounded" />
-                </div>
+                </div> --}}
             </div>
 
             <!-- Quick Links Section -->
-            <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
-                <h5 class="text-uppercase mb-4">Menu</h5>
-                <ul class="list-unstyled">
-                    <li class="mb-2">
+            <div class="col-lg-4 col-md-12 mb-4 mb-md-0">
+                <h5 class="text-uppercase mb-4 text-center">Menu</h5>
+                <ul class="list-unstyled text-center">
+                    <li class="mb-3 border-bottom pb-2">
                         <a href="#" class="text-white text-decoration-none hover:text-yellow-400">Fasilitas</a>
                     </li>
-                    <li class="mb-2">
+                    <li class="mb-3 border-bottom pb-2">
                         <a href="#" class="text-white text-decoration-none hover:text-yellow-400">Berita</a>
                     </li>
-                    <li class="mb-2">
+                    <li class="mb-3 border-bottom pb-2">
                         <a href="#" class="text-white text-decoration-none hover:text-yellow-400">Tentang Kami</a>
                     </li>
-                    <li class="mb-2">
+                    <li class="mb-3">
                         <a href="#" class="text-white text-decoration-none hover:text-yellow-400">Galeri</a>
                     </li>
                 </ul>
@@ -104,4 +107,5 @@
         © 2024 <a class="text-white text-decoration-none" href="#">Universitas Negeri Jakarta</a>.
         All rights reserved.
     </div>
+
 </footer>
