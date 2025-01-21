@@ -6,10 +6,14 @@
     <title>Direktorat Pemeringkatan</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ asset('style.css') }}">
 </head>
 <body>
-    <!-- Top Bar -->
+
+    @include('loginpopup')
+    
     <div class="top-bar" id="topBar">
         <div class="social-icons">
             <a href="https://facebook.com" target="_blank" aria-label="Facebook">
@@ -27,7 +31,7 @@
         </div>
     </div>
 
-    <!-- Navbar -->
+
     <div class="navbar" id="navbar">
         <img alt="Logo of Direktorat Pemeringkatan" height="50"
             src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" width="50" />
@@ -44,7 +48,7 @@
         <a href="#">Berita</a>
         <a href="#">Program</a>
         <a href="#">Galeri</a>
-        <a class="login" href="#">Masuk</a>
+        <a class="login" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a>
     </div>
 
     <script src="{{ asset('script.js') }}"></script>

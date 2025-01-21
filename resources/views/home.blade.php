@@ -17,8 +17,7 @@
 
 <body>
     @include('navbar')
-
-
+    @include('loginpopup')
 
     <div id="imageCarousel" class="carousel slide mb-2" data-bs-ride="carousel">
         <div class="carousel-indicators">

@@ -1,0 +1,32 @@
+.modal-content {
+    border-radius: 10px;
+    border: none;
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-radius: 10px 10px 0 0;
+}
+
+.modal-title {
+    font-weight: 500;
+}
+
+.input-group-text {
+    background-color: #f8f9fa;
+}
+
+.btn-primary {
+    padding: 10px;
+    font-weight: 500;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #004d40;
+}
+
+.button-enter{
+    color: #004d40;
+    
+}
