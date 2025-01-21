@@ -9,6 +9,11 @@ Route::get('/', function () {
 // Route::get('/', function () {
 //     return view('admin');
 // });
+// Route::get('/admin', function () {
+//     return response()->file(public_path('admin'));
+// });
+
+
 Route::get('/admin', function () {
-    return response()->file(public_path('admin'));
-});
+    return view('admin.admin');
+})->name('admin');

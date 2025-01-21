@@ -34,7 +34,7 @@
                         <label class="form-check-label" for="remember">Ingat Saya</label>
                     </div>
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn button-enter">Masuk</button>
+                        <a href="{{ route('admin') }}" class="btn">Masuk</a>
                     </div>
                 </form>
                 <div class="text-center mt-3">
