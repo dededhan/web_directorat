@@ -10,14 +10,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form action="admin.php" method="POST">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <div class="input-group">
                             <span class="input-group-text">
                                 <i class="fas fa-envelope"></i>
                             </span>
-                            <input type="email" class="form-control" id="email" placeholder="Masukkan email">
+                            <input type="email" class="form-control" id="email" placeholder="Masukkan email" name="email">
                         </div>
                     </div>
                     <div class="mb-3">
@@ -26,11 +26,11 @@
                             <span class="input-group-text">
                                 <i class="fas fa-lock"></i>
                             </span>
-                            <input type="password" class="form-control" id="password" placeholder="Masukkan kata sandi">
+                            <input type="password" class="form-control" id="password" placeholder="Masukkan kata sandi" name="password">
                         </div>
                     </div>
                     <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="remember">
+                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
                         <label class="form-check-label" for="remember">Ingat Saya</label>
                     </div>
                     <div class="d-grid gap-2">
