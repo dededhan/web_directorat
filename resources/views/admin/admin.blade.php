@@ -10,6 +10,14 @@
 	<link rel="stylesheet" href="admin.css">
 
 	<title>Dashboard Direktorat</title>
+
+	<!-- Chart.js -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+	<style>
+		/* Style untuk container chart */
+		
+	</style>
 </head>
 <body>
 	@include('admin.sidebaradmin')
@@ -18,7 +26,6 @@
 	<section id="content">
 		<!-- NAVBAR -->
 		@include('admin.navbaradmin')
-
 
 		<!-- MAIN -->
 		<main>
@@ -29,138 +36,87 @@
 						<li>
 							<a href="#">Dashboard</a>
 						</li>
-						<li><i class='bx bx-chevron-right' ></i></li>
+						<li><i class='bx bx-chevron-right'></i></li>
 						<li>
 							<a class="active" href="#">Home</a>
 						</li>
 					</ul>
 				</div>
 				<a href="#" class="btn-download">
-					<i class='bx bxs-cloud-download' ></i>
+					<i class='bx bxs-cloud-download'></i>
 					<span class="text">Download PDF</span>
 				</a>
 			</div>
 
+			<!-- Summary Boxes -->
 			<ul class="box-info">
 				<li>
-					<i class='bx bxs-calendar-check' ></i>
+					<i class='bx bxs-news'></i>
 					<span class="text">
-						<h3>1020</h3>
-						<p>New Order</p>
+						<h3>5</h3>
+						<p>New Articles</p>
 					</span>
 				</li>
 				<li>
-					<i class='bx bxs-group' ></i>
+					<i class='bx bxs-calendar'></i>
 					<span class="text">
-						<h3>2834</h3>
-						<p>Visitors</p>
+						<h3>3</h3>
+						<p>Upcoming Events</p>
 					</span>
 				</li>
 				<li>
-					<i class='bx bxs-dollar-circle' ></i>
+					<i class='bx bxs-bell'></i>
 					<span class="text">
-						<h3>$2543</h3>
-						<p>Total Sales</p>
+						<h3>12</h3>
+						<p>Notifications</p>
 					</span>
 				</li>
 			</ul>
 
-
-			<div class="table-data">
-				<div class="order">
-					<div class="head">
-						<h3>Recent Orders</h3>
-						<i class='bx bx-search' ></i>
-						<i class='bx bx-filter' ></i>
-					</div>
-					<table>
-						<thead>
-							<tr>
-								<th>User</th>
-								<th>Date Order</th>
-								<th>Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>
-									<img src="img/people.png">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status completed">Completed</span></td>
-							</tr>
-							<tr>
-								<td>
-									<img src="img/people.png">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status pending">Pending</span></td>
-							</tr>
-							<tr>
-								<td>
-									<img src="img/people.png">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status process">Process</span></td>
-							</tr>
-							<tr>
-								<td>
-									<img src="img/people.png">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status pending">Pending</span></td>
-							</tr>
-							<tr>
-								<td>
-									<img src="img/people.png">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status completed">Completed</span></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="todo">
-					<div class="head">
-						<h3>Todos</h3>
-						<i class='bx bx-plus' ></i>
-						<i class='bx bx-filter' ></i>
-					</div>
-					<ul class="todo-list">
-						<li class="completed">
-							<p>Todo List</p>
-							<i class='bx bx-dots-vertical-rounded' ></i>
-						</li>
-						<li class="completed">
-							<p>Todo List</p>
-							<i class='bx bx-dots-vertical-rounded' ></i>
-						</li>
-						<li class="not-completed">
-							<p>Todo List</p>
-							<i class='bx bx-dots-vertical-rounded' ></i>
-						</li>
-						<li class="completed">
-							<p>Todo List</p>
-							<i class='bx bx-dots-vertical-rounded' ></i>
-						</li>
-						<li class="not-completed">
-							<p>Todo List</p>
-							<i class='bx bx-dots-vertical-rounded' ></i>
-						</li>
-					</ul>
+			<!-- Content Section -->
+			<div class="content-data">
+				<div class="chart-container">
+					<canvas id="visitorChart"></canvas>
 				</div>
 			</div>
 		</main>
-		<!-- MAIN -->
 	</section>
-	<!-- CONTENT -->
-	
 
 	<script src="admin.js"></script>
+	<script>
+		// Data jumlah pengunjung per bulan
+		const labels = ["Januari", "Februari", "Maret", "April", "Mei", "Juni"];
+		const data = {
+			labels: labels,
+			datasets: [{
+				label: "Jumlah Pengunjung",
+				data: [120, 150, 180, 200, 250, 300], // Data pengunjung
+				backgroundColor: "rgba(75, 192, 192, 0.2)",
+				borderColor: "rgba(75, 192, 192, 1)",
+				borderWidth: 1
+			}]
+		};
+
+		// Konfigurasi chart
+		const config = {
+			type: "bar", // Jenis chart: bar, line, pie, dll.
+			data: data,
+			options: {
+				responsive: true,
+				maintainAspectRatio: false, // Mengatur rasio chart agar bisa menyesuaikan container
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			}
+		};
+
+		// Render chart
+		const visitorChart = new Chart(
+			document.getElementById("visitorChart"),
+			config
+		);
+	</script>
 </body>
 </html>

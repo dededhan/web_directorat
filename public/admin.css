@@ -589,4 +589,19 @@ body {
 	#content main .table-data .todo .todo-list {
 		min-width: 420px;
 	}
+	.chart-container {
+		width: 40%; /* Ukuran container di kiri */
+		margin: 100px 0; /* Margin atas dan bawah */
+		padding: 10px;
+		background-color: #f9f9f9; /* Warna latar belakang */
+		border: 1px solid #ddd; /* Border */
+		border-radius: 8px; /* Membuat sudut melengkung */
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow */
+		height: 500px;
+		float: left; /* Letakkan container di kiri */
+	}
+	/* Style untuk mengatur elemen lain di sebelah chart */
+	.content-right {
+		margin-left: 45%; /* Beri jarak dari chart */
+	}
 }
