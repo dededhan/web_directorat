@@ -1,32 +1,114 @@
-.modal-content {
-    border-radius: 10px;
-    border: none;
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    height: 100vh;
+    background-color: #f5f5f5;
+    justify-content: center;
+    align-items: center;
+    display: grid;
 }
 
-.modal-header {
-    background-color: #f8f9fa;
-    border-radius: 10px 10px 0 0;
+.modal-dialog {
+    max-width: 900px;
 }
 
-.modal-title {
-    font-weight: 500;
+.left-panel, .right-panel {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.input-group-text {
-    background-color: #f8f9fa;
+.left-panel {
+    width: 50%;
+    background-color: white;
+    text-align: center;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    border-right: 5px solid white;
+    clip-path: ellipse(100% 80% at left center);
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: flex-start; 
 }
 
-.btn-primary {
+.left-panel img {
+    width: 150px;
+    margin-top: 40px; 
+    margin-bottom: 20px; 
+}
+.left-panel h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 40px;
+    color: #176369;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.left-panel p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+.left-panel input[type="text"], .left-panel input[type="password"] {
+    width: 100%;
     padding: 10px;
-    font-weight: 500;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: rgba(0, 41, 102, 0.3); 
 }
 
-.form-control:focus {
-    box-shadow: none;
-    border-color: #004d40;
+.left-panel button {
+    width: 100%;
+    padding: 10px;
+    background-color: #176369;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.left-panel a {
+    color: #666;
+    text-decoration: none;
+    margin-top: 20px;
+    display: inline-block;
+}
+.right-panel {
+    width: 50%;
+    height: auto; 
+    background-color: #176369;
+    color: white;
+    text-align: center;
+    border-top-left-radius: 150px;  
+    border-bottom-left-radius: 150px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-.button-enter{
-    color: #004d40;
-    
+.right-panel h2 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+.right-panel p {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        flex-direction: column;
+    }
+    .left-panel, .right-panel {
+        width: 100%;
+    }
+    .left-panel {
+        border-top-left-radius: 0;
+        border-bottom-right-radius: 10px;
+        border-right: none;
+        clip-path: none;
+    }
 }

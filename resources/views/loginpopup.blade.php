@@ -1,46 +1,43 @@
-<!-- Login Modal -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNJ Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('style-login-popup.css') }}">
 
-<link rel="stylesheet" href="{{ asset('style-login-popup.css') }}">
+</head>
+<body>
+  
 
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="loginModalLabel">Masuk</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="admin.php" method="POST">
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="fas fa-envelope"></i>
-                            </span>
-                            <input type="email" class="form-control" id="email" placeholder="Masukkan email" name="email">
-                        </div>
+    <!-- Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content d-flex flex-row">
+                <div class="left-panel">
+                    <img src="https://spm.unj.ac.id/wp-content/uploads/2024/08/cropped-Logo-UNJ-PTNBH-RGB_Logo_Motto_Transparan.png" alt="UNJ Logo"/>
+                    <h1>Sign In</h1>
+                    <p>Welcome to the Admin Portal. Please login with your credentials to access the system.</p>
+                    <input type="text" placeholder="Username"/>
+                    <input type="password" placeholder="Password"/>
+                    <div class="recaptcha">
+                        <img src="https://placehold.co/300x80" alt="reCAPTCHA verification"/>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Kata Sandi</label>
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="fas fa-lock"></i>
-                            </span>
-                            <input type="password" class="form-control" id="password" placeholder="Masukkan kata sandi" name="password">
-                        </div>
-                    </div>
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                        <label class="form-check-label" for="remember">Ingat Saya</label>
-                    </div>
-                    <div class="d-grid gap-2">
-                        <a href="{{ route('admin') }}" class="btn">Masuk</a>
-                    </div>
-                </form>
-                <div class="text-center mt-3">
-                    <a href="#" class="text-decoration-none">Lupa kata sandi?</a>
+                    <button>SIGN IN</button>
+                    <a href="#">Forgot Your Password?</a>
+                </div>
+                <div class="right-panel">
+                    <h2>UNJ Dashboard</h2>
+                    <p>Admin Panel Login</p>
+                    <p>Hello, Admin!</p>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
