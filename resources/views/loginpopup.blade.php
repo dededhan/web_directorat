@@ -21,12 +21,15 @@
                     <img src="https://spm.unj.ac.id/wp-content/uploads/2024/08/cropped-Logo-UNJ-PTNBH-RGB_Logo_Motto_Transparan.png" alt="UNJ Logo"/>
                     <h1>Sign In</h1>
                     <p>Welcome to the Admin Portal. Please login with your credentials to access the system.</p>
-                    <input type="text" placeholder="Username"/>
-                    <input type="password" placeholder="Password"/>
-                    <div class="recaptcha">
-                        <img src="https://placehold.co/300x80" alt="reCAPTCHA verification"/>
-                    </div>
-                    <button>SIGN IN</button>
+                    <form method="POST" action="{{ route('login') }}">
+                        @csrf
+                        <input type="email" name="email" placeholder="Email" required/>
+                        <input type="password" name="password" placeholder="Password" required/>
+                        <div class="recaptcha">
+                            <img src="https://placehold.co/300x80" alt="reCAPTCHA verification"/>
+                        </div>
+                        <button type="submit">SIGN IN</button>
+                    </form>
                     <a href="#">Forgot Your Password?</a>
                 </div>
                 <div class="right-panel">
