@@ -21,19 +21,22 @@
 
     <div id="imageCarousel" class="carousel slide mb-2" data-bs-ride="carousel">
         <div class="carousel-indicators">
-            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
         </div>
-        
+
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="https://maukuliah.ap-south-1.linodeobjects.com/gallery/001037/Gedung%203%20UNJ-thumbnail.jpg" alt="Image of Universitas Negeri Jakarta">
+                <img src="https://maukuliah.ap-south-1.linodeobjects.com/gallery/001037/Gedung%203%20UNJ-thumbnail.jpg"
+                    alt="Image of Universitas Negeri Jakarta">
             </div>
             <div class="carousel-item">
-                <img src="https://www.unj.ac.id/wp-content/uploads/2025/01/WhatsApp-Image-2025-01-16-at-11.47.23.jpeg" alt="Second Image">
+                <img src="https://www.unj.ac.id/wp-content/uploads/2025/01/WhatsApp-Image-2025-01-16-at-11.47.23.jpeg"
+                    alt="Second Image">
             </div>
         </div>
-        
+
 
         <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -102,62 +105,59 @@
             </div>
         </div>
     </div>
-    </div>
-    <div class="card" style="max-width: 190%; background-color: #2C6D71;">
-        <div class="card-body">
-            <div class="container">
-                <div class="header">
-                    <h1>PENGUMUMAN</h1>
-                    <div class="underline"></div>
-                </div>
-                <div class="column">
-                    <div class="cards">
-                        <div class="card">
-                            <h2>Pengumuman Lelang</h2>
-                            <p>25-10-2024</p>
-                        </div>
-                        <div class="card">
-                            <h2>Pengumuman Lelang</h2>
-                            <p>25-10-2024</p>
-                        </div>
+    <div class="container-fluid">
+        <div class="card" style="max-width: 190%; background-color: #2C6D71;">
+            <div class="card-body">
+                <div class="container">
+                    <div class="header">
+                        <h1>PENGUMUMAN</h1>
+                        <div class="underline"></div>
                     </div>
-                    <div class="small-underline"></div>
+                    <div class="column">
+                        <div class="cards">
+                            <div class="card">
+                                <h2>Pengumuman Lelang</h2>
+                                <p>25-10-2024</p>
+                            </div>
+                            <div class="card">
+                                <h2>Pengumuman Lelang</h2>
+                                <p>25-10-2024</p>
+                            </div>
+                        </div>
+                        <div class="small-underline"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="program-container">
-        <div class="left-section">
-            <div class="header">
-                <img alt="Program Dan Layanan Icon" height="30"
-                    src="https://storage.googleapis.com/a1aa/image/bUjsvzHgLYKqIlWzBurjLPFj9iDpEZmkYvc5h0Vlz01eekGUA.jpg"
-                    width="30" />
-                <div class="title">Program Dan Layanan</div>
+    <div class="container-fluid">
+        <div class="program-container">
+            <div class="left-section">
+                <div class="header">
+                    <img alt="Program Dan Layanan Icon" height="30"
+                        src="https://storage.googleapis.com/a1aa/image/bUjsvzHgLYKqIlWzBurjLPFj9iDpEZmkYvc5h0Vlz01eekGUA.jpg"
+                        width="30" />
+                    <div class="title">Program Dan Layanan</div>
+                </div>
+                <div class="description">Program dan Layanan Universitas Negeri Jakarta</div>
+                <div class="link">Program dan layanan Lainnya</div>
             </div>
-            <div class="description">Program dan Layanan Universitas Negeri Jakarta</div>
-            <div class="link">Program dan layanan Lainnya</div>
-        </div>
-        <div class="program-card"></div>
-        <div class="program-card"></div>
-        <div class="program-card"></div>
-    </div>
-    <div class="card" style="max-width: 80%; margin: 20px auto; border-radius: 8px; overflow: hidden;">
-        <div class="header-section">Panduan Program</div>
-        <div class="data-container">
-            <div class="data-message">Data Belum Tersedia</div>
-            <button class="data-button">Lihat Panduan Lainnya</button>
+            <div class="program-card"></div>
+            <div class="program-card"></div>
+            <div class="program-card"></div>
         </div>
     </div>
 
-    @include('footerlp')
-    <!-- <footer class="footer">
-    <div class="footer-left">
-      <img alt="University Logo" height="50" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" width="50"/>
-      <p>Universitas Negeri Jakarta</p>
-      <p>Jl. Rawamangun Muka, RT.11/RW.14, Rawamangun, Pulo Gadung, East Jakarta City, Special Capital Region of Jakarta 13220</p>
-      <p>+123123123</p>
-      <p>info@yourmail.com</p>
-      <p>Whatsapp</p>
+
+    <div class="container-fluid">
+        <div class="card" style="max-width: 80%; margin: 20px auto; border-radius: 8px; overflow: hidden;">
+            <div class="header-section">Panduan Program</div>
+            <div class="data-container">
+                <div class="data-message">Data Belum Tersedia</div>
+                <button class="data-button">Lihat Panduan Lainnya</button>
+            </div>
+        </div>
     </div>
-    <div class="footer-right">
-      <img alt="Map" height="200" src="https://storage.googleapis.com/a1aa/image/lemWxTmjJbyuRinTcdVzKqB2CPO6XXMFWmL56jXQ11xe -->
+
+
+    @include('footerlp')
