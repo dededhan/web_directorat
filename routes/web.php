@@ -6,14 +6,14 @@ Route::get('/', function () {
     return view('home');
 });
 
-// Route::get('/', function () {
-//     return view('admin');
-// });
-// Route::get('/admin', function () {
-//     return response()->file(public_path('admin'));
-// });
-
-
-Route::get('/admin', function () {
-    return view('admin.admin');
-})->name('admin');
+Route::prefix('admin')->group(function () {
+    // Dashboard
+    Route::get('/', function () {
+        return view('admin.dashboardadmin');
+    })->name('admin.dashboard');
+    
+    // News
+    Route::get('/news', function () {
+        return view('admin.newsadmin');
+    })->name('admin.news');
+});
