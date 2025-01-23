@@ -34,7 +34,7 @@ class LoginController extends Controller
 
         return back()->withErrors([
             'email' => 'Invalid credentials.',
-        ]);
+        ])->with('error', 'Email atau password salah.'); // Flash message
     }
 
     public function logout(Request $request)
@@ -44,4 +44,7 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
         return redirect('/');
     }
+    
 }
+
+

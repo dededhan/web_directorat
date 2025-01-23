@@ -11,7 +11,10 @@
 
 </head>
 <body>
-  
+    
+
+
+
 
     <!-- Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
@@ -40,7 +43,17 @@
             </div>
         </div>
     </div>
-
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '{{ session('error') }}',
+                footer: '<a href="#">Why do I have this issue?</a>'
+            });
+        </script>
+    @endif
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
