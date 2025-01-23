@@ -1,6 +1,9 @@
 <nav>
-    <i class='bx bx-menu d-flex flex-row'></i>
     
+<i class='bx bx-menu d-flex flex-row position-absolute top-2 end-0' style="font-size: 40px;"></i>
+    <a href="#" class="logo">
+    <img src="https://spm.unj.ac.id/wp-content/uploads/2024/08/cropped-Logo-UNJ-PTNBH-RGB_Logo_Motto_Transparan.png" alt="Logo">
+    </a>
     <div class="user-profile">
         @auth
         <div class="profile-info">
@@ -17,15 +20,3 @@
         @endguest
     </div>
 </nav>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Optional: Add dropdown or more interactions for user profile
-    const profileElement = document.querySelector('.profile-info');
-    profileElement.addEventListener('click', function() {
-        // Toggle dropdown or show user options
-        const dropdown = document.getElementById('user-dropdown');
-        dropdown.classList.toggle('show');
-    });
-});
-</script>

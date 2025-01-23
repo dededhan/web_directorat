@@ -45,6 +45,46 @@
         </li>
     </ul>
 
+    <style>
+    .container {
+        background-color: white; /* Menetapkan warna latar belakang putih */
+        padding: 20px; /* Menambahkan padding di dalam container */
+        border-radius: 8px; /* Menambahkan sudut melengkung jika diinginkan */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Menambahkan bayangan ringan */
+    }
+</style>
+<style>
+    .container {
+        background-color: white; /* Menetapkan warna latar belakang putih */
+        padding: 20px; /* Menambahkan padding di dalam container */
+        border-radius: 8px; /* Menambahkan sudut melengkung */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Menambahkan bayangan ringan */
+        min-height: 500px; /* Menetapkan tinggi minimal container */
+    }
+</style>
+<style>
+    .container {
+        background-color: white; /* Menetapkan warna latar belakang putih */
+        padding: 20px; /* Menambahkan padding di dalam container */
+        border-radius: 8px; /* Menambahkan sudut melengkung */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Menambahkan bayangan ringan */
+        min-height: 500px; /* Menetapkan tinggi minimal container */
+        display: flex; /* Menjadikan container sebagai flex container */
+        flex-direction: column; /* Agar chart mengisi container secara vertikal */
+    }
+
+    .chart-container {
+        flex-grow: 1; /* Agar canvas mengisi seluruh ruang yang tersedia */
+        height: 100%; /* Menyesuaikan tinggi container */
+    }
+
+    #visitorChart {
+        width: 100% !important; /* Membuat chart memenuhi lebar container */
+        height: 100% !important; /* Membuat chart memenuhi tinggi container */
+    }
+</style>
+
+<div class="container">
     <!-- Content Section -->
     <div class="content-data">
         <div class="chart-container">
@@ -87,4 +127,5 @@
             config
         );
     </script>
+</div>
 @endsection

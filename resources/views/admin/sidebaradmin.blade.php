@@ -1,8 +1,8 @@
 <!-- SIDEBAR -->
 <section id="sidebar">
-    <a href="#" class="brand">
-        <i class='bx bxs-smile'></i>
-        <span class="text">Dashboard Direktorat</span>
+    <a href="#" class="brand" style="display: flex; flex-direction: column; align-items: center;">
+        <i style="margin-bottom: 8px;"></i>
+        <span class="text" style="color: white;">Dashboard Direktorat</span>
     </a>
     <ul class="side-menu top">
         <li class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
@@ -23,11 +23,6 @@
                 <span class="text">Event</span>
             </a>
         </li>
-        <li class="{{ request()->routeIs('admin.qsranking') ? 'active' : '' }}">
-            <a href="{{ route('admin.qsrankingadmin') }}">
-                <i class='bx bxs-message-dots'></i>
-                <span class="text">qsranking</span>
-            </a>
         <li>
             <a href="#">
                 <i class='bx bxs-message-dots'></i>
