@@ -25,4 +25,9 @@ Route::prefix('admin')->group(function () {
         return view('admin.newsadmin');
     })->name('admin.news');
 
+   
+    Route::get('/qsranking', function () {
+        return view('admin.qsrankingadmin');
+    })->name('admin.qsrankingadmin');
+
 });

@@ -23,6 +23,11 @@
                 <span class="text">Event</span>
             </a>
         </li>
+        <li class="{{ request()->routeIs('admin.qsranking') ? 'active' : '' }}">
+            <a href="{{ route('admin.qsrankingadmin') }}">
+                <i class='bx bxs-message-dots'></i>
+                <span class="text">qsranking</span>
+            </a>
         <li>
             <a href="#">
                 <i class='bx bxs-message-dots'></i>
