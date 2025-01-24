@@ -31,3 +31,7 @@ Route::prefix('admin')->group(function () {
     })->name('admin.qsranking');
 
 });
+
+Route::get('/pemeringkatan/landingpage', function () {
+    return view('pemeringkatan.landingpagepemeringkatan');
+})->name('pemeringkatan.landingpage');
