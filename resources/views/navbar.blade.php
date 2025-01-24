@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="{{ asset('style.css') }}">
+    <link rel="stylesheet" href="{{ asset('navbar.css') }}">
 </head>
 <body>
 
@@ -28,6 +28,15 @@
             <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn">
                 <i class="fab fa-linkedin-in"></i>
             </a>
+                    <div class="language-selector">
+            <label class="switch">
+                <input type="checkbox" id="languageToggle">
+                <span class="slider round"></span>
+                <span class="lang-label">ID/EN</span>
+            </label>
+        </div>
+        </div>
+        </div>
         </div>
     </div>
 
@@ -37,17 +46,41 @@
             src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" width="50" />
         <div class="title">Direktorat Pemeringkatan</div>
         <a href="#">Beranda</a>
-        <div class="dropdown">
-            <a href="#">Sub Direktorat <i class="fa fa-caret-down"></i></a>
-            <div class="dropdown-content">
-                <a href="#">Sub Direktorat 1</a>
-                <a href="#">Sub Direktorat 2</a>
-                <a href="#">Sub Direktorat 3</a>
+       
+        <div class="navbar-links">
+         
+            <div class="dropdown">
+                <a href="#">Sub Direktorat <i class="fa fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="#">Subdirektorat Inovasi dan Hilirisasi</a>
+                    <a href="#">Subdirektorat Pemeringkatan dan Sistem Informasi</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <a href="#">Profil <i class="fa fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="#">Struktur Organisasi</a>
+                    <a href="#">Tugas Pokok dan Fungsi</a>
+                </div>
             </div>
         </div>
         <a href="#">Berita</a>
-        <a href="#">Program</a>
-        <a href="#">Galeri</a>
+            <div class="dropdown">
+                <a href="#">Program <i class="fa fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="#">Program</a>
+                    <a href="#">Program</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#">Galeri <i class="fa fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="#">2024</a>
+                    <a href="#">2025</a>
+                </div>
+            </div>
+            <a href="#">Portal</a> 
         <a class="login" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a>
     </div>
 

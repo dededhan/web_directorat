@@ -1,16 +1,19 @@
-// Script untuk menyembunyikan top bar ketika di-scroll
-let lastScrollTop = 0;
-const topBar = document.getElementById('topBar');
-const navbar = document.getElementById('navbar');
+(() => {
+    const topBar = document.getElementById('topBar');
+    const navbar = document.getElementById('navbar');
+    let lastScrollY = window.scrollY;
 
-window.addEventListener('scroll', () => {
-    const scrollTop = window.scrollY;
-    if (scrollTop > lastScrollTop) {
-        // Ketika scroll ke bawah, sembunyikan top bar
-        topBar.classList.add('hidden');
-    } else {
-        // Ketika scroll ke atas, tampilkan top bar
-        topBar.classList.remove('hidden');
-    }
-    lastScrollTop = scrollTop;
-});
+    window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+        
+        if (currentScrollY > lastScrollY) {
+            topBar.style.transform = 'translateY(-100%)';
+            navbar.style.top = '0';
+        } else {
+            topBar.style.transform = 'translateY(0)';
+            navbar.style.top = '35px';
+        }
+        
+        lastScrollY = currentScrollY;
+    });
+})();
