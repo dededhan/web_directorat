@@ -17,6 +17,12 @@
                 <span class="text">Berita</span>
             </a>
         </li>
+        <li class="{{ request()->routeIs('admin.qsranking') ? 'active' : '' }}">
+            <a href="{{ route('admin.qsranking') }}">
+                <i class='bx bxs-shopping-bag-alt'></i>
+                <span class="text">Ranking</span>
+            </a>
+        </li>
         <li>
             <a href="#">
                 <i class='bx bxs-doughnut-chart'></i>

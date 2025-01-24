@@ -28,6 +28,6 @@ Route::prefix('admin')->group(function () {
    
     Route::get('/qsranking', function () {
         return view('admin.qsrankingadmin');
-    })->name('admin.qsrankingadmin');
+    })->name('admin.qsranking');
 
 });
