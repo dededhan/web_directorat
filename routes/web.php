@@ -30,8 +30,13 @@ Route::prefix('admin')->group(function () {
         return view('admin.qsrankingadmin');
     })->name('admin.qsranking');
 
+
 });
+Route::get('/qsrangking/qs_employerrespondent', function () {
+    return view('qsrangking.qs_employerrespondent');
+})->name('qs_employerrespondent');
 
 Route::get('/pemeringkatan/landingpage', function () {
     return view('pemeringkatan.landingpagepemeringkatan');
 })->name('pemeringkatan.landingpage');
+
