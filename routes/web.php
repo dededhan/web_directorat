@@ -36,6 +36,10 @@ Route::get('/qsrangking/qs_employerrespondent', function () {
     return view('qsrangking.qs_employerrespondent');
 })->name('qs_employerrespondent');
 
+Route::get('/qsrangking/qs_academic', function () {
+    return view('qsrangking.qs_academic');
+})->name('qs_academic');
+
 Route::get('/pemeringkatan/landingpage', function () {
     return view('pemeringkatan.landingpagepemeringkatan');
 })->name('pemeringkatan.landingpage');

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academic Respondent Form</title>
+    <qs_academic.blade.php</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
@@ -112,10 +112,10 @@
 </head>
 <body>
     <div class="form-container">
-        <h2>Employer Respondent Form</h2>
+        <h2>ACADEMIC</h2>
         <form>
             <div class="form-section">
-                <div class="section-title">Personal Information</div>
+                <div class="section-title">ACADEMIC Information</div>
                 <div class="form-group">
                     <label class="form-label">Title</label>
                     <select class="form-select">
@@ -136,23 +136,31 @@
             </div>
 
             <div class="form-section">
-                <div class="section-title">Professional Details</div>
+                <div class="section-title">ACADEMIC Details</div>
                 <div class="form-group">
-                <label class="form-label">Job Title</label>
-                <select class="form-select">
-                    <option>Select Job Title</option>
-                    <option>CEO/President/Managing Director</option>
-                    <option>COO/CFO/CTO/CIO/CMO</option>
-                    <option>Director/Partner/Vice President</option>
-                    <option>Senior Human Resources/Recruitment</option>
-                    <option>Other Human Resources/Recruitment</option>
-                    <option>Manager/Executive</option>
-                    <option>Consultant/Advisor</option>
-                    <option>Coordinator/Officer</option>
-                    <option>Analyst/Specialist</option>
-                    <option>Assistant/Administrator</option>
-                </select>
-            </div>
+                    <label class="form-label">Job Title</label>
+                    <select class="form-select">
+                        <option>Select Job Title</option>
+                        <option>President/Vice-Chancellor</option>
+                        <option>Vice-President/Deputy Vice-Chancellor</option>
+                        <option>Senior Administrator</option>
+                        <option>Head of Department</option>
+                        <option>Professor/Associate Professor</option>
+                        <option>Assistant Professor</option>
+                        <option>Senior Lecturer</option>
+                        <option>Lecturer</option>
+                        <option>Research Specialist</option>
+                        <option>Administrator/Functional Manager</option>
+                        <option>Research Assistant</option>
+                        <option>Teaching Assistant</option>
+                        <option>Admissions Officer</option>
+                        <option>Librarian/Library Assistant</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Institution</label>
+                    <input type="text" class="form-control">
+                </div>
                 <div class="form-group">
                     <label class="form-label">Company Name</label>
                     <input type="text" class="form-control">
@@ -164,6 +172,7 @@
                 <div class="form-group">
                     <label class="form-label">Country</label>
                     <select class="form-select">
+                        <option>Select Country</option>
                         <option>Select Country</option>
                         <option>Afghanistan</option>
                         <option>Albania</option>
@@ -408,4 +417,4 @@
     </div>
 </body>
 </html>
-    @include('pemeringkatan.footerpemeringkatan')
+@include('pemeringkatan.footerpemeringkatan')
