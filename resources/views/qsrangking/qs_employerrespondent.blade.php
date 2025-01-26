@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academic Respondent Form</title>
+    <title>Employer form</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
@@ -153,6 +153,7 @@
                     <option>Assistant/Administrator</option>
                 </select>
             </div>
+
                 <div class="form-group">
                     <label class="form-label">Company Name</label>
                     <input type="text" class="form-control">
