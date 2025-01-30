@@ -30,6 +30,10 @@ Route::prefix('admin')->group(function () {
         return view('admin.qsrankingadmin');
     })->name('admin.qsranking');
 
+    Route::get('/manage-user', function () {
+        return view('admin.manageuser');
+    })->name('admin.manageuser');
+
 
 });
 Route::get('/qsrangking/qs_employerrespondent', function () {
