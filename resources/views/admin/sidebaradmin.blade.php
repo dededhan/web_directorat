@@ -23,8 +23,8 @@
                 <span class="text">Manage User</span>
             </a>
         </li>
-        <li class="{{ request()->routeIs('admin.responden') ? 'active' : '' }}">
-            <a href="{{ route('admin.responden') }}">
+        <li class="{{ request()->routeIs('admin.responden.index') ? 'active' : '' }}">
+            <a href="{{ route('admin.responden.index') }}">
                 <i class='bx bxs-shopping-bag-alt'></i>
                 <span class="text">Ranking</span>
             </a>
