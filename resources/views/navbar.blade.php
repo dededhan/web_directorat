@@ -76,7 +76,7 @@
             <div class="dropdown">
                 <a href="#">Galeri <i class="fa fa-caret-down"></i></a>
                 <div class="dropdown-content">
-                    <a href="#">2024</a>
+                <a href="{{ route('pemeringkatan.galeri') }}">2024</a>
                     <a href="#">2025</a>
                 </div>
             </div>

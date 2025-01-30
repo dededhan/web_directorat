@@ -34,7 +34,7 @@
 }
 
 input:checked + .slider {
-  background-color: #004d40;
+  background-color: #176369;
 }
 
 input:checked + .slider:before {
@@ -89,7 +89,7 @@ input:checked + .slider:before {
   z-index: 1000;
   display: flex;
   align-items: center;
-  background-color: #004d40;
+  background-color: #176369;
   padding: 10px 50px;
 }
 
@@ -164,7 +164,7 @@ body {
   .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #004d40;
+    background-color: #176369;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
