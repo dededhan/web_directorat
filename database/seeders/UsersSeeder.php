@@ -69,13 +69,8 @@ class UsersSeeder extends Seeder
                 'password'=>bcrypt('dosen123'),
                 'role'=>'dosen'
             ],
-
-
-            
         ];
 
-        foreach($userdata as $key => $val){
-            User::create($val);
-        }
+        User::insert($userdata);
     }
 }
