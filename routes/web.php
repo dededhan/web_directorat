@@ -47,6 +47,10 @@ Route::get('/galeri', function () {
     return view('galeri.galeri');
 })->name('galeri.galeri');
 
+Route::get('/tupoksi', function () {
+    return view('tupoksi.tupoksi');
+})->name('tupoksi.tupoksi');
+
 Route::get('/pemeringkatan/landingpage', function () {
     return view('pemeringkatan.landingpagepemeringkatan');
 })->name('pemeringkatan.landingpage');

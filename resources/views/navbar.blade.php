@@ -61,7 +61,7 @@
                 <a href="#">Profil <i class="fa fa-caret-down"></i></a>
                 <div class="dropdown-content">
                     <a href="#">Struktur Organisasi</a>
-                    <a href="#">Tugas Pokok dan Fungsi</a>
+                    <a href="{{ route('tupoksi.tupoksi') }}">Tugas Pokok dan Fungsi</a>
                 </div>
             </div>
         </div>
