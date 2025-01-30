@@ -40,9 +40,9 @@ Route::get('/qsrangking/qs_academic', function () {
     return view('qsrangking.qs_academic');
 })->name('qs_academic');
 
-Route::get('/pemeringkatan/galeri', function () {
+Route::get('/galeri', function () {
     return view('galeri.galeri');
-})->name('pemeringkatan.galeri');
+})->name('galeri.galeri');
 
 Route::get('/pemeringkatan/landingpage', function () {
     return view('pemeringkatan.landingpagepemeringkatan');
