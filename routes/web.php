@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminRespondenController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -10,32 +11,30 @@ Route::get('/', function () {
 
 
 
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::get('/login', [LoginController::class, 'showLog
+inForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/', function () {
         return view('admin.dashboardadmin');
-    })->name('admin.dashboard');
+    })->name('dashboard');
     
     // News
     Route::get('/news', function () {
         return view('admin.newsadmin');
-    })->name('admin.news');
+    })->name('news');
 
-   
-    Route::get('/responden', function () {
-        return view('admin.respondenadmin');
-    })->name('admin.responden');
+    Route::resource('/responden', AdminRespondenController::class);
 
     Route::get('/manage-user', function () {
         return view('admin.manageuser');
-    })->name('admin.manageuser');
-
+    })->name('manageuser');
 
 });
+
 Route::get('/qsrangking/qs_employerrespondent', function () {
     return view('qsrangking.qs_employerrespondent');
 })->name('qs_employerrespondent');
