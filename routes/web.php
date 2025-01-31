@@ -35,13 +35,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 });
 
-Route::get('/qsrangking/qs_employerrespondent', function () {
-    return view('qsrangking.qs_employerrespondent');
-})->name('qs_employerrespondent');
-
-Route::get('/qsrangking/qs_academic', function () {
-    return view('qsrangking.qs_academic');
-})->name('qs_academic');
+Route::get('/qsrangking/qs_general', function () {
+    return view('qsrangking.qs_general');
+})->name('qs_general');
 
 Route::get('/galeri', function () {
     return view('galeri.galeri');
