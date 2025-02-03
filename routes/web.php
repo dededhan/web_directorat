@@ -56,7 +56,10 @@ Route::get('/tupoksi', function () {
     return view('tupoksi.tupoksi');
 })->name('tupoksi.tupoksi');
 
+Route::get('/galeri/sustainability', function () {
+    return view('galeri.sustainability');
+})->name('sustainability');
+
 Route::get('/pemeringkatan/landingpage', function () {
     return view('pemeringkatan.landingpagepemeringkatan');
 })->name('pemeringkatan.landingpage');
-

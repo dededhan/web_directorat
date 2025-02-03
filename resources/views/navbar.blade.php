@@ -77,8 +77,7 @@
                 <a href="#">Galeri <i class="fa fa-caret-down"></i></a>
                 <div class="dropdown-content">
                 <a href="{{ route('galeri.galeri') }}">2024</a>
-                    <a href="#">2025</a>
-                </div>
+                <a href="{{ route('sustainability') }}">Sustainability</a>                </div>
             </div>
             <a href="#">Portal</a> 
         <a class="login" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a>
