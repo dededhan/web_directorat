@@ -33,6 +33,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('admin.manageuser');
     })->name('manageuser');
 
+    
+    Route::get('/sustainability', function () {
+        return view('admin.sustainability');
+    })->name('sustainability');
+
 });
 
 Route::get('/qsrangking/qs_general', function () {

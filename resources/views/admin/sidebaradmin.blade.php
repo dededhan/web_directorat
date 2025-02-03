@@ -26,7 +26,13 @@
         <li class="{{ request()->routeIs('admin.responden.index') ? 'active' : '' }}">
             <a href="{{ route('admin.responden.index') }}">
                 <i class='bx bxs-shopping-bag-alt'></i>
-                <span class="text">Ranking</span>
+                <span class="text">Responden</span>
+            </a>
+        </li>
+        <li class="{{ request()->routeIs('admin.sustainability') ? 'active' : '' }}">
+            <a href="{{ route('admin.sustainability') }}">
+                <i class='bx bxs-shopping-bag-alt'></i>
+                <span class="text">Sustainability</span>
             </a>
         </li>
         <li>
