@@ -38,6 +38,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('admin.sustainability');
     })->name('sustainability');
 
+    Route::get('/matakuliah-sustainability', function () {
+        return view('admin.matakuliahsustainability');
+    })->name('matakuliah-sustainability');
+
 });
 
 Route::get('/qsrangking/qs_general', function () {
