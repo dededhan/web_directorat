@@ -76,7 +76,7 @@
             <div class="dropdown">
                 <a href="#">Galeri <i class="fa fa-caret-down"></i></a>
                 <div class="dropdown-content">
-                <a href="{{ route('galeri.galeri') }}">2024</a>
+                <a href="{{ route('alumni') }}">Alumni Berdampak</a>
                 <a href="{{ route('sustainability') }}">Sustainability</a>                </div>
             </div>
             <a href="#">Portal</a> 

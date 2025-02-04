@@ -11,15 +11,14 @@
        
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
+<nav class="navbar">
         <a href="#" class="navbar-logo">
-            <img src="https://spm.unj.ac.id/wp-content/uploads/2024/08/cropped-Logo-UNJ-PTNBH-RGB_Logo_Motto_Transparan.png" />
-            <span class="navbar-logo-text">SUSTAINABILITY</span>
+            <img src="https://spm.unj.ac.id/wp-content/uploads/2024/08/cropped-Logo-UNJ-PTNBH-RGB_Logo_Motto_Transparan.png" alt="Logo" />
+            <span class="navbar-logo-text"> SUSTAINABILITY</span>
         </a>
         <ul class="navbar-menu">
-            <a href="{{ route('home') }}">Home</a>     
-            <li><a href="#" class="navbar-link">Sustainability</a></li>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Sustainability</a></li>
         </ul>
     </nav>
 

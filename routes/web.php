@@ -52,10 +52,6 @@ Route::get('/qsrangking/qs_general', function () {
     return view('qsrangking.qs_general');
 })->name('qs_general');
 
-Route::get('/galeri', function () {
-    return view('galeri.galeri');
-})->name('galeri.galeri');
-
 Route::get('/tupoksi', function () {
     return view('tupoksi.tupoksi');
 })->name('tupoksi.tupoksi');
@@ -63,6 +59,10 @@ Route::get('/tupoksi', function () {
 Route::get('/galeri/sustainability', function () {
     return view('galeri.sustainability');
 })->name('sustainability');
+
+Route::get('/galeri/alumni', function () {
+    return view('galeri.alumni');
+})->name('alumni');
 
 Route::get('/pemeringkatan/landingpage', function () {
     return view('pemeringkatan.landingpagepemeringkatan');

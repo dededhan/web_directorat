@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+:root {
+    --primary-color: #176369;
+    --text-color: #2d3436;
+    --background-color: #f8f9fa;
+}
+.navbar {
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+    text-decoration: none;
+}
+        
+
+
+.navbar-logo img {
+    height: 40px;
+    margin-left: 80px;
+  
+}
+
+.navbar-logo-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-right: 10px;
+    color: #176369;
+}
+
+.navbar-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    gap: 1.5rem;
+    margin-top: 15px;
+    margin-right: 50px;
+    color: #176369;
+    padding: 0.5rem 1rem;
+}
+
+.navbar-menu a {
+    color: #176369;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 60px auto;
+    padding: 0 24px;
+}
+
+.activity-photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 32px;
+    margin: 30px 0;
+}
+
+.photo-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    transition: all 0.4s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.photo-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
+
+.card-image {
+    height: 240px;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.card-content {
+    padding: 28px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #176369;
+    margin-bottom: 16px;
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #4a5568;
+    font-size: 0.95em;
+}
+
+.info-item i {
+    color: #176369;
+    width: 20px;
+}
+
+.info-item a {
+    color: #176369;
+    text-decoration: none;
+}
+
+.detail-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: #eef2ff;
+    color: #176369;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.detail-link:hover {
+    background-color: #176369;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .navbar-menu {
+        margin-top: 1rem;
+        flex-direction: column;
+    }
+
+    .activity-photos {
+        grid-template-columns: 1fr;
+    }
+}
