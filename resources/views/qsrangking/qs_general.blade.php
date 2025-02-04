@@ -122,13 +122,14 @@
 <body>
     <div class="form-container">
         <h2>General Respondent Form</h2>
-        <form id="respondentForm" onsubmit="return validateForm(event)">
+        <form method="POST" id="respondentForm" onsubmit="return validateForm(event)" action="{{ route('qs-general.store') }}">
             <!-- Previous form sections remain the same until contact information -->
+            @csrf
             <div class="form-section">
                 <div class="section-title">Personal Information</div>
                 <div class="form-group">
                     <label class="form-label">Respondent Type</label>
-                    <select class="form-select" required>
+                    <select class="form-select" name="general_respondent_type" required>
                         <option value="">Select Respondent Type</option>
                         <option value="student">Student</option>
                         <option value="dosen">Dosen</option>
@@ -139,11 +140,11 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">First Name</label>
-                    <input type="text" class="form-control" required>
+                    <input type="text" class="form-control" name="general_firstname" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Last Name</label>
-                    <input type="text" class="form-control" required>
+                    <input type="text" class="form-control" name="general_lastname" required>
                 </div>
             </div>
 
@@ -151,20 +152,19 @@
                 <div class="section-title">Institution Details</div>
                 <div class="form-group">
                     <label class="form-label">Institution</label>
-                    <input type="text" class="form-control" required>
+                    <input type="text" class="form-control" name="general_institution" required>
                 </div>
             </div>
-
             <div class="form-section">
                 <div class="section-title">Activity Details</div>
                 <div class="form-group">
                     <label class="form-label">Activity Name</label>
-                    <input type="text" class="form-control" required>
+                    <input type="text" class="form-control" name="general_activity_name" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Activity Date</label>
                     <div class="date-input-wrapper">
-                        <input type="text" class="form-control datepicker" placeholder="Select date" required>
+                        <input type="text" class="form-control datepicker" name="general_activity_date" placeholder="Select date" required>
                     </div>
                 </div>
             </div>
@@ -174,17 +174,17 @@
                 <!-- Update the country select element -->
                 <div class="form-group">
                     <label class="form-label">Country</label>
-                    <select class="form-select" id="countrySelect" required>
+                    <select class="form-select" name="general_country" id="countrySelect" required>
                         <option value="">Select Country</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Email</label>
-                    <input type="text" class="form-control" id="email" required>
+                    <input type="email" class="form-control" name="general_email" id="email" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Phone Number</label>
-                    <input type="text" class="form-control" id="phone" required>
+                    <input type="tel" class="form-control" name="general_phone" id="phone" required>
                 </div>
             </div>
 
@@ -193,27 +193,27 @@
                 <div class="form-group">
                     <label class="form-label">2023 Survey</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="survey2023" value="yes" required>
+                        <input class="form-check-input" type="radio" name="general_survey2023" value="yes" required>
                         <label class="form-check-label">Yes</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="survey2023" value="no">
+                        <input class="form-check-input" type="radio" name="general_survey2023" value="no">
                         <label class="form-check-label">No</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label">2024 Survey</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="survey2024" value="yes" required>
+                        <input class="form-check-input" type="radio" name="general_survey2024" value="yes" required>
                         <label class="form-check-label">Yes</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="survey2024" value="no">
+                        <input class="form-check-input" type="radio" name="general_survey2024" value="no">
                         <label class="form-check-label">No</label>
                     </div>
                 </div>
             </div>
-
+ 
             <button type="submit" class="btn-submit">Submit Survey</button>
         </form>
     </div>
@@ -222,7 +222,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Existing datepicker initialization
     flatpickr(".datepicker", {
-        dateFormat: "d/m/Y",
+        dateFormat: "d-m-Y",
         minDate: "today",
         disableMobile: false,
         allowInput: true,
@@ -240,7 +240,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Countries API implementation
     const countrySelect = document.getElementById('countrySelect');
-    
+    //*
+    // Rather than using a third party country list api solution, 
+    // I suggest to use the built in Intl function such as below.
+    // Much faster, and did not require background client request todo it.
+    // */
+    function getCountries(lang = 'en') {
+        const A = 65
+        const Z = 90
+        const countryName = new Intl.DisplayNames([lang], { type: 'region' });
+        const countries = {}
+        for(let i=A; i<=Z; ++i) {
+            for(let j=A; j<=Z; ++j) {
+                let code = String.fromCharCode(i) + String.fromCharCode(j)
+                let name = countryName.of(code)
+                if (code !== name) {
+                    countries[code] = name
+                }
+            }
+        }
+        return Object.values(countries)
+    } 
+    // above function will return an array of ['Ascension Island', 'Andorra', 'Argentina',.....]
     async function fetchCountries() {
         try {
             // Show loading state

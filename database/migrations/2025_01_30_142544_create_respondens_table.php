@@ -18,12 +18,12 @@ return new class extends Migration
             $table->string('jabatan');
             $table->string('instansi');
             $table->string('email')->unique();
-            $table->string('phone_responden')->nullable()->unique();
+            $table->string('phone_responden')->nullable();
             $table->string('nama_dosen_pengusul');
             $table->string('phone_dosen')->nullable();
-            $table->string('fakultas');
-            $table->enum('category', ['academic', 'employer']);
-            $table->enum('status', ['belum di-email', 'sudah di-email, belum di-follow up', 'sudah di-email, sudah di-follow up', 'selesai'])->default('belum di-email');
+            $table->string('fakultas')->nullable();
+            $table->string('category')->nullable();
+            $table->enum('status', ['belum', 'done', 'dones'])->default('belum');
             $table->timestamps();
         });
     }
