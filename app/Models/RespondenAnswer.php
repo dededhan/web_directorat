@@ -9,4 +9,5 @@ class RespondenAnswer extends Model
 {
     /** @use HasFactory<\Database\Factories\RespondenAnswerFactory> */
     use HasFactory;
+    protected $guarded = ['id'];
 }

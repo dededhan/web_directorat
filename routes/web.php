@@ -1,6 +1,9 @@
 <?php
 
+
+use App\Http\Controllers\AdminMailSendController;
 use App\Http\Controllers\AdminRespondenController;
+use App\Http\Controllers\QuesionerGeneralController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -27,8 +30,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('admin.newsadmin');
     })->name('news');
 
+    
     Route::resource('/responden', AdminRespondenController::class);
+    Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
+    ->name('responden.update');
 
+// Untuk update status khusus (POST)
+Route::post('/responden/update-status/{id}', [AdminRespondenController::class, 'updateStatus'])
+    ->name('responden.updateStatus');
+
+    // Route::post('/responden/{responden}', AdminMailSendController::class)->name('mail.responden');
+    
     Route::get('/manage-user', function () {
         return view('admin.manageuser');
     })->name('manageuser');
@@ -48,9 +60,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 });
 
-Route::get('/qsrangking/qs_general', function () {
-    return view('qsrangking.qs_general');
-})->name('qs_general');
+Route::resource('/qsranking/qs-general', QuesionerGeneralController::class);
+Route::put('/responden/{id}', [AdminRespondenController::class, 'update']);
+
+// Route::get('/qsrangking/qs_general', function () {
+//     return view('qsrangking.qs_general');
+// })->name('qs_general');
 
 Route::get('/tupoksi', function () {
     return view('tupoksi.tupoksi');
@@ -67,3 +82,4 @@ Route::get('/galeri/alumni', function () {
 Route::get('/pemeringkatan/landingpage', function () {
     return view('pemeringkatan.landingpagepemeringkatan');
 })->name('pemeringkatan.landingpage');
+

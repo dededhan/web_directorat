@@ -143,18 +143,85 @@
                                     <td>{{ $responden->phone_dosen }}</td>
                                     <td>{{ $responden->fakultas }}</td>
                                     <td>{{ $responden->category }}</td>
-                                    <td>{{ $responden->status }}</td>
+                                    <td>
+                                        <select class="form-select status-dropdown" data-id="{{ $responden->id }}">
+                                            <option value="belum" {{ $responden->status == 'belum' ? 'selected' : '' }}>Belum di-email</option>
+                                            <option value="done" {{ $responden->status == 'done' ? 'selected' : '' }}>Sudah di-email, belum di-follow up</option>
+                                            <option value="dones" {{ $responden->status == 'dones' ? 'selected' : '' }}>Sudah di-email, sudah di-follow up</option>
+                                        </select>                                   
+                                    </td>                                    
+                                     <td>
+                                       
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm btn-warning update-status" >Update</button>
+                                        </div>
+                                        {{-- <form method="POST" action="{{ route('admin.mail.responden', $responden->id) }}">
+                                            @csrf
+                                            <input class="btn btn-primary" type="submit" value="Kirim Email" @disabled($responden->status != 'belum di-email')>
+                                        </form> --}}
+                                    </td>
                                 </tr>
                             @empty
                                 <span>Data Belum Ada</span>
                             @endforelse
                         </tbody>
                     </table>
+                    
+                    
                 </div>
             </div>
         </div>
     </div>
-
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+            document.querySelectorAll('.status-dropdown').forEach(select => {
+                select.addEventListener('change', function() {
+                    const respondenId = this.dataset.id;
+                    const newStatus = this.value;
+                    
+                    axios.post(`/admin/responden/update-status/${respondenId}`, {
+                        status: newStatus,
+                        _token: csrfToken
+                    })
+                    .then(response => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: response.data.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                        
+                        // Optional: Update tampilan tanpa reload
+                        const badge = this.closest('tr').querySelector('.status-badge');
+                        if(badge) {
+                            badge.textContent = response.data.new_status;
+                        }
+                    })
+                    .catch(error => {
+                        // Rollback ke nilai sebelumnya jika gagal
+                        this.value = this.dataset.previousValue;
+                        
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: error.response?.data?.message || 'Terjadi kesalahan',
+                        });
+                    })
+                    .finally(() => {
+                        // Update previous value
+                        this.dataset.previousValue = newStatus;
+                    });
+                });
+                
+                // Initialize previous value
+                select.dataset.previousValue = select.value;
+            });
+        });
+    </script>
 
     <style>
         .table-data {
@@ -195,5 +262,11 @@
             display: flex;
             gap: 5px;
         }
+        
+        .status-dropdown {
+        width: 140%;
+        margin-left: -10px; /* Menggeser ke kiri */
+        }
+        
     </style>
 @endsection

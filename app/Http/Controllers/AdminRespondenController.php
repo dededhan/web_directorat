@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreRespondenRequest;
 use App\Http\Requests\UpdateRespondenRequest;
 use App\Models\Responden;
+use Illuminate\Validation\Rule;
+
 
 class AdminRespondenController extends Controller
 {
@@ -66,10 +69,39 @@ class AdminRespondenController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRespondenRequest $request, Responden $responden)
+    public function update(UpdateRespondenRequest $request, $id)
     {
-        //
+        $validated = $request->validated(); // Gunakan validasi dari Form Request
+        
+        $responden = Responden::findOrFail($id);
+        $responden->update($validated);
+        
+        return response()->json([
+            'message' => 'Data berhasil diperbarui',
+            'data' => $responden
+        ]);
     }
+
+    // Buat method terpisah untuk update status
+    public function updateStatus(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'status' => [
+                'required', 
+                Rule::in(['belum', 'done', 'dones'])
+            ]
+        ]);
+    
+        $responden = Responden::findOrFail($id);
+        $responden->update($validated);
+    
+        return response()->json([
+            'message' => 'Status berhasil diperbarui',
+            'new_status' => $validated['status']
+        ]);
+    }
+
+     
 
     /**
      * Remove the specified resource from storage.
