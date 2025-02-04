@@ -42,6 +42,13 @@
                 <span class="text">Mata Kuliah Sustainability</span>
             </a>
         </li>
+
+        <li class="{{ request()->routeIs('admin.alumniberdampak') ? 'active' : '' }}">
+            <a href="{{ route('admin.alumniberdampak') }}">
+                <i class='bx bxs-shopping-bag-alt'></i>
+                <span class="text">Alumni Berdampak</span>
+            </a>
+        </li>
         <li>
             <a href="#">
                 <i class='bx bxs-doughnut-chart'></i>

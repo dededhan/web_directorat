@@ -7,7 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 
 
 
@@ -41,6 +41,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/matakuliah-sustainability', function () {
         return view('admin.matakuliahsustainability');
     })->name('matakuliah-sustainability');
+
+    Route::get('/alumniberdampak', function () {
+        return view('admin.alumniberdampak');
+    })->name('alumniberdampak');
 
 });
 
