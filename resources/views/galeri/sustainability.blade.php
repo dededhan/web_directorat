@@ -18,7 +18,7 @@
             <span class="navbar-logo-text">SUSTAINABILITY</span>
         </a>
         <ul class="navbar-menu">
-            <li><a href="#" class="navbar-link">Home</a></li>
+            <a href="{{ route('home') }}">Home</a>     
             <li><a href="#" class="navbar-link">Sustainability</a></li>
         </ul>
     </nav>
