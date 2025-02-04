@@ -35,6 +35,11 @@
                         <label for="semester" class="form-label">Semester</label>
                         <input type="text" class="form-control" name="semester" id="semester">
                     </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="Kode Mata Kuliah" class="form-label">Kode Mata Kuliah</label>
+                        <input type="text" class="form-control" name="Kode Mata Kuliah" id="Kode Mata Kuliah">
+                    </div>
                 </div>
 
                 <div class="row">
