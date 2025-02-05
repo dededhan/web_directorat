@@ -78,9 +78,10 @@ Route::get('/tupoksi', function () {
     return view('tupoksi.tupoksi');
 })->name('tupoksi.tupoksi');
 
+
 Route::get('/galeri/sustainability', function () {
     return view('galeri.sustainability');
-})->name('sustainability');
+})->name('galeri.sustainability'); 
 
 Route::get('/galeri/alumni', function () {
     return view('galeri.alumni');
