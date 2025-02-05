@@ -35,8 +35,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     ->name('responden.update');
 
 // Untuk update status khusus (POST)
-Route::post('/responden/update-status/{id}', [AdminRespondenController::class, 'updateStatus'])
-    ->name('responden.updateStatus');
+    Route::post('/responden/update-status/{id}', [AdminRespondenController::class, 'updateStatus'])
+        ->name('responden.updateStatus');
 
     // Route::post('/responden/{responden}', AdminMailSendController::class)->name('mail.responden');
     
@@ -61,13 +61,14 @@ Route::post('/responden/update-status/{id}', [AdminRespondenController::class, '
         return view('admin.alumniberdampak');
     })->name('alumniberdampak');
 
-    Route::get('/qstable', function () {
-        return view('admin.qstable');
-    })->name('qstable');
+    Route::resource('/qstable', QuesionerGeneralController::class)->except(['create', 'store']);
+    // Route::get('/qstable', function () {
+    //     return view('admin.qstable');
+    // })->name('qstable');
 
 });
 
-Route::resource('/qsranking/qs-general', QuesionerGeneralController::class);
+Route::resource('/qsranking/qs-general', QuesionerGeneralController::class)->only(['create', 'store']);
 Route::put('/responden/{id}', [AdminRespondenController::class, 'update']);
 
 // Route::get('/qsrangking/qs_general', function () {

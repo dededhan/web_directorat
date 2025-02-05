@@ -38,28 +38,34 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach($quesionerGenerals as $data)
                         <tr>
-                            <td>Student</td>
-                            <td>John Doe</td>
-                            <td>University of Example</td>
-                            <td>Research Conference</td>
-                            <td>01-02-2024</td>
-                            <td>Indonesia</td>
+                            <td>{{ $data->respondent_type }}</td>
+                            <td>{{ $data->firstname }} {{ $data->lastname }}</td>
+                            <td>{{ $data->institution }}</td>
+                            <td>{{ $data->activity_name }}</td>
+                            <td>{{ $data->activity_date }}</td>
+                            <td>{{ $data->country }}</td>
                             <td>
-                                Email: john@example.com<br>
-                                Phone: 081234567890
+                                Email: {{ $data->email }}<br>
+                                Phone: {{ $data->phone }}
                             </td>
                             <td>
-                                2023: ✓<br>
-                                2024: ✓
+                                2023: {!! $data->survey_2023 === 'Yes' ? '✓' : '✗' !!}<br>
+                                2024: {!! $data->survey_2024 === 'Yes' ? '✓' : '✗' !!}
                             </td>
                             <td>
                                 <div class="btn-group">
-                                    <button class="btn btn-sm btn-warning">Edit</button>
-                                    <button class="btn btn-sm btn-danger">Delete</button>
+                                    <a href="#" class="btn btn-sm btn-warning">Edit</a>
+                                    <form action="#" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

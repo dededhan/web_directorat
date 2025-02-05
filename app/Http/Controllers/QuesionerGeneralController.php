@@ -12,17 +12,18 @@ class QuesionerGeneralController extends Controller
     /**
      * Display a listing of the resource.
      */
+    
+
     public function index()
     {
-        return view('qsrangking.qs_general');
+        $quesionerGenerals = QuesionerGeneral::all();
+        return view('admin.qstable', compact('quesionerGenerals'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Method untuk publik
     public function create()
     {
-        //
+        return view('qsrangking.qs_general'); // Sesuaikan dengan view form publik
     }
 
     /**
