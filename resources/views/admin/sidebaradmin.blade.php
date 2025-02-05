@@ -1,8 +1,7 @@
-<!-- SIDEBAR -->
 <section id="sidebar">
-    <a href="#" class="brand" style="display: flex; flex-direction: column; align-items: center;">
-        <i style="margin-bottom: 8px;"></i>
-        <span class="text" style="color: white;">Dashboard Direktorat</span>
+    <a href="#" class="brand">
+        <i class='bx bxs-dashboard'></i>
+        <span class="text">Dashboard Direktorat</span>
     </a>
     <ul class="side-menu top">
         <li class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
@@ -13,52 +12,38 @@
         </li>
         <li class="{{ request()->routeIs('admin.news') ? 'active' : '' }}">
             <a href="{{ route('admin.news') }}">
-                <i class='bx bxs-shopping-bag-alt'></i>
+                <i class='bx bxs-news'></i>
                 <span class="text">Berita</span>
             </a>
         </li>
         <li class="{{ request()->routeIs('admin.manageuser') ? 'active' : '' }}">
             <a href="{{ route('admin.manageuser') }}">
-                <i class='bx bxs-message-dots'></i>
+                <i class='bx bxs-user'></i>
                 <span class="text">Manage User</span>
             </a>
         </li>
         <li class="{{ request()->routeIs('admin.responden.index') ? 'active' : '' }}">
             <a href="{{ route('admin.responden.index') }}">
-                <i class='bx bxs-shopping-bag-alt'></i>
+                <i class='bx bxs-user-voice'></i>
                 <span class="text">Responden</span>
             </a>
         </li>
         <li class="{{ request()->routeIs('admin.sustainability') ? 'active' : '' }}">
             <a href="{{ route('admin.sustainability') }}">
-                <i class='bx bxs-shopping-bag-alt'></i>
+                <i class='bx bxs-book'></i>
                 <span class="text">Sustainability</span>
             </a>
         </li>
-
         <li class="{{ request()->routeIs('admin.matakuliah-sustainability') ? 'active' : '' }}">
             <a href="{{ route('admin.matakuliah-sustainability') }}">
-                <i class='bx bxs-shopping-bag-alt'></i>
+                <i class='bx bxs-book'></i>
                 <span class="text">Mata Kuliah Sustainability</span>
             </a>
         </li>
-
         <li class="{{ request()->routeIs('admin.alumniberdampak') ? 'active' : '' }}">
             <a href="{{ route('admin.alumniberdampak') }}">
-                <i class='bx bxs-shopping-bag-alt'></i>
+                <i class='bx bxs-graduation'></i>
                 <span class="text">Alumni Berdampak</span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <i class='bx bxs-doughnut-chart'></i>
-                <span class="text">Event</span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <i class='bx bxs-message-dots'></i>
-                <span class="text">Manage User</span>
             </a>
         </li>
     </ul>
@@ -80,4 +65,3 @@
         </li>
     </ul>
 </section>
-<!-- SIDEBAR -->

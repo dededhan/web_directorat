@@ -84,7 +84,7 @@
             <!-- Card 3 -->
             <div class="photo-card">
                 <div class="card-image">
-                    <img src="/api/placeholder/400/300" alt="Workshop Data Science">
+                    <img src="/api/placeholder/800/400" alt="Workshop Data Science">
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">Workshop Data Science</h3>
