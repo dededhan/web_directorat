@@ -58,6 +58,10 @@ Route::post('/responden/update-status/{id}', [AdminRespondenController::class, '
         return view('admin.alumniberdampak');
     })->name('alumniberdampak');
 
+    Route::get('/qstable', function () {
+        return view('admin.qstable');
+    })->name('qstable');
+
 });
 
 Route::resource('/qsranking/qs-general', QuesionerGeneralController::class);

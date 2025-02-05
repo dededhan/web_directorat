@@ -46,6 +46,13 @@
                 <span class="text">Alumni Berdampak</span>
             </a>
         </li>
+
+        <li class="{{ request()->routeIs('admin.qstable') ? 'active' : '' }}">
+            <a href="{{ route('admin.qstable') }}">
+                <i class='bx bxs-graduation'></i>
+                <span class="text">Tabel Responden</span>
+            </a>
+        </li>
     </ul>
     <ul class="side-menu">
         <li>
