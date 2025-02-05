@@ -22,7 +22,8 @@
                 <h3>Input Kegiatan Sustainability</h3>
             </div> 
 
-            <form id="sustainability-form">
+            <form id="sustainability-form" method="POST" action="{{ route('admin.sustainability.store') }}" enctype="multipart/form-data">
+                @csrf
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="judul_kegiatan" class="form-label">Judul Kegiatan</label>
@@ -69,8 +70,8 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="foto_kegiatan" class="form-label">Foto-foto Kegiatan</label>
-                        <input type="file" class="form-control" name="foto_kegiatan[]" id="foto_kegiatan" multiple accept="image/*">
-                        <small class="text-muted">You can select multiple images</small>
+                        <input type="file" class="form-control" name="foto_kegiatan" id="foto_kegiatan" multiple accept="image/*">
+                        <small class="text-muted">You can select images</small>
                     </div>
                 </div>
 
@@ -108,14 +109,26 @@
                             </tr>
                         </thead>
                         <tbody id="sustainability-list">
+                            @foreach($sustainabilities as $activity)
                             <tr>
-                                <td>Workshop Sustainability</td>
-                                <td>2024-02-03</td>
-                                <td>FMIPA</td>
-                                <td>Ilmu Komputer</td>
-                                <td><a href="#" target="_blank">View Link</a></td>
-                                <td><button class="btn btn-sm btn-info">View Photos</button></td>
-                                <td>Workshop tentang penerapan...</td>
+                                <td>{{ $activity->judul_kegiatan }}</td>
+                                <td>{{ $activity->tanggal_kegiatan}}</td>
+                                <td>{{ strtoupper($activity->fakultas) }}</td>
+                                <td>{{ $activity->prodi }}</td>
+                                <td>
+                                    @if($activity->link_kegiatan)
+                                    <a href="{{ $activity->link_kegiatan }}" target="_blank">View Link</a>
+                                    @else
+                                    -
+                                    @endif
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-info view-photos" 
+                                        data-photos='@json($activity->photos->pluck('path'))'>
+                                        View Photos ({{ $activity->photos->count() }})
+                                    </button>
+                                </td>
+                                <td>{{ Str::limit($activity->deskripsi_kegiatan, 50) }}</td>
                                 <td>
                                     <div class="btn-group">
                                         <button class="btn btn-sm btn-warning">Edit</button>
@@ -123,28 +136,26 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>Seminar Lingkungan</td>
-                                <td>2024-02-01</td>
-                                <td>FT</td>
-                                <td>Teknik Sipil</td>
-                                <td><a href="#" target="_blank">View Link</a></td>
-                                <td><button class="btn btn-sm btn-info">View Photos</button></td>
-                                <td>Seminar mengenai pembangunan...</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="photoModalLabel">Foto Kegiatan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="photoGallery">
+                    <!-- Foto akan ditampilkan di sini -->
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         const prodisByFaculty = {
             'fmipa': ['Ilmu Komputer', 'Matematika', 'Pendidikan Matematika', 'Fisika', 'Pendidikan Fisika', 'Biologi', 'Pendidikan Biologi', 'Kimia', 'Pendidikan Kimia'],
@@ -165,7 +176,7 @@
                 const prodis = prodisByFaculty[this.value];
                 prodis.forEach(prodi => {
                     const option = document.createElement('option');
-                    option.value = prodi.toLowerCase().replace(/ /g, '_');
+                    option.value = prodi;
                     option.textContent = prodi;
                     prodiSelect.appendChild(option);
                 });
@@ -173,6 +184,53 @@
                 prodiSelect.disabled = true;
             }
         });
+        // Handle view photos
+        document.querySelectorAll('.view-photos').forEach(button => {
+            button.addEventListener('click', function() {
+                const photos = JSON.parse(this.dataset.photos);
+                const gallery = document.getElementById('photoGallery');
+                gallery.innerHTML = '';
+                
+                photos.forEach(path => {
+                    const img = document.createElement('img');
+                    img.src = `/storage/${path}`;
+                    img.classList.add('img-fluid', 'mb-3');
+                    img.style.maxHeight = '500px';
+                    gallery.appendChild(img);
+                });
+                
+                new bootstrap.Modal(document.getElementById('photoModal')).show();
+            });
+        });
+
+        // Handle form submission feedback
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                timer: 2000
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: '{{ session('error') }}',
+                timer: 2000
+            });
+        @endif
+        
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     </script>
 
     <style>
@@ -223,4 +281,5 @@
             white-space: nowrap;
         }
     </style>
+
 @endsection

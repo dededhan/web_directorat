@@ -1,7 +1,6 @@
 <?php
 
-
-use App\Http\Controllers\AdminMailSendController;
+use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\AdminRespondenController;
 use App\Http\Controllers\QuesionerGeneralController;
 use Illuminate\Support\Facades\Route;
@@ -46,9 +45,13 @@ Route::post('/responden/update-status/{id}', [AdminRespondenController::class, '
     })->name('manageuser');
 
     
-    Route::get('/sustainability', function () {
-        return view('admin.sustainability');
-    })->name('sustainability');
+    
+    Route::resource('/sustainability', AdminSustainabilityController::class);
+    
+    
+    // Route::get('/sustainability', function () {
+    //     return view('admin.sustainability');
+    // })->name('sustainability');
 
     Route::get('/matakuliah-sustainability', function () {
         return view('admin.matakuliahsustainability');
