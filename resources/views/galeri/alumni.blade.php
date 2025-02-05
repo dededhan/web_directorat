@@ -6,10 +6,34 @@
     <title>ALUMNI IMPACT</title>
     <link rel="stylesheet" href="{{ asset('alumni.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        #navbar, .top-bar {
+            max-width: 100% !important;
+            width: 100% !important;
+            margin: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+        }
+        
+        body > div:first-of-type {
+            max-width: 100% !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    </style>
 </head>
+
+
 <body>
-    <nav class="navbar">
-        <a href="#" class="navbar-logo">
+    <div class="main-navbar-wrapper">
+        @include('navbar')
+    </div>
+    
+
+    <nav class="alumni-navbar">
+        <a href="#" class="navbar-logo mt-2">
             <img src="https://spm.unj.ac.id/wp-content/uploads/2024/08/cropped-Logo-UNJ-PTNBH-RGB_Logo_Motto_Transparan.png" alt="Logo" />
             <span class="navbar-logo-text">ALUMNI IMPACT</span>
         </a>
@@ -25,7 +49,7 @@
             <!-- Card 1 -->
             <div class="photo-card">
                 <div class="card-image">
-                    <img src="/api/placeholder/400/300" alt="Alumni Success Story">
+                    <img src="https://ibb.co.com/pgzvFvm" alt="Alumni Success Story">
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">Alumni UNJ Kembangkan Startup Pendidikan yang Mendunia</h3>
