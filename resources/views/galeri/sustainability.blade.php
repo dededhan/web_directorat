@@ -1,27 +1,47 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUSTAINABILITY</title>
-    <link rel="stylesheet" href="{{ asset('sustainability.css') }}">
+    <link rel="stylesheet" href="{{ asset('alumni.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
-       
+
+    <style>
+        #navbar, .top-bar {
+            max-width: 100% !important;
+            width: 100% !important;
+            margin: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+        }
+        
+        body > div:first-of-type {
+            max-width: 100% !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    </style>
 </head>
+
+
 <body>
-<nav class="navbar">
-        <a href="#" class="navbar-logo">
+    <div class="main-navbar-wrapper">
+        @include('navbar')
+    </div>
+    
+
+    <nav class="alumni-navbar">
+        <a href="#" class="navbar-logo mt-2">
             <img src="https://spm.unj.ac.id/wp-content/uploads/2024/08/cropped-Logo-UNJ-PTNBH-RGB_Logo_Motto_Transparan.png" alt="Logo" />
-            <span class="navbar-logo-text"> SUSTAINABILITY</span>
+            <span class="navbar-logo-text">SUSTAINABILITY</span>
         </a>
         <ul class="navbar-menu">
             <li><a href="#">Home</a></li>
-            <li><a href="#">Sustainability</a></li>
+            <li><a href="#">Alumni Impact</a></li>
         </ul>
     </nav>
-
     <!-- Rest of the existing content remains the same -->
     <div class="container">
         <div class="activity-photos">
