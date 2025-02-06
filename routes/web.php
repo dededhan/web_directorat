@@ -71,6 +71,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::resource('/qsranking/qs-general', QuesionerGeneralController::class)->only(['create', 'store']);
 Route::put('/responden/{id}', [AdminRespondenController::class, 'update']);
 
+
+
+Route::get('/qsrangking/qs_academic', function () {
+    return view('qsrangking.qs_academic');
+})->name('qs_academic');
+
+Route::get('/qsrangking/qs_employee', function () {
+    return view('qsrangking.qs_employee');
+})->name('qs_employee');
+
+
 // Route::get('/qsrangking/qs_general', function () {
 //     return view('qsrangking.qs_general');
 // })->name('qs_general');
