@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Direktorat Pemeringkatan</title>
+    <title>Direktorat Inovasi dan Hilirisasi</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="{{ asset('navbar.css') }}">
+    <link rel="stylesheet" href="{{ asset('inovasi/navbar.css') }}">
 </head>
 <body>
 
@@ -44,43 +40,62 @@
     <div class="navbar" id="navbar">
         <img alt="Logo of Direktorat Pemeringkatan" height="50"
             src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" width="50" />
-        <div class="title">Direktorat Pemeringkatan</div>
+        <div class="title">Direktorat Inovasi dan Hilirisasi</div>
         <a href="#">Beranda</a>
        
         <div class="navbar-links">
-         
-            <div class="dropdown">
-                <a href="#">Sub Direktorat <i class="fa fa-caret-down"></i></a>
-                <div class="dropdown-content">
-                    <a href="{{ route('inovasi.landingpage') }}">Subdirektorat Inovasi dan Hilirisasi</a>
-                    <a href="{{ route('pemeringkatan.landingpage') }}">Subdirektorat Pemeringkatan dan Sistem Informasi</a>
-                </div>
-            </div>
-
             <div class="dropdown">
                 <a href="#">Profil <i class="fa fa-caret-down"></i></a>
                 <div class="dropdown-content">
                     <a href="#">Struktur Organisasi</a>
-                    <a href="{{ route('tupoksi.tupoksi') }}">Tugas Pokok dan Fungsi</a>
+                    <a href="#">Tugas Pokok dan Fungsi</a>
                 </div>
             </div>
-        </div>
-        <a href="#">Berita</a>
+    
             <div class="dropdown">
                 <a href="#">Program <i class="fa fa-caret-down"></i></a>
                 <div class="dropdown-content">
-                    <a href="#">Program</a>
-                    <a href="#">Program</a>
+                    <a href="#">Daftar Program</a>
+                    <a href="#">Panduan Program</a>
                 </div>
             </div>
+    
             <div class="dropdown">
-                <a href="#">Galeri <i class="fa fa-caret-down"></i></a>
+                <a href="#">Data <i class="fa fa-caret-down"></i></a>
                 <div class="dropdown-content">
-                <a href="{{ route('alumni') }}">Alumni Berdampak</a>
-                <a href="{{ route('galeri.sustainability') }}">Sustainability</a>                </div>
+                    <a href="#">Data Statistik</a>
+                    <a href="#">Laporan</a>
+                </div>
             </div>
-            <a href="#">Portal</a> 
-        <a class="login" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a>
+    
+            <div class="dropdown">
+                <a href="#">Dokumen <i class="fa fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="#">Publikasi</a>
+                    <a href="#">Arsip</a>
+                </div>
+            </div>
+    
+            <div class="dropdown">
+                <a href="#">Inovasi UNJ<i class="fa fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="#">Mercendise UNJ</a>
+                    <a href="#">Pangan</a>
+                    <a href="#">Energi</a>
+                    <a href="#">TIK</a>
+                    <a href="#">Biomedis</a>
+                    <a href="#">Antropometri digital</a>
+                    <a href="#">Smartbed</a>
+                    <a href="#">Material Maju</a>
+                    <a href="#">Lainnya</a>
+                    <a href="#">Pakaian Zavera</a>
+                </div>
+            </div>
+        </div>
+    
+        <a href="#">Berita</a>
+        <a href="#">Galeri</a>
+        <a href="#">Portal</a> 
     </div>
 
     <script src="{{ asset('script.js') }}"></script>

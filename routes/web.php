@@ -103,3 +103,7 @@ Route::get('/pemeringkatan/landingpage', function () {
     return view('pemeringkatan.landingpagepemeringkatan');
 })->name('pemeringkatan.landingpage');
 
+Route::get('/inovasi/landingpage', function () {
+    return view('inovasi.landingpagehilirisasi');
+})->name('inovasi.landingpage');
+
