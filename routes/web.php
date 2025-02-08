@@ -66,23 +66,24 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('admin.qstable');
     })->name('qstable');
 
-    Route::get('/qsgeneraltable', [QuesionerGeneralController::class, 'index'])->name('qsgeneraltable');
+    
     Route::get('/qsgeneraltable', [QuesionerGeneralController::class, 'index'])->name('qsgeneraltable');
 
+    Route::get('/respondenacademic', function () {
+        return view('admin.respondenacademic');
+    })->name('respondenacademic');
+
+    Route::get('/respondenemployee', function () {
+        return view('admin.respondenemployee');
+    })->name('respondenemployee');
 });
 
 // Route::resource('/qsranking/qs-general', QuesionerGeneralController::class)->only(['create', 'store']);
 // Route::put('/responden/{id}', [AdminRespondenController::class, 'update']);
 
-// Route::prefix('qsranking')->group(function () {
-//     Route::get('/qs-general', [QuesionerGeneralController::class, 'create'])->name('qs-general.create');
-//     Route::post('/qs-general', [QuesionerGeneralController::class, 'store'])->name('qs-general.store');
-// });
 
 Route::get('/qsrangking/qs_general', [QuesionerGeneralController::class, 'create'])->name('qs_general');
 Route::post('/qsrangking/qs_general', [QuesionerGeneralController::class, 'store'])->name('qs_general.store');
-
-
 
 
 Route::get('/qsrangking/qs_academic', function () {
