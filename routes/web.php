@@ -66,6 +66,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('admin.qstable');
     })->name('qstable');
 
+    Route::get('/respondenacademic', function () {
+        return view('admin.respondenacademic');
+    })->name('respondenacademic');
+
+    Route::get('/respondenemployee', function () {
+        return view('admin.respondenemployee');
+    })->name('respondenemployee');
 });
 
 // Route::resource('/qsranking/qs-general', QuesionerGeneralController::class)->only(['create', 'store']);

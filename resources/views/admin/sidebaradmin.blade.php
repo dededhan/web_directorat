@@ -55,6 +55,18 @@
                 <span class="text">Tabel Responden</span>
             </a>
         </li>
+        <li class="{{ request()->routeIs('admin.respondenacademic') ? 'active' : '' }}">
+            <a href="{{ route('admin.respondenacademic') }}">
+                <i class='bx bxs-graduation'></i>
+                <span class="text">Tabel Academic</span>
+            </a>
+        </li>
+        <li class="{{ request()->routeIs('admin.respondenemployee') ? 'active' : '' }}">
+            <a href="{{ route('admin.respondenemployee') }}">
+                <i class='bx bxs-graduation'></i>
+                <span class="text">Tabel Employer</span>
+            </a>
+        </li>
     </ul>
     <ul class="side-menu">
         <li>
