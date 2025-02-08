@@ -122,7 +122,7 @@
 <body>
     <div class="form-container">
         <h2>General Respondent Form</h2>
-        <form method="POST" id="respondentForm" onsubmit="return validateForm(event)" action="{{ route('qs-general.store') }}">
+        <form method="POST" id="respondentForm" onsubmit="return validateForm(event)" action="{{ route('qs_general.store') }}">
         {{-- <form method="POST" id="respondentForm" onsubmit="return validateForm(event)" action="{{ route('qs-general.store') }}">     --}}
             <!-- Previous form sections remain the same until contact information -->
             @csrf

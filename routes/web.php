@@ -66,21 +66,22 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('admin.qstable');
     })->name('qstable');
 
+    Route::get('/qsgeneraltable', [QuesionerGeneralController::class, 'index'])->name('qsgeneraltable');
+    Route::get('/qsgeneraltable', [QuesionerGeneralController::class, 'index'])->name('qsgeneraltable');
+
 });
 
 // Route::resource('/qsranking/qs-general', QuesionerGeneralController::class)->only(['create', 'store']);
 // Route::put('/responden/{id}', [AdminRespondenController::class, 'update']);
 
-Route::prefix('qsranking')->group(function () {
-    Route::get('/qs-general', [QuesionerGeneralController::class, 'create'])->name('qs-general.create');
-    Route::post('/qs-general', [QuesionerGeneralController::class, 'store'])->name('qs-general.store');
-});
+// Route::prefix('qsranking')->group(function () {
+//     Route::get('/qs-general', [QuesionerGeneralController::class, 'create'])->name('qs-general.create');
+//     Route::post('/qs-general', [QuesionerGeneralController::class, 'store'])->name('qs-general.store');
+// });
 
-// The admin routes can stay in the admin prefix group
-Route::prefix('admin')->name('admin.')->group(function () {
-    // ... other admin routes ...
-    Route::get('/qstable', [QuesionerGeneralController::class, 'index'])->name('qstable');
-});
+Route::get('/qsrangking/qs_general', [QuesionerGeneralController::class, 'create'])->name('qs_general');
+Route::post('/qsrangking/qs_general', [QuesionerGeneralController::class, 'store'])->name('qs_general.store');
+
 
 
 

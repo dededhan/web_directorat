@@ -17,7 +17,7 @@ class QuesionerGeneralController extends Controller
     public function index()
     {
         $quesionerGenerals = QuesionerGeneral::all();
-        return view('admin.qstable', compact('quesionerGenerals'));
+        return view('admin.qsgeneraltable', compact('quesionerGenerals'));
     }
 
     // Method untuk publik
