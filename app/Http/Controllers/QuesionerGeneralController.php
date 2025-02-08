@@ -47,7 +47,8 @@ class QuesionerGeneralController extends Controller
             'survey_2024' => $validatedQUesionerData['general_survey2024']
         ]);
 
-        return redirect(route('qs-general.index'));
+        // return redirect(route('qs-general.index'));
+        return redirect()->route('home')->with('success', 'Form submitted successfully');
     }
 
     /**
