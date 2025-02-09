@@ -22,7 +22,8 @@
                 <h3>Input Berita Alumni Berdampak</h3>
             </div> 
 
-            <form id="alumni-form">
+            <form id="alumni-form" action="{{ route('admin.alumniberdampak.store') }}" method="POST">
+                @csrf
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="judul_berita" class="form-label">Judul Berita/Artikel</label>
@@ -91,12 +92,17 @@
                             </tr>
                         </thead>
                         <tbody id="alumni-list">
+                            @foreach($alumniBerdampak as $alumni)
                             <tr>
-                                <td>Alumni FMIPA Ciptakan Inovasi Teknologi Ramah Lingkungan</td>
-                                <td>2024-02-03</td>
-                                <td>FMIPA</td>
-                                <td>Ilmu Komputer</td>
-                                <td><a href="#" target="_blank" class="btn btn-sm btn-info">View Link</a></td>
+                                <td>{{ $alumni->judul_berita }}</td>
+                                <td>{{ $alumni->tanggal_berita }}</td>
+                                <td>{{ strtoupper($alumni->fakultas) }}</td>
+                                <td>{{ $alumni->prodi }}</td>
+                                <td>
+                                    <a href="{{ $alumni->link_berita }}" target="_blank" class="btn btn-sm btn-info">
+                                        View Link
+                                    </a>
+                                </td>
                                 <td>
                                     <div class="btn-group">
                                         <button class="btn btn-sm btn-warning">Edit</button>
@@ -104,19 +110,7 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>Alumni FT Raih Penghargaan Internasional</td>
-                                <td>2024-02-01</td>
-                                <td>FT</td>
-                                <td>Teknik Sipil</td>
-                                <td><a href="#" target="_blank" class="btn btn-sm btn-info">View Link</a></td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

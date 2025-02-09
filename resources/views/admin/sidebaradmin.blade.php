@@ -43,8 +43,8 @@
             </a>
         </li>
 
-        <li class="{{ request()->routeIs('admin.alumniberdampak') ? 'active' : '' }}">
-            <a href="{{ route('admin.alumniberdampak') }}">
+        <li class="{{ request()->routeIs('admin.alumniberdampak.index') ? 'active' : '' }}">
+            <a href="{{ route('admin.alumniberdampak.index') }}">
                 <i class='bx bxs-shopping-bag-alt'></i>
                 <span class="text">Alumni Berdampak</span>
             </a>

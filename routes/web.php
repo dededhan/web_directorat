@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\AdminRespondenController;
 use App\Http\Controllers\QuesionerGeneralController;
+use App\Http\Controllers\AdminAlumniBerdampakController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -57,9 +58,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('admin.matakuliahsustainability');
     })->name('matakuliah-sustainability');
 
-    Route::get('/alumniberdampak', function () {
-        return view('admin.alumniberdampak');
-    })->name('alumniberdampak');
+    Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
+    Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
+
+    // Route::get('/alumniberdampak', function () {
+    //     return view('admin.alumniberdampak');
+    // })->name('alumniberdampak');
 
     // Route::resource('/qstable', QuesionerGeneralController::class)->except(['create', 'store']);
     Route::get('/qstable', function () {
