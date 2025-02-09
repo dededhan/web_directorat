@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\AdminRespondenController;
 use App\Http\Controllers\QuesionerGeneralController;
 use App\Http\Controllers\AdminAlumniBerdampakController;
+use App\Http\Controllers\AdminMataKuliahController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -54,9 +55,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     //     return view('admin.sustainability');
     // })->name('sustainability');
 
-    Route::get('/matakuliah-sustainability', function () {
-        return view('admin.matakuliahsustainability');
-    })->name('matakuliah-sustainability');
+    Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
+    Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
+    // Route::get('/matakuliah-sustainability', function () {
+    //     return view('admin.matakuliahsustainability');
+    // })->name('matakuliah-sustainability');
 
     Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
     Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');

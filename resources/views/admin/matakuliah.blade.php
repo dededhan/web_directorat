@@ -22,7 +22,8 @@
                 <h3>Input Mata Kuliah Sustainability</h3>
             </div> 
 
-            <form id="matakuliah-form">
+            <form id="matakuliah-form" action="{{ route('admin.matakuliah.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="nama_matkul" class="form-label">Nama Mata Kuliah</label>
@@ -37,8 +38,8 @@
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label for="Kode Mata Kuliah" class="form-label">Kode Mata Kuliah</label>
-                        <input type="text" class="form-control" name="Kode Mata Kuliah" id="Kode Mata Kuliah">
+                        <label for="kode_matkul" class="form-label">Kode Mata Kuliah</label>
+                        <input type="text" class="form-control" name="kode_matkul" id="kode_matkul">
                     </div>
                 </div>
 
@@ -105,20 +106,26 @@
                             </tr>
                         </thead>
                         <tbody id="matakuliah-list">
-                            <tr>
-                                <td>Pembangunan Berkelanjutan</td>
-                                <td>Ganjil 2023/2024</td>
-                                <td>FMIPA</td>
-                                <td>Ilmu Komputer</td>
-                                <td><a href="#" class="btn btn-sm btn-info">Download RPS</a></td>
-                                <td>Mata kuliah ini membahas konsep...</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
+                            @foreach($matakuliahs as $matakuliah)
+                                <tr>
+                                    <td>{{ $matakuliah->nama_matkul }}</td>
+                                    <td>{{ $matakuliah->semester }}</td>
+                                    <td>{{ ucfirst($matakuliah->fakultas) }}</td> {{-- Contoh konversi ke huruf kapital --}}
+                                    <td>{{ $matakuliah->prodi }}</td>
+                                    <td>
+                                        <a href="{{ Storage::url($matakuliah->rps_path) }}" class="btn btn-sm btn-info">
+                                            Download RPS
+                                        </a>
+                                    </td>
+                                    <td>{{ Str::limit($matakuliah->deskripsi, 50) }}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm btn-warning">Edit</button>
+                                            <button class="btn btn-sm btn-danger">Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

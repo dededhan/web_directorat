@@ -36,8 +36,8 @@
             </a>
         </li>
 
-        <li class="{{ request()->routeIs('admin.matakuliah-sustainability') ? 'active' : '' }}">
-            <a href="{{ route('admin.matakuliah-sustainability') }}">
+        <li class="{{ request()->routeIs('admin.matakuliah.index') ? 'active' : '' }}">
+            <a href="{{ route('admin.matakuliah.index') }}">
                 <i class='bx bxs-shopping-bag-alt'></i>
                 <span class="text">Mata Kuliah Sustainability</span>
             </a>
