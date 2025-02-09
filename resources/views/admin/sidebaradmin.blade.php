@@ -52,19 +52,19 @@
         <li class="{{ request()->routeIs('admin.qsgeneraltable') ? 'active' : '' }}">
             <a href="{{ route('admin.qsgeneraltable') }}">
                 <i class='bx bxs-graduation'></i>
-                <span class="text">Tabel Responden</span>
+                <span class="text">Tabel General</span>
             </a>
         </li>
-        <li class="{{ request()->routeIs('admin.respondenacademic') ? 'active' : '' }}">
+        {{-- <li class="{{ request()->routeIs('admin.respondenacademic') ? 'active' : '' }}">
             <a href="{{ route('admin.respondenacademic') }}">
                 <i class='bx bxs-graduation'></i>
                 <span class="text">Tabel Academic</span>
             </a>
-        </li>
+        </li> --}}
         <li class="{{ request()->routeIs('admin.respondenemployee') ? 'active' : '' }}">
             <a href="{{ route('admin.respondenemployee') }}">
                 <i class='bx bxs-graduation'></i>
-                <span class="text">Tabel Employer</span>
+                <span class="text">Tabel Responden</span>
             </a>
         </li>
     </ul>

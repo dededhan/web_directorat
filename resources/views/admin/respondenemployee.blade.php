@@ -3,14 +3,14 @@
 @section('contentadmin')
     <div class="head-title">
         <div class="left">
-            <h1>QS Employer Respondents</h1>
+            <h1>QS Responden Table</h1>
             <ul class="breadcrumb">
                 <li>
                     <a href="{{ route('admin.dashboard') }}">Dashboard</a>
                 </li>
                 <li><i class='bx bx-chevron-right'></i></li>
                 <li>
-                    <a class="active" href="#">QS Employer Respondents</a>
+                    <a class="active" href="#">QS Responden Table</a>
                 </li>
             </ul>
         </div>
@@ -19,7 +19,7 @@
     <div class="table-data">
         <div class="order">
             <div class="head">
-                <h3>Employer Respondent Data</h3>
+                <h3>QS Respondent Data</h3>
             </div>
             
             <div class="table-responsive">
@@ -36,6 +36,7 @@
                             <th>Phone</th>
                             <th>2023 Survey</th>
                             <th>2024 Survey</th>
+                            <th>Category</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
