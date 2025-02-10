@@ -26,10 +26,18 @@ class LoginController extends Controller
    
             if (Auth::user()->role === 'admin_direktorat') {
                 return redirect()->route('admin.dashboard');
+            } else if (Auth::user()->role === 'prodi') {
+                return redirect()->route('prodi.dashboard');
             }
+
             
             // Default redirect
+            // if (Auth::user()->role === 'admin_direktorat') {
+            //     return redirect('/admin');
+            // }
+
             return redirect('/admin');
+
         }
 
         return back()->withErrors([

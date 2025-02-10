@@ -6,13 +6,20 @@ namespace App\Http\Controllers;
 use App\Models\AlumniBerdampak;
 use App\Http\Requests\StoreAlumniBerdampakRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; 
 
 class AdminAlumniBerdampakController extends Controller
 {
     public function index()
     {
         $alumniBerdampak = AlumniBerdampak::latest()->get();
-        return view('admin.alumniberdampak', compact('alumniBerdampak'));
+
+        if (Auth::user()->role === 'admin_direktorat') {
+            return view('admin.alumniberdampak', compact('alumniBerdampak'));
+        } else if (Auth::user()->role === 'prodi') {
+            return view('prodi.alumniberdampak', compact('alumniBerdampak'));
+        }
+        // return view('admin.alumniberdampak', compact('alumniBerdampak'));
     }
 
     public function store(StoreAlumniBerdampakRequest $request)
@@ -76,7 +83,15 @@ class AdminAlumniBerdampakController extends Controller
 
         AlumniBerdampak::create($validated);
 
-        return redirect()->route('admin.alumniberdampak.index')
-            ->with('success', 'Data berhasil disimpan!');
+        if (Auth::user()->role === 'admin_direktorat') {
+            return redirect()->route('admin.alumniberdampak.index')
+                ->with('success', 'Data berhasil disimpan!');
+        } else if (Auth::user()->role === 'prodi') {
+            return redirect()->route('prodi.alumniberdampak.index')
+                ->with('success', 'Data berhasil disimpan!');
+        }
+
+        // return redirect()->route('admin.alumniberdampak.index')
+        //     ->with('success', 'Data berhasil disimpan!');
     }
 }  //

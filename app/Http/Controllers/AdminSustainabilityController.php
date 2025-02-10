@@ -9,13 +9,20 @@ use App\Http\Requests\UpdateSustainabilityRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth; 
 
 class AdminSustainabilityController extends Controller
 {
     public function index()
     {
         $sustainabilities = Sustainability::with('photos')->latest()->paginate(10);
-        return view('admin.sustainability', compact('sustainabilities'));
+
+        if (Auth::user()->role === 'admin_direktorat') {
+            return view('admin.sustainability', compact('sustainabilities'));
+        } else if (Auth::user()->role === 'prodi') {
+            return view('prodi.sustainability', compact('sustainabilities'));
+        }
+        // return view('admin.sustainability', compact('sustainabilities'));
     }
     
     public function store(StoreSustainabilityRequest $request)

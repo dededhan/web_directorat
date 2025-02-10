@@ -6,6 +6,7 @@ use App\Models\MataKuliah;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreMataKuliahRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth; 
 
 class AdminMataKuliahController extends Controller
 {
@@ -13,7 +14,14 @@ class AdminMataKuliahController extends Controller
     public function index()
     {
         $matakuliahs = MataKuliah::all(); // <-- Variable plural
-    return view('admin.matakuliah', compact('matakuliahs'));
+
+        
+        if (Auth::user()->role === 'admin_direktorat') {
+            return view('admin.matakuliah', compact('matakuliahs'));
+        } else if (Auth::user()->role === 'prodi') {
+            return view('prodi.matakuliah', compact('matakuliahs'));
+        }
+        // return view('admin.matakuliah', compact('matakuliahs'));
 
     }
 
@@ -31,8 +39,18 @@ class AdminMataKuliahController extends Controller
             'rps_path' => $path,
             'deskripsi' => $request->deskripsi
         ]);
-        return redirect()->route('admin.matakuliah.index')
-            ->with('success', 'Data berhasil disimpan!');
+
+        if (Auth::user()->role === 'admin_direktorat') {
+            return redirect()->route('admin.matakuliah.index')
+                ->with('success', 'Data berhasil disimpan!');
+        } else if (Auth::user()->role === 'prodi') {
+            return redirect()->route('prodi.matakuliah.index')
+                ->with('success', 'Data berhasil disimpan!');
+        }
+
+
+        // return redirect()->route('admin.matakuliah.index')
+        //     ->with('success', 'Data berhasil disimpan!');
 
     }
 }
