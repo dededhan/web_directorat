@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminRespondenController;
 use App\Http\Controllers\QuesionerGeneralController;
 use App\Http\Controllers\AdminAlumniBerdampakController;
 use App\Http\Controllers\AdminMataKuliahController;
+use App\Http\Controllers\AlumniController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -115,9 +116,13 @@ Route::get('/galeri/sustainability', function () {
     return view('galeri.sustainability');
 })->name('galeri.sustainability'); 
 
-Route::get('/galeri/alumni', function () {
-    return view('galeri.alumni');
-})->name('alumni');
+// Route::get('/alumni-impact', [AlumniController::class, 'index'])->name('alumni.impact');
+// Route::get('/galeri/alumni', function () {
+//     return view('galeri.alumni');
+// })->name('alumni');
+
+Route::get('/galeri/alumni', [AlumniController::class, 'index'])->name('alumni');
+
 
 Route::get('/pemeringkatan/landingpage', function () {
     return view('pemeringkatan.landingpagepemeringkatan');

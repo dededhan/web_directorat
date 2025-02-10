@@ -42,179 +42,103 @@
             <li><a href="#">Alumni Impact</a></li>
         </ul>
     </nav>
-
     <div class="container">
         <div class="activity-photos">
-            <!-- Original cards content remains the same -->
-            <!-- Card 1 -->
-            <div class="photo-card">
-                <div class="card-image">
-                    <img src="https://ibb.co.com/pgzvFvm" alt="Alumni Success Story">
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Alumni UNJ Kembangkan Startup Pendidikan yang Mendunia</h3>
-                    <div class="card-info">
-                        <div class="info-item">
-                            <i class="fas fa-calendar"></i>
-                            <span>15 Februari 2025</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-graduation-cap"></i>
-                            <span>Teknik Informatika</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-university"></i>
-                            <span>Fakultas Teknik</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-link"></i>
-                            <a href="https://news.unj.ac.id/article1" target="_blank">Baca selengkapnya</a>
+            @forelse($alumniBerdampak as $alumni)
+                <div class="photo-card">
+                    <div class="card-image">
+                        <!-- You might want to add a default image if none provided -->
+                        <img src="{{ asset('images/default-news.jpg') }}" alt="{{ $alumni->judul_berita }}">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">{{ $alumni->judul_berita }}</h3>
+                        <div class="card-info">
+                            <div class="info-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>{{ \Carbon\Carbon::parse($alumni->tanggal_berita)->format('d F Y') }}</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>{{ $alumni->prodi }}</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-university"></i>
+                                <span>{{ strtoupper($alumni->fakultas) }}</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-link"></i>
+                                <a href="{{ $alumni->link_berita }}" target="_blank">Baca selengkapnya</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="photo-card">
-                <div class="card-image">
-                    <img src="/api/placeholder/400/300" alt="Alumni Impact Story">
+            @empty
+                <div class="no-data">
+                    <i class="fas fa-newspaper"></i>
+                    <p>Belum ada berita alumni yang tersedia</p>
                 </div>
-                <div class="card-content">
-                    <h3 class="card-title">Alumni UNJ Raih Penghargaan Guru Terbaik Nasional</h3>
-                    <div class="card-info">
-                        <div class="info-item">
-                            <i class="fas fa-calendar"></i>
-                            <span>20 Maret 2025</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-graduation-cap"></i>
-                            <span>Pendidikan Matematika</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-university"></i>
-                            <span>Fakultas MIPA</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-link"></i>
-                            <a href="https://news.unj.ac.id/article2" target="_blank">Baca selengkapnya</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="photo-card">
-                <div class="card-image">
-                    <img src="/api/placeholder/400/300" alt="Community Impact">
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Alumni UNJ Dirikan Pusat Pemberdayaan Masyarakat</h3>
-                    <div class="card-info">
-                        <div class="info-item">
-                            <i class="fas fa-calendar"></i>
-                            <span>5 April 2025</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-graduation-cap"></i>
-                            <span>Pendidikan Masyarakat</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-university"></i>
-                            <span>Fakultas Ilmu Pendidikan</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-link"></i>
-                            <a href="https://news.unj.ac.id/article3" target="_blank">Baca selengkapnya</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="photo-card">
-                <div class="card-image">
-                    <img src="/api/placeholder/400/300" alt="Research Impact">
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Alumni UNJ Temukan Inovasi Energi Terbarukan</h3>
-                    <div class="card-info">
-                        <div class="info-item">
-                            <i class="fas fa-calendar"></i>
-                            <span>12 Mei 2025</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-graduation-cap"></i>
-                            <span>Teknik Elektro</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-university"></i>
-                            <span>Fakultas Teknik</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-link"></i>
-                            <a href="https://news.unj.ac.id/article4" target="_blank">Baca selengkapnya</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 5 -->
-            <div class="photo-card">
-                <div class="card-image">
-                    <img src="/api/placeholder/400/300" alt="Social Impact">
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Alumni UNJ Bangun Gerakan Literasi Nasional</h3>
-                    <div class="card-info">
-                        <div class="info-item">
-                            <i class="fas fa-calendar"></i>
-                            <span>25 Mei 2025</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-graduation-cap"></i>
-                            <span>Pendidikan Bahasa Indonesia</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-university"></i>
-                            <span>Fakultas Bahasa dan Seni</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-link"></i>
-                            <a href="https://news.unj.ac.id/article5" target="_blank">Baca selengkapnya</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 6 -->
-            <div class="photo-card">
-                <div class="card-image">
-                    <img src="/api/placeholder/400/300" alt="International Achievement">
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Alumni UNJ Jadi Peneliti di NASA</h3>
-                    <div class="card-info">
-                        <div class="info-item">
-                            <i class="fas fa-calendar"></i>
-                            <span>30 Mei 2025</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-graduation-cap"></i>
-                            <span>Fisika</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-university"></i>
-                            <span>Fakultas MIPA</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-link"></i>
-                            <a href="https://news.unj.ac.id/article6" target="_blank">Baca selengkapnya</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforelse
         </div>
     </div>
+    
 </body>
 </html>
+
+<style>
+    .no-data {
+        width: 100%;
+        text-align: center;
+        padding: 40px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        margin: 20px 0;
+    }
+    
+    .no-data i {
+        font-size: 48px;
+        color: #ccc;
+        margin-bottom: 15px;
+    }
+    
+    .no-data p {
+        color: #666;
+        font-size: 18px;
+    }
+    
+    .photo-card {
+        transition: transform 0.3s ease;
+    }
+    
+    .photo-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .card-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.9em;
+        color: #666;
+    }
+    
+    .info-item i {
+        color: #3498db;
+    }
+    
+    .info-item a {
+        color: #3498db;
+        text-decoration: none;
+    }
+    
+    .info-item a:hover {
+        text-decoration: underline;
+    }
+    </style>
 @include('pemeringkatan.footerpemeringkatan')
