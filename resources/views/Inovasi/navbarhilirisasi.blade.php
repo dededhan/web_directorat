@@ -59,6 +59,13 @@
                     <a href="#">Panduan Program</a>
                 </div>
             </div>
+
+            <div class="dropdown">
+                <a href="#">Layanan <i class="fa fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                <a href="{{ route('form') }}">Form Kasinov</a>
+                </div>
+            </div>
     
             <div class="dropdown">
                 <a href="#">Data <i class="fa fa-caret-down"></i></a>

@@ -5,7 +5,6 @@ use App\Http\Controllers\AdminRespondenController;
 use App\Http\Controllers\QuesionerGeneralController;
 use App\Http\Controllers\AdminAlumniBerdampakController;
 use App\Http\Controllers\AdminMataKuliahController;
-use App\Http\Controllers\AlumniController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -26,32 +25,32 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {
         return view('admin.dashboardadmin');
     })->name('dashboard');
-
+    
     // News
     Route::get('/news', function () {
         return view('admin.newsadmin');
     })->name('news');
 
-
+    
     Route::resource('/responden', AdminRespondenController::class);
     Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
-        ->name('responden.update');
+    ->name('responden.update');
 
-    // Untuk update status khusus (POST)
+// Untuk update status khusus (POST)
     Route::post('/responden/update-status/{id}', [AdminRespondenController::class, 'updateStatus'])
         ->name('responden.updateStatus');
 
     // Route::post('/responden/{responden}', AdminMailSendController::class)->name('mail.responden');
-
+    
     Route::get('/manage-user', function () {
         return view('admin.manageuser');
     })->name('manageuser');
 
-
-
+    
+    
     Route::resource('/sustainability', AdminSustainabilityController::class);
-
-
+    
+    
     // Route::get('/sustainability', function () {
     //     return view('admin.sustainability');
     // })->name('sustainability');
@@ -74,7 +73,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('admin.qstable');
     })->name('qstable');
 
-
+    
     Route::get('/qsgeneraltable', [QuesionerGeneralController::class, 'index'])->name('qsgeneraltable');
 
     Route::get('/respondenacademic', function () {
@@ -84,29 +83,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/respondenemployee', function () {
         return view('admin.respondenemployee');
     })->name('respondenemployee');
-});
-
-Route::prefix('prodi')->name('prodi.')->group(function () {
-    // Dashboard
-    Route::get('/dashboard', function () {
-        return view('prodi.dashboard');
-    })->name('dashboard');
-
-    Route::resource('/sustainability', AdminSustainabilityController::class);
-
-
-    //Mata Kuliah
-    Route::get('/matakuliah-sustainability', function () {
-        return view('admin.matakuliahsustainability');
-    })->name('matakuliah-sustainability');
-    Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
-    Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
-
-
-    //Alumni
-    Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
-    Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
-
 });
 
 // Route::resource('/qsranking/qs-general', QuesionerGeneralController::class)->only(['create', 'store']);
@@ -137,15 +113,15 @@ Route::get('/tupoksi', function () {
 
 Route::get('/galeri/sustainability', function () {
     return view('galeri.sustainability');
-})->name('galeri.sustainability');
+})->name('galeri.sustainability'); 
 
-// Route::get('/alumni-impact', [AlumniController::class, 'index'])->name('alumni.impact');
-// Route::get('/galeri/alumni', function () {
-//     return view('galeri.alumni');
-// })->name('alumni');
+Route::get('/galeri/alumni', function () {
+    return view('galeri.alumni');
+})->name('alumni');
 
-Route::get('/galeri/alumni', [AlumniController::class, 'index'])->name('alumni');
-
+Route::get('/Kasinov/form', function () {
+    return view('Inovasi.Kasinov.form');
+})->name('form');
 
 Route::get('/pemeringkatan/landingpage', function () {
     return view('pemeringkatan.landingpagepemeringkatan');
@@ -154,3 +130,4 @@ Route::get('/pemeringkatan/landingpage', function () {
 Route::get('/inovasi/landingpage', function () {
     return view('inovasi.landingpagehilirisasi');
 })->name('inovasi.landingpage');
+
