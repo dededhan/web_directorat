@@ -62,7 +62,7 @@
             </a>
         </li> --}}
         <li class="{{ request()->routeIs('admin.respondenemployee') ? 'active' : '' }}">
-            <a href="{{ route('admin.respondenemployee') }}">
+            <a href="{{ route('admin.qsresponden.index') }}">
                 <i class='bx bxs-graduation'></i>
                 <span class="text">Tabel Responden</span>
             </a>

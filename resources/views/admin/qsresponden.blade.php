@@ -29,6 +29,7 @@
                             <th>Title</th>
                             <th>First Name</th>
                             <th>Last Name</th>
+                            <th>Institution</th>
                             <th>Company Name</th>
                             <th>Job Title</th>
                             <th>Country</th>
@@ -40,6 +41,28 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
+                    <tbody>
+                        @forelse ($respondens as $responden)
+                            <tr>
+                                <td>{{ $responden->title }}</td>
+                                <td>{{ $responden->firstname }}</td>
+                                <td>{{ $responden->lastname }}</td>
+                                <td>{{ $responden->institution }}</td>
+                                <td>{{ $responden->company }}</td>
+                                <td>{{ $responden->job_title }}</td>
+                                <td>{{ $responden->country }}</td>
+                                <td>{{ $responden->email }}</td>
+                                <td>{{ $responden->phone }}</td>
+                                <td>{{ $responden->survey_2023 }}</td>
+                                <td>{{ $responden->survey_2024 }}</td>
+                                <td>{{ $responden->category }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td>Tidak ada data</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
                 </table>
             </div>
         </div>

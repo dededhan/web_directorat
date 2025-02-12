@@ -51,8 +51,8 @@
                                 Phone: {{ $data->phone }}
                             </td>
                             <td>
-                                2023: {!! $data->survey_2023 === 'Yes' ? '✓' : '✗' !!}<br>
-                                2024: {!! $data->survey_2024 === 'Yes' ? '✓' : '✗' !!}
+                                2023: {!! $data->survey_2023 === 'yes' ? '✓' : '✗' !!}<br>
+                                2024: {!! $data->survey_2024 === 'yes' ? '✓' : '✗' !!}
                             </td>
                             <td>
                                 <div class="btn-group">

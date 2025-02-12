@@ -5,6 +5,8 @@ use App\Http\Controllers\AdminRespondenController;
 use App\Http\Controllers\QuesionerGeneralController;
 use App\Http\Controllers\AdminAlumniBerdampakController;
 use App\Http\Controllers\AdminMataKuliahController;
+use App\Http\Controllers\RespondenAnswerController;
+use App\Http\Middleware\HandleRespondenForm;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -76,30 +78,33 @@ Route::prefix('admin')->name('admin.')->group(function () {
     
     Route::get('/qsgeneraltable', [QuesionerGeneralController::class, 'index'])->name('qsgeneraltable');
 
-    Route::get('/respondenacademic', function () {
-        return view('admin.respondenacademic');
-    })->name('respondenacademic');
-
-    Route::get('/respondenemployee', function () {
-        return view('admin.respondenemployee');
-    })->name('respondenemployee');
+    Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
 });
 
 // Route::resource('/qsranking/qs-general', QuesionerGeneralController::class)->only(['create', 'store']);
 // Route::put('/responden/{id}', [AdminRespondenController::class, 'update']);
 
+Route::prefix('qsranking')->group(function(){
+    Route::get('/qs-general', [QuesionerGeneralController::class, 'create'])->name('qs_general.index');
+    Route::post('/qs-general', [QuesionerGeneralController::class, 'store'])->name('qs_general.store');
 
-Route::get('/qsrangking/qs_general', [QuesionerGeneralController::class, 'create'])->name('qs_general');
-Route::post('/qsrangking/qs_general', [QuesionerGeneralController::class, 'store'])->name('qs_general.store');
+    // controller hijack :v
+    Route::get('/qs-employee', [RespondenAnswerController::class, 'create'])->name('qs-employee.index')->middleware(HandleRespondenForm::class);
+    Route::post('/qs-employee', [RespondenAnswerController::class, 'store'])->name('qs-employee.store')->middleware(HandleRespondenForm::class);
+    Route::get('/qs-academic', [RespondenAnswerController::class, 'create'])->name('qs-academic.index')->middleware(HandleRespondenForm::class);
+    Route::post('/qs-academic', [RespondenAnswerController::class, 'store'])->name('qs-academic.store')->middleware(HandleRespondenForm::class);
+});
+// Route::get('/qsrangking/qs_general', [QuesionerGeneralController::class, 'create'])->name('qs_general');
+// Route::post('/qsrangking/qs_general', [QuesionerGeneralController::class, 'store'])->name('qs_general.store');
 
 
-Route::get('/qsrangking/qs_academic', function () {
-    return view('qsrangking.qs_academic');
-})->name('qs_academic');
+// Route::get('/qsrangking/qs_academic', function () {
+//     return view('qsrangking.qs_academic');
+// })->name('qs_academic');
 
-Route::get('/qsrangking/qs_employee', function () {
-    return view('qsrangking.qs_employee');
-})->name('qs_employee');
+// Route::get('/qsrangking/qs_employee', function () {
+//     return view('qsrangking.qs_employee');
+// })->name('qs_employee');
 
 
 // Route::get('/qsrangking/qs_general', function () {

@@ -157,6 +157,8 @@
                                                 Sudah di-email, belum di-follow up</option>
                                             <option value="dones" {{ $responden->status == 'dones' ? 'selected' : '' }}>
                                                 Sudah di-email, sudah di-follow up</option>
+                                                <option value="clear" {{ $responden->status == 'clear' ? 'selected' : '' }}>
+                                                    selesai</option>
                                         </select>
                                     </td>
                                     <td>
