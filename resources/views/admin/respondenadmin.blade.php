@@ -158,7 +158,7 @@
                                             <option value="dones" {{ $responden->status == 'dones' ? 'selected' : '' }}>
                                                 Sudah di-email, sudah di-follow up</option>
                                             <option value="clear" {{ $responden->status == 'clear' ? 'selected' : '' }}>
-                                                    selesai</option>
+                                                selesai</option>
                                         </select>
                                     </td>
                                     <td>
@@ -189,9 +189,11 @@
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             document.querySelectorAll('.status-dropdown').forEach(select => {
-                // Disable update button if status is clear
+                // Initial state check
                 const updateButton = select.closest('tr').querySelector('.update-status');
                 if (select.value === 'clear') {
+                    // Disable both select and button
+                    select.disabled = true;
                     updateButton.disabled = true;
                     updateButton.classList.add('btn-secondary');
                     updateButton.classList.remove('btn-warning');
@@ -202,48 +204,76 @@
                     const newStatus = this.value;
                     const updateButton = this.closest('tr').querySelector('.update-status');
 
-                    // If new status is clear, disable both select and button
+                    // Store previous value for rollback if needed
+                    const previousValue = this.dataset.previousValue;
+
+                    // If new status is clear
                     if (newStatus === 'clear') {
-                        select.disabled = true;
-                        updateButton.disabled = true;
-                        updateButton.classList.add('btn-secondary');
-                        updateButton.classList.remove('btn-warning');
-                    }
-
-                    axios.post(`/admin/responden/update-status/${respondenId}`, {
-                            status: newStatus,
-                            _token: csrfToken
-                        })
-                        .then(response => {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil!',
-                                text: response.data.message,
-                                timer: 1500,
-                                showConfirmButton: false
-                            });
-
-                            const badge = this.closest('tr').querySelector('.status-badge');
-                            if (badge) {
-                                badge.textContent = response.data.new_status;
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "Setting status to 'clear' will lock this entry. This cannot be undone!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, set to clear'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                updateStatus(this, respondenId, newStatus, updateButton);
+                            } else {
+                                // Revert to previous value if user cancels
+                                this.value = previousValue;
                             }
-                        })
-                        .catch(error => {
-                            this.value = this.dataset.previousValue;
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Gagal!',
-                                text: error.response?.data?.message ||
-                                    'Terjadi kesalahan',
-                            });
-                        })
-                        .finally(() => {
-                            this.dataset.previousValue = newStatus;
                         });
+                    } else {
+                        updateStatus(this, respondenId, newStatus, updateButton);
+                    }
                 });
 
+                // Store initial value
                 select.dataset.previousValue = select.value;
             });
+
+            function updateStatus(selectElement, respondenId, newStatus, updateButton) {
+                axios.post(`/admin/responden/update-status/${respondenId}`, {
+                        status: newStatus,
+                        _token: csrfToken
+                    })
+                    .then(response => {
+                        if (newStatus === 'clear') {
+                            // Disable both select and button
+                            selectElement.disabled = true;
+                            updateButton.disabled = true;
+                            updateButton.classList.add('btn-secondary');
+                            updateButton.classList.remove('btn-warning');
+                        }
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: response.data.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        const badge = selectElement.closest('tr').querySelector('.status-badge');
+                        if (badge) {
+                            badge.textContent = response.data.new_status;
+                        }
+                    })
+                    .catch(error => {
+                        // Revert to previous value on error
+                        selectElement.value = selectElement.dataset.previousValue;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: error.response?.data?.message || 'Terjadi kesalahan',
+                        });
+                    })
+                    .finally(() => {
+                        selectElement.dataset.previousValue = newStatus;
+                    });
+            }
         });
 
 
