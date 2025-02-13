@@ -28,8 +28,9 @@ class LoginController extends Controller
                 return redirect()->route('admin.dashboard');
             } else if (Auth::user()->role === 'prodi') {
                 return redirect()->route('prodi.dashboard');
-            }
-
+            } else if (Auth::user()->role === 'fakultas') {
+                return redirect()->route('fakultas.dashboard');
+            } 
             
             // Default redirect
             // if (Auth::user()->role === 'admin_direktorat') {

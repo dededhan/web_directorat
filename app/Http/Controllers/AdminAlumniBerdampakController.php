@@ -18,6 +18,8 @@ class AdminAlumniBerdampakController extends Controller
             return view('admin.alumniberdampak', compact('alumniBerdampak'));
         } else if (Auth::user()->role === 'prodi') {
             return view('prodi.alumniberdampak', compact('alumniBerdampak'));
+        } else if (Auth::user()->role === 'fakultas') {
+            return view('fakultas.alumniberdampak', compact('alumniBerdampak'));
         }
         // return view('admin.alumniberdampak', compact('alumniBerdampak'));
     }
@@ -88,6 +90,9 @@ class AdminAlumniBerdampakController extends Controller
                 ->with('success', 'Data berhasil disimpan!');
         } else if (Auth::user()->role === 'prodi') {
             return redirect()->route('prodi.alumniberdampak.index')
+                ->with('success', 'Data berhasil disimpan!');
+        } else if (Auth::user()->role === 'fakultas') {
+            return redirect()->route('fakultas.alumniberdampak.index')
                 ->with('success', 'Data berhasil disimpan!');
         }
 

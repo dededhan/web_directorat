@@ -133,6 +133,35 @@ Route::prefix('prodi')->name('prodi.')->group(function () {
 });
 
 
+Route::prefix('fakultas')->name('fakultas.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('fakultas.dashboard');
+    })->name('dashboard');
+    
+    Route::resource('/sustainability', AdminSustainabilityController::class);
+    
+    //Mata Kuliah
+    Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
+    Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
+    
+    //Alumni
+    Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
+    Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
+
+    //responden
+    Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
+});
+
+
+  //Alumni
+Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
+Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
+Route::get('/galeri/alumni', [AlumniController::class, 'index'])->name('alumni');
+
+// Route::get('/galeri/alumni', function () {
+//     return view('galeri.alumni');
+// })->name('alumni');
 
 
 Route::get('/tupoksi', function () {
@@ -144,9 +173,6 @@ Route::get('/galeri/sustainability', function () {
     return view('galeri.sustainability');
 })->name('galeri.sustainability'); 
 
-Route::get('/galeri/alumni', function () {
-    return view('galeri.alumni');
-})->name('alumni');
 
 Route::get('/Kasinov/form', function () {
     return view('Inovasi.Kasinov.form');

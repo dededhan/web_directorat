@@ -20,6 +20,8 @@ class AdminMataKuliahController extends Controller
             return view('admin.matakuliah', compact('matakuliahs'));
         } else if (Auth::user()->role === 'prodi') {
             return view('prodi.matakuliah', compact('matakuliahs'));
+        }else if (Auth::user()->role === 'fakultas') {
+            return view('fakultas.matakuliah', compact('matakuliahs'));
         }
         // return view('admin.matakuliah', compact('matakuliahs'));
 

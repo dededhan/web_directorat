@@ -21,6 +21,8 @@ class AdminSustainabilityController extends Controller
             return view('admin.sustainability', compact('sustainabilities'));
         } else if (Auth::user()->role === 'prodi') {
             return view('prodi.sustainability', compact('sustainabilities'));
+        } else if (Auth::user()->role === 'fakultas') {
+            return view('fakultas.sustainability', compact('sustainabilities'));
         }
         // return view('admin.sustainability', compact('sustainabilities'));
     }

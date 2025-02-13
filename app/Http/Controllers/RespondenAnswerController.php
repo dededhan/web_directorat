@@ -38,6 +38,10 @@ class RespondenAnswerController extends Controller
             return view('prodi.qsresponden', [
                 'respondens' => RespondenAnswer::all()
             ]);
+        } else if (Auth::user()->role === 'fakultas') {
+            return view('fakultas.qsresponden', [
+                'respondens' => RespondenAnswer::all()
+            ]);
         }
     }
 
