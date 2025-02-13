@@ -17,8 +17,6 @@
                 <span class="text">Sustainability</span>
             </a>
         </li>
-
-        
         <li class="{{ request()->routeIs('prodi.matakuliah.index') ? 'active' : '' }}">
             <a href="{{ route('prodi.matakuliah.index') }}">
                 <i class='bx bxs-shopping-bag-alt'></i>
@@ -30,6 +28,13 @@
             <a href="{{ route('prodi.alumniberdampak.index') }}">
                 <i class='bx bxs-shopping-bag-alt'></i>
                 <span class="text">Alumni Berdampak</span>
+            </a>
+        </li>
+
+        <li class="{{ request()->routeIs('prodi.qsresponden.index') ? 'active' : '' }}">
+            <a href="{{ route('prodi.qsresponden.index') }}">
+                <i class='bx bxs-graduation'></i>
+                <span class="text">Tabel Responden</span>
             </a>
         </li>
 

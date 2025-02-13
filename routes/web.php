@@ -6,6 +6,7 @@ use App\Http\Controllers\QuesionerGeneralController;
 use App\Http\Controllers\AdminAlumniBerdampakController;
 use App\Http\Controllers\AdminMataKuliahController;
 use App\Http\Controllers\RespondenAnswerController;
+use App\Http\Controllers\AlumniController;
 use App\Http\Middleware\HandleRespondenForm;
 use Illuminate\Support\Facades\Route;
 
@@ -110,6 +111,29 @@ Route::prefix('qsranking')->group(function(){
 // Route::get('/qsrangking/qs_general', function () {
 //     return view('qsrangking.qs_general');
 // })->name('qs_general');
+
+Route::prefix('prodi')->name('prodi.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('prodi.dashboard');
+    })->name('dashboard');
+    Route::resource('/sustainability', AdminSustainabilityController::class);
+    //Mata Kuliah
+    Route::get('/matakuliah-sustainability', function () {
+        return view('admin.matakuliahsustainability');
+    })->name('matakuliah-sustainability');
+    Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
+    Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
+    //Alumni
+    Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
+    Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
+
+    //responden
+    Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
+});
+
+
+
 
 Route::get('/tupoksi', function () {
     return view('tupoksi.tupoksi');

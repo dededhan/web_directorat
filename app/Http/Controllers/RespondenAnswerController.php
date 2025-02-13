@@ -6,6 +6,7 @@ use App\Http\Requests\StoreRespondenAnswerRequest;
 use App\Http\Requests\UpdateRespondenAnswerRequest;
 use App\Models\Responden;
 use App\Models\RespondenAnswer;
+use Illuminate\Support\Facades\Auth;
 
 class RespondenAnswerController extends Controller
 {
@@ -14,10 +15,33 @@ class RespondenAnswerController extends Controller
      */
     public function index()
     {
-        return view('admin.qsresponden', [
-            'respondens' => RespondenAnswer::all()
-        ]);
+        // return view('admin.qsresponden', [
+        //     'respondens' => RespondenAnswer::all()
+        // ]);
+        // $respondenAnswers = RespondenAnswer::all();
+        // if (Auth::user()->role === 'admin_direktorat') {
+        //         return view('admin.respondenanswer', compact('respondenAnswers'));
+        //     } else if (Auth::user()->role === 'admin_pemeringkatan') {
+        //         return view('pemeringkatan.respondenanswer', compact('respondenAnswers'));
+        //     } else if (Auth::user()->role === 'prodi') {
+        //         return view('prodi.qsresponden', compact('respondenAnswers'));
+        //     } else if (Auth::user()->role === 'fakultas') {
+        //         return view('fakultas.respondenanswer', compact('respondenAnswers'));
+        //     }
+        // }
+
+        if (Auth::user()->role === 'admin_direktorat') {
+            return view('admin.qsresponden', [
+                'respondens' => RespondenAnswer::all()
+            ]);
+        } else if (Auth::user()->role === 'prodi') {
+            return view('prodi.qsresponden', [
+                'respondens' => RespondenAnswer::all()
+            ]);
+        }
     }
+
+
 
     /**
      * Show the form for creating a new resource.
