@@ -28,6 +28,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="judul_kegiatan" class="form-label">Judul Kegiatan</label>
                         <input type="text" class="form-control" name="judul_kegiatan" id="judul_kegiatan">
+                        <div class="form-text text-muted">Masukkan judul kegiatan sustainability yang dilaksanakan</div>
                     </div>
                 </div>
 
@@ -35,6 +36,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="tanggal_kegiatan" class="form-label">Tanggal Kegiatan</label>
                         <input type="date" class="form-control" name="tanggal_kegiatan" id="tanggal_kegiatan">
+                        <div class="form-text text-muted">Pilih tanggal pelaksanaan kegiatan</div>
                     </div>
                 </div>
 
@@ -51,12 +53,14 @@
                             <option value="fe">FE</option>
                             <option value="fis">FIS</option>
                         </select>
+                        <div class="form-text text-muted">Pilih fakultas penyelenggara kegiatan</div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="prodi" class="form-label">Program Studi</label>
                         <select class="form-select" name="prodi" id="prodi" disabled>
                             <option value="">Pilih Program Studi</option>
                         </select>
+                        <div class="form-text text-muted">Pilih program studi terkait kegiatan</div>
                     </div>
                 </div>
 
@@ -64,6 +68,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="link_kegiatan" class="form-label">Link Kegiatan</label>
                         <input type="url" class="form-control" name="link_kegiatan" id="link_kegiatan">
+                        <div class="form-text text-muted">Masukkan link dokumentasi kegiatan (YouTube/Media Sosial/Google Drive)</div>
                     </div>
                 </div>
 
@@ -71,7 +76,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="foto_kegiatan" class="form-label">Foto-foto Kegiatan</label>
                         <input type="file" class="form-control" name="foto_kegiatan" id="foto_kegiatan" multiple accept="image/*">
-                        <small class="text-muted">You can select images</small>
+                        <div class="form-text text-muted">Upload foto-foto dokumentasi kegiatan (format: JPG, PNG, atau JPEG)</div>
                     </div>
                 </div>
 
@@ -79,6 +84,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="deskripsi_kegiatan" class="form-label">Deskripsi Kegiatan</label>
                         <textarea class="form-control" name="deskripsi_kegiatan" id="deskripsi_kegiatan" rows="4"></textarea>
+                        <div class="form-text text-muted">Tuliskan deskripsi lengkap mengenai kegiatan yang dilaksanakan</div>
                     </div>
                 </div>
 
