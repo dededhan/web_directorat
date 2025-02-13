@@ -317,7 +317,18 @@ h2 {
   animation-timeline: view();
   animation-range: entry 0% cover 40%;
 }
+.carousel-inner {
+  height: 94vh; 
+}
 
+.carousel-item {
+  height: 94%; 
+}
+
+.carousel-item img {
+  height: 94%; 
+  object-fit: cover; 
+}
 .carousel-item img {
   width: 100%;
   max-height: 1080px;
