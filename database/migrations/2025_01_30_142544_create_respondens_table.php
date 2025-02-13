@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('phone_dosen')->nullable();
             $table->string('fakultas')->nullable();
             $table->string('category')->nullable();
-            $table->enum('status', ['belum', 'done', 'dones'])->default('belum');
+            $table->enum('status', ['belum', 'done', 'dones','clear'])->default('belum');
             $table->timestamps();
         });
     }

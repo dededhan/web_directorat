@@ -157,7 +157,7 @@
                                                 Sudah di-email, belum di-follow up</option>
                                             <option value="dones" {{ $responden->status == 'dones' ? 'selected' : '' }}>
                                                 Sudah di-email, sudah di-follow up</option>
-                                                <option value="clear" {{ $responden->status == 'clear' ? 'selected' : '' }}>
+                                            <option value="clear" {{ $responden->status == 'clear' ? 'selected' : '' }}>
                                                     selesai</option>
                                         </select>
                                     </td>
@@ -189,9 +189,26 @@
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             document.querySelectorAll('.status-dropdown').forEach(select => {
+                // Disable update button if status is clear
+                const updateButton = select.closest('tr').querySelector('.update-status');
+                if (select.value === 'clear') {
+                    updateButton.disabled = true;
+                    updateButton.classList.add('btn-secondary');
+                    updateButton.classList.remove('btn-warning');
+                }
+
                 select.addEventListener('change', function() {
                     const respondenId = this.dataset.id;
                     const newStatus = this.value;
+                    const updateButton = this.closest('tr').querySelector('.update-status');
+
+                    // If new status is clear, disable both select and button
+                    if (newStatus === 'clear') {
+                        select.disabled = true;
+                        updateButton.disabled = true;
+                        updateButton.classList.add('btn-secondary');
+                        updateButton.classList.remove('btn-warning');
+                    }
 
                     axios.post(`/admin/responden/update-status/${respondenId}`, {
                             status: newStatus,
@@ -206,16 +223,13 @@
                                 showConfirmButton: false
                             });
 
-                            // Optional: Update tampilan tanpa reload
                             const badge = this.closest('tr').querySelector('.status-badge');
                             if (badge) {
                                 badge.textContent = response.data.new_status;
                             }
                         })
                         .catch(error => {
-                            // Rollback ke nilai sebelumnya jika gagal
                             this.value = this.dataset.previousValue;
-
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Gagal!',
@@ -224,12 +238,10 @@
                             });
                         })
                         .finally(() => {
-                            // Update previous value
                             this.dataset.previousValue = newStatus;
                         });
                 });
 
-                // Initialize previous value
                 select.dataset.previousValue = select.value;
             });
         });

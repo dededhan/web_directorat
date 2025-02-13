@@ -88,7 +88,7 @@ class AdminRespondenController extends Controller
         $validated = $request->validate([
             'status' => [
                 'required', 
-                Rule::in(['belum', 'done', 'dones'])
+                Rule::in(['belum', 'done', 'dones', 'clear'])
             ]
         ]);
     
