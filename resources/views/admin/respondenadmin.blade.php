@@ -150,15 +150,17 @@
                                     <td>{{ $responden->fakultas }}</td>
                                     <td>{{ $responden->category }}</td>
                                     <td>
-                                        <select class="form-select status-dropdown" data-id="{{ $responden->id }}">
+                                        <select class="form-select status-dropdown" data-id="{{ $responden->id }}"
+                                            {{ $responden->status == 'clear' ? 'disabled' : '' }}>
                                             <option value="belum" {{ $responden->status == 'belum' ? 'selected' : '' }}>
                                                 Belum di-email</option>
                                             <option value="done" {{ $responden->status == 'done' ? 'selected' : '' }}>
                                                 Sudah di-email, belum di-follow up</option>
                                             <option value="dones" {{ $responden->status == 'dones' ? 'selected' : '' }}>
                                                 Sudah di-email, sudah di-follow up</option>
-                                            <option value="clear" {{ $responden->status == 'clear' ? 'selected' : '' }}>
-                                                selesai</option>
+                                            @if ($responden->status == 'clear')
+                                                <option value="clear" selected>selesai</option>
+                                            @endif
                                         </select>
                                     </td>
                                     <td>
@@ -192,8 +194,7 @@
                 // Initial state check
                 const updateButton = select.closest('tr').querySelector('.update-status');
                 if (select.value === 'clear') {
-                    // Disable both select and button
-                    select.disabled = true;
+                    // Disable button when status is clear
                     updateButton.disabled = true;
                     updateButton.classList.add('btn-secondary');
                     updateButton.classList.remove('btn-warning');
@@ -207,27 +208,18 @@
                     // Store previous value for rollback if needed
                     const previousValue = this.dataset.previousValue;
 
-                    // If new status is clear
+                    // Prevent selecting 'clear' status manually
                     if (newStatus === 'clear') {
+                        this.value = previousValue;
                         Swal.fire({
-                            title: 'Are you sure?',
-                            text: "Setting status to 'clear' will lock this entry. This cannot be undone!",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, set to clear'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                updateStatus(this, respondenId, newStatus, updateButton);
-                            } else {
-                                // Revert to previous value if user cancels
-                                this.value = previousValue;
-                            }
+                            icon: 'error',
+                            title: 'Invalid Action',
+                            text: 'Status "selesai" cannot be set manually',
                         });
-                    } else {
-                        updateStatus(this, respondenId, newStatus, updateButton);
+                        return;
                     }
+
+                    updateStatus(this, respondenId, newStatus, updateButton);
                 });
 
                 // Store initial value
@@ -240,14 +232,6 @@
                         _token: csrfToken
                     })
                     .then(response => {
-                        if (newStatus === 'clear') {
-                            // Disable both select and button
-                            selectElement.disabled = true;
-                            updateButton.disabled = true;
-                            updateButton.classList.add('btn-secondary');
-                            updateButton.classList.remove('btn-warning');
-                        }
-
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil!',
