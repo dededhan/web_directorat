@@ -28,6 +28,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="nama_matkul" class="form-label">Nama Mata Kuliah</label>
                         <input type="text" class="form-control" name="nama_matkul" id="nama_matkul">
+                        <div class="form-text text-muted">Masukkan nama lengkap mata kuliah sesuai dengan kurikulum</div>
                     </div>
                 </div>
 
@@ -35,11 +36,13 @@
                     <div class="col-md-6 mb-3">
                         <label for="semester" class="form-label">Semester</label>
                         <input type="text" class="form-control" name="semester" id="semester">
+                        <div class="form-text text-muted">Masukkan semester berapa mata kuliah ini diajarkan (contoh: 1, 2, 3, dst)</div>
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="kode_matkul" class="form-label">Kode Mata Kuliah</label>
                         <input type="text" class="form-control" name="kode_matkul" id="kode_matkul">
+                        <div class="form-text text-muted">Masukkan kode mata kuliah sesuai dengan kurikulum (contoh: MK001)</div>
                     </div>
                 </div>
 
@@ -56,12 +59,14 @@
                             <option value="fe">FE</option>
                             <option value="fis">FIS</option>
                         </select>
+                        <div class="form-text text-muted">Pilih fakultas yang menyelenggarakan mata kuliah ini</div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="prodi" class="form-label">Program Studi</label>
                         <select class="form-select" name="prodi" id="prodi" disabled>
                             <option value="">Pilih Program Studi</option>
                         </select>
+                        <div class="form-text text-muted">Pilih program studi yang menyelenggarakan mata kuliah ini</div>
                     </div>
                 </div>
 
@@ -69,7 +74,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="rps" class="form-label">RPS Mata Kuliah</label>
                         <input type="file" class="form-control" name="rps" id="rps" accept=".pdf,.doc,.docx">
-                        <small class="text-muted">Accepted formats: PDF, DOC, DOCX</small>
+                        <div class="form-text text-muted">Upload dokumen RPS dalam format PDF, DOC, atau DOCX. Pastikan RPS sudah disetujui dan ditandatangani</div>
                     </div>
                 </div>
 
@@ -77,6 +82,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="deskripsi" class="form-label">Deskripsi Mata Kuliah</label>
                         <textarea class="form-control" name="deskripsi" id="deskripsi" rows="4"></textarea>
+                        <div class="form-text text-muted">Deskripsikan mata kuliah secara lengkap (minimal 100 kata), termasuk tujuan pembelajaran, capaian pembelajaran, dan keterkaitan dengan sustainability</div>
                     </div>
                 </div>
 
