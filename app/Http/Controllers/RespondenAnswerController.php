@@ -42,6 +42,10 @@ class RespondenAnswerController extends Controller
             return view('fakultas.qsresponden', [
                 'respondens' => RespondenAnswer::all()
             ]);
+        } else if (Auth::user()->role === 'admin_pemeringkatan') {
+            return view('admin_pemeringkatan.qsresponden', [
+                'respondens' => RespondenAnswer::all()
+            ]);
         }
     }
 

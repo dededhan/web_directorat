@@ -22,6 +22,8 @@ class AdminMataKuliahController extends Controller
             return view('prodi.matakuliah', compact('matakuliahs'));
         }else if (Auth::user()->role === 'fakultas') {
             return view('fakultas.matakuliah', compact('matakuliahs'));
+        } else if (Auth::user()->role === 'admin_pemeringkatan'){
+            return view('admin_pemeringkatan.matakuliah', compact('matakuliahs'));
         }
         // return view('admin.matakuliah', compact('matakuliahs'));
 
@@ -47,6 +49,12 @@ class AdminMataKuliahController extends Controller
                 ->with('success', 'Data berhasil disimpan!');
         } else if (Auth::user()->role === 'prodi') {
             return redirect()->route('prodi.matakuliah.index')
+                ->with('success', 'Data berhasil disimpan!');
+        } else if (Auth::user()->role === 'admin_pemeringkatan'){ 
+            return redirect()->route('admin_pemeringkatan.matakuliah.index')
+                ->with('success', 'Data berhasil disimpan!');
+        } else if (Auth::user()->role === 'fakultas') {
+            return redirect()->route('fakultas.matakuliah.index')
                 ->with('success', 'Data berhasil disimpan!');
         }
 

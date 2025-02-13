@@ -153,6 +153,31 @@ Route::prefix('fakultas')->name('fakultas.')->group(function () {
     Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
 });
 
+Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('admin_pemeringkatan.dashboard');
+    })->name('dashboard');
+
+        
+    Route::get('/manage-user', function () {
+        return view('admin_pemeringkatan.manageuser');
+    })->name('manageuser');
+    
+    Route::resource('/sustainability', AdminSustainabilityController::class);
+    
+    //Mata Kuliah
+    Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
+    Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
+    
+    //Alumni
+    Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
+    Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
+
+    //responden
+    Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
+});
+
 
   //Alumni
 Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
