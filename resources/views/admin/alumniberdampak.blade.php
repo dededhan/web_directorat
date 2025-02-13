@@ -28,6 +28,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="judul_berita" class="form-label">Judul Berita/Artikel</label>
                         <input type="text" class="form-control" name="judul_berita" id="judul_berita">
+                        <div class="form-text text-muted">Masukkan judul berita/artikel sesuai dengan sumber aslinya. Pastikan judul mencerminkan dampak alumni terhadap sustainability</div>
                     </div>
                 </div>
 
@@ -35,6 +36,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="tanggal_berita" class="form-label">Tanggal Berita/Artikel</label>
                         <input type="date" class="form-control" name="tanggal_berita" id="tanggal_berita">
+                        <div class="form-text text-muted">Pilih tanggal publikasi berita/artikel asli</div>
                     </div>
                 </div>
 
@@ -51,12 +53,14 @@
                             <option value="fe">FE</option>
                             <option value="fis">FIS</option>
                         </select>
+                        <div class="form-text text-muted">Pilih fakultas asal alumni yang bersangkutan</div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="prodi" class="form-label">Program Studi</label>
                         <select class="form-select" name="prodi" id="prodi" disabled>
                             <option value="">Pilih Program Studi</option>
                         </select>
+                        <div class="form-text text-muted">Pilih program studi asal alumni yang bersangkutan</div>
                     </div>
                 </div>
 
@@ -64,6 +68,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="link_berita" class="form-label">Link Berita/Artikel</label>
                         <input type="url" class="form-control" name="link_berita" id="link_berita">
+                        <div class="form-text text-muted">Masukkan link berita/artikel dari sumber terpercaya (media massa online, website resmi institusi, atau publikasi resmi lainnya)</div>
                     </div>
                 </div>
 
