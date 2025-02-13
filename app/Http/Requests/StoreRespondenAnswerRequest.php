@@ -25,6 +25,7 @@ class StoreRespondenAnswerRequest extends FormRequest
         $this->request->remove('answer_email');
         $this->request->add(['phone' => $this->input('answer_phone')]);
         $this->request->remove('answer_phone');
+        
         return [
             'answer_title' => ['required'],
             'answer_firstname' => ['required'],

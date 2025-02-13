@@ -41,7 +41,8 @@
                         @foreach($quesionerGenerals as $data)
                         <tr>
                             <td>{{ $data->respondent_type }}</td>
-                            <td>{{ $data->firstname }} {{ $data->lastname }}</td>
+                            <td>{{ $data->firstname }}</td> 
+                            <td>{{ $data->lastname }}</td>
                             <td>{{ $data->institution }}</td>
                             <td>{{ $data->activity_name }}</td>
                             <td>{{ $data->activity_date }}</td>

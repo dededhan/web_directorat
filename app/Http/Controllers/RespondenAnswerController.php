@@ -65,6 +65,7 @@ class RespondenAnswerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    
     public function store(StoreRespondenAnswerRequest $request)
     {
         $answerValidatedData = $request->validated();
@@ -84,9 +85,9 @@ class RespondenAnswerController extends Controller
             'category' => request()->get('category')
         ]);
         // update status
-        Responden::where('email', $answerValidatedData['email'])->update([
-            'status' => 'clear'
-        ]);
+        Responden::where('email', $answerValidatedData['email'])
+    ->orWhere('phone_responden', $answerValidatedData['phone'])
+    ->update(['status' => 'clear']);
 
         return $this->create();
     }
