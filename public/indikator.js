@@ -212,7 +212,7 @@ function calculateTotal() {
 // Comprehensive Indicator and KATSINOV Calculation System
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Global configuration for indicators
+    // Comprehensive Indicator Configuration
     const INDICATOR_CONFIGS = [
         { id: 1, rows: 21 },
         { id: 2, rows: 21 },
@@ -222,86 +222,136 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 6, rows: 24 }
     ];
 
-    // Utility function to calculate indicator score
+    // Debugging Utility: Enhanced Logging
+    function debugLog(message, data = null) {
+        console.group('KATSINOV Calculation Debug');
+        console.log(message);
+        if (data !== null) {
+            console.log('Data:', data);
+        }
+        console.groupEnd();
+    }
+
+    // Robust Indicator Score Calculation
     function calculateIndicatorScore(card) {
-        let total = 0;
-        const checkedRadios = card.querySelectorAll('input[type="radio"]:checked');
-        checkedRadios.forEach(radio => {
-            total += parseInt(radio.value);
-        });
+        // Validate card input
+        if (!card) {
+            debugLog('Invalid card input');
+            return { 
+                percentage: 0, 
+                status: 'TIDAK TERPENUHI',
+                debug: 'No card found' 
+            };
+        }
 
-        // Find configuration for this card
-        const cardTitle = card.querySelector('.main-title')?.textContent;
-        const indicatorConfig = INDICATOR_CONFIGS.find(config => 
-            cardTitle && cardTitle.includes(`KATSINOV ${config.id}`)
-        ) || { rows: 21 }; // Default to 21 rows if not found
+        // Extract card metadata
+        const cardTitle = card.querySelector('.main-title')?.textContent || '';
+        const indicatorMatch = cardTitle.match(/KATSINOV (\d+)/);
+        const indicatorNum = indicatorMatch ? parseInt(indicatorMatch[1]) : 0;
 
-        const maxPossible = indicatorConfig.rows * 5;
-        const percentage = (total / maxPossible) * 100;
+        // Select configuration
+        const config = INDICATOR_CONFIGS.find(c => c.id === indicatorNum) || { rows: 21 };
+        
+        // Comprehensive radio button selection
+        const checkedRadios = Array.from(card.querySelectorAll('input[type="radio"]:checked'));
+        
+        // Robust score calculation with debugging
+        const total = checkedRadios.reduce((sum, radio) => {
+            const value = parseInt(radio.value || '0');
+            debugLog(`Radio Button Debug`, {
+                name: radio.name,
+                value: value,
+                aspect: radio.closest('tr')?.querySelector('.aspect-cell')?.textContent
+            });
+            return sum + value;
+        }, 0);
 
-        // Update card-specific elements
+        // Precise percentage calculation
+        const maxPossible = config.rows * 5;
+        const percentage = maxPossible > 0 ? (total / maxPossible) * 100 : 0;
+
+        // Status determination
+        const status = percentage > 0 ? 'TERPENUHI' : 'TIDAK TERPENUHI';
+
+        // Update UI elements
         const totalValue = card.querySelector('.total-value');
         const percentageValue = card.querySelectorAll('.total-value')[1];
         const statusCell = card.querySelector('.status-cell');
 
-        if (totalValue) totalValue.textContent = total;
-        if (percentageValue) percentageValue.textContent = percentage.toFixed(2) + '%';
-        if (statusCell) statusCell.textContent = percentage > 0 ? 'TERPENUHI' : 'TIDAK TERPENUHI';
+        if (totalValue) totalValue.textContent = total.toString();
+        if (percentageValue) percentageValue.textContent = `${percentage.toFixed(2)}%`;
+        if (statusCell) statusCell.textContent = status;
 
-        return percentage > 0;
+        debugLog('Indicator Score Calculation', {
+            indicatorNum,
+            total,
+            maxPossible,
+            percentage,
+            status
+        });
+
+        return { 
+            percentage, 
+            status,
+            total,
+            maxPossible
+        };
     }
 
-    // Function to update KATSINOV level
+    // Advanced KATSINOV Level Determination
     function updateKatsinovLevel() {
-        console.log('Updating KATSINOV Level');
         const cards = document.querySelectorAll('.card');
-        const indicators = [];
-
-        // Calculate status for each KATSINOV indicator
-        INDICATOR_CONFIGS.forEach((config, index) => {
+        const indicators = INDICATOR_CONFIGS.map((config, index) => {
             const card = Array.from(cards).find(card => 
                 card.querySelector('.main-title')?.textContent.includes(`KATSINOV ${config.id}`)
             );
 
-            if (card) {
-                indicators[index] = calculateIndicatorScore(card);
-            }
+            return card ? calculateIndicatorScore(card) : null;
         });
 
-        // Determine highest consecutive KATSINOV level
-        let highestLevel = 0;
-        for (let i = 0; i < indicators.length; i++) {
-            if (indicators[i]) {
-                highestLevel = i + 1;
+        // Sophisticated Level Determination
+        const consecutiveLevels = indicators.reduce((acc, indicator, index) => {
+            if (indicator && indicator.percentage >= 20) {
+                acc.push(index + 1);
             } else {
-                break;
+                return acc;
             }
-        }
+            return acc;
+        }, []);
 
-        // Update KATSINOV display
+        const highestLevel = consecutiveLevels.length > 0 
+            ? Math.max(...consecutiveLevels) 
+            : 0;
+
+        // Update KATSINOV Display
         const valueDisplay = document.querySelector('.katsinov-indicator .value');
         if (valueDisplay) {
-            valueDisplay.textContent = highestLevel;
+            valueDisplay.textContent = highestLevel.toString();
         }
 
-        console.log('Highest KATSINOV Level:', highestLevel);
+        debugLog('KATSINOV Level Update', {
+            indicators,
+            consecutiveLevels,
+            highestLevel
+        });
+
         return highestLevel;
     }
 
-   
-    // Setup radio button event listeners
+    // Radio Button Standardization
     function setupRadioListeners() {
         const indicators = document.querySelectorAll('.card');
         
         indicators.forEach((indicator, index) => {
-            const indicatorNum = indicator.querySelector('.main-title')?.textContent.match(/\d+/)?.[0] || index + 1;
+            const indicatorNum = indicator.querySelector('.main-title')?.textContent.match(/\d+/)?.[0] || (index + 1);
             
-            // Uniquely name radio buttons
-            indicator.querySelectorAll('.radio-input').forEach(radio => {
-                const rowNum = radio.getAttribute('name').replace('row', '');
-                radio.setAttribute('name', `indicator${indicatorNum}_row${rowNum}`);
+            indicator.querySelectorAll('.radio-input').forEach((radio, rowIndex) => {
+                // Consistent, predictable naming
+                const aspectCell = radio.closest('tr')?.querySelector('.aspect-cell');
+                const aspect = aspectCell?.textContent.trim() || 'Unknown';
                 
-                // Add change event listener
+                radio.setAttribute('name', `indicator${indicatorNum}_row${rowIndex + 1}_${aspect}`);
+                
                 radio.addEventListener('change', () => {
                     calculateIndicatorScore(indicator);
                     updateKatsinovLevel();
@@ -310,18 +360,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Initialize everything
+    // Initialization Function
     function initializeIndicators() {
         setupRadioListeners();
-        colorCodeRows();
         updateKatsinovLevel();
     }
 
-    // Expose functions globally for debugging
-    window.updateKatsinovLevel = updateKatsinovLevel;
-    window.calculateIndicatorScore = calculateIndicatorScore;
+    // Global Debugging Exposure
+    window.debugKatsinov = {
+        calculateIndicatorScore,
+        updateKatsinovLevel,
+        INDICATOR_CONFIGS
+    };
 
-    // Run initialization
+    // Initialize
     initializeIndicators();
 });
  src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"
@@ -346,4 +398,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 // You can add more logic here if needed
             });
         });
+
+
  

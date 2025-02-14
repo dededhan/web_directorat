@@ -6,6 +6,11 @@
     <title>KATSINOV-MeterO - Innovation Measurement System</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('kasinov123.css') }}">
+    <link href="{{ asset('aspect-analysis.css') }}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="{{ asset('aspect-legend.js') }}"></script>
+    <script src="{{ asset('aspect-analysis-integrated.js') }}"></script>
 
 </head>
 <body>
@@ -126,39 +131,97 @@
                 </div>
             </div>
 
-            <div class="legend">
-                <h3 style="color: var(--text); margin-bottom: 1.5rem; font-size: 1.2rem;">Keterangan:</h3>
-                <div class="legend-grid">
-                    <div class="legend-item">
-                        <div class="legend-box" style="background: linear-gradient(135deg, #fad961 0%, #f76b1c 100%);"></div>
-                        <span>Aspek Teknologi (T)</span>
+            <div class="legend" x-data="aspectLegend()">
+    <h3 class="text-gray-700 mb-6 text-lg">Keterangan:</h3>
+    <div class="legend-grid">
+        <!-- Teknologi -->
+        <div class="legend-item cursor-pointer" @click="openAspectAnalysis('T')">
+            <div class="legend-box" style="background: linear-gradient(135deg, #fad961 0%, #f76b1c 100%);"></div>
+            <span>Aspek Teknologi (T)</span>
+        </div>
+        
+        <!-- Organisasi -->
+        <div class="legend-item cursor-pointer" @click="openAspectAnalysis('O')">
+            <div class="legend-box" style="background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);"></div>
+            <span>Aspek Organisasi (O)</span>
+        </div>
+        
+        <!-- Risiko -->
+        <div class="legend-item cursor-pointer" @click="openAspectAnalysis('R')">
+            <div class="legend-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+            <span>Aspek Risiko (R)</span>
+        </div>
+        
+        <!-- Pasar -->
+        <div class="legend-item cursor-pointer" @click="openAspectAnalysis('M')">
+            <div class="legend-box" style="background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);"></div>
+            <span>Aspek Pasar (M)</span>
+        </div>
+        
+        <!-- Kemitraan -->
+        <div class="legend-item cursor-pointer" @click="openAspectAnalysis('P')">
+            <div class="legend-box" style="background: linear-gradient(135deg, #ffd1ff 0%, #fab2ff 100%);"></div>
+            <span>Aspek Kemitraan (P)</span>
+        </div>
+        
+        <!-- Manufaktur -->
+        <div class="legend-item cursor-pointer" @click="openAspectAnalysis('Mf')">
+            <div class="legend-box" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);"></div>
+            <span>Aspek Manufaktur (Mf)</span>
+        </div>
+        
+        <!-- Investasi -->
+        <div class="legend-item cursor-pointer" @click="openAspectAnalysis('I')">
+            <div class="legend-box" style="background: linear-gradient(135deg, #96fbc4 0%, #f9f586 100%);"></div>
+            <span>Aspek Investasi (I)</span>
+        </div>
+    </div>
+    
+    <!-- Aspect Analysis Popup -->
+    <div 
+        x-show="showPopup" 
+        class="aspect-popup" 
+        @click.self="showPopup = false"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+    >
+        <div class="popup-content">
+            <div class="popup-header" :style="{ background: selectedAspect?.gradient }">
+                <h3 class="text-white text-xl font-semibold" x-text="'Analysis ' + selectedAspect?.name"></h3>
+                <button @click="showPopup = false" class="popup-close">&times;</button>
+            </div>
+            
+            <div class="popup-body">
+                <div class="chart-container">
+                    <canvas id="aspectChart"></canvas>
+                </div>
+                
+                <div class="summary-container">
+                    <div class="summary-item">
+                        <span class="label">Rata-rata Pencapaian:</span>
+                        <span class="value" x-text="calculateAverage() + '%'"></span>
                     </div>
-                    <div class="legend-item">
-                        <div class="legend-box" style="background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);"></div>
-                        <span>Aspek Organisasi (O)</span>
+                    <div class="summary-item">
+                        <span class="label">Level KATSINOV Tercapai:</span>
+                        <span class="value" x-text="getMaxKatsinovLevel()"></span>
                     </div>
-                    <div class="legend-item">
-                        <div class="legend-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
-                        <span>Aspek Risiko (R)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-box" style="background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);"></div>
-                        <span>Aspek Pasar (M)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-box" style="background: linear-gradient(135deg, #ffd1ff 0%, #fab2ff 100%);"></div>
-                        <span>Aspek Kemitraan (P)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-box" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);"></div>
-                        <span>Aspek Manufaktur (Mf)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-box" style="background: linear-gradient(135deg, #96fbc4 0%, #f9f586 100%);"></div>
-                        <span>Aspek Investasi (I)</span>
+                    <div class="summary-item">
+                        <span class="label">Status:</span>
+                        <span 
+                            class="value"
+                            :class="getStatusClass()"
+                            x-text="getStatus()"
+                        ></span>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
         </div>
     </main>
     @include('inovasi.Kasinov.Indikator1')
@@ -215,5 +278,7 @@
             });
         });
     </script>
+    <!-- In the head section -->
+
 </body>
 </html>
