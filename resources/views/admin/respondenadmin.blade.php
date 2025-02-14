@@ -120,7 +120,7 @@
             <div class="order">
                 <div class="head">
                     <h3>Daftar Responden</h3>
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-end align-items-center">
                         <div class="search-box">
                             <input type="text" id="searchInput" class="form-control" placeholder="Search...">
                         </div>

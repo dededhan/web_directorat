@@ -80,6 +80,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/qsgeneraltable', [QuesionerGeneralController::class, 'index'])->name('qsgeneraltable');
 
     Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
+
+        // mahasiswa
+    Route::get('/mahasiswainternational', function () {
+        return view('admin.mahasiswainternational');
+    })->name('mahasiswainternational');
+
+    Route::get('/dataakreditasi', function () {
+        return view('admin.dataakreditasi');
+    })->name('dataakreditasi');
+
+    Route::get('/international_lecture', function () {
+        return view('admin.international_lecture');
+    })->name('international_lecture');
 });
 
 // Route::resource('/qsranking/qs-general', QuesionerGeneralController::class)->only(['create', 'store']);

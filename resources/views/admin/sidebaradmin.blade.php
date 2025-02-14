@@ -39,7 +39,7 @@
         <li class="{{ request()->routeIs('admin.matakuliah.index') ? 'active' : '' }}">
             <a href="{{ route('admin.matakuliah.index') }}">
                 <i class='bx bxs-shopping-bag-alt'></i>
-                <span class="text">Mata Kuliah Sustainability</span>
+                <span class="text">MatKul Sustainability</span>
             </a>
         </li>
 
@@ -65,6 +65,26 @@
             <a href="{{ route('admin.qsresponden.index') }}">
                 <i class='bx bxs-graduation'></i>
                 <span class="text">Tabel Responden</span>
+            </a>
+        </li>
+
+        <li class="{{ request()->routeIs('admin.mahasiswainternational') ? 'active' : '' }}">
+            <a href="{{ route('admin.mahasiswainternational') }}">
+                <i class='bx bxs-graduation'></i>
+                <span class="text">Mahasiswa International</span>
+            </a>
+        </li>        
+        <li class="{{ request()->routeIs('admin.dataakreditasi') ? 'active' : '' }}">
+            <a href="{{ route('admin.dataakreditasi') }}">
+                <i class='bx bxs-graduation'></i>
+                <span class="text">Data Akreditasi</span>
+            </a>
+        </li>
+
+        <li class="{{ request()->routeIs('admin.international_lecture') ? 'active' : '' }}">
+            <a href="{{ route('admin.international_lecture') }}">
+                <i class='bx bxs-graduation'></i>
+                <span class="text">International Lecture</span>
             </a>
         </li>
     </ul>
