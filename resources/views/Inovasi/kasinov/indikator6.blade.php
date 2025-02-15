@@ -1,8 +1,7 @@
 <!-- KATSINOV Assessment Section -->
 <div class="container">
-    <div class="card" data-aos="fade-up">
-        <div class="main-title">
-            Indikator KATSINOV 6
+<div class="card" data-indicator="6">
+<div class="main-title">Indikator KATSINOV 6</div>
         </div>
         <div class="content">
             <table class="katsinov-table">

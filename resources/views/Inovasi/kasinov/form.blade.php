@@ -11,9 +11,9 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="{{ asset('aspect-legend.js') }}"></script>
     <script src="{{ asset('aspect-analysis-integrated.js') }}"></script>
-
+    <script src="{{ asset('spiderweb-chart-script.js') }}"></script>
 </head>
-<body>
+<body x-data="aspectLegend()" x-init="init()">
     <!-- Header Section -->
     <header class="header">
         <div class="container">
@@ -222,6 +222,86 @@
         </div>
     </div>
 </div>
+<div class="spiderweb-trigger" style="position: fixed; bottom: 20px; right: 20px; z-index: 100;">
+        <button 
+            @click="openSpiderwebAnalysis()"
+            class="bg-primary text-white px-4 py-2 rounded-full shadow-lg hover:bg-primary-dark transition-colors"
+            style="background-color: #176369; color: white; padding: 10px 20px; border-radius: 30px;"
+        >
+            Lihat Analisis Aspek
+        </button>
+    </div>
+    
+    <!-- Spiderweb Analysis Popup -->
+    <!-- Spiderweb Analysis Popup -->
+<div 
+    x-show="showSpiderwebPopup" 
+    class="spiderweb-popup" 
+    @click.self="showSpiderwebPopup = false"
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition ease-in duration-200"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    style="
+        position: fixed; 
+        inset: 0; 
+        background: rgba(0,0,0,0.5); 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        z-index: 1000;
+    "
+>
+    <div 
+        class="popup-content" 
+        style="
+            background: white; 
+            border-radius: 10px; 
+            width: 90%; 
+            max-width: 800px; 
+            max-height: 90%; 
+            overflow: auto; 
+            padding: 20px; 
+            position: relative;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+        "
+    >
+        <div class="popup-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 class="text-xl font-semibold">Analisis Keseluruhan Aspek KATSINOV</h3>
+            <button 
+                @click="showSpiderwebPopup = false" 
+                class="popup-close"
+                style="background: none; border: none; font-size: 24px; cursor: pointer;"
+            >&times;</button>
+        </div>
+        
+        <div class="popup-body" style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="chart-container" style="width: 100%; height: 400px;">
+                <canvas id="spiderwebChart"></canvas>
+            </div>
+            
+            <div class="summary-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div class="summary-item" style="background: #f0f4f8; padding: 15px; border-radius: 8px;">
+                    <span class="label block text-gray-600 mb-2">Rata-rata Pencapaian:</span>
+                    <span class="rata-rata-pencapaian text-xl font-bold text-primary">0.0%</span>
+                </div>
+                <div class="summary-item" style="background: #f0f4f8; padding: 15px; border-radius: 8px;">
+                    <span class="label block text-gray-600 mb-2">Aspek Terpenuhi:</span>
+                    <span class="aspek-terpenuhi text-xl font-bold text-primary">0 dari 7</span>
+                </div>
+                <div class="summary-item" style="background: #f0f4f8; padding: 15px; border-radius: 8px;">
+                    <span class="label block text-gray-600 mb-2">Status Keseluruhan:</span>
+                    <span class="status-keseluruhan text-xl font-bold">BELUM TERPENUHI</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        </div>
         </div>
     </main>
     @include('inovasi.Kasinov.Indikator1')

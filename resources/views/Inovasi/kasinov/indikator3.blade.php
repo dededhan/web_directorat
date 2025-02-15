@@ -1,5 +1,6 @@
 <!-- KATSINOV Assessment Section -->
 <div class="container">
+<div class="card" data-indicator="3">
     <div class="card" data-aos="fade-up">
         <div class="main-title">
             Indikator KATSINOV 3

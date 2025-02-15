@@ -1,8 +1,35 @@
 window.aspectLegend = function() {
     return {
         showPopup: false,
+        showSpiderwebPopup: false,
         selectedAspect: null,
         chart: null,
+        
+        init() {
+            // Initialize any necessary setup
+            this.$watch('showPopup', value => {
+                if (value) {
+                    this.$nextTick(() => {
+                        // Any initialization for the popup
+                    });
+                }
+            });
+        },
+
+        openSpiderwebAnalysis() {
+            console.log('Opening spiderweb analysis'); // Debug log
+            this.showSpiderwebPopup = true;
+            
+            // Ensure the chart updates after a short delay
+            this.$nextTick(() => {
+                if (window.updateSpiderwebChart) {
+                    window.updateSpiderwebChart();
+                } else {
+                    console.error('updateSpiderwebChart function not found');
+                }
+            });
+        },
+
         aspectConfig: {
             T: {
                 name: 'Aspek Teknologi',
@@ -41,87 +68,61 @@ window.aspectLegend = function() {
             }
         },
 
+        init() {
+            this.$watch('showPopup', value => {
+                if (value) {
+                    this.$nextTick(() => {
+                        this.initializeChart();
+                    });
+                }
+            });
+        },
+
         openAspectAnalysis(aspectCode) {
-            // Ensure the aspect code matches the configuration
-            const normalizedCode = aspectCode === 'Mf' ? 'Mf' : aspectCode;
-            
-            // Check if the aspect exists in the configuration
-            if (!this.aspectConfig[normalizedCode]) {
-                console.error('Invalid aspect code:', aspectCode);
-                return;
-            }
-
-            // Set the selected aspect with calculation
             this.selectedAspect = {
-                ...this.aspectConfig[normalizedCode],
-                code: normalizedCode,
-                data: this.calculateAspectData(normalizedCode)
+                ...this.aspectConfig[aspectCode],
+                code: aspectCode,
+                data: this.calculateAspectData(aspectCode)
             };
-
-            // Ensure popup is shown
             this.showPopup = true;
-
-            // Delay chart initialization to ensure DOM is ready
-            setTimeout(() => {
-                this.initializeChart();
-            }, 50);
         },
 
         calculateAspectData(aspectCode) {
-            const KATSINOV_LEVELS = 6;
+            // Get all radio inputs for this aspect
             const scores = [];
-
-            for (let level = 1; level <= KATSINOV_LEVELS; level++) {
-                const levelRows = document.querySelectorAll(`[name^="indicator${level}_row"]`);
-                
+            for (let level = 1; level <= 6; level++) {
                 let levelTotal = 0;
                 let maxPossible = 0;
-                let aspectRowsCount = 0;
-
-                levelRows.forEach(radio => {
+                
+                document.querySelectorAll(`[name^="indicator${level}_row"]`).forEach(radio => {
                     const row = radio.closest('tr');
                     if (row && row.querySelector('.aspect-cell').textContent.trim() === aspectCode) {
-                        aspectRowsCount++;
-                        maxPossible += 5; // Each row can score max 5
                         if (radio.checked) {
                             levelTotal += parseInt(radio.value);
                         }
+                        maxPossible += 5; // Max possible score per question
                     }
                 });
 
-                const percentage = aspectRowsCount > 0 
-                    ? (levelTotal / (aspectRowsCount * 5)) * 100 
-                    : 0;
-
+                const percentage = maxPossible > 0 ? (levelTotal / maxPossible) * 100 : 0;
                 scores.push({
                     level: `KATSINOV ${level}`,
                     score: levelTotal,
-                    maxPossible: aspectRowsCount * 5,
+                    maxPossible: maxPossible,
                     percentage: percentage
                 });
             }
-
             return scores;
         },
 
         initializeChart() {
-            const ctx = document.getElementById('aspectChart');
+            const ctx = document.getElementById('aspectChart').getContext('2d');
             
-            // Ensure context exists
-            if (!ctx) {
-                console.error('Chart canvas not found');
-                return;
-            }
-
-            // Destroy existing chart if it exists
             if (this.chart) {
                 this.chart.destroy();
             }
 
-            // Get 2D context
-            const context = ctx.getContext('2d');
-
-            this.chart = new Chart(context, {
+            this.chart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: this.selectedAspect.data.map(d => d.level),
@@ -152,7 +153,7 @@ window.aspectLegend = function() {
                             beginAtZero: true,
                             max: 100,
                             ticks: {
-                                callback: value => `${value}%`
+                                callback: value => value + '%'
                             }
                         }
                     }
@@ -192,4 +193,4 @@ window.aspectLegend = function() {
             return `status-${status}`;
         }
     };
-};
+}

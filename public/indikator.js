@@ -398,6 +398,141 @@ document.addEventListener('DOMContentLoaded', () => {
                 // You can add more logic here if needed
             });
         });
+// Tambahkan fungsi ini di indikator.js
+document.addEventListener('DOMContentLoaded', function() {
+    let spiderwebChart;
+    
+    function initSpiderwebChart() {
+        const ctx = document.getElementById('spiderwebChart').getContext('2d');
+        spiderwebChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: [
+                    'Teknologi (T)',
+                    'Organisasi (O)',
+                    'Risiko (R)',
+                    'Pasar (M)',
+                    'Kemitraan (P)',
+                    'Manufaktur (MF)',
+                    'Investasi (I)'
+                ],
+                datasets: [{
+                    label: 'Nilai Aspek KATSINOV',
+                    data: [0, 0, 0, 0, 0, 0, 0],
+                    fill: true,
+                    backgroundColor: 'rgba(23, 99, 105, 0.2)',
+                    borderColor: 'rgb(23, 99, 105)',
+                    pointBackgroundColor: 'rgb(23, 99, 105)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(23, 99, 105)'
+                }]
+            },
+            options: {
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            stepSize: 20
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    }
 
+    function calculateAspectValues() {
+        const aspects = {
+            'T': { total: 0, count: 0 },
+            'O': { total: 0, count: 0 },
+            'R': { total: 0, count: 0 },
+            'M': { total: 0, count: 0 },
+            'P': { total: 0, count: 0 },
+            'MF': { total: 0, count: 0 },
+            'I': { total: 0, count: 0 }
+        };
+
+        // Loop melalui semua kartu indikator KATSINOV
+        document.querySelectorAll('.card[data-indicator]').forEach(card => {
+            // Ambil semua baris dari tabel
+            card.querySelectorAll('tr').forEach(row => {
+                const aspectCell = row.querySelector('.aspect-cell');
+                if (!aspectCell) return;
+
+                const aspect = aspectCell.textContent.trim().toUpperCase();
+                const checkedRadio = row.querySelector('input[type="radio"]:checked');
+                
+                if (checkedRadio && aspects.hasOwnProperty(aspect)) {
+                    const value = parseInt(checkedRadio.value);
+                    if (!isNaN(value)) {
+                        aspects[aspect].total += value;
+                        aspects[aspect].count++;
+                    }
+                }
+            });
+        });
+
+        // Hitung persentase untuk setiap aspek
+        const values = [
+            calculatePercentage(aspects['T']),   // Teknologi
+            calculatePercentage(aspects['O']),   // Organisasi
+            calculatePercentage(aspects['R']),   // Risiko
+            calculatePercentage(aspects['M']),   // Pasar
+            calculatePercentage(aspects['P']),   // Kemitraan
+            calculatePercentage(aspects['MF']),  // Manufaktur
+            calculatePercentage(aspects['I'])    // Investasi
+        ];
+
+        return values;
+    }
+
+    function calculatePercentage(aspect) {
+        if (aspect.count === 0) return 0;
+        return (aspect.total / (aspect.count * 5)) * 100;
+    }
+
+    function updateChart() {
+        const values = calculateAspectValues();
+        if (spiderwebChart) {
+            spiderwebChart.data.datasets[0].data = values;
+            spiderwebChart.update();
+        }
+
+        // Update ringkasan
+        const average = values.reduce((a, b) => a + b, 0) / values.length;
+        const fulfilled = values.filter(value => value >= 80).length;
+        
+        document.querySelector('.rata-rata-pencapaian').textContent = average.toFixed(1) + '%';
+        document.querySelector('.aspek-terpenuhi').textContent = fulfilled + ' dari 7';
+        
+        const statusElement = document.querySelector('.status-keseluruhan');
+        if (statusElement) {
+            const status = average >= 80 ? 'TERPENUHI' : 'BELUM TERPENUHI';
+            statusElement.textContent = status;
+            statusElement.className = 'status-keseluruhan ' + 
+                (status === 'TERPENUHI' ? 'text-green-600' : 'text-red-600');
+        }
+    }
+
+    // Inisialisasi chart
+    initSpiderwebChart();
+
+    // Tambahkan event listener untuk semua radio button
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', updateChart);
+    });
+
+    // Update awal
+    updateChart();
+});
 
  
