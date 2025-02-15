@@ -87,6 +87,13 @@
                 <span class="text">International Lecture</span>
             </a>
         </li>
+
+        <li class="{{ request()->routeIs('admin.tabel_kasinov') ? 'active' : '' }}">
+            <a href="{{ route('admin.tabel_kasinov') }}">
+                <i class='bx bxs-graduation'></i>
+                <span class="text">Tabel Kasinov</span>
+            </a>
+        </li>
     </ul>
     <ul class="side-menu">
         <li>

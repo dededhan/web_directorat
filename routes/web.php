@@ -93,6 +93,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/international_lecture', function () {
         return view('admin.international_lecture');
     })->name('international_lecture');
+
+    Route::get('/tabel_kasinov', function () {
+        return view('admin.tabel_kasinov');
+    })->name('tabel_kasinov');
+    
+    // Route::get('/kasinov/{id}/edit', function ($id) {
+    //     return view('admin.edit_kasinov', ['id' => $id]);
+    // })->name('kasinov.edit');
+    
+    // Route::delete('/kasinov/{id}', function ($id) {
+    //     // Handle delete logic here
+    //     return redirect()->route('tabel_kasinov');
+    // })->name('kasinov.destroy');
 });
 
 // Route::resource('/qsranking/qs-general', QuesionerGeneralController::class)->only(['create', 'store']);
