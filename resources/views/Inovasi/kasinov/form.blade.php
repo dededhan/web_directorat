@@ -233,74 +233,53 @@
     </div>
     
     <!-- Spiderweb Analysis Popup -->
-    <!-- Spiderweb Analysis Popup -->
-<div 
-    x-show="showSpiderwebPopup" 
-    class="spiderweb-popup" 
-    @click.self="showSpiderwebPopup = false"
-    x-transition:enter="transition ease-out duration-300"
-    x-transition:enter-start="opacity-0"
-    x-transition:enter-end="opacity-100"
-    x-transition:leave="transition ease-in duration-200"
-    x-transition:leave-start="opacity-100"
-    x-transition:leave-end="opacity-0"
-    style="
-        position: fixed; 
-        inset: 0; 
-        background: rgba(0,0,0,0.5); 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        z-index: 1000;
-    "
->
     <div 
-        class="popup-content" 
-        style="
-            background: white; 
-            border-radius: 10px; 
-            width: 90%; 
-            max-width: 800px; 
-            max-height: 90%; 
-            overflow: auto; 
-            padding: 20px; 
-            position: relative;
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
-        "
+        x-show="showSpiderwebPopup" 
+        class="spiderweb-popup" 
+        @click.self="showSpiderwebPopup = false"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000;"
     >
-        <div class="popup-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 class="text-xl font-semibold">Analisis Keseluruhan Aspek KATSINOV</h3>
-            <button 
-                @click="showSpiderwebPopup = false" 
-                class="popup-close"
-                style="background: none; border: none; font-size: 24px; cursor: pointer;"
-            >&times;</button>
-        </div>
-        
-        <div class="popup-body" style="display: flex; flex-direction: column; gap: 20px;">
-            <div class="chart-container" style="width: 100%; height: 400px;">
-                <canvas id="spiderwebChart"></canvas>
+        <div 
+            class="popup-content" 
+            style="background: white; border-radius: 10px; width: 90%; max-width: 800px; max-height: 90%; overflow: auto; padding: 20px;"
+        >
+            <div class="popup-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 class="text-xl font-semibold">Analisis Keseluruhan Aspek KATSINOV</h3>
+                <button 
+                    @click="showSpiderwebPopup = false" 
+                    class="popup-close"
+                    style="background: none; border: none; font-size: 24px; cursor: pointer;"
+                >&times;</button>
             </div>
             
-            <div class="summary-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                <div class="summary-item" style="background: #f0f4f8; padding: 15px; border-radius: 8px;">
-                    <span class="label block text-gray-600 mb-2">Rata-rata Pencapaian:</span>
-                    <span class="rata-rata-pencapaian text-xl font-bold text-primary">0.0%</span>
+            <div class="popup-body" style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="chart-container" style="width: 100%; height: 400px;">
+                    <canvas id="spiderwebChart"></canvas>
                 </div>
-                <div class="summary-item" style="background: #f0f4f8; padding: 15px; border-radius: 8px;">
-                    <span class="label block text-gray-600 mb-2">Aspek Terpenuhi:</span>
-                    <span class="aspek-terpenuhi text-xl font-bold text-primary">0 dari 7</span>
-                </div>
-                <div class="summary-item" style="background: #f0f4f8; padding: 15px; border-radius: 8px;">
-                    <span class="label block text-gray-600 mb-2">Status Keseluruhan:</span>
-                    <span class="status-keseluruhan text-xl font-bold">BELUM TERPENUHI</span>
+                
+                <div class="summary-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div class="summary-item" style="background: #f0f4f8; padding: 15px; border-radius: 8px;">
+                        <span class="label block text-gray-600 mb-2">Rata-rata Pencapaian:</span>
+                        <span class="rata-rata-pencapaian text-xl font-bold text-primary">0.0%</span>
+                    </div>
+                    <div class="summary-item" style="background: #f0f4f8; padding: 15px; border-radius: 8px;">
+                        <span class="label block text-gray-600 mb-2">Aspek Terpenuhi:</span>
+                        <span class="aspek-terpenuhi text-xl font-bold text-primary">0 dari 7</span>
+                    </div>
+                    <div class="summary-item" style="background: #f0f4f8; padding: 15px; border-radius: 8px;">
+                        <span class="label block text-gray-600 mb-2">Status Keseluruhan:</span>
+                        <span class="status-keseluruhan text-xl font-bold">BELUM TERPENUHI</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-
         </div>
         </div>
     </main>
@@ -311,6 +290,89 @@
     @include('inovasi.Kasinov.Indikator5')
     @include('inovasi.Kasinov.Indikator6')
     @include('inovasi.Kasinov.jumlahindikator')
+    <!-- Submit All Button -->
+<div class="submit-all-container" style="
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+">
+    <button 
+        id="submitAllBtn" 
+        class="submit-all-btn"
+        style="
+            background-color: #176369;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        "
+        onclick="submitAllIndicators()"
+    >
+        Submit Semua Indikator KATSINOV
+    </button>
+</div>
+
+<script>
+function submitAllIndicators() {
+    // Validasi apakah semua indikator sudah diisi
+    const indicators = [1, 2, 3, 4, 5, 6];
+    let allFilled = true;
+    let missingIndicators = [];
+
+    indicators.forEach(indicatorNum => {
+        const indicator = document.querySelector(`.card[data-indicator="${indicatorNum}"]`);
+        const checkedRadios = indicator.querySelectorAll('input[type="radio"]:checked');
+        const totalRows = indicator.querySelectorAll('tr').length - 3; // Kurangi baris total
+
+        if (checkedRadios.length < totalRows) {
+            allFilled = false;
+            missingIndicators.push(indicatorNum);
+        }
+    });
+
+    if (!allFilled) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Peringatan',
+            text: `Indikator ${missingIndicators.join(', ')} belum terisi lengkap. Silakan lengkapi terlebih dahulu.`,
+            confirmButtonText: 'Mengerti'
+        });
+        return;
+    }
+
+    // Konfirmasi submit
+    Swal.fire({
+        icon: 'question',
+        title: 'Konfirmasi Submit',
+        text: 'Apakah Anda yakin ingin mengirimkan semua indikator KATSINOV?',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Submit',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Proses submit
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Seluruh indikator KATSINOV telah disubmit!',
+                confirmButtonText: 'Tutup'
+            });
+            
+            // Tambahkan logika submit form jika diperlukan
+            // document.getElementById('katsinovForm').submit();
+        }
+    });
+}
+</script>
+
+<!-- Sweet Alert Library untuk notifikasi -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <footer style="background: #176369; color: white; text-align: center; padding: 1rem; margin-top: 2rem;">
         <p>&copy; 2024 KATSINOV-MeterO. Innovation Measurement System</p>
     </footer>

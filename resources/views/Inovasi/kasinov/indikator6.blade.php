@@ -1,33 +1,34 @@
 <!-- KATSINOV Assessment Section -->
 <div class="container">
-<div class="card" data-indicator="6">
-<div class="main-title">Indikator KATSINOV 6</div>
+    <div class="card" data-aos="fade-up">
+        <div class="main-title">
+            Indikator KATSINOV 6
         </div>
         <div class="content">
-            <table class="katsinov-table">
-                <tr>
-                    <th>No</th>
-                    <th>Aspek</th>
-                    <th class="score-columns">0</th>
-                    <th class="score-columns">1</th>
-                    <th class="score-columns">2</th>
-                    <th class="score-columns">3</th>
-                    <th class="score-columns">4</th>
-                    <th class="score-columns">5</th>
-                    <th>Deskripsi</th>
-                    <td rowspan="16" class="katsinov-title">KATSINOV 6</td>
-                </tr>
-                <tr class="row-t">
-                    <td class="row-number">1</td>
-                    <td class="aspect-cell">T</td>
-                    <td><input type="radio" name="row1" class="radio-input" value="0"></td>
-                    <td><input type="radio" name="row1" class="radio-input" value="1"></td>
-                    <td><input type="radio" name="row1" class="radio-input" value="2"></td>
-                    <td><input type="radio" name="row1" class="radio-input" value="3"></td>
-                    <td><input type="radio" name="row1" class="radio-input" value="4"></td>
-                    <td><input type="radio" name="row1" class="radio-input" value="5"></td>
-                    <td class="description-cell">Produk teknologi milik kompetitor telah ditinjau.</td>
-                </tr>
+        <table class="katsinov-table">
+    <tr>
+        <th>No</th>
+        <th>Aspek</th>
+        <th class="score-columns">0</th>
+        <th class="score-columns">1</th>
+        <th class="score-columns">2</th>
+        <th class="score-columns">3</th>
+        <th class="score-columns">4</th>
+        <th class="score-columns">5</th>
+        <th>Deskripsi</th>
+        <td rowspan="16" class="katsinov-title">KATSINOV 6</td>
+    </tr>
+    <tr class="row-t">
+        <td class="row-number">1</td>
+        <td class="aspect-cell">T</td>
+        <td><input type="radio" name="row1_indicator6" class="radio-input" value="0"></td>
+        <td><input type="radio" name="row1_indicator6" class="radio-input" value="1"></td>
+        <td><input type="radio" name="row1_indicator6" class="radio-input" value="2"></td>
+        <td><input type="radio" name="row1_indicator6" class="radio-input" value="3"></td>
+        <td><input type="radio" name="row1_indicator6" class="radio-input" value="4"></td>
+        <td><input type="radio" name="row1_indicator6" class="radio-input" value="5"></td>
+        <td class="description-cell">Produk teknologi milik kompetitor telah ditinjau.</td>
+    </tr>
                 <tr class="row-t">
                     <td class="row-number">2</td>
                     <td class="aspect-cell">T</td>

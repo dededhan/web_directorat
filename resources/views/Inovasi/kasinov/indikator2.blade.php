@@ -1,10 +1,12 @@
 <!-- KATSINOV Assessment Section -->
 <div class="container">
-<div class="card" data-indicator="2">
-<div class="main-title">Indikator KATSINOV 2</div>
+    <div class="card" data-indicator="2" data-aos="fade-up">
+        <div class="main-title">
+            Indikator KATSINOV 2
         </div>
         <div class="content">
             <table class="katsinov-table">
+                <!-- Pastikan struktur tabel sama persis dengan indikator1.blade.php -->
                 <tr>
                     <th>No</th>
                     <th>Aspek</th>
@@ -17,7 +19,7 @@
                     <th>Deskripsi</th>
                     <td rowspan="24" class="katsinov-title">KATSINOV 2</td>
                 </tr>
-                <!-- T rows -->
+                <!-- Pastikan semua baris radio button memiliki name yang unik -->
                 <tr class="row-t">
                     <td class="row-number">1</td>
                     <td class="aspect-cell">T</td>
@@ -73,7 +75,8 @@
                     <td><input type="radio" name="row5" class="radio-input" value="5"></td>
                     <td class="description-cell">Secara teknis mampu memberikan solusi terhadap permasalahan yang dihadapi masyarakat.</td>
                 </tr>
-                <!-- M rows -->
+                
+                <!-- Market Aspect Rows -->
                 <tr class="row-m">
                     <td class="row-number">6</td>
                     <td class="aspect-cell">M</td>
@@ -107,7 +110,8 @@
                     <td><input type="radio" name="row8" class="radio-input" value="5"></td>
                     <td class="description-cell">Telah memulai kesiapan modal intelektual (intellectual capital).</td>
                 </tr>
-                <!-- O rows -->
+                
+                <!-- Organization Aspect Rows -->
                 <tr class="row-o">
                     <td class="row-number">9</td>
                     <td class="aspect-cell">O</td>
@@ -152,7 +156,8 @@
                     <td><input type="radio" name="row12" class="radio-input" value="5"></td>
                     <td class="description-cell">Telah melakukan persetujuan tanggung jawab dan persetujuan batas waktu dalam pengelolaan suatu proyek.</td>
                 </tr>
-                <!-- Mf rows -->
+                
+                <!-- Manufacturing Aspect Rows -->
                 <tr class="row-mf">
                     <td class="row-number">13</td>
                     <td class="aspect-cell">Mf</td>
@@ -175,18 +180,19 @@
                     <td><input type="radio" name="row14" class="radio-input" value="5"></td>
                     <td class="description-cell">Material, perkakas dan alat uji prototipe, maupun keahlian personel telah diperlihatkan oleh sub system/system dalam suatu lingkungan produksi yang relevan.</td>
                 </tr>
-                <!-- I rows -->
+                
                 <tr class="row-i">
-                    <td class="row-number">15</td>
-                    <td class="aspect-cell">I</td>
-                    <td><input type="radio" name="row15" class="radio-input" value="0"></td>
-                    <td><input type="radio" name="row15" class="radio-input" value="1"></td>
-                    <td><input type="radio" name="row15" class="radio-input" value="2"></td>
-                    <td><input type="radio" name="row15" class="radio-input" value="3"></td>
-                    <td><input type="radio" name="row15" class="radio-input" value="4"></td>
-                    <td><input type="radio" name="row15" class="radio-input" value="5"></td>
-                    <td class="description-cell">Keunggulan nilai jual yang dimiliki telah teruji kepada pelanggan.</td>
-                </tr>
+                <td class="row-number">15</td>
+                <td class="aspect-cell">I</td>
+                <td><input type="radio" name="row15_indicator2" class="radio-input" value="0"></td>
+                <td><input type="radio" name="row15_indicator2" class="radio-input" value="1"></td>
+                <td><input type="radio" name="row15_indicator2" class="radio-input" value="2"></td>
+                <td><input type="radio" name="row15_indicator2" class="radio-input" value="3"></td>
+                <td><input type="radio" name="row15_indicator2" class="radio-input" value="4"></td>
+                <td><input type="radio" name="row15_indicator2" class="radio-input" value="5"></td>
+                <td class="description-cell">Keunggulan nilai jual yang dimiliki telah teruji kepada pelanggan.</td>
+            </tr>
+
                 <tr class="row-i">
                     <td class="row-number">16</td>
                     <td class="aspect-cell">I</td>
@@ -196,7 +202,7 @@
                     <td><input type="radio" name="row16" class="radio-input" value="3"></td>
                     <td><input type="radio" name="row16" class="radio-input" value="4"></td>
                     <td><input type="radio" name="row16" class="radio-input" value="5"></td>
-                    <td class="description-cell">Solusi yang ditawarkan kepada pelanggan memunculkan daya tarik yang menguntungkan di pasar.</td>
+                    <td class="description-cell">Keunggulan nilai jual yang dimiliki telah teruji kepada pelanggan.</td>
                 </tr>
                 <tr class="row-i">
                     <td class="row-number">17</td>
@@ -207,20 +213,21 @@
                     <td><input type="radio" name="row17" class="radio-input" value="3"></td>
                     <td><input type="radio" name="row17" class="radio-input" value="4"></td>
                     <td><input type="radio" name="row17" class="radio-input" value="5"></td>
-                    <td class="description-cell">Validasi value proposition, channel, segmen pelanggan, model hubungan dengan pelanggan yang ada, dan aliran revenue terbukti telah dilakukan.</td>
+                    <td class="description-cell">Solusi yang ditawarkan kepada pelanggan memunculkan daya tarik yang menguntungkan di pasar.</td>
                 </tr>
-                <!-- P rows -->
-                <tr class="row-p">
+                <tr class="row-i">
                     <td class="row-number">18</td>
-                    <td class="aspect-cell">P</td>
+                    <td class="aspect-cell">I</td>
                     <td><input type="radio" name="row18" class="radio-input" value="0"></td>
                     <td><input type="radio" name="row18" class="radio-input" value="1"></td>
                     <td><input type="radio" name="row18" class="radio-input" value="2"></td>
                     <td><input type="radio" name="row18" class="radio-input" value="3"></td>
                     <td><input type="radio" name="row18" class="radio-input" value="4"></td>
                     <td><input type="radio" name="row18" class="radio-input" value="5"></td>
-                    <td class="description-cell">Telah melakukan penggalian informasi dan seleksi mitra.</td>
+                    <td class="description-cell">Validasi value proposition, channel, segmen pelanggan, model hubungan dengan pelanggan yang ada, dan aliran revenue terbukti telah dilakukan.</td>
                 </tr>
+                
+                <!-- Partnership Aspect Rows -->
                 <tr class="row-p">
                     <td class="row-number">19</td>
                     <td class="aspect-cell">P</td>
@@ -230,20 +237,21 @@
                     <td><input type="radio" name="row19" class="radio-input" value="3"></td>
                     <td><input type="radio" name="row19" class="radio-input" value="4"></td>
                     <td><input type="radio" name="row19" class="radio-input" value="5"></td>
-                    <td class="description-cell">Pola kemitraan dibangun dengan tepat.</td>
+                    <td class="description-cell">Telah melakukan penggalian informasi dan seleksi mitra.</td>
                 </tr>
-                <!-- R rows -->
-                <tr class="row-r">
+                <tr class="row-p">
                     <td class="row-number">20</td>
-                    <td class="aspect-cell">R</td>
+                    <td class="aspect-cell">P</td>
                     <td><input type="radio" name="row20" class="radio-input" value="0"></td>
                     <td><input type="radio" name="row20" class="radio-input" value="1"></td>
                     <td><input type="radio" name="row20" class="radio-input" value="2"></td>
                     <td><input type="radio" name="row20" class="radio-input" value="3"></td>
                     <td><input type="radio" name="row20" class="radio-input" value="4"></td>
                     <td><input type="radio" name="row20" class="radio-input" value="5"></td>
-                    <td class="description-cell">Kajian risiko teknologi telah dilakukan dalam setiap langkah pengembangan teknologi.</td>
+                    <td class="description-cell">Pola kemitraan dibangun dengan tepat.</td>
                 </tr>
+                
+                <!-- Risk Aspect Rows -->
                 <tr class="row-r">
                     <td class="row-number">21</td>
                     <td class="aspect-cell">R</td>
@@ -253,6 +261,17 @@
                     <td><input type="radio" name="row21" class="radio-input" value="3"></td>
                     <td><input type="radio" name="row21" class="radio-input" value="4"></td>
                     <td><input type="radio" name="row21" class="radio-input" value="5"></td>
+                    <td class="description-cell">Kajian risiko teknologi telah dilakukan dalam setiap langkah pengembangan teknologi.</td>
+                </tr>
+                <tr class="row-r">
+                    <td class="row-number">22</td>
+                    <td class="aspect-cell">R</td>
+                    <td><input type="radio" name="row22" class="radio-input" value="0"></td>
+                    <td><input type="radio" name="row22" class="radio-input" value="1"></td>
+                    <td><input type="radio" name="row22" class="radio-input" value="2"></td>
+                    <td><input type="radio" name="row22" class="radio-input" value="3"></td>
+                    <td><input type="radio" name="row22" class="radio-input" value="4"></td>
+                    <td><input type="radio" name="row22" class="radio-input" value="5"></td>
                     <td class="description-cell">Pada tahap pengembangan teknologi dilakukan penyusunan rencana pengendalian risiko teknologi.</td>
                 </tr>
                 <tr class="total-row">
@@ -281,14 +300,14 @@
             <textarea 
                 placeholder="Tambahkan catatan di sini..." 
                 style="width: 100%; 
-                       min-height: 200px; 
-                       padding: 1rem; 
-                       border: 2px solid var(--background);
-                       border-radius: 10px; 
-                       font-family: inherit; 
-                       font-size: 0.95rem; 
-                       line-height: 1.5; 
-                       resize: vertical;">
+                        min-height: 200px; 
+                        padding: 1rem; 
+                        border: 2px solid var(--background);
+                        border-radius: 10px; 
+                        font-family: inherit; 
+                        font-size: 0.95rem; 
+                        line-height: 1.5; 
+                        resize: vertical;">
             </textarea>
         </div>
     </div>

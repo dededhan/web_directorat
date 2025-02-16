@@ -508,3 +508,19 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+/* Add this to your existing CSS */
+.katsinov-table tr {
+    transition: background-color 0.2s ease;
+}
+
+.katsinov-table tr:hover {
+    background-color: rgba(23, 99, 105, 0.05) !important;
+}
+
+.katsinov-table .description-cell {
+    transition: color 0.2s ease;
+}
+
+.katsinov-table tr:hover .description-cell {
+    color: var(--primary);
+}
