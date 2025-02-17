@@ -13,6 +13,11 @@ class KatsinovController extends Controller
 {
     public function index()
     {
+        $katsinovs = Katsinov::with('scores')->get();
+        return view('admin.tabelkasinov', compact('katsinovs'));
+    }
+    public function create()
+    {
       
         return view('inovasi.kasinov.form');
     }

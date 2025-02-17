@@ -95,9 +95,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('admin.international_lecture');
     })->name('international_lecture');
 
-    Route::get('/tabel_kasinov', function () {
-        return view('admin.tabel_kasinov');
-    })->name('tabel_kasinov');
+    Route::get('/tabelkasinov', [KatsinovController::class, 'index'])->name('tabelkasinov');
     
     // Route::get('/kasinov/{id}/edit', function ($id) {
     //     return view('admin.edit_kasinov', ['id' => $id]);
@@ -234,7 +232,7 @@ Route::get('/katsinov-data', function() {
     return App\Models\Katsinov::with('scores')->get();
 });
     
-Route::get('/katsinov/form', [KatsinovController::class, 'index'])
+Route::get('/katsinov/form', [KatsinovController::class, 'create'])
     ->name('katsinov.form');
 
 Route::post('/katsinov/store', [KatsinovController::class, 'store'])
