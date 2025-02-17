@@ -6,6 +6,7 @@ use App\Http\Controllers\QuesionerGeneralController;
 use App\Http\Controllers\AdminAlumniBerdampakController;
 use App\Http\Controllers\AdminMataKuliahController;
 use App\Http\Controllers\RespondenAnswerController;
+use App\Http\Controllers\KatsinovController;
 use App\Http\Controllers\AlumniController;
 use App\Http\Middleware\HandleRespondenForm;
 use Illuminate\Support\Facades\Route;
@@ -225,9 +226,21 @@ Route::get('/galeri/sustainability', function () {
 })->name('galeri.sustainability'); 
 
 
-Route::get('/Kasinov/form', function () {
-    return view('Inovasi.Kasinov.form');
-})->name('form');
+// Route::get('/Kasinov/form', function () {
+//     return view('Inovasi.Kasinov.form');
+// })->name('form');
+// web.php
+Route::get('/katsinov-data', function() {
+    return App\Models\Katsinov::with('scores')->get();
+});
+    
+Route::get('/katsinov/form', [KatsinovController::class, 'index'])
+    ->name('katsinov.form');
+
+Route::post('/katsinov/store', [KatsinovController::class, 'store'])
+    ->name('katsinov.store');
+    
+// Route::post('/kasinov/form', [KatsinovAssessmentController::class, 'store'])->name('katsinov.store');
 
 Route::get('/pemeringkatan/landingpage', function () {
     return view('pemeringkatan.landingpagepemeringkatan');

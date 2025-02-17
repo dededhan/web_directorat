@@ -1,6 +1,63 @@
 document.addEventListener('DOMContentLoaded', function() {
     let spiderwebChart;
+    function collectAspectScores() {
+        const aspectMap = { 
+            'T': 'technology',
+            'O': 'organization',
+            'R': 'risk',
+            'M': 'market',
+            'P': 'partnership',
+            'MF': 'manufacturing',
+            'I': 'investment'
+        };
     
+        const indicators = [];
+        
+        document.querySelectorAll('[data-indicator]').forEach((card) => {
+            const indicatorNumber = parseInt(card.dataset.indicator);
+            const aspectScores = {
+                indicator_number: indicatorNumber,
+                technology: 0,
+                organization: 0,
+                risk: 0,
+                market: 0,
+                partnership: 0,
+                manufacturing: 0,
+                investment: 0,
+                totalQuestions: 0
+            };
+    
+            // Hitung skor per aspek dalam indikator ini
+            card.querySelectorAll('tr').forEach(row => {
+                const aspectCell = row.querySelector('.aspect-cell');
+                if (!aspectCell) return;
+    
+                const aspectCode = aspectCell.textContent.trim().toUpperCase();
+                const aspectField = aspectMap[aspectCode];
+                const checkedRadio = row.querySelector('input[type="radio"]:checked');
+                
+                if (checkedRadio && aspectField) {
+                    const value = parseInt(checkedRadio.value);
+                    aspectScores[aspectField] += value; // Akumulasi skor mentah (0-5)
+                    aspectScores.totalQuestions++;
+                }
+            });
+    
+            // Konversi ke persentase
+            const maxPossiblePerAspect = aspectScores.totalQuestions * 5;
+            Object.keys(aspectMap).forEach(code => {
+                const field = aspectMap[code];
+                aspectScores[field] = maxPossiblePerAspect > 0 
+                    ? ((aspectScores[field] / maxPossiblePerAspect) * 100).toFixed(2)
+                    : 0;
+            });
+    
+            indicators.push(aspectScores);
+        });
+    
+        return indicators;
+    }
+        
     function initSpiderwebChart() {
         const ctx = document.getElementById('spiderwebChart').getContext('2d');
         spiderwebChart = new Chart(ctx, {

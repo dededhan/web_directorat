@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Katsinov;
+use App\Models\KatsinovScore;
+
+use Illuminate\Support\Facades\DB;
+
+
+class KatsinovController extends Controller
+{
+    public function index()
+    {
+      
+        return view('inovasi.kasinov.form');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'focus_area' => 'required|string|max:255',
+            'project_name' => 'required|string|max:255',
+            'institution' => 'required|string|max:255',
+            'address' => 'required|string',
+            'contact' => 'required|string',
+            'assessment_date' => 'required|date',
+            'indicators' => 'required|array',
+            'indicators.*.indicator_number' => 'required|integer|min:1|max:6',
+            'indicators.*.technology' => 'required|numeric|between:0,100',
+            'indicators.*.organization' => 'required|numeric|between:0,100',
+            'indicators.*.risk' => 'required|numeric|between:0,100',
+            'indicators.*.market' => 'required|numeric|between:0,100',
+            'indicators.*.partnership' => 'required|numeric|between:0,100',
+            'indicators.*.manufacturing' => 'required|numeric|between:0,100',
+            'indicators.*.investment' => 'required|numeric|between:0,100',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $katsinov = Katsinov::create($validated);
+            
+            foreach ($validated['indicators'] as $indicator) {
+                KatsinovScore::create([
+                    'katsinov_id' => $katsinov->id,
+                    'indicator_number' => $indicator['indicator_number'],
+                    'technology' => $indicator['technology'],
+                    'organization' => $indicator['organization'],
+                    'risk' => $indicator['risk'],
+                    'market' => $indicator['market'],
+                    'partnership' => $indicator['partnership'],
+                    'manufacturing' => $indicator['manufacturing'],
+                    'investment' => $indicator['investment']
+                ]);
+            }
+            
+            DB::commit();
+            return response()->json(['message' => 'Data berhasil disimpan'], 200);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
+        }
+    }
+}
