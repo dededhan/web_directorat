@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Katsinov;
 use App\Models\KatsinovScore;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\DB;
 
@@ -13,8 +14,16 @@ class KatsinovController extends Controller
 {
     public function index()
     {
-        $katsinovs = Katsinov::with('scores')->get();
-        return view('admin.tabelkasinov', compact('katsinovs'));
+        // $katsinovs = Katsinov::with('scores')->get();
+        // return view('admin.tabelkasinov', compact('katsinovs'));
+        $katsinovs = Katsinov::with('scores')->latest()->paginate(10);
+
+        if (Auth::user()->role === 'admin') {
+            return view('admin.tabelkasinov', compact('katsinovs'));
+        } else if (Auth::user()->role === 'dosen') {
+            return view('Inovasi.dosen.tablekasitnov', compact('katsinovs'));
+        } 
+
     }
     public function create()
     {

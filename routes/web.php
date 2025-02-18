@@ -203,6 +203,20 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')->group(functi
     Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
 });
 
+Route::prefix('Inovasi')->name('Inovasi.')->group(function () {
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+        // Dashboard
+        Route::get('/dashboard', function () {
+            return view('Inovasi.dosen.dashboard');
+        })->name('dashboard');
+
+        // Tabel Katsinov
+        Route::get('/tablekasitnov', [KatsinovController::class, 'index'])->name('tablekasitnov');
+
+
+    });
+});
+
 
   //Alumni
 Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');

@@ -51,7 +51,7 @@ body {
 
 
 /* SIDEBAR */
-#sidebar {
+/* #sidebar {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -156,7 +156,7 @@ body {
 	min-width: calc(60px  - ((4px + 6px) * 2));
 	display: flex;
 	justify-content: center;
-}
+} */
 /* SIDEBAR */
 
 
@@ -456,7 +456,7 @@ nav .logo img {
 
 
 /* SIDEBAR */
-#sidebar {
+/* #sidebar {
     position: fixed;
     top: 0;
     left: 0;

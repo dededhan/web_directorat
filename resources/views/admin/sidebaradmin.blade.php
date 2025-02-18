@@ -91,7 +91,7 @@
         <li class="{{ request()->routeIs('admin.tabelkasinov') ? 'active' : '' }}">
             <a href="{{ route('admin.tabelkasinov') }}">
                 <i class='bx bxs-graduation'></i>
-                <span class="text">Tabel Kasinov</span>
+                <span class="text">Tabel Kasitnov</span>
             </a>
         </li>
     </ul>
