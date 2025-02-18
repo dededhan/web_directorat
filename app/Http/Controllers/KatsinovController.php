@@ -18,8 +18,9 @@ class KatsinovController extends Controller
         // return view('admin.tabelkasinov', compact('katsinovs'));
         $katsinovs = Katsinov::with('scores')->latest()->paginate(10);
 
-        if (Auth::user()->role === 'admin') {
+        if (Auth::user()->role === 'admin_direktorat') {
             return view('admin.tabelkasinov', compact('katsinovs'));
+            
         } else if (Auth::user()->role === 'dosen') {
             return view('Inovasi.dosen.tablekasitnov', compact('katsinovs'));
         } 
