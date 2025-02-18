@@ -6,21 +6,19 @@ window.aspectLegend = function() {
         chart: null,
         
         init() {
-            // Initialize any necessary setup
             this.$watch('showPopup', value => {
                 if (value) {
                     this.$nextTick(() => {
-                        // Any initialization for the popup
+                        this.initializeChart();
                     });
                 }
             });
         },
 
         openSpiderwebAnalysis() {
-            console.log('Opening spiderweb analysis'); // Debug log
+            console.log('Opening spiderweb analysis');
             this.showSpiderwebPopup = true;
             
-            // Ensure the chart updates after a short delay
             this.$nextTick(() => {
                 if (window.updateSpiderwebChart) {
                     window.updateSpiderwebChart();
@@ -68,50 +66,60 @@ window.aspectLegend = function() {
             }
         },
 
-        init() {
-            this.$watch('showPopup', value => {
-                if (value) {
-                    this.$nextTick(() => {
-                        this.initializeChart();
-                    });
-                }
-            });
-        },
-
         openAspectAnalysis(aspectCode) {
             this.selectedAspect = {
                 ...this.aspectConfig[aspectCode],
-                code: aspectCode,
-                data: this.calculateAspectData(aspectCode)
+                code: aspectCode
             };
             this.showPopup = true;
         },
 
         calculateAspectData(aspectCode) {
-            // Get all radio inputs for this aspect
             const scores = [];
-            for (let level = 1; level <= 6; level++) {
+            const aspectConfigs = [
+                { level: 1, selector: `input[name^="indicator1_row"][name$="_${aspectCode}"]:checked` },
+                { level: 2, selector: `input[name^="indicator2_row"][name$="_${aspectCode}"]:checked` },
+                { level: 3, selector: `input[name^="indicator3_row"][name$="_${aspectCode}"]:checked` },
+                { level: 4, selector: `input[name^="indicator4_row"][name$="_${aspectCode}"]:checked` },
+                { level: 5, selector: `input[name^="indicator5_row"][name$="_${aspectCode}"]:checked` },
+                { level: 6, selector: `input[name^="indicator6_row"][name$="_${aspectCode}"]:checked` }
+            ];
+            
+            aspectConfigs.forEach(config => {
                 let levelTotal = 0;
-                let maxPossible = 0;
                 
-                document.querySelectorAll(`[name^="indicator${level}_row"]`).forEach(radio => {
-                    const row = radio.closest('tr');
-                    if (row && row.querySelector('.aspect-cell').textContent.trim() === aspectCode) {
-                        if (radio.checked) {
-                            levelTotal += parseInt(radio.value);
-                        }
-                        maxPossible += 5; // Max possible score per question
+                // Count total questions for this aspect in this level
+                const allQuestions = document.querySelectorAll(`input[name^="indicator${config.level}_row"][name$="_${aspectCode}"]`);
+                const questionsPerRow = 6; // Since each question has 6 radio buttons (0-5)
+                const totalQuestions = Math.ceil(allQuestions.length / questionsPerRow);
+                const maxPossible = totalQuestions * 5; // Each question can score up to 5 points
+                
+                // Get checked radio buttons for this level
+                const checkedRadios = document.querySelectorAll(config.selector);
+                checkedRadios.forEach(radio => {
+                    const value = parseInt(radio.value);
+                    if (!isNaN(value)) {
+                        levelTotal += value;
                     }
                 });
 
                 const percentage = maxPossible > 0 ? (levelTotal / maxPossible) * 100 : 0;
+                
                 scores.push({
-                    level: `KATSINOV ${level}`,
+                    level: `KATSINOV ${config.level}`,
                     score: levelTotal,
                     maxPossible: maxPossible,
                     percentage: percentage
                 });
-            }
+
+                console.log(`Level ${config.level}:`, {
+                    totalQuestions,
+                    maxPossible,
+                    levelTotal,
+                    percentage
+                });
+            });
+
             return scores;
         },
 
@@ -122,13 +130,15 @@ window.aspectLegend = function() {
                 this.chart.destroy();
             }
 
+            const aspectData = this.calculateAspectData(this.selectedAspect.code);
+            
             this.chart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: this.selectedAspect.data.map(d => d.level),
+                    labels: aspectData.map(d => d.level),
                     datasets: [{
-                        label: 'Achievement (%)',
-                        data: this.selectedAspect.data.map(d => d.percentage),
+                        label: 'Pencapaian (%)',
+                        data: aspectData.map(d => d.percentage),
                         borderColor: this.selectedAspect.color,
                         backgroundColor: this.selectedAspect.color + '40',
                         fill: true,
@@ -162,20 +172,29 @@ window.aspectLegend = function() {
         },
 
         calculateAverage() {
-            const percentages = this.selectedAspect.data.map(d => d.percentage);
-            const average = percentages.reduce((a, b) => a + b, 0) / percentages.length;
+            const aspectData = this.calculateAspectData(this.selectedAspect.code);
+            const validPercentages = aspectData
+                .map(d => d.percentage)
+                .filter(p => !isNaN(p));
+            
+            if (validPercentages.length === 0) return '0.00';
+            
+            const average = validPercentages.reduce((a, b) => a + b, 0) / validPercentages.length;
             return average.toFixed(2);
         },
 
         getMaxKatsinovLevel() {
+            const aspectData = this.calculateAspectData(this.selectedAspect.code);
             let maxLevel = 0;
-            for (let i = 0; i < this.selectedAspect.data.length; i++) {
-                if (this.selectedAspect.data[i].percentage >= 80) {
+            
+            for (let i = 0; i < aspectData.length; i++) {
+                if (aspectData[i].percentage >= 80) {
                     maxLevel = i + 1;
                 } else {
                     break;
                 }
             }
+            
             return maxLevel;
         },
 
@@ -193,4 +212,4 @@ window.aspectLegend = function() {
             return `status-${status}`;
         }
     };
-}
+};

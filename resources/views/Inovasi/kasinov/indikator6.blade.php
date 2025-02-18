@@ -117,7 +117,7 @@
                     <td><input type="radio" name="indikator6_row9" class="radio-input" value="5"></td>
                     <td class="description-cell">Ada peran jejaring dalam mendukung Inovasi Ulang atau Pengembangan Teknologi Baru.</td>
                 </tr>
-                <tr class="row-mf">
+                <tr class="row-MF">
                     <td class="row-number">10</td>
                     <td class="aspect-cell">Mf</td>
                     <td><input type="radio" name="indikator6_row10" class="radio-input" value="0"></td>
