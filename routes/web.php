@@ -215,6 +215,18 @@ Route::prefix('Inovasi')->name('Inovasi.')->group(function () {
 
 
     });
+
+    Route::prefix('admin_hilirisasi')->name('admin_hilirisasi.')->group(function () {
+        // Dashboard
+        Route::get('/dashboard', function () {
+            return view('Inovasi.admin_hilirisasi.dashboard');
+        })->name('dashboard');
+
+        // Tabel Katsinov
+        Route::get('/tablekasitnov', [KatsinovController::class, 'index'])->name('tablekasitnov');
+
+
+    });
 });
 
 

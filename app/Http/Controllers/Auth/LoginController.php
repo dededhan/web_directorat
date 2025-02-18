@@ -34,6 +34,8 @@ class LoginController extends Controller
                 return redirect()->route('admin_pemeringkatan.dashboard');
             } else if (Auth::user()->role === 'dosen'){
                 return redirect()->route('Inovasi.dosen.dashboard');
+            }  else if (Auth::user()->role === 'admin_hilirisasi'){
+                return redirect()->route('Inovasi.admin_hilirisasi.dashboard');
             }
             
             // Default redirect
