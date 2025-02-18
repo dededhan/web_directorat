@@ -22,12 +22,12 @@
                 <h3>Input Data Dosen Internasional</h3>
             </div> 
 
-            <form id="lecture-form">
+            <form id="lecture-form" action="{{ route('admin.internationallecture.store') }}" method="POST">
                 @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="fakultas" class="form-label">Fakultas</label>
-                        <select class="form-select" id="fakultas">
+                        <select class="form-select" name="fakultas" id="fakultas">
                             <option value="">Pilih Fakultas</option>
                             <option value="fmipa">FMIPA</option>
                             <option value="fik">FIK</option>
@@ -41,7 +41,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="prodi" class="form-label">Program Studi</label>
-                        <select class="form-select" id="prodi" disabled>
+                        <select class="form-select" name="prodi" id="prodi" disabled>
                             <option value="">Pilih Program Studi</option>
                         </select>
                         <div class="form-text text-muted">Pilih program studi tempat dosen mengajar</div>
@@ -51,7 +51,7 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="nama" class="form-label">Nama Dosen</label>
-                        <input type="text" class="form-control" id="nama" required>
+                        <input type="text" class="form-control" name="nama" id="nama" required>
                         <div class="form-text text-muted">Masukkan nama lengkap dosen</div>
                     </div>
                 </div>
@@ -59,12 +59,12 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="negara" class="form-label">Negara Asal</label>
-                        <input type="text" class="form-control" id="negara" required>
+                        <input type="text" class="form-control" name="negara" id="negara" required>
                         <div class="form-text text-muted">Masukkan negara asal dosen</div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="universitas_asal" class="form-label">Universitas Asal</label>
-                        <input type="text" class="form-control" id="universitas_asal" required>
+                        <input type="text" class="form-control" name="universitas_asal" id="universitas_asal" required>
                         <div class="form-text text-muted">Masukkan universitas asal dosen</div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="status" class="form-label">Status</label>
-                        <select class="form-select" id="status" required>
+                        <select class="form-select" name="status" id="status" required>
                             <option value="">Pilih Status</option>
                             <option value="fulltime">Full Time</option>
                             <option value="parttime">Part Time</option>
@@ -81,13 +81,13 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="bidang_keahlian" class="form-label">Bidang Keahlian</label>
-                        <input type="text" class="form-control" id="bidang_keahlian" required>
+                        <input type="text" class="form-control" name="bidang_keahlian" id="bidang_keahlian" required>
                         <div class="form-text text-muted">Masukkan bidang keahlian dosen</div>
                     </div>
                 </div>
 
                 <div class="mb-3 d-flex justify-content-end">
-                    <button type="button" class="btn btn-primary" onclick="addDummyData()">Simpan</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>
@@ -117,8 +117,34 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                        <tbody id="lecture-list">
-                            <!-- Data akan ditampilkan di sini -->
+                        <tbody>
+                            @foreach($dosen as $item)
+                            <tr>
+                                <td>{{ $item->nama }}</td>
+                                <td>{{ strtoupper($item->fakultas) }}</td>
+                                <td>{{ $item->prodi }}</td>
+                                <td>{{ $item->negara }}</td>
+                                <td>{{ $item->universitas_asal }}</td>
+                                <td>{{ ucfirst($item->status) }}</td>
+                                <td>{{ $item->bidang_keahlian }}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-warning">Edit</button>
+                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                    </div>
+                                    {{-- <div class="btn-group">
+                                        <a href="{{ route('admin.dataakreditasi.edit', $akreditasi->id) }}" 
+                                           class="btn btn-sm btn-warning">Edit</a>
+                                        <form action="{{ route('admin.dataakreditasi.destroy', $akreditasi->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger" 
+                                                    onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
+                                        </form>
+                                    </div> --}}
+                                </td>
+                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -196,46 +222,6 @@
                 prodiSelect.disabled = true;
             }
         });
-
-        // Add dummy data function
-        function addDummyData() {
-            const tbody = document.getElementById('lecture-list');
-            const row = document.createElement('tr');
-            
-            const lectureData = {
-                nama: document.getElementById('nama').value || 'John Smith',
-                fakultas: document.getElementById('fakultas').value || 'fmipa',
-                prodi: document.getElementById('prodi').value || 'ilmu_komputer',
-                negara: document.getElementById('negara').value || 'Amerika Serikat',
-                universitasAsal: document.getElementById('universitas_asal').value || 'MIT',
-                status: document.getElementById('status').value || 'fulltime',
-                bidangKeahlian: document.getElementById('bidang_keahlian').value || 'Ilmu Komputer'
-            };
-
-            row.innerHTML = `
-                <td>${lectureData.nama}</td>
-                <td>${lectureData.fakultas.toUpperCase()}</td>
-                <td>${lectureData.prodi.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</td>
-                <td>${lectureData.negara}</td>
-                <td>${lectureData.universitasAsal}</td>
-                <td><span class="badge bg-${lectureData.status === 'fulltime' ? 'success' : 'primary'}">${lectureData.status.toUpperCase()}</span></td>
-                <td>${lectureData.bidangKeahlian}</td>
-                <td>
-                    <div class="btn-group">
-                        <button class="btn btn-sm btn-warning">Edit</button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteRow(this)">Hapus</button>
-                    </div>
-                </td>
-            `;
-
-            tbody.appendChild(row);
-            document.getElementById('lecture-form').reset();
-        }
-
-        // Delete row function
-        function deleteRow(button) {
-            button.closest('tr').remove();
-        }
 
         // Search functionality
         document.getElementById('searchInput').addEventListener('keyup', function() {

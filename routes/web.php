@@ -11,6 +11,7 @@ use App\Http\Controllers\AlumniController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\InternationalStudentController;
 use App\Http\Controllers\AkreditasiController;
+use App\Http\Controllers\DosenInternasionalController;
 
 
 use App\Http\Middleware\HandleRespondenForm;
@@ -97,10 +98,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::resource('/dataakreditasi', AkreditasiController::class);
 
-
-    Route::get('/international_lecture', function () {
-        return view('admin.international_lecture');
-    })->name('international_lecture');
+    Route::resource('/internationallecture', DosenInternasionalController::class);
+    // Route::get('/international_lecture', function () {
+    //     return view('admin.international_lecture');
+    // })->name('international_lecture');
 
     Route::get('/tabelkasinov', [KatsinovController::class, 'index'])->name('tabelkasinov');
     

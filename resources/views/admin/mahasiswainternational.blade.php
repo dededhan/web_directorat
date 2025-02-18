@@ -145,7 +145,20 @@
                                     <td>{{ ucfirst($student->status) }}</td>
                                     <td>{{ $student->periode_mulai }} - {{ $student->periode_akhir }}</td>
                                     <td>
-                                        <!-- Tambahkan tombol aksi jika diperlukan -->
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm btn-warning">Edit</button>
+                                            <button class="btn btn-sm btn-danger">Delete</button>
+                                        </div>
+                                        {{-- <div class="btn-group">
+                                            <a href="{{ route('admin.dataakreditasi.edit', $akreditasi->id) }}" 
+                                               class="btn btn-sm btn-warning">Edit</a>
+                                            <form action="{{ route('admin.dataakreditasi.destroy', $akreditasi->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger" 
+                                                        onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
+                                            </form>
+                                        </div> --}}
                                     </td>
                                 </tr>
                             @endforeach
