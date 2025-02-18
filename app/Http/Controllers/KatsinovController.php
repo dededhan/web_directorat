@@ -8,7 +8,7 @@ use App\Models\KatsinovScore;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\DB;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class KatsinovController extends Controller
 {
@@ -80,4 +80,18 @@ class KatsinovController extends Controller
             return response()->json(['message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
     }
+    public function downloadPDF()
+    {
+        $katsinovs = Katsinov::with('scores')->get();
+        
+        $pdf = PDF::loadView('inovasi.katsinov.pdf', compact('katsinovs'))
+            ->setPaper('a4', 'landscape')
+            ->setOptions([
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true
+            ]);
+        
+        return $pdf->download('katsinov-report.pdf');
+    }
+
 }

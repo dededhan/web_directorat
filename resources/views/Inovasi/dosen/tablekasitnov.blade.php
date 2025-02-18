@@ -135,7 +135,11 @@
                     </div>
                 </div>
             </div>
-
+            <div class="d-flex justify-content-end mb-3">
+                <a href="{{ route('katsinov.pdf') }}" class="btn btn-primary">
+                    <i class='bx bxs-download'></i> Download PDF
+                </a>
+            </div>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>

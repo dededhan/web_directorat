@@ -282,3 +282,4 @@ Route::get('/inovasi/landingpage', function () {
     return view('inovasi.landingpagehilirisasi');
 })->name('inovasi.landingpage');
 
+Route::get('/katsinov/pdf', [KatsinovController::class, 'downloadPDF'])->name('katsinov.pdf');
