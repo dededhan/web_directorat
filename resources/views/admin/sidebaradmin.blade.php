@@ -68,8 +68,8 @@
             </a>
         </li>
 
-        <li class="{{ request()->routeIs('admin.mahasiswainternational') ? 'active' : '' }}">
-            <a href="{{ route('admin.mahasiswainternational') }}">
+        <li class="{{ request()->routeIs('admin.mahasiswainternational.index') ? 'active' : '' }}">
+            <a href="{{ route('admin.mahasiswainternational.index') }}">
                 <i class='bx bxs-graduation'></i>
                 <span class="text">Mahasiswa International</span>
             </a>

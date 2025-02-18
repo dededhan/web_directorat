@@ -115,6 +115,6 @@ class UsersSeeder extends Seeder
             }
         }
         // User::insert($userdata);
-        User::factory()->count(20)->create();
+        // User::factory()->count(20)->create();
     }
 }

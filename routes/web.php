@@ -9,6 +9,9 @@ use App\Http\Controllers\RespondenAnswerController;
 use App\Http\Controllers\KatsinovController;
 use App\Http\Controllers\AlumniController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\InternationalStudentController;
+
+
 use App\Http\Middleware\HandleRespondenForm;
 use Illuminate\Support\Facades\Route;
 
@@ -25,7 +28,7 @@ inForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
+Route::prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/', function () {
         return view('admin.dashboardadmin');
@@ -85,9 +88,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
 
         // mahasiswa
-    Route::get('/mahasiswainternational', function () {
-        return view('admin.mahasiswainternational');
-    })->name('mahasiswainternational');
+    Route::resource('/mahasiswainternational', InternationalStudentController::class);
+    
+    // Route::get('/mahasiswainternational', function () {
+    //     return view('admin.mahasiswainternational');
+    // })->name('mahasiswainternational');
 
     Route::get('/dataakreditasi', function () {
         return view('admin.dataakreditasi');
