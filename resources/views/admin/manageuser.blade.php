@@ -22,7 +22,8 @@
             <h3>Add New User</h3>
         </div>
         <div class="form-container p-4">
-            <form>
+            <form method="POST" action="{{ route('admin.manageuser.store') }}">
+                @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="name" class="form-label">Name</label>
@@ -52,6 +53,7 @@
                             <option value="kepala_sub_direktorat">Kepala Sub Direktorat</option>
                             <option value="wr3">Wakil Rektor 3</option>
                             <option value="dosen">Dosen</option>
+                            <option value="mahasiswa">mahasiswa</option>
                         </select>
                     </div>
                 </div>
@@ -84,12 +86,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Sample data -->
+                    @foreach ($users as $user)
                     <tr>
-                        <td>1</td>
-                        <td>John Doe</td>
-                        <td>john@example.com</td>
-                        <td>Admin Direktorat</td>
+                        <td>{{ $user->id }}</td>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->role }}</td>
+                        
                         <td>
                             <span class="badge bg-success">Active</span>
                         </td>
@@ -104,6 +107,7 @@
                             </div>
                         </td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

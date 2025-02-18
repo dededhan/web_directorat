@@ -3,8 +3,12 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Dosen;
+use App\Models\Mahasiswa;
+use App\Models\Fakultas;
+use App\Models\Prodi;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UsersSeeder extends Seeder
 {
@@ -68,9 +72,49 @@ class UsersSeeder extends Seeder
                 'email'=>'dosen123@gmail.com',
                 'password'=>bcrypt('dosen123'),
                 'role'=>'dosen'
+                
             ],
         ];
+        foreach ($userdata as $data) {
+            $user = User::create($data);
+            
+            switch ($data['role']) {
+                case 'dosen':
+                    Dosen::create([ // PERBAIKI SINTAKS DISINI
+                        'user_id' => $user->id,
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'password' => $user->password
+                    ]);
+                    break;
+                case 'mahasiswa':
+                    Mahasiswa::create([
+                        'user_id' => $user->id,
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'password' => $user->password                        
+                    ]);
+                    break;
+                case 'prodi':
+                        Prodi::create([
+                        'user_id' => $user->id,
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'password' => $user->password                        
+                    ]);
+                    break;
+                case 'fakultas':
+                        Fakultas::create([
+                        'user_id' => $user->id,
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'password' => $user->password                        
+                    ]);
+                    break;
 
-        User::insert($userdata);
+            }
+        }
+        // User::insert($userdata);
+        User::factory()->count(20)->create();
     }
 }

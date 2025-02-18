@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminMataKuliahController;
 use App\Http\Controllers\RespondenAnswerController;
 use App\Http\Controllers\KatsinovController;
 use App\Http\Controllers\AlumniController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\HandleRespondenForm;
 use Illuminate\Support\Facades\Route;
 
@@ -46,9 +47,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     // Route::post('/responden/{responden}', AdminMailSendController::class)->name('mail.responden');
     
-    Route::get('/manage-user', function () {
-        return view('admin.manageuser');
-    })->name('manageuser');
+    Route::resource('/manageuser', UserController::class);
+    // Route::get('/manage-user', function () {
+    //     return view('admin.manageuser');
+    // })->name('manageuser');
 
     
     

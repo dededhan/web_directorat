@@ -17,8 +17,8 @@
                 <span class="text">Berita</span>
             </a>
         </li>
-        <li class="{{ request()->routeIs('admin.manageuser') ? 'active' : '' }}">
-            <a href="{{ route('admin.manageuser') }}">
+        <li class="{{ request()->routeIs('admin.manageuser.index') ? 'active' : '' }}">
+            <a href="{{ route('admin.manageuser.index') }}">
                 <i class='bx bxs-message-dots'></i>
                 <span class="text">Manage User</span>
             </a>
