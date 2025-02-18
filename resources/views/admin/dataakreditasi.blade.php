@@ -22,12 +22,13 @@
                 <h3>Input Data Akreditasi</h3>
             </div> 
 
-            <form id="akreditasi-form">
+            <form action="{{ route('admin.dataakreditasi.store') }}" method="POST" id="akreditasi-form">
+            
                 @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="fakultas" class="form-label">Fakultas</label>
-                        <select class="form-select" id="fakultas">
+                        <select class="form-select" name="fakultas" id="fakultas">
                             <option value="">Pilih Fakultas</option>
                             <option value="fmipa">FMIPA</option>
                             <option value="fik">FIK</option>
@@ -41,7 +42,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="prodi" class="form-label">Program Studi</label>
-                        <select class="form-select" id="prodi" disabled>
+                        <select class="form-select" name="prodi" id="prodi" disabled>
                             <option value="">Pilih Program Studi</option>
                         </select>
                         <div class="form-text text-muted">Pilih program studi yang akan diinput data akreditasinya</div>
@@ -51,7 +52,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="lembaga_akreditasi" class="form-label">Lembaga Akreditasi</label>
-                        <select class="form-select" id="lembaga_akreditasi">
+                        <select class="form-select" name="lembaga_akreditasi" id="lembaga_akreditasi">
                             <option value="">Pilih Lembaga Akreditasi</option>
                             <option value="ban-pt">BAN-PT</option>
                             <option value="lam-infokom">LAM INFOKOM</option>
@@ -63,7 +64,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="peringkat" class="form-label">Peringkat Akreditasi</label>
-                        <select class="form-select" id="peringkat">
+                        <select class="form-select" name="peringkat" id="peringkat">
                             <option value="">Pilih Peringkat</option>
                             <option value="unggul">Unggul</option>
                             <option value="baik_sekali">Baik Sekali</option>
@@ -79,7 +80,7 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="nomor_sk" class="form-label">Nomor SK</label>
-                        <input type="text" class="form-control" id="nomor_sk">
+                        <input type="text" class="form-control" name="nomor_sk" id="nomor_sk">
                         <div class="form-text text-muted">Masukkan nomor SK akreditasi (contoh: 1234/SK/BAN-PT/2024)</div>
                     </div>
                 </div>
@@ -87,18 +88,18 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="periode_awal" class="form-label">Periode Awal Berlaku</label>
-                        <input type="date" class="form-control" id="periode_awal">
+                        <input type="date" class="form-control" name="periode_awal" id="periode_awal">
                         <div class="form-text text-muted">Pilih tanggal mulai berlakunya akreditasi</div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="periode_akhir" class="form-label">Periode Akhir Berlaku</label>
-                        <input type="date" class="form-control" id="periode_akhir">
+                        <input type="date" class="form-control" name="periode_akhir" id="periode_akhir">
                         <div class="form-text text-muted">Pilih tanggal berakhirnya akreditasi</div>
                     </div>
                 </div>
 
                 <div class="mb-3 d-flex justify-content-end">
-                    <button type="button" class="btn btn-primary" onclick="addDummyData()">Submit</button>
+                    <button type="submit" class="btn btn-primary" >Submit</button>
                 </div>
             </form>
         </div>
@@ -128,7 +129,51 @@
                             </tr>
                         </thead>
                         <tbody id="akreditasi-list">
-                            <!-- Dummy data will be inserted here -->
+                            @forelse ($akreditasis as $akreditasi)
+                            <tr>
+                                <td>{{ strtoupper($akreditasi->fakultas) }}</td>
+                                <td>{{ $akreditasi->prodi }}</td>
+                                <td>{{ ucwords(str_replace('-', ' ', $akreditasi->lembaga_akreditasi)) }}</td>
+                                <td>
+                                    @php
+                                        $peringkatLabels = [
+                                            'unggul' => 'Unggul',
+                                            'baik_sekali' => 'Baik Sekali',
+                                            'baik' => 'Baik',
+                                            'a' => 'A',
+                                            'b' => 'B',
+                                            'c' => 'C'
+                                        ];
+                                    @endphp
+                                    {{ $peringkatLabels[$akreditasi->peringkat] ?? $akreditasi->peringkat }}
+                                </td>
+                                <td>{{ $akreditasi->nomor_sk }}</td>
+                                <td>
+                                    {{ \Carbon\Carbon::parse($akreditasi->periode_awal)->format('d/m/Y') }} - 
+                                    {{ \Carbon\Carbon::parse($akreditasi->periode_akhir)->format('d/m/Y') }}
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-warning">Edit</button>
+                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                    </div>
+                                    {{-- <div class="btn-group">
+                                        <a href="{{ route('admin.dataakreditasi.edit', $akreditasi->id) }}" 
+                                           class="btn btn-sm btn-warning">Edit</a>
+                                        <form action="{{ route('admin.dataakreditasi.destroy', $akreditasi->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger" 
+                                                    onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
+                                        </form>
+                                    </div> --}}
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center">Tidak ada data akreditasi</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -207,54 +252,6 @@
             }
         });
 
-        // Add dummy data function
-        function addDummyData() {
-            const tbody = document.getElementById('akreditasi-list');
-            const row = document.createElement('tr');
-            
-            const akreditasiData = {
-                fakultas: document.getElementById('fakultas').value || 'fmipa',
-                prodi: document.getElementById('prodi').value || 'ilmu_komputer',
-                lembaga: document.getElementById('lembaga_akreditasi').value || 'ban-pt',
-                peringkat: document.getElementById('peringkat').value || 'unggul',
-                nomorSK: document.getElementById('nomor_sk').value || '1234/SK/BAN-PT/2024',
-                periodeAwal: document.getElementById('periode_awal').value || '2024-01-01',
-                periodeAkhir: document.getElementById('periode_akhir').value || '2029-01-01'
-            };
-
-            row.innerHTML = `
-                <td>${akreditasiData.fakultas.toUpperCase()}</td>
-                <td>${akreditasiData.prodi.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</td>
-                <td>${akreditasiData.lembaga.toUpperCase()}</td>
-                <td><span class="badge bg-success">${akreditasiData.peringkat.replace(/_/g, ' ').toUpperCase()}</span></td>
-                <td>${akreditasiData.nomorSK}</td>
-                <td>${formatDate(akreditasiData.periodeAwal)} - ${formatDate(akreditasiData.periodeAkhir)}</td>
-                <td>
-                    <div class="btn-group">
-                        <button class="btn btn-sm btn-warning">Edit</button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteRow(this)">Delete</button>
-                    </div>
-                </td>
-            `;
-
-            tbody.appendChild(row);
-            document.getElementById('akreditasi-form').reset();
-        }
-
-        // Format date helper function
-        function formatDate(dateString) {
-            if (!dateString) return '';
-            return new Date(dateString).toLocaleDateString('en-GB', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric'
-            });
-        }
-
-        // Delete row function
-        function deleteRow(button) {
-            button.closest('tr').remove();
-        }
 
         // Search functionality
         document.getElementById('searchInput').addEventListener('keyup', function() {

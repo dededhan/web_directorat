@@ -74,8 +74,8 @@
                 <span class="text">Mahasiswa International</span>
             </a>
         </li>        
-        <li class="{{ request()->routeIs('admin.dataakreditasi') ? 'active' : '' }}">
-            <a href="{{ route('admin.dataakreditasi') }}">
+        <li class="{{ request()->routeIs('admin.dataakreditasi.index') ? 'active' : '' }}">
+            <a href="{{ route('admin.dataakreditasi.index') }}">
                 <i class='bx bxs-graduation'></i>
                 <span class="text">Data Akreditasi</span>
             </a>
