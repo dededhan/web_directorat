@@ -1,6 +1,8 @@
 @extends('admin.admin')
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="{{ asset('inovasi/dashboard/table_katsinov/css/table_katsinov.css') }}"> 
+
 
 
 @section('contentadmin')
@@ -16,6 +18,110 @@
                     <a class="active" href="#">KATSINOV Data</a>
                 </li>
             </ul>
+        </div>
+    </div>
+
+    <div class="dashboard-summary">
+        <div class="cards">
+            <div class="card-stat">
+                <div class="card-stat-content">
+                    <h3>Total Innovations</h3>
+                    <p class="number">{{ $katsinovs->count() }}</p>
+                </div>
+                <i class='bx bx-bulb icon'></i>
+            </div>
+            <div class="card-stat">
+                <div class="card-stat-content">
+                    <h3>Completed</h3>
+                    <p class="number">
+                        {{ $katsinovs->filter(function ($k) {
+                                $averages = [];
+                                foreach (
+                                    ['technology', 'organization', 'risk', 'market', 'partnership', 'manufacturing', 'investment']
+                                    as $key
+                                ) {
+                                    $total = $k->scores->avg($key);
+                                    $averages[$key] = $total;
+                                }
+                                $overallAvg = array_sum($averages) / count($averages);
+                                return $overallAvg >= 80;
+                            })->count() }}
+                    </p>
+                </div>
+                <i class='bx bx-check-circle icon success'></i>
+            </div>
+            <div class="card-stat">
+                <div class="card-stat-content">
+                    <h3>Pending</h3>
+                    <p class="number">
+                        {{ $katsinovs->filter(function ($k) {
+                                $averages = [];
+                                foreach (
+                                    ['technology', 'organization', 'risk', 'market', 'partnership', 'manufacturing', 'investment']
+                                    as $key
+                                ) {
+                                    $total = $k->scores->avg($key);
+                                    $averages[$key] = $total;
+                                }
+                                $overallAvg = array_sum($averages) / count($averages);
+                                return $overallAvg >= 60 && $overallAvg < 80;
+                            })->count() }}
+                    </p>
+                </div>
+                <i class='bx bx-time-five icon warning'></i>
+            </div>
+            <div class="card-stat">
+                <div class="card-stat-content">
+                    <h3>Need Review</h3>
+                    <p class="number">
+                        {{ $katsinovs->filter(function ($k) {
+                                $averages = [];
+                                foreach (
+                                    ['technology', 'organization', 'risk', 'market', 'partnership', 'manufacturing', 'investment']
+                                    as $key
+                                ) {
+                                    $total = $k->scores->avg($key);
+                                    $averages[$key] = $total;
+                                }
+                                $overallAvg = array_sum($averages) / count($averages);
+                                return $overallAvg < 60;
+                            })->count() }}
+                    </p>
+                </div>
+                <i class='bx bx-error-circle icon danger'></i>
+            </div>
+        </div>
+
+        <div class="chart-overview">
+            <div class="overview-card">
+                <div class="overview-header">
+                    <h4>Overall Aspect Performance</h4>
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-outline-primary active" onclick="showOverallBarChart()">Bar
+                            Chart</button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="showOverallSpiderweb()">Spiderweb</button>
+                    </div>
+                </div>
+                <div class="overview-body">
+                    <div id="overallBarChart" class="chart-container">
+                        <canvas></canvas>
+                    </div>
+                    <div id="overallSpiderWeb" class="chart-container" style="display:none;">
+                        <canvas></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-header">
+                    <h4>Status Distribution</h4>
+                </div>
+                <div class="overview-body">
+                    <div id="statusPieChart" class="chart-container">
+                        <canvas></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -84,7 +190,8 @@
                                                     : 'Need Review');
                                     @endphp
                                     <span class="badge bg-{{ $status }}">{{ $statusText }}
-                                        ({{ $overallAvg }}%)</span>
+                                        ({{ $overallAvg }}%)
+                                    </span>
                                 </td>
                                 <td>
                                     <div class="btn-group">
@@ -162,384 +269,14 @@
             </div>
         </div>
     </div>
-
+    <script src="{{ asset('inovasi/dashboard/table_katsinov/js/table_katsinov.js') }}"></script>
+    <script src="{{ asset('inovasi/dashboard/table_katsinov/js/table_katsinovoverall.js') }}"></script>
     <style>
-        .table-data {
-            margin-top: 24px;
-        }
 
-        .order {
-            background: #fff;
-            padding: 24px;
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .table th {
-            white-space: nowrap;
-            background-color: #f8fafc;
-            font-weight: 600;
-        }
-
-        .table th,
-        .table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #edf2f7;
-        }
-
-        tr[data-toggle="row-details"] {
-            cursor: pointer;
-        }
-
-        tr[data-toggle="row-details"]:hover {
-            background-color: #f1f5f9;
-        }
-
-        .detail-row td {
-            padding: 0;
-            border: none;
-        }
-
-        .detail-content {
-            padding: 20px;
-            background-color: #f8fafc;
-            border-bottom: 1px solid #edf2f7;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 5px;
-        }
-
-        .search-box {
-            margin-left: auto;
-        }
-
-        .search-box input {
-            padding: 8px 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            width: 240px;
-        }
-
-        .aspect-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 0.75rem;
-        }
-
-        .aspect-item {
-            background-color: #f1f5f9;
-            padding: 0.75rem;
-            border-radius: 8px;
-        }
-
-        .aspect-item.overall {
-            background-color: #e0f2fe;
-            grid-column: 1 / -1;
-        }
-
-        .aspect-item h6 {
-            margin: 0 0 0.5rem 0;
-            color: #475569;
-            font-size: 0.8rem;
-        }
-
-        .aspect-item p {
-            margin: 0;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #0f172a;
-        }
-
-        .badge {
-            font-size: 0.7em;
-            padding: 6px 12px;
-            border-radius: 20px;
-        }
-
-        .chart-container {
-            width: 100%;
-            height: 220px;
-        }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Toggle row details
-        document.querySelectorAll('.toggle-details').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const row = this.closest('tr');
-                const targetId = row.getAttribute('data-target');
-                const detailRow = document.querySelector(targetId);
-
-                if (detailRow.style.display === 'none') {
-                    detailRow.style.display = '';
-                    this.querySelector('i').className = 'bx bx-chevron-up';
-                    const katsinovId = targetId.substring(9); // Extract ID from #details-XXX
-                    initCharts(katsinovId);
-                } else {
-                    detailRow.style.display = 'none';
-                    this.querySelector('i').className = 'bx bx-chevron-down';
-                }
-            });
-        });
-
-        // Row click to expand
-        document.querySelectorAll('tr[data-toggle="row-details"]').forEach(row => {
-            row.addEventListener('click', function(e) {
-                if (!e.target.closest('button')) {
-                    this.querySelector('.toggle-details').click();
-                }
-            });
-        });
-
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            const searchText = this.value.toLowerCase();
-            const rows = document.querySelectorAll('tr[data-toggle="row-details"]');
-
-            rows.forEach(row => {
-                const cells = row.getElementsByTagName('td');
-                let found = false;
-
-                for (let i = 1; i < cells.length - 1; i++) {
-                    const text = cells[i].textContent.toLowerCase();
-                    if (text.includes(searchText)) {
-                        found = true;
-                        break;
-                    }
-                }
-
-                const targetId = row.getAttribute('data-target');
-                const detailRow = document.querySelector(targetId);
-
-                if (found) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                    if (detailRow.style.display !== 'none') {
-                        detailRow.style.display = 'none';
-                        row.querySelector('.toggle-details i').className = 'bx bx-chevron-down';
-                    }
-                }
-            });
-        });
-
-        function getChartColors() {
-            return {
-                technology: 'rgba(255, 159, 64, 0.7)',
-                organization: 'rgba(75, 192, 192, 0.7)',
-                risk: 'rgba(153, 102, 255, 0.7)',
-                market: 'rgba(255, 99, 132, 0.7)',
-                partnership: 'rgba(255, 205, 86, 0.7)',
-                manufacturing: 'rgba(54, 162, 235, 0.7)',
-                investment: 'rgba(201, 203, 207, 0.7)'
-            };
-        }
-
-        window.initCharts = function(katsinovId) {
-            console.log("Initializing charts for katsinov ID:", katsinovId); // Debug log
-            // Initialize both charts but show only bar chart initially
-            initBarChart(katsinovId);
-            initSpiderwebChart(katsinovId);
-        };
-
-        window.showBarChart = function(katsinovId) {
-            document.getElementById(`barChart-${katsinovId}`).style.display = '';
-            document.getElementById(`spiderWeb-${katsinovId}`).style.display = 'none';
-        };
-
-        window.showSpiderweb = function(katsinovId) {
-            document.getElementById(`barChart-${katsinovId}`).style.display = 'none';
-            document.getElementById(`spiderWeb-${katsinovId}`).style.display = '';
-        };
-
-        window.initBarChart = function(katsinovId) {
-            console.log("Initializing bar chart for katsinov ID:", katsinovId); // Debug log
-            const chartContainer = document.querySelector(`#barChart-${katsinovId} canvas`);
-            if (!chartContainer) {
-                console.error(`Bar chart container for ID ${katsinovId} not found`);
-                return;
-            }
-
-            // Extract data from DOM elements for this specific katsinov
-            const aspectItems = document.querySelectorAll(`#details-${katsinovId} .aspect-item:not(.overall)`);
-            if (aspectItems.length === 0) {
-                console.error(`No aspect items found for katsinov ID ${katsinovId}`);
-                return;
-            }
-
-            const labels = [];
-            const data = [];
-
-            aspectItems.forEach(item => {
-                const header = item.querySelector('h6');
-                const value = item.querySelector('p');
-
-                if (!header || !value) {
-                    console.error("Missing header or value in aspect item", item);
-                    return;
-                }
-
-                labels.push(header.textContent);
-                data.push(parseFloat(value.textContent));
-            });
-
-            if (labels.length === 0 || data.length === 0) {
-                console.error("No valid data extracted for chart");
-                return;
-            }
-
-            // Clear any existing chart
-            if (chartContainer.chart) {
-                chartContainer.chart.destroy();
-            }
-
-            const colors = Object.values(getChartColors());
-
-            const chart = new Chart(chartContainer, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Aspect Scores (%)',
-                        data: data,
-                        backgroundColor: colors,
-                        borderColor: colors.map(color => color.replace('0.7', '1')),
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return context.parsed.y + '%';
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            title: {
-                                display: true,
-                                text: 'Percentage (%)'
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Store chart instance for cleanup if needed later
-            chartContainer.chart = chart;
-            console.log("Bar chart initialized successfully");
-        };
-
-        window.initSpiderwebChart = function(katsinovId) {
-            console.log("Initializing spiderweb chart for katsinov ID:", katsinovId); // Debug log
-            const chartContainer = document.querySelector(`#spiderWeb-${katsinovId} canvas`);
-            if (!chartContainer) {
-                console.error(`Spiderweb chart container for ID ${katsinovId} not found`);
-                return;
-            }
-
-            // Extract data from DOM elements for this specific katsinov
-            const aspectItems = document.querySelectorAll(`#details-${katsinovId} .aspect-item:not(.overall)`);
-            if (aspectItems.length === 0) {
-                console.error(`No aspect items found for katsinov ID ${katsinovId}`);
-                return;
-            }
-
-            const labels = [];
-            const data = [];
-
-            aspectItems.forEach(item => {
-                const header = item.querySelector('h6');
-                const value = item.querySelector('p');
-
-                if (!header || !value) {
-                    console.error("Missing header or value in aspect item", item);
-                    return;
-                }
-
-                labels.push(header.textContent);
-                data.push(parseFloat(value.textContent));
-            });
-
-            if (labels.length === 0 || data.length === 0) {
-                console.error("No valid data extracted for chart");
-                return;
-            }
-
-            // Clear any existing chart
-            if (chartContainer.chart) {
-                chartContainer.chart.destroy();
-            }
-
-            const colorKeys = Object.keys(getChartColors());
-            const colors = colorKeys.map(key => getChartColors()[key]);
-
-            const chart = new Chart(chartContainer, {
-                type: 'radar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Aspect Scores',
-                        data: data,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        pointBackgroundColor: colors,
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: colors
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            angleLines: {
-                                display: true
-                            },
-                            suggestedMin: 0,
-                            suggestedMax: 100
-                        }
-                    },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return context.parsed.r + '%';
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Store chart instance for cleanup if needed later
-            chartContainer.chart = chart;
-            console.log("Spiderweb chart initialized successfully");
-        };
     </script>
 @endsection
