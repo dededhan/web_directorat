@@ -1,4 +1,4 @@
-@extends('Inovasi.dosen.index')
+@extends('inovasi.dosen.index')
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet" href="{{ asset('inovasi/dashboard/table_katsinov/css/table_katsinov.css') }}"> 

@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Middleware\EnsureUserLoggedIn;
-use App\Http\Middleware\HandleRespondenForm;
-use App\Http\Middleware\RespondenForm;
+use App\Http\Middleware\EnsureUserRole;
+use App\Http\Middleware\EnsureUserRoleIsCorrect;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -14,8 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->appendToGroup('admin', [
-            EnsureUserLoggedIn::class,
+        $middleware->alias([
+            'checked' => EnsureUserLoggedIn::class,
+            'role' => EnsureUserRoleIsCorrect::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

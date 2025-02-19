@@ -6,13 +6,13 @@
     </a>
     <ul class="side-menu top">
         <li class="{{ Request::is('Inovasi/dosen/dashboard') ? 'active' : '' }}">
-            <a href="{{ route('Inovasi.dosen.dashboard') }}">
+            <a href="{{ route('inovasi.dosen.dashboard') }}">
                 <i class='bx bxs-dashboard'></i>
                 <span class="text">Dashboard</span>
             </a>
         </li>
         <li class="{{ request()->routeIs('Inovasi.dosen.tablekasitnov') ? 'active' : '' }}">
-            <a href="{{ route('Inovasi.dosen.tablekasitnov') }}">
+            <a href="{{ route('inovasi.dosen.tablekasitnov') }}">
                 <i class='bx bxs-graduation'></i>
                 <span class="text">Tabel Kasitnov</span>
             </a>

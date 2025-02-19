@@ -21,15 +21,14 @@ class KatsinovController extends Controller
         if (Auth::user()->role === 'admin_direktorat') {
             return view('admin.tabelkasinov', compact('katsinovs'));
         } else if (Auth::user()->role === 'dosen') {
-            return view('Inovasi.dosen.tablekasitnov', compact('katsinovs'));
+            return view('inovasi.dosen.tablekasitnov', compact('katsinovs'));
         } else if (Auth::user()->role === 'admin_hilirisasi') {
-            return view('Inovasi.admin_hilirisasi.tablekasitnov', compact('katsinovs'));
+            return view('inovasi.admin_hilirisasi.tablekatsinov', compact('katsinovs'));
         }
 
     }
     public function create()
     {
-      
         return view('inovasi.kasinov.form');
     }
 

@@ -1,0 +1,184 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\KatsinovController;
+use App\Http\Controllers\AkreditasiController;
+use App\Http\Controllers\AdminRespondenController;
+use App\Http\Controllers\AdminMataKuliahController;
+use App\Http\Controllers\RespondenAnswerController;
+use App\Http\Controllers\QuesionerGeneralController;
+use App\Http\Controllers\DosenInternasionalController;
+use App\Http\Controllers\AdminSustainabilityController;
+use App\Http\Controllers\AdminAlumniBerdampakController;
+use App\Http\Controllers\InternationalStudentController;
+
+Route::prefix('admin')->name('admin.')
+->middleware(['checked', 'role:admin_direktorat'])
+->group(function () {
+    Route::get('/', function(){
+        return redirect(route('admin.dashboard'));
+    });
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('admin.dashboardadmin');
+    })->name('dashboard');
+    
+    // News
+    Route::get('/news', function () {
+        return view('admin.newsadmin');
+    })->name('news');
+
+    
+    Route::resource('/responden', AdminRespondenController::class);
+    Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
+    ->name('responden.update');
+
+    // Untuk update status khusus (POST)
+    Route::post('/responden/update-status/{id}', [AdminRespondenController::class, 'updateStatus'])
+        ->name('responden.updateStatus');
+    
+    Route::resource('/manageuser', UserController::class);
+
+    
+    Route::resource('/sustainability', AdminSustainabilityController::class);
+
+    Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
+    Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
+
+    Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
+    Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
+
+    Route::get('/qstable', function () {
+        return view('admin.qstable');
+    })->name('qstable');
+
+    
+    Route::get('/qsgeneraltable', [QuesionerGeneralController::class, 'index'])->name('qsgeneraltable');
+
+    Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
+
+    // mahasiswa
+    Route::resource('/mahasiswainternational', InternationalStudentController::class);
+
+    Route::resource('/dataakreditasi', AkreditasiController::class);
+
+    Route::resource('/internationallecture', DosenInternasionalController::class);
+
+    Route::get('/tabelkasinov', [KatsinovController::class, 'index'])->name('tabelkasinov');
+    
+});
+
+Route::prefix('prodi')->name('prodi.')
+->middleware(['checked', 'role:prodi'])
+->group(function () {
+    // Dashboard
+    Route::get('/', function(){
+        return redirect(route('prodi.dashboard'));
+    });
+
+    Route::get('/dashboard', function () {
+        return view('prodi.dashboard');
+    })->name('dashboard');
+    Route::resource('/sustainability', AdminSustainabilityController::class);
+
+    //Mata Kuliah
+    // Route::get('/matakuliah-sustainability', function () {
+    //     return view('admin.matakuliahsustainability');
+    // })->name('matakuliah-sustainability');
+
+    Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
+    Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
+    //Alumni
+    Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
+    Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
+
+    //responden
+    Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
+});
+
+Route::prefix('fakultas')->name('fakultas.')
+->middleware(['checked', 'role:fakultas'])
+->group(function () {
+    Route::get('/', function(){
+        return redirect(route('fakultas.dashboard'));
+    });
+
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('fakultas.dashboard');
+    })->name('dashboard');
+    
+    Route::resource('/sustainability', AdminSustainabilityController::class);
+
+    //Mata Kuliah
+    Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
+    Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
+    
+    //Alumni
+    Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
+    Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
+
+    //responden
+    Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
+});
+
+Route::prefix('admin-pemeringkatan')->name('admin_pemeringkatan.')
+->middleware(['checked', 'role:admin_pemeringkatan'])
+->group(function () {
+    Route::get('/', function(){
+        return redirect(route('admin_pemeringkatan.dashboard'));
+    });
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('admin_pemeringkatan.dashboard');
+    })->name('dashboard');
+
+        
+    Route::get('/manage-user', function () {
+        return view('admin_pemeringkatan.manageuser');
+    })->name('manageuser');
+    
+    Route::resource('/sustainability', AdminSustainabilityController::class);
+    
+    //Mata Kuliah
+    Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
+    Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
+    
+    //Alumni
+    Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
+    Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
+
+    //responden
+    Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
+});
+
+Route::prefix('inovasi')->name('inovasi.')
+->group(function () {
+    Route::prefix('dosen')->name('dosen.')
+    ->middleware(['checked', 'role:dosen'])
+    ->group(function () {
+        // Dashboard
+        Route::get('/dashboard', function () {
+            return view('inovasi.dosen.dashboard');
+        })->name('dashboard');
+
+        // Tabel Katsinov
+        Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekasitnov');
+
+    });
+    // mahasiswa
+
+    Route::prefix('admin_hilirisasi')->name('admin_hilirisasi.')
+    ->middleware(['checked', 'role:admin_hilirisasi'])
+    ->group(function () {
+        // Dashboard
+        Route::get('/dashboard', function () {
+            return view('inovasi.admin_hilirisasi.dashboard');
+        })->name('dashboard');
+
+        // Tabel Katsinov
+        Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekasitnov');
+
+    });
+});

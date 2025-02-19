@@ -1,4 +1,4 @@
-@extends('Inovasi.admin_hilirisasi.index')
+@extends('inovasi.admin_hilirisasi.index')
 
 @section('contentadminhilirisasi')
     <div class="head-title">

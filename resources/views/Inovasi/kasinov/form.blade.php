@@ -14,7 +14,6 @@
     <script src="{{ asset('aspect-legend.js') }}"></script>
     <script src="{{ asset('aspect-analysis-integrated.js') }}"></script>
     <script src="{{ asset('spiderweb-chart-script.js') }}"></script>
-
 </head>
 
 <body x-data="aspectLegend()" x-init="init()">
@@ -34,7 +33,6 @@
     <main class="container">
         <form id="katsinovForm" method="POST" action="{{ route('katsinov.store') }}">
             @csrf
-
             <!-- Explanation Card -->
             <div class="card" data-aos="fade-up">
                 <div class="main-title">
@@ -278,13 +276,13 @@
                 </div>
             </div>
             </div>
-            @include('inovasi.Kasinov.Indikator1')
-            @include('inovasi.Kasinov.Indikator2')
-            @include('inovasi.Kasinov.Indikator3')
-            @include('inovasi.Kasinov.Indikator4')
-            @include('inovasi.Kasinov.Indikator5')
-            @include('inovasi.Kasinov.Indikator6')
-            @include('inovasi.Kasinov.jumlahindikator')
+            @include('inovasi.kasinov.indikator1')
+            @include('inovasi.kasinov.indikator2')
+            @include('inovasi.kasinov.indikator3')
+            @include('inovasi.kasinov.indikator4')
+            @include('inovasi.kasinov.indikator5')
+            @include('inovasi.kasinov.indikator6')
+            @include('inovasi.kasinov.jumlahindikator')
             <!-- Submit All Button -->
             <div class="submit-all-container"
                 style="
