@@ -4,20 +4,20 @@
         <div class="main-title">
             Indikator KATSINOV 6
         </div>
-        <div class="content">
-        <table class="katsinov-table">
-    <tr>
-        <th>No</th>
-        <th>Aspek</th>
-        <th class="score-columns">0</th>
-        <th class="score-columns">1</th>
-        <th class="score-columns">2</th>
-        <th class="score-columns">3</th>
-        <th class="score-columns">4</th>
-        <th class="score-columns">5</th>
-        <th>Deskripsi</th>
-        <td rowspan="16" class="katsinov-title">KATSINOV 6</td>
-    </tr>
+        <div class="content position-relative">
+            <table class="katsinov-table">
+                <tr>
+                    <th>No</th>
+                    <th>Aspek</th>
+                    <th class="score-columns">0</th>
+                    <th class="score-columns">1</th>
+                    <th class="score-columns">2</th>
+                    <th class="score-columns">3</th>
+                    <th class="score-columns">4</th>
+                    <th class="score-columns">5</th>
+                    <th>Deskripsi</th>
+                    <td rowspan="16" class="katsinov-title">KATSINOV 6</td>
+                </tr>
     <tr class="row-t">
         <td class="row-number">1</td>
         <td class="aspect-cell">T</td>
@@ -182,33 +182,19 @@
                     <td colspan="6" class="total-value">0.00%</td>
                     <td colspan="1" class="status-cell">TIDAK TERPENUHI</td>
                 </tr>
-                </table>
+            </table>
+            <div class="notes-section">
+                <div class="notes-header">Catatan</div>
+                <textarea 
+                    placeholder="Tambahkan catatan di sini..." 
+                    class="notes-textarea">
+                </textarea>
+            </div>
             <div class="katsinov-legend">
                 Skala: 0=tidak terpenuhi; 1=20%; 2=40%; 3=60%; 4=80%; 5=100% atau terpenuhi
             </div>
         </div>
     </div>
-
-    <!-- Catatan Section -->
-    <div class="card" data-aos="fade-up">
-        <div class="main-title">
-            Catatan
-        </div>
-        <div class="content">
-            <textarea 
-                placeholder="Tambahkan catatan di sini..." 
-                style="width: 100%; 
-                       min-height: 200px; 
-                       padding: 1rem; 
-                       border: 2px solid var(--background);
-                       border-radius: 10px; 
-                       font-family: inherit; 
-                       font-size: 0.95rem; 
-                       line-height: 1.5; 
-                       resize: vertical;">
-            </textarea>
-        </div>
-    </div>
 </div>
 <script src="{{ asset('indikator.js') }}"></script>
-          
+

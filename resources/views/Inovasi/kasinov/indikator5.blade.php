@@ -4,7 +4,7 @@
         <div class="main-title">
             Indikator KATSINOV 5
         </div>
-        <div class="content">
+        <div class="content position-relative">
             <table class="katsinov-table">
                 <tr>
                     <th>No</th>
@@ -18,6 +18,7 @@
                     <th>Deskripsi</th>
                     <td rowspan="26" class="katsinov-title">KATSINOV 5</td>
                 </tr>
+                <!-- T rows -->
                 <!-- T rows -->
                 <tr class="row-t">
                     <td class="row-number">1</td>
@@ -287,7 +288,8 @@
                     <td><input type="radio" name="indikator5_row24" class="radio-input" value="5"></td>
                     <td class="description-cell">Kajian risiko dampak sosial pada tahap kematangan pasar tercapai.</td>
                 </tr>
-                <tr class="total-row">
+                
+ <tr class="total-row">
                     <td colspan="2">Total Skor</td>
                     <td colspan="6" class="total-value">0</td>
                     <td colspan="1"></td>
@@ -298,31 +300,18 @@
                     <td colspan="1" class="status-cell">TIDAK TERPENUHI</td>
                 </tr>
             </table>
+            <div class="notes-section">
+                <div class="notes-header">Catatan</div>
+                <textarea 
+                    placeholder="Tambahkan catatan di sini..." 
+                    class="notes-textarea">
+                </textarea>
+            </div>
             <div class="katsinov-legend">
                 Skala: 0=tidak terpenuhi; 1=20%; 2=40%; 3=60%; 4=80%; 5=100% atau terpenuhi
             </div>
         </div>
     </div>
-
-    <!-- Catatan Section -->
-    <div class="card" data-aos="fade-up">
-        <div class="main-title">
-            Catatan
-        </div>
-        <div class="content">
-            <textarea 
-                placeholder="Tambahkan catatan di sini..." 
-                style="width: 100%; 
-                       min-height: 200px; 
-                       padding: 1rem; 
-                       border: 2px solid var(--background);
-                       border-radius: 10px; 
-                       font-family: inherit; 
-                       font-size: 0.95rem; 
-                       line-height: 1.5; 
-                       resize: vertical;">
-            </textarea>
-        </div>
-    </div>
 </div>
 <script src="{{ asset('indikator.js') }}"></script>
+
