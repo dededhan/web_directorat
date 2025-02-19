@@ -1,7 +1,7 @@
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#katsinovModal">
     <i class="bi bi-cloud-upload"></i>
-    Upload Dokumen KATSINOV
+    Upload Lampiran
 </button>
 
 <!-- Include Bootstrap Icons -->
@@ -14,7 +14,7 @@
             <div class="modal-header border-bottom-0 bg-light">
                 <h5 class="modal-title d-flex align-items-center gap-2" id="katsinovModalLabel">
                     <i class="bi bi-folder-plus text-primary"></i>
-                    Upload Dokumen KATSINOV
+                    Upload Lampiran
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
