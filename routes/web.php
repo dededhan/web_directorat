@@ -44,6 +44,10 @@ Route::get('/galeri/sustainability', function () {
     return view('galeri.sustainability');
 })->name('galeri.sustainability'); 
 
+Route::get('/kasinov/forminformasidasar', function () {
+    return view('inovasi.kasinov.forminformasidasar');
+})->name('kasinov.informasidasar');
+
 Route::get('/katsinov-data', function() {
     return App\Models\Katsinov::with('scores')->get();
 });
