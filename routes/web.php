@@ -52,6 +52,10 @@ Route::get('/kasinov/formberitaacara', function () {
     return view('inovasi.kasinov.formberitaacara');
 })->name('kasinov.formberitaacara');
 
+Route::get('/kasinov/formrecordhasilpengukuran', function () {
+    return view('inovasi.kasinov.formrecordhasilpengukuran');
+})->name('kasinov.formrecordhasilpengukuran');
+
 Route::get('/katsinov-data', function() {
     return App\Models\Katsinov::with('scores')->get();
 });
