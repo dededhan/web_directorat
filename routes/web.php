@@ -48,6 +48,10 @@ Route::get('/kasinov/forminformasidasar', function () {
     return view('inovasi.kasinov.forminformasidasar');
 })->name('kasinov.informasidasar');
 
+Route::get('/kasinov/formberitaacara', function () {
+    return view('inovasi.kasinov.formberitaacara');
+})->name('kasinov.formberitaacara');
+
 Route::get('/katsinov-data', function() {
     return App\Models\Katsinov::with('scores')->get();
 });
