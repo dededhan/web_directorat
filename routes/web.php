@@ -44,17 +44,17 @@ Route::get('/galeri/sustainability', function () {
     return view('galeri.sustainability');
 })->name('galeri.sustainability'); 
 
-Route::get('/kasinov/forminformasidasar', function () {
-    return view('inovasi.kasinov.forminformasidasar');
-})->name('kasinov.informasidasar');
+Route::get('/katsinov/forminformasidasar', function () {
+    return view('inovasi.katsinov.forminformasidasar');
+})->name('katsinov.informasidasar');
 
-Route::get('/kasinov/formberitaacara', function () {
-    return view('inovasi.kasinov.formberitaacara');
-})->name('kasinov.formberitaacara');
+Route::get('/katsinov/formberitaacara', function () {
+    return view('inovasi.katsinov.formberitaacara');
+})->name('katsinov.formberitaacara');
 
-Route::get('/kasinov/formrecordhasilpengukuran', function () {
-    return view('inovasi.kasinov.formrecordhasilpengukuran');
-})->name('kasinov.formrecordhasilpengukuran');
+Route::get('/katsinov/formrecordhasilpengukuran', function () {
+    return view('inovasi.katsinov.formrecordhasilpengukuran');
+})->name('katsinov.formrecordhasilpengukuran');
 
 Route::get('/katsinov-data', function() {
     return App\Models\Katsinov::with('scores')->get();
