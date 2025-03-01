@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    @include('loginpopup')
+    {{-- @include('loginpopup') --}}
     
     <div class="top-bar" id="topBar">
         <div class="social-icons">
@@ -63,7 +63,7 @@
             <div class="dropdown">
                 <a href="#">Layanan <i class="fa fa-caret-down"></i></a>
                 <div class="dropdown-content">
-                <a href="{{ route('form') }}">Form Kasinov</a>
+                {{-- <a href="{{ route('form') }}">Form Kasinov</a> --}}
                 </div>
             </div>
     
