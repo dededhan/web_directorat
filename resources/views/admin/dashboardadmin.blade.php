@@ -1,4 +1,7 @@
 @extends('admin.admin')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/dashboard_admin.css') }}">
+
 
 @section('contentadmin')
     <div class="head-title">
@@ -20,112 +23,217 @@
         </a>
     </div>
 
-    <!-- Summary Boxes -->
-    <ul class="box-info">
-        <li>
-            <i class='bx bxs-news'></i>
-            <span class="text">
-                <h3>5</h3>
-                <p>New Articles</p>
-            </span>
-        </li>
-        <li>
-            <i class='bx bxs-calendar'></i>
-            <span class="text">
-                <h3>3</h3>
-                <p>Upcoming Events</p>
-            </span>
-        </li>
-        <li>
-            <i class='bx bxs-bell'></i>
-            <span class="text">
-                <h3>12</h3>
-                <p>Notifications</p>
-            </span>
-        </li>
-    </ul>
-
-    <style>
-    .container {
-        background-color: white; /* Menetapkan warna latar belakang putih */
-        padding: 20px; /* Menambahkan padding di dalam container */
-        border-radius: 8px; /* Menambahkan sudut melengkung jika diinginkan */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Menambahkan bayangan ringan */
-    }
-</style>
-<style>
-    .container {
-        background-color: white; /* Menetapkan warna latar belakang putih */
-        padding: 20px; /* Menambahkan padding di dalam container */
-        border-radius: 8px; /* Menambahkan sudut melengkung */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Menambahkan bayangan ringan */
-        min-height: 500px; /* Menetapkan tinggi minimal container */
-    }
-</style>
-<style>
-    .container {
-        background-color: white; /* Menetapkan warna latar belakang putih */
-        padding: 20px; /* Menambahkan padding di dalam container */
-        border-radius: 8px; /* Menambahkan sudut melengkung */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Menambahkan bayangan ringan */
-        min-height: 500px; /* Menetapkan tinggi minimal container */
-        display: flex; /* Menjadikan container sebagai flex container */
-        flex-direction: column; /* Agar chart mengisi container secara vertikal */
-    }
-
-    .chart-container {
-        flex-grow: 1; /* Agar canvas mengisi seluruh ruang yang tersedia */
-        height: 100%; /* Menyesuaikan tinggi container */
-    }
-
-    #visitorChart {
-        width: 100% !important; /* Membuat chart memenuhi lebar container */
-        height: 100% !important; /* Membuat chart memenuhi tinggi container */
-    }
-</style>
-
-<div class="container">
-    <!-- Content Section -->
-    <div class="content-data">
-        <div class="chart-container">
-            <canvas id="visitorChart"></canvas>
+    <!-- Quick Stats Section (Redesigned) -->
+    <div class="container quick-stats-container">
+        <div class="section-title">
+            <h2>Overview</h2>
+            <div class="title-underline"></div>
+        </div>
+        <div class="quick-stats-grid">
+            <div class="quick-stat-item">
+                <div class="stat-icon">
+                    <i class='bx bxs-news'></i>
+                </div>
+                <div class="stat-number">5</div>
+                <div class="stat-title">New Articles</div>
+            </div>
+            <div class="quick-stat-item">
+                <div class="stat-icon">
+                    <i class='bx bxs-calendar'></i>
+                </div>
+                <div class="stat-number">3</div>
+                <div class="stat-title">Upcoming Events</div>
+            </div>
+            <div class="quick-stat-item">
+                <div class="stat-icon">
+                    <i class='bx bxs-bell'></i>
+                </div>
+                <div class="stat-number">12</div>
+                <div class="stat-title">Notifications</div>
+            </div>
+            <div class="quick-stat-item">
+                <div class="stat-icon">
+                    <i class='bx bxs-user-check'></i>
+                </div>
+                <div class="stat-number">8</div>
+                <div class="stat-title">New Users</div>
+            </div>
         </div>
     </div>
 
-    <script>
-        // Data jumlah pengunjung per bulan
-        const labels = ["Januari", "Februari", "Maret", "April", "Mei", "Juni"];
-        const data = {
-            labels: labels,
-            datasets: [{
-                label: "Jumlah Pengunjung",
-                data: [120, 150, 180, 200, 250, 300], // Data pengunjung
-                backgroundColor: "rgba(75, 192, 192, 0.2)",
-                borderColor: "rgba(75, 192, 192, 1)",
-                borderWidth: 1
-            }]
-        };
+    <!-- UNJ dalam Prestasi Section -->
+    <div class="container unj-prestasi-container">
+        <div class="section-title text-center">
+            <h2>UNJ dalam <span class="highlight">Prestasi</span></h2>
+            <div class="title-underline"></div>
+        </div>
+        <div class="prestasi-grid">
+            <!-- Row 1 -->
+            <div class="prestasi-item">
+                <div class="prestasi-icon">
+                    <i class='bx bxs-group'></i>
+                </div>
+                <div class="prestasi-number">30,673</div>
+                <div class="prestasi-title">Mahasiswa</div>
+            </div>
+            <div class="prestasi-item">
+                <div class="prestasi-icon">
+                    <i class='bx bx-world'></i>
+                </div>
+                <div class="prestasi-number">125</div>
+                <div class="prestasi-title">Mahasiswa Internasional</div>
+            </div>
+            <div class="prestasi-item">
+                <div class="prestasi-icon">
+                    <i class='bx bxs-bulb'></i>
+                </div>
+                <div class="prestasi-number">130</div>
+                <div class="prestasi-title">Guru Besar</div>
+            </div>
+            <div class="prestasi-item">
+                <div class="prestasi-icon">
+                    <i class='bx bxs-user-voice'></i>
+                </div>
+                <div class="prestasi-number">1,132</div>
+                <div class="prestasi-title">Dosen</div>
+            </div>
+            <div class="prestasi-item">
+                <div class="prestasi-icon">
+                    <i class='bx bxs-user-badge'></i>
+                </div>
+                <div class="prestasi-number">4</div>
+                <div class="prestasi-title">Dosen Internasional</div>
+            </div>
+            <div class="prestasi-item">
+                <div class="prestasi-icon">
+                    <i class='bx bxs-user'></i>
+                </div>
+                <div class="prestasi-number">774</div>
+                <div class="prestasi-title">Tendik</div>
+            </div>
+            
+            <!-- Row 2 -->
+            <div class="prestasi-item">
+                <div class="prestasi-icon">
+                    <i class='bx bxs-building-house'></i>
+                </div>
+                <div class="prestasi-number">8</div>
+                <div class="prestasi-title">Fakultas</div>
+            </div>
+            <div class="prestasi-item">
+                <div class="prestasi-icon">
+                    <i class='bx bxs-school'></i>
+                </div>
+                <div class="prestasi-number">1</div>
+                <div class="prestasi-title">Sekolah</div>
+            </div>
+            <div class="prestasi-item">
+                <div class="prestasi-icon">
+                    <i class='bx bxs-grid'></i>
+                </div>
+                <div class="prestasi-number">116</div>
+                <div class="prestasi-title">Program Studi</div>
+            </div>
+            <div class="prestasi-item">
+                <div class="prestasi-icon">
+                    <i class='bx bxs-graduation'></i>
+                </div>
+                <div class="prestasi-number">3,681</div>
+                <div class="prestasi-title">terindeks Scopus</div>
+            </div>
+            <div class="prestasi-item">
+                <div class="prestasi-icon">
+                    <i class='bx bxs-file'></i>
+                </div>
+                <div class="prestasi-number">2,459</div>
+                <div class="prestasi-title">HKI</div>
+            </div>
+            <div class="prestasi-item">
+                <div class="prestasi-icon">
+                    <i class='bx bxs-certificate'></i>
+                </div>
+                <div class="prestasi-number">123</div>
+                <div class="prestasi-title">Hak Paten</div>
+            </div>
+        </div>
+        
+        <!-- Akreditasi Info -->
+        <div class="akreditasi-wrapper">
+            <div class="akreditasi-item nasional">
+                <div class="akreditasi-number">116 Prodi</div>
+                <div class="akreditasi-title">Terakreditasi Nasional</div>
+            </div>
+            <div class="akreditasi-item internasional">
+                <div class="akreditasi-number">60 Prodi</div>
+                <div class="akreditasi-title">Terakreditasi Internasional</div>
+            </div>
+        </div>
+    </div>
 
-        // Konfigurasi chart
-        const config = {
-            type: "bar", // Jenis chart: bar, line, pie, dll.
-            data: data,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false, // Mengatur rasio chart agar bisa menyesuaikan container
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        };
+    <!-- Visitor Chart Container -->
+    <div class="container chart-container">
+        <div class="section-title">
+            <h2>Visitor Statistics</h2>
+            <div class="title-underline"></div>
+        </div>
+        <div class="content-data">
+            <div class="chart-wrapper">
+                <canvas id="visitorChart"></canvas>
+            </div>
+        </div>
+    </div>
 
-        // Render chart
-        const visitorChart = new Chart(
-            document.getElementById("visitorChart"),
-            config
-        );
-    </script>
-</div>
+    <!-- Recent Activity Table -->
+    <div class="container activity-container">
+        <div class="section-title">
+            <h2>Recent Activity</h2>
+            <div class="title-underline"></div>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Activity</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Admin1</td>
+                        <td>Updated website content</td>
+                        <td>Today, 14:20</td>
+                        <td><span class="status completed">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td>Admin2</td>
+                        <td>Added new event</td>
+                        <td>Today, 12:30</td>
+                        <td><span class="status completed">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td>Editor1</td>
+                        <td>Posted new article</td>
+                        <td>Yesterday, 16:45</td>
+                        <td><span class="status completed">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td>Admin1</td>
+                        <td>System maintenance</td>
+                        <td>Feb 25, 09:30</td>
+                        <td><span class="status pending">Pending</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="{{ asset('dashboard_main/dashboard/dashboard_admin..js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    @endpush
 @endsection
