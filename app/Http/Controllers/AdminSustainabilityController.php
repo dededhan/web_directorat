@@ -60,6 +60,12 @@ class AdminSustainabilityController extends Controller
         }
     }
 
+    public function showPublic()
+    {
+        $sustainabilities = Sustainability::with('photos')->latest()->get();
+        return view('galeri.sustainability', compact('sustainabilities'));
+    }
+
     // Method lainnya tetap ada tapi belum diimplementasikan
     public function show(string $id) {}
     public function create() {}
