@@ -40,9 +40,11 @@ Route::get('/tupoksi', function () {
     return view('tupoksi.tupoksi');
 })->name('tupoksi.tupoksi');
 
-Route::get('/galeri/sustainability', function () {
-    return view('galeri.sustainability');
-})->name('galeri.sustainability'); 
+// Route::get('/galeri/sustainability', function () {
+//     return view('galeri.sustainability');
+// })->name('galeri.sustainability'); 
+
+Route::get('/galeri/sustainability', [App\Http\Controllers\AdminSustainabilityController::class, 'showPublic'])->name('galeri.sustainability');
 
 Route::get('/katsinov/forminformasidasar', function () {
     return view('inovasi.katsinov.forminformasidasar');
