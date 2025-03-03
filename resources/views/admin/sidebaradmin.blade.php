@@ -105,6 +105,61 @@
             </li>
         </ul>
     </div>
+    <div class="menu-section">
+        <h3 class="section-title">Inovasi</h3>
+        <ul class="side-menu">
+            <li class="{{ request()->routeIs('admin.Katsinov.TableKatsinov') ? 'active' : '' }}">
+                <a href="{{ route('admin.Katsinov.TableKatsinov') }}">
+                    <i class='bx bxs-graduation'></i>
+                    <span class="text">Tabel Kasitnov</span>
+                </a>
+            </li>
+            <li class="{{ request()->routeIs('admin.Katsinov.form') ? 'active' : '' }}">
+                <a href="{{ route('admin.Katsinov.form') }}">
+                    <i class='bx bxs-file-plus'></i>
+                    <span class="text">Form Katsinov</span>
+                </a>
+            </li>
+            <li class="{{ request()->routeIs('admin.Katsinov.informasidasar') ? 'active' : '' }}">
+                <a href="{{ route('admin.Katsinov.informasidasar') }}">
+                    <i class='bx bxs-file-plus'></i>
+                    <span class="text">Form Informasi Dasar</span>
+                </a>
+            </li>
+
+            <li class="{{ request()->routeIs('admin.Katsinov.formberitaacara') ? 'active' : '' }}">
+                <a href="{{ route('admin.Katsinov.formberitaacara') }}">
+                    <i class='bx bxs-file-plus'></i>
+                    <span class="text">Form Berita Acara</span>
+                </a>
+            </li>
+
+            <li class="{{ request()->routeIs('admin.Katsinov.formjudul') ? 'active' : '' }}">
+                <a href="{{ route('admin.Katsinov.formjudul') }}">
+                    <i class='bx bxs-file-plus'></i>
+                    <span class="text">Form Judul</span>
+                </a>
+            </li>
+
+
+            <li class="{{ request()->routeIs('admin.Katsinov.formrecordhasilpengukuran') ? 'active' : '' }}">
+                <a href="{{ route('admin.Katsinov.formrecordhasilpengukuran') }}">
+                    <i class='bx bxs-file-plus'></i>
+                    <span class="text">Form Record</span>
+                </a>
+            </li>
+        </ul>
+
+        <ul class="side-menu">
+            {{-- <li class="{{ request()->routeIs('admin.Form_Katsinov.TableKatsinov') ? 'active' : '' }}">
+                <a href="{{ route('admin.Form_Katsinov.TableKatsinov') }}">
+                    <i class='bx bxs-graduation'></i>
+                    <span class="text">Form Katsinov</span>
+                </a>
+            </li> --}}
+        </ul>
+    </div>
+
 
     <!-- Settings Section -->
     <div class="menu-section">

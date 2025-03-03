@@ -14,22 +14,22 @@ class KatsinovController extends Controller
 {
     public function index()
     {
-        // $katsinovs = Katsinov::with('scores')->get();
-        // return view('admin.tabelkasinov', compact('katsinovs'));
         $katsinovs = Katsinov::with('scores')->latest()->paginate(10);
 
         if (Auth::user()->role === 'admin_direktorat') {
-            return view('admin.tabelkasinov', compact('katsinovs'));
+            return view('admin.Katsinov.TableKatsinov', compact('katsinovs'));
         } else if (Auth::user()->role === 'dosen') {
             return view('inovasi.dosen.tablekasitnov', compact('katsinovs'));
         } else if (Auth::user()->role === 'admin_hilirisasi') {
             return view('inovasi.admin_hilirisasi.tablekatsinov', compact('katsinovs'));
-        }
+        } 
 
     }
     public function create()
     {
-        return view('inovasi.kasinov.form');
+
+        return view('admin.katsinov.form_katsinov');
+        // return view('inovasi.kasinov.form');
     }
 
     public function store(Request $request)

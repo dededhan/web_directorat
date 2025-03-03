@@ -65,8 +65,31 @@ Route::prefix('admin')->name('admin.')
 
     Route::resource('/internationallecture', DosenInternasionalController::class);
 
-    Route::get('/tabelkasinov', [KatsinovController::class, 'index'])->name('tabelkasinov');
-    
+
+    Route::prefix('Katsinov')->name('Katsinov.')
+    ->group(function () {
+        Route::get('/TableKatsinov', [KatsinovController::class, 'index'])->name('TableKatsinov');
+        Route::get('/form', [KatsinovController::class, 'create'])->name('form');
+        Route::post('/store', [KatsinovController::class, 'store'])->name('store');
+        Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
+
+        Route::get('/forminformasidasar', function () {
+            return view('admin.katsinov.forminformasidasar');
+        })->name('informasidasar');
+        
+        Route::get('/formberitaacara', function () {
+            return view('admin.katsinov.formberitaacara');
+        })->name('formberitaacara');
+        
+        Route::get('/formjudul', function () {
+            return view('admin.katsinov.formjudul');
+        })->name('formjudul');
+        
+        Route::get('/formrecordhasilpengukuran', function () {
+            return view('admin.katsinov.formrecordhasilpengukuran');
+        })->name('formrecordhasilpengukuran');
+    });
+
 });
 
 Route::prefix('prodi')->name('prodi.')
@@ -167,6 +190,19 @@ Route::prefix('inovasi')->name('inovasi.')
         Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekasitnov');
 
     });
+
+
+    Route::prefix('admin_hilirisasi')->name('admin_hilirisasi.')->group(function () {
+        // Dashboard
+        Route::get('/dashboard', function () {
+            return view('Inovasi.admin_hilirisasi.dashboard');
+        })->name('dashboard');
+
+        // Tabel Katsinov
+        Route::get('/tablekasitnov', [KatsinovController::class, 'index'])->name('tablekasitnov');
+
+
+    });
     // mahasiswa
 
     Route::prefix('admin_hilirisasi')->name('admin_hilirisasi.')
@@ -174,7 +210,7 @@ Route::prefix('inovasi')->name('inovasi.')
     ->group(function () {
         // Dashboard
         Route::get('/dashboard', function () {
-            return view('inovasi.admin_hilirisasi.dashboard');
+            return view('Inovasi.admin_hilirisasi.dashboard');
         })->name('dashboard');
 
         // Tabel Katsinov
