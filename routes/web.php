@@ -40,6 +40,10 @@ Route::get('/tupoksi', function () {
     return view('tupoksi.tupoksi');
 })->name('tupoksi.tupoksi');
 
+Route::get('/strukturorganisasi', function () {
+    return view('struktur organisasi.strukturorganisasi');
+})->name('strukturorganisasi');
+
 // Route::get('/galeri/sustainability', function () {
 //     return view('galeri.sustainability');
 // })->name('galeri.sustainability'); 
