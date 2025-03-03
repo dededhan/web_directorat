@@ -1,0 +1,127 @@
+[33m6e87c06[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Reroutes Katsinov into Dashboard
+[33md78556a[m add dashboard admin JavaScript and CSS for visitor statistics and styling
+[33m79ea7bb[m refactor sustainability route to use AdminSustainabilityController
+[33m6264742[m add showPublic method to retrieve and display sustainability data
+[33m61046bd[m disable login popup and form link in navbar
+[33mfab2c01[m add page pengajuan judul inovasi
+[33md354afe[m Update Style Sidebar
+[33m62e0566[m perubahan route form
+[33m98268fd[m add page form record hasil pengukuran
+[33m54f6caa[m add page formberitaacara
+[33mfe61d22[m add page form informasi dasar
+[33m1cd7f07[m revisi lampiran
+[33m1dce278[m add lampiran pop up and perbaikan posisi catatan
+[33m4e959f2[m add midleware dari masing masing role
+[33md033074[m add download pdf dosen katsinov table by database
+[33m9cbe25b[m add database data international lecture and form
+[33m55f458f[m add database data akreditasi and form
+[33mca7b46a[m Merge branch 'main' of https://github.com/dededhan/web_directorat
+[33me42e809[m add database mahasiswa international and form
+[33m6162c4f[m add manageuser id with role id
+[33md0986a3[m pop up user after mengisi indikator
+[33m223bf03[m add midleware /admin
+[33m5bbef17[m Add Role Pages Admin Hilirisasi
+[33m7bd6bc3[m Reroutes all Navbar Style
+[33m68af956[m Fix Routes Katsinov
+[33mcf6c054[m perbaikan perhitungan kasinov
+[33m6b739f6[m Changes 1. Reroutes all sidebar style to seperate .css 2. Add Dosen Role to auth 3. Add Dosen Pages
+[33m5bd91fc[m add CSS and JavaScript for table_katsinov dashboard functionality
+[33m5988780[m Kasitnov Fix Button for Form type Add Graph and change layout for table on dashboard
+[33mfe4cd1d[m add to dashboard tabel_kasinov
+[33mfa0675c[m add database and connect form katsinov to database
+[33md58fed7[m revisi perhitungan dan tambah button sumbit
+[33m2327efe[m add Tabel Kasinov link to admin sidebar and route
+[33maedd788[m add spiderweb kasinov & perhitungannya
+[33m47c77cf[m add 7 aspek kasinov  pop up graph
+[33mbcbbaf0[m Add International Lecture, Data Akreditasi, Mahasiswa International Page. Rearrange Search Box into content end
+[33m8b96abe[m update table with phone and perbaikan qstable responden
+[33m1b70f52[m resize carousel fit layar
+[33md9b87a9[m add hint respondent
+[33m7a54fbf[m add hint alumni berdampak
+[33m3189d6e[m add hint matkul susten
+[33mffaa3e5[m add hint susten
+[33m269fa6c[m Prevent manual selection of 'clear' status and enhance status update handling
+[33m1c38a87[m Enhance status update functionality with confirmation for 'clear' status and rollback on cancel
+[33m95a6bca[m update table ttg responden
+[33mcbc8703[m add api negara qs academic and employee
+[33m8b4b236[m Add Role Page for Admin Pemeringkatan
+[33me115add[m Reroutes alumni Add Page Dashboard for fakultas
+[33m0ce52f8[m Implement role-based views for Responden answers and add Prodi navigation for Responden table
+[33m22d92ea[m Enhance user management form with required fields and add user list with search functionality
+[33m7ed589b[m add database, some add midleware and change view qs form
+[33m6a93ddf[m add page kasinov form dan perhitungan form
+[33me414b29[m Add Prodi role support in controllers and views for dashboard navigation
+[33m589b495[m Add AlumniController and update alumni gallery view with dynamic data
+[33mdf30524[m add database and update form matakuliah
+[33m135d1c1[m add database and update form alumniberdampak
+[33m525047a[m Update labels in Responden Employee view and sidebar for consistency
+[33m3189e32[m Enhance Responden Admin view with search functionality, improved layout, and responsive design adjustments
+[33m6df129c[m Change General Respondent Submissions view with improved layout and styling; remove survey columns for clarity.
+[33ma38e817[m Merge branch 'main' of https://github.com/dededhan/web_directorat
+[33m31b10b0[m Update QuesionerGeneralController and views for general respondent table
+[33m1c919c3[m add page table academic and employer
+[33m72cea3f[m Refactor QuesionerGeneralController and update routing for qs-general and qstable
+[33m21021af[m Initial Page for Sub Inovasi dan Hilirisasi.
+[33m793f915[m Add Back QS academic and employee page.
+[33m2d2ce50[m revisi double navbar in sustainability
+[33mb251a62[m update connect table to database
+[33m89ee42c[m update routes to galeri sustainability
+[33mb3d1038[m add database and connect form to database
+[33m630a9cd[m Update double Navbar
+[33mb752aa9[m Add QS General Respondents table and update sidebar navigation
+[33m8607892[m Rearrange Layout for dashboard Fix Sidebar Collapsing into 1 icon.
+[33mabb6be1[m add seeder responden ,add fitur update status, add database qs general
+[33m990bb0b[m Update AdminRespondenController, model RespondenAnswer, dan tampilan admin responden
+[33m795c906[m Add Kode Mata Kuliah input field to Mata Kuliah Sustainability page
+[33me0105a5[m add page alumniimpact & revisi navbar susten
+[33m4f70a63[m Add Dashboard Alumni Berdampak
+[33m13621c3[m Reroutes To home page.
+[33mba8b470[m add page Sustainabilit
+[33m435fde6[m Add Mata Kuliah Sustainability Page.
+[33mf41ca58[m Add halaman sustainability.
+[33m2b74aae[m revisi page qs_acedemic menjadi General dll
+[33m82a17e4[m add page tupoksi
+[33mc028817[m add database responden untuk respondenadmin
+[33mabdb981[m change name file dan duplikat email/phone
+[33ma67340f[m update route responden untuk controller
+[33m1ada952[m update insert(userdata)
+[33m187f6a4[m new routes untuk view responden
+[33m55fecd5[m Reconstruct QSranking itu Responden Page, change all input accordingly.
+[33m8f88825[m Create Manage Users for roles.
+[33m23e0292[m perbaikan route
+[33mdfbba8c[m revisi warna landing page dan add  page galeri
+[33meedd4ca[m Revert Admin Ranking Page.
+[33m9a945c4[m revisi title
+[33m0d11c9f[m add qs academic form
+[33m4d60691[m add user qs form academic
+[33md33da98[m Initial Seperation each section landing page Update content Navbar same as features.
+[33md67889f[m Initial Pemeringkatan Setup Page.
+[33m13efdd5[m Add QSRanking Input Form.
+[33m84e6493[m Revisi Navbar
+[33mf39c8d9[m Update users role
+[33m32839ab[m hapus folder migrate dan seeder salah tempat
+[33m96a8502[m add sweet alert dan tracking pada Seeder
+[33m8d0e6d3[m salah upload
+[33m4b679e9[m perbaikan dashboard admin
+[33m68310ba[m Add Account Text login, add new page ranking.
+[33mfc74b03[m Add Container persection content main landing page.
+[33m1de7167[m Login Route Popup direct.
+[33m0a16ed2[m Refactor and seperate routes for each section admin.
+[33m0cd5a56[m revisi login popup
+[33md9d1a44[m Revisi pop up
+[33m4432b25[m perbaikan dasboard dan penambahan chart
+[33m4e9fc3a[m Seperation each section for admin dashboard
+[33m6786aab[m add role users
+[33mcb749c1[m Reroutes dashboard login.
+[33mdbba580[m dashboard
+[33m47e643b[m Add modals login popup.
+[33m64b6467[m update
+[33m75de57e[m topbar
+[33m12143ef[m Add Image Carousel
+[33me26914d[m Seperation Navbar from main landing page Update Footer Logo Add animation on scroll
+[33mdb4e84a[m Memperbarui style.css
+[33m9bd6546[m Menambahkan file home.blade.php
+[33mdb88c79[m Delete resources/views/home.blade.php
+[33mc0a1876[m Update
+[33m5e4aa3f[m Add footer Components.
+[33mb63944c[m test

@@ -1,88 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Direktorat Pemeringkatan</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="{{ asset('navbar.css') }}">
-</head>
-<body>
-
-    @include('loginpopup')
-    
-    <div class="top-bar" id="topBar">
-        <div class="social-icons">
-            <a href="https://facebook.com" target="_blank" aria-label="Facebook">
-                <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="https://twitter.com" target="_blank" aria-label="Twitter">
-                <i class="fab fa-twitter"></i>
-            </a>
-            <a href="https://instagram.com" target="_blank" aria-label="Instagram">
-                <i class="fab fa-instagram"></i>
-            </a>
-            <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn">
-                <i class="fab fa-linkedin-in"></i>
-            </a>
-                    <div class="language-selector">
-            <label class="switch">
-                <input type="checkbox" id="languageToggle">
-                <span class="slider round"></span>
-                <span class="lang-label">ID/EN</span>
-            </label>
-        </div>
-        </div>
-        </div>
-        </div>
+<div class="social-media-bar py-2">
+    <div class="container mx-auto px-6 flex justify-start space-x-4">
+        <a href="#" class="hover:text-yellow-500">
+            <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="#" class="hover:text-yellow-500">
+            <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="hover:text-yellow-500">
+            <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" class="hover:text-yellow-500">
+            <i class="fab fa-youtube"></i>
+        </a>
     </div>
-
-
-    <div class="navbar" id="navbar">
-        <img alt="Logo of Direktorat Pemeringkatan" height="50"
-            src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" width="50" />
-        <div class="title">Direktorat Pemeringkatan</div>
-        <a href="#">Beranda</a>
-       
-        <div class="navbar-links">
-         
-            <div class="dropdown">
-                <a href="#">Sub Direktorat <i class="fa fa-caret-down"></i></a>
-                <div class="dropdown-content">
-                    <a href="{{ route('inovasi.landingpage') }}">Subdirektorat Inovasi dan Hilirisasi</a>
-                    <a href="{{ route('pemeringkatan.landingpage') }}">Subdirektorat Pemeringkatan dan Sistem Informasi</a>
-                </div>
-            </div>
-
-            <div class="dropdown">
-                <a href="#">Profil <i class="fa fa-caret-down"></i></a>
-                <div class="dropdown-content">
-                    <a href="#">Struktur Organisasi</a>
-                    <a href="{{ route('tupoksi.tupoksi') }}">Tugas Pokok dan Fungsi</a>
-                </div>
-            </div>
+</div>
+@include('loginpopup')
+<nav class="navbar">
+    <div class="container mx-auto flex justify-between items-center py-4 px-6">
+        <div class="flex items-center space-x-4">
+            <img alt="University logo" class="h-12 w-12" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png"/>
+            <h1 class="text-white text-2xl font-bold">UNIVERSITAS NEGERI JAKARTA</h1>
         </div>
-        <a href="#">Berita</a>
-            <div class="dropdown">
-                <a href="#">Program <i class="fa fa-caret-down"></i></a>
-                <div class="dropdown-content">
-                    <a href="#">Program</a>
-                    <a href="#">Program</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <a href="#">Galeri <i class="fa fa-caret-down"></i></a>
-                <div class="dropdown-content">
-                <a href="{{ route('alumni') }}">Alumni Berdampak</a>
-                <a href="{{ route('galeri.sustainability') }}">Sustainability</a>                </div>
-            </div>
-            <a href="#">Portal</a> 
-        <a class="login" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a>
+        <ul class="flex space-x-6">
+            <li><a href="#" class="text-white hover:text-yellow-400">Beranda</a></li>
+            <li class="relative group">
+                <a href="#" class="text-white hover:text-yellow-400">Sub Direktorat</a>
+                <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
+                    <li><a href="{{ route('inovasi.landingpage') }}" class="hover:text-yellow-400">Subdirektorat Inovasi dan Hilirisasi</a></li>
+                    <li><a href="{{ route('pemeringkatan.landingpage') }}" class="hover:text-yellow-400">Subdirektorat Pemeringkatan dan Sistem Informasi</a></li>
+                </ul>
+            </li>
+            <li class="relative group">
+                <a href="#" class="text-white hover:text-yellow-400">Profil</a>
+                <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
+                    <li><a href="#" class="hover:text-yellow-400">Struktur Organisasi</a></li>
+                    <li><a href="{{ route('tupoksi.tupoksi') }}" class="hover:text-yellow-400">Tugas Pokok dan Fungsi</a></li>
+                </ul>
+            </li>
+            <li class="relative group">
+                <a href="#" class="text-white hover:text-yellow-400">Berita</a>
+                <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
+                    <li><a href="#" class="hover:text-yellow-400">Program</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">Program</a></li>
+                </ul>
+            </li>
+            <li class="relative group">
+                <a href="#" class="text-white hover:text-yellow-400">Galeri</a>
+                <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
+                    <li><a href="{{ route('alumni') }}" class="hover:text-yellow-400">Alumni Berdampak</a></li>
+                    <li><a href="{{ route('galeri.sustainability') }}" class="hover:text-yellow-400">Sustainability</a></li>
+                </ul>
+            </li>
+            <li><a href="#" class="text-white hover:text-yellow-400">Portal</a></li>
+            <li><a class="login" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
+        </ul>
     </div>
-
-    <script src="{{ asset('script.js') }}"></script>
-</body>
-</html>
+</nav>

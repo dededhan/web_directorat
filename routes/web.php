@@ -74,9 +74,9 @@ Route::post('/katsinov/store', [KatsinovController::class, 'store'])
     ->name('katsinov.store')
     ->middleware('checked');
 
-Route::get('/pemeringkatan/LandingPage', function () {
-    return view('pemeringkatan.LandingPage');
-})->name('pemeringkatan.LandingPage');
+    Route::get('/pemeringkatan/LandingPage', function () {
+        return view('pemeringkatan.LandingPage');
+    })->name('pemeringkatan.landingpage');
 
 Route::get('/inovasi/landingpage', function () {
     return view('inovasi.landingPageHilirisasi');
