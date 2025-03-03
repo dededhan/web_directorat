@@ -33,6 +33,7 @@
             text-align: center;
             margin-bottom: 40px;
             position: relative;
+            color: #176369;
         }
 
         header:after {
@@ -160,12 +161,7 @@
             </div>
             <p class="img-caption">Struktur Organisasi Tahun 2025</p>
         </div>
-
-        <footer>
-            <div class="footer-content">
-                <p>&copy; 2025 Universitas Negeri Jakarta. Hak Cipta Dilindungi.</p>
-            </div>
-        </footer>
     </div>
 </body>
 </html>
+@include('pemeringkatan.footerpemeringkatan')
