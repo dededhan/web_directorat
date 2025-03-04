@@ -56,7 +56,7 @@
                 <a href="#">Program <i class="fa fa-caret-down"></i></a>
                 <div class="dropdown-content">
                     <a href="#">Daftar Program</a>
-                    <a href="#">Panduan Program</a>
+                    <a href="{{ route('sdgscenter') }}">SDGs Center</a>
                 </div>
             </div>
 
