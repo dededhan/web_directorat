@@ -13,7 +13,7 @@ use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\AdminAlumniBerdampakController;
 use App\Http\Controllers\InternationalStudentController;
 use App\Http\Controllers\BeritaAcaraController;
-
+use App\Http\Controllers\FormInformasiDasarController;
 
 Route::prefix('admin')->name('admin.')
 ->middleware(['checked', 'role:admin_direktorat'])
@@ -75,10 +75,12 @@ Route::prefix('admin')->name('admin.')
         Route::post('/store', [KatsinovController::class, 'store'])->name('store');
         Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
 
-        Route::get('/forminformasidasar', function () {
-            return view('admin.katsinov.forminformasidasar');
-        })->name('informasidasar');
-        
+        // Route::get('/forminformasidasar', function () {
+        //     return view('admin.katsinov.forminformasidasar');
+        // })->name('informasidasar');
+        Route::resource('/forminformasidasar', FormInformasiDasarController::class);
+        Route::post('/admin/Katsinov/forminformasidasar', [FormInformasiDasarController::class, 'store'])
+        ->name('admin.Katsinov.forminformasidasar.store');
         // Route::get('/formberitaacara', function () {
         //     return view('admin.katsinov.formberitaacara');
         // })->name('formberitaacara');
