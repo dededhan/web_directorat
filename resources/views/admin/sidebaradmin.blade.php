@@ -142,8 +142,8 @@
                         <span class="text">Form Judul</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('admin.Katsinov.formrecordhasilpengukuran') ? 'active' : '' }}">
-                    <a href="{{ route('admin.Katsinov.formrecordhasilpengukuran') }}">
+                <li class="{{ request()->routeIs('admin.Katsinov.formrecordhasilpengukuran.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.Katsinov.formrecordhasilpengukuran.index') }}">
                         <i class='bx bxs-file-plus'></i>
                         <span class="text">Form Record</span>
                     </a>

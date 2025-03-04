@@ -14,6 +14,7 @@ use App\Http\Controllers\AdminAlumniBerdampakController;
 use App\Http\Controllers\InternationalStudentController;
 use App\Http\Controllers\BeritaAcaraController;
 use App\Http\Controllers\FormInformasiDasarController;
+use App\Http\Controllers\FormRecordHasilPengukuranController;
 
 Route::prefix('admin')->name('admin.')
 ->middleware(['checked', 'role:admin_direktorat'])
@@ -91,10 +92,12 @@ Route::prefix('admin')->name('admin.')
             return view('admin.katsinov.formjudul');
         })->name('formjudul');
         
-        Route::get('/formrecordhasilpengukuran', function () {
-            return view('admin.katsinov.formrecordhasilpengukuran');
-        })->name('formrecordhasilpengukuran');
+        // Route::get('/formrecordhasilpengukuran', function () {
+        //     return view('admin.katsinov.formrecordhasilpengukuran');
+        // })->name('formrecordhasilpengukuran');
+        Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
     });
+    
 
 });
 
