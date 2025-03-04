@@ -130,8 +130,8 @@
                         <span class="text">Form Informasi Dasar</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('admin.Katsinov.formberitaacara') ? 'active' : '' }}">
-                    <a href="{{ route('admin.Katsinov.formberitaacara') }}">
+                <li class="{{ request()->routeIs('admin.Katsinov.formberitaacara.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.Katsinov.formberitaacara.index') }}">
                         <i class='bx bxs-file-plus'></i>
                         <span class="text">Form Berita Acara</span>
                     </a>

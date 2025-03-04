@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Berita Acara Pengukuran</title>
     <link rel="stylesheet" href="/inovasi/formberitaacara.css">
@@ -16,16 +17,16 @@
             <!-- Date and Location Section -->
             <section class="form-section">
                 <p>
-                    Pada hari ini, <input type="text" class="input-inline">, 
-                    tanggal <input type="text" class="input-inline">
-                    bulan <input type="text" class="input-inline">
-                    tahun <input type="text" class="input-inline">
-                    (<input type="text" class="input-inline">),
+                    Pada hari ini, <input type="text" class="input-inline" name="hari">, 
+                    tanggal <input type="text" class="input-inline" name="tanggal">
+                    bulan <input type="text" class="input-inline" name="bulan">
+                    tahun <input type="text" class="input-inline" name="tahun">
+                    (<input type="text" class="input-inline" name="keterangan_tanggal">),
                 </p>
                 <p>
-                    bertempat di <input type="text" class="input-inline">,
+                    bertempat di <input type="text" class="input-inline" name="tempat">,
                     dari hasil pengukuran Tingkat Kesiapan Inovasi (KATSINOV) yang dilakukan oleh Tim yang dibentuk 
-                    berdasarkan Surat Keputusan <input type="text" class="input-inline"> menyatakan:
+                    berdasarkan Surat Keputusan <input type="text" class="input-inline" name="surat_keputusan"> menyatakan:
                 </p>
             </section>
 
@@ -33,41 +34,42 @@
             <section class="form-section">
                 <div class="form-row">
                     <label class="label">Judul Inovasi</label>
-                    <input type="text" class="input-field">
+                    <input type="text" class="input-field" name="judul_inovasi">
                 </div>
-
+                
                 <div class="form-row">
                     <label class="label">Jenis Inovasi</label>
-                    <input type="text" class="input-field">
+                    <input type="text" class="input-field" name="jenis_inovasi">
                 </div>
-
+                
                 <div class="form-row">
                     <label class="label">Nilai TKI</label>
-                    <input type="text" class="input-field">
+                    <input type="text" class="input-field" name="nilai_tki">
                 </div>
-
+                
                 <div class="form-row">
                     <label class="label">Opini Penilai</label>
-                    <textarea class="input-field"></textarea>
+                    <textarea class="input-field" name="opini_penilai"></textarea>
                 </div>
             </section>
 
             <!-- Closing Statement -->
             <section class="form-section">
-            <p>
-                Demikian Berita Acara Pengukuran Tingkat Kesiapan Inovasi (KATSINOV) ini dibuat dengan sebenar-benarnya, 
-                kemudian ditutup dan ditandatangani di
-                pada <input type="date" class="input-inline date-picker" style="min-width: 180px;"> 
-                pada hari dan tanggal, bulan, tahun tersebut di atas.
-            </p>
+                <p>
+                    Demikian Berita Acara Pengukuran Tingkat Kesiapan Inovasi (KATSINOV) ini dibuat dengan sebenar-benarnya, 
+                    kemudian ditutup dan ditandatangani di
+                    pada <input type="date" class="input-inline date-picker" name="tanggal_penutupan" style="min-width: 180px;"> 
+                    pada hari dan tanggal, bulan, tahun tersebut di atas.
+                </p>
             </section>
+            
 
             <!-- Signature Section -->
             <section class="signature-section">
-                <div class="signature-box" data-signature-id="penanggung-jawab">
+                <div class="signature-box" data-signature-id="penanggung-jawab" >
                     <h3 class="signature-box-title">Penanggungjawab Inovasi</h3>
                     <div class="signature-area"></div>
-                    <input type="text" class="input-field" placeholder="Nama Lengkap">
+                    <input type="text" class="input-field" placeholder="Nama Lengkap" name="nama_penanggungjawab">
                     <div class="signature-buttons">
                         <button class="signature-btn hapus">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -90,7 +92,7 @@
                     <div data-signature-role="ketua">
                         <p class="signature-subtitle">Ketua Tim Penilai</p>
                         <div class="signature-area"></div>
-                        <input type="text" class="input-field" placeholder="Nama Lengkap">
+                        <input type="text" class="input-field" placeholder="Nama Lengkap" name="nama_ketua_tim">
                         <div class="signature-buttons">
                             <button class="signature-btn hapus">Hapus</button>
                             <button class="signature-btn">Upload</button>
@@ -100,7 +102,7 @@
                     <div data-signature-role="anggota-1">
                         <p class="signature-subtitle">Anggota 1</p>
                         <div class="signature-area"></div>
-                        <input type="text" class="input-field" placeholder="Nama Lengkap">
+                        <input type="text" class="input-field" placeholder="Nama Lengkap" name="nama_anggota1">
                         <div class="signature-buttons">
                             <button class="signature-btn hapus">Hapus</button>
                             <button class="signature-btn">Upload</button>
@@ -110,7 +112,7 @@
                     <div data-signature-role="anggota-2">
                         <p class="signature-subtitle">Anggota 2</p>
                         <div class="signature-area"></div>
-                        <input type="text" class="input-field" placeholder="Nama Lengkap">
+                        <input type="text" class="input-field" placeholder="Nama Lengkap" name="nama_anggota2">
                         <div class="signature-buttons">
                             <button class="signature-btn hapus">Hapus</button>
                             <button class="signature-btn">Upload</button>
@@ -421,71 +423,113 @@ document.addEventListener('DOMContentLoaded', () => {
         // Disable button and show loading state
         submitBtn.disabled = true;
         submitBtn.classList.add('loading');
-        
+// Ganti bagian try dalam event listener submitBtn
+
         try {
-            // Collect form data
             const formData = new FormData();
+
+            // 1. Ambil data input inline dengan name attribute
+            const inlineInputs = [
+                'hari', 'tanggal', 'bulan', 'tahun', 
+                'keterangan_tanggal', 'tempat', 'surat_keputusan'
+            ];
             
-            // Get all inline inputs
-            const inlineInputs = document.querySelectorAll('.input-inline');
-            inlineInputs.forEach((input, index) => {
-                formData.append(`inline_input_${index}`, input.value);
+            inlineInputs.forEach(name => {
+                const input = document.querySelector(`[name="${name}"]`);
+                if (input) formData.append(name, input.value);
             });
+
+            // 2. Ambil data input field dengan name attribute
+            const fieldInputs = [
+                'judul_inovasi', 'jenis_inovasi', 'nilai_tki', 
+                'opini_penilai', 'tanggal_penutupan'
+            ];
             
-            // Get innovation details
-            const innovationTitle = document.querySelector('.form-row input[class="input-field"]').value;
-            const innovationType = document.querySelectorAll('.form-row input[class="input-field"]')[1].value;
-            const tkiValue = document.querySelectorAll('.form-row input[class="input-field"]')[2].value;
-            const opinion = document.querySelector('.form-row textarea').value;
-            
-            formData.append('innovation_title', innovationTitle);
-            formData.append('innovation_type', innovationType);
-            formData.append('tki_value', tkiValue);
-            formData.append('opinion', opinion);
-            
-            // Get signatures
-            const signatureAreas = document.querySelectorAll('.signature-area');
-            signatureAreas.forEach((area, index) => {
-                const canvas = area.querySelector('canvas');
-                if (canvas) {
-                    const signatureData = canvas.toDataURL('image/png');
-                    formData.append(`signature_${index}`, signatureData);
+            fieldInputs.forEach(name => {
+                const input = document.querySelector(`[name="${name}"]`);
+                if (input) formData.append(name, input.value);
+            });
+
+            // 3. Ambil tanda tangan dan nama dengan selector yang lebih spesifik
+            const signatureMappings = [
+                { 
+                    canvas: '[data-signature-id="penanggung-jawab"] .signature-area canvas',
+                    name: '[data-signature-id="penanggung-jawab"] input[placeholder="Nama Lengkap"]',
+                    field: 'ttd_penanggungjawab',
+                    nameField: 'nama_penanggungjawab'
+                },
+                {
+                    canvas: '[data-signature-role="ketua"] .signature-area canvas',
+                    name: '[data-signature-role="ketua"] input[placeholder="Nama Lengkap"]',
+                    field: 'ttd_ketua_tim',
+                    nameField: 'nama_ketua_tim'
+                },
+                {
+                    canvas: '[data-signature-role="anggota-1"] .signature-area canvas',
+                    name: '[data-signature-role="anggota-1"] input[placeholder="Nama Lengkap"]',
+                    field: 'ttd_anggota1',
+                    nameField: 'nama_anggota1'
+                },
+                {
+                    canvas: '[data-signature-role="anggota-2"] .signature-area canvas',
+                    name: '[data-signature-role="anggota-2"] input[placeholder="Nama Lengkap"]',
+                    field: 'ttd_anggota2',
+                    nameField: 'nama_anggota2'
+                }
+            ];
+
+            signatureMappings.forEach(({canvas, name, field, nameField}) => {
+                const canvasElement = document.querySelector(canvas);
+                const nameInput = document.querySelector(name);
+                
+                if (canvasElement) {
+                    formData.append(field, canvasElement.toDataURL());
+                }
+                if (nameInput) {
+                    formData.append(nameField, nameInput.value);
+                }
+            });
+
+            // 4. Tambahkan validasi client-side sederhana
+            let isValid = true;
+            document.querySelectorAll('[required]').forEach(input => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                    input.classList.add('error');
+                    alert(`Field ${input.name} harus diisi`);
                 }
             });
             
-            // Get names
-            const names = document.querySelectorAll('input[placeholder="Nama Lengkap"]');
-            names.forEach((input, index) => {
-                formData.append(`name_${index}`, input.value);
-            });
-            
-            // Validate required fields
-            const required = [
-                innovationTitle,
-                innovationType,
-                tkiValue,
-                opinion
-            ];
-            
-            if (required.some(field => !field)) {
-                throw new Error('Harap isi semua field yang diperlukan');
+            if (!isValid) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+                return;
             }
-            
-            // Here you would normally send the formData to your server
-            // For demonstration, we'll simulate an API call
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            // Show success message
-            alert('Form berhasil disubmit!');
-            
-            // Optional: Reset form
-            // document.querySelector('form').reset();
-            
+
+            // 5. Kirim request dengan error handling lebih baik
+            const response = await fetch('/admin/Katsinov/formberitaacara', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || result.error || 'Terjadi kesalahan server');
+            }
+
+            alert('Data berhasil disimpan!');
+            window.location.href = result.redirect || '/';
+
         } catch (error) {
-            // Show error message
-            alert(error.message || 'Terjadi kesalahan saat submit form');
-        } finally {
-            // Re-enable button and remove loading state
+            console.error('Error:', error);
+            alert(error.message || 'Terjadi kesalahan saat mengirim formulir');
+            
+            // Re-enable button
             submitBtn.disabled = false;
             submitBtn.classList.remove('loading');
         }

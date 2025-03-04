@@ -12,6 +12,8 @@ use App\Http\Controllers\DosenInternasionalController;
 use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\AdminAlumniBerdampakController;
 use App\Http\Controllers\InternationalStudentController;
+use App\Http\Controllers\BeritaAcaraController;
+
 
 Route::prefix('admin')->name('admin.')
 ->middleware(['checked', 'role:admin_direktorat'])
@@ -77,9 +79,11 @@ Route::prefix('admin')->name('admin.')
             return view('admin.katsinov.forminformasidasar');
         })->name('informasidasar');
         
-        Route::get('/formberitaacara', function () {
-            return view('admin.katsinov.formberitaacara');
-        })->name('formberitaacara');
+        // Route::get('/formberitaacara', function () {
+        //     return view('admin.katsinov.formberitaacara');
+        // })->name('formberitaacara');
+        
+        Route::resource('/formberitaacara', BeritaAcaraController::class);
         
         Route::get('/formjudul', function () {
             return view('admin.katsinov.formjudul');
