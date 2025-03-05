@@ -1,7 +1,7 @@
 @extends('admin.admin')
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="stylesheet" href="{{ asset('inovasi/dashboard/table_katsinov/css/table_katsinov.css') }}"> 
+<link rel="stylesheet" href="{{ asset('inovasi/dashboard/table_katsinov/css/table_katsinov.css') }}">
 
 @section('contentadmin')
     <div class="head-title">
@@ -196,6 +196,12 @@
                                         <button class="btn btn-sm btn-warning">Edit</button>
                                         <button class="btn btn-sm btn-danger">Delete</button>
                                     </div>
+                                    <div class="submit-all-container">
+                                        <button type="button" onclick="loadRecord()" class="submit-all-btn">
+                                            Muat Record Terakhir
+                                        </button>
+                                        <!-- Tombol submit existing -->
+                                    </div>
                                 </td>
                             </tr>
                             <tr id="details-{{ $katsinov->id }}" class="detail-row" style="display: none;">
@@ -275,6 +281,63 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Toggle row details
+        async function loadRecord() {
+            try {
+                const response = await fetch('/katsinov/latest');
+                if (!response.ok) throw new Error('Data tidak ditemukan');
+                const data = await response.json();
+
+                // Isi data dasar
+                document.querySelector('input[name="title"]').value = data.title || '';
+                document.querySelector('input[name="focus_area"]').value = data.focus_area || '';
+                document.querySelector('input[name="project_name"]').value = data.project_name || '';
+                document.querySelector('input[name="institution"]').value = data.institution || '';
+                document.querySelector('input[name="address"]').value = data.address || '';
+                document.querySelector('input[name="contact"]').value = data.contact || '';
+                document.querySelector('input[name="assessment_date"]').value = data.assessment_date || '';
+
+                // Isi skor per indikator dan aspek
+                data.scores.forEach(score => {
+                    const indicator = score.indicator_number;
+
+                    // Mapping aspek database ke class di form
+                    const aspectMap = {
+                        'technology': 't',
+                        'organization': 'o',
+                        'risk': 'r',
+                        'market': 'm',
+                        'partnership': 'p',
+                        'manufacturing': 'mf',
+                        'investment': 'i'
+                    };
+
+                    // Loop semua aspek
+                    Object.entries(aspectMap).forEach(([dbAspect, formAspect]) => {
+                        const percentage = score[dbAspect];
+                        const value = Math.round(percentage / 20); // Konversi ke 0-5
+
+                        // Cari semua radio button di indikator dan aspek terkait
+                        const selector =
+                            `div[data-indicator="${indicator}"] tr.row-${formAspect} input[value="${value}"]`;
+                        const radios = document.querySelectorAll(selector);
+
+                        // Set radio yang sesuai
+                        radios.forEach(radio => radio.checked = true);
+                    });
+                });
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Data berhasil dimuat!',
+                    text: 'Data terakhir telah diisi ke form',
+                });
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal memuat data',
+                    text: error.message,
+                });
+            }
+        }
     </script>
 @endsection
