@@ -75,7 +75,8 @@ Route::prefix('admin')->name('admin.')
         Route::get('/form', [KatsinovController::class, 'create'])->name('form');
         Route::post('/store', [KatsinovController::class, 'store'])->name('store');
         Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
-
+        // routes/web.php
+        Route::get('/katsinov/latest', [KatsinovController::class, 'latest']);
         // Route::get('/forminformasidasar', function () {
         //     return view('admin.katsinov.forminformasidasar');
         // })->name('informasidasar');

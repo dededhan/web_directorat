@@ -100,5 +100,19 @@ class KatsinovController extends Controller
         
         return $pdf->download('katsinov-report.pdf');
     }
+    public function latest()
+    {
+        $latestRecord = Katsinov::with('scores')
+            ->latest()
+            ->first();
+    
+        if (!$latestRecord) {
+            return response()->json(['message' => 'No records found'], 404);
+        }
+    
+        return response()->json($latestRecord);
+    }
+
+    
 
 }
