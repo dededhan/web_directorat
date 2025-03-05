@@ -1,4 +1,6 @@
 <!-- SIDEBAR -->
+
+<link rel="stylesheet" href="{{ asset('dashboard_main/sidebar_dashboardadmin.css') }}">
 <section id="sidebar">
     <a href="#" class="brand" style="display: flex; flex-direction: column; align-items: center;">
         <i style="margin-bottom: 8px;"></i>
@@ -11,13 +13,50 @@
                 <span class="text">Dashboard</span>
             </a>
         </li>
-        <li class="{{ request()->routeIs('inovasi.admin_hilirisasi.tablekasitnov') ? 'active' : '' }}">
-            <a href="{{ route('inovasi.admin_hilirisasi.tablekasitnov') }}">
-                <i class='bx bxs-graduation'></i>
-                <span class="text">Tabel Kasitnov</span>
-            </a>
-        </li>
+
     </ul>
+
+    <div class="menu-section">
+        <h3 class="section-title">Inovasi</h3>
+        <ul class="side-menu">
+            <li class="{{ request()->routeIs('inovasi.admin_hilirisasi.tablekasitnov') ? 'active' : '' }}">
+                <a href="{{ route('inovasi.admin_hilirisasi.tablekasitnov') }}">
+                    <i class='bx bxs-graduation'></i>
+                    <span class="text">Tabel Kasitnov</span>
+                </a>
+            </li>
+            <li class="{{ request()->routeIs('inovasi.admin_hilirisasi.form') ? 'active' : '' }}">
+                <a href="{{ route('inovasi.admin_hilirisasi.form') }}">
+                    <i class='bx bxs-file-plus'></i>
+                    <span class="text">Form Katsinov</span>
+                </a>
+            </li>
+            <li class="{{ request()->routeIs('inovasi.admin_hilirisasi.forminformasidasar.index') ? 'active' : '' }}">
+                <a href="{{ route('inovasi.admin_hilirisasi.forminformasidasar.index') }}">
+                    <i class='bx bxs-file-plus'></i>
+                    <span class="text">Form Informasi Dasar</span>
+                </a>
+            </li>
+            <li class="{{ request()->routeIs('inovasi.admin_hilirisasi.formberitaacara.index') ? 'active' : '' }}">
+                <a href="{{ route('inovasi.admin_hilirisasi.formberitaacara.index') }}">
+                    <i class='bx bxs-file-plus'></i>
+                    <span class="text">Form Berita Acara</span>
+                </a>
+            </li>
+            <li class="{{ request()->routeIs('inovasi.admin_hilirisasi.formjudul') ? 'active' : '' }}">
+                <a href="{{ route('inovasi.admin_hilirisasi.formjudul') }}">
+                    <i class='bx bxs-file-plus'></i>
+                    <span class="text">Form Judul</span>
+                </a>
+            </li>
+            <li class="{{ request()->routeIs('inovasi.admin_hilirisasi.formrecordhasilpengukuran.index') ? 'active' : '' }}">
+                <a href="{{ route('inovasi.admin_hilirisasi.formrecordhasilpengukuran.index') }}">
+                    <i class='bx bxs-file-plus'></i>
+                    <span class="text">Form Record</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 
     <ul class="side-menu">
         <li>

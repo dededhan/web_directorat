@@ -8,6 +8,7 @@ use App\Models\InnovatorForm;
 use App\Models\FormProgress;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth; 
 
 class FormInformasiDasarController extends Controller
 {
@@ -16,8 +17,18 @@ class FormInformasiDasarController extends Controller
      */
     public function index()
     {
-        $forms = InnovatorForm::all(); // Ambil data dari database
-        return view('admin.katsinov.forminformasidasar', compact('forms'));
+        // $forms = InnovatorForm::all(); // Ambil data dari database
+        // return view('admin.katsinov.forminformasidasar', compact('forms'));
+
+        $forms = InnovatorForm::all(); // Retrieve data from database
+
+        if (Auth::user()->role === 'admin_direktorat') {
+            return view('admin.katsinov.forminformasidasar', compact('forms'));
+        } else if (Auth::user()->role === 'dosen') {
+            return view('inovasi.dosen.forminformasidasar', compact('forms'));
+        } else if (Auth::user()->role === 'admin_hilirisasi') {
+            return view('inovasi.admin_hilirisasi.forminformasidasar', compact('forms'));
+        }
     }
 
     /**

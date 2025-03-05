@@ -28,8 +28,16 @@ class KatsinovController extends Controller
     public function create()
     {
 
-        return view('admin.katsinov.form_katsinov');
+        // return view('admin.katsinov.form_katsinov');
         // return view('inovasi.kasinov.form');
+
+        if (Auth::user()->role === 'admin_direktorat') {
+            return view('admin.katsinov.form_katsinov');
+        } else if (Auth::user()->role === 'dosen') {
+            return view('inovasi.dosen.form_katsinov');
+        } else if (Auth::user()->role === 'admin_hilirisasi') {
+            return view('inovasi.admin_hilirisasi.form_katsinov');
+        }
     }
 
     public function store(Request $request)

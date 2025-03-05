@@ -5,13 +5,24 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FormRecordHasilPengukuranRequest;
 use App\Models\FormRecordHasilPengukuran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; 
 
 class FormRecordHasilPengukuranController extends Controller
 {
     public function index()
     {
+        // $records = FormRecordHasilPengukuran::all();
+        // return view('admin.Katsinov.formrecordhasilpengukuran', compact('records'));
+
         $records = FormRecordHasilPengukuran::all();
-        return view('admin.Katsinov.formrecordhasilpengukuran', compact('records'));
+
+        if (Auth::user()->role === 'admin_direktorat') {
+            return view('admin.Katsinov.formrecordhasilpengukuran', compact('records'));
+        } else if (Auth::user()->role === 'dosen') {
+            return view('inovasi.dosen.formrecordhasilpengukuran', compact('records'));
+        } else if (Auth::user()->role === 'admin_hilirisasi') {
+            return view('inovasi.admin_hilirisasi.formrecordhasilpengukuran', compact('records'));
+        }
     }
 
     public function create()

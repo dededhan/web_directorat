@@ -7,6 +7,7 @@ use App\Http\Requests\StoreBeritaAcaraRequest;
 use App\Models\BeritaAcara;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth; 
 
 class BeritaAcaraController extends Controller
 {
@@ -15,8 +16,19 @@ class BeritaAcaraController extends Controller
      */
     public function index()
     {
+        // $beritaAcaras = BeritaAcara::latest()->get();
+        // return view('admin.katsinov.formberitaacara', compact('beritaAcaras'));
+
+
         $beritaAcaras = BeritaAcara::latest()->get();
-        return view('admin.katsinov.formberitaacara', compact('beritaAcaras'));
+
+        if (Auth::user()->role === 'admin_direktorat') {
+            return view('admin.katsinov.formberitaacara', compact('beritaAcaras'));
+        } else if (Auth::user()->role === 'dosen') {
+            return view('inovasi.dosen.formberitaacara', compact('beritaAcaras'));
+        } else if (Auth::user()->role === 'admin_hilirisasi') {
+            return view('inovasi.admin_hilirisasi.formberitaacara', compact('beritaAcaras'));
+        }
     }
 
     /**
