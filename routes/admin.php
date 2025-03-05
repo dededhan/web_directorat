@@ -198,6 +198,21 @@ Route::prefix('inovasi')->name('inovasi.')
 
         // Tabel Katsinov
         Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekasitnov');
+        Route::get('/form', [KatsinovController::class, 'create'])->name('form');
+        Route::post('/store', [KatsinovController::class, 'store'])->name('store');
+        Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
+
+        Route::resource('/forminformasidasar', FormInformasiDasarController::class);
+        Route::post('/Inovasi/dosen/forminformasidasar', [FormInformasiDasarController::class, 'store'])
+        ->name('inovasi.dosen.forminformasidasar.store');
+
+        Route::resource('/formberitaacara', BeritaAcaraController::class);
+        
+        Route::get('/formjudul', function () {
+            return view('inovasi.dosen.formjudul');
+        })->name('formjudul');
+        
+        Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
 
     });
 
