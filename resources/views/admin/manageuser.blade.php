@@ -54,6 +54,7 @@
                             <option value="wr3">Wakil Rektor 3</option>
                             <option value="dosen">Dosen</option>
                             <option value="mahasiswa">mahasiswa</option>
+                            <option value="valdator">Penilai</option>
                         </select>
                     </div>
                 </div>

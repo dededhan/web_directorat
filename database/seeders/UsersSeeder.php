@@ -74,6 +74,13 @@ class UsersSeeder extends Seeder
                 'role'=>'dosen'
                 
             ],
+            [
+                'name'=>'team penilai',
+                'email'=>'valid123@gmail.com',
+                'password'=>bcrypt('valid123'),
+                'role'=>'validator'
+                
+            ],
         ];
         foreach ($userdata as $data) {
             $user = User::create($data);

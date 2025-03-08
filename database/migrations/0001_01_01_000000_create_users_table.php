@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['super_admin','admin_direktorat','admin_pemeringkatan', 
-            'admin_hilirisasi','kepala_direktorat','fakultas' , 'prodi', 'dosen', 'kepala_sub_direktorat', 'wr3', 'mahasiswa' ]);
+            'admin_hilirisasi','kepala_direktorat','fakultas' , 'prodi', 'dosen', 'kepala_sub_direktorat', 'wr3', 'mahasiswa','validator' ]);
             $table->timestamps();
         });
 
