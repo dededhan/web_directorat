@@ -49,7 +49,8 @@
                     <span class="text">Form Judul</span>
                 </a>
             </li>
-            <li class="{{ request()->routeIs('inovasi.admin_hilirisasi.formrecordhasilpengukuran.index') ? 'active' : '' }}">
+            <li
+                class="{{ request()->routeIs('inovasi.admin_hilirisasi.formrecordhasilpengukuran.index') ? 'active' : '' }}">
                 <a href="{{ route('inovasi.admin_hilirisasi.formrecordhasilpengukuran.index') }}">
                     <i class='bx bxs-file-plus'></i>
                     <span class="text">Form Record</span>
@@ -58,9 +59,28 @@
         </ul>
     </div>
 
+    <div class="menu-section">
+        <h3 class="section-title">SDGs</h3>
+        <ul class="side-menu">
+            <li class="{{ request()->routeIs('inovasi.admin_hilirisasi.SDGs.program_kegiatan') ? 'active' : '' }}">
+                <a href="{{ route('inovasi.admin_hilirisasi.SDGs.program_kegiatan') }}">
+                    <i class='bx bxs-graduation'></i>
+                    <span class="text">Program</span>
+                </a>
+            </li>
+            <li class="{{ request()->routeIs('inovasi.admin_hilirisasi.SDGs.publikasi_riset') ? 'active' : '' }}">
+                <a href="{{ route('inovasi.admin_hilirisasi.SDGs.publikasi_riset') }}">
+                    <i class='bx bxs-graduation'></i>
+                    <span class="text">Publikasi & Riset</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
     <ul class="side-menu">
         <li>
-            <a href="#" class="logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <a href="#" class="logout"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class='bx bxs-log-out-circle'></i>
                 <span class="text">Logout</span>
             </a>

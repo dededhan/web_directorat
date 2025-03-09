@@ -98,6 +98,21 @@ Route::prefix('admin')->name('admin.')
         // })->name('formrecordhasilpengukuran');
         Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
     });
+
+    Route::prefix('SDGs')->name('SDGs.')
+    ->group(function () {
+
+        // Program Kegiatan
+        Route::get('/program_kegiatan', function () {
+            return view('admin.SDGs.program_kegiatan');
+        })->name('program_kegiatan');
+
+                // Program Kegiatan
+                Route::get('/publikasi_riset', function () {
+                    return view('admin.SDGs.publikasi_riset');
+                })->name('publikasi_riset');
+
+    });
     
 
 });
@@ -241,6 +256,19 @@ Route::prefix('inovasi')->name('inovasi.')
         
         Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
 
+
+        Route::prefix('SDGs')->name('SDGs.')
+        ->group(function () {
+            // Program Kegiatan
+            Route::get('/program_kegiatan', function () {
+                return view('Inovasi.admin_hilirisasi.SDGs.program_kegiatan');
+            })->name('program_kegiatan');
+            
+            // Publikasi Riset
+            Route::get('/publikasi_riset', function () {
+                return view('Inovasi.admin_hilirisasi.SDGs.publikasi_riset');
+            })->name('publikasi_riset');
+        });
 
     });
     // mahasiswa
