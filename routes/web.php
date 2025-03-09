@@ -54,6 +54,10 @@ Route::get('/katsinov/forminformasidasar', function () {
     return view('inovasi.katsinov.forminformasidasar');
 })->name('katsinov.informasidasar');
 
+Route::get('/register', function () {
+    return view('register');
+})->name('register');
+
 Route::get('/sdgscenter', function () {
     return view('Inovasi.katsinov.sdgscenter.sdgscenter');
 })->name('sdgscenter');
