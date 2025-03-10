@@ -58,6 +58,12 @@ Route::get('/register', function () {
     return view('register');
 })->name('register');
 
+// Google Login
+Route::get('login/google', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle'])->name('login.google');
+Route::get('auth-google-callback', [App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback']);
+
+// Route::get('/auth-google-redirect')
+
 Route::get('/sdgscenter', function () {
     return view('Inovasi.katsinov.sdgscenter.sdgscenter');
 })->name('sdgscenter');
