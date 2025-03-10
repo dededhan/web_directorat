@@ -22,7 +22,9 @@ class KatsinovController extends Controller
             return view('inovasi.dosen.tablekasitnov', compact('katsinovs'));
         } else if (Auth::user()->role === 'admin_hilirisasi') {
             return view('inovasi.admin_hilirisasi.tablekatsinov', compact('katsinovs'));
-        } 
+        } else if (Auth::user()->role === 'validator') {
+            return view('inovasi.validator.tablekatsinov', compact('katsinovs'));
+        }
 
     }
     public function create()
@@ -37,6 +39,8 @@ class KatsinovController extends Controller
             return view('inovasi.dosen.form_katsinov');
         } else if (Auth::user()->role === 'admin_hilirisasi') {
             return view('inovasi.admin_hilirisasi.form_katsinov');
+        } else if (Auth::user()->role === 'validator') {
+            return view('inovasi.validator.form_katsinov');
         }
     }
 

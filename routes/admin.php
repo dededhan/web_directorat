@@ -271,7 +271,48 @@ Route::prefix('inovasi')->name('inovasi.')
         });
 
     });
-    // mahasiswa
+
+    // Validator
+
+    Route::prefix('validator')->name('validator.')->group(function () {
+        // Dashboard
+        Route::get('/dashboard', function () {
+            return view('Inovasi.validator.dashboard');
+        })->name('dashboard');
+
+        // Tabel Katsinov
+        Route::get('/tablekasitnov', [KatsinovController::class, 'index'])->name('tablekasitnov');
+        Route::get('/form', [KatsinovController::class, 'create'])->name('form');
+        Route::post('/store', [KatsinovController::class, 'store'])->name('store');
+        Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
+
+        Route::resource('/forminformasidasar', FormInformasiDasarController::class);
+        Route::post('/Inovasi/validator/forminformasidasar', [FormInformasiDasarController::class, 'store'])
+        ->name('inovasi.validator.forminformasidasar.store');
+
+        Route::resource('/formberitaacara', BeritaAcaraController::class);
+        
+        Route::get('/formjudul', function () {
+            return view('inovasi.validator.formjudul');
+        })->name('formjudul');
+        
+        Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
+
+
+        Route::prefix('SDGs')->name('SDGs.')
+        ->group(function () {
+            // Program Kegiatan
+            Route::get('/program_kegiatan', function () {
+                return view('Inovasi.validator.SDGs.program_kegiatan');
+            })->name('program_kegiatan');
+            
+            // Publikasi Riset
+            Route::get('/publikasi_riset', function () {
+                return view('Inovasi.validator.SDGs.publikasi_riset');
+            })->name('publikasi_riset');
+        });
+
+    });
 
     Route::prefix('admin_hilirisasi')->name('admin_hilirisasi.')
     ->middleware(['checked', 'role:admin_hilirisasi'])

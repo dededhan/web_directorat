@@ -28,6 +28,8 @@ class FormInformasiDasarController extends Controller
             return view('inovasi.dosen.forminformasidasar', compact('forms'));
         } else if (Auth::user()->role === 'admin_hilirisasi') {
             return view('inovasi.admin_hilirisasi.forminformasidasar', compact('forms'));
+        } else if (Auth::user()->role === 'validator') {
+            return view('inovasi.validator.forminformasidasar', compact('forms'));
         }
     }
 
