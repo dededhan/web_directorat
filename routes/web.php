@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminAlumniBerdampakController;
 use App\Http\Controllers\RespondenAnswerController;
 use App\Http\Controllers\KatsinovController;
 use App\Http\Controllers\AlumniController;
+use App\Http\Controllers\GoogleController;
 
 use App\Http\Middleware\HandleRespondenForm;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,11 @@ Route::get('/login', [LoginController::class, 'showLog
 inForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Google Login
+Route::get('login/google', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle'])->name('login.google');
+Route::get('auth-google-callback', [App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback']);
+
 
 Route::prefix('qsranking')->group(function(){
     Route::get('/qs-general', [QuesionerGeneralController::class, 'create'])->name('qs_general.index');
@@ -58,9 +64,6 @@ Route::get('/register', function () {
     return view('register');
 })->name('register');
 
-// Google Login
-Route::get('login/google', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle'])->name('login.google');
-Route::get('auth-google-callback', [App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback']);
 
 // Route::get('/auth-google-redirect')
 
