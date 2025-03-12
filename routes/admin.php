@@ -232,7 +232,7 @@ Route::prefix('inovasi')->name('inovasi.')
     });
 
 
-    Route::prefix('admin_hilirisasi')->name('admin_hilirisasi.')->group(function () {
+    Route::prefix('admin-hilirisasi')->name('admin_hilirisasi.')->group(function () {
         // Dashboard
         Route::get('/dashboard', function () {
             return view('Inovasi.admin_hilirisasi.dashboard');
@@ -240,7 +240,7 @@ Route::prefix('inovasi')->name('inovasi.')
 
         // Tabel Katsinov
         Route::get('/tablekasitnov', [KatsinovController::class, 'index'])->name('tablekasitnov');
-        Route::get('/form', [KatsinovController::class, 'create'])->name('form');
+        // Route::get('/form', [KatsinovController::class, 'create'])->name('form');
         Route::post('/store', [KatsinovController::class, 'store'])->name('store');
         Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
 

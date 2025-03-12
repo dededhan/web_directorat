@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('katsinov_scores', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('katsinov_id')->constrained();
+            $table->foreignId('katsinov_id')->references('id')->on('katsinovs');
             $table->integer('indicator_number');
             $table->decimal('technology', 5, 2);
             $table->decimal('organization', 5, 2);

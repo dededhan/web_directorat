@@ -8,8 +8,13 @@ class Katsinov extends Model
 {
     protected $fillable = [
         'title', 'focus_area', 'project_name', 
-        'institution', 'address', 'contact', 'assessment_date'
+        'institution', 'address', 'contact', 'assessment_date',
+        'user_id',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class, '');
+    }
 
     public function scores()
     {
