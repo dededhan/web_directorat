@@ -14,22 +14,32 @@ class KatsinovController extends Controller
 {
     public function index()
     {
+        $role = Auth::user()->role;
         $katsinovs = Katsinov::with('scores')->latest()->paginate(10);
-
-        if (Auth::user()->role === 'admin_direktorat') {
-            return view('admin.Katsinov.TableKatsinov', compact('katsinovs'));
-        } else if (Auth::user()->role === 'dosen') {
-            return view('inovasi.dosen.tablekasitnov', compact('katsinovs'));
-        } else if (Auth::user()->role === 'admin_hilirisasi') {
-            return view('inovasi.admin_hilirisasi.tablekatsinov', compact('katsinovs'));
-        } else if (Auth::user()->role === 'validator') {
-            return view('inovasi.validator.tablekatsinov', compact('katsinovs'));
+        if(in_array($role, ['dosen', 'mahasiswa'])){
+            $katsinovs = auth()->user()->katsinovs()->paginate();
         }
-
+        $view = match ($role) {
+            'admin_direktorat' => 'admin.katsinov.TableKatsinov',
+            'dosen' => 'inovasi.dosen.tablekasitnov',
+            'admin_hilirisasi' => 'inovasi.admin_hilirisasi.tablekatsinov',
+            'validator' => 'inovasi.validator.tablekatsinov',
+        };
+        // if (Auth::user()->role === 'admin_direktorat') {
+        //     return view('admin.katsinov.TableKatsinov', compact('katsinovs'));
+        // } else if (Auth::user()->role === 'dosen') {
+        //     return view('inovasi.dosen.tablekasitnov', compact('katsinovs'));
+        // } else if (Auth::user()->role === 'admin_hilirisasi') {
+        //     return view('inovasi.admin_hilirisasi.tablekatsinov', compact('katsinovs'));
+        // } else if (Auth::user()->role === 'validator') {
+        //     return view('inovasi.validator.tablekatsinov', compact('katsinovs'));
+        // }
+        return view($view, [
+            'katsinovs' => $katsinovs
+        ]);
     }
     public function create()
     {
-
         // return view('admin.katsinov.form_katsinov');
         // return view('inovasi.kasinov.form');
 
@@ -67,7 +77,10 @@ class KatsinovController extends Controller
 
         DB::beginTransaction();
         try {
-            $katsinov = Katsinov::create($validated);
+            $katsinov = Katsinov::create([
+                ...$validated,
+                'user_id' => Auth::user()->id,
+            ]);
             
             foreach ($validated['indicators'] as $indicator) {
                 KatsinovScore::create([
@@ -79,7 +92,7 @@ class KatsinovController extends Controller
                     'market' => $indicator['market'],
                     'partnership' => $indicator['partnership'],
                     'manufacturing' => $indicator['manufacturing'],
-                    'investment' => $indicator['investment']
+                    'investment' => $indicator['investment'],
                 ]);
             }
             
@@ -93,7 +106,7 @@ class KatsinovController extends Controller
     }
     public function downloadPDF()
     {
-        $katsinovs = Katsinov::with('scores')->get();
+        $katsinovs = auth()->user()->katsinovs()->with('scores')->get();
         
         $pdf = PDF::loadView('inovasi.katsinov.pdf', compact('katsinovs'))
             ->setPaper('a4', 'landscape')

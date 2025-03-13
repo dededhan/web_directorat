@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('katsinovs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained();
             $table->string('title');
             $table->string('focus_area');
             $table->string('project_name');

@@ -40,7 +40,11 @@ class User extends Authenticatable
         return $this->hasOne(Prodi::class);
     }
 
-    public function  hasRole($role){
+    public function hasRole($role){
         return $this->role === $role;
+    }
+
+    public function katsinovs(){
+        return $this->hasMany(Katsinov::class, 'user_id');
     }
 }

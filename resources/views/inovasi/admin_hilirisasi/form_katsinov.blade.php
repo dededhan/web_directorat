@@ -21,7 +21,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-@extends('inovasi.dosen.index')
+@extends('inovasi.admin_hilirisasi.index')
 
 {{-- @include('admin.sidebaradmin') --}}
 
@@ -280,12 +280,12 @@
             </div>
             @include('admin.katsinov.lampiran')
             </div>
-            @include('admin.katsinov.indikator1')
-            @include('admin.katsinov.indikator2')
-            @include('admin.katsinov.indikator3')
-            @include('admin.katsinov.indikator4')
-            @include('admin.katsinov.indikator5')
-            @include('admin.katsinov.indikator6')
+            @include('admin.katsinov.Indikator1')
+            @include('admin.katsinov.Indikator2')
+            @include('admin.katsinov.Indikator3')
+            @include('admin.katsinov.Indikator4')
+            @include('admin.katsinov.Indikator5')
+            @include('admin.katsinov.Indikator6')
             @include('admin.katsinov.jumlahindikator')
             <!-- Submit All Button -->
             <div class="submit-all-container"
