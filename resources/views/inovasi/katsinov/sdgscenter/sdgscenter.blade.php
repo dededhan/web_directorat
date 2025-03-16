@@ -69,247 +69,298 @@
             </div>
         </div>
     </section>
-
-    <section id="goals" class="goals">
-        <div class="container">
-            <div class="section-title">
-                <h3>Tujuan Pembangunan Berkelanjutan</h3>
-                <p>17 Tujuan Global untuk mengubah dunia menjadi tempat yang lebih baik dan berkelanjutan bagi semua</p>
-            </div>
-            
-            <div class="carousel-container">
-                <button class="carousel-button prev">&lt;</button>
-                <div class="carousel-track">
-                    <!-- SDG 1 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
+<!-- SDGs Full-Screen Carousel Section -->
+<section id="goals" class="goals">
+    <div class="container">
+        <div class="section-title">
+            <h3>Tujuan Pembangunan Berkelanjutan</h3>
+            <p>Komitmen global untuk mengakhiri kemiskinan, melindungi bumi, dan memastikan kemakmuran bagi semua</p>
+        </div>
+        
+        <div class="sdgs-fullscreen-carousel">
+            <!-- Main slide container -->
+            <div class="sdgs-slider-container">
+                <!-- SDG 1 -->
+                <div class="sdgs-slide" style="--sdg-color: #e5243b;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">1</div>
+                        <div class="sdgs-slide-image">
                             <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-01.jpg" alt="SDG 1">
-                            <div class="goal-content">
-                                <div class="carousel-number">1</div>
-                                <h4>Tanpa Kemiskinan</h4>
-                                <p>Mengakhiri kemiskinan dalam segala bentuk di mana pun</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
                         </div>
-                    </div>
-                    
-                    <!-- SDG 2 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-02.jpg" alt="SDG 2">
-                            <div class="goal-content">
-                                <div class="carousel-number">2</div>
-                                <h4>Tanpa Kelaparan</h4>
-                                <p>Mengakhiri kelaparan, mencapai ketahanan pangan dan gizi yang baik</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SDG 3 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-03.jpg" alt="SDG 3">
-                            <div class="goal-content">
-                                <div class="carousel-number">3</div>
-                                <h4>Kehidupan Sehat dan Sejahtera</h4>
-                                <p>Menjamin kehidupan yang sehat dan mendorong kesejahteraan bagi semua</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SDG 4 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-04.jpg" alt="SDG 4">
-                            <div class="goal-content">
-                                <div class="carousel-number">4</div>
-                                <h4>Pendidikan Berkualitas</h4>
-                                <p>Menjamin pendidikan yang inklusif dan berkualitas serta meningkatkan kesempatan belajar</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SDG 5 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-05.jpg" alt="SDG 5">
-                            <div class="goal-content">
-                                <div class="carousel-number">5</div>
-                                <h4>Kesetaraan Gender</h4>
-                                <p>Mencapai kesetaraan gender dan memberdayakan kaum perempuan</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SDG 6 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-06.jpg" alt="SDG 6">
-                            <div class="goal-content">
-                                <div class="carousel-number">6</div>
-                                <h4>Air Bersih dan Sanitasi Layak</h4>
-                                <p>Menjamin ketersediaan air bersih dan sanitasi yang berkelanjutan untuk semua</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SDG 7 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-07.jpg" alt="SDG 7">
-                            <div class="goal-content">
-                                <div class="carousel-number">7</div>
-                                <h4>Energi Bersih dan Terjangkau</h4>
-                                <p>Menjamin akses terhadap energi yang terjangkau, andal, berkelanjutan dan modern</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SDG 8 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-08.jpg" alt="SDG 8">
-                            <div class="goal-content">
-                                <div class="carousel-number">8</div>
-                                <h4>Pekerjaan Layak dan Pertumbuhan Ekonomi</h4>
-                                <p>Meningkatkan pertumbuhan ekonomi yang inklusif dan berkelanjutan</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SDG 9 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-09.jpg" alt="SDG 9">
-                            <div class="goal-content">
-                                <div class="carousel-number">9</div>
-                                <h4>Industri, Inovasi dan Infrastruktur</h4>
-                                <p>Membangun infrastruktur tangguh, meningkatkan industri inklusif dan berkelanjutan</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SDG 10 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-10.jpg" alt="SDG 10">
-                            <div class="goal-content">
-                                <div class="carousel-number">10</div>
-                                <h4>Berkurangnya Kesenjangan</h4>
-                                <p>Mengurangi ketimpangan di dalam dan antar negara</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SDG 11 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-11.jpg" alt="SDG 11">
-                            <div class="goal-content">
-                                <div class="carousel-number">11</div>
-                                <h4>Kota dan Permukiman Berkelanjutan</h4>
-                                <p>Membangun kota dan permukiman yang inklusif, aman, tangguh dan berkelanjutan</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SDG 12 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-12.jpg" alt="SDG 12">
-                            <div class="goal-content">
-                                <div class="carousel-number">12</div>
-                                <h4>Konsumsi dan Produksi Bertanggung Jawab</h4>
-                                <p>Menjamin pola konsumsi dan produksi yang berkelanjutan</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SDG 13 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-13.jpg" alt="SDG 13">
-                            <div class="goal-content">
-                                <div class="carousel-number">13</div>
-                                <h4>Penanganan Perubahan Iklim</h4>
-                                <p>Mengambil tindakan segera untuk mengatasi perubahan iklim dan dampaknya</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SDG 14 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-14.jpg" alt="SDG 14">
-                            <div class="goal-content">
-                                <div class="carousel-number">14</div>
-                                <h4>Ekosistem Laut</h4>
-                                <p>Melestarikan dan memanfaatkan secara berkelanjutan sumber daya kelautan</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SDG 15 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-15.jpg" alt="SDG 15">
-                            <div class="goal-content">
-                                <div class="carousel-number">15</div>
-                                <h4>Ekosistem Daratan</h4>
-                                <p>Melindungi, memulihkan dan meningkatkan pemanfaatan berkelanjutan ekosistem darat</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SDG 16 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-16.jpg" alt="SDG 16">
-                            <div class="goal-content">
-                                <div class="carousel-number">16</div>
-                                <h4>Perdamaian, Keadilan dan Kelembagaan yang Kuat</h4>
-                                <p>Mempromosikan masyarakat yang damai dan inklusif untuk pembangunan berkelanjutan</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SDG 17 -->
-                    <div class="carousel-slide">
-                        <div class="goal-card">
-                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-17.jpg" alt="SDG 17">
-                            <div class="goal-content">
-                                <div class="carousel-number">17</div>
-                                <h4>Kemitraan untuk Mencapai Tujuan</h4>
-                                <p>Memperkuat sarana pelaksanaan dan merevitalisasi kemitraan global untuk pembangunan berkelanjutan</p>
-                                <a href="#" class="learn-more-btn">Pelajari Lebih Lanjut</a>
-                            </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Tanpa Kemiskinan</h2>
+                            <p>Mengakhiri kemiskinan dalam segala bentuk di manapun. Tujuan ini berfokus pada penyediaan layanan dasar, perlindungan sosial, dan memastikan semua orang memiliki akses yang setara terhadap sumber daya ekonomi.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                         </div>
                     </div>
                 </div>
-                <button class="carousel-button next">&gt;</button>
+                
+                <!-- SDG 2 -->
+                <div class="sdgs-slide" style="--sdg-color: #DDA63A;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">2</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-02.jpg" alt="SDG 2">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Tanpa Kelaparan</h2>
+                            <p>Mengakhiri kelaparan, mencapai ketahanan pangan dan gizi yang baik, serta mendorong pertanian berkelanjutan. Fokus pada akses terhadap makanan, perbaikan nutrisi, dan meningkatkan produktivitas pertanian secara berkelanjutan.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 3 -->
+                <div class="sdgs-slide" style="--sdg-color: #4C9F38;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">3</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-03.jpg" alt="SDG 3">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Kehidupan Sehat dan Sejahtera</h2>
+                            <p>Memastikan kehidupan yang sehat dan mendorong kesejahteraan bagi semua di segala usia. Berfokus pada pengurangan angka kematian ibu dan anak, mengakhiri epidemi penyakit menular, dan memastikan akses universal ke layanan kesehatan.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 4 -->
+                <div class="sdgs-slide" style="--sdg-color: #C5192D;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">4</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-04.jpg" alt="SDG 4">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Pendidikan Berkualitas</h2>
+                            <p>Memastikan pendidikan yang inklusif dan berkualitas serta mendorong kesempatan belajar seumur hidup bagi semua. Memastikan semua anak mendapatkan akses pendidikan dan pelatihan keterampilan yang sesuai.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 5 -->
+                <div class="sdgs-slide" style="--sdg-color: #FF3A21;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">5</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-05.jpg" alt="SDG 5">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Kesetaraan Gender</h2>
+                            <p>Mencapai kesetaraan gender dan memberdayakan kaum perempuan dan anak perempuan. Menghilangkan segala bentuk diskriminasi dan kekerasan terhadap perempuan dan memastikan partisipasi penuh mereka di semua tingkatan.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 6 -->
+                <div class="sdgs-slide" style="--sdg-color: #26BDE2;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">6</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-06.jpg" alt="SDG 6">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Air Bersih dan Sanitasi Layak</h2>
+                            <p>Memastikan ketersediaan dan pengelolaan air bersih dan sanitasi yang berkelanjutan bagi semua. Meningkatkan kualitas air, mengurangi polusi, dan melindungi ekosistem yang berkaitan dengan air.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 7 -->
+                <div class="sdgs-slide" style="--sdg-color: #FCC30B;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">7</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-07.jpg" alt="SDG 7">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Energi Bersih dan Terjangkau</h2>
+                            <p>Memastikan akses ke energi yang terjangkau, andal, berkelanjutan, dan modern bagi semua. Meningkatkan penggunaan energi terbarukan dan efisiensi energi dalam sistem energi global.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 8 -->
+                <div class="sdgs-slide" style="--sdg-color: #A21942;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">8</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-08.jpg" alt="SDG 8">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Pekerjaan Layak dan Pertumbuhan Ekonomi</h2>
+                            <p>Mendorong pertumbuhan ekonomi yang inklusif dan berkelanjutan, lapangan kerja penuh dan produktif, serta pekerjaan yang layak bagi semua. Fokus pada inovasi, kewirausahaan, dan penciptaan lapangan kerja.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 9 -->
+                <div class="sdgs-slide" style="--sdg-color: #FD6925;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">9</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-09.jpg" alt="SDG 9">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Industri, Inovasi dan Infrastruktur</h2>
+                            <p>Membangun infrastruktur yang tangguh, mendorong industrialisasi yang inklusif dan berkelanjutan, serta memupuk inovasi. Meningkatkan akses ke teknologi informasi dan komunikasi.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 10 -->
+                <div class="sdgs-slide" style="--sdg-color: #DD1367;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">10</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-10.jpg" alt="SDG 10">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Berkurangnya Kesenjangan</h2>
+                            <p>Mengurangi kesenjangan dalam dan antar negara. Mendorong inklusi sosial, ekonomi, dan politik bagi semua, terlepas dari usia, jenis kelamin, disabilitas, ras, etnis, atau status lainnya.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 11 -->
+                <div class="sdgs-slide" style="--sdg-color: #FD9D24;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">11</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-11.jpg" alt="SDG 11">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Kota dan Permukiman yang Berkelanjutan</h2>
+                            <p>Menjadikan kota dan permukiman inklusif, aman, tangguh, dan berkelanjutan. Memastikan akses ke perumahan yang layak dan terjangkau, transportasi publik, dan ruang publik yang aman.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 12 -->
+                <div class="sdgs-slide" style="--sdg-color: #BF8B2E;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">12</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-12.jpg" alt="SDG 12">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Konsumsi dan Produksi yang Bertanggung Jawab</h2>
+                            <p>Memastikan pola konsumsi dan produksi yang berkelanjutan. Mengurangi limbah, mendorong daur ulang, dan mendorong praktik bisnis yang berkelanjutan dan pengadaan publik yang berkelanjutan.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 13 -->
+                <div class="sdgs-slide" style="--sdg-color: #3F7E44;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">13</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-13.jpg" alt="SDG 13">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Penanganan Perubahan Iklim</h2>
+                            <p>Mengambil tindakan segera untuk memerangi perubahan iklim dan dampaknya. Memperkuat ketahanan dan kapasitas adaptasi terhadap bahaya terkait iklim dan bencana alam di semua negara.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 14 -->
+                <div class="sdgs-slide" style="--sdg-color: #0A97D9;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">14</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-14.jpg" alt="SDG 14">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Ekosistem Laut</h2>
+                            <p>Melestarikan dan memanfaatkan secara berkelanjutan sumber daya laut untuk pembangunan berkelanjutan. Mengurangi polusi laut, melindungi ekosistem pesisir dan laut, dan mengakhiri penangkapan ikan berlebihan.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 15 -->
+                <div class="sdgs-slide" style="--sdg-color: #56C02B;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">15</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-15.jpg" alt="SDG 15">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Ekosistem Daratan</h2>
+                            <p>Melindungi, memulihkan, dan mendorong pemanfaatan berkelanjutan ekosistem darat, mengelola hutan secara berkelanjutan, memerangi penggurunan, dan menghentikan dan membalikkan degradasi lahan dan menghentikan hilangnya keanekaragaman hayati.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 16 -->
+                <div class="sdgs-slide" style="--sdg-color: #00689D;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">16</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-16.jpg" alt="SDG 16">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Perdamaian, Keadilan dan Kelembagaan yang Tangguh</h2>
+                            <p>Mendorong masyarakat yang damai dan inklusif untuk pembangunan berkelanjutan, menyediakan akses keadilan bagi semua dan membangun institusi yang efektif, akuntabel, dan inklusif di semua tingkatan.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 17 -->
+                <div class="sdgs-slide" style="--sdg-color: #19486A;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">17</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-17.jpg" alt="SDG 17">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Kemitraan untuk Mencapai Tujuan</h2>
+                            <p>Memperkuat sarana pelaksanaan dan merevitalisasi kemitraan global untuk pembangunan berkelanjutan. Memobilisasi sumber daya, berbagi pengetahuan dan teknologi, dan membangun kapasitas untuk mencapai SDGs.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
             </div>
             
-            <div class="carousel-indicators">
-                <!-- Indicators will be generated by JavaScript -->
+            <!-- Numbered navigation elements -->
+            <div class="sdgs-slider-nav">
+                <div class="sdgs-pagination">
+                    <div class="sdgs-pagination-number" data-index="0" style="background-color: #e5243b;">1</div>
+                    <div class="sdgs-pagination-number" data-index="1" style="background-color: #DDA63A;">2</div>
+                    <div class="sdgs-pagination-number" data-index="2" style="background-color: #4C9F38;">3</div>
+                    <div class="sdgs-pagination-number" data-index="3" style="background-color: #C5192D;">4</div>
+                    <div class="sdgs-pagination-number" data-index="4" style="background-color: #FF3A21;">5</div>
+                    <div class="sdgs-pagination-number" data-index="5" style="background-color: #26BDE2;">6</div>
+                    <div class="sdgs-pagination-number" data-index="6" style="background-color: #FCC30B;">7</div>
+                    <div class="sdgs-pagination-number" data-index="7" style="background-color: #A21942;">8</div>
+                    <div class="sdgs-pagination-number" data-index="8" style="background-color: #FD6925;">9</div>
+                    <div class="sdgs-pagination-number" data-index="9" style="background-color: #DD1367;">10</div>
+                    <div class="sdgs-pagination-number" data-index="10" style="background-color: #FD9D24;">11</div>
+                    <div class="sdgs-pagination-number" data-index="11" style="background-color: #BF8B2E;">12</div>
+                    <div class="sdgs-pagination-number" data-index="12" style="background-color: #3F7E44;">13</div>
+                    <div class="sdgs-pagination-number" data-index="13" style="background-color: #0A97D9;">14</div>
+                    <div class="sdgs-pagination-number" data-index="14" style="background-color: #56C02B;">15</div>
+                    <div class="sdgs-pagination-number" data-index="15" style="background-color: #00689D;">16</div>
+                    <div class="sdgs-pagination-number" data-index="16" style="background-color: #19486A;">17</div>
+                </div>
             </div>
         </div>
-    </section>
-
+    </div>
+</section>
     <section id="programs" class="programs">
         <div class="container">
             <div class="section-title">
@@ -660,6 +711,149 @@ function changeBackgroundImage() {
 
 // Change the background image every 5 seconds (5000 milliseconds)
 setInterval(changeBackgroundImage, 5000);
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all necessary elements
+    const sliderContainer = document.querySelector('.sdgs-slider-container');
+    const slides = Array.from(document.querySelectorAll('.sdgs-slide'));
+    const paginationNumbers = Array.from(document.querySelectorAll('.sdgs-pagination-number'));
+    
+    // Current slide index
+    let currentIndex = 0;
+    let isTransitioning = false;
+    
+    // Add active class to first pagination number
+    paginationNumbers[0].classList.add('active');
+    
+    // Add click event listeners to pagination numbers
+    paginationNumbers.forEach(numBtn => {
+        numBtn.addEventListener('click', () => {
+            const index = parseInt(numBtn.getAttribute('data-index'));
+            if (!isTransitioning && currentIndex !== index) {
+                goToSlide(index);
+            }
+        });
+    });
+    
+    // Function to go to a specific slide
+    function goToSlide(index) {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        
+        // Ensure index is within bounds
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
+        
+        // Update current index
+        currentIndex = index;
+        
+        // Move the slider
+        sliderContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+        
+        // Update pagination numbers
+        paginationNumbers.forEach((numBtn, i) => {
+            if (i === currentIndex) {
+                numBtn.classList.add('active');
+            } else {
+                numBtn.classList.remove('active');
+            }
+        });
+        
+        // Reset transition flag after animation completes
+        setTimeout(() => {
+            isTransitioning = false;
+        }, 800); // This should match the transition duration in CSS
+    }
+    
+    // Add keyboard navigation (left/right arrows)
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            goToSlide(currentIndex - 1);
+            resetAutoPlay();
+        } else if (e.key === 'ArrowRight') {
+            goToSlide(currentIndex + 1);
+            resetAutoPlay();
+        }
+    });
+    
+    // Add swipe support for mobile devices
+    
+    // Touch swipe functionality
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    sliderContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        pauseAutoPlay();
+    }, {passive: true});
+    
+    sliderContainer.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+        resetAutoPlay();
+    }, {passive: true});
+    
+    function handleSwipe() {
+        const swipeThreshold = 50; // Minimum distance for a swipe
+        
+        if (touchEndX < touchStartX - swipeThreshold) {
+            // Swipe left - go to next slide
+            goToSlide(currentIndex + 1);
+        }
+        
+        if (touchEndX > touchStartX + swipeThreshold) {
+            // Swipe right - go to previous slide
+            goToSlide(currentIndex - 1);
+        }
+    }
+    
+    // Auto play functionality
+    let autoPlayInterval;
+    const autoPlayDelay = 6000; // 6 seconds between slides
+    
+    function startAutoPlay() {
+        autoPlayInterval = setInterval(() => {
+            goToSlide(currentIndex + 1);
+        }, autoPlayDelay);
+    }
+    
+    function pauseAutoPlay() {
+        clearInterval(autoPlayInterval);
+    }
+    
+    function resetAutoPlay() {
+        pauseAutoPlay();
+        startAutoPlay();
+    }
+    
+    // Initialize auto play
+    startAutoPlay();
+    
+    // Pause auto play on hover
+    const carousel = document.querySelector('.sdgs-fullscreen-carousel');
+    carousel.addEventListener('mouseenter', pauseAutoPlay);
+    carousel.addEventListener('mouseleave', startAutoPlay);
+    
+    // Update slide colors dynamically
+    slides.forEach(slide => {
+        const colorStr = slide.style.getPropertyValue('--sdg-color');
+        if (colorStr) {
+            let color = colorStr.trim();
+            if (color.startsWith('#')) {
+                // If it's a hex color, use it as is
+                slide.style.setProperty('--sdg-color', color);
+            }
+        }
+    });
+    
+    // Smooth out the slider on window resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            goToSlide(currentIndex);
+        }, 250);
+    });
+});
     </script>
 </body>
 </html>
