@@ -3,148 +3,238 @@
 @section('contentadmin')
     <div class="head-title">
         <div class="left">
-            <h1>Manajemen Berita</h1>
+            <h1>Berita</h1>
             <ul class="breadcrumb">
                 <li>
-                    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+                    <a href="#">Dashboard</a>
                 </li>
                 <li><i class='bx bx-chevron-right'></i></li>
                 <li>
-                    <a class="active" href="#">Berita</a>
+                    <a class="active" href="#">Kelola Berita</a>
                 </li>
             </ul>
         </div>
-        <a href="#" class="btn-download" data-bs-toggle="modal" data-bs-target="#addNewsModal">
-            <i class='bx bxs-plus-circle'></i>
-            <span class="text">Tambah Berita</span>
-        </a>
     </div>
 
-    <!-- News List -->
     <div class="table-data">
         <div class="order">
             <div class="head">
-                <h3>Daftar Berita</h3>
-                <i class='bx bx-search'></i>
-                <i class='bx bx-filter'></i>
+                <h3>Input Berita</h3>
+            </div> 
+
+            <form id="berita-form" method="POST" action="#" enctype="multipart/form-data">
+                @csrf
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="category" class="form-label">Kategori</label>
+                        <select class="form-select" name="category" id="category">
+                            <option value="">Pilih Kategori</option>
+                            <option value="berita">Berita</option>
+                            <option value="feature">Feature</option>
+                            <option value="akademik">Akademik</option>
+                        </select>
+                        <div class="form-text text-muted">Pilih kategori berita yang sesuai</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="tanggal" class="form-label">Tanggal</label>
+                        <input type="date" class="form-control" name="tanggal" id="tanggal">
+                        <div class="form-text text-muted">Pilih tanggal publikasi berita</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="judul_berita" class="form-label">Judul Berita</label>
+                        <input type="text" class="form-control" name="judul_berita" id="judul_berita">
+                        <div class="form-text text-muted">Masukkan judul berita (maksimal 200 karakter)</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="isi_berita" class="form-label">Isi Berita</label>
+                        <textarea class="form-control" name="isi_berita" id="isi_berita" rows="8"></textarea>
+                        <div class="form-text text-muted">Tuliskan isi berita secara lengkap dan detail</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="gambar" class="form-label">Gambar</label>
+                        <input type="file" class="form-control" name="gambar" id="gambar" accept="image/*">
+                        <div class="form-text text-muted">Upload gambar utama berita (format: JPG, PNG, atau JPEG, max 2MB)</div>
+                    </div>
+                </div>
+
+                <div class="mb-3 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Simpan Berita</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="table-data mt-4">
+            <div class="order">
+                <div class="head">
+                    <h3>Daftar Berita</h3>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-striped" id="berita-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kategori</th>
+                                <th>Tanggal</th>
+                                <th>Judul Berita</th>
+                                <th>Isi</th>
+                                <th>Gambar</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="berita-list">
+                            <!-- Sample data for demonstration -->
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <span class="badge bg-primary">Berita</span>
+                                </td>
+                                <td>16/03/2025</td>
+                                <td>Mahasiswa Raih Juara Kompetisi Nasional</td>
+                                <td>Mahasiswa Teknik Informatika berhasil meraih juara dalam kompetisi...</td>
+                                <td>
+                                    <button class="btn btn-sm btn-info view-image" 
+                                        data-image="https://via.placeholder.com/800x600"
+                                        data-title="Mahasiswa Raih Juara Kompetisi Nasional">
+                                        Lihat Gambar
+                                    </button>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-warning">Edit</button>
+                                        <button class="btn btn-sm btn-danger delete-berita" data-id="1">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>
+                                    <span class="badge bg-success">Feature</span>
+                                </td>
+                                <td>15/03/2025</td>
+                                <td>Profil Fakultas Teknik Tahun 2025</td>
+                                <td>Fakultas Teknik merupakan salah satu fakultas terkemuka yang...</td>
+                                <td>
+                                    <button class="btn btn-sm btn-info view-image" 
+                                        data-image="https://via.placeholder.com/800x600"
+                                        data-title="Profil Fakultas Teknik Tahun 2025">
+                                        Lihat Gambar
+                                    </button>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-warning">Edit</button>
+                                        <button class="btn btn-sm btn-danger delete-berita" data-id="2">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>
+                                    <span class="badge bg-warning">Akademik</span>
+                                </td>
+                                <td>14/03/2025</td>
+                                <td>Jadwal UAS Semester Genap 2024/2025</td>
+                                <td>Jadwal Ujian Akhir Semester (UAS) Semester Genap 2024/2025...</td>
+                                <td>
+                                    <button class="btn btn-sm btn-info view-image" 
+                                        data-image="https://via.placeholder.com/800x600"
+                                        data-title="Jadwal UAS Semester Genap 2024/2025">
+                                        Lihat Gambar
+                                    </button>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-warning">Edit</button>
+                                        <button class="btn btn-sm btn-danger delete-berita" data-id="3">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Judul Berita</th>
-                        <th>Kategori</th>
-                        <th>Tanggal Publikasi</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <p>Pembukaan Pendaftaran Mahasiswa Baru</p>
-                        </td>
-                        <td>Akademik</td>
-                        <td>01-10-2023</td>
-                        <td><span class="status completed">Published</span></td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="#" class="btn-edit" title="Edit">
-                                    <i class='bx bxs-edit'></i>
-                                </a>
-                                <a href="#" class="btn-delete" title="Delete">
-                                    <i class='bx bxs-trash'></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p>Workshop Kewirausahaan 2023</p>
-                        </td>
-                        <td>Event</td>
-                        <td>28-09-2023</td>
-                        <td><span class="status completed">Published</span></td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="#" class="btn-edit" title="Edit">
-                                    <i class='bx bxs-edit'></i>
-                                </a>
-                                <a href="#" class="btn-delete" title="Delete">
-                                    <i class='bx bxs-trash'></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p>Pengumuman Libur Nasional</p>
-                        </td>
-                        <td>Pengumuman</td>
-                        <td>25-09-2023</td>
-                        <td><span class="status pending">Draft</span></td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="#" class="btn-edit" title="Edit">
-                                    <i class='bx bxs-edit'></i>
-                                </a>
-                                <a href="#" class="btn-delete" title="Delete">
-                                    <i class='bx bxs-trash'></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
     </div>
 
-    <!-- Add News Modal -->
-    <div class="modal fade" id="addNewsModal" tabindex="-1" aria-labelledby="addNewsModalLabel" aria-hidden="true">
+    <!-- Modal untuk menampilkan gambar -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addNewsModalLabel">Tambah Berita Baru</h5>
+                    <h5 class="modal-title" id="imageModalLabel">Gambar Berita</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="newsTitle" class="form-label">Judul Berita</label>
-                            <input type="text" class="form-control" id="newsTitle" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="newsCategory" class="form-label">Kategori</label>
-                            <select class="form-select" id="newsCategory" required>
-                                <option value="">Pilih Kategori</option>
-                                <option value="akademik">Akademik</option>
-                                <option value="event">Event</option>
-                                <option value="pengumuman">Pengumuman</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="newsContent" class="form-label">Konten Berita</label>
-                            <textarea class="form-control" id="newsContent" rows="6" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="newsThumbnail" class="form-label">Thumbnail</label>
-                            <input type="file" class="form-control" id="newsThumbnail">
-                        </div>
-                        <div class="mb-3">
-                            <label for="newsStatus" class="form-label">Status</label>
-                            <select class="form-select" id="newsStatus" required>
-                                <option value="draft">Draft</option>
-                                <option value="published">Published</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary">Simpan Berita</button>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" class="img-fluid" alt="Gambar Berita">
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // Inisialisasi text editor untuk isi berita
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof ClassicEditor !== 'undefined') {
+                ClassicEditor
+                    .create(document.querySelector('#isi_berita'))
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+        });
+
+        // Handle view image
+        document.querySelectorAll('.view-image').forEach(button => {
+            button.addEventListener('click', function() {
+                const imageUrl = this.dataset.image;
+                const title = this.dataset.title;
+                
+                document.getElementById('imageModalLabel').textContent = title;
+                document.getElementById('modalImage').src = imageUrl;
+                
+                new bootstrap.Modal(document.getElementById('imageModal')).show();
+            });
+        });
+
+        // Handle delete confirmation
+        document.querySelectorAll('.delete-berita').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.dataset.id;
+                
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Berita yang dihapus tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Alert instead of form submission
+                        Swal.fire(
+                            'Terhapus!',
+                            'Berita telah dihapus.',
+                            'success'
+                        );
+                        // Here you would typically do the actual deletion
+                        // For now, we'll just show a success message
+                    }
+                });
+            });
+        });
+    </script>
 
     <style>
         .table-data {
@@ -158,78 +248,49 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
-        .order table {
-            width: 100%;
-            margin-top: 16px;
-        }
-
-        .order table th {
-            padding: 12px 10px;
-            text-align: left;
-            background: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-        }
-
-        .order table td {
-            padding: 12px 10px;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .status {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 500;
-        }
-
-        .status.completed {
-            background: #e6f4ea;
-            color: #1e8449;
-        }
-
-        .status.pending {
-            background: #fff3e0;
-            color: #e67e22;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-edit, .btn-delete {
-            padding: 6px;
-            border-radius: 6px;
-            color: #fff;
-            text-decoration: none;
-        }
-
-        .btn-edit {
-            background: #3498db;
-        }
-
-        .btn-delete {
-            background: #e74c3c;
-        }
-
-        .btn-edit:hover, .btn-delete:hover {
-            opacity: 0.8;
-        }
-
-        .modal-content {
-            border-radius: 15px;
-        }
-
-        .modal-header {
-            background: #f8f9fa;
-            border-radius: 15px 15px 0 0;
-        }
-
         .form-control:focus, .form-select:focus {
             border-color: #3498db;
             box-shadow: none;
         }
-    </style>
 
-    <!-- Make sure you have Bootstrap JavaScript included in your admin.blade.php -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        .btn-primary {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        .badge {
+            font-size: 0.7em;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 5px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+        
+        .table th {
+            white-space: nowrap;
+        }
+        
+        /* Custom styles for the news management */
+        .ck-editor__editable {
+            min-height: 300px;
+        }
+        
+        #modalImage {
+            max-height: 70vh;
+        }
+    </style>
 @endsection
