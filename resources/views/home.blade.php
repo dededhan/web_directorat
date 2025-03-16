@@ -98,7 +98,7 @@
                     <p class="text-gray-600 mb-4">
                         Dialog "Coffee Morning" yang diselenggarakan UNJ bertujuan untuk memperkuat silaturahmi dan membangun sinergi dengan organisasi mahasiswa kampus.
                     </p>
-                    <a href="#" class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
+                    <a href="{{ route('Berita.beritahome') }}" class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
                         Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                     </a>
                 </div>
@@ -128,7 +128,7 @@
                     <p class="text-gray-600 mb-4">
                         Kebanggaan Kampus Menuju Prestasi Nasional melalui Mahasiswa Berprestasi terbaik Universitas Negeri Jakarta tahun ini.
                     </p>
-                    <a href="#" class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
+                    <a href="{{ route('Berita.beritahome') }}" class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
                         Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                     </a>
                 </div>
@@ -158,7 +158,7 @@
                     <p class="text-gray-600 mb-4">
                         Pengukuhan Rektor UNJ sebagai Ketua Umum PB IPF oleh KONI Pusat untuk masa bakti 2022-2026 menunjukkan kepercayaan tinggi terhadap kepemimpinannya.
                     </p>
-                    <a href="#" class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
+                    <a href="{{ route('Berita.beritahome') }}" class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
                         Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                     </a>
                 </div>

@@ -79,6 +79,10 @@ Route::get('/katsinov/formjudul', function () {
     return view('inovasi.katsinov.formjudul');
 })->name('katsinov.formjudul');
 
+Route::get('/Berita', function () {
+    return view('Berita.beritahome');
+})->name('Berita.beritahome');
+
 Route::get('/katsinov/formrecordhasilpengukuran', function () {
     return view('inovasi.katsinov.formrecordhasilpengukuran');
 })->name('katsinov.formrecordhasilpengukuran');

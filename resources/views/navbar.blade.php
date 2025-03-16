@@ -38,10 +38,10 @@
                 </ul>
             </li>
             <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400">Berita</a>
-                <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="#" class="hover:text-yellow-400">Program</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">Program</a></li>
+                <a href="{{ route('Berita.beritahome') }}" class="text-white hover:text-yellow-400">Berita</a>
+                <ul class="absolute hidden group-hover">
+                    <!-- <li><a href="#" class="hover:text-yellow-400">Program</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">Program</a></li> -->
                 </ul>
             </li>
             <li class="relative group">
