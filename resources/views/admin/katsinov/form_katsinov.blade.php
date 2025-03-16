@@ -27,6 +27,7 @@
 {{-- @section('contentadmin')
 @endsection --}}
 
+
 <body x-data="aspectLegend()" x-init="init()">
     <!-- Main Content -->
     

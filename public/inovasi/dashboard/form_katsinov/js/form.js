@@ -21,6 +21,32 @@ function validateForm() {
 
     return isValid;
 }
+function collectFormResponses() {
+    const responses = [];
+    
+    document.querySelectorAll('[data-indicator]').forEach(indicatorContainer => {
+        const indicatorNumber = parseInt(indicatorContainer.dataset.indicator);
+        
+        indicatorContainer.querySelectorAll('tr').forEach((row, index) => {
+            const aspectCell = row.querySelector('.aspect-cell');
+            if (!aspectCell) return; // Skip header and total rows
+            
+            const aspect = aspectCell.textContent.trim();
+            const checkedRadio = row.querySelector('input[type="radio"]:checked');
+            const score = checkedRadio ? parseInt(checkedRadio.value) : 0;
+            
+            responses.push({
+                indicator: indicatorNumber,
+                row: index, // Atau sesuaikan dengan nomor row yang benar
+                aspect: aspect,
+                score: score
+            });
+        });
+    });
+    
+    return responses;
+}
+
 
 async function submitAllIndicators() {
     const btn = document.getElementById("submitAllBtn");
@@ -29,14 +55,16 @@ async function submitAllIndicators() {
     btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Menyimpan...';
 
     try {
+        const responses = collectFormResponses();
         const formData = new FormData(document.getElementById("katsinovForm"));
-        const indicators = collectAspectScores();
 
-        indicators.forEach((indicator, index) => {
-            for (const [key, value] of Object.entries(indicator)) {
-                formData.append(`indicators[${index}][${key}]`, value);
-            }
+        responses.forEach((response, index) => {
+            formData.append(`responses[${index}][indicator]`, response.indicator);
+            formData.append(`responses[${index}][row]`, response.row);
+            formData.append(`responses[${index}][aspect]`, response.aspect);
+            formData.append(`responses[${index}][score]`, response.score);
         });
+        
 
         const response = await fetch("/katsinov/store", {
             // ✏️ Perbaiki disini

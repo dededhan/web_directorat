@@ -31,48 +31,47 @@ class GoogleController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
             
-            // Check if user already exists
+            // Cari user berdasarkan google_id atau email
             $existingUser = User::where('google_id', $googleUser->id)
                                 ->orWhere('email', $googleUser->email)
                                 ->first();
             
             if ($existingUser) {
-                // User exists - update Google ID if necessary
-                if (empty($existingUser->google_id)) {
-                    $existingUser->google_id = $googleUser->id;
-                    $existingUser->save();
+                // Update google_id jika belum ada
+                if (!$existingUser->google_id) {
+                    $existingUser->update([
+                        'google_id' => $googleUser->id,
+                        'avatar' => $googleUser->avatar,
+                    ]);
                 }
                 
                 Auth::login($existingUser);
             } else {
-                // Create new user
+                // Buat user baru
                 $newUser = User::create([
                     'name' => $googleUser->name,
                     'email' => $googleUser->email,
                     'google_id' => $googleUser->id,
                     'avatar' => $googleUser->avatar,
-                    'password' => bcrypt(rand(1, 10000)), // Random password as it won't be used
-                    'role' => 'registered_user', // Assign the role as requested
+                    'password' => bcrypt(rand(1, 10000)),
+                    'role' => 'registered_user',
+                    'email_verified_at' => now(), // Verifikasi email
                 ]);
                 
                 Auth::login($newUser);
             }
             
-            // Determine where to redirect based on role
+            // Redirect sesuai role
             $next = match (Auth::user()->role) {
                 'admin_direktorat' => 'admin.dashboard',
-                'prodi' => 'prodi.dashboard',
-                'fakultas' => 'fakultas.dashboard',
-                'admin_pemeringkatan' => 'admin_pemeringkatan.dashboard',
-                'dosen' => 'inovasi.dosen.dashboard',
-                'admin_hilirisasi' => 'inovasi.admin_hilirisasi.dashboard',
-                'registered_user' => 'inovasi.registered_user.dashboard', 
+                // ... tambahkan role lainnya
+                'registered_user' => 'inovasi.registered_user.dashboard',
                 default => 'home',
             };
             
             return redirect()->route($next);
         } catch (Exception $e) {
-            return redirect('login')->with('error', 'Google authentication failed: ' . $e->getMessage());
+            return redirect('login')->with('error', 'Gagal login dengan Google: ' . $e->getMessage());
         }
     }
 }

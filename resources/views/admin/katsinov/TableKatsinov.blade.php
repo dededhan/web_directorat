@@ -275,6 +275,7 @@
     </div>
     <script src="{{ asset('inovasi/dashboard/table_katsinov/js/table_katsinov.js') }}"></script>
     <script src="{{ asset('inovasi/dashboard/table_katsinov/js/table_katsinovoverall.js') }}"></script>
+    <script src="{{ asset('inovasi/dashboard/form_katsinov/js/form.js') }}"></script>
     <style>
 
     </style>
