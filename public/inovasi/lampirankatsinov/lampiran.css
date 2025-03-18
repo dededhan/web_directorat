@@ -1,0 +1,170 @@
+/* Main Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+}
+
+/* Custom Accordion Styles */
+.custom-accordion .accordion-button {
+    font-weight: 600;
+    background-color: #f8f9fa;
+    box-shadow: none;
+    padding: 15px 20px;
+}
+
+.custom-accordion .accordion-button:not(.collapsed) {
+    color: #0d6efd;
+    background-color: #e7f1ff;
+}
+
+.custom-accordion .accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(13, 110, 253, 0.25);
+}
+
+.custom-accordion .accordion-body {
+    padding: 20px;
+    background-color: #fff;
+}
+
+/* Section Titles */
+.section-title {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #495057;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 8px;
+}
+
+/* Form Controls */
+.form-control {
+    padding: 10px 12px;
+    border-radius: 6px;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #212529;
+}
+
+/* Upload Progress Bar */
+.upload-progress-container {
+    margin-top: 8px;
+    display: none;
+}
+
+.progress {
+    height: 6px;
+    border-radius: 3px;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    padding: 8px 20px;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+.btn-light {
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+    color: #212529;
+    padding: 8px 20px;
+    font-weight: 500;
+}
+
+.btn-light:hover {
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
+}
+
+/* Modal Customization */
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.modal-header, .modal-footer {
+    border-radius: 0;
+    padding: 15px 20px;
+}
+
+.modal-title {
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: 0;
+}
+
+/* Alert Styles */
+#alertContainer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    max-width: 350px;
+}
+
+.alert {
+    margin-bottom: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border-left: 4px solid;
+}
+
+.alert-success {
+    border-left-color: #28a745;
+}
+
+.alert-danger {
+    border-left-color: #dc3545;
+}
+
+.alert-warning {
+    border-left-color: #ffc107;
+}
+
+.alert-info {
+    border-left-color: #17a2b8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+    
+    .modal-content {
+        border-radius: 8px;
+    }
+    
+    .accordion-button {
+        padding: 12px 15px;
+    }
+    
+    .accordion-body {
+        padding: 15px;
+    }
+    
+    #alertContainer {
+        left: 20px;
+        right: 20px;
+        max-width: none;
+    }
+}
