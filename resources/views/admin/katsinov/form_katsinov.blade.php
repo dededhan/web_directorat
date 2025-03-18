@@ -23,9 +23,9 @@
 </head>
 
 
-{{-- @extends('admin.admin') --}}
-{{-- @section('contentadmin')
-@endsection --}}
+@extends('admin.admin')
+
+@section('contentadmin')
 
 
 <body x-data="aspectLegend()" x-init="init()">
@@ -84,31 +84,31 @@
 
                 <div class="form-group">
                     <div class="form-label">Nama/Judul</div>
-                    <input type="text" class="form-input" name="title" placeholder="Masukkan nama/judul" value="{{ $katsinov->title }}">
+                    <input type="text" class="form-input" name="title" placeholder="Masukkan nama/judul" value="{{ $katsinov['title'] ?? '' }}">
                 </div>
 
                 <div class="form-group">
                     <div class="form-label">Fokus Bidang</div>
-                    <input type="text" class="form-input" name="focus_area" placeholder="Masukkan fokus bidang" value="{{ $katsinov->focus_area }}">
+                    <input type="text" class="form-input" name="focus_area" placeholder="Masukkan fokus bidang" value="{{ $katsinov['focus_area'] ?? '' }}">
                 </div>
 
                 <div class="form-group">
                     <div class="form-label">Nama Proyek</div>
-                    <input type="text" class="form-input" name="project_name" placeholder="Masukkan nama proyek" value="{{ $katsinov->project_name }}">
+                    <input type="text" class="form-input" name="project_name" placeholder="Masukkan nama proyek" value="{{ $katsinov['project_name'] ?? '' }}">
                 </div>
 
                 <div class="form-group">
                     <div class="form-label">Nama Lembaga/Perusahaan</div>
                     <input type="text" class="form-input" name="institution"
-                        placeholder="Masukkan nama lembaga/perusahaan" value="{{ $katsinov->institution }}">
+                        placeholder="Masukkan nama lembaga/perusahaan" value="{{ $katsinov['institution'] ?? '' }}">
                 </div>
 
                 <div class="form-group">
                     <div class="form-label">Alamat / Kontak</div>
                     <div>
-                        <input type="text" class="form-input" name="address" placeholder="Masukkan alamat lengkap" value="{{ $katsinov->address }}">
+                        <input type="text" class="form-input" name="address" placeholder="Masukkan alamat lengkap" value="{{ $katsinov['address'] ?? '' }}">
                         <div style="margin-top: 0.75rem;">
-                            <input type="text" class="form-input" name="contact" placeholder="Telp / Fax / email" value="{{ $katsinov->contact }}">
+                            <input type="text" class="form-input" name="contact" placeholder="Telp / Fax / email" value="{{ $katsinov['contact'] ?? '' }}">
                         </div>
                     </div>
                 </div>
@@ -118,7 +118,7 @@
                         <div class="form-label">Tanggal</div>
                         <input type="date" id="assessment_date" name="assessment_date"
                             class="form-input @error('assessment_date') border-red-500 @enderror"
-                            value="{{old('assessment_date', $katsinov? $katsinov->assessment_date: date('Y-m-d')) }}" required>
+                            value="{{ old('assessment_date', isset($katsinov['assessment_date']) ? $katsinov['assessment_date'] : date('Y-m-d')) }}" required>
                     </div>
                 </div>
 
@@ -274,15 +274,11 @@
                     </div>
                 </div>
             </div>
-<<<<<<< HEAD
             <buttom>
             <a href="{{ route('admin.hilirisasi.lampiran') }}">
     <button type="button" style="background-color: #176369; color: white; padding: 10px 20px; border: none; cursor: pointer;">Lampiran</button>
 </a>
 </buttom>
-=======
-            {{-- @include('admin.katsinov.lampiran') --}}
->>>>>>> 2fa95843289b2fb618c6b1400d6673786d3a8ae2
             </div>
             {{-- @dd($indicator) --}}
             @include('admin.katsinov.indikator1')
