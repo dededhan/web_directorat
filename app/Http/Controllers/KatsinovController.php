@@ -19,39 +19,36 @@ class KatsinovController extends Controller
         if(in_array($role, ['dosen', 'mahasiswa'])){
             $katsinovs = auth()->user()->katsinovs()->paginate();
         }
+
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov.TableKatsinov',
             'dosen' => 'inovasi.dosen.tablekasitnov',
             'admin_hilirisasi' => 'inovasi.admin_hilirisasi.tablekatsinov',
             'validator' => 'inovasi.validator.tablekatsinov',
         };
-        // if (Auth::user()->role === 'admin_direktorat') {
-        //     return view('admin.katsinov.TableKatsinov', compact('katsinovs'));
-        // } else if (Auth::user()->role === 'dosen') {
-        //     return view('inovasi.dosen.tablekasitnov', compact('katsinovs'));
-        // } else if (Auth::user()->role === 'admin_hilirisasi') {
-        //     return view('inovasi.admin_hilirisasi.tablekatsinov', compact('katsinovs'));
-        // } else if (Auth::user()->role === 'validator') {
-        //     return view('inovasi.validator.tablekatsinov', compact('katsinovs'));
-        // }
+
         return view($view, [
             'katsinovs' => $katsinovs
         ]);
     }
     public function create()
     {
-        // return view('admin.katsinov.form_katsinov');
-        // return view('inovasi.kasinov.form');
+        $view = match (Auth::user()->role) {
+            'admin_direktorat' => 'admin.katsinov.form_katsinov',
+            'dosen' => 'inovasi.dosen.form_katsinov',
+            'admin_hilirisasi' => 'inovasi.admin_hilirisasi.form_katsinov',
+            'validator' => 'inovasi.validator.form_katsinov',
+        };
 
-        if (Auth::user()->role === 'admin_direktorat') {
-            return view('admin.katsinov.form_katsinov');
-        } else if (Auth::user()->role === 'dosen') {
-            return view('inovasi.dosen.form_katsinov');
-        } else if (Auth::user()->role === 'admin_hilirisasi') {
-            return view('inovasi.admin_hilirisasi.form_katsinov');
-        } else if (Auth::user()->role === 'validator') {
-            return view('inovasi.validator.form_katsinov');
-        }
+        return view($view, [
+            'katsinov' => collect([]),
+            'indicatorOne' =>  collect([]),
+            'indicatorTwo' =>  collect([]),
+            'indicatorThree' =>collect([]),
+            'indicatorFour' => collect([]),
+            'indicatorFive' => collect([]),
+            'indicatorSix' =>  collect([]),
+        ]);
     }
 
     public function store(Request $request)
@@ -77,7 +74,7 @@ class KatsinovController extends Controller
                 ...$validated,
                 'user_id' => Auth::user()->id,
             ]);
-            
+
             foreach ($validated['responses'] as $response) {
                 KatsinovResponse::create([
                     'katsinov_id' => $katsinov->id,
@@ -88,7 +85,6 @@ class KatsinovController extends Controller
                 ]);
             }
             
-            
             DB::commit();
             return response()->json(['message' => 'Data berhasil disimpan'], 200);
             
@@ -97,6 +93,21 @@ class KatsinovController extends Controller
             return response()->json(['message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
     }
+
+    public function show(Request $request){
+        $katsinov = Katsinov::where('id', '=', $request->id)->with('scores')->first();
+        $data = [
+            'katsinov' => $katsinov,
+            'indicatorOne' =>  $katsinov->scores()->where('indicator_number', '=', 1)->get(),
+            'indicatorTwo' =>  $katsinov->scores()->where('indicator_number', '=', 2)->get(),
+            'indicatorThree' =>  $katsinov->scores()->where('indicator_number', '=', 3)->get(),
+            'indicatorFour' =>  $katsinov->scores()->where('indicator_number', '=', 4)->get(),
+            'indicatorFive' =>  $katsinov->scores()->where('indicator_number', '=', 5)->get(),
+            'indicatorSix' =>  $katsinov->scores()->where('indicator_number', '=', 6)->get(),
+        ];
+        return view('admin.katsinov.form_katsinov', $data);
+    }
+
     public function downloadPDF()
     {
         $katsinovs = auth()->user()->katsinovs()->with('scores')->get();

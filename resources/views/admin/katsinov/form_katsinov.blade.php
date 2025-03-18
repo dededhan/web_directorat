@@ -23,7 +23,7 @@
 </head>
 
 
-@extends('admin.admin')
+{{-- @extends('admin.admin') --}}
 {{-- @section('contentadmin')
 @endsection --}}
 
@@ -79,37 +79,36 @@
             </div>
 
             <!-- Form Container -->
-
             <div class="form-container" data-aos="fade-up" data-aos-delay="500">
                 <div class="document-number">No: 20190802-001</div>
 
                 <div class="form-group">
                     <div class="form-label">Nama/Judul</div>
-                    <input type="text" class="form-input" name="title" placeholder="Masukkan nama/judul">
+                    <input type="text" class="form-input" name="title" placeholder="Masukkan nama/judul" value="{{ $katsinov->title }}">
                 </div>
 
                 <div class="form-group">
                     <div class="form-label">Fokus Bidang</div>
-                    <input type="text" class="form-input" name="focus_area" placeholder="Masukkan fokus bidang">
+                    <input type="text" class="form-input" name="focus_area" placeholder="Masukkan fokus bidang" value="{{ $katsinov->focus_area }}">
                 </div>
 
                 <div class="form-group">
                     <div class="form-label">Nama Proyek</div>
-                    <input type="text" class="form-input" name="project_name" placeholder="Masukkan nama proyek">
+                    <input type="text" class="form-input" name="project_name" placeholder="Masukkan nama proyek" value="{{ $katsinov->project_name }}">
                 </div>
 
                 <div class="form-group">
                     <div class="form-label">Nama Lembaga/Perusahaan</div>
                     <input type="text" class="form-input" name="institution"
-                        placeholder="Masukkan nama lembaga/perusahaan">
+                        placeholder="Masukkan nama lembaga/perusahaan" value="{{ $katsinov->institution }}">
                 </div>
 
                 <div class="form-group">
                     <div class="form-label">Alamat / Kontak</div>
                     <div>
-                        <input type="text" class="form-input" name="address" placeholder="Masukkan alamat lengkap">
+                        <input type="text" class="form-input" name="address" placeholder="Masukkan alamat lengkap" value="{{ $katsinov->address }}">
                         <div style="margin-top: 0.75rem;">
-                            <input type="text" class="form-input" name="contact" placeholder="Telp / Fax / email">
+                            <input type="text" class="form-input" name="contact" placeholder="Telp / Fax / email" value="{{ $katsinov->contact }}">
                         </div>
                     </div>
                 </div>
@@ -119,7 +118,7 @@
                         <div class="form-label">Tanggal</div>
                         <input type="date" id="assessment_date" name="assessment_date"
                             class="form-input @error('assessment_date') border-red-500 @enderror"
-                            value="{{ old('assessment_date', date('Y-m-d')) }}" required>
+                            value="{{old('assessment_date', $katsinov? $katsinov->assessment_date: date('Y-m-d')) }}" required>
                     </div>
                 </div>
 
@@ -275,8 +274,9 @@
                     </div>
                 </div>
             </div>
-            @include('admin.katsinov.lampiran')
+            {{-- @include('admin.katsinov.lampiran') --}}
             </div>
+            {{-- @dd($indicator) --}}
             @include('admin.katsinov.indikator1')
             @include('admin.katsinov.indikator2')
             @include('admin.katsinov.indikator3')
@@ -285,6 +285,7 @@
             @include('admin.katsinov.indikator6')
             @include('admin.katsinov.jumlahindikator')
             <!-- Submit All Button -->
+            @if (!$katsinov)    
             <div class="submit-all-container"
                 style="
             display: flex;
@@ -309,6 +310,7 @@
                     Submit Semua Indikator KATSINOV
                 </button>
             </div>
+            @endif
         </form>
     </main>
 

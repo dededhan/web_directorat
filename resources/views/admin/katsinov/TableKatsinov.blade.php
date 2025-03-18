@@ -155,7 +155,7 @@
                                         <i class='bx bx-chevron-down'></i>
                                     </button>
                                 </td>
-                                <td>{{ $katsinov->id }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $katsinov->title }}</td>
                                 <td>{{ $katsinov->focus_area }}</td>
                                 <td>{{ $katsinov->project_name }}</td>
@@ -197,9 +197,12 @@
                                         <button class="btn btn-sm btn-danger">Delete</button>
                                     </div>
                                     <div class="submit-all-container">
-                                        <button type="button" onclick="loadRecord()" class="submit-all-btn">
+                                        <a href="{{ route('admin.Katsinov.show', $katsinov->id) }}" class="btn btn-success">
                                             Muat Record Terakhir
-                                        </button>
+                                        </a>
+                                        {{-- <button type="button" onclick="loadRecord()" class="submit-all-btn">
+                                            
+                                        </button> --}}
                                         <!-- Tombol submit existing -->
                                     </div>
                                 </td>

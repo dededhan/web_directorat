@@ -254,42 +254,42 @@ async function submitAllIndicators() {
 }
 
  // Initialize AOS (Animate On Scroll)
- AOS.init({
+AOS.init({
     duration: 800,
     offset: 100,
     once: true
 });
 
 // Form Interactivity
-document.addEventListener('DOMContentLoaded', () => {
-    const formInputs = document.querySelectorAll('.form-input');
+// document.addEventListener('DOMContentLoaded', () => {
+//     const formInputs = document.querySelectorAll('.form-input');
 
-    formInputs.forEach(input => {
-        input.addEventListener('focus', (e) => {
-            e.target.style.borderColor = 'var(--primary)';
-        });
+//     formInputs.forEach(input => {
+//         input.addEventListener('focus', (e) => {
+//             e.target.style.borderColor = 'var(--primary)';
+//         });
 
-        input.addEventListener('blur', (e) => {
-            e.target.style.borderColor = 'var(--background)';
-        });
-    });
+//         input.addEventListener('blur', (e) => {
+//             e.target.style.borderColor = 'var(--background)';
+//         });
+//     });
 
-    // Simple form validation (optional)
-    const form = document.querySelector('.form-container');
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        let isValid = true;
+//     // Simple form validation (optional)
+//     const form = document.querySelector('.form-container');
+//     form.addEventListener('submit', (e) => {
+//         e.preventDefault();
+//         let isValid = true;
 
-        formInputs.forEach(input => {
-            if (!input.value.trim()) {
-                input.style.borderColor = '#FF6B6B';
-                isValid = false;
-            }
-        });
+//         formInputs.forEach(input => {
+//             if (!input.value.trim()) {
+//                 input.style.borderColor = '#FF6B6B';
+//                 isValid = false;
+//             }
+//         });
 
-        if (isValid) {
-            alert('Formulir berhasil disubmit!');
-            // You can add more complex submission logic here
-        }
-    });
-});
+//         if (isValid) {
+//             alert('Formulir berhasil disubmit!');
+//             // You can add more complex submission logic here
+//         }
+//     });
+// });
