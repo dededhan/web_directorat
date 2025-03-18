@@ -18,6 +18,6 @@ class Katsinov extends Model
 
     public function scores()
     {
-        return $this->hasMany(KatsinovScore::class);
+        return $this->hasMany(KatsinovResponse::class);
     }
 }

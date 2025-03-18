@@ -69,347 +69,298 @@
             </div>
         </div>
     </section>
-
-    <!-- Enhanced SDGs Grid Section with Flip Animation -->
+<!-- SDGs Full-Screen Carousel Section -->
 <section id="goals" class="goals">
     <div class="container">
         <div class="section-title">
             <h3>Tujuan Pembangunan Berkelanjutan</h3>
-            <p>17 Tujuan Global untuk mengubah dunia menjadi tempat yang lebih baik dan berkelanjutan bagi semua</p>
+            <p>Komitmen global untuk mengakhiri kemiskinan, melindungi bumi, dan memastikan kemakmuran bagi semua</p>
         </div>
         
-        <div class="sdgs-grid">
-            <!-- SDG 1 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-1">
-                        <div class="sdg-number">1</div>
-                        <h4>NO POVERTY</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-1.png" alt="SDG 1">
+        <div class="sdgs-fullscreen-carousel">
+            <!-- Main slide container -->
+            <div class="sdgs-slider-container">
+                <!-- SDG 1 -->
+                <div class="sdgs-slide" style="--sdg-color: #e5243b;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">1</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-01.jpg" alt="SDG 1">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Tanpa Kemiskinan</h2>
+                            <p>Mengakhiri kemiskinan dalam segala bentuk di manapun. Tujuan ini berfokus pada penyediaan layanan dasar, perlindungan sosial, dan memastikan semua orang memiliki akses yang setara terhadap sumber daya ekonomi.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                         </div>
                     </div>
-                    <div class="sdg-back sdg-1">
-                        <div class="sdg-number">1</div>
-                        <h4>TANPA KEMISKINAN</h4>
-                        <p>SDG 1 is a university effort to reduce poverty aimed at the general public and the academic community in the internal campus environment, such as students</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
+                </div>
+                
+                <!-- SDG 2 -->
+                <div class="sdgs-slide" style="--sdg-color: #DDA63A;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">2</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-02.jpg" alt="SDG 2">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Tanpa Kelaparan</h2>
+                            <p>Mengakhiri kelaparan, mencapai ketahanan pangan dan gizi yang baik, serta mendorong pertanian berkelanjutan. Fokus pada akses terhadap makanan, perbaikan nutrisi, dan meningkatkan produktivitas pertanian secara berkelanjutan.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 3 -->
+                <div class="sdgs-slide" style="--sdg-color: #4C9F38;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">3</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-03.jpg" alt="SDG 3">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Kehidupan Sehat dan Sejahtera</h2>
+                            <p>Memastikan kehidupan yang sehat dan mendorong kesejahteraan bagi semua di segala usia. Berfokus pada pengurangan angka kematian ibu dan anak, mengakhiri epidemi penyakit menular, dan memastikan akses universal ke layanan kesehatan.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 4 -->
+                <div class="sdgs-slide" style="--sdg-color: #C5192D;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">4</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-04.jpg" alt="SDG 4">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Pendidikan Berkualitas</h2>
+                            <p>Memastikan pendidikan yang inklusif dan berkualitas serta mendorong kesempatan belajar seumur hidup bagi semua. Memastikan semua anak mendapatkan akses pendidikan dan pelatihan keterampilan yang sesuai.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 5 -->
+                <div class="sdgs-slide" style="--sdg-color: #FF3A21;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">5</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-05.jpg" alt="SDG 5">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Kesetaraan Gender</h2>
+                            <p>Mencapai kesetaraan gender dan memberdayakan kaum perempuan dan anak perempuan. Menghilangkan segala bentuk diskriminasi dan kekerasan terhadap perempuan dan memastikan partisipasi penuh mereka di semua tingkatan.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 6 -->
+                <div class="sdgs-slide" style="--sdg-color: #26BDE2;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">6</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-06.jpg" alt="SDG 6">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Air Bersih dan Sanitasi Layak</h2>
+                            <p>Memastikan ketersediaan dan pengelolaan air bersih dan sanitasi yang berkelanjutan bagi semua. Meningkatkan kualitas air, mengurangi polusi, dan melindungi ekosistem yang berkaitan dengan air.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 7 -->
+                <div class="sdgs-slide" style="--sdg-color: #FCC30B;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">7</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-07.jpg" alt="SDG 7">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Energi Bersih dan Terjangkau</h2>
+                            <p>Memastikan akses ke energi yang terjangkau, andal, berkelanjutan, dan modern bagi semua. Meningkatkan penggunaan energi terbarukan dan efisiensi energi dalam sistem energi global.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 8 -->
+                <div class="sdgs-slide" style="--sdg-color: #A21942;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">8</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-08.jpg" alt="SDG 8">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Pekerjaan Layak dan Pertumbuhan Ekonomi</h2>
+                            <p>Mendorong pertumbuhan ekonomi yang inklusif dan berkelanjutan, lapangan kerja penuh dan produktif, serta pekerjaan yang layak bagi semua. Fokus pada inovasi, kewirausahaan, dan penciptaan lapangan kerja.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 9 -->
+                <div class="sdgs-slide" style="--sdg-color: #FD6925;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">9</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-09.jpg" alt="SDG 9">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Industri, Inovasi dan Infrastruktur</h2>
+                            <p>Membangun infrastruktur yang tangguh, mendorong industrialisasi yang inklusif dan berkelanjutan, serta memupuk inovasi. Meningkatkan akses ke teknologi informasi dan komunikasi.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 10 -->
+                <div class="sdgs-slide" style="--sdg-color: #DD1367;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">10</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-10.jpg" alt="SDG 10">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Berkurangnya Kesenjangan</h2>
+                            <p>Mengurangi kesenjangan dalam dan antar negara. Mendorong inklusi sosial, ekonomi, dan politik bagi semua, terlepas dari usia, jenis kelamin, disabilitas, ras, etnis, atau status lainnya.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 11 -->
+                <div class="sdgs-slide" style="--sdg-color: #FD9D24;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">11</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-11.jpg" alt="SDG 11">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Kota dan Permukiman yang Berkelanjutan</h2>
+                            <p>Menjadikan kota dan permukiman inklusif, aman, tangguh, dan berkelanjutan. Memastikan akses ke perumahan yang layak dan terjangkau, transportasi publik, dan ruang publik yang aman.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 12 -->
+                <div class="sdgs-slide" style="--sdg-color: #BF8B2E;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">12</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-12.jpg" alt="SDG 12">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Konsumsi dan Produksi yang Bertanggung Jawab</h2>
+                            <p>Memastikan pola konsumsi dan produksi yang berkelanjutan. Mengurangi limbah, mendorong daur ulang, dan mendorong praktik bisnis yang berkelanjutan dan pengadaan publik yang berkelanjutan.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 13 -->
+                <div class="sdgs-slide" style="--sdg-color: #3F7E44;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">13</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-13.jpg" alt="SDG 13">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Penanganan Perubahan Iklim</h2>
+                            <p>Mengambil tindakan segera untuk memerangi perubahan iklim dan dampaknya. Memperkuat ketahanan dan kapasitas adaptasi terhadap bahaya terkait iklim dan bencana alam di semua negara.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 14 -->
+                <div class="sdgs-slide" style="--sdg-color: #0A97D9;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">14</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-14.jpg" alt="SDG 14">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Ekosistem Laut</h2>
+                            <p>Melestarikan dan memanfaatkan secara berkelanjutan sumber daya laut untuk pembangunan berkelanjutan. Mengurangi polusi laut, melindungi ekosistem pesisir dan laut, dan mengakhiri penangkapan ikan berlebihan.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 15 -->
+                <div class="sdgs-slide" style="--sdg-color: #56C02B;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">15</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-15.jpg" alt="SDG 15">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Ekosistem Daratan</h2>
+                            <p>Melindungi, memulihkan, dan mendorong pemanfaatan berkelanjutan ekosistem darat, mengelola hutan secara berkelanjutan, memerangi penggurunan, dan menghentikan dan membalikkan degradasi lahan dan menghentikan hilangnya keanekaragaman hayati.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 16 -->
+                <div class="sdgs-slide" style="--sdg-color: #00689D;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">16</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-16.jpg" alt="SDG 16">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Perdamaian, Keadilan dan Kelembagaan yang Tangguh</h2>
+                            <p>Mendorong masyarakat yang damai dan inklusif untuk pembangunan berkelanjutan, menyediakan akses keadilan bagi semua dan membangun institusi yang efektif, akuntabel, dan inklusif di semua tingkatan.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SDG 17 -->
+                <div class="sdgs-slide" style="--sdg-color: #19486A;">
+                    <div class="sdgs-slide-content">
+                        <div class="sdgs-slide-number">17</div>
+                        <div class="sdgs-slide-image">
+                            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-17.jpg" alt="SDG 17">
+                        </div>
+                        <div class="sdgs-slide-info">
+                            <h2>Kemitraan untuk Mencapai Tujuan</h2>
+                            <p>Memperkuat sarana pelaksanaan dan merevitalisasi kemitraan global untuk pembangunan berkelanjutan. Memobilisasi sumber daya, berbagi pengetahuan dan teknologi, dan membangun kapasitas untuk mencapai SDGs.</p>
+                            <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <!-- SDG 2 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-2">
-                        <div class="sdg-number">2</div>
-                        <h4>ZERO HUNGER</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-2.png" alt="SDG 2">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-2">
-                        <div class="sdg-number">2</div>
-                        <h4>TANPA KELAPARAN</h4>
-                        <p>SDG 2 is a university effort to end hunger, achieve food security and improved nutrition and promote sustainable agriculture</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
+            <!-- Numbered navigation elements -->
+            <div class="sdgs-slider-nav">
+                <div class="sdgs-pagination">
+                    <div class="sdgs-pagination-number" data-index="0" style="background-color: #e5243b;">1</div>
+                    <div class="sdgs-pagination-number" data-index="1" style="background-color: #DDA63A;">2</div>
+                    <div class="sdgs-pagination-number" data-index="2" style="background-color: #4C9F38;">3</div>
+                    <div class="sdgs-pagination-number" data-index="3" style="background-color: #C5192D;">4</div>
+                    <div class="sdgs-pagination-number" data-index="4" style="background-color: #FF3A21;">5</div>
+                    <div class="sdgs-pagination-number" data-index="5" style="background-color: #26BDE2;">6</div>
+                    <div class="sdgs-pagination-number" data-index="6" style="background-color: #FCC30B;">7</div>
+                    <div class="sdgs-pagination-number" data-index="7" style="background-color: #A21942;">8</div>
+                    <div class="sdgs-pagination-number" data-index="8" style="background-color: #FD6925;">9</div>
+                    <div class="sdgs-pagination-number" data-index="9" style="background-color: #DD1367;">10</div>
+                    <div class="sdgs-pagination-number" data-index="10" style="background-color: #FD9D24;">11</div>
+                    <div class="sdgs-pagination-number" data-index="11" style="background-color: #BF8B2E;">12</div>
+                    <div class="sdgs-pagination-number" data-index="12" style="background-color: #3F7E44;">13</div>
+                    <div class="sdgs-pagination-number" data-index="13" style="background-color: #0A97D9;">14</div>
+                    <div class="sdgs-pagination-number" data-index="14" style="background-color: #56C02B;">15</div>
+                    <div class="sdgs-pagination-number" data-index="15" style="background-color: #00689D;">16</div>
+                    <div class="sdgs-pagination-number" data-index="16" style="background-color: #19486A;">17</div>
                 </div>
-            </div>
-            
-            <!-- SDG 3 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-3">
-                        <div class="sdg-number">3</div>
-                        <h4>GOOD HEALTH AND WELL-BEING</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-3.png" alt="SDG 3">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-3">
-                        <div class="sdg-number">3</div>
-                        <h4>KEHIDUPAN SEHAT DAN SEJAHTERA</h4>
-                        <p>SDG 3 is a university effort to ensure healthy lives and promote well-being for all at all ages</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SDG 4 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-4">
-                        <div class="sdg-number">4</div>
-                        <h4>QUALITY EDUCATION</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-4.png" alt="SDG 4">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-4">
-                        <div class="sdg-number">4</div>
-                        <h4>PENDIDIKAN BERKUALITAS</h4>
-                        <p>SDG 4 is a university effort to ensure inclusive and equitable quality education for all</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SDG 5 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-5">
-                        <div class="sdg-number">5</div>
-                        <h4>GENDER EQUALITY</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-5.png" alt="SDG 5">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-5">
-                        <div class="sdg-number">5</div>
-                        <h4>KESETARAAN GENDER</h4>
-                        <p>SDG 5 is a university effort to achieve gender equality and empower all women and girls</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SDG 6 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-6">
-                        <div class="sdg-number">6</div>
-                        <h4>CLEAN WATER AND SANITATION</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-6.png" alt="SDG 6">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-6">
-                        <div class="sdg-number">6</div>
-                        <h4>AIR BERSIH DAN SANITASI LAYAK</h4>
-                        <p>SDG 6 is a university effort to ensure availability and sustainable management of water and sanitation</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SDG 7 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-7">
-                        <div class="sdg-number">7</div>
-                        <h4>AFFORDABLE AND CLEAN ENERGY</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-7.png" alt="SDG 7">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-7">
-                        <div class="sdg-number">7</div>
-                        <h4>ENERGI BERSIH DAN TERJANGKAU</h4>
-                        <p>SDG 7 is a university effort to ensure access to affordable, reliable, sustainable energy</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SDG 8 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-8">
-                        <div class="sdg-number">8</div>
-                        <h4>DECENT WORK AND ECONOMIC GROWTH</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-8.png" alt="SDG 8">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-8">
-                        <div class="sdg-number">8</div>
-                        <h4>PEKERJAAN LAYAK DAN PERTUMBUHAN EKONOMI</h4>
-                        <p>SDG 8 is a university effort to promote inclusive economic growth and decent work for all</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SDG 9 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-9">
-                        <div class="sdg-number">9</div>
-                        <h4>INDUSTRY, INNOVATION AND INFRASTRUCTURE</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-9.png" alt="SDG 9">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-9">
-                        <div class="sdg-number">9</div>
-                        <h4>INDUSTRI, INOVASI DAN INFRASTRUKTUR</h4>
-                        <p>SDG 9 is a university effort to build resilient infrastructure and foster innovation</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SDG 10 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-10">
-                        <div class="sdg-number">10</div>
-                        <h4>REDUCED INEQUALITIES</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-10.png" alt="SDG 10">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-10">
-                        <div class="sdg-number">10</div>
-                        <h4>BERKURANGNYA KESENJANGAN</h4>
-                        <p>SDG 10 is an effort by universities in overcoming inequality both economic inequality and health within and between countries</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SDG 11 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-11">
-                        <div class="sdg-number">11</div>
-                        <h4>SUSTAINABLE CITIES AND COMMUNITIES</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-11.png" alt="SDG 11">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-11">
-                        <div class="sdg-number">11</div>
-                        <h4>KOTA DAN PERMUKIMAN BERKELANJUTAN</h4>
-                        <p>SDG 11 is a university effort to make cities and human settlements inclusive, safe and sustainable</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SDG 12 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-12">
-                        <div class="sdg-number">12</div>
-                        <h4>RESPONSIBLE CONSUMPTION AND PRODUCTION</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-12.png" alt="SDG 12">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-12">
-                        <div class="sdg-number">12</div>
-                        <h4>KONSUMSI DAN PRODUKSI BERTANGGUNG JAWAB</h4>
-                        <p>SDG 12 is a university effort to ensure sustainable consumption and production patterns</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SDG 13 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-13">
-                        <div class="sdg-number">13</div>
-                        <h4>CLIMATE ACTION</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-13.png" alt="SDG 13">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-13">
-                        <div class="sdg-number">13</div>
-                        <h4>PENANGANAN PERUBAHAN IKLIM</h4>
-                        <p>SDG 13 is a university effort to take urgent action to combat climate change and its impacts</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SDG 14 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-14">
-                        <div class="sdg-number">14</div>
-                        <h4>LIFE BELOW WATER</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-14.png" alt="SDG 14">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-14">
-                        <div class="sdg-number">14</div>
-                        <h4>EKOSISTEM LAUT</h4>
-                        <p>SDG 14 is a university effort to conserve and sustainably use marine resources</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SDG 15 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-15">
-                        <div class="sdg-number">15</div>
-                        <h4>LIFE ON LAND</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-15.png" alt="SDG 15">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-15">
-                        <div class="sdg-number">15</div>
-                        <h4>EKOSISTEM DARATAN</h4>
-                        <p>SDG 15 is a university effort to protect, restore and promote sustainable use of terrestrial ecosystems</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SDG 16 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-16">
-                        <div class="sdg-number">16</div>
-                        <h4>PEACE, JUSTICE AND STRONG INSTITUTIONS</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-16.png" alt="SDG 16">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-16">
-                        <div class="sdg-number">16</div>
-                        <h4>PERDAMAIAN, KEADILAN DAN KELEMBAGAAN YANG KUAT</h4>
-                        <p>SDG 16 is a university effort to promote peaceful and inclusive societies for sustainable development</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SDG 17 -->
-            <div class="sdg-item">
-                <div class="sdg-card">
-                    <div class="sdg-front sdg-17">
-                        <div class="sdg-number">17</div>
-                        <h4>PARTNERSHIPS FOR THE GOALS</h4>
-                        <div class="sdg-icon">
-                            <img src="/images/sdg-icons/sdg-icon-17.png" alt="SDG 17">
-                        </div>
-                    </div>
-                    <div class="sdg-back sdg-17">
-                        <div class="sdg-number">17</div>
-                        <h4>KEMITRAAN UNTUK MENCAPAI TUJUAN</h4>
-                        <p>SDG 17 is a university effort to strengthen partnerships for sustainable development</p>
-                        <a href="#" class="sdg-more-btn">See more »</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SDG Logo -->
-            <div class="sdg-item sdg-logo">
-                <img src="/images/sdg-logo.png" alt="Sustainable Development Goals" class="sdg-main-logo">
             </div>
         </div>
     </div>
 </section>
-
     <section id="programs" class="programs">
         <div class="container">
             <div class="section-title">
@@ -760,245 +711,148 @@ function changeBackgroundImage() {
 
 // Change the background image every 5 seconds (5000 milliseconds)
 setInterval(changeBackgroundImage, 5000);
-// Interactive script for organic SDGs layout
 document.addEventListener('DOMContentLoaded', function() {
-    // SDG Detail data
-    const sdgDetails = {
-        1: {
-            title: "TANPA KEMISKINAN",
-            description: "SDG 1 is a university effort to reduce poverty aimed at the general public and the academic community in the internal campus environment, such as students."
-        },
-        2: {
-            title: "TANPA KELAPARAN",
-            description: "SDG 2 is a university effort to end hunger, achieve food security and improved nutrition and promote sustainable agriculture."
-        },
-        3: {
-            title: "KEHIDUPAN SEHAT DAN SEJAHTERA",
-            description: "SDG 3 is a university effort to ensure healthy lives and promote well-being for all at all ages through health programs and research."
-        },
-        4: {
-            title: "PENDIDIKAN BERKUALITAS",
-            description: "SDG 4 is a university effort to ensure inclusive and equitable quality education and promote lifelong learning opportunities for all."
-        },
-        5: {
-            title: "KESETARAAN GENDER",
-            description: "SDG 5 is a university effort to achieve gender equality and empower all women and girls through policy and institutional practices."
-        },
-        6: {
-            title: "AIR BERSIH DAN SANITASI LAYAK",
-            description: "SDG 6 is a university effort to ensure availability and sustainable management of water and sanitation for all communities."
-        },
-        7: {
-            title: "ENERGI BERSIH DAN TERJANGKAU",
-            description: "SDG 7 is a university effort to ensure access to affordable, reliable, sustainable and modern energy for all through research and innovation."
-        },
-        8: {
-            title: "PEKERJAAN LAYAK DAN PERTUMBUHAN EKONOMI",
-            description: "SDG 8 is a university effort to promote sustained, inclusive economic growth, full employment and decent work for all."
-        },
-        9: {
-            title: "INDUSTRI, INOVASI DAN INFRASTRUKTUR",
-            description: "SDG 9 is a university effort to build resilient infrastructure, promote inclusive and sustainable industrialization and foster innovation."
-        },
-        10: {
-            title: "BERKURANGNYA KESENJANGAN",
-            description: "SDG 10 is an effort by universities in overcoming inequality both economic inequality and health within and between countries, including in terms of minorities, and discrimination."
-        },
-        11: {
-            title: "KOTA DAN PERMUKIMAN BERKELANJUTAN",
-            description: "SDG 11 is a university effort to make cities and human settlements inclusive, safe, resilient and sustainable through urban planning innovations."
-        },
-        12: {
-            title: "KONSUMSI DAN PRODUKSI BERTANGGUNG JAWAB",
-            description: "SDG 12 is a university effort to ensure sustainable consumption and production patterns through campus practices and community education."
-        },
-        13: {
-            title: "PENANGANAN PERUBAHAN IKLIM",
-            description: "SDG 13 is a university effort to take urgent action to combat climate change and its impacts through research and campus sustainability."
-        },
-        14: {
-            title: "EKOSISTEM LAUT",
-            description: "SDG 14 is a university effort to conserve and sustainably use the oceans, seas and marine resources for sustainable development."
-        },
-        15: {
-            title: "EKOSISTEM DARATAN",
-            description: "SDG 15 is a university effort to protect, restore and promote sustainable use of terrestrial ecosystems through conservation programs."
-        },
-        16: {
-            title: "PERDAMAIAN, KEADILAN DAN KELEMBAGAAN YANG KUAT",
-            description: "SDG 16 is a university effort to promote peaceful and inclusive societies for sustainable development through education and policy."
-        },
-        17: {
-            title: "KEMITRAAN UNTUK MENCAPAI TUJUAN",
-            description: "SDG 17 is a university effort to strengthen the means of implementation and revitalize global partnerships for sustainable development."
-        }
-    };
-
-    // Get modal elements
-    const modal = document.getElementById('sdgDetailModal');
-    const modalNumber = document.querySelector('.sdg-detail-number');
-    const modalTitle = document.querySelector('.sdg-detail-title');
-    const modalIcon = document.querySelector('.sdg-detail-icon');
-    const modalDescription = document.querySelector('.sdg-detail-description');
-    const closeModal = document.querySelector('.close-modal');
+    // Get all necessary elements
+    const sliderContainer = document.querySelector('.sdgs-slider-container');
+    const slides = Array.from(document.querySelectorAll('.sdgs-slide'));
+    const paginationNumbers = Array.from(document.querySelectorAll('.sdgs-pagination-number'));
     
-    // Get all SDG items
-    const sdgItems = document.querySelectorAll('.sdg-item');
+    // Current slide index
+    let currentIndex = 0;
+    let isTransitioning = false;
     
-    // Add click event to each SDG item
-    sdgItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const sdgNumber = this.getAttribute('data-sdg');
-            
-            if (sdgNumber) {
-                // Set modal content
-                modalNumber.textContent = sdgNumber;
-                modalNumber.className = 'sdg-detail-number sdg-' + sdgNumber;
-                modalTitle.textContent = sdgDetails[sdgNumber].title;
-                modalIcon.src = '/images/sdg-icons/sdg-icon-' + sdgNumber + '.png';
-                modalIcon.alt = 'SDG ' + sdgNumber;
-                modalDescription.textContent = sdgDetails[sdgNumber].description;
-                
-                // Show modal
-                modal.style.display = 'flex';
+    // Add active class to first pagination number
+    paginationNumbers[0].classList.add('active');
+    
+    // Add click event listeners to pagination numbers
+    paginationNumbers.forEach(numBtn => {
+        numBtn.addEventListener('click', () => {
+            const index = parseInt(numBtn.getAttribute('data-index'));
+            if (!isTransitioning && currentIndex !== index) {
+                goToSlide(index);
             }
         });
     });
     
-    // Close modal when clicking the close button
-    closeModal.addEventListener('click', function() {
-        modal.style.display = 'none';
-    });
-    
-    // Close modal when clicking outside the modal content
-    window.addEventListener('click', function(event) {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-    
-    // Make circles rotate slightly on mousemove
-    const wheel = document.querySelector('.sdgs-wheel');
-    let rotationDegrees = 0;
-    let lastMouseX = 0;
-    let isRotating = false;
-    
-    // Subtle rotation on mousemove
-    document.addEventListener('mousemove', function(e) {
-        if (!isRotating) {
-            const mouseX = e.clientX;
-            const direction = mouseX > lastMouseX ? 1 : -1;
-            
-            // Calculate small rotation based on mouse movement
-            const rotationAmount = direction * 0.2;
-            rotationDegrees += rotationAmount;
-            
-            // Apply rotation to circles
-            document.querySelector('.sdgs-inner-circle').style.transform = `translate(-50%, -50%) rotate(${rotationDegrees * 0.5}deg)`;
-            document.querySelector('.sdgs-middle-circle').style.transform = `translate(-50%, -50%) rotate(${rotationDegrees * 0.3}deg)`;
-            document.querySelector('.sdgs-outer-circle').style.transform = `translate(-50%, -50%) rotate(${rotationDegrees * 0.1}deg)`;
-            
-            lastMouseX = mouseX;
-        }
-    });
-    
-    // Add entrance animation
-    function animateEntrance() {
-        // Center logo
-        const centerLogo = document.querySelector('.sdgs-center');
-        centerLogo.style.opacity = '0';
-        centerLogo.style.transform = 'translate(-50%, -50%) scale(0.5)';
+    // Function to go to a specific slide
+    function goToSlide(index) {
+        if (isTransitioning) return;
+        isTransitioning = true;
         
-        // Circles
-        const innerCircle = document.querySelector('.sdgs-inner-circle');
-        const middleCircle = document.querySelector('.sdgs-middle-circle');
-        const outerCircle = document.querySelector('.sdgs-outer-circle');
+        // Ensure index is within bounds
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
         
-        innerCircle.style.opacity = '0';
-        innerCircle.style.transform = 'translate(-50%, -50%) scale(0.8)';
+        // Update current index
+        currentIndex = index;
         
-        middleCircle.style.opacity = '0';
-        middleCircle.style.transform = 'translate(-50%, -50%) scale(0.8)';
+        // Move the slider
+        sliderContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
         
-        outerCircle.style.opacity = '0';
-        outerCircle.style.transform = 'translate(-50%, -50%) scale(0.8)';
-        
-        // Animate in sequence
-        setTimeout(() => {
-            centerLogo.style.transition = 'all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-            centerLogo.style.opacity = '1';
-            centerLogo.style.transform = 'translate(-50%, -50%) scale(1)';
-        }, 300);
-        
-        setTimeout(() => {
-            innerCircle.style.transition = 'all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-            innerCircle.style.opacity = '1';
-            innerCircle.style.transform = 'translate(-50%, -50%) scale(1)';
-        }, 800);
-        
-        setTimeout(() => {
-            middleCircle.style.transition = 'all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-            middleCircle.style.opacity = '1';
-            middleCircle.style.transform = 'translate(-50%, -50%) scale(1)';
-        }, 1200);
-        
-        setTimeout(() => {
-            outerCircle.style.transition = 'all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-            outerCircle.style.opacity = '1';
-            outerCircle.style.transform = 'translate(-50%, -50%) scale(1)';
-        }, 1600);
-    }
-    
-    // Start animation
-    window.addEventListener('load', animateEntrance);
-    // Add this JavaScript to your page for touch support on mobile devices
-document.addEventListener('DOMContentLoaded', function() {
-    // Get all SDG items
-    const sdgItems = document.querySelectorAll('.sdg-item');
-    
-    // Add touch support for mobile devices
-    sdgItems.forEach(item => {
-        item.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            this.classList.toggle('flipped');
+        // Update pagination numbers
+        paginationNumbers.forEach((numBtn, i) => {
+            if (i === currentIndex) {
+                numBtn.classList.add('active');
+            } else {
+                numBtn.classList.remove('active');
+            }
         });
+        
+        // Reset transition flag after animation completes
+        setTimeout(() => {
+            isTransitioning = false;
+        }, 800); // This should match the transition duration in CSS
+    }
+    
+    // Add keyboard navigation (left/right arrows)
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            goToSlide(currentIndex - 1);
+            resetAutoPlay();
+        } else if (e.key === 'ArrowRight') {
+            goToSlide(currentIndex + 1);
+            resetAutoPlay();
+        }
     });
     
-    // Add animation on scroll
-    function animateSDGsOnScroll() {
-        const goalsSection = document.querySelector('.goals');
-        if (!goalsSection) return;
+    // Add swipe support for mobile devices
+    
+    // Touch swipe functionality
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    sliderContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        pauseAutoPlay();
+    }, {passive: true});
+    
+    sliderContainer.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+        resetAutoPlay();
+    }, {passive: true});
+    
+    function handleSwipe() {
+        const swipeThreshold = 50; // Minimum distance for a swipe
         
-        const sectionPosition = goalsSection.getBoundingClientRect().top;
-        const screenPosition = window.innerHeight / 1.3;
+        if (touchEndX < touchStartX - swipeThreshold) {
+            // Swipe left - go to next slide
+            goToSlide(currentIndex + 1);
+        }
         
-        if (sectionPosition < screenPosition) {
-            // Add staggered animation for each SDG item
-            sdgItems.forEach((item, index) => {
-                setTimeout(() => {
-                    item.style.opacity = '1';
-                    item.style.transform = 'translateY(0)';
-                }, 50 * index);
-            });
-            
-            // Remove scroll event once animation is triggered
-            window.removeEventListener('scroll', animateSDGsOnScroll);
+        if (touchEndX > touchStartX + swipeThreshold) {
+            // Swipe right - go to previous slide
+            goToSlide(currentIndex - 1);
         }
     }
     
-    // Set initial state for animation
-    sdgItems.forEach(item => {
-        item.style.opacity = '0';
-        item.style.transform = 'translateY(20px)';
-        item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    // Auto play functionality
+    let autoPlayInterval;
+    const autoPlayDelay = 6000; // 6 seconds between slides
+    
+    function startAutoPlay() {
+        autoPlayInterval = setInterval(() => {
+            goToSlide(currentIndex + 1);
+        }, autoPlayDelay);
+    }
+    
+    function pauseAutoPlay() {
+        clearInterval(autoPlayInterval);
+    }
+    
+    function resetAutoPlay() {
+        pauseAutoPlay();
+        startAutoPlay();
+    }
+    
+    // Initialize auto play
+    startAutoPlay();
+    
+    // Pause auto play on hover
+    const carousel = document.querySelector('.sdgs-fullscreen-carousel');
+    carousel.addEventListener('mouseenter', pauseAutoPlay);
+    carousel.addEventListener('mouseleave', startAutoPlay);
+    
+    // Update slide colors dynamically
+    slides.forEach(slide => {
+        const colorStr = slide.style.getPropertyValue('--sdg-color');
+        if (colorStr) {
+            let color = colorStr.trim();
+            if (color.startsWith('#')) {
+                // If it's a hex color, use it as is
+                slide.style.setProperty('--sdg-color', color);
+            }
+        }
     });
     
-    // Listen for scroll events
-    window.addEventListener('scroll', animateSDGsOnScroll);
-    
-    // Check on initial load
-    animateSDGsOnScroll();
-});
+    // Smooth out the slider on window resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            goToSlide(currentIndex);
+        }, 250);
+    });
 });
     </script>
 </body>

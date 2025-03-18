@@ -73,13 +73,12 @@ Route::prefix('admin')->name('admin.')
     ->group(function () {
         Route::get('/TableKatsinov', [KatsinovController::class, 'index'])->name('TableKatsinov');
         Route::get('/form', [KatsinovController::class, 'create'])->name('form');
+        Route::get('/show/{id}', [KatsinovController::class, 'show'])->name('show');
         Route::post('/store', [KatsinovController::class, 'store'])->name('store');
         Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
-        // routes/web.php
         Route::get('/katsinov/latest', [KatsinovController::class, 'latest']);
-        // Route::get('/forminformasidasar', function () {
-        //     return view('admin.katsinov.forminformasidasar');
-        // })->name('informasidasar');
+
+
         Route::resource('/forminformasidasar', FormInformasiDasarController::class);
         Route::post('/admin/Katsinov/forminformasidasar', [FormInformasiDasarController::class, 'store'])
         ->name('admin.Katsinov.forminformasidasar.store');
