@@ -172,7 +172,7 @@
         </section>
     </main>
 
-    @include('inovasi.footerhilirisasi')
+    @include('Berita.beritafooter')
 
     <script> 
     document.addEventListener('DOMContentLoaded', function() {

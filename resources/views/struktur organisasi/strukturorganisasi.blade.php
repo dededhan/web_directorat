@@ -163,5 +163,5 @@
         </div>
     </div>
 </body>
+@include('struktur organisasi.footerstrukturorganisasi')
 </html>
-@include('pemeringkatan.footerpemeringkatan')
