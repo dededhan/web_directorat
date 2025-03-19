@@ -19,8 +19,7 @@
             <div class="flex items-center space-x-4">
             </div>
             <div class="mt-16">
-                <p class="text-white text-lg">Selamat Datang di Website</p>
-                <h2 class="text-white text-4xl font-bold">Direktorat Pemeringkatan</h2>
+                <h2 class="text-white text-4xl font-bold">Direktorat Pemeringkatan, hilirisasi dan Sistem Informasi</h2>
             </div>
         </div>
     </header>

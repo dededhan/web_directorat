@@ -91,6 +91,6 @@
         </div>
     </div>
 
-    @include('pemeringkatan.footerpemeringkatan')
+    @include('galeri.alumni.footeralumni')
 </body>
 </html>
