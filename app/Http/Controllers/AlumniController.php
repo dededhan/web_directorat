@@ -8,7 +8,10 @@ class AlumniController extends Controller
 {
     public function index()
     {
-        $alumniBerdampak = AlumniBerdampak::latest()->get();
-        return view('galeri.alumni', compact('alumniBerdampak'));
+        // Fetch alumni data
+        $alumniBerdampak = AlumniBerdampak::all(); 
+        
+        // Update the view path to match the new location
+        return view('galeri.alumni.alumni', compact('alumniBerdampak'));
     }
 }
