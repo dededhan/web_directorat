@@ -9,12 +9,17 @@ use App\Models\Dosen;
 use App\Models\Mahasiswa;
 use App\Models\Fakultas;
 use App\Models\Prodi;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = user::all();
+        // Get all users and apply some basic sorting by creation date (newest first)
+        $users = User::latest()->get();
+        
+        // Log the number of users fetched for debugging
+        Log::info('Fetched users for manage page', ['count' => $users->count()]);
         
         return view('admin.manageuser', compact('users'));
     }
@@ -30,8 +35,9 @@ class UserController extends Controller
             'password' => bcrypt($validated['password']),
             'role' => $validated['role'],
         ]);
+        
         try {
-        // Create role-specific record
+            // Create role-specific record if needed
             switch ($validated['role']) {
                 case 'dosen':
                     Dosen::create([
@@ -66,11 +72,16 @@ class UserController extends Controller
                     ]);
                     break;
             }
+            
+            Log::info('User created manually', ['user_id' => $user->id, 'role' => $user->role]);
+            return redirect()->back()->with('success', 'User berhasil ditambahkan');
+        } catch (\Exception $e) {
+            Log::error('Failed to create role-specific record', [
+                'user_id' => $user->id,
+                'role' => $validated['role'],
+                'error' => $e->getMessage()
+            ]);
+            return redirect()->back()->with('error', 'Gagal membuat data role: ' . $e->getMessage());
         }
-            catch (\Exception $e) {
-                return redirect()->back()->with('error', 'Gagal membuat data role: ' . $e->getMessage());
-        }
-
-        return redirect()->back()->with('success', 'User berhasil ditambahkan');
     }
 }

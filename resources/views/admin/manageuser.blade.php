@@ -54,7 +54,8 @@
                             <option value="wr3">Wakil Rektor 3</option>
                             <option value="dosen">Dosen</option>
                             <option value="mahasiswa">mahasiswa</option>
-                            <option value="valdator">Penilai</option>
+                            <option value="validator">Penilai</option>
+                            <option value="registered_user">Pengguna Terdaftar</option>
                         </select>
                     </div>
                 </div>
@@ -65,20 +66,21 @@
     </div>
 </div>
 
+<!-- System Users Table -->
 <div class="table-data mt-4">
     <div class="order">
         <div class="head">
-            <h3>Users List</h3>
+            <h3>System Users</h3>
             <div class="search-box">
-                <input type="text" id="searchInput" class="form-control" placeholder="Search users...">
+                <input type="text" id="searchSystemInput" class="form-control" placeholder="Search system users...">
             </div>
         </div>
 
         <div class="table-responsive">
-            <table class="table" id="users-table">
+            <table class="table" id="system-users-table">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th>ID</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Role</th>
@@ -87,13 +89,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
+                    @foreach ($users->where('role', '!=', 'registered_user') as $user)
                     <tr>
                         <td>{{ $user->id }}</td>
-                        <td>{{ $user->name }}</td>
+                        <td>
+                            @if($user->avatar)
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ $user->avatar }}" alt="Avatar" class="rounded-circle me-2" width="30">
+                                    {{ $user->name }}
+                                </div>
+                            @else
+                                {{ $user->name }}
+                            @endif
+                        </td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->role }}</td>
-                        
                         <td>
                             <span class="badge bg-success">Active</span>
                         </td>
@@ -104,6 +114,79 @@
                                 </button>
                                 <button class="btn btn-sm btn-danger">
                                     <i class='bx bx-trash'></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Registered Users Table -->
+<div class="table-data mt-4">
+    <div class="order">
+        <div class="head">
+            <h3>Registered Users</h3>
+            <div class="d-flex align-items-center">
+                <span class="badge bg-info me-3">Total: {{ $users->where('role', 'registered_user')->count() }}</span>
+                <div class="search-box">
+                    <input type="text" id="searchRegisteredInput" class="form-control" placeholder="Search registered users...">
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table" id="registered-users-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Registration</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($users->where('role', 'registered_user') as $user)
+                    <tr>
+                        <td>{{ $user->id }}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                @if($user->avatar)
+                                    <img src="{{ $user->avatar }}" alt="Avatar" class="rounded-circle me-2" width="30">
+                                @else
+                                    <div class="rounded-circle me-2 bg-secondary d-flex align-items-center justify-content-center text-white" style="width: 30px; height: 30px;">
+                                        {{ substr($user->name, 0, 1) }}
+                                    </div>
+                                @endif
+                                {{ $user->name }}
+                            </div>
+                        </td>
+                        <td>{{ $user->email }}</td>
+                        <td>
+                            @if($user->google_id)
+                                <span class="badge bg-primary">
+                                    <i class="bx bxl-google me-1"></i> Google
+                                </span>
+                            @else
+                                <span class="badge bg-secondary">Standard</span>
+                            @endif
+                        </td>
+                        <td>{{ $user->created_at->format('d M Y') }}</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-primary">
+                                    <i class='bx bx-edit-alt'></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger">
+                                    <i class='bx bx-trash'></i>
+                                </button>
+                                <button class="btn btn-sm btn-info">
+                                    <i class='bx bx-user-check'></i>
                                 </button>
                             </div>
                         </td>
@@ -186,9 +269,25 @@
 </style>
 
 <script>
-    document.getElementById('searchInput').addEventListener('keyup', function() {
+    // Search functionality for system users table
+    document.getElementById('searchSystemInput').addEventListener('keyup', function() {
         const searchText = this.value.toLowerCase();
-        const table = document.getElementById('users-table');
+        const table = document.getElementById('system-users-table');
+        const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+        for (let row of rows) {
+            let text = '';
+            for (let cell of row.getElementsByTagName('td')) {
+                text += cell.textContent.toLowerCase() + ' ';
+            }
+            row.style.display = text.includes(searchText) ? '' : 'none';
+        }
+    });
+    
+    // Search functionality for registered users table
+    document.getElementById('searchRegisteredInput').addEventListener('keyup', function() {
+        const searchText = this.value.toLowerCase();
+        const table = document.getElementById('registered-users-table');
         const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
 
         for (let row of rows) {
