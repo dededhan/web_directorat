@@ -170,7 +170,7 @@ body {
 /* Alumni Grid */
 .alumni-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
 }
 
@@ -351,9 +351,5 @@ body {
     
     .container {
         padding: 0 1rem;
-    }
-    
-    .alumni-grid {
-        grid-template-columns: 1fr;
     }
 }
