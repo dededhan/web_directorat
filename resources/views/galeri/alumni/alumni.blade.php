@@ -57,10 +57,6 @@
         <div class="alumni-grid">
             @forelse($alumniBerdampak as $alumni)
                 <div class="alumni-card">
-                    <div class="card-image">
-                        <img src="{{ asset('images/default-news.jpg') }}" alt="{{ $alumni->judul_berita }}">
-                        <div class="faculty-badge">{{ strtoupper($alumni->fakultas) }}</div>
-                    </div>
                     <div class="card-content">
                         <h3 class="card-title">{{ $alumni->judul_berita }}</h3>
                         <div class="card-meta">
