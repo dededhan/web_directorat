@@ -278,7 +278,11 @@
                     </div>
                 </div>
             </div>
-            @include('admin.katsinov.lampiran')
+            <buttom>
+            <a href="{{ route('admin.hilirisasi.lampiran') }}">
+    <button type="button" style="background-color: #176369; color: white; padding: 10px 20px; border: none; cursor: pointer;">Lampiran</button>
+</a>
+</buttom>
             </div>
             @include('admin.katsinov.Indikator1')
             @include('admin.katsinov.Indikator2')

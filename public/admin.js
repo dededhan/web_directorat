@@ -71,3 +71,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Add tooltip data attributes to sidebar items
+document.addEventListener('DOMContentLoaded', function() {
+    const sideMenuItems = document.querySelectorAll('#sidebar .side-menu li');
+    
+    sideMenuItems.forEach(item => {
+        const text = item.querySelector('.text').textContent.trim();
+        item.setAttribute('data-title', text);
+    });
+});

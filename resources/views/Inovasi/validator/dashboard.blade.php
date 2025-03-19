@@ -3,7 +3,7 @@
 @section('contentvalidator')
     <div class="head-title">
         <div class="left">
-            <h1>Dashboard Direktorat</h1>
+            <h1>Dashboard Validator</h1>
             <ul class="breadcrumb">
                 <li>
                     <a href="#">Dashboard</a>
