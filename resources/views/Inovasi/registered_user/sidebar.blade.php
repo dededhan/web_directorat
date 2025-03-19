@@ -3,12 +3,12 @@
 <section id="sidebar">
     <a href="#" class="brand" style="display: flex; flex-direction: column; align-items: center;">
         <i style="margin-bottom: 8px;"></i>
-        <span class="text" style="color: white;">Dashboard Dosen</span>
+        <span class="text" style="color: white;">Dashboard User</span>
     </a>
     <ul class="side-menu top">
 
-        <li class="{{ request()->routeIs('inovasi.dosen.dashboard') ? 'active' : '' }}">
-            <a href="{{ route('inovasi.dosen.dashboard') }}">
+        <li class="{{ request()->routeIs('inovasi.registered_user.dashboard') ? 'active' : '' }}">
+            <a href="{{ route('inovasi.registered_user.dashboard') }}">
                 <i class='bx bxs-dashboard'></i>
                 <span class="text">Dashboard</span>
             </a>
@@ -18,42 +18,42 @@
     <div class="menu-section">
         <h3 class="section-title">Inovasi</h3>
         <ul class="side-menu">
-            <li class="{{ request()->routeIs('inovasi.dosen.tablekasitnov') ? 'active' : '' }}">
-                <a href="{{ route('inovasi.dosen.tablekasitnov') }}">
+            {{-- <li class="{{ request()->routeIs('inovasi.registered_user.tablekasitnov') ? 'active' : '' }}">
+                <a href="{{ route('inovasi.registered_user.tablekasitnov') }}">
                     <i class='bx bxs-graduation'></i>
                     <span class="text">Tabel Kasitnov</span>
                 </a>
             </li>
-            <li class="{{ request()->routeIs('inovasi.dosen.form') ? 'active' : '' }}">
-                <a href="{{ route('inovasi.dosen.form') }}">
+            <li class="{{ request()->routeIs('inovasi.registered_user.form') ? 'active' : '' }}">
+                <a href="{{ route('inovasi.registered_user.form') }}">
                     <i class='bx bxs-file-plus'></i>
                     <span class="text">Form Katsinov</span>
                 </a>
             </li>
-            <li class="{{ request()->routeIs('inovasi.dosen.forminformasidasar.index') ? 'active' : '' }}">
-                <a href="{{ route('inovasi.dosen.forminformasidasar.index') }}">
+            <li class="{{ request()->routeIs('inovasi.registered_user.forminformasidasar.index') ? 'active' : '' }}">
+                <a href="{{ route('inovasi.registered_user.forminformasidasar.index') }}">
                     <i class='bx bxs-file-plus'></i>
                     <span class="text">Form Informasi Dasar</span>
                 </a>
             </li>
-            <li class="{{ request()->routeIs('inovasi.dosen.formberitaacara.index') ? 'active' : '' }}">
-                <a href="{{ route('inovasi.dosen.formberitaacara.index') }}">
+            <li class="{{ request()->routeIs('inovasi.registered_user.formberitaacara.index') ? 'active' : '' }}">
+                <a href="{{ route('inovasi.registered_user.formberitaacara.index') }}">
                     <i class='bx bxs-file-plus'></i>
                     <span class="text">Form Berita Acara</span>
                 </a>
             </li>
-            <li class="{{ request()->routeIs('inovasi.dosen.formjudul') ? 'active' : '' }}">
-                <a href="{{ route('inovasi.dosen.formjudul') }}">
+            <li class="{{ request()->routeIs('inovasi.registered_user.formjudul') ? 'active' : '' }}">
+                <a href="{{ route('inovasi.registered_user.formjudul') }}">
                     <i class='bx bxs-file-plus'></i>
                     <span class="text">Form Judul</span>
                 </a>
             </li>
-            <li class="{{ request()->routeIs('inovasi.dosen.formrecordhasilpengukuran.index') ? 'active' : '' }}">
-                <a href="{{ route('inovasi.dosen.formrecordhasilpengukuran.index') }}">
+            <li class="{{ request()->routeIs('inovasi.registered_user.formrecordhasilpengukuran.index') ? 'active' : '' }}">
+                <a href="{{ route('inovasi.registered_user.formrecordhasilpengukuran.index') }}">
                     <i class='bx bxs-file-plus'></i>
                     <span class="text">Form Record</span>
                 </a>
-            </li>
+            </li> --}}
         </ul>
     </div>
 
