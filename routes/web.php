@@ -54,6 +54,9 @@ Route::get('/strukturorganisasi', function () {
 //     return view('galeri.sustainability');
 // })->name('galeri.sustainability'); 
 
+Route::post('/admin/sustainability', [SustainabilityController::class, 'store'])
+    ->name('admin.sustainability.store');
+    
 Route::get('/galeri/sustainability', [App\Http\Controllers\AdminSustainabilityController::class, 'showPublic'])->name('galeri.sustainability');
 
 Route::get('/katsinov/forminformasidasar', function () {
