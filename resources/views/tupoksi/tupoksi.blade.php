@@ -367,4 +367,4 @@
     </div>
 </body>
 </html>
-@include('pemeringkatan.footerpemeringkatan')
+@include('tupoksi.tupoksifooter')
