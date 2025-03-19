@@ -1,11 +1,11 @@
-@extends('inovasi.admin_hilirisasi.index')
+@extends('inovasi.validator.index')
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet" href="{{ asset('inovasi/dashboard/table_katsinov/css/table_katsinov.css') }}"> 
 
 
 
-@section('contentadminhilirisasi')
+@section('contentvalidator')
     <div class="head-title">
         <div class="left">
             <h1>KATSINOV Data</h1>
