@@ -25,14 +25,14 @@ class FormInformasiDasarController extends Controller
         if (Auth::user()->role === 'admin_direktorat') {
             return view('admin.katsinov.forminformasidasar', compact('forms'));
         } else if (Auth::user()->role === 'dosen') {
-            return view('inovasi.dosen.forminformasidasar', compact('forms'));
+            return view('Inovasi.dosen.forminformasidasar', compact('forms'));
         } else if (Auth::user()->role === 'admin_hilirisasi') {
-            return view('inovasi.admin_hilirisasi.forminformasidasar', compact('forms'));
+            return view('Inovasi.admin_hilirisasi.forminformasidasar', compact('forms'));
         } else if (Auth::user()->role === 'validator') {
-            return view('inovasi.validator.forminformasidasar', compact('forms'));
+            return view('Inovasi.validator.forminformasidasar', compact('forms'));
         } // registered user role
         else if (Auth::user()->role === 'registered_user') {
-            return view('inovasi.registered_user.forminformasidasar', compact('forms'));
+            return view('Inovasi.registered_user.forminformasidasar', compact('forms'));
         }
     }
 

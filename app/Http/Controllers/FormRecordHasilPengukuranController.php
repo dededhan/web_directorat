@@ -19,13 +19,13 @@ class FormRecordHasilPengukuranController extends Controller
         if (Auth::user()->role === 'admin_direktorat') {
             return view('admin.Katsinov.formrecordhasilpengukuran', compact('records'));
         } else if (Auth::user()->role === 'dosen') {
-            return view('inovasi.dosen.formrecordhasilpengukuran', compact('records'));
+            return view('Inovasi.dosen.formrecordhasilpengukuran', compact('records'));
         } else if (Auth::user()->role === 'admin_hilirisasi') {
-            return view('inovasi.admin_hilirisasi.formrecordhasilpengukuran', compact('records'));
+            return view('Inovasi.admin_hilirisasi.formrecordhasilpengukuran', compact('records'));
         } else if (Auth::user()->role === 'validator') {
-            return view('inovasi.validator.formrecordhasilpengukuran', compact('records'));
+            return view('Inovasi.validator.formrecordhasilpengukuran', compact('records'));
         } else if (Auth::user()->role === 'registered_user') {
-            return view('inovasi.registered_user.formrecordhasilpengukuran', compact('records'));
+            return view('Inovasi.registered_user.formrecordhasilpengukuran', compact('records'));
         }
     }
 
