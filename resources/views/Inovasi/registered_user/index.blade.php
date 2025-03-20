@@ -19,12 +19,12 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    @include('inovasi.registered_user.sidebar')
+    @include('Inovasi.registered_user.sidebar')
 
     <!-- CONTENT -->
     <section id="content">
         <!-- NAVBAR -->
-        @include('inovasi.registered_user.navbar')
+        @include('Inovasi.registered_user.navbar')
 
         <main>
             @yield('contentregistered_user')
