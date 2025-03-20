@@ -289,7 +289,7 @@
             @include('admin.katsinov.indikator6')
             @include('admin.katsinov.jumlahindikator')
             <!-- Submit All Button -->
-            @if (!$katsinov)    
+            <!-- Modified Submit Button Section - Always Visible -->
             <div class="submit-all-container"
                 style="
             display: flex;
@@ -311,15 +311,16 @@
                     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
                 "
                     onclick="submitAllIndicators()">
-                    Submit Semua Indikator KATSINOV
+                    @if (!$katsinov)
+                        Submit Semua Indikator KATSINOV
+                    @else
+                        Update Indikator KATSINOV
+                    @endif
                 </button>
             </div>
-            @endif
         </form>
     </main>
 
     <script src="{{ asset('inovasi/dashboard/form_katsinov/js/form.js') }}"></script>
 </body>
-
-
 </html>

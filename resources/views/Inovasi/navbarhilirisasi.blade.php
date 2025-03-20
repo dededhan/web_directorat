@@ -40,7 +40,7 @@
     <div class="navbar" id="navbar">
         <img alt="Logo of Direktorat Pemeringkatan" height="50"
             src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" width="50" />
-        <div class="title">Direktorat Inovasi dan Hilirisasi</div>
+        <div class="title">Subdirektorat Inovasi dan Hilirisasi</div>
         <a href="#">Beranda</a>
        
         <div class="navbar-links">
