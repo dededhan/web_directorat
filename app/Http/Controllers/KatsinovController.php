@@ -22,10 +22,10 @@ class KatsinovController extends Controller
 
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov.TableKatsinov',
-            'dosen' => 'inovasi.dosen.tablekasitnov',
-            'admin_hilirisasi' => 'inovasi.admin_hilirisasi.tablekatsinov',
-            'validator' => 'inovasi.validator.tablekatsinov',
-            'registered_user' => 'inovasi.registered_user.tablekatsinov',
+            'dosen' => 'Inovasi.dosen.tablekasitnov',
+            'admin_hilirisasi' => 'Inovasi.admin_hilirisasi.tablekatsinov',
+            'validator' => 'Inovasi.validator.tablekatsinov',
+            'registered_user' => 'Inovasi.registered_user.tablekatsinov',
         };
 
         return view($view, [
@@ -36,10 +36,10 @@ class KatsinovController extends Controller
     {
         $view = match (Auth::user()->role) {
             'admin_direktorat' => 'admin.katsinov.form_katsinov',
-            'dosen' => 'inovasi.dosen.form_katsinov',
-            'admin_hilirisasi' => 'inovasi.admin_hilirisasi.form_katsinov',
-            'validator' => 'inovasi.validator.form_katsinov',
-            'registered_user' => 'inovasi.registered_user.form_katsinov',
+            'dosen' => 'Inovasi.dosen.form_katsinov',
+            'admin_hilirisasi' => 'Inovasi.admin_hilirisasi.form_katsinov',
+            'validator' => 'Inovasi.validator.form_katsinov',
+            'registered_user' => 'Inovasi.registered_user.form_katsinov',
         };
 
         return view($view, [
