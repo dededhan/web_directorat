@@ -454,7 +454,7 @@
             </div>
         </div>
     </section>
-    @include('inovasi.katsinov.sdgscenter.footersdg')
+    @include('Inovasi.katsinov.sdgscenter.footersdg')
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

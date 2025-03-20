@@ -1,5 +1,5 @@
 <head>
-    <title>Direktorat Inovasi dan Hilirisasi</title>
+    <title>Sub Direktorat Inovasi dan Hilirisasi</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
