@@ -267,9 +267,9 @@ Route::prefix('inovasi')->name('inovasi.')
         });
 
         // Validator
-
-        Route::prefix('validator')->name('validator.')->group(function () {
-            // Dashboard
+        Route::prefix('registered_user')->name('registered_user.')
+        ->middleware(['checked', 'role:registered_user'])
+        ->group(function () {
             Route::get('/dashboard', function () {
                 return view('Inovasi.validator.dashboard');
             })->name('dashboard');
