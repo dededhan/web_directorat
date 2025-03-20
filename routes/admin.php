@@ -314,12 +314,12 @@ Route::prefix('inovasi')->name('inovasi.')
         ->group(function () {
             // Dashboard
             Route::get('/dashboard', function () {
-                return view('inovasi.registered_user.dashboard');
+                return view('Inovasi.registered_user.dashboard');
             })->name('dashboard');
             
             // You can add more routes for registered users here as needed
             Route::get('/profile', function () {
-                return view('inovasi.registered_user.profile');
+                return view('Inovasi.registered_user.profile');
             })->name('profile');
         });
 

@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ asset('dashboard_main/sidebar_dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('dashboard_main/navbar_dashboard.css') }}">  
 
-    <title>Dashboard Dosen</title>
+    <title>Dashboard User</title>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

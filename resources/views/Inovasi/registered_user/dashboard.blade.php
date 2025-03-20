@@ -1,4 +1,4 @@
-@extends('inovasi.registered_user.index')
+@extends('Inovasi.registered_user.index')
 
 @section('contentregistered_user')
     <div class="head-title">
