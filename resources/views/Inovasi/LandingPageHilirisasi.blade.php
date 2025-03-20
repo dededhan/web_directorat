@@ -155,4 +155,4 @@
     </div>
 
 
-    @include('Inovasi.Footerhilirisasi')
+    @include('Inovasi.footerHilirisasi')
