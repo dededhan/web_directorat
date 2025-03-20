@@ -36,7 +36,7 @@
             <span class="navbar-logo-text">ALUMNI IMPACT</span>
         </a>
         <ul class="navbar-menu">
-            <li><a href="#" class="menu-link">Home</a></li>
+            <li><a href="{{ route('home') }}" class="menu-link">Home</a></li>
             <li><a href="#" class="menu-link active">Alumni Impact</a></li>
         </ul>
     </nav>

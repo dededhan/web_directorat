@@ -136,7 +136,7 @@
             <span class="navbar-logo-text">SUSTAINABILITY</span>
         </a>
         <ul class="navbar-menu">
-            <li><a href="#" class="menu-link">Home</a></li>
+            <li><a href="{{ route('home') }}" class="menu-link">Home</a></li>
             <li><a href="#" class="menu-link active">Sustainability Activities</a></li>
         </ul>
     </nav>
