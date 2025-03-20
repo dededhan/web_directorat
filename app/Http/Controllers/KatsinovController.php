@@ -25,7 +25,7 @@ class KatsinovController extends Controller
             'dosen' => 'Inovasi.dosen.tablekasitnov',
             'admin_hilirisasi' => 'Inovasi.admin_hilirisasi.tablekatsinov',
             'validator' => 'Inovasi.validator.tablekatsinov',
-            'registered_user' => 'Inovasi.registered_user.tablekatsinov',
+            'registered_user' => 'Inovasi.registered_user.TableKatsinov',
         };
 
         return view($view, [

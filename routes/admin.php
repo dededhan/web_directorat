@@ -323,7 +323,7 @@ Route::prefix('inovasi')->name('inovasi.')
             })->name('profile');
 
             // Tabel Katsinov
-            Route::get('/tablekasitnov', [KatsinovController::class, 'index'])->name('tablekasitnov');
+            Route::get('/TableKatsinov', [KatsinovController::class, 'index'])->name('TableKatsinov');
             Route::get('/form', [KatsinovController::class, 'create'])->name('form');
             Route::post('/store', [KatsinovController::class, 'store'])->name('store');
             Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
