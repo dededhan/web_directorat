@@ -29,18 +29,19 @@
         </div>
         <ul class="flex space-x-6">
             <li><a href="#" class="text-white hover:text-yellow-400">Beranda</a></li>
-            <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400">Sub Direktorat</a>
-                <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('inovasi.landingpage') }}" class="hover:text-yellow-400">Subdirektorat Inovasi dan Hilirisasi</a></li>
-                    <li><a href="{{ route('pemeringkatan.landingpage') }}" class="hover:text-yellow-400">Subdirektorat Pemeringkatan dan Sistem Informasi</a></li>
-                </ul>
-            </li>
+            
             <li class="relative group">
                 <a href="#" class="text-white hover:text-yellow-400">Profil</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
                     <li><a href="{{ route('strukturorganisasi') }}" class="hover:text-yellow-400">Struktur Organisasi</a></li>
                     <li><a href="{{ route('tupoksi.tupoksi') }}" class="hover:text-yellow-400">Tugas Pokok dan Fungsi</a></li>
+                </ul>
+            </li>
+            <li class="relative group">
+                <a href="#" class="text-white hover:text-yellow-400">Sub Direktorat</a>
+                <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
+                    <li><a href="{{ route('inovasi.landingpage') }}" class="hover:text-yellow-400">Subdirektorat Inovasi dan Hilirisasi</a></li>
+                    <li><a href="{{ route('pemeringkatan.landingpage') }}" class="hover:text-yellow-400">Subdirektorat Pemeringkatan dan Sistem Informasi</a></li>
                 </ul>
             </li>
             <li class="relative group">
@@ -50,6 +51,7 @@
                     <li><a href="#" class="hover:text-yellow-400">Program</a></li> -->
                 </ul>
             </li>
+            
             <li class="relative group">
                 <a href="#" class="text-white hover:text-yellow-400">Galeri</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
