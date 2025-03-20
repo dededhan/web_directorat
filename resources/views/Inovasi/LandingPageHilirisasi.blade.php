@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    @include('inovasi.navbarhilirisasi')
+    @include('Inovasi.navbarhilirisasi')
 
     <div id="imageCarousel" class="carousel slide mb-2" data-bs-ride="carousel">
         <div class="carousel-indicators">
@@ -155,4 +155,4 @@
     </div>
 
 
-    @include('inovasi.footerhilirisasi')
+    @include('Inovasi.Footerhilirisasi')

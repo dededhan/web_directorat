@@ -111,7 +111,7 @@ Route::post('/katsinov/store', [KatsinovController::class, 'store'])
     })->name('pemeringkatan.landingpage');
 
     Route::get('/inovasi/landingpage', function () {
-        return view('inovasi.LandingPageHilirisasi');
+        return view('Inovasi.LandingPageHilirisasi');
     })->name('inovasi.landingpage');
 
 Route::get('/katsinov/pdf', [KatsinovController::class, 'downloadPDF'])->name('katsinov.pdf');
