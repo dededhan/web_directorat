@@ -18,7 +18,7 @@
     <div class="menu-section">
         <h3 class="section-title">Inovasi</h3>
         <ul class="side-menu">
-            {{-- <li class="{{ request()->routeIs('inovasi.registered_user.tablekasitnov') ? 'active' : '' }}">
+            <li class="{{ request()->routeIs('inovasi.registered_user.tablekasitnov') ? 'active' : '' }}">
                 <a href="{{ route('inovasi.registered_user.tablekasitnov') }}">
                     <i class='bx bxs-graduation'></i>
                     <span class="text">Tabel Kasitnov</span>
@@ -53,7 +53,7 @@
                     <i class='bx bxs-file-plus'></i>
                     <span class="text">Form Record</span>
                 </a>
-            </li> --}}
+            </li>
         </ul>
     </div>
 

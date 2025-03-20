@@ -24,6 +24,8 @@ class FormRecordHasilPengukuranController extends Controller
             return view('inovasi.admin_hilirisasi.formrecordhasilpengukuran', compact('records'));
         } else if (Auth::user()->role === 'validator') {
             return view('inovasi.validator.formrecordhasilpengukuran', compact('records'));
+        } else if (Auth::user()->role === 'registered_user') {
+            return view('inovasi.registered_user.formrecordhasilpengukuran', compact('records'));
         }
     }
 

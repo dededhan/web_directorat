@@ -25,6 +25,7 @@ class KatsinovController extends Controller
             'dosen' => 'inovasi.dosen.tablekasitnov',
             'admin_hilirisasi' => 'inovasi.admin_hilirisasi.tablekatsinov',
             'validator' => 'inovasi.validator.tablekatsinov',
+            'registered_user' => 'inovasi.registered_user.tablekatsinov',
         };
 
         return view($view, [
@@ -38,6 +39,7 @@ class KatsinovController extends Controller
             'dosen' => 'inovasi.dosen.form_katsinov',
             'admin_hilirisasi' => 'inovasi.admin_hilirisasi.form_katsinov',
             'validator' => 'inovasi.validator.form_katsinov',
+            'registered_user' => 'inovasi.registered_user.form_katsinov',
         };
 
         return view($view, [
