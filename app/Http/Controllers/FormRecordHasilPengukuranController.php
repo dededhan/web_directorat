@@ -17,7 +17,7 @@ class FormRecordHasilPengukuranController extends Controller
         $records = FormRecordHasilPengukuran::all();
 
         if (Auth::user()->role === 'admin_direktorat') {
-            return view('admin.Katsinov.formrecordhasilpengukuran', compact('records'));
+            return view(resource_path('views/admin/Katsinov/formrecordhasilpengukuran.blade.php'), compact('records'));
         } else if (Auth::user()->role === 'dosen') {
             return view('Inovasi.dosen.formrecordhasilpengukuran', compact('records'));
         } else if (Auth::user()->role === 'admin_hilirisasi') {
