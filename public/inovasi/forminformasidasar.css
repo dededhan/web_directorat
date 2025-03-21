@@ -227,3 +227,16 @@ table td input:focus, table td textarea:focus {
         padding: 12px;
     }
 }
+/* Add this to your CSS */
+.submit-all-container, .submit-container {
+    position: relative;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    z-index: 1; /* Lower z-index than navbar */
+}
+
+.submit-all-btn, .submit-btn {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+}
