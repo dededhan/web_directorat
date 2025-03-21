@@ -204,7 +204,7 @@ Route::prefix('inovasi')->name('inovasi.')
             ->group(function () {
                 // Dashboard
                 Route::get('/dashboard', function () {
-                    return view('inovasi.dosen.dashboard');
+                    return view('Inovasi.dosen.dashboard');
                 })->name('dashboard');
 
                 // Tabel Katsinov
@@ -215,12 +215,12 @@ Route::prefix('inovasi')->name('inovasi.')
 
                 Route::resource('/forminformasidasar', FormInformasiDasarController::class);
                 Route::post('/Inovasi/dosen/forminformasidasar', [FormInformasiDasarController::class, 'store'])
-                    ->name('inovasi.dosen.forminformasidasar.store');
+                    ->name('Inovasi.dosen.forminformasidasar.store');
 
                 Route::resource('/formberitaacara', BeritaAcaraController::class);
 
                 Route::get('/formjudul', function () {
-                    return view('inovasi.dosen.formjudul');
+                    return view('Inovasi.dosen.formjudul');
                 })->name('formjudul');
 
                 Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
