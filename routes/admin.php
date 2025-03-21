@@ -268,79 +268,81 @@ Route::prefix('inovasi')->name('inovasi.')
 
         // Validator
         Route::prefix('registered_user')->name('registered_user.')
-        ->middleware(['checked', 'role:registered_user'])
-        ->group(function () {
-            Route::get('/dashboard', function () {
-                return view('Inovasi.validator.dashboard');
-            })->name('dashboard');
+            ->middleware(['checked', 'role:registered_user'])
+            ->group(function () {
+                Route::get('/dashboard', function () {
+                    return view('Inovasi.validator.dashboard');
+                })->name('dashboard');
 
-            // Tabel Katsinov
-            Route::get('/tablekasitnov', [KatsinovController::class, 'index'])->name('tablekasitnov');
-            Route::get('/form', [KatsinovController::class, 'create'])->name('form');
-            Route::post('/store', [KatsinovController::class, 'store'])->name('store');
-            Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
+                // Tabel Katsinov
+                Route::get('/tablekasitnov', [KatsinovController::class, 'index'])->name('tablekasitnov');
+                Route::get('/form', [KatsinovController::class, 'create'])->name('form');
+                Route::post('/store', [KatsinovController::class, 'store'])->name('store');
+                Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
 
-            Route::resource('/forminformasidasar', FormInformasiDasarController::class);
-            Route::post('/Inovasi/validator/forminformasidasar', [FormInformasiDasarController::class, 'store'])
-                ->name('inovasi.validator.forminformasidasar.store');
+                Route::resource('/forminformasidasar', FormInformasiDasarController::class);
+                Route::post('/Inovasi/validator/forminformasidasar', [FormInformasiDasarController::class, 'store'])
+                    ->name('inovasi.validator.forminformasidasar.store');
 
-            Route::resource('/formberitaacara', BeritaAcaraController::class);
+                Route::resource('/formberitaacara', BeritaAcaraController::class);
 
-            Route::get('/formjudul', function () {
-                return view('inovasi.validator.formjudul');
-            })->name('formjudul');
+                Route::get('/formjudul', function () {
+                    return view('inovasi.validator.formjudul');
+                })->name('formjudul');
 
-            Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
+                Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
 
 
-            Route::prefix('SDGs')->name('SDGs.')
-                ->group(function () {
-                    // Program Kegiatan
-                    Route::get('/program_kegiatan', function () {
-                        return view('Inovasi.validator.SDGs.program_kegiatan');
-                    })->name('program_kegiatan');
+                Route::prefix('SDGs')->name('SDGs.')
+                    ->group(function () {
+                        // Program Kegiatan
+                        Route::get('/program_kegiatan', function () {
+                            return view('Inovasi.validator.SDGs.program_kegiatan');
+                        })->name('program_kegiatan');
 
-                    // Publikasi Riset
-                    Route::get('/publikasi_riset', function () {
-                        return view('Inovasi.validator.SDGs.publikasi_riset');
-                    })->name('publikasi_riset');
-                });
-        });
+                        // Publikasi Riset
+                        Route::get('/publikasi_riset', function () {
+                            return view('Inovasi.validator.SDGs.publikasi_riset');
+                        })->name('publikasi_riset');
+                    });
+            });
 
+
+
+        // This should go in the registered_user section of your routes/admin.php file
 
         // registered user
         Route::prefix('registered_user')->name('registered_user.')
-        ->middleware(['checked', 'role:registered_user'])
-        ->group(function () {
-            // Dashboard
-            Route::get('/dashboard', function () {
-                return view('Inovasi.registered_user.dashboard');
-            })->name('dashboard');
-            
-            // You can add more routes for registered users here as needed
-            Route::get('/profile', function () {
-                return view('Inovasi.registered_user.profile');
-            })->name('profile');
+            ->middleware(['checked', 'role:registered_user'])
+            ->group(function () {
+                // Dashboard
+                Route::get('/dashboard', function () {
+                    return view('Inovasi.registered_user.dashboard');
+                })->name('dashboard');
 
-            // Tabel Katsinov
-            Route::get('/TableKatsinov', [KatsinovController::class, 'index'])->name('TableKatsinov');
-            Route::get('/form', [KatsinovController::class, 'create'])->name('form');
-            Route::post('/store', [KatsinovController::class, 'store'])->name('store');
-            Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
+                // You can add more routes for registered users here as needed
+                Route::get('/profile', function () {
+                    return view('Inovasi.registered_user.profile');
+                })->name('profile');
 
-            Route::resource('/forminformasidasar', FormInformasiDasarController::class);
-            Route::post('/Inovasi/validator/forminformasidasar', [FormInformasiDasarController::class, 'store'])
-                ->name('inovasi.validator.forminformasidasar.store');
+                // Tabel Katsinov
+                Route::get('/TableKatsinov', [KatsinovController::class, 'index'])->name('TableKatsinov');
+                Route::get('/form', [KatsinovController::class, 'create'])->name('form');
+                Route::post('/store', [KatsinovController::class, 'store'])->name('store');
+                Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
 
-            Route::resource('/formberitaacara', BeritaAcaraController::class);
+                Route::resource('/forminformasidasar', FormInformasiDasarController::class);
+                Route::post('/forminformasidasar', [FormInformasiDasarController::class, 'store'])
+                    ->name('forminformasidasar.store');
 
-            Route::get('/formjudul', function () {
-                return view('inovasi.validator.formjudul');
-            })->name('formjudul');
+                Route::resource('/formberitaacara', BeritaAcaraController::class);
 
-            Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
+                Route::get('/formjudul', function () {
+                    return view('Inovasi.registered_user.formjudul');
+                })->name('formjudul');
 
-        });
+                Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
+            });
 
 
 
