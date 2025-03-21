@@ -90,9 +90,8 @@ Route::get('/Berita', function () {
     return view('Berita.beritahome');
 })->name('Berita.beritahome');
 
-Route::get('/katsinov/formrecordhasilpengukuran', function () {
-    return view('inovasi.katsinov.formrecordhasilpengukuran');
-})->name('katsinov.formrecordhasilpengukuran');
+Route::get('/admin/Katsinov/formrecordhasilpengukuran', [FormRecordHasilPengukuranController::class, 'index'])
+    ->name('admin.Katsinov.formrecordhasilpengukuran.index');
 
 Route::get('/katsinov-data', function() {
     return App\Models\Katsinov::with('scores')->get();
