@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    @extends('inovasi.dosen.index')
+    @extends('Inovasi.dosen.index')
     <div class="container">
         <div class="header">
             <h1>Form Pengajuan Inovasi</h1>

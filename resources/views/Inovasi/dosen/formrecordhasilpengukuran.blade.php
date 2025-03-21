@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/inovasi/formrecordhasilpengukuran.css">
 </head>
 
-@extends('inovasi.dosen.index')
+@extends('Inovasi.dosen.index')
 
 <body>
     @section('contentdosen')

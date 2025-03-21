@@ -1,4 +1,4 @@
-@extends('inovasi.dosen.index')
+@extends('Inovasi.dosen.index')
 
 @section('contentdosen')
     <div class="head-title">

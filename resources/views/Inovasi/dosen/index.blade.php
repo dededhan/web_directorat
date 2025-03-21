@@ -19,12 +19,12 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    @include('inovasi.dosen.sidebar')
+    @include('Inovasi.dosen.sidebar')
 
     <!-- CONTENT -->
     <section id="content">
         <!-- NAVBAR -->
-        @include('inovasi.dosen.navbar')
+        @include('Inovasi.dosen.navbar')
 
         <main>
             @yield('contentdosen')
