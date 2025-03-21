@@ -1,8 +1,22 @@
+/* Reset and ensure consistent positioning */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Content area styling */
 #content {
     position: relative;
     width: calc(100% - 280px);
     left: 280px;
     transition: all .3s ease;
+    min-height: 100vh;
 }
 
 #sidebar.hide ~ #content {
@@ -10,25 +24,30 @@
     left: 60px;
 }
 
-#content nav {
+/* Fixed navigation styling with higher specificity */
+body #content nav {
     height: 56px;
     background: #ffffff;
     padding: 0 24px;
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Aligns content to the right */
+    justify-content: flex-end;
     font-family: var(--lato);
-    position: fixed; /* Changed from sticky to fixed */
-    top: 0;
+    position: fixed !important;
+    top: 0 !important;
     right: 0;
-    width: calc(100% - 280px); /* Width matches content area */
-    z-index: 1000;
+    left: 280px !important; /* Ensure left position aligns with sidebar */
+    width: calc(100% - 280px) !important;
+    z-index: 1500 !important; /* Very high z-index to ensure it's above everything */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all .3s ease;
+    margin: 0 !important;
+    border: none !important;
 }
 
-#sidebar.hide ~ #content nav {
-    width: calc(100% - 60px);
+body #sidebar.hide ~ #content nav {
+    left: 60px !important;
+    width: calc(100% - 60px) !important;
 }
 
 /* Logo styling */
@@ -91,7 +110,7 @@ nav .logo img {
     font-family: var(--poppins);
     max-height: calc(100vh - 56px);
     overflow-y: auto;
-    margin-top: 56px; /* Add this to create space for fixed navbar */
+    margin-top: 56px !important; /* Force space for fixed navbar */
 }
 
 #content main .head-title {
@@ -191,4 +210,27 @@ nav .logo img {
 
 #content main .box-info li .text p {
     color: var(--dark);    
+}
+
+/* Fix for any potential stacking context issues */
+#sidebar {
+    z-index: 1499 !important; /* Just below navbar */
+}
+
+/* Media queries for potential responsive issues */
+@media screen and (max-width: 768px) {
+    body #content nav {
+        width: 100% !important;
+        left: 0 !important;
+    }
+    
+    #content {
+        width: 100%;
+        left: 0;
+    }
+    
+    #sidebar.hide ~ #content nav {
+        left: 0 !important;
+        width: 100% !important;
+    }
 }
