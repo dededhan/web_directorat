@@ -28,7 +28,11 @@ class BeritaAcaraController extends Controller
             return view('inovasi.dosen.formberitaacara', compact('beritaAcaras'));
         } else if (Auth::user()->role === 'admin_hilirisasi') {
             return view('inovasi.admin_hilirisasi.formberitaacara', compact('beritaAcaras'));
-        }
+        } else if (Auth::user()->role === 'validator') {
+            return view('inovasi.validator.formberitaacara', compact('beritaAcaras'));
+        } else if (Auth::user()->role === 'registered_user') {
+            return view('inovasi.registered_user.formberitaacara', compact('beritaAcaras'));
+        } 
     }
 
     /**
