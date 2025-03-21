@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ asset('inovasi/dashboard/form_katsinov/css/berita_acara.css') }}">
     <link rel="stylesheet" href="{{ asset('inovasi/dashboard/form_katsinov/css/formberitaacara.css') }}">
 </head>
-@extends('inovasi.dosen.index')
+@extends('Inovasi.dosen.index')
 @section('contentdosen')
 
 <header class="header">
