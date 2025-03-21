@@ -111,13 +111,6 @@ window.aspectLegend = function() {
                     maxPossible: maxPossible,
                     percentage: percentage
                 });
-
-                console.log(`Level ${config.level}:`, {
-                    totalQuestions,
-                    maxPossible,
-                    levelTotal,
-                    percentage
-                });
             });
 
             return scores;

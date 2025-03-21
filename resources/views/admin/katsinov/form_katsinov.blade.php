@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>KATSINOV-MeterO - Innovation Measurement System</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <link href="{{ asset('aspect-analysis.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('.css') }}">
     <link rel="stylesheet" href="{{ asset('inovasi/dashboard/form_katsinov/css/form.css') }}">
@@ -17,7 +16,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -35,7 +33,7 @@
         <form id="katsinovForm" method="POST" action="{{ route('katsinov.store') }}">
             @csrf
             <!-- Explanation Card -->
-            <div class="card" data-aos="fade-up">
+            <div class="card">
                 <div class="main-title">
                     PENGUKURAN TINGKAT KESIAPAN INOVASI (KATSINOV)
                 </div>
@@ -62,16 +60,16 @@
                         Pengukuran IRL sangat penting untuk:
                     </div>
                     <div class="list-container">
-                        <div class="list-item" data-aos="fade-right" data-aos-delay="100">
+                        <div class="list-item">
                             Menggambarkan perkembangan inovasi
                         </div>
-                        <div class="list-item" data-aos="fade-right" data-aos-delay="200">
+                        <div class="list-item">
                             Membantu mengimplementasikan inovasi diatas siklus-hidup yang lebih efektif
                         </div>
-                        <div class="list-item" data-aos="fade-right" data-aos-delay="300">
+                        <div class="list-item">
                             Mengantisipasi persaingan pasar yang semakin sengit
                         </div>
-                        <div class="list-item" data-aos="fade-right" data-aos-delay="400">
+                        <div class="list-item">
                             Mengantisipasi tingkat inovasi atau siklus hidup teknologi yang lebih cepat
                         </div>
                     </div>
@@ -79,7 +77,7 @@
             </div>
 
             <!-- Form Container -->
-            <div class="form-container" data-aos="fade-up" data-aos-delay="500">
+            <div class="form-container">
                 <div class="document-number">No: 20190802-001</div>
 
                 <div class="form-group">
@@ -222,7 +220,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="spiderweb-trigger" style="position: fixed; bottom: 20px; right: 20px; z-index: 100;">
+                <div class="spiderweb-trigger" style="display: flex; justify-content: center; margin: 20px 0;">
                     <button 
                     type="button"
                     @click="openSpiderwebAnalysis()"
@@ -289,32 +287,30 @@
             @include('admin.katsinov.indikator6')
             @include('admin.katsinov.jumlahindikator')
             <!-- Submit All Button -->
-            @if (!$katsinov)    
-            <div class="submit-all-container"
-                style="
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-        ">
-                <button type="submit" id="submitAllBtn" class="submit-all-btn"
-                    style="
-                    background-color: #176369;
-                    color: white;
-                    padding: 12px 24px;
-                    border: none;
-                    border-radius: 8px;
-                    font-size: 1rem;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                "
-                    onclick="submitAllIndicators()">
-                    Submit Semua Indikator KATSINOV
-                </button>
-            </div>
-            @endif
+<div class="submit-all-container"
+    style="
+display: flex;
+justify-content: center;
+margin-top: 2rem;
+margin-bottom: 2rem;
+">
+    <button type="submit" id="submitAllBtn" class="submit-all-btn"
+        style="
+            background-color: #176369;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        "
+        onclick="submitAllIndicators()">
+        Submit Semua Indikator KATSINOV
+    </button>
+</div>
         </form>
     </main>
 

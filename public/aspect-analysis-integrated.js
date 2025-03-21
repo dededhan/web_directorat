@@ -225,7 +225,7 @@ function collectAspectScores() {
         'R': 'risk',
         'M': 'market',
         'P': 'partnership',
-        'Mf': 'manufacturing', // ✏️ Sesuaikan dengan kode di HTML (Mf bukan MF)
+        'Mf': 'manufacturing', 
         'I': 'investment'
     };
 
@@ -235,7 +235,7 @@ function collectAspectScores() {
         const indicatorNumber = parseInt(card.dataset.indicator);
         const aspectScores = {
             indicator_number: indicatorNumber,
-            technology: { total: 0, count: 0 }, // 💡 Simpan total dan jumlah pertanyaan per aspek
+            technology: { total: 0, count: 0 }, 
             organization: { total: 0, count: 0 },
             risk: { total: 0, count: 0 },
             market: { total: 0, count: 0 },
@@ -277,7 +277,6 @@ function collectAspectScores() {
         indicators.push(processedScores);
     });
 
-    console.log("Data yang dikirim:", indicators); // 🚨 Debugging
     return indicators;
 }
 
