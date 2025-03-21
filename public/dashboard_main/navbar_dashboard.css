@@ -36,9 +36,9 @@ body #content nav {
     position: fixed !important;
     top: 0 !important;
     right: 0;
-    left: 280px !important; /* Ensure left position aligns with sidebar */
+    left: 280px !important;
     width: calc(100% - 280px) !important;
-    z-index: 1500 !important; /* Very high z-index to ensure it's above everything */
+    z-index: 1500 !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all .3s ease;
     margin: 0 !important;
