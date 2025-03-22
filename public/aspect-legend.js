@@ -13,6 +13,33 @@ window.aspectLegend = function() {
                     });
                 }
             });
+            
+            // Load saved data if available on page load
+            this.loadSavedData();
+        },
+        
+        loadSavedData() {
+            // Check if we're in edit mode by looking for existing data in the form
+            const existingResponses = document.querySelectorAll('input[type="radio"][checked]');
+            if (existingResponses.length > 0) {
+                console.log('Found existing responses, applying values');
+                
+                // Select all checked radio buttons
+                existingResponses.forEach(radio => {
+                    radio.checked = true;
+                    
+                    // Highlight the row
+                    const row = radio.closest('tr');
+                    if (row) {
+                        row.classList.add('selected-row');
+                    }
+                });
+                
+                // Update charts if needed
+                if (window.updateSpiderwebChart) {
+                    window.updateSpiderwebChart();
+                }
+            }
         },
 
         openSpiderwebAnalysis() {
@@ -113,11 +140,18 @@ window.aspectLegend = function() {
                 });
             });
 
+            console.log(`Calculated scores for ${aspectCode}:`, scores);
             return scores;
         },
 
         initializeChart() {
-            const ctx = document.getElementById('aspectChart').getContext('2d');
+            const ctx = document.getElementById('aspectChart');
+            if (!ctx) {
+                console.error('Canvas element #aspectChart not found');
+                return;
+            }
+            
+            const ctxObj = ctx.getContext('2d');
             
             if (this.chart) {
                 this.chart.destroy();
@@ -125,7 +159,7 @@ window.aspectLegend = function() {
 
             const aspectData = this.calculateAspectData(this.selectedAspect.code);
             
-            this.chart = new Chart(ctx, {
+            this.chart = new Chart(ctxObj, {
                 type: 'line',
                 data: {
                     labels: aspectData.map(d => d.level),

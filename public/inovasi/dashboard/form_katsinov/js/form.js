@@ -21,6 +21,7 @@ function validateForm() {
 
     return isValid;
 }
+
 function collectFormResponses() {
     const responses = [];
     
@@ -33,31 +34,50 @@ function collectFormResponses() {
             
             const aspect = aspectCell.textContent.trim();
             const checkedRadio = row.querySelector('input[type="radio"]:checked');
-            const score = checkedRadio ? parseInt(checkedRadio.value) : 0;
             
-            responses.push({
-                indicator: indicatorNumber,
-                row: index, // Atau sesuaikan dengan nomor row yang benar
-                aspect: aspect,
-                score: score
-            });
+            if (checkedRadio) {
+                const score = parseInt(checkedRadio.value);
+                
+                responses.push({
+                    indicator: indicatorNumber,
+                    row: index, // Row index within the indicator
+                    aspect: aspect,
+                    score: score
+                });
+            }
         });
     });
     
+    console.log('Collected responses:', responses); // Debug
     return responses;
 }
 
-
 async function submitAllIndicators() {
     const btn = document.getElementById("submitAllBtn");
+
+    if (!validateForm()) {
+        Swal.fire({
+            icon: "warning",
+            title: "Peringatan",
+            text: "Mohon lengkapi semua pertanyaan sebelum mengirimkan formulir.",
+            confirmButtonColor: "#176369",
+        });
+        return;
+    }
 
     btn.disabled = true;
     btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Menyimpan...';
 
     try {
         const responses = collectFormResponses();
+        
+        if (responses.length === 0) {
+            throw new Error("Tidak ada data yang dikumpulkan. Pastikan semua pertanyaan telah dijawab.");
+        }
+        
         const formData = new FormData(document.getElementById("katsinovForm"));
 
+        // Add responses to formData
         responses.forEach((response, index) => {
             formData.append(`responses[${index}][indicator]`, response.indicator);
             formData.append(`responses[${index}][row]`, response.row);
@@ -65,9 +85,12 @@ async function submitAllIndicators() {
             formData.append(`responses[${index}][score]`, response.score);
         });
         
+        // Debug: Log formData entries
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
 
         const response = await fetch("/katsinov/store", {
-            // ✏️ Perbaiki disini
             method: "POST",
             headers: {
                 "X-CSRF-TOKEN": document.querySelector(
@@ -198,6 +221,8 @@ async function submitAllIndicators() {
             },
         });
     } catch (error) {
+        console.error("Error submitting form:", error);
+        
         Swal.fire({
             icon: "error",
             title: "Gagal!",
@@ -253,43 +278,45 @@ async function submitAllIndicators() {
     }
 }
 
- // Initialize AOS (Animate On Scroll)
-AOS.init({
-    duration: 800,
-    offset: 100,
-    once: true
+// Event listener for radio buttons to update the UI and calculations
+document.addEventListener('DOMContentLoaded', function() {
+    const radioButtons = document.querySelectorAll('input[type="radio"]');
+    
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Trigger chart updates if they exist
+            if (window.updateSpiderwebChart) {
+                window.updateSpiderwebChart();
+            }
+            
+            // Highlight the selected radio button's parent row
+            const row = this.closest('tr');
+            if (row) {
+                // Remove highlight from all rows in this table
+                const table = row.closest('table');
+                if (table) {
+                    table.querySelectorAll('tr').forEach(r => {
+                        r.classList.remove('selected-row');
+                    });
+                }
+                
+                // Add highlight to this row
+                row.classList.add('selected-row');
+            }
+        });
+    });
+    
+    // Add CSS for highlighted rows
+    const style = document.createElement('style');
+    style.textContent = `
+        .selected-row {
+            background-color: rgba(23, 99, 105, 0.05);
+            transition: background-color 0.3s ease;
+        }
+        
+        .katsinov-table tr:hover {
+            background-color: rgba(23, 99, 105, 0.02);
+        }
+    `;
+    document.head.appendChild(style);
 });
-
-// Form Interactivity
-// document.addEventListener('DOMContentLoaded', () => {
-//     const formInputs = document.querySelectorAll('.form-input');
-
-//     formInputs.forEach(input => {
-//         input.addEventListener('focus', (e) => {
-//             e.target.style.borderColor = 'var(--primary)';
-//         });
-
-//         input.addEventListener('blur', (e) => {
-//             e.target.style.borderColor = 'var(--background)';
-//         });
-//     });
-
-//     // Simple form validation (optional)
-//     const form = document.querySelector('.form-container');
-//     form.addEventListener('submit', (e) => {
-//         e.preventDefault();
-//         let isValid = true;
-
-//         formInputs.forEach(input => {
-//             if (!input.value.trim()) {
-//                 input.style.borderColor = '#FF6B6B';
-//                 isValid = false;
-//             }
-//         });
-
-//         if (isValid) {
-//             alert('Formulir berhasil disubmit!');
-//             // You can add more complex submission logic here
-//         }
-//     });
-// });

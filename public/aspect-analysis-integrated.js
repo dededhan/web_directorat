@@ -59,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     gradient: 'linear-gradient(135deg, #96fbc4 0%, #f9f586 100%)',
                     color: '#f9f586'
                 }
-            
             },
 
             calculateAspectData(aspectCode) {
@@ -67,8 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Calculate scores for each KATSINOV level
                 INDICATOR_CONFIGS.forEach(config => {
-                    const indicator = document.querySelector(`.card:has(.main-title:contains("KATSINOV ${config.id}"))`);
-                    if (!indicator) return;
+                    const indicator = document.querySelector(`[data-indicator="${config.id}"]`);
+                    if (!indicator) {
+                        console.warn(`Indicator for KATSINOV ${config.id} not found`);
+                        return;
+                    }
 
                     let levelTotal = 0;
                     let maxPossible = 0;
@@ -84,7 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     aspectRows.forEach(row => {
                         const checkedRadio = row.querySelector('input[type="radio"]:checked');
                         if (checkedRadio) {
-                            levelTotal += parseInt(checkedRadio.value);
+                            const value = parseInt(checkedRadio.value);
+                            if (!isNaN(value)) {
+                                levelTotal += value;
+                            }
                         }
                         maxPossible += 5; // Maximum possible score per question
                     });
@@ -102,15 +107,21 @@ document.addEventListener('DOMContentLoaded', () => {
             },
 
             initializeChart() {
-                const ctx = document.getElementById('aspectChart').getContext('2d');
+                const ctx = document.getElementById('aspectChart');
+                if (!ctx) {
+                    console.error('Canvas element #aspectChart not found');
+                    return;
+                }
                 
+                const ctxObj = ctx.getContext('2d');
                 if (this.chart) {
                     this.chart.destroy();
                 }
 
                 const aspectData = this.calculateAspectData(this.selectedAspect.code);
+                console.log('Aspect data for chart:', aspectData);
                 
-                this.chart = new Chart(ctx, {
+                this.chart = new Chart(ctxObj, {
                     type: 'line',
                     data: {
                         labels: aspectData.map(d => d.level),
@@ -150,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
 
             openAspectAnalysis(aspectCode) {
+                console.log(`Opening analysis for aspect: ${aspectCode}`);
                 this.selectedAspect = {
                     ...this.aspectConfig[aspectCode],
                     code: aspectCode
@@ -172,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const aspectData = this.calculateAspectData(this.selectedAspect.code);
                 let maxLevel = 0;
                 
+                // Find highest consecutive level
                 for (let i = 0; i < aspectData.length; i++) {
                     if (aspectData[i].percentage >= 80) {
                         maxLevel = i + 1;
@@ -190,20 +203,106 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (average >= 40) return 'CUKUP';
                 if (average >= 20) return 'KURANG';
                 return 'SANGAT KURANG';
+            },
+
+            getStatusClass() {
+                const status = this.getStatus().toLowerCase().replace(' ', '-');
+                return `status-${status}`;
             }
         };
     };
 
-    // Initialize aspect analysis
+    // Function to collect aspect scores for all indicators
+    function collectAspectScores() {
+        const aspectMap = { 
+            'T': 'technology',
+            'O': 'organization',
+            'R': 'risk',
+            'M': 'market',
+            'P': 'partnership',
+            'Mf': 'manufacturing', 
+            'I': 'investment'
+        };
+
+        const indicators = [];
+        
+        document.querySelectorAll('[data-indicator]').forEach((card) => {
+            const indicatorNumber = parseInt(card.dataset.indicator);
+            const aspectScores = {
+                indicator_number: indicatorNumber,
+                technology: { total: 0, count: 0 }, 
+                organization: { total: 0, count: 0 },
+                risk: { total: 0, count: 0 },
+                market: { total: 0, count: 0 },
+                partnership: { total: 0, count: 0 },
+                manufacturing: { total: 0, count: 0 },
+                investment: { total: 0, count: 0 }
+            };
+
+            // Hitung skor per aspek dalam indikator ini
+            card.querySelectorAll('tr').forEach(row => {
+                const aspectCell = row.querySelector('.aspect-cell');
+                if (!aspectCell) return;
+
+                const aspectCode = aspectCell.textContent.trim();
+                const aspectField = aspectMap[aspectCode];
+                const checkedRadio = row.querySelector('input[type="radio"]:checked');
+                
+                if (checkedRadio && aspectField) {
+                    const value = parseInt(checkedRadio.value);
+                    if (!isNaN(value)) {
+                        aspectScores[aspectField].total += value; // Akumulasi skor
+                        aspectScores[aspectField].count++;        // Hitung jumlah pertanyaan
+                    }
+                }
+            });
+
+            // Konversi ke persentase per aspek
+            const processedScores = {};
+            processedScores.indicator_number = indicatorNumber;
+            
+            Object.entries(aspectScores).forEach(([key, value]) => {
+                if (key === 'indicator_number') {
+                    return;
+                }
+                
+                const maxPossible = value.count * 5;
+                processedScores[key] = maxPossible > 0 
+                    ? ((value.total / maxPossible) * 100).toFixed(2)
+                    : 0;
+            });
+
+            indicators.push(processedScores);
+        });
+
+        return indicators;
+    }
+
+    // Initialize aspect analysis and attach listeners
+    function initializeAspectAnalysis() {
+        // Add click handlers to legend items
+        document.querySelectorAll('.legend-item').forEach(item => {
+            const aspectText = item.querySelector('span').textContent;
+            const aspectCode = aspectText.match(/\((.*?)\)/);
+            
+            if (aspectCode && aspectCode[1]) {
+                item.setAttribute('data-aspect', aspectCode[1]);
+            }
+        });
+    }
+
+    // Initialize on page load
     initializeAspectAnalysis();
+    
+    // Add event listeners to all radio buttons
     document.querySelectorAll('.radio-input').forEach(radio => {
         radio.addEventListener('change', () => {
-            // Update chart dan perhitungan
+            // Update chart if visible
             if (window.aspectLegend().showPopup) {
                 window.aspectLegend().initializeChart();
             }
             
-            // Update nilai tersembunyi
+            // Update scores in hidden form fields
             const scores = collectAspectScores();
             scores.forEach((indicator, index) => {
                 Object.entries(indicator).forEach(([field, value]) => {
@@ -213,77 +312,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (input) input.value = value;
                 });
             });
+            
+            console.log('Updated scores after radio change:', scores);
         });
     });
 });
-
-// Fungsi baru untuk mengumpulkan data skor per aspek
-function collectAspectScores() {
-    const aspectMap = { 
-        'T': 'technology',
-        'O': 'organization',
-        'R': 'risk',
-        'M': 'market',
-        'P': 'partnership',
-        'Mf': 'manufacturing', 
-        'I': 'investment'
-    };
-
-    const indicators = [];
-    
-    document.querySelectorAll('[data-indicator]').forEach((card) => {
-        const indicatorNumber = parseInt(card.dataset.indicator);
-        const aspectScores = {
-            indicator_number: indicatorNumber,
-            technology: { total: 0, count: 0 }, 
-            organization: { total: 0, count: 0 },
-            risk: { total: 0, count: 0 },
-            market: { total: 0, count: 0 },
-            partnership: { total: 0, count: 0 },
-            manufacturing: { total: 0, count: 0 },
-            investment: { total: 0, count: 0 }
-        };
-
-        // Hitung skor per aspek dalam indikator ini
-        card.querySelectorAll('tr').forEach(row => {
-            const aspectCell = row.querySelector('.aspect-cell');
-            if (!aspectCell) return;
-
-            const aspectCode = aspectCell.textContent.trim();
-            const aspectField = aspectMap[aspectCode];
-            const checkedRadio = row.querySelector('input[type="radio"]:checked');
-            
-            if (checkedRadio && aspectField) {
-                const value = parseInt(checkedRadio.value);
-                aspectScores[aspectField].total += value; // Akumulasi skor
-                aspectScores[aspectField].count++;        // Hitung jumlah pertanyaan
-            }
-        });
-
-        // Konversi ke persentase per aspek
-        const processedScores = {};
-        Object.entries(aspectScores).forEach(([key, value]) => {
-            if (key === 'indicator_number') {
-                processedScores[key] = value;
-                return;
-            }
-            
-            const maxPossible = value.count * 5;
-            processedScores[key] = maxPossible > 0 
-                ? ((value.total / maxPossible) * 100).toFixed(2)
-                : 0;
-        });
-
-        indicators.push(processedScores);
-    });
-
-    return indicators;
-}
-
-function initializeAspectAnalysis() {
-    // Add click handlers to legend items
-    document.querySelectorAll('.legend-item').forEach(item => {
-        const aspectCode = item.querySelector('span').textContent.match(/\((.*?)\)/)[1];
-        item.setAttribute('data-aspect', aspectCode);
-    });
-}

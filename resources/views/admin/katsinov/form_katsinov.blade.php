@@ -287,30 +287,34 @@
             @include('admin.katsinov.indikator6')
             @include('admin.katsinov.jumlahindikator')
             <!-- Submit All Button -->
-<div class="submit-all-container"
-    style="
-display: flex;
-justify-content: center;
-margin-top: 2rem;
-margin-bottom: 2rem;
-">
-    <button type="submit" id="submitAllBtn" class="submit-all-btn"
-        style="
-            background-color: #176369;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        "
-        onclick="submitAllIndicators()">
-        Submit Semua Indikator KATSINOV
-    </button>
-</div>
+            <div class="submit-all-container"
+                style="
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            ">
+                <button type="submit" id="submitAllBtn" class="submit-all-btn"
+                    style="
+                        background-color: #176369;
+                        color: white;
+                        padding: 12px 24px;
+                        border: none;
+                        border-radius: 8px;
+                        font-size: 1rem;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                    "
+                    onclick="submitAllIndicators()">
+                    @if (!isset($katsinov) || empty($katsinov))
+                    Submit Semua Indikator KATSINOV
+                    @else
+                    Update Indikator KATSINOV
+                    @endif
+                </button>
+            </div>  
         </form>
     </main>
 
