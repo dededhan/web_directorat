@@ -44,31 +44,10 @@
             <p class="text-gray-600">Informasi terkini dari Universitas Negeri Jakarta</p>
         </div>
         <!-- Filter and View Options -->
-        <div class="flex flex-wrap justify-between items-center mb-8">
-            <div class="flex space-x-2 mb-4 md:mb-0">
-                <button class="bg-teal-700 text-white px-4 py-2 rounded-lg hover:bg-teal-800 transition-colors">
-                    Semua
-                </button>
-                <button class="bg-white text-teal-700 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
-                    Berita
-                </button>
-                <button class="bg-white text-teal-700 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
-                    Feature
-                </button>
-                <button class="bg-white text-teal-700 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
-                    Akademik
-                </button>
+        <div>
             </div>
             
-            <div class="flex items-center space-x-3">
-                <span class="text-gray-600">Tampilan:</span>
-                <button class="bg-teal-700 text-white w-10 h-10 rounded-lg flex items-center justify-center hover:bg-teal-800 transition-colors">
-                    <i class="fas fa-th-large"></i>
-                </button>
-                <button class="bg-white text-teal-700 w-10 h-10 rounded-lg flex items-center justify-center hover:bg-gray-100 transition-colors">
-                    <i class="fas fa-list"></i>
-                </button>
-            </div>
+           
         </div>
         <!-- Regular News Grid with improved styling -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
