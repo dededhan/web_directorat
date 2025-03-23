@@ -18,8 +18,8 @@
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('admin.news') ? 'active' : '' }}">
-                    <a href="{{ route('admin.news') }}">
+                <li class="{{ request()->routeIs('admin.news.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.news.index') }}">
                         <i class='bx bxs-news'></i>
                         <span class="text">Berita</span>
                     </a>

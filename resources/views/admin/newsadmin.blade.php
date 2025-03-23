@@ -22,12 +22,12 @@
                 <h3>Input Berita</h3>
             </div> 
 
-            <form id="berita-form" method="POST" action="#" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('admin.news.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="category" class="form-label">Kategori</label>
-                        <select class="form-select" name="category" id="category">
+                        <select class="form-select" name="kategori" id="category">
                             <option value="">Pilih Kategori</option>
                             <option value="berita">Berita</option>
                             <option value="feature">Feature</option>
@@ -91,75 +91,41 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="berita-list">
-                            <!-- Sample data for demonstration -->
+                        <tbody>
+                            @foreach($beritas as $index => $berita)
                             <tr>
-                                <td>1</td>
+                                <td>{{ $index + 1 }}</td>
                                 <td>
-                                    <span class="badge bg-primary">Berita</span>
+                                    <span class="badge bg-{{ [
+                                        'berita' => 'primary',
+                                        'feature' => 'success',
+                                        'akademik' => 'warning'
+                                    ][$berita->kategori] }}">
+                                        {{ ucfirst($berita->kategori) }}
+                                    </span>
                                 </td>
-                                <td>16/03/2025</td>
-                                <td>Mahasiswa Raih Juara Kompetisi Nasional</td>
-                                <td>Mahasiswa Teknik Informatika berhasil meraih juara dalam kompetisi...</td>
+                                <td>{{ $berita->tanggal}}</td>
+                                <td>{{ $berita->judul }}</td>
+                                <td>{{ Str::limit(strip_tags($berita->isi), 50) }}</td>
                                 <td>
                                     <button class="btn btn-sm btn-info view-image" 
-                                        data-image="https://via.placeholder.com/800x600"
-                                        data-title="Mahasiswa Raih Juara Kompetisi Nasional">
+                                        data-image="{{ Storage::url($berita->gambar) }}"
+                                        data-title="{{ $berita->judul }}">
                                         Lihat Gambar
                                     </button>
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning">Edit</button>
-                                        <button class="btn btn-sm btn-danger delete-berita" data-id="1">Delete</button>
+                                        <form method="POST" action="{{ route('admin.news.destroy', $berita->id) }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>
-                                    <span class="badge bg-success">Feature</span>
-                                </td>
-                                <td>15/03/2025</td>
-                                <td>Profil Fakultas Teknik Tahun 2025</td>
-                                <td>Fakultas Teknik merupakan salah satu fakultas terkemuka yang...</td>
-                                <td>
-                                    <button class="btn btn-sm btn-info view-image" 
-                                        data-image="https://via.placeholder.com/800x600"
-                                        data-title="Profil Fakultas Teknik Tahun 2025">
-                                        Lihat Gambar
-                                    </button>
-                                </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning">Edit</button>
-                                        <button class="btn btn-sm btn-danger delete-berita" data-id="2">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>
-                                    <span class="badge bg-warning">Akademik</span>
-                                </td>
-                                <td>14/03/2025</td>
-                                <td>Jadwal UAS Semester Genap 2024/2025</td>
-                                <td>Jadwal Ujian Akhir Semester (UAS) Semester Genap 2024/2025...</td>
-                                <td>
-                                    <button class="btn btn-sm btn-info view-image" 
-                                        data-image="https://via.placeholder.com/800x600"
-                                        data-title="Jadwal UAS Semester Genap 2024/2025">
-                                        Lihat Gambar
-                                    </button>
-                                </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning">Edit</button>
-                                        <button class="btn btn-sm btn-danger delete-berita" data-id="3">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
+                            @endforeach
+                        </tbody>                        
                     </table>
                 </div>
             </div>

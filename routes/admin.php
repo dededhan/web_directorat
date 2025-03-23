@@ -15,6 +15,7 @@ use App\Http\Controllers\InternationalStudentController;
 use App\Http\Controllers\BeritaAcaraController;
 use App\Http\Controllers\FormInformasiDasarController;
 use App\Http\Controllers\FormRecordHasilPengukuranController;
+use App\Http\Controllers\BeritaController;
 
 Route::prefix('admin')->name('admin.')
     ->middleware(['checked', 'role:admin_direktorat'])
@@ -28,9 +29,8 @@ Route::prefix('admin')->name('admin.')
         })->name('dashboard');
 
         // News
-        Route::get('/news', function () {
-            return view('admin.newsadmin');
-        })->name('news');
+        Route::resource('/news', BeritaController::class)
+        ->except(['show', 'edit', 'update']);
 
 
         Route::resource('/responden', AdminRespondenController::class);
