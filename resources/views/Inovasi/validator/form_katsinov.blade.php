@@ -21,9 +21,9 @@
 </head>
 
 
-@extends('Inovasi.admin_hilirisasi.index')
+@extends('Inovasi.validator.index')
 
-@section('contentadminhilirisasi')
+@section('contentvalidator')
 
 
 <body x-data="aspectLegend()" x-init="init()">
