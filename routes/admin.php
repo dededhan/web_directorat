@@ -227,7 +227,10 @@ Route::prefix('inovasi')->name('inovasi.')
             });
 
 
-        Route::prefix('admin_hilirisasi')->name('admin_hilirisasi.')->group(function () {
+            // Admin Hilirisasi routes
+        Route::prefix('admin_hilirisasi')->name('admin_hilirisasi.')
+        ->middleware(['checked', 'role:admin_hilirisasi'])
+        ->group(function () {
             // Dashboard
             Route::get('/dashboard', function () {
                 return view('Inovasi.admin_hilirisasi.dashboard');
@@ -235,23 +238,27 @@ Route::prefix('inovasi')->name('inovasi.')
 
             // Tabel Katsinov
             Route::get('/TableKatsinov', [KatsinovController::class, 'index'])->name('TableKatsinov');
-            // Route::get('/form', [KatsinovController::class, 'create'])->name('form');
+            Route::get('/form', [KatsinovController::class, 'create'])->name('form');
             Route::post('/store', [KatsinovController::class, 'store'])->name('store');
             Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
 
+            // Form Informasi Dasar
             Route::resource('/forminformasidasar', FormInformasiDasarController::class);
-            Route::post('/Inovasi/admin_hilirisasi/forminformasidasar', [FormInformasiDasarController::class, 'store'])
-                ->name('inovasi.admin_hilirisasi.forminformasidasar.store');
+            Route::post('/forminformasidasar/store', [FormInformasiDasarController::class, 'store'])
+                ->name('forminformasidasar.store');
 
+            // Form Berita Acara
             Route::resource('/formberitaacara', BeritaAcaraController::class);
 
+            // Form Judul
             Route::get('/formjudul', function () {
-                return view('inovasi.admin_hilirisasi.formjudul');
+                return view('Inovasi.admin_hilirisasi.formjudul');
             })->name('formjudul');
 
+            // Form Record Hasil Pengukuran
             Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
 
-
+            // SDGs routes
             Route::prefix('SDGs')->name('SDGs.')
                 ->group(function () {
                     // Program Kegiatan
