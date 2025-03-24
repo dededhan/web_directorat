@@ -269,7 +269,7 @@
             </div>
         </section>
     </main>
-    @include('Profile.profilefooter')
+    @include('Profile1.profilefooter')
    
     <script>
         // JavaScript for enhancing the user experience
