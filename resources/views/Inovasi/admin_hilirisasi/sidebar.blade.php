@@ -19,8 +19,8 @@
     <div class="menu-section">
         <h3 class="section-title">Inovasi</h3>
         <ul class="side-menu">
-            <li class="{{ request()->routeIs('Inovasi.admin_hilirisasi.tablekasitnov') ? 'active' : '' }}">
-                <a href="{{ route('Inovasi.admin_hilirisasi.tablekasitnov') }}">
+            <li class="{{ request()->routeIs('Inovasi.admin_hilirisasi.TableKatsinov') ? 'active' : '' }}">
+                <a href="{{ route('Inovasi.admin_hilirisasi.TableKatsinov') }}">
                     <i class='bx bxs-graduation'></i>
                     <span class="text">Tabel Kasitnov</span>
                 </a>
