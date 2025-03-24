@@ -227,9 +227,7 @@
                     </div>
                 </div>
                 <div class="spiderweb-trigger" style="position: fixed; bottom: 20px; right: 20px; z-index: 100;">
-                    <button 
-                    type="button"
-                    @click="openSpiderwebAnalysis()"
+                    <button type="button" @click="openSpiderwebAnalysis()"
                         class="bg-primary text-white px-4 py-2 rounded-full shadow-lg hover:bg-primary-dark transition-colors"
                         style="background-color: #176369; color: white; padding: 10px 20px; border-radius: 30px;">
                         Lihat Analisis Aspek
@@ -279,18 +277,19 @@
                 </div>
             </div>
             <buttom>
-            <a href="{{ route('admin.hilirisasi.lampiran') }}">
-    <button type="button" style="background-color: #176369; color: white; padding: 10px 20px; border: none; cursor: pointer;">Lampiran</button>
-</a>
-</buttom>
+                <a href="{{ route('admin.hilirisasi.lampiran') }}">
+                    <button type="button"
+                        style="background-color: #176369; color: white; padding: 10px 20px; border: none; cursor: pointer;">Lampiran</button>
+                </a>
+            </buttom>
             </div>
-            @include('admin.katsinov.Indikator1')
-            @include('admin.katsinov.Indikator2')
-            @include('admin.katsinov.Indikator3')
-            @include('admin.katsinov.Indikator4')
-            @include('admin.katsinov.Indikator5')
-            @include('admin.katsinov.Indikator6')
-            @include('admin.katsinov.jumlahindikator')
+            @include('Inovasi.admin_hilirisasi.Indikator1')
+            @include('Inovasi.admin_hilirisasi.Indikator2')
+            @include('Inovasi.admin_hilirisasi.Indikator3')
+            @include('Inovasi.admin_hilirisasi.Indikator4')
+            @include('Inovasi.admin_hilirisasi.Indikator5')
+            @include('Inovasi.admin_hilirisasi.Indikator6')
+            @include('Inovasi.admin_hilirisasi.jumlahindikator')
             <!-- Submit All Button -->
             <div class="submit-all-container"
                 style="

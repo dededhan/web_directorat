@@ -12,7 +12,7 @@
 
 
 <body>
-    @extends('inovasi.admin_hilirisasi.index')
+    @extends('Inovasi.admin_hilirisasi.index')
     <div class="container">
         <!-- Rest of your existing HTML structure remains the same -->
         <div class="header">
