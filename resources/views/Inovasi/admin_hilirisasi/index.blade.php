@@ -19,7 +19,7 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    @include(view: 'Inovasi.admin_hilirisasi.sidebar')
+    @include('Inovasi.admin_hilirisasi.sidebar')
 
     <!-- CONTENT -->
     <section id="content">
