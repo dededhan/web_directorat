@@ -60,7 +60,7 @@
                 </ul>
             </li>
             <li><a href="#" class="text-white hover:text-yellow-400">Portal</a></li>
-            <li><a class="login" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
+            <li><a class="login text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
         </ul>
     </div>
 </nav>
