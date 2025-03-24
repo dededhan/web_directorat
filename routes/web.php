@@ -46,6 +46,10 @@ Route::get('/tupoksi', function () {
     return view('tupoksi.tupoksi');
 })->name('tupoksi.tupoksi');
 
+Route::get('/profile', function () {
+    return view('profile.profile');
+})->name('profile.profile');
+
 Route::get('/strukturorganisasi', function () {
     return view('struktur organisasi.strukturorganisasi');
 })->name('strukturorganisasi');
