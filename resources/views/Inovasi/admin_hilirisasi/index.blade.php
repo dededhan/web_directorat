@@ -19,12 +19,12 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    @include('inovasi.admin_hilirisasi.sidebar')
+    @include(view: 'Inovasi.admin_hilirisasi.sidebar')
 
     <!-- CONTENT -->
     <section id="content">
         <!-- NAVBAR -->
-        @include('inovasi.admin_hilirisasi.navbar')
+        @include('Inovasi.admin_hilirisasi.navbar')
 
         <main>
             @yield('contentadminhilirisasi')
