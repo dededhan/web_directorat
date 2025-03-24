@@ -274,8 +274,8 @@ Route::prefix('inovasi')->name('inovasi.')
         });
 
         // Validator
-        Route::prefix('registered_user')->name('registered_user.')
-            ->middleware(['checked', 'role:registered_user'])
+        Route::prefix('validator')->name('validator.')
+            ->middleware(['checked', 'role:validator'])
             ->group(function () {
                 Route::get('/dashboard', function () {
                     return view('Inovasi.validator.dashboard');
@@ -313,10 +313,6 @@ Route::prefix('inovasi')->name('inovasi.')
                         })->name('publikasi_riset');
                     });
             });
-
-
-
-        // This should go in the registered_user section of your routes/admin.php file
 
         // registered user
         Route::prefix('registered_user')->name('registered_user.')
