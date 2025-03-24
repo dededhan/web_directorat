@@ -1,11 +1,11 @@
-@extends('Inovasi.dosen.index')
+@extends('Inovasi.admin_hilirisasi.index')
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet" href="{{ asset('inovasi/dashboard/table_katsinov/css/table_katsinov.css') }}"> 
 
 
 
-@section('contentdosen')
+@section('contentadminhilirisasi')
     <div class="head-title">
         <div class="left">
             <h1>KATSINOV Data</h1>

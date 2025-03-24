@@ -24,7 +24,7 @@ class KatsinovController extends Controller
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov.TableKatsinov',
             'dosen' => 'Inovasi.dosen.TableKatsinov',
-            'admin_hilirisasi' => 'inovasi.admin_hilirisasi.TableKatsinov',
+            'admin_hilirisasi' => 'inovasi.admin_hilirisasi.tablekatsinov',
             'validator' => 'Inovasi.validator.TableKatsinov',
             'registered_user' => 'Inovasi.registered_user.TableKatsinov',
         };
