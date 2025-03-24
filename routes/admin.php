@@ -294,7 +294,7 @@ Route::prefix('inovasi')->name('inovasi.')
                 Route::resource('/formberitaacara', BeritaAcaraController::class);
 
                 Route::get('/formjudul', function () {
-                    return view('inovasi.validator.formjudul');
+                    return view('Inovasi.validator.formjudul');
                 })->name('formjudul');
 
                 Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
