@@ -47,7 +47,7 @@ Route::get('/tupoksi', function () {
 })->name('tupoksi.tupoksi');
 
 Route::get('/profile', function () {
-    return view('profile1.profile');
+    return view('Profile1.profile');
 })->name('profile.profile');
 
 Route::get('/strukturorganisasi', function () {
