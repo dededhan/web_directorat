@@ -19,12 +19,12 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    @include('inovasi.validator.sidebar')
+    @include('Inovasi.validator.sidebar')
 
     <!-- CONTENT -->
     <section id="content">
         <!-- NAVBAR -->
-        @include('inovasi.validator.navbar')
+        @include('Inovasi.validator.navbar')
 
         <main>
             @yield('contentvalidator')

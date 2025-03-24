@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    @extends('inovasi.validator.index')
+    @extends('Inovasi.validator.index')
     <div class="container">
         <div class="header">
             <h1>Form Pengajuan Inovasi</h1>
