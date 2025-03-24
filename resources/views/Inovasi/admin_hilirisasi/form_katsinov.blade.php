@@ -283,12 +283,12 @@
                 </a>
             </buttom>
             </div>
-            @include('Inovasi.admin_hilirisasi.Indikator1')
-            @include('Inovasi.admin_hilirisasi.Indikator2')
-            @include('Inovasi.admin_hilirisasi.Indikator3')
-            @include('Inovasi.admin_hilirisasi.Indikator4')
-            @include('Inovasi.admin_hilirisasi.Indikator5')
-            @include('Inovasi.admin_hilirisasi.Indikator6')
+            @include('Inovasi.admin_hilirisasi.indikator1')
+            @include('Inovasi.admin_hilirisasi.indikator2')
+            @include('Inovasi.admin_hilirisasi.indikator3')
+            @include('Inovasi.admin_hilirisasi.indikator4')
+            @include('Inovasi.admin_hilirisasi.indikator5')
+            @include('Inovasi.admin_hilirisasi.indikator6')
             @include('Inovasi.admin_hilirisasi.jumlahindikator')
             <!-- Submit All Button -->
             <div class="submit-all-container"
