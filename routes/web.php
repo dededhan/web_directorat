@@ -110,7 +110,7 @@ Route::post('/katsinov/store', [KatsinovController::class, 'store'])
     ->middleware('checked');
 
 Route::get('/pemeringkatan/landingpage', function () {
-    return view('pemeringkatan.LandingPagePemeringkatan');
+    return view('Pemeringkatan.LandingPagePemeringkatan');
 })->name('pemeringkatan.landingpage');
 
 Route::get('/inovasi/landingpage', function () {
