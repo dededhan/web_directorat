@@ -31,7 +31,7 @@
     width: 60px;
 }
 
-/* Brand styling */
+/* Brand styling - preserve sticky positioning */
 #sidebar .brand {
     font-size: 20px;
     font-weight: 700;
@@ -44,11 +44,32 @@
     top: 0;
     left: 0;
     z-index: 500;
-    padding: 0 16px;
+    padding: 0 16px 0 50px; /* Add left padding for menu button */
     background: rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(5px);
     transition: all 0.3s ease;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Menu toggle button styles */
+#sidebar .brand .toggle-sidebar {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+#sidebar .brand .toggle-sidebar:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
+#sidebar.hide .brand .toggle-sidebar {
+    left: 18px; /* Center when sidebar is collapsed */
+    transform: translateY(-50%) rotate(180deg); /* Rotate when collapsed */
 }
 
 #sidebar .brand .logo-icon {
@@ -61,6 +82,15 @@
 
 #sidebar.hide .brand .text {
     display: none;
+}
+
+#sidebar.hide .brand {
+    padding: 0; /* Reset padding in collapsed state */
+    justify-content: center;
+}
+
+#sidebar.hide .brand .logo-icon {
+    margin-right: 0;
 }
 
 /* Section styling */

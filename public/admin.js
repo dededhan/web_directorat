@@ -1,13 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Sidebar menu functionality
-    const allSideMenu = document.querySelectorAll('#sidebar .side-menu.top li a');
-    const menuBar = document.querySelector('#content nav .bx.bx-menu');
+    const allSideMenu = document.querySelectorAll('#sidebar .side-menu li a');
+    const toggleSidebar = document.querySelector('#sidebar .brand .toggle-sidebar');
     const sidebar = document.getElementById('sidebar');
 
-    // Toggle sidebar
-    menuBar.addEventListener('click', function () {
-        sidebar.classList.toggle('hide');
-    });
+    // Toggle sidebar using the menu button in the sidebar
+    if (toggleSidebar) {
+        toggleSidebar.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent default behavior if within an <a> tag
+            sidebar.classList.toggle('hide');
+        });
+    }
 
     // Active menu item handling
     allSideMenu.forEach(item => {
@@ -15,12 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
         item.addEventListener('click', function () {
             allSideMenu.forEach(i => {
                 i.parentElement.classList.remove('active');
-            })
+            });
             li.classList.add('active');
         });
     });
 
-    // Search functionality
+    // Search functionality (if present)
     const searchButton = document.querySelector('#content nav form .form-input button');
     const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');
     const searchForm = document.querySelector('#content nav form');
@@ -43,6 +46,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleResize() {
         if(window.innerWidth < 768) {
             sidebar.classList.add('hide');
+        } else if (window.innerWidth > 768 && window.innerWidth < 1200) {
+            // Optional: Decide if sidebar should be shown on medium screens
+            // sidebar.classList.remove('hide');
         }
         
         if(window.innerWidth > 576) {
@@ -59,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Resize event listener
     window.addEventListener('resize', handleResize);
 
-    // Dark mode toggle
+    // Dark mode toggle (if present)
     const switchMode = document.getElementById('switch-mode');
     if (switchMode) {
         switchMode.addEventListener('change', function () {
@@ -70,14 +76,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-});
-
-// Add tooltip data attributes to sidebar items
-document.addEventListener('DOMContentLoaded', function() {
-    const sideMenuItems = document.querySelectorAll('#sidebar .side-menu li');
     
+    // Add tooltip data attributes to sidebar items
+    const sideMenuItems = document.querySelectorAll('#sidebar .side-menu li');
     sideMenuItems.forEach(item => {
-        const text = item.querySelector('.text').textContent.trim();
-        item.setAttribute('data-title', text);
+        const textElement = item.querySelector('.text');
+        if (textElement) {
+            const text = textElement.textContent.trim();
+            item.setAttribute('data-title', text);
+        }
     });
 });

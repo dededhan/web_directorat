@@ -2,6 +2,7 @@
 <section id="sidebar">
     <!-- Brand Logo -->
     <a href="#" class="brand">
+        <i class='bx bx-menu toggle-sidebar'></i>
         <i class="logo-icon"></i>
         <span class="text">Dashboard Direktorat</span>
     </a>
@@ -174,12 +175,6 @@
         <div class="menu-section">
             <h3 class="section-title">Settings</h3>
             <ul class="side-menu">
-                <li>
-                    <a href="#">
-                        <i class='bx bxs-cog'></i>
-                        <span class="text">Settings</span>
-                    </a>
-                </li>
                 <li>
                     <form method="POST" action="{{ route('logout') }}" id="logout-form">
                         @csrf
