@@ -46,6 +46,10 @@ Route::get('/tupoksi', function () {
     return view('tupoksi.tupoksi');
 })->name('tupoksi.tupoksi');
 
+Route::get('/profile', function () {
+    return view('Profile1.profile');
+})->name('profile.profile');
+
 Route::get('/strukturorganisasi', function () {
     return view('struktur organisasi.strukturorganisasi');
 })->name('strukturorganisasi');
@@ -105,13 +109,13 @@ Route::post('/katsinov/store', [KatsinovController::class, 'store'])
     ->name('katsinov.store')
     ->middleware('checked');
 
-    Route::get('/pemeringkatan/LandingPage', function () {
-        return view('pemeringkatan.LandingPage');
-    })->name('pemeringkatan.landingpage');
+Route::get('/pemeringkatan/landingpage', function () {
+    return view('Pemeringkatan.LandingPagePemeringkatan');
+})->name('pemeringkatan.landingpage');
 
-    Route::get('/inovasi/landingpage', function () {
-        return view('Inovasi.LandingPageHilirisasi');
-    })->name('inovasi.landingpage');
+Route::get('/inovasi/landingpage', function () {
+    return view('Inovasi.LandingPageHilirisasi');
+})->name('inovasi.landingpage');
 
 Route::get('/katsinov/pdf', [KatsinovController::class, 'downloadPDF'])->name('katsinov.pdf');
 

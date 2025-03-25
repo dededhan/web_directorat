@@ -1,4 +1,4 @@
-@extends('inovasi.validator.index')
+@extends('Inovasi.validator.index')
 
 @section('contentvalidator')
     <div class="head-title">

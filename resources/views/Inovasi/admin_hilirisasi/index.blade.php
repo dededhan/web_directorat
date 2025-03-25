@@ -12,19 +12,19 @@
     <link rel="stylesheet" href="{{ asset('dashboard_main/sidebar_dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('dashboard_main/navbar_dashboard.css') }}">  
 
-    <title>Dashboard n</title>
+    <title>Dashboard Admin Hilirisasi</title>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    @include('inovasi.admin_hilirisasi.sidebar')
+    @include('Inovasi.admin_hilirisasi.sidebar')
 
     <!-- CONTENT -->
     <section id="content">
         <!-- NAVBAR -->
-        @include('inovasi.admin_hilirisasi.navbar')
+        @include('Inovasi.admin_hilirisasi.navbar')
 
         <main>
             @yield('contentadminhilirisasi')

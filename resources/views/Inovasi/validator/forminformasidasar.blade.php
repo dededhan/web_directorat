@@ -12,7 +12,7 @@
 
 
 <body>
-    @extends('inovasi.validator.index')
+    @extends('Inovasi.validator.index')
     <div class="container">
         <!-- Rest of your existing HTML structure remains the same -->
         <div class="header">

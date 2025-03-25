@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    @include('pemeringkatan.navbarpemeringkatan')
+    @include('Pemeringkatan.navbarpemeringkatan')
 
     <div id="imageCarousel" class="carousel slide mb-2" data-bs-ride="carousel">
         <div class="carousel-indicators">
@@ -155,4 +155,4 @@
     </div>
 
 
-    @include('pemeringkatan.footerpemeringkatan')
+    @include('Pemeringkatan.footerpemeringkatan')

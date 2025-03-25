@@ -5,366 +5,472 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
-        :root {
-            --primary-color: #176369;
-            --secondary-color: #0d4b4f;
-            --accent-color: #2a8288;
-            --light-accent: #e6f0f1;
-            --text-color: #2c3e50;
-            --white: #ffffff;
-        }
-
+        /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #186666;
+            --primary-light: #2a8787;
+            --primary-dark: #0d4545;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --accent: #f0c75e;
+            --accent-light: #f8e4ad;
+            --bg-light: #f8f8f8;
+            --border-color: #e0e0e0;
+            --link-color: #186666;
+            --white: #ffffff;
+            --border-radius: 4px;
         }
 
         body {
-            background: #f8fafa;
-            color: var(--text-color);
-            line-height: 1.7;
-            overflow-x: hidden;
+            background-color: var(--white);
+            color: var(--text-dark);
+            line-height: 1.6;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-            perspective: 1000px;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes slideInFromLeft {
-            0% {
-                transform: translateX(-100%);
-                opacity: 0;
-            }
-            100% {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes rotateIn {
-            0% {
-                transform: rotateY(-90deg);
-                opacity: 0;
-            }
-            100% {
-                transform: rotateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--white);
-            border-radius: 20px;
-            margin-bottom: 3rem;
-            position: relative;
-            overflow: hidden;
-            animation: float 6s ease-in-out infinite;
-            box-shadow: 0 10px 30px rgba(23, 99, 105, 0.2);
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                rgba(255, 255, 255, 0.1) 10px,
-                rgba(255, 255, 255, 0.1) 20px
-            );
-            animation: movePattern 20s linear infinite;
-        }
-
-        @keyframes movePattern {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .header h1 {
-            position: relative;
-            z-index: 1;
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            animation: pulse 3s ease-in-out infinite;
-        }
-
-        .section {
-            background: var(--white);
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(23, 99, 105, 0.1);
-            transition: all 0.3s ease;
-            opacity: 0;
-            animation: rotateIn 0.8s ease-out forwards;
-            transform-origin: center;
-        }
-
-        .section:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(23, 99, 105, 0.2);
-        }
-
-        .section-title {
-            color: var(--primary-color);
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 3px solid var(--accent-color);
-            font-size: 1.8rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            animation: slideInFromLeft 0.8s ease-out;
-        }
-
-        .section-title::before {
-            content: '🔍';
-            font-size: 1.5rem;
-            animation: pulse 2s infinite;
-        }
-
-        .subsection h3 {
-            color: var(--primary-color);
-            margin: 1.5rem 0;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            opacity: 0;
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-
-        .tugas {
-            background: linear-gradient(135deg, var(--light-accent), white);
-            padding: 2rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.8s ease-out;
-            border-left: 4px solid var(--accent-color);
-        }
-
-        .tugas:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 20px rgba(23, 99, 105, 0.15);
-        }
-
-        .fungsi-list {
-            list-style-type: none;
-            display: grid;
-            gap: 1rem;
-        }
-
-        .fungsi-item {
-            padding: 1.2rem 1.5rem;
-            background: var(--white);
-            border-radius: 12px;
-            border-left: 4px solid var(--accent-color);
-            transition: all 0.3s ease;
-            opacity: 0;
-            transform: translateX(-20px);
-            animation: slideIn 0.5s ease-out forwards;
-            position: relative;
-            overflow: hidden;
-        }
-
-        @keyframes slideIn {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .fungsi-item:hover {
-            transform: translateX(10px) scale(1.02);
-            background: linear-gradient(to right, var(--light-accent), white);
-            box-shadow: 0 5px 15px rgba(23, 99, 105, 0.1);
-        }
-
-        .fungsi-item::before {
-            content: '';
-            position: absolute;
+        /* Navbar styling */
+        nav {
+            position: sticky;
             top: 0;
-            left: -100%;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                120deg,
-                transparent,
-                rgba(255, 255, 255, 0.6),
-                transparent
-            );
-            transition: 0.5s;
+            z-index: 1000;
+            background-color: #006463; /* Match the example */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0;
+        }
+        
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 2100px;
+            margin: 0 auto;
+            padding: 0.8rem 2rem;
+            width: 100%;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .unj-logo {
+            width: 40px;
+            height: 40px;
+            object-fit: contain; /* Ensures logo fits properly */
+            margin-right: 0.8rem;
+        }
+        
+        .logo-text {
+            color: var(--text-light);
+            font-weight: bold;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+        }
+        
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+        
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        nav a.active {
+            color: var(--accent);
+            font-weight: 500;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            margin-top: 20px;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
         }
 
-        .fungsi-item:hover::before {
-            left: 100%;
+        .menu-toggle span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: var(--white);
+            border-radius: 3px;
+            transition: all 0.3s ease;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .header {
-                padding: 2rem 1rem;
-            }
-
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .section {
-                padding: 1.5rem;
-            }
+        /* Container */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
         }
 
-        /* Adding delay to fungsi-item animations */
-        .fungsi-item {
-            animation-delay: calc(var(--i) * 0.1s);
+        /* Section styling */
+        .section-header {
+            text-align: center;
+            margin-top: 4rem; /* Added more top margin to create space between navbar and h2 */
+            margin-bottom: 3.5rem;
         }
 
-        /* Animate sections one by one */
-        .section:nth-child(1) { animation-delay: 0.2s; }
-        .section:nth-child(2) { animation-delay: 0.4s; }
-        .section:nth-child(3) { animation-delay: 0.6s; }
-
-        /* Floating animation for specific elements */
-        .section-title:hover::before {
-            animation: float 2s ease-in-out infinite;
+        .section-header h2 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
         }
 
-        /* Shine effect */
-        @keyframes shine {
-            0% {
-                background-position: -100% 0;
-            }
-            100% {
-                background-position: 200% 0;
-            }
-        }
-
-        .header::after {
+        .section-header h2:after {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent 45%,
-                rgba(255, 255, 255, 0.1) 50%,
-                transparent 55%
-            );
-            animation: shine 6s infinite;
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Tupoksi sections styling */
+        .tupoksi-section {
+            margin-bottom: 4rem;
+            border-bottom: 1px solid #e0e6e6;
+            padding-bottom: 3rem;
+        }
+        
+        .tupoksi-section:last-child {
+            border-bottom: none;
+            margin-bottom: 2rem;
+        }
+        
+        .tupoksi-header {
+            margin-bottom: 2rem;
+            position: relative;
+            padding-left: 2.5rem;
+        }
+        
+        .tupoksi-header h3 {
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .tupoksi-header i {
+            position: absolute;
+            left: 0;
+            top: 0.3rem;
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+        
+        .task-content-wrapper {
+            margin-bottom: 2rem;
+        }
+        
+        .task-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .task-title i {
+            margin-right: 0.8rem;
+            color: var(--accent);
+        }
+        
+        .task-content {
+            padding: 1.5rem 0;
+            font-size: 1.05rem;
+        }
+        
+        .function-list {
+            list-style-position: inside;
+            margin-left: 1rem;
+            padding-left: 0;
+        }
+        
+        .function-item {
+            padding: 0.5rem 0;
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-logo img {
+            height: 60px;
+            filter: brightness(0) invert(1);
+        }
+
+        .footer-text {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-link {
+            color: var(--white);
+            margin: 0 1rem;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            section {
+                padding: 2rem 5%;
+            }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .nav-container {
+                padding: 0.8rem 5%;
+            }
+            
+            .nav-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: #006463;
+                flex-direction: column;
+                align-items: center;
+                padding: 1rem 0;
+                transform: translateY(-100%);
+                opacity: 0;
+                transition: all 0.3s ease;
+                z-index: 99;
+            }
+            
+            .nav-menu.active {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            
+            .nav-menu li {
+                width: 100%;
+                text-align: center;
+            }
+            
+            nav a {
+                display: block;
+                padding: 0.8rem 1rem;
+                width: 100%;
+            }
+
+            .tupoksi-header h3 {
+                font-size: 1.4rem;
+            }
+            
+            .function-item span.letter {
+                margin-bottom: 0.3rem;
+            }
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header class="header">
-            <h1>Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</h1>
-        </header>
 
-        <div class="section">
-            <h2 class="section-title">Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</h2>
-            <div class="subsection">
-                <h3><i class="fas fa-tasks"></i> Tugas</h3>
-                <div class="tugas">
+<body>
+    <!-- Updated Navbar -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <img src="https://spm.unj.ac.id/wp-content/uploads/2024/08/Logo-UNJ-PTNBH-RGB_Logo_Motto_Transparan-875x1024.png" alt="UNJ Logo" class="unj-logo">
+                <span class="logo-text">Direktorat Inovasi</span>
+            </div>
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="{{ route('home') }}">Home</a></li>
+                <li><a href="#" class="active">TUPOKSI</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="section-header">
+            <h2>Tugas Pokok dan Fungsi</h2>
+        </div>
+        
+        <!-- Direktorat Section -->
+        <div class="tupoksi-section">
+            <div class="tupoksi-header">
+                <i class="fas fa-building"></i>
+                <h3>Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</h3>
+            </div>
+            
+            <div class="task-content-wrapper">
+                <h4 class="task-title"><i class="fas fa-tasks"></i> Tugas</h4>
+                <div class="task-content">
                     <p>Merencanakan dan melaksanakan pengembangan inovasi dan layanan informasi untuk meningkatkan daya saing dan reputasi universitas baik secara nasional maupun internasional</p>
                 </div>
-                
-                <h3><i class="fas fa-cogs"></i> Fungsi</h3>
-                <ul class="fungsi-list">
-                    <li class="fungsi-item" style="--i:1">a. Mengembangkan kebijakan inovasi jangka pendek, menengah dan panjang di universitas agar selaras dengan kebutuhan industri dan masyarakat.</li>
-                    <li class="fungsi-item" style="--i:2">b. Merencanakan dan mengelola kegiatan inovasi dan hilirisasi inovasi di seluruh fakultas dan program studi hingga siap digunakan industri atau masyarakat</li>
-                    <li class="fungsi-item" style="--i:3">c. Mengelola layanan informasi antar unit secara sistematis yang mudah diakses oleh publik</li>
-                    <li class="fungsi-item" style="--i:4">d. Menyusun strategi komprehensif sesuai indikator lembaga pemeringkat perguruan tinggi tingkat nasional maupun internasional</li>
-                    <li class="fungsi-item" style="--i:5">e. Mengkoordinasikan pelaksanaan pemosisian universitas sehingga memiliki reputasi tingkat nasional dan internasional</li>
-                </ul>
             </div>
+            
+            <h4 class="task-title"><i class="fas fa-cogs"></i> Fungsi</h4>
+            <ol class="function-list">
+                <li class="function-item">
+                    <span>Mengembangkan kebijakan inovasi jangka pendek, menengah dan panjang di universitas agar selaras dengan kebutuhan industri dan masyarakat.</span>
+                </li>
+                <li class="function-item">
+                    <span>Merencanakan dan mengelola kegiatan inovasi dan hilirisasi inovasi di seluruh fakultas dan program studi hingga siap digunakan industri atau masyarakat</span>
+                </li>
+                <li class="function-item">
+                    <span>Mengelola layanan informasi antar unit secara sistematis yang mudah diakses oleh publik</span>
+                </li>
+                <li class="function-item">
+                    <span>Menyusun strategi komprehensif sesuai indikator lembaga pemeringkat perguruan tinggi tingkat nasional maupun internasional</span>
+                </li>
+                <li class="function-item">
+                    <span>Mengkoordinasikan pelaksanaan pemosisian universitas sehingga memiliki reputasi tingkat nasional dan internasional</span>
+                </li>
+            </ol>
         </div>
-
-        <div class="section">
-            <h2 class="section-title">Subdit Riset, Inovasi, dan Hilirisasi</h2>
-            <div class="subsection">
-                <h3><i class="fas fa-flask"></i> Tugas</h3>
-                <div class="tugas">
+        
+        <!-- Subdit Riset Section -->
+        <div class="tupoksi-section">
+            <div class="tupoksi-header">
+                <i class="fas fa-flask"></i>
+                <h3>Subdit Riset, Inovasi, dan Hilirisasi</h3>
+            </div>
+            
+            <div class="task-content-wrapper">
+                <h4 class="task-title"><i class="fas fa-tasks"></i> Tugas</h4>
+                <div class="task-content">
                     <p>Melaksanakan pengembangan berbagai inovasi dan proses hilirisasi hingga siap digunakan masyarakat dan industri</p>
                 </div>
-                
-                <h3><i class="fas fa-list-check"></i> Fungsi</h3>
-                <ul class="fungsi-list">
-                    <li class="fungsi-item" style="--i:1">a. Mengidentifikasi, melakukan pengukuran kesiapterapan dan mengembangkan hasil riset yang berpotensi menjadi inovasi.</li>
-                    <li class="fungsi-item" style="--i:2">b. Melaksanakan pengujian hasil inovasi pada berbagai lembaga sertifikasi sesuai dengan karakteristik produk</li>
-                    <li class="fungsi-item" style="--i:3">c. Mengelola program inkubator untuk startup atau usaha rintisan berbasis inovasi.</li>
-                    <li class="fungsi-item" style="--i:4">d. Mengembangkan kemitraan dengan industri, pemerintah, dan organisasi lain.</li>
-                    <li class="fungsi-item" style="--i:5">e. Penghubung antara pemilik inovasi dan universitas dengan pihak eksternal.</li>
-                </ul>
             </div>
+            
+            <h4 class="task-title"><i class="fas fa-cogs"></i> Fungsi</h4>
+            <ol class="function-list">
+                <li class="function-item">
+                    <span>Mengidentifikasi, melakukan pengukuran kesiapterapan dan mengembangkan hasil riset yang berpotensi menjadi inovasi.</span>
+                </li>
+                <li class="function-item">
+                    <span>Melaksanakan pengujian hasil inovasi pada berbagai lembaga sertifikasi sesuai dengan karakteristik produk</span>
+                </li>
+                <li class="function-item">
+                    <span>Mengelola program inkubator untuk startup atau usaha rintisan berbasis inovasi.</span>
+                </li>
+                <li class="function-item">
+                    <span>Mengembangkan kemitraan dengan industri, pemerintah, dan organisasi lain.</span>
+                </li>
+                <li class="function-item">
+                    <span>Penghubung antara pemilik inovasi dan universitas dengan pihak eksternal.</span>
+                </li>
+            </ol>
         </div>
-
-        <div class="section">
-            <h2 class="section-title">Subdit Pemeringkatan dan Layanan Informasi</h2>
-            <div class="subsection">
-                <h3><i class="fas fa-chart-line"></i> Tugas</h3>
-                <div class="tugas">
+        
+        <!-- Subdit Pemeringkatan Section -->
+        <div class="tupoksi-section">
+            <div class="tupoksi-header">
+                <i class="fas fa-chart-line"></i>
+                <h3>Subdit Pemeringkatan dan Layanan Informasi</h3>
+            </div>
+            
+            <div class="task-content-wrapper">
+                <h4 class="task-title"><i class="fas fa-tasks"></i> Tugas</h4>
+                <div class="task-content">
                     <p>Merencanakan dan melaksanakan layanan informasi akuntabel bagi terwujudnya universitas bereputasi nasional dan internasional</p>
                 </div>
-                
-                <h3><i class="fas fa-list"></i> Fungsi</h3>
-                <ul class="fungsi-list">
-                    <li class="fungsi-item" style="--i:1">a. Membangun sistem informasi yang adaptif dan efisien</li>
-                    <li class="fungsi-item" style="--i:2">b. Mengimplementasikan strategi untuk meningkatkan posisi universitas</li>
-                    <li class="fungsi-item" style="--i:3">c. Mengkoordinasi pengumpulan data yang konsisten di seluruh unit</li>
-                    <li class="fungsi-item" style="--i:4">d. Memantau dan menganalisis data kinerja universitas</li>
-                    <li class="fungsi-item" style="--i:5">e. Menyusun laporan berkala dan media publikasi</li>
-                </ul>
             </div>
+            
+            <h4 class="task-title"><i class="fas fa-cogs"></i> Fungsi</h4>
+            <ol class="function-list">
+                <li class="function-item">
+                    <span>Membangun sistem informasi yang adaptif dan efisien</span>
+                </li>
+                <li class="function-item">
+                    <span>Mengimplementasikan strategi untuk meningkatkan posisi universitas</span>
+                </li>
+                <li class="function-item">
+                    <span>Mengkoordinasi pengumpulan data yang konsisten di seluruh unit</span>
+                </li>
+                <li class="function-item">
+                    <span>Memantau dan menganalisis data kinerja universitas</span>
+                </li>
+                <li class="function-item">
+                    <span>Menyusun laporan berkala dan media publikasi</span>
+                </li>
+            </ol>
         </div>
     </div>
+
+    <footer>
+    @include('tupoksi.tupoksifooter')
+
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        menuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+        });
+    </script>
 </body>
 </html>
-@include('tupoksi.tupoksifooter')

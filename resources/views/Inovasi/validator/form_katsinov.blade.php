@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>KATSINOV-MeterO - Innovation Measurement System</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <link href="{{ asset('aspect-analysis.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('.css') }}">
     <link rel="stylesheet" href="{{ asset('inovasi/dashboard/form_katsinov/css/form.css') }}">
 
     <script src="{{ asset('aspect-legend.js') }}"></script>
@@ -16,29 +16,24 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-@extends('inovasi.validator.index')
 
-{{-- @include('admin.sidebaradmin') --}}
+@extends('Inovasi.validator.index')
 
-{{-- @section('contentadmin')
-@endsection --}}
+@section('contentvalidator')
+
 
 <body x-data="aspectLegend()" x-init="init()">
-
-
     <!-- Main Content -->
+    
     <main class="container">
         <form id="katsinovForm" method="POST" action="{{ route('katsinov.store') }}">
-            {{-- @include('admin.navbaradmin') --}}
             @csrf
-
             <!-- Explanation Card -->
-            <div class="card" data-aos="fade-up">
+            <div class="card">
                 <div class="main-title">
                     PENGUKURAN TINGKAT KESIAPAN INOVASI (KATSINOV)
                 </div>
@@ -65,16 +60,16 @@
                         Pengukuran IRL sangat penting untuk:
                     </div>
                     <div class="list-container">
-                        <div class="list-item" data-aos="fade-right" data-aos-delay="100">
+                        <div class="list-item">
                             Menggambarkan perkembangan inovasi
                         </div>
-                        <div class="list-item" data-aos="fade-right" data-aos-delay="200">
+                        <div class="list-item">
                             Membantu mengimplementasikan inovasi diatas siklus-hidup yang lebih efektif
                         </div>
-                        <div class="list-item" data-aos="fade-right" data-aos-delay="300">
+                        <div class="list-item">
                             Mengantisipasi persaingan pasar yang semakin sengit
                         </div>
-                        <div class="list-item" data-aos="fade-right" data-aos-delay="400">
+                        <div class="list-item">
                             Mengantisipasi tingkat inovasi atau siklus hidup teknologi yang lebih cepat
                         </div>
                     </div>
@@ -82,37 +77,36 @@
             </div>
 
             <!-- Form Container -->
-
-            <div class="form-container" data-aos="fade-up" data-aos-delay="500">
+            <div class="form-container">
                 <div class="document-number">No: 20190802-001</div>
 
                 <div class="form-group">
                     <div class="form-label">Nama/Judul</div>
-                    <input type="text" class="form-input" name="title" placeholder="Masukkan nama/judul">
+                    <input type="text" class="form-input" name="title" placeholder="Masukkan nama/judul" value="{{ $katsinov['title'] ?? '' }}">
                 </div>
 
                 <div class="form-group">
                     <div class="form-label">Fokus Bidang</div>
-                    <input type="text" class="form-input" name="focus_area" placeholder="Masukkan fokus bidang">
+                    <input type="text" class="form-input" name="focus_area" placeholder="Masukkan fokus bidang" value="{{ $katsinov['focus_area'] ?? '' }}">
                 </div>
 
                 <div class="form-group">
                     <div class="form-label">Nama Proyek</div>
-                    <input type="text" class="form-input" name="project_name" placeholder="Masukkan nama proyek">
+                    <input type="text" class="form-input" name="project_name" placeholder="Masukkan nama proyek" value="{{ $katsinov['project_name'] ?? '' }}">
                 </div>
 
                 <div class="form-group">
                     <div class="form-label">Nama Lembaga/Perusahaan</div>
                     <input type="text" class="form-input" name="institution"
-                        placeholder="Masukkan nama lembaga/perusahaan">
+                        placeholder="Masukkan nama lembaga/perusahaan" value="{{ $katsinov['institution'] ?? '' }}">
                 </div>
 
                 <div class="form-group">
                     <div class="form-label">Alamat / Kontak</div>
                     <div>
-                        <input type="text" class="form-input" name="address" placeholder="Masukkan alamat lengkap">
+                        <input type="text" class="form-input" name="address" placeholder="Masukkan alamat lengkap" value="{{ $katsinov['address'] ?? '' }}">
                         <div style="margin-top: 0.75rem;">
-                            <input type="text" class="form-input" name="contact" placeholder="Telp / Fax / email">
+                            <input type="text" class="form-input" name="contact" placeholder="Telp / Fax / email" value="{{ $katsinov['contact'] ?? '' }}">
                         </div>
                     </div>
                 </div>
@@ -122,7 +116,7 @@
                         <div class="form-label">Tanggal</div>
                         <input type="date" id="assessment_date" name="assessment_date"
                             class="form-input @error('assessment_date') border-red-500 @enderror"
-                            value="{{ old('assessment_date', date('Y-m-d')) }}" required>
+                            value="{{ old('assessment_date', isset($katsinov['assessment_date']) ? $katsinov['assessment_date'] : date('Y-m-d')) }}" required>
                     </div>
                 </div>
 
@@ -226,7 +220,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="spiderweb-trigger" style="position: fixed; bottom: 20px; right: 20px; z-index: 100;">
+                <div class="spiderweb-trigger" style="display: flex; justify-content: center; margin: 20px 0;">
                     <button 
                     type="button"
                     @click="openSpiderwebAnalysis()"
@@ -279,18 +273,19 @@
                 </div>
             </div>
             <buttom>
-            <a href="{{ route('admin.hilirisasi.lampiran') }}">
-    <button type="button" style="background-color: #176369; color: white; padding: 10px 20px; border: none; cursor: pointer;">Lampiran</button>
-</a>
-</buttom>
+                <a href="{{ route('admin.hilirisasi.lampiran') }}">
+                    <button type="button"
+                        style="background-color: #176369; color: white; padding: 10px 20px; border: none; cursor: pointer;">Lampiran</button>
+                </a>
             </div>
-            @include('admin.katsinov.Indikator1')
-            @include('admin.katsinov.Indikator2')
-            @include('admin.katsinov.Indikator3')
-            @include('admin.katsinov.Indikator4')
-            @include('admin.katsinov.Indikator5')
-            @include('admin.katsinov.Indikator6')
-            @include('admin.katsinov.jumlahindikator')
+            {{-- @dd($indicator) --}}
+            @include('Inovasi.validator.indikator1')
+            @include('Inovasi.validator.indikator2')
+            @include('Inovasi.validator.indikator3')
+            @include('Inovasi.validator.indikator4')
+            @include('Inovasi.validator.indikator5')
+            @include('Inovasi.validator.indikator6')
+            @include('Inovasi.validator.jumlahindikator')
             <!-- Submit All Button -->
             <div class="submit-all-container"
                 style="
@@ -298,298 +293,30 @@
             justify-content: center;
             margin-top: 2rem;
             margin-bottom: 2rem;
-        ">
+            ">
                 <button type="submit" id="submitAllBtn" class="submit-all-btn"
                     style="
-                    background-color: #176369;
-                    color: white;
-                    padding: 12px 24px;
-                    border: none;
-                    border-radius: 8px;
-                    font-size: 1rem;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                "
+                        background-color: #176369;
+                        color: white;
+                        padding: 12px 24px;
+                        border: none;
+                        border-radius: 8px;
+                        font-size: 1rem;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                    "
                     onclick="submitAllIndicators()">
+                    @if (!isset($katsinov) || empty($katsinov))
                     Submit Semua Indikator KATSINOV
+                    @else
+                    Update Indikator KATSINOV
+                    @endif
                 </button>
-            </div>
+            </div>  
         </form>
     </main>
-
-    {{-- <script>
-        function validateForm() {
-            let isValid = true;
-
-            // Cek semua radio button terisi
-            document.querySelectorAll('.katsinov-table').forEach(table => {
-                const filled = table.querySelectorAll('input[type="radio"]:checked').length;
-                const totalRows = table.querySelectorAll('tr:not(.total-row)').length - 1; // Exclude header
-
-                if (filled < totalRows) {
-                    isValid = false;
-                    table.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                    table.style.border = '2px solid red';
-                    setTimeout(() => table.style.border = '', 3000);
-                }
-            });
-
-            return isValid;
-        }
-
-        async function submitAllIndicators() {
-
-            const btn = document.getElementById('submitAllBtn');
-
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Menyimpan...';
-
-            try {
-                const formData = new FormData(document.getElementById('katsinovForm'));
-                const indicators = collectAspectScores();
-
-                indicators.forEach((indicator, index) => {
-                    for (const [key, value] of Object.entries(indicator)) {
-                        formData.append(`indicators[${index}][${key}]`, value);
-                    }
-                });
-
-                const response = await fetch('/katsinov/store', { // ✏️ Perbaiki disini
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Accept': 'application/json',
-                    },
-                    body: formData
-                });
-
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.message || 'Gagal menyimpan data');
-
-                Swal.fire({
-                icon: 'success',
-                title: '🎉 Selamat!',
-                html: `
-                    <div style="
-                        background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
-                        border-radius: 20px; 
-                        padding: 30px; 
-                        text-align: center;
-                        max-width: 450px;
-                        margin: 0 auto;
-                        border: 1px solid rgba(23, 99, 105, 0.1);
-                        box-shadow: 0 20px 40px rgba(23, 99, 105, 0.1);
-                    ">
-                        <div style="
-                            width: 80px;
-                            height: 80px;
-                            background-color: #e6f6f7;
-                            border-radius: 50%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            margin: 0 auto 20px;
-                            box-shadow: 0 10px 20px rgba(23, 99, 105, 0.1);
-                        ">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#176369" stroke-width="2.5">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                                <polyline points="22 4 12 14.01 9 11.01"/>
-                            </svg>
-                        </div>
-                        
-                        <h2 style="
-                            color: #176369;
-                            font-size: 22px;
-                            font-weight: 700;
-                            margin-bottom: 15px;
-                        ">
-                            Indikator KATSINOV Berhasil
-                        </h2>
-                        
-                        <p style="
-                            color: #2d3748; 
-                            font-size: 16px; 
-                            line-height: 1.6;
-                            margin-bottom: 20px;
-                        ">
-                            Terima kasih atas partisipasi Anda. Data Anda telah berhasil disimpan dalam sistem kami dengan sempurna.
-                        </p>
-                        
-                        <div style="
-                            background-color: #f0f9fa; 
-                            border-left: 5px solid #176369;
-                            padding: 12px 15px;
-                            border-radius: 8px;
-                            margin-bottom: 20px;
-                            text-align: left;
-                        ">
-                            <p style="
-                                color: #4a5568;
-                                font-size: 14px;
-                                margin: 0;
-                            ">
-                                ⏳ Halaman akan dimuat ulang dalam beberapa saat...
-                            </p>
-                        </div>
-                    </div>
-                `,
-                confirmButtonText: 'Tutup',
-                confirmButtonColor: '#176369',
-                showCloseButton: false,
-                allowOutsideClick: false,
-                width: '500px',
-                willClose: () => window.location.reload(),
-                didOpen: () => {
-                    const style = document.createElement('style');
-                    style.textContent = `
-                        .swal2-popup {
-                            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-                            border-radius: 20px;
-                            box-shadow: 0 30px 60px rgba(23, 99, 105, 0.15);
-                            animation: softBounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                        }
-
-                        @keyframes softBounce {
-                            0% { transform: scale(0.8); opacity: 0; }
-                            70% { transform: scale(1.03); opacity: 0.9; }
-                            100% { transform: scale(1); opacity: 1; }
-                        }
-
-                        .swal2-confirm {
-                            padding: 12px 24px !important;
-                            font-weight: 700;
-                            text-transform: uppercase;
-                            letter-spacing: 0.5px;
-                            border-radius: 10px;
-                            transition: all 0.3s ease;
-                        }
-
-                        .swal2-confirm:hover {
-                            transform: translateY(-3px);
-                            box-shadow: 0 6px 20px rgba(23, 99, 105, 0.3);
-                        }
-
-                        .swal2-icon.swal2-success {
-                            border-color: rgba(23, 99, 105, 0.2) !important;
-                        }
-
-                        .swal2-success-ring {
-                            border-color: #176369 !important;
-                            opacity: 0.3;
-                        }
-                    `;
-                    document.head.appendChild(style);
-                }
-            });
-
-            } catch (error) {
-                Swal.fire({
-    icon: 'error',
-    title: 'Gagal!',
-    html: `
-        <div style="
-            background-color: #fff0f3;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            max-width: 400px;
-            margin: 0 auto;
-        ">
-            <p style="
-                color: #4a4a4a;
-                font-size: 16px;
-                line-height: 1.6;
-                margin-bottom: 10px;
-            ">
-                ${error.message}
-            </p>
-        </div>
-    `,
-    confirmButtonText: 'Tutup',
-    confirmButtonColor: '#dc2626',
-    didOpen: () => {
-        const style = document.createElement('style');
-        style.textContent = `
-            .swal2-popup {
-                font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-                border-radius: 15px;
-                box-shadow: 0 10px 25px rgba(220, 38, 38, 0.1);
-            }
-            .swal2-confirm {
-                padding: 10px 20px !important;
-                font-weight: 600;
-                text-transform: uppercase;
-                transition: all 0.3s ease;
-            }
-            .swal2-confirm:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 15px rgba(220, 38, 38, 0.2);
-            }
-            .swal2-icon.swal2-error {
-                margin-bottom: 10px !important;
-            }
-        `;
-        document.head.appendChild(style);
-    }
-});
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = 'Submit Semua Indikator KATSINOV';
-            }
-        }
-    </script>
-
-    <!-- Sweet Alert Library untuk notifikasi -->
-
-
-    <script>
-        // Initialize AOS (Animate On Scroll)
-        AOS.init({
-            duration: 800,
-            offset: 100,
-            once: true
-        });
-
-        // Form Interactivity
-        document.addEventListener('DOMContentLoaded', () => {
-            const formInputs = document.querySelectorAll('.form-input');
-
-            formInputs.forEach(input => {
-                input.addEventListener('focus', (e) => {
-                    e.target.style.borderColor = 'var(--primary)';
-                });
-
-                input.addEventListener('blur', (e) => {
-                    e.target.style.borderColor = 'var(--background)';
-                });
-            });
-
-            // Simple form validation (optional)
-            const form = document.querySelector('.form-container');
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                let isValid = true;
-
-                formInputs.forEach(input => {
-                    if (!input.value.trim()) {
-                        input.style.borderColor = '#FF6B6B';
-                        isValid = false;
-                    }
-                });
-
-                if (isValid) {
-                    alert('Formulir berhasil disubmit!');
-                    // You can add more complex submission logic here
-                }
-            });
-        });
-    </script> --}}
-    <!-- In the head section -->
-
 
     <script src="{{ asset('inovasi/dashboard/form_katsinov/js/form.js') }}"></script>
 </body>
