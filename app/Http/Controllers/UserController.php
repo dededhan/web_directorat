@@ -34,6 +34,7 @@ class UserController extends Controller
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
             'role' => $validated['role'],
+            'status' => 'active',
         ]);
         
         try {
@@ -83,5 +84,13 @@ class UserController extends Controller
             ]);
             return redirect()->back()->with('error', 'Gagal membuat data role: ' . $e->getMessage());
         }
+    }
+    public function toggleStatus(User $user)
+    {
+        $user->update([
+            'status' => $user->status === 'active' ? 'unactive' : 'active'
+        ]);
+
+        return redirect()->back()->with('success', 'Status user berhasil diubah');
     }
 }

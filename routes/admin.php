@@ -41,8 +41,11 @@ Route::prefix('admin')->name('admin.')
         Route::post('/responden/update-status/{id}', [AdminRespondenController::class, 'updateStatus'])
             ->name('responden.updateStatus');
 
+        
+        
+        
+        Route::put('/manageuser/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('manageuser.toggleStatus');
         Route::resource('/manageuser', UserController::class);
-
 
         Route::resource('/sustainability', AdminSustainabilityController::class);
 

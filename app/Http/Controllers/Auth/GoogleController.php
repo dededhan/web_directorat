@@ -79,6 +79,7 @@ class GoogleController extends Controller
                     'avatar' => $googleUser->avatar,
                     'password' => bcrypt(uniqid()), // Generate a random password
                     'role' => 'registered_user', // Set default role
+                    'status' => 'unactive', // Tambahkan ini
                     'email_verified_at' => now(),
                 ]);
                 

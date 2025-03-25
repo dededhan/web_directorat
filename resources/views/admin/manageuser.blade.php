@@ -147,6 +147,7 @@
                         <th>Email</th>
                         <th>Registration</th>
                         <th>Joined</th>
+                        <th>status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -178,6 +179,22 @@
                         </td>
                         <td>{{ $user->created_at->format('d M Y') }}</td>
                         <td>
+                            @if($user->status === 'active')
+                                <span class="badge bg-success">Active</span>
+                            @else
+                                <span class="badge bg-danger">Unactive</span>
+                            @endif
+                        </td>
+                        <td>
+                            <form action="{{ route('admin.manageuser.toggleStatus', $user->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn btn-sm btn-{{ $user->status === 'active' ? 'danger' : 'success' }}">
+                                    {{ $user->status === 'active' ? 'Nonaktifkan' : 'Aktifkan' }}
+                                </button>
+                            </form>
+                        </td>
+                        {{-- <td>
                             <div class="btn-group">
                                 <button class="btn btn-sm btn-primary">
                                     <i class='bx bx-edit-alt'></i>
@@ -189,7 +206,7 @@
                                     <i class='bx bx-user-check'></i>
                                 </button>
                             </div>
-                        </td>
+                        </td> --}}
                     </tr>
                     @endforeach
                 </tbody>
