@@ -34,7 +34,7 @@ class UserController extends Controller
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
             'role' => $validated['role'],
-            'status' => 'active',
+            'status' => 'unactive',
         ]);
         
         try {

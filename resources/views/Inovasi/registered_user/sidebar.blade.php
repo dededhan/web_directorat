@@ -87,10 +87,8 @@
 
     <!-- Logout -->
     <ul class="side-menu">
-        <li class="@if(Auth::user()->status === 'unactive') disabled @endif">
-            <a href="{{ Auth::user()->status === 'active' ? '#' : '#' }}" 
-               class="@if(Auth::user()->status === 'unactive') disabled-link @endif"
-               onclick="if(Auth::user()->status === 'active') { event.preventDefault(); document.getElementById('logout-form').submit(); }">
+        <li>
+            <a href="#" class="logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class='bx bxs-log-out-circle'></i>
                 <span class="text">Logout</span>
             </a>
