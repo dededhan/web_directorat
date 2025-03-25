@@ -109,13 +109,13 @@ Route::post('/katsinov/store', [KatsinovController::class, 'store'])
     ->name('katsinov.store')
     ->middleware('checked');
 
-    Route::get('/pemeringkatan/LandingPage', function () {
-        return view('pemeringkatan.LandingPage');
-    })->name('pemeringkatan.landingpage');
+Route::get('/pemeringkatan/landingpage', function () {
+    return view('pemeringkatan.LandingPagePemeringkatan');
+})->name('pemeringkatan.landingpage');
 
-    Route::get('/inovasi/landingpage', function () {
-        return view('Inovasi.LandingPageHilirisasi');
-    })->name('inovasi.landingpage');
+Route::get('/inovasi/landingpage', function () {
+    return view('Inovasi.LandingPageHilirisasi');
+})->name('inovasi.landingpage');
 
 Route::get('/katsinov/pdf', [KatsinovController::class, 'downloadPDF'])->name('katsinov.pdf');
 
