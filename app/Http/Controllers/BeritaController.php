@@ -32,11 +32,11 @@ class BeritaController extends Controller
     public function store(StoreBeritaRequest $request)
     {
         // $gambarPath = $request->file('gambar')->store('berita-images', 'public');
-        
+
         // Generate nama file unik
         $namaFile = time() . '_' . $request->file('gambar')->getClientOriginalName();
         $gambarPath = $request->file('gambar')->storeAs(
-            'berita-images', 
+            'berita-images',
             $namaFile,
             'public'
         );
@@ -54,11 +54,29 @@ class BeritaController extends Controller
     }
 
     /**
+     * Display news on the home page.
+     */
+    public function homeNews()
+    {
+        // Get regular news for the main grid (latest 3)
+        $regularNews = Berita::latest()->take(3)->get();
+
+        // Get featured news for the carousel (latest 5)
+        $featuredNews = Berita::latest()->take(5)->get();
+
+        return view('home', compact('regularNews', 'featuredNews'));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
+        $berita = Berita::findOrFail($id);
+        return view('Berita.show', compact('berita'));
     }
 
     /**

@@ -11,9 +11,14 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+
+use App\Http\Controllers\BeritaController;
+
+Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
+Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('Berita.show');
+// Route::get('/', function () {
+//     return view('home');
+// })->name('home');
 
 
 Route::get('/login', [LoginController::class, 'showLog

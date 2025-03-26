@@ -50,225 +50,73 @@
            
         </div>
         <!-- Regular News Grid with improved styling -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            <!-- News card 1 -->
-            <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                <div class="relative">
-                    <img alt="Coffee Morning Event" class="w-full h-56 object-cover" src="https://storage.googleapis.com/a1aa/image/tL-ajsZBsORGzMsGCvwmOU7pkXmsD0JsdwlLM-jMV_8.jpg"/>
-                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-24"></div>
-                    <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
-                        Berita
-                    </div>
-                </div>
-                <div class="p-5">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center text-gray-500 text-sm">
-                            <i class="fas fa-user-circle mr-2"></i>azisf
-                        </div>
-                        <div class="text-gray-500 text-sm">
-                            <i class="fas fa-calendar-alt mr-1"></i>28 Feb 2025
-                        </div>
-                    </div>
-                    <h2 class="font-bold text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
-                        Perkuat Silaturahmi dan Sinergi dengan Ormawa, UNJ Gelar Dialog "Coffee Morning"
-                    </h2>
-                    <p class="text-gray-600 mb-4">
-                        Dialog "Coffee Morning" yang diselenggarakan UNJ bertujuan untuk memperkuat silaturahmi dan membangun sinergi dengan organisasi mahasiswa kampus.
-                    </p>
-                    <a href="{{ route('Berita.beritahome') }}" class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
-                        Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- News card 2 -->
-            <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                <div class="relative">
-                    <img alt="Mawapres UNJ Event" class="w-full h-56 object-cover" src="https://storage.googleapis.com/a1aa/image/tL-ajsZBsORGzMsGCvwmOU7pkXmsD0JsdwlLM-jMV_8.jpg"/>
-                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-24"></div>
-                    <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
-                        Berita
-                    </div>
-                </div>
-                <div class="p-5">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center text-gray-500 text-sm">
-                            <i class="fas fa-user-circle mr-2"></i>Admin
-                        </div>
-                        <div class="text-gray-500 text-sm">
-                            <i class="fas fa-calendar-alt mr-1"></i>27 Feb 2025
-                        </div>
-                    </div>
-                    <h2 class="font-bold text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
-                        Rayhan dan Adelio Raih Gelar Mawapres Utama UNJ 2025
-                    </h2>
-                    <p class="text-gray-600 mb-4">
-                        Kebanggaan Kampus Menuju Prestasi Nasional melalui Mahasiswa Berprestasi terbaik Universitas Negeri Jakarta tahun ini.
-                    </p>
-                    <a href="{{ route('Berita.beritahome') }}" class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
-                        Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- News card 3 -->
-            <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                <div class="relative">
-                    <img alt="Rektor UNJ Event" class="w-full h-56 object-cover" src="https://storage.googleapis.com/a1aa/image/tL-ajsZBsORGzMsGCvwmOU7pkXmsD0JsdwlLM-jMV_8.jpg"/>
-                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-24"></div>
-                    <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
-                        Berita, Feature
-                    </div>
-                </div>
-                <div class="p-5">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center text-gray-500 text-sm">
-                            <i class="fas fa-user-circle mr-2"></i>Admin
-                        </div>
-                        <div class="text-gray-500 text-sm">
-                            <i class="fas fa-calendar-alt mr-1"></i>27 Feb 2025
-                        </div>
-                    </div>
-                    <h2 class="font-bold text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
-                        Rektor UNJ Dikukuhkan KONI Pusat Jadi Ketua Umum PB IPF
-                    </h2>
-                    <p class="text-gray-600 mb-4">
-                        Pengukuhan Rektor UNJ sebagai Ketua Umum PB IPF oleh KONI Pusat untuk masa bakti 2022-2026 menunjukkan kepercayaan tinggi terhadap kepemimpinannya.
-                    </p>
-                    <a href="{{ route('Berita.beritahome') }}" class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
-                        Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                    </a>
-                </div>
+<!-- Regular News Grid with improved styling -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+    @foreach($regularNews as $news)
+    <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="relative">
+            <img alt="{{ $news->judul }}" class="w-full h-56 object-cover" src="{{ Storage::url($news->gambar) }}"/>
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-24"></div>
+            <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
+                {{ ucfirst($news->kategori) }}
             </div>
         </div>
+        <div class="p-5">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center text-gray-500 text-sm">
+                    <i class="fas fa-user-circle mr-2"></i>Admin
+                </div>
+                <div class="text-gray-500 text-sm">
+                    <i class="fas fa-calendar-alt mr-1"></i>{{ date('d M Y', strtotime($news->tanggal)) }}
+                </div>
+            </div>
+            <h2 class="font-bold text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
+                {{ $news->judul }}
+            </h2>
+            <p class="text-gray-600 mb-4">
+                {{ Str::limit(strip_tags($news->isi), 100) }}
+            </p>
+            <a href="{{ route('Berita.show', $news->id) }}" class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
+                Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+    </div>
+    @endforeach
+</div>
 
         <!-- Enhanced Featured News Carousel - Moved to the bottom part -->
-        <div class="enhanced-carousel">
-            <div class="enhanced-carousel-title">Berita Unggulan</div>
-            <div class="carousel">
-                <div class="carousel-inner">
-                    <!-- Carousel Item 1 -->
-                    <div class="carousel-item-enhanced">
-                        <div class="news-card-enhanced">
-                            <div class="news-image-container">
-                                <img alt="Coffee Morning Event" class="news-image" src="https://storage.googleapis.com/a1aa/image/tL-ajsZBsORGzMsGCvwmOU7pkXmsD0JsdwlLM-jMV_8.jpg"/>
-                                <div class="news-tag-enhanced">Berita</div>
-                            </div>
-                            <div class="news-content">
-                                <div class="news-meta">
-                                    <i class="fas fa-user-circle mr-2"></i>azisf
-                                    <span class="mx-2">|</span>
-                                    <i class="fas fa-calendar-alt mr-2"></i>28 Feb 2025
-                                </div>
-                                <h3 class="news-title">Perkuat Silaturahmi dan Sinergi dengan Ormawa, UNJ Gelar Dialog "Coffee Morning"</h3>
-                                <p class="news-excerpt">
-                                    Universitas Negeri Jakarta menggelar dialog "Coffee Morning" untuk memperkuat silaturahmi dan sinergi dengan organisasi mahasiswa kampus. Kegiatan ini diharapkan dapat meningkatkan kolaborasi dalam berbagai program kampus.
-                                </p>
-                                <a href="#" class="news-link">
-                                    Baca selengkapnya <i class="fas fa-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
+<!-- Enhanced Featured News Carousel -->
+<div class="enhanced-carousel">
+    <div class="enhanced-carousel-title">Berita Unggulan</div>
+    <div class="carousel">
+        <div class="carousel-inner">
+            @foreach($featuredNews as $featured)
+            <div class="carousel-item-enhanced">
+                <div class="news-card-enhanced">
+                    <div class="news-image-container">
+                        <img alt="{{ $featured->judul }}" class="news-image" src="{{ Storage::url($featured->gambar) }}"/>
+                        <div class="news-tag-enhanced">{{ ucfirst($featured->kategori) }}</div>
                     </div>
-                    
-                    <!-- Carousel Item 2 -->
-                    <div class="carousel-item-enhanced">
-                        <div class="news-card-enhanced">
-                            <div class="news-image-container">
-                                <img alt="Mawapres UNJ Event" class="news-image" src="https://storage.googleapis.com/a1aa/image/tL-ajsZBsORGzMsGCvwmOU7pkXmsD0JsdwlLM-jMV_8.jpg"/>
-                                <div class="news-tag-enhanced">Berita</div>
-                            </div>
-                            <div class="news-content">
-                                <div class="news-meta">
-                                    <i class="fas fa-user-circle mr-2"></i>Admin
-                                    <span class="mx-2">|</span>
-                                    <i class="fas fa-calendar-alt mr-2"></i>27 Feb 2025
-                                </div>
-                                <h3 class="news-title">Rayhan dan Adelio Raih Gelar Mawapres Utama UNJ 2025</h3>
-                                <p class="news-excerpt">
-                                    Kebanggaan Kampus Menuju Prestasi Nasional melalui Mahasiswa Berprestasi terbaik Universitas Negeri Jakarta tahun ini. Prestasi ini menjadi motivasi bagi mahasiswa lainnya untuk terus berprestasi.
-                                </p>
-                                <a href="#" class="news-link">
-                                    Baca selengkapnya <i class="fas fa-arrow-right"></i>
-                                </a>
-                            </div>
+                    <div class="news-content">
+                        <div class="news-meta">
+                            <i class="fas fa-user-circle mr-2"></i>Admin
+                            <span class="mx-2">|</span>
+                            <i class="fas fa-calendar-alt mr-2"></i>{{ date('d M Y', strtotime($featured->tanggal)) }}
                         </div>
-                    </div>
-                    
-                    <!-- Carousel Item 3 -->
-                    <div class="carousel-item-enhanced">
-                        <div class="news-card-enhanced">
-                            <div class="news-image-container">
-                                <img alt="Rektor UNJ Event" class="news-image" src="https://storage.googleapis.com/a1aa/image/tL-ajsZBsORGzMsGCvwmOU7pkXmsD0JsdwlLM-jMV_8.jpg"/>
-                                <div class="news-tag-enhanced">Berita, Feature</div>
-                            </div>
-                            <div class="news-content">
-                                <div class="news-meta">
-                                    <i class="fas fa-user-circle mr-2"></i>Admin
-                                    <span class="mx-2">|</span>
-                                    <i class="fas fa-calendar-alt mr-2"></i>27 Feb 2025
-                                </div>
-                                <h3 class="news-title">Rektor UNJ Dikukuhkan KONI Pusat Jadi Ketua Umum PB IPF Masa Bakti 2022-2026</h3>
-                                <p class="news-excerpt">
-                                    Prestasi pimpinan kampus yang juga berkontribusi dalam pengembangan olahraga nasional. Pengukuhan ini menunjukkan peran aktif UNJ dalam berbagai bidang termasuk olahraga.
-                                </p>
-                                <a href="#" class="news-link">
-                                    Baca selengkapnya <i class="fas fa-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Carousel Item 4 -->
-                    <div class="carousel-item-enhanced">
-                        <div class="news-card-enhanced">
-                            <div class="news-image-container">
-                                <img alt="Maryam Qonita" class="news-image" src="https://storage.googleapis.com/a1aa/image/tL-ajsZBsORGzMsGCvwmOU7pkXmsD0JsdwlLM-jMV_8.jpg"/>
-                                <div class="news-tag-enhanced">Feature</div>
-                            </div>
-                            <div class="news-content">
-                                <div class="news-meta">
-                                    <i class="fas fa-user-circle mr-2"></i>Admin
-                                    <span class="mx-2">|</span>
-                                    <i class="fas fa-calendar-alt mr-2"></i>25 Feb 2025
-                                </div>
-                                <h3 class="news-title">Maryam Qonita: Dari Mahasiswa Berprestasi Hingga Peneliti Muda</h3>
-                                <p class="news-excerpt">
-                                    Kisah inspiratif perjalanan akademik dan prestasi Maryam Qonita sebagai mahasiswa berprestasi UNJ yang kini menjadi peneliti muda dengan berbagai penghargaan.
-                                </p>
-                                <a href="#" class="news-link">
-                                    Baca selengkapnya <i class="fas fa-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Carousel Item 5 -->
-                    <div class="carousel-item-enhanced">
-                        <div class="news-card-enhanced">
-                            <div class="news-image-container">
-                                <img alt="Prof. Mohamed Event" class="news-image" src="https://storage.googleapis.com/a1aa/image/tL-ajsZBsORGzMsGCvwmOU7pkXmsD0JsdwlLM-jMV_8.jpg"/>
-                                <div class="news-tag-enhanced">Akademik</div>
-                            </div>
-                            <div class="news-content">
-                                <div class="news-meta">
-                                    <i class="fas fa-user-circle mr-2"></i>Admin
-                                    <span class="mx-2">|</span>
-                                    <i class="fas fa-calendar-alt mr-2"></i>25 Feb 2025
-                                </div>
-                                <h3 class="news-title">Maryam Qonita: Dari Mahasiswa Berprestasi Hingga Peneliti Muda</h3>
-                                <p class="news-excerpt">
-                                    Kisah inspiratif perjalanan akademik dan prestasi Maryam Qonita sebagai mahasiswa berprestasi UNJ yang kini menjadi peneliti muda dengan berbagai penghargaan.
-                                </p>
-                                <a href="#" class="news-link">
-                                    Baca selengkapnya <i class="fas fa-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
+                        <h3 class="news-title">{{ $featured->judul }}</h3>
+                        <p class="news-excerpt">
+                            {{ Str::limit(strip_tags($featured->isi), 150) }}
+                        </p>
+                        <a href="{{ route('Berita.show', $featured->id) }}" class="news-link">
+                            Baca selengkapnya <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
+            @endforeach
         </div>
+    </div>
+</div>
     </main>
     <!-- Program dan Layanan Section -->
     <section class="program-section">
