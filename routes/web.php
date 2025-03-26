@@ -55,6 +55,10 @@ Route::get('/profile', function () {
     return view('Profile1.profile');
 })->name('profile.profile');
 
+Route::get('/document', function () {
+    return view('document.document');
+})->name('document.document');
+
 Route::get('/strukturorganisasi', function () {
     return view('struktur organisasi.strukturorganisasi');
 })->name('strukturorganisasi');
