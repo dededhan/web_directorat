@@ -23,7 +23,8 @@
                 <h3>Input Pengumuman</h3>
             </div> 
 
-            <form id="pengumuman-form">
+            <form id="pengumuman-form" action="{{ route('admin.news-scroll.store') }}" method="POST">
+                @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="judul_pengumuman" class="form-label">Judul Pengumuman</label>
@@ -58,7 +59,7 @@
                 </div>
 
                 <div class="mb-3 d-flex justify-content-end">
-                    <button type="button" class="btn btn-primary" id="simpan-btn">Simpan Pengumuman</button>
+                    <button type="submit" class="btn btn-primary" id="simpan-btn">Simpan Pengumuman</button>
                 </div>
             </form>
         </div>
@@ -82,64 +83,34 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($pengumumans as $index => $pengumuman)
                             <tr>
-                                <td>1</td>
-                                <td>🕌</td>
-                                <td>Masjid Nurul Irfan UNJ</td>
-                                <td>Menerima dan Menyalurkan Hewan Qurban. Segera hubungi panitia untuk informasi lebih lanjut.</td>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $pengumuman->icon }}</td>
+                                <td>{{ $pengumuman->judul_pengumuman }}</td>
+                                <td>{{ $pengumuman->isi_pengumuman }}</td>
                                 <td>
-                                    <span class="badge bg-success">Aktif</span>
+                                    <span class="badge bg-{{ $pengumuman->status ? 'success' : 'secondary' }}">
+                                        {{ $pengumuman->status ? 'Aktif' : 'Non-Aktif' }}
+                                    </span>
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning edit-pengumuman" data-id="1">
+                                        <a href="{{ route('admin.news-scroll.edit', $pengumuman->id) }}" class="btn btn-sm btn-warning">
                                             <i class='bx bx-edit'></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger delete-pengumuman" data-id="1">
-                                            <i class='bx bx-trash'></i>
-                                        </button>
+                                        </a>
+                                        <form action="{{ route('admin.news-scroll.destroy', $pengumuman->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class='bx bx-trash'></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>📚</td>
-                                <td>Pendaftaran KKN</td>
-                                <td>Pendaftaran KKN Periode Juli 2025 telah dibuka. Silakan akses aplikasi SIAKAD untuk mendaftar.</td>
-                                <td>
-                                    <span class="badge bg-success">Aktif</span>
-                                </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning edit-pengumuman" data-id="2">
-                                            <i class='bx bx-edit'></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger delete-pengumuman" data-id="2">
-                                            <i class='bx bx-trash'></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>💰</td>
-                                <td>Beasiswa Prestasi UNJ</td>
-                                <td>Pendaftaran Beasiswa Prestasi UNJ tahun 2025 dibuka sampai 10 April. Info lengkap di web beasiswa.unj.ac.id.</td>
-                                <td>
-                                    <span class="badge bg-secondary">Non-Aktif</span>
-                                </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning edit-pengumuman" data-id="3">
-                                            <i class='bx bx-edit'></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger delete-pengumuman" data-id="3">
-                                            <i class='bx bx-trash'></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>                        
+                            @endforeach
+                        </tbody>                       
                     </table>
                 </div>
             </div>

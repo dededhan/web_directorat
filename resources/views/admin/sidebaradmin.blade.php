@@ -34,8 +34,8 @@
                         <span class="text">Manage User</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('admin.news_scroll') ? 'active' : '' }}">
-                    <a href="{{ route('admin.news_scroll') }}">
+                <li class="{{ request()->routeIs('admin.newsscroll.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.news-scroll.index') }}">
                         <i class='bx bxs-user'></i>
                         <span class="text">Berita Scroll</span>
                     </a>

@@ -16,6 +16,9 @@ use App\Http\Controllers\BeritaAcaraController;
 use App\Http\Controllers\FormInformasiDasarController;
 use App\Http\Controllers\FormRecordHasilPengukuranController;
 use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\PengumumanController;
+
+
 
 Route::prefix('admin')->name('admin.')
     ->middleware(['checked', 'role:admin_direktorat'])
@@ -33,9 +36,11 @@ Route::prefix('admin')->name('admin.')
         ->except(['show', 'edit', 'update']);
 
         // News Scroll
-        Route::get('/news_scroll', function () {
-            return view('admin.news_scroll');
-        })->name('news_scroll');
+        // Route::get('/news_scroll', function () {
+        //     return view('admin.news_scroll');
+        // })->name('news_scroll');
+        Route::resource('/news-scroll', PengumumanController::class);
+
 
         // News Scroll
         Route::get('/program_layanan', function () {
