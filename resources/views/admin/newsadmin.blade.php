@@ -29,9 +29,8 @@
                         <label for="category" class="form-label">Kategori</label>
                         <select class="form-select" name="kategori" id="category">
                             <option value="">Pilih Kategori</option>
-                            <option value="berita">Berita</option>
-                            <option value="feature">Feature</option>
-                            <option value="akademik">Akademik</option>
+                            <option value="inovasi">Inovasi</option>
+                            <option value="pemeringkatan">Pemeringkatan</option>
                         </select>
                         <div class="form-text text-muted">Pilih kategori berita yang sesuai</div>
                     </div>
