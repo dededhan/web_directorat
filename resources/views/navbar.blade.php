@@ -33,9 +33,8 @@
             <li class="relative group">
                 <a href="#" class="text-white hover:text-yellow-400">Profil</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('profile.profile') }}" class="hover:text-yellow-400">Profile</a></li>
+                    <li><a href="{{ route('profile.profile') }}" class="hover:text-yellow-400">Tugas Pokok dan Fungsi</a></li>
                     <li><a href="{{ route('strukturorganisasi') }}" class="hover:text-yellow-400">Struktur Organisasi</a></li>
-                    <li><a href="{{ route('tupoksi.tupoksi') }}" class="hover:text-yellow-400">Tugas Pokok dan Fungsi</a></li>
                 </ul>
             </li>
             <li class="relative group">
@@ -60,7 +59,8 @@
                     <li><a href="{{ route('galeri.sustainability') }}" class="hover:text-yellow-400">Sustainability</a></li>
                 </ul>
             </li>
-            <li><a href="#" class="text-white hover:text-yellow-400">Portal</a></li>
+            <li><a href="#" class="text-white hover:text-yellow-400">Dokumen</a></li>
+            <li><a href="#" class="text-white hover:text-yellow-400">SSO</a></li>
             <li><a class="login text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
         </ul>
     </div>
