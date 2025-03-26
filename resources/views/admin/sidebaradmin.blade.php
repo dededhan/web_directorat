@@ -41,8 +41,8 @@
                     </a>
                 </li>
 
-                <li class="{{ request()->routeIs('admin.program_layanan') ? 'active' : '' }}">
-                    <a href="{{ route('admin.program_layanan') }}">
+                <li class="{{ request()->routeIs('admin.programlayanan.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.program-layanan.index') }}">
                         <i class='bx bxs-user'></i>
                         <span class="text">Program dan Layanan</span>
                     </a>

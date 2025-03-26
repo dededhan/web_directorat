@@ -17,7 +17,7 @@ use App\Http\Controllers\FormInformasiDasarController;
 use App\Http\Controllers\FormRecordHasilPengukuranController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\PengumumanController;
-
+use App\Http\Controllers\ProgramLayananController;
 
 
 Route::prefix('admin')->name('admin.')
@@ -35,18 +35,12 @@ Route::prefix('admin')->name('admin.')
         Route::resource('/news', BeritaController::class)
         ->except(['show', 'edit', 'update']);
 
-        // News Scroll
-        // Route::get('/news_scroll', function () {
-        //     return view('admin.news_scroll');
-        // })->name('news_scroll');
         Route::resource('/news-scroll', PengumumanController::class);
 
 
-        // News Scroll
-        Route::get('/program_layanan', function () {
-            return view('admin.program_layanan');
-        })->name('program_layanan');
-
+    
+        Route::resource('/program-layanan', ProgramLayananController::class);
+        
         Route::get('/document', function () {
             return view('admin.document');
         })->name('document');

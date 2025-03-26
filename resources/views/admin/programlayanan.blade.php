@@ -22,8 +22,8 @@
             <div class="head">
                 <h3>Input Program Layanan</h3>
             </div> 
-
-            <form id="layanan-form">
+            <form id="layanan-form"  action="{{ route('admin.program-layanan.store') }}" method="POST">
+                @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="icon" class="form-label">Icon</label>
@@ -59,7 +59,7 @@
 
 
                 <div class="mb-3 d-flex justify-content-end">
-                    <button type="button" class="btn btn-primary" id="simpan-btn">Simpan Program</button>
+                    <button type="submit" class="btn btn-primary" id="simpan-btn">Simpan Program</button>
                 </div>
             </form>
         </div>
@@ -83,64 +83,38 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($programs as $key => $program)
                             <tr>
-                                <td>1</td>
-                                <td><i class="fas fa-graduation-cap"></i></td>
-                                <td>Beasiswa</td>
-                                <td>Program beasiswa untuk mahasiswa berprestasi dan kurang mampu, membantu meringankan biaya pendidikan.</td>
+                                <td>{{ $key+1 }}</td>
+                                <td><i class="{{ $program->icon }}"></i></td>
+                                <td>{{ $program->judul }}</td>
+                                <td>{{ $program->deskripsi }}</td>
                                 <td>
-                                    <span class="badge bg-success">Aktif</span>
+                                    <span class="badge bg-{{ $program->status ? 'success' : 'secondary' }}">
+                                        {{ $program->status ? 'Aktif' : 'Non-Aktif' }}
+                                    </span>
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning edit-layanan" data-id="1">
+                                        <button class="btn btn-sm btn-warning edit-layanan" 
+                                                data-id="{{ $program->id }}"
+                                                data-icon="{{ $program->icon }}"
+                                                data-judul="{{ $program->judul }}"
+                                                data-deskripsi="{{ $program->deskripsi }}">
                                             <i class='bx bx-edit'></i>
                                         </button>
-                                        <button class="btn btn-sm btn-danger delete-layanan" data-id="1">
-                                            <i class='bx bx-trash'></i>
-                                        </button>
+                                        <form action="{{ route('admin.program-layanan.destroy', $program->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class='bx bx-trash'></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td><i class="fas fa-hands-helping"></i></td>
-                                <td>Bantuan Pendidikan</td>
-                                <td>Memberikan bantuan pendidikan berupa subsidi biaya kuliah dan bantuan buku kepada mahasiswa dari keluarga prasejahtera.</td>
-                                <td>
-                                    <span class="badge bg-success">Aktif</span>
-                                </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning edit-layanan" data-id="2">
-                                            <i class='bx bx-edit'></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger delete-layanan" data-id="2">
-                                            <i class='bx bx-trash'></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td><i class="fas fa-certificate"></i></td>
-                                <td>Sertifikasi Keahlian</td>
-                                <td>Program sertifikasi keahlian profesional bagi mahasiswa dan alumni untuk meningkatkan kompetensi di dunia kerja.</td>
-                                <td>
-                                    <span class="badge bg-secondary">Non-Aktif</span>
-                                </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning edit-layanan" data-id="3">
-                                            <i class='bx bx-edit'></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger delete-layanan" data-id="3">
-                                            <i class='bx bx-trash'></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>                        
+                            @endforeach
+                        </tbody>                       
                     </table>
                 </div>
             </div>
