@@ -4,7 +4,7 @@
     top: 0;
     left: 0;
     width: 280px;
-    height: 100%;
+    height: 100vh; /* Use viewport height instead */
     background: linear-gradient(180deg, #176369 0%, #114a4d 100%);
     z-index: 2000;
     font-family: 'Inter', 'Segoe UI', sans-serif;
@@ -12,6 +12,13 @@
     overflow-x: hidden;
     overflow-y: auto;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Body styles to prevent scrolling issues */
+body {
+    overflow-x: hidden; /* Prevent horizontal scrollbar */
+    margin: 0;
+    padding: 0;
 }
 
 #sidebar::-webkit-scrollbar {
@@ -267,6 +274,9 @@
     width: calc(100% - 280px);
     left: 280px;
     transition: all 0.3s ease;
+    height: 100vh; /* Set to viewport height */
+    overflow-y: auto; /* Allow content area to scroll */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 #sidebar.hide ~ #content {
@@ -305,4 +315,20 @@
     border-style: solid;
     border-color: transparent #333 transparent transparent;
     z-index: 11;
+}
+
+/* Add this to ensure proper overflow handling */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent scrolling on the body */
+}
+
+/* Main content scrolling */
+#content main {
+    height: auto;
+    min-height: calc(100vh - 56px); /* Navbar height */
+    overflow-y: auto;
+    padding-bottom: 20px;
 }

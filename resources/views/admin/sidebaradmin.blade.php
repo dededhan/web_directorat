@@ -1,11 +1,14 @@
 <!-- SIDEBAR -->
 <section id="sidebar">
     <!-- Brand Logo -->
-    <a href="#" class="brand">
-        <i class='bx bx-menu toggle-sidebar'></i>
+    <div class="brand">
+        <!-- Use a button element instead of an icon inside a link -->
+        <button type="button" id="toggle-sidebar-btn" style="background: none; border: none; color: white; cursor: pointer; position: absolute; left: 15px; top: 50%; transform: translateY(-50%); padding: 5px; font-size: 24px;">
+            <i class='bx bx-menu'></i>
+        </button>
         <i class="logo-icon"></i>
         <span class="text">Dashboard Direktorat</span>
-    </a>
+    </div>
     
     <!-- Navigation Menu -->
     <nav class="side-navigation">
@@ -187,5 +190,33 @@
             </ul>
         </div>
     </nav>
+
+    <script>
+        // Execute immediately when DOM is ready
+        (function() {
+            // Try different ways to attach the event
+            var btn = document.getElementById('toggle-sidebar-btn');
+            var sidebar = document.getElementById('sidebar');
+            
+            if (btn && sidebar) {
+                // Method 1: Direct property
+                btn.onclick = function() {
+                    sidebar.classList.toggle('hide');
+                };
+                
+                // Method 2: Add event listener
+                btn.addEventListener('click', function() {
+                    sidebar.classList.toggle('hide');
+                });
+                
+                // Method 3: Add event to parent
+                document.addEventListener('click', function(e) {
+                    if (e.target === btn || e.target.closest('#toggle-sidebar-btn')) {
+                        sidebar.classList.toggle('hide');
+                    }
+                });
+            }
+        })();
+        </script>
 </section>
 <!-- SIDEBAR -->
