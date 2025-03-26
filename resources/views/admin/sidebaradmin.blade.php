@@ -34,6 +34,19 @@
                         <span class="text">Manage User</span>
                     </a>
                 </li>
+                <li class="{{ request()->routeIs('admin.news_scroll') ? 'active' : '' }}">
+                    <a href="{{ route('admin.news_scroll') }}">
+                        <i class='bx bxs-user'></i>
+                        <span class="text">Berita Scroll</span>
+                    </a>
+                </li>
+
+                <li class="{{ request()->routeIs('admin.program_layanan') ? 'active' : '' }}">
+                    <a href="{{ route('admin.program_layanan') }}">
+                        <i class='bx bxs-user'></i>
+                        <span class="text">Program dan Layanan</span>
+                    </a>
+                </li>
             </ul>
         </div>
 

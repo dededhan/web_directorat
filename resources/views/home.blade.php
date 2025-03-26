@@ -276,7 +276,7 @@
             <!-- Section Header -->
             <div class="section-header">
                 <span class="section-subtitle">Program & Layanan</span>
-                <h2 class="section-title">Layanan Unggulan untuk Mahasiswa</h2>
+                <h2 class="section-title">Layanan </h2>
                 <p class="section-description">
                     Universitas Negeri Jakarta menyediakan berbagai program dan layanan unggulan untuk mendukung perkembangan akademik dan karir mahasiswa.
                 </p>

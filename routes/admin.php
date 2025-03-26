@@ -32,6 +32,16 @@ Route::prefix('admin')->name('admin.')
         Route::resource('/news', BeritaController::class)
         ->except(['show', 'edit', 'update']);
 
+        // News Scroll
+        Route::get('/news_scroll', function () {
+            return view('admin.news_scroll');
+        })->name('news_scroll');
+
+        // News Scroll
+        Route::get('/program_layanan', function () {
+            return view('admin.program_layanan');
+        })->name('program_layanan');
+
 
         Route::resource('/responden', AdminRespondenController::class);
         Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
