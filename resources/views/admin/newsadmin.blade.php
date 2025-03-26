@@ -96,9 +96,8 @@
                                 <td>{{ $index + 1 }}</td>
                                 <td>
                                     <span class="badge bg-{{ [
-                                        'berita' => 'primary',
-                                        'feature' => 'success',
-                                        'akademik' => 'warning'
+                                        'inovasi' => 'primary',
+                                        'pemeringkatan' => 'success'
                                     ][$berita->kategori] }}">
                                         {{ ucfirst($berita->kategori) }}
                                     </span>

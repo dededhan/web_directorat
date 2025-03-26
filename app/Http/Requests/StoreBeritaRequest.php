@@ -14,7 +14,7 @@ class StoreBeritaRequest extends FormRequest
     public function rules()
     {
         return [
-            'kategori' => 'required|in:berita,feature,akademik',
+            'kategori' => 'required|in:inovasi,pemeringkatan',
             'tanggal' => 'required|date',
             'judul_berita' => 'required|string|max:200',
             'isi_berita' => 'required|string',
