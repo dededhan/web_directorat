@@ -32,7 +32,7 @@
                 </a>
                 <nav>
                     <ul>
-                        <li><a href="#">Beranda</a></li>
+                        <li><a href="{{ route('home') }}">Home</a></li>
                         <li><a href="#">Terbaru</a></li>
                     </ul>
                 </nav>
