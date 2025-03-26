@@ -47,6 +47,13 @@
                         <span class="text">Program dan Layanan</span>
                     </a>
                 </li>
+
+                <li class="{{ request()->routeIs('admin.document') ? 'active' : '' }}">
+                    <a href="{{ route('admin.document') }}">
+                        <i class='bx bxs-user'></i>
+                        <span class="text">Document</span>
+                    </a>
+                </li>
             </ul>
         </div>
 

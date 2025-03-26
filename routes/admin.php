@@ -42,6 +42,10 @@ Route::prefix('admin')->name('admin.')
             return view('admin.program_layanan');
         })->name('program_layanan');
 
+        Route::get('/document', function () {
+            return view('admin.document');
+        })->name('document');
+
 
         Route::resource('/responden', AdminRespondenController::class);
         Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
