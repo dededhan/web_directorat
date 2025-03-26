@@ -217,7 +217,7 @@
     <main>
         <section class="functions" id="functions">
             <h2 class="section-title">Fungsi Utama</h2>
-            <p>Berdasarkan Pasal 111, Direktorat Inovasi dan Hilirisasi, Sistem Informasi dan Pemeringkatan menyelenggarakan fungsi:</p>
+            <p>Direktorat Inovasi dan Hilirisasi, Sistem Informasi dan Pemeringkatan menyelenggarakan fungsi:</p>
             <ul class="function-list">
                 <li>penyusunan dan pengembangan kebijakan inovasi;</li>
                 <li>pengembangan dan pengelolaan kegiatan inovasi dan hilirisasi di seluruh Fakultas dan Program Studi;</li>
@@ -230,7 +230,7 @@
         
         <section class="organization" id="organization">
             <h2 class="section-title">Struktur Organisasi</h2>
-            <p>Berdasarkan Pasal 112, Direktorat Inovasi dan Hilirisasi, Sistem Informasi dan Pemeringkatan didukung oleh:</p>
+            <p>Direktorat Inovasi dan Hilirisasi, Sistem Informasi dan Pemeringkatan didukung oleh:</p>
             
             <ul class="function-list">
                 <li>Subdirektorat Inovasi dan Hilirisasi;</li>
@@ -240,7 +240,7 @@
             <div class="subdir-wrapper">
                 <article>
                     <h3>Subdirektorat Inovasi dan Hilirisasi</h3>
-                    <p>Mempunyai tugas melakukan pengembangan inovasi dan hilirisasi hasil riset. Berdasarkan Pasal 114, Subdirektorat Inovasi dan Hilirisasi menyelenggarakan fungsi:</p>
+                    <p>Mempunyai tugas melakukan pengembangan inovasi dan hilirisasi hasil riset. Subdirektorat Inovasi dan Hilirisasi menyelenggarakan fungsi:</p>
                     <ul class="function-list">
                         <li>pengelolaan program inkubasi untuk mendukung usaha rintisan berbasis inovasi;</li>
                         <li>pengelolaan dana riset yang diperoleh dari hibah atau kerja sama dengan mitra untuk mendukung pengembangan inovasi;</li>
@@ -252,7 +252,7 @@
                 
                 <article>
                     <h3>Subdirektorat Sistem Informasi dan Pemeringkatan</h3>
-                    <p>Mempunyai tugas melakukan peningkatan sistem informasi dan pemeringkatan. Berdasarkan Pasal 114, Subdirektorat Sistem Informasi dan Pemeringkatan menyelenggarakan fungsi:</p>
+                    <p>Mempunyai tugas melakukan peningkatan sistem informasi dan pemeringkatan. Subdirektorat Sistem Informasi dan Pemeringkatan menyelenggarakan fungsi:</p>
                     <ul class="function-list">
                         <li>pengumpulan, pengelolaan, dan analisis data yang dibutuhkan untuk pemeringkatan universitas;</li>
                         <li>penyusunan dan pelaksanaan strategi untuk meningkatkan posisi universitas dalam pemeringkatan nasional dan internasional;</li>
