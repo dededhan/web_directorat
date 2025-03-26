@@ -356,7 +356,7 @@
     </section>
     
     <!-- UNJ dalam Angka Section -->
-    <section class="unj-dalam-angka">
+    {{-- <section class="unj-dalam-angka">
         <div class="container">
             <h1>UNJ dalam <span>Angka</span></h1>
             <div class="grid-container">
@@ -425,7 +425,7 @@
             <div class="badge">116 Prodi Terakreditasi Nasional</div>
             <div class="badge">60 Prodi Terakreditasi Internasional</div>
         </div>
-    </div>
+    </div> --}}
 </section>
     <script src="{{ asset('home.js') }}"></script>
 </body>
