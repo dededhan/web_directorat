@@ -48,8 +48,8 @@
                     </a>
                 </li>
 
-                <li class="{{ request()->routeIs('admin.document') ? 'active' : '' }}">
-                    <a href="{{ route('admin.document') }}">
+                <li class="{{ request()->routeIs('admin.document.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.document.index') }}">
                         <i class='bx bxs-user'></i>
                         <span class="text">Document</span>
                     </a>

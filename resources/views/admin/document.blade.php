@@ -22,7 +22,7 @@
                 <h3>Input Dokumen</h3>
             </div> 
 
-            <form method="POST" action="#" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('admin.document.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -90,42 +90,42 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Contoh data statis untuk tampilan -->
+                            @foreach($dokumens as $dokumen)
                             <tr>
-                                <td>1</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>
-                                    <span class="badge bg-danger">
-                                        PDF
+                                    <span class="badge {{ $dokumen->kategori === 'pdf' ? 'bg-danger' : 'bg-primary' }}">
+                                        {{ strtoupper($dokumen->kategori) }}
                                     </span>
                                 </td>
-                                <td>2025-03-15</td>
-                                <td>Peraturan Rektor No. 5 Tahun 2025</td>
-                                <td>2.4 MB</td>
+                                <td>{{ $dokumen->tanggal_publikasi }}</td>
+                                <td>{{ $dokumen->judul_dokumen }}</td>
+                                <td>
+                                    @if($dokumen->ukuran > 1000000)
+                                        {{ number_format($dokumen->ukuran / 1048576, 1) }} MB
+                                    @else
+                                        {{ number_format($dokumen->ukuran / 1024, 0) }} KB
+                                    @endif
+                                </td>
                                 <td>
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-info">Download</button>
-                                        <button class="btn btn-sm btn-danger delete-dokumen">Delete</button>
+                                        <a href="{{ route('admin.document.download', $dokumen->id) }}" 
+                                            class="btn btn-sm btn-info" 
+                                            title="Download {{ $dokumen->nama_file }}">
+                                             Download
+                                         </a>
+                                        <form action="{{ route('admin.document.destroy', $dokumen->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger delete-dokumen">
+                                                Delete
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>
-                                    <span class="badge bg-primary">
-                                        Word
-                                    </span>
-                                </td>
-                                <td>2025-03-20</td>
-                                <td>Pedoman Green Campus Initiative</td>
-                                <td>856 KB</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-info">Download</button>
-                                        <button class="btn btn-sm btn-danger delete-dokumen">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>                        
+                            @endforeach
+                        </tbody>                       
                     </table>
                 </div>
             </div>

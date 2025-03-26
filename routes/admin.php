@@ -18,6 +18,9 @@ use App\Http\Controllers\FormRecordHasilPengukuranController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\ProgramLayananController;
+// Ganti route yang ada dengan:
+use App\Http\Controllers\DokumenController;
+
 
 
 Route::prefix('admin')->name('admin.')
@@ -41,10 +44,9 @@ Route::prefix('admin')->name('admin.')
     
         Route::resource('/program-layanan', ProgramLayananController::class);
         
-        Route::get('/document', function () {
-            return view('admin.document');
-        })->name('document');
-
+        Route::resource('/document', DokumenController::class);
+        Route::get('document/{dokumen}/download', [DokumenController::class, 'download'])
+            ->name('document.download');
 
         Route::resource('/responden', AdminRespondenController::class);
         Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
