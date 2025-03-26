@@ -47,9 +47,8 @@
         <div class="category-tabs">
             <div class="container" style="display: flex; overflow-x: auto;">
                 <a href="#" class="category-tab active">Semua</a>
-                <a href="#" class="category-tab">Berita</a>
-                <a href="#" class="category-tab">Feature</a>
-                <a href="#" class="category-tab">Akademik</a>
+                <a href="#" class="category-tab">Inovasi</a>
+                <a href="#" class="category-tab">Pemeringkatan</a>
             </div>
         </div>
     </header>
@@ -62,7 +61,7 @@
                         <h2 class="headline-title">Pemerintah Umumkan Kebijakan Baru untuk Mendorong Ekonomi Kreatif</h2>
                         <p class="headline-desc">Program ini diharapkan dapat meningkatkan kontribusi ekonomi kreatif hingga 10% terhadap PDB nasional dalam lima tahun ke depan.</p>
                         <div class="news-meta">
-                            <span class="news-category">Feature</span>
+                            <span class="news-category">Inovasi</span>
                             <span class="news-date">16 Maret 2025</span>
                         </div>
                     </div>
@@ -73,7 +72,7 @@
                         <div class="side-content">
                             <h3 class="side-title">Startup Lokal Kembangkan AI untuk Solusi Pertanian Presisi</h3>
                             <div class="news-meta">
-                                <span class="news-category">Feature</span>
+                                <span class="news-category">Inovasi</span>
                             </div>
                         </div>
                     </div>
@@ -82,7 +81,7 @@
                         <div class="side-content">
                             <h3 class="side-title">Tim Nasional Berhasil Lolos ke Semifinal Turnamen Internasional</h3>
                             <div class="news-meta">
-                                <span class="news-category">Berita</span>
+                                <span class="news-category">Pemeringkatan</span>
                             </div>
                         </div>
                     </div>
@@ -91,7 +90,7 @@
                         <div class="side-content">
                             <h3 class="side-title">Kementerian Pendidikan Luncurkan Program Beasiswa untuk 10,000 Mahasiswa</h3>
                             <div class="news-meta">
-                                <span class="news-category">Akademik</span>
+                                <span class="news-category">Pemeringkatan</span>
                             </div>
                         </div>
                     </div>
@@ -108,7 +107,7 @@
                         <h3 class="card-title">Peneliti Temukan Manfaat Baru Kunyit untuk Kesehatan Jantung</h3>
                         <p class="card-excerpt">Studi terbaru menunjukkan bahwa kurkumin dalam kunyit dapat membantu mengurangi peradangan dan meningkatkan fungsi pembuluh darah.</p>
                         <div class="news-meta">
-                            <span class="news-category">Feature</span>
+                            <span class="news-category">Inovasi</span>
                             <span class="news-date">16 Maret 2025</span>
                         </div>
                     </div>
@@ -119,7 +118,7 @@
                         <h3 class="card-title">Festival Film Internasional Digelar di Jakarta Bulan Depan</h3>
                         <p class="card-excerpt">Lebih dari 100 film dari 30 negara akan diputar dalam festival bergengsi yang akan berlangsung selama satu minggu.</p>
                         <div class="news-meta">
-                            <span class="news-category">Berita</span>
+                            <span class="news-category">Pemeringkatan</span>
                             <span class="news-date">16 Maret 2025</span>
                         </div>
                     </div>
@@ -130,7 +129,7 @@
                         <h3 class="card-title">Pemerintah Daerah Resmikan Taman Kota Ramah Lingkungan</h3>
                         <p class="card-excerpt">Taman seluas 5 hektar ini dilengkapi dengan panel surya, sistem pengolahan air hujan, dan berbagai fasilitas ramah lingkungan lainnya.</p>
                         <div class="news-meta">
-                            <span class="news-category">Akademik</span>
+                            <span class="news-category">Inovasi</span>
                             <span class="news-date">15 Maret 2025</span>
                         </div>
                     </div>
@@ -141,7 +140,7 @@
                         <h3 class="card-title">Bank Sentral Pertahankan Suku Bunga Acuan</h3>
                         <p class="card-excerpt">Keputusan ini diambil setelah melihat stabilitas inflasi dan pertumbuhan ekonomi yang terjaga dalam tiga bulan terakhir.</p>
                         <div class="news-meta">
-                            <span class="news-category">Berita</span>
+                            <span class="news-category">Pemeringkatan</span>
                             <span class="news-date">15 Maret 2025</span>
                         </div>
                     </div>
@@ -152,7 +151,7 @@
                         <h3 class="card-title">Peluncuran Ponsel Pintar Terbaru dengan Fitur Kamera 200MP</h3>
                         <p class="card-excerpt">Perusahaan teknologi terkemuka mengklaim ponsel ini memiliki kemampuan fotografi terbaik di kelasnya dengan dukungan AI.</p>
                         <div class="news-meta">
-                            <span class="news-category">Feature</span>
+                            <span class="news-category">Inovasi</span>
                             <span class="news-date">14 Maret 2025</span>
                         </div>
                     </div>
@@ -163,7 +162,7 @@
                         <h3 class="card-title">Menteri Luar Negeri Kunjungi Tiga Negara Asia Tenggara</h3>
                         <p class="card-excerpt">Kunjungan diplomatik ini bertujuan untuk memperkuat kerja sama bilateral dalam bidang ekonomi dan keamanan.</p>
                         <div class="news-meta">
-                            <span class="news-category">Akademik</span>
+                            <span class="news-category">Pemeringkatan</span>
                             <span class="news-date">14 Maret 2025</span>
                         </div>
                     </div>
@@ -181,146 +180,98 @@
     
     // Content database for different categories
     const categoryContent = {
-        "Berita": {
+        "Inovasi": {
             main: {
-                title: "Presiden Resmikan Proyek Infrastruktur Senilai 50 Triliun Rupiah",
-                desc: "Paket proyek infrastruktur ini mencakup jalan tol, pelabuhan, dan bandara di lima provinsi yang diharapkan mempercepat pertumbuhan ekonomi daerah.",
-                category: "Berita",
+                title: "Startup Lokal Kembangkan Robot Penyelamat untuk Bencana Alam",
+                desc: "Tim mahasiswa ITB berhasil menciptakan robot yang dapat menjangkau area-area berbahaya dan mendeteksi korban terjebak setelah bencana alam.",
+                category: "Inovasi",
                 date: "16 Maret 2025"
             },
             side: [
                 {
-                    title: "Kasus Covid-19 Menurun 20% dalam Sebulan Terakhir",
-                    category: "Berita"
+                    title: "Peneliti Indonesia Temukan Bahan Plastik yang Terurai dalam 3 Bulan",
+                    category: "Inovasi"
                 },
                 {
-                    title: "Pemerintah Perketat Pengawasan Impor Bahan Pangan",
-                    category: "Berita"
+                    title: "Sistem Deteksi Dini Banjir Berbasis IoT Diuji Coba di Jakarta",
+                    category: "Inovasi"
                 },
                 {
-                    title: "Partai Politik Mulai Persiapkan Diri Menjelang Pemilu 2026",
-                    category: "Berita"
+                    title: "Dosen UGM Kembangkan Vaksin Kanker Nasofaring Pertama di ASEAN",
+                    category: "Inovasi"
                 }
             ],
             news: [
                 {
-                    title: "Menteri Keuangan: Inflasi Terkendali di Bawah 3%",
-                    excerpt: "Data BPS menunjukkan inflasi tahunan berada pada level 2.8%, lebih rendah dari perkiraan yang membuat pemerintah optimis pertumbuhan ekonomi mencapai target.",
-                    category: "Berita",
+                    title: "Aplikasi Pembelajaran Bahasa Daerah Berbasis AI Diluncurkan",
+                    excerpt: "Platform digital ini mampu mengenali dan mengajarkan lebih dari 50 bahasa daerah di Indonesia dengan metode interaktif yang menarik.",
+                    category: "Inovasi",
                     date: "16 Maret 2025"
                 },
                 {
-                    title: "Badan Meteorologi Ingatkan Cuaca Ekstrem di Beberapa Wilayah",
-                    excerpt: "Peringatan dini dikeluarkan untuk wilayah pesisir barat Sumatra dan selatan Jawa terkait potensi cuaca ekstrem dalam tiga hari ke depan.",
-                    category: "Berita",
+                    title: "Tim Mahasiswa ITS Ciptakan Mobil Bertenaga Surya dengan Efisiensi Tinggi",
+                    excerpt: "Mobil bernama 'Surya Nusantara' ini mampu menempuh jarak hingga 1.200 km dengan energi matahari dan memenangkan kompetisi internasional.",
+                    category: "Inovasi",
                     date: "15 Maret 2025"
                 },
                 {
-                    title: "Polisi Ungkap Sindikat Penipuan Online Lintas Negara",
-                    excerpt: "Operasi gabungan berhasil menangkap 12 tersangka yang telah menipu ribuan korban dengan total kerugian mencapai ratusan miliar rupiah.",
-                    category: "Berita",
+                    title: "Teknologi Konversi Sampah Plastik Menjadi Bahan Bakar Dikembangkan",
+                    excerpt: "Inovasi dari peneliti UI ini mampu mengolah sampah plastik menjadi bahan bakar berkualitas tinggi dengan emisi karbon yang minimal.",
+                    category: "Inovasi",
                     date: "15 Maret 2025"
                 },
                 {
-                    title: "ASEAN Sepakati Kerjasama Bidang Keamanan Siber",
-                    excerpt: "Para pemimpin negara ASEAN menandatangani kesepakatan untuk memperkuat kerja sama dalam menghadapi ancaman keamanan siber yang semakin meningkat.",
-                    category: "Berita",
+                    title: "Bioteknologi Baru Mempercepat Pertumbuhan Terumbu Karang 5x Lipat",
+                    excerpt: "Metode inovatif ini dikembangkan oleh LIPI dan telah berhasil diimplementasikan untuk rehabilitasi terumbu karang di Raja Ampat.",
+                    category: "Inovasi",
                     date: "14 Maret 2025"
                 }
             ]
         },
-        "Feature": {
+        "Pemeringkatan": {
             main: {
-                title: "Buku dan Film: Seni Adaptasi Karya Sastra ke Layar Lebar",
-                desc: "Mengulas fenomena adaptasi buku ke film dan bagaimana sutradara menafsirkan karya sastra menjadi bahasa visual yang menarik bagi penonton.",
-                category: "Feature",
+                title: "UI Masuk Top 100 Universitas Terbaik Asia Versi QS Rankings 2025",
+                desc: "Universitas Indonesia mencatatkan prestasi membanggakan dengan naik 15 peringkat dari tahun sebelumnya di peringkat universitas terbaik Asia.",
+                category: "Pemeringkatan",
                 date: "16 Maret 2025"
             },
             side: [
                 {
-                    title: "Menjelajahi Wisata Kuliner Tersembunyi di Sudut-sudut Jakarta",
-                    category: "Feature"
+                    title: "Indonesia Naik ke Peringkat 40 Indeks Inovasi Global",
+                    category: "Pemeringkatan"
                 },
                 {
-                    title: "Tren Fashion Berkelanjutan: Ketika Mode Bertemu Kesadaran Lingkungan",
-                    category: "Feature"
+                    title: "Tiga Kota Indonesia Masuk 50 Kota Terbaik untuk Startup",
+                    category: "Pemeringkatan"
                 },
                 {
-                    title: "Seni Kaligrafi Modern: Perpaduan Tradisi dan Inovasi",
-                    category: "Feature"
+                    title: "Jurnal Ilmiah UGM Capai Q1 Scopus untuk Kategori Energi Terbarukan",
+                    category: "Pemeringkatan"
                 }
             ],
             news: [
                 {
-                    title: "Taman Bacaan Masyarakat: Oase Literasi di Tengah Himpitan Digital",
-                    excerpt: "Menelusuri peran taman bacaan masyarakat yang masih bertahan dan menjadi pusat kegiatan literasi di berbagai daerah.",
-                    category: "Feature",
+                    title: "LIPI Raih Ranking Tertinggi di ASEAN untuk Publikasi Ilmiah Bidang Biodiversitas",
+                    excerpt: "Lembaga Ilmu Pengetahuan Indonesia mencatat rekor baru dengan jumlah publikasi dan sitasi tertinggi untuk penelitian keanekaragaman hayati.",
+                    category: "Pemeringkatan",
                     date: "16 Maret 2025"
                 },
                 {
-                    title: "Generasi Sandwich: Tantangan Merawat Orang Tua dan Membesarkan Anak Sekaligus",
-                    excerpt: "Kisah para individu yang berada dalam dilema merawat orang tua lanjut usia sekaligus membesarkan anak-anak mereka sendiri.",
-                    category: "Feature",
+                    title: "Startup Fintech Indonesia Puncaki Daftar 100 Most Promising Companies Asia",
+                    excerpt: "PayNusantara menjadi startup Indonesia pertama yang menduduki peringkat teratas dalam daftar perusahaan paling menjanjikan versi Forbes Asia.",
+                    category: "Pemeringkatan",
                     date: "15 Maret 2025"
                 },
                 {
-                    title: "Seni Menyeduh Kopi: Dari Ritual Pagi Hingga Profesi Barista",
-                    excerpt: "Mengupas tuntas perkembangan budaya kopi dari kebiasaan sederhana menjadi tren gaya hidup dan profesi yang dihormati.",
-                    category: "Feature",
+                    title: "Indonesia Naik 12 Peringkat dalam Ease of Doing Business Index 2025",
+                    excerpt: "Reformasi birokrasi dan digitalisasi layanan publik berhasil mendongkrak peringkat Indonesia dalam indeks kemudahan berbisnis global.",
+                    category: "Pemeringkatan",
                     date: "15 Maret 2025"
                 },
                 {
-                    title: "Tiny House Movement: Gaya Hidup Minimalis di Rumah Mini",
-                    excerpt: "Mengenal gerakan hidup sederhana dengan tinggal di rumah berukuran kecil yang kian populer di kalangan urban.",
-                    category: "Feature",
-                    date: "14 Maret 2025"
-                }
-            ]
-        },
-        "Akademik": {
-            main: {
-                title: "Universitas Indonesia Raih Peringkat Tertinggi dalam QS World University Rankings 2025",
-                desc: "Pencapaian ini menandai kemajuan signifikan pendidikan tinggi Indonesia di kancah global dengan peningkatan kualitas penelitian dan pengajaran.",
-                category: "Akademik",
-                date: "16 Maret 2025"
-            },
-            side: [
-                {
-                    title: "Program Doktor Saintek Hasilkan Inovasi Baru dalam Pengolahan Limbah Plastik",
-                    category: "Akademik"
-                },
-                {
-                    title: "Mahasiswa Teknik Sipil Ciptakan Beton Ramah Lingkungan dari Limbah Pertanian",
-                    category: "Akademik"
-                },
-                {
-                    title: "Fakultas Kedokteran Luncurkan Penelitian Vaksin Kanker Pertama di Indonesia",
-                    category: "Akademik"
-                }
-            ],
-            news: [
-                {
-                    title: "Dosen Muda Raih Penghargaan Internasional untuk Penelitian Energi Terbarukan",
-                    excerpt: "Dr. Rina Wijaya berhasil mengembangkan metode baru konversi energi matahari yang lebih efisien dan terjangkau untuk masyarakat pedesaan.",
-                    category: "Akademik",
-                    date: "16 Maret 2025"
-                },
-                {
-                    title: "Kolaborasi Riset Antar Perguruan Tinggi Hasilkan Terobosan di Bidang Kecerdasan Buatan",
-                    excerpt: "Kerja sama lima universitas negeri berhasil mengembangkan sistem AI yang dapat memprediksi bencana alam dengan tingkat akurasi tinggi.",
-                    category: "Akademik",
-                    date: "15 Maret 2025"
-                },
-                {
-                    title: "Fakultas Hukum Gelar Konferensi Internasional Tentang Hak Cipta di Era Digital",
-                    excerpt: "Acara yang dihadiri pakar hukum dari 15 negara ini membahas tantangan perlindungan hak cipta dalam perkembangan teknologi terkini.",
-                    category: "Akademik",
-                    date: "15 Maret 2025"
-                },
-                {
-                    title: "Perpustakaan Kampus Digitalisasi Koleksi Naskah Kuno Nusantara",
-                    excerpt: "Sebanyak 5.000 manuskrip langka berhasil didigitalisasi dan dapat diakses secara online oleh peneliti dari seluruh dunia.",
-                    category: "Akademik",
+                    title: "ITB Masuk 200 Besar Global University Rankings untuk Bidang Teknik",
+                    excerpt: "Program studi teknik di Institut Teknologi Bandung mendapat pengakuan internasional dengan masuk peringkat 175 terbaik dunia.",
+                    category: "Pemeringkatan",
                     date: "14 Maret 2025"
                 }
             ]
@@ -350,8 +301,6 @@
             };
         })
     };
-    
-    // Functions removed as requested
     
     // Filter content function - shows/hides existing content based on category
     function filterContent(category) {
