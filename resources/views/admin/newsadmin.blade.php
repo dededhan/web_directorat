@@ -16,6 +16,21 @@
         </div>
     </div>
 
+    <!-- Flash Messages -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <div class="table-data">
         <div class="order">
             <div class="head">
@@ -27,16 +42,22 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="category" class="form-label">Kategori</label>
-                        <select class="form-select" name="kategori" id="category">
+                        <select class="form-select @error('kategori') is-invalid @enderror" name="kategori" id="category">
                             <option value="">Pilih Kategori</option>
-                            <option value="inovasi">Inovasi</option>
-                            <option value="pemeringkatan">Pemeringkatan</option>
+                            <option value="inovasi" {{ old('kategori') == 'inovasi' ? 'selected' : '' }}>Inovasi</option>
+                            <option value="pemeringkatan" {{ old('kategori') == 'pemeringkatan' ? 'selected' : '' }}>Pemeringkatan</option>
                         </select>
+                        @error('kategori')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                         <div class="form-text text-muted">Pilih kategori berita yang sesuai</div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="tanggal" class="form-label">Tanggal</label>
-                        <input type="date" class="form-control" name="tanggal" id="tanggal">
+                        <input type="date" class="form-control @error('tanggal') is-invalid @enderror" name="tanggal" id="tanggal" value="{{ old('tanggal') }}">
+                        @error('tanggal')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                         <div class="form-text text-muted">Pilih tanggal publikasi berita</div>
                     </div>
                 </div>
@@ -44,7 +65,10 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="judul_berita" class="form-label">Judul Berita</label>
-                        <input type="text" class="form-control" name="judul_berita" id="judul_berita">
+                        <input type="text" class="form-control @error('judul_berita') is-invalid @enderror" name="judul_berita" id="judul_berita" value="{{ old('judul_berita') }}">
+                        @error('judul_berita')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                         <div class="form-text text-muted">Masukkan judul berita (maksimal 200 karakter)</div>
                     </div>
                 </div>
@@ -52,7 +76,10 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="isi_berita" class="form-label">Isi Berita</label>
-                        <textarea class="form-control" name="isi_berita" id="isi_berita" rows="8"></textarea>
+                        <textarea class="form-control @error('isi_berita') is-invalid @enderror" name="isi_berita" id="isi_berita" rows="8">{{ old('isi_berita') }}</textarea>
+                        @error('isi_berita')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                         <div class="form-text text-muted">Tuliskan isi berita secara lengkap dan detail</div>
                     </div>
                 </div>
@@ -60,7 +87,10 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="gambar" class="form-label">Gambar</label>
-                        <input type="file" class="form-control" name="gambar" id="gambar" accept="image/*">
+                        <input type="file" class="form-control @error('gambar') is-invalid @enderror" name="gambar" id="gambar" accept="image/*">
+                        @error('gambar')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                         <div class="form-text text-muted">Upload gambar utama berita (format: JPG, PNG, atau JPEG, max 2MB)</div>
                     </div>
                 </div>
@@ -107,14 +137,14 @@
                                 <td>{{ Str::limit(strip_tags($berita->isi), 50) }}</td>
                                 <td>
                                     <button class="btn btn-sm btn-info view-image" 
-                                        data-image="{{ Storage::url($berita->gambar) }}"
+                                        data-image="{{ asset('storage/'.$berita->gambar) }}"
                                         data-title="{{ $berita->judul }}">
                                         Lihat Gambar
                                     </button>
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <form method="POST" action="{{ route('admin.news.destroy', $berita->id) }}">
+                                        <form method="POST" action="{{ route('admin.news.destroy', $berita->id) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">Delete</button>
@@ -155,46 +185,25 @@
                         console.error(error);
                     });
             }
-        });
+            
+            // Auto-hide alerts after 5 seconds
+            setTimeout(function() {
+                document.querySelectorAll('.alert').forEach(function(alert) {
+                    var bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
 
-        // Handle view image
-        document.querySelectorAll('.view-image').forEach(button => {
-            button.addEventListener('click', function() {
-                const imageUrl = this.dataset.image;
-                const title = this.dataset.title;
-                
-                document.getElementById('imageModalLabel').textContent = title;
-                document.getElementById('modalImage').src = imageUrl;
-                
-                new bootstrap.Modal(document.getElementById('imageModal')).show();
-            });
-        });
-
-        // Handle delete confirmation
-        document.querySelectorAll('.delete-berita').forEach(button => {
-            button.addEventListener('click', function() {
-                const id = this.dataset.id;
-                
-                Swal.fire({
-                    title: 'Apakah Anda yakin?',
-                    text: "Berita yang dihapus tidak dapat dikembalikan!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Ya, hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Alert instead of form submission
-                        Swal.fire(
-                            'Terhapus!',
-                            'Berita telah dihapus.',
-                            'success'
-                        );
-                        // Here you would typically do the actual deletion
-                        // For now, we'll just show a success message
-                    }
+            // Handle view image
+            document.querySelectorAll('.view-image').forEach(button => {
+                button.addEventListener('click', function() {
+                    const imageUrl = this.dataset.image;
+                    const title = this.dataset.title;
+                    
+                    document.getElementById('imageModalLabel').textContent = title;
+                    document.getElementById('modalImage').src = imageUrl;
+                    
+                    new bootstrap.Modal(document.getElementById('imageModal')).show();
                 });
             });
         });
@@ -255,6 +264,25 @@
         
         #modalImage {
             max-height: 70vh;
+        }
+        
+        /* Alert styling */
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
         }
     </style>
 @endsection

@@ -19,40 +19,50 @@ class BeritaController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreBeritaRequest $request)
     {
-        // $gambarPath = $request->file('gambar')->store('berita-images', 'public');
+        try {
+            // Validation already handled by StoreBeritaRequest
 
-        // Generate nama file unik
-        $namaFile = time() . '_' . $request->file('gambar')->getClientOriginalName();
-        $gambarPath = $request->file('gambar')->storeAs(
-            'berita-images',
-            $namaFile,
-            'public'
-        );
+            // Check if image exists and is valid
+            if ($request->hasFile('gambar') && $request->file('gambar')->isValid()) {
+                // Generate unique file name
+                $namaFile = time() . '_' . uniqid() . '.' . $request->file('gambar')->getClientOriginalExtension();
 
-        Berita::create([
-            'kategori' => $request->kategori,
-            'tanggal' => $request->tanggal,
-            'judul' => $request->judul_berita,
-            'isi' => $request->isi_berita,
-            'gambar' => $gambarPath
-        ]);
+                // Store the file in the public disk under berita-images folder
+                $gambarPath = $request->file('gambar')->storeAs(
+                    'berita-images',
+                    $namaFile,
+                    'public'
+                );
 
-        return redirect()->route('admin.news.index')
-            ->with('success', 'Berita berhasil disimpan!');
+                // Create the berita record with the image path
+                Berita::create([
+                    'kategori' => $request->kategori,
+                    'tanggal' => $request->tanggal,
+                    'judul' => $request->judul_berita,
+                    'isi' => $request->isi_berita,
+                    'gambar' => $gambarPath
+                ]);
+
+                return redirect()->route('admin.news.index')
+                    ->with('success', 'Berita berhasil disimpan!');
+            } else {
+                // Handle the case where image upload failed
+                return redirect()->back()
+                    ->with('error', 'Upload gambar gagal. Pastikan file gambar valid.')
+                    ->withInput();
+            }
+        } catch (\Exception $e) {
+            // Log the error and return with error message
+            \Log::error('Error storing news: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'Gagal menambahkan berita: ' . $e->getMessage())
+                ->withInput();
+        }
     }
-
     /**
      * Display news on the home page.
      */
@@ -70,9 +80,6 @@ class BeritaController extends Controller
     /**
      * Display the specified resource.
      */
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $berita = Berita::findOrFail($id);
@@ -80,26 +87,27 @@ class BeritaController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $berita = Berita::findOrFail($id);
+
+            // Delete the image file from storage
+            if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
+                Storage::disk('public')->delete($berita->gambar);
+            }
+
+            // Delete the record
+            $berita->delete();
+
+            return redirect()->route('admin.news.index')
+                ->with('success', 'Berita berhasil dihapus!');
+        } catch (\Exception $e) {
+            \Log::error('Error deleting news: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'Gagal menghapus berita: ' . $e->getMessage());
+        }
     }
 }
