@@ -101,72 +101,23 @@
         <section>
             <h2 class="section-title">Berita Terbaru</h2>
             <div class="news-grid">
-                <div class="news-card">
-                    <div class="card-img"></div>
-                    <div class="card-content">
-                        <h3 class="card-title">Peneliti Temukan Manfaat Baru Kunyit untuk Kesehatan Jantung</h3>
-                        <p class="card-excerpt">Studi terbaru menunjukkan bahwa kurkumin dalam kunyit dapat membantu mengurangi peradangan dan meningkatkan fungsi pembuluh darah.</p>
-                        <div class="news-meta">
-                            <span class="news-category">Inovasi</span>
-                            <span class="news-date">16 Maret 2025</span>
+                @forelse($beritas as $berita)
+                    <div class="news-card">
+                        <div class="card-img" style="background-image: url('{{ asset('storage/'.$berita->gambar) }}')"></div>
+                        <div class="card-content">
+                            <h3 class="card-title">{{ $berita->judul }}</h3>
+                            <p class="card-excerpt">{{ Str::limit(strip_tags($berita->isi), 150) }}</p>
+                            <div class="news-meta">
+                                <span class="news-category">{{ ucfirst($berita->kategori) }}</span>
+                                <span class="news-date">{{ date('d F Y', strtotime($berita->tanggal)) }}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="news-card">
-                    <div class="card-img"></div>
-                    <div class="card-content">
-                        <h3 class="card-title">Festival Film Internasional Digelar di Jakarta Bulan Depan</h3>
-                        <p class="card-excerpt">Lebih dari 100 film dari 30 negara akan diputar dalam festival bergengsi yang akan berlangsung selama satu minggu.</p>
-                        <div class="news-meta">
-                            <span class="news-category">Pemeringkatan</span>
-                            <span class="news-date">16 Maret 2025</span>
-                        </div>
+                @empty
+                    <div class="no-results">
+                        <p>Belum ada berita tersedia.</p>
                     </div>
-                </div>
-                <div class="news-card">
-                    <div class="card-img"></div>
-                    <div class="card-content">
-                        <h3 class="card-title">Pemerintah Daerah Resmikan Taman Kota Ramah Lingkungan</h3>
-                        <p class="card-excerpt">Taman seluas 5 hektar ini dilengkapi dengan panel surya, sistem pengolahan air hujan, dan berbagai fasilitas ramah lingkungan lainnya.</p>
-                        <div class="news-meta">
-                            <span class="news-category">Inovasi</span>
-                            <span class="news-date">15 Maret 2025</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="news-card">
-                    <div class="card-img"></div>
-                    <div class="card-content">
-                        <h3 class="card-title">Bank Sentral Pertahankan Suku Bunga Acuan</h3>
-                        <p class="card-excerpt">Keputusan ini diambil setelah melihat stabilitas inflasi dan pertumbuhan ekonomi yang terjaga dalam tiga bulan terakhir.</p>
-                        <div class="news-meta">
-                            <span class="news-category">Pemeringkatan</span>
-                            <span class="news-date">15 Maret 2025</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="news-card">
-                    <div class="card-img"></div>
-                    <div class="card-content">
-                        <h3 class="card-title">Peluncuran Ponsel Pintar Terbaru dengan Fitur Kamera 200MP</h3>
-                        <p class="card-excerpt">Perusahaan teknologi terkemuka mengklaim ponsel ini memiliki kemampuan fotografi terbaik di kelasnya dengan dukungan AI.</p>
-                        <div class="news-meta">
-                            <span class="news-category">Inovasi</span>
-                            <span class="news-date">14 Maret 2025</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="news-card">
-                    <div class="card-img"></div>
-                    <div class="card-content">
-                        <h3 class="card-title">Menteri Luar Negeri Kunjungi Tiga Negara Asia Tenggara</h3>
-                        <p class="card-excerpt">Kunjungan diplomatik ini bertujuan untuk memperkuat kerja sama bilateral dalam bidang ekonomi dan keamanan.</p>
-                        <div class="news-meta">
-                            <span class="news-category">Pemeringkatan</span>
-                            <span class="news-date">14 Maret 2025</span>
-                        </div>
-                    </div>
-                </div>
+                @endforelse
             </div>
         </section>
     </main>

@@ -105,6 +105,8 @@ Route::get('/katsinov/lampiran', function () {
 Route::get('/Berita', function () {
     return view('Berita.beritahome');
 })->name('Berita.beritahome');
+Route::get('/Berita', [BeritaController::class, 'allNews'])->name('Berita.beritahome');
+
 
 Route::get('/admin/Katsinov/formrecordhasilpengukuran', [FormRecordHasilPengukuranController::class, 'index'])
     ->name('admin.Katsinov.formrecordhasilpengukuran.index');

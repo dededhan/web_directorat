@@ -6,7 +6,7 @@ use App\Models\Berita;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreBeritaRequest;
 use App\Models\Pengumuman;
-use App\Models\ProgramLayanan; 
+use App\Models\ProgramLayanan;
 use Illuminate\Support\Facades\Storage;
 
 class BeritaController extends Controller
@@ -72,22 +72,28 @@ class BeritaController extends Controller
     {
         // Get regular news for the main grid (latest 3)
         $regularNews = Berita::latest()->take(3)->get();
-    
+
         // Get featured news for the carousel (latest 5)
         $featuredNews = Berita::latest()->take(5)->get();
-        
+
         // Get active announcements
         $announcements = Pengumuman::where('status', true)
-                        ->orderBy('created_at', 'desc')
-                        ->get();
-        
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         // Get active program layanan
         $programLayanan = ProgramLayanan::where('status', 1)
-                        ->orderBy('id', 'desc')
-                        ->take(4)
-                        ->get();
-    
+            ->orderBy('id', 'desc')
+            ->take(4)
+            ->get();
+
         return view('home', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan'));
+    }
+
+    public function allNews()
+    {
+        $beritas = Berita::latest()->paginate(9); // Show 9 news per page
+        return view('Berita.beritahome', compact('beritas'));
     }
 
     /**
@@ -96,12 +102,12 @@ class BeritaController extends Controller
     public function show(string $id)
     {
         $berita = Berita::findOrFail($id);
-        
+
         // Get active announcements
         $announcements = Pengumuman::where('status', true)
-                        ->orderBy('created_at', 'desc')
-                        ->get();
-                        
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return view('Berita.show', compact('berita', 'announcements'));
     }
     /**
