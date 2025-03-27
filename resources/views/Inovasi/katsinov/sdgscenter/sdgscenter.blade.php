@@ -14,7 +14,7 @@
                 <h1>SDGS Center UNJ</h1>
             </div>
             <ul class="nav-links">
-                <li><a href="#home">Beranda</a></li>
+                <li><a href="{{ route('inovasi.landingpage') }}">Beranda</a></li>
                 <li><a href="#about">Tentang</a></li>
                 <li><a href="#rankings">Peringkat</a></li>
                 <li><a href="#goals">Tujuan</a></li>
@@ -454,7 +454,7 @@
             </div>
         </div>
     </section>
-    @include('Inovasi.katsinov.sdgscenter.footersdg')
+    @includeIf('Inovasi.katsinov.sdgscenter.footersdg')
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
