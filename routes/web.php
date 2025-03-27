@@ -18,7 +18,9 @@ Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
 Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('Berita.show');
 Route::get('/api/announcements', [App\Http\Controllers\PengumumanController::class, 'getActiveAnnouncements'])
     ->name('api.announcements');
-Route::get('/program-layanan', [App\Http\Controllers\ProgramLayananController::class, 'showFrontend'])->name('program-layanan');    
+Route::get('/program-layanan', [App\Http\Controllers\ProgramLayananController::class, 'showFrontend'])->name('program-layanan');
+
+
 // Route::get('/', function () {
 //     return view('home');
 // })->name('home');
@@ -61,6 +63,7 @@ Route::get('/profile', function () {
 Route::get('/document', function () {
     return view('document.document');
 })->name('document.document');
+Route::get('/document', [App\Http\Controllers\DokumenController::class, 'showPublic'])->name('document.document');
 
 Route::get('/strukturorganisasi', function () {
     return view('struktur organisasi.strukturorganisasi');
