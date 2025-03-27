@@ -1,7 +1,7 @@
 :root {
-    --primary-color: #00796b;
-    --primary-light: #48a999;
-    --primary-dark: #004c40;
+    --primary-color: #166165; /* Changed from #00796b to #166165 */
+    --primary-light: #4a918e; /* Updated to match the new primary color */
+    --primary-dark: #00342f; /* Updated to match the new primary color */
     --text-on-primary: #ffffff;
     --background-color: #f5f5f5;
     --card-color: #ffffff;
