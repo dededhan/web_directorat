@@ -14,7 +14,6 @@ class DokumenController extends Controller
         $dokumens = Dokumen::orderBy('tanggal_publikasi', 'desc')->get();
         return view('admin.document', compact('dokumens'));
     }
-
     public function create()
     {
         //
@@ -40,40 +39,17 @@ class DokumenController extends Controller
         ]);
     
         return redirect()->back()->with('success', 'Dokumen berhasil disimpan');
+
     }
 
-    public function download(Dokumen $dokumen, Request $request)
+    public function download(Dokumen $dokumen)
     {
         // Pastikan file ada sebelum didownload
         if (!Storage::disk('public')->exists($dokumen->path)) {
             abort(404);
         }
         
-        // Check if this is a view request
-        if ($request->has('view')) {
-            // For viewing, we'll return the file with Content-Disposition: inline
-            $file = Storage::disk('public')->get($dokumen->path);
-            $mimeType = Storage::disk('public')->mimeType($dokumen->path);
-            
-            $response = response($file, 200)->header('Content-Type', $mimeType);
-            
-            // Return file inline for browser to display instead of download
-            $response->header('Content-Disposition', 'inline; filename="' . $dokumen->nama_file . '"');
-            
-            return $response;
-        }
-        
-        // Otherwise, it's a download request
         return Storage::disk('public')->download($dokumen->path, $dokumen->nama_file);
-    }
-
-    /**
-     * Show documents on the frontend document page
-     */
-    public function showPublic()
-    {
-        $dokumens = Dokumen::orderBy('tanggal_publikasi', 'desc')->get();
-        return view('document.document', compact('dokumens'));
     }
 
     /**

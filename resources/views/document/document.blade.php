@@ -29,6 +29,8 @@
                 <li><a href="{{ route('home') }}" class="menu-link">Home</a></li>
                 <li><a href="#" class="menu-link active">Dokumen</a></li>
             </ul>
+            
+            <!-- Navbar right section removed -->
         </div>
     </div>
 
@@ -70,7 +72,7 @@
                 </div>
 
                 <div id="documentGrid" class="document-grid">
-                    <!-- Documents will be populated dynamically with JavaScript -->
+                    <!-- Documents will be dynamically populated here -->
                 </div>
             </div>
         </div>
@@ -107,6 +109,16 @@
             }
         });
 
+        // Toggle search overlay - This event listener is no longer needed but the function is kept for other potential uses
+        /* Removed as search icon is removed
+        document.getElementById('searchToggle').addEventListener('click', function() {
+            document.getElementById('searchOverlay').style.display = 'flex';
+            setTimeout(() => {
+                document.querySelector('.search-input').focus();
+            }, 100);
+        });
+        */
+
         // Close search overlay
         document.getElementById('closeSearch').addEventListener('click', function() {
             document.getElementById('searchOverlay').style.display = 'none';
@@ -130,23 +142,43 @@
         });
 
         // Document Repository Functionality
-        // Load documents from database instead of hard-coded array
         const documents = [
-            @foreach($dokumens as $dokumen)
             {
-                id: {{ $dokumen->id }},
-                type: '{{ $dokumen->kategori }}',
-                name: '{{ $dokumen->judul_dokumen }}',
-                icon: '{{ $dokumen->kategori === "pdf" ? "file-pdf" : "file-word" }}',
-                path: '{{ route("admin.document.download", $dokumen->id) }}',
-                date: '{{ $dokumen->tanggal_publikasi }}',
-                size: '{{ 
-                    $dokumen->ukuran > 1000000 
-                    ? number_format($dokumen->ukuran / 1048576, 1) . " MB" 
-                    : number_format($dokumen->ukuran / 1024, 0) . " KB" 
-                }}'
-            }{{ !$loop->last ? ',' : '' }}
-            @endforeach
+                id: 1,
+                type: 'pdf',
+                name: '41-355-Penyampaian Salinan Pertor No 5 Tahun 2025 ttg OTK',
+                icon: 'file-pdf',
+                path: 'https://drive.google.com/file/d/1VFC8HsUQ_HVqkJr4fnwhB-SExfeRfdx3/view?usp=drive_link',
+                date: '2023-11-15',
+                size: '2.4 MB'
+            },
+            {
+                id: 2,
+                type: 'pdf',
+                name: 'salinan_Salinan PP Nomor 31 Tahun 2024',
+                icon: 'file-pdf',
+                path: 'https://drive.google.com/file/d/1lT8EI0kTMbXt4TqTDTUfa97QpCNg7-sL/view?usp=drive_link',
+                date: '2023-10-22',
+                size: '1.8 MB'
+            },
+            {
+                id: 3,
+                type: 'docx',
+                name: 'Green Campus Initiative',
+                icon: 'file-word',
+                path: 'https://drive.google.com/file/sample/d/1VFC8HsUQ_example/view',
+                date: '2023-12-01',
+                size: '856 KB'
+            },
+            {
+                id: 4,
+                type: 'docx',
+                name: 'Sustainability Workshop Materials',
+                icon: 'file-word',
+                path: 'https://drive.google.com/file/sample/d/1VFC8HsUQ_example2/view',
+                date: '2023-11-28',
+                size: '1.2 MB'
+            }
         ];
 
         // Format date for display
@@ -186,9 +218,9 @@
                         <button class="action-btn view-btn" onclick="viewDocument('${doc.path}', '${doc.name}')">
                             <i class="fas fa-eye"></i> View
                         </button>
-                        <a href="${doc.path}" class="action-btn download-btn" download>
+                        <button class="action-btn download-btn" onclick="downloadDocument('${doc.path}', '${doc.name}')">
                             <i class="fas fa-download"></i> Download
-                        </a>
+                        </button>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -250,7 +282,7 @@
             renderDocuments(filtered);
         }
 
-        // View document in modal 
+        // View document in modal with improved error handling
         function viewDocument(path, name) {
             const modal = document.getElementById('documentModal');
             const modalContent = document.getElementById('modalContent');
@@ -258,14 +290,87 @@
             
             modalTitle.textContent = name;
             
-            modalContent.innerHTML = `
-                <iframe src="${path}" width="100%" height="500px" frameborder="0">
-                    <p>Your browser does not support iframes.</p>
-                </iframe>
-            `;
-            
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
+            try {
+                // Defensive validation of Google Drive link
+                const fileIdMatch = path.match(/\/d\/([^/]+)/);
+                if (!fileIdMatch) {
+                    throw new Error('Invalid Google Drive link format');
+                }
+                
+                const fileId = fileIdMatch[1];
+                const embedPath = `https://drive.google.com/file/d/${fileId}/preview`;
+                
+                modalContent.innerHTML = `
+                    <iframe src="${embedPath}" width="100%" height="100%" frameborder="0">
+                        <p>Unable to preview document. 
+                           <a href="${path}" target="_blank">Open in Google Drive</a></p>
+                    </iframe>
+                `;
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            } catch (error) {
+                console.error('Document view error:', error);
+                modalContent.innerHTML = `
+                    <div class="error-message">
+                        <p>Unable to preview document. The file may be inaccessible or in an unsupported format.</p>
+                        <a href="${path}" target="_blank" class="action-btn view-btn">Open in Google Drive</a>
+                    </div>
+                `;
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // Robust download functionality
+        function downloadDocument(path, name) {
+            try {
+                // Extract file ID with error handling
+                const fileIdMatch = path.match(/\/d\/([^/]+)/);
+                if (!fileIdMatch) {
+                    throw new Error('Invalid Google Drive link format');
+                }
+                
+                const fileId = fileIdMatch[1];
+                const downloadLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
+                
+                // Create and trigger a temporary download link
+                const tempLink = document.createElement('a');
+                tempLink.href = downloadLink;
+                tempLink.setAttribute('download', name);
+                tempLink.setAttribute('target', '_blank');
+                document.body.appendChild(tempLink);
+                tempLink.click();
+                
+                // Clean up the temporary element
+                setTimeout(() => {
+                    document.body.removeChild(tempLink);
+                }, 100);
+                
+            } catch (error) {
+                console.error('Download error:', error);
+                
+                // Fallback: open in new tab
+                window.open(path, '_blank');
+                
+                // Notify user of potential issues
+                const notifyUser = () => {
+                    const modal = document.getElementById('documentModal');
+                    const modalContent = document.getElementById('modalContent');
+                    const modalTitle = document.getElementById('modalTitle');
+                    
+                    modalTitle.textContent = 'Download Notice';
+                    modalContent.innerHTML = `
+                        <div class="error-message">
+                            <p>Direct download may not work due to Google Drive restrictions. 
+                               The document has been opened in a new tab where you can download it manually.</p>
+                        </div>
+                    `;
+                    modal.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                };
+                
+                setTimeout(notifyUser, 500);
+            }
         }
 
         // Modal control functions
