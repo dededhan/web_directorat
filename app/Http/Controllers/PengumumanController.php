@@ -76,10 +76,15 @@ class PengumumanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pengumuman $pengumuman)
+    public function destroy(Pengumuman $news_scroll)
     {
-        $pengumuman->delete();
-        return redirect()->route('admin.news-scroll.index')->with('success', 'Data berhasil dihapus!');
+        try {
+            $news_scroll->delete();
+            return redirect()->route('admin.news-scroll.index')->with('success', 'Data berhasil dihapus!');
+        } catch (\Exception $e) {
+            \Log::error('Error deleting: ' . $e->getMessage());
+            return redirect()->route('admin.news-scroll.index')->with('error', 'Gagal menghapus data!');
+        }
     }
 
     public function getActiveAnnouncements()

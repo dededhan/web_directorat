@@ -29,17 +29,33 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Delete confirmation
-    document.querySelectorAll(".delete-pengumuman").forEach((button) => {
-        button.addEventListener("click", function () {
-            if (confirm("Apakah Anda yakin ingin menghapus pengumuman ini?")) {
-                // Simulate deletion (for demonstration)
-                const row = this.closest("tr");
-                row.style.backgroundColor = "#ffcccc";
-                setTimeout(() => {
-                    row.remove();
-                }, 500);
-            }
+    // Delete confirmation with SweetAlert
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all delete buttons by class
+        var deleteButtons = document.querySelectorAll('.delete-confirm');
+        
+        // Add click listener to each button
+        deleteButtons.forEach(function(button) {
+            button.onclick = function() {
+                var id = this.getAttribute('data-id');
+                var form = document.getElementById('delete-form-' + id);
+                
+                // Use SweetAlert instead of standard confirm
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Pengumuman ini akan dihapus secara permanen!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            };
         });
     });
 

@@ -99,12 +99,14 @@
                                         <a href="{{ route('admin.news-scroll.edit', $pengumuman->id) }}" class="btn btn-sm btn-warning">
                                             <i class='bx bx-edit'></i>
                                         </a>
-                                        <form action="{{ route('admin.news-scroll.destroy', $pengumuman->id) }}" method="POST">
+                                        <!-- Updated delete button with SweetAlert -->
+                                        <button type="button" class="btn btn-sm btn-danger delete-confirm" data-id="{{ $pengumuman->id }}">
+                                            <i class='bx bx-trash'></i>
+                                        </button>
+                                        <!-- Hidden delete form -->
+                                        <form id="delete-form-{{ $pengumuman->id }}" action="{{ route('admin.news-scroll.destroy', $pengumuman->id) }}" method="POST" style="display: none;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                <i class='bx bx-trash'></i>
-                                            </button>
                                         </form>
                                     </div>
                                 </td>
@@ -118,4 +120,36 @@
     </div>
 
     <script src="{{ asset('news_scroll.js') }}"></script>
+
+    <script>
+        // SweetAlert delete confirmation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all delete buttons by class
+            var deleteButtons = document.querySelectorAll('.delete-confirm');
+            
+            // Add click listener to each button
+            deleteButtons.forEach(function(button) {
+                button.onclick = function() {
+                    var id = this.getAttribute('data-id');
+                    var form = document.getElementById('delete-form-' + id);
+                    
+                    // Use SweetAlert instead of standard confirm
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Pengumuman ini akan dihapus secara permanen!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                };
+            });
+        });
+        </script>
 @endsection
