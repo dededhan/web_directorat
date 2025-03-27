@@ -17,6 +17,7 @@ class Dokumen extends Model
         'nama_file',
         'nama_file_hash',
         'path',
+        'pdf_preview_path', // Added for storing PDF conversion path
         'ukuran',
         'ekstensi'
     ];

@@ -50,6 +50,21 @@ Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])
 Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
 Route::get('/galeri/alumni', [AlumniController::class, 'index'])->name('alumni');
 
+// Document routes
+Route::get('/document', [App\Http\Controllers\DokumenController::class, 'publicIndex'])
+    ->name('document.document');
+
+// API endpoint to get documents for the frontend
+Route::get('/api/documents', [App\Http\Controllers\DokumenController::class, 'apiGetDocuments'])
+    ->name('api.documents');
+
+// Document preview and download routes
+Route::get('/documents/preview/{id}', [App\Http\Controllers\DokumenController::class, 'preview'])
+    ->name('documents.preview');
+Route::get('/documents/download/{id}', [App\Http\Controllers\DokumenController::class, 'download'])
+    ->name('documents.download');
+
+
 Route::get('/tupoksi', function () {
     return view('tupoksi.tupoksi');
 })->name('tupoksi.tupoksi');

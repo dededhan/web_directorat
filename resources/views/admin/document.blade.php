@@ -30,7 +30,6 @@
                         <select class="form-select" name="kategori" id="category">
                             <option value="">Pilih Kategori</option>
                             <option value="pdf">PDF Document</option>
-                            <option value="docx">Word Document</option>
                         </select>
                         <div class="form-text text-muted">Pilih kategori dokumen yang sesuai</div>
                     </div>
