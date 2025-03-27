@@ -31,4 +31,18 @@ class ProgramLayananController extends Controller
         $programLayanan->delete();
         return redirect()->route('admin.program-layanan.index')->with('success', 'Program berhasil dihapus');
     }
+    
+    /**
+     * Display active program layanan on the frontend
+     */
+    public function showFrontend()
+    {
+        // Get active program layanan, limit to 4 for display
+        $programs = ProgramLayanan::where('status', 1)
+                                  ->orderBy('id', 'desc')
+                                  ->take(4)
+                                  ->get();
+        
+        return view('frontend.program-section', compact('programs'));
+    }
 }

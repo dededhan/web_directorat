@@ -149,83 +149,48 @@
                 <span class="section-subtitle">Program & Layanan</span>
                 <h2 class="section-title">Layanan </h2>
                 <p class="section-description">
-                    Universitas Negeri Jakarta menyediakan berbagai program dan layanan unggulan untuk mendukung
-                    perkembangan akademik dan karir mahasiswa.
+                    Program dan Layanan Direktorat Inovasi, Sistem Informasi dan Pemeringkatan
                 </p>
             </div>
-
+    
             <!-- Program Cards Grid -->
             <div class="program-grid">
-                <!-- Program 1 -->
-                <div class="program-card">
-                    <div class="card-content">
-                        <div class="icon-container">
-                            <i class="fas fa-graduation-cap"></i>
+                @forelse($programLayanan as $program)
+                    <div class="program-card">
+                        <div class="card-content">
+                            <div class="icon-container">
+                                <i class="{{ $program->icon }}"></i>
+                            </div>
+                            <h3 class="card-title">{{ $program->judul }}</h3>
+                            <p class="card-description">
+                                {{ $program->deskripsi }}
+                            </p>
+                            <a href="#" class="card-link">
+                                Selengkapnya
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
                         </div>
-                        <h3 class="card-title">Beasiswa</h3>
-                        <p class="card-description">
-                            Program beasiswa untuk mahasiswa berprestasi dan kurang mampu, membantu meringankan biaya
-                            pendidikan.
-                        </p>
-                        <a href="#" class="card-link">
-                            Selengkapnya
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
                     </div>
-                </div>
-
-                <!-- Program 2 -->
-                <div class="program-card">
-                    <div class="card-content">
-                        <div class="icon-container">
-                            <i class="fas fa-book-open"></i>
+                @empty
+                    <!-- Fallback content if no programs are found -->
+                    <div class="program-card">
+                        <div class="card-content">
+                            <div class="icon-container">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h3 class="card-title">Beasiswa</h3>
+                            <p class="card-description">
+                                Program beasiswa untuk mahasiswa berprestasi dan kurang mampu, membantu meringankan biaya
+                                pendidikan.
+                            </p>
+                            <a href="#" class="card-link">
+                                Selengkapnya
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
                         </div>
-                        <h3 class="card-title">Perpustakaan Digital</h3>
-                        <p class="card-description">
-                            Akses ke ribuan buku, jurnal, dan sumber belajar digital untuk mendukung studi dan
-                            penelitian.
-                        </p>
-                        <a href="#" class="card-link">
-                            Selengkapnya
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
                     </div>
-                </div>
-
-                <!-- Program 3 -->
-                <div class="program-card">
-                    <div class="card-content">
-                        <div class="icon-container">
-                            <i class="fas fa-briefcase"></i>
-                        </div>
-                        <h3 class="card-title">Karir & Magang</h3>
-                        <p class="card-description">
-                            Layanan informasi karir, magang, dan pelatihan untuk mempersiapkan mahasiswa memasuki dunia
-                            kerja.
-                        </p>
-                        <a href="#" class="card-link">
-                            Selengkapnya
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Program 4 -->
-                <div class="program-card">
-                    <div class="card-content">
-                        <div class="icon-container">
-                            <i class="fas fa-globe"></i>
-                        </div>
-                        <h3 class="card-title">Program Internasional</h3>
-                        <p class="card-description">
-                            Program pertukaran pelajar dan kerjasama internasional untuk memperluas wawasan global.
-                        </p>
-                        <a href="#" class="card-link">
-                            Selengkapnya
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
+    
+                @endforelse
             </div>
         </div>
     </section>

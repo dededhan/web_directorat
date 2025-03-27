@@ -6,6 +6,7 @@ use App\Models\Berita;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreBeritaRequest;
 use App\Models\Pengumuman;
+use App\Models\ProgramLayanan; 
 use Illuminate\Support\Facades\Storage;
 
 class BeritaController extends Controller
@@ -79,8 +80,14 @@ class BeritaController extends Controller
         $announcements = Pengumuman::where('status', true)
                         ->orderBy('created_at', 'desc')
                         ->get();
+        
+        // Get active program layanan
+        $programLayanan = ProgramLayanan::where('status', 1)
+                        ->orderBy('id', 'desc')
+                        ->take(4)
+                        ->get();
     
-        return view('home', compact('regularNews', 'featuredNews', 'announcements'));
+        return view('home', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan'));
     }
 
     /**
