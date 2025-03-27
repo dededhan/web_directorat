@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pengumuman;
+
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePengumumanRequest;
 
@@ -33,15 +34,15 @@ class PengumumanController extends Controller
     {
         try {
             $data = $request->validated();
-            $data['status'] = true; 
-    
+            $data['status'] = true;
+
             // Debug data sebelum disimpan
             logger()->info('Data to save:', $data);
-    
+
             Pengumuman::create($data);
-            
+
             return redirect()->route('admin.news-scroll.index')
-                   ->with('success', 'Data berhasil disimpan!');
+                ->with('success', 'Data berhasil disimpan!');
         } catch (\Exception $e) {
             // Log error
             logger()->error('Error saving data: ' . $e->getMessage());
@@ -79,5 +80,14 @@ class PengumumanController extends Controller
     {
         $pengumuman->delete();
         return redirect()->route('admin.news-scroll.index')->with('success', 'Data berhasil dihapus!');
+    }
+
+    public function getActiveAnnouncements()
+    {
+        $announcements = Pengumuman::where('status', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($announcements);
     }
 }

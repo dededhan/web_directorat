@@ -32,13 +32,26 @@
                 <div class="bg-yellow-400 p-2 rounded-full">
                     <i class="fas fa-bullhorn text-teal-800 text-lg"></i>
                 </div>
-                <!-- Teks Berjalan -->
-                <marquee class="flex-1 text-white font-medium" behavior="scroll" direction="left" scrollamount="5">
-                    🕌 <span class="text-yellow-400 font-bold">Masjid Nurul Irfan UNJ</span> Menerima dan Menyalurkan
-                    Hewan Qurban. Segera hubungi panitia untuk informasi lebih lanjut. 🐑
+                <!-- Teks Berjalan - Dynamic from database -->
+                <marquee class="flex-1 text-white font-medium news-marquee" behavior="scroll" direction="left"
+                    scrollamount="5">
+                    @if (isset($announcements) && count($announcements) > 0)
+                        {{ $announcements[0]->icon }} <span
+                            class="text-yellow-400 font-bold">{{ $announcements[0]->judul_pengumuman }}</span>
+                        {{ $announcements[0]->isi_pengumuman }}
+                    @else
+                        <span class="text-yellow-400 font-bold">Belum ada pengumuman</span>
+                    @endif
                 </marquee>
             </div>
         </div>
+        <!-- Hidden data for JavaScript -->
+        @if (isset($announcements))
+        <script type="application/json" id="announcements-data">
+        {!! json_encode($announcements) !!}
+        </script>
+        @endif
+
     </div>
     <!-- Main content -->
     <main class="container mx-auto py-12 px-6">
@@ -61,7 +74,7 @@
                     class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                     <div class="relative">
                         <img alt="{{ $news->judul }}" class="w-full h-56 object-cover"
-                            src="{{ asset('storage/'.$news->gambar) }}" />
+                            src="{{ asset('storage/' . $news->gambar) }}" />
                         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-24">
                         </div>
                         <div
@@ -92,7 +105,7 @@
                 </div>
             @endforeach
         </div>
-        
+
         <!-- Enhanced Featured News Carousel -->
         <div class="enhanced-carousel">
             <div class="enhanced-carousel-title">Berita Unggulan</div>
@@ -103,7 +116,7 @@
                             <div class="news-card-enhanced">
                                 <div class="news-image-container">
                                     <img alt="{{ $featured->judul }}" class="news-image"
-                                        src="{{ asset('storage/'.$featured->gambar) }}" />
+                                        src="{{ asset('storage/' . $featured->gambar) }}" />
                                     <div class="news-tag-enhanced">{{ ucfirst($featured->kategori) }}</div>
                                 </div>
                                 <div class="news-content">

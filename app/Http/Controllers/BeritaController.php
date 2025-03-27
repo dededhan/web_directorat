@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Berita;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreBeritaRequest;
+use App\Models\Pengumuman;
 use Illuminate\Support\Facades\Storage;
 
 class BeritaController extends Controller
@@ -70,11 +71,16 @@ class BeritaController extends Controller
     {
         // Get regular news for the main grid (latest 3)
         $regularNews = Berita::latest()->take(3)->get();
-
+    
         // Get featured news for the carousel (latest 5)
         $featuredNews = Berita::latest()->take(5)->get();
-
-        return view('home', compact('regularNews', 'featuredNews'));
+        
+        // Get active announcements
+        $announcements = Pengumuman::where('status', true)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+    
+        return view('home', compact('regularNews', 'featuredNews', 'announcements'));
     }
 
     /**
@@ -83,9 +89,14 @@ class BeritaController extends Controller
     public function show(string $id)
     {
         $berita = Berita::findOrFail($id);
-        return view('Berita.show', compact('berita'));
+        
+        // Get active announcements
+        $announcements = Pengumuman::where('status', true)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+                        
+        return view('Berita.show', compact('berita', 'announcements'));
     }
-
     /**
      * Remove the specified resource from storage.
      */

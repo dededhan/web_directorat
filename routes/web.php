@@ -16,6 +16,8 @@ use App\Http\Controllers\BeritaController;
 
 Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
 Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('Berita.show');
+Route::get('/api/announcements', [App\Http\Controllers\PengumumanController::class, 'getActiveAnnouncements'])
+    ->name('api.announcements');
 // Route::get('/', function () {
 //     return view('home');
 // })->name('home');
