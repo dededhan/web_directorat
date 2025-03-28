@@ -9,6 +9,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('home.css') }}">
+    <link rel="stylesheet" href="{{ asset('header-carousel.css') }}">
+    <script src="{{ asset('header-carousel.js') }}"></script>
 </head>
 
 <body class="font-sans bg-gray-100">
@@ -16,15 +18,16 @@
 
     <!-- Header section -->
     <header class="relative">
-        <img alt="Universitas Negeri Jakarta building with a sculpture in front" class="w-full h-screen object-cover"
-            src="https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434" />
-        <div class="absolute inset-0 bg-teal-900 bg-opacity-50 flex flex-col justify-center items-start p-8">
-            <div class="flex items-center space-x-4">
-            </div>
-            <div class="mt-16">
-            </div>
+    <!-- The carousel will be dynamically inserted here by JavaScript -->
+    <img alt="Universitas Negeri Jakarta building with a sculpture in front" class="w-full h-screen object-cover"
+        src="https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434" />
+    <div class="absolute inset-0 bg-teal-900 bg-opacity-50 flex flex-col justify-center items-start p-8">
+        <div class="flex items-center space-x-4">
         </div>
-    </header>
+        <div class="mt-16">
+        </div>
+    </div>
+</header>
     <div class="bg-gradient-to-r from-teal-700 to-teal-800 py-3 shadow-lg">
         <div class="container mx-auto px-6">
             <div class="flex items-center space-x-4">

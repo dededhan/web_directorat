@@ -433,3 +433,158 @@ document.addEventListener('DOMContentLoaded', function() {
     updateProgressDots();
     startAutoSlide();
 });
+document.addEventListener('DOMContentLoaded', function() {
+    // Create the carousel structure
+    const header = document.querySelector('header');
+    if (!header) return;
+    
+    // Images for the carousel
+    const images = [
+        "https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434",
+        "https://edura.unj.ac.id/edura-news/wp-content/uploads/2025/01/WhatsApp-Image-2025-01-16-at-11.47.23-scaled.jpeg",
+        "https://fe.unj.ac.id/wp-content/uploads/2023/08/FE-UNJ-1210x642-1.jpg",
+    ];
+    
+    // Create carousel container
+    const carouselContainer = document.createElement('div');
+    carouselContainer.className = 'header-carousel';
+    
+    // Create slides
+    const slidesContainer = document.createElement('div');
+    slidesContainer.className = 'header-carousel-slides';
+    
+    // Add slides with images
+    images.forEach((imgSrc, index) => {
+        const slide = document.createElement('div');
+        slide.className = `header-slide ${index === 0 ? 'active' : ''}`;
+        
+        const img = document.createElement('img');
+        img.src = imgSrc;
+        img.alt = `Universitas Negeri Jakarta campus view ${index + 1}`;
+        img.className = 'w-full h-screen object-cover';
+        
+        slide.appendChild(img);
+        slidesContainer.appendChild(slide);
+    });
+    
+    // Create navigation dots
+    const dotsContainer = document.createElement('div');
+    dotsContainer.className = 'header-carousel-dots';
+    
+    images.forEach((_, index) => {
+        const dot = document.createElement('span');
+        dot.className = `header-carousel-dot ${index === 0 ? 'active' : ''}`;
+        dot.setAttribute('data-index', index);
+        dotsContainer.appendChild(dot);
+    });
+    
+    // Add all elements to the carousel container
+    carouselContainer.appendChild(slidesContainer);
+    carouselContainer.appendChild(dotsContainer);
+    
+    // Replace current header content with the carousel
+    // Preserve the overlay with background
+    const overlay = header.querySelector('.absolute.inset-0');
+    
+    // Clear header and add carousel
+    const currentImg = header.querySelector('img');
+    if (currentImg) currentImg.remove();
+    
+    header.insertBefore(carouselContainer, overlay);
+    
+    // Carousel functionality
+    let currentSlide = 0;
+    const totalSlides = images.length;
+    let autoplayInterval;
+    
+    // Function to show a specific slide
+    function showSlide(index) {
+        // Handle bounds
+        if (index >= totalSlides) index = 0;
+        if (index < 0) index = totalSlides - 1;
+        
+        // Update current slide
+        currentSlide = index;
+        
+        // Update slides
+        const slides = document.querySelectorAll('.header-slide');
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === currentSlide);
+        });
+        
+        // Update dots
+        const dots = document.querySelectorAll('.header-carousel-dot');
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentSlide);
+        });
+    }
+    
+    // Navigate to next slide
+    function nextSlide() {
+        showSlide(currentSlide + 1);
+    }
+    
+    // Navigate to previous slide
+    function prevSlide() {
+        showSlide(currentSlide - 1);
+    }
+    
+    // Arrow navigation removed as requested
+    
+    // Add event listeners for dots
+    document.querySelectorAll('.header-carousel-dot').forEach(dot => {
+        dot.addEventListener('click', () => {
+            const index = parseInt(dot.getAttribute('data-index'));
+            showSlide(index);
+            resetAutoplay();
+        });
+    });
+    
+    // Autoplay functionality
+    function startAutoplay() {
+        autoplayInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+    }
+    
+    function resetAutoplay() {
+        clearInterval(autoplayInterval);
+        startAutoplay();
+    }
+    
+    // Start autoplay
+    startAutoplay();
+    
+    // Pause autoplay on hover
+    carouselContainer.addEventListener('mouseenter', () => {
+        clearInterval(autoplayInterval);
+    });
+    
+    carouselContainer.addEventListener('mouseleave', () => {
+        startAutoplay();
+    });
+    
+    // Add touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    carouselContainer.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    carouselContainer.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+    
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        if (touchEndX < touchStartX - swipeThreshold) {
+            // Swiped left, go to next slide
+            nextSlide();
+            resetAutoplay();
+        } else if (touchEndX > touchStartX + swipeThreshold) {
+            // Swiped right, go to previous slide
+            prevSlide();
+            resetAutoplay();
+        }
+    }
+});
