@@ -1,15 +1,18 @@
 <!-- SIDEBAR -->
 <section id="sidebar">
     <!-- Brand Logo -->
+
+    <link rel="stylesheet" href="{{ asset('dashboard_main/sidebar_dashboardadmin.css') }}">
     <div class="brand">
         <!-- Use a button element instead of an icon inside a link -->
-        <button type="button" id="toggle-sidebar-btn" style="background: none; border: none; color: white; cursor: pointer; position: absolute; left: 15px; top: 50%; transform: translateY(-50%); padding: 5px; font-size: 24px;">
+        <button type="button" id="toggle-sidebar-btn"
+            style="background: none; border: none; color: white; cursor: pointer; position: absolute; left: 15px; top: 50%; transform: translateY(-50%); padding: 5px; font-size: 24px;">
             <i class='bx bx-menu'></i>
         </button>
         <i class="logo-icon"></i>
         <span class="text">Dashboard Direktorat</span>
     </div>
-    
+
     <!-- Navigation Menu -->
     <nav class="side-navigation">
         <!-- Main Menu Section -->
@@ -148,7 +151,7 @@
                         <span class="text">Form Katsinov</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('admin.Katsinov.forminformasidasar.index') ? 'active' : '' }}">
+                {{-- <li class="{{ request()->routeIs('admin.Katsinov.forminformasidasar.index') ? 'active' : '' }}">
                     <a href="{{ route('admin.Katsinov.forminformasidasar.index') }}">
                         <i class='bx bxs-file-plus'></i>
                         <span class="text">Form Informasi Dasar</span>
@@ -166,12 +169,13 @@
                         <span class="text">Form Judul</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('admin.Katsinov.formrecordhasilpengukuran.index') ? 'active' : '' }}">
+                <li
+                    class="{{ request()->routeIs('admin.Katsinov.formrecordhasilpengukuran.index') ? 'active' : '' }}">
                     <a href="{{ route('admin.Katsinov.formrecordhasilpengukuran.index') }}">
                         <i class='bx bxs-file-plus'></i>
                         <span class="text">Form Record</span>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </div>
 
@@ -201,7 +205,8 @@
                 <li>
                     <form method="POST" action="{{ route('logout') }}" id="logout-form">
                         @csrf
-                        <a href="#" class="logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <a href="#" class="logout"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class='bx bxs-log-out-circle'></i>
                             <span class="text">Logout</span>
                         </a>
@@ -217,18 +222,18 @@
             // Try different ways to attach the event
             var btn = document.getElementById('toggle-sidebar-btn');
             var sidebar = document.getElementById('sidebar');
-            
+
             if (btn && sidebar) {
                 // Method 1: Direct property
                 btn.onclick = function() {
                     sidebar.classList.toggle('hide');
                 };
-                
+
                 // Method 2: Add event listener
                 btn.addEventListener('click', function() {
                     sidebar.classList.toggle('hide');
                 });
-                
+
                 // Method 3: Add event to parent
                 document.addEventListener('click', function(e) {
                     if (e.target === btn || e.target.closest('#toggle-sidebar-btn')) {
@@ -237,6 +242,6 @@
                 });
             }
         })();
-        </script>
+    </script>
 </section>
 <!-- SIDEBAR -->
