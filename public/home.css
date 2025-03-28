@@ -246,7 +246,7 @@ body {
 }
 /* Program dan Layanan Section */
 .program-section {
-    margin-top: -7rem;
+    margin-top: -1rem;
     padding: 3rem 0;
     background: linear-gradient(to bottom, #f0fdfa, white);
 }
@@ -1643,4 +1643,395 @@ footer {
         top: -10px !important;
         height: 10px !important;
     }
+}
+/* ===== CARD CONSISTENCY SYSTEM =====
+   Add this to the end of your home.css file */
+
+/* Base card structure */
+.card-consistent {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card-consistent:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transform: translateY(-5px);
+}
+
+/* Image container with fixed aspect ratio */
+.image-container {
+    position: relative;
+    overflow: hidden;
+    padding-top: 60%; /* 3:5 aspect ratio */
+}
+
+.image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.card-consistent:hover .image-container img {
+    transform: scale(1.05);
+}
+
+/* Special case for video containers */
+.video-container {
+    padding-top: 56.25%; /* 16:9 aspect ratio for videos */
+}
+
+/* Content area */
+.card-content {
+    padding: 1.25rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Card typography */
+.card-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #0F766E;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+    transition: color 0.3s ease;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 2.8em;
+}
+
+.card-consistent:hover .card-title {
+    color: #F59E0B;
+}
+
+/* Card description */
+.card-description {
+    color: #4B5563;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
+/* Links */
+.card-link {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    color: #0F766E;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.card-link:hover {
+    color: #F59E0B;
+}
+
+.card-link i {
+    margin-left: 0.25rem;
+    transition: transform 0.3s ease;
+}
+
+.card-link:hover i {
+    transform: translateX(3px);
+}
+
+/* Category/tag badges */
+.card-tag {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background-color: #FBBF24;
+    color: #115E59;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    z-index: 5;
+}
+
+/* Metadata section (author, date) */
+.card-meta {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    color: #6B7280;
+}
+
+/* Consistent grid layouts */
+.grid-consistent {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(1, 1fr);
+}
+
+@media (min-width: 640px) {
+    .grid-consistent {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .grid-consistent {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Program cards specific styles */
+.program-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    background: #0d9488;
+    border-radius: 9999px;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.card-consistent:hover .program-icon-container {
+    transform: rotate(12deg);
+}
+
+.program-icon-container i {
+    color: white;
+    font-size: 1.5rem;
+}
+
+/* Carousel specific adjustments */
+.carousel-item-enhanced {
+    padding: 0.75rem;
+    height: auto;
+}
+
+.enhanced-carousel .card-consistent {
+    height: 100%;
+}
+
+/* Instagram/social media placeholders */
+.social-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Section headers consistency */
+.section-header-consistent {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.section-subtitle-consistent {
+    color: #0d9488;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.875rem;
+}
+
+.section-title-consistent {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #134e4a;
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.section-description-consistent {
+    color: #4b5563;
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .card-title {
+        font-size: 1rem;
+        -webkit-line-clamp: 2;
+        height: auto;
+        min-height: 2.8em;
+    }
+    
+    .card-description {
+        font-size: 0.875rem;
+        -webkit-line-clamp: 2;
+    }
+    
+    .card-content {
+        padding: 1rem;
+    }
+    
+    .program-icon-container {
+        width: 3rem;
+        height: 3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .program-icon-container i {
+        font-size: 1.25rem;
+    }
+    
+    .section-title-consistent {
+        font-size: 1.5rem;
+    }
+    
+    .section-subtitle-consistent {
+        font-size: 0.75rem;
+    }
+    
+    .section-description-consistent {
+        font-size: 0.875rem;
+    }
+    
+    .card-tag {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+    }
+    
+    .card-meta {
+        font-size: 0.75rem;
+    }
+    
+    .card-link {
+        font-size: 0.875rem;
+    }
+}
+
+/* Ensure small screens still have decent-sized cards with 2 columns max */
+@media (max-width: 639px) {
+    .grid-consistent {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 1rem;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 639px) {
+    .grid-consistent {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Fix for the carousel to maintain consistency */
+@media (max-width: 767px) {
+    .carousel-inner {
+        gap: 0;
+    }
+    
+    .carousel-item-enhanced {
+        padding: 0.5rem;
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    @media (min-width: 480px) {
+        .carousel-item-enhanced {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+    }
+}
+
+/* Remove conflicting styles from original CSS */
+@media (max-width: 1023px) {
+    .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 {
+        display: grid !important;
+    }
+}
+.unj-content-section-header {
+    margin-bottom: 2rem;
+    border-left: 4px solid #FACC15; /* Yellow-400 for all section headers */
+    padding-left: 1rem;
+}
+
+.unj-content-section-header .unj-section-title {
+    color: #0F766E; /* Teal-700 */
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.unj-content-section-header .unj-section-subtitle {
+    color: #4B5563; /* Gray-600 */
+    font-size: 1rem;
+}
+
+/* Social media section headers with centered style */
+.unj-social-section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.unj-social-section-header .unj-section-title {
+    color: #0F766E; /* Teal-700 */
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.unj-social-section-header .unj-icon-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.unj-social-section-header .unj-divider-line {
+    height: 0.25rem;
+    width: 4rem;
+    background-color: #D1D5DB; /* Gray-300 */
+}
+
+.unj-social-section-header .unj-social-icon {
+    margin: 0 0.75rem;
+    font-size: 1.5rem;
+}
+
+.unj-social-section-header .unj-section-subtitle {
+    color: #4B5563; /* Gray-600 */
+    max-width: 32rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.unj-social-section-header .unj-profile-link {
+    display: inline-flex;
+    align-items: center;
+    color: #0F766E; /* Teal-700 */
+    font-weight: 500;
+    margin-top: 0.5rem;
+    transition: color 0.3s;
+}
+
+.unj-social-section-header .unj-profile-link:hover {
+    color: #FACC15; /* Yellow-500 */
+}
+
+.unj-social-section-header .unj-profile-link i {
+    margin-left: 0.5rem;
 }
