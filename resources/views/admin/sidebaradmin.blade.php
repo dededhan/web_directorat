@@ -25,16 +25,16 @@
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('admin.news.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.news.index') }}">
-                        <i class='bx bxs-news'></i>
-                        <span class="text">Berita</span>
-                    </a>
-                </li>
                 <li class="{{ request()->routeIs('admin.manageuser.index') ? 'active' : '' }}">
                     <a href="{{ route('admin.manageuser.index') }}">
                         <i class='bx bxs-user'></i>
                         <span class="text">Manage User</span>
+                    </a>
+                </li>
+                <li class="{{ request()->routeIs('admin.news.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.news.index') }}">
+                        <i class='bx bxs-news'></i>
+                        <span class="text">Berita</span>
                     </a>
                 </li>
                 <li class="{{ request()->routeIs('admin.newsscroll.index') ? 'active' : '' }}">
@@ -55,6 +55,13 @@
                     <a href="{{ route('admin.document.index') }}">
                         <i class='bx bxs-user'></i>
                         <span class="text">Document</span>
+                    </a>
+                </li>
+
+                <li class="{{ request()->routeIs('admin.youtube.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.youtube.index') }}">
+                        <i class='bx bxl-youtube'></i>
+                        <span class="text">Youtube</span>
                     </a>
                 </li>
             </ul>

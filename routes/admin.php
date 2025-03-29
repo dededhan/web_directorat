@@ -18,6 +18,7 @@ use App\Http\Controllers\FormRecordHasilPengukuranController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\ProgramLayananController;
+use App\Http\Controllers\YoutubeController;
 use Illuminate\Http\Request;
 // Ganti route yang ada dengan:
 use App\Http\Controllers\DokumenController;
@@ -41,9 +42,14 @@ Route::prefix('admin')->name('admin.')
 
         Route::resource('/news-scroll', PengumumanController::class);
 
-
-
         Route::resource('/program-layanan', ProgramLayananController::class);
+
+        //Youtube
+        Route::resource('/youtube', YoutubeController::class)
+            ->except(['show', 'edit', 'update']);
+
+        Route::get('/youtube/{id}/preview', [YoutubeController::class, 'preview'])
+            ->name('youtube.preview');    
 
         Route::resource('/document', DokumenController::class);
         Route::get('document/{dokumen}/download', [DokumenController::class, 'download'])
@@ -56,9 +62,6 @@ Route::prefix('admin')->name('admin.')
         // Untuk update status khusus (POST)
         Route::post('/responden/update-status/{id}', [AdminRespondenController::class, 'updateStatus'])
             ->name('responden.updateStatus');
-
-
-
 
         Route::put('/manageuser/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('manageuser.toggleStatus');
         Route::resource('/manageuser', UserController::class);
