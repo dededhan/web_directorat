@@ -346,6 +346,6 @@ function validateForm(event) {
     return isValid;
 }
 </script>
+{{-- @include('pemeringkatan.footerpemeringkatan') --}}
 </body>
 </html>
-@include('pemeringkatan.footerpemeringkatan')

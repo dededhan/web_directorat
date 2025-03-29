@@ -15,7 +15,7 @@ class StoreSustainabilityRequest extends FormRequest
         return [
             'judul_kegiatan' => 'required|string|max:255',
             'tanggal_kegiatan' => 'required|date',
-            'fakultas' => 'required|in:fmipa,fik,ft,fbs,fip,fe,fis',
+            'fakultas' => 'required|in:pascasarjana,fip,fmipa,fppsi,fbs,ft,fik,fis,fe,profesi',
             'prodi' => 'required|string',
             'link_kegiatan' => 'nullable|url',
             'foto_kegiatan' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
