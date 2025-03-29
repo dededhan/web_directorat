@@ -9,7 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="{{ asset('home.css') }}">
     <script src="{{ asset('home.js') }}"></script>
-
+    <link rel="stylesheet" href="{{ asset('mobile.css') }}">
+    <script src="{{ asset('mobile.js') }}"></script>
 </head>
 <body class="font-sans bg-gray-100">
     @include('Inovasi.navbarhilirisasi')
