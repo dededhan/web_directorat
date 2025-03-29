@@ -77,6 +77,10 @@ Route::get('/document', function () {
     return view('document.document');
 })->name('document.document');
 
+Route::get('inovasi/risetunj', function () {
+    return view('inovasi.riset_unj.risetunj');
+})->name('riset.unj');
+
 Route::get('/strukturorganisasi', function () {
     return view('struktur organisasi.strukturorganisasi');
 })->name('strukturorganisasi');
