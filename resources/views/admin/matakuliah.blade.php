@@ -1,5 +1,7 @@
 @extends('admin.admin')
 
+<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/matakuliah_dashboard.css') }}">
+
 @section('contentadmin')
     <div class="head-title">
         <div class="left">
@@ -15,6 +17,32 @@
             </ul>
         </div>
     </div>
+
+    <!-- Alert Messages -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
     <div class="table-data">
         <div class="order">
@@ -51,13 +79,16 @@
                         <label for="fakultas" class="form-label">Fakultas</label>
                         <select class="form-select" name="fakultas" id="fakultas">
                             <option value="">Pilih Fakultas</option>
-                            <option value="fmipa">FMIPA</option>
-                            <option value="fik">FIK</option>
-                            <option value="ft">FT</option>
-                            <option value="fbs">FBS</option>
+                            <option value="pascasarjana">PASCASARJANA</option>
                             <option value="fip">FIP</option>
-                            <option value="fe">FE</option>
+                            <option value="fmipa">FMIPA</option>
+                            <option value="fppsi">FPPsi</option>
+                            <option value="fbs">FBS</option>
+                            <option value="ft">FT</option>
+                            <option value="fik">FIK</option>
                             <option value="fis">FIS</option>
+                            <option value="fe">FE</option>
+                            <option value="profesi">PROFESI</option>
                         </select>
                         <div class="form-text text-muted">Pilih fakultas yang menyelenggarakan mata kuliah ini</div>
                     </div>
@@ -139,74 +170,40 @@
         </div>
     </div>
 
-    <script>
-        const prodisByFaculty = {
-            'fmipa': ['Ilmu Komputer', 'Matematika', 'Pendidikan Matematika', 'Fisika', 'Pendidikan Fisika', 'Biologi', 'Pendidikan Biologi', 'Kimia', 'Pendidikan Kimia'],
-            'fik': ['Pendidikan Teknologi Informasi', 'Pendidikan Teknik Elektronika', 'Pendidikan Teknik Elektro', 'Teknik Informatika dan Komputer'],
-            'ft': ['Teknik Sipil', 'Teknik Mesin', 'Teknik Elektro', 'Pendidikan Teknik Bangunan', 'Pendidikan Teknik Mesin'],
-            'fbs': ['Pendidikan Bahasa Indonesia', 'Pendidikan Bahasa Inggris', 'Pendidikan Bahasa Jerman', 'Pendidikan Bahasa Prancis', 'Pendidikan Seni Rupa'],
-            'fip': ['Pendidikan Guru Sekolah Dasar', 'Pendidikan Anak Usia Dini', 'Bimbingan dan Konseling', 'Teknologi Pendidikan', 'Pendidikan Luar Biasa'],
-            'fe': ['Pendidikan Ekonomi', 'Manajemen', 'Akuntansi', 'Pendidikan Administrasi Perkantoran'],
-            'fis': ['Pendidikan Pancasila dan Kewarganegaraan', 'Pendidikan Sejarah', 'Pendidikan Geografi', 'Pendidikan Sosiologi', 'Ilmu Komunikasi']
-        };
+    <!-- Include jQuery if not already included -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        document.getElementById('fakultas').addEventListener('change', function() {
-            const prodiSelect = document.getElementById('prodi');
-            prodiSelect.innerHTML = '<option value="">Pilih Program Studi</option>';
-            
-            if (this.value) {
-                prodiSelect.disabled = false;
-                const prodis = prodisByFaculty[this.value];
-                prodis.forEach(prodi => {
-                    const option = document.createElement('option');
-                    option.value = prodi.toLowerCase().replace(/ /g, '_');
-                    option.textContent = prodi;
-                    prodiSelect.appendChild(option);
-                });
-            } else {
-                prodiSelect.disabled = true;
-            }
+    <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/matakuliah_dashboard.css') }}">
+    
+    <!-- Include Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="{{ asset('dashboard_main/dashboard/matakuliah_dashboard.js') }}"></script>
+    
+    <script>
+        // Display SweetAlert for flash messages
+document.addEventListener('DOMContentLoaded', function() {
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 2000
         });
+    @endif
+
+    @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            timer: 2000
+        });
+    @endif
+});
     </script>
 
     <style>
-        .table-data {
-            margin-top: 24px;
-        }
-        
-        .order {
-            background: #fff;
-            padding: 24px;
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-control:focus, .form-select:focus {
-            border-color: #3498db;
-            box-shadow: none;
-        }
-
-        .btn-primary {
-            background-color: #3498db;
-            border-color: #3498db;
-        }
-
-        .btn-primary:hover {
-            background-color: #2980b9;
-            border-color: #2980b9;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 5px;
-        }
-
-        textarea {
-            resize: vertical;
-        }
+       
     </style>
 @endsection

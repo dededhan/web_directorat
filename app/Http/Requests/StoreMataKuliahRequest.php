@@ -17,7 +17,7 @@ class StoreMataKuliahRequest extends FormRequest
             'nama_matkul' => 'required|string|max:255',
             'semester' => 'required|string|max:255',
             'kode_matkul' => 'required|string|max:255|unique:mata_kuliahs,kode_matkul',
-            'fakultas' => 'required|in:fmipa,fik,ft,fbs,fip,fe,fis',
+            'fakultas' => 'required|in:pascasarjana,fip,fmipa,fppsi,fbs,ft,fik,fis,fe,profesi',
             'prodi' => 'required|string|max:255',
             'rps' => 'required|file|mimes:pdf,doc,docx|max:2048',
             'deskripsi' => 'required|string',
