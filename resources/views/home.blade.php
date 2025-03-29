@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{{ asset('home.css') }}">
     <link rel="stylesheet" href="{{ asset('header-carousel.css') }}">
     <script src="{{ asset('header-carousel.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('mobile.css') }}">
+    <script src="{{ asset('mobile.js') }}"></script>
 </head>
 
 <body class="font-sans bg-gray-100">
