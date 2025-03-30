@@ -26,6 +26,9 @@ Route::get('/program-layanan', [App\Http\Controllers\ProgramLayananController::c
 
 Route::get('/instagram/{id}/preview', [InstagramController::class, 'preview'])
     ->name('instagram.preview');
+Route::get('/api/youtube-videos', [App\Http\Controllers\YoutubeController::class, 'getFrontendVideos'])
+    ->name('api.youtube-videos');
+    
 Route::get('/api/instagram-posts', [App\Http\Controllers\InstagramController::class, 'getFrontendPosts'])
     ->name('api.instagram-posts');        
 // Route::get('/', function () {

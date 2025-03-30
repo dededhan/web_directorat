@@ -62,4 +62,28 @@ class YoutubeController extends Controller
         return redirect()->route('admin.youtube.index')
             ->with('success', 'Video berhasil dihapus!');
     }
+
+    /**
+     * Display a preview of the video.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function preview($id)
+    {
+        $video = Youtube::findOrFail($id);
+        return view('admin.youtube-preview', compact('video'));
+    }
+
+    /**
+     * Get latest YouTube videos for the homepage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getFrontendVideos()
+    {
+        // Get the latest 3 YouTube videos
+        $videos = Youtube::latest()->take(3)->get();
+        return response()->json($videos);
+    }
 }

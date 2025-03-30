@@ -366,6 +366,7 @@
 </section>
 
 <!-- YouTube Section with Consistent Card Styling -->
+<!-- YouTube Section with Consistent Card Styling -->
 <section class="media-section py-16 relative bg-gradient-to-b from-white to-gray-50">
     <!-- Decorative Elements -->
     <div class="absolute bottom-0 right-0 w-32 h-32 bg-yellow-400 rounded-full -mr-16 -mb-16 opacity-10"></div>
@@ -383,76 +384,123 @@
             <p class="text-gray-600 max-w-2xl mx-auto">Tonton video terbaru dari channel YouTube UNJ</p>
         </div>
         
-        <!-- YouTube Videos Grid with Consistent Card Styling -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Video 1 -->
-            <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                <div class="relative pb-[56.25%] h-0 overflow-hidden">
-                    <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/JJ0pP0kzLxQ?rel=0" title="Profil Universitas Negeri Jakarta Tahun 2020" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                    </iframe>
-                </div>
-                <div class="p-6">
-                    <div class="flex items-center mb-3">
-                        <div class="flex items-center text-gray-500 text-sm">
-                            <i class="fab fa-youtube mr-2"></i>
-                            <span>UNJ Official</span>
+        <!-- Featured YouTube Videos - Hardcoded -->
+        <div class="mb-12">
+            <h3 class="text-xl font-bold text-teal-700 mb-6 text-center">Video Unggulan</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Video 1 -->
+                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                    <div class="relative pb-[56.25%] h-0 overflow-hidden">
+                        <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/JJ0pP0kzLxQ?rel=0" title="Profil Universitas Negeri Jakarta Tahun 2020" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <i class="fab fa-youtube mr-2"></i>
+                                <span>UNJ Official</span>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">Profil Universitas Negeri Jakarta</h3>
+                        <p class="text-gray-600 mb-4">Mengenal lebih dalam tentang UNJ, fasilitas, dan program unggulan yang ditawarkan.</p>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <a href="https://www.youtube.com/watch?v=JJ0pP0kzLxQ" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
+                                <span>Tonton di YouTube</span>
+                                <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                            </a>
                         </div>
                     </div>
-                    <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">Profil Universitas Negeri Jakarta</h3>
-                    <p class="text-gray-600 mb-4">Mengenal lebih dalam tentang UNJ, fasilitas, dan program unggulan yang ditawarkan.</p>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="https://www.youtube.com/watch?v=JJ0pP0kzLxQ" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                            <span>Tonton di YouTube</span>
-                            <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                        </a>
+                </div>
+
+                <!-- Video 2 -->
+                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                    <div class="relative pb-[56.25%] h-0 overflow-hidden">
+                        <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/XtmrlOGaAcE?rel=0" title="Muda dan Berkarya : Inspirasi Wirausahawan Alumni UNJ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <i class="fab fa-youtube mr-2"></i>
+                                <span>UNJ Official</span>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">Muda dan Berkarya</h3>
+                        <p class="text-gray-600 mb-4">Inspirasi dari wirausahawan alumni UNJ yang sukses membangun karir.</p>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <a href="https://www.youtube.com/watch?v=XtmrlOGaAcE" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
+                                <span>Tonton di YouTube</span>
+                                <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video 3 -->
+                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                    <div class="relative pb-[56.25%] h-0 overflow-hidden">
+                        <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/LeF0xnWIPYU?rel=0" title="Mengenal Lebih Jauh UNJ! with Wakil Rektor III UNJ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <i class="fab fa-youtube mr-2"></i>
+                                <span>UNJ Official</span>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">Mengenal Lebih Jauh UNJ</h3>
+                        <p class="text-gray-600 mb-4">Wawancara eksklusif bersama Wakil Rektor III Universitas Negeri Jakarta.</p>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <a href="https://www.youtube.com/watch?v=LeF0xnWIPYU" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
+                                <span>Tonton di YouTube</span>
+                                <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Video 2 -->
-            <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                <div class="relative pb-[56.25%] h-0 overflow-hidden">
-                    <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/XtmrlOGaAcE?rel=0" title="Muda dan Berkarya : Inspirasi Wirausahawan Alumni UNJ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                    </iframe>
-                </div>
-                <div class="p-6">
-                    <div class="flex items-center mb-3">
-                        <div class="flex items-center text-gray-500 text-sm">
-                            <i class="fab fa-youtube mr-2"></i>
-                            <span>UNJ Official</span>
+        <!-- Dynamic YouTube Videos from Database -->
+        <div>
+            <h3 class="text-xl font-bold text-teal-700 mb-6 text-center">Video Terbaru</h3>
+            <div id="dynamic-videos-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Dynamic content will be loaded here via JavaScript -->
+                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                    <div class="p-6">
+                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
                         </div>
                     </div>
-                    <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">Muda dan Berkarya</h3>
-                    <p class="text-gray-600 mb-4">Inspirasi dari wirausahawan alumni UNJ yang sukses membangun karir.</p>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="https://www.youtube.com/watch?v=XtmrlOGaAcE" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                            <span>Tonton di YouTube</span>
-                            <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                        </a>
-                    </div>
                 </div>
-            </div>
-
-            <!-- Video 3 -->
-            <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                <div class="relative pb-[56.25%] h-0 overflow-hidden">
-                    <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/LeF0xnWIPYU?rel=0" title="Mengenal Lebih Jauh UNJ! with Wakil Rektor III UNJ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                    </iframe>
-                </div>
-                <div class="p-6">
-                    <div class="flex items-center mb-3">
-                        <div class="flex items-center text-gray-500 text-sm">
-                            <i class="fab fa-youtube mr-2"></i>
-                            <span>UNJ Official</span>
+                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                    <div class="p-6">
+                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
                         </div>
                     </div>
-                    <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">Mengenal Lebih Jauh UNJ</h3>
-                    <p class="text-gray-600 mb-4">Wawancara eksklusif bersama Wakil Rektor III Universitas Negeri Jakarta.</p>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="https://www.youtube.com/watch?v=LeF0xnWIPYU" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                            <span>Tonton di YouTube</span>
-                            <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                        </a>
+                </div>
+                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                    <div class="p-6">
+                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -515,5 +563,97 @@
     }
 }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fetch YouTube videos from the API
+        fetch('/api/youtube-videos')
+            .then(response => response.json())
+            .then(videos => {
+                const container = document.getElementById('dynamic-videos-container');
+                
+                // Clear loading placeholders
+                container.innerHTML = '';
+                
+                if (videos.length === 0) {
+                    // Display a message if no videos are found
+                    container.innerHTML = `
+                        <div class="col-span-3 text-center py-8">
+                            <p class="text-gray-500">Belum ada video tersedia.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Generate HTML for each video
+                videos.forEach(video => {
+                    // Extract YouTube video ID from the link
+                    let videoId = '';
+                    
+                    // Handle different YouTube URL formats
+                    if (video.link.includes('youtu.be/')) {
+                        // Short URL format: https://youtu.be/VIDEO_ID
+                        videoId = video.link.split('youtu.be/')[1].split('?')[0];
+                    } else if (video.link.includes('watch?v=')) {
+                        // Standard URL format: https://www.youtube.com/watch?v=VIDEO_ID
+                        const urlParams = new URLSearchParams(video.link.split('?')[1]);
+                        videoId = urlParams.get('v');
+                    } else if (video.link.includes('/embed/')) {
+                        // Already in embed format
+                        videoId = video.link.split('/embed/')[1];
+                    } else {
+                        // Fallback
+                        videoId = video.link.replace('watch?v=', 'embed/').split('/').pop();
+                    }
+                    
+                    const embedUrl = `https://www.youtube.com/embed/${videoId}?rel=0`;
+                    
+                    // Create video card
+                    const videoCard = `
+                        <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                            <div class="relative pb-[56.25%] h-0 overflow-hidden">
+                                <iframe class="absolute top-0 left-0 w-full h-full" 
+                                    src="${embedUrl}" 
+                                    title="${video.judul}" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                    referrerpolicy="strict-origin-when-cross-origin" 
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center mb-3">
+                                    <div class="flex items-center text-gray-500 text-sm">
+                                        <i class="fab fa-youtube mr-2"></i>
+                                        <span>UNJ Official</span>
+                                    </div>
+                                </div>
+                                <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">${video.judul}</h3>
+                                <p class="text-gray-600 mb-4">${video.deskripsi.length > 100 ? video.deskripsi.substring(0, 100) + '...' : video.deskripsi}</p>
+                                <div class="mt-4 pt-4 border-t border-gray-100">
+                                    <a href="${video.link}" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
+                                        <span>Tonton di YouTube</span>
+                                        <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Add video card to container
+                    container.innerHTML += videoCard;
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching YouTube videos:', error);
+                const container = document.getElementById('dynamic-videos-container');
+                container.innerHTML = `
+                    <div class="col-span-3 text-center py-8">
+                        <p class="text-gray-500">Gagal memuat video. Silakan coba lagi nanti.</p>
+                    </div>
+                `;
+            });
+    });
+</script>
 </html>
 @include('footerlp')
