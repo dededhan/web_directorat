@@ -102,7 +102,7 @@
                         <p class="text-gray-600 mb-4">
                             {{ Str::limit(strip_tags($news->isi), 100) }}
                         </p>
-                        <a href="{{ route('Berita.show', $news->id) }}"
+                        <a href="{{ route('Berita.beritahome') }}"
                             class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
                             Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                         </a>
@@ -135,7 +135,7 @@
                                     <p class="news-excerpt">
                                         {{ Str::limit(strip_tags($featured->isi), 150) }}
                                     </p>
-                                    <a href="{{ route('Berita.show', $featured->id) }}" class="news-link">
+                                    <a href="{{ route('Berita.beritahome') }}" class="news-link">
                                         Baca selengkapnya <i class="fas fa-arrow-right"></i>
                                     </a>
                                 </div>

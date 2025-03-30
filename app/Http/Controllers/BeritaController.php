@@ -89,6 +89,31 @@ class BeritaController extends Controller
 
         return view('home', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan'));
     }
+    public function getBeritaDetail($id)
+{
+    $berita = Berita::findOrFail($id);
+    return response()->json($berita);
+}
+
+    /**
+     * Display news by category.
+     */
+    public function kategori(string $kategori)
+    {
+        // Validate the category
+        if (!in_array($kategori, ['inovasi', 'pemeringkatan'])) {
+            return redirect()->route('berita.all')
+                ->with('error', 'Kategori tidak valid.');
+        }
+
+        $beritas = Berita::where('kategori', $kategori)
+            ->latest()
+            ->paginate(9); // Show 9 news per page
+        
+        $pageTitle = 'Berita ' . ucfirst($kategori);
+        
+        return view('Berita.beritahome', compact('beritas', 'pageTitle'));
+    }
 
     public function allNews()
     {

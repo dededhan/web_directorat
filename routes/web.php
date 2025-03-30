@@ -64,6 +64,10 @@ Route::get('/documents/preview/{id}', [App\Http\Controllers\DokumenController::c
 Route::get('/documents/download/{id}', [App\Http\Controllers\DokumenController::class, 'download'])
     ->name('documents.download');
 
+    Route::get('/berita', [BeritaController::class, 'allNews'])->name('berita.all');
+    Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('berita.show')->where('id', '[0-9]+');
+    Route::get('/berita/kategori/{kategori}', [BeritaController::class, 'kategori'])->name('berita.kategori');
+    Route::get('/api/berita/{id}', [BeritaController::class, 'getBeritaDetail']);
 
 Route::get('/tupoksi', function () {
     return view('tupoksi.tupoksi');
