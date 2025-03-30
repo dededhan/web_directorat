@@ -2,8 +2,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Berita Terkini</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ $pageTitle ?? 'Berita Terkini' }}</title>
     <link rel="stylesheet" href="{{ asset('berita.css') }}">
     <link rel="stylesheet" href="{{ asset('unj-navbar.css') }}">
     <style>
@@ -18,49 +18,314 @@
             color: #666;
         }
         
-        .category-tabs {
-            background: #f5f5f5;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #e0e0e0;
+        /* Simple and clean cards matching your screenshot */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
         }
         
-        .category-tab {
-            padding: 0.5rem 1rem;
-            margin-right: 0.5rem;
-            color: #555;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-        
-        .category-tab.active {
-            background-color: #277177;
-            color: white;
-        }
-        
-        .search-container {
-            padding: 1rem 0;
+        .news-card {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            height: 100%;
             display: flex;
-            max-width: 600px;
-            margin: 0 auto;
+            flex-direction: column;
+            transition: transform 0.2s;
         }
         
-        .search-input {
-            flex: 1;
-            padding: 0.75rem 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px 0 0 4px;
+        .news-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-img {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .card-content {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 10px;
+            color: #333;
+        }
+        
+        .card-excerpt {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        
+        .card-category {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .card-category.inovasi {
+            background-color: #e8f4f4;
+            color: var(--primary-color);
+        }
+        
+        .card-category.pemeringkatan {
+            background-color: #f0f7ee;
+            color: #166534;
+        }
+        
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #777;
+            margin-top: auto;
+            padding-top: 10px;
+        }
+        
+        .card-date {
+            color: #777;
+        }
+        
+        .read-more {
+            display: block;
+            background-color: #f5f5f5;
+            color: var(--primary-color);
+            text-decoration: none;
+            text-align: center;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 15px;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .read-more:hover {
+            background-color: #e0e0e0;
+        }
+        
+        /* Headline banner */
+        .headline-banner {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem 0;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .headline-banner h2 {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+        
+        /* Pagination styling */
+        .pagination-container {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+        }
+        
+        /* News detail popup styles */
+        .news-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        
+        .news-popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .news-popup {
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+        
+        .news-popup-overlay.active .news-popup {
+            transform: scale(1);
+        }
+        
+        .popup-header {
+            position: relative;
+            height: 250px;
+        }
+        
+        .popup-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            z-index: 10;
+        }
+        
+        .popup-close:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .popup-content {
+            padding: 25px;
+            overflow-y: auto;
+            max-height: calc(90vh - 250px);
+        }
+        
+        .popup-category {
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .popup-category.inovasi {
+            background-color: #e8f4f4;
+            color: var(--primary-color);
+        }
+        
+        .popup-category.pemeringkatan {
+            background-color: #f0f7ee;
+            color: #166534;
+        }
+        
+        .popup-title {
+            font-size: 1.8rem;
+            margin: 10px 0 15px;
+            color: #333;
+            line-height: 1.3;
+        }
+        
+        .popup-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            color: #777;
             font-size: 0.9rem;
         }
         
-        .search-button {
-            background: #277177;
-            color: white;
-            border: none;
-            padding: 0 1.5rem;
-            border-radius: 0 4px 4px 0;
-            cursor: pointer;
+        .popup-date {
+            margin-right: 15px;
+        }
+        
+        .popup-body {
+            line-height: 1.7;
+            color: #444;
+            font-size: 1rem;
+        }
+        
+        .popup-body p {
+            margin-bottom: 15px;
+        }
+        
+        .popup-body img {
+            max-width: 100%;
+            height: auto;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        /* Loading state */
+        .popup-loading {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+        }
+        
+        .popup-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Disable body scroll when popup is open */
+        body.popup-open {
+            overflow: hidden;
+        }
+        
+        /* Error message styling */
+        .error-message {
+            text-align: center;
+            padding: 30px;
+            color: #721c24;
+            background-color: #f8d7da;
+            border-radius: 5px;
+        }
+        
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .popup-header {
+                height: 180px;
+            }
+            
+            .popup-title {
+                font-size: 1.5rem;
+            }
+            
+            .popup-content {
+                max-height: calc(90vh - 180px);
+            }
         }
     </style>
 </head>
@@ -70,390 +335,267 @@
         <div class="spinner"></div>
     </div>
     
-    <!-- Include standardized navbar component -->
-    @include('components.main-navbar', [
-        'pageTitle' => 'Portal Berita',
-        'currentPage' => 'Terbaru'
-    ])
-    
-    <div class="container">
-        <div class="search-container">
-            <input type="text" class="search-input" placeholder="Cari berita...">
-            <button class="search-button">🔍</button>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="{{ route('home') }}" class="logo">
+                    <img src="https://spm.unj.ac.id/wp-content/uploads/2024/08/cropped-Logo-UNJ-PTNBH-RGB_Logo_Motto_Transparan.png" alt="Logo UNJ" class="logo-image">
+                    Portal Berita
+                </a>
+                <nav>
+                    <ul>
+                        <li><a href="{{ route('home') }}">Home</a></li>
+                        <li><a href="{{ route('berita.all') }}">Berita</a></li>
+                    </ul>
+                </nav>
+            </div>
         </div>
-    </div>
-    
-    <div class="category-tabs">
-        <div class="container" style="display: flex; overflow-x: auto;">
-            <a href="#" class="category-tab active">Semua</a>
-            <a href="#" class="category-tab">Inovasi</a>
-            <a href="#" class="category-tab">Pemeringkatan</a>
+        <div class="container">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Cari berita...">
+                <button class="search-button">🔍</button>
+            </div>
         </div>
-    </div>
+        
+        <!-- Category tabs using existing CSS style -->
+        <div class="category-tabs">
+            <div class="container" style="display: flex; overflow-x: auto;">
+                <a href="{{ route('berita.all') }}" class="category-tab {{ !request()->segment(3) ? 'active' : '' }}">Semua</a>
+                <a href="{{ route('berita.kategori', 'inovasi') }}" class="category-tab {{ request()->segment(3) == 'inovasi' ? 'active' : '' }}">Inovasi</a>
+                <a href="{{ route('berita.kategori', 'pemeringkatan') }}" class="category-tab {{ request()->segment(3) == 'pemeringkatan' ? 'active' : '' }}">Pemeringkatan</a>
+            </div>
+        </div>
+    </header>
 
     <main class="container">
-        <section class="headline">
-            <div class="headline-grid">
-                <div class="main-headline">
-                    <div class="headline-content">
-                        <h2 class="headline-title">Pemerintah Umumkan Kebijakan Baru untuk Mendorong Ekonomi Kreatif</h2>
-                        <p class="headline-desc">Program ini diharapkan dapat meningkatkan kontribusi ekonomi kreatif hingga 10% terhadap PDB nasional dalam lima tahun ke depan.</p>
-                        <div class="news-meta">
-                            <span class="news-category">Inovasi</span>
-                            <span class="news-date">16 Maret 2025</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="side-headlines">
-                    <div class="side-headline">
-                        <div class="side-img"></div>
-                        <div class="side-content">
-                            <h3 class="side-title">Startup Lokal Kembangkan AI untuk Solusi Pertanian Presisi</h3>
-                            <div class="news-meta">
-                                <span class="news-category">Inovasi</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="side-headline">
-                        <div class="side-img"></div>
-                        <div class="side-content">
-                            <h3 class="side-title">Tim Nasional Berhasil Lolos ke Semifinal Turnamen Internasional</h3>
-                            <div class="news-meta">
-                                <span class="news-category">Pemeringkatan</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="side-headline">
-                        <div class="side-img"></div>
-                        <div class="side-content">
-                            <h3 class="side-title">Kementerian Pendidikan Luncurkan Program Beasiswa untuk 10,000 Mahasiswa</h3>
-                            <div class="news-meta">
-                                <span class="news-category">Pemeringkatan</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!-- Category headline banner -->
+        <div class="headline-banner">
+            <h2>{{ $pageTitle ?? 'Berita' }}</h2>
+        </div>
 
         <section>
-            <h2 class="section-title">Berita Terbaru</h2>
             <div class="news-grid">
                 @forelse($beritas as $berita)
                     <div class="news-card">
                         <div class="card-img" style="background-image: url('{{ asset('storage/'.$berita->gambar) }}')"></div>
                         <div class="card-content">
+                            <span class="card-category {{ strtolower($berita->kategori) }}">{{ strtoupper($berita->kategori) }}</span>
                             <h3 class="card-title">{{ $berita->judul }}</h3>
-                            <p class="card-excerpt">{{ Str::limit(strip_tags($berita->isi), 150) }}</p>
-                            <div class="news-meta">
-                                <span class="news-category">{{ ucfirst($berita->kategori) }}</span>
-                                <span class="news-date">{{ date('d F Y', strtotime($berita->tanggal)) }}</span>
+                            <p class="card-excerpt">{{ Str::limit(strip_tags($berita->isi), 100) }}</p>
+                            <div class="card-meta">
+                                <span class="card-date">{{ date('d F Y', strtotime($berita->tanggal)) }}</span>
                             </div>
+                            <button class="read-more" data-id="{{ $berita->id }}">Baca Selengkapnya</button>
                         </div>
                     </div>
                 @empty
                     <div class="no-results">
-                        <p>Belum ada berita tersedia.</p>
+                        <p>Belum ada berita tersedia dalam kategori ini.</p>
                     </div>
                 @endforelse
             </div>
+            
+            <!-- Pagination -->
+            <div class="pagination-container">
+                {{ $beritas->links() }}
+            </div>
         </section>
     </main>
+
+    <!-- News Detail Popup -->
+    <div class="news-popup-overlay" id="newsPopup">
+        <div class="news-popup">
+            <div class="popup-loading" id="popupLoading">
+                <div class="popup-spinner"></div>
+                <p>Memuat konten...</p>
+            </div>
+            <div class="popup-header">
+                <img src="" alt="Gambar berita" class="popup-img" id="popupImg">
+                <button class="popup-close" id="popupClose">&times;</button>
+            </div>
+            <div class="popup-content" id="popupContent">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
 
     @include('Berita.beritafooter')
 
     <script> 
     document.addEventListener('DOMContentLoaded', function() {
-    // Get all category tabs
-    const categoryTabs = document.querySelectorAll('.category-tab');
+        // Hide loading indicator when page loads
+        document.querySelector('.loading').style.display = 'none';
     
-    // Content database for different categories
-    const categoryContent = {
-        "Inovasi": {
-            main: {
-                title: "Startup Lokal Kembangkan Robot Penyelamat untuk Bencana Alam",
-                desc: "Tim mahasiswa ITB berhasil menciptakan robot yang dapat menjangkau area-area berbahaya dan mendeteksi korban terjebak setelah bencana alam.",
-                category: "Inovasi",
-                date: "16 Maret 2025"
-            },
-            side: [
-                {
-                    title: "Peneliti Indonesia Temukan Bahan Plastik yang Terurai dalam 3 Bulan",
-                    category: "Inovasi"
-                },
-                {
-                    title: "Sistem Deteksi Dini Banjir Berbasis IoT Diuji Coba di Jakarta",
-                    category: "Inovasi"
-                },
-                {
-                    title: "Dosen UGM Kembangkan Vaksin Kanker Nasofaring Pertama di ASEAN",
-                    category: "Inovasi"
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        const searchButton = document.querySelector('.search-button');
+        
+        function performSearch() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            const newsCards = document.querySelectorAll('.news-card');
+            let hasResults = false;
+            
+            newsCards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                const excerpt = card.querySelector('.card-excerpt').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || excerpt.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                    hasResults = true;
+                } else {
+                    card.style.display = 'none';
                 }
-            ],
-            news: [
-                {
-                    title: "Aplikasi Pembelajaran Bahasa Daerah Berbasis AI Diluncurkan",
-                    excerpt: "Platform digital ini mampu mengenali dan mengajarkan lebih dari 50 bahasa daerah di Indonesia dengan metode interaktif yang menarik.",
-                    category: "Inovasi",
-                    date: "16 Maret 2025"
-                },
-                {
-                    title: "Tim Mahasiswa ITS Ciptakan Mobil Bertenaga Surya dengan Efisiensi Tinggi",
-                    excerpt: "Mobil bernama 'Surya Nusantara' ini mampu menempuh jarak hingga 1.200 km dengan energi matahari dan memenangkan kompetisi internasional.",
-                    category: "Inovasi",
-                    date: "15 Maret 2025"
-                },
-                {
-                    title: "Teknologi Konversi Sampah Plastik Menjadi Bahan Bakar Dikembangkan",
-                    excerpt: "Inovasi dari peneliti UI ini mampu mengolah sampah plastik menjadi bahan bakar berkualitas tinggi dengan emisi karbon yang minimal.",
-                    category: "Inovasi",
-                    date: "15 Maret 2025"
-                },
-                {
-                    title: "Bioteknologi Baru Mempercepat Pertumbuhan Terumbu Karang 5x Lipat",
-                    excerpt: "Metode inovatif ini dikembangkan oleh LIPI dan telah berhasil diimplementasikan untuk rehabilitasi terumbu karang di Raja Ampat.",
-                    category: "Inovasi",
-                    date: "14 Maret 2025"
+            });
+            
+            // Show/hide no results message
+            const newsGrid = document.querySelector('.news-grid');
+            let noResultsElement = document.querySelector('.no-search-results');
+            
+            if (!hasResults) {
+                if (!noResultsElement) {
+                    noResultsElement = document.createElement('div');
+                    noResultsElement.className = 'no-results no-search-results';
+                    noResultsElement.innerHTML = '<p>Tidak ada hasil yang cocok dengan pencarian Anda.</p>';
+                    newsGrid.appendChild(noResultsElement);
                 }
-            ]
-        },
-        "Pemeringkatan": {
-            main: {
-                title: "UI Masuk Top 100 Universitas Terbaik Asia Versi QS Rankings 2025",
-                desc: "Universitas Indonesia mencatatkan prestasi membanggakan dengan naik 15 peringkat dari tahun sebelumnya di peringkat universitas terbaik Asia.",
-                category: "Pemeringkatan",
-                date: "16 Maret 2025"
-            },
-            side: [
-                {
-                    title: "Indonesia Naik ke Peringkat 40 Indeks Inovasi Global",
-                    category: "Pemeringkatan"
-                },
-                {
-                    title: "Tiga Kota Indonesia Masuk 50 Kota Terbaik untuk Startup",
-                    category: "Pemeringkatan"
-                },
-                {
-                    title: "Jurnal Ilmiah UGM Capai Q1 Scopus untuk Kategori Energi Terbarukan",
-                    category: "Pemeringkatan"
-                }
-            ],
-            news: [
-                {
-                    title: "LIPI Raih Ranking Tertinggi di ASEAN untuk Publikasi Ilmiah Bidang Biodiversitas",
-                    excerpt: "Lembaga Ilmu Pengetahuan Indonesia mencatat rekor baru dengan jumlah publikasi dan sitasi tertinggi untuk penelitian keanekaragaman hayati.",
-                    category: "Pemeringkatan",
-                    date: "16 Maret 2025"
-                },
-                {
-                    title: "Startup Fintech Indonesia Puncaki Daftar 100 Most Promising Companies Asia",
-                    excerpt: "PayNusantara menjadi startup Indonesia pertama yang menduduki peringkat teratas dalam daftar perusahaan paling menjanjikan versi Forbes Asia.",
-                    category: "Pemeringkatan",
-                    date: "15 Maret 2025"
-                },
-                {
-                    title: "Indonesia Naik 12 Peringkat dalam Ease of Doing Business Index 2025",
-                    excerpt: "Reformasi birokrasi dan digitalisasi layanan publik berhasil mendongkrak peringkat Indonesia dalam indeks kemudahan berbisnis global.",
-                    category: "Pemeringkatan",
-                    date: "15 Maret 2025"
-                },
-                {
-                    title: "ITB Masuk 200 Besar Global University Rankings untuk Bidang Teknik",
-                    excerpt: "Program studi teknik di Institut Teknologi Bandung mendapat pengakuan internasional dengan masuk peringkat 175 terbaik dunia.",
-                    category: "Pemeringkatan",
-                    date: "14 Maret 2025"
-                }
-            ]
+            } else if (noResultsElement) {
+                noResultsElement.remove();
+            }
         }
-    };
-    
-    // Store original content for "Semua" category
-    const originalContent = {
-        main: {
-            title: document.querySelector('.main-headline .headline-title').textContent,
-            desc: document.querySelector('.main-headline .headline-desc').textContent,
-            category: document.querySelector('.main-headline .news-category').textContent,
-            date: document.querySelector('.main-headline .news-date').textContent
-        },
-        side: Array.from(document.querySelectorAll('.side-headline')).map(headline => {
-            return {
-                title: headline.querySelector('.side-title').textContent,
-                category: headline.querySelector('.news-category').textContent
-            };
-        }),
-        news: Array.from(document.querySelectorAll('.news-card')).map(card => {
-            return {
-                title: card.querySelector('.card-title').textContent,
-                excerpt: card.querySelector('.card-excerpt').textContent,
-                category: card.querySelector('.news-category').textContent,
-                date: card.querySelector('.news-date').textContent
-            };
-        })
-    };
-    
-    // Filter content function - shows/hides existing content based on category
-    function filterContent(category) {
-        // Get all news elements
-        const mainHeadline = document.querySelector('.main-headline');
-        const sideHeadlines = document.querySelectorAll('.side-headline');
-        const newsCards = document.querySelectorAll('.news-card');
         
-        // Filter main headline
-        const mainCategory = mainHeadline.querySelector('.news-category').textContent;
-        mainHeadline.style.display = (category === 'Semua' || mainCategory === category) ? 'block' : 'none';
+        searchButton.addEventListener('click', performSearch);
         
-        // Filter side headlines
-        let visibleSideHeadlines = 0;
-        sideHeadlines.forEach(headline => {
-            const headlineCategory = headline.querySelector('.news-category').textContent;
-            const shouldDisplay = (category === 'Semua' || headlineCategory === category);
-            headline.style.display = shouldDisplay ? 'flex' : 'none';
-            if (shouldDisplay) visibleSideHeadlines++;
+        searchInput.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
         });
         
-        // Handle side headlines container visibility
-        const sideHeadlinesContainer = document.querySelector('.side-headlines');
-        sideHeadlinesContainer.style.display = (visibleSideHeadlines > 0) ? 'flex' : 'none';
+        // Check if we have a scrollable category tabs
+        const categoryTabs = document.querySelector('.category-tabs .container');
+        const activeTab = document.querySelector('.category-tab.active');
         
-        // Filter news cards
-        let visibleNewsCards = 0;
-        newsCards.forEach(card => {
-            const cardCategory = card.querySelector('.news-category').textContent;
-            const shouldDisplay = (category === 'Semua' || cardCategory === category);
-            card.style.display = shouldDisplay ? 'block' : 'none';
-            if (shouldDisplay) visibleNewsCards++;
-        });
-        
-        // If no visible news cards, display a message
-        const newsGrid = document.querySelector('.news-grid');
-        if (visibleNewsCards === 0 && newsGrid) {
-            // Clear the grid
-            newsGrid.innerHTML = '<p class="no-results">Tidak ada artikel dalam kategori ini.</p>';
-        }
-    }
-    
-    // Replace content function - replaces content with category-specific content
-    function replaceContent(category) {
-        // If Semua is selected, restore original content
-        if (category === 'Semua') {
-            updateMainHeadline(originalContent.main);
-            updateSideHeadlines(originalContent.side);
-            updateNewsCards(originalContent.news);
-            return;
+        if (activeTab && categoryTabs.scrollWidth > categoryTabs.clientWidth) {
+            // Scroll to the active tab
+            activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
         
-        // Get category content
-        const content = categoryContent[category];
-        if (!content) return;
+        // News popup functionality
+        const popup = document.getElementById('newsPopup');
+        const popupClose = document.getElementById('popupClose');
+        const popupContent = document.getElementById('popupContent');
+        const popupImg = document.getElementById('popupImg');
+        const popupLoading = document.getElementById('popupLoading');
+        const readMoreButtons = document.querySelectorAll('.read-more');
         
-        // Update content
-        updateMainHeadline(content.main);
-        updateSideHeadlines(content.side);
-        updateNewsCards(content.news);
-    }
-    
-    // Update main headline function
-    function updateMainHeadline(data) {
-        const mainHeadline = document.querySelector('.main-headline');
-        if (!mainHeadline) return;
-        
-        const title = mainHeadline.querySelector('.headline-title');
-        const desc = mainHeadline.querySelector('.headline-desc');
-        const category = mainHeadline.querySelector('.news-category');
-        const date = mainHeadline.querySelector('.news-date');
-        
-        title.textContent = data.title;
-        desc.textContent = data.desc;
-        category.textContent = data.category;
-        if (date) date.textContent = data.date;
-        
-        // Make sure the headline is visible
-        mainHeadline.style.display = 'block';
-    }
-    
-    // Update side headlines function
-    function updateSideHeadlines(dataArray) {
-        const sideHeadlinesContainer = document.querySelector('.side-headlines');
-        if (!sideHeadlinesContainer) return;
-        
-        // Clear existing side headlines
-        sideHeadlinesContainer.innerHTML = '';
-        
-        // Create new side headlines
-        dataArray.forEach(item => {
-            const html = `
-                <div class="side-headline">
-                    <div class="side-img"></div>
-                    <div class="side-content">
-                        <h3 class="side-title">${item.title}</h3>
-                        <div class="news-meta">
-                            <span class="news-category">${item.category}</span>
-                        </div>
+        // Function to open popup with AJAX request
+        function openPopup(beritaId) {
+            // Show loading spinner
+            popupLoading.style.display = 'flex';
+            popupContent.style.display = 'none';
+            popupImg.style.display = 'none';
+            
+            // Show popup
+            popup.classList.add('active');
+            document.body.classList.add('popup-open');
+            
+            // Get CSRF token for secure requests
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+            // Fetch news data
+            fetch(`/api/berita/${beritaId}`, {
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                console.log('API Response Status:', response.status);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Berita data received:', data);
+                
+                // Update popup content
+                popupImg.src = `/storage/${data.gambar}`;
+                popupImg.alt = data.judul;
+                
+                let content = `
+                    <span class="popup-category ${data.kategori.toLowerCase()}">${data.kategori.toUpperCase()}</span>
+                    <h2 class="popup-title">${data.judul}</h2>
+                    <div class="popup-meta">
+                        <span class="popup-date">${formatDate(data.tanggal)}</span>
                     </div>
-                </div>
-            `;
-            sideHeadlinesContainer.insertAdjacentHTML('beforeend', html);
-        });
-        
-        // Make sure the container is visible
-        sideHeadlinesContainer.style.display = 'flex';
-    }
-    
-    // Update news cards function
-    function updateNewsCards(dataArray) {
-        const newsGrid = document.querySelector('.news-grid');
-        if (!newsGrid) return;
-        
-        // Clear existing news cards
-        newsGrid.innerHTML = '';
-        
-        // If no data, show message
-        if (dataArray.length === 0) {
-            newsGrid.innerHTML = '<p class="no-results">Tidak ada artikel dalam kategori ini.</p>';
-            return;
+                    <div class="popup-body">
+                        ${data.isi}
+                    </div>
+                `;
+                
+                popupContent.innerHTML = content;
+                
+                // Hide loading spinner and show content
+                popupLoading.style.display = 'none';
+                popupContent.style.display = 'block';
+                popupImg.style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error fetching news:', error);
+                popupContent.innerHTML = `
+                    <div class="error-message">
+                        <h3>Terjadi kesalahan</h3>
+                        <p>Maaf, konten berita tidak dapat dimuat. Silakan coba lagi nanti.</p>
+                        <p>Detail error: ${error.message}</p>
+                    </div>
+                `;
+                popupLoading.style.display = 'none';
+                popupContent.style.display = 'block';
+            });
         }
         
-        // Create new news cards
-        dataArray.forEach(item => {
-            const html = `
-                <div class="news-card">
-                    <div class="card-img"></div>
-                    <div class="card-content">
-                        <h3 class="card-title">${item.title}</h3>
-                        <p class="card-excerpt">${item.excerpt}</p>
-                        <div class="news-meta">
-                            <span class="news-category">${item.category}</span>
-                            <span class="news-date">${item.date}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-            newsGrid.insertAdjacentHTML('beforeend', html);
+        // Function to close popup
+        function closePopup() {
+            popup.classList.remove('active');
+            document.body.classList.remove('popup-open');
+            // Clear content after transition
+            setTimeout(() => {
+                popupContent.innerHTML = '';
+                popupImg.src = '';
+            }, 300);
+        }
+        
+        // Format date helper function
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('id-ID', options);
+        }
+        
+        // Add event listeners
+        readMoreButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const beritaId = this.getAttribute('data-id');
+                openPopup(beritaId);
+            });
         });
-    }
-    
-    // Add click event listeners to category tabs
-    categoryTabs.forEach(tab => {
-        tab.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Remove 'active' class from all tabs
-            categoryTabs.forEach(t => t.classList.remove('active'));
-            
-            // Add 'active' class to the clicked tab
-            this.classList.add('active');
-            
-            // Get the selected category
-            const selectedCategory = this.textContent.trim();
-            
-            // Replace content immediately
-            replaceContent(selectedCategory);
-            
-            // Scroll back to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        popupClose.addEventListener('click', closePopup);
+        
+        // Close popup when clicking outside the content
+        popup.addEventListener('click', function(event) {
+            if (event.target === popup) {
+                closePopup();
+            }
+        });
+        
+        // Close popup when pressing Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && popup.classList.contains('active')) {
+                closePopup();
+            }
         });
     });
-});
 </script>
 </body>
 </html>
