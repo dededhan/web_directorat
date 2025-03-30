@@ -19,6 +19,7 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\ProgramLayananController;
 use App\Http\Controllers\YoutubeController;
+use App\Http\Controllers\InstagramController;
 use Illuminate\Http\Request;
 // Ganti route yang ada dengan:
 use App\Http\Controllers\DokumenController;
@@ -49,7 +50,14 @@ Route::prefix('admin')->name('admin.')
             ->except(['show', 'edit', 'update']);
 
         Route::get('/youtube/{id}/preview', [YoutubeController::class, 'preview'])
-            ->name('youtube.preview');    
+            ->name('youtube.preview');
+            
+        // Instagram
+        Route::resource('/instagram', InstagramController::class)
+            ->except(['show', 'edit', 'update']);
+
+        Route::get('/instagram/{id}/preview', [InstagramController::class, 'preview'])
+            ->name('instagram.preview');
 
         Route::resource('/document', DokumenController::class);
         Route::get('document/{dokumen}/download', [DokumenController::class, 'download'])

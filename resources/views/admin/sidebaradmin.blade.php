@@ -64,6 +64,13 @@
                         <span class="text">Youtube</span>
                     </a>
                 </li>
+
+                <li class="{{ request()->routeIs('admin.instagram.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.instagram.index') }}">
+                        <i class='bx bxl-instagram'></i>
+                        <span class="text">Instagram</span>
+                    </a>
+                </li>
             </ul>
         </div>
 
