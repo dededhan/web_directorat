@@ -3,7 +3,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Berita Terkini</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('berita.css') }}">
+    <link rel="stylesheet" href="{{ asset('unj-navbar.css') }}">
     <style>
         .no-results {
             grid-column: 1 / -1;
@@ -15,6 +17,51 @@
             font-size: 1.1rem;
             color: #666;
         }
+        
+        .category-tabs {
+            background: #f5f5f5;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .category-tab {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            color: #555;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .category-tab.active {
+            background-color: #277177;
+            color: white;
+        }
+        
+        .search-container {
+            padding: 1rem 0;
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 0.9rem;
+        }
+        
+        .search-button {
+            background: #277177;
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -23,35 +70,26 @@
         <div class="spinner"></div>
     </div>
     
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <a href="#" class="logo">
-                    <img src="https://spm.unj.ac.id/wp-content/uploads/2024/08/cropped-Logo-UNJ-PTNBH-RGB_Logo_Motto_Transparan.png" alt="Logo UNJ" class="logo-image">
-                    Portal Berita
-                </a>
-                <nav>
-                    <ul>
-                        <li><a href="{{ route('home') }}">Home</a></li>
-                        <li><a href="#">Terbaru</a></li>
-                    </ul>
-                </nav>
-            </div>
+    <!-- Include standardized navbar component -->
+    @include('components.main-navbar', [
+        'pageTitle' => 'Portal Berita',
+        'currentPage' => 'Terbaru'
+    ])
+    
+    <div class="container">
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Cari berita...">
+            <button class="search-button">🔍</button>
         </div>
-        <div class="container">
-            <div class="search-container">
-                <input type="text" class="search-input" placeholder="Cari berita...">
-                <button class="search-button">🔍</button>
-            </div>
+    </div>
+    
+    <div class="category-tabs">
+        <div class="container" style="display: flex; overflow-x: auto;">
+            <a href="#" class="category-tab active">Semua</a>
+            <a href="#" class="category-tab">Inovasi</a>
+            <a href="#" class="category-tab">Pemeringkatan</a>
         </div>
-        <div class="category-tabs">
-            <div class="container" style="display: flex; overflow-x: auto;">
-                <a href="#" class="category-tab active">Semua</a>
-                <a href="#" class="category-tab">Inovasi</a>
-                <a href="#" class="category-tab">Pemeringkatan</a>
-            </div>
-        </div>
-    </header>
+    </div>
 
     <main class="container">
         <section class="headline">

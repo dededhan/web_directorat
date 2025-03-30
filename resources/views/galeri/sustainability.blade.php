@@ -7,6 +7,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('alumni.css') }}">
+    <link rel="stylesheet" href="{{ asset('unj-navbar.css') }}">
     
     <style>
         #navbar, .top-bar {
@@ -127,20 +128,12 @@
 </head>
 
 <body>
-    <div class="main-navbar-wrapper">
-    </div>
+    <!-- Include standardized navbar component -->
+    @include('components.main-navbar', [
+        'pageTitle' => 'SUSTAINABILITY',
+        'currentPage' => 'Sustainability Activities'
+    ])
     
-    <nav class="alumni-navbar">
-        <a href="#" class="navbar-logo">
-            <img src="https://spm.unj.ac.id/wp-content/uploads/2024/08/cropped-Logo-UNJ-PTNBH-RGB_Logo_Motto_Transparan.png" alt="Logo" />
-            <span class="navbar-logo-text">SUSTAINABILITY</span>
-        </a>
-        <ul class="navbar-menu">
-            <li><a href="{{ route('home') }}" class="menu-link">Home</a></li>
-            <li><a href="#" class="menu-link active">Sustainability Activities</a></li>
-        </ul>
-    </nav>
-
     <div class="hero-section">
         <div class="hero-content">
             <h1>Our Sustainability Initiatives</h1>

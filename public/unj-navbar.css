@@ -1,0 +1,180 @@
+/* unj-navbar.css - Unified Navigation Bar Styles for UNJ Portal (White Design) */
+
+.main-navbar-wrapper {
+    width: 100%;
+    position: relative;
+    z-index: 1000;
+}
+
+.unj-navbar {
+    background-color: #ffffff;
+    color: #333333;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.unj-navbar .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #277177;
+}
+
+.navbar-logo img {
+    height: 40px;
+    margin-right: 12px;
+}
+
+.navbar-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.navbar-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-menu li {
+    margin-left: 1.5rem;
+}
+
+.menu-item {
+    color: #555555;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+    position: relative;
+    transition: all 0.3s;
+    font-family: 'Poppins', sans-serif;
+}
+
+.menu-item:hover {
+    color: #277177;
+}
+
+.menu-item.active {
+    color: #277177;
+    font-weight: 600;
+}
+
+.menu-item.active:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background-color: #277177;
+    bottom: -6px;
+    left: 0;
+    border-radius: 2px;
+}
+
+/* Mobile menu button */
+.mobile-menu-button {
+    display: none;
+}
+
+.mobile-menu-button button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 24px;
+}
+
+.mobile-menu-button span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: #277177;
+    transition: all 0.3s;
+    border-radius: 1px;
+}
+
+.mobile-menu-button button.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.mobile-menu-button button.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-button button.active span:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
+}
+
+/* Mobile menu (hidden by default) */
+.mobile-menu {
+    display: none;
+    background-color: #ffffff;
+    padding: 0.5rem 0;
+    border-top: 1px solid #f0f0f0;
+}
+
+.mobile-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mobile-menu li {
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid #f8f8f8;
+}
+
+.mobile-menu li:last-child {
+    border-bottom: none;
+}
+
+.mobile-menu a {
+    color: #555555;
+    text-decoration: none;
+    font-size: 1.1rem;
+    display: block;
+    font-family: 'Poppins', sans-serif;
+}
+
+.mobile-menu a.active {
+    color: #277177;
+    font-weight: 600;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+    .navbar-links {
+        display: none;
+    }
+    
+    .mobile-menu-button {
+        display: block;
+    }
+    
+    .mobile-menu.open {
+        display: block;
+    }
+}
