@@ -5,6 +5,9 @@ use App\Http\Controllers\RespondenAnswerController;
 use App\Http\Controllers\KatsinovController;
 use App\Http\Controllers\AlumniController;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\InstagramController;
+use App\Http\Controllers\SustainabilityController;
+use App\Http\Controllers\FormRecordHasilPengukuranController;
 
 use App\Http\Middleware\HandleRespondenForm;
 use Illuminate\Support\Facades\Route;
@@ -18,7 +21,13 @@ Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
 Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('Berita.show');
 Route::get('/api/announcements', [App\Http\Controllers\PengumumanController::class, 'getActiveAnnouncements'])
     ->name('api.announcements');
-Route::get('/program-layanan', [App\Http\Controllers\ProgramLayananController::class, 'showFrontend'])->name('program-layanan');    
+Route::get('/program-layanan', [App\Http\Controllers\ProgramLayananController::class, 'showFrontend'])->name('program-layanan');
+// Instagram
+
+Route::get('/instagram/{id}/preview', [InstagramController::class, 'preview'])
+    ->name('instagram.preview');
+Route::get('/api/instagram-posts', [App\Http\Controllers\InstagramController::class, 'getFrontendPosts'])
+    ->name('api.instagram-posts');        
 // Route::get('/', function () {
 //     return view('home');
 // })->name('home');

@@ -290,10 +290,42 @@
         </div>        
         <!-- Instagram Feed Grid with Consistent Card Styling -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Instagram Post 1 -->
+            @forelse($instagramPosts ?? [] as $index => $post)
+            <!-- Instagram Post -->
             <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
                 <div class="relative pb-[56.25%]">
                     <!-- Empty placeholder with gradient background -->
+                    <div class="absolute inset-0 bg-gradient-to-br {{ $index % 3 === 0 ? 'from-teal-100 to-teal-200' : ($index % 3 === 1 ? 'from-yellow-100 to-yellow-200' : 'from-teal-100 to-blue-200') }} flex items-center justify-center">
+                        <i class="fab fa-instagram text-teal-500 text-5xl opacity-30"></i>
+                    </div>
+                    <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
+                        Instagram
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center text-gray-500 text-sm">
+                            <i class="fab fa-instagram mr-2"></i>
+                            <span>@dir.isipunj</span>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">{{ $post->judul }}</h3>
+                    <p class="text-gray-600 mb-4">
+                        {{ Str::limit($post->deskripsi, 100) }}
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <a href="{{ $post->link }}" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
+                            <span>Lihat di Instagram</span>
+                            <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @empty
+            <!-- Fallback content if no posts are found -->
+            <!-- Instagram Post 1 -->
+            <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                <div class="relative pb-[56.25%]">
                     <div class="absolute inset-0 bg-gradient-to-br from-teal-100 to-teal-200 flex items-center justify-center">
                         <i class="fab fa-instagram text-teal-500 text-5xl opacity-30"></i>
                     </div>
@@ -320,68 +352,7 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Instagram Post 2 -->
-            <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                <div class="relative pb-[56.25%]">
-                    <!-- Empty placeholder with gradient background -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-yellow-100 to-yellow-200 flex items-center justify-center">
-                        <i class="fab fa-instagram text-yellow-500 text-5xl opacity-30"></i>
-                    </div>
-                    <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
-                        Instagram
-                    </div>
-                </div>
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center text-gray-500 text-sm">
-                            <i class="fab fa-instagram mr-2"></i>
-                            <span>@dir.isipunj</span>
-                        </div>
-                    </div>
-                    <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">Informasi Terupdate</h3>
-                    <p class="text-gray-600 mb-4">
-                        Dapatkan informasi terupdate di Instagram kami
-                    </p>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="https://www.instagram.com/dir.isipunj/" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                            <span>Lihat di Instagram</span>
-                            <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Instagram Post 3 -->
-            <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                <div class="relative pb-[56.25%]">
-                    <!-- Empty placeholder with gradient background -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-teal-100 to-blue-200 flex items-center justify-center">
-                        <i class="fab fa-instagram text-teal-500 text-5xl opacity-30"></i>
-                    </div>
-                    <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
-                        Instagram
-                    </div>
-                </div>
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center text-gray-500 text-sm">
-                            <i class="fab fa-instagram mr-2"></i>
-                            <span>@dir.isipunj</span>
-                        </div>
-                    </div>
-                    <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">Aktivitas Terbaru</h3>
-                    <p class="text-gray-600 mb-4">
-                        Ikuti aktivitas dan pengumuman terbaru kami
-                    </p>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="https://www.instagram.com/dir.isipunj/" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                            <span>Lihat di Instagram</span>
-                            <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
+            @endforelse
         </div>
         
         <!-- View More Button -->

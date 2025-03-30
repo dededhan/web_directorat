@@ -8,6 +8,7 @@ use App\Http\Requests\StoreBeritaRequest;
 use App\Models\Pengumuman;
 use App\Models\ProgramLayanan;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Instagram;
 
 class BeritaController extends Controller
 {
@@ -87,8 +88,9 @@ class BeritaController extends Controller
             ->take(4)
             ->get();
 
-        return view('home', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan'));
-    }
+
+        $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();    
+        return view('home', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));    }
     public function getBeritaDetail($id)
 {
     $berita = Berita::findOrFail($id);

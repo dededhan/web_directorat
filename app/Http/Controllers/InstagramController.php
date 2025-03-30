@@ -55,4 +55,15 @@ class InstagramController extends Controller
 
         return redirect()->route('admin.instagram.index')->with('success', 'Post Instagram berhasil dihapus');
     }
+    
+    /**
+     * Get Instagram posts for the frontend display
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getFrontendPosts()
+    {
+        $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();
+        return $instagramPosts;
+    }
 }
