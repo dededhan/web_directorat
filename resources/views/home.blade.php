@@ -276,7 +276,7 @@
     <div class="container mx-auto px-6">
         <!-- Instagram Section Header -->
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-teal-700 mb-2">Instagram DISIP UNJ</h2>
+            <h2 class="text-3xl font-bold text-teal-700 mb-2">Instagram DITSIP UNJ</h2>
             <div class="flex items-center justify-center mb-4">
                 <div class="h-1 w-16 bg-gray-300"></div>
                 <span class="text-yellow-400 text-2xl mx-3"><i class="fab fa-instagram"></i></span>

@@ -71,13 +71,13 @@ class BeritaController extends Controller
      */
     public function homeNews()
     {
-        // Get regular news for the main grid (latest 3)
+        // Regular
         $regularNews = Berita::latest()->take(3)->get();
 
-        // Get featured news for the carousel (latest 5)
+        // Features
         $featuredNews = Berita::latest()->take(5)->get();
 
-        // Get active announcements
+        // Scroll
         $announcements = Pengumuman::where('status', true)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -88,14 +88,16 @@ class BeritaController extends Controller
             ->take(4)
             ->get();
 
+        // Get Instagram posts for the homepage
+        $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();
 
-        $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();    
-        return view('home', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));    }
+        return view('home', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
+    }
     public function getBeritaDetail($id)
-{
-    $berita = Berita::findOrFail($id);
-    return response()->json($berita);
-}
+    {
+        $berita = Berita::findOrFail($id);
+        return response()->json($berita);
+    }
 
     /**
      * Display news by category.
@@ -111,9 +113,9 @@ class BeritaController extends Controller
         $beritas = Berita::where('kategori', $kategori)
             ->latest()
             ->paginate(9); // Show 9 news per page
-        
+
         $pageTitle = 'Berita ' . ucfirst($kategori);
-        
+
         return view('Berita.beritahome', compact('beritas', 'pageTitle'));
     }
 
