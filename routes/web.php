@@ -158,15 +158,21 @@ Route::post('/katsinov/store', [KatsinovController::class, 'store'])
     ->name('katsinov.store')
     ->middleware('checked');
 
-Route::get('/pemeringkatan/landingpage', function () {
-    return view('Pemeringkatan.LandingPagePemeringkatan');
-})->name('pemeringkatan.landingpage');
-
 Route::get('/inovasi/landingpage', function () {
     return view('inovasi.LandingPageHilirisasi');
 })->name('inovasi.landingpage');
 
 Route::get('/katsinov/pdf', [KatsinovController::class, 'downloadPDF'])->name('katsinov.pdf');
 
+
+//Pemeringkatan
+Route::get('/Pemeringkatans', function () {
+    return view('Pemeringkatan.LandingPagePemeringkatan');
+})->name('pemeringkatan.landingpage');
+
+
+Route::get('/test-pemeringkatan', function () {
+    return "Pemeringkatan Page Test";
+})->name('test.pemeringkatan');
 // collection of admin-like routes
 require __DIR__ . '/admin.php';

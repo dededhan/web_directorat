@@ -57,7 +57,7 @@
             </li>
             
             <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400">Ranking Universita Negeri Jakarta</a>
+                <a href="#" class="text-white hover:text-yellow-400">Ranking Universitas Negeri Jakarta</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
                     {{-- <li class="relative group">
                         <a href="#" class="hover:text-yellow-400 flex items-center justify-between">
