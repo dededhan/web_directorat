@@ -542,7 +542,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Autoplay functionality
     function startAutoplay() {
-        autoplayInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+        autoplayInterval = setInterval(nextSlide, 10000); // Change slide every 5 seconds
     }
     
     function resetAutoplay() {
