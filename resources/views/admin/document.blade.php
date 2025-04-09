@@ -113,13 +113,15 @@
                                             title="Download {{ $dokumen->nama_file }}">
                                              Download
                                          </a>
-                                        <form action="{{ route('admin.document.destroy', $dokumen->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger delete-dokumen">
-                                                Delete
-                                            </button>
-                                        </form>
+                                         <form action="{{ route('admin.document.destroy', $dokumen) }}" method="POST" >
+                                         @csrf
+                                         @method('DELETE')
+                                         <button type="submit" class="btn btn-sm btn-danger delete-dokumen">
+                                             Delete
+                                         </button>
+                                         
+                                     </form>
+                                     
                                     </div>
                                 </td>
                             </tr>

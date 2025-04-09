@@ -62,6 +62,7 @@ Route::prefix('admin')->name('admin.')
         Route::resource('/document', DokumenController::class);
         Route::get('document/{dokumen}/download', [DokumenController::class, 'download'])
             ->name('document.download');
+     
 
         Route::resource('/responden', AdminRespondenController::class);
         Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])

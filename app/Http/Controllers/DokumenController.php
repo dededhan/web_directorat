@@ -134,18 +134,21 @@ class DokumenController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Dokumen $dokumen)
+    public function destroy(Dokumen $document)
     {
         try {
-            // Delete file from storage
-            if ($dokumen->path && Storage::disk('public')->exists($dokumen->path)) {
-                Storage::disk('public')->delete($dokumen->path);
+            // Hapus file dari storage
+            if ($document->path && Storage::disk('public')->exists($document->path)) {
+                Storage::disk('public')->delete($document->path);
             }
             
-            $dokumen->delete();
+            // Hapus record dari database
+            $document->delete();
+            
             return redirect()->back()->with('success', 'Dokumen berhasil dihapus');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal menghapus dokumen: ' . $e->getMessage());
         }
     }
+
 }
