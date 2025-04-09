@@ -83,6 +83,7 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Password</th>
                         <th>Role</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -103,6 +104,14 @@
                             @endif
                         </td>
                         <td>{{ $user->email }}</td>
+                        <td>
+                            <div class="password-field position-relative">
+                                <input type="password" class="form-control password-input" value="{{ $user->password }}" readonly>
+                                <button type="button" class="btn btn-sm btn-outline-secondary toggle-password position-absolute end-0 top-0 h-100">
+                                    <i class='bx bx-show'></i>
+                                </button>
+                            </div>
+                        </td>
                         <td>{{ $user->role }}</td>
                         <td>
                             <span class="badge bg-success">Active</span>
@@ -272,6 +281,21 @@
         border-radius: 20px;
     }
 
+    .password-field {
+        width: 200px;
+    }
+
+    .toggle-password {
+        background: transparent;
+        border: none;
+        border-left: 1px solid #ced4da;
+        border-radius: 0;
+    }
+
+    .toggle-password:hover {
+        background-color: #f8f9fa;
+    }
+
     @media (max-width: 768px) {
         .search-box {
             width: 100%;
@@ -281,6 +305,10 @@
         .head {
             flex-direction: column;
             align-items: stretch;
+        }
+
+        .password-field {
+            width: 100%;
         }
     }
 </style>
@@ -314,6 +342,28 @@
             }
             row.style.display = text.includes(searchText) ? '' : 'none';
         }
+    });
+
+    // Toggle password visibility
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleButtons = document.querySelectorAll('.toggle-password');
+        
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const passwordInput = this.previousElementSibling;
+                const icon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('bx-show');
+                    icon.classList.add('bx-hide');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('bx-hide');
+                    icon.classList.add('bx-show');
+                }
+            });
+        });
     });
 </script>
 @endsection

@@ -267,7 +267,8 @@ Route::prefix('inovasi')->name('inovasi.')
 
         // Admin Hilirisasi routes
         Route::prefix('admin_hilirisasi')->name('admin_hilirisasi.')
-            ->middleware(['checked', 'role:admin_hilirisasi'])
+        ->middleware(['checked', 'role:admin_hilirisasi,kepala_sub_direktorat'])
+        // ->middleware(['checked', 'role:admin_hilirisasi|kepala_sub_direktorat'])  
             ->group(function () {
                 // Dashboard
                 Route::get('/dashboard', function () {
@@ -385,17 +386,4 @@ Route::prefix('inovasi')->name('inovasi.')
                 Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
             });
 
-
-
-        Route::prefix('admin_hilirisasi')->name('admin_hilirisasi.')
-            ->middleware(['checked', 'role:admin_hilirisasi'])
-            ->group(function () {
-                // Dashboard
-                Route::get('/dashboard', function () {
-                    return view('Inovasi.admin_hilirisasi.dashboard');
-                })->name('dashboard');
-
-                // Tabel Katsinov
-                Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekasitnov');
-            });
     });

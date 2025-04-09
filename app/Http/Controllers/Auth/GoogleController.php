@@ -65,6 +65,7 @@ class GoogleController extends Controller
                     'dosen' => 'inovasi.dosen.dashboard',
                     'admin_hilirisasi' => 'inovasi.admin_hilirisasi.dashboard',
                     'validator' => 'inovasi.validator.dashboard',
+                    'kepala_sub_direktorat' => 'inovasi.admin_hilirisasi.dashboard',
                     'registered_user' => 'inovasi.registered_user.dashboard',
                     default => 'home',
                 };
