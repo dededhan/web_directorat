@@ -93,6 +93,31 @@ class BeritaController extends Controller
 
         return view('home', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
     }
+
+    public function landingPagePemeringkatan()
+    {
+        // Regular
+        $regularNews = Berita::latest()->take(3)->get();
+
+        // Features
+        $featuredNews = Berita::latest()->take(5)->get();
+
+        // Scroll
+        $announcements = Pengumuman::where('status', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Get active program layanan
+        $programLayanan = ProgramLayanan::where('status', 1)
+            ->orderBy('id', 'desc')
+            ->take(4)
+            ->get();
+
+        // Get Instagram posts for the homepage
+        $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();
+
+        return view('Pemeringkatan.LandingPagePemeringkatan', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
+    }
     public function getBeritaDetail($id)
     {
         $berita = Berita::findOrFail($id);

@@ -166,13 +166,11 @@ Route::get('/katsinov/pdf', [KatsinovController::class, 'downloadPDF'])->name('k
 
 
 //Pemeringkatan
-Route::get('/Pemeringkatans', function () {
-    return view('Pemeringkatan.LandingPagePemeringkatan');
-})->name('pemeringkatan.landingpage');
+// Route::get('/Pemeringkatans', function () {
+//     return view('Pemeringkatan.LandingPagePemeringkatan');
+// })->name('pemeringkatan.landingpage');
 
+Route::get('/Pemeringkatans', [BeritaController::class, 'landingPagePemeringkatan'])->name('pemeringkatan.landingpage');
 
-Route::get('/test-pemeringkatan', function () {
-    return "Pemeringkatan Page Test";
-})->name('test.pemeringkatan');
 // collection of admin-like routes
 require __DIR__ . '/admin.php';
