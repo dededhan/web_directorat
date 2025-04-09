@@ -149,7 +149,7 @@
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
         <!-- Data Source Info Area -->
-        {{-- <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+        <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-xl font-semibold">Data Source: <span class="text-blue-600">product_innovations.xlsx</span></h2>
@@ -159,7 +159,7 @@
                     <span id="dataStatus" class="px-4 py-2 bg-gray-100 rounded-full text-sm">Loading...</span>
                 </div>
             </div>
-        </div> --}}
+        </div>
 
         <!-- Search and Filters -->
         <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
