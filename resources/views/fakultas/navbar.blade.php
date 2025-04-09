@@ -16,7 +16,5 @@
         </div>
         @endguest
 
-        <!-- Menu Icon -->
-        <i class='bx bx-menu'></i>
     </div>
 </nav>
