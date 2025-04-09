@@ -57,9 +57,9 @@
             </li>
             
             <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400">Sistem Peningkatan</a>
+                <a href="#" class="text-white hover:text-yellow-400">Ranking Universita Negeri Jakarta</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li class="relative group">
+                    {{-- <li class="relative group">
                         <a href="#" class="hover:text-yellow-400 flex items-center justify-between">
                             QS WUR
                             <i class="fas fa-chevron-right text-xs ml-2"></i>
@@ -76,10 +76,21 @@
                         <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg left-full top-0 ml-1">
                             <li><a href="#" class="hover:text-yellow-400">Dashboard IKU</a></li>
                         </ul>
-                    </li>
-                    <li><a href="#" class="hover:text-yellow-400">THE</a></li>
+                    </li> --}}
+                    <li><a href="#" class="hover:text-yellow-400">Pemeringkatan Klaster Perguruan Tinggi</a></li>
                     <li><a href="#" class="hover:text-yellow-400">UI Green Metric</a></li>
                     <li><a href="#" class="hover:text-yellow-400">Webometric</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">QS World University Ranking</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">QS Asian Rankings</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">Qs Sustainability Rankings</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">Times Higher Education</a></li>
+                </ul>
+            </li>
+
+            <li class="relative group">
+                <a href="#" class="text-white hover:text-yellow-400">Contact</a>
+                <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
+                    <li><a href="{{ route('sdgscenter') }}" class="hover:text-yellow-400">Program 1</a></li>
                 </ul>
             </li>
             
@@ -226,7 +237,7 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <ul class="hidden bg-[#135a54]">
-                        <li>
+                        {{-- <li>
                             <div class="nested-sidebar-dropdown">
                                 <button class="flex justify-between items-center w-full text-white py-3 px-6 hover:bg-[#0e4c46]">
                                     QS WUR
@@ -255,10 +266,15 @@
                                     </li>
                                 </ul>
                             </div>
-                        </li>
+                        </li> --}}
                         <li>
                             <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 THE
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                                Pemeringkatan Klaster Perguruan Tinggi
                             </a>
                         </li>
                         <li>
@@ -269,6 +285,26 @@
                         <li>
                             <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 Webometric
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                                QS World University Ranking
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                                QS Asian Rankings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                                Qs Sustainability Rankings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                                Times Higher Education
                             </a>
                         </li>
                     </ul>
