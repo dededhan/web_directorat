@@ -122,7 +122,7 @@ Route::get('/register', function () {
 // Route::get('/auth-google-redirect')
 
 Route::get('/sdgscenter', function () {
-    return view('Inovasi.katsinov.sdgscenter.sdgscenter');
+    return view('inovasi.katsinov.sdgscenter.sdgscenter');
 })->name('sdgscenter');
 
 Route::get('/katsinov/formberitaacara', function () {
@@ -133,9 +133,9 @@ Route::get('/katsinov/formjudul', function () {
     return view('inovasi.katsinov.formjudul');
 })->name('katsinov.formjudul');
 
-Route::get('/katsinov/lampiran', function () {
-    return view('inovasi.admin_hilirisasi.lampiran');
-})->name('admin.hilirisasi.lampiran');
+// Route::get('/katsinov/lampiran', function () {
+//     return view('inovasi.admin_hilirisasi.lampiran');
+// })->name('admin.hilirisasi.lampiran');
 
 Route::get('/Berita', function () {
     return view('Berita.beritahome');
@@ -163,7 +163,7 @@ Route::get('/pemeringkatan/landingpage', function () {
 })->name('pemeringkatan.landingpage');
 
 Route::get('/inovasi/landingpage', function () {
-    return view('Inovasi.LandingPageHilirisasi');
+    return view('inovasi.LandingPageHilirisasi');
 })->name('inovasi.landingpage');
 
 Route::get('/katsinov/pdf', [KatsinovController::class, 'downloadPDF'])->name('katsinov.pdf');

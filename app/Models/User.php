@@ -51,4 +51,5 @@ class User extends Authenticatable
     public function katsinovs(){
         return $this->hasMany(Katsinov::class, 'user_id');
     }
+
 }

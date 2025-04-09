@@ -1,5 +1,5 @@
 <!-- KATSINOV Assessment Section -->
-<div class="container"
+<div class="container">
 <div class="container" data-indicator="6">
     <div class="card" data-aos="fade-up">
         <div class="main-title">

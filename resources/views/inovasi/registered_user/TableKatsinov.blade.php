@@ -1,11 +1,11 @@
-@extends('Inovasi.dosen.index')
+@extends('Inovasi.registered_user.index')
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="stylesheet" href="{{ asset('inovasi/dashboard/table_katsinov/css/table_katsinov.css') }}"> 
+<link rel="stylesheet" href="{{ asset('inovasi/dashboard/table_katsinov/css/table_katsinov.css') }}">
 
-
-
-@section('contentdosen')
+@section('contentregistered_user')
     <div class="head-title">
         <div class="left">
             <h1>KATSINOV Data</h1>
@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    {{-- <div class="dashboard-summary">
+    <div class="dashboard-summary">
         <div class="cards">
             <div class="card-stat">
                 <div class="card-stat-content">
@@ -123,7 +123,7 @@
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
 
     <div class="table-data">
         <div class="order">
@@ -135,11 +135,7 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-end mb-3">
-                <a href="{{ route('katsinov.pdf') }}" class="btn btn-primary">
-                    <i class='bx bxs-download'></i> Download PDF
-                </a>
-            </div>
+
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -161,7 +157,7 @@
                                         <i class='bx bx-chevron-down'></i>
                                     </button>
                                 </td>
-                                <td>{{ $katsinov->id }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $katsinov->title }}</td>
                                 <td>{{ $katsinov->focus_area }}</td>
                                 <td>{{ $katsinov->project_name }}</td>
@@ -201,6 +197,15 @@
                                     <div class="btn-group">
                                         <button class="btn btn-sm btn-warning">Edit</button>
                                         <button class="btn btn-sm btn-danger">Delete</button>
+                                    </div>
+                                    <div class="submit-all-container">
+                                        <a href="{{ route('admin.Katsinov.show', $katsinov->id) }}" class="btn btn-success">
+                                            Muat Record Terakhir
+                                        </a>
+                                        {{-- <button type="button" onclick="loadRecord()" class="submit-all-btn">
+                                            
+                                        </button> --}}
+                                        <!-- Tombol submit existing -->
                                     </div>
                                 </td>
                             </tr>
@@ -275,12 +280,70 @@
     </div>
     <script src="{{ asset('inovasi/dashboard/table_katsinov/js/table_katsinov.js') }}"></script>
     <script src="{{ asset('inovasi/dashboard/table_katsinov/js/table_katsinovoverall.js') }}"></script>
+    <script src="{{ asset('inovasi/dashboard/form_katsinov/js/form.js') }}"></script>
     <style>
 
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Toggle row details
+        async function loadRecord() {
+            try {
+                const response = await fetch('/katsinov/latest');
+                if (!response.ok) throw new Error('Data tidak ditemukan');
+                const data = await response.json();
+
+                // Isi data dasar
+                document.querySelector('input[name="title"]').value = data.title || '';
+                document.querySelector('input[name="focus_area"]').value = data.focus_area || '';
+                document.querySelector('input[name="project_name"]').value = data.project_name || '';
+                document.querySelector('input[name="institution"]').value = data.institution || '';
+                document.querySelector('input[name="address"]').value = data.address || '';
+                document.querySelector('input[name="contact"]').value = data.contact || '';
+                document.querySelector('input[name="assessment_date"]').value = data.assessment_date || '';
+
+                // Isi skor per indikator dan aspek
+                data.scores.forEach(score => {
+                    const indicator = score.indicator_number;
+
+                    // Mapping aspek database ke class di form
+                    const aspectMap = {
+                        'technology': 't',
+                        'organization': 'o',
+                        'risk': 'r',
+                        'market': 'm',
+                        'partnership': 'p',
+                        'manufacturing': 'mf',
+                        'investment': 'i'
+                    };
+
+                    // Loop semua aspek
+                    Object.entries(aspectMap).forEach(([dbAspect, formAspect]) => {
+                        const percentage = score[dbAspect];
+                        const value = Math.round(percentage / 20); // Konversi ke 0-5
+
+                        // Cari semua radio button di indikator dan aspek terkait
+                        const selector =
+                            `div[data-indicator="${indicator}"] tr.row-${formAspect} input[value="${value}"]`;
+                        const radios = document.querySelectorAll(selector);
+
+                        // Set radio yang sesuai
+                        radios.forEach(radio => radio.checked = true);
+                    });
+                });
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Data berhasil dimuat!',
+                    text: 'Data terakhir telah diisi ke form',
+                });
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal memuat data',
+                    text: error.message,
+                });
+            }
+        }
     </script>
 @endsection

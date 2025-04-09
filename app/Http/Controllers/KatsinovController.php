@@ -2,14 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Katsinov;
-use App\Models\KatsinovResponse;
+use App\Models\KatsinovBerita;
+use App\Models\KatsinovInformasi;
+use App\Models\KatsinovInformasiCollection;
+use App\Models\KatsinovInovasi;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Models\KatsinovScore;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\KatsinovLampiran;
+use App\Models\KatsinovResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class KatsinovController extends Controller
 {
@@ -23,10 +30,10 @@ class KatsinovController extends Controller
 
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov.TableKatsinov',
-            'dosen' => 'Inovasi.dosen.TableKatsinov',
-            'admin_hilirisasi' => 'Inovasi.admin_hilirisasi.tablekatsinov',
-            'validator' => 'Inovasi.validator.tablekatsinov',
-            'registered_user' => 'Inovasi.registered_user.TableKatsinov',
+            'dosen' => 'inovasi.dosen.tablekatsinov',
+            'admin_hilirisasi' => 'inovasi.admin_hilirisasi.tablekatsinov',
+            'validator' => 'inovasi.validator.tablekatsinov',
+            'registered_user' => 'inovasi.registered_user.TableKatsinov',
         };
 
         return view($view, [
@@ -38,10 +45,10 @@ class KatsinovController extends Controller
     {
         $view = match (Auth::user()->role) {
             'admin_direktorat' => 'admin.katsinov.form_katsinov',
-            'dosen' => 'Inovasi.dosen.form_katsinov',
-            'admin_hilirisasi' => 'Inovasi.admin_hilirisasi.form_katsinov',
-            'validator' => 'Inovasi.validator.form_katsinov',
-            'registered_user' => 'Inovasi.registered_user.form_katsinov',
+            'dosen' => 'inovasi.dosen.form_katsinov',
+            'admin_hilirisasi' => 'inovasi.admin_hilirisasi.form_katsinov',
+            'validator' => 'inovasi.validator.form_katsinov',
+            'registered_user' => 'inovasi.registered_user.form_katsinov',
         };
 
         return view($view, [
@@ -57,6 +64,7 @@ class KatsinovController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         // Validate the basic katsinov data
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -187,21 +195,22 @@ class KatsinovController extends Controller
     public function show(Request $request)
     {
         $katsinov = Katsinov::where('id', '=', $request->id)
-            ->with(['scores', 'responses'])
-            ->first();
-            
+        ->with(['scores', 'responses'])
+        ->first();
+        // dump($katsinov->toArray());
+        
         if (!$katsinov) {
             return redirect()->back()->with('error', 'Data KATSINOV tidak ditemukan');
         }
         
         $data = [
             'katsinov' => $katsinov,
-            'indicatorOne' =>  $katsinov->scores()->where('indicator_number', '=', 1)->get(),
-            'indicatorTwo' =>  $katsinov->scores()->where('indicator_number', '=', 2)->get(),
-            'indicatorThree' =>  $katsinov->scores()->where('indicator_number', '=', 3)->get(),
-            'indicatorFour' =>  $katsinov->scores()->where('indicator_number', '=', 4)->get(),
-            'indicatorFive' =>  $katsinov->scores()->where('indicator_number', '=', 5)->get(),
-            'indicatorSix' =>  $katsinov->scores()->where('indicator_number', '=', 6)->get(),
+            'indicatorOne' =>  $katsinov->responses()->where('indicator_number', '=', 1)->get(),
+            'indicatorTwo' =>  $katsinov->responses()->where('indicator_number', '=', 2)->get(),
+            'indicatorThree' =>  $katsinov->responses()->where('indicator_number', '=', 3)->get(),
+            'indicatorFour' =>  $katsinov->responses()->where('indicator_number', '=', 4)->get(),
+            'indicatorFive' =>  $katsinov->responses()->where('indicator_number', '=', 5)->get(),
+            'indicatorSix' =>  $katsinov->responses()->where('indicator_number', '=', 6)->get(),
         ];
         
         return view('admin.katsinov.form_katsinov', $data);
@@ -331,5 +340,326 @@ class KatsinovController extends Controller
             Log::error('Error deleting Katsinov: ' . $e->getMessage(), ['id' => $katsinov->id]);
             return redirect()->back()->with('error', 'Gagal menghapus data: ' . $e->getMessage());
         }
+    }
+
+    public function lampiranIndex($katsinov_id = null){
+        $katsinov = Katsinov::find($katsinov_id);
+
+        if (!$katsinov) {
+            return redirect()->back()->with('error', 'Katsinov data not found');
+        }
+
+        // which page role should I redirect into? ¯\_(ツ)_/¯
+        // its not my job to decide which page is should be switched to
+        // may the team able to solve such chaos
+        return view('admin.katsinov.lampiran', ['id' => $katsinov->id]);
+    }
+
+    public function lampiranStore (Request $request, $katsinov_id){
+        $files = $request->validate([
+            'aspek_teknologi' => ['required', 'array', 'min:14'],
+            'aspek_teknologi.*' => ['required', 'file', 'mimes:pdf,doc,docx'],
+            'aspek_pasar' => ['required', 'array', 'min:6'],
+            'aspek_pasar.*' => ['required', 'file', 'mimes:pdf,doc,docx'],
+            'aspek_organisasi' => ['required', 'array', 'min:4'],
+            'aspek_organisasi.*' => ['required', 'file', 'mimes:pdf,doc,docx'],
+            'aspek_mitra' => ['required', 'array', 'min:3'],
+            'aspek_mitra.*' => ['required', 'file', 'mimes:pdf,doc,docx'],
+            'aspek_risiko' => ['required', 'array', 'min:3'],
+            'aspek_risiko.*' => ['required', 'file', 'mimes:pdf,doc,docx'],
+            'aspek_manufaktur' => ['required', 'array', 'min:6'],
+            'aspek_manufaktur.*' => ['required', 'file', 'mimes:pdf,doc,docx'],
+            'aspek_investasi' => ['required', 'array', 'min:5'],
+            'aspek_investasi.*' => ['required', 'file', 'mimes:pdf,doc,docx'],
+        ]);
+
+        $basePath = 'lampiran_katsinov';
+        $now = now();
+        $data_files = [];
+
+        // the max file uploads now at 50
+        // this process 47 file uploads simultaneuosly
+        foreach ($files as $aspect => $categories) {
+            foreach ($categories as $category => $file) {
+                if($file && $file->isValid()){
+                    $extension = $file->getClientOriginalExtension();
+                    $fileName = "teknologi_{$category}_{$now}.{$extension}";
+                    $path = Storage::disk('public')->putFileAs("$basePath/$aspect", $file, $fileName);
+    
+                    $data_files[] = [
+                        'path' => $path,
+                        'category' => $category,
+                        'type' => $aspect,
+                        'katsinov_id' => $katsinov_id,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+                }
+            }
+        }
+        
+        KatsinovLampiran::insert($data_files);
+
+        // which page role should I redirect into? ¯\_(ツ)_/¯
+        // its not my job to decide which page is should be switched to
+        // may the team able to solve such chaos
+        return redirect(route('admin.Katsinov.TableKatsinov'));
+    }
+
+    public function inovasiIndex($katsinov_id = null){
+        $katsinov = Katsinov::find($katsinov_id);
+        $inovasi = $katsinov->katsinovInovasis()->first();
+        if (!$katsinov) {
+            return redirect()->back()->with('error', 'Katsinov data not found');
+        }
+        return view('admin.katsinov.formjudul', [
+            'id' => $katsinov->id, 
+            'inovasi' => $inovasi
+        ]);
+    }
+
+    public function inovasiStore(Request $request, $katsinov_id){
+        $validatedData = $request->validate([
+            'judul' => ['required', 'string'],
+            'sub_judul' => ['required', 'string'],
+            'pendahuluan' => ['required', 'string'],
+            'produk_teknologi' => ['required', 'string'],
+            'keunggulan' => ['required', 'string'],
+            'paten' => ['required', 'string'],
+            'kesiapan_teknologi' => ['required', 'string'],
+            'kesiapan_pasar' => ['required', 'string'],
+            'nama' => ['required', 'string'],
+            'phone' => ['required'],
+            'mobile' => ['required'],
+            'fax' => ['required'],
+            'email' => ['required', 'email:rfc:dns'],
+        ]);
+
+        KatsinovInovasi::create([
+            'title' => $validatedData['judul'],
+            'sub_title' => $validatedData['sub_judul'],
+            'introduction' => $validatedData['pendahuluan'],
+            'tech_product' => $validatedData['produk_teknologi'],
+            'supremacy' => $validatedData['keunggulan'],
+            'patent' => $validatedData['paten'],
+            'tech_preparation' => $validatedData['kesiapan_teknologi'],
+            'market_preparation' => $validatedData['kesiapan_pasar'],
+            'name' => $validatedData['nama'],
+            'phone' => $validatedData['phone'],
+            'mobile' => $validatedData['mobile'],
+            'fax' => $validatedData['fax'],
+            'email' => $validatedData['email'],
+            'katsinov_id' => $katsinov_id
+        ]);
+
+        return redirect(route('admin.Katsinov.TableKatsinov'));
+    }
+
+    public function informationIndex($katsinov_id = null){
+        $katsinov = Katsinov::find($katsinov_id);
+        if (!$katsinov) {
+            return redirect()->back()->with('error', 'Katsinov data not found');
+        }
+        $informasi = $katsinov->katsinovInformasis()->first();
+        $informasiCollection = null;
+        if(!is_null($informasi)){
+            $informasiCollection = KatsinovInformasiCollection::where('katsinov_informasi_id', $informasi->id)->get([
+                'field', 'index', 'attribute', 'value'
+            ])->toArray();
+        }
+        
+        $groupedData = [];
+
+        if(!is_null($informasiCollection)){
+        foreach ($informasiCollection as $item) {
+            $field = $item['field'];
+            $index = $item['index'];
+
+            if(!isset($groupedData[$field][$index])){
+                $groupedData[$field][$index] = [];
+            }
+            $groupedData[$field][$index][$item['attribute']] = $item['value'];
+        }}
+        
+        // dd($informasiCollection, $groupedData['team']);
+        return view('admin.katsinov.forminformasidasar', [
+            'id' => $katsinov->id,
+            'informasi' => $informasi,
+            'informasi_team' => $groupedData['team'] ?? [],
+            'informasi_program' => $groupedData['program_implementation'] ?? [],
+            'informasi_partner' => $groupedData['innovation_partner'] ?? [],
+            'informasi_tech' => $groupedData['information_tech'] ?? [],
+            'informasi_market' => $groupedData['information_market'] ?? [],
+        ]);
+        
+    }
+
+    public function informationStore(Request $request, $katsinov_id){
+        // dd($request->all());
+        $validatedData = $request->validate([
+            'person_in_charge' => ['required'],
+            'pic_institution' => ['required'],
+            'pic_address' => ['required'],
+            'pic_phone' => ['required'],
+            'pic_fax' => ['required'],
+            'innovation_title' => ['required'],
+            'innovation_name' => ['required'],
+            'innovation_type' => ['required'],
+            'innovation_field' => ['required'],
+            'innovation_application' => ['required'],
+            'innovation_duration' => ['required'],
+            'innovation_year' => ['required'],
+            'innovation_summary' => ['required'],
+            'innovation_novelty' => ['required'],
+            'innovation_supremacy' => ['required'],
+            'team' => ['required', 'array', 'min:1'],
+            'program_implementation' => ['required', 'array', 'min:1'],
+            'innovation_partner' => ['required', 'array', 'min:1'],
+            'information_tech' => ['required', 'array', 'min:1'],
+            'information_market' => ['required', 'array', 'min:1'],
+        ]);
+        $now = now();
+        $information =  KatsinovInformasi::create([
+            'pic' => $validatedData['person_in_charge'],
+            'address' => $validatedData['pic_address'],
+            'institution' => $validatedData['pic_institution'],
+            'phone' => $validatedData['pic_phone'],
+            'fax' => $validatedData['pic_fax'],
+            'innovation_title' => $validatedData['innovation_title'],
+            'innovation_name'  => $validatedData['innovation_name'],
+            'innovation_type'  => $validatedData['innovation_type'],
+            'innovation_field'  => $validatedData['innovation_field'],
+            'innovation_application'  => $validatedData['innovation_application'],
+            'innovation_duration'  => $validatedData['innovation_duration'],
+            'innovation_year'  => $validatedData['innovation_year'],
+            'innovation_summary'  => $validatedData['innovation_summary'],
+            'innovation_supremacy'  => $validatedData['innovation_supremacy'],
+            'innovation_novelty'  => $validatedData['innovation_novelty'],
+            'katsinov_id' => $katsinov_id
+        ]);
+    
+        $collections = [];
+        // there must be a better way to do this, I just do this several foreach to get the thing done faster
+        // processing of array input
+        foreach ($request->team as $index => $array) {
+            foreach ($array as $key => $value) {
+                $collections[] = [
+                    'field' => 'team', 
+                    'index' => $index,
+                    'attribute' => $key, 
+                    'value' => $value,
+                    'katsinov_informasi_id' => $information->id,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+        }
+        foreach ($request->program_implementation as $index => $array) {
+            foreach ($array as $key => $value) {
+                $collections[] = [
+                    'field' => 'program_implementation', 
+                    'index' => $index,
+                    'attribute' => $key, 
+                    'value' => $value,
+                    'katsinov_informasi_id' => $information->id,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+        }
+        foreach ($request->innovation_partner as $index => $array) {
+            foreach ($array as $key => $value) {
+                $collections[] = [
+                    'field' => 'innovation_partner', 
+                    'index' => $index,
+                    'attribute' => $key, 
+                    'value' => $value,
+                    'katsinov_informasi_id' => $information->id,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+        }
+        foreach ($request->information_tech as $index => $array) {
+            foreach ($array as $key => $value) {
+                $collections[] = [
+                    'field' => 'information_tech', 
+                    'index' => $index,
+                    'attribute' => $key, 
+                    'value' => $value,
+                    'katsinov_informasi_id' => $information->id,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+        }
+
+        foreach ($request->information_market as $index => $array) {
+            foreach ($array as $key => $value) {
+                $collections[] = [
+                    'field' => 'information_market', 
+                    'index' => $index,
+                    'attribute' => $key, 
+                    'value' => $value,
+                    'katsinov_informasi_id' => $information->id,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+        }
+        $information->katsinovInformasiCollections()->insert($collections);
+
+        return redirect(route('admin.Katsinov.TableKatsinov'));
+    }
+
+    public function beritaIndex($katsinov_id = null){
+        $katsinov = Katsinov::find($katsinov_id);
+        $berita = $katsinov->katsinovBeritas()->first();
+        // dd($berita->day);
+
+        if (!$katsinov) {
+            return redirect()->back()->with('error', 'Katsinov data not found');
+        }
+        
+        return view('admin.katsinov.formberitaacara', [
+            'id' => $katsinov->id,
+            'berita' => $berita,
+        ]);
+    }
+
+    public function beritaStore(Request $request, $katsinov_id){
+        // dd($request->all());
+        $validatedData = $request->validate([
+            'text_day' => ['required', 'string'],
+            'text_date' => ['required', 'string'],
+            'text_month' => ['required', 'string'],
+            'text_year' => ['required', 'string'],
+            'text_yearfull' => ['required', 'string'],
+            'text_decree' => ['required', 'string'],
+            'text_place' => ['required', 'string'],
+            'innovation_title' => ['required', 'string'],
+            'innovation_type' => ['required', 'string'],
+            'innovation_tki' => ['required', 'string'],
+            'innovation_opinion' => ['required', 'string'],
+            'innovation_date' => ['required', 'string'],
+        ]);
+
+        KatsinovBerita::create([
+            'day' => $validatedData['text_day'], 
+            'date' => $validatedData['text_date'],
+            'month' => $validatedData['text_month'],
+            'year' => $validatedData['text_year'],
+            'yearfull' => $validatedData['text_yearfull'],
+            'decree' => $validatedData['text_decree'],
+            'place' => $validatedData['text_place'],
+            'title' => $validatedData['innovation_title'],
+            'type' => $validatedData['innovation_type'],
+            'tki' => $validatedData['innovation_tki'],
+            'opinion' => $validatedData['innovation_opinion'],
+            'sign_date' => $validatedData['innovation_date'],
+            'katsinov_id' => $katsinov_id, 
+        ]);
+
+        return redirect(route('admin.Katsinov.TableKatsinov'));
     }
 }

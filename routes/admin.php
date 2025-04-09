@@ -108,36 +108,8 @@ Route::prefix('admin')->name('admin.')
                 Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
                 Route::get('/katsinov/latest', [KatsinovController::class, 'latest']);
 
-
-                // Route::resource('/forminformasidasar', FormInformasiDasarController::class);
-                // Route::post('/admin/Katsinov/forminformasidasar', [FormInformasiDasarController::class, 'store'])
-                //     ->name('admin.Katsinov.forminformasidasar.store');
-                // Route::get('/formberitaacara', function () {
-                //     return view('admin.katsinov.formberitaacara');
-                // })->name('formberitaacara');
-
-                // Route::resource('/formberitaacara', BeritaAcaraController::class);
-
-                // Route::get('/formrecordhasilpengukuran', function () {
-                //     return view('admin.katsinov.formrecordhasilpengukuran');
-                // })->name('formrecordhasilpengukuran');
-                // Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
-
-                // Route::get('/formjudul', function () {
-                //     return view('admin.katsinov.formjudul');
-                // })->name('formjudul');
-
-                // Form Judul with katsinov_id parameter
-                Route::get('/formjudul/{katsinov_id?}', function (Request $request, $katsinov_id = null) {
-                    $katsinov = null;
-                    if ($katsinov_id) {
-                        $katsinov = \App\Models\Katsinov::find($katsinov_id);
-                        if (!$katsinov) {
-                            return redirect()->back()->with('error', 'Katsinov data not found');
-                        }
-                    }
-                    return view('admin.katsinov.formjudul', compact('katsinov'));
-                })->name('formjudul');
+                Route::get('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiIndex'])->name('inovasi.index');
+                Route::post('/form-invoasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
 
                 // Form Record Hasil Pengukuran with katsinov_id parameter
                 Route::get('/formrecordhasilpengukuran/{katsinov_id?}', function (Request $request, $katsinov_id = null) {
@@ -152,40 +124,15 @@ Route::prefix('admin')->name('admin.')
                 })->name('formrecordhasilpengukuran');
 
                 // Form Berita Acara with katsinov_id parameter
-                Route::get('/formberitaacara/{katsinov_id?}', function (Request $request, $katsinov_id = null) {
-                    $katsinov = null;
-                    if ($katsinov_id) {
-                        $katsinov = \App\Models\Katsinov::find($katsinov_id);
-                        if (!$katsinov) {
-                            return redirect()->back()->with('error', 'Katsinov data not found');
-                        }
-                    }
-                    return view('admin.katsinov.formberitaacara', compact('katsinov'));
-                })->name('formberitaacara');
+                Route::get('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaIndex'])->name('berita.index');
+                Route::post('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaStore'])->name('berita.store');
 
-                // Form Informasi Dasar with katsinov_id parameter
-                Route::get('/forminformasidasar/{katsinov_id?}', function (Request $request, $katsinov_id = null) {
-                    $katsinov = null;
-                    if ($katsinov_id) {
-                        $katsinov = \App\Models\Katsinov::find($katsinov_id);
-                        if (!$katsinov) {
-                            return redirect()->back()->with('error', 'Katsinov data not found');
-                        }
-                    }
-                    return view('admin.katsinov.forminformasidasar', compact('katsinov'));
-                })->name('forminformasidasar');
+                Route::get('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationIndex'])->name('informasi.index');
+                Route::post('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationStore'])->name('informasi.store');
 
                 // Lampiran with katsinov_id parameter
-                Route::get('/lampiran/{katsinov_id?}', function (Request $request, $katsinov_id = null) {
-                    $katsinov = null;
-                    if ($katsinov_id) {
-                        $katsinov = \App\Models\Katsinov::find($katsinov_id);
-                        if (!$katsinov) {
-                            return redirect()->back()->with('error', 'Katsinov data not found');
-                        }
-                    }
-                    return view('admin.katsinov.lampiran', compact('katsinov'));
-                })->name('lampiran');
+                Route::get('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranIndex'])->name('lampiran.index');
+                Route::post('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranStore'])->name('lampiran.store');
             });
 
         Route::prefix('SDGs')->name('SDGs.')
@@ -294,7 +241,7 @@ Route::prefix('inovasi')->name('inovasi.')
             ->group(function () {
                 // Dashboard
                 Route::get('/dashboard', function () {
-                    return view('Inovasi.dosen.dashboard');
+                    return view('inovasi.dosen.dashboard');
                 })->name('dashboard');
 
                 // Tabel Katsinov
@@ -310,7 +257,7 @@ Route::prefix('inovasi')->name('inovasi.')
                 Route::resource('/formberitaacara', BeritaAcaraController::class);
 
                 Route::get('/formjudul', function () {
-                    return view('Inovasi.dosen.formjudul');
+                    return view('inovasi.dosen.formjudul');
                 })->name('formjudul');
 
                 Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
@@ -342,7 +289,7 @@ Route::prefix('inovasi')->name('inovasi.')
 
                 // Form Judul
                 Route::get('/formjudul', function () {
-                    return view('Inovasi.admin_hilirisasi.formjudul');
+                    return view('inovasi.admin_hilirisasi.formjudul');
                 })->name('formjudul');
 
                 // Form Record Hasil Pengukuran
@@ -384,7 +331,7 @@ Route::prefix('inovasi')->name('inovasi.')
                 Route::resource('/formberitaacara', BeritaAcaraController::class);
 
                 Route::get('/formjudul', function () {
-                    return view('Inovasi.validator.formjudul');
+                    return view('inovasi.validator.formjudul');
                 })->name('formjudul');
 
                 Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
@@ -431,7 +378,7 @@ Route::prefix('inovasi')->name('inovasi.')
                 Route::resource('/formberitaacara', BeritaAcaraController::class);
 
                 Route::get('/formjudul', function () {
-                    return view('Inovasi.registered_user.formjudul');
+                    return view('inovasi.registered_user.formjudul');
                 })->name('formjudul');
 
                 Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);

@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>KATSINOV-MeterO - Innovation Measurement System</title>
     <link href="{{ asset('aspect-analysis.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('inovasi/dashboard/form_katsinov/css/form.css') }}">
 
     <script src="{{ asset('aspect-legend.js') }}"></script>
@@ -354,17 +354,7 @@
                     </div>
                 </div>
             </div>
-            <buttom>
-            <a href="{{ route('admin.hilirisasi.lampiran') }}">
-    <button type="button" style="background-color: #176369; color: white; padding: 10px 20px; border: none; cursor: pointer;">Lampiran</button>
-</a>
-</buttom>
-
-           <div class="indicators-container">
-    <div class="indicators-header">
-        <!-- Header without text as requested -->
-    </div>
-    
+    <div class="indicators-container">    
     <div class="indicators-wrapper">
         <!-- Indikator 1 -->
         <div class="indicator-card">
@@ -402,15 +392,8 @@
         </div>
     </div>
 </div>
-
 <!-- Submit All Button -->
-<div class="submit-all-container"
-    style="
-display: flex;
-justify-content: center;
-margin-top: 2rem;
-margin-bottom: 2rem;
-">
+<div class="submit-all-container" style="display: flex;justify-content: center;margin-top: 2rem;margin-bottom: 2rem;">
     <button type="submit" id="submitAllBtn" class="submit-all-btn"
         style="
             background-color: #176369;

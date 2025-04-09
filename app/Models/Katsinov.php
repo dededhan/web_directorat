@@ -48,6 +48,22 @@ class Katsinov extends Model
         return $this->hasMany(KatsinovScore::class);
     }
 
+    public function katsinovLampirans(){
+        return $this->hasMany(KatsinovLampiran::class);
+    }
+
+    public function katsinovInovasis(){
+        return $this->hasMany(KatsinovInovasi::class);
+    }
+
+    public function katsinovInformasis(){
+        return $this->hasMany(KatsinovInformasi::class);
+    }
+
+    public function katsinovBeritas(){
+        return $this->hasMany(KatsinovBerita::class);
+    }
+
     /**
      * Get the responses for a specific indicator
      */

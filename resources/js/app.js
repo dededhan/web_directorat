@@ -1,1 +1,4 @@
 import './bootstrap';
+
+let test = '';
+

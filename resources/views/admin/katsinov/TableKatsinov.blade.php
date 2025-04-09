@@ -214,19 +214,19 @@
                                         <div class="card card-body subform-container">
                                             <h5 class="subform-title">Sub-Forms for "{{ $katsinov->title }}"</h5>
                                             <div class="subform-buttons">
-                                                <a href="{{ route('admin.Katsinov.formjudul', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('admin.Katsinov.inovasi.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-file'></i> Form Judul
                                                 </a>
-                                                <a href="{{ route('admin.Katsinov.forminformasidasar', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('admin.Katsinov.informasi.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-info-circle'></i> Form Informasi Dasar
                                                 </a>
-                                                <a href="{{ route('admin.Katsinov.formberitaacara', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('admin.Katsinov.berita.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-news'></i> Form Berita Acara
                                                 </a>
                                                 <a href="{{ route('admin.Katsinov.formrecordhasilpengukuran', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-bar-chart-alt-2'></i> Form Record Hasil
                                                 </a>
-                                                <a href="{{ route('admin.Katsinov.lampiran', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('admin.Katsinov.lampiran.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-paperclip'></i> Lampiran
                                                 </a>
                                             </div>

@@ -13,7 +13,8 @@
 </head>
 <body class="bg-light p-5">
     <div class="container">
-        <div class="row justify-content-center">
+        <form class="row justify-content-center" method="POST" action="{{ route('admin.Katsinov.lampiran.store', $id) }}" enctype="multipart/form-data">
+            @csrf
             <div class="col-md-12">
                 <h1 class="text-center mb-4">Sistem Upload Lampiran</h1>
                 <p class="lead text-center mb-5">Silakan upload dokumen-dokumen yang diperlukan sesuai dengan kategori.</p>
@@ -38,7 +39,7 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Proposal penelitian dan pengembangan</label>
-                                            <input type="file" class="form-control">
+                                            <input type="file" class="form-control" name="aspek_teknologi[proposal]">
                                             <div class="upload-progress-container">
                                                 <div class="progress">
                                                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -47,7 +48,7 @@
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Jadwal program (Program Schedule)</label>
-                                            <input type="file" class="form-control">
+                                            <input type="file" class="form-control" name="aspek_teknologi[jadwal]">
                                             <div class="upload-progress-container">
                                                 <div class="progress">
                                                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -62,7 +63,7 @@
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Desain secara teori dan empiris</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_teknologi[desain]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -71,7 +72,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Hasil simulasi dan pemodelan</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_teknologi[simulasi_pemodelan]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -80,7 +81,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Hasil penelitian analitik</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_teknologi[penelitian_analitik]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -89,7 +90,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Hasil eksperimen laboratorium</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_teknologi[eksperimen_laboratorium]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -98,7 +99,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Prototipe skala laboratorium</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_teknologi[prototipe_laboratorium]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -107,7 +108,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Prototipe skala pilot</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_teknologi[prototipe_pilot]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -116,7 +117,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Hasil uji kelayakan teknis</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_teknologi[uji_kelayakan]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -125,7 +126,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Prototipe skala 1:1</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_teknologi[prototipe_sebanding]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -134,7 +135,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Uji pada simulasi lingkungan operasional</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_teknologi[simulasi_lingkungan]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -143,7 +144,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Hasil test dan evaluasi</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_teknologi[test_evaluasi]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -159,7 +160,7 @@
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Publikasi ilmiah: paper, prosiding, jurnal, dll</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_teknologi[dokumen_ilmiah]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -168,7 +169,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Kekayaan Intelektual: paten, lisensi, desain industri, dll</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_teknologi[dokumen_haki]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -194,7 +195,7 @@
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Hasil Penelitian pasar (marketing research)</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_pasar[penelitian_pasar]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -203,7 +204,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Identifikasi segmen, ukuran dan pangsa pasar</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_pasar[identifkasi_segmen]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -212,7 +213,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Perhitungan kebutuhan investasi</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_pasar[perhitungan_kebutuhan]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -221,7 +222,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Estimasi harga produksi dibandingkan kompetitor</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_pasar[estimasi_harga]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -230,7 +231,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Identifikasi kompetitor</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_pasar[identifikasi_kompetitor]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -239,7 +240,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Model bisnis</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_pasar[model_bisnis]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -248,7 +249,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Posisioning pasar</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_pasar[posisioning_pasar]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -274,7 +275,7 @@
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Strategi Inovasi</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_organisasi[strategi_inovasi]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -283,7 +284,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Sumber daya manusia</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_organisasi[sdm]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -292,7 +293,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Analisis dan rencana bisnis</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_organisasi[analisis_bisnis]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -301,7 +302,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Organisasi formal (struktur bisnis dengan staff dan kolaborator)</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_organisasi[struktur_bisnis]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -327,7 +328,7 @@
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Daftar mitra potensial</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_mitra[mitra_potensial]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -336,7 +337,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Kerjasama</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_mitra[kerjasama]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -345,7 +346,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Pengelolaan kerjasama yang telah berjalan</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_mitra[pengelolaan_kerjasama]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -371,7 +372,7 @@
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Kajian risiko teknologi</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_risiko[kajian_teknologi]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -380,7 +381,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Kajian risiko pasar</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_risiko[kajian_pasar]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -389,7 +390,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Kajian risiko organisasi</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_risiko[kajian_organisasi]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -415,7 +416,7 @@
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Analisis awal solusi material</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_manufaktur[analisis_materil]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -424,7 +425,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Material, perkakas dan alat uji prototype</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_manufaktur[material_prototipe]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -433,7 +434,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Analisis rincian biaya</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_manufaktur[analisis_biaya]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -442,7 +443,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Proses dan prosedur manufaktur</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_manufaktur[proses_prosedur]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -451,7 +452,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Jaminan Mutu (Quality Assurance)</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_manufaktur[jaminan_mutu]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -460,7 +461,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Penerapan lean manufacturing</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_manufaktur[lean_manufaktur]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -486,7 +487,7 @@
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Analisis pelanggan, pasar dan pesaing</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_investasi[pelanggan_pasar]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -495,7 +496,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Market Value Proposition (MVP)</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_investasi[mvp]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -504,7 +505,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Estimasi kondisi akhir produk</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_investasi[kondisi_produk]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -513,7 +514,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Estimasi potensi pasar</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_investasi[potensi_pasar]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -522,7 +523,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Estimasi ekspansi pasar</label>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" name="aspek_investasi[ekspansi_pasar]">
                                                 <div class="upload-progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
@@ -537,18 +538,18 @@
                     </div>
                 </div>
                 <div class="modal-footer border-top-0 bg-light">
-                    <button type="button" class="btn btn-primary d-flex align-items-center gap-2" id="uploadAllBtn">
+                    <button type="submit" class="btn btn-primary d-flex align-items-center gap-2" id="uploadAllBtn">
                         <i class="bi bi-cloud-arrow-up"></i>
                         Upload Semua
                     </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
-    <script src="{{ asset('inovasi/lampirankatsinov/lampiran.js') }}"></script>
+    {{-- <script src="{{ asset('inovasi/lampirankatsinov/lampiran.js') }}"></script> --}}
 </body>
 </html> 
