@@ -1,6 +1,6 @@
-<!-- navbar.blade.php for Laravel 11 with Android-size responsive design -->
+<!-- Navbar.blade.php - Sticky navbar for Pemeringkatan Klaster pages -->
 
-<!-- Social Media Bar (Original, unchanged for desktop) -->
+<!-- Social Media Bar (Desktop only) -->
 <div class="social-media-bar py-2 hidden md:flex">
     <div class="container mx-auto px-6 flex justify-start space-x-4">
         <a href="#" class="hover:text-yellow-500">
@@ -20,8 +20,8 @@
 
 @include('loginpopup')
 
-<!-- Original Desktop Navbar (Updated with new structure) -->
-<nav class="navbar hidden md:block">
+<!-- Desktop Navbar - Sticky -->
+<nav class="navbar hidden md:block sticky top-0 z-50 bg-[#186862] shadow-md">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
         <div class="flex items-center space-x-4">
             <img alt="University logo" class="h-12 w-12" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png"/>
@@ -47,8 +47,6 @@
                 </ul>
             </li>
             
-           
-            
             <li class="relative group">
                 <a href="{{ route('document.document') }}" class="text-white hover:text-yellow-400">Dokumen</a>
                 <ul class="absolute hidden group-hover:">
@@ -59,24 +57,6 @@
             <li class="relative group">
                 <a href="#" class="text-white hover:text-yellow-400">Ranking Universitas Negeri Jakarta</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    {{-- <li class="relative group">
-                        <a href="#" class="hover:text-yellow-400 flex items-center justify-between">
-                            QS WUR
-                            <i class="fas fa-chevron-right text-xs ml-2"></i>
-                        </a>
-                        <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg left-full top-0 ml-1">
-                            <li><a href="#" class="hover:text-yellow-400">Formulir QS WUR</a></li>
-                        </ul>
-                    </li>
-                    <li class="relative group">
-                        <a href="#" class="hover:text-yellow-400 flex items-center justify-between">
-                            IKU
-                            <i class="fas fa-chevron-right text-xs ml-2"></i>
-                        </a>
-                        <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg left-full top-0 ml-1">
-                            <li><a href="#" class="hover:text-yellow-400">Dashboard IKU</a></li>
-                        </ul>
-                    </li> --}}
                     <li><a href="{{ route('pemeringkatan.klaster') }}" class="hover:text-yellow-400">Pemeringkatan Klaster Perguruan Tinggi</a></li>
                     <li><a href="#" class="hover:text-yellow-400">UI Green Metric</a></li>
                     <li><a href="#" class="hover:text-yellow-400">Webometric</a></li>
@@ -100,8 +80,8 @@
     </div>
 </nav>
 
-<!-- Mobile Navigation Bar (Android) -->
-<nav class="navbar bg-transparent md:hidden fixed top-0 w-full z-20 transition-colors duration-300" id="mobile-navbar">
+<!-- Mobile Navigation Bar - Sticky -->
+<nav class="navbar md:hidden fixed top-0 w-full z-20 bg-[#186862] shadow-md" id="mobile-navbar">
     <div class="relative">
         <!-- Content -->
         <div class="flex justify-between items-center py-4 px-4">
@@ -119,8 +99,8 @@
     </div>
 </nav>
 
-<!-- Mobile Sidebar - Visible by default on mobile -->
-<div id="mobile-sidebar" class="fixed top-0 right-0 w-64 h-full bg-[#186862] z-40 transform md:translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto">
+<!-- Mobile Sidebar -->
+<div id="mobile-sidebar" class="fixed top-0 right-0 w-64 h-full bg-[#186862] z-40 transform translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto">
     <!-- Sidebar Header -->
     <div class="flex justify-between items-center p-4">
         <div class="flex items-center">
@@ -136,7 +116,7 @@
     <div class="py-4">
         <ul class="space-y-0">
             <li>
-                <a href="#" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                <a href="{{ route('home') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
                     Beranda
                 </a>
             </li>
@@ -191,27 +171,6 @@
             <li>
                 <div class="sidebar-dropdown">
                     <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                        Data
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <ul class="hidden bg-[#135a54]">
-                        <li>
-                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Data 1
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Data 2
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            
-            <li>
-                <div class="sidebar-dropdown">
-                    <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
                         Dokumen
                         <i class="fas fa-chevron-down"></i>
                     </button>
@@ -237,41 +196,6 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <ul class="hidden bg-[#135a54]">
-                        {{-- <li>
-                            <div class="nested-sidebar-dropdown">
-                                <button class="flex justify-between items-center w-full text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                    QS WUR
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <ul class="hidden bg-[#0e4540]">
-                                    <li>
-                                        <a href="#" class="block text-white py-3 pl-10 hover:bg-[#0a3c38]">
-                                            Formulir QS WUR
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="nested-sidebar-dropdown">
-                                <button class="flex justify-between items-center w-full text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                    IKU
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <ul class="hidden bg-[#0e4540]">
-                                    <li>
-                                        <a href="#" class="block text-white py-3 pl-10 hover:bg-[#0a3c38]">
-                                            Dashboard IKU
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li> --}}
-                        <li>
-                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                THE
-                            </a>
-                        </li>
                         <li>
                             <a href="{{ route('pemeringkatan.klaster') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 Pemeringkatan Klaster Perguruan Tinggi
@@ -336,35 +260,7 @@
         const menuIcon = document.getElementById('menu-icon');
         const mobileSidebar = document.getElementById('mobile-sidebar');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
-        const mobileNavbar = document.getElementById('mobile-navbar');
         const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
-        const nestedDropdownButtons = document.querySelectorAll('.nested-sidebar-dropdown button');
-        
-        // Function to handle scroll effects
-        function handleScroll() {
-            if (window.scrollY > 10) {
-                // When scrolled, add background color
-                mobileNavbar.classList.remove('bg-transparent');
-                mobileNavbar.classList.add('bg-[#186862]');
-            } else {
-                // When at top, make transparent
-                mobileNavbar.classList.remove('bg-[#186862]');
-                mobileNavbar.classList.add('bg-transparent');
-            }
-        }
-        
-        // Add scroll event listener
-        window.addEventListener('scroll', handleScroll);
-        
-        // Set initial state for mobile devices
-        function initMobileNav() {
-            if (window.innerWidth < 768) {
-                // Default state: sidebar hidden, show hamburger icon
-                hideSidebar();
-                // Check initial scroll position
-                handleScroll();
-            }
-        }
         
         // Function to show sidebar
         function showSidebar() {
@@ -418,37 +314,42 @@
             });
         });
         
-        // Toggle nested dropdowns in sidebar
-        nestedDropdownButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.stopPropagation(); // Prevent parent dropdown from closing
-                const dropdownMenu = this.nextElementSibling;
-                const icon = this.querySelector('i');
-                
-                // Toggle current dropdown
-                if (dropdownMenu.classList.contains('hidden')) {
-                    dropdownMenu.classList.remove('hidden');
-                    icon.classList.remove('fa-chevron-down');
-                    icon.classList.add('fa-chevron-up');
-                } else {
-                    dropdownMenu.classList.add('hidden');
-                    icon.classList.remove('fa-chevron-up');
-                    icon.classList.add('fa-chevron-down');
+        // Set the active menu item based on current URL
+        function setActiveMenuItem() {
+            // For desktop menu
+            const navLinks = document.querySelectorAll('nav ul li a');
+            const currentPath = window.location.pathname;
+            
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && currentPath.includes('pemeringkatan/ranking-universitas/klaster-perguruan-tinggi') && 
+                    link.textContent.trim() === "Pemeringkatan Klaster Perguruan Tinggi") {
+                    link.classList.add('text-yellow-400');
+                    link.classList.add('font-bold');
                 }
             });
-        });
+            
+            // For mobile menu
+            const mobileLinks = document.querySelectorAll('#mobile-sidebar a');
+            mobileLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && currentPath.includes('pemeringkatan/ranking-universitas/klaster-perguruan-tinggi') && 
+                    link.textContent.trim() === "Pemeringkatan Klaster Perguruan Tinggi") {
+                    link.classList.add('text-yellow-400');
+                    link.classList.add('font-bold');
+                }
+            });
+        }
         
-        // Initialize mobile navigation
-        initMobileNav();
+        // Call functions on page load
+        hideSidebar();
+        setActiveMenuItem();
         
         // Handle window resize
         window.addEventListener('resize', function() {
             if (window.innerWidth >= 768) {
                 // Desktop view - hide mobile elements
                 hideSidebar();
-            } else {
-                // Check scroll position on resize
-                handleScroll();
             }
         });
     });

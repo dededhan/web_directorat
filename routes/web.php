@@ -171,6 +171,9 @@ Route::get('/katsinov/pdf', [KatsinovController::class, 'downloadPDF'])->name('k
 // })->name('pemeringkatan.landingpage');
 
 Route::get('/Pemeringkatans', [BeritaController::class, 'landingPagePemeringkatan'])->name('pemeringkatan.landingpage');
+Route::get('/Pemeringkatans/Ranking-Universitas/klaster-perguruan-tinggi', function () {
+    return view('Pemeringkatan.Ranking_Universitas.Pemeringkatan_Klaster_Perguruan_Tinggi');
+})->name('pemeringkatan.klaster');
 
 // collection of admin-like routes
 require __DIR__ . '/admin.php';
