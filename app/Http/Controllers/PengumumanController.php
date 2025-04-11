@@ -27,6 +27,12 @@ class PengumumanController extends Controller
         //
     }
 
+    public function getPengumumanDetail($id)
+    {
+        $pengumuman = Pengumuman::findOrFail($id);
+        return response()->json($pengumuman);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -57,21 +63,44 @@ class PengumumanController extends Controller
         //
     }
 
+    public function update(Request $request, Pengumuman $news_scroll)
+    {
+        try {
+            $validated = $request->validate([
+                'judul_pengumuman' => 'required|string|max:50',
+                'icon' => 'nullable|string',
+                'isi_pengumuman' => 'required|string|max:200',
+                'status' => 'sometimes|boolean'
+            ]);
+
+            $news_scroll->update($validated);
+
+            if ($request->ajax()) {
+                return response()->json(['success' => true, 'message' => 'Pengumuman berhasil diperbarui!']);
+            }
+
+            return redirect()->route('admin.news-scroll.index')
+                ->with('success', 'Pengumuman berhasil diperbarui!');
+        } catch (\Exception $e) {
+            \Log::error('Error updating pengumuman: ' . $e->getMessage());
+
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Gagal memperbarui pengumuman: ' . $e->getMessage()]);
+            }
+
+            return redirect()->back()
+                ->with('error', 'Gagal memperbarui pengumuman: ' . $e->getMessage())
+                ->withInput();
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Pengumuman $pengumuman)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Pengumuman $pengumuman)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.

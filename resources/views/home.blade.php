@@ -16,65 +16,84 @@
 
 
     <!-- Shared CSS for both sections -->
-<style>
-    /* Common styling for both Instagram and YouTube cards */
- 
-    
- .media-card {
-     height: 100%;
-     display: flex;
-     flex-direction: column;
- }
- 
- .media-card .p-6 {
-     flex: 1;
-     display: flex;
-     flex-direction: column;
- }
- 
- .media-card .mt-4 {
-     margin-top: auto;
- }
- 
- /* Make all cards the same height */
- .grid {
-     align-items: stretch;
- }
- 
- /* Enhanced responsive design for mobile devices */
- @media (max-width: 768px) {
-     .media-section {
-         padding: 3rem 0;
-     }
-     
-     .media-section .grid {
-         gap: 2rem;
-     }
-     
-     .media-card {
-         min-height: 360px;
-     }
-     
-     .media-card h3 {
-         font-size: 1.125rem;
-     }
-     
-     .media-card p {
-         font-size: 0.875rem;
-     }
- }
- 
- /* Hyperlink Color */
- .news-excerpt a {
-     color: #0D9488; /* Teal color to match your theme */
-     text-decoration: underline;
-     transition: color 0.2s ease;
- }
- 
- .news-excerpt a:hover {
-     color: #F59E0B; /* Yellow color on hover to match your theme */
- }
- </style>
+    <style>
+        .media-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .media-card .p-6 {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .media-card .mt-4 {
+            margin-top: auto;
+        }
+
+        /* Make all cards the same height */
+        .grid {
+            align-items: stretch;
+        }
+
+        /* Enhanced responsive design for mobile devices */
+        @media (max-width: 768px) {
+            .media-section {
+                padding: 3rem 0;
+            }
+
+            .media-section .grid {
+                gap: 2rem;
+            }
+
+            .media-card {
+                min-height: 360px;
+            }
+
+            .media-card h3 {
+                font-size: 1.125rem;
+            }
+
+            .media-card p {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Hyperlink Color */
+        .news-excerpt a {
+            color: #0D9488;
+            text-decoration: underline;
+            transition: color 0.2s ease;
+        }
+
+        .news-excerpt a:hover {
+            color: #F59E0B;
+        }
+        .news-marquee a {
+            color: #facc15;
+            text-decoration: underline;
+        }
+
+        .news-marquee strong,
+        .news-marquee b {
+            font-weight: bold;
+            color: white;
+        }
+
+        .news-marquee em,
+        .news-marquee i {
+            font-style: italic;
+        }
+
+        .news-marquee * {
+            color: white;
+        }
+        .news-marquee .text-yellow-400 {
+            color: #facc15 !important;
+        }
+    </style>
 </head>
 
 <body class="font-sans bg-gray-100">
@@ -82,16 +101,16 @@
 
     <!-- Header section -->
     <header class="relative">
-    <!-- The carousel will be dynamically inserted here by JavaScript -->
-    <img alt="Universitas Negeri Jakarta building with a sculpture in front" class="w-full h-screen object-cover"
-        src="https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434" />
-    <div class="absolute inset-0 bg-teal-900 bg-opacity-50 flex flex-col justify-center items-start p-8">
-        <div class="flex items-center space-x-4">
+        <!-- The carousel will be dynamically inserted here by JavaScript -->
+        <img alt="Universitas Negeri Jakarta building with a sculpture in front" class="w-full h-screen object-cover"
+            src="https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434" />
+        <div class="absolute inset-0 bg-teal-900 bg-opacity-50 flex flex-col justify-center items-start p-8">
+            <div class="flex items-center space-x-4">
+            </div>
+            <div class="mt-16">
+            </div>
         </div>
-        <div class="mt-16">
-        </div>
-    </div>
-</header>
+    </header>
     <div class="bg-gradient-to-r from-teal-700 to-teal-800 py-3 shadow-lg">
         <div class="container mx-auto px-6">
             <div class="flex items-center space-x-4">
@@ -105,7 +124,7 @@
                     @if (isset($announcements) && count($announcements) > 0)
                         {{ $announcements[0]->icon }} <span
                             class="text-yellow-400 font-bold">{{ $announcements[0]->judul_pengumuman }}</span>
-                        {{ $announcements[0]->isi_pengumuman }}
+                        {!! $announcements[0]->isi_pengumuman !!}
                     @else
                         <span class="text-yellow-400 font-bold">Belum ada pengumuman</span>
                     @endif
@@ -114,7 +133,7 @@
         </div>
         <!-- Hidden data for JavaScript -->
         @if (isset($announcements))
-        <script type="application/json" id="announcements-data">
+            <script type="application/json" id="announcements-data">
         {!! json_encode($announcements) !!}
         </script>
         @endif
@@ -124,9 +143,9 @@
     <main class="container mx-auto py-12 px-6">
         <!-- Section Header with better styling -->
         <div class="unj-content-section-header">
-    <h2 class="unj-section-title">Berita Terbaru</h2>
-    <p class="unj-section-subtitle">Informasi terkini dari Universitas Negeri Jakarta</p>
-</div>
+            <h2 class="unj-section-title">Berita Terbaru</h2>
+            <p class="unj-section-subtitle">Informasi terkini dari Universitas Negeri Jakarta</p>
+        </div>
         <!-- Filter and View Options -->
         <div>
         </div>
@@ -212,10 +231,11 @@
         <div class="container">
             <!-- Section Header -->
             <div class="unj-content-section-header">
-    <h2 class="unj-section-title">Program & Layanan</h2>
-    <p class="unj-section-subtitle">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan Pemeringkatan</p>
-</div>
-    
+                <h2 class="unj-section-title">Program & Layanan</h2>
+                <p class="unj-section-subtitle">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan
+                    Pemeringkatan</p>
+            </div>
+
             <!-- Program Cards Grid -->
             <div class="program-grid">
                 @forelse($programLayanan as $program)
@@ -243,7 +263,8 @@
                             </div>
                             <h3 class="card-title">Beasiswa</h3>
                             <p class="card-description">
-                                Program beasiswa untuk mahasiswa berprestasi dan kurang mampu, membantu meringankan biaya
+                                Program beasiswa untuk mahasiswa berprestasi dan kurang mampu, membantu meringankan
+                                biaya
                                 pendidikan.
                             </p>
                             <a href="#" class="card-link">
@@ -252,7 +273,6 @@
                             </a>
                         </div>
                     </div>
-    
                 @endforelse
             </div>
         </div>
@@ -344,81 +364,95 @@
                 <div class="h-1 w-16 bg-gray-300"></div>
             </div>
             <p class="text-gray-600 max-w-2xl mx-auto">Ikuti akun Instagram kami untuk mendapatkan informasi terbaru</p>
-            <a href="https://www.instagram.com/dir.isipunj/" target="_blank" class="inline-flex items-center text-teal-700 hover:text-yellow-500 mt-2 font-medium">
+            <a href="https://www.instagram.com/dir.isipunj/" target="_blank"
+                class="inline-flex items-center text-teal-700 hover:text-yellow-500 mt-2 font-medium">
                 <span>@dir.isipunj</span>
                 <i class="fas fa-external-link-alt ml-2"></i>
             </a>
-        </div>        
+        </div>
         <!-- Instagram Feed Grid with Consistent Card Styling -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             @forelse($instagramPosts ?? [] as $index => $post)
-            <!-- Instagram Post -->
-            <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                <div class="relative pb-[56.25%]">
-                    <!-- Empty placeholder with gradient background -->
-                    <div class="absolute inset-0 bg-gradient-to-br {{ $index % 3 === 0 ? 'from-teal-100 to-teal-200' : ($index % 3 === 1 ? 'from-yellow-100 to-yellow-200' : 'from-teal-100 to-blue-200') }} flex items-center justify-center">
-                        <i class="fab fa-instagram text-teal-500 text-5xl opacity-30"></i>
-                    </div>
-                    <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
-                        Instagram
-                    </div>
-                </div>
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center text-gray-500 text-sm">
-                            <i class="fab fa-instagram mr-2"></i>
-                            <span>@dir.isipunj</span>
+                <!-- Instagram Post -->
+                <div
+                    class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                    <div class="relative pb-[56.25%]">
+                        <!-- Empty placeholder with gradient background -->
+                        <div
+                            class="absolute inset-0 bg-gradient-to-br {{ $index % 3 === 0 ? 'from-teal-100 to-teal-200' : ($index % 3 === 1 ? 'from-yellow-100 to-yellow-200' : 'from-teal-100 to-blue-200') }} flex items-center justify-center">
+                            <i class="fab fa-instagram text-teal-500 text-5xl opacity-30"></i>
+                        </div>
+                        <div
+                            class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
+                            Instagram
                         </div>
                     </div>
-                    <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">{{ $post->judul }}</h3>
-                    <p class="text-gray-600 mb-4">
-                        {{ Str::limit($post->deskripsi, 100) }}
-                    </p>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="{{ $post->link }}" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                            <span>Lihat di Instagram</span>
-                            <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                        </a>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <i class="fab fa-instagram mr-2"></i>
+                                <span>@dir.isipunj</span>
+                            </div>
+                        </div>
+                        <h3
+                            class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
+                            {{ $post->judul }}</h3>
+                        <p class="text-gray-600 mb-4">
+                            {{ Str::limit($post->deskripsi, 100) }}
+                        </p>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <a href="{{ $post->link }}" target="_blank"
+                                class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
+                                <span>Lihat di Instagram</span>
+                                <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
             @empty
-            <!-- Fallback content if no posts are found -->
-            <!-- Instagram Post 1 -->
-            <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                <div class="relative pb-[56.25%]">
-                    <div class="absolute inset-0 bg-gradient-to-br from-teal-100 to-teal-200 flex items-center justify-center">
-                        <i class="fab fa-instagram text-teal-500 text-5xl opacity-30"></i>
-                    </div>
-                    <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
-                        Instagram
-                    </div>
-                </div>
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center text-gray-500 text-sm">
-                            <i class="fab fa-instagram mr-2"></i>
-                            <span>@dir.isipunj</span>
+                <!-- Fallback content if no posts are found -->
+                <!-- Instagram Post 1 -->
+                <div
+                    class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                    <div class="relative pb-[56.25%]">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-br from-teal-100 to-teal-200 flex items-center justify-center">
+                            <i class="fab fa-instagram text-teal-500 text-5xl opacity-30"></i>
+                        </div>
+                        <div
+                            class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
+                            Instagram
                         </div>
                     </div>
-                    <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">Instagram DISIP UNJ</h3>
-                    <p class="text-gray-600 mb-4">
-                        Kunjungi Instagram kami untuk melihat konten terbaru
-                    </p>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="https://www.instagram.com/dir.isipunj/" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                            <span>Lihat di Instagram</span>
-                            <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                        </a>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <i class="fab fa-instagram mr-2"></i>
+                                <span>@dir.isipunj</span>
+                            </div>
+                        </div>
+                        <h3
+                            class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
+                            Instagram DISIP UNJ</h3>
+                        <p class="text-gray-600 mb-4">
+                            Kunjungi Instagram kami untuk melihat konten terbaru
+                        </p>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <a href="https://www.instagram.com/dir.isipunj/" target="_blank"
+                                class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
+                                <span>Lihat di Instagram</span>
+                                <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
             @endforelse
         </div>
-        
+
         <!-- View More Button -->
         <div class="text-center mt-8">
-            <a href="https://www.instagram.com/dir.isipunj/" target="_blank" class="inline-flex items-center justify-center px-6 py-3 bg-teal-700 hover:bg-teal-600 text-white font-medium rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1">
+            <a href="https://www.instagram.com/dir.isipunj/" target="_blank"
+                class="inline-flex items-center justify-center px-6 py-3 bg-teal-700 hover:bg-teal-600 text-white font-medium rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1">
                 <span>Lihat Semua Postingan</span>
                 <i class="fas fa-external-link-alt ml-2 text-sm"></i>
             </a>
@@ -432,7 +466,7 @@
     <!-- Decorative Elements -->
     <div class="absolute bottom-0 right-0 w-32 h-32 bg-yellow-400 rounded-full -mr-16 -mb-16 opacity-10"></div>
     <div class="absolute top-40 left-0 w-24 h-24 bg-teal-600 rounded-full -ml-12 opacity-10"></div>
-    
+
     <div class="container mx-auto px-6 relative z-10">
         <!-- Section Header with Enhanced Styling -->
         <div class="text-center mb-12">
@@ -444,15 +478,20 @@
             </div>
             <p class="text-gray-600 max-w-2xl mx-auto">Tonton video terbaru dari channel YouTube UNJ</p>
         </div>
-        
+
         <!-- Featured YouTube Videos - Hardcoded -->
         <div class="mb-12">
             <h3 class="text-xl font-bold text-teal-700 mb-6 text-center">Video Unggulan</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Video 1 -->
-                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                <div
+                    class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
                     <div class="relative pb-[56.25%] h-0 overflow-hidden">
-                        <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/JJ0pP0kzLxQ?rel=0" title="Profil Universitas Negeri Jakarta Tahun 2020" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                        <iframe class="absolute top-0 left-0 w-full h-full"
+                            src="https://www.youtube.com/embed/JJ0pP0kzLxQ?rel=0"
+                            title="Profil Universitas Negeri Jakarta Tahun 2020" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
                         </iframe>
                     </div>
                     <div class="p-6">
@@ -462,10 +501,14 @@
                                 <span>UNJ Official</span>
                             </div>
                         </div>
-                        <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">Profil Universitas Negeri Jakarta</h3>
-                        <p class="text-gray-600 mb-4">Mengenal lebih dalam tentang UNJ, fasilitas, dan program unggulan yang ditawarkan.</p>
+                        <h3
+                            class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
+                            Profil Universitas Negeri Jakarta</h3>
+                        <p class="text-gray-600 mb-4">Mengenal lebih dalam tentang UNJ, fasilitas, dan program unggulan
+                            yang ditawarkan.</p>
                         <div class="mt-4 pt-4 border-t border-gray-100">
-                            <a href="https://www.youtube.com/watch?v=JJ0pP0kzLxQ" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
+                            <a href="https://www.youtube.com/watch?v=JJ0pP0kzLxQ" target="_blank"
+                                class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
                                 <span>Tonton di YouTube</span>
                                 <i class="fas fa-external-link-alt ml-2 text-sm"></i>
                             </a>
@@ -474,9 +517,14 @@
                 </div>
 
                 <!-- Video 2 -->
-                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                <div
+                    class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
                     <div class="relative pb-[56.25%] h-0 overflow-hidden">
-                        <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/XtmrlOGaAcE?rel=0" title="Muda dan Berkarya : Inspirasi Wirausahawan Alumni UNJ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                        <iframe class="absolute top-0 left-0 w-full h-full"
+                            src="https://www.youtube.com/embed/XtmrlOGaAcE?rel=0"
+                            title="Muda dan Berkarya : Inspirasi Wirausahawan Alumni UNJ" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
                         </iframe>
                     </div>
                     <div class="p-6">
@@ -486,10 +534,14 @@
                                 <span>UNJ Official</span>
                             </div>
                         </div>
-                        <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">Muda dan Berkarya</h3>
-                        <p class="text-gray-600 mb-4">Inspirasi dari wirausahawan alumni UNJ yang sukses membangun karir.</p>
+                        <h3
+                            class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
+                            Muda dan Berkarya</h3>
+                        <p class="text-gray-600 mb-4">Inspirasi dari wirausahawan alumni UNJ yang sukses membangun
+                            karir.</p>
                         <div class="mt-4 pt-4 border-t border-gray-100">
-                            <a href="https://www.youtube.com/watch?v=XtmrlOGaAcE" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
+                            <a href="https://www.youtube.com/watch?v=XtmrlOGaAcE" target="_blank"
+                                class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
                                 <span>Tonton di YouTube</span>
                                 <i class="fas fa-external-link-alt ml-2 text-sm"></i>
                             </a>
@@ -498,9 +550,14 @@
                 </div>
 
                 <!-- Video 3 -->
-                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                <div
+                    class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
                     <div class="relative pb-[56.25%] h-0 overflow-hidden">
-                        <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/LeF0xnWIPYU?rel=0" title="Mengenal Lebih Jauh UNJ! with Wakil Rektor III UNJ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                        <iframe class="absolute top-0 left-0 w-full h-full"
+                            src="https://www.youtube.com/embed/LeF0xnWIPYU?rel=0"
+                            title="Mengenal Lebih Jauh UNJ! with Wakil Rektor III UNJ" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
                         </iframe>
                     </div>
                     <div class="p-6">
@@ -510,10 +567,14 @@
                                 <span>UNJ Official</span>
                             </div>
                         </div>
-                        <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">Mengenal Lebih Jauh UNJ</h3>
-                        <p class="text-gray-600 mb-4">Wawancara eksklusif bersama Wakil Rektor III Universitas Negeri Jakarta.</p>
+                        <h3
+                            class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
+                            Mengenal Lebih Jauh UNJ</h3>
+                        <p class="text-gray-600 mb-4">Wawancara eksklusif bersama Wakil Rektor III Universitas Negeri
+                            Jakarta.</p>
                         <div class="mt-4 pt-4 border-t border-gray-100">
-                            <a href="https://www.youtube.com/watch?v=LeF0xnWIPYU" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
+                            <a href="https://www.youtube.com/watch?v=LeF0xnWIPYU" target="_blank"
+                                class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
                                 <span>Tonton di YouTube</span>
                                 <i class="fas fa-external-link-alt ml-2 text-sm"></i>
                             </a>
@@ -569,7 +630,8 @@
 
         <!-- View More Button -->
         <div class="text-center mt-8">
-            <a href="https://www.youtube.com/channel/UCjQ4lIzs8Zm3zVD3wiL-KMw" target="_blank" class="inline-flex items-center justify-center px-6 py-3 bg-teal-700 hover:bg-teal-600 text-white font-medium rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1">
+            <a href="https://www.youtube.com/channel/UCjQ4lIzs8Zm3zVD3wiL-KMw" target="_blank"
+                class="inline-flex items-center justify-center px-6 py-3 bg-teal-700 hover:bg-teal-600 text-white font-medium rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1">
                 <span>Lihat Semua Video</span>
                 <i class="fas fa-external-link-alt ml-2 text-sm"></i>
             </a>
@@ -586,10 +648,10 @@
             .then(response => response.json())
             .then(videos => {
                 const container = document.getElementById('dynamic-videos-container');
-                
+
                 // Clear loading placeholders
                 container.innerHTML = '';
-                
+
                 if (videos.length === 0) {
                     // Display a message if no videos are found
                     container.innerHTML = `
@@ -599,12 +661,12 @@
                     `;
                     return;
                 }
-                
+
                 // Generate HTML for each video
                 videos.forEach(video => {
                     // Extract YouTube video ID from the link
                     let videoId = '';
-                    
+
                     // Handle different YouTube URL formats
                     if (video.link.includes('youtu.be/')) {
                         // Short URL format: https://youtu.be/VIDEO_ID
@@ -620,9 +682,9 @@
                         // Fallback
                         videoId = video.link.replace('watch?v=', 'embed/').split('/').pop();
                     }
-                    
+
                     const embedUrl = `https://www.youtube.com/embed/${videoId}?rel=0`;
-                    
+
                     // Create video card
                     const videoCard = `
                         <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
@@ -654,7 +716,7 @@
                             </div>
                         </div>
                     `;
-                    
+
                     // Add video card to container
                     container.innerHTML += videoCard;
                 });
@@ -670,5 +732,6 @@
             });
     });
 </script>
+
 </html>
 @include('footerlp')
