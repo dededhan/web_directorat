@@ -188,4 +188,63 @@ class BeritaController extends Controller
                 ->with('error', 'Gagal menghapus berita: ' . $e->getMessage());
         }
     }
+
+    public function update(Request $request, string $id)
+    {
+        try {
+            $berita = Berita::findOrFail($id);
+
+            // Validate the request
+            $validated = $request->validate([
+                'kategori' => 'required|in:inovasi,pemeringkatan',
+                'tanggal' => 'required|date',
+                'judul_berita' => 'required|string|max:200',
+                'isi_berita' => 'required|string',
+                'gambar' => 'nullable|image|max:2048',
+            ]);
+
+            // Update the text fields
+            $berita->kategori = $validated['kategori'];
+            $berita->tanggal = $validated['tanggal'];
+            $berita->judul = $validated['judul_berita'];
+            $berita->isi = $validated['isi_berita'];
+
+            // Handle image update if a new one was uploaded
+            if ($request->hasFile('gambar') && $request->file('gambar')->isValid()) {
+                // Delete old image
+                if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
+                    Storage::disk('public')->delete($berita->gambar);
+                }
+
+                // Store new image
+                $namaFile = time() . '_' . uniqid() . '.' . $request->file('gambar')->getClientOriginalExtension();
+                $gambarPath = $request->file('gambar')->storeAs(
+                    'berita-images',
+                    $namaFile,
+                    'public'
+                );
+
+                $berita->gambar = $gambarPath;
+            }
+
+            $berita->save();
+
+            if ($request->ajax()) {
+                return response()->json(['success' => true, 'message' => 'Berita berhasil diperbarui!']);
+            }
+
+            return redirect()->route('admin.news.index')
+                ->with('success', 'Berita berhasil diperbarui!');
+        } catch (\Exception $e) {
+            \Log::error('Error updating news: ' . $e->getMessage());
+
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Gagal memperbarui berita: ' . $e->getMessage()]);
+            }
+
+            return redirect()->back()
+                ->with('error', 'Gagal memperbarui berita: ' . $e->getMessage())
+                ->withInput();
+        }
+    }
 }

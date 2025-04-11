@@ -13,6 +13,68 @@
     <script src="{{ asset('header-carousel.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('mobile.css') }}">
     <script src="{{ asset('mobile.js') }}"></script>
+
+
+    <!-- Shared CSS for both sections -->
+<style>
+    /* Common styling for both Instagram and YouTube cards */
+ 
+    
+ .media-card {
+     height: 100%;
+     display: flex;
+     flex-direction: column;
+ }
+ 
+ .media-card .p-6 {
+     flex: 1;
+     display: flex;
+     flex-direction: column;
+ }
+ 
+ .media-card .mt-4 {
+     margin-top: auto;
+ }
+ 
+ /* Make all cards the same height */
+ .grid {
+     align-items: stretch;
+ }
+ 
+ /* Enhanced responsive design for mobile devices */
+ @media (max-width: 768px) {
+     .media-section {
+         padding: 3rem 0;
+     }
+     
+     .media-section .grid {
+         gap: 2rem;
+     }
+     
+     .media-card {
+         min-height: 360px;
+     }
+     
+     .media-card h3 {
+         font-size: 1.125rem;
+     }
+     
+     .media-card p {
+         font-size: 0.875rem;
+     }
+ }
+ 
+ /* Hyperlink Color */
+ .news-excerpt a {
+     color: #0D9488; /* Teal color to match your theme */
+     text-decoration: underline;
+     transition: color 0.2s ease;
+ }
+ 
+ .news-excerpt a:hover {
+     color: #F59E0B; /* Yellow color on hover to match your theme */
+ }
+ </style>
 </head>
 
 <body class="font-sans bg-gray-100">
@@ -72,8 +134,7 @@
 
         </div>
         <!-- Regular News Grid with improved styling -->
-        <!-- Regular News Grid with improved styling -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        {{-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             @foreach ($regularNews as $news)
                 <div
                     class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
@@ -109,7 +170,7 @@
                     </div>
                 </div>
             @endforeach
-        </div>
+        </div> --}}
 
         <!-- Enhanced Featured News Carousel -->
         <div class="enhanced-carousel">
@@ -133,7 +194,7 @@
                                     </div>
                                     <h3 class="news-title">{{ $featured->judul }}</h3>
                                     <p class="news-excerpt">
-                                        {{ Str::limit(strip_tags($featured->isi), 150) }}
+                                        {!! Str::limit($featured->isi, 150) !!}
                                     </p>
                                     <a href="{{ route('Berita.beritahome') }}" class="news-link">
                                         Baca selengkapnya <i class="fas fa-arrow-right"></i>
@@ -516,53 +577,7 @@
     </div>
 </section>
 
-<!-- Shared CSS for both sections -->
-<style>
-   /* Common styling for both Instagram and YouTube cards */
-.media-card {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
 
-.media-card .p-6 {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.media-card .mt-4 {
-    margin-top: auto;
-}
-
-/* Make all cards the same height */
-.grid {
-    align-items: stretch;
-}
-
-/* Enhanced responsive design for mobile devices */
-@media (max-width: 768px) {
-    .media-section {
-        padding: 3rem 0;
-    }
-    
-    .media-section .grid {
-        gap: 2rem;
-    }
-    
-    .media-card {
-        min-height: 360px;
-    }
-    
-    .media-card h3 {
-        font-size: 1.125rem;
-    }
-    
-    .media-card p {
-        font-size: 0.875rem;
-    }
-}
-</style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

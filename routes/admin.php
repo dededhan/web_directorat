@@ -37,9 +37,13 @@ Route::prefix('admin')->name('admin.')
             return view('admin.dashboardadmin');
         })->name('dashboard');
 
-        // News
+            // News
         Route::resource('/news', BeritaController::class)
             ->except(['show', 'edit', 'update']);
+        Route::get('/berita/{id}/detail', [BeritaController::class, 'getBeritaDetail'])
+            ->name('news.detail');
+        Route::put('/berita/{id}', [BeritaController::class, 'update'])
+            ->name('news.update');
 
         Route::resource('/news-scroll', PengumumanController::class);
 
