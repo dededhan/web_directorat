@@ -206,7 +206,7 @@
                 <div class="sidebar-dropdown">
                     <button
                         class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                        Sistem Peningkatan
+                        Sistem Pemeringkatan
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <ul class="hidden bg-[#135a54]">
