@@ -71,6 +71,7 @@
         .news-excerpt a:hover {
             color: #F59E0B;
         }
+
         .news-marquee a {
             color: #facc15;
             text-decoration: underline;
@@ -90,6 +91,7 @@
         .news-marquee * {
             color: white;
         }
+
         .news-marquee .text-yellow-400 {
             color: #facc15 !important;
         }
@@ -479,8 +481,52 @@
             <p class="text-gray-600 max-w-2xl mx-auto">Tonton video terbaru dari channel YouTube UNJ</p>
         </div>
 
+
+        <!-- Dynamic YouTube Videos from Database -->
+        <div>
+            <h3 class="text-xl font-bold text-teal-700 mb-6 text-center">Video Terbaru</h3>
+            <div id="dynamic-videos-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Dynamic content will be loaded here via JavaScript -->
+                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                    <div class="p-6">
+                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                    <div class="p-6">
+                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                    <div class="p-6">
+                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Featured YouTube Videos - Hardcoded -->
-        <div class="mb-12">
+        <div class="mb-12 mt-12">
             <h3 class="text-xl font-bold text-teal-700 mb-6 text-center">Video Unggulan</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Video 1 -->
@@ -584,49 +630,7 @@
             </div>
         </div>
 
-        <!-- Dynamic YouTube Videos from Database -->
-        <div>
-            <h3 class="text-xl font-bold text-teal-700 mb-6 text-center">Video Terbaru</h3>
-            <div id="dynamic-videos-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Dynamic content will be loaded here via JavaScript -->
-                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
-                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
-                    <div class="p-6">
-                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
-                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
-                    <div class="p-6">
-                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
-                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
-                    <div class="p-6">
-                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
 
         <!-- View More Button -->
         <div class="text-center mt-8">
