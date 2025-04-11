@@ -440,7 +440,7 @@
                             Kunjungi Instagram kami untuk melihat konten terbaru
                         </p>
                         <div class="mt-4 pt-4 border-t border-gray-100">
-                            <a href="https://www.instagram.com/dir.isipunj/" target="_blank"
+                            <a href="https://www.instagram.com/dit.isipunj/" target="_blank"
                                 class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
                                 <span>Lihat di Instagram</span>
                                 <i class="fas fa-external-link-alt ml-2 text-sm"></i>
