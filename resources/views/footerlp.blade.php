@@ -50,7 +50,7 @@
                     <div class="flex items-center group">
                         <i class="fas fa-envelope mr-3 group-hover:text-yellow-400 transition-colors"></i>
                         <a href="mailto:info@unj.ac.id"
-                            class="hover:text-yellow-400 transition-colors">dir.inovasi@unj.ac.i</a>
+                        class="hover:text-yellow-400 transition-colors">dir.inovasi@unj.ac.id</a>
                     </div>
 {{-- 
                     <div class="flex items-center group">
