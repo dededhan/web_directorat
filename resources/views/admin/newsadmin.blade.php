@@ -1,6 +1,7 @@
 @extends('admin.admin')
 
 <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @section('contentadmin')
     <div class="head-title">
@@ -19,7 +20,7 @@
     </div>
 
 
-    <!-- Flash Messages -->
+    {{-- <!-- Flash Messages -->
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -32,7 +33,7 @@
             {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    @endif
+    @endif --}}
 
     <div class="table-data">
         <div class="order">
@@ -159,10 +160,11 @@
                                                 Edit
                                             </button>
                                             <form method="POST" action="{{ route('admin.news.destroy', $berita->id) }}"
-                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini?');">
+                                                class="delete-form">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                <button type="button"
+                                                    class="btn btn-sm btn-danger delete-btn">Delete</button>
                                             </form>
                                         </div>
                                     </td>
@@ -252,8 +254,50 @@
 
 
     <script>
-        // Inisialisasi text editor untuk isi berita
+        // SweetAlert helper functions
+        function showSuccessAlert(message) {
+            Swal.fire({
+                title: 'Berhasil!',
+                text: message,
+                icon: 'success',
+                confirmButtonColor: '#3498db',
+                confirmButtonText: 'OK'
+            });
+        }
+    
+        function showErrorAlert(message) {
+            Swal.fire({
+                title: 'Gagal!',
+                text: message,
+                icon: 'error',
+                confirmButtonColor: '#3498db',
+                confirmButtonText: 'OK'
+            });
+        }
+    
+        function showConfirmationDialog(message, callback) {
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: message,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3498db',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    callback();
+                }
+            });
+        }
+        
+        // Global variable for editor instance
+        let editBeritaEditor;
+        
+        // Initialize all functionality when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize CKEditor for new berita
             ClassicEditor
                 .create(document.querySelector('#isi_berita'), {
                     toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
@@ -263,72 +307,8 @@
                 .catch(error => {
                     console.error(error);
                 });
-
-            // Auto-hide alerts after 5 seconds
-            setTimeout(function() {
-                document.querySelectorAll('.alert').forEach(function(alert) {
-                    var bsAlert = new bootstrap.Alert(alert);
-                    bsAlert.close();
-                });
-            }, 5000);
-
-            // Handle view image
-            document.querySelectorAll('.view-image').forEach(button => {
-                button.addEventListener('click', function() {
-                    const imageUrl = this.dataset.image;
-                    const title = this.dataset.title;
-
-                    document.getElementById('imageModalLabel').textContent = title;
-                    document.getElementById('modalImage').src = imageUrl;
-
-                    new bootstrap.Modal(document.getElementById('imageModal')).show();
-                });
-            });
-        });
-
-
-        let editBeritaEditor;
-        document.querySelectorAll('.edit-berita').forEach(button => {
-            button.addEventListener('click', function() {
-                const beritaId = this.dataset.id;
-
-                // Fetch berita details via AJAX
-                fetch(`/admin/berita/${beritaId}/detail`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Populate the edit form
-                        document.getElementById('edit_kategori').value = data.kategori;
-                        document.getElementById('edit_tanggal').value = data.tanggal;
-                        document.getElementById('edit_judul_berita').value = data.judul;
-
-                        // Set content to the CKEditor
-                        if (editBeritaEditor) {
-                            editBeritaEditor.setData(data.isi);
-                        }
-
-                        // Set the current image
-                        const currentImage = document.getElementById('current_image');
-                        currentImage.src = `/storage/${data.gambar}`;
-
-                        // Set the form action
-                        const form = document.getElementById('editBeritaForm');
-                        form.action = `/admin/berita/${beritaId}`;
-
-                        // Show the modal
-                        new bootstrap.Modal(document.getElementById('editBeritaModal')).show();
-                    })
-                    .catch(error => {
-                        console.error('Error fetching berita details:', error);
-                        alert('Gagal mengambil data berita.');
-                    });
-            });
-        });
-
-        // Initialize CKEditor for the edit form
-        document.addEventListener('DOMContentLoaded', function() {
-            // Your existing code...
-
-            // Initialize CKEditor for the edit form
+    
+            // Initialize CKEditor for edit form
             ClassicEditor
                 .create(document.querySelector('#edit_isi_berita'), {
                     toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
@@ -341,40 +321,114 @@
                 .catch(error => {
                     console.error(error);
                 });
-
+    
+            // Check for PHP flash messages
+            @if(session('success'))
+                showSuccessAlert("{{ session('success') }}");
+            @endif
+            
+            @if(session('error'))
+                showErrorAlert("{{ session('error') }}");
+            @endif
+    
+            // Handle view image
+            document.querySelectorAll('.view-image').forEach(button => {
+                button.addEventListener('click', function() {
+                    const imageUrl = this.dataset.image;
+                    const title = this.dataset.title;
+    
+                    document.getElementById('imageModalLabel').textContent = title;
+                    document.getElementById('modalImage').src = imageUrl;
+    
+                    new bootstrap.Modal(document.getElementById('imageModal')).show();
+                });
+            });
+            
+            // Handle delete button clicks
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const form = this.closest('form');
+                    
+                    showConfirmationDialog('Apakah Anda yakin ingin menghapus berita ini?', () => {
+                        form.submit();
+                    });
+                });
+            });
+            
+            // Handle edit button clicks
+            document.querySelectorAll('.edit-berita').forEach(button => {
+                button.addEventListener('click', function() {
+                    const beritaId = this.dataset.id;
+    
+                    // Fetch berita details via AJAX
+                    fetch(`/admin/berita/${beritaId}/detail`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Populate the edit form
+                            document.getElementById('edit_kategori').value = data.kategori;
+                            document.getElementById('edit_tanggal').value = data.tanggal;
+                            document.getElementById('edit_judul_berita').value = data.judul;
+    
+                            // Set content to the CKEditor
+                            if (editBeritaEditor) {
+                                editBeritaEditor.setData(data.isi);
+                            }
+    
+                            // Set the current image
+                            const currentImage = document.getElementById('current_image');
+                            currentImage.src = `/storage/${data.gambar}`;
+    
+                            // Set the form action
+                            const form = document.getElementById('editBeritaForm');
+                            form.action = `/admin/berita/${beritaId}`;
+    
+                            // Show the modal
+                            new bootstrap.Modal(document.getElementById('editBeritaModal')).show();
+                        })
+                        .catch(error => {
+                            console.error('Error fetching berita details:', error);
+                            showErrorAlert('Gagal mengambil data berita.');
+                        });
+                });
+            });
+    
             // Handle save button click
             document.getElementById('saveEditBerita').addEventListener('click', function() {
-
                 const editorData = editBeritaEditor.getData();
                 document.getElementById('edit_isi_berita').value = editorData;
-
+    
                 const form = document.getElementById('editBeritaForm');
                 const formData = new FormData(form);
-
+    
                 fetch(form.action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Close the modal
-                            bootstrap.Modal.getInstance(document.getElementById('editBeritaModal'))
-                                .hide();
-
-                            // Refresh the page to show updated data
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Close the modal
+                        bootstrap.Modal.getInstance(document.getElementById('editBeritaModal'))
+                            .hide();
+    
+                        // Show success message
+                        showSuccessAlert(data.message || 'Berita berhasil diperbarui!');
+                        
+                        // Refresh the page after a short delay
+                        setTimeout(() => {
                             window.location.reload();
-                        } else {
-                            alert(data.message || 'Gagal menyimpan perubahan.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error saving berita:', error);
-                        alert('Gagal menyimpan perubahan.');
-                    });
+                        }, 1500);
+                    } else {
+                        showErrorAlert(data.message || 'Gagal menyimpan perubahan.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error saving berita:', error);
+                    showErrorAlert('Gagal menyimpan perubahan.');
+                });
             });
         });
     </script>
