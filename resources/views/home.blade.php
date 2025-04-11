@@ -366,9 +366,9 @@
                 <div class="h-1 w-16 bg-gray-300"></div>
             </div>
             <p class="text-gray-600 max-w-2xl mx-auto">Ikuti akun Instagram kami untuk mendapatkan informasi terbaru</p>
-            <a href="https://www.instagram.com/dir.isipunj/" target="_blank"
+            <a href="https://www.instagram.com/dit.isipunj/" target="_blank"
                 class="inline-flex items-center text-teal-700 hover:text-yellow-500 mt-2 font-medium">
-                <span>@dir.isipunj</span>
+                <span>@dit.isipunj</span>
                 <i class="fas fa-external-link-alt ml-2"></i>
             </a>
         </div>
@@ -393,7 +393,7 @@
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center text-gray-500 text-sm">
                                 <i class="fab fa-instagram mr-2"></i>
-                                <span>@dir.isipunj</span>
+                                <span>@dit.isipunj</span>
                             </div>
                         </div>
                         <h3
@@ -430,12 +430,12 @@
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center text-gray-500 text-sm">
                                 <i class="fab fa-instagram mr-2"></i>
-                                <span>@dir.isipunj</span>
+                                <span>@dit.isipunj</span>
                             </div>
                         </div>
                         <h3
                             class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
-                            Instagram DISIP UNJ</h3>
+                            Instagram DITSIP UNJ</h3>
                         <p class="text-gray-600 mb-4">
                             Kunjungi Instagram kami untuk melihat konten terbaru
                         </p>
