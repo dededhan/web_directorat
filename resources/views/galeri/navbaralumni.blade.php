@@ -27,7 +27,31 @@
             padding-top: 80px !important; /* Ensure space for fixed navbar */
         }
 
-       
+        /* Social Media Bar */
+        .social-media-bar {
+            background-color: var(--primary-color);
+            padding: 0.5rem 0;
+        }
+
+        .social-media-bar .container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            max-width: 1600px; /* Increased from 1200px to 1600px */
+            width: 95%; /* Makes container take 95% of available width */
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .social-media-bar a {
+            color: var(--text-color);
+            margin-right: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-media-bar a:hover {
+            color: var(--hover-color);
+        }
 
         /* Desktop Navbar */
         .navbar {
@@ -47,7 +71,7 @@
 
         .navbar .container {
             display: flex;
-       
+            justify-content: space-between;
             align-items: center;
             max-width: 1600px; /* Increased from 1200px to 1600px */
             width: 95%; /* Makes container take 95% of available width */
