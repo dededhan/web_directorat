@@ -200,45 +200,47 @@
         </div>
 
 
-        </div>
-        <!-- Regular News Grid with improved styling -->
-        {{-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            @foreach ($regularNews as $news)
-                <div
-                    class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                    <div class="relative">
-                        <img alt="{{ $news->judul }}" class="w-full h-56 object-cover"
-                            src="{{ asset('storage/' . $news->gambar) }}" />
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-24">
-                        </div>
-                        <div
-                            class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
-                            {{ ucfirst($news->kategori) }}
-                        </div>
+        <!-- Regular News Grid with randomly selected news -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+    @php
+        // Create a copy of the featuredNews to shuffle
+        $randomNews = $featuredNews->shuffle()->take(3);
+    @endphp
+    
+    @foreach ($randomNews as $news)
+        <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div class="relative">
+                <img alt="{{ $news->judul }}" class="w-full h-56 object-cover" 
+                     src="{{ asset('storage/' . $news->gambar) }}" />
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-24">
+                </div>
+                <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
+                    {{ ucfirst($news->kategori) }}
+                </div>
+            </div>
+            <div class="p-5">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center text-gray-500 text-sm">
+                        <i class="fas fa-user-circle mr-2"></i>Admin
                     </div>
-                    <div class="p-5">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center text-gray-500 text-sm">
-                                <i class="fas fa-user-circle mr-2"></i>Admin
-                            </div>
-                            <div class="text-gray-500 text-sm">
-                                <i class="fas fa-calendar-alt mr-1"></i>{{ date('d M Y', strtotime($news->tanggal)) }}
-                            </div>
-                        </div>
-                        <h2 class="font-bold text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
-                            {{ $news->judul }}
-                        </h2>
-                        <p class="text-gray-600 mb-4">
-                            {{ Str::limit(strip_tags($news->isi), 100) }}
-                        </p>
-                        <a href="{{ route('Berita.beritahome') }}"
-                            class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
-                            Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                        </a>
+                    <div class="text-gray-500 text-sm">
+                        <i class="fas fa-calendar-alt mr-1"></i>{{ date('d M Y', strtotime($news->tanggal)) }}
                     </div>
                 </div>
-            @endforeach
-        </div> --}}
+                <h2 class="font-bold text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
+                    {{ $news->judul }}
+                </h2>
+                <p class="text-gray-600 mb-4">
+                    {{ Str::limit(strip_tags($news->isi), 100) }}
+                </p>
+                <a href="{{ route('Berita.beritahome') }}" 
+                   class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
+                    Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+        </div>
+    @endforeach
+</div>
 
         <!-- Enhanced Featured News Carousel -->
         <div class="enhanced-carousel">
