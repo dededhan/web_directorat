@@ -95,6 +95,52 @@
         .news-marquee .text-yellow-400 {
             color: #facc15 !important;
         }
+
+        .program-card {
+            margin-bottom: 25px;
+        }
+
+        .card-content {
+            padding: 20px;
+            text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .icon-container {
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            margin-bottom: 15px;
+        }
+
+        .card-description {
+            margin-bottom: 20px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-description p {
+            margin: 0;
+            padding: 0 10px;
+        }
+
+        .card-link {
+            margin-top: auto;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .card-link:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
     </style>
 </head>
 
@@ -247,9 +293,9 @@
                                 <i class="{{ $program->icon }}"></i>
                             </div>
                             <h3 class="card-title">{{ $program->judul }}</h3>
-                            <p class="card-description">
-                                {{ $program->deskripsi }}
-                            </p>
+                            <div class="card-description">
+                                {!! $program->deskripsi !!}
+                            </div>
                             <a href="#" class="card-link">
                                 Selengkapnya
                                 <i class="fas fa-arrow-right"></i>

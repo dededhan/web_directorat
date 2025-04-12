@@ -50,6 +50,8 @@ Route::prefix('admin')->name('admin.')
             ->name('news-scroll.detail');
 
         Route::resource('/program-layanan', ProgramLayananController::class);
+        Route::get('/program-layanan/{id}/detail', [ProgramLayananController::class, 'getProgramDetail'])
+            ->name('program-layanan.detail');
 
         //Youtube
         Route::resource('/youtube', YoutubeController::class)
