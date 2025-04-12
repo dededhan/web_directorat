@@ -1,10 +1,18 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Direktorat</title>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, user-scalable=yes" name="viewport" />
+    <title>Universitas Negeri Jakarta - Direktorat Pemeringkatan</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('home.css') }}">
+    <script src="{{ asset('home.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('mobile.css') }}">
+    
     <style>
         :root {
             --primary-color: #186666;
@@ -30,76 +38,9 @@
             background-color: white;
             color: var(--text-dark);
             line-height: 1.6;
-            overflow-x: hidden; /* Prevent horizontal scrolling */
+            overflow-x: hidden;
             width: 100%;
             position: relative;
-        }
-        
-        /* New Navigation Design */
-        nav {
-            position: sticky;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background-color: #006463; /* Changed to match image background */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 0;
-        }
-        
-        .nav-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 2100px;
-            margin: 0 auto;
-            padding: 0.8rem 2rem;
-            width: 100%;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-        
-        .unj-logo {
-            width: 40px;
-            height: 40px;
-            object-fit: contain; /* Ensures logo fits properly */
-            margin-right: 0.8rem;
-        }
-        
-        .logo-text {
-            color: var(--text-light);
-            font-weight: bold;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        
-        .nav-menu {
-            display: flex;
-            gap: 1rem;
-            list-style: none;
-        }
-        
-        nav a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 1rem;
-            padding: 0.5rem 1rem;
-            position: relative;
-            transition: all 0.3s ease;
-            border-radius: 4px;
-        }
-        
-        nav a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        nav a.active {
-            color: var(--accent);
-            font-weight: 500;
-            background-color: rgba(255, 255, 255, 0.1);
         }
         
         main {
@@ -194,27 +135,11 @@
             section {
                 padding: 2rem 5%;
             }
-            
-            nav {
-                padding: 0.5rem 2%;
-            }
         }
     </style>
 </head>
+@include('Profile1.navbarprofile')
 <body>
-    <nav>
-        <div class="nav-container">
-            <div class="logo">
-                <img src="https://spm.unj.ac.id/wp-content/uploads/2024/08/Logo-UNJ-PTNBH-RGB_Logo_Motto_Transparan-875x1024.png" alt="UNJ Logo" class="unj-logo">
-                <span class="logo-text">Profile Direktorat</span>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="#" class="active">Profile</a></li>
-            </ul>
-        </div>
-    </nav>
-    
     <main>
         <section class="functions" id="functions">
             <h2 class="section-title">Fungsi Utama</h2>
@@ -271,58 +196,10 @@
         </section>
     </main>
     @include('Profile1.profilefooter')
-   
     <script>
-        // JavaScript for enhancing the user experience
+        // Removed navbar-related JavaScript
         document.addEventListener('DOMContentLoaded', function() {
-            // Add smooth scrolling for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    if (targetId !== '#') {
-                        document.querySelector(targetId).scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-            
-            // Add navbar scroll effect
-            const nav = document.querySelector('nav');
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 50) {
-                    nav.style.padding = '0.5rem 2rem';
-                    nav.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
-                } else {
-                    nav.style.padding = '0.8rem 2rem';
-                    nav.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
-                }
-            });
-            
-            // Add active class to current section in viewport
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-menu a');
-            
-            window.addEventListener('scroll', function() {
-                let current = '';
-                
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    const sectionHeight = section.clientHeight;
-                    
-                    if (window.scrollY >= (sectionTop - 100)) {
-                        current = section.getAttribute('id');
-                    }
-                });
-                
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${current}`) {
-                        link.classList.add('active');
-                    }
-                });
-            });
+            // Optional: You can add other non-navbar related scripts here if needed
         });
     </script>
 </body>
