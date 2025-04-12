@@ -57,7 +57,7 @@ header {
 
 .header-content {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 1rem 0;
 }
@@ -95,69 +95,6 @@ header {
     font-size: 0.85rem;
     opacity: 0.9;
     font-weight: 400;
-}
-
-/* Main Navigation */
-nav ul {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    align-items: center;
-}
-
-nav ul li {
-    margin-left: 1.5rem;
-    position: relative;
-}
-
-.nav-link {
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1rem;
-    padding: 0.5rem 0;
-    transition: all var(--transition-speed);
-    display: flex;
-    align-items: center;
-}
-
-.nav-link:hover {
-    color: var(--accent-color);
-}
-
-.nav-icon {
-    margin-right: 8px;
-    font-size: 0.9em;
-}
-
-.nav-text {
-    display: inline-block;
-}
-
-/* Social Icons */
-.nav-social {
-    font-size: 1.1rem;
-    padding: 0.5rem;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.1);
-    transition: all var(--transition-speed);
-}
-
-.nav-social:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-}
-
-.nav-divider {
-    color: rgba(255, 255, 255, 0.3);
-    font-weight: 300;
-    margin: 0 0.5rem;
 }
 
 /* ===== Search Section ===== */
@@ -270,14 +207,6 @@ nav ul li {
         font-size: 0.75rem;
     }
     
-    nav ul li {
-        margin-left: 1rem;
-    }
-    
-    .nav-link {
-        font-size: 0.9rem;
-    }
-    
     .category-tab {
         padding: 0.7rem 1.2rem;
         font-size: 0.9rem;
@@ -286,26 +215,7 @@ nav ul li {
 
 @media (max-width: 768px) {
     .header-content {
-        flex-direction: column;
         padding: 1rem 0 0.5rem;
-    }
-    
-    .logo {
-        margin-bottom: 1rem;
-    }
-    
-    nav ul {
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    
-    nav ul li {
-        margin: 0 0.5rem 0.5rem;
-    }
-    
-    .nav-divider {
-        display: none;
     }
     
     .search-container {
@@ -802,16 +712,6 @@ nav ul li {
                     <span class="logo-sub">Universitas Negeri Jakarta</span>
                 </div>
             </a>
-            <nav>
-                <ul>
-                    <li><a href="{{ route('home') }}" class="nav-link"><i class="fas fa-home nav-icon"></i> <span class="nav-text">Home</span></a></li>
-                    <li><a href="{{ route('berita.all') }}" class="nav-link"><i class="fas fa-newspaper nav-icon"></i> <span class="nav-text">Berita</span></a></li>
-                    <li class="nav-divider">|</li>
-                    <li><a href="#" class="nav-link nav-social"><i class="fab fa-facebook-f"></i></a></li>
-                    <li><a href="#" class="nav-link nav-social"><i class="fab fa-twitter"></i></a></li>
-                    <li><a href="#" class="nav-link nav-social"><i class="fab fa-instagram"></i></a></li>
-                </ul>
-            </nav>
         </div>
     </div>
     

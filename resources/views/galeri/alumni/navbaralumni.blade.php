@@ -47,7 +47,7 @@
 
         .navbar .container {
             display: flex;
-       
+            justify-content: space-between;
             align-items: center;
             max-width: 1600px; /* Increased from 1200px to 1600px */
             width: 95%; /* Makes container take 95% of available width */
