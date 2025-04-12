@@ -242,7 +242,7 @@
 
         <!-- Enhanced Featured News Carousel -->
         <div class="enhanced-carousel">
-            <div class="enhanced-carousel-title">Berita Unggulan</div>
+            <div class="enhanced-carousel-title">Berita Terbaru</div>
             <div class="carousel">
                 <div class="carousel-inner">
                     @foreach ($featuredNews as $featured)

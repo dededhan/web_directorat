@@ -75,7 +75,7 @@ class BeritaController extends Controller
         $regularNews = Berita::latest()->take(3)->get();
 
         // Features
-        $featuredNews = Berita::latest()->take(5)->get();
+        $featuredNews = Berita::latest()->take(6)->get();
 
         // Scroll
         $announcements = Pengumuman::where('status', true)
