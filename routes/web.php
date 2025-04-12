@@ -125,6 +125,10 @@ Route::get('/sdgscenter', function () {
     return view('inovasi.katsinov.sdgscenter.sdgscenter');
 })->name('sdgscenter');
 
+Route::get('/berita/sampleberita', function () { 
+    return view('Berita.sampleberita'); 
+})->name('berita.sample');
+
 Route::get('/katsinov/formberitaacara', function () {
     return view('inovasi.katsinov.formberitaacara');
 })->name('katsinov.formberitaacara');
