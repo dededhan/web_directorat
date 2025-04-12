@@ -369,7 +369,7 @@
 
 <body>
     <!-- Include the Navbar -->
-    @include('galeri.alumni.navbarprofile')
+    @include('galeri.alumni.navbaralumni')
     <div class="hero-section">
         <div class="hero-content">
             <h1>Our Alumni Making an Impact</h1>
