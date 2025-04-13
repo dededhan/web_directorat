@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UNJ Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-    <!-- Removed Google Fonts import for Poppins -->
+    <!-- Removed Google Fonts import for Roboto -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
     <style>
         * {
@@ -112,7 +112,7 @@
 
 <body class="bg-gray-100">
     <!-- Modal -->
-    <div class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" id="loginModal">
+    <div class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="loginModal">
         <div class="modal-dialog w-full max-w-4xl mx-auto">
             <div class="modal-content bg-white rounded-3xl overflow-hidden shadow-2xl">
                 <div class="modal-container">
@@ -191,7 +191,7 @@
             modal.classList.add('hidden');
             modal.classList.remove('block');
 
-            // Then add event listeners to login buttons
+            // Only show login modal when login buttons are clicked
             const loginButtons = document.querySelectorAll('.login');
             loginButtons.forEach(button => {
                 button.addEventListener('click', function(e) {
@@ -208,6 +208,15 @@
                     modal.classList.remove('block');
                 }
             });
+
+            // Optional: Add close button functionality
+            const closeModalButton = modal.querySelector('[data-dismiss="modal"]');
+            if (closeModalButton) {
+                closeModalButton.addEventListener('click', function() {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('block');
+                });
+            }
         });
     </script>
 </body>

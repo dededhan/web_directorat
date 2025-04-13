@@ -237,6 +237,7 @@
         }
     </style>
 </head>
+@include('loginpopup')
 <body>
     <!-- Social Media Bar (Desktop only) -->
     <div class="social-media-bar hidden md:flex">

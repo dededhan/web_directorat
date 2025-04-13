@@ -1,5 +1,5 @@
 
-
+@include('loginpopup')
 <!-- Desktop Navbar - Sticky -->
 <nav class="navbar hidden md:block sticky top-0 z-50 bg-[#186862] shadow-md">
     <div class="container mx-auto flex items-center py-2 px-6">
