@@ -714,7 +714,7 @@ body {
                             <div class="card-meta">
                                 <span class="card-date">{{ date('d F Y', strtotime($berita->tanggal)) }}</span>
                             </div>
-                            <button class="read-more" data-id="{{ $berita->id }}">Baca Selengkapnya</button>
+                            <a href="{{ route('Berita.show', Str::slug($berita->judul)) }}" class="read-more">Baca Selengkapnya</a>
                         </div>
                     </div>
                 @empty
@@ -731,24 +731,6 @@ body {
             </div>
         </section>
     </main>
-
-    <!-- News Detail Popup -->
-    <div class="news-popup-overlay" id="newsPopup">
-        <div class="news-popup">
-            <div class="popup-loading" id="popupLoading">
-                <div class="popup-spinner"></div>
-                <p>Memuat konten...</p>
-            </div>
-            <div class="popup-header">
-                <img src="" alt="Gambar berita" class="popup-img" id="popupImg">
-                <button class="popup-close" id="popupClose">&times;</button>
-            </div>
-            <div class="popup-content" id="popupContent">
-                <!-- Content will be loaded dynamically -->
-            </div>
-        </div>
-    </div>
-
     @include('Berita.beritafooter')
 
     <!-- Add Font Awesome JS for better icon support -->
