@@ -18,39 +18,13 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'arial', sans-serif;
         }
 
         body {
             line-height: 1.6;
             overflow-x: hidden;
             padding-top: 80px !important; /* Ensure space for fixed navbar */
-        }
-
-        /* Social Media Bar */
-        .social-media-bar {
-            background-color: var(--primary-color);
-            padding: 0.5rem 0;
-        }
-
-        .social-media-bar .container {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            max-width: 1600px; /* Increased from 1200px to 1600px */
-            width: 95%; /* Makes container take 95% of available width */
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .social-media-bar a {
-            color: var(--text-color);
-            margin-right: 1rem;
-            transition: color 0.3s ease;
-        }
-
-        .social-media-bar a:hover {
-            color: var(--hover-color);
         }
 
         /* Desktop Navbar */
@@ -73,8 +47,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1600px; /* Increased from 1200px to 1600px */
-            width: 95%; /* Makes container take 95% of available width */
+            max-width: 1600px;
+            width: 95%;
             margin: 0 auto;
             padding: 1rem;
         }
@@ -91,23 +65,30 @@
 
         .navbar-logo h1 {
             color: var(--text-color);
-            font-size: 1rem; /* Slightly reduced font size */
+            font-size: 1rem;
             font-weight: 600;
             line-height: 1.2;
-            max-width: 300px; /* Increased from 250px to 300px */
+            max-width: 300px;
         }
 
+        /* FIXED: Updated menu styles */
         .navbar-menu {
             display: flex;
             list-style: none;
-            gap: -1000rem; /* CHANGED: Reduced from 2rem to 1.2rem for closer menu items */
+            gap: -1rem; /* Changed from -1000rem to positive value */
+            align-items: center;
+        }
+
+        .navbar-menu li {
+            position: relative;
         }
 
         .navbar-menu a {
             color: var(--text-color);
             text-decoration: none;
             transition: color 0.3s ease;
-            white-space: nowrap; /* Prevents menu items from wrapping */
+            white-space: nowrap;
+            padding: 0.5rem 0.25rem;
         }
 
         .navbar-menu a:hover {
@@ -274,7 +255,7 @@
             <div class="navbar-logo">
                 <img alt="University logo" 
                      src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
-                <h1>Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</h1>
+                     <h1>Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</h1>
             </div>
             <ul class="navbar-menu">
                 <li><a href="{{ route('home') }}">Beranda</a></li>
