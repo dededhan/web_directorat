@@ -762,7 +762,7 @@ header {
                             <div class="card-meta">
                                 <span class="card-date">{{ date('d F Y', strtotime($berita->tanggal)) }}</span>
                             </div>
-                            <a href="{{ route('berita.show', $berita->id) }}" class="read-more">Baca Selengkapnya</a>
+                            <a href="{{ route('berita.show', Str::slug($berita->judul)) }}" class="read-more">Baca Selengkapnya</a>
                         </div>
                     </div>
                 @empty

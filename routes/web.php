@@ -76,10 +76,11 @@ Route::get('/documents/preview/{id}', [App\Http\Controllers\DokumenController::c
 Route::get('/documents/download/{id}', [App\Http\Controllers\DokumenController::class, 'download'])
     ->name('documents.download');
 
-    Route::get('/berita', [BeritaController::class, 'allNews'])->name('berita.all');
-    Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('berita.show')->where('id', '[0-9]+');
-    Route::get('/berita/kategori/{kategori}', [BeritaController::class, 'kategori'])->name('berita.kategori');
-    Route::get('/api/berita/{id}', [BeritaController::class, 'getBeritaDetail']);
+Route::get('/Berita', [BeritaController::class, 'allNews'])->name('berita.all');
+// Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('berita.show')->where('id', '[0-9]+');
+Route::get('/Berita/{id}', [BeritaController::class, 'show'])->name('berita.show');
+Route::get('/Berita/kategori/{kategori}', [BeritaController::class, 'kategori'])->name('berita.kategori');
+Route::get('/api/Berita/{id}', [BeritaController::class, 'getBeritaDetail']);
 
 Route::get('/tupoksi', function () {
     return view('tupoksi.tupoksi');
@@ -141,10 +142,6 @@ Route::get('/katsinov/formjudul', function () {
 //     return view('inovasi.admin_hilirisasi.lampiran');
 // })->name('admin.hilirisasi.lampiran');
 
-Route::get('/Berita', function () {
-    return view('Berita.beritahome');
-})->name('Berita.beritahome');
-Route::get('/Berita', [BeritaController::class, 'allNews'])->name('Berita.beritahome');
 
 
 Route::get('/admin/Katsinov/formrecordhasilpengukuran', [FormRecordHasilPengukuranController::class, 'index'])
@@ -167,6 +164,14 @@ Route::get('/inovasi/landingpage', function () {
 })->name('inovasi.landingpage');
 
 Route::get('/katsinov/pdf', [KatsinovController::class, 'downloadPDF'])->name('katsinov.pdf');
+
+
+//Berita
+
+Route::get('/Berita', function () {
+    return view('Berita.beritahome');
+})->name('Berita.beritahome');
+Route::get('/Berita', [BeritaController::class, 'allNews'])->name('Berita.beritahome');
 
 
 //Pemeringkatan
