@@ -714,9 +714,8 @@ body {
                             <div class="card-meta">
                                 <span class="card-date">{{ date('d F Y', strtotime($berita->tanggal)) }}</span>
                             </div>
-                            {{-- <a href="{{ route('Berita.show', Str::slug($berita->judul)) }}" class="read-more">Baca Selengkapnya</a> --}}
-                            <a href="{{ route('Berita.show', ['slug' => Str::slug($berita->judul)]) }}" class="read-more">Baca Selengkapnya</a>
-                        </div>
+                            {{-- <a href="{{ route('Berita.show', ['slug' => Str::slug($berita->judul)]) }}" class="read-more">Baca Selengkapnya</a> --}}
+                            <a href="{{ route('Berita.show', ['slug' => $berita->slug]) }}" class="read-more">Baca Selengkapnya</a>                        </div>
                     </div>
                 @empty
                     <div class="no-results">

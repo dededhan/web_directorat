@@ -147,26 +147,28 @@ class BeritaController extends Controller
 
     public function show(string $slug)
     {
-        $title = str_replace('-', ' ', $slug);
-        $berita = Berita::where('judul', $title)->first();
-        if (!$berita) {
-            $berita = Berita::where('judul', 'LIKE', "%{$title}%")->first();
-        }
+        // First try to find by slug
+        $berita = Berita::where('slug', $slug)->first();
+        
+        // If not found and looks like an ID, try finding by ID
         if (!$berita && is_numeric($slug)) {
             $berita = Berita::find($slug);
         }
+        
+        // If still not found, abort
         if (!$berita) {
             abort(404, 'Berita tidak ditemukan');
         }
+        
         $relatedNews = Berita::where('id', '!=', $berita->id)
             ->where('kategori', $berita->kategori)
             ->latest()
             ->take(3)
             ->get();
+            
         $latestNews = Berita::latest()->take(4)->get();
-
         $popularNews = Berita::latest()->take(5)->get();
-
+    
         return view('Berita.sampleberita', compact('berita', 'relatedNews', 'latestNews', 'popularNews'));
     }
     // public function show(string $title_or_id)
