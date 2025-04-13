@@ -730,7 +730,7 @@ header {
     <!-- Category tabs -->
     <div class="category-tabs">
         <div class="container" style="display: flex; overflow-x: auto;">
-            <a href="{{ route('berita.all') }}" class="category-tab {{ !request()->segment(3) ? 'active' : '' }}">
+            <a href="{{ route('Berita.beritahome') }}" class="category-tab {{ !request()->segment(3) ? 'active' : '' }}">
                 <i class="fas fa-layer-group tab-icon"></i>
                 <span>Semua</span>
             </a>
@@ -762,7 +762,8 @@ header {
                             <div class="card-meta">
                                 <span class="card-date">{{ date('d F Y', strtotime($berita->tanggal)) }}</span>
                             </div>
-                            <a href="{{ route('berita.show', Str::slug($berita->judul)) }}" class="read-more">Baca Selengkapnya</a>
+                            <a href="{{ route('Berita.show', Str::slug($berita->judul)) }}" class="read-more">Baca Selengkapnya</a>
+
                         </div>
                     </div>
                 @empty
