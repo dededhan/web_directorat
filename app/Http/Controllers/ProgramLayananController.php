@@ -45,7 +45,7 @@ class ProgramLayananController extends Controller
             $validated = $request->validate([
                 'icon' => 'required|string',
                 'judul' => 'required|string|max:50',
-                'deskripsi' => 'required|string|max:500',
+                'deskripsi' => 'required|string|max:1000',
                 'status' => 'sometimes|boolean'
             ]);
 

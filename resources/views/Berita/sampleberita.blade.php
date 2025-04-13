@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UI News Portal</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
+    <title>{{ $berita->judul }}UNJ News Portal</title>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -372,27 +374,24 @@
     <!-- Main Content -->
     <div class="content-container">
         <div class="featured-image-container">
-            <img class="featured-image" src="https://lh3.googleusercontent.com/gps-cs-s/AB5caB_cqHu1oll93NUg188d3JD6vNMAldMk0b-luMyiBxxHIb2JRi0lysmBTp0mk3IRvc4CE68t6wEkYKw01Zqtb31SRTKX3Y0LIWpHcvH9r6OvXLghY8rJO_bhXa2WGsNBdwOyKB71=s680-w680-h510" alt="UI Jadi Tuan Rumah Indonesia-China" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg width=\'680\' height=\'400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'18\' text-anchor=\'middle\' alignment-baseline=\'middle\' font-family=\'Arial, sans-serif\' fill=\'%23888888\'%3EUniversitas Indonesia%3C/text%3E%3C/svg%3E'">
+            <img class="featured-image" src="{{ asset('storage/'.$berita->gambar) }}" alt="{{ $berita->judul }}" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg width=\'680\' height=\'400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'18\' text-anchor=\'middle\' alignment-baseline=\'middle\' font-family=\'Arial, sans-serif\' fill=\'%23888888\'%3EUniversitas Indonesia%3C/text%3E%3C/svg%3E'">
             <div class="image-overlay">
                 <div class="date-badge">
-                    <span>📅 March 24, 2025</span>
-                    <span>⌚ 3:32 pm</span>
+                    <span>📅 {{ date('F d, Y', strtotime($berita->tanggal)) }}</span>
+                    <span>⌚ {{ date('g:i a', strtotime($berita->tanggal)) }}</span>
                 </div>
-                <h1>UI Jadi Tuan Rumah 11th Indonesia-China Innovation & Technology Collaboration di Sektor Industri Kimia</h1>
+                <h1>{{ $berita->judul }}</h1>
             </div>
         </div>
         
         <div class="main-content">
             <div class="article-meta">
-                <strong>Depok, 18 Maret 2025</strong> - Universitas Indonesia (UI) menjadi tuan rumah acara bertajuk <strong>11<sup>th</sup> Indonesia-China Innovation & Technology Collaboration (Chemical Industry)</strong>. Acara ini diselenggarakan di UI Depok, 18 Maret 2025, di Ruang Serbaguna Gedung Science Techno Park UI. Acara ini merupakan langkah penting untuk mendorong inovasi dan memperkuat hubungan inkubasi antara Indonesia dan China di sektor industri kimia, yang sangat penting untuk pembangunan ekonomi berkelanjutan.
+                <strong>{{ $berita->kategori == 'inovasi' ? 'Inovasi' : 'Pemeringkatan' }}, {{ date('d F Y', strtotime($berita->tanggal)) }}</strong> - 
+                {{ Str::limit(strip_tags($berita->isi), 200) }}
             </div>
             
             <div class="article-content">
-                <p>Acara ini diinisiasi oleh Forum Sinergi Inovasi Industri (FSII) yang telah menghadirkan Advisor FSII UI, Prof. Dr. Ir. Muhammad Anis, M.Met, Prof. Dr. Ir. Heri Hermansyah, IPU, Dekan Fakultas Teknik UI dari Riset Berdampak Tinggi Universitas Indonesia (DRBT UI), Chairul Hudaya, Ph.D., menyajikan usaha pemerintah dari para partisipasi industria dan kalitbang Bammer, Ir.M.S., S.Sos., M.Si., Kasubdit Operasional DRBT UI, turut menghadiri acara ini. Presentasi dan informasi yang disampaikan mencakup topik-topik penting seperti inovasi industri, kebijakan pemerintah, dan studi kasus dari perusahaan-perusahaan terkemuka. Acara ini bertujuan untuk mengidentifikasi peluang kerjasama, mempercepat pertukaran, dan membuka peluang kolaborasi potensial antara para pemangku kepentingan dari Indonesia dan Cina.</p>
-                
-                <p>Turut hadir dalam acara adalah perwakilan dari Direktorat Jenderal Industri Kimia, Farmasi, dan Tekstil, Kementerian Perindustrian Republik Indonesia, Anggota Dewan Energi Nasional Republik Indonesia, PT Kilang Pertamina International, PT Ecolab Manufacturing Indonesia, PT Autochem Industry Indonesia, IPSOS, Sinopharma Investment International, and Axiomatic International, Rihua International Co., Ltd., Weihai Chemical Machinery Co., Ltd., serta Jiangsu GONGTECK Automation Technology Co., Ltd. Para tamu ini berbagi wawasan tentang tren terbaru, inovasi, dan peluang investasi di industri kimia, serta membahas strategi untuk meningkatkan kerja sama bilateral dalam bidang ini. Para delegasi juga memberikan tinjauan tentang industri kimia dalam lanskap global dan investasi proyek teknologi, serta memberikan perspektif berharga tentang industri global.</p>
-                
-                <p>Kolaborasi Inovasi dan Teknologi Indonesia-Cina ke-11 ini diharapkan dapat menghasilkan kemitraan yang lebih kuat dan menciptakan ekosistem yang akan mendorong inovasi dan pertumbuhan di industri kimia. Acara ini juga berperan sebagai platform untuk berbagi praktik terbaik, mendiskusikan tantangan, dan merancang solusi untuk masa depan industri kimia yang berkelanjutan.</p>
+                {!! $berita->isi !!}
                 
                 <div class="article-share">
                     <span>Bagikan:</span>
@@ -404,43 +403,33 @@
                 </div>
                 
                 <div class="article-tags">
-                    <span>Inovasi</span>
-                    <span>Teknologi</span>
-                    <span>Kerjasama Internasional</span>
-                    <span>Indonesia-China</span>
-                    <span>Industri Kimia</span>
+                    <span>{{ $berita->kategori }}</span>
+                    <span>Universitas</span>
+                    <span>UNJ</span>
                 </div>
                 
                 <div class="related-posts">
                     <h3>Berita Terkait</h3>
                     <div class="related-post-grid">
+                        @forelse($relatedNews as $related)
                         <div class="related-post-item">
-                            <img src="/api/placeholder/300/150" alt="Related News" class="related-post-image" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg width=\'300\' height=\'150\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'14\' text-anchor=\'middle\' alignment-baseline=\'middle\' font-family=\'Arial, sans-serif\' fill=\'%23888888\'%3EBerita Terkait%3C/text%3E%3C/svg%3E'">
+                            <img src="{{ asset('storage/'.$related->gambar) }}" alt="{{ $related->judul }}" class="related-post-image" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg width=\'300\' height=\'150\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'14\' text-anchor=\'middle\' alignment-baseline=\'middle\' font-family=\'Arial, sans-serif\' fill=\'%23888888\'%3EBerita Terkait%3C/text%3E%3C/svg%3E'">
                             <div class="related-post-content">
                                 <div class="related-post-title">
-                                    <a href="#">Kolaborasi Industri dan Perguruan Tinggi Kunci Inovasi Berkelanjutan</a>
+                                    <a href="{{ route('Berita.show', Str::slug($related->judul)) }}">{{ $related->judul }}</a>
                                 </div>
-                                <div class="related-post-date">Maret 12, 2025</div>
+                                <div class="related-post-date">{{ date('F d, Y', strtotime($related->tanggal)) }}</div>
                             </div>
                         </div>
+                        @empty
                         <div class="related-post-item">
-                            <img src="/api/placeholder/300/150" alt="Related News" class="related-post-image" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg width=\'300\' height=\'150\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'14\' text-anchor=\'middle\' alignment-baseline=\'middle\' font-family=\'Arial, sans-serif\' fill=\'%23888888\'%3EBerita Terkait%3C/text%3E%3C/svg%3E'">
                             <div class="related-post-content">
                                 <div class="related-post-title">
-                                    <a href="#">UI Raih Penghargaan Excellence in Innovation Award 2025</a>
+                                    Tidak ada berita terkait
                                 </div>
-                                <div class="related-post-date">Maret 05, 2025</div>
                             </div>
                         </div>
-                        <div class="related-post-item">
-                            <img src="/api/placeholder/300/150" alt="Related News" class="related-post-image" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg width=\'300\' height=\'150\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'14\' text-anchor=\'middle\' alignment-baseline=\'middle\' font-family=\'Arial, sans-serif\' fill=\'%23888888\'%3EBerita Terkait%3C/text%3E%3C/svg%3E'">
-                            <div class="related-post-content">
-                                <div class="related-post-title">
-                                    <a href="#">Implementasi Teknologi Hijau dalam Industri Kimia Modern</a>
-                                </div>
-                                <div class="related-post-date">Februari 28, 2025</div>
-                            </div>
-                        </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -451,58 +440,25 @@
                 <div class="section-header">Latest News</div>
             </div>
             <div class="section-content">
+                @foreach($latestNews as $latest)
                 <div class="news-item">
-                    <h3><a href="#">UI Jadi Tuan Rumah 11th Indonesia-China Innovation & Technology Collaboration di Sektor Industri Kimia</a></h3>
-                    <div class="date">Maret 18, 2025 • Kemahasiswaan</div>
+                    <h3><a href="{{ route('Berita.show', $latest->id) }}">{{ $latest->judul }}</a></h3>
+                    <div class="date">{{ date('F d, Y', strtotime($latest->tanggal)) }} • {{ ucfirst($latest->kategori) }}</div>
                 </div>
-                
-                <div class="news-item">
-                    <h3><a href="#">Sebanyak 19 Perguruan Tinggi UI Diterbitkan Paten dari DJKI Kemenkumham</a></h3>
-                    <div class="date">Maret 15, 2025 • Akademik</div>
-                </div>
-                
-                <div class="news-item">
-                    <h3><a href="#">UI Gelar Sosialisasi Penormalisasi dan Penyesuaian Kebijakan Penelitian untuk Prestasi Para Inventor</a></h3>
-                    <div class="date">Maret 10, 2025 • Riset</div>
-                </div>
-                
-                <div class="news-item">
-                    <h3><a href="#">UI Dalam Menyongsong Mitra Industri: Kolaborasi Strategis dengan Paper Group</a></h3>
-                    <div class="date">Maret 8, 2025 • Industri</div>
-                </div>
+                @endforeach
             </div>
             
             <div class="section-title-wrapper">
                 <div class="section-header">Popular Post</div>
             </div>
             <div class="section-content">
+                @foreach($popularNews as $popular)
                 <div class="popular-item">
-                    <span class="post-date">🗓 Mar 1, 2025</span>
-                    <a href="#" class="post-title">UI MERAIH KEKAYAAN INTELEKTUAL NASIONAL 2025</a>
+                    <span class="post-date">🗓 {{ date('M d, Y', strtotime($popular->tanggal)) }}</span>
+                    <a href="{{ route('Berita.show', $popular->id) }}" class="post-title">{{ $popular->judul }}</a>
                 </div>
-                
-                <div class="popular-item">
-                    <span class="post-date">🗓 Feb 15, 2025</span>
-                    <a href="#" class="post-title">UI Incubate - Pengumuman Penerima Mahasiswa Gelombang 2 TA 2025</a>
-                </div>
-                
-                <div class="popular-item">
-                    <span class="post-date">🗓 Feb 1, 2025</span>
-                    <a href="#" class="post-title">Pelatihan Strategi Pemasaran: Branding dan Packaging Produk Usaha</a>
-                </div>
-                
-                <div class="popular-item">
-                    <span class="post-date">🗓 Jan 20, 2025</span>
-                    <a href="#" class="post-title">Meet up & Startup Pitching Day</a>
-                </div>
-                
-                <div class="popular-item">
-                    <span class="post-date">🗓 Jan 10, 2025</span>
-                    <a href="#" class="post-title">UI Incubate Program 2026</a>
-                </div>
+                @endforeach
             </div>
-
-            
         </div>
     </div>
 </body>

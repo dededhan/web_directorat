@@ -118,11 +118,6 @@ class BeritaController extends Controller
 
         return view('Pemeringkatan.LandingPagePemeringkatan', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
     }
-    public function getBeritaDetail($id)
-    {
-        $berita = Berita::findOrFail($id);
-        return response()->json($berita);
-    }
 
     /**
      * Display news by category.
@@ -150,19 +145,46 @@ class BeritaController extends Controller
         return view('Berita.beritahome', compact('beritas'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+
+    public function show(string $title_or_id)
     {
-        $berita = Berita::findOrFail($id);
-
-        // Get active announcements
-        $announcements = Pengumuman::where('status', true)
-            ->orderBy('created_at', 'desc')
+        if (is_numeric($title_or_id)) {
+            $berita = Berita::findOrFail($title_or_id);
+        } else {
+            // Replace dashes with spaces and handle potential URL slugs
+            $title = str_replace('-', ' ', $title_or_id);
+            $berita = Berita::where('judul', 'LIKE', "%{$title}%")->firstOrFail();
+        }
+    
+        // Get related news (same category, excluding current article)
+        $relatedNews = Berita::where('id', '!=', $berita->id)
+            ->where('kategori', $berita->kategori)
+            ->latest()
+            ->take(3)
             ->get();
+    
+        // Get latest news (for sidebar)
+        $latestNews = Berita::latest()->take(4)->get();
+    
+        // Get popular news (for sidebar)
+        $popularNews = Berita::latest()->take(5)->get();
+    
+        return view('Berita.sampleberita', compact('berita', 'relatedNews', 'latestNews', 'popularNews'));
+    }
 
-        return view('Berita.show', compact('berita', 'announcements'));
+    /**
+     * Get news details for API requests
+     */
+    public function getBeritaDetail($title_or_id)
+    {
+        if (is_numeric($title_or_id)) {
+            $berita = Berita::findOrFail($title_or_id);
+        } else {
+            $title = str_replace('-', ' ', $title_or_id);
+            $berita = Berita::where('judul', 'LIKE', "%{$title}%")->firstOrFail();
+        }
+
+        return response()->json($berita);
     }
     /**
      * Remove the specified resource from storage.

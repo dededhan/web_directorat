@@ -707,11 +707,19 @@ body {
         </div>
     </section>
     
+<<<<<<< HEAD
     <!-- FIXED Category Tabs Section -->
     <section class="categories-section">
         <div class="container categories-container">
             <a href="{{ route('berita.all') }}" class="category-tab {{ !request()->segment(3) ? 'active' : '' }}">
                 <i class="fa-solid fa-layer-group tab-icon"></i>
+=======
+    <!-- Category tabs -->
+    <div class="category-tabs">
+        <div class="container" style="display: flex; overflow-x: auto;">
+            <a href="{{ route('Berita.beritahome') }}" class="category-tab {{ !request()->segment(3) ? 'active' : '' }}">
+                <i class="fas fa-layer-group tab-icon"></i>
+>>>>>>> 5c6ea149865f5159c5b1b0188247f28fad948d14
                 <span>Semua</span>
             </a>
             <a href="{{ route('berita.kategori', 'inovasi') }}" class="category-tab {{ request()->segment(3) == 'inovasi' ? 'active' : '' }}">
@@ -741,7 +749,8 @@ body {
                             <div class="card-meta">
                                 <span class="card-date">{{ date('d F Y', strtotime($berita->tanggal)) }}</span>
                             </div>
-                            <button class="read-more" data-id="{{ $berita->id }}">Baca Selengkapnya</button>
+                            <a href="{{ route('Berita.show', Str::slug($berita->judul)) }}" class="read-more">Baca Selengkapnya</a>
+
                         </div>
                     </div>
                 @empty
@@ -759,7 +768,7 @@ body {
         </section>
     </main>
 
-    <!-- News Detail Popup -->
+    {{-- <!-- News Detail Popup -->
     <div class="news-popup-overlay" id="newsPopup">
         <div class="news-popup">
             <div class="popup-loading" id="popupLoading">
@@ -774,7 +783,7 @@ body {
                 <!-- Content will be loaded dynamically -->
             </div>
         </div>
-    </div>
+    </div> --}}
 
     @include('Berita.beritafooter')
 
