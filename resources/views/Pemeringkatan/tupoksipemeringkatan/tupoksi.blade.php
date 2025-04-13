@@ -197,7 +197,7 @@
             </div>
         </section>
     </main>
-    @include('Pemeringkatan.tupoksiPemeringkatan.tupoksifooter')
+    @include('Pemeringkatan.tupoksipemeringkatan.tupoksifooter')
     <script>
         // Removed navbar-related JavaScript
         document.addEventListener('DOMContentLoaded', function() {
