@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0, user-scalable=yes" name="viewport" />
@@ -8,16 +7,19 @@
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Removed Google Fonts import for Roboto -->
     <link rel="stylesheet" href="{{ asset('home.css') }}">
     <link rel="stylesheet" href="{{ asset('header-carousel.css') }}">
     <script src="{{ asset('header-carousel.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('mobile.css') }}">
     <script src="{{ asset('mobile.js') }}"></script>
 
-
-    <!-- Shared CSS for both sections -->
+    <!-- Added Arial font style -->
     <style>
+        * {
+            font-family: Arial, sans-serif !important;
+        }
+        
         .media-card {
             height: 100%;
             display: flex;
@@ -142,6 +144,17 @@
         .card-link:hover {
             background-color: rgba(0, 0, 0, 0.05);
         }
+        html, body, p, h1, h2, h3, h4, h5, h6, span, div:not(.fas):not(.fab):not(.far):not(.fa), 
+      a:not(.fas):not(.fab):not(.far):not(.fa), button, input, textarea, select, label {
+        font-family: Arial, sans-serif !important;
+      }
+      
+      /* Preserve Font Awesome icons */
+      .fas, .fab, .far, .fa, 
+      [class^="fa-"], [class*=" fa-"],
+      i.fas, i.fab, i.far, i.fa {
+        font-family: "Font Awesome 5 Free", "Font Awesome 5 Brands", "FontAwesome" !important;
+      }
     </style>
 </head>
 

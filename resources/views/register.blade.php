@@ -1,13 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- REGISTER.BLADE.PHP HEAD SECTION -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UNJ Dashboard - Register</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <!-- Removed Google Fonts import for Poppins -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="{{ asset('register.css') }}">
+    <style>
+        * {
+            font-family: Arial, sans-serif !important;
+        }
+    </style>
+</head>
+
+<!-- FOOTERLP.BLADE.PHP - ADD STYLE TO FOOTER SECTION -->
+<style>
+    * {
+        font-family: Arial, sans-serif !important;
+    }
+</style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="w-full max-w-5xl mx-auto p-5">
