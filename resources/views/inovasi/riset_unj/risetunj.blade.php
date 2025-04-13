@@ -8,6 +8,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('home.css') }}">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -105,38 +109,16 @@
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body>
     <!-- Navigation Bar -->
-    <nav class="navbar sticky top-0 z-50 shadow-md">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center py-3">
-                <div class="flex items-center">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Lambang_baru_UNJ.png/960px-Lambang_baru_UNJ.png" alt="Riset UNJ Logo" class="h-8 w-auto mr-2">
-                    <span class="font-bold text-xl">Riset UNJ</span>
-                </div>
-                <div class="hidden md:flex space-x-1">
-                <a href="{{ route('inovasi.landingpage') }}" class="nav-link px-4 py-2 rounded font-medium">Home</a>
-                    <a href="#" class="nav-link active-nav px-4 py-2 rounded font-medium">Dashboard</a>                  
-                </div>
-                <div class="md:hidden">
-                    <button id="mobileMenuButton" class="p-2 rounded-md hover:bg-teal-600 focus:outline-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <!-- Mobile Menu -->
-            <div id="mobileMenu" class="md:hidden hidden pb-3">
-                <a href="#" class="nav-link block px-4 py-2 rounded font-medium">Dashboard</a>
-                <a href="#" class="nav-link block px-4 py-2 rounded font-medium">Products</a>
-                <a href="#" class="nav-link block px-4 py-2 rounded font-medium">Researchers</a>
-                <a href="#" class="nav-link block px-4 py-2 rounded font-medium">Analytics</a>
-                <a href="#" class="nav-link block px-4 py-2 rounded font-medium">About</a>
-            </div>
-        </div>
-    </nav>
+    
+        
+        @include('Inovasi.riset_unj.navbarprofile')
 
+   
+     <div id="mobileMenuButton" class="p-2 rounded-md hover:bg-teal-600 focus:outline-none">
+                        
+    </div>
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="bg-white p-6 rounded-lg shadow-lg text-center">
@@ -150,11 +132,8 @@
     <main class="container mx-auto px-4 py-8">
         <!-- Data Source Info Area -->
         <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h2 class="text-xl font-semibold">Data Source: <span class="text-blue-600">product_innovations.xlsx</span></h2>
-                    <p class="text-gray-600 mt-1">Data is loaded automatically from local Excel file</p>
-                </div>
+            
+                
                 <div>
                     <span id="dataStatus" class="px-4 py-2 bg-gray-100 rounded-full text-sm">Loading...</span>
                 </div>
