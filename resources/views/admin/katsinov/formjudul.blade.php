@@ -29,6 +29,7 @@
             </div>
 
             <form id="innovation-form" action="{{route('admin.Katsinov.inovasi.store', $id)}}" method="POST">
+                @dump($inovasi)
                 @csrf
                 <!-- Informasi Inovasi -->
                 <div class="form-section" id="info-inovasi">
@@ -54,9 +55,7 @@
 
                     <div class="form-group">
                         <label for="pendahuluan">Pendahuluan</label>
-                        <textarea id="pendahuluan" name="pendahuluan" placeholder="Contoh: Inovasi ini bertujuan untuk mengelola limbah dengan lebih efisien...">
-                            {{ !is_null($inovasi)? $inovasi->introduction : '' }}
-                        </textarea>
+                        <textarea id="pendahuluan" name="pendahuluan" placeholder="Contoh: Inovasi ini bertujuan untuk mengelola limbah dengan lebih efisien...">{{ !is_null($inovasi)? $inovasi->introduction : '' }}</textarea>
                         <span class="form-hint">Jelaskan secara singkat maksimal 3 baris</span>
                         <div class="char-counter" id="pendahuluan-counter">0/300 karakter</div>
                     </div>
@@ -68,25 +67,19 @@
                     
                     <div class="form-group">
                         <label for="produk-teknologi-desc">Deskripsi Produk Teknologi</label>
-                        <textarea id="produk-teknologi-desc" name="produk_teknologi" placeholder="Jelaskan tentang produk teknologi, kegunaan, dan manfaat bisnisnya">
-                            {{ !is_null($inovasi)? $inovasi->tech_product : '' }}
-                        </textarea>
+                        <textarea id="produk-teknologi-desc" name="produk_teknologi" placeholder="Jelaskan tentang produk teknologi, kegunaan, dan manfaat bisnisnya">{{ !is_null($inovasi)? $inovasi->tech_product : '' }}</textarea>
                         <span class="form-hint">Jelaskan secara rinci tentang teknologi yang digunakan dan nilai bisnisnya</span>
                     </div>
 
                     <div class="form-group">
                         <label for="keunggulan">Keunggulan Kompetitif (Unique Selling Point)</label>
-                        <textarea id="keunggulan" name="keunggulan" placeholder="Jelaskan keunggulan produk dibandingkan dengan produk lain di pasar">
-                            {{ !is_null($inovasi)? $inovasi->supremacy : '' }}
-                        </textarea>
+                        <textarea id="keunggulan" name="keunggulan" placeholder="Jelaskan keunggulan produk dibandingkan dengan produk lain di pasar">{{ !is_null($inovasi)? $inovasi->supremacy : '' }}</textarea>
                         <span class="form-hint">Identifikasi minimal 3 keunggulan yang membedakan dengan kompetitor</span>
                     </div>
 
                     <div class="form-group">
                         <label for="paten">Deskripsi Perlindungan Paten</label>
-                        <textarea id="paten" name="paten" placeholder="Jelaskan apa yang dilindungi oleh paten (metode, komposisi, dll)">
-                            {{ !is_null($inovasi)? $inovasi->patent : '' }}
-                        </textarea>
+                        <textarea id="paten" name="paten" placeholder="Jelaskan apa yang dilindungi oleh paten (metode, komposisi, dll)">{{ !is_null($inovasi)? $inovasi->patent : '' }}</textarea>
                         <span class="form-hint">Jelaskan aspek-aspek unik yang dilindungi atau akan dilindungi paten</span>
                     </div>
                 </div>
@@ -102,17 +95,13 @@
                                 <span class="tooltip-text">TRL 1-9, dari konsep dasar hingga sistem teruji di lingkungan sebenarnya</span>
                             </div>
                         </label>
-                        <textarea id="kesiapan-teknologi" name="kesiapan_teknologi" placeholder="Jelaskan kesiapan teknologi (proof of concept, prototipe, validasi, dll)">
-                            {{ !is_null($inovasi)? $inovasi->tech_preparation : '' }}
-                        </textarea>
+                        <textarea id="kesiapan-teknologi" name="kesiapan_teknologi" placeholder="Jelaskan kesiapan teknologi (proof of concept, prototipe, validasi, dll)">{{ !is_null($inovasi)? $inovasi->tech_preparation : '' }}</textarea>
                         <span class="form-hint">Indikasikan tingkat kesiapan teknologi (TRL) dan bukti yang mendukung</span>
                     </div>
 
                     <div class="form-group">
                         <label for="kesiapan-pasar">Kesiapan Pasar (Market Readiness)</label>
-                        <textarea id="kesiapan-pasar-desc" name="kesiapan_pasar" placeholder="Jelaskan kesiapan pasar (target pengguna, mitra komersial, investasi, dll)">
-                            {{ !is_null($inovasi)? $inovasi->tech_market : '' }}
-                        </textarea>
+                        <textarea id="kesiapan-pasar-desc" name="kesiapan_pasar" placeholder="Jelaskan kesiapan pasar (target pengguna, mitra komersial, investasi, dll)">{{ !is_null($inovasi)? $inovasi->market_preparation : '' }}</textarea>
                         <span class="form-hint">Deskripsikan target pasar, feedback pengguna, dan peluang komersialisasi</span>
                     </div>
                 </div>
@@ -158,7 +147,7 @@
                             <label for="email">Alamat Email</label>
                             <div class="input-icon">
                                 <i class="fas fa-envelope"></i>
-                                <input type="email" id="email" name="email" placeholder="Contoh: nama@institusi.ac.id" {{ !is_null($inovasi)? $inovasi->email : '' }}>
+                                <input type="email" id="email" name="email" placeholder="Contoh: nama@institusi.ac.id" value="{{ !is_null($inovasi)? $inovasi->email : '' }}">
                             </div>
                         </div>
                     </div>

@@ -7,7 +7,6 @@ use App\Models\KatsinovBerita;
 use App\Models\KatsinovInformasi;
 use App\Models\KatsinovInformasiCollection;
 use App\Models\KatsinovInovasi;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\KatsinovScore;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -484,12 +483,12 @@ class KatsinovController extends Controller
         // dd($informasiCollection, $groupedData['team']);
         return view('admin.katsinov.forminformasidasar', [
             'id' => $katsinov->id,
-            'informasi' => $informasi,
-            'informasi_team' => $groupedData['team'] ?? [],
-            'informasi_program' => $groupedData['program_implementation'] ?? [],
-            'informasi_partner' => $groupedData['innovation_partner'] ?? [],
-            'informasi_tech' => $groupedData['information_tech'] ?? [],
-            'informasi_market' => $groupedData['information_market'] ?? [],
+            'informasi' => $informasi ?? null,
+            'informasi_team' => $groupedData['team'] ?? null,
+            'informasi_program' => $groupedData['program_implementation'] ?? null,
+            'informasi_partner' => $groupedData['innovation_partner'] ?? null,
+            'informasi_tech' => $groupedData['information_tech'] ?? null,
+            'informasi_market' => $groupedData['information_market'] ?? null,
         ]);
         
     }

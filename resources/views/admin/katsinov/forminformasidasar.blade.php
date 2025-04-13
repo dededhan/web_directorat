@@ -26,7 +26,6 @@
 
         <form action="{{ route('admin.Katsinov.informasi.store', $id) }}" method="POST">
             @csrf
-            @dump($informasi)
             <!-- Section 1: Informasi Inovator -->
             <div class="section">
                 <h2>1. Informasi Inovator</h2>
@@ -40,27 +39,27 @@
                         <tr>
                             <td width="200">Nama Penanggungjawab</td>
                             <td width="20">:</td>
-                            <td><input type="text" class="form-control" name="person_in_charge"></td>
+                            <td><input type="text" class="form-control" name="person_in_charge" value="{{ !is_null($informasi)? $informasi->pic : '' }}"></td>
                         </tr>
                         <tr>
                             <td>Institusi</td>
                             <td>:</td>
-                            <td><input type="text" class="form-control" name="pic_institution"></td>
+                            <td><input type="text" class="form-control" name="pic_institution" value="{{ !is_null($informasi)? $informasi->institution : '' }}"></td>
                         </tr>
                         <tr>
                             <td>Alamat Kontak</td>
                             <td>:</td>
-                            <td><textarea class="form-control" rows="3" name="pic_address"></textarea></td>
+                            <td><textarea class="form-control" rows="3" name="pic_address">{{ !is_null($informasi)? $informasi->address : '' }}</textarea></td>
                         </tr>
                         <tr>
                             <td>Phone</td>
                             <td>:</td>
-                            <td><input type="tel" class="form-control" name="pic_phone"></td>
+                            <td><input type="tel" class="form-control" name="pic_phone" value="{{ !is_null($informasi)? $informasi->phone : '' }}"></td>
                         </tr>
                         <tr>
                             <td>Fax.</td>
                             <td>:</td>
-                            <td><input type="tel" class="form-control" name="pic_fax"></td>
+                            <td><input type="tel" class="form-control" name="pic_fax" value="{{ !is_null($informasi)? $informasi->fax : '' }}"></td>
                         </tr>
                     </table>
                 </div>
@@ -129,13 +128,13 @@
                 <!-- Title -->
                 <div class="subsection">
                     <h3 class="underline">a&#41; Judul Inovasi:</h3>
-                    <input type="text" class="form-control" name="innovation_title">
+                    <input type="text" class="form-control" name="innovation_title" value="{{ !is_null($informasi)? $informasi->innovation_title : '' }}">
                 </div>
 
                 <!-- Program Name -->
                 <div class="subsection">
                     <h3 class="underline">b&#41; Nama Program:</h3>
-                    <input type="text" class="form-control" name="innovation_name">
+                    <input type="text" class="form-control" name="innovation_name" value="{{ !is_null($informasi)? $informasi->innovation_name : '' }}">
                 </div>
 
                 <!-- Innovation Type -->
@@ -144,17 +143,17 @@
                     <p class="italic">(pilih salah satu)</p>
                     <div class="radio-group">
                         <label>
-                            <input type="radio" name="innovation_type" value="produk"> Produk
+                            <input type="radio" name="innovation_type" value="produk" @checked(!is_null($informasi) && $informasi->innovation_type == 'produk' )> Produk
                         </label>
                         <label>
-                            <input type="radio" name="innovation_type" value="pasar"> Pasar
+                            <input type="radio" name="innovation_type" value="pasar" @checked(!is_null($informasi) && $informasi->innovation_type == 'pasar' )> Pasar
                         </label>
                         <label>
-                            <input type="radio" name="innovation_type" value="proses"> Proses
+                            <input type="radio" name="innovation_type" value="proses" @checked(!is_null($informasi) && $informasi->innovation_type == 'proses' )> Proses
                         </label>
                         <label>
-                            {{-- this needs js to prevent unclick else button filling the input --}}
-                            <input type="radio" name="innovation_type" value="lainnya"> Lainnya:
+                            {{-- this needs js to prevent unclicked else button filling the input --}}
+                            <input type="radio" name="innovation_type" value="lainnya" @checked(!is_null($informasi) && $informasi->innovation_type == 'lainnya' )> Lainnya:
                             {{-- temporarily disabled because it may conflict with the other radio input --}}
                             {{-- <input type="text" style="width: 200px;" name="innovation_type_text"> --}}
                         </label>
@@ -167,30 +166,30 @@
                     <p class="italic">(pilih salah satu)</p>
                     <div class="radio-group">
                         <label>
-                            <input type="radio" name="innovation_field" value="hankam"> Teknologi Hankam
+                            <input type="radio" name="innovation_field" value="hankam" @checked(!is_null($informasi) && $informasi->innovation_field == 'hankam' )> Teknologi Hankam
                         </label>
                         <label>
-                            <input type="radio" name="innovation_field" value="ict"> ICT
+                            <input type="radio" name="innovation_field" value="ict" @checked(!is_null($informasi) && $informasi->innovation_field == 'ict' )> ICT
                         </label>
                         <label>
-                            <input type="radio" name="innovation_field" value="transportasi"> Teknologi Transportasi
+                            <input type="radio" name="innovation_field" value="transportasi" @checked(!is_null($informasi) && $informasi->innovation_field == 'transportasi' )> Teknologi Transportasi
                         </label>
                         <label>
-                            <input type="radio" name="innovation_field" value="pertanian"> Teknologi Pertanian
+                            <input type="radio" name="innovation_field" value="pertanian" @checked(!is_null($informasi) && $informasi->innovation_field == 'pertanian' )> Teknologi Pertanian
                         </label>
                     </div>
                     <div class="radio-group">
                         <label>
-                            <input type="radio" name="innovation_field" value="lingkungan"> Teknologi Lingkungan
+                            <input type="radio" name="innovation_field" value="lingkungan" @checked(!is_null($informasi) && $informasi->innovation_field == 'lingkungan' )> Teknologi Lingkungan
                         </label>
                         <label>
-                            <input type="radio" name="innovation_field" value="manufaktur"> Teknologi Manufaktur
+                            <input type="radio" name="innovation_field" value="manufaktur" @checked(!is_null($informasi) && $informasi->innovation_field == 'manufaktur' )> Teknologi Manufaktur
                         </label>
                         <label>
-                            <input type="radio" name="innovation_field" value="material"> Teknologi Material
+                            <input type="radio" name="innovation_field" value="material" @checked(!is_null($informasi) && $informasi->innovation_field == 'material' )> Teknologi Material
                         </label>
                         <label>
-                            <input type="radio" name="innovation_field" value="lainnya"> Lainnya:
+                            <input type="radio" name="innovation_field" value="lainnya" @checked(!is_null($informasi) && $informasi->innovation_field == 'lainnya' )> Lainnya:
                             {{-- <input type="text" style="width: 200px;" name="innovation_field_text"> --}}
                         </label>
                     </div>
@@ -199,7 +198,7 @@
                 <!-- Application and Benefits -->
                 <div class="subsection">
                     <h3>e&#41; Aplikasi dan Manfaat Inovasi:</h3>
-                    <textarea class="form-control" rows="4" name="innovation_application"></textarea>
+                    <textarea class="form-control" rows="4" name="innovation_application">{{ !is_null($informasi)? $informasi->innovation_application : '' }}</textarea>
                 </div>
 
                 <!-- Program Implementation -->
@@ -208,14 +207,14 @@
                     <div class="form-group">
                         <div class="input-with-unit">
                             <label>Lama program/ kegiatan yang direncanakan:</label>
-                            <input type="text" style="width: 100px;" name="innovation_duration">
+                            <input type="text" style="width: 100px;" name="innovation_duration" value="{{ !is_null($informasi)? $informasi->innovation_duration : ''}}">
                             <span>tahun</span>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="input-with-unit">
                             <label>Program/ kegiatan yang berjalan tahun ke-:</label>
-                            <input type="text" style="width: 100px;" name="innovation_year">
+                            <input type="text" style="width: 100px;" name="innovation_year" value="{{ !is_null($informasi)? $informasi->innovation_year : ''}}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -326,7 +325,7 @@
                 <!-- Innovation Summary -->
                 <div class="subsection">
                     <h3>h&#41; Ringkasan Inovasi Yang Dilaksanakan Dengan Pencapaian Yang Diharapkan:</h3>
-                    <textarea class="form-control" rows="4" name="innovation_summary"></textarea>
+                    <textarea class="form-control" rows="4" name="innovation_summary">{{ !is_null($informasi)? $informasi->innovation_summary : '' }}</textarea>
                 </div>
 
                 <!-- Innovation Novelty -->
@@ -334,11 +333,11 @@
                     <h3>i&#41; Kebaruan dan Keunggulan Inovasi:</h3>
                     <div class="form-group">
                         <label>Kebaruan yang ditawarkan dari inovasi yang dilakukan:</label>
-                        <textarea class="form-control" rows="3" name="innovation_novelty"></textarea>
+                        <textarea class="form-control" rows="3" name="innovation_novelty">{{ !is_null($informasi)? $informasi->innovation_novelty : '' }}</textarea>
                     </div>
                     <div class="form-group">
                         <label>Keunggulan yang membedakan dengan produk/jasa sejenis yang ada di pasar saat ini:</label>
-                        <textarea class="form-control" rows="3" name="innovation_supremacy"></textarea>
+                        <textarea class="form-control" rows="3" name="innovation_supremacy">{{ !is_null($informasi)? $informasi->innovation_supremacy : '' }}</textarea>
                     </div>
                 </div>
             </div>
@@ -371,7 +370,7 @@
                                         <option value="sudah" @if (isset($informasi_tech[0]) && $informasi_tech[0]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_tech[0][explanation]" value="{{ $informasi_tech[0]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_tech[0][explanation]" value="{{ isset($informasi_tech[0])? $informasi_tech[0]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>2</td>
@@ -379,11 +378,11 @@
                                 <td>
                                     <select class="form-control" name="information_tech[1][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if ($informasi_tech[1]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if ($informasi_tech[1]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if (isset($informasi_tech[1]) && $informasi_tech[1]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if (isset($informasi_tech[1]) && $informasi_tech[1]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_tech[1][explanation]" value="{{ $informasi_tech[1]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_tech[1][explanation]" value="{{ isset($informasi_tech[1])? $informasi_tech[1]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>3</td>
@@ -391,11 +390,11 @@
                                 <td>
                                     <select class="form-control" name="information_tech[2][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if ($informasi_tech[2]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if ($informasi_tech[2]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if (isset($informasi_tech[2]) && $informasi_tech[2]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if (isset($informasi_tech[2]) && $informasi_tech[2]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_tech[2][explanation]" value="{{ $informasi_tech[2]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_tech[2][explanation]" value="{{ isset($informasi_tech[2])? $informasi_tech[2]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>4</td>
@@ -403,11 +402,11 @@
                                 <td>
                                     <select class="form-control" name="information_tech[3][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if ($informasi_tech[3]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if ($informasi_tech[3]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if (isset($informasi_tech[3]) && $informasi_tech[3]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if (isset($informasi_tech[3]) && $informasi_tech[3]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_tech[3][explanation]" value="{{ $informasi_tech[3]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_tech[3][explanation]" value="{{ isset($informasi_tech[3])? $informasi_tech[3]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>5</td>
@@ -415,11 +414,11 @@
                                 <td>
                                     <select class="form-control" name="information_tech[4][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if ($informasi_tech[4]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if ($informasi_tech[4]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if (isset($informasi_tech[4]) && $informasi_tech[4]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if (isset($informasi_tech[4]) && $informasi_tech[4]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_tech[4][explanation]" value="{{ $informasi_tech[4]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_tech[4][explanation]" value="{{ isset($informasi_tech[4])? $informasi_tech[4]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>6</td>
@@ -427,11 +426,11 @@
                                 <td>
                                     <select class="form-control" name="information_tech[5][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if ($informasi_tech[5]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if ($informasi_tech[5]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if (isset($informasi_tech[5]) && $informasi_tech[5]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if (isset($informasi_tech[5]) && $informasi_tech[5]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_tech[5][explanation]" value="{{ $informasi_tech[5]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_tech[5][explanation]" value="{{ isset($informasi_tech[5])? $informasi_tech[5]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>7</td>
@@ -439,11 +438,11 @@
                                 <td>
                                     <select class="form-control" name="information_tech[6][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if ($informasi_tech[6]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if ($informasi_tech[6]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if (isset($informasi_tech[6]) && $informasi_tech[6]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if (isset($informasi_tech[6]) && $informasi_tech[6]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_tech[6][explanation]" value="{{ $informasi_tech[6]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_tech[6][explanation]" value="{{ isset($informasi_tech[6])? $informasi_tech[6]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>8</td>
@@ -451,11 +450,11 @@
                                 <td>
                                     <select class="form-control" name="information_tech[7][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if ($informasi_tech[7]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if ($informasi_tech[7]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if (isset($informasi_tech[7]) && $informasi_tech[7]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if (isset($informasi_tech[7]) && $informasi_tech[7]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_tech[7][explanation]" value="{{ $informasi_tech[7]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_tech[7][explanation]" value="{{ isset($informasi_tech[7])? $informasi_tech[7]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>9</td>
@@ -463,11 +462,11 @@
                                 <td>
                                     <select class="form-control" name="information_tech[8][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if ($informasi_tech[8]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if ($informasi_tech[8]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if (isset($informasi_tech[8]) && $informasi_tech[8]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if (isset($informasi_tech[8]) && $informasi_tech[8]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_tech[8][explanation]" value="{{ $informasi_tech[8]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_tech[8][explanation]" value="{{ isset($informasi_tech[8])? $informasi_tech[8]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>10</td>
@@ -475,11 +474,11 @@
                                 <td>
                                     <select class="form-control" name="information_tech[9][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if ($informasi_tech[9]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if ($informasi_tech[9]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if (isset($informasi_tech[9]) && $informasi_tech[9]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if (isset($informasi_tech[9]) && $informasi_tech[9]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_tech[9][explanation]" value="{{ $informasi_tech[9]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_tech[9][explanation]" value="{{ isset($informasi_tech[9])? $informasi_tech[9]['explanation'] : '' }}"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -504,11 +503,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[0][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[0]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[0]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[0]) && $informasi_market[0]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[0]) && $informasi_market[0]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[0][explanation]" value="{{ $informasi_market[0]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[0][explanation]" value="{{ isset($informasi_market[0])? $informasi_market[0]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>2</td>
@@ -516,11 +515,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[1][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[1]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[1]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[1]) && $informasi_market[1]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[1]) && $informasi_market[1]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[1][explanation]" value="{{ $informasi_market[1]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[1][explanation]" value="{{ isset($informasi_market[1])? $informasi_market[1]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>3</td>
@@ -528,11 +527,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[2][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[2]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[2]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[2]) && $informasi_market[2]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[2]) && $informasi_market[2]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[2][explanation]" value="{{ $informasi_market[2]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[2][explanation]" value="{{ isset($informasi_market[2])? $informasi_market[2]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>4</td>
@@ -540,11 +539,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[3][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[3]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[3]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[3]) && $informasi_market[3]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[3]) && $informasi_market[3]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[3][explanation]" value="{{ $informasi_market[3]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[3][explanation]" value="{{ isset($informasi_market[3])? $informasi_market[3]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>5</td>
@@ -552,11 +551,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[4][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[4]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[4]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[4]) && $informasi_market[4]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[4]) && $informasi_market[4]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[4][explanation]" value="{{ $informasi_market[4]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[4][explanation]" value="{{ isset($informasi_market[4])? $informasi_market[4]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>6</td>
@@ -564,11 +563,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[5][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[5]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[5]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[5]) && $informasi_market[5]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[5]) && $informasi_market[5]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[5][explanation]" value="{{ $informasi_market[5]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[5][explanation]" value="{{ isset($informasi_market[5])? $informasi_market[5]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>7</td>
@@ -576,11 +575,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[6][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[6]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[6]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[6]) && $informasi_market[6]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[6]) && $informasi_market[6]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[6][explanation]" value="{{ $informasi_market[6]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[6][explanation]" value="{{ isset($informasi_market[6])? $informasi_market[6]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>8</td>
@@ -588,11 +587,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[7][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[7]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[7]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[7]) && $informasi_market[7]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[7]) && $informasi_market[7]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[7][explanation]" value="{{ $informasi_market[7]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[7][explanation]" value="{{ isset($informasi_market[7])? $informasi_market[7]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>9</td>
@@ -600,11 +599,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[8][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[8]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[8]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[8]) && $informasi_market[8]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[8]) && $informasi_market[8]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[8][explanation]" value="{{ $informasi_market[8]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[8][explanation]" value="{{ isset($informasi_market[8])? $informasi_market[8]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>10</td>
@@ -612,11 +611,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[9][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[9]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[9]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[9]) && $informasi_market[9]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[9]) && $informasi_market[9]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[9][explanation]" value="{{ $informasi_market[9]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[9][explanation]" value="{{  isset($informasi_market[9])? $informasi_market[9]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>11</td>
@@ -624,11 +623,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[10][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[10]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[10]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[10]) && $informasi_market[10]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[10]) && $informasi_market[10]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[10][explanation]" value="{{ $informasi_market[10]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[10][explanation]" value="{{  isset($informasi_market[10])? $informasi_market[10]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>12</td>
@@ -636,11 +635,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[11][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[11]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[11]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[11]) &&$informasi_market[11]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[11]) &&$informasi_market[11]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[11][explanation]" value="{{ $informasi_market[11]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[11][explanation]" value="{{  isset($informasi_market[11])? $informasi_market[11]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>13</td>
@@ -648,11 +647,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[12][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[12]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[12]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[12]) &&$informasi_market[12]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[12]) &&$informasi_market[12]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[12][explanation]" value="{{ $informasi_market[12]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[12][explanation]" value="{{  isset($informasi_market[12])? $informasi_market[12]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>14</td>
@@ -660,11 +659,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[13][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[13]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[13]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[13]) &&$informasi_market[13]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[13]) &&$informasi_market[13]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[13][explanation]" value="{{ $informasi_market[13]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[13][explanation]" value="{{  isset($informasi_market[13])? $informasi_market[13]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>15</td>
@@ -672,11 +671,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[14][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[14]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[14]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[14]) &&$informasi_market[14]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[14]) &&$informasi_market[14]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[14][explanation]" value="{{ $informasi_market[14]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[14][explanation]" value="{{  isset($informasi_market[14])? $informasi_market[14]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>16</td>
@@ -684,11 +683,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[15][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[15]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[15]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[15]) &&$informasi_market[15]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[15]) &&$informasi_market[15]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[15][explanation]" value="{{ $informasi_market[15]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[15][explanation]" value="{{  isset($informasi_market[15])? $informasi_market[15]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>17</td>
@@ -696,11 +695,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[16][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[16]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[16]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[16]) &&$informasi_market[16]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[16]) &&$informasi_market[16]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[16][explanation]" value="{{ $informasi_market[16]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[16][explanation]" value="{{  isset($informasi_market[16])? $informasi_market[16]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>18</td>
@@ -711,11 +710,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[17][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[17]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[17]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[17]) &&$informasi_market[17]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[17]) &&$informasi_market[17]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[17][explanation]" value="{{ $informasi_market[17]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[17][explanation]" value="{{  isset($informasi_market[17])? $informasi_market[17]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>19</td>
@@ -723,11 +722,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[18][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[18]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[18]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[18]) &&$informasi_market[18]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[18]) &&$informasi_market[18]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[18][explanation]" value="{{ $informasi_market[18]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[18][explanation]" value="{{  isset($informasi_market[18])? $informasi_market[18]['explanation'] : '' }}"></td>
                             </tr>
                             <tr>
                                 <td>20</td>
@@ -735,11 +734,11 @@
                                 <td>
                                     <select class="form-control" name="information_market[19][status]">
                                         <option value="">Pilih status</option>
-                                        <option value="belum" @if($informasi_market[19]['status'] == 'belum') selected @endif>Belum</option>
-                                        <option value="sudah" @if($informasi_market[19]['status'] == 'sudah') selected @endif>Sudah</option>
+                                        <option value="belum" @if(isset($informasi_market[19]) &&$informasi_market[19]['status'] == 'belum') selected @endif>Belum</option>
+                                        <option value="sudah" @if(isset($informasi_market[19]) &&$informasi_market[19]['status'] == 'sudah') selected @endif>Sudah</option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="information_market[19][explanation]" value="{{ $informasi_market[19]['explanation'] }}"></td>
+                                <td><input type="text" class="form-control" name="information_market[19][explanation]" value="{{ isset($informasi_market[19])? $informasi_market[19]['explanation'] : '' }}"></td>
                             </tr>
                         </tbody>
                     </table>
