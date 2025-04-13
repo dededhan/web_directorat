@@ -36,7 +36,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
@@ -44,7 +44,6 @@ body {
     color: var(--text-color);
     line-height: 1.6;
     font-size: 16px;
-    font-family: 'Arial', sans-serif;
 }
 
 .container {
@@ -55,7 +54,7 @@ body {
 
 /* ===== Hero Section with Search ===== */
 .hero-section {
-    background: #AFE1AE;
+    background: #D1E7DD;
     padding: 3rem 0;
     margin-bottom: 2rem;
     position: relative;
@@ -87,14 +86,12 @@ body {
     font-weight: 700;
     margin-bottom: 1rem;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    font-family: 'Arial', sans-serif;
 }
 
 .hero-subtitle {
     font-size: 1.2rem;
     margin-bottom: 2rem;
     opacity: 0.9;
-    font-family: 'Arial', sans-serif;
 }
 
 .search-container {
@@ -116,7 +113,6 @@ body {
     font-size: 1rem;
     background: rgba(255, 255, 255, 0.95);
     transition: all var(--transition-speed);
-    font-family: 'Arial', sans-serif;
 }
 
 .search-input:focus {
@@ -135,7 +131,6 @@ body {
     align-items: center;
     justify-content: center;
     font-weight: 600;
-    font-family: 'Arial', sans-serif;
 }
 
 .search-button:hover {
@@ -145,7 +140,6 @@ body {
 
 .search-text {
     margin-left: 8px;
-    font-family: 'Arial', sans-serif;
 }
 
 /* ===== Category Tabs ===== */
@@ -173,7 +167,6 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     display: flex;
     align-items: center;
-    font-family: 'Arial', sans-serif;
 }
 
 .category-tab:hover {
@@ -223,7 +216,6 @@ body {
     position: relative;
     font-weight: 700;
     letter-spacing: 1px;
-    font-family: 'Arial', sans-serif;
 }
 
 /* ===== Enhanced News Cards ===== */
@@ -277,7 +269,6 @@ body {
     margin: 0 0 12px;
     color: var(--text-color);
     line-height: 1.4;
-    font-family: 'Arial', sans-serif;
 }
 
 .card-excerpt {
@@ -286,7 +277,6 @@ body {
     margin-bottom: 20px;
     flex-grow: 1;
     line-height: 1.6;
-    font-family: 'Arial', sans-serif;
 }
 
 /* ===== Enhanced Category Indicators ===== */
@@ -299,7 +289,6 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    font-family: 'Arial', sans-serif;
 }
 
 .card-category.inovasi {
@@ -321,14 +310,12 @@ body {
     margin-top: auto;
     padding-top: 15px;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
-    font-family: 'Arial', sans-serif;
 }
 
 .card-date {
     color: var(--text-secondary);
     display: flex;
     align-items: center;
-    font-family: 'Arial', sans-serif;
 }
 
 .card-date::before {
@@ -354,7 +341,6 @@ body {
     cursor: pointer;
     border: none;
     letter-spacing: 0.5px;
-    font-family: 'Arial', sans-serif;
 }
 
 .read-more:hover {
@@ -374,7 +360,6 @@ body {
     font-size: 1.1rem;
     color: var(--text-secondary);
     border: 1px dashed rgba(0, 0, 0, 0.1);
-    font-family: 'Arial', sans-serif;
 }
 
 .no-results i {
@@ -389,7 +374,6 @@ body {
     margin: 40px 0;
     display: flex;
     justify-content: center;
-    font-family: 'Arial', sans-serif;
 }
 
 /* ===== News Popup Styles ===== */
@@ -460,7 +444,6 @@ body {
     transition: background-color var(--transition-speed);
     z-index: 10;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    font-family: 'Arial', sans-serif;
 }
 
 .popup-close:hover {
@@ -472,7 +455,6 @@ body {
     padding: 30px;
     overflow-y: auto;
     max-height: calc(90vh - 300px);
-    font-family: 'Arial', sans-serif;
 }
 
 .popup-category {
@@ -484,7 +466,6 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    font-family: 'Arial', sans-serif;
 }
 
 .popup-category.inovasi {
@@ -503,7 +484,6 @@ body {
     color: var(--text-color);
     line-height: 1.3;
     font-weight: 700;
-    font-family: 'Arial', sans-serif;
 }
 
 .popup-meta {
@@ -514,14 +494,12 @@ body {
     font-size: 0.95rem;
     padding-bottom: 15px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    font-family: 'Arial', sans-serif;
 }
 
 .popup-date {
     margin-right: 15px;
     display: flex;
     align-items: center;
-    font-family: 'Arial', sans-serif;
 }
 
 .popup-date::before {
@@ -535,12 +513,10 @@ body {
     line-height: 1.8;
     color: var(--text-color);
     font-size: 1.05rem;
-    font-family: 'Arial', sans-serif;
 }
 
 .popup-body p {
     margin-bottom: 20px;
-    font-family: 'Arial', sans-serif;
 }
 
 .popup-body img {
@@ -558,7 +534,6 @@ body {
     justify-content: center;
     align-items: center;
     height: 300px;
-    font-family: 'Arial', sans-serif;
 }
 
 .popup-spinner {
@@ -584,13 +559,11 @@ body {
     background-color: #f8d7da;
     border-radius: 8px;
     border: 1px solid #f5c6cb;
-    font-family: 'Arial', sans-serif;
 }
 
 .error-message h3 {
     margin-bottom: 10px;
     font-size: 1.5rem;
-    font-family: 'Arial', sans-serif;
 }
 
 /* Loading Indicator */
@@ -707,19 +680,11 @@ body {
         </div>
     </section>
     
-<<<<<<< HEAD
     <!-- FIXED Category Tabs Section -->
     <section class="categories-section">
         <div class="container categories-container">
             <a href="{{ route('berita.all') }}" class="category-tab {{ !request()->segment(3) ? 'active' : '' }}">
                 <i class="fa-solid fa-layer-group tab-icon"></i>
-=======
-    <!-- Category tabs -->
-    <div class="category-tabs">
-        <div class="container" style="display: flex; overflow-x: auto;">
-            <a href="{{ route('Berita.beritahome') }}" class="category-tab {{ !request()->segment(3) ? 'active' : '' }}">
-                <i class="fas fa-layer-group tab-icon"></i>
->>>>>>> 5c6ea149865f5159c5b1b0188247f28fad948d14
                 <span>Semua</span>
             </a>
             <a href="{{ route('berita.kategori', 'inovasi') }}" class="category-tab {{ request()->segment(3) == 'inovasi' ? 'active' : '' }}">
@@ -749,8 +714,7 @@ body {
                             <div class="card-meta">
                                 <span class="card-date">{{ date('d F Y', strtotime($berita->tanggal)) }}</span>
                             </div>
-                            <a href="{{ route('Berita.show', Str::slug($berita->judul)) }}" class="read-more">Baca Selengkapnya</a>
-
+                            <button class="read-more" data-id="{{ $berita->id }}">Baca Selengkapnya</button>
                         </div>
                     </div>
                 @empty
@@ -768,7 +732,7 @@ body {
         </section>
     </main>
 
-    {{-- <!-- News Detail Popup -->
+    <!-- News Detail Popup -->
     <div class="news-popup-overlay" id="newsPopup">
         <div class="news-popup">
             <div class="popup-loading" id="popupLoading">
@@ -783,7 +747,7 @@ body {
                 <!-- Content will be loaded dynamically -->
             </div>
         </div>
-    </div> --}}
+    </div>
 
     @include('Berita.beritafooter')
 
