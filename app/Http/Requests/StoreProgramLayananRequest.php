@@ -16,7 +16,7 @@ class StoreProgramLayananRequest extends FormRequest
         return [
             'icon' => 'required|string',
             'judul' => 'required|string|max:50',
-            'deskripsi' => 'required|string|max:200',
+            'deskripsi' => 'required|string|max:500',
         ];
     }
 }

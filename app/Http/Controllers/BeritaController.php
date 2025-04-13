@@ -156,13 +156,21 @@ class BeritaController extends Controller
     public function show(string $id)
     {
         $berita = Berita::findOrFail($id);
-
-        // Get active announcements
-        $announcements = Pengumuman::where('status', true)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('Berita.show', compact('berita', 'announcements'));
+    
+        // Get related news (optional - for "Berita Terkait" section)
+        $relatedNews = Berita::where('id', '!=', $id)
+                            ->where('kategori', $berita->kategori)
+                            ->latest()
+                            ->take(3)
+                            ->get();
+        
+        // Get latest news (for sidebar)
+        $latestNews = Berita::latest()->take(4)->get();
+        
+        // Get popular news (for sidebar)
+        $popularNews = Berita::latest()->take(5)->get(); // In a real app, you might track views and sort by popularity
+        
+        return view('Berita.sampleberita', compact('berita', 'relatedNews', 'latestNews', 'popularNews'));
     }
     /**
      * Remove the specified resource from storage.

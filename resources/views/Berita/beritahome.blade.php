@@ -762,7 +762,7 @@ header {
                             <div class="card-meta">
                                 <span class="card-date">{{ date('d F Y', strtotime($berita->tanggal)) }}</span>
                             </div>
-                            <button class="read-more" data-id="{{ $berita->id }}">Baca Selengkapnya</button>
+                            <a href="{{ route('berita.show', $berita->id) }}" class="read-more">Baca Selengkapnya</a>
                         </div>
                     </div>
                 @empty
@@ -780,7 +780,7 @@ header {
         </section>
     </main>
 
-    <!-- News Detail Popup -->
+    {{-- <!-- News Detail Popup -->
     <div class="news-popup-overlay" id="newsPopup">
         <div class="news-popup">
             <div class="popup-loading" id="popupLoading">
@@ -795,7 +795,7 @@ header {
                 <!-- Content will be loaded dynamically -->
             </div>
         </div>
-    </div>
+    </div> --}}
 
     @include('Berita.beritafooter')
 
