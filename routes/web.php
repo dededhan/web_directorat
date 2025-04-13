@@ -18,7 +18,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BeritaController;
 
 Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
-Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('Berita.show');
+
 Route::get('/api/announcements', [App\Http\Controllers\PengumumanController::class, 'getActiveAnnouncements'])
     ->name('api.announcements');
 Route::get('/program-layanan', [App\Http\Controllers\ProgramLayananController::class, 'showFrontend'])->name('program-layanan');
@@ -82,6 +82,12 @@ Route::get('/Berita/all', [BeritaController::class, 'allNews'])->name('berita.al
 Route::get('/Berita/{id}', [BeritaController::class, 'show'])->name('Berita.show');
 Route::get('/Berita/kategori/{kategori}', [BeritaController::class, 'kategori'])->name('berita.kategori');
 Route::get('/api/Berita/{id}', [BeritaController::class, 'getBeritaDetail']);
+
+//jasinkes
+Route::get('/berita/{id}', function ($id) {
+    return redirect()->route('Berita.show', ['id' => $id]);
+});
+
 
 Route::get('/tupoksi', function () {
     return view('tupoksi.tupoksi');

@@ -416,7 +416,7 @@
                             <img src="{{ asset('storage/'.$related->gambar) }}" alt="{{ $related->judul }}" class="related-post-image" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg width=\'300\' height=\'150\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'14\' text-anchor=\'middle\' alignment-baseline=\'middle\' font-family=\'Arial, sans-serif\' fill=\'%23888888\'%3EBerita Terkait%3C/text%3E%3C/svg%3E'">
                             <div class="related-post-content">
                                 <div class="related-post-title">
-                                    <a href="{{ route('berita.show', Str::slug($related->judul)) }}">{{ $related->judul }}</a>
+                                    <a href="{{ route('Berita.show', Str::slug($related->judul)) }}">{{ $related->judul }}</a>
                                 </div>
                                 <div class="related-post-date">{{ date('F d, Y', strtotime($related->tanggal)) }}</div>
                             </div>
@@ -442,7 +442,7 @@
             <div class="section-content">
                 @foreach($latestNews as $latest)
                 <div class="news-item">
-                    <h3><a href="{{ route('berita.show', $latest->id) }}">{{ $latest->judul }}</a></h3>
+                    <h3><a href="{{ route('Berita.show', $latest->id) }}">{{ $latest->judul }}</a></h3>
                     <div class="date">{{ date('F d, Y', strtotime($latest->tanggal)) }} • {{ ucfirst($latest->kategori) }}</div>
                 </div>
                 @endforeach
@@ -455,7 +455,7 @@
                 @foreach($popularNews as $popular)
                 <div class="popular-item">
                     <span class="post-date">🗓 {{ date('M d, Y', strtotime($popular->tanggal)) }}</span>
-                    <a href="{{ route('berita.show', $popular->id) }}" class="post-title">{{ $popular->judul }}</a>
+                    <a href="{{ route('Berita.show', $popular->id) }}" class="post-title">{{ $popular->judul }}</a>
                 </div>
                 @endforeach
             </div>
