@@ -1,27 +1,10 @@
 <!-- Navbar.blade.php - Sticky navbar for Pemeringkatan Klaster pages -->
 
-<!-- Social Media Bar (Desktop only) -->
-<div class="social-media-bar py-2 hidden md:flex">
-    <div class="container mx-auto px-6 flex justify-start space-x-4">
-        <a href="#" class="hover:text-yellow-500">
-            <i class="fab fa-facebook-f"></i>
-        </a>
-        <a href="#" class="hover:text-yellow-500">
-            <i class="fab fa-twitter"></i>
-        </a>
-        <a href="#" class="hover:text-yellow-500">
-            <i class="fab fa-instagram"></i>
-        </a>
-        <a href="#" class="hover:text-yellow-500">
-            <i class="fab fa-youtube"></i>
-        </a>
-    </div>
-</div>
 
 @include('loginpopup')
 
 <!-- Desktop Navbar - Sticky -->
-<nav class="navbar hidden md:block sticky top-0 z-50 bg-[#186862] shadow-md">
+<nav class="navbar hidden md:block sticky top-0 z-50 bg-[#176369] shadow-md">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
         <div class="flex items-center space-x-4">
             <img alt="University logo" class="h-12 w-12"
