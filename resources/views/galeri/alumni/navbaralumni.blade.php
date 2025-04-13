@@ -8,8 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #186862;
-            --secondary-color: #125a54;
+            --primary-color: #006B68; /* Exact teal green from image */
+            --secondary-color: #005a57;
             --text-color: #ffffff;
             --hover-color: #f59e0b;
         }
@@ -27,8 +27,6 @@
             padding-top: 80px !important; /* Ensure space for fixed navbar */
         }
 
-       
-
         /* Desktop Navbar */
         .navbar {
             position: fixed !important;
@@ -39,6 +37,8 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             z-index: 1000 !important;
             transition: box-shadow 0.3s ease;
+            display: flex;
+            justify-content: center; /* Center the container in the navbar */
         }
 
         .navbar.scrolled {
@@ -47,43 +47,54 @@
 
         .navbar .container {
             display: flex;
-            justify-content: space-between;
+            justify-content: center; /* Center content instead of space-between */
             align-items: center;
-            max-width: 1600px; /* Increased from 1200px to 1600px */
-            width: 95%; /* Makes container take 95% of available width */
-            margin: 0 auto;
-            padding: 1rem;
+            max-width: 1600px;
+            width: 95%;
+            margin: 0 auto; /* Center the container horizontally */
+            padding: 0.5rem 1rem; /* Reduced vertical padding */
+            gap: 2rem; /* Add space between logo and menu */
         }
 
         .navbar-logo {
             display: flex;
             align-items: center;
+            flex: 1; /* Take up available space */
+            justify-content: center; /* Center the logo and text */
         }
 
         .navbar-logo img {
-            height: 50px;
+            height: 40px; /* Reduced from 50px */
             margin-right: 1rem;
         }
 
         .navbar-logo h1 {
             color: var(--text-color);
-            font-size: 1rem; /* Slightly reduced font size */
+            font-size: 1rem; /* Increased from 0.85rem */
             font-weight: 600;
             line-height: 1.2;
-            max-width: 300px; /* Increased from 250px to 300px */
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap; /* Keep text on one line */
+            text-align: center; /* Center the text */
         }
 
         .navbar-menu {
             display: flex;
             list-style: none;
-            gap: -1000rem; /* CHANGED: Reduced from 2rem to 1.2rem for closer menu items */
+            gap: 1.5rem; /* Adjusted gap between menu items */
+            justify-content: flex-end;
+            flex: 1; /* Take up available space */
         }
 
         .navbar-menu a {
             color: var(--text-color);
             text-decoration: none;
             transition: color 0.3s ease;
-            white-space: nowrap; /* Prevents menu items from wrapping */
+            white-space: nowrap;
+            font-size: 1rem; /* Increased from 0.85rem */
+            font-weight: 400;
+            padding: 0 0.5rem;
         }
 
         .navbar-menu a:hover {
@@ -111,7 +122,7 @@
             color: black;
             min-width: 200px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border-radius: 0.5rem;
+            border-radius: 0.25rem; /* Reduced from 0.5rem */
             padding: 0.5rem 0;
             z-index: 50;
         }
@@ -146,21 +157,20 @@
             }
 
             .mobile-navbar {
-                display: block;
+                display: flex;
                 background-color: var(--primary-color);
                 position: fixed !important;
                 top: 0 !important;
                 left: 0 !important;
                 width: 100% !important;
                 z-index: 1000 !important;
-                padding: 1rem;
-                display: flex;
+                padding: 0.75rem 1rem;
                 justify-content: space-between;
                 align-items: center;
             }
 
             .mobile-navbar img {
-                height: 40px;
+                height: 35px; /* Reduced from 40px */
             }
 
             .mobile-menu-toggle {
@@ -239,18 +249,13 @@
     </style>
 </head>
 <body>
-    <!-- Social Media Bar (Desktop only) -->
-    <div class="social-media-bar hidden md:flex">
-        
-    </div>
-
     <!-- Desktop Navbar -->
     <nav class="navbar hidden md:block">
         <div class="container">
             <div class="navbar-logo">
                 <img alt="University logo" 
                      src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
-                <h1>Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</h1>
+                <h1>DIREKTORAT INOVASI, SISTEM INFORMASI, DAN PEMERINGKATAN</h1>
             </div>
             <ul class="navbar-menu">
                 <li><a href="{{ route('home') }}">Beranda</a></li>
@@ -293,7 +298,7 @@
         <div class="flex items-center">
             <img alt="University logo" 
                  src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
-            <h1 class="text-white ml-2">UNJ</h1>
+            <h1 class="text-white ml-2 text-xs uppercase font-semibold">DIREKTORAT INOVASI UNJ</h1>
         </div>
         <button id="mobile-menu-toggle" class="mobile-menu-toggle">
             <i class="fas fa-bars"></i>
@@ -307,7 +312,7 @@
                 <img alt="University logo" 
                      src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" 
                      class="h-10 mr-2"/>
-                <h1 class="text-white">UNJ</h1>
+                <h1 class="text-white uppercase text-xs">DIREKTORAT INOVASI UNJ</h1>
             </div>
             <button id="close-sidebar" class="text-white text-2xl">
                 <i class="fas fa-times"></i>
