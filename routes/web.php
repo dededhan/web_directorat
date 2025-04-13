@@ -145,6 +145,10 @@ Route::get('/katsinov/formjudul', function () {
     return view('inovasi.katsinov.formjudul');
 })->name('katsinov.formjudul');
 
+Route::get('/tupoksipemeringkatan', function () {
+    return view('Pemeringkatan.tupoksipemeringkatan.tupoksi');
+})->name('tupoksipemeringkatan');
+
 // Route::get('/katsinov/lampiran', function () {
 //     return view('inovasi.admin_hilirisasi.lampiran');
 // })->name('admin.hilirisasi.lampiran');

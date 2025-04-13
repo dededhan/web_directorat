@@ -37,7 +37,7 @@
                     class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
                     <li><a href="{{ route('strukturorganisasi') }}" class="hover:text-yellow-400">Struktur
                             Organisasi</a></li>
-                    <li><a href="{{ route('tupoksi.tupoksi') }}" class="hover:text-yellow-400">Tugas Pokok dan
+                    <li><a href="{{ route('tupoksipemeringkatan') }}" class="hover:text-yellow-400">Tugas Pokok dan
                             Fungsi</a></li>
                 </ul>
             </li>
