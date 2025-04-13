@@ -20,12 +20,13 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             background-color: var(--background-color);
             color: var(--text-color);
             line-height: 1.6;
+            font-size: 16px !important;
         }
 
         .container {
@@ -53,7 +54,7 @@
 
         h1 {
             color: var(--primary-color);
-            font-size: 36px;
+            font-size: 40px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -102,7 +103,12 @@
             max-width: 800px;
             margin: 0 auto 30px;
             color: #555;
-            font-size: 18px;
+            font-size: 16px;
+        }
+
+        /* Force all text elements to use the 16px font size */
+        p, span, div, a, li {
+            font-size: 16px !important;
         }
 
         @media (max-width: 768px) {
