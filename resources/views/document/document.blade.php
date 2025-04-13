@@ -6,30 +6,29 @@
     <title>Dokumen</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body, h1, h2, h3, h4, h5, h6, p, button, input, div {
+            font-family: Arial, sans-serif !important;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Arial&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('document.css') }}">        
+    <link rel="stylesheet" href="{{ asset('document.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ asset('home.css') }}">      
 </head>
 <body>
      <!-- Main Navbar -->
      <div class="navbar-wrapper">
-        <div class="container main-navbar">
-            <a href="#" class="navbar-logo">
-                <img src="https://spm.unj.ac.id/wp-content/uploads/2024/08/cropped-Logo-UNJ-PTNBH-RGB_Logo_Motto_Transparan.png" alt="Logo UNJ">
-                <div class="navbar-logo-text">
-                    <span class="logo-title">DOKUMEN</span>
-                    <span class="logo-subtitle">Universitas Negeri Jakarta</span>
-                </div>
-            </a>
+     @include('document.navbardocument')
+
             
             <button class="navbar-toggle" id="navbarToggle">
                 <i class="fas fa-bars"></i>
             </button>
             
-            <ul class="navbar-menu" id="navbarMenu">
-                <li><a href="{{ route('home') }}" class="menu-link">Home</a></li>
-                <li><a href="#" class="menu-link active">Dokumen</a></li>
-            </ul>
+            
             
             <!-- Navbar right section removed -->
         </div>
