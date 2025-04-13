@@ -145,32 +145,55 @@ class BeritaController extends Controller
         return view('Berita.beritahome', compact('beritas'));
     }
 
-
-    public function show(string $title_or_id)
+    public function show(string $slug)
     {
-        if (is_numeric($title_or_id)) {
-            $berita = Berita::findOrFail($title_or_id);
-        } else {
-            // Replace dashes with spaces and handle potential URL slugs
-            $title = str_replace('-', ' ', $title_or_id);
-            $berita = Berita::where('judul', 'LIKE', "%{$title}%")->firstOrFail();
+        $title = str_replace('-', ' ', $slug);
+        $berita = Berita::where('judul', $title)->first();
+        if (!$berita) {
+            $berita = Berita::where('judul', 'LIKE', "%{$title}%")->first();
         }
-    
-        // Get related news (same category, excluding current article)
+        if (!$berita && is_numeric($slug)) {
+            $berita = Berita::find($slug);
+        }
+        if (!$berita) {
+            abort(404, 'Berita tidak ditemukan');
+        }
         $relatedNews = Berita::where('id', '!=', $berita->id)
             ->where('kategori', $berita->kategori)
             ->latest()
             ->take(3)
             ->get();
-    
-        // Get latest news (for sidebar)
         $latestNews = Berita::latest()->take(4)->get();
-    
-        // Get popular news (for sidebar)
+
         $popularNews = Berita::latest()->take(5)->get();
-    
+
         return view('Berita.sampleberita', compact('berita', 'relatedNews', 'latestNews', 'popularNews'));
     }
+    // public function show(string $title_or_id)
+    // {
+    //     if (is_numeric($title_or_id)) {
+    //         $berita = Berita::findOrFail($title_or_id);
+    //     } else {
+    //         // Replace dashes with spaces and handle potential URL slugs
+    //         $title = str_replace('-', ' ', $title_or_id);
+    //         $berita = Berita::where('judul', 'LIKE', "%{$title}%")->firstOrFail();
+    //     }
+
+    //     // Get related news (same category, excluding current article)
+    //     $relatedNews = Berita::where('id', '!=', $berita->id)
+    //         ->where('kategori', $berita->kategori)
+    //         ->latest()
+    //         ->take(3)
+    //         ->get();
+
+    //     // Get latest news (for sidebar)
+    //     $latestNews = Berita::latest()->take(4)->get();
+
+    //     // Get popular news (for sidebar)
+    //     $popularNews = Berita::latest()->take(5)->get();
+
+    //     return view('Berita.sampleberita', compact('berita', 'relatedNews', 'latestNews', 'popularNews'));
+    // }
 
     /**
      * Get news details for API requests
