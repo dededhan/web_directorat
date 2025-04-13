@@ -149,6 +149,10 @@ Route::get('/tupoksipemeringkatan', function () {
     return view('Pemeringkatan.tupoksipemeringkatan.tupoksi');
 })->name('tupoksipemeringkatan');
 
+Route::get('/strukturorganisasipemeringkatan', function () {
+    return view('Pemeringkatan.struktur organisasi.strukturorganisasi');
+})->name('strukturorganisasipemeringkatan');
+
 // Route::get('/katsinov/lampiran', function () {
 //     return view('inovasi.admin_hilirisasi.lampiran');
 // })->name('admin.hilirisasi.lampiran');
