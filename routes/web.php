@@ -79,7 +79,8 @@ Route::get('/documents/download/{id}', [App\Http\Controllers\DokumenController::
 // Berita routes
 Route::get('/Berita', [BeritaController::class, 'allNews'])->name('Berita.beritahome');
 Route::get('/Berita/all', [BeritaController::class, 'allNews'])->name('berita.all');
-Route::get('/Berita/{id}', [BeritaController::class, 'show'])->name('Berita.show');
+// Route::get('/Berita/{id}', [BeritaController::class, 'show'])->name('Berita.show');
+Route::get('/Berita/detail/{slug}', [BeritaController::class, 'show'])->name('Berita.show');
 Route::get('/Berita/kategori/{kategori}', [BeritaController::class, 'kategori'])->name('berita.kategori');
 Route::get('/api/Berita/{id}', [BeritaController::class, 'getBeritaDetail']);
 
