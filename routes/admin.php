@@ -121,16 +121,16 @@ Route::prefix('admin')->name('admin.')
                 Route::post('/form-invoasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
 
                 // Form Record Hasil Pengukuran with katsinov_id parameter
-                Route::get('/formrecordhasilpengukuran/{katsinov_id?}', function (Request $request, $katsinov_id = null) {
-                    $katsinov = null;
-                    if ($katsinov_id) {
-                        $katsinov = \App\Models\Katsinov::find($katsinov_id);
-                        if (!$katsinov) {
-                            return redirect()->back()->with('error', 'Katsinov data not found');
-                        }
-                    }
-                    return view('admin.katsinov.formrecordhasilpengukuran', compact('katsinov'));
-                })->name('formrecordhasilpengukuran');
+                // Route::get('/formrecordhasilpengukuran/{katsinov_id?}', function (Request $request, $katsinov_id = null) {
+                //     $katsinov = null;
+                //     if ($katsinov_id) {
+                //         $katsinov = \App\Models\Katsinov::find($katsinov_id);
+                //         if (!$katsinov) {
+                //             return redirect()->back()->with('error', 'Katsinov data not found');
+                //         }
+                //     }
+                //     return view('admin.katsinov.formrecordhasilpengukuran', compact('katsinov'));
+                // })->name('formrecordhasilpengukuran');
 
                 // Form Berita Acara with katsinov_id parameter
                 Route::get('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaIndex'])->name('berita.index');
@@ -142,6 +142,10 @@ Route::prefix('admin')->name('admin.')
                 // Lampiran with katsinov_id parameter
                 Route::get('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranIndex'])->name('lampiran.index');
                 Route::post('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranStore'])->name('lampiran.store');
+                
+                //Form record hasil pengukuran
+                Route::get('/record-hasil/{katsinov_id?}', [KatsinovController::class, 'recordIndex'])->name('record.index');
+                Route::post('/record-hasil/{katsinov_id?}', [KatsinovController::class, 'recordStore'])->name('record.store');
             });
 
         Route::prefix('SDGs')->name('SDGs.')

@@ -223,7 +223,7 @@
                                                 <a href="{{ route('admin.Katsinov.berita.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-news'></i> Form Berita Acara
                                                 </a>
-                                                <a href="{{ route('admin.Katsinov.formrecordhasilpengukuran', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('admin.Katsinov.record.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-bar-chart-alt-2'></i> Form Record Hasil
                                                 </a>
                                                 <a href="{{ route('admin.Katsinov.lampiran.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">

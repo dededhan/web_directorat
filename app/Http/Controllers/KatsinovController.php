@@ -7,6 +7,7 @@ use App\Models\KatsinovBerita;
 use App\Models\KatsinovInformasi;
 use App\Models\KatsinovInformasiCollection;
 use App\Models\KatsinovInovasi;
+use App\Models\FormRecordHasilPengukuran;
 use Illuminate\Http\Request;
 use App\Models\KatsinovScore;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -660,5 +661,59 @@ class KatsinovController extends Controller
         ]);
 
         return redirect(route('admin.Katsinov.TableKatsinov'));
+    }
+
+
+
+    public function recordIndex($katsinov_id = null)
+    {
+        $katsinov = Katsinov::find($katsinov_id);
+        $record = $katsinov->formRecordHasilPengukuran()->first();
+
+        return view('admin.katsinov.formrecordhasilpengukuran', [
+            'id' => $katsinov->id, // Pastikan variabel ini dikirim
+            'katsinov' => $katsinov, // Optional: kirim full object jika diperlukan
+            'record' => $record,
+        ]);
+    }
+
+    public function recordStore(Request $request, $katsinov_id)
+    {
+        $validationRules = [
+            'nama_penanggung_jawab' => 'required|string|max:255',
+            'institusi' => 'required|string|max:255',
+            'judul_inovasi' => 'required|string|max:255',
+            'jenis_inovasi' => 'required|string|max:255',
+            'alamat_kontak' => 'required|string',
+            'phone' => 'required|string|max:20',
+            'fax' => 'required|string|max:20',
+            'tanggal_penilaian' => 'required|date',
+        ];
+    
+        // Generate rules untuk 5 aspek
+        for ($i = 1; $i <= 5; $i++) {
+            $validationRules["aspek_$i"] = 'required|string|max:255';
+            $validationRules["aktivitas_$i"] = 'required|string|max:255';
+            $validationRules["capaian_$i"] = 'required|integer|min:0|max:100';
+            $validationRules["keterangan_$i"] = 'required|string|max:255';
+            $validationRules["catatan_$i"] = 'required|string|max:255';
+        }
+    
+        $validatedData = $request->validate($validationRules);
+    
+        try {
+            // Simpan ke database
+            FormRecordHasilPengukuran::updateOrCreate(
+                ['katsinov_id' => $katsinov_id],
+                array_merge($validatedData, ['katsinov_id' => $katsinov_id])
+            );
+    
+            return redirect()->route('admin.Katsinov.TableKatsinov')
+                ->with('success', 'Data berhasil disimpan!');
+                
+        } catch (\Exception $e) {
+            return back()->withInput()
+                ->with('error', 'Gagal menyimpan data: ' . $e->getMessage());
+        }
     }
 }

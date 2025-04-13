@@ -64,6 +64,10 @@ class Katsinov extends Model
         return $this->hasMany(KatsinovBerita::class);
     }
 
+    public function formRecordHasilPengukuran()
+    {
+        return $this->hasOne(FormRecordHasilPengukuran::class);
+    }
     /**
      * Get the responses for a specific indicator
      */
