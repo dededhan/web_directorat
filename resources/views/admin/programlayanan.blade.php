@@ -65,7 +65,7 @@
                         @error('deskripsi')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="form-text text-muted">Tuliskan deskripsi singkat tentang program layanan (maksimal 500
+                        <div class="form-text text-muted">Tuliskan deskripsi singkat tentang program layanan (maksimal 1500
                             karakter)</div>
                     </div>
                 </div>
@@ -174,7 +174,7 @@
                                 <label for="edit_deskripsi" class="form-label">Deskripsi</label>
                                 <textarea class="form-control" name="deskripsi" id="edit_deskripsi" rows="3"></textarea>
                                 <div class="form-text text-muted">Tuliskan deskripsi singkat tentang program layanan
-                                    (maksimal 500 karakter)</div>
+                                    (maksimal 1500 karakter)</div>
                             </div>
                         </div>
                         <div class="row">
@@ -257,7 +257,7 @@
                     const deskripsiTextarea = document.getElementById('deskripsi');
                     const charCountContainer = document.createElement('div');
                     charCountContainer.className = 'char-count mt-1';
-                    charCountContainer.innerHTML = '<span id="char-count">0</span>/500 karakter';
+                    charCountContainer.innerHTML = '<span id="char-count">0</span>/1500 karakter';
                     deskripsiTextarea.parentNode.insertBefore(charCountContainer, document.querySelector(
                         '.form-text.text-muted'));
 
@@ -270,10 +270,10 @@
                         document.getElementById('char-count').textContent = charCount;
 
                         // Visual feedback when approaching/exceeding limit
-                        if (charCount > 500) {
+                        if (charCount > 1500) {
                             charCountContainer.classList.add('text-danger');
                             document.getElementById('simpan-btn').disabled = true;
-                        } else if (charCount > 450) {
+                        } else if (charCount > 1450) {
                             charCountContainer.classList.add('text-warning');
                             charCountContainer.classList.remove('text-danger');
                             document.getElementById('simpan-btn').disabled = false;
@@ -301,7 +301,7 @@
                     const editDeskripsiTextarea = document.getElementById('edit_deskripsi');
                     const editCharCountContainer = document.createElement('div');
                     editCharCountContainer.className = 'char-count mt-1';
-                    editCharCountContainer.innerHTML = '<span id="edit-char-count">0</span>/500 karakter';
+                    editCharCountContainer.innerHTML = '<span id="edit-char-count">0</span>/1500 karakter';
                     editDeskripsiTextarea.parentNode.insertBefore(editCharCountContainer, document
                         .querySelector('#editProgramForm .form-text.text-muted'));
 
@@ -314,10 +314,10 @@
                         document.getElementById('edit-char-count').textContent = charCount;
 
                         // Visual feedback when approaching/exceeding limit
-                        if (charCount > 500) {
+                        if (charCount > 1500) {
                             editCharCountContainer.classList.add('text-danger');
                             document.getElementById('saveEditProgram').disabled = true;
-                        } else if (charCount > 450) {
+                        } else if (charCount > 1450) {
                             editCharCountContainer.classList.add('text-warning');
                             editCharCountContainer.classList.remove('text-danger');
                             document.getElementById('saveEditProgram').disabled = false;
@@ -388,12 +388,12 @@
                                     document.getElementById('edit-char-count')
                                         .textContent = charCount;
 
-                                    if (charCount > 500) {
+                                    if (charCount > 1500) {
                                         editCharCountContainer.classList.add(
                                             'text-danger');
                                         document.getElementById('saveEditProgram')
                                             .disabled = true;
-                                    } else if (charCount > 450) {
+                                    } else if (charCount > 1450) {
                                         editCharCountContainer.classList.add(
                                             'text-warning');
                                         editCharCountContainer.classList.remove(
@@ -430,8 +430,8 @@
                 const plainText = editorData.replace(/<[^>]*>/g, '');
 
                 // Final check before submitting
-                if (plainText.length > 500) {
-                    showErrorAlert('Deskripsi tidak boleh lebih dari 500 karakter.');
+                if (plainText.length > 1500) {
+                    showErrorAlert('Deskripsi tidak boleh lebih dari 1500 karakter.');
                     return;
                 }
 
@@ -480,9 +480,9 @@
                     const editorData = deskripsiEditor.getData();
                     const plainText = editorData.replace(/<[^>]*>/g, '');
 
-                    if (plainText.length > 500) {
+                    if (plainText.length > 1500) {
                         e.preventDefault();
-                        showErrorAlert('Deskripsi tidak boleh lebih dari 500 karakter.');
+                        showErrorAlert('Deskripsi tidak boleh lebih dari 1500 karakter.');
                         return false;
                     }
                 }
