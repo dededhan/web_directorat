@@ -240,16 +240,18 @@
                         <i class="fas fa-calendar-alt mr-1"></i>{{ date('d M Y', strtotime($news->tanggal)) }}
                     </div>
                 </div>
-                <h2 class="font-bold text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
-                    {{ $news->judul }}
-                </h2>
+                <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="block">
+                    <h2 class="font-bold text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
+                        {{ $news->judul }}
+                    </h2>
+                </a>
                 <p class="text-gray-600 mb-4">
                     {{ Str::limit(strip_tags($news->isi), 100) }}
                 </p>
-                <a href="{{ route('Berita.beritahome') }}" 
-                   class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
-                    Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                </a>
+                <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" 
+                    class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
+                     Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                 </a>
             </div>
         </div>
     @endforeach
@@ -275,11 +277,13 @@
                                         <i
                                             class="fas fa-calendar-alt mr-2"></i>{{ date('d M Y', strtotime($featured->tanggal)) }}
                                     </div>
-                                    <h3 class="news-title">{{ $featured->judul }}</h3>
+                                    <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}">
+                                        <h3 class="news-title">{{ $featured->judul }}</h3>
+                                    </a>
                                     <p class="news-excerpt">
                                         {!! Str::limit($featured->isi, 150) !!}
                                     </p>
-                                    <a href="{{ route('Berita.beritahome') }}" class="news-link">
+                                    <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}" class="news-link">
                                         Baca selengkapnya <i class="fas fa-arrow-right"></i>
                                     </a>
                                 </div>
