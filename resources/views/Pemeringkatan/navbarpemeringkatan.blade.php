@@ -43,14 +43,26 @@
             </li>
 
             <li class="relative group">
+                <a href="#" class="text-white hover:text-yellow-400">Ranking UNJ</a>
+                <!-- <ul
+                    class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
+                    <li><a href="{{ route('pemeringkatan.klaster') }}" class="hover:text-yellow-400">IKU</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">UI Green Metric</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">Webometric</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">QS World University Ranking</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">Times Higher Education</a></li>
+                </ul> -->
+            </li>
+
+            <li class="relative group">
                 <a href="#" class="text-white hover:text-yellow-400">Program</a>
-                <ul
+                <!-- <ul
                     class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
                     <li><a href="{{ route('sdgscenter') }}" class="hover:text-yellow-400">Global Engagement</a></li>
                     <li><a href="#" class="hover:text-yellow-400">Lecturer Expose</a></li>
                     <li><a href="#" class="hover:text-yellow-400">International Faculty Staff</a></li>
                     <li><a href="#" class="hover:text-yellow-400">International Student Mobility</a></li>
-                </ul>
+                </ul> -->
             </li>
 
 
@@ -62,17 +74,7 @@
             </li>
 
 
-            <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400">Ranking Universitas Negeri Jakarta</a>
-                <ul
-                    class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('pemeringkatan.klaster') }}" class="hover:text-yellow-400">IKU</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">UI Green Metric</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">Webometric</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">QS World University Ranking</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">Times Higher Education</a></li>
-                </ul>
-            </li>
+           
 
 
             <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400">SSO</a></li>
