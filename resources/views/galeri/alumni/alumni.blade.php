@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         :root {
@@ -122,12 +122,12 @@
 
         /* Hero Section */
         .hero-section {
-           
             background-color: #D1E7DD;
             padding: 5rem 2rem;
-            color: white;
+            color: #186666; /* Changed to match brand color */
             text-align: center;
             clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            margin-bottom: 3rem; /* Added margin to create space between sections */
         }
 
         .hero-content {
@@ -143,15 +143,15 @@
 
         .hero-content p {
             font-size: 1.2rem;
-            font-weight: 300;
+            font-weight: 400; /* Increased from 300 */
             opacity: 0.9;
         }
 
         /* Container */
         .container {
             max-width: 1280px;
-            margin: 3rem auto;
-            padding: 0 1.5rem;
+            margin: 2rem auto; /* Reduced from 3rem to 2rem */
+            padding: 0 2rem; /* Increased from 1.5rem to 2rem */
         }
 
         /* Section Header */
@@ -179,7 +179,8 @@
         .alumni-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
+            gap: 2.5rem; /* Increased from 2rem to 2.5rem */
+            margin-bottom: 3rem; /* Added margin at bottom */
         }
 
         .alumni-card {
@@ -191,6 +192,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            border: 1px solid #e5e7eb; /* Added border for more definition */
         }
 
         .alumni-card:hover {
@@ -230,14 +232,14 @@
         }
 
         .card-content {
-            padding: 1.5rem;
+            padding: 1.8rem; /* Increased from 1.5rem */
             display: flex;
             flex-direction: column;
             flex: 1;
         }
 
         .card-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem; /* Increased from 1.2rem */
             font-weight: 600;
             margin-bottom: 1rem;
             color: #186666;
@@ -245,10 +247,10 @@
         }
 
         .card-meta {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem; /* Increased from 1.5rem */
             display: flex;
             flex-direction: column;
-            gap: 0.7rem;
+            gap: 0.8rem; /* Increased from 0.7rem */
         }
 
         .meta-item {
@@ -256,13 +258,14 @@
             align-items: center;
             gap: 0.5rem;
             color: var(--light-text);
-            font-size: 0.9rem;
+            font-size: 0.95rem; /* Increased from 0.9rem */
         }
 
         .meta-item i {
             color: #3AA6A6;
-            font-size: 1rem;
-            width: 16px;
+            font-size: 1.1rem; /* Increased from 1rem */
+            width: 20px; /* Increased from 16px */
+            text-align: center;
         }
 
         .read-more {
@@ -270,12 +273,12 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.7rem 1.2rem;
+            padding: 0.8rem 1.5rem; /* Increased from 0.7rem 1.2rem */
             background-color: rgba(24, 102, 102, 0.1);
             color: #186666;
             text-decoration: none;
             border-radius: 0.5rem;
-            font-weight: 500;
+            font-weight: 600; /* Increased from 500 */
             transition: var(--transition);
         }
 
@@ -296,36 +299,38 @@
         .empty-state {
             grid-column: 1 / -1;
             background-color: var(--card-bg);
-            padding: 3rem;
+            padding: 3.5rem; /* Increased from 3rem */
             border-radius: 1rem;
             text-align: center;
             box-shadow: var(--shadow);
+            border: 1px solid #e5e7eb; /* Added border */
         }
 
         .empty-icon {
             background-color: rgba(24, 102, 102, 0.1);
-            width: 80px;
-            height: 80px;
+            width: 90px; /* Increased from 80px */
+            height: 90px; /* Increased from 80px */
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
+            margin: 0 auto 1.8rem; /* Increased from 1.5rem */
         }
 
         .empty-icon i {
-            font-size: 2rem;
+            font-size: 2.2rem; /* Increased from 2rem */
             color: #186666;
         }
 
         .empty-state h3 {
-            font-size: 1.5rem;
+            font-size: 1.6rem; /* Increased from 1.5rem */
             color: #186666;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.7rem; /* Increased from 0.5rem */
         }
 
         .empty-state p {
             color: var(--light-text);
+            font-size: 1.1rem; /* Added font size */
         }
 
         /* Responsive */
@@ -358,7 +363,12 @@
             }
             
             .container {
-                padding: 0 1rem;
+                padding: 0 1.5rem; /* Increased from 1rem */
+            }
+            
+            .alumni-grid {
+                grid-template-columns: 1fr; /* Change to single column on mobile */
+                gap: 2rem;
             }
         }
     </style>

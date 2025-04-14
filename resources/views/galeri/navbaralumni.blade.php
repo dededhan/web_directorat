@@ -48,9 +48,9 @@
             justify-content: space-between;
             align-items: center;
             max-width: 1600px;
-            width: 95%;
+            width: 100%;
             margin: 0 auto;
-            padding: 1rem;
+            padding: 0.5rem 2rem;
         }
 
         .navbar-logo {
@@ -63,20 +63,25 @@
             margin-right: 1rem;
         }
 
-        .navbar-logo h1 {
+        /* Updated title positioning - next to logo */
+        .directorate-title {
             color: var(--text-color);
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
+            text-transform: uppercase;
             line-height: 1.2;
-            max-width: 300px;
+            margin-left: 0.5rem;
+            white-space: nowrap;
         }
 
-        /* FIXED: Updated menu styles */
+        /* Updated menu styles - positioned on right side */
         .navbar-menu {
             display: flex;
             list-style: none;
-            gap: -1rem; /* Changed from -1000rem to positive value */
+            gap: 0rem;
             align-items: center;
+            justify-content: flex-end;
+            margin-left: auto;
         }
 
         .navbar-menu li {
@@ -89,6 +94,7 @@
             transition: color 0.3s ease;
             white-space: nowrap;
             padding: 0.5rem 0.25rem;
+            font-size: 0.9rem;
         }
 
         .navbar-menu a:hover {
@@ -147,6 +153,10 @@
             }
 
             .navbar {
+                display: none;
+            }
+            
+            .directorate-title {
                 display: none;
             }
 
@@ -244,19 +254,17 @@
     </style>
 </head>
 <body>
-    <!-- Social Media Bar (Desktop only) -->
-    <div class="social-media-bar hidden md:flex">
-        
-    </div>
-
     <!-- Desktop Navbar -->
     <nav class="navbar hidden md:block">
         <div class="container">
+            <!-- Logo on the left with title -->
             <div class="navbar-logo">
                 <img alt="University logo" 
                      src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
-                     <h1>Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</h1>
+                <h1 class="directorate-title">DIREKTORAT INOVASI, SISTEM INFORMASI, DAN PEMERINGKATAN</h1>
             </div>
+            
+            <!-- Menu on the right -->
             <ul class="navbar-menu">
                 <li><a href="{{ route('home') }}">Beranda</a></li>
                 
@@ -288,7 +296,6 @@
                 
                 <li><a href="{{ route('document.document') }}">Dokumen</a></li>
                 <li><a href="https://sso.unj.ac.id/login">SSO</a></li>
-                <li><a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
             </ul>
         </div>
     </nav>

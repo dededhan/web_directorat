@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUSTAINABILITY IMPACT</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('unj-navbar.css') }}">
     
     <style>
@@ -42,13 +42,13 @@ body {
     overflow-x: hidden;
 }
 
-/* Hero Section */
 .hero-section {
     background-color: #D1E7DD;
     padding: 5rem 2rem;
-    color: white;
+    color: #186666; /* Changed to match brand color */
     text-align: center;
     clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    margin-bottom: 3rem; /* Added margin to create space between sections */
 }
 
 .hero-content {
@@ -64,7 +64,7 @@ body {
 
 .hero-content p {
     font-size: 1.2rem;
-    font-weight: 300;
+    font-weight: 400; /* Increased from 300 */
     opacity: 0.9;
 }
 

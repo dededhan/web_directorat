@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UNJ Navbar</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Removed Google Fonts Poppins import -->
     <style>
         :root {
             --primary-color: #006B68; /* Exact teal green from image */
@@ -18,20 +18,18 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: Arial, Helvetica, sans-serif; /* Changed from Poppins to Arial */
         }
 
         body {
             line-height: 1.6;
             overflow-x: hidden;
-            padding-top: 80px !important; /* Ensure space for fixed navbar */
+            padding-top: 0 !important; /* Removed padding-top to eliminate gap */
         }
 
         /* Desktop Navbar */
         .navbar {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
+            position: relative !important; /* Changed from fixed to relative */
             width: 100% !important;
             background-color: var(--primary-color);
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -47,13 +45,14 @@
 
         .navbar .container {
             display: flex;
-            justify-content: center; /* Center content instead of space-between */
+            justify-content: center; /* Center content */
             align-items: center;
             max-width: 1600px;
             width: 95%;
             margin: 0 auto; /* Center the container horizontally */
-            padding: 0.5rem 1rem; /* Reduced vertical padding */
+            padding: 1rem 1.5rem; /* Increased vertical padding from 0.5rem to 1rem and horizontal from 1rem to 1.5rem */
             gap: 2rem; /* Add space between logo and menu */
+            text-align: center; /* Ensure text is centered */
         }
 
         .navbar-logo {
@@ -61,30 +60,34 @@
             align-items: center;
             flex: 1; /* Take up available space */
             justify-content: center; /* Center the logo and text */
+            text-align: center; /* Center text within the container */
         }
 
         .navbar-logo img {
-            height: 40px; /* Reduced from 50px */
-            margin-right: 1rem;
+            height: 50px; /* Increased from 40px */
+            margin-right: 1.5rem; /* Increased from 1rem */
         }
 
         .navbar-logo h1 {
             color: var(--text-color);
-            font-size: 1rem; /* Increased from 0.85rem */
+            font-size: 1.2rem; /* Increased from 1rem */
             font-weight: 600;
             line-height: 1.2;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             white-space: nowrap; /* Keep text on one line */
             text-align: center; /* Center the text */
+            padding-top: 0.5rem; /* Added padding to move text down */
         }
 
         .navbar-menu {
             display: flex;
             list-style: none;
-            gap: 1.5rem; /* Adjusted gap between menu items */
-            justify-content: flex-end;
+            gap: 1rem; /* Adjusted gap between menu items */
+            justify-content: center; /* Changed from flex-end to center */
             flex: 1; /* Take up available space */
+            text-align: center; /* Center text within the menu */
+            padding-top: 0.5rem; /* Added padding to move menu items down */
         }
 
         .navbar-menu a {
@@ -149,7 +152,7 @@
 
         @media (max-width: 768px) {
             body {
-                padding-top: 60px !important; /* Adjusted for mobile */
+                padding-top: 0 !important; /* Removed padding for mobile */
             }
 
             .navbar {
@@ -159,18 +162,17 @@
             .mobile-navbar {
                 display: flex;
                 background-color: var(--primary-color);
-                position: fixed !important;
-                top: 0 !important;
-                left: 0 !important;
+                position: relative !important; /* Changed from fixed to relative */
                 width: 100% !important;
                 z-index: 1000 !important;
-                padding: 0.75rem 1rem;
-                justify-content: space-between;
+                padding: 1.2rem 1.5rem; /* Increased from 0.75rem 1rem */
+                justify-content: center; /* Changed from space-between to center */
                 align-items: center;
+                text-align: center; /* Center text within the navbar */
             }
 
             .mobile-navbar img {
-                height: 35px; /* Reduced from 40px */
+                height: 45px; /* Increased from 35px */
             }
 
             .mobile-menu-toggle {
@@ -288,17 +290,16 @@
                 
                 <li><a href="{{ route('document.document') }}">Dokumen</a></li>
                 <li><a href="https://sso.unj.ac.id/login">SSO</a></li>
-                <li><a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
             </ul>
         </div>
     </nav>
 
     <!-- Mobile Navbar -->
     <nav class="mobile-navbar md:hidden">
-        <div class="flex items-center">
+        <div class="flex items-center justify-center text-center w-full">
             <img alt="University logo" 
                  src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
-            <h1 class="text-white ml-2 text-xs uppercase font-semibold">DIREKTORAT INOVASI UNJ</h1>
+            <h1 class="text-white ml-2 text-xs uppercase font-semibold text-center mt-2">DIREKTORAT INOVASI UNJ</h1>
         </div>
         <button id="mobile-menu-toggle" class="mobile-menu-toggle">
             <i class="fas fa-bars"></i>
