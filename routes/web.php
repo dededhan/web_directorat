@@ -106,6 +106,10 @@ Route::get('inovasi/risetunj', function () {
     return view('Inovasi.riset_unj.risetunj');
 })->name('riset.unj');
 
+Route::get('inovasi/risetunj/produk_inovasi', function () {
+    return view('Inovasi.riset_unj.produk_inovasi.produkinovasi');
+})->name('Inovasi.riset_unj.produk_inovasi.produkinovasi');
+
 Route::get('/strukturorganisasi', function () {
     return view('struktur organisasi.strukturorganisasi');
 })->name('strukturorganisasi');
