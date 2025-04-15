@@ -104,6 +104,8 @@ Route::prefix('admin')->name('admin.')
         Route::resource('/mahasiswainternational', InternationalStudentController::class);
 
         Route::resource('/dataakreditasi', AkreditasiController::class);
+        Route::get('/dataakreditasi/{id}/detail', [AkreditasiController::class, 'getAkreditasiDetail'])
+        ->name('dataakreditasi.detail');
 
         Route::resource('/internationallecture', DosenInternasionalController::class);
         Route::get('/internationallecture/{id}/detail', [DosenInternasionalController::class, 'getDosenDetail'])
