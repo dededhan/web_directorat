@@ -183,35 +183,7 @@ class BeritaController extends Controller
     
         return view('Berita.sampleberita', compact('berita', 'relatedNews', 'latestNews', 'popularNews'));
     }
-    // public function show(string $title_or_id)
-    // {
-    //     if (is_numeric($title_or_id)) {
-    //         $berita = Berita::findOrFail($title_or_id);
-    //     } else {
-    //         // Replace dashes with spaces and handle potential URL slugs
-    //         $title = str_replace('-', ' ', $title_or_id);
-    //         $berita = Berita::where('judul', 'LIKE', "%{$title}%")->firstOrFail();
-    //     }
-
-    //     // Get related news (same category, excluding current article)
-    //     $relatedNews = Berita::where('id', '!=', $berita->id)
-    //         ->where('kategori', $berita->kategori)
-    //         ->latest()
-    //         ->take(3)
-    //         ->get();
-
-    //     // Get latest news (for sidebar)
-    //     $latestNews = Berita::latest()->take(4)->get();
-
-    //     // Get popular news (for sidebar)
-    //     $popularNews = Berita::latest()->take(5)->get();
-
-    //     return view('Berita.sampleberita', compact('berita', 'relatedNews', 'latestNews', 'popularNews'));
-    // }
-
-    /**
-     * Get news details for API requests
-     */
+   
     public function getBeritaDetail($title_or_id)
     {
         if (is_numeric($title_or_id)) {
@@ -235,23 +207,6 @@ class BeritaController extends Controller
             if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
                 Storage::disk('public')->delete($berita->gambar);
             }
-
-            
-            if ($request->hasFile('additional_images')) {
-                foreach ($request->file('additional_images') as $image) {
-                    $namaAdditionalFile = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-                    $additionalPath = $image->storeAs(
-                        'berita-images',
-                        $namaAdditionalFile,
-                        'public'
-                    );
-                    
-                    BeritaImage::create([
-                        'berita_id' => $berita->id,
-                        'path' => $additionalPath
-                    ]);
-                }
-            }
          
             // Delete the record
             $berita->delete();
@@ -265,6 +220,20 @@ class BeritaController extends Controller
         }
     }
 
+    // app/Http/Controllers/BeritaController.php
+    public function upload(Request $request)
+{
+    $request->validate([
+        'upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    $path = $request->file('upload')->store('news_images', 'public');
+    $url = Storage::url($path);
+
+    return response()->json([
+        'url' => asset($url),
+    ]);
+}
     public function update(Request $request, string $id)
     {
         try {

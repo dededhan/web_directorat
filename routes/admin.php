@@ -44,6 +44,7 @@ Route::prefix('admin')->name('admin.')
             ->name('news.detail');
         Route::put('/berita/{id}', [BeritaController::class, 'update'])
             ->name('news.update');
+        Route::post('/berita/upload', [BeritaController::class, 'upload'])->name('news.upload');
 
         Route::resource('/news-scroll', PengumumanController::class);
         Route::get('/pengumuman/{id}/detail', [PengumumanController::class, 'getPengumumanDetail'])

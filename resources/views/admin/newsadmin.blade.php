@@ -270,7 +270,92 @@
         </div>
     </div>
 
-
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
+    <script>
+        // Custom upload adapter
+        class MyUploadAdapter {
+            constructor(loader) {
+                this.loader = loader;
+            }
+    
+            upload() {
+                return this.loader.file.then(file => new Promise((resolve, reject) => {
+                    const data = new FormData();
+                    data.append('upload', file);
+                    data.append('_token', '{{ csrf_token() }}');
+    
+                    fetch('{{ route("admin.news.upload") }}', {
+                        method: 'POST',
+                        body: data
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.error) {
+                            return reject(result.error.message);
+                        }
+                        resolve({
+                            default: result.url
+                        });
+                    })
+                    .catch(error => {
+                        reject('Upload failed: ' + error.message);
+                    });
+                }));
+            }
+    
+            abort() {
+                return Promise.reject();
+            }
+        }
+    
+        function MyCustomUploadAdapterPlugin(editor) {
+            editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+                return new MyUploadAdapter(loader);
+            };
+        }
+    
+        // Initialize CKEditor for new berita
+        ClassicEditor
+            .create(document.querySelector('#isi_berita'), {
+                extraPlugins: [MyCustomUploadAdapterPlugin],
+                toolbar: {
+                    items: [
+                        'heading', '|',
+                        'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+                        'imageUpload', 'blockQuote', 'undo', 'redo'
+                    ]
+                },
+                image: {
+                    toolbar: ['imageTextAlternative', 'imageStyle:inline', 'imageStyle:block', 'imageStyle:side']
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    
+        // Initialize CKEditor for edit form
+        let editBeritaEditor;
+        ClassicEditor
+            .create(document.querySelector('#edit_isi_berita'), {
+                extraPlugins: [MyCustomUploadAdapterPlugin],
+                toolbar: {
+                    items: [
+                        'heading', '|',
+                        'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+                        'imageUpload', 'blockQuote', 'undo', 'redo'
+                    ]
+                },
+                image: {
+                    toolbar: ['imageTextAlternative', 'imageStyle:inline', 'imageStyle:block', 'imageStyle:side']
+                }
+            })
+            .then(editor => {
+                editBeritaEditor = editor;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
     <script>
         // SweetAlert helper functions
         function showSuccessAlert(message) {
@@ -309,45 +394,6 @@
                 }
             });
         }
-        
-        // Global variable for editor instance
-        let editBeritaEditor;
-        
-        // Initialize all functionality when DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize CKEditor for new berita
-            ClassicEditor
-                .create(document.querySelector('#isi_berita'), {
-                    toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
-                        'undo', 'redo'
-                    ]
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-    
-            // Initialize CKEditor for edit form
-            ClassicEditor
-                .create(document.querySelector('#edit_isi_berita'), {
-                    toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
-                        'undo', 'redo'
-                    ]
-                })
-                .then(editor => {
-                    editBeritaEditor = editor;
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-    
-            // Check for PHP flash messages
-            @if(session('success'))
-                showSuccessAlert("{{ session('success') }}");
-            @endif
-            
-            @if(session('error'))
-                showErrorAlert("{{ session('error') }}");
-            @endif
     
             // Handle view image
             document.querySelectorAll('.view-image').forEach(button => {
