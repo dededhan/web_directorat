@@ -146,7 +146,8 @@ document.getElementById('fakultas').addEventListener('change', function() {
         if (prodis) {
             prodis.forEach(prodi => {
                 const option = document.createElement('option');
-                option.value = prodi.toLowerCase().replace(/ /g, '_');
+                // Use the original format instead of converting to lowercase with underscores
+                option.value = prodi;
                 option.textContent = prodi;
                 prodiSelect.appendChild(option);
             });
@@ -167,7 +168,8 @@ document.getElementById('edit_fakultas').addEventListener('change', function() {
         if (prodis) {
             prodis.forEach(prodi => {
                 const option = document.createElement('option');
-                option.value = prodi.toLowerCase().replace(/ /g, '_');
+                // Use the original format instead of converting to lowercase with underscores
+                option.value = prodi;
                 option.textContent = prodi;
                 prodiSelect.appendChild(option);
             });
@@ -270,7 +272,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (prodis) {
                             prodis.forEach(prodi => {
                                 const option = document.createElement('option');
-                                option.value = prodi.toLowerCase().replace(/ /g, '_');
+                                // Use the original format instead of converting to lowercase with underscores
+                                option.value = prodi;
                                 option.textContent = prodi;
                                 prodiSelect.appendChild(option);
                             });

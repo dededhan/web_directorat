@@ -1,7 +1,8 @@
 @extends('admin.admin')
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/internationallecture_dashboard.css') }}">
+<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/international_lecture_dashboard.css') }}">
+
 
 @section('contentadmin')
     <div class="head-title">
@@ -253,7 +254,7 @@
     </div>
 
     <style>
-        .table-data {
+        /* .table-data {
             margin-top: 24px;
         }
 
@@ -291,9 +292,9 @@
 
         .badge {
             font-size: 0.7em;
-        }
+        } */
     </style>
 
     <!-- Include internationallecture_dashboard.js for fakultas & prodi dropdown logic and other functionality -->
-    <script src="{{ asset('dashboard_main/dashboard/internationallecture_dashboard.js') }}"></script>
+    <script src="{{ asset('dashboard_main/dashboard/international_lecture_dashboard.js') }}"></script>
 @endsection
