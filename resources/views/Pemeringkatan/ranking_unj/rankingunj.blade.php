@@ -196,7 +196,7 @@
                 <p>Webometrics World University Ranking</p>
             </a>
             
-            <a href="#" class="ranking-card">
+            <a href="{{ route('Pemeringkatan.ranking_unj.Times Higher Education Impact Rankings.Times Higher Education Impact Rankings') }}" class="ranking-card"> 
                 <div class="logo-container">
                     <img src="/images/logos/Times_Higher_Education_logo.png" alt="Times Higher Education Logo">
                 </div>
