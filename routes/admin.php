@@ -102,14 +102,17 @@ Route::prefix('admin')->name('admin.')
 
         // mahasiswa
         Route::resource('/mahasiswainternational', InternationalStudentController::class);
+        Route::get('/mahasiswainternational/{id}/detail', [InternationalStudentController::class, 'getStudentDetail'])
+            ->name('mahasiswainternational.detail');
 
         Route::resource('/dataakreditasi', AkreditasiController::class);
         Route::get('/dataakreditasi/{id}/detail', [AkreditasiController::class, 'getAkreditasiDetail'])
-        ->name('dataakreditasi.detail');
+            ->name('dataakreditasi.detail');
 
         Route::resource('/internationallecture', DosenInternasionalController::class);
         Route::get('/internationallecture/{id}/detail', [DosenInternasionalController::class, 'getDosenDetail'])
-        ->name('internationallecture.detail');
+            ->name('internationallecture.detail');
+
 
 
         Route::prefix('Katsinov')->name('Katsinov.')
@@ -146,7 +149,7 @@ Route::prefix('admin')->name('admin.')
                 // Lampiran with katsinov_id parameter
                 Route::get('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranIndex'])->name('lampiran.index');
                 Route::post('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranStore'])->name('lampiran.store');
-                
+
                 //Form record hasil pengukuran
                 Route::get('/record-hasil/{katsinov_id?}', [KatsinovController::class, 'recordIndex'])->name('record.index');
                 Route::post('/record-hasil/{katsinov_id?}', [KatsinovController::class, 'recordStore'])->name('record.store');
