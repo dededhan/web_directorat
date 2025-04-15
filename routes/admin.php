@@ -106,6 +106,8 @@ Route::prefix('admin')->name('admin.')
         Route::resource('/dataakreditasi', AkreditasiController::class);
 
         Route::resource('/internationallecture', DosenInternasionalController::class);
+        Route::get('/internationallecture/{id}/detail', [DosenInternasionalController::class, 'getDosenDetail'])
+        ->name('internationallecture.detail');
 
 
         Route::prefix('Katsinov')->name('Katsinov.')

@@ -1,5 +1,8 @@
 @extends('admin.admin')
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/internationallecture_dashboard.css') }}">
+
 @section('contentadmin')
     <div class="head-title">
         <div class="left">
@@ -16,11 +19,25 @@
         </div>
     </div>
 
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <div class="table-data">
         <div class="order">
             <div class="head">
                 <h3>Input Data Dosen Internasional</h3>
-            </div> 
+            </div>
 
             <form id="lecture-form" action="{{ route('admin.internationallecture.store') }}" method="POST">
                 @csrf
@@ -29,13 +46,16 @@
                         <label for="fakultas" class="form-label">Fakultas</label>
                         <select class="form-select" name="fakultas" id="fakultas">
                             <option value="">Pilih Fakultas</option>
-                            <option value="fmipa">FMIPA</option>
-                            <option value="fik">FIK</option>
-                            <option value="ft">FT</option>
-                            <option value="fbs">FBS</option>
+                            <option value="pascasarjana">PASCASARJANA</option>
                             <option value="fip">FIP</option>
-                            <option value="fe">FE</option>
+                            <option value="fmipa">FMIPA</option>
+                            <option value="fppsi">FPPsi</option>
+                            <option value="fbs">FBS</option>
+                            <option value="ft">FT</option>
+                            <option value="fik">FIK</option>
                             <option value="fis">FIS</option>
+                            <option value="fe">FE</option>
+                            <option value="profesi">PROFESI</option>
                         </select>
                         <div class="form-text text-muted">Pilih fakultas tempat dosen mengajar</div>
                     </div>
@@ -102,7 +122,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="table-responsive">
                     <table class="table table-striped" id="lecture-table">
                         <thead>
@@ -118,35 +138,115 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($dosen as $item)
-                            <tr>
-                                <td>{{ $item->nama }}</td>
-                                <td>{{ strtoupper($item->fakultas) }}</td>
-                                <td>{{ $item->prodi }}</td>
-                                <td>{{ $item->negara }}</td>
-                                <td>{{ $item->universitas_asal }}</td>
-                                <td>{{ ucfirst($item->status) }}</td>
-                                <td>{{ $item->bidang_keahlian }}</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </div>
-                                    {{-- <div class="btn-group">
-                                        <a href="{{ route('admin.dataakreditasi.edit', $akreditasi->id) }}" 
-                                           class="btn btn-sm btn-warning">Edit</a>
-                                        <form action="{{ route('admin.dataakreditasi.destroy', $akreditasi->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" 
-                                                    onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
-                                        </form>
-                                    </div> --}}
-                                </td>
-                            </tr>
+                            @foreach ($dosen as $item)
+                                <tr>
+                                    <td>{{ $item->nama }}</td>
+                                    <td>{{ strtoupper($item->fakultas) }}</td>
+                                    <td>{{ $item->prodi }}</td>
+                                    <td>{{ $item->negara }}</td>
+                                    <td>{{ $item->universitas_asal }}</td>
+                                    <td>{{ ucfirst($item->status) }}</td>
+                                    <td>{{ $item->bidang_keahlian }}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-warning edit-dosen"
+                                                data-id="{{ $item->id }}">Edit</button>
+                                            <form method="POST"
+                                                action="{{ route('admin.internationallecture.destroy', $item->id) }}"
+                                                class="delete-form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button"
+                                                    class="btn btn-sm btn-danger delete-btn">Delete</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk mengedit dosen -->
+    <div class="modal fade" id="editDosenModal" tabindex="-1" aria-labelledby="editDosenModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editDosenModalLabel">Edit Dosen Internasional</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editDosenForm" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_fakultas" class="form-label">Fakultas</label>
+                                <select class="form-select" name="fakultas" id="edit_fakultas">
+                                    <option value="">Pilih Fakultas</option>
+                                    <option value="pascasarjana">PASCASARJANA</option>
+                                    <option value="fip">FIP</option>
+                                    <option value="fmipa">FMIPA</option>
+                                    <option value="fppsi">FPPsi</option>
+                                    <option value="fbs">FBS</option>
+                                    <option value="ft">FT</option>
+                                    <option value="fik">FIK</option>
+                                    <option value="fis">FIS</option>
+                                    <option value="fe">FE</option>
+                                    <option value="profesi">PROFESI</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_prodi" class="form-label">Program Studi</label>
+                                <select class="form-select" name="prodi" id="edit_prodi">
+                                    <option value="">Pilih Program Studi</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="edit_nama" class="form-label">Nama Dosen</label>
+                                <input type="text" class="form-control" name="nama" id="edit_nama" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_negara" class="form-label">Negara Asal</label>
+                                <input type="text" class="form-control" name="negara" id="edit_negara" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_universitas_asal" class="form-label">Universitas Asal</label>
+                                <input type="text" class="form-control" name="universitas_asal"
+                                    id="edit_universitas_asal" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_status" class="form-label">Status</label>
+                                <select class="form-select" name="status" id="edit_status" required>
+                                    <option value="">Pilih Status</option>
+                                    <option value="fulltime">Full Time</option>
+                                    <option value="parttime">Part Time</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_bidang_keahlian" class="form-label">Bidang Keahlian</label>
+                                <input type="text" class="form-control" name="bidang_keahlian"
+                                    id="edit_bidang_keahlian" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="saveEditDosen">Simpan Perubahan</button>
                 </div>
             </div>
         </div>
@@ -156,7 +256,7 @@
         .table-data {
             margin-top: 24px;
         }
-        
+
         .order {
             background: #fff;
             padding: 24px;
@@ -164,7 +264,8 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus,
+        .form-select:focus {
             border-color: #3498db;
             box-shadow: none;
         }
@@ -193,45 +294,6 @@
         }
     </style>
 
-    <script>
-        const prodisByFaculty = {
-            'fmipa': ['Ilmu Komputer', 'Matematika', 'Pendidikan Matematika', 'Fisika', 'Pendidikan Fisika', 'Biologi', 'Pendidikan Biologi', 'Kimia', 'Pendidikan Kimia'],
-            'fik': ['Pendidikan Teknologi Informasi', 'Pendidikan Teknik Elektronika', 'Pendidikan Teknik Elektro', 'Teknik Informatika dan Komputer'],
-            'ft': ['Teknik Sipil', 'Teknik Mesin', 'Teknik Elektro', 'Pendidikan Teknik Bangunan', 'Pendidikan Teknik Mesin'],
-            'fbs': ['Pendidikan Bahasa Indonesia', 'Pendidikan Bahasa Inggris', 'Pendidikan Bahasa Jerman', 'Pendidikan Bahasa Prancis', 'Pendidian Seni Rupa'],
-            'fip': ['Pendidikan Guru Sekolah Dasar', 'Pendidikan Anak Usia Dini', 'Bimbingan dan Konseling', 'Teknologi Pendidikan', 'Pendidikan Luar Biasa'],
-            'fe': ['Pendidikan Ekonomi', 'Manajemen', 'Akuntansi', 'Pendidikan Administrasi Perkantoran'],
-            'fis': ['Pendidikan Pancasila dan Kewarganegaraan', 'Pendidikan Sejarah', 'Pendidikan Geografi', 'Pendidikan Sosiologi', 'Ilmu Komunikasi']
-        };
-
-        // Faculty change handler
-        document.getElementById('fakultas').addEventListener('change', function() {
-            const prodiSelect = document.getElementById('prodi');
-            prodiSelect.innerHTML = '<option value="">Pilih Program Studi</option>';
-            
-            if (this.value) {
-                prodiSelect.disabled = false;
-                const prodis = prodisByFaculty[this.value];
-                prodis.forEach(prodi => {
-                    const option = document.createElement('option');
-                    option.value = prodi.toLowerCase().replace(/ /g, '_');
-                    option.textContent = prodi;
-                    prodiSelect.appendChild(option);
-                });
-            } else {
-                prodiSelect.disabled = true;
-            }
-        });
-
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            const searchText = this.value.toLowerCase();
-            const rows = document.getElementById('lecture-list').getElementsByTagName('tr');
-
-            Array.from(rows).forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(searchText) ? '' : 'none';
-            });
-        });
-    </script>
+    <!-- Include internationallecture_dashboard.js for fakultas & prodi dropdown logic and other functionality -->
+    <script src="{{ asset('dashboard_main/dashboard/internationallecture_dashboard.js') }}"></script>
 @endsection
