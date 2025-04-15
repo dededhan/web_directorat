@@ -228,10 +228,10 @@
                 <div class="logo-container">
                     <img src="/images/logos/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.png" alt="Kementerian Pendidikan Logo"> 
                 </div>
-                <p>Pemeringkatan Klaster Pendidikan Tinggi</p>
+                <p>Pemeringkatan Klaster Pendidikan Tinggi</p> 
             </a>
             
-            <a href="#" class="ranking-card">
+            <a href="{{ route('Pemeringkatan.ranking_unj.AD Scientific Index.AD Scientific Index') }}" class="ranking-card">
                 <div class="logo-container">
                     <img src="/images/logos/AD scientific index.jpeg" alt="AD Scientific Index Logo">
                 </div>

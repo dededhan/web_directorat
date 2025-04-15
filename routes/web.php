@@ -217,6 +217,10 @@ Route::get('/ranking_unj/Pemeringkatan Klaster Pendidikan Tinggi', function () {
     return view('Pemeringkatan.ranking_unj.Pemeringkatan Klaster Pendidikan Tinggi.Pemeringkatan Klaster Pendidikan Tinggi');
 })->name('Pemeringkatan.ranking_unj.Pemeringkatan Klaster Pendidikan Tinggi.Pemeringkatan Klaster Pendidikan Tinggi');
 
+Route::get('/ranking_unj/AD Scientific Index', function () {
+    return view('Pemeringkatan.ranking_unj.AD Scientific Index.AD Scientific Index');
+})->name('Pemeringkatan.ranking_unj.AD Scientific Index.AD Scientific Index');
+
 Route::get('/Pemeringkatans', [BeritaController::class, 'landingPagePemeringkatan'])->name('pemeringkatan.landingpage');
 Route::get('/Pemeringkatans/Ranking-Universitas/klaster-perguruan-tinggi', function () {
     return view('Pemeringkatan.Ranking_Universitas.Pemeringkatan_Klaster_Perguruan_Tinggi');
