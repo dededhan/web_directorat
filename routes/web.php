@@ -189,6 +189,10 @@ Route::get('/Berita', function () {
 })->name('Berita.beritahome');
 Route::get('/Berita', [BeritaController::class, 'allNews'])->name('Berita.beritahome');
 
+Route::get('/sejarah', function () {
+    return view('Pemeringkatan.sejarah.sejarah');
+})->name('Pemeringkatan.sejarah.sejarah');
+
 Route::get('/ranking_unj', function () {
     return view('Pemeringkatan.ranking_unj.rankingunj');
 })->name('Pemeringkatan.ranking_unj.rankingunj');
