@@ -189,7 +189,7 @@
         
         <div class="ranking-grid">
             <!-- All 7 cards with corresponding logos -->
-            <a href="#" class="ranking-card">
+            <a href="{{ route('Pemeringkatan.ranking_unj.Webometrics World University Ranking.Webometrics World University Ranking') }}" class="ranking-card"> 
                 <div class="logo-container">
                     <img src="/images/logos/Webometrics-Logo.jpeg" alt="Webometrics Logo">
                 </div>
