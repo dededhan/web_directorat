@@ -1,5 +1,8 @@
 @extends('admin.admin')
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/international_student_dashboard.css') }}">
+
 @section('contentadmin')
     <div class="head-title">
         <div class="left">
@@ -15,6 +18,20 @@
             </ul>
         </div>
     </div>
+
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
     <div class="table-data">
         <div class="order">
@@ -146,24 +163,103 @@
                                     <td>{{ $student->periode_mulai }} - {{ $student->periode_akhir }}</td>
                                     <td>
                                         <div class="btn-group">
-                                            <button class="btn btn-sm btn-warning">Edit</button>
-                                            <button class="btn btn-sm btn-danger">Delete</button>
-                                        </div>
-                                        {{-- <div class="btn-group">
-                                            <a href="{{ route('admin.dataakreditasi.edit', $akreditasi->id) }}" 
-                                               class="btn btn-sm btn-warning">Edit</a>
-                                            <form action="{{ route('admin.dataakreditasi.destroy', $akreditasi->id) }}" method="POST">
+                                            <button type="button" class="btn btn-sm btn-warning edit-student" 
+                                                data-id="{{ $student->id }}">Edit</button>
+                                            <form method="POST"
+                                                action="{{ route('admin.mahasiswainternational.destroy', $student->id) }}"
+                                                class="delete-form">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" 
-                                                        onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
+                                                <button type="button" class="btn btn-sm btn-danger delete-btn">Delete</button>
                                             </form>
-                                        </div> --}}
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk mengedit mahasiswa -->
+    <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editStudentModalLabel">Edit International Student</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editStudentForm" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="edit_nama_mahasiswa" class="form-label">Student Name</label>
+                                <input type="text" class="form-control" name="nama_mahasiswa" id="edit_nama_mahasiswa" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_nim" class="form-label">Student ID (NIM)</label>
+                                <input type="text" class="form-control" name="nim" id="edit_nim" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_negara" class="form-label">Country</label>
+                                <input type="text" class="form-control" name="negara" id="edit_negara" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_kategori" class="form-label">Category</label>
+                                <select class="form-select" name="kategori" id="edit_kategori" required>
+                                    <option value="">Select Category</option>
+                                    <option value="inbound">Inbound</option>
+                                    <option value="outbound">Outbound</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_status" class="form-label">Status</label>
+                                <select class="form-select" name="status" id="edit_status" required>
+                                    <option value="">Select Status</option>
+                                    <option value="fulltime">Full Time</option>
+                                    <option value="parttime">Part Time</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_fakultas" class="form-label">Faculty</label>
+                                <input type="text" class="form-control" name="fakultas" id="edit_fakultas" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_program_studi" class="form-label">Department</label>
+                                <input type="text" class="form-control" name="program_studi" id="edit_program_studi" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_periode_mulai" class="form-label">Start Date</label>
+                                <input type="date" class="form-control" name="periode_mulai" id="edit_periode_mulai" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_periode_akhir" class="form-label">End Date</label>
+                                <input type="date" class="form-control" name="periode_akhir" id="edit_periode_akhir" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveEditStudent">Save Changes</button>
                 </div>
             </div>
         </div>
@@ -215,17 +311,10 @@
         }
     </style>
 
-    <script>
-        
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            const searchText = this.value.toLowerCase();
-            const rows = document.getElementById('students-list').getElementsByTagName('tr');
-
-            Array.from(rows).forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(searchText) ? '' : 'none';
-            });
-        });
-    </script>
+    <!-- Include jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Include international_student_dashboard.js for functionality -->
+    <script src="{{ asset('dashboard_main/dashboard/international_student_dashboard.js') }}"></script>
 @endsection
