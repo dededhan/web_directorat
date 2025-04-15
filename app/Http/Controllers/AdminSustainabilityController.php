@@ -26,13 +26,10 @@ class AdminSustainabilityController extends Controller
         } else if (Auth::user()->role === 'admin_pemeringkatan'){
             return view('admin_pemeringkatan.sustainability', compact('sustainabilities'));
         }
-        // return view('admin.sustainability', compact('sustainabilities'));
     }
     
     public function store(StoreSustainabilityRequest $request)
     {
-    
-        
         try {
             $sustainability = Sustainability::create($request->except('foto_kegiatan'));
             
@@ -66,10 +63,115 @@ class AdminSustainabilityController extends Controller
         return view('galeri.sustainability', compact('sustainabilities'));
     }
 
-    // Method lainnya tetap ada tapi belum diimplementasikan
-    public function show(string $id) {}
-    public function create() {}
-    public function edit(string $id) {}
-    public function update(Request $request, string $id) {}
-    public function destroy(string $id) {}
+    /**
+     * Get sustainability detail for API request
+     */
+    public function getSustainabilityDetail($id)
+    {
+        $sustainability = Sustainability::with('photos')->findOrFail($id);
+        return response()->json($sustainability);
+    }
+
+    /**
+     * Show the form for viewing the specified resource.
+     */
+    public function show(string $id)
+    {
+        $sustainability = Sustainability::with('photos')->findOrFail($id);
+        return view('admin.sustainability.show', compact('sustainability'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        // Implemented if needed
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        // Implemented if needed
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        try {
+            $sustainability = Sustainability::findOrFail($id);
+            
+            // Validate the request
+            $validatedData = $request->validate([
+                'judul_kegiatan' => 'required|string|max:255',
+                'tanggal_kegiatan' => 'required|date',
+                'fakultas' => 'required|string|max:50',
+                'prodi' => 'required|string',
+                'link_kegiatan' => 'nullable|url|max:255',
+                'deskripsi_kegiatan' => 'required|string',
+            ]);
+            
+            $sustainability->update($validatedData);
+            
+            // Handle file uploads
+            if ($request->hasFile('foto_kegiatan')) {
+                $file = $request->file('foto_kegiatan');
+                $path = $file->store('sustainability', 'public');
+                
+                SustainabilityPhoto::create([
+                    'sustainability_id' => $sustainability->id,
+                    'path' => $path
+                ]);
+            }
+            
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Data kegiatan sustainability berhasil diperbarui!'
+                ]);
+            }
+            
+            return redirect()->back()->with('success', 'Data kegiatan sustainability berhasil diperbarui!');
+                
+        } catch (\Exception $e) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal memperbarui data: ' . $e->getMessage()
+                ]);
+            }
+            
+            return redirect()->back()
+                ->with('error', 'Gagal memperbarui data: ' . $e->getMessage())
+                ->withInput();
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        try {
+            $sustainability = Sustainability::with('photos')->findOrFail($id);
+            
+            // Delete associated photos from storage
+            foreach ($sustainability->photos as $photo) {
+                Storage::disk('public')->delete($photo->path);
+                $photo->delete();
+            }
+            
+            // Delete the sustainability record
+            $sustainability->delete();
+            
+            return redirect()->back()->with('success', 'Data kegiatan sustainability berhasil dihapus!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Gagal menghapus data: ' . $e->getMessage());
+        }
+    }
 }

@@ -84,6 +84,8 @@ Route::prefix('admin')->name('admin.')
         Route::resource('/manageuser', UserController::class);
 
         Route::resource('/sustainability', AdminSustainabilityController::class);
+        Route::get('/sustainability/{id}/detail', [AdminSustainabilityController::class, 'getSustainabilityDetail'])
+        ->name('sustainability.detail');
 
         Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
         Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');

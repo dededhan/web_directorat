@@ -135,6 +135,7 @@ const prodisByFaculty = {
     ]
 };
 
+// Faculty change handler for add form
 document.getElementById('fakultas').addEventListener('change', function() {
     const prodiSelect = document.getElementById('prodi');
     prodiSelect.innerHTML = '<option value="">Pilih Program Studi</option>';
@@ -152,6 +153,63 @@ document.getElementById('fakultas').addEventListener('change', function() {
         prodiSelect.disabled = true;
     }
 });
+
+// Faculty change handler for edit form
+document.getElementById('edit_fakultas').addEventListener('change', function() {
+    const prodiSelect = document.getElementById('edit_prodi');
+    prodiSelect.innerHTML = '<option value="">Pilih Program Studi</option>';
+    
+    if (this.value) {
+        prodiSelect.disabled = false;
+        const prodis = prodisByFaculty[this.value];
+        prodis.forEach(prodi => {
+            const option = document.createElement('option');
+            option.value = prodi;
+            option.textContent = prodi;
+            prodiSelect.appendChild(option);
+        });
+    } else {
+        prodiSelect.disabled = true;
+    }
+});
+
+// SweetAlert helper functions
+function showSuccessAlert(message) {
+    Swal.fire({
+        title: 'Berhasil!',
+        text: message,
+        icon: 'success',
+        confirmButtonColor: '#3498db',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showErrorAlert(message) {
+    Swal.fire({
+        title: 'Gagal!',
+        text: message,
+        icon: 'error',
+        confirmButtonColor: '#3498db',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showConfirmationDialog(message, callback) {
+    Swal.fire({
+        title: 'Konfirmasi',
+        text: message,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3498db',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Tidak'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            callback();
+        }
+    });
+}
 
 // Handle view photos
 document.querySelectorAll('.view-photos').forEach(button => {
@@ -172,31 +230,73 @@ document.querySelectorAll('.view-photos').forEach(button => {
     });
 });
 
-// Handle form submission feedback
-// @if(session('success'))
-//     Swal.fire({
-//         icon: 'success',
-//         title: 'Berhasil!',
-//         text: '{{ session('success') }}',
-//         timer: 2000
-//     });
-// @endif
-
-// @if(session('error'))
-//     Swal.fire({
-//         icon: 'error',
-//         title: 'Gagal!',
-//         text: '{{ session('error') }}',
-//         timer: 2000
-//     });
-// @endif
-
-// @if ($errors->any())
-//     <div class="alert alert-danger">
-//         <ul>
-//             @foreach ($errors->all() as $error)
-//                 <li>{{ $error }}</li>
-//             @endforeach
-//         </ul>
-//     </div>
-// @endif
+// Initialize all functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle flash messages from session
+    const successAlert = document.querySelector('.alert-success');
+    if (successAlert) {
+        showSuccessAlert(successAlert.textContent.trim());
+        successAlert.remove();
+    }
+    
+    const errorAlert = document.querySelector('.alert-danger');
+    if (errorAlert) {
+        showErrorAlert(errorAlert.textContent.trim());
+        errorAlert.remove();
+    }
+    
+    // Handle edit button clicks
+    document.querySelectorAll('.edit-activity').forEach(button => {
+        button.addEventListener('click', function() {
+            // Get data attributes
+            const activityId = this.dataset.id;
+            
+            // Populate edit form with data attributes
+            document.getElementById('edit_judul_kegiatan').value = this.dataset.judul;
+            document.getElementById('edit_tanggal_kegiatan').value = this.dataset.tanggal;
+            document.getElementById('edit_fakultas').value = this.dataset.fakultas;
+            document.getElementById('edit_link_kegiatan').value = this.dataset.link || '';
+            document.getElementById('edit_deskripsi_kegiatan').value = this.dataset.deskripsi;
+            
+            // Load prodi options based on selected fakultas
+            const prodiSelect = document.getElementById('edit_prodi');
+            prodiSelect.innerHTML = '<option value="">Pilih Program Studi</option>';
+            
+            if (this.dataset.fakultas) {
+                prodiSelect.disabled = false;
+                const prodis = prodisByFaculty[this.dataset.fakultas];
+                if (prodis) {
+                    prodis.forEach(prodi => {
+                        const option = document.createElement('option');
+                        option.value = prodi;
+                        option.textContent = prodi;
+                        prodiSelect.appendChild(option);
+                    });
+                }
+                
+                // Set the selected prodi
+                prodiSelect.value = this.dataset.prodi;
+            }
+            
+            // Set form action
+            document.getElementById('edit-form').action = `/admin/sustainability/${activityId}`;
+            
+            // Show the modal
+            new bootstrap.Modal(document.getElementById('editModal')).show();
+        });
+    });
+    
+    // Handle delete button clicks
+    document.querySelectorAll('.delete-activity').forEach(button => {
+        button.addEventListener('click', function() {
+            const activityId = this.dataset.id;
+            const activityTitle = this.dataset.judul;
+            
+            showConfirmationDialog(`Apakah Anda yakin ingin menghapus kegiatan "${activityTitle}"?`, () => {
+                const deleteForm = document.getElementById('delete-form');
+                deleteForm.action = `/admin/sustainability/${activityId}`;
+                deleteForm.submit();
+            });
+        });
+    });
+});
