@@ -189,11 +189,9 @@ Route::get('/Berita', function () {
 })->name('Berita.beritahome');
 Route::get('/Berita', [BeritaController::class, 'allNews'])->name('Berita.beritahome');
 
-
-//Pemeringkatan
-// Route::get('/Pemeringkatans', function () {
-//     return view('Pemeringkatan.LandingPagePemeringkatan');
-// })->name('pemeringkatan.landingpage');
+Route::get('/ranking_unj', function () {
+    return view('Pemeringkatan.ranking_unj.rankingunj');
+})->name('Pemeringkatan.ranking_unj.rankingunj');
 
 Route::get('/Pemeringkatans', [BeritaController::class, 'landingPagePemeringkatan'])->name('pemeringkatan.landingpage');
 Route::get('/Pemeringkatans/Ranking-Universitas/klaster-perguruan-tinggi', function () {
