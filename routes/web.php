@@ -209,6 +209,10 @@ Route::get('/ranking_unj/QS Asian University Rankings', function () {
     return view('Pemeringkatan.ranking_unj.QS Asian University Rankings.QS Asian University Rankings');
 })->name('Pemeringkatan.ranking_unj.QS Asian University Rankings.QS Asian University Rankings');
 
+Route::get('/ranking_unj/UI Greenmetric World University Ranking', function () {
+    return view('Pemeringkatan.ranking_unj.UI Greenmetric World University Ranking.UI Greenmetric World University Ranking');
+})->name('Pemeringkatan.ranking_unj.UI Greenmetric World University Ranking.UI Greenmetric World University Ranking');
+
 Route::get('/Pemeringkatans', [BeritaController::class, 'landingPagePemeringkatan'])->name('pemeringkatan.landingpage');
 Route::get('/Pemeringkatans/Ranking-Universitas/klaster-perguruan-tinggi', function () {
     return view('Pemeringkatan.Ranking_Universitas.Pemeringkatan_Klaster_Perguruan_Tinggi');

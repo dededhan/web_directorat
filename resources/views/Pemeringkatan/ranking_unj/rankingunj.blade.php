@@ -217,7 +217,7 @@
                 <p>QS Asian University Rankings</p>
             </a>
             
-            <a href="#" class="ranking-card">
+            <a href="{{ route('Pemeringkatan.ranking_unj.UI Greenmetric World University Ranking.UI Greenmetric World University Ranking') }}" class="ranking-card">
                 <div class="logo-container">
                     <img src="/images/logos/logo_uigm.png" alt="UI GreenMetric Logo">
                 </div>
