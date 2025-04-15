@@ -28,14 +28,9 @@ class BeritaController extends Controller
     public function store(StoreBeritaRequest $request)
     {
         try {
-            // Validation already handled by StoreBeritaRequest
-       
             // Check if image exists and is valid
-            if ($request->hasFile('gambar') && $request->file('gambar')->isValid()) {
-                // Generate unique file name
+            if ($request->hasFile('gambar')) {
                 $namaFile = time() . '_' . uniqid() . '.' . $request->file('gambar')->getClientOriginalExtension();
-
-                // Store the file in the public disk under berita-images folder
                 $gambarPath = $request->file('gambar')->storeAs(
                     'berita-images',
                     $namaFile,
@@ -43,13 +38,29 @@ class BeritaController extends Controller
                 );
                 
                 // Create the berita record with the image path
-                Berita::create([
+                $berita = Berita::create([
                     'kategori' => $request->kategori,
                     'tanggal' => $request->tanggal,
                     'judul' => $request->judul_berita,
                     'isi' => $request->isi_berita,
                     'gambar' => $gambarPath
                 ]);
+                
+                if ($request->hasFile('additional_images')) {
+                    foreach ($request->file('additional_images') as $image) {
+                        $namaAdditionalFile = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                        $additionalPath = $image->storeAs(
+                            'berita-images',
+                            $namaAdditionalFile,
+                            'public'
+                        );
+                        
+                        BeritaImage::create([
+                            'berita_id' => $berita->id,
+                            'path' => $additionalPath
+                        ]);
+                    }
+                }
 
                 return redirect()->route('admin.news.index')
                     ->with('success', 'Berita berhasil disimpan!');
@@ -225,9 +236,26 @@ class BeritaController extends Controller
                 Storage::disk('public')->delete($berita->gambar);
             }
 
+            
+            if ($request->hasFile('additional_images')) {
+                foreach ($request->file('additional_images') as $image) {
+                    $namaAdditionalFile = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                    $additionalPath = $image->storeAs(
+                        'berita-images',
+                        $namaAdditionalFile,
+                        'public'
+                    );
+                    
+                    BeritaImage::create([
+                        'berita_id' => $berita->id,
+                        'path' => $additionalPath
+                    ]);
+                }
+            }
+         
             // Delete the record
             $berita->delete();
-
+            
             return redirect()->route('admin.news.index')
                 ->with('success', 'Berita berhasil dihapus!');
         } catch (\Exception $e) {

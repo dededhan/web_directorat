@@ -19,6 +19,7 @@ class Berita extends Model
         'gambar'
         
     ];
+    
 
     protected static function boot()
     {
@@ -37,6 +38,11 @@ class Berita extends Model
                 $berita->slug = $berita->generateUniqueSlug($berita->judul);
             }
         });
+    }
+
+    public function images()
+    {
+        return $this->hasMany(BeritaImage::class);
     }
 
     // Generate a unique slug

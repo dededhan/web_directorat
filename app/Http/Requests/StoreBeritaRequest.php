@@ -24,8 +24,9 @@ class StoreBeritaRequest extends FormRequest
             'tanggal' => 'required|date',
             'judul_berita' => 'required|string|max:200',
             'isi_berita' => 'required|string',
-            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048'// 2MB max
-         
+            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'additional_images' => 'nullable|array|max:3',
+            'additional_images.*' => 'image|mimes:jpeg,png,jpg|max:2048'
         ];
     }
 
@@ -55,6 +56,10 @@ class StoreBeritaRequest extends FormRequest
             'gambar.image' => 'File harus berupa gambar',
             'gambar.mimes' => 'Format gambar harus berupa jpeg, png, atau jpg',
             'gambar.max' => 'Ukuran gambar maksimal 2MB',
+            'additional_images.max' => 'Maksimal 3 gambar tambahan',
+            'additional_images.*.image' => 'File harus berupa gambar',
+            'additional_images.*.mimes' => 'Format gambar harus jpeg, png, atau jpg',
+            'additional_images.*.max' => 'Ukuran gambar maksimal 2MB',
         ];
     }
 }

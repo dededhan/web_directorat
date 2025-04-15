@@ -106,6 +106,20 @@
                         </div>
                     </div>
                 </div>
+                <!-- Tambahkan input multiple files setelah input cover image -->
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="additional_images" class="form-label">Isi Gambar Berita</label>
+                        <input type="file" class="form-control @error('additional_images') is-invalid @enderror" 
+                            name="additional_images[]" id="additional_images" multiple accept="image/*">
+                        @error('additional_images.*')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <div class="form-text text-muted">
+                            Upload isi gambar Berita (format: JPG, PNG, atau JPEG, max 2MB per file)
+                        </div>
+                    </div>
+                </div>
 
                 <div class="mb-3 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary">Simpan Berita</button>
