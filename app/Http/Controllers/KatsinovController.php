@@ -357,20 +357,20 @@ class KatsinovController extends Controller
 
     public function lampiranStore (Request $request, $katsinov_id){
         $files = $request->validate([
-            'aspek_teknologi' => ['required', 'array', 'min:14'],
-            'aspek_teknologi.*' => ['required', 'file', 'mimes:pdf,doc,docx'],
-            'aspek_pasar' => ['required', 'array', 'min:6'],
-            'aspek_pasar.*' => ['required', 'file', 'mimes:pdf,doc,docx'],
-            'aspek_organisasi' => ['required', 'array', 'min:4'],
-            'aspek_organisasi.*' => ['required', 'file', 'mimes:pdf,doc,docx'],
-            'aspek_mitra' => ['required', 'array', 'min:3'],
-            'aspek_mitra.*' => ['required', 'file', 'mimes:pdf,doc,docx'],
-            'aspek_risiko' => ['required', 'array', 'min:3'],
-            'aspek_risiko.*' => ['required', 'file', 'mimes:pdf,doc,docx'],
-            'aspek_manufaktur' => ['required', 'array', 'min:6'],
-            'aspek_manufaktur.*' => ['required', 'file', 'mimes:pdf,doc,docx'],
-            'aspek_investasi' => ['required', 'array', 'min:5'],
-            'aspek_investasi.*' => ['required', 'file', 'mimes:pdf,doc,docx'],
+            'aspek_teknologi' => ['array', 'min:1'],
+            'aspek_teknologi.*' => ['file', 'mimes:pdf,doc,docx'],
+            'aspek_pasar' => ['array', 'min:1'],
+            'aspek_pasar.*' => ['file', 'mimes:pdf,doc,docx'],
+            'aspek_organisasi' => ['array', 'min:1'],
+            'aspek_organisasi.*' => ['file', 'mimes:pdf,doc,docx'],
+            'aspek_mitra' => ['array', 'min:1'],
+            'aspek_mitra.*' => ['file', 'mimes:pdf,doc,docx'],
+            'aspek_risiko' => ['array', 'min:1'],
+            'aspek_risiko.*' => ['file', 'mimes:pdf,doc,docx'],
+            'aspek_manufaktur' => ['array', 'min:1'],
+            'aspek_manufaktur.*' => ['file', 'mimes:pdf,doc,docx'],
+            'aspek_investasi' => ['array', 'min:1'],
+            'aspek_investasi.*' => ['file', 'mimes:pdf,doc,docx'],
         ]);
 
         $basePath = 'lampiran_katsinov';

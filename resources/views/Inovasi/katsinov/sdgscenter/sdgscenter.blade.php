@@ -5,24 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SDGS Center - Universitas Negeri Jakarta</title>
     <link rel="stylesheet" href="/inovasi/sdgscenter.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('home.css') }}">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="logo">
-                <img src="https://spm.unj.ac.id/wp-content/uploads/2024/08/cropped-Logo-UNJ-PTNBH-RGB_Logo_Motto_Transparan.png" alt="Logo UNJ">
-                <h1>SDGS Center UNJ</h1>
-            </div>
-            <ul class="nav-links">
-                <li><a href="{{ route('inovasi.landingpage') }}">Beranda</a></li>
-                <li><a href="#about">Tentang</a></li>
-                <li><a href="#rankings">Peringkat</a></li>
-                <li><a href="#goals">Tujuan</a></li>
-                <li><a href="#programs">Program</a></li>
-                <li><a href="#publication">Publikasi</a></li>
-            </ul>
-        </nav>
-    </header>
+@includeIf('Inovasi.katsinov.sdgscenter.navbarsdg')
     <section id="home" class="hero" id="heroSection">
     <div class="hero-content">
         <h2>Sustainable Development Goals Center</h2>
