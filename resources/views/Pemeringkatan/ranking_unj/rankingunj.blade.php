@@ -203,7 +203,7 @@
                 <p>Times Higher Education Impact Rankings</p>
             </a>
             
-            <a href="#" class="ranking-card">
+            <a href="{{ route('Pemeringkatan.ranking_unj.QS World University Ranking.QS World University Ranking') }}" class="ranking-card">
                 <div class="logo-container">
                     <img src="/images/logos/QS world ranking.png"alt="QS World Ranking Logo">
                 </div>
