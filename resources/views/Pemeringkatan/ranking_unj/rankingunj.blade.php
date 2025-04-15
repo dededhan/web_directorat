@@ -210,7 +210,7 @@
                 <p>QS World University Ranking</p>
             </a>
             
-            <a href="#" class="ranking-card">
+            <a href="{{ route('Pemeringkatan.ranking_unj.QS Asian University Rankings.QS Asian University Rankings') }}" class="ranking-card">
                 <div class="logo-container">
                     <img src="/images/logos/QS asian ranking.jpg" alt="QS Asian Ranking Logo">
                 </div>
