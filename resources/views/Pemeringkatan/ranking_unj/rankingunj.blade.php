@@ -224,7 +224,7 @@
                 <p>UI Greenmetric World University Ranking</p>
             </a>
             
-            <a href="#" class="ranking-card">
+            <a href="{{ route('Pemeringkatan.ranking_unj.Pemeringkatan Klaster Pendidikan Tinggi.Pemeringkatan Klaster Pendidikan Tinggi') }}" class="ranking-card">
                 <div class="logo-container">
                     <img src="/images/logos/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.png" alt="Kementerian Pendidikan Logo"> 
                 </div>
