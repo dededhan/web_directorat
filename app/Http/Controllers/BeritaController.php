@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Berita;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreBeritaRequest;
+use App\Models\BeritaImage;
 use App\Models\Pengumuman;
 use App\Models\ProgramLayanan;
 use Illuminate\Support\Facades\Storage;
@@ -28,7 +29,7 @@ class BeritaController extends Controller
     {
         try {
             // Validation already handled by StoreBeritaRequest
-
+       
             // Check if image exists and is valid
             if ($request->hasFile('gambar') && $request->file('gambar')->isValid()) {
                 // Generate unique file name
@@ -40,7 +41,7 @@ class BeritaController extends Controller
                     $namaFile,
                     'public'
                 );
-
+                
                 // Create the berita record with the image path
                 Berita::create([
                     'kategori' => $request->kategori,
@@ -125,7 +126,7 @@ class BeritaController extends Controller
     public function kategori(string $kategori)
     {
         // Validate the category
-        if (!in_array($kategori, ['inovasi', 'pemeringkatan'])) {
+        if (!in_array($kategori, ['inovasi', 'pemeringkatan', 'umum'])) {
             return redirect()->route('berita.all')
                 ->with('error', 'Kategori tidak valid.');
         }
@@ -243,7 +244,7 @@ class BeritaController extends Controller
 
             // Validate the request
             $validated = $request->validate([
-                'kategori' => 'required|in:inovasi,pemeringkatan',
+                'kategori' => 'required|in:inovasi,pemeringkatan, umum',
                 'tanggal' => 'required|date',
                 'judul_berita' => 'required|string|max:200',
                 'isi_berita' => 'required|string',

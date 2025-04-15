@@ -17,6 +17,7 @@ class Berita extends Model
         'slug', 
         'isi',
         'gambar'
+        
     ];
 
     protected static function boot()
@@ -59,4 +60,6 @@ class Berita extends Model
     {
         return 'slug';
     }
+
+    
 }

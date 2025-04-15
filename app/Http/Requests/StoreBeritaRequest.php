@@ -20,11 +20,12 @@ class StoreBeritaRequest extends FormRequest
     public function rules()
     {
         return [
-            'kategori' => 'required|in:inovasi,pemeringkatan',
+            'kategori' => 'required|in:inovasi,pemeringkatan,umum',
             'tanggal' => 'required|date',
             'judul_berita' => 'required|string|max:200',
             'isi_berita' => 'required|string',
-            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048' // 2MB max
+            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048'// 2MB max
+         
         ];
     }
 

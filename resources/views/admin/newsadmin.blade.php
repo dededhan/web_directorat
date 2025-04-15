@@ -51,6 +51,8 @@
                             <option value="inovasi" {{ old('kategori') == 'inovasi' ? 'selected' : '' }}>Inovasi</option>
                             <option value="pemeringkatan" {{ old('kategori') == 'pemeringkatan' ? 'selected' : '' }}>
                                 Pemeringkatan</option>
+                                <option value="umum" {{ old('kategori') == 'umum' ? 'selected' : '' }}>
+                                    umum</option>
                         </select>
                         @error('kategori')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -94,13 +96,13 @@
 
                 <div class="row">
                     <div class="col-md-12 mb-3">
-                        <label for="gambar" class="form-label">Gambar</label>
+                        <label for="gambar" class="form-label">Cover Gambar</label>
                         <input type="file" class="form-control @error('gambar') is-invalid @enderror" name="gambar"
                             id="gambar" accept="image/*">
                         @error('gambar')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="form-text text-muted">Upload gambar utama berita (format: JPG, PNG, atau JPEG, max 2MB)
+                        <div class="form-text text-muted">Upload gambar cover berita (format: JPG, PNG, atau JPEG, max 2MB)
                         </div>
                     </div>
                 </div>
@@ -126,7 +128,7 @@
                                 <th>Tanggal</th>
                                 <th>Judul Berita</th>
                                 <th>Isi</th>
-                                <th>Gambar</th>
+                                <th>Cover Gambar</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -139,6 +141,7 @@
                                             class="badge bg-{{ [
                                                 'inovasi' => 'primary',
                                                 'pemeringkatan' => 'success',
+                                                'umum' => 'info'
                                             ][$berita->kategori] }}">
                                             {{ ucfirst($berita->kategori) }}
                                         </span>
@@ -211,6 +214,7 @@
                                 <select class="form-select" name="kategori" id="edit_kategori">
                                     <option value="inovasi">Inovasi</option>
                                     <option value="pemeringkatan">Pemeringkatan</option>
+                                    <option value="umum">umum</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
