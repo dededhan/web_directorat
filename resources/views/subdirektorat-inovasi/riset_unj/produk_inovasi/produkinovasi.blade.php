@@ -63,6 +63,24 @@
         .toggle-icon.rotated {
             transform: rotate(180deg);
         }
+        .product-meta {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .meta-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .meta-item i {
+            margin-right: 5px;
+            color: #176369;
+        }
     </style>
 </head>
 @include('Inovasi.riset_unj.produk_inovasi.navbarprofile')
@@ -73,73 +91,66 @@
         </h1>
 
         <div class="space-y-4">
-            @php
-            $products = [
-                [
-                    'name' => 'Lorem Ipsum',
-                    'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                    'detail' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                    'image' => 'https://masuk-ptn.com/images/product/6de51bb6b61afd78744eebba0e6e03f040664e9d.jpg'
-                ],
-                [
-                    'name' => 'Lorem Ipsum',
-                    'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                    'detail' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                    'image' => 'https://masuk-ptn.com/images/product/6de51bb6b61afd78744eebba0e6e03f040664e9d.jpg'
-                ],
-                [
-                    'name' => 'Lorem Ipsum',
-                    'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                    'detail' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                    'image' => 'https://masuk-ptn.com/images/product/6de51bb6b61afd78744eebba0e6e03f040664e9d.jpg'
-                ],
-                [
-                    'name' => 'Lorem Ipsum',
-                    'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                    'detail' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                    'image' => 'https://masuk-ptn.com/images/product/6de51bb6b61afd78744eebba0e6e03f040664e9d.jpg'
-                ],
-                [
-                    'name' => 'Lorem Ipsum',
-                    'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                    'detail' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                    'image' => 'https://masuk-ptn.com/images/product/6de51bb6b61afd78744eebba0e6e03f040664e9d.jpg'
-                ],
-                [
-                    'name' => 'Lorem Ipsum',
-                    'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                    'detail' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                    'image' => 'https://masuk-ptn.com/images/product/6de51bb6b61afd78744eebba0e6e03f040664e9d.jpg'
-                ]
-            ];
-            @endphp
-
-            @foreach($products as $product)
-            <div class="product-item bg-white rounded-lg shadow-md">
-                <div class="product-header" onclick="toggleDropdown(this)">
-                    <h2 class="font-bold text-lg">{{ $product['name'] }}</h2>
-                    <svg class="toggle-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </div>
-                <div class="product-content">
-                    @if(isset($product['image']))
-                    <div class="mb-4 flex justify-center">
-                        <img src="{{ $product['image'] }}" alt="{{ $product['name'] }}" class="max-w-full h-auto rounded-lg">
+            @if($produkInovasi->count() > 0)
+                @foreach($produkInovasi as $produk)
+                <div class="product-item bg-white rounded-lg shadow-md">
+                    <div class="product-header" onclick="toggleDropdown(this)">
+                        <h2 class="font-bold text-lg">{{ $produk->nama_produk }}</h2>
+                        <svg class="toggle-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
                     </div>
-                    @endif
-                    <p class="text-gray-700 mb-4">{{ $product['description'] }}</p>
-                    <div class="flex justify-between items-center">
-                        <a href="#" class="text-blue-500 hover:underline selengkapnya-btn">Selengkapnya</a>
-                        <span class="text-sm text-gray-500">{{ date('Y') }}</span>
-                    </div>
-                    <div class="detail-content">
-                        <h3 class="text-lg font-semibold mb-2">Detail Produk</h3>
-                        <p class="text-gray-700">{{ $product['detail'] }}</p>
+                    <div class="product-content">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            @if($produk->gambar)
+                            <div class="md:w-1/3 mb-4 md:mb-0">
+                                <img src="{{ asset('storage/' . $produk->gambar) }}" alt="{{ $produk->nama_produk }}" class="w-full h-auto rounded-lg object-cover">
+                            </div>
+                            @endif
+                            <div class="md:w-2/3">
+                                <h3 class="text-xl font-semibold mb-3">{{ $produk->nama_produk }}</h3>
+                                <div class="product-meta mb-4">
+                                    <div class="meta-item">
+                                        <i class="fas fa-user-alt"></i>
+                                        <span>Inovator: {{ $produk->inovator }}</span>
+                                    </div>
+                                    @if($produk->nomor_paten)
+                                    <div class="meta-item">
+                                        <i class="fas fa-certificate"></i>
+                                        <span>No. Paten: {{ $produk->nomor_paten }}</span>
+                                    </div>
+                                    @endif
+                                    <div class="meta-item">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Ditambahkan: {{ $produk->created_at->format('d M Y') }}</span>
+                                    </div>
+                                </div>
+                                <div class="description">
+                                    <h4 class="font-semibold mb-2">Deskripsi Singkat:</h4>
+                                    <div class="text-gray-700 mb-3">
+                                        {!! Str::limit(strip_tags($produk->deskripsi), 150) !!}
+                                    </div>
+                                    <button class="text-blue-500 hover:underline selengkapnya-btn focus:outline-none">
+                                        Lihat Detail Lengkap
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-content">
+                            <h3 class="text-lg font-semibold mb-3">Detail Produk Inovasi</h3>
+                            <div class="text-gray-700">
+                                {!! $produk->deskripsi !!}
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            @endforeach
+                @endforeach
+            @else
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <p class="text-gray-500">Belum ada produk inovasi yang ditambahkan.</p>
+                </div>
+            @endif
         </div>
     </div>
 
@@ -175,12 +186,22 @@
             icon.classList.toggle('rotated');
         }
 
-        // Add event listener for "Selengkapnya" button
-        document.querySelectorAll('.selengkapnya-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation(); // Prevent triggering parent dropdown
-                const detailContent = this.closest('.product-content').querySelector('.detail-content');
-                detailContent.classList.toggle('active');
+        // Add event listener for "Selengkapnya" button after the DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.selengkapnya-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation(); // Prevent triggering parent dropdown
+                    const detailContent = this.closest('.product-content').querySelector('.detail-content');
+                    detailContent.classList.toggle('active');
+                    
+                    // Change button text based on state
+                    if (detailContent.classList.contains('active')) {
+                        this.textContent = 'Sembunyikan Detail';
+                    } else {
+                        this.textContent = 'Lihat Detail Lengkap';
+                    }
+                });
             });
         });
     </script>

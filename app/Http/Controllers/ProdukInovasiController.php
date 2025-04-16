@@ -12,10 +12,23 @@ class ProdukInovasiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function publicIndex()
     {
+        // Get all products ordered by most recent first
         $produkInovasi = ProdukInovasi::latest()->get();
-        return view('admin.katsinov.produk_inovasi', compact('produkInovasi'));
+        
+        return view('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi', compact('produkInovasi'));
+    }
+    
+    /**
+     * Alternative public view showing the same data but for the Inovasi path
+     */
+    public function publicIndexAlt()
+    {
+        // Get all products ordered by most recent first
+        $produkInovasi = ProdukInovasi::latest()->get();
+        
+        return view('Inovasi.riset_unj.produk_inovasi.produkinovasi', compact('produkInovasi'));
     }
 
     /**

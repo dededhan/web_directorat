@@ -8,6 +8,7 @@ use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\InstagramController;
 use App\Http\Controllers\SustainabilityController;
 use App\Http\Controllers\FormRecordHasilPengukuranController;
+use App\Http\Controllers\ProdukInovasiController;
 
 use App\Http\Middleware\HandleRespondenForm;
 use Illuminate\Support\Facades\Route;
@@ -110,6 +111,9 @@ Route::get('inovasi/risetunj/produk_inovasi', function () {
     return view('Inovasi.riset_unj.produk_inovasi.produkinovasi');
 })->name('Inovasi.riset_unj.produk_inovasi.produkinovasi');
 
+Route::get('inovasi/risetunj/produk_inovasi', [App\Http\Controllers\ProdukInovasiController::class, 'publicIndexAlt'])
+    ->name('Inovasi.riset_unj.produk_inovasi.produkinovasi');
+
 Route::get('subdirektorat-inovasi/risetunj', function () {
     return view('subdirektorat-inovasi.riset_unj.risetunj');
 })->name('riset.unj');
@@ -117,6 +121,10 @@ Route::get('subdirektorat-inovasi/risetunj', function () {
 Route::get('subdirektorat-inovasi/risetunj/produk_inovasi', function () {
     return view('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi');
 })->name('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi');
+
+
+Route::get('subdirektorat-inovasi/risetunj/produk_inovasi', [App\Http\Controllers\ProdukInovasiController::class, 'publicIndex'])
+    ->name('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi');
 
 Route::get('/strukturorganisasi', function () {
     return view('struktur organisasi.strukturorganisasi');
