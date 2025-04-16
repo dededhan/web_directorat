@@ -20,6 +20,7 @@ use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\ProgramLayananController;
 use App\Http\Controllers\YoutubeController;
 use App\Http\Controllers\InstagramController;
+use App\Http\Controllers\ProdukInovasiController;
 use Illuminate\Http\Request;
 // Ganti route yang ada dengan:
 use App\Http\Controllers\DokumenController;
@@ -145,6 +146,18 @@ Route::prefix('admin')->name('admin.')
                 Route::post('/record-hasil/{katsinov_id?}', [KatsinovController::class, 'recordStore'])->name('record.store');
 
 
+
+                // Route::get('/produk_inovasi', function () {
+                //     return view('admin.katsinov.produk_inovasi');
+                // })->name('produk_inovasi');
+
+                Route::get('/produk_inovasi', [ProdukInovasiController::class, 'index'])->name('produk_inovasi');
+                Route::post('/produk_inovasi', [ProdukInovasiController::class, 'store'])->name('produk_inovasi.store');
+                Route::get('/produk_inovasi/{id}/detail', [ProdukInovasiController::class, 'getProdukDetail'])->name('produk_inovasi.detail');
+                Route::put('/produk_inovasi/{id}', [ProdukInovasiController::class, 'update'])->name('produk_inovasi.update');
+                Route::delete('/produk_inovasi/{id}', [ProdukInovasiController::class, 'destroy'])->name('produk_inovasi.destroy');
+                Route::post('/produk_inovasi/upload', [ProdukInovasiController::class, 'upload'])->name('produk_inovasi.upload');
+
                 // Form Record Hasil Pengukuran with katsinov_id parameter
                 // Route::get('/formrecordhasilpengukuran/{katsinov_id?}', function (Request $request, $katsinov_id = null) {
                 //     $katsinov = null;
@@ -269,7 +282,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                     return view('inovasi.dosen.dashboard');
                 })->name('dashboard');
 
-                
+
                 // Tabel Katsinov
                 Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekasitnov');
                 Route::get('/form', [KatsinovController::class, 'create'])->name('form');
