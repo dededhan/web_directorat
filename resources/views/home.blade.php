@@ -298,57 +298,80 @@
     </div>
 </div>
 </main>
-    <!-- Program dan Layanan Section -->
-    <section class="program-section">
-        <div class="container">
-            <!-- Section Header -->
-            <div class="unj-content-section-header">
-                <h2 class="unj-section-title">Program & Layanan</h2>
-                <p class="unj-section-subtitle">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan
-                    Pemeringkatan</p>
-            </div>
+    <!-- Program dan Layanan Section with Popup -->
+<section class="program-section">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="unj-content-section-header">
+            <h2 class="unj-section-title">Program & Layanan</h2>
+            <p class="unj-section-subtitle">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan Pemeringkatan</p>
+        </div>
+        
+        <!-- Program Cards Grid -->
+        <div class="program-grid">
+            @forelse($programLayanan as $program)
+                <div class="program-card" data-program-id="{{ $program->id }}">
+                    <div class="card-content">
+                        <div class="icon-container">
+                            <i class="{{ $program->icon }}"></i>
+                        </div>
+                        <h3 class="card-title">{{ $program->judul }}</h3>
+                        <div class="card-description">
+                            {!! $program->deskripsi !!}
+                        </div>
+                        <a href="#" class="card-link program-details-btn" data-program-id="{{ $program->id }}" 
+                           data-title="{{ $program->judul }}"
+                           data-description="{{ strip_tags($program->deskripsi) }}"
+                           data-full-description="{!! htmlspecialchars($program->deskripsi_lengkap ?? $program->deskripsi) !!}">
+                            Selengkapnya
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            @empty
+                <!-- Fallback content if no programs are found -->
+                <div class="program-card">
+                    <div class="card-content">
+                        <div class="icon-container">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3 class="card-title">Beasiswa</h3>
+                        <p class="card-description">
+                            Program beasiswa untuk mahasiswa berprestasi dan kurang mampu, membantu meringankan
+                            biaya pendidikan.
+                        </p>
+                        <a href="#" class="card-link">
+                            Selengkapnya
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</section>
 
-            <!-- Program Cards Grid -->
-            <div class="program-grid">
-                @forelse($programLayanan as $program)
-                    <div class="program-card">
-                        <div class="card-content">
-                            <div class="icon-container">
-                                <i class="{{ $program->icon }}"></i>
-                            </div>
-                            <h3 class="card-title">{{ $program->judul }}</h3>
-                            <div class="card-description">
-                                {!! $program->deskripsi !!}
-                            </div>
-                            <a href="#" class="card-link">
-                                Selengkapnya
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                @empty
-                    <!-- Fallback content if no programs are found -->
-                    <div class="program-card">
-                        <div class="card-content">
-                            <div class="icon-container">
-                                <i class="fas fa-graduation-cap"></i>
-                            </div>
-                            <h3 class="card-title">Beasiswa</h3>
-                            <p class="card-description">
-                                Program beasiswa untuk mahasiswa berprestasi dan kurang mampu, membantu meringankan
-                                biaya
-                                pendidikan.
-                            </p>
-                            <a href="#" class="card-link">
-                                Selengkapnya
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                @endforelse
+<!-- Program Details Popup Modal -->
+<div id="programDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 z-[1100] hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
+        <!-- Close Button -->
+        <button id="closeModalBtn" class="absolute top-4 right-4 text-gray-600 hover:text-teal-700 transition-colors">
+            <i class="fas fa-times text-2xl"></i>
+        </button>
+        
+        <!-- Modal Content -->
+        <div class="p-8">
+            <div id="programModalIcon" class="icon-container mx-auto mb-6 w-20 h-20 flex items-center justify-center">
+                <i class="text-4xl text-white"></i>
+            </div>
+            <h2 id="programModalTitle" class="text-3xl font-bold text-teal-800 mb-4 text-center"></h2>
+            
+            <div id="programModalDescription" class="prose max-w-prose mx-auto text-gray-700">
+                <!-- Dynamic content will be inserted here -->
             </div>
         </div>
-    </section>
+    </div>
+</div>
 
     <!-- UNJ dalam Angka Section -->
     {{-- <section class="unj-dalam-angka">
@@ -805,6 +828,65 @@
                 `;
             });
     });
+    document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('programDetailsModal');
+    const modalIcon = document.getElementById('programModalIcon').querySelector('i');
+    const modalTitle = document.getElementById('programModalTitle');
+    const modalDescription = document.getElementById('programModalDescription');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const programDetailsBtns = document.querySelectorAll('.program-details-btn');
+
+    // Function to open modal
+    function openProgramModal(btn) {
+        // Get data from button's data attributes
+        const programId = btn.getAttribute('data-program-id');
+        const title = btn.getAttribute('data-title');
+        const description = btn.getAttribute('data-description');
+        const fullDescription = btn.getAttribute('data-full-description');
+        const iconClass = btn.closest('.program-card').querySelector('.icon-container i').className;
+
+        // Set modal content
+        modalIcon.className = `${iconClass} text-4xl text-white`;
+        modalTitle.textContent = title;
+        modalDescription.innerHTML = fullDescription || description;
+
+        // Show modal
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    // Add click event to all "Selengkapnya" buttons
+    programDetailsBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            openProgramModal(this);
+        });
+    });
+
+    // Close modal when close button is clicked
+    closeModalBtn.addEventListener('click', function() {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    });
+
+    // Close modal when clicking outside of the modal content
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+    });
+    
+});
+
 </script>
 
 </html>
