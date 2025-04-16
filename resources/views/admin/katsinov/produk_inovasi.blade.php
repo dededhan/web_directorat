@@ -426,7 +426,12 @@
         
             // Handle save button click
             document.getElementById('saveEditProduk').addEventListener('click', function() {
+                // Get the data from CKEditor and set it to the textarea
                 const editorData = editDeskripsiEditor.getData();
+                
+                // This is the critical fix - we need to update the textarea with the editor content
+                // before submitting the form since the textarea is what gets submitted, not the CKEditor directly
+                document.getElementById('edit_deskripsi').value = editorData;
                 
                 const form = document.getElementById('editProdukForm');
                 const formData = new FormData(form);
