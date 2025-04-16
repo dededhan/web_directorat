@@ -25,19 +25,19 @@
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                {{-- <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.news.index') ? 'active' : '' }}">
+                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.news.index') ? 'active' : '' }}">
                     <a href="{{ route('subdirektorat-inovasi.admin_hilirisasi.news.index') }}">
                         <i class='bx bxs-news'></i>
                         <span class="text">Berita</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.newsscroll.index') ? 'active' : '' }}">
+                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.news-scroll.index') ? 'active' : '' }}">
                     <a href="{{ route('subdirektorat-inovasi.admin_hilirisasi.news-scroll.index') }}">
                         <i class='bx bxs-user'></i>
                         <span class="text">Berita Scroll</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.programlayanan.index') ? 'active' : '' }}">
+                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.program-layanan.index') ? 'active' : '' }}">
                     <a href="{{ route('subdirektorat-inovasi.admin_hilirisasi.program-layanan.index') }}">
                         <i class='bx bxs-user'></i>
                         <span class="text">Program dan Layanan</span>
@@ -60,7 +60,7 @@
                         <i class='bx bxl-instagram'></i>
                         <span class="text">Instagram</span>
                     </a>
-                </li> --}}
+                </li>
             </ul>
         </div>
        

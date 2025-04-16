@@ -259,7 +259,7 @@ Route::prefix('admin-pemeringkatan')->name('admin_pemeringkatan.')
     });
 
 Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
-// Route::prefix('inovasi')->name('inovasi.')
+    // Route::prefix('inovasi')->name('inovasi.')
     ->group(function () {
         Route::prefix('dosen')->name('dosen.')
             ->middleware(['checked', 'role:dosen'])
@@ -269,6 +269,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                     return view('inovasi.dosen.dashboard');
                 })->name('dashboard');
 
+                
                 // Tabel Katsinov
                 Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekasitnov');
                 Route::get('/form', [KatsinovController::class, 'create'])->name('form');
@@ -297,6 +298,41 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::get('/dashboard', function () {
                     return view('subdirektorat-inovasi.admin_hilirisasi.dashboard');
                 })->name('dashboard');
+
+                Route::resource('/news', BeritaController::class)
+                    ->except(['show', 'edit', 'update']);
+                Route::get('/berita/{id}/detail', [BeritaController::class, 'getBeritaDetail'])
+                    ->name('news.detail');
+                Route::put('/berita/{id}', [BeritaController::class, 'update'])
+                    ->name('news.update');
+                Route::post('/berita/upload', [BeritaController::class, 'upload'])->name('news.upload');
+
+                Route::resource('/news-scroll', PengumumanController::class);
+                Route::get('/pengumuman/{id}/detail', [PengumumanController::class, 'getPengumumanDetail'])
+                    ->name('news-scroll.detail');
+
+                Route::resource('/program-layanan', ProgramLayananController::class);
+                Route::get('/program-layanan/{id}/detail', [ProgramLayananController::class, 'getProgramDetail'])
+                    ->name('program-layanan.detail');
+
+                //Youtube
+                Route::resource('/youtube', YoutubeController::class)
+                    ->except(['show', 'edit', 'update']);
+
+                Route::get('/youtube/{id}/preview', [YoutubeController::class, 'preview'])
+                    ->name('youtube.preview');
+
+                // Instagram
+                Route::resource('/instagram', InstagramController::class)
+                    ->except(['show', 'edit', 'update']);
+
+                Route::get('/instagram/{id}/preview', [InstagramController::class, 'preview'])
+                    ->name('instagram.preview');
+
+                Route::resource('/document', DokumenController::class);
+                Route::get('document/{dokumen}/download', [DokumenController::class, 'download'])
+                    ->name('document.download');
+
 
                 // Tabel Katsinov
                 Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekatsinov');
