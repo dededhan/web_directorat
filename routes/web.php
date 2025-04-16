@@ -110,6 +110,14 @@ Route::get('inovasi/risetunj/produk_inovasi', function () {
     return view('Inovasi.riset_unj.produk_inovasi.produkinovasi');
 })->name('Inovasi.riset_unj.produk_inovasi.produkinovasi');
 
+Route::get('subdirektorat-inovasi/risetunj', function () {
+    return view('subdirektorat-inovasi.riset_unj.risetunj');
+})->name('riset.unj');
+
+Route::get('subdirektorat-inovasi/risetunj/produk_inovasi', function () {
+    return view('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi');
+})->name('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi');
+
 Route::get('/strukturorganisasi', function () {
     return view('struktur organisasi.strukturorganisasi');
 })->name('strukturorganisasi');
@@ -179,9 +187,9 @@ Route::post('/katsinov/store', [KatsinovController::class, 'store'])
     ->name('katsinov.store')
     ->middleware('checked');
 
-Route::get('/inovasi/landingpage', function () {
-    return view('Inovasi.LandingPageHilirisasi');
-})->name('inovasi.landingpage');
+Route::get('/subdirektorat-inovasi/landingpage', function () {
+    return view('subdirektorat-inovasi.LandingPageHilirisasi');
+})->name('subdirektorat-inovasi.landingpage');
 
 Route::get('/katsinov/pdf', [KatsinovController::class, 'downloadPDF'])->name('katsinov.pdf');
 

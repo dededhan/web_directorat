@@ -266,7 +266,7 @@
                 <li class="group">
                     <a href="#">Sub Direktorat</a>
                     <ul class="dropdown-menu group-hover:block">
-                        <li><a href="{{ route('inovasi.landingpage') }}">Subdirektorat Inovasi dan Hilirisasi</a></li>
+                        <li><a href="{{ route('subdirektorat-inovasi.landingpage') }}">Subdirektorat Inovasi dan Hilirisasi</a></li>
                         <li><a href="{{ route('pemeringkatan.landingpage') }}">Subdirektorat Pemeringkatan dan Sistem Informasi</a></li>
                     </ul>
                 </li>
@@ -334,7 +334,7 @@
                     <i class="fas fa-chevron-down"></i>
                 </button>
                 <ul class="hidden">
-                    <li><a href="{{ route('inovasi.landingpage') }}">Subdirektorat Inovasi dan Hilirisasi</a></li>
+                    <li><a href="{{ route('subdirektorat-inovasi.landingpage') }}">Subdirektorat Inovasi dan Hilirisasi</a></li>
                     <li><a href="{{ route('pemeringkatan.landingpage') }}">Subdirektorat Pemeringkatan dan Sistem Informasi</a></li>
                 </ul>
             </li>

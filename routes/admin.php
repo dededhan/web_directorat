@@ -258,6 +258,7 @@ Route::prefix('admin-pemeringkatan')->name('admin_pemeringkatan.')
         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
     });
 
+// Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 Route::prefix('inovasi')->name('inovasi.')
     ->group(function () {
         Route::prefix('dosen')->name('dosen.')
