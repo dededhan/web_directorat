@@ -19,22 +19,6 @@
         </div>
     </div>
 
-
-    {{-- <!-- Flash Messages -->
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif --}}
-
     <div class="table-data">
         <div class="order">
             <div class="head">
@@ -357,57 +341,59 @@
             });
     </script>
     <script>
-        // SweetAlert helper functions
-        function showSuccessAlert(message) {
-            Swal.fire({
-                title: 'Berhasil!',
-                text: message,
-                icon: 'success',
-                confirmButtonColor: '#3498db',
-                confirmButtonText: 'OK'
-            });
-        }
-    
-        function showErrorAlert(message) {
-            Swal.fire({
-                title: 'Gagal!',
-                text: message,
-                icon: 'error',
-                confirmButtonColor: '#3498db',
-                confirmButtonText: 'OK'
-            });
-        }
-    
-        function showConfirmationDialog(message, callback) {
-            Swal.fire({
-                title: 'Konfirmasi',
-                text: message,
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3498db',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya',
-                cancelButtonText: 'Tidak'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    callback();
-                }
-            });
-        }
-    
+        document.addEventListener('DOMContentLoaded', function() {
+            // SweetAlert helper functions
+            function showSuccessAlert(message) {
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: message,
+                    icon: 'success',
+                    confirmButtonColor: '#3498db',
+                    confirmButtonText: 'OK'
+                });
+            }
+        
+            function showErrorAlert(message) {
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: message,
+                    icon: 'error',
+                    confirmButtonColor: '#3498db',
+                    confirmButtonText: 'OK'
+                });
+            }
+        
+            function showConfirmationDialog(message, callback) {
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: message,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3498db',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Tidak'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        callback();
+                    }
+                });
+            }
+        
             // Handle view image
             document.querySelectorAll('.view-image').forEach(button => {
                 button.addEventListener('click', function() {
                     const imageUrl = this.dataset.image;
                     const title = this.dataset.title;
-    
+        
                     document.getElementById('imageModalLabel').textContent = title;
                     document.getElementById('modalImage').src = imageUrl;
-    
-                    new bootstrap.Modal(document.getElementById('imageModal')).show();
+        
+                    const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+                    imageModal.show();
                 });
             });
-            
+                
             // Handle delete button clicks
             document.querySelectorAll('.delete-btn').forEach(button => {
                 button.addEventListener('click', function() {
@@ -418,36 +404,42 @@
                     });
                 });
             });
-            
+                
             // Handle edit button clicks
             document.querySelectorAll('.edit-berita').forEach(button => {
                 button.addEventListener('click', function() {
                     const beritaId = this.dataset.id;
-    
+        
                     // Fetch berita details via AJAX
                     fetch(`/admin/berita/${beritaId}/detail`)
-                        .then(response => response.json())
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
                         .then(data => {
                             // Populate the edit form
                             document.getElementById('edit_kategori').value = data.kategori;
                             document.getElementById('edit_tanggal').value = data.tanggal;
                             document.getElementById('edit_judul_berita').value = data.judul;
-    
+        
                             // Set content to the CKEditor
                             if (editBeritaEditor) {
                                 editBeritaEditor.setData(data.isi);
                             }
-    
+        
                             // Set the current image
                             const currentImage = document.getElementById('current_image');
                             currentImage.src = `/storage/${data.gambar}`;
-    
+        
                             // Set the form action
                             const form = document.getElementById('editBeritaForm');
                             form.action = `/admin/berita/${beritaId}`;
-    
+        
                             // Show the modal
-                            new bootstrap.Modal(document.getElementById('editBeritaModal')).show();
+                            const editModal = new bootstrap.Modal(document.getElementById('editBeritaModal'));
+                            editModal.show();
                         })
                         .catch(error => {
                             console.error('Error fetching berita details:', error);
@@ -455,29 +447,31 @@
                         });
                 });
             });
-    
+        
             // Handle save button click
             document.getElementById('saveEditBerita').addEventListener('click', function() {
                 const editorData = editBeritaEditor.getData();
                 document.getElementById('edit_isi_berita').value = editorData;
-    
+        
                 const form = document.getElementById('editBeritaForm');
                 const formData = new FormData(form);
-    
+        
                 fetch(form.action, {
                     method: 'POST',
                     body: formData,
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     }
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
                         // Close the modal
-                        bootstrap.Modal.getInstance(document.getElementById('editBeritaModal'))
-                            .hide();
-    
+                        const modalElement = document.getElementById('editBeritaModal');
+                        const modal = bootstrap.Modal.getInstance(modalElement);
+                        modal.hide();
+        
                         // Show success message
                         showSuccessAlert(data.message || 'Berita berhasil diperbarui!');
                         
