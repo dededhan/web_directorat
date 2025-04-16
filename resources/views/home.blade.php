@@ -213,14 +213,14 @@
         </div>
 
 
-        <!-- Regular News Grid with randomly selected news -->
+       <!-- Regular News Grid with first 3 news items -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
     @php
-        // Create a copy of the featuredNews to shuffle
-        $randomNews = $featuredNews->shuffle()->take(3);
+        // Take the first 3 news items for the regular grid
+        $regularNews = $featuredNews->take(3);
     @endphp
     
-    @foreach ($randomNews as $news)
+    @foreach ($regularNews as $news)
         <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div class="relative">
                 <img alt="{{ $news->judul }}" class="w-full h-56 object-cover" 
@@ -257,43 +257,47 @@
     @endforeach
 </div>
 
-        <!-- Enhanced Featured News Carousel -->
-        <div class="enhanced-carousel">
-            <div class="enhanced-carousel-title">Berita Terbaru</div>
-            <div class="carousel">
-                <div class="carousel-inner">
-                    @foreach ($featuredNews as $featured)
-                        <div class="carousel-item-enhanced">
-                            <div class="news-card-enhanced">
-                                <div class="news-image-container">
-                                    <img alt="{{ $featured->judul }}" class="news-image"
-                                        src="{{ asset('storage/' . $featured->gambar) }}" />
-                                    <div class="news-tag-enhanced">{{ ucfirst($featured->kategori) }}</div>
-                                </div>
-                                <div class="news-content">
-                                    <div class="news-meta">
-                                        <i class="fas fa-user-circle mr-2"></i>Admin
-                                        <span class="mx-2">|</span>
-                                        <i
-                                            class="fas fa-calendar-alt mr-2"></i>{{ date('d M Y', strtotime($featured->tanggal)) }}
-                                    </div>
-                                    <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}">
-                                        <h3 class="news-title">{{ $featured->judul }}</h3>
-                                    </a>
-                                    <p class="news-excerpt">
-                                        {!! Str::limit($featured->isi, 150) !!}
-                                    </p>
-                                    <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}" class="news-link">
-                                        Baca selengkapnya <i class="fas fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
+<!-- Enhanced Featured News Carousel with remaining news items -->
+<div class="enhanced-carousel">
+    <div class="enhanced-carousel-title">Berita Terbaru</div>
+    <div class="carousel">
+        <div class="carousel-inner">
+            @php
+                // Skip the first 3 news items and use the rest for the carousel
+                $carouselNews = $featuredNews->slice(3);
+            @endphp
+            @foreach ($carouselNews as $featured)
+                <div class="carousel-item-enhanced">
+                    <div class="news-card-enhanced">
+                        <div class="news-image-container">
+                            <img alt="{{ $featured->judul }}" class="news-image"
+                                src="{{ asset('storage/' . $featured->gambar) }}" />
+                            <div class="news-tag-enhanced">{{ ucfirst($featured->kategori) }}</div>
                         </div>
-                    @endforeach
+                        <div class="news-content">
+                            <div class="news-meta">
+                                <i class="fas fa-user-circle mr-2"></i>Admin
+                                <span class="mx-2">|</span>
+                                <i
+                                    class="fas fa-calendar-alt mr-2"></i>{{ date('d M Y', strtotime($featured->tanggal)) }}
+                            </div>
+                            <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}">
+                                <h3 class="news-title">{{ $featured->judul }}</h3>
+                            </a>
+                            <p class="news-excerpt">
+                                {!! Str::limit($featured->isi, 150) !!}
+                            </p>
+                            <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}" class="news-link">
+                                Baca selengkapnya <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            @endforeach
         </div>
-    </main>
+    </div>
+</div>
+</main>
     <!-- Program dan Layanan Section -->
     <section class="program-section">
         <div class="container">
