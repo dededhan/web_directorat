@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>KATSINOV-MeterO - Innovation Measurement System</title>
     <link href="{{ asset('aspect-analysis.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('inovasi/dashboard/form_katsinov/css/form.css') }}">
 
     <script src="{{ asset('aspect-legend.js') }}"></script>
@@ -18,6 +18,84 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Added Custom CSS for Card Indicators -->
+    <style>
+    .summary-card {
+        background: #f8f9fa;
+        border-left: 5px solid #176369;
+    }
+
+    .indicators-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 10px; /* Reduced gap */
+        padding: 10px; /* Reduced padding */
+        background-color: #f5f5f5; /* Added light background */
+    }
+
+    .indicator-title {
+        font-weight: bold;
+        color: #176369;
+        margin-bottom: 8px; /* Reduced margin */
+        border-bottom: 1px solid #eee;
+        padding-bottom: 6px; /* Reduced padding */
+        font-size: 1em; /* Slightly smaller font size */
+    }
+
+    .indicator-header {
+        margin: 0;
+        padding: 8px 15px; /* Reduced vertical padding */
+        background-color: #006064;
+        color: white;
+        text-align: center;
+        width: 100%;
+        border-radius: 4px 4px 0 0; /* Rounded top corners */
+        line-height: 1.2; /* Reduced line height */
+    }
+
+    /* Added styles for the assessment table */
+    .assessment-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    .assessment-table th, 
+    .assessment-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .assessment-table th {
+        background-color: #006064;
+        color: white;
+    }
+
+    .assessment-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .assessment-table tr:hover {
+        background-color: #e9e9e9;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .indicator-card {
+            padding: 12px 15px;
+            width: 100%;
+            margin: 0 auto 15px;
+        }
+        
+        .assessment-table th,
+        .assessment-table td {
+            padding: 6px 4px;
+            font-size: 0.9rem;
+        }
+    }
+    </style>
 </head>
 
 
@@ -272,13 +350,13 @@
                     </div>
                 </div>
             </div>
-            <buttom>
-                <a href="{{ route('admin.hilirisasi.lampiran') }}">
+            <div>
+                <a href="{{ route('inovasi.admin_hilirisasi.lampiran') }}">
                     <button type="button"
                         style="background-color: #176369; color: white; padding: 10px 20px; border: none; cursor: pointer;">Lampiran</button>
                 </a>
             </div>
-            {{-- @dd($indicator) --}}
+            
             @include('Inovasi.admin_hilirisasi.indikator1')
             @include('Inovasi.admin_hilirisasi.indikator2')
             @include('Inovasi.admin_hilirisasi.indikator3')
@@ -286,6 +364,7 @@
             @include('Inovasi.admin_hilirisasi.indikator5')
             @include('Inovasi.admin_hilirisasi.indikator6')
             @include('Inovasi.admin_hilirisasi.jumlahindikator')
+            
             <!-- Submit All Button -->
             <div class="submit-all-container"
                 style="
@@ -314,12 +393,12 @@
                     Update Indikator KATSINOV
                     @endif
                 </button>
-            </div>  
+            </div>
         </form>
     </main>
 
     <script src="{{ asset('inovasi/dashboard/form_katsinov/js/form.js') }}"></script>
 </body>
 
-
+@endsection
 </html>

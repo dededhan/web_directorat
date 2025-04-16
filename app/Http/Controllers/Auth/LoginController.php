@@ -30,7 +30,7 @@ class LoginController extends Controller
                 'admin_pemeringkatan' => 'admin_pemeringkatan.dashboard',
                 'dosen' => 'inovasi.dosen.dashboard',
                 'admin_hilirisasi' => 'inovasi.admin_hilirisasi.dashboard',
-                'kepala_sub_direktorat' => 'inovasi.admin_hilirisasi.dashboard',
+                // 'kepala_sub_direktorat' => 'inovasi.admin_hilirisasi.dashboard',
                 'validator' => 'inovasi.validator.dashboard',
             };
 

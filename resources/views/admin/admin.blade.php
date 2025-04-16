@@ -16,8 +16,6 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
     <!-- My CSS -->
     <link rel="stylesheet" href="{{ asset('admin.css') }}">
-
-    {{-- <link rel="stylesheet" href="{{ asset('dashboard_main/sidebar_dashboard.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('dashboard_main/sidebar_dashboardadmin.css') }}">
     <link rel="stylesheet" href="{{ asset('dashboard_main/navbar_dashboard.css') }}">
 
