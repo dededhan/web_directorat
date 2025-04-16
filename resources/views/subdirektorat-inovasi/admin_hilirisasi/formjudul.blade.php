@@ -9,7 +9,8 @@
 </head>
 <body>
 
-    @extends('Inovasi.admin_hilirisasi.index')
+    @extends('subdirektorat-inovasi.admin_hilirisasi.index')
+
     <div class="container">
         <div class="header">
             <h1>Form Pengajuan Inovasi</h1>

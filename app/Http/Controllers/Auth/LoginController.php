@@ -28,10 +28,10 @@ class LoginController extends Controller
                 'prodi' =>  'prodi.dashboard',
                 'fakultas' =>'fakultas.dashboard',
                 'admin_pemeringkatan' => 'admin_pemeringkatan.dashboard',
-                'dosen' => 'inovasi.dosen.dashboard',
-                'admin_hilirisasi' => 'inovasi.admin_hilirisasi.dashboard',
+                'dosen' => 'subdirektorat-inovasi.dosen.dashboard',
+                'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.dashboard',
                 // 'kepala_sub_direktorat' => 'inovasi.admin_hilirisasi.dashboard',
-                'validator' => 'inovasi.validator.dashboard',
+                'validator' => 'subdirektorat-inovasi.validator.dashboard',
             };
 
             return redirect(route($next));

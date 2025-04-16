@@ -6,10 +6,12 @@
     <link rel="stylesheet" href="/inovasi/formrecordhasilpengukuran.css">
 </head>
 
-@extends('Inovasi.admin_hilirisasi.index')
+@extends('subdirektorat-inovasi.admin_hilirisasi.index')
+
+
 
 <body>
-    @section('contentadminhilirisasi')
+    @section('content-admin-hilirisasi')
     
     <div class="form-container">
         <form id="innovationForm">

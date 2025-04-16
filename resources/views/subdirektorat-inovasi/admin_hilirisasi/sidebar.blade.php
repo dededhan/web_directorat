@@ -15,18 +15,67 @@
 
     <!-- Navigation Menu -->
     <nav class="side-navigation">
+        <!-- Main Menu Section -->
+        <div class="menu-section">
+            <h3 class="section-title">Main Menu</h3>
+            <ul class="side-menu">
+                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('subdirektorat-inovasi.admin_hilirisasi.dashboard') }}">
+                        <i class='bx bxs-dashboard'></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                {{-- <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.news.index') ? 'active' : '' }}">
+                    <a href="{{ route('subdirektorat-inovasi.admin_hilirisasi.news.index') }}">
+                        <i class='bx bxs-news'></i>
+                        <span class="text">Berita</span>
+                    </a>
+                </li>
+                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.newsscroll.index') ? 'active' : '' }}">
+                    <a href="{{ route('subdirektorat-inovasi.admin_hilirisasi.news-scroll.index') }}">
+                        <i class='bx bxs-user'></i>
+                        <span class="text">Berita Scroll</span>
+                    </a>
+                </li>
+                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.programlayanan.index') ? 'active' : '' }}">
+                    <a href="{{ route('subdirektorat-inovasi.admin_hilirisasi.program-layanan.index') }}">
+                        <i class='bx bxs-user'></i>
+                        <span class="text">Program dan Layanan</span>
+                    </a>
+                </li>
+                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.document.index') ? 'active' : '' }}">
+                    <a href="{{ route('subdirektorat-inovasi.admin_hilirisasi.document.index') }}">
+                        <i class='bx bxs-user'></i>
+                        <span class="text">Document</span>
+                    </a>
+                </li>
+                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.youtube.index') ? 'active' : '' }}">
+                    <a href="{{ route('subdirektorat-inovasi.admin_hilirisasi.youtube.index') }}">
+                        <i class='bx bxl-youtube'></i>
+                        <span class="text">Youtube</span>
+                    </a>
+                </li>
+                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.instagram.index') ? 'active' : '' }}">
+                    <a href="{{ route('subdirektorat-inovasi.admin_hilirisasi.instagram.index') }}">
+                        <i class='bx bxl-instagram'></i>
+                        <span class="text">Instagram</span>
+                    </a>
+                </li> --}}
+            </ul>
+        </div>
+       
         <!-- Inovasi Section -->
         <div class="menu-section">
             <h3 class="section-title">Inovasi</h3>
             <ul class="side-menu">
-                <li class="{{ request()->routeIs('inovasi.admin_hilirisasi.TableKatsinov') ? 'active' : '' }}">
-                    <a href="{{ route('inovasi.admin_hilirisasi.TableKatsinov') }}">
+                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.tablekatsinov') ? 'active' : '' }}">
+                    <a href="{{ route('subdirektorat-inovasi.admin_hilirisasi.tablekatsinov') }}">
                         <i class='bx bxs-graduation'></i>
                         <span class="text">Tabel Kasitnov</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('inovasi.admin_hilirisasi.form') ? 'active' : '' }}">
-                    <a href="{{ route('inovasi.admin_hilirisasi.form') }}">
+                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.form') ? 'active' : '' }}">
+                    <a href="{{ route('subdirektorat-inovasi.admin_hilirisasi.form') }}">
                         <i class='bx bxs-file-plus'></i>
                         <span class="text">Form Katsinov</span>
                     </a>
@@ -38,14 +87,14 @@
         <div class="menu-section">
             <h3 class="section-title">SDGs</h3>
             <ul class="side-menu">
-                <li class="{{ request()->routeIs('inovasi.admin_hilirisasi.SDGs.program_kegiatan') ? 'active' : '' }}">
-                    <a href="{{ route('inovasi.admin_hilirisasi.SDGs.program_kegiatan') }}">
+                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.SDGs.program_kegiatan') ? 'active' : '' }}">
+                    <a href="{{ route('subdirektorat-inovasi.admin_hilirisasi.SDGs.program_kegiatan') }}">
                         <i class='bx bxs-graduation'></i>
                         <span class="text">Program</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('inovasi.admin_hilirisasi.SDGs.publikasi_riset') ? 'active' : '' }}">
-                    <a href="{{ route('inovasi.admin_hilirisasi.SDGs.publikasi_riset') }}">
+                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.SDGs.publikasi_riset') ? 'active' : '' }}">
+                    <a href="{{ route('subdirektorat-inovasi.admin_hilirisasi.SDGs.publikasi_riset') }}">
                         <i class='bx bxs-graduation'></i>
                         <span class="text">Publikasi & Riset</span>
                     </a>

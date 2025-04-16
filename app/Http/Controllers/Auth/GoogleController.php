@@ -62,11 +62,11 @@ class GoogleController extends Controller
                     'prodi' =>  'prodi.dashboard',
                     'fakultas' =>'fakultas.dashboard',
                     'admin_pemeringkatan' => 'admin_pemeringkatan.dashboard',
-                    'dosen' => 'inovasi.dosen.dashboard',
-                    'admin_hilirisasi' => 'inovasi.admin_hilirisasi.dashboard',
-                    'validator' => 'inovasi.validator.dashboard',
-                    'kepala_sub_direktorat' => 'inovasi.admin_hilirisasi.dashboard',
-                    'registered_user' => 'inovasi.registered_user.dashboard',
+                    'dosen' => 'subdirektorat-inovasi.dosen.dashboard',
+                    'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.dashboard',
+                    'validator' => 'subdirektorat-inovasi.validator.dashboard',
+                    // 'kepala_sub_direktorat' => 'subdirektorat-inovasi.admin_hilirisasi.dashboard',
+                    'registered_user' => 'subdirektorat-inovasi.registered_user.dashboard',
                     default => 'home',
                 };
                 

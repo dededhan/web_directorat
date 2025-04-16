@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="{{ asset('inovasi/dashboard/form_katsinov/css/berita_acara.css') }}">
     <link rel="stylesheet" href="{{ asset('inovasi/dashboard/form_katsinov/css/formberitaacara.css') }}">
 </head>
-@extends('Inovasi.admin_hilirisasi.index')
+@extends('subdirektorat-inovasi.admin_hilirisasi.index')
 
-@section('contentadminhilirisasi')
+@section('content-admin-hilirisasi')
 
 <header class="header">
     <h1>Berita Acara Pengukuran Tingkat Kesiapan Teknologi</h1>

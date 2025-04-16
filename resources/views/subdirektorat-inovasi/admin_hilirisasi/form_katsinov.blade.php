@@ -99,9 +99,9 @@
 </head>
 
 
-@extends('Inovasi.admin_hilirisasi.index')
+@extends('subdirektorat-inovasi.admin_hilirisasi.index')
 
-@section('contentadminhilirisasi')
+@section('content-admin-hilirisasi')
 
 
 <body x-data="aspectLegend()" x-init="init()">
@@ -350,20 +350,20 @@
                     </div>
                 </div>
             </div>
-            <div>
+            {{-- <div>
                 <a href="{{ route('inovasi.admin_hilirisasi.lampiran') }}">
                     <button type="button"
                         style="background-color: #176369; color: white; padding: 10px 20px; border: none; cursor: pointer;">Lampiran</button>
                 </a>
-            </div>
+            </div> --}}
             
-            @include('Inovasi.admin_hilirisasi.indikator1')
-            @include('Inovasi.admin_hilirisasi.indikator2')
-            @include('Inovasi.admin_hilirisasi.indikator3')
-            @include('Inovasi.admin_hilirisasi.indikator4')
-            @include('Inovasi.admin_hilirisasi.indikator5')
-            @include('Inovasi.admin_hilirisasi.indikator6')
-            @include('Inovasi.admin_hilirisasi.jumlahindikator')
+            @include('subdirektorat-inovasi.admin_hilirisasi.indikator1')
+            @include('subdirektorat-inovasi.admin_hilirisasi.indikator2')
+            @include('subdirektorat-inovasi.admin_hilirisasi.indikator3')
+            @include('subdirektorat-inovasi.admin_hilirisasi.indikator4')
+            @include('subdirektorat-inovasi.admin_hilirisasi.indikator5')
+            @include('subdirektorat-inovasi.admin_hilirisasi.indikator6')
+            @include('subdirektorat-inovasi.admin_hilirisasi.jumlahindikator')
             
             <!-- Submit All Button -->
             <div class="submit-all-container"

@@ -1,6 +1,6 @@
-@extends('Inovasi.admin_hilirisasi.index')
+@extends('subdirektorat-inovasi.admin_hilirisasi.index')
 
-@section('contentadminhilirisasi')
+@section('content-admin-hilirisasi')
     <div class="head-title">
         <div class="left">
             <h1>Program & Kegiatan</h1>

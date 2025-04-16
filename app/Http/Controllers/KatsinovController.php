@@ -30,10 +30,10 @@ class KatsinovController extends Controller
 
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov.TableKatsinov',
-            'dosen' => 'inovasi.dosen.tablekatsinov',
-            'admin_hilirisasi' => 'inovasi.admin_hilirisasi.tablekatsinov',
-            'validator' => 'inovasi.validator.tablekatsinov',
-            'registered_user' => 'inovasi.registered_user.TableKatsinov',
+            'dosen' => 'subdirektorat-inovasi.dosen.tablekatsinov',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.tablekatsinov',
+            'validator' => 'subdirektorat-inovasi.validator.tablekatsinov',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.tablekatsinov',
         };
 
         return view($view, [
@@ -45,10 +45,10 @@ class KatsinovController extends Controller
     {
         $view = match (Auth::user()->role) {
             'admin_direktorat' => 'admin.katsinov.form_katsinov',
-            'dosen' => 'inovasi.dosen.form_katsinov',
-            'admin_hilirisasi' => 'inovasi.admin_hilirisasi.form_katsinov',
-            'validator' => 'inovasi.validator.form_katsinov',
-            'registered_user' => 'inovasi.registered_user.form_katsinov',
+            'dosen' => 'subdirektorat-inovasi.dosen.form_katsinov',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.form_katsinov',
+            'validator' => 'subdirektorat-inovasi.validator.form_katsinov',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.form_katsinov',
         };
 
         return view($view, [

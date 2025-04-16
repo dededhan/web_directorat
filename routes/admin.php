@@ -258,8 +258,8 @@ Route::prefix('admin-pemeringkatan')->name('admin_pemeringkatan.')
         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
     });
 
-// Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
-Route::prefix('inovasi')->name('inovasi.')
+Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
+// Route::prefix('inovasi')->name('inovasi.')
     ->group(function () {
         Route::prefix('dosen')->name('dosen.')
             ->middleware(['checked', 'role:dosen'])
@@ -295,11 +295,11 @@ Route::prefix('inovasi')->name('inovasi.')
             ->group(function () {
                 // Dashboard
                 Route::get('/dashboard', function () {
-                    return view('Inovasi.admin_hilirisasi.dashboard');
+                    return view('subdirektorat-inovasi.admin_hilirisasi.dashboard');
                 })->name('dashboard');
 
                 // Tabel Katsinov
-                Route::get('/TableKatsinov', [KatsinovController::class, 'index'])->name('TableKatsinov');
+                Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekatsinov');
                 Route::get('/form', [KatsinovController::class, 'create'])->name('form');
                 Route::post('/store', [KatsinovController::class, 'store'])->name('store');
                 Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
@@ -328,12 +328,12 @@ Route::prefix('inovasi')->name('inovasi.')
                     ->group(function () {
                         // Program Kegiatan
                         Route::get('/program_kegiatan', function () {
-                            return view('Inovasi.admin_hilirisasi.SDGs.program_kegiatan');
+                            return view('subdirektorat-inovasi.admin_hilirisasi.SDGs.program_kegiatan');
                         })->name('program_kegiatan');
 
                         // Publikasi Riset
                         Route::get('/publikasi_riset', function () {
-                            return view('Inovasi.admin_hilirisasi.SDGs.publikasi_riset');
+                            return view('subdirektorat-inovasi.admin_hilirisasi.SDGs.publikasi_riset');
                         })->name('publikasi_riset');
                     });
             });
