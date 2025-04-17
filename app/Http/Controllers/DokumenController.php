@@ -8,6 +8,9 @@ use App\Http\Requests\StoreDokumenRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 
 class DokumenController extends Controller
 {
@@ -17,7 +20,11 @@ class DokumenController extends Controller
     public function index()
     {
         $dokumens = Dokumen::orderBy('tanggal_publikasi', 'desc')->get();
-        return view('admin.document', compact('dokumens'));
+        if (auth()->user()->hasRole('admin')) {
+            return view('admin.document', compact('dokumens'));
+        } elseif (auth()->user()->hasRole('admin_hilirisasi')) {
+            return view('subdirektorat-inovasi.admin_hilirisasi.document', compact('dokumens'));
+        }
     }
 
     /**

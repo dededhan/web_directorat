@@ -27,7 +27,7 @@
                 <h3>Input Berita</h3>
             </div>
 
-            <form method="POST" action="{{ route('admin.news.store') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route($routePrefix . '.news.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -270,7 +270,7 @@
                     data.append('upload', file);
                     data.append('_token', '{{ csrf_token() }}');
     
-                    fetch('{{ route("admin.news.upload") }}', {
+                    fetch('{{ route($routePrefix . ".news.upload") }}', {
                         method: 'POST',
                         body: data
                     })
@@ -293,6 +293,7 @@
                 return Promise.reject();
             }
         }
+    
     
         function MyCustomUploadAdapterPlugin(editor) {
             editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
@@ -343,6 +344,9 @@
             });
     </script>
     <script>
+
+        const appRoutePrefix = '{{ $routePrefix }}';
+        
         document.addEventListener('DOMContentLoaded', function() {
             // SweetAlert helper functions
             function showSuccessAlert(message) {
@@ -494,80 +498,6 @@
     </script>
 
     <style>
-        .table-data {
-            margin-top: 24px;
-        }
 
-        .order {
-            background: #fff;
-            padding: 24px;
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-            border-color: #3498db;
-            box-shadow: none;
-        }
-
-        .btn-primary {
-            background-color: #3498db;
-            border-color: #3498db;
-        }
-
-        .btn-primary:hover {
-            background-color: #2980b9;
-            border-color: #2980b9;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        .badge {
-            font-size: 0.7em;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 5px;
-        }
-
-        textarea {
-            resize: vertical;
-        }
-
-        .table th {
-            white-space: nowrap;
-        }
-
-        /* Custom styles for the news management */
-        .ck-editor__editable {
-            min-height: 300px;
-        }
-
-        #modalImage {
-            max-height: 70vh;
-        }
-
-        /* Alert styling */
-        .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            color: #155724;
-        }
-
-        .alert-danger {
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            color: #721c24;
-        }
     </style>
 @endsection

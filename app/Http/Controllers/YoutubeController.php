@@ -15,7 +15,11 @@ class YoutubeController extends Controller
     public function index()
     {
         $videos = Youtube::latest()->get();
-        return view('admin.youtube', compact('videos'));
+        if (auth()->user()->hasRole('admin')) {
+            return view('admin.youtube', compact('videos'));
+        } elseif (auth()->user()->hasRole('admin_hilirisasi')) {
+            return view('subdirektorat-inovasi.admin_hilirisasi.youtube', compact('videos'));
+        }
     }
 
     /**

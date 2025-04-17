@@ -14,12 +14,32 @@ use App\Models\Instagram;
 class BeritaController extends Controller
 {
     /**
+     * Get the correct route name prefix based on authenticated user role
+     */
+    private function getRoutePrefix()
+    {
+        if (auth()->user()->role === 'admin_direktorat') {
+            return 'admin';
+        } else if (auth()->user()->role === 'admin_hilirisasi') {
+            return 'subdirektorat-inovasi.admin_hilirisasi';
+        }
+        
+        return 'admin';
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $beritas = Berita::latest()->get();
-        return view('admin.newsadmin', compact('beritas'));
+        $routePrefix = $this->getRoutePrefix();
+        
+        if (auth()->user()->role === 'admin_direktorat') {
+            return view('admin.newsadmin', compact('beritas', 'routePrefix'));
+        } else if (auth()->user()->role === 'admin_hilirisasi') {
+            return view('subdirektorat-inovasi.admin_hilirisasi.newsadmin', compact('beritas', 'routePrefix'));
+        }
     }
 
     /**
@@ -62,7 +82,8 @@ class BeritaController extends Controller
                     }
                 }
 
-                return redirect()->route('admin.news.index')
+                $routePrefix = $this->getRoutePrefix();
+                return redirect()->route($routePrefix . '.news.index')
                     ->with('success', 'Berita berhasil disimpan!');
             } else {
                 // Handle the case where image upload failed
@@ -207,11 +228,22 @@ class BeritaController extends Controller
             if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
                 Storage::disk('public')->delete($berita->gambar);
             }
+            
+            // Delete additional images if they exist
+            if ($berita->additionalImages) {
+                foreach ($berita->additionalImages as $image) {
+                    if (Storage::disk('public')->exists($image->path)) {
+                        Storage::disk('public')->delete($image->path);
+                    }
+                    $image->delete();
+                }
+            }
          
             // Delete the record
             $berita->delete();
             
-            return redirect()->route('admin.news.index')
+            $routePrefix = $this->getRoutePrefix();
+            return redirect()->route($routePrefix . '.news.index')
                 ->with('success', 'Berita berhasil dihapus!');
         } catch (\Exception $e) {
             \Log::error('Error deleting news: ' . $e->getMessage());
@@ -222,18 +254,19 @@ class BeritaController extends Controller
 
     // app/Http/Controllers/BeritaController.php
     public function upload(Request $request)
-{
-    $request->validate([
-        'upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
+    {
+        $request->validate([
+            'upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-    $path = $request->file('upload')->store('news_images', 'public');
-    $url = Storage::url($path);
+        $path = $request->file('upload')->store('news_images', 'public');
+        $url = Storage::url($path);
 
-    return response()->json([
-        'url' => asset($url),
-    ]);
-}
+        return response()->json([
+            'url' => asset($url),
+        ]);
+    }
+    
     public function update(Request $request, string $id)
     {
         try {
@@ -241,7 +274,7 @@ class BeritaController extends Controller
 
             // Validate the request
             $validated = $request->validate([
-                'kategori' => 'required|in:inovasi,pemeringkatan, umum',
+                'kategori' => 'required|in:inovasi,pemeringkatan,umum',
                 'tanggal' => 'required|date',
                 'judul_berita' => 'required|string|max:200',
                 'isi_berita' => 'required|string',
@@ -274,11 +307,13 @@ class BeritaController extends Controller
 
             $berita->save();
 
+            $routePrefix = $this->getRoutePrefix();
+            
             if ($request->ajax()) {
                 return response()->json(['success' => true, 'message' => 'Berita berhasil diperbarui!']);
             }
 
-            return redirect()->route('admin.news.index')
+            return redirect()->route($routePrefix . '.news.index')
                 ->with('success', 'Berita berhasil diperbarui!');
         } catch (\Exception $e) {
             \Log::error('Error updating news: ' . $e->getMessage());

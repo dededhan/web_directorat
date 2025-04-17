@@ -5,13 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\ProgramLayanan;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreProgramLayananRequest;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 
 class ProgramLayananController extends Controller
 {
     public function index()
     {
         $programs = ProgramLayanan::all();
-        return view('admin.programlayanan', compact('programs'));
+
+        if (auth()->user()->hasRole('admin')) {
+            return view('admin.programlayanan', compact('programs'));
+        } elseif (auth()->user()->hasRole('admin_hilirisasi')) {
+            return view('subdirektorat-inovasi.admin_hilirisasi.programlayanan', compact('programs'));
+        }
     }
 
     public function store(StoreProgramLayananRequest $request)

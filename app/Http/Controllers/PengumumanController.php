@@ -7,6 +7,12 @@ use App\Models\Pengumuman;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePengumumanRequest;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 
 class PengumumanController extends Controller
 {
@@ -16,7 +22,11 @@ class PengumumanController extends Controller
     public function index()
     {
         $pengumumans = Pengumuman::all();
-        return view('admin.newsscroll', compact('pengumumans'));
+        if (auth()->user()->hasRole('admin')) {
+            return view('admin.newsscroll', compact('pengumumans'));
+        } elseif (auth()->user()->hasRole('admin_hilirisasi')) {
+            return view('subdirektorat-inovasi.admin_hilirisasi.newsscroll', compact('pengumumans'));
+        }
     }
 
     /**
