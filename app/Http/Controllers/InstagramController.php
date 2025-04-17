@@ -16,7 +16,11 @@ class InstagramController extends Controller
     public function index()
     {
         $instagram_posts = Instagram::orderBy('created_at', 'desc')->get();
-        return view('admin.instagram', compact('instagram_posts'));
+        if (auth()->user()->hasRole('admin')) {
+            return view('admin.instagram', compact('instagram_posts'));
+        } elseif (auth()->user()->hasRole('admin_hilirisasi')) {
+            return view('subdirektorat-inovasi.admin_hilirisasi.instagram', compact('instagram_posts'));
+        }
     }
 
     /**
