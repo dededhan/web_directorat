@@ -114,9 +114,6 @@ Route::get('inovasi/risetunj/produk_inovasi', function () {
     return view('Inovasi.riset_unj.produk_inovasi.produkinovasi');
 })->name('Inovasi.riset_unj.produk_inovasi.produkinovasi');
 
-Route::get('inovasi/risetunj/produk_inovasi', [App\Http\Controllers\ProdukInovasiController::class, 'publicIndexAlt'])
-    ->name('Inovasi.riset_unj.produk_inovasi.produkinovasi');
-
 Route::get('subdirektorat-inovasi/risetunj', function () {
     return view('subdirektorat-inovasi.riset_unj.risetunj');
 })->name('riset.unj');
@@ -124,7 +121,6 @@ Route::get('subdirektorat-inovasi/risetunj', function () {
 Route::get('subdirektorat-inovasi/risetunj/produk_inovasi', function () {
     return view('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi');
 })->name('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi');
-
 
 Route::get('subdirektorat-inovasi/risetunj/produk_inovasi', [App\Http\Controllers\ProdukInovasiController::class, 'publicIndex'])
     ->name('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi');

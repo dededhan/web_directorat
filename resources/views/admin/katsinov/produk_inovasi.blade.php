@@ -2,6 +2,7 @@
 
 <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/produk_inovasi.css') }}">
 
 @section('contentadmin')
     <div class="head-title">
@@ -43,8 +44,8 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="inovator" class="form-label">Inovator</label>
-                        <input type="text" class="form-control @error('inovator') is-invalid @enderror" 
-                            name="inovator" id="inovator" value="{{ old('inovator') }}">
+                        <input type="text" class="form-control @error('inovator') is-invalid @enderror" name="inovator"
+                            id="inovator" value="{{ old('inovator') }}">
                         @error('inovator')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -67,8 +68,7 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="deskripsi" class="form-label">Deskripsi Produk</label>
-                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"
-                            rows="8">{{ old('deskripsi') }}</textarea>
+                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" rows="8">{{ old('deskripsi') }}</textarea>
                         @error('deskripsi')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -135,7 +135,8 @@
                                                 data-id="{{ $produk->id }}">
                                                 Edit
                                             </button>
-                                            <form method="POST" action="{{ route('admin.Katsinov.produk_inovasi.destroy', $produk->id) }}"
+                                            <form method="POST"
+                                                action="{{ route('admin.Katsinov.produk_inovasi.destroy', $produk->id) }}"
                                                 class="delete-form">
                                                 @csrf
                                                 @method('DELETE')
@@ -226,49 +227,50 @@
     </div>
 
     <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Custom upload adapter
         class MyUploadAdapter {
             constructor(loader) {
                 this.loader = loader;
             }
-    
+
             upload() {
                 return this.loader.file.then(file => new Promise((resolve, reject) => {
                     const data = new FormData();
                     data.append('upload', file);
                     data.append('_token', '{{ csrf_token() }}');
-    
-                    fetch('{{ route("admin.Katsinov.produk_inovasi.upload") }}', {
-                        method: 'POST',
-                        body: data
-                    })
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.error) {
-                            return reject(result.error.message);
-                        }
-                        resolve({
-                            default: result.url
+
+                    fetch('{{ route('admin.Katsinov.produk_inovasi.upload') }}', {
+                            method: 'POST',
+                            body: data
+                        })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.error) {
+                                return reject(result.error.message);
+                            }
+                            resolve({
+                                default: result.url
+                            });
+                        })
+                        .catch(error => {
+                            reject('Upload failed: ' + error.message);
                         });
-                    })
-                    .catch(error => {
-                        reject('Upload failed: ' + error.message);
-                    });
                 }));
             }
-    
+
             abort() {
                 return Promise.reject();
             }
         }
-    
+
         function MyCustomUploadAdapterPlugin(editor) {
             editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
                 return new MyUploadAdapter(loader);
             };
         }
-    
+
         // Initialize CKEditor for new produk
         ClassicEditor
             .create(document.querySelector('#deskripsi'), {
@@ -287,7 +289,7 @@
             .catch(error => {
                 console.error(error);
             });
-    
+
         // Initialize CKEditor for edit form
         let editDeskripsiEditor;
         ClassicEditor
@@ -313,74 +315,87 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // SweetAlert helper functions
-            function showSuccessAlert(message) {
-                Swal.fire({
-                    title: 'Berhasil!',
-                    text: message,
-                    icon: 'success',
-                    confirmButtonColor: '#3498db',
-                    confirmButtonText: 'OK'
+            // Create Form Submission with SweetAlert
+            const createForm = document.querySelector('form[action*="produk_inovasi.store"]');
+            if (createForm) {
+                createForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    Swal.fire({
+                        title: 'Konfirmasi',
+                        text: 'Apakah Anda yakin ingin menyimpan produk inovasi ini?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3498db',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Simpan!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Show loading state
+                            Swal.fire({
+                                title: 'Menyimpan...',
+                                text: 'Mohon tunggu sebentar',
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+
+                            // Submit the form
+                            this.submit();
+                        }
+                    });
                 });
             }
-        
-            function showErrorAlert(message) {
-                Swal.fire({
-                    title: 'Gagal!',
-                    text: message,
-                    icon: 'error',
-                    confirmButtonColor: '#3498db',
-                    confirmButtonText: 'OK'
-                });
-            }
-        
-            function showConfirmationDialog(message, callback) {
-                Swal.fire({
-                    title: 'Konfirmasi',
-                    text: message,
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3498db',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya',
-                    cancelButtonText: 'Tidak'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        callback();
-                    }
-                });
-            }
-        
-            // Handle view image
-            document.querySelectorAll('.view-image').forEach(button => {
-                button.addEventListener('click', function() {
-                    const imageUrl = this.dataset.image;
-                    const title = this.dataset.title;
-        
-                    document.getElementById('imageModalLabel').textContent = title;
-                    document.getElementById('modalImage').src = imageUrl;
-        
-                    const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
-                    imageModal.show();
-                });
-            });
-                
+
             // Handle delete button clicks
             document.querySelectorAll('.delete-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const form = this.closest('form');
-                    
-                    showConfirmationDialog('Apakah Anda yakin ingin menghapus produk ini?', () => {
-                        form.submit();
+
+                    Swal.fire({
+                        title: 'Konfirmasi Penghapusan',
+                        text: 'Apakah Anda yakin ingin menghapus produk ini? Tindakan ini tidak dapat dibatalkan.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3498db',
+                        confirmButtonText: 'Ya, Hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Show loading state
+                            Swal.fire({
+                                title: 'Menghapus...',
+                                text: 'Mohon tunggu sebentar',
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+
+                            form.submit();
+                        }
                     });
                 });
             });
-                
+
             // Handle edit button clicks
             document.querySelectorAll('.edit-produk').forEach(button => {
                 button.addEventListener('click', function() {
                     const produkId = this.dataset.id;
-        
+
+                    // Show loading state
+                    Swal.fire({
+                        title: 'Memuat Data...',
+                        text: 'Mohon tunggu sebentar',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
                     // Fetch produk details via AJAX
                     fetch(`/admin/Katsinov/produk_inovasi/${produkId}/detail`)
                         .then(response => {
@@ -390,16 +405,20 @@
                             return response.json();
                         })
                         .then(data => {
+                            Swal.close(); // Close loading dialog
+
                             // Populate the edit form
-                            document.getElementById('edit_nama_produk').value = data.nama_produk;
+                            document.getElementById('edit_nama_produk').value = data
+                                .nama_produk;
                             document.getElementById('edit_inovator').value = data.inovator;
-                            document.getElementById('edit_nomor_paten').value = data.nomor_paten || '';
-        
+                            document.getElementById('edit_nomor_paten').value = data
+                                .nomor_paten || '';
+
                             // Set content to the CKEditor
                             if (editDeskripsiEditor) {
                                 editDeskripsiEditor.setData(data.deskripsi);
                             }
-        
+
                             // Set the current image
                             const currentImage = document.getElementById('current_image');
                             if (data.gambar) {
@@ -408,144 +427,137 @@
                             } else {
                                 currentImage.style.display = 'none';
                             }
-        
+
                             // Set the form action
                             const form = document.getElementById('editProdukForm');
                             form.action = `/admin/Katsinov/produk_inovasi/${produkId}`;
-        
+
                             // Show the modal
-                            const editModal = new bootstrap.Modal(document.getElementById('editProdukModal'));
+                            const editModal = new bootstrap.Modal(document.getElementById(
+                                'editProdukModal'));
                             editModal.show();
                         })
                         .catch(error => {
                             console.error('Error fetching produk details:', error);
-                            showErrorAlert('Gagal mengambil data produk.');
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Gagal mengambil data produk.',
+                                icon: 'error',
+                                confirmButtonColor: '#3498db'
+                            });
                         });
                 });
             });
-        
-            // Handle save button click
+
+            // Handle save button click for edit form
             document.getElementById('saveEditProduk').addEventListener('click', function() {
-                // Get the data from CKEditor and set it to the textarea
-                const editorData = editDeskripsiEditor.getData();
-                
-                // This is the critical fix - we need to update the textarea with the editor content
-                // before submitting the form since the textarea is what gets submitted, not the CKEditor directly
-                document.getElementById('edit_deskripsi').value = editorData;
-                
-                const form = document.getElementById('editProdukForm');
-                const formData = new FormData(form);
-        
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: 'Apakah Anda yakin ingin menyimpan perubahan?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3498db',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Simpan Perubahan!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Get the data from CKEditor and set it to the textarea
+                        const editorData = editDeskripsiEditor.getData();
+
+                        // Update textarea with editor content
+                        document.getElementById('edit_deskripsi').value = editorData;
+
+                        const form = document.getElementById('editProdukForm');
+                        const formData = new FormData(form);
+
+                        // Show loading state
+                        Swal.fire({
+                            title: 'Menyimpan Perubahan...',
+                            text: 'Mohon tunggu sebentar',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        fetch(form.action, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'X-CSRF-TOKEN': document.querySelector(
+                                        'meta[name="csrf-token"]').getAttribute('content')
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    // Close the modal
+                                    const modalElement = document.getElementById(
+                                        'editProdukModal');
+                                    const modal = bootstrap.Modal.getInstance(modalElement);
+                                    modal.hide();
+
+                                    // Show success message
+                                    Swal.fire({
+                                        title: 'Berhasil!',
+                                        text: data.message ||
+                                            'Produk berhasil diperbarui!',
+                                        icon: 'success',
+                                        confirmButtonColor: '#3498db'
+                                    }).then(() => {
+                                        // Reload the page
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Gagal!',
+                                        text: data.message ||
+                                            'Gagal menyimpan perubahan.',
+                                        icon: 'error',
+                                        confirmButtonColor: '#3498db'
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error saving produk:', error);
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Gagal menyimpan perubahan.',
+                                    icon: 'error',
+                                    confirmButtonColor: '#3498db'
+                                });
+                            });
                     }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Close the modal
-                        const modalElement = document.getElementById('editProdukModal');
-                        const modal = bootstrap.Modal.getInstance(modalElement);
-                        modal.hide();
-        
-                        // Show success message
-                        showSuccessAlert(data.message || 'Produk berhasil diperbarui!');
-                        
-                        // Refresh the page after a short delay
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 1500);
-                    } else {
-                        showErrorAlert(data.message || 'Gagal menyimpan perubahan.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error saving produk:', error);
-                    showErrorAlert('Gagal menyimpan perubahan.');
                 });
             });
+
+            // Flash message handling
+            const flashSuccess = "{{ session('success') }}";
+            const flashError = "{{ session('error') }}";
+
+            if (flashSuccess) {
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: flashSuccess,
+                    icon: 'success',
+                    confirmButtonColor: '#3498db'
+                });
+            }
+
+            if (flashError) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: flashError,
+                    icon: 'error',
+                    confirmButtonColor: '#3498db'
+                });
+            }
         });
     </script>
 
     <style>
-        .table-data {
-            margin-top: 24px;
-        }
 
-        .order {
-            background: #fff;
-            padding: 24px;
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-            border-color: #3498db;
-            box-shadow: none;
-        }
-
-        .btn-primary {
-            background-color: #3498db;
-            border-color: #3498db;
-        }
-
-        .btn-primary:hover {
-            background-color: #2980b9;
-            border-color: #2980b9;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        .badge {
-            font-size: 0.7em;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 5px;
-        }
-
-        textarea {
-            resize: vertical;
-        }
-
-        .table th {
-            white-space: nowrap;
-        }
-
-        /* Custom styles for the product management */
-        .ck-editor__editable {
-            min-height: 300px;
-        }
-
-        #modalImage {
-            max-height: 70vh;
-        }
-
-        /* Alert styling */
-        .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            color: #155724;
-        }
-
-        .alert-danger {
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            color: #721c24;
-        }
     </style>
 @endsection

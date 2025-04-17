@@ -4,68 +4,107 @@ namespace App\Http\Controllers;
 
 use App\Models\ProdukInovasi;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreProdukInovasiRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class ProdukInovasiController extends Controller
 {
     /**
+     * Get the correct route name prefix based on authenticated user role
+     */
+    private function getRoutePrefix()
+    {
+        if (auth()->user()->hasRole('admin_direktorat')) {
+            return 'admin';
+        } else if (auth()->user()->hasRole('admin_hilirisasi')) {
+            return 'subdirektorat-inovasi.admin_hilirisasi';
+        }
+        
+        return 'admin'; // Default fallback
+    }
+
+    /**
      * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $produkInovasi = ProdukInovasi::all();
+        $routePrefix = $this->getRoutePrefix();
+        
+        if (auth()->user()->hasRole('admin_direktorat')) {
+            return view('admin.katsinov.produk_inovasi', compact('produkInovasi', 'routePrefix'));
+        } elseif (auth()->user()->hasRole('admin_hilirisasi')) {
+            return view('subdirektorat-inovasi.admin_hilirisasi.produk_inovasi', compact('produkInovasi', 'routePrefix'));
+        }
+        
+        // Default fallback view
+        return view('admin.katsinov.produk_inovasi', compact('produkInovasi', 'routePrefix'));
+    }
+
+    /**
+     * Display a listing of the resource for public view.
      */
     public function publicIndex()
     {
         // Get all products ordered by most recent first
         $produkInovasi = ProdukInovasi::latest()->get();
-        
+
         return view('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi', compact('produkInovasi'));
-    }
-    
-    /**
-     * Alternative public view showing the same data but for the Inovasi path
-     */
-    public function publicIndexAlt()
-    {
-        // Get all products ordered by most recent first
-        $produkInovasi = ProdukInovasi::latest()->get();
-        
-        return view('Inovasi.riset_unj.produk_inovasi.produkinovasi', compact('produkInovasi'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProdukInovasiRequest $request)
+    public function store(Request $request)
     {
+        $request->validate([
+            'nama_produk' => 'required|string|max:255',
+            'inovator' => 'required|string|max:255',
+            'nomor_paten' => 'nullable|string|max:255',
+            'deskripsi' => 'required|string',
+            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
         try {
-            $data = $request->validated();
+            $data = $request->all();
 
             // Handle image upload
             if ($request->hasFile('gambar')) {
-                $namaFile = time() . '_' . uniqid() . '.' . $request->file('gambar')->getClientOriginalExtension();
-                $gambarPath = $request->file('gambar')->storeAs(
-                    'produk-inovasi-images',
-                    $namaFile,
-                    'public'
-                );
-                
-                $data['gambar'] = $gambarPath;
+                $file = $request->file('gambar');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('produk_inovasi', $fileName, 'public');
+                $data['gambar'] = $filePath;
             }
 
-            // Create the product
             ProdukInovasi::create($data);
-            
-            return redirect()->route('admin.Katsinov.produk_inovasi')
-                ->with('success', 'Produk inovasi berhasil disimpan!');
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Produk inovasi berhasil ditambahkan!'
+                ]);
+            }
+
+            $routePrefix = $this->getRoutePrefix();
+            return redirect()->route($routePrefix . '.Katsinov.produk_inovasi')
+                ->with('success', 'Produk inovasi berhasil ditambahkan!');
         } catch (\Exception $e) {
-            \Log::error('Error storing product: ' . $e->getMessage());
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal menambahkan produk inovasi: ' . $e->getMessage()
+                ]);
+            }
+
             return redirect()->back()
-                ->with('error', 'Gagal menambahkan produk: ' . $e->getMessage())
+                ->with('error', 'Gagal menambahkan produk inovasi: ' . $e->getMessage())
                 ->withInput();
         }
     }
 
     /**
-     * Get detail of a product for edit modal.
+     * Get the detail of a product for AJAX request.
      */
     public function getProdukDetail($id)
     {
@@ -76,61 +115,55 @@ class ProdukInovasiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
+        $request->validate([
+            'nama_produk' => 'required|string|max:255',
+            'inovator' => 'required|string|max:255',
+            'nomor_paten' => 'nullable|string|max:255',
+            'deskripsi' => 'required|string',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
         try {
             $produk = ProdukInovasi::findOrFail($id);
+            $data = $request->except('gambar');
 
-            // Validate the request
-            $validated = $request->validate([
-                'nama_produk' => 'required|string|max:1500',
-                'inovator' => 'required|string|max:1500',
-                'deskripsi' => 'required|string|max:1500',
-                'nomor_paten' => 'nullable|string|max:255',
-                'gambar' => 'nullable|image|max:2048',
-            ]);
-
-            // Update the text fields
-            $produk->nama_produk = $validated['nama_produk'];
-            $produk->inovator = $validated['inovator'];
-            $produk->deskripsi = $validated['deskripsi'];
-            $produk->nomor_paten = $validated['nomor_paten'];
-
-            // Handle image update if a new one was uploaded
-            if ($request->hasFile('gambar') && $request->file('gambar')->isValid()) {
-                // Delete old image
+            // Handle image upload
+            if ($request->hasFile('gambar')) {
+                // Delete old image if exists
                 if ($produk->gambar && Storage::disk('public')->exists($produk->gambar)) {
                     Storage::disk('public')->delete($produk->gambar);
                 }
 
-                // Store new image
-                $namaFile = time() . '_' . uniqid() . '.' . $request->file('gambar')->getClientOriginalExtension();
-                $gambarPath = $request->file('gambar')->storeAs(
-                    'produk-inovasi-images',
-                    $namaFile,
-                    'public'
-                );
-
-                $produk->gambar = $gambarPath;
+                $file = $request->file('gambar');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('produk_inovasi', $fileName, 'public');
+                $data['gambar'] = $filePath;
             }
 
-            $produk->save();
+            $produk->update($data);
 
             if ($request->ajax()) {
-                return response()->json(['success' => true, 'message' => 'Produk berhasil diperbarui!']);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Produk inovasi berhasil diperbarui!'
+                ]);
             }
 
-            return redirect()->route('admin.Katsinov.produk_inovasi')
-                ->with('success', 'Produk berhasil diperbarui!');
+            $routePrefix = $this->getRoutePrefix();
+            return redirect()->route($routePrefix . '.Katsinov.produk_inovasi')
+                ->with('success', 'Produk inovasi berhasil diperbarui!');
         } catch (\Exception $e) {
-            \Log::error('Error updating product: ' . $e->getMessage());
-
             if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => 'Gagal memperbarui produk: ' . $e->getMessage()]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal memperbarui produk inovasi: ' . $e->getMessage()
+                ]);
             }
 
             return redirect()->back()
-                ->with('error', 'Gagal memperbarui produk: ' . $e->getMessage())
+                ->with('error', 'Gagal memperbarui produk inovasi: ' . $e->getMessage())
                 ->withInput();
         }
     }
@@ -138,42 +171,75 @@ class ProdukInovasiController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
         try {
             $produk = ProdukInovasi::findOrFail($id);
 
-            // Delete the image file from storage
+            // Delete image if exists
             if ($produk->gambar && Storage::disk('public')->exists($produk->gambar)) {
                 Storage::disk('public')->delete($produk->gambar);
             }
-         
-            // Delete the record
+
             $produk->delete();
-            
-            return redirect()->route('admin.Katsinov.produk_inovasi')
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Produk inovasi berhasil dihapus!'
+                ]);
+            }
+
+            $routePrefix = $this->getRoutePrefix();
+            return redirect()->route($routePrefix . '.Katsinov.produk_inovasi')
                 ->with('success', 'Produk inovasi berhasil dihapus!');
         } catch (\Exception $e) {
-            \Log::error('Error deleting product: ' . $e->getMessage());
-            return redirect()->back()
-                ->with('error', 'Gagal menghapus produk: ' . $e->getMessage());
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal menghapus produk inovasi: ' . $e->getMessage()
+                ]);
+            }
+
+            $routePrefix = $this->getRoutePrefix();
+            return redirect()->route($routePrefix . '.Katsinov.produk_inovasi')
+                ->with('error', 'Gagal menghapus produk inovasi: ' . $e->getMessage());
         }
     }
 
     /**
-     * Handle CKEditor image upload.
+     * Handle image uploads from CKEditor
      */
     public function upload(Request $request)
     {
-        $request->validate([
-            'upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        $path = $request->file('upload')->store('produk_inovasi_images', 'public');
-        $url = Storage::url($path);
-
+        if ($request->hasFile('upload')) {
+            $file = $request->file('upload');
+            
+            // Validate mime type and size
+            $validator = \Validator::make(['upload' => $file], [
+                'upload' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+            
+            if ($validator->fails()) {
+                return response()->json([
+                    'error' => [
+                        'message' => $validator->errors()->first('upload')
+                    ]
+                ]);
+            }
+            
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('produk_inovasi/editor', $fileName, 'public');
+            
+            return response()->json([
+                'url' => Storage::url($filePath)
+            ]);
+        }
+        
         return response()->json([
-            'url' => asset($url),
+            'error' => [
+                'message' => 'No file uploaded'
+            ]
         ]);
     }
 }

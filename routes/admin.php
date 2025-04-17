@@ -372,6 +372,14 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::get('/record-hasil/{katsinov_id?}', [KatsinovController::class, 'recordIndex'])->name('record.index');
                 Route::post('/record-hasil/{katsinov_id?}', [KatsinovController::class, 'recordStore'])->name('record.store');
 
+
+                // Produk Inovasi routes for admin_hilirisasi
+                Route::get('/produk_inovasi', [ProdukInovasiController::class, 'index'])->name('Katsinov.produk_inovasi');
+                Route::post('/produk_inovasi', [ProdukInovasiController::class, 'store'])->name('Katsinov.produk_inovasi.store');
+                Route::get('/produk_inovasi/{id}/detail', [ProdukInovasiController::class, 'getProdukDetail'])->name('Katsinov.produk_inovasi.detail');
+                Route::put('/produk_inovasi/{id}', [ProdukInovasiController::class, 'update'])->name('Katsinov.produk_inovasi.update');
+                Route::delete('/produk_inovasi/{id}', [ProdukInovasiController::class, 'destroy'])->name('Katsinov.produk_inovasi.destroy');
+                Route::post('/produk_inovasi/upload', [ProdukInovasiController::class, 'upload'])->name('Katsinov.produk_inovasi.upload');
                 // SDGs routes
                 Route::prefix('SDGs')->name('SDGs.')
                     ->group(function () {
