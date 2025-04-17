@@ -17,15 +17,31 @@ use Illuminate\Support\Facades\Redirect;
 class PengumumanController extends Controller
 {
     /**
+     * Get the correct route name prefix based on authenticated user role
+     */
+    private function getRoutePrefix()
+    {
+        if (auth()->user()->hasRole('admin_direktorat')) {
+            return 'admin';
+        } else if (auth()->user()->hasRole('admin_hilirisasi')) {
+            return 'subdirektorat-inovasi.admin_hilirisasi';
+        }
+        
+        return 'admin';
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $pengumumans = Pengumuman::all();
-        if (auth()->user()->hasRole('admin')) {
-            return view('admin.newsscroll', compact('pengumumans'));
+        $routePrefix = $this->getRoutePrefix();
+        
+        if (auth()->user()->hasRole('admin_direktorat')) {
+            return view('admin.newsscroll', compact('pengumumans', 'routePrefix'));
         } elseif (auth()->user()->hasRole('admin_hilirisasi')) {
-            return view('subdirektorat-inovasi.admin_hilirisasi.newsscroll', compact('pengumumans'));
+            return view('subdirektorat-inovasi.admin_hilirisasi.newsscroll', compact('pengumumans', 'routePrefix'));
         }
     }
 
@@ -57,7 +73,8 @@ class PengumumanController extends Controller
 
             Pengumuman::create($data);
 
-            return redirect()->route('admin.news-scroll.index')
+            $routePrefix = $this->getRoutePrefix();
+            return redirect()->route($routePrefix . '.news-scroll.index')
                 ->with('success', 'Data berhasil disimpan!');
         } catch (\Exception $e) {
             // Log error
@@ -85,11 +102,13 @@ class PengumumanController extends Controller
 
             $news_scroll->update($validated);
 
+            $routePrefix = $this->getRoutePrefix();
+            
             if ($request->ajax()) {
                 return response()->json(['success' => true, 'message' => 'Pengumuman berhasil diperbarui!']);
             }
 
-            return redirect()->route('admin.news-scroll.index')
+            return redirect()->route($routePrefix . '.news-scroll.index')
                 ->with('success', 'Pengumuman berhasil diperbarui!');
         } catch (\Exception $e) {
             \Log::error('Error updating pengumuman: ' . $e->getMessage());
@@ -119,10 +138,12 @@ class PengumumanController extends Controller
     {
         try {
             $news_scroll->delete();
-            return redirect()->route('admin.news-scroll.index')->with('success', 'Data berhasil dihapus!');
+            $routePrefix = $this->getRoutePrefix();
+            return redirect()->route($routePrefix . '.news-scroll.index')->with('success', 'Data berhasil dihapus!');
         } catch (\Exception $e) {
             \Log::error('Error deleting: ' . $e->getMessage());
-            return redirect()->route('admin.news-scroll.index')->with('error', 'Gagal menghapus data!');
+            $routePrefix = $this->getRoutePrefix();
+            return redirect()->route($routePrefix . '.news-scroll.index')->with('error', 'Gagal menghapus data!');
         }
     }
 

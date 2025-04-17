@@ -25,7 +25,7 @@
                 <h3>Input Pengumuman</h3>
             </div> 
 
-            <form id="pengumuman-form" action="{{ route('admin.news-scroll.store') }}" method="POST">
+            <form id="pengumuman-form" action="{{ route($routePrefix . '.news-scroll.store') }}" method="POST">
                 @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -113,7 +113,7 @@
                                             data-id="{{ $pengumuman->id }}">
                                             <i class='bx bx-edit'></i> Edit
                                         </button>
-                                        <form method="POST" action="{{ route('admin.news-scroll.destroy', $pengumuman->id) }}" 
+                                        <form method="POST" action="{{ route($routePrefix . '.news-scroll.destroy', $pengumuman->id) }}" 
                                             class="delete-form">
                                             @csrf
                                             @method('DELETE')
@@ -289,10 +289,19 @@
             document.querySelectorAll('.edit-pengumuman').forEach(button => {
                 button.addEventListener('click', function() {
                     const pengumumanId = this.dataset.id;
+                    const routePrefix = '{{ $routePrefix }}';
+                    
+                    // Convert route prefix with dots to path with slashes
+                    const routePath = routePrefix.replace(/\./g, '/');
 
                     // Fetch pengumuman details via AJAX
-                    fetch(`/admin/pengumuman/${pengumumanId}/detail`)
-                        .then(response => response.json())
+                    fetch(`/${routePath}/pengumuman/${pengumumanId}/detail`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
                         .then(data => {
                             // Populate the edit form
                             document.getElementById('edit_judul_pengumuman').value = data.judul_pengumuman;
@@ -306,7 +315,7 @@
 
                             // Set the form action
                             const form = document.getElementById('editPengumumanForm');
-                            form.action = `/admin/news-scroll/${pengumumanId}`;
+                            form.action = `/${routePath}/news-scroll/${pengumumanId}`;
 
                             // Show the modal
                             new bootstrap.Modal(document.getElementById('editPengumumanModal')).show();
