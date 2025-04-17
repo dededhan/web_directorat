@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0, user-scalable=yes" name="viewport" />
@@ -19,7 +20,7 @@
         * {
             font-family: Arial, sans-serif !important;
         }
-        
+
         .media-card {
             height: 100%;
             display: flex;
@@ -144,17 +145,40 @@
         .card-link:hover {
             background-color: rgba(0, 0, 0, 0.05);
         }
-        html, body, p, h1, h2, h3, h4, h5, h6, span, div:not(.fas):not(.fab):not(.far):not(.fa), 
-      a:not(.fas):not(.fab):not(.far):not(.fa), button, input, textarea, select, label {
-        font-family: Arial, sans-serif !important;
-      }
-      
-      /* Preserve Font Awesome icons */
-      .fas, .fab, .far, .fa, 
-      [class^="fa-"], [class*=" fa-"],
-      i.fas, i.fab, i.far, i.fa {
-        font-family: "Font Awesome 5 Free", "Font Awesome 5 Brands", "FontAwesome" !important;
-      }
+
+        html,
+        body,
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        span,
+        div:not(.fas):not(.fab):not(.far):not(.fa),
+        a:not(.fas):not(.fab):not(.far):not(.fa),
+        button,
+        input,
+        textarea,
+        select,
+        label {
+            font-family: Arial, sans-serif !important;
+        }
+
+        /* Preserve Font Awesome icons */
+        .fas,
+        .fab,
+        .far,
+        .fa,
+        [class^="fa-"],
+        [class*=" fa-"],
+        i.fas,
+        i.fab,
+        i.far,
+        i.fa {
+            font-family: "Font Awesome 5 Free", "Font Awesome 5 Brands", "FontAwesome" !important;
+        }
     </style>
 </head>
 
@@ -213,165 +237,172 @@
         </div>
 
 
-       <!-- Regular News Grid with first 3 news items -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-    @php
-        // Take the first 3 news items for the regular grid
-        $regularNews = $featuredNews->take(3);
-    @endphp
-    
-    @foreach ($regularNews as $news)
-        <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div class="relative">
-                <img alt="{{ $news->judul }}" class="w-full h-56 object-cover" 
-                     src="{{ asset('storage/' . $news->gambar) }}" />
-                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-24">
-                </div>
-                <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
-                    {{ ucfirst($news->kategori) }}
-                </div>
-            </div>
-            <div class="p-5">
-                <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center text-gray-500 text-sm">
-                        <i class="fas fa-user-circle mr-2"></i>Admin
-                    </div>
-                    <div class="text-gray-500 text-sm">
-                        <i class="fas fa-calendar-alt mr-1"></i>{{ date('d M Y', strtotime($news->tanggal)) }}
-                    </div>
-                </div>
-                <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="block">
-                    <h2 class="font-bold text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
-                        {{ $news->judul }}
-                    </h2>
-                </a>
-                <p class="text-gray-600 mb-4">
-                    {{ Str::limit(strip_tags($news->isi), 100) }}
-                </p>
-                <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" 
-                    class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
-                     Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                 </a>
-            </div>
-        </div>
-    @endforeach
-</div>
-
-<!-- Enhanced Featured News Carousel with remaining news items -->
-<div class="enhanced-carousel">
-    <div class="enhanced-carousel-title">Berita Terbaru</div>
-    <div class="carousel">
-        <div class="carousel-inner">
+        <!-- Regular News Grid with first 3 news items -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             @php
-                // Skip the first 3 news items and use the rest for the carousel
-                $carouselNews = $featuredNews->slice(3);
+                // Take the first 3 news items for the regular grid
+                $regularNews = $featuredNews->take(3);
             @endphp
-            @foreach ($carouselNews as $featured)
-                <div class="carousel-item-enhanced">
-                    <div class="news-card-enhanced">
-                        <div class="news-image-container">
-                            <img alt="{{ $featured->judul }}" class="news-image"
-                                src="{{ asset('storage/' . $featured->gambar) }}" />
-                            <div class="news-tag-enhanced">{{ ucfirst($featured->kategori) }}</div>
+
+            @foreach ($regularNews as $news)
+                <div
+                    class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="relative">
+                        <img alt="{{ $news->judul }}" class="w-full h-56 object-cover"
+                            src="{{ asset('storage/' . $news->gambar) }}" />
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-24">
                         </div>
-                        <div class="news-content">
-                            <div class="news-meta">
+                        <div
+                            class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
+                            {{ ucfirst($news->kategori) }}
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center text-gray-500 text-sm">
                                 <i class="fas fa-user-circle mr-2"></i>Admin
-                                <span class="mx-2">|</span>
-                                <i
-                                    class="fas fa-calendar-alt mr-2"></i>{{ date('d M Y', strtotime($featured->tanggal)) }}
                             </div>
-                            <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}">
-                                <h3 class="news-title">{{ $featured->judul }}</h3>
-                            </a>
-                            <p class="news-excerpt">
-                                {!! Str::limit($featured->isi, 150) !!}
-                            </p>
-                            <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}" class="news-link">
-                                Baca selengkapnya <i class="fas fa-arrow-right"></i>
-                            </a>
+                            <div class="text-gray-500 text-sm">
+                                <i class="fas fa-calendar-alt mr-1"></i>{{ date('d M Y', strtotime($news->tanggal)) }}
+                            </div>
                         </div>
+                        <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="block">
+                            <h2 class="font-bold text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
+                                {{ $news->judul }}
+                            </h2>
+                        </a>
+                        <p class="text-gray-600 mb-4">
+                            {{ Str::limit(strip_tags($news->isi), 100) }}
+                        </p>
+                        <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}"
+                            class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
+                            Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
                     </div>
                 </div>
             @endforeach
         </div>
-    </div>
-</div>
-</main>
-    <!-- Program dan Layanan Section with Popup -->
-<section class="program-section">
-    <div class="container">
-        <!-- Section Header -->
-        <div class="unj-content-section-header">
-            <h2 class="unj-section-title">Program & Layanan</h2>
-            <p class="unj-section-subtitle">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan Pemeringkatan</p>
-        </div>
-        
-        <!-- Program Cards Grid -->
-        <div class="program-grid">
-            @forelse($programLayanan as $program)
-                <div class="program-card" data-program-id="{{ $program->id }}">
-                    <div class="card-content">
-                        <div class="icon-container">
-                            <i class="{{ $program->icon }}"></i>
-                        </div>
-                        <h3 class="card-title">{{ $program->judul }}</h3>
-                        <div class="card-description">
-                            {!! $program->deskripsi !!}
-                        </div>
-                        <a href="#" class="card-link program-details-btn" data-program-id="{{ $program->id }}" 
-                           data-title="{{ $program->judul }}"
-                           data-description="{{ strip_tags($program->deskripsi) }}"
-                           data-full-description="{!! htmlspecialchars($program->deskripsi_lengkap ?? $program->deskripsi) !!}">
-                            Selengkapnya
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            @empty
-                <!-- Fallback content if no programs are found -->
-                <div class="program-card">
-                    <div class="card-content">
-                        <div class="icon-container">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <h3 class="card-title">Beasiswa</h3>
-                        <p class="card-description">
-                            Program beasiswa untuk mahasiswa berprestasi dan kurang mampu, membantu meringankan
-                            biaya pendidikan.
-                        </p>
-                        <a href="#" class="card-link">
-                            Selengkapnya
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            @endforelse
-        </div>
-    </div>
-</section>
 
-<!-- Program Details Popup Modal -->
-<div id="programDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 z-[1100] hidden items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
-        <!-- Close Button -->
-        <button id="closeModalBtn" class="absolute top-4 right-4 text-gray-600 hover:text-teal-700 transition-colors">
-            <i class="fas fa-times text-2xl"></i>
-        </button>
-        
-        <!-- Modal Content -->
-        <div class="p-8">
-            <div id="programModalIcon" class="icon-container mx-auto mb-6 w-20 h-20 flex items-center justify-center">
-                <i class="text-4xl text-white"></i>
+        <!-- Enhanced Featured News Carousel with remaining news items -->
+        <div class="enhanced-carousel">
+            <div class="enhanced-carousel-title">Berita Terbaru</div>
+            <div class="carousel">
+                <div class="carousel-inner">
+                    @php
+                        // Skip the first 3 news items and use the rest for the carousel
+                        $carouselNews = $featuredNews->slice(3);
+                    @endphp
+                    @foreach ($carouselNews as $featured)
+                        <div class="carousel-item-enhanced">
+                            <div class="news-card-enhanced">
+                                <div class="news-image-container">
+                                    <img alt="{{ $featured->judul }}" class="news-image"
+                                        src="{{ asset('storage/' . $featured->gambar) }}" />
+                                    <div class="news-tag-enhanced">{{ ucfirst($featured->kategori) }}</div>
+                                </div>
+                                <div class="news-content">
+                                    <div class="news-meta">
+                                        <i class="fas fa-user-circle mr-2"></i>Admin
+                                        <span class="mx-2">|</span>
+                                        <i
+                                            class="fas fa-calendar-alt mr-2"></i>{{ date('d M Y', strtotime($featured->tanggal)) }}
+                                    </div>
+                                    <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}">
+                                        <h3 class="news-title">{{ $featured->judul }}</h3>
+                                    </a>
+                                    <p class="news-excerpt">
+                                        {!! Str::limit($featured->isi, 150) !!}
+                                    </p>
+                                    <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}"
+                                        class="news-link">
+                                        Baca selengkapnya <i class="fas fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
             </div>
-            <h2 id="programModalTitle" class="text-3xl font-bold text-teal-800 mb-4 text-center"></h2>
-            
-            <div id="programModalDescription" class="prose max-w-prose mx-auto text-gray-700">
-                <!-- Dynamic content will be inserted here -->
+        </div>
+    </main>
+    <!-- Program dan Layanan Section with Popup -->
+    <section class="program-section">
+        <div class="container">
+            <!-- Section Header -->
+            <div class="unj-content-section-header">
+                <h2 class="unj-section-title">Program & Layanan</h2>
+                <p class="unj-section-subtitle">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan
+                    Pemeringkatan</p>
+            </div>
+
+            <!-- Program Cards Grid -->
+            <div class="program-grid">
+                @forelse($programLayanan as $program)
+                    <div class="program-card" data-program-id="{{ $program->id }}">
+                        <div class="card-content">
+                            <div class="icon-container">
+                                <i class="{{ $program->icon }}"></i>
+                            </div>
+                            <h3 class="card-title">{{ $program->judul }}</h3>
+                            <div class="card-description">
+                                {!! $program->deskripsi !!}
+                            </div>
+                            <a href="#" class="card-link program-details-btn"
+                                data-program-id="{{ $program->id }}" data-title="{{ $program->judul }}"
+                                data-description="{{ strip_tags($program->deskripsi) }}"
+                                data-full-description="{!! htmlspecialchars($program->deskripsi_lengkap ?? $program->deskripsi) !!}">
+                                Selengkapnya
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                @empty
+                    <!-- Fallback content if no programs are found -->
+                    <div class="program-card">
+                        <div class="card-content">
+                            <div class="icon-container">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h3 class="card-title">Beasiswa</h3>
+                            <p class="card-description">
+                                Program beasiswa untuk mahasiswa berprestasi dan kurang mampu, membantu meringankan
+                                biaya pendidikan.
+                            </p>
+                            <a href="#" class="card-link">
+                                Selengkapnya
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </section>
+
+    <!-- Program Details Popup Modal -->
+    <div id="programDetailsModal"
+        class="fixed inset-0 bg-black bg-opacity-50 z-[1100] hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
+            <!-- Close Button -->
+            <button id="closeModalBtn"
+                class="absolute top-4 right-4 text-gray-600 hover:text-teal-700 transition-colors">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+
+            <!-- Modal Content -->
+            <div class="p-8">
+                <div id="programModalIcon"
+                    class="icon-container mx-auto mb-6 w-20 h-20 flex items-center justify-center">
+                    <i class="text-4xl text-white"></i>
+                </div>
+                <h2 id="programModalTitle" class="text-3xl font-bold text-teal-800 mb-4 text-center"></h2>
+
+                <div id="programModalDescription" class="prose max-w-prose mx-auto text-gray-700">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- UNJ dalam Angka Section -->
     {{-- <section class="unj-dalam-angka">
@@ -465,88 +496,51 @@
                 <i class="fas fa-external-link-alt ml-2"></i>
             </a>
         </div>
-        <!-- Instagram Feed Grid with Consistent Card Styling -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            @forelse($instagramPosts ?? [] as $index => $post)
-                <!-- Instagram Post -->
-                <div
-                    class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                    <div class="relative pb-[56.25%]">
-                        <!-- Empty placeholder with gradient background -->
-                        <div
-                            class="absolute inset-0 bg-gradient-to-br {{ $index % 3 === 0 ? 'from-teal-100 to-teal-200' : ($index % 3 === 1 ? 'from-yellow-100 to-yellow-200' : 'from-teal-100 to-blue-200') }} flex items-center justify-center">
-                            <i class="fab fa-instagram text-teal-500 text-5xl opacity-30"></i>
-                        </div>
-                        <div
-                            class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
-                            Instagram
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center text-gray-500 text-sm">
-                                <i class="fab fa-instagram mr-2"></i>
-                                <span>@dit.isipunj</span>
-                            </div>
-                        </div>
-                        <h3
-                            class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
-                            {{ $post->judul }}</h3>
-                        <p class="text-gray-600 mb-4">
-                            {{ Str::limit($post->deskripsi, 100) }}
-                        </p>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <a href="{{ $post->link }}" target="_blank"
-                                class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                                <span>Lihat di Instagram</span>
-                                <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                            </a>
-                        </div>
+        
+        <!-- Instagram Feed Grid with Dynamic Loading via JavaScript -->
+        <div id="instagram-api-feed-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Loading placeholders - will be replaced by JavaScript -->
+            <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                <div class="p-6">
+                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                    <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                    <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <div class="h-4 bg-gray-200 rounded w-2/4"></div>
                     </div>
                 </div>
-            @empty
-                <!-- Fallback content if no posts are found -->
-                <!-- Instagram Post 1 -->
-                <div
-                    class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                    <div class="relative pb-[56.25%]">
-                        <div
-                            class="absolute inset-0 bg-gradient-to-br from-teal-100 to-teal-200 flex items-center justify-center">
-                            <i class="fab fa-instagram text-teal-500 text-5xl opacity-30"></i>
-                        </div>
-                        <div
-                            class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
-                            Instagram
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center text-gray-500 text-sm">
-                                <i class="fab fa-instagram mr-2"></i>
-                                <span>@dit.isipunj</span>
-                            </div>
-                        </div>
-                        <h3
-                            class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
-                            Instagram DITSIP UNJ</h3>
-                        <p class="text-gray-600 mb-4">
-                            Kunjungi Instagram kami untuk melihat konten terbaru
-                        </p>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <a href="https://www.instagram.com/dit.isipunj/" target="_blank"
-                                class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                                <span>Lihat di Instagram</span>
-                                <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                            </a>
-                        </div>
+            </div>
+            <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                <div class="p-6">
+                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                    <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                    <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <div class="h-4 bg-gray-200 rounded w-2/4"></div>
                     </div>
                 </div>
-            @endforelse
+            </div>
+            <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                <div class="p-6">
+                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                    <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                    <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <div class="h-4 bg-gray-200 rounded w-2/4"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- View More Button -->
         <div class="text-center mt-8">
-            <a href="https://www.instagram.com/dir.isipunj/" target="_blank"
+            <a href="https://www.instagram.com/dit.isipunj/" target="_blank"
                 class="inline-flex items-center justify-center px-6 py-3 bg-teal-700 hover:bg-teal-600 text-white font-medium rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1">
                 <span>Lihat Semua Postingan</span>
                 <i class="fas fa-external-link-alt ml-2 text-sm"></i>
@@ -736,7 +730,7 @@
     </div>
 </section>
 
-
+<script src="{{ asset('js/instagram-api-feed.js') }}"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -829,64 +823,63 @@
             });
     });
     document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('programDetailsModal');
-    const modalIcon = document.getElementById('programModalIcon').querySelector('i');
-    const modalTitle = document.getElementById('programModalTitle');
-    const modalDescription = document.getElementById('programModalDescription');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const programDetailsBtns = document.querySelectorAll('.program-details-btn');
+        const modal = document.getElementById('programDetailsModal');
+        const modalIcon = document.getElementById('programModalIcon').querySelector('i');
+        const modalTitle = document.getElementById('programModalTitle');
+        const modalDescription = document.getElementById('programModalDescription');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const programDetailsBtns = document.querySelectorAll('.program-details-btn');
 
-    // Function to open modal
-    function openProgramModal(btn) {
-        // Get data from button's data attributes
-        const programId = btn.getAttribute('data-program-id');
-        const title = btn.getAttribute('data-title');
-        const description = btn.getAttribute('data-description');
-        const fullDescription = btn.getAttribute('data-full-description');
-        const iconClass = btn.closest('.program-card').querySelector('.icon-container i').className;
+        // Function to open modal
+        function openProgramModal(btn) {
+            // Get data from button's data attributes
+            const programId = btn.getAttribute('data-program-id');
+            const title = btn.getAttribute('data-title');
+            const description = btn.getAttribute('data-description');
+            const fullDescription = btn.getAttribute('data-full-description');
+            const iconClass = btn.closest('.program-card').querySelector('.icon-container i').className;
 
-        // Set modal content
-        modalIcon.className = `${iconClass} text-4xl text-white`;
-        modalTitle.textContent = title;
-        modalDescription.innerHTML = fullDescription || description;
+            // Set modal content
+            modalIcon.className = `${iconClass} text-4xl text-white`;
+            modalTitle.textContent = title;
+            modalDescription.innerHTML = fullDescription || description;
 
-        // Show modal
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
+            // Show modal
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
 
-    // Add click event to all "Selengkapnya" buttons
-    programDetailsBtns.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            openProgramModal(this);
+        // Add click event to all "Selengkapnya" buttons
+        programDetailsBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                openProgramModal(this);
+            });
         });
-    });
 
-    // Close modal when close button is clicked
-    closeModalBtn.addEventListener('click', function() {
-        modal.classList.remove('flex');
-        modal.classList.add('hidden');
-    });
-
-    // Close modal when clicking outside of the modal content
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
+        // Close modal when close button is clicked
+        closeModalBtn.addEventListener('click', function() {
             modal.classList.remove('flex');
             modal.classList.add('hidden');
-        }
-    });
+        });
 
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
-        }
-    });
-    
-});
+        // Close modal when clicking outside of the modal content
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+        });
 
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+        });
+
+    });
 </script>
 
 </html>
