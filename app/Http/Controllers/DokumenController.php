@@ -20,7 +20,7 @@ class DokumenController extends Controller
     public function index()
     {
         $dokumens = Dokumen::orderBy('tanggal_publikasi', 'desc')->get();
-        if (auth()->user()->hasRole('admin')) {
+        if (auth()->user()->hasRole('admin_direktorat')) {
             return view('admin.document', compact('dokumens'));
         } elseif (auth()->user()->hasRole('admin_hilirisasi')) {
             return view('subdirektorat-inovasi.admin_hilirisasi.document', compact('dokumens'));

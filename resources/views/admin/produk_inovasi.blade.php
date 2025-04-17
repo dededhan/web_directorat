@@ -30,7 +30,7 @@
                 <h3>Input Produk Inovasi</h3>
             </div>
 
-            <form method="POST" action="{{ route('admin.Katsinov.produk_inovasi.store') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route($routePrefix . '.produk_inovasi.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -136,7 +136,7 @@
                                                 Edit
                                             </button>
                                             <form method="POST"
-                                                action="{{ route('admin.Katsinov.produk_inovasi.destroy', $produk->id) }}"
+                                                action="{{ route($routePrefix . '.produk_inovasi.destroy', $produk->id) }}"
                                                 class="delete-form">
                                                 @csrf
                                                 @method('DELETE')
@@ -229,6 +229,13 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Set global variables for use in external JS file
+        const appConfig = {
+            csrfToken: '{{ csrf_token() }}',
+            uploadUrl: '{{ route($routePrefix . '.produk_inovasi.upload') }}',
+            routePrefix: '{{ $routePrefix }}'
+        };
+
         // Custom upload adapter
         class MyUploadAdapter {
             constructor(loader) {
@@ -241,7 +248,7 @@
                     data.append('upload', file);
                     data.append('_token', '{{ csrf_token() }}');
 
-                    fetch('{{ route('admin.Katsinov.produk_inovasi.upload') }}', {
+                    fetch('{{ route($routePrefix . '.produk_inovasi.upload') }}', {
                             method: 'POST',
                             body: data
                         })
@@ -385,6 +392,10 @@
             document.querySelectorAll('.edit-produk').forEach(button => {
                 button.addEventListener('click', function() {
                     const produkId = this.dataset.id;
+                    const routePrefix = '{{ $routePrefix }}';
+
+                    // Convert route prefix with dots to path with slashes
+                    const routePath = routePrefix.replace(/\./g, '/');
 
                     // Show loading state
                     Swal.fire({
@@ -397,7 +408,7 @@
                     });
 
                     // Fetch produk details via AJAX
-                    fetch(`/admin/Katsinov/produk_inovasi/${produkId}/detail`)
+                    fetch(`/${routePath}/produk_inovasi/${produkId}/detail`)
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error('Network response was not ok');
@@ -409,7 +420,7 @@
 
                             // Populate the edit form
                             document.getElementById('edit_nama_produk').value = data
-                                .nama_produk;
+                            .nama_produk;
                             document.getElementById('edit_inovator').value = data.inovator;
                             document.getElementById('edit_nomor_paten').value = data
                                 .nomor_paten || '';
@@ -430,7 +441,7 @@
 
                             // Set the form action
                             const form = document.getElementById('editProdukForm');
-                            form.action = `/admin/Katsinov/produk_inovasi/${produkId}`;
+                            form.action = `/${routePath}/produk_inovasi/${produkId}`;
 
                             // Show the modal
                             const editModal = new bootstrap.Modal(document.getElementById(
@@ -533,6 +544,20 @@
                 });
             });
 
+            // Handle view image
+            document.querySelectorAll('.view-image').forEach(button => {
+                button.addEventListener('click', function() {
+                    const imageUrl = this.dataset.image;
+                    const title = this.dataset.title;
+
+                    document.getElementById('imageModalLabel').textContent = title;
+                    document.getElementById('modalImage').src = imageUrl;
+
+                    const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+                    imageModal.show();
+                });
+            });
+
             // Flash message handling
             const flashSuccess = "{{ session('success') }}";
             const flashError = "{{ session('error') }}";
@@ -556,8 +581,4 @@
             }
         });
     </script>
-
-    <style>
-
-    </style>
 @endsection

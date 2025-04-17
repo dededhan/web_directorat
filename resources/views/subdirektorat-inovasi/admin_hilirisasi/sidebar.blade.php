@@ -80,6 +80,12 @@
                         <span class="text">Form Katsinov</span>
                     </a>
                 </li>
+                <li class="{{ request()->routeIs('subdirektorat-inovasi.admin_hilirisasi.produk_inovasi') ? 'active' : '' }}">
+                    <a href="{{ route('subdirektorat-inovasi.admin_hilirisasi.produk_inovasi') }}">
+                        <i class='bx bxs-file-plus'></i>
+                        <span class="text">Produk Inovasi</span>
+                    </a>
+                </li>
             </ul>
         </div>
 

@@ -33,13 +33,13 @@ class ProdukInovasiController extends Controller
         $routePrefix = $this->getRoutePrefix();
         
         if (auth()->user()->hasRole('admin_direktorat')) {
-            return view('admin.katsinov.produk_inovasi', compact('produkInovasi', 'routePrefix'));
+            return view('admin.produk_inovasi', compact('produkInovasi', 'routePrefix'));
         } elseif (auth()->user()->hasRole('admin_hilirisasi')) {
             return view('subdirektorat-inovasi.admin_hilirisasi.produk_inovasi', compact('produkInovasi', 'routePrefix'));
         }
         
         // Default fallback view
-        return view('admin.katsinov.produk_inovasi', compact('produkInovasi', 'routePrefix'));
+        return view('admin.produk_inovasi', compact('produkInovasi', 'routePrefix'));
     }
 
     /**
@@ -87,7 +87,7 @@ class ProdukInovasiController extends Controller
             }
 
             $routePrefix = $this->getRoutePrefix();
-            return redirect()->route($routePrefix . '.Katsinov.produk_inovasi')
+            return redirect()->route($routePrefix . '.produk_inovasi')
                 ->with('success', 'Produk inovasi berhasil ditambahkan!');
         } catch (\Exception $e) {
             if ($request->ajax()) {
@@ -130,7 +130,7 @@ class ProdukInovasiController extends Controller
             $data = $request->except('gambar');
 
             // Handle image upload
-            if ($request->hasFile('gambar')) {
+            if ($request->hasFile('gambar') && $request->file('gambar')->isValid()) {
                 // Delete old image if exists
                 if ($produk->gambar && Storage::disk('public')->exists($produk->gambar)) {
                     Storage::disk('public')->delete($produk->gambar);
@@ -152,7 +152,7 @@ class ProdukInovasiController extends Controller
             }
 
             $routePrefix = $this->getRoutePrefix();
-            return redirect()->route($routePrefix . '.Katsinov.produk_inovasi')
+            return redirect()->route($routePrefix . '.produk_inovasi')
                 ->with('success', 'Produk inovasi berhasil diperbarui!');
         } catch (\Exception $e) {
             if ($request->ajax()) {
@@ -191,7 +191,7 @@ class ProdukInovasiController extends Controller
             }
 
             $routePrefix = $this->getRoutePrefix();
-            return redirect()->route($routePrefix . '.Katsinov.produk_inovasi')
+            return redirect()->route($routePrefix . '.produk_inovasi')
                 ->with('success', 'Produk inovasi berhasil dihapus!');
         } catch (\Exception $e) {
             if (request()->ajax()) {
@@ -202,7 +202,7 @@ class ProdukInovasiController extends Controller
             }
 
             $routePrefix = $this->getRoutePrefix();
-            return redirect()->route($routePrefix . '.Katsinov.produk_inovasi')
+            return redirect()->route($routePrefix . '.produk_inovasi')
                 ->with('error', 'Gagal menghapus produk inovasi: ' . $e->getMessage());
         }
     }

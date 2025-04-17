@@ -18,7 +18,7 @@ class ProgramLayananController extends Controller
     {
         $programs = ProgramLayanan::all();
 
-        if (auth()->user()->hasRole('admin')) {
+        if (auth()->user()->hasRole('admin_direktorat')) {
             return view('admin.programlayanan', compact('programs'));
         } elseif (auth()->user()->hasRole('admin_hilirisasi')) {
             return view('subdirektorat-inovasi.admin_hilirisasi.programlayanan', compact('programs'));

@@ -118,6 +118,14 @@ Route::prefix('admin')->name('admin.')
             ->name('internationallecture.detail');
 
 
+        //inovasi
+        Route::get('/produk_inovasi', [ProdukInovasiController::class, 'index'])->name('produk_inovasi');
+        Route::post('/produk_inovasi', [ProdukInovasiController::class, 'store'])->name('produk_inovasi.store');
+        Route::get('/produk_inovasi/{id}/detail', [ProdukInovasiController::class, 'getProdukDetail'])->name('produk_inovasi.detail');
+        Route::put('/produk_inovasi/{id}', [ProdukInovasiController::class, 'update'])->name('produk_inovasi.update');
+        Route::delete('/produk_inovasi/{id}', [ProdukInovasiController::class, 'destroy'])->name('produk_inovasi.destroy');
+        Route::post('/produk_inovasi/upload', [ProdukInovasiController::class, 'upload'])->name('produk_inovasi.upload');    
+
 
         Route::prefix('Katsinov')->name('Katsinov.')
             ->group(function () {
@@ -144,32 +152,6 @@ Route::prefix('admin')->name('admin.')
                 //Form record hasil pengukuran
                 Route::get('/record-hasil/{katsinov_id?}', [KatsinovController::class, 'recordIndex'])->name('record.index');
                 Route::post('/record-hasil/{katsinov_id?}', [KatsinovController::class, 'recordStore'])->name('record.store');
-
-
-
-                // Route::get('/produk_inovasi', function () {
-                //     return view('admin.katsinov.produk_inovasi');
-                // })->name('produk_inovasi');
-
-                Route::get('/produk_inovasi', [ProdukInovasiController::class, 'index'])->name('produk_inovasi');
-                Route::post('/produk_inovasi', [ProdukInovasiController::class, 'store'])->name('produk_inovasi.store');
-                Route::get('/produk_inovasi/{id}/detail', [ProdukInovasiController::class, 'getProdukDetail'])->name('produk_inovasi.detail');
-                Route::put('/produk_inovasi/{id}', [ProdukInovasiController::class, 'update'])->name('produk_inovasi.update');
-                Route::delete('/produk_inovasi/{id}', [ProdukInovasiController::class, 'destroy'])->name('produk_inovasi.destroy');
-                Route::post('/produk_inovasi/upload', [ProdukInovasiController::class, 'upload'])->name('produk_inovasi.upload');
-
-                // Form Record Hasil Pengukuran with katsinov_id parameter
-                // Route::get('/formrecordhasilpengukuran/{katsinov_id?}', function (Request $request, $katsinov_id = null) {
-                //     $katsinov = null;
-                //     if ($katsinov_id) {
-                //         $katsinov = \App\Models\Katsinov::find($katsinov_id);
-                //         if (!$katsinov) {
-                //             return redirect()->back()->with('error', 'Katsinov data not found');
-                //         }
-                //     }
-                //     return view('admin.katsinov.formrecordhasilpengukuran', compact('katsinov'));
-                // })->name('formrecordhasilpengukuran');
-
             });
 
         Route::prefix('SDGs')->name('SDGs.')
@@ -374,12 +356,12 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
 
                 // Produk Inovasi routes for admin_hilirisasi
-                Route::get('/produk_inovasi', [ProdukInovasiController::class, 'index'])->name('Katsinov.produk_inovasi');
-                Route::post('/produk_inovasi', [ProdukInovasiController::class, 'store'])->name('Katsinov.produk_inovasi.store');
-                Route::get('/produk_inovasi/{id}/detail', [ProdukInovasiController::class, 'getProdukDetail'])->name('Katsinov.produk_inovasi.detail');
-                Route::put('/produk_inovasi/{id}', [ProdukInovasiController::class, 'update'])->name('Katsinov.produk_inovasi.update');
-                Route::delete('/produk_inovasi/{id}', [ProdukInovasiController::class, 'destroy'])->name('Katsinov.produk_inovasi.destroy');
-                Route::post('/produk_inovasi/upload', [ProdukInovasiController::class, 'upload'])->name('Katsinov.produk_inovasi.upload');
+                Route::get('/produk_inovasi', [ProdukInovasiController::class, 'index'])->name('produk_inovasi');
+                Route::post('/produk_inovasi', [ProdukInovasiController::class, 'store'])->name('produk_inovasi.store');
+                Route::get('/produk_inovasi/{id}/detail', [ProdukInovasiController::class, 'getProdukDetail'])->name('produk_inovasi.detail');
+                Route::put('/produk_inovasi/{id}', [ProdukInovasiController::class, 'update'])->name('produk_inovasi.update');
+                Route::delete('/produk_inovasi/{id}', [ProdukInovasiController::class, 'destroy'])->name('produk_inovasi.destroy');
+                Route::post('/produk_inovasi/upload', [ProdukInovasiController::class, 'upload'])->name('produk_inovasi.upload');
                 // SDGs routes
                 Route::prefix('SDGs')->name('SDGs.')
                     ->group(function () {
