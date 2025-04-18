@@ -1,20 +1,7 @@
 // Program studi for each fakultas based on the Excel data
 const prodisByFaculty = {
     'pascasarjana': [
-        'S3 Penelitian Dan Evaluasi Pendidikan', 
-        'S2 Penelitian Dan Evaluasi Pendidikan', 
-        'S2 Manajemen Lingkungan', 
-        'S3 Ilmu Manajemen', 
-        'S3 Manajemen Pendidikan', 
-        'S3 Pendidikan Dasar', 
-        'S2 Linguistik Terapan', 
-        'S3 Pendidikan Kependudukan Dan Lingkungan Hidup', 
-        'S2 Pendidikan Lingkungan', 
-        'S3 Pendidikan Jasmani', 
-        'S3 Teknologi Pendidikan', 
-        'S3 Linguistik Terapan', 
-        'S3 Pendidikan Anak Usia Dini', 
-        'S2 Manajemen Pendidikan Tinggi'
+       
     ],
     'fip': [
         'S2 Bimbingan Konseling', 
@@ -110,7 +97,7 @@ const prodisByFaculty = {
         'S1 Pendidikan Geografi', 
         'S1 Pendidikan IPS', 
         'S1 Pendidikan Sejarah', 
-        'S1 Ilmu Komunikasi (ILKOM)', 
+        'S1 Ilmu Komunikasi', 
         'S1 Geografi', 
         'S2 Pendidikan Geografi', 
         'S2 Pendidikan Pancasila Dan Kewarganegaraan'

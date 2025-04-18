@@ -27,7 +27,7 @@ class StoreRespondenRequest extends FormRequest
             'responden_jabatan' => ['required'],
             'responden_instansi' => ['required'],
             'email' => ['required', 'unique:respondens', 'email:rfc'],
-            'phone_responden' => ['required', 'unique:respondens'],
+            'phone_responden' => ['nullable', 'unique:respondens'],
             'responden_dosen' => ['required'],
             'responden_dosen_phone' => ['required'],
             'responden_fakultas' => ['required'],

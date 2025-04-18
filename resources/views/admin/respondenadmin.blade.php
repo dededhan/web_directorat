@@ -63,7 +63,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="nomor_responden" class="form-label">Nomor Responden</label>
-                        <input type="text" class="form-control" name="phone_responden" id="nomor_responden" required>
+                        <input type="text" class="form-control" name="phone_responden" id="nomor_responden" >
                         <div class="form-text text-muted">Masukkan nomor telepon aktif responden (format: 08xxxx)</div>
                         @error('phone_responden')
                             <span style="color: red">Nomor hp sama</span>
@@ -142,7 +142,7 @@
                                 <th>Fakultas</th>
                                 <th>Kategori</th>
                                 <th>Status</th>
-                                <th>Actions</th>
+      
                             </tr>
                         </thead>
                         <tbody id="respondent-list">
@@ -172,16 +172,7 @@
                                             @endif
                                         </select>
                                     </td>
-                                    <td>
-
-                                        <div class="btn-group">
-                                            <button class="btn btn-sm btn-warning update-status">Update</button>
-                                        </div>
-                                        {{-- <form method="POST" action="{{ route('admin.mail.responden', $responden->id) }}">
-                                            @csrf
-                                            <input class="btn btn-primary" type="submit" value="Kirim Email" @disabled($responden->status != 'belum di-email')>
-                                        </form> --}}
-                                    </td>
+                                    
                                 </tr>
                             @empty
                                 <span>Data Belum Ada</span>
