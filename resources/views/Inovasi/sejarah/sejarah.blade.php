@@ -96,7 +96,7 @@
     </style>
 </head>
 <body>
-@include('Pemeringkatan.sejarah.navbarpemeringkatan')
+@include('Inovasi.sejarah.navbarhilirisasi')
 
 <div class="main-content">
     <div class="sidebar">
