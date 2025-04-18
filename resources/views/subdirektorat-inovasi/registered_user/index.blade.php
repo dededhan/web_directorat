@@ -49,12 +49,12 @@
     </style>
 </head>
 <body>
-    @include('Inovasi.registered_user.sidebar')
+    @include('subdirektorat-inovasi.registered_user.sidebar')
 
     <!-- CONTENT -->
     <section id="content">
         <!-- NAVBAR -->
-        @include('Inovasi.registered_user.navbar')
+        @include('subdirektorat-inovasi.registered_user.navbar')
 
         <main>
             @yield('contentregistered_user')

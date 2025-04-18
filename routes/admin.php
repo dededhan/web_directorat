@@ -384,7 +384,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
             ->middleware(['checked', 'role:validator'])
             ->group(function () {
                 Route::get('/dashboard', function () {
-                    return view('Inovasi.validator.dashboard');
+                    return view('subdirektorat-inovasi.validator.dashboard');
                 })->name('dashboard');
 
                 // Tabel Katsinov
@@ -426,30 +426,35 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
             ->group(function () {
                 // Dashboard
                 Route::get('/dashboard', function () {
-                    return view('Inovasi.registered_user.dashboard');
+                    return view('subdirektorat-inovasi.registered_user.dashboard');
                 })->name('dashboard');
 
                 // You can add more routes for registered users here as needed
                 Route::get('/profile', function () {
-                    return view('Inovasi.registered_user.profile');
+                    return view('subdirektorat-inovasi.registered_user.profile');
                 })->name('profile');
 
                 // Tabel Katsinov
-                Route::get('/TableKatsinov', [KatsinovController::class, 'index'])->name('TableKatsinov');
+                Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekatsinov');
                 Route::get('/form', [KatsinovController::class, 'create'])->name('form');
                 Route::post('/store', [KatsinovController::class, 'store'])->name('store');
                 Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
 
-                Route::resource('/forminformasidasar', FormInformasiDasarController::class);
-                Route::post('/forminformasidasar', [FormInformasiDasarController::class, 'store'])
-                    ->name('forminformasidasar.store');
+                Route::get('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiIndex'])->name('inovasi.index');
+                Route::post('/form-invoasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
+                // Form Berita Acara with katsinov_id parameter
+                Route::get('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaIndex'])->name('berita.index');
+                Route::post('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaStore'])->name('berita.store');
 
-                Route::resource('/formberitaacara', BeritaAcaraController::class);
+                Route::get('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationIndex'])->name('informasi.index');
+                Route::post('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationStore'])->name('informasi.store');
 
-                Route::get('/formjudul', function () {
-                    return view('inovasi.registered_user.formjudul');
-                })->name('formjudul');
+                // Lampiran with katsinov_id parameter
+                Route::get('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranIndex'])->name('lampiran.index');
+                Route::post('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranStore'])->name('lampiran.store');
 
-                Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
+                //Form record hasil pengukuran
+                Route::get('/record-hasil/{katsinov_id?}', [KatsinovController::class, 'recordIndex'])->name('record.index');
+                Route::post('/record-hasil/{katsinov_id?}', [KatsinovController::class, 'recordStore'])->name('record.store');
             });
     });
