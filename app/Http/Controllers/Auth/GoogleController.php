@@ -93,8 +93,9 @@ class GoogleController extends Controller
                 Auth::login($newUser);
                 
                 // Redirect to registered user dashboard
-                return redirect()->route('inovasi.registered_user.dashboard')
-                    ->with('success', 'Akun berhasil dibuat dengan Google');
+                return redirect()->route('subdirektorat-inovasi.registered_user.dashboard')
+                                 ->with('success', 'Akun berhasil dibuat dengan Google');
+                
             }
         } catch (Exception $e) {
             Log::error('Google sign-in error', [
