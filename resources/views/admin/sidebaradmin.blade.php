@@ -37,14 +37,14 @@
                         <span class="text">Berita</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('admin.newsscroll.index') ? 'active' : '' }}">
+                <li class="{{ request()->routeIs('admin.news-scroll.index') ? 'active' : '' }}">
                     <a href="{{ route('admin.news-scroll.index') }}">
                         <i class='bx bxs-user'></i>
                         <span class="text">Berita Scroll</span>
                     </a>
                 </li>
 
-                <li class="{{ request()->routeIs('admin.programlayanan.index') ? 'active' : '' }}">
+                <li class="{{ request()->routeIs('admin.program-layanan.index') ? 'active' : '' }}">
                     <a href="{{ route('admin.program-layanan.index') }}">
                         <i class='bx bxs-user'></i>
                         <span class="text">Program dan Layanan</span>
@@ -165,37 +165,12 @@
                         <span class="text">Form Katsinov</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('admin.Katsinov.produk_inovasi') ? 'active' : '' }}">
+                <li class="{{ request()->routeIs('admin.produk_inovasi') ? 'active' : '' }}">
                     <a href="{{ route('admin.produk_inovasi') }}">
                         <i class='bx bxs-file-plus'></i>
                         <span class="text">Produk Inovasi</span>
                     </a>
                 </li>
-                {{-- <li class="{{ request()->routeIs('admin.Katsinov.forminformasidasar.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.Katsinov.forminformasidasar.index') }}">
-                        <i class='bx bxs-file-plus'></i>
-                        <span class="text">Form Informasi Dasar</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.Katsinov.formberitaacara.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.Katsinov.formberitaacara.index') }}">
-                        <i class='bx bxs-file-plus'></i>
-                        <span class="text">Form Berita Acara</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.Katsinov.formjudul') ? 'active' : '' }}">
-                    <a href="{{ route('admin.Katsinov.formjudul') }}">
-                        <i class='bx bxs-file-plus'></i>
-                        <span class="text">Form Judul</span>
-                    </a>
-                </li>
-                <li
-                    class="{{ request()->routeIs('admin.Katsinov.formrecordhasilpengukuran.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.Katsinov.formrecordhasilpengukuran.index') }}">
-                        <i class='bx bxs-file-plus'></i>
-                        <span class="text">Form Record</span>
-                    </a>
-                </li> --}}
             </ul>
         </div>
 
