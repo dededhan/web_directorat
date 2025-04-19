@@ -21,7 +21,7 @@
             font-family: Arial, sans-serif !important;
         }
 
-        main,
+        /* main,
         section {
             max-width: 100%;
             overflow-x: hidden;
@@ -30,7 +30,7 @@
         .container {
             max-width: 100%;
             overflow-x: hidden;
-        }
+        } */
 
         .media-card {
             height: 100%;
