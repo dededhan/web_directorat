@@ -87,6 +87,11 @@ Route::prefix('admin')->name('admin.')
         Route::post('/responden/update-status/{id}', [AdminRespondenController::class, 'updateStatus'])
             ->name('responden.updateStatus');
 
+        Route::get('/responden/export/excel', [AdminRespondenController::class, 'export'])
+            ->name('responden.export');
+        Route::get('/responden/export/csv', [AdminRespondenController::class, 'exportCSV'])
+            ->name('responden.exportCSV');
+
         Route::put('/manageuser/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('manageuser.toggleStatus');
         Route::resource('/manageuser', UserController::class);
 

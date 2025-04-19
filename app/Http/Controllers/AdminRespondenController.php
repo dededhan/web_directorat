@@ -7,6 +7,9 @@ use App\Http\Requests\StoreRespondenRequest;
 use App\Http\Requests\UpdateRespondenRequest;
 use App\Models\Responden;
 use Illuminate\Validation\Rule;
+use App\Exports\RespondenExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 
 class AdminRespondenController extends Controller
@@ -109,5 +112,19 @@ class AdminRespondenController extends Controller
     public function destroy(Responden $responden)
     {
         //
+    }
+
+
+    public function export()
+    {
+        return Excel::download(new RespondenExport, 'responden-data.xlsx');
+    }
+
+    /**
+     * Export responden data to CSV.
+     */
+    public function exportCSV()
+    {
+        return Excel::download(new RespondenExport, 'responden-data.csv');
     }
 }
