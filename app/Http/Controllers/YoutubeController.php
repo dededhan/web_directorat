@@ -8,6 +8,20 @@ use App\Models\Youtube;
 class YoutubeController extends Controller
 {
     /**
+     * Get the correct route name prefix based on authenticated user role
+     */
+    private function getRoutePrefix()
+    {
+        if (auth()->user()->role === 'admin_direktorat') {
+            return 'admin';
+        } else if (auth()->user()->role === 'admin_hilirisasi') {
+            return 'subdirektorat-inovasi.admin_hilirisasi';
+        }
+        
+        return 'admin';
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -15,10 +29,12 @@ class YoutubeController extends Controller
     public function index()
     {
         $videos = Youtube::latest()->get();
-        if (auth()->user()->hasRole('admin_direktorat')) {
-            return view('admin.youtube', compact('videos'));
-        } elseif (auth()->user()->hasRole('admin_hilirisasi')) {
-            return view('subdirektorat-inovasi.admin_hilirisasi.youtube', compact('videos'));
+        $routePrefix = $this->getRoutePrefix();
+        
+        if (auth()->user()->role === 'admin_direktorat') {
+            return view('admin.youtube', compact('videos', 'routePrefix'));
+        } else if (auth()->user()->role === 'admin_hilirisasi') {
+            return view('subdirektorat-inovasi.admin_hilirisasi.youtube', compact('videos', 'routePrefix'));
         }
     }
 
@@ -48,8 +64,67 @@ class YoutubeController extends Controller
             'link' => $request->link
         ]);
 
-        return redirect()->route('admin.youtube.index')
+        $routePrefix = $this->getRoutePrefix();
+        return redirect()->route($routePrefix . '.youtube.index')
             ->with('success', 'Video berhasil ditambahkan!');
+    }
+
+
+    public function getVideoDetail($id)
+    {
+        $video = Youtube::findOrFail($id);
+        return response()->json($video);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        try {
+            $video = Youtube::findOrFail($id);
+            
+            $validated = $request->validate([
+                'judul' => 'required|string|max:100',
+                'deskripsi' => 'required|string',
+                'link' => 'required|url'
+            ], [
+                'judul.required' => 'Judul video wajib diisi',
+                'judul.max' => 'Judul tidak boleh lebih dari 100 karakter',
+                'deskripsi.required' => 'Deskripsi video wajib diisi',
+                'link.required' => 'Link YouTube wajib diisi',
+                'link.url' => 'Format link YouTube tidak valid'
+            ]);
+
+            $video->update([
+                'judul' => $validated['judul'],
+                'deskripsi' => $validated['deskripsi'],
+                'link' => $validated['link']
+            ]);
+
+            $routePrefix = $this->getRoutePrefix();
+            
+            if ($request->ajax()) {
+                return response()->json(['success' => true, 'message' => 'Video berhasil diperbarui!']);
+            }
+
+            return redirect()->route($routePrefix . '.youtube.index')
+                ->with('success', 'Video berhasil diperbarui!');
+        } catch (\Exception $e) {
+            \Log::error('Error updating video: ' . $e->getMessage());
+
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Gagal memperbarui video: ' . $e->getMessage()]);
+            }
+
+            return redirect()->back()
+                ->with('error', 'Gagal memperbarui video: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     /**
@@ -60,11 +135,18 @@ class YoutubeController extends Controller
      */
     public function destroy($id)
     {
-        $video = Youtube::findOrFail($id);
-        $video->delete();
+        try {
+            $video = Youtube::findOrFail($id);
+            $video->delete();
 
-        return redirect()->route('admin.youtube.index')
-            ->with('success', 'Video berhasil dihapus!');
+            $routePrefix = $this->getRoutePrefix();
+            return redirect()->route($routePrefix . '.youtube.index')
+                ->with('success', 'Video berhasil dihapus!');
+        } catch (\Exception $e) {
+            \Log::error('Error deleting video: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'Gagal menghapus video: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -76,7 +158,8 @@ class YoutubeController extends Controller
     public function preview($id)
     {
         $video = Youtube::findOrFail($id);
-        return view('admin.youtube-preview', compact('video'));
+        $routePrefix = $this->getRoutePrefix();
+        return view($routePrefix . '.youtube-preview', compact('video', 'routePrefix'));
     }
 
     /**

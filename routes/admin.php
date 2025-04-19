@@ -57,8 +57,9 @@ Route::prefix('admin')->name('admin.')
 
         //Youtube
         Route::resource('/youtube', YoutubeController::class)
-            ->except(['show', 'edit', 'update']);
-
+            ->except(['show', 'edit']);
+        Route::get('/youtube/{id}/detail', [YoutubeController::class, 'getVideoDetail'])
+            ->name('youtube.detail');
         Route::get('/youtube/{id}/preview', [YoutubeController::class, 'preview'])
             ->name('youtube.preview');
 
@@ -312,8 +313,9 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
                 //Youtube
                 Route::resource('/youtube', YoutubeController::class)
-                    ->except(['show', 'edit', 'update']);
-
+                    ->except(['show', 'edit']);
+                Route::get('/youtube/{id}/detail', [YoutubeController::class, 'getVideoDetail'])
+                    ->name('youtube.detail');
                 Route::get('/youtube/{id}/preview', [YoutubeController::class, 'preview'])
                     ->name('youtube.preview');
 
