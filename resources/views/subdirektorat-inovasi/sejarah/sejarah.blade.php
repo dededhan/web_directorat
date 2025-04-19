@@ -96,7 +96,7 @@
     </style>
 </head>
 <body>
-@include('Inovasi.sejarah.navbarhilirisasi')
+@include('subdirektorat-inovasi.sejarah.navbarhilirisasi')
 
 <div class="main-content">
     <div class="sidebar">
@@ -177,6 +177,6 @@
     </script>
 <!-- Adding margin before footer -->
 <div style="margin-top: 50px"></div>
-@include('Pemeringkatan.sejarah.footerpemeringkatan')
+@include('subdirektorat-inovasi.sejarah.footerpemeringkatan')
 </body>
 </html>

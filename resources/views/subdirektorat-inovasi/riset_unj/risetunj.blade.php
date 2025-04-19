@@ -113,7 +113,7 @@
     <!-- Navigation Bar -->
     
         
-        @include('Inovasi.riset_unj.navbarprofile')
+        @include('subdirektorat-inovasi.riset_unj.navbarprofile')
 
    
      <div id="mobileMenuButton" class="p-2 rounded-md hover:bg-teal-600 focus:outline-none">
@@ -219,7 +219,7 @@
     </main>
 
     <!-- Footer -->
-    @include('Inovasi.riset_unj.footerrisetunj')
+    @include('subdirektorat-inovasi.riset_unj.footerrisetunj')
 
     <script>
         // Mobile menu toggle functionality

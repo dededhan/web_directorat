@@ -110,17 +110,13 @@ Route::get('inovasi/risetunj', function () {
     return view('Inovasi.riset_unj.risetunj');
 })->name('riset.unj');
 
-Route::get('inovasi/risetunj/produk_inovasi', function () {
-    return view('Inovasi.riset_unj.produk_inovasi.produkinovasi');
-})->name('Inovasi.riset_unj.produk_inovasi.produkinovasi');
+;
 
 Route::get('subdirektorat-inovasi/risetunj', function () {
     return view('subdirektorat-inovasi.riset_unj.risetunj');
 })->name('riset.unj');
 
-Route::get('subdirektorat-inovasi/risetunj/produk_inovasi', function () {
-    return view('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi');
-})->name('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi');
+
 
 Route::get('subdirektorat-inovasi/risetunj/produk_inovasi', [App\Http\Controllers\ProdukInovasiController::class, 'publicIndex'])
     ->name('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi');
@@ -213,8 +209,8 @@ Route::get('/sejarah-pemeringkatan', function () {
 })->name('Pemeringkatan.sejarah.sejarah');
 
 Route::get('/sejarah-hilirisasi', function () {
-    return view('Inovasi.sejarah.sejarah');
-})->name('Inovasi.sejarah.sejarah');
+    return view('subdirektorat-inovasi.sejarah.sejarah');
+})->name('subdirektorat-inovasi.sejarah.sejarah');
 
 Route::get('/ranking_unj', function () {
     return view('Pemeringkatan.ranking_unj.rankingunj');
