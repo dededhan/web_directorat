@@ -9,6 +9,7 @@ use App\Http\Controllers\InstagramController;
 use App\Http\Controllers\SustainabilityController;
 use App\Http\Controllers\FormRecordHasilPengukuranController;
 use App\Http\Controllers\ProdukInovasiController;
+use App\Http\Controllers\SejarahContentController;
 
 use App\Http\Middleware\HandleRespondenForm;
 use Illuminate\Support\Facades\Route;
@@ -208,13 +209,21 @@ Route::get('/Berita', function () {
 })->name('Berita.beritahome');
 Route::get('/Berita', [BeritaController::class, 'allNews'])->name('Berita.beritahome');
 
-Route::get('/sejarah-pemeringkatan', function () {
-    return view('Pemeringkatan.sejarah.sejarah');
-})->name('Pemeringkatan.sejarah.sejarah');
 
-Route::get('/sejarah-hilirisasi', function () {
-    return view('subdirektorat-inovasi.sejarah.sejarah');
-})->name('subdirektorat-inovasi.sejarah.sejarah');
+
+// Route::get('/sejarah-pemeringkatan', [SejarahContentController::class, 'showPublic'])
+//     ->name('Pemeringkatan.sejarah.sejarah')
+//     ->with('category', 'pemeringkatan');
+
+// Route::get('/sejarah-hilirisasi', [SejarahContentController::class, 'showPublic'])
+//     ->name('subdirektorat-inovasi.sejarah.sejarah')
+//     ->with('category', 'inovasi');
+
+Route::get('/sejarah-pemeringkatan', [SejarahContentController::class, 'showPublic'])
+    ->name('Pemeringkatan.sejarah.sejarah');
+
+Route::get('/sejarah-hilirisasi', [SejarahContentController::class, 'showPublic'])
+    ->name('subdirektorat-inovasi.sejarah.sejarah');
 
 Route::get('/ranking_unj', function () {
     return view('Pemeringkatan.ranking_unj.rankingunj');

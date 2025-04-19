@@ -71,6 +71,13 @@
                         <span class="text">Instagram</span>
                     </a>
                 </li>
+
+                <li class="{{ request()->routeIs('admin.sejarah.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.sejarah.index') }}">
+                        <i class='bx bxl-instagram'></i>
+                        <span class="text">Sejarah</span>
+                    </a>
+                </li>
             </ul>
         </div>
 

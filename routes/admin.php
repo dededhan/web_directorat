@@ -21,6 +21,7 @@ use App\Http\Controllers\ProgramLayananController;
 use App\Http\Controllers\YoutubeController;
 use App\Http\Controllers\InstagramController;
 use App\Http\Controllers\ProdukInovasiController;
+use App\Http\Controllers\SejarahContentController;
 use Illuminate\Http\Request;
 // Ganti route yang ada dengan:
 use App\Http\Controllers\DokumenController;
@@ -74,6 +75,9 @@ Route::prefix('admin')->name('admin.')
         Route::get('document/{dokumen}/download', [DokumenController::class, 'download'])
             ->name('document.download');
 
+        //sejarah
+        Route::resource('/sejarah', SejarahContentController::class);
+
 
         Route::resource('/responden', AdminRespondenController::class);
         Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
@@ -125,7 +129,7 @@ Route::prefix('admin')->name('admin.')
         Route::get('/produk_inovasi/{id}/detail', [ProdukInovasiController::class, 'getProdukDetail'])->name('produk_inovasi.detail');
         Route::put('/produk_inovasi/{id}', [ProdukInovasiController::class, 'update'])->name('produk_inovasi.update');
         Route::delete('/produk_inovasi/{id}', [ProdukInovasiController::class, 'destroy'])->name('produk_inovasi.destroy');
-        Route::post('/produk_inovasi/upload', [ProdukInovasiController::class, 'upload'])->name('produk_inovasi.upload');    
+        Route::post('/produk_inovasi/upload', [ProdukInovasiController::class, 'upload'])->name('produk_inovasi.upload');
 
 
         Route::prefix('Katsinov')->name('Katsinov.')
@@ -240,6 +244,10 @@ Route::prefix('admin-pemeringkatan')->name('admin_pemeringkatan.')
             return view('admin_pemeringkatan.manageuser');
         })->name('manageuser');
 
+
+        //sejarah
+        Route::resource('/sejarah', SejarahContentController::class);
+
         Route::resource('/sustainability', AdminSustainabilityController::class);
 
         //Mata Kuliah
@@ -329,6 +337,10 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::resource('/document', DokumenController::class);
                 Route::get('document/{dokumen}/download', [DokumenController::class, 'download'])
                     ->name('document.download');
+
+
+                //sejarah
+                Route::resource('/sejarah', SejarahContentController::class);
 
 
                 // Tabel Katsinov
