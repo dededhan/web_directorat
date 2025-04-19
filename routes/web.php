@@ -125,6 +125,10 @@ Route::get('/strukturorganisasi', function () {
     return view('struktur organisasi.strukturorganisasi');
 })->name('strukturorganisasi');
 
+Route::get('/pimpinan', function () {
+    return view('pimpinan.pimpinan');
+})->name('pimpinan.pimpinan');
+
 // Route::get('/galeri/sustainability', function () {
 //     return view('galeri.sustainability');
 // })->name('galeri.sustainability'); 
