@@ -83,7 +83,7 @@
         }
     </style>
 </head>
-@include('Inovasi.riset_unj.produk_inovasi.navbarprofile')
+@include('subdirektorat-inovasi.riset_unj.produk_inovasi.navbarprofile')
 <body class="bg-gray-100">
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <h1 class="text-3xl font-bold mb-6 text-center">
@@ -206,5 +206,5 @@
         });
     </script>
 </body>
-@include('Inovasi.riset_unj.produk_inovasi.footerrisetunj')
+@include('subdirektorat-inovasi.riset_unj.produk_inovasi.footerrisetunj')
 </html>

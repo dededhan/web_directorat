@@ -17,7 +17,7 @@
     <script src="{{ asset('mobile.js') }}"></script>
 </head>
 <body class="font-sans bg-gray-100">
-    @include('Inovasi.navbarhilirisasi')
+    @include('subdirektorat-inovasi.navbarhilirisasi')
     
     <!-- Header section -->
     <header class="relative">
@@ -479,7 +479,7 @@
     
     <!-- UNJ dalam Angka Section (commented out) -->
     
-    @include('Inovasi.footerHilirisasi')
+    @include('subdirektorat-inovasi.footerHilirisasi')
     
     <script src="{{ asset('/inovasi/homeinovasi.js') }}"></script>
 </body>

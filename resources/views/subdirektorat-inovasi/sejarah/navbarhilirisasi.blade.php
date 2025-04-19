@@ -18,7 +18,7 @@
                     <li><a href="#" class="hover:text-yellow-400">Pimpinan Direktorat</a></li>
                     <li><a href="{{ route('strukturorganisasi') }}" class="hover:text-yellow-400">Struktur Organisasi</a></li>
                     <li><a href="{{ route('tupoksi.tupoksi') }}" class="hover:text-yellow-400">Tugas Pokok dan Fungsi</a></li>
-                    <li><a href="{{ route('Inovasi.sejarah.sejarah') }}" class="hover:text-yellow-400">Sejarah</a></li>
+                    <li><a href="{{ route('subdirektorat-inovasi.sejarah.sejarah') }}" class="hover:text-yellow-400">Sejarah</a></li>
                 </ul>
             </li>
             
@@ -50,7 +50,7 @@
                 <a href="#" class="text-white hover:text-yellow-400">Inovasi UNJ</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
                     <li><a href="{{ route('riset.unj') }}" class="hover:text-yellow-400">Riset UNJ</a></li>
-                    <li><a href="{{ route('Inovasi.riset_unj.produk_inovasi.produkinovasi') }}" class="hover:text-yellow-400">Produk Inovasi UNJ</a></li>
+                    <li><a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}" class="hover:text-yellow-400">Produk Inovasi UNJ</a></li>
                 </ul>
             </li>
             
