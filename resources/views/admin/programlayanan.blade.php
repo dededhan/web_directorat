@@ -1,5 +1,9 @@
 @extends('admin.admin')
 
+<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/program_layanan_dashboard.css') }}">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
 @section('contentadmin')
     <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -24,7 +28,7 @@
             <div class="head">
                 <h3>Input Program Layanan</h3>
             </div>
-            <form id="layanan-form" action="{{ route('admin.program-layanan.store') }}" method="POST">
+            <form id="layanan-form" action="{{ route($routePrefix . '.program-layanan.store') }}" method="POST">
                 @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -78,8 +82,16 @@
 
         <div class="table-data mt-4">
             <div class="order">
-                <div class="head">
+                <div class="head d-flex justify-content-between align-items-center mb-3">
                     <h3>Daftar Program Layanan</h3>
+                    <div class="search-container">
+                        <div class="input-group">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Cari program...">
+                            <button class="btn btn-primary" type="button">
+                                <i class='bx bx-search'></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="table-responsive">
@@ -90,7 +102,6 @@
                                 <th>Icon</th>
                                 <th>Judul</th>
                                 <th>Deskripsi</th>
-                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -98,14 +109,9 @@
                             @foreach ($programs as $key => $program)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td><i class="{{ $program->icon }}"></i></td>
+                                    <td><i class="{{ $program->icon }} fa-lg"></i></td>
                                     <td>{{ $program->judul }}</td>
                                     <td>{{ Str::limit(strip_tags($program->deskripsi), 50) }}</td>
-                                    <td>
-                                        <span class="badge bg-{{ $program->status ? 'success' : 'secondary' }}">
-                                            {{ $program->status ? 'Aktif' : 'Non-Aktif' }}
-                                        </span>
-                                    </td>
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-sm btn-warning edit-program"
@@ -113,7 +119,7 @@
                                                 <i class='bx bx-edit'></i> Edit
                                             </button>
                                             <form method="POST"
-                                                action="{{ route('admin.program-layanan.destroy', $program->id) }}"
+                                                action="{{ route($routePrefix . '.program-layanan.destroy', $program->id) }}"
                                                 class="delete-form">
                                                 @csrf
                                                 @method('DELETE')
@@ -197,6 +203,15 @@
             </div>
         </div>
     </div>
+
+    <!-- Script section -->
+    <script>
+        // Set global variables for use in external JS file
+        const appConfig = {
+            csrfToken: '{{ csrf_token() }}',
+            routePrefix: '{{ $routePrefix }}'
+        };
+    </script>
 
     <script>
         // SweetAlert helper functions
@@ -356,9 +371,13 @@
             document.querySelectorAll('.edit-program').forEach(button => {
                 button.addEventListener('click', function() {
                     const programId = this.dataset.id;
+                    const routePrefix = '{{ $routePrefix }}';
+
+                    // Convert route prefix with dots to path with slashes
+                    const routePath = routePrefix.replace(/\./g, '/');
 
                     // Fetch program details via AJAX
-                    fetch(`/admin/program-layanan/${programId}/detail`)
+                    fetch(`/${routePath}/program-layanan/${programId}/detail`)
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error('Network response was not ok');
@@ -380,7 +399,7 @@
                                 setTimeout(() => {
                                     const editorData = editDeskripsiEditor.getData();
                                     const plainText = editorData.replace(/<[^>]*>/g,
-                                    '');
+                                        '');
                                     const charCount = plainText.length;
                                     const editCharCountContainer = document
                                         .querySelector('#editProgramModal .char-count');
@@ -409,9 +428,9 @@
                                 }, 100); // Short timeout to ensure editor is populated
                             }
 
-                            // Set the form action
+                            // Set the form action with correct path structure
                             const form = document.getElementById('editProgramForm');
-                            form.action = `/admin/program-layanan/${programId}`;
+                            form.action = `/${routePath}/program-layanan/${programId}`;
 
                             // Show the modal
                             new bootstrap.Modal(document.getElementById('editProgramModal'))
@@ -425,7 +444,9 @@
             });
 
             // Handle save button click in edit modal
+
             document.getElementById('saveEditProgram').addEventListener('click', function() {
+                // Get the CKEditor content and update the hidden field
                 const editorData = editDeskripsiEditor.getData();
                 const plainText = editorData.replace(/<[^>]*>/g, '');
 
@@ -435,27 +456,42 @@
                     return;
                 }
 
+                // Important: Make sure the CKEditor data is included in the form submission
+                // by setting the value of the textarea before creating FormData
+                document.getElementById('edit_deskripsi').value = editorData;
+
                 const form = document.getElementById('editProgramForm');
                 const formData = new FormData(form);
+
+                // Log the form data to ensure deskripsi is included
+                console.log("Form data being sent:");
+                for (let pair of formData.entries()) {
+                    console.log(pair[0] + ': ' + pair[1]);
+                }
 
                 fetch(form.action, {
                         method: 'POST',
                         body: formData,
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content')
                         }
                     })
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error('Network response was not ok');
+                            return response.json().then(errorData => {
+                                throw new Error(JSON.stringify(errorData));
+                            });
                         }
                         return response.json();
                     })
                     .then(data => {
                         if (data.success) {
                             // Close the modal
-                            bootstrap.Modal.getInstance(document.getElementById('editProgramModal'))
-                                .hide();
+                            const modalElement = document.getElementById('editProgramModal');
+                            const modal = bootstrap.Modal.getInstance(modalElement);
+                            modal.hide();
 
                             // Show success message
                             showSuccessAlert(data.message || 'Program layanan berhasil diperbarui!');
@@ -470,10 +506,18 @@
                     })
                     .catch(error => {
                         console.error('Error saving program:', error);
-                        showErrorAlert('Gagal menyimpan perubahan.');
+                        try {
+                            const errorData = JSON.parse(error.message);
+                            if (errorData.errors && errorData.errors.deskripsi) {
+                                showErrorAlert('Error: ' + errorData.errors.deskripsi[0]);
+                            } else {
+                                showErrorAlert('Gagal menyimpan perubahan: ' + error.message);
+                            }
+                        } catch (e) {
+                            showErrorAlert('Gagal menyimpan perubahan.');
+                        }
                     });
             });
-
             // Add form submit validation for new program form
             document.getElementById('layanan-form').addEventListener('submit', function(e) {
                 if (deskripsiEditor) {
@@ -488,107 +532,28 @@
                 }
             });
         });
+
+        //search
+        const searchInput = document.getElementById('searchInput');
+
+        searchInput.addEventListener('keyup', function() {
+            const searchText = this.value.toLowerCase();
+            const table = document.getElementById('layanan-table');
+            const rows = table.getElementsByTagName('tr');
+
+            // Start from index 1 to skip the header row
+            for (let i = 1; i < rows.length; i++) {
+                const rowData = rows[i].textContent.toLowerCase();
+                if (rowData.includes(searchText)) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+        });
     </script>
 
     <style>
-        .char-count {
-            font-size: 0.8rem;
-            color: #6c757d;
-            text-align: right;
-        }
 
-        .text-warning {
-            color: #ffc107 !important;
-        }
-
-        .text-danger {
-            color: #dc3545 !important;
-        }
-
-        /* Add a transition for smooth color changes */
-        .char-count {
-            transition: color 0.3s ease;
-        }
-
-        /* CKEditor content styles when approaching limit */
-        .ck.ck-editor__editable.ck-content.char-limit-warning {
-            border-color: #ffc107 !important;
-        }
-
-        .ck.ck-editor__editable.ck-content.char-limit-exceeded {
-            border-color: #dc3545 !important;
-        }
-
-        .table-data {
-            margin-top: 24px;
-        }
-
-        .order {
-            background: #fff;
-            padding: 24px;
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-            border-color: #3498db;
-            box-shadow: none;
-        }
-
-        .btn-primary {
-            background-color: #3498db;
-            border-color: #3498db;
-        }
-
-        .btn-primary:hover {
-            background-color: #2980b9;
-            border-color: #2980b9;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        .badge {
-            font-size: 0.7em;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 5px;
-        }
-
-        textarea {
-            resize: vertical;
-        }
-
-        .table th {
-            white-space: nowrap;
-        }
-
-        /* Custom styles for CKEditor */
-        .ck-editor__editable {
-            min-height: 150px;
-        }
-
-        /* Alert styling */
-        .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            color: #155724;
-        }
-
-        .alert-danger {
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            color: #721c24;
-        }
     </style>
 @endsection
