@@ -7,8 +7,6 @@ use App\Http\Requests\StoreRespondenRequest;
 use App\Http\Requests\UpdateRespondenRequest;
 use App\Models\Responden;
 use Illuminate\Validation\Rule;
-use App\Exports\RespondenExport;
-use Maatwebsite\Excel\Facades\Excel;
 
 
 class AdminRespondenController extends Controller
@@ -74,10 +72,10 @@ class AdminRespondenController extends Controller
     public function update(UpdateRespondenRequest $request, $id)
     {
         $validated = $request->validated(); // Gunakan validasi dari Form Request
-
+        
         $responden = Responden::findOrFail($id);
         $responden->update($validated);
-
+        
         return response()->json([
             'message' => 'Data berhasil diperbarui',
             'data' => $responden
@@ -89,21 +87,21 @@ class AdminRespondenController extends Controller
     {
         $validated = $request->validate([
             'status' => [
-                'required',
+                'required', 
                 Rule::in(['belum', 'done', 'dones', 'clear'])
             ]
         ]);
-
+    
         $responden = Responden::findOrFail($id);
         $responden->update($validated);
-
+    
         return response()->json([
             'message' => 'Status berhasil diperbarui',
             'new_status' => $validated['status']
         ]);
     }
 
-
+     
 
     /**
      * Remove the specified resource from storage.
@@ -111,18 +109,5 @@ class AdminRespondenController extends Controller
     public function destroy(Responden $responden)
     {
         //
-    }
-
-    public function export()
-    {
-        return Excel::download(new RespondenExport, 'responden-data.xlsx');
-    }
-
-    /**
-     * Export responden data to CSV.
-     */
-    public function exportCSV()
-    {
-        return Excel::download(new RespondenExport, 'responden-data.csv');
     }
 }

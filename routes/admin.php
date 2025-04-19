@@ -22,8 +22,6 @@ use App\Http\Controllers\YoutubeController;
 use App\Http\Controllers\InstagramController;
 use App\Http\Controllers\ProdukInovasiController;
 use App\Http\Controllers\SejarahContentController;
-
-
 use Illuminate\Http\Request;
 // Ganti route yang ada dengan:
 use App\Http\Controllers\DokumenController;
@@ -84,11 +82,6 @@ Route::prefix('admin')->name('admin.')
         Route::resource('/responden', AdminRespondenController::class);
         Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
             ->name('responden.update');
-
-        Route::get('/responden/export/excel', [AdminRespondenController::class, 'export'])
-            ->name('responden.export');
-        Route::get('/responden/export/csv', [AdminRespondenController::class, 'exportCSV'])
-            ->name('responden.exportCSV');
 
         // Untuk update status khusus (POST)
         Route::post('/responden/update-status/{id}', [AdminRespondenController::class, 'updateStatus'])
