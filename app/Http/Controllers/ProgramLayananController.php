@@ -14,14 +14,32 @@ use Illuminate\Support\Facades\Redirect;
 
 class ProgramLayananController extends Controller
 {
+    /**
+     * Get the correct route name prefix based on authenticated user role
+     */
+    private function getRoutePrefix()
+    {
+        if (auth()->user()->role === 'admin_direktorat') {
+            return 'admin';
+        } else if (auth()->user()->role === 'admin_hilirisasi') {
+            return 'subdirektorat-inovasi.admin_hilirisasi';
+        }
+        
+        return 'admin';
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         $programs = ProgramLayanan::all();
-
-        if (auth()->user()->hasRole('admin_direktorat')) {
-            return view('admin.programlayanan', compact('programs'));
-        } elseif (auth()->user()->hasRole('admin_hilirisasi')) {
-            return view('subdirektorat-inovasi.admin_hilirisasi.programlayanan', compact('programs'));
+        $routePrefix = $this->getRoutePrefix();
+        
+        if (auth()->user()->role === 'admin_direktorat') {
+            return view('admin.programlayanan', compact('programs', 'routePrefix'));
+        } else if (auth()->user()->role === 'admin_hilirisasi') {
+            return view('subdirektorat-inovasi.admin_hilirisasi.programlayanan', compact('programs', 'routePrefix'));
         }
     }
 
@@ -33,7 +51,8 @@ class ProgramLayananController extends Controller
             
             ProgramLayanan::create($data);
             
-            return redirect()->route('admin.program-layanan.index')
+            $routePrefix = $this->getRoutePrefix();
+            return redirect()->route($routePrefix . '.program-layanan.index')
                 ->with('success', 'Program berhasil ditambahkan');
         } catch (\Exception $e) {
             logger()->error('Error saving program: ' . $e->getMessage());
@@ -62,11 +81,13 @@ class ProgramLayananController extends Controller
 
             $programLayanan->update($validated);
 
+            $routePrefix = $this->getRoutePrefix();
+            
             if ($request->ajax()) {
                 return response()->json(['success' => true, 'message' => 'Program layanan berhasil diperbarui!']);
             }
 
-            return redirect()->route('admin.program-layanan.index')
+            return redirect()->route($routePrefix . '.program-layanan.index')
                 ->with('success', 'Program layanan berhasil diperbarui!');
         } catch (\Exception $e) {
             \Log::error('Error updating program: ' . $e->getMessage());
@@ -85,12 +106,14 @@ class ProgramLayananController extends Controller
     {
         try {
             $programLayanan->delete();
-            return redirect()->route('admin.program-layanan.index')
+            
+            $routePrefix = $this->getRoutePrefix();
+            return redirect()->route($routePrefix . '.program-layanan.index')
                 ->with('success', 'Program berhasil dihapus');
         } catch (\Exception $e) {
             \Log::error('Error deleting program: ' . $e->getMessage());
-            return redirect()->route('admin.program-layanan.index')
-                ->with('error', 'Gagal menghapus program!');
+            return redirect()->back()
+                ->with('error', 'Gagal menghapus program: ' . $e->getMessage());
         }
     }
     
