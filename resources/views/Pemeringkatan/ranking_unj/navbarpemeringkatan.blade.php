@@ -18,10 +18,12 @@
                 <a href="#" class="text-white hover:text-yellow-400">Profil</a>
                 <ul
                     class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
+                    <li><a href="{{ route('pimpinan.pimpinan') }}" class="hover:text-yellow-400">Pimpinan Direktorat</a></li>
                     <li><a href="{{ route('strukturorganisasipemeringkatan') }}" class="hover:text-yellow-400">Struktur
                             Organisasi</a></li>
                     <li><a href="{{ route('tupoksipemeringkatan') }}" class="hover:text-yellow-400">Tugas Pokok dan
                             Fungsi</a></li>
+                            <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="hover:text-yellow-400">Sejarah</a></li>
                 </ul>
             </li>
             <li class="relative group">
