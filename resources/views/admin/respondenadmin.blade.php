@@ -38,7 +38,8 @@
                     <div class="col-md-8 mb-3">
                         <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
                         <input type="text" class="form-control" name="responden_fullname" id="nama_lengkap" required>
-                        <div class="form-text text-muted">Masukkan nama lengkap responden beserta gelar akademik (jika ada)</div>
+                        <div class="form-text text-muted">Masukkan nama lengkap responden beserta gelar akademik (jika ada)
+                        </div>
                     </div>
                 </div>
 
@@ -63,7 +64,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="nomor_responden" class="form-label">Nomor Responden</label>
-                        <input type="text" class="form-control" name="phone_responden" id="nomor_responden" >
+                        <input type="text" class="form-control" name="phone_responden" id="nomor_responden">
                         <div class="form-text text-muted">Masukkan nomor telepon aktif responden (format: 08xxxx)</div>
                         @error('phone_responden')
                             <span style="color: red">Nomor hp sama</span>
@@ -79,7 +80,8 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="nomor_narahubung" class="form-label">Nomor Narahubung</label>
-                        <input type="text" class="form-control" name="responden_dosen_phone" id="nomor_narahubung" required>
+                        <input type="text" class="form-control" name="responden_dosen_phone" id="nomor_narahubung"
+                            required>
                         <div class="form-text text-muted">Masukkan nomor telepon aktif dosen pengusul (format: 08xxxx)</div>
                     </div>
                 </div>
@@ -106,7 +108,8 @@
                             <option value="academic">Academic</option>
                             <option value="employer">Employer</option>
                         </select>
-                        <div class="form-text text-muted">Pilih kategori responden: Academic (dari institusi pendidikan) atau Employer (dari dunia kerja/industri)</div>
+                        <div class="form-text text-muted">Pilih kategori responden: Academic (dari institusi pendidikan)
+                            atau Employer (dari dunia kerja/industri)</div>
                     </div>
                 </div>
 
@@ -121,6 +124,16 @@
                 <div class="head">
                     <h3>Daftar Responden</h3>
                     <div class="d-flex justify-content-end align-items-center">
+                        <div class="export-buttons me-3">
+                            <div class="btn-group">
+                                <a href="{{ route('admin.responden.export') }}" class="btn btn-success">
+                                    <i class='bx bx-export'></i> Export Excel
+                                </a>
+                                <a href="{{ route('admin.responden.exportCSV') }}" class="btn btn-info">
+                                    <i class='bx bx-export'></i> Export CSV
+                                </a>
+                            </div>
+                        </div>
                         <div class="search-box">
                             <input type="text" id="searchInput" class="form-control" placeholder="Search...">
                         </div>
@@ -142,7 +155,7 @@
                                 <th>Fakultas</th>
                                 <th>Kategori</th>
                                 <th>Status</th>
-      
+
                             </tr>
                         </thead>
                         <tbody id="respondent-list">
@@ -172,7 +185,7 @@
                                             @endif
                                         </select>
                                     </td>
-                                    
+
                                 </tr>
                             @empty
                                 <span>Data Belum Ada</span>
@@ -388,6 +401,44 @@
             text-align: center;
             padding: 40px;
             color: #6c757d;
+        }
+
+
+        .btn-success {
+            background-color: #2ecc71;
+            border-color: #2ecc71;
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .btn-info {
+            background-color: #3498db;
+            border-color: #3498db;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+            color: white;
+        }
+
+        .export-buttons {
+            margin-bottom: 20px;
+        }
+
+        /* Add responsive styles for export buttons */
+        @media (max-width: 768px) {
+            .export-buttons {
+                margin-bottom: 10px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
         }
     </style>
 @endsection
