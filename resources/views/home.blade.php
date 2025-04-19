@@ -21,6 +21,17 @@
             font-family: Arial, sans-serif !important;
         }
 
+        main,
+        section {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
         .media-card {
             height: 100%;
             display: flex;
@@ -489,14 +500,15 @@
                 <span class="text-yellow-400 text-2xl mx-3"><i class="fab fa-instagram"></i></span>
                 <div class="h-1 w-16 bg-gray-300"></div>
             </div>
-            <p class="text-gray-600 max-w-2xl mx-auto">Ikuti akun Instagram kami untuk mendapatkan informasi terbaru</p>
+            <p class="text-gray-600 max-w-2xl mx-auto">Ikuti akun Instagram kami untuk mendapatkan informasi terbaru
+            </p>
             <a href="https://www.instagram.com/dit.isipunj/" target="_blank"
                 class="inline-flex items-center text-teal-700 hover:text-yellow-500 mt-2 font-medium">
                 <span>@dit.isipunj</span>
                 <i class="fas fa-external-link-alt ml-2"></i>
             </a>
         </div>
-        
+
         <!-- Instagram Feed Grid with Dynamic Loading via JavaScript -->
         <div id="instagram-api-feed-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Loading placeholders - will be replaced by JavaScript -->
