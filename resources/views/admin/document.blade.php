@@ -29,7 +29,9 @@
                         <label for="category" class="form-label">Kategori</label>
                         <select class="form-select" name="kategori" id="category">
                             <option value="">Pilih Kategori</option>
-                            <option value="pdf">PDF Document</option>
+                            <option value="umum">Umum</option>
+                            <option value="pemeringkatan">Pemeringkatan</option>
+                            <option value="inovasi">Inovasi</option>
                         </select>
                         <div class="form-text text-muted">Pilih kategori dokumen yang sesuai</div>
                     </div>
@@ -93,7 +95,11 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
-                                    <span class="badge {{ $dokumen->kategori === 'pdf' ? 'bg-danger' : 'bg-primary' }}">
+                                    <span class="badge 
+                                        @if($dokumen->kategori === 'umum') bg-primary
+                                        @elseif($dokumen->kategori === 'pemeringkatan') bg-success
+                                        @elseif($dokumen->kategori === 'inovasi') bg-info
+                                        @endif">
                                         {{ strtoupper($dokumen->kategori) }}
                                     </span>
                                 </td>

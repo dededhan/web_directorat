@@ -14,7 +14,7 @@ class StoreDokumenRequest extends FormRequest
     public function rules()
     {
         return [
-            'kategori' => 'required|in:pdf,docx',
+            'kategori' => 'required|in:umum,pemeringkatan,inovasi',
             'tanggal' => 'required|date',
             'judul_dokumen' => 'required|max:200',
             'deskripsi' => 'nullable',
