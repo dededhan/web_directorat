@@ -1,10 +1,7 @@
-<!-- SIDEBAR -->
 <section id="sidebar">
-    <!-- Brand Logo -->
 
     <link rel="stylesheet" href="{{ asset('dashboard_main/sidebar_dashboardadmin.css') }}">
     <div class="brand">
-        <!-- Use a button element instead of an icon inside a link -->
         <button type="button" id="toggle-sidebar-btn"
             style="background: none; border: none; color: white; cursor: pointer; position: absolute; left: 15px; top: 50%; transform: translateY(-50%); padding: 5px; font-size: 24px;">
             <i class='bx bx-menu'></i>
@@ -19,16 +16,58 @@
         <div class="menu-section">
             <h3 class="section-title">Main Menu</h3>
             <ul class="side-menu">
-                <li class="{{ Request::is('admin_pemeringkatan/dashboard') ? 'active' : '' }}">
+                <li class="{{ request()->routeIs('admin_pemeringkatan.dashboard') ? 'active' : '' }}">
                     <a href="{{ route('admin_pemeringkatan.dashboard') }}">
                         <i class='bx bxs-dashboard'></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('admin_pemeringkatan.manageuser') ? 'active' : '' }}">
-                    <a href="{{ route('admin_pemeringkatan.manageuser') }}">
+
+                <li class="{{ request()->routeIs('admin_pemeringkatan.news.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin_pemeringkatan.news.index') }}">
+                        <i class='bx bxs-news'></i>
+                        <span class="text">Berita</span>
+                    </a>
+                </li>
+                <li class="{{ request()->routeIs('admin_pemeringkatan.news-scroll.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin_pemeringkatan.news-scroll.index') }}">
                         <i class='bx bxs-user'></i>
-                        <span class="text">Manage User</span>
+                        <span class="text">Berita Scroll</span>
+                    </a>
+                </li>
+
+                <li class="{{ request()->routeIs('admin_pemeringkatan.program-layanan.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin_pemeringkatan.program-layanan.index') }}">
+                        <i class='bx bxs-user'></i>
+                        <span class="text">Program dan Layanan</span>
+                    </a>
+                </li>
+
+                <li class="{{ request()->routeIs('admin_pemeringkatan.document.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin_pemeringkatan.document.index') }}">
+                        <i class='bx bxs-user'></i>
+                        <span class="text">Document</span>
+                    </a>
+                </li>
+
+                <li class="{{ request()->routeIs('admin_pemeringkatan.youtube.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin_pemeringkatan.youtube.index') }}">
+                        <i class='bx bxl-youtube'></i>
+                        <span class="text">Youtube</span>
+                    </a>
+                </li>
+
+                <li class="{{ request()->routeIs('admin_pemeringkatan.instagram.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin_pemeringkatan.instagram.index') }}">
+                        <i class='bx bxl-instagram'></i>
+                        <span class="text">Instagram</span>
+                    </a>
+                </li>
+
+                <li class="{{ request()->routeIs('admin_pemeringkatan.sejarah.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin_pemeringkatan.sejarah.index') }}">
+                        <i class='bx bxs-book'></i>
+                        <span class="text">Sejarah</span>
                     </a>
                 </li>
             </ul>

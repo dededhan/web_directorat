@@ -233,7 +233,7 @@ Route::prefix('fakultas')->name('fakultas.')
         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
     });
 
-Route::prefix('admin-pemeringkatan')->name('admin_pemeringkatan.')
+Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
     ->middleware(['checked', 'role:admin_pemeringkatan'])
     ->group(function () {
         Route::get('/', function () {
@@ -244,11 +244,41 @@ Route::prefix('admin-pemeringkatan')->name('admin_pemeringkatan.')
             return view('admin_pemeringkatan.dashboard');
         })->name('dashboard');
 
+        // News
+        Route::resource('/news', BeritaController::class)
+            ->except(['show', 'edit', 'update']);
+        Route::get('/berita/{id}/detail', [BeritaController::class, 'getBeritaDetail'])
+            ->name('news.detail');
+        Route::put('/berita/{id}', [BeritaController::class, 'update'])
+            ->name('news.update');
+        Route::post('/berita/upload', [BeritaController::class, 'upload'])->name('news.upload');
 
-        Route::get('/manage-user', function () {
-            return view('admin_pemeringkatan.manageuser');
-        })->name('manageuser');
+        Route::resource('/news-scroll', PengumumanController::class);
+        Route::get('/pengumuman/{id}/detail', [PengumumanController::class, 'getPengumumanDetail'])
+            ->name('news-scroll.detail');
 
+        Route::resource('/program-layanan', ProgramLayananController::class);
+        Route::get('/program-layanan/{id}/detail', [ProgramLayananController::class, 'getProgramDetail'])
+            ->name('program-layanan.detail');
+
+        //Youtube
+        Route::resource('/youtube', YoutubeController::class)
+            ->except(['show', 'edit']);
+        Route::get('/youtube/{id}/detail', [YoutubeController::class, 'getVideoDetail'])
+            ->name('youtube.detail');
+        Route::get('/youtube/{id}/preview', [YoutubeController::class, 'preview'])
+            ->name('youtube.preview');
+
+        // Instagram
+        Route::resource('/instagram', InstagramController::class)
+            ->except(['show', 'edit', 'update']);
+
+        Route::get('/instagram/{id}/preview', [InstagramController::class, 'preview'])
+            ->name('instagram.preview');
+
+        Route::resource('/document', DokumenController::class);
+        Route::get('document/{dokumen}/download', [DokumenController::class, 'download'])
+            ->name('document.download');
 
         //sejarah
         Route::resource('/sejarah', SejarahContentController::class);

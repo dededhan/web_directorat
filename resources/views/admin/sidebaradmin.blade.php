@@ -74,7 +74,7 @@
 
                 <li class="{{ request()->routeIs('admin.sejarah.index') ? 'active' : '' }}">
                     <a href="{{ route('admin.sejarah.index') }}">
-                        <i class='bx bxl-instagram'></i>
+                        <i class='bx bxl-building'></i>
                         <span class="text">Sejarah</span>
                     </a>
                 </li>

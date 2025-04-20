@@ -22,6 +22,10 @@ class BeritaController extends Controller
             return 'admin';
         } else if (auth()->user()->role === 'admin_hilirisasi') {
             return 'subdirektorat-inovasi.admin_hilirisasi';
+        } else if (auth()->user()->role === 'admin_inovasi') {
+            return 'subdirektorat-inovasi.admin_inovasi';
+        } else if (auth()->user()->role === 'admin_pemeringkatan') {
+            return 'admin_pemeringkatan';
         }
         
         return 'admin';
@@ -39,6 +43,10 @@ class BeritaController extends Controller
             return view('admin.newsadmin', compact('beritas', 'routePrefix'));
         } else if (auth()->user()->role === 'admin_hilirisasi') {
             return view('subdirektorat-inovasi.admin_hilirisasi.newsadmin', compact('beritas', 'routePrefix'));
+        } else if (auth()->user()->role === 'admin_inovasi') {
+            return view('subdirektorat-inovasi.admin_inovasi.newsadmin', compact('beritas', 'routePrefix'));
+        } else if (auth()->user()->role === 'admin_pemeringkatan') {
+            return view('admin_pemeringkatan.newsadmin', compact('beritas', 'routePrefix'));
         }
     }
 

@@ -1,5 +1,8 @@
 @extends('admin_pemeringkatan.index')
 
+
+<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/sustainability_dashboard.css') }}">
+
 @section('contentadmin_pemeringkatan')
     <div class="head-title">
         <div class="left">
@@ -16,6 +19,32 @@
         </div>
     </div>
 
+    <!-- Alert Messages -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <div class="table-data">
         <div class="order">
             <div class="head">
@@ -28,6 +57,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="judul_kegiatan" class="form-label">Judul Kegiatan</label>
                         <input type="text" class="form-control" name="judul_kegiatan" id="judul_kegiatan">
+                        <div class="form-text text-muted">Masukkan judul kegiatan sustainability yang dilaksanakan</div>
                     </div>
                 </div>
 
@@ -35,6 +65,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="tanggal_kegiatan" class="form-label">Tanggal Kegiatan</label>
                         <input type="date" class="form-control" name="tanggal_kegiatan" id="tanggal_kegiatan">
+                        <div class="form-text text-muted">Pilih tanggal pelaksanaan kegiatan</div>
                     </div>
                 </div>
 
@@ -43,20 +74,25 @@
                         <label for="fakultas" class="form-label">Fakultas</label>
                         <select class="form-select" name="fakultas" id="fakultas">
                             <option value="">Pilih Fakultas</option>
-                            <option value="fmipa">FMIPA</option>
-                            <option value="fik">FIK</option>
-                            <option value="ft">FT</option>
-                            <option value="fbs">FBS</option>
+                            <option value="pascasarjana">PASCASARJANA</option>
                             <option value="fip">FIP</option>
-                            <option value="fe">FE</option>
+                            <option value="fmipa">FMIPA</option>
+                            <option value="fppsi">FPPsi</option>
+                            <option value="fbs">FBS</option>
+                            <option value="ft">FT</option>
+                            <option value="fik">FIK</option>
                             <option value="fis">FIS</option>
+                            <option value="fe">FE</option>
+                            <option value="profesi">PROFESI</option>
                         </select>
+                        <div class="form-text text-muted">Pilih fakultas penyelenggara kegiatan</div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="prodi" class="form-label">Program Studi</label>
                         <select class="form-select" name="prodi" id="prodi" disabled>
                             <option value="">Pilih Program Studi</option>
                         </select>
+                        <div class="form-text text-muted">Pilih program studi terkait kegiatan</div>
                     </div>
                 </div>
 
@@ -64,6 +100,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="link_kegiatan" class="form-label">Link Kegiatan</label>
                         <input type="url" class="form-control" name="link_kegiatan" id="link_kegiatan">
+                        <div class="form-text text-muted">Masukkan link dokumentasi kegiatan (YouTube/Media Sosial/Google Drive)</div>
                     </div>
                 </div>
 
@@ -71,7 +108,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="foto_kegiatan" class="form-label">Foto-foto Kegiatan</label>
                         <input type="file" class="form-control" name="foto_kegiatan" id="foto_kegiatan" multiple accept="image/*">
-                        <small class="text-muted">You can select images</small>
+                        <div class="form-text text-muted">Upload foto-foto dokumentasi kegiatan (format: JPG, PNG, atau JPEG)</div>
                     </div>
                 </div>
 
@@ -79,6 +116,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="deskripsi_kegiatan" class="form-label">Deskripsi Kegiatan</label>
                         <textarea class="form-control" name="deskripsi_kegiatan" id="deskripsi_kegiatan" rows="4"></textarea>
+                        <div class="form-text text-muted">Tuliskan deskripsi lengkap mengenai kegiatan yang dilaksanakan</div>
                     </div>
                 </div>
 
@@ -131,8 +169,19 @@
                                 <td>{{ Str::limit($activity->deskripsi_kegiatan, 50) }}</td>
                                 <td>
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                        <button class="btn btn-sm btn-warning edit-activity" 
+                                                data-id="{{ $activity->id }}"
+                                                data-judul="{{ $activity->judul_kegiatan }}"
+                                                data-tanggal="{{ $activity->tanggal_kegiatan->format('Y-m-d') }}"
+                                                data-fakultas="{{ $activity->fakultas }}"
+                                                data-prodi="{{ $activity->prodi }}"
+                                                data-link="{{ $activity->link_kegiatan }}"
+                                                data-deskripsi="{{ $activity->deskripsi_kegiatan }}">
+                                            Edit
+                                        </button>
+                                        <button class="btn btn-sm btn-danger delete-activity" data-id="{{ $activity->id }}" data-judul="{{ $activity->judul_kegiatan }}">
+                                            Delete
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -143,6 +192,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Photo Modal -->
     <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -156,130 +207,128 @@
             </div>
         </div>
     </div>
-    <script>
-        const prodisByFaculty = {
-            'fmipa': ['Ilmu Komputer', 'Matematika', 'Pendidikan Matematika', 'Fisika', 'Pendidikan Fisika', 'Biologi', 'Pendidikan Biologi', 'Kimia', 'Pendidikan Kimia'],
-            'fik': ['Pendidikan Teknologi Informasi', 'Pendidikan Teknik Elektronika', 'Pendidikan Teknik Elektro', 'Teknik Informatika dan Komputer'],
-            'ft': ['Teknik Sipil', 'Teknik Mesin', 'Teknik Elektro', 'Pendidikan Teknik Bangunan', 'Pendidikan Teknik Mesin'],
-            'fbs': ['Pendidikan Bahasa Indonesia', 'Pendidikan Bahasa Inggris', 'Pendidikan Bahasa Jerman', 'Pendidikan Bahasa Prancis', 'Pendidikan Seni Rupa'],
-            'fip': ['Pendidikan Guru Sekolah Dasar', 'Pendidikan Anak Usia Dini', 'Bimbingan dan Konseling', 'Teknologi Pendidikan', 'Pendidikan Luar Biasa'],
-            'fe': ['Pendidikan Ekonomi', 'Manajemen', 'Akuntansi', 'Pendidikan Administrasi Perkantoran'],
-            'fis': ['Pendidikan Pancasila dan Kewarganegaraan', 'Pendidikan Sejarah', 'Pendidikan Geografi', 'Pendidikan Sosiologi', 'Ilmu Komunikasi']
-        };
 
-        document.getElementById('fakultas').addEventListener('change', function() {
-            const prodiSelect = document.getElementById('prodi');
-            prodiSelect.innerHTML = '<option value="">Pilih Program Studi</option>';
-            
-            if (this.value) {
-                prodiSelect.disabled = false;
-                const prodis = prodisByFaculty[this.value];
-                prodis.forEach(prodi => {
-                    const option = document.createElement('option');
-                    option.value = prodi;
-                    option.textContent = prodi;
-                    prodiSelect.appendChild(option);
-                });
-            } else {
-                prodiSelect.disabled = true;
-            }
-        });
-        // Handle view photos
-        document.querySelectorAll('.view-photos').forEach(button => {
-            button.addEventListener('click', function() {
-                const photos = JSON.parse(this.dataset.photos);
-                const gallery = document.getElementById('photoGallery');
-                gallery.innerHTML = '';
-                
-                photos.forEach(path => {
-                    const img = document.createElement('img');
-                    img.src = `/storage/${path}`;
-                    img.classList.add('img-fluid', 'mb-3');
-                    img.style.maxHeight = '500px';
-                    gallery.appendChild(img);
-                });
-                
-                new bootstrap.Modal(document.getElementById('photoModal')).show();
-            });
-        });
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Kegiatan Sustainability</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="edit-form" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="edit_judul_kegiatan" class="form-label">Judul Kegiatan</label>
+                                <input type="text" class="form-control" name="judul_kegiatan" id="edit_judul_kegiatan">
+                            </div>
+                        </div>
 
-        // Handle form submission feedback
-        @if(session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: '{{ session('success') }}',
-                timer: 2000
-            });
-        @endif
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_tanggal_kegiatan" class="form-label">Tanggal Kegiatan</label>
+                                <input type="date" class="form-control" name="tanggal_kegiatan" id="edit_tanggal_kegiatan">
+                            </div>
+                        </div>
 
-        @if(session('error'))
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: '{{ session('error') }}',
-                timer: 2000
-            });
-        @endif
-        
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_fakultas" class="form-label">Fakultas</label>
+                                <select class="form-select" name="fakultas" id="edit_fakultas">
+                                    <option value="">Pilih Fakultas</option>
+                                    <option value="pascasarjana">PASCASARJANA</option>
+                                    <option value="fip">FIP</option>
+                                    <option value="fmipa">FMIPA</option>
+                                    <option value="fppsi">FPPsi</option>
+                                    <option value="fbs">FBS</option>
+                                    <option value="ft">FT</option>
+                                    <option value="fik">FIK</option>
+                                    <option value="fis">FIS</option>
+                                    <option value="fe">FE</option>
+                                    <option value="profesi">PROFESI</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_prodi" class="form-label">Program Studi</label>
+                                <select class="form-select" name="prodi" id="edit_prodi">
+                                    <option value="">Pilih Program Studi</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="edit_link_kegiatan" class="form-label">Link Kegiatan</label>
+                                <input type="url" class="form-control" name="link_kegiatan" id="edit_link_kegiatan">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="edit_foto_kegiatan" class="form-label">Foto-foto Kegiatan (Opsional)</label>
+                                <input type="file" class="form-control" name="foto_kegiatan" id="edit_foto_kegiatan" accept="image/*">
+                                <div class="form-text text-muted">Biarkan kosong jika tidak ingin mengubah foto</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="edit_deskripsi_kegiatan" class="form-label">Deskripsi Kegiatan</label>
+                                <textarea class="form-control" name="deskripsi_kegiatan" id="edit_deskripsi_kegiatan" rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    </div>
+                </form>
             </div>
-        @endif
+        </div>
+    </div>
+
+    <!-- Delete Form -->
+    <form id="delete-form" method="POST" style="display: none;">
+        @csrf
+        @method('DELETE')
+    </form>
+
+    <!-- Include jQuery if not already included -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Include Bootstrap JS and SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Load sustainability_dashboard.js for fakultas & prodi dropdown logic -->
+    <script src="{{ asset('dashboard_main/dashboard/sustainability_dashboard.js') }}"></script>
+    
+    <script>
+        // Handle edit button clicks
+    
+        
+        // Display SweetAlert for flash messages
+        document.addEventListener('DOMContentLoaded', function() {
+            @if(session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}',
+                    timer: 2000
+                });
+            @endif
+
+            @if(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: '{{ session('error') }}',
+                    timer: 2000
+                });
+            @endif
+        });
     </script>
-
-    <style>
-        .table-data {
-            margin-top: 24px;
-        }
-        
-        .order {
-            background: #fff;
-            padding: 24px;
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-control:focus, .form-select:focus {
-            border-color: #3498db;
-            box-shadow: none;
-        }
-
-        .btn-primary {
-            background-color: #3498db;
-            border-color: #3498db;
-        }
-
-        .btn-primary:hover {
-            background-color: #2980b9;
-            border-color: #2980b9;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-        
-        .badge {
-            font-size: 0.7em;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 5px;
-        }
-
-        textarea {
-            resize: vertical;
-        }
-        
-        .table th {
-            white-space: nowrap;
-        }
-    </style>
-
 @endsection

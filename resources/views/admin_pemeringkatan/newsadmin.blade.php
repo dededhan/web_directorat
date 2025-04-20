@@ -1,10 +1,12 @@
-@extends('admin.admin')
+@extends('admin_pemeringkatan.index')
+
+
 
 <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/berita_dashboard.css') }}">
 
-@section('contentadmin')
+@section('contentadmin_pemeringkatan')
     <div class="head-title">
         <div class="left">
             <h1>Berita</h1>
