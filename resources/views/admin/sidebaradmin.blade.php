@@ -184,15 +184,15 @@
         <div class="menu-section">
             <h3 class="section-title">SDGs</h3>
             <ul class="side-menu">
-                <li class="{{ request()->routeIs('admin.SDGs.program_kegiatan') ? 'active' : '' }}">
-                    <a href="{{ route('admin.SDGs.program_kegiatan') }}">
+                <li class="{{ request()->routeIs('admin.SDGs.program-kegiatan.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.SDGs.program-kegiatan.index') }}">
                         <i class='bx bxs-graduation'></i>
                         <span class="text">Program</span>
                     </a>
                 </li>
 
-                <li class="{{ request()->routeIs('admin.SDGs.publikasi_riset') ? 'active' : '' }}">
-                    <a href="{{ route('admin.SDGs.publikasi_riset') }}">
+                <li class="{{ request()->routeIs('admin.SDGs.publikasi-riset.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.SDGs.publikasi-riset.index') }}">
                         <i class='bx bxs-graduation'></i>
                         <span class="text">Publikasi & Riset</span>
                     </a>

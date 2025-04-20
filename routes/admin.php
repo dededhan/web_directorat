@@ -12,6 +12,8 @@ use App\Http\Controllers\DosenInternasionalController;
 use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\AdminAlumniBerdampakController;
 use App\Http\Controllers\InternationalStudentController;
+use App\Http\Controllers\ProgramKegiatanController;
+use App\Http\Controllers\PublikasiRisetController;
 use App\Http\Controllers\BeritaAcaraController;
 use App\Http\Controllers\FormInformasiDasarController;
 use App\Http\Controllers\FormRecordHasilPengukuranController;
@@ -171,14 +173,18 @@ Route::prefix('admin')->name('admin.')
             ->group(function () {
 
                 // Program Kegiatan
-                Route::get('/program_kegiatan', function () {
-                    return view('admin.SDGs.program_kegiatan');
-                })->name('program_kegiatan');
+                // Route::get('/program_kegiatan', function () {
+                //     return view('admin.SDGs.program_kegiatan');
+                // })->name('program_kegiatan');
+                 Route::resource('/program-kegiatan', ProgramKegiatanController::class)->except(['show']);
 
                 // Program Kegiatan
-                Route::get('/publikasi_riset', function () {
-                    return view('admin.SDGs.publikasi_riset');
-                })->name('publikasi_riset');
+                // Route::get('/publikasi_riset', function () {
+                //     return view('admin.SDGs.publikasi_riset');
+                // })->name('publikasi_riset');
+                Route::resource('/publikasi-riset', PublikasiRisetController::class)->except(['show']);
+                Route::get('/publikasi-riset/download/{id}', [PublikasiRisetController::class, 'download'])
+                    ->name('publikasi-riset.download');
             });
     });
 
