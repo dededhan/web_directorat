@@ -1,7 +1,7 @@
-@extends('admin.admin')
 
+@extends('admin_pemeringkatan.index')
 <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/youtube_dashboard.css') }}">
-@section('contentadmin')
+@section('contentadmin_pemeringkatan')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <div class="head-title">

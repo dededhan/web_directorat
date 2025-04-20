@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Youtube;
 
+
 class YoutubeController extends Controller
 {
     /**
@@ -16,6 +17,8 @@ class YoutubeController extends Controller
             return 'admin';
         } else if (auth()->user()->role === 'admin_hilirisasi') {
             return 'subdirektorat-inovasi.admin_hilirisasi';
+        } else if (auth()->user()->role === 'admin_pemeringkatan') {
+            return 'admin_pemeringkatan';
         }
         
         return 'admin';
@@ -35,6 +38,8 @@ class YoutubeController extends Controller
             return view('admin.youtube', compact('videos', 'routePrefix'));
         } else if (auth()->user()->role === 'admin_hilirisasi') {
             return view('subdirektorat-inovasi.admin_hilirisasi.youtube', compact('videos', 'routePrefix'));
+        } else if (auth()->user()->role === 'admin_pemeringkatan') {
+            return view('admin_pemeringkatan.youtube', compact('videos', 'routePrefix'));
         }
     }
 

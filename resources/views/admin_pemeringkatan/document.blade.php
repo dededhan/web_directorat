@@ -1,6 +1,8 @@
-@extends('admin.admin')
+@extends('admin_pemeringkatan.index')
+
 <link rel="stylesheet" href="{{ asset('dashboard_main/document_dashboard.css') }}">
-@section('contentadmin')
+
+@section('contentadmin_pemeringkatan')
     <div class="head-title">
         <div class="left">
             <h1>Dokumen</h1>

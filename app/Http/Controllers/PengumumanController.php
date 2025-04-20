@@ -25,7 +25,11 @@ class PengumumanController extends Controller
             return 'admin';
         } else if (auth()->user()->hasRole('admin_hilirisasi')) {
             return 'subdirektorat-inovasi.admin_hilirisasi';
-        }
+        } else if (auth()->user()->hasRole('admin_inovasi')) {
+            return 'subdirektorat-inovasi.admin_inovasi';
+        } else if (auth()->user()->hasRole('admin_pemeringkatan')) {
+            return 'admin_pemeringkatan';
+        } 
         
         return 'admin';
     }
@@ -42,6 +46,10 @@ class PengumumanController extends Controller
             return view('admin.newsscroll', compact('pengumumans', 'routePrefix'));
         } elseif (auth()->user()->hasRole('admin_hilirisasi')) {
             return view('subdirektorat-inovasi.admin_hilirisasi.newsscroll', compact('pengumumans', 'routePrefix'));
+        } elseif (auth()->user()->hasRole('admin_inovasi')) {
+            return view('subdirektorat-inovasi.admin_inovasi.newsscroll', compact('pengumumans', 'routePrefix'));
+        } elseif (auth()->user()->hasRole('admin_pemeringkatan')) {
+            return view('admin_pemeringkatan.newsscroll', compact('pengumumans', 'routePrefix'));
         }
     }
 

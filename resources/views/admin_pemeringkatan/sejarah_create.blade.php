@@ -1,6 +1,6 @@
-@extends('admin.admin')
+@extends('admin_pemeringkatan.index')
 <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/sejarah_dashboard.css') }}">
-@section('contentadmin')
+@section('contentadmin_pemeringkatan')
     <div class="head-title">
         <div class="left">
             <h1>Edit Konten Halaman Sejarah</h1>

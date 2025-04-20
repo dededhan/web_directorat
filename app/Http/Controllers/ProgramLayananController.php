@@ -23,6 +23,8 @@ class ProgramLayananController extends Controller
             return 'admin';
         } else if (auth()->user()->role === 'admin_hilirisasi') {
             return 'subdirektorat-inovasi.admin_hilirisasi';
+        } else if (auth()->user()->role === 'admin_pemeringkatan') {
+            return 'admin_pemeringkatan';
         }
         
         return 'admin';
@@ -40,6 +42,8 @@ class ProgramLayananController extends Controller
             return view('admin.programlayanan', compact('programs', 'routePrefix'));
         } else if (auth()->user()->role === 'admin_hilirisasi') {
             return view('subdirektorat-inovasi.admin_hilirisasi.programlayanan', compact('programs', 'routePrefix'));
+        } else if (auth()->user()->role === 'admin_pemeringkatan') {
+            return view('admin_pemeringkatan.programlayanan', compact('programs', 'routePrefix'));
         }
     }
 

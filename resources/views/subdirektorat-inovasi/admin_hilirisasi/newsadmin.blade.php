@@ -1,3 +1,4 @@
+
 @extends('subdirektorat-inovasi.admin_hilirisasi.index')
 
 
@@ -355,6 +356,8 @@
                 console.error(error);
             });
 
+            
+
         document.addEventListener('DOMContentLoaded', function() {
             // SweetAlert helper functions
             function showSuccessAlert(message) {
@@ -420,6 +423,7 @@
             });
 
             // Handle edit button clicks
+            // Handle edit button clicks
             document.querySelectorAll('.edit-berita').forEach(button => {
                 button.addEventListener('click', function() {
                     const beritaId = this.dataset.id;
@@ -466,8 +470,6 @@
                         });
                 });
             });
-
-            
             // Handle save button click
             document.getElementById('saveEditBerita').addEventListener('click', function() {
                 const editorData = editBeritaEditor.getData();
@@ -510,5 +512,7 @@
                     });
             });
         });
+
+
     </script>
 @endsection

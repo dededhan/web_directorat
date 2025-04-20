@@ -24,6 +24,10 @@ class DokumenController extends Controller
             return view('admin.document', compact('dokumens'));
         } elseif (auth()->user()->hasRole('admin_hilirisasi')) {
             return view('subdirektorat-inovasi.admin_hilirisasi.document', compact('dokumens'));
+        } elseif (auth()->user()->hasRole('admin_pemeringkatan')) {
+            return view('admin_pemeringkatan.document', compact('dokumens'));
+        } else {
+            return redirect()->route('home')->with('error', 'Unauthorized access');
         }
     }
 
