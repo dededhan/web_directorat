@@ -71,6 +71,7 @@ Route::get('/galeri/alumni', [AlumniController::class, 'index'])->name('alumni')
 Route::get('/document', [App\Http\Controllers\DokumenController::class, 'publicIndex'])
     ->name('document.document');
 
+
 // API endpoint to get documents for the frontend
 Route::get('/api/documents', [App\Http\Controllers\DokumenController::class, 'apiGetDocuments'])
     ->name('api.documents');

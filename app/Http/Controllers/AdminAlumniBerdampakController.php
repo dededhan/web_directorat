@@ -54,4 +54,30 @@ class AdminAlumniBerdampakController extends Controller
         // return redirect()->route('admin.alumniberdampak.index')
         //     ->with('success', 'Data berhasil disimpan!');
     }
+
+    public function edit(AlumniBerdampak $alumniberdampak)
+    {
+        return response()->json($alumniberdampak);
+    }
+
+    public function update(StoreAlumniBerdampakRequest $request, AlumniBerdampak $alumniberdampak)
+    {
+        $alumniberdampak->update([
+            'judul_berita' => $request->judul_berita,
+            'tanggal_berita' => $request->tanggal_berita,
+            'fakultas' => $request->fakultas,
+            'prodi' => $request->prodi,
+            'link_berita' => $request->link_berita,
+        ]);
+
+        return redirect()->back()
+                ->with('success', 'Mata kuliah berhasil diperbarui');
+    }
+
+    public function destroy(AlumniBerdampak $alumniberdampak)
+    {
+        $alumniberdampak->delete();
+        return redirect()->back()
+                ->with('success', 'Mata kuliah berhasil dihapus');
+    }
 }

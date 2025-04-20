@@ -1,4 +1,6 @@
-// Toggle mobile menu
+
+
+// Toggle mo    ile menu
 document.getElementById('navbarToggle').addEventListener('click', function() {
     const menu = document.getElementById('navbarMenu');
     menu.classList.toggle('active');
@@ -207,6 +209,10 @@ function searchDocuments() {
     
     renderDocuments(filtered);
 }
+
+// Pastikan kode ini dijalankan setelah DOM selesai dimuat
+// Handle edit document button clicks
+
 
 // View document in preview page
 function viewDocument(id) {

@@ -10,17 +10,26 @@ class StoreMataKuliahRequest extends FormRequest
     {
         return true;
     }
-
     public function rules()
     {
-        return [
-            'nama_matkul' => 'required|string|max:255',
-            'semester' => 'required|string|max:255',
-            'kode_matkul' => 'required|string|max:255|unique:mata_kuliahs,kode_matkul',
-            'fakultas' => 'required|in:pascasarjana,fip,fmipa,fppsi,fbs,ft,fik,fis,fe,profesi',
-            'prodi' => 'required|string|max:255',
-            'rps' => 'required|file|mimes:pdf,doc,docx|max:2048',
-            'deskripsi' => 'required|string',
+        $rules = [
+            'nama_matkul' => 'required|string|max:200',
+            'semester' => 'required|string|max:20',
+            'kode_matkul' => 'required|string|max:20',
+            'fakultas' => 'required|string',
+            'prodi' => 'required|string',
+            'deskripsi' => 'required|string|min:100',
         ];
+    
+        // Untuk create, RPS wajib diisi
+        if ($this->isMethod('post')) {
+            $rules['rps'] = 'required|file|mimes:pdf,doc,docx|max:10240';
+        }
+        // Untuk update, RPS optional
+        elseif ($this->isMethod('put') || $this->isMethod('patch')) {
+            $rules['rps'] = 'nullable|file|mimes:pdf,doc,docx|max:10240';
+        }
+    
+        return $rules;
     }
 }

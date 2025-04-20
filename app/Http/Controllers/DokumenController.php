@@ -162,4 +162,47 @@ class DokumenController extends Controller
         }
     }
 
+    public function update(StoreDokumenRequest $request, Dokumen $document)
+    {
+        try {
+            $data = $request->validated();
+            
+            // Handle file update
+            if ($request->hasFile('file_dokumen')) {
+                // Validasi file
+                $request->validate([
+                    'file_dokumen' => 'required|file|mimes:pdf,docx,doc|max:10240'
+                ]);
+                
+                // Delete old file
+                if (Storage::disk('public')->exists($document->path)) {
+                    Storage::disk('public')->delete($document->path);
+                }
+                
+                // Store new file
+                $file = $request->file('file_dokumen');
+                $path = $file->store('dokumen', 'public');
+                
+                $data = array_merge($data, [
+                    'nama_file' => $file->getClientOriginalName(),
+                    'nama_file_hash' => $file->hashName(),
+                    'path' => $path,
+                    'ukuran' => $file->getSize(),
+                    'ekstensi' => $file->getClientOriginalExtension()
+                ]);
+            }
+
+            $document->update($data);
+
+            return redirect()->back()
+                ->with('success', 'Dokumen berhasil diperbarui');
+                
+        } catch (\Exception $e) {
+            Log::error('Error updating document: '.$e->getMessage());
+            return redirect()->back()
+                ->with('error', 'Gagal memperbarui dokumen: '.$e->getMessage())
+                ->withInput();
+        }
+    }
+
 }

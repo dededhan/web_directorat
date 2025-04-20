@@ -63,4 +63,56 @@ class AdminMataKuliahController extends Controller
         //     ->with('success', 'Data berhasil disimpan!');
 
     }
+
+    public function edit(MataKuliah $matakuliah)
+    {
+        return response()->json($matakuliah);
+    }
+
+    public function update(StoreMataKuliahRequest $request, MataKuliah $matakuliah)
+    {
+        try {
+            $data = $request->validated();
+            
+            // Handle file update hanya jika ada file baru diupload
+            if ($request->hasFile('rps')) {
+                // Delete old file
+                if (Storage::disk('public')->exists($matakuliah->rps_path)) {
+                    Storage::disk('public')->delete($matakuliah->rps_path);
+                }
+                
+                // Store new file
+                $path = $request->file('rps')->store('rps', 'public');
+                $data['rps_path'] = $path;
+            }
+
+            $matakuliah->update($data);
+
+            return redirect()->back()
+                ->with('success', 'Mata kuliah berhasil diperbarui');
+                
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Gagal memperbarui mata kuliah: '.$e->getMessage());
+        }
+    }
+
+    public function destroy(MataKuliah $matakuliah)
+    {
+        try {
+            // Delete file
+            if (Storage::disk('public')->exists($matakuliah->rps_path)) {
+                Storage::disk('public')->delete($matakuliah->rps_path);
+            }
+            
+            // Delete record
+            $matakuliah->delete();
+            
+            return redirect()->back()
+                ->with('success', 'Mata kuliah berhasil dihapus');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Gagal menghapus mata kuliah: '.$e->getMessage());
+        }
+    }
 }
