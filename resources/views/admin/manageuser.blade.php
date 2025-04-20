@@ -118,10 +118,14 @@
                         </td>
                         <td>
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-primary">
+                                <button class="btn btn-sm btn-primary edit-user" 
+                                        data-id="{{ $user->id }}"
+                                        data-name="{{ $user->name }}"
+                                        data-email="{{ $user->email }}"
+                                        data-role="{{ $user->role }}">
                                     <i class='bx bx-edit-alt'></i>
                                 </button>
-                                <button class="btn btn-sm btn-danger">
+                                <button class="btn btn-sm btn-danger delete-user" data-id="{{ $user->id }}">
                                     <i class='bx bx-trash'></i>
                                 </button>
                             </div>
@@ -224,6 +228,85 @@
     </div>
 </div>
 
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="edit-user-form" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="edit_name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="edit_name" name="name" required>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="edit_email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="edit_email" name="email" required>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="edit_password" class="form-label">Password (Kosongkan jika tidak ingin mengubah)</label>
+                            <input type="password" class="form-control" id="edit_password" name="password">
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="edit_role" class="form-label">Role</label>
+                            <select class="form-select" id="edit_role" name="role" required>
+                                <option value="admin_direktorat">Admin Direktorat</option>
+                                <option value="kepala_direktorat">Kepala Direktorat</option>
+                                <option value="admin_pemeringkatan">Admin Pemeringkatan</option>
+                                <option value="fakultas">Fakultas</option>
+                                <option value="prodi">Prodi</option>
+                                <option value="admin_hilirisasi">Admin Hilirisasi</option>
+                                <option value="kepala_sub_direktorat">Kepala Sub Direktorat</option>
+                                <option value="wr3">Wakil Rektor 3</option>
+                                <option value="dosen">Dosen</option>
+                                <option value="mahasiswa">Mahasiswa</option>
+                                <option value="validator">Penilai</option>
+                                <option value="registered_user">Pengguna Terdaftar</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this user? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="delete-user-form" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Delete User</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     .table-data {
         margin-top: 24px;
@@ -313,6 +396,68 @@
     }
 </style>
 
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Handle edit button click
+    document.querySelectorAll('.edit-user').forEach(button => {
+        button.addEventListener('click', function() {
+            const userId = this.dataset.id;
+            const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+            
+            // Populate form data
+            document.getElementById('edit_name').value = this.dataset.name;
+            document.getElementById('edit_email').value = this.dataset.email;
+            document.getElementById('edit_role').value = this.dataset.role;
+            
+            // Set form action menggunakan named route
+            const form = document.getElementById('edit-user-form');
+            form.action = `/admin/manageuser/${userId}`;
+            
+            // Show modal
+            modal.show();
+        });
+    });
+    // Handle delete button click
+    document.querySelectorAll('.delete-user').forEach(button => {
+        button.addEventListener('click', function() {
+            const userId = this.dataset.id;
+            const modal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
+            
+            // Set form action menggunakan named route
+            const form = document.getElementById('delete-user-form');
+            form.action = `/admin/manageuser/${userId}`;
+            
+            // Show modal
+            modal.show();
+        });
+    });
+
+    // SweetAlert for success/error messages
+    document.addEventListener('DOMContentLoaded', function() {
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '{{ session('success') }}',
+                timer: 2000
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: '{{ session('error') }}',
+                timer: 2000
+            });
+        @endif
+    });
+</script>
 <script>
     // Search functionality for system users table
     document.getElementById('searchSystemInput').addEventListener('keyup', function() {

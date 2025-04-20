@@ -92,8 +92,9 @@ Route::prefix('admin')->name('admin.')
         Route::get('/responden/export/csv', [AdminRespondenController::class, 'exportCSV'])
             ->name('responden.exportCSV');
 
-        Route::put('/manageuser/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('manageuser.toggleStatus');
+        
         Route::resource('/manageuser', UserController::class);
+        Route::put('/manageuser/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('manageuser.toggleStatus');
 
         Route::resource('/sustainability', AdminSustainabilityController::class);
         Route::get('/sustainability/{id}/detail', [AdminSustainabilityController::class, 'getSustainabilityDetail'])
