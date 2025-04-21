@@ -257,6 +257,14 @@ Route::get('/ranking_unj/AD Scientific Index', function () {
     return view('Pemeringkatan.ranking_unj.AD Scientific Index.AD Scientific Index');
 })->name('Pemeringkatan.ranking_unj.AD Scientific Index.AD Scientific Index');
 
+Route::get('/ranking_unj/scimago', function () {
+    return view('Pemeringkatan.ranking_unj.scimago.scimago');
+})->name('Pemeringkatan.ranking_unj.scimago.scimago');
+
+Route::get('/ranking_unj/sinta', function () {
+    return view('Pemeringkatan.ranking_unj.sinta.sinta');
+})->name('Pemeringkatan.ranking_unj.sinta.sinta');
+
 Route::get('/Pemeringkatans', [BeritaController::class, 'landingPagePemeringkatan'])->name('pemeringkatan.landingpage');
 Route::get('/Pemeringkatans/Ranking-Universitas/klaster-perguruan-tinggi', function () {
     return view('Pemeringkatan.Ranking_Universitas.Pemeringkatan_Klaster_Perguruan_Tinggi');

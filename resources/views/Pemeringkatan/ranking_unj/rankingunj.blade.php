@@ -237,6 +237,20 @@
                 </div>
                 <p>AD Scientific Index</p>
             </a>
+
+            <a href="{{ route('Pemeringkatan.ranking_unj.scimago.scimago') }}" class="ranking-card">
+                <div class="logo-container">
+                    <img src="/images/logos/scimago.png" alt="scimago">
+                </div>
+                <p>scimago</p>
+            </a>
+
+            <a href="{{ route('Pemeringkatan.ranking_unj.sinta.sinta') }}" class="ranking-card">
+                <div class="logo-container">
+                    <img src="/images/logos/sinta.png" alt="sinta">
+                </div>
+                <p>sinta</p>
+            </a>
         </div>
     </div>
 </body>
