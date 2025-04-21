@@ -125,7 +125,7 @@ class PimpinanController extends Controller
                 'nama' => 'required|string|max:255',
                 'jabatan' => 'required|in:Direktur Inovasi Sistem Informasi dan Pemeringkatan,Kepala Subdirektorat Inovasi dan Hilirisai,Kepala Subdirektorat Sistem Informasi dan Pemeringkatan',
                 'deskripsi' => 'required|string',
-                'gambar' => 'nullable|image|max:2048',
+                'gambar' => 'nullable|image|max:8192',
             ]);
 
             // Update the text fields

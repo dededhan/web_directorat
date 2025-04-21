@@ -74,7 +74,7 @@
                         @error('gambar')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="form-text text-muted">Upload foto pimpinan (format: JPG, PNG, atau JPEG, max 2MB)</div>
+                        <div class="form-text text-muted">Upload foto pimpinan (format: JPG, PNG, atau JPEG, max 8MB)</div>
                     </div>
                 </div>
 
