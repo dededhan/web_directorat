@@ -99,7 +99,7 @@
                             <option value="fpsi">FPsi</option>
                             <option value="fbs">FBS</option>
                             <option value="ft">FT</option>
-                            <option value="fik">FIK</option>
+                            <option value="fik">FIKK</option>
                             <option value="fish">FISH</option>
                             <option value="feb">FEB</option>
                             <option value="profesi">PROFESI</option>
