@@ -18,15 +18,29 @@
     </div>
 </div>
 
+<style>
+    /* Optional: Add smooth transitions */
+    .submenu {
+        transition: all 0.3s ease;
+    }
+    .toggle-icon {
+        transition: transform 0.3s ease;
+    }
+    .transform.rotate-90 {
+        transform: rotate(90deg);
+    }
+    </style>
+
 @include('loginpopup')
 
 <!-- Original Desktop Navbar (Updated with new structure) -->
 <nav class="navbar hidden md:block">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
         <div class="flex items-center space-x-4">
-        <a href="{{ route('home') }}">
-    <img alt="University logo" class="h-12 w-12" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png"/>
-        </a>
+            <a href="{{ route('home') }}">
+                <img alt="University logo" class="h-12 w-12"
+                    src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
+            </a>
             <h1 class="text-white text-2xl font-bold">Subdirektorat Pemeringkatan dan Sistem Informasi</h1>
         </div>
         <ul class="flex space-x-6">
@@ -36,36 +50,101 @@
                 <a href="#" class="text-white hover:text-yellow-400">Tentang</a>
                 <ul
                     class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('pimpinan.pimpinan') }}" class="hover:text-yellow-400">Pimpinan Direktorat</a></li>
+                    <li><a href="{{ route('pimpinan.pimpinan') }}" class="hover:text-yellow-400">Pimpinan Direktorat</a>
+                    </li>
                     <li><a href="{{ route('strukturorganisasipemeringkatan') }}" class="hover:text-yellow-400">Struktur
                             Organisasi</a></li>
                     <li><a href="{{ route('tupoksipemeringkatan') }}" class="hover:text-yellow-400">Tugas Pokok dan
                             Fungsi</a></li>
-                    <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="hover:text-yellow-400">Profil</a></li>
+                    <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="hover:text-yellow-400">Profil</a>
+                    </li>
                 </ul>
             </li>
-            
+
             <li class="relative group">
-                <a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="text-white hover:text-yellow-400">Ranking UNJ</a>
-                <!-- <ul
+                <a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}"
+                    class="text-white hover:text-yellow-400">Ranking UNJ</a>
+                {{-- <!-- <ul
                     class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
                     <li><a href="{{ route('pemeringkatan.klaster') }}" class="hover:text-yellow-400">IKU</a></li>
                     <li><a href="#" class="hover:text-yellow-400">UI Green Metric</a></li>
                     <li><a href="#" class="hover:text-yellow-400">Webometric</a></li>
                     <li><a href="#" class="hover:text-yellow-400">QS World University Ranking</a></li>
                     <li><a href="#" class="hover:text-yellow-400">Times Higher Education</a></li>
-                </ul> -->
+                </ul> --> --}}
             </li>
 
+            <!-- Retractable Navigation Menu -->
             <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400">Program</a>
-                <!-- <ul
-                    class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('sdgscenter') }}" class="hover:text-yellow-400">Global Engagement</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">Lecturer Expose</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">International Faculty Staff</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">International Student Mobility</a></li>
-                </ul> -->
+                <a href="#" class="text-white hover:text-yellow-400 flex items-center">
+                    Program
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </a>
+                <ul
+                    class="menu-dropdown absolute hidden bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg z-10 w-64">
+                    <li><a href="#" class="hover:text-yellow-400 block py-1">Global Engagement</a></li>
+                    <li><a href="#" class="hover:text-yellow-400 block py-1">Lecturer Expose</a></li>
+                    <li><a href="#" class="hover:text-yellow-400 block py-1">International Faculty Staff</a></li>
+                    <li><a href="#" class="hover:text-yellow-400 block py-1">International Student Mobility</a>
+                    </li>
+
+                    <!-- Sustainability Menu -->
+                    <li class="relative">
+                        <a href="#"
+                            class="hover:text-yellow-400 flex items-center justify-between py-1 submenu-toggle">
+                            <span>Sustainability</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 toggle-icon" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                        <ul class="submenu hidden pl-4 mt-1 space-y-2">
+                            <li><a href="#" class="hover:text-yellow-400 block py-1">Kegiatan Sustainability</a>
+                            </li>
+                            <li><a href="#" class="hover:text-yellow-400 block py-1">Mata Kuliah
+                                    Sustainability</a></li>
+                            <li class="relative">
+                                <a href="#"
+                                    class="hover:text-yellow-400 flex items-center justify-between py-1 submenu-toggle">
+                                    <span>Program Sustainability Universitas Negeri Jakarta</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 toggle-icon" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                                <ul class="submenu hidden pl-4 mt-1 space-y-2">
+                                    <li><a href="#" class="hover:text-yellow-400 block py-1">Tagihan Listrik</a>
+                                    </li>
+                                    <li><a href="#" class="hover:text-yellow-400 block py-1">BBM</a></li>
+                                    <li><a href="#" class="hover:text-yellow-400 block py-1">Sarpras Ramah
+                                            Lingkungan</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Data Responden Menu -->
+                    <li class="relative">
+                        <a href="#"
+                            class="hover:text-yellow-400 flex items-center justify-between py-1 submenu-toggle">
+                            <span>Data Responden</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 toggle-icon" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                        <ul class="submenu hidden pl-4 mt-1 space-y-2">
+                            <li><a href="#" class="hover:text-yellow-400 block py-1">Academic</a></li>
+                            <li><a href="#" class="hover:text-yellow-400 block py-1">Employee</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </li>
 
 
@@ -77,18 +156,20 @@
             </li>
 
 
-           
+
 
 
             <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400">SSO</a></li>
-            <li><a class="login text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a>
+            <li><a class="login text-white" href="#" data-bs-toggle="modal"
+                    data-bs-target="#loginModal">Masuk</a>
             </li>
         </ul>
     </div>
 </nav>
 
 <!-- Mobile Navigation Bar (Android) -->
-<nav class="navbar bg-transparent md:hidden fixed top-0 w-full z-20 transition-colors duration-300" id="mobile-navbar">
+<nav class="navbar bg-transparent md:hidden fixed top-0 w-full z-20 transition-colors duration-300"
+    id="mobile-navbar">
     <div class="relative">
         <!-- Content -->
         <div class="flex justify-between items-center py-4 px-4">
@@ -411,6 +492,39 @@
                 // Check scroll position on resize
                 handleScroll();
             }
+        });
+    });
+
+
+    //Retractable Navigation Menu
+    // Show main dropdown on hover
+    document.querySelectorAll('.group').forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            const dropdown = item.querySelector('.menu-dropdown');
+            if (dropdown) dropdown.classList.remove('hidden');
+        });
+
+        item.addEventListener('mouseleave', () => {
+            const dropdown = item.querySelector('.menu-dropdown');
+            if (dropdown) dropdown.classList.add('hidden');
+        });
+    });
+
+    // Toggle submenus on click
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Toggle the submenu
+                const submenu = this.nextElementSibling;
+                submenu.classList.toggle('hidden');
+
+                // Rotate icon
+                const icon = this.querySelector('.toggle-icon');
+                icon.classList.toggle('transform');
+                icon.classList.toggle('rotate-90');
+            });
         });
     });
 </script>
