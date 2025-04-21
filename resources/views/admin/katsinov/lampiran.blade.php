@@ -40,6 +40,20 @@
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Proposal penelitian dan pengembangan</label>
                                             <input type="file" class="form-control" name="aspek_teknologi[proposal]">
+                                            @if(isset($lampiran['aspek_teknologi']['proposal']))
+                                                <div class="mt-2">
+                                                    <span>File terupload:</span>
+                                                    <a href="{{ route('admin.Katsinov.document.view', $lampiran['aspek_teknologi']['proposal']->id) }}" 
+                                                        target="_blank" 
+                                                        class="document-preview">
+                                                        Lihat Dokumen
+                                                     </a>
+                                                    <button type="button" class="btn btn-sm btn-danger ms-2" 
+                                                            onclick="confirmDelete('{{ $lampiran['aspek_teknologi']['proposal']->id }}')">
+                                                        Hapus
+                                                    </button>
+                                                </div>
+                                            @endif
                                             <div class="upload-progress-container">
                                                 <div class="progress">
                                                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>

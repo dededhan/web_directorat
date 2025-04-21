@@ -348,11 +348,19 @@ class KatsinovController extends Controller
         if (!$katsinov) {
             return redirect()->back()->with('error', 'Katsinov data not found');
         }
-
-        // which page role should I redirect into? ¯\_(ツ)_/¯
-        // its not my job to decide which page is should be switched to
-        // may the team able to solve such chaos
-        return view('admin.katsinov.lampiran', ['id' => $katsinov->id]);
+      
+        $lampiran = KatsinovLampiran::where('katsinov_id', $katsinov_id)->get();
+        
+        // Kelompokkan lampiran berdasarkan type dan category
+        $groupedLampiran = [];
+        foreach ($lampiran as $file) {
+            $groupedLampiran[$file->type][$file->category] = $file;
+        }
+    
+        return view('admin.katsinov.lampiran', [
+            'id' => $katsinov->id,
+            'lampiran' => $groupedLampiran
+        ]);
     }
 
     public function lampiranStore (Request $request, $katsinov_id){
@@ -383,8 +391,26 @@ class KatsinovController extends Controller
             foreach ($categories as $category => $file) {
                 if($file && $file->isValid()){
                     $extension = $file->getClientOriginalExtension();
-                    $fileName = "teknologi_{$category}_{$now}.{$extension}";
-                    $path = Storage::disk('public')->putFileAs("$basePath/$aspect", $file, $fileName);
+                    $fileName = "{$aspect}_{$category}_{$now->timestamp}.{$extension}";
+                    
+                    // Simpan file
+                    $path = $file->storeAs(
+                        "$basePath/$aspect", 
+                        $fileName, 
+                        'public' // Pastikan menggunakan disk 'public'
+                    );
+                    
+                    // Hapus file lama jika ada
+                    $existingFile = KatsinovLampiran::where([
+                        'katsinov_id' => $katsinov_id,
+                        'type' => $aspect,
+                        'category' => $category
+                    ])->first();
+                    
+                    if ($existingFile) {
+                        Storage::disk('public')->delete($existingFile->path);
+                        $existingFile->delete();
+                    }
     
                     $data_files[] = [
                         'path' => $path,
@@ -406,6 +432,34 @@ class KatsinovController extends Controller
         return redirect(route('admin.Katsinov.TableKatsinov'));
     }
 
+    public function lampiranShow($katsinov_id)
+    {
+        $katsinov = Katsinov::findOrFail($katsinov_id);
+        $lampiran = $katsinov->katsinovLampirans()->get();
+        
+        // Kelompokkan lampiran berdasarkan type (aspek)
+        $groupedLampiran = $lampiran->groupBy('type');
+        
+        return view('admin.katsinov.lampiran_show', [
+            'id' => $katsinov_id,
+            'lampiran' => $groupedLampiran
+        ]);
+    }
+
+    public function viewDocument($id) {
+        $lampiran = KatsinovLampiran::findOrFail($id);
+        $path = storage_path('app/public/' . $lampiran->path);
+        
+        if (!file_exists($path)) {
+            abort(404);
+        }
+    
+        return response()->file($path, [
+            'Content-Type' => mime_content_type($path),
+            'Content-Disposition' => 'inline; filename="'.basename($path).'"'
+        ]);
+    }
+    
     public function inovasiIndex($katsinov_id = null){
         $katsinov = Katsinov::find($katsinov_id);
         $inovasi = $katsinov->katsinovInovasis()->first();
