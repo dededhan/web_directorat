@@ -2124,3 +2124,95 @@ footer {
 header .absolute.inset-0 {
     z-index: 5;
 }
+/* Prevent horizontal scrolling and extra space */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+main {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* Ensure full-width responsive images */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Fix for mobile landscape mode */
+@media (max-width: 767px) {
+    body {
+        position: relative;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+/* Additional fixes for specific elements */
+.navbar {
+    width: 100%;
+}
+
+header {
+    width: 100%;
+    overflow: hidden;
+}
+
+section {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* Prevent horizontal scrolling on mobile */
+@media (max-width: 767px) {
+    body {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .carousel-inner {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    * {
+        max-width: 100%;
+    }
+}
+
+/* Viewport meta tag optimization */
+@media (max-width: 767px) {
+    meta[name="viewport"] {
+        content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+    }
+}
