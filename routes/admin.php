@@ -150,6 +150,8 @@ Route::prefix('admin')->name('admin.')
                 Route::post('/store', [KatsinovController::class, 'store'])->name('store');
                 Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
                 Route::get('/katsinov/latest', [KatsinovController::class, 'latest']);
+                Route::get('/documents/{id}', [KatsinovController::class, 'viewDocument'])
+                    ->name('document.view');
 
                 Route::get('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiIndex'])->name('inovasi.index');
                 Route::post('/form-invoasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
