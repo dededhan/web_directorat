@@ -53,8 +53,8 @@
             <li class="relative group">
                 <a href="#" class="text-white hover:text-yellow-400">Layanan</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="#" class="hover:text-yellow-400">Pengujian Kasinov</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">Pendaftaran Inkubisnis</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">Pengujian Katsinov</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">Pendaftaran Inkubator Bisnis</a></li>
                     <li><a href="#" class="hover:text-yellow-400">Pengujian/Sertifikasi Produk Inovasi</a></li>
                     <li><a href="#" class="hover:text-yellow-400">Join Mitra Inovasi UNJ</a></li>
                 </ul>

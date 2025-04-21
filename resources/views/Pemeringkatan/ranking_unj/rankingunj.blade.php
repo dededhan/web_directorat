@@ -178,7 +178,7 @@
 <body>
     <div class="hero-section">
         <div class="hero-content">
-            <h1>Reputation Center<br>Universitas Negeri Jakarta</h1>
+            <h1>PUSAT PEMERINGKATAN<br>Universitas Negeri Jakarta</h1>
             <p>Shaping Global Excellence, Empowering Future Leaders</p>
             <button class="hero-button">Selengkapnya</button> 
         </div>
