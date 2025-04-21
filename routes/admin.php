@@ -89,6 +89,8 @@ Route::prefix('admin')->name('admin.')
         Route::post('/responden/update-status/{id}', [AdminRespondenController::class, 'updateStatus'])
             ->name('responden.updateStatus');
 
+        Route::post('/responden/import', [AdminRespondenController::class, 'import'])->name('responden.import');
+        Route::get('/responden/filter', [AdminRespondenController::class, 'filter'])->name('responden.filter');
         Route::get('/responden/export/excel', [AdminRespondenController::class, 'export'])
             ->name('responden.export');
         Route::get('/responden/export/csv', [AdminRespondenController::class, 'exportCSV'])

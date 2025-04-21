@@ -7,6 +7,8 @@ use App\Http\Requests\StoreRespondenRequest;
 use App\Http\Requests\UpdateRespondenRequest;
 use App\Models\Responden;
 use Illuminate\Validation\Rule;
+use App\Imports\RespondenImport;
+
 use App\Exports\RespondenExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -115,6 +117,39 @@ class AdminRespondenController extends Controller
     }
 
 
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        try {
+            $skipDuplicates = $request->has('skip_duplicates');
+            
+            Excel::import(new RespondenImport($skipDuplicates), $request->file('file'));
+            
+            return redirect()->back()->with('success', 'Data responden berhasil diimport!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error importing file: ' . $e->getMessage());
+        }
+    }
+
+    public function filter(Request $request)
+    {
+        $query = Responden::query();
+        
+        if ($request->has('email')) {
+            $query->where('email', 'like', '%' . $request->email . '%');
+        }
+        
+        if ($request->has('phone')) {
+            $query->where('phone_responden', 'like', '%' . $request->phone . '%');
+        }
+        
+        $respondens = $query->get();
+        
+        return view('admin.responden.index', compact('respondens'));
+    }
     public function export()
     {
         return Excel::download(new RespondenExport, 'responden-data.xlsx');

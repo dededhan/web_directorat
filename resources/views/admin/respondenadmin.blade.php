@@ -126,6 +126,9 @@
                     <div class="d-flex justify-content-end align-items-center">
                         <div class="export-buttons me-3">
                             <div class="btn-group">
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importModal">
+                                    <i class='bx bx-import'></i> Import Excel
+                                </button>
                                 <a href="{{ route('admin.responden.export') }}" class="btn btn-success">
                                     <i class='bx bx-export'></i> Export Excel
                                 </a>
@@ -199,6 +202,97 @@
         </div>
     </div>
 
+<!-- Import Excel Modal -->
+<div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importModalLabel">Import Responden from Excel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="importForm" action="{{ route('admin.responden.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="excelFile" class="form-label">Select Excel File</label>
+                        <input class="form-control" type="file" id="excelFile" name="file" accept=".xlsx,.xls" required>
+                        <div class="form-text">File harus sesuai dengan format yang ditentukan</div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="skipDuplicates" name="skip_duplicates" checked>
+                            <label class="form-check-label" for="skipDuplicates">
+                                Skip duplicate entries (based on email and phone)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <script>
+        // Import form submission
+    document.getElementById('importForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        
+        axios.post(this.action, formData)
+            .then(response => {
+                $('#importModal').modal('hide');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: response.data.message || 'Data imported successfully',
+                }).then(() => {
+                    window.location.reload();
+                });
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Import Failed',
+                    text: error.response?.data?.message || 'Error importing file',
+                });
+            });
+    });
+
+    // Filter functionality
+    document.getElementById('emailFilter').addEventListener('keyup', function() {
+        filterRespondents();
+    });
+
+    document.getElementById('phoneFilter').addEventListener('keyup', function() {
+        filterRespondents();
+    });
+
+    document.getElementById('resetFilters').addEventListener('click', function() {
+        document.getElementById('emailFilter').value = '';
+        document.getElementById('phoneFilter').value = '';
+        filterRespondents();
+    });
+
+    function filterRespondents() {
+        const email = document.getElementById('emailFilter').value.toLowerCase();
+        const phone = document.getElementById('phoneFilter').value.toLowerCase();
+        const rows = document.querySelectorAll('#respondent-table tbody tr');
+        
+        rows.forEach(row => {
+            const rowEmail = row.cells[4].textContent.toLowerCase();
+            const rowPhone = row.cells[5].textContent.toLowerCase();
+            
+            const emailMatch = email === '' || rowEmail.includes(email);
+            const phoneMatch = phone === '' || rowPhone.includes(phone);
+            
+            row.style.display = emailMatch && phoneMatch ? '' : 'none';
+        });
+    }
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
