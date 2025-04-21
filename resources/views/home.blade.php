@@ -563,7 +563,7 @@
 
 <!-- YouTube Section with Consistent Card Styling -->
 <!-- YouTube Section with Consistent Card Styling -->
-<section class="media-section py-16 relative bg-gradient-to-b from-white to-gray-50">
+<section class="media-section py-16">
     <!-- Decorative Elements -->
     <div class="absolute bottom-0 right-0 w-32 h-32 bg-yellow-400 rounded-full -mr-16 -mb-16 opacity-10"></div>
     <div class="absolute top-40 left-0 w-24 h-24 bg-teal-600 rounded-full -ml-12 opacity-10"></div>
