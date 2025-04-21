@@ -1,4 +1,4 @@
-<!-- navbar.blade.php for Laravel 11 with Android-size responsive design -->
+<!-- navbar.blade.php with fully click-based dropdown menus -->
 
 <!-- Social Media Bar (Original, unchanged for desktop) -->
 <div class="social-media-bar py-2 hidden md:flex">
@@ -19,21 +19,61 @@
 </div>
 
 <style>
-    /* Optional: Add smooth transitions */
-    .submenu {
-        transition: all 0.3s ease;
+    /* Clean dropdown styling */
+    .dropdown-menu {
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: absolute;
+        min-width: 200px;
+        z-index: 100;
+        padding: 8px 0;
+        margin-top: 5px;
     }
-    .toggle-icon {
-        transition: transform 0.3s ease;
+    
+    .dropdown-menu li {
+        display: block;
+        width: 100%;
     }
-    .transform.rotate-90 {
-        transform: rotate(90deg);
+    
+    .dropdown-menu a, 
+    .dropdown-menu button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #333;
+        padding: 10px 15px;
+        text-decoration: none;
+        font-weight: normal;
+        white-space: nowrap;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
     }
-    </style>
+    
+    .dropdown-menu a:hover, 
+    .dropdown-menu button:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+    
+    .nested-menu {
+        position: absolute;
+        top: 0;
+        left: 100%;
+        margin-top: -8px;
+    }
+    
+    /* For active menu items */
+    .menu-active {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+</style>
 
 @include('loginpopup')
 
-<!-- Original Desktop Navbar (Updated with new structure) -->
+<!-- Desktop Navbar with Click-Based Dropdown -->
 <nav class="navbar hidden md:block">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
         <div class="flex items-center space-x-4">
@@ -46,137 +86,83 @@
         <ul class="flex space-x-6">
             <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400">Beranda</a></li>
 
-            <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400">Tentang</a>
-                <ul
-                    class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('pimpinan.pimpinan') }}" class="hover:text-yellow-400">Pimpinan Direktorat</a>
-                    </li>
-                    <li><a href="{{ route('strukturorganisasipemeringkatan') }}" class="hover:text-yellow-400">Struktur
-                            Organisasi</a></li>
-                    <li><a href="{{ route('tupoksipemeringkatan') }}" class="hover:text-yellow-400">Tugas Pokok dan
-                            Fungsi</a></li>
-                    <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="hover:text-yellow-400">Profil</a>
-                    </li>
+            <li class="relative">
+                <a href="#" class="text-white hover:text-yellow-400 primary-dropdown-toggle" data-dropdown="tentang-dropdown">Tentang</a>
+                <ul id="tentang-dropdown" class="dropdown-menu primary-dropdown hidden">
+                    <li><a href="{{ route('pimpinan.pimpinan') }}">Pimpinan Direktorat</a></li>
+                    <li><a href="{{ route('strukturorganisasipemeringkatan') }}">Struktur Organisasi</a></li>
+                    <li><a href="{{ route('tupoksipemeringkatan') }}">Tugas Pokok dan Fungsi</a></li>
+                    <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}">Profil</a></li>
                 </ul>
             </li>
 
-            <li class="relative group">
-                <a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}"
-                    class="text-white hover:text-yellow-400">Ranking UNJ</a>
-                {{-- <!-- <ul
-                    class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('pemeringkatan.klaster') }}" class="hover:text-yellow-400">IKU</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">UI Green Metric</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">Webometric</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">QS World University Ranking</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">Times Higher Education</a></li>
-                </ul> --> --}}
-            </li>
-
-            <!-- Retractable Navigation Menu -->
-            <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400 flex items-center">
-                    Program
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </a>
-                <ul
-                    class="menu-dropdown absolute hidden bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg z-10 w-64">
-                    <li><a href="#" class="hover:text-yellow-400 block py-1">Global Engagement</a></li>
-                    <li><a href="#" class="hover:text-yellow-400 block py-1">Lecturer Expose</a></li>
-                    <li><a href="#" class="hover:text-yellow-400 block py-1">International Faculty Staff</a></li>
-                    <li><a href="#" class="hover:text-yellow-400 block py-1">International Student Mobility</a>
-                    </li>
-
-                    <!-- Sustainability Menu -->
+            <!-- Program Dropdown with Click-Based Behavior -->
+            <li class="relative">
+                <a href="#" class="text-white hover:text-yellow-400 primary-dropdown-toggle" data-dropdown="program-dropdown">Program</a>
+                <ul id="program-dropdown" class="dropdown-menu primary-dropdown hidden">
+                    <li><a href="#">Global Engagement</a></li>
+                    <li><a href="#">Lecturer Expose</a></li>
+                    <li><a href="#">International Faculty Staff</a></li>
+                    <li><a href="#">International Student Mobility</a></li>
+                    
                     <li class="relative">
-                        <a href="#"
-                            class="hover:text-yellow-400 flex items-center justify-between py-1 submenu-toggle">
-                            <span>Sustainability</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 toggle-icon" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5l7 7-7 7" />
-                            </svg>
+                        <a href="#" class="flex justify-between items-center secondary-dropdown-toggle" data-dropdown="sustainability-dropdown">
+                            Sustainability
+                            <i class="fas fa-chevron-right ml-2"></i>
                         </a>
-                        <ul class="submenu hidden pl-4 mt-1 space-y-2">
-                            <li><a href="#" class="hover:text-yellow-400 block py-1">Kegiatan Sustainability</a>
-                            </li>
-                            <li><a href="#" class="hover:text-yellow-400 block py-1">Mata Kuliah
-                                    Sustainability</a></li>
+                        <ul id="sustainability-dropdown" class="dropdown-menu nested-menu secondary-dropdown hidden">
+                            <li><a href="#">Kegiatan Sustainability</a></li>
+                            <li><a href="#">Mata Kuliah Sustainability</a></li>
+                            
                             <li class="relative">
-                                <a href="#"
-                                    class="hover:text-yellow-400 flex items-center justify-between py-1 submenu-toggle">
-                                    <span>Program Sustainability Universitas Negeri Jakarta</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 toggle-icon" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 5l7 7-7 7" />
-                                    </svg>
+                                <a href="#" class="flex justify-between items-center tertiary-dropdown-toggle" data-dropdown="program-sustainability-dropdown">
+                                    Program Sustainability UNJ
+                                    <i class="fas fa-chevron-right ml-2"></i>
                                 </a>
-                                <ul class="submenu hidden pl-4 mt-1 space-y-2">
-                                    <li><a href="#" class="hover:text-yellow-400 block py-1">Tagihan Listrik</a>
-                                    </li>
-                                    <li><a href="#" class="hover:text-yellow-400 block py-1">BBM</a></li>
-                                    <li><a href="#" class="hover:text-yellow-400 block py-1">Sarpras Ramah
-                                            Lingkungan</a></li>
+                                <ul id="program-sustainability-dropdown" class="dropdown-menu nested-menu tertiary-dropdown hidden">
+                                    <li><a href="#">Tagihan Listrik</a></li>
+                                    <li><a href="#">BBM</a></li>
+                                    <li><a href="#">Sarpras Ramah Lingkungan</a></li>
                                 </ul>
                             </li>
                         </ul>
                     </li>
-
-                    <!-- Data Responden Menu -->
+                    
                     <li class="relative">
-                        <a href="#"
-                            class="hover:text-yellow-400 flex items-center justify-between py-1 submenu-toggle">
-                            <span>Data Responden</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 toggle-icon" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5l7 7-7 7" />
-                            </svg>
+                        <a href="#" class="flex justify-between items-center secondary-dropdown-toggle" data-dropdown="data-responden-dropdown">
+                            Data Responden
+                            <i class="fas fa-chevron-right ml-2"></i>
                         </a>
-                        <ul class="submenu hidden pl-4 mt-1 space-y-2">
-                            <li><a href="#" class="hover:text-yellow-400 block py-1">Academic</a></li>
-                            <li><a href="#" class="hover:text-yellow-400 block py-1">Employee</a></li>
+                        <ul id="data-responden-dropdown" class="dropdown-menu nested-menu secondary-dropdown hidden">
+                            <li><a href="#">Academic</a></li>
+                            <li><a href="#">Employee</a></li>
                         </ul>
                     </li>
                 </ul>
             </li>
 
-
-            <li class="relative group">
-                <a href="{{ route('document.document') }}" class="text-white hover:text-yellow-400">Dokumen</a>
-                <ul class="absolute hidden group-hover:">
-
-                </ul>
+            <li class="relative">
+                <a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="text-white hover:text-yellow-400">Ranking UNJ</a>
             </li>
 
-
-
-
+            <li class="relative">
+                <a href="{{ route('document.document') }}" class="text-white hover:text-yellow-400">Dokumen</a>
+            </li>
 
             <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400">SSO</a></li>
-            <li><a class="login text-white" href="#" data-bs-toggle="modal"
-                    data-bs-target="#loginModal">Masuk</a>
-            </li>
+            <li><a class="login text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
         </ul>
     </div>
 </nav>
 
 <!-- Mobile Navigation Bar (Android) -->
-<nav class="navbar bg-transparent md:hidden fixed top-0 w-full z-20 transition-colors duration-300"
-    id="mobile-navbar">
+<nav class="navbar bg-transparent md:hidden fixed top-0 w-full z-20 transition-colors duration-300" id="mobile-navbar">
     <div class="relative">
         <!-- Content -->
         <div class="flex justify-between items-center py-4 px-4">
             <!-- Logo and University Name -->
             <div class="flex items-center">
-                <img alt="University logo" class="h-10 w-10"
-                    src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
+                <img alt="University logo" class="h-10 w-10" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
                 <h1 class="text-white text-xl font-bold ml-2">UNJ</h1>
             </div>
 
@@ -188,14 +174,12 @@
     </div>
 </nav>
 
-<!-- Mobile Sidebar - Visible by default on mobile -->
-<div id="mobile-sidebar"
-    class="fixed top-0 right-0 w-64 h-full bg-[#186862] z-40 transform md:translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto">
+<!-- Mobile Sidebar -->
+<div id="mobile-sidebar" class="fixed top-0 right-0 w-64 h-full bg-[#186862] z-40 transform md:translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto">
     <!-- Sidebar Header -->
     <div class="flex justify-between items-center p-4">
         <div class="flex items-center">
-            <img alt="University logo" class="h-8 w-8"
-                src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
+            <img alt="University logo" class="h-8 w-8" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
             <h1 class="text-white text-xl font-bold ml-2">UNJ</h1>
         </div>
         <button id="close-sidebar" class="text-white">
@@ -214,32 +198,39 @@
 
             <li>
                 <div class="sidebar-dropdown">
-                    <button
-                        class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                        Profil
+                    <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                        Tentang
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <ul class="hidden bg-[#135a54]">
                         <li>
-                            <a href="{{ route('strukturorganisasi') }}"
-                                class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                            <a href="{{ route('pimpinan.pimpinan') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                                Pimpinan Direktorat
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('strukturorganisasi') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 Struktur Organisasi
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('tupoksi.tupoksi') }}"
-                                class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                            <a href="{{ route('tupoksi.tupoksi') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 Tugas Pokok dan Fungsi
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                                Profil
                             </a>
                         </li>
                     </ul>
                 </div>
             </li>
 
+            <!-- Program Dropdown for Mobile -->
             <li>
                 <div class="sidebar-dropdown">
-                    <button
-                        class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                    <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
                         Program
                         <i class="fas fa-chevron-down"></i>
                     </button>
@@ -264,65 +255,90 @@
                                 International Student Mobility
                             </a>
                         </li>
+                        
+                        <!-- Sustainability with nested dropdown -->
+                        <li>
+                            <div class="nested-sidebar-dropdown">
+                                <button class="flex justify-between items-center w-full text-white py-3 px-6 hover:bg-[#0e4c46]">
+                                    Sustainability
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                                <ul class="hidden bg-[#0d4540]">
+                                    <li>
+                                        <a href="#" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">
+                                            Kegiatan Sustainability
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">
+                                            Mata Kuliah Sustainability
+                                        </a>
+                                    </li>
+                                    
+                                    <!-- Program Sustainability with deeper nesting -->
+                                    <li>
+                                        <div class="nested-nested-sidebar-dropdown">
+                                            <button class="flex justify-between items-center w-full text-white py-3 px-8 hover:bg-[#0a3c38]">
+                                                Program Sustainability UNJ
+                                                <i class="fas fa-chevron-right"></i>
+                                            </button>
+                                            <ul class="hidden bg-[#083633]">
+                                                <li>
+                                                    <a href="#" class="block text-white py-3 px-10 hover:bg-[#062f2c]">
+                                                        Tagihan Listrik
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="block text-white py-3 px-10 hover:bg-[#062f2c]">
+                                                        BBM
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="block text-white py-3 px-10 hover:bg-[#062f2c]">
+                                                        Sarpras Ramah Lingkungan
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        
+                        <!-- Data Responden with nested dropdown -->
+                        <li>
+                            <div class="nested-sidebar-dropdown">
+                                <button class="flex justify-between items-center w-full text-white py-3 px-6 hover:bg-[#0e4c46]">
+                                    Data Responden
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                                <ul class="hidden bg-[#0d4540]">
+                                    <li>
+                                        <a href="#" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">
+                                            Academic
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">
+                                            Employee
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </li>
 
             <li>
                 <div class="sidebar-dropdown">
-                    <button
-                        class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                        Data
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <ul class="hidden bg-[#135a54]">
-                        <li>
-                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Data 1
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Data 2
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <li>
-                <div class="sidebar-dropdown">
-                    <button
-                        class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                        Dokumen
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <ul class="hidden bg-[#135a54]">
-                        <li>
-                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Dokumen 1
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Dokumen 2
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <li>
-                <div class="sidebar-dropdown">
-                    <button
-                        class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                    <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
                         Sistem Pemeringkatan
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <ul class="hidden bg-[#135a54]">
                         <li>
-                            <a href="{{ route('pemeringkatan.klaster') }}"
-                                class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                            <a href="{{ route('pemeringkatan.klaster') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 IKU
                             </a>
                         </li>
@@ -357,8 +373,7 @@
             </li>
 
             <li class="px-6 my-6">
-                <a href="#" class="block text-center bg-white text-[#186862] py-2 rounded-sm font-medium w-20"
-                    data-bs-toggle="modal" data-bs-target="#loginModal">
+                <a href="#" class="block text-center bg-white text-[#186862] py-2 rounded-sm font-medium w-20" data-bs-toggle="modal" data-bs-target="#loginModal">
                     Masuk
                 </a>
             </li>
@@ -367,13 +382,12 @@
 </div>
 
 <!-- Overlay for sidebar - Only on mobile -->
-<div id="sidebar-overlay"
-    class="fixed inset-0 bg-black opacity-0 md:hidden pointer-events-none transition-opacity duration-300 ease-in-out z-30">
-</div>
+<div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-0 md:hidden pointer-events-none transition-opacity duration-300 ease-in-out z-30"></div>
 
-<!-- JavaScript for mobile sidebar -->
+<!-- JavaScript for mobile sidebar and click-based dropdowns -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Mobile sidebar functionality
         const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
         const menuIcon = document.getElementById('menu-icon');
         const mobileSidebar = document.getElementById('mobile-sidebar');
@@ -381,15 +395,14 @@
         const mobileNavbar = document.getElementById('mobile-navbar');
         const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
         const nestedDropdownButtons = document.querySelectorAll('.nested-sidebar-dropdown button');
+        const nestedNestedDropdownButtons = document.querySelectorAll('.nested-nested-sidebar-dropdown button');
 
         // Function to handle scroll effects
         function handleScroll() {
             if (window.scrollY > 10) {
-                // When scrolled, add background color
                 mobileNavbar.classList.remove('bg-transparent');
                 mobileNavbar.classList.add('bg-[#186862]');
             } else {
-                // When at top, make transparent
                 mobileNavbar.classList.remove('bg-[#186862]');
                 mobileNavbar.classList.add('bg-transparent');
             }
@@ -401,9 +414,7 @@
         // Set initial state for mobile devices
         function initMobileNav() {
             if (window.innerWidth < 768) {
-                // Default state: sidebar hidden, show hamburger icon
                 hideSidebar();
-                // Check initial scroll position
                 handleScroll();
             }
         }
@@ -441,13 +452,12 @@
         // Close sidebar when clicking overlay
         sidebarOverlay.addEventListener('click', hideSidebar);
 
-        // Toggle dropdowns in sidebar
+        // Toggle mobile dropdowns
         dropdownButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const dropdownMenu = this.nextElementSibling;
                 const icon = this.querySelector('i');
-
-                // Toggle current dropdown
+                
                 if (dropdownMenu.classList.contains('hidden')) {
                     dropdownMenu.classList.remove('hidden');
                     icon.classList.remove('fa-chevron-down');
@@ -459,25 +469,138 @@
                 }
             });
         });
-
-        // Toggle nested dropdowns in sidebar
+        
+        // Toggle nested mobile dropdowns
         nestedDropdownButtons.forEach(button => {
             button.addEventListener('click', function(e) {
-                e.stopPropagation(); // Prevent parent dropdown from closing
+                e.stopPropagation();
                 const dropdownMenu = this.nextElementSibling;
                 const icon = this.querySelector('i');
-
-                // Toggle current dropdown
+                
                 if (dropdownMenu.classList.contains('hidden')) {
                     dropdownMenu.classList.remove('hidden');
-                    icon.classList.remove('fa-chevron-down');
-                    icon.classList.add('fa-chevron-up');
+                    icon.classList.remove('fa-chevron-right');
+                    icon.classList.add('fa-chevron-down');
                 } else {
                     dropdownMenu.classList.add('hidden');
-                    icon.classList.remove('fa-chevron-up');
-                    icon.classList.add('fa-chevron-down');
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-right');
                 }
             });
+        });
+        
+        // Toggle deeper nested mobile dropdowns
+        nestedNestedDropdownButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const dropdownMenu = this.nextElementSibling;
+                const icon = this.querySelector('i');
+                
+                if (dropdownMenu.classList.contains('hidden')) {
+                    dropdownMenu.classList.remove('hidden');
+                    icon.classList.remove('fa-chevron-right');
+                    icon.classList.add('fa-chevron-down');
+                } else {
+                    dropdownMenu.classList.add('hidden');
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-right');
+                }
+            });
+        });
+
+        // DESKTOP CLICK-BASED DROPDOWN FUNCTIONALITY
+        // Handle primary dropdown toggle
+        const primaryDropdowns = document.querySelectorAll('.primary-dropdown-toggle');
+        primaryDropdowns.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const targetId = this.getAttribute('data-dropdown');
+                const targetDropdown = document.getElementById(targetId);
+                
+                // Close all other primary dropdowns first
+                document.querySelectorAll('.primary-dropdown').forEach(dropdown => {
+                    if (dropdown.id !== targetId) {
+                        dropdown.classList.add('hidden');
+                    }
+                });
+                
+                // Toggle this dropdown
+                targetDropdown.classList.toggle('hidden');
+            });
+        });
+        
+        // Handle secondary dropdown toggle (hover for desktop)
+        const secondaryDropdownToggles = document.querySelectorAll('.secondary-dropdown-toggle');
+        secondaryDropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const targetId = this.getAttribute('data-dropdown');
+                const targetDropdown = document.getElementById(targetId);
+                
+                // Close any open sibling secondary dropdowns
+                const siblingButtons = Array.from(this.closest('ul').querySelectorAll('.secondary-dropdown-toggle'));
+                siblingButtons.forEach(button => {
+                    if (button !== this) {
+                        const siblingId = button.getAttribute('data-dropdown');
+                        const siblingDropdown = document.getElementById(siblingId);
+                        if (siblingDropdown) {
+                            siblingDropdown.classList.add('hidden');
+                        }
+                    }
+                });
+                
+                // Toggle this dropdown
+                targetDropdown.classList.toggle('hidden');
+            });
+        });
+        
+        // Handle tertiary dropdown toggle (hover for desktop)
+        const tertiaryDropdownToggles = document.querySelectorAll('.tertiary-dropdown-toggle');
+        tertiaryDropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const targetId = this.getAttribute('data-dropdown');
+                const targetDropdown = document.getElementById(targetId);
+                
+                // Toggle this dropdown
+                targetDropdown.classList.toggle('hidden');
+            });
+        });
+
+        // Prevent click events on dropdown menus from closing the parent dropdown
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            menu.addEventListener('click', function(e) {
+                // Only stop propagation if clicking on a toggle button or non-link item
+                if (e.target.classList.contains('secondary-dropdown-toggle') || 
+                    e.target.classList.contains('tertiary-dropdown-toggle') ||
+                    e.target.tagName !== 'A' || 
+                    e.target.getAttribute('href') === '#') {
+                    e.stopPropagation();
+                }
+            });
+        });
+        
+        // Close desktop dropdowns when clicking elsewhere on the page
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown-menu') && !e.target.classList.contains('primary-dropdown-toggle')) {
+                document.querySelectorAll('.primary-dropdown').forEach(dropdown => {
+                    dropdown.classList.add('hidden');
+                });
+                
+                document.querySelectorAll('.secondary-dropdown').forEach(dropdown => {
+                    dropdown.classList.add('hidden');
+                });
+                
+                document.querySelectorAll('.tertiary-dropdown').forEach(dropdown => {
+                    dropdown.classList.add('hidden');
+                });
+            }
         });
 
         // Initialize mobile navigation
@@ -486,45 +609,10 @@
         // Handle window resize
         window.addEventListener('resize', function() {
             if (window.innerWidth >= 768) {
-                // Desktop view - hide mobile elements
                 hideSidebar();
             } else {
-                // Check scroll position on resize
                 handleScroll();
             }
-        });
-    });
-
-
-    //Retractable Navigation Menu
-    // Show main dropdown on hover
-    document.querySelectorAll('.group').forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            const dropdown = item.querySelector('.menu-dropdown');
-            if (dropdown) dropdown.classList.remove('hidden');
-        });
-
-        item.addEventListener('mouseleave', () => {
-            const dropdown = item.querySelector('.menu-dropdown');
-            if (dropdown) dropdown.classList.add('hidden');
-        });
-    });
-
-    // Toggle submenus on click
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.submenu-toggle').forEach(toggle => {
-            toggle.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                // Toggle the submenu
-                const submenu = this.nextElementSibling;
-                submenu.classList.toggle('hidden');
-
-                // Rotate icon
-                const icon = this.querySelector('.toggle-icon');
-                icon.classList.toggle('transform');
-                icon.classList.toggle('rotate-90');
-            });
         });
     });
 </script>
