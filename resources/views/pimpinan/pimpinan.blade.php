@@ -258,96 +258,56 @@
 </head>
 @include('pimpinan.navbar')
 <body>
-    <!-- Navbar placeholder - would be included from another file -->
-    
     <div class="container">
         <header class="fade-in">
             <h1>Pimpinan DISIP</h1>
         </header>
 
+        @if($direktur)
+        <div class="director-profile slide-up">
+            <div class="profile-image">
+                <img src="{{ asset('storage/' . $direktur->gambar) }}" alt="{{ $direktur->nama }}">
+            </div>
+            <div class="profile-content">
+                <h2>{{ $direktur->nama }}</h2>
+                <h3>{{ $direktur->jabatan }}</h3>
+                <div>
+                    {!! $direktur->deskripsi !!}
+                </div>
+            </div>
+        </div>
+        @else
         <div class="director-profile slide-up">
             <div class="profile-image">
                 <img src="/api/placeholder/300/370" alt="Director Photo">
             </div>
             <div class="profile-content">
-                <h2>Nama Direktur</h2>
-                <h3>Consectetur Adipiscing Elit</h3>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras porttitor metus justo, vitae tincidunt ipsum fermentum sit amet. Maecenas fringilla consectetur tempor. Fusce ultrices quam vel maximus vehicula. Vivamus feugiat urna in magna dictum lacinia.
-                </p>
-                <p>
-                    Nullam rhoncus, libero sed facilisis feugiat, turpis quam gravida nisl, a pulvinar quam massa quis nibh. Proin eget arcu nec turpis facilisis interdum. Vivamus vitae magna eget ligula auctor sagittis. Suspendisse potenti. Etiam fermentum felis eget urna faucibus, nec tincidunt nisl pellentesque.
-                </p>
-                <p>
-                    Curabitur dignissim elit eu risus pharetra, a feugiat est tincidunt. Mauris varius lacinia diam, id feugiat mauris luctus et. Phasellus vulputate rhoncus nulla et euismod. Fusce ac libero vel nulla pulvinar tempus lobortis sit amet justo. Sed consectetur, nunc vitae tincidunt elementum, sem lorem vestibulum ipsum.
-                </p>
-                <p>
-                    Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec dapibus velit nec tellus condimentum, id eleifend eros vestibulum. Aliquam erat volutpat. Praesent eget magna sit amet nibh finibus tempus eget sit amet ligula. Fusce tempor neque at lectus scelerisque finibus.
-                </p>
+                <h2>Direktur Inovasi Sistem Informasi dan Pemeringkatan</h2>
+                <h3>Belum tersedia</h3>
+                <p>Data belum tersedia.</p>
             </div>
         </div>
+        @endif
 
         <div class="team-section fade-in">
             <div class="team-members">
+                @forelse($kasubdits as $kasubdit)
                 <div class="team-member">
                     <div class="member-image">
-                        <img src="/api/placeholder/150/150" alt="Team Member 1">
+                        <img src="{{ asset('storage/' . $kasubdit->gambar) }}" alt="{{ $kasubdit->nama }}">
                     </div>
                     <div class="member-info">
-                        <h4>LOREM IPSUM DOLOR</h4>
-                        <h5>CONSECTETUR ADIPISCING ELIT</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce euismod lacus vel magna gravida, id aliquet nibh vehicula.</p>
-                        <a href="#" class="detail-button" data-id="member1">Selengkapnya</a>
+                        <h4>{{ $kasubdit->nama }}</h4>
+                        <h5>{{ $kasubdit->jabatan }}</h5>
+                        <p>{{ Str::limit(strip_tags($kasubdit->deskripsi), 80) }}</p>
+                        <a href="#" class="detail-button" data-id="{{ $kasubdit->id }}">Selengkapnya</a>
                     </div>
                 </div>
-
-                <div class="team-member">
-                    <div class="member-image">
-                        <img src="/api/placeholder/150/150" alt="Team Member 2">
-                    </div>
-                    <div class="member-info">
-                        <h4>VIVAMUS LACINIA ODIO</h4>
-                        <h5>VITAE VESTIBULUM VESTIBULUM</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vitae magna ac odio eleifend tempus vel ac neque.</p>
-                        <a href="#" class="detail-button" data-id="member2">Selengkapnya</a>
-                    </div>
+                @empty
+                <div class="text-center w-full">
+                    <p>Belum ada data pimpinan Subdirektorat.</p>
                 </div>
-
-                <div class="team-member">
-                    <div class="member-image">
-                        <img src="/api/placeholder/150/150" alt="Team Member 3">
-                    </div>
-                    <div class="member-info">
-                        <h4>MAECENAS FRINGILLA CONSECTETUR</h4>
-                        <h5>FUSCE ULTRICES QUAM VEL MAXIMUS</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames.</p>
-                        <a href="#" class="detail-button" data-id="member3">Selengkapnya</a>
-                    </div>
-                </div>
-
-                <div class="team-member">
-                    <div class="member-image">
-                        <img src="/api/placeholder/150/150" alt="Team Member 4">
-                    </div>
-                    <div class="member-info">
-                        <h4>NULLAM RHONCUS LIBERO</h4>
-                        <h5>PULVINAR QUAM MASSA QUIS</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis magna in metus rutrum ultricies. Suspendisse potenti.</p>
-                        <a href="#" class="detail-button" data-id="member4">Selengkapnya</a>
-                    </div>
-                </div>
-
-                <div class="team-member">
-                    <div class="member-image">
-                        <img src="/api/placeholder/150/150" alt="Team Member 5">
-                    </div>
-                    <div class="member-info">
-                        <h4>CURABITUR DIGNISSIM ELIT</h4>
-                        <h5>FEUGIAT EST TINCIDUNT</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu metus fermentum, fringilla quam vel, consequat turpis.</p>
-                        <a href="#" class="detail-button" data-id="member5">Selengkapnya</a>
-                    </div>
-                </div>
+                @endforelse
             </div>
         </div>
     </div>
@@ -357,7 +317,7 @@
             <span class="close-button" id="closeModal">&times;</span>
             
             <div class="modal-image">
-                <img id="modalImage" src="/api/placeholder/300/370" alt="Team Member">
+                <img id="modalImage" src="" alt="Team Member">
             </div>
             
             <div class="modal-text">
@@ -365,71 +325,31 @@
                 <h3 id="modalPosition" style="color: #186862; font-size: 18px; margin-bottom: 20px; font-weight: 500;"></h3>
                 
                 <div id="modalContent">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan, metus ultrices eleifend gravida, nulla nunc varius lectus, nec rutrum justo nibh eu lectus. Ut vulputate semper dui. Fusce erat odio, sollicitudin vel erat vel, interdum mattis neque. Sed quis semper magna. Sed a risus in felis bibendum ullamcorper.</p>
-                    <p>Maecenas eget justo sem. Nullam feugiat, augue in consectetur ultricies, risus elit eleifend orci, quis maximus justo nulla non orci. Suspendisse tincidunt venenatis purus in interdum. Fusce eget nisl a est suscipit ultricies in sed ante. Nunc porttitor sapien a scelerisque aliquet. Maecenas dignissim sem in justo sollicitudin convallis.</p>
-                    <p>Vivamus at iaculis nunc. Pellentesque suscipit magna sit amet eros placerat, sed condimentum quam congue. Cras ultricies, augue in hendrerit sagittis, turpis nulla feugiat magna, eu lobortis turpis justo id justo. Nulla rhoncus a risus eu placerat. Quisque feugiat justo vel nulla blandit, vitae bibendum risus tempus.</p>
-                    <p>Praesent rutrum velit a lorem finibus feugiat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus ornare velit id enim eleifend, in malesuada sapien semper. Proin maximus diam sem, quis malesuada metus faucibus vel.</p>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Footer placeholder - would be included from another file -->
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Smooth scroll effect
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-                    
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        targetElement.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-
             // Modal functionality
             const modal = document.getElementById('profileModal');
             const closeModal = document.getElementById('closeModal');
             const modalName = document.getElementById('modalName');
             const modalPosition = document.getElementById('modalPosition');
             const modalImage = document.getElementById('modalImage');
+            const modalContent = document.getElementById('modalContent');
             
-            // Team member data
+            // Team member data with their details
             const teamData = {
-                member1: {
-                    name: 'LOREM IPSUM DOLOR',
-                    position: 'CONSECTETUR ADIPISCING ELIT',
-                    imgSrc: '/api/placeholder/300/370'
+                @foreach($kasubdits as $kasubdit)
+                "{{ $kasubdit->id }}": {
+                    name: "{{ $kasubdit->nama }}",
+                    position: "{{ $kasubdit->jabatan }}",
+                    imgSrc: "{{ asset('storage/' . $kasubdit->gambar) }}",
+                    description: `{!! $kasubdit->deskripsi !!}`
                 },
-                member2: {
-                    name: 'VIVAMUS LACINIA ODIO',
-                    position: 'VITAE VESTIBULUM VESTIBULUM',
-                    imgSrc: '/api/placeholder/300/370'
-                },
-                member3: {
-                    name: 'MAECENAS FRINGILLA CONSECTETUR',
-                    position: 'FUSCE ULTRICES QUAM VEL MAXIMUS',
-                    imgSrc: '/api/placeholder/300/370'
-                },
-                member4: {
-                    name: 'NULLAM RHONCUS LIBERO',
-                    position: 'PULVINAR QUAM MASSA QUIS',
-                    imgSrc: '/api/placeholder/300/370'
-                },
-                member5: {
-                    name: 'CURABITUR DIGNISSIM ELIT',
-                    position: 'FEUGIAT EST TINCIDUNT',
-                    imgSrc: '/api/placeholder/300/370'
-                }
+                @endforeach
             };
 
             // Open modal with specific member data
@@ -444,6 +364,7 @@
                         modalPosition.textContent = member.position;
                         modalImage.src = member.imgSrc;
                         modalImage.alt = member.name;
+                        modalContent.innerHTML = member.description;
                         
                         modal.classList.add('active');
                     }

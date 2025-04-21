@@ -78,6 +78,13 @@
                         <span class="text">Sejarah</span>
                     </a>
                 </li>
+
+                <li class="{{ request()->routeIs('admin.pimpinan.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.pimpinan.index') }}">
+                        <i class='bx bxs-user'></i>
+                        <span class="text">Pimpinan</span>
+                    </a>
+                </li>
             </ul>
         </div>
 
@@ -94,7 +101,7 @@
                 <li class="{{ request()->routeIs('admin.matakuliah.index') ? 'active' : '' }}">
                     <a href="{{ route('admin.matakuliah.index') }}">
                         <i class='bx bxs-book'></i>
-                        <span class="text">MatKul Sustainability</span>
+                        <span class="text">MK Sustainability</span>
                     </a>
                 </li>
                 <li class="{{ request()->routeIs('admin.alumniberdampak.index') ? 'active' : '' }}">
@@ -163,7 +170,7 @@
                 <li class="{{ request()->routeIs('admin.Katsinov.TableKatsinov') ? 'active' : '' }}">
                     <a href="{{ route('admin.Katsinov.TableKatsinov') }}">
                         <i class='bx bxs-graduation'></i>
-                        <span class="text">Tabel Kasitnov</span>
+                        <span class="text">Tabel Katsinov</span>
                     </a>
                 </li>
                 <li class="{{ request()->routeIs('admin.Katsinov.form') ? 'active' : '' }}">

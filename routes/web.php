@@ -11,6 +11,7 @@ use App\Http\Controllers\SustainabilityController;
 use App\Http\Controllers\FormRecordHasilPengukuranController;
 use App\Http\Controllers\ProdukInovasiController;
 use App\Http\Controllers\SejarahContentController;
+use App\Http\Controllers\PimpinanController;
 
 
 use App\Http\Middleware\HandleRespondenForm;
@@ -127,9 +128,8 @@ Route::get('/strukturorganisasi', function () {
     return view('struktur organisasi.strukturorganisasi');
 })->name('strukturorganisasi');
 
-Route::get('/pimpinan', function () {
-    return view('pimpinan.pimpinan');
-})->name('pimpinan.pimpinan');
+Route::get('/pimpinan', [App\Http\Controllers\PimpinanController::class, 'showPublic'])
+    ->name('pimpinan.pimpinan');
 
 // Route::get('/galeri/sustainability', function () {
 //     return view('galeri.sustainability');

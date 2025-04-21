@@ -24,6 +24,7 @@ use App\Http\Controllers\YoutubeController;
 use App\Http\Controllers\InstagramController;
 use App\Http\Controllers\ProdukInovasiController;
 use App\Http\Controllers\SejarahContentController;
+use App\Http\Controllers\PimpinanController;
 use Illuminate\Http\Request;
 // Ganti route yang ada dengan:
 use App\Http\Controllers\DokumenController;
@@ -81,6 +82,15 @@ Route::prefix('admin')->name('admin.')
         Route::resource('/sejarah', SejarahContentController::class);
 
 
+        // Pimpinan routes
+        Route::resource('/pimpinan', PimpinanController::class)
+            ->except(['show', 'edit', 'create']);
+        Route::get('/pimpinan/{id}/detail', [PimpinanController::class, 'getPimpinanDetail'])
+            ->name('pimpinan.detail');
+        Route::post('/pimpinan/upload', [PimpinanController::class, 'upload'])
+            ->name('pimpinan.upload');
+
+
         Route::resource('/responden', AdminRespondenController::class);
         Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
             ->name('responden.update');
@@ -96,7 +106,7 @@ Route::prefix('admin')->name('admin.')
         Route::get('/responden/export/csv', [AdminRespondenController::class, 'exportCSV'])
             ->name('responden.exportCSV');
 
-        
+
         Route::resource('/manageuser', UserController::class);
         Route::put('/manageuser/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('manageuser.toggleStatus');
 
@@ -104,11 +114,11 @@ Route::prefix('admin')->name('admin.')
         Route::get('/sustainability/{id}/detail', [AdminSustainabilityController::class, 'getSustainabilityDetail'])
             ->name('sustainability.detail');
 
-        Route::resource ('/matakuliah', AdminMataKuliahController::class);
+        Route::resource('/matakuliah', AdminMataKuliahController::class);
         Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
         Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
-        
-        Route::resource ('/alumniberdampak', AdminAlumniBerdampakController::class);
+
+        Route::resource('/alumniberdampak', AdminAlumniBerdampakController::class);
         Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
         Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
 
@@ -180,7 +190,7 @@ Route::prefix('admin')->name('admin.')
                 // Route::get('/program_kegiatan', function () {
                 //     return view('admin.SDGs.program_kegiatan');
                 // })->name('program_kegiatan');
-                 Route::resource('/program-kegiatan', ProgramKegiatanController::class)->except(['show']);
+                Route::resource('/program-kegiatan', ProgramKegiatanController::class)->except(['show']);
 
                 // Program Kegiatan
                 // Route::get('/publikasi_riset', function () {

@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
-
+use League\Flysystem\Local\LocalFilesystemAdapter;
+use League\Flysystem\Filesystem;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,12 +20,17 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot() {
+    public function boot() 
+    {
         Storage::extend('local', function ($app, $config) {
+            $adapter = new LocalFilesystemAdapter(
+                $config['root']
+            );
+            
             return new \Illuminate\Filesystem\FilesystemAdapter(
-                new \Illuminate\Filesystem\Filesystem,
-                $config['root'],
-                File::mimeType(...)
+                new Filesystem($adapter, $config),
+                $adapter,
+                $config
             );
         });
     }
