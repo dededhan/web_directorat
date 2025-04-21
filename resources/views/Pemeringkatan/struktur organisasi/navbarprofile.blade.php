@@ -6,15 +6,16 @@
 <nav class="navbar hidden md:block sticky top-0 z-50 bg-[#186862] shadow-md">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
         <div class="flex items-center space-x-4">
-            <img alt="University logo" class="h-12 w-12"
-                src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
+        <a href="{{ route('home') }}">
+    <img alt="University logo" class="h-12 w-12" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png"/>
+        </a>
             <h1 class="text-white text-2xl font-bold">Subdirektorat Pemeringkatan dan Sistem Informasi</h1>
         </div>
         <ul class="flex space-x-6">
             <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400">Beranda</a></li>
 
             <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400">Profil</a>
+                <a href="#" class="text-white hover:text-yellow-400">Tentang</a>
                 <ul
                     class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
                     <li><a href="{{ route('pimpinan.pimpinan') }}" class="hover:text-yellow-400">Pimpinan Direktorat</a></li>
@@ -22,6 +23,7 @@
                             Organisasi</a></li>
                     <li><a href="{{ route('tupoksipemeringkatan') }}" class="hover:text-yellow-400">Tugas Pokok dan
                             Fungsi</a></li>
+                            <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="hover:text-yellow-400">Profil</a></li>
                 </ul>
             </li>
 
