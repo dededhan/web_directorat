@@ -76,12 +76,12 @@
                             <option value="pascasarjana">PASCASARJANA</option>
                             <option value="fip">FIP</option>
                             <option value="fmipa">FMIPA</option>
-                            <option value="fppsi">FPPsi</option>
+                            <option value="fppsi">FPsi</option>
                             <option value="fbs">FBS</option>
                             <option value="ft">FT</option>
-                            <option value="fik">FIK</option>
-                            <option value="fis">FIS</option>
-                            <option value="fe">FE</option>
+                            <option value="fik">FIKK</option>
+                            <option value="fis">FISH</option>
+                            <option value="fe">FEB</option>
                             <option value="profesi">PROFESI</option>
                         </select>
                         <div class="form-text text-muted">Pilih fakultas penyelenggara kegiatan</div>
@@ -241,12 +241,12 @@
                                     <option value="pascasarjana">PASCASARJANA</option>
                                     <option value="fip">FIP</option>
                                     <option value="fmipa">FMIPA</option>
-                                    <option value="fppsi">FPPsi</option>
+                                    <option value="fppsi">FPsi</option>
                                     <option value="fbs">FBS</option>
                                     <option value="ft">FT</option>
-                                    <option value="fik">FIK</option>
-                                    <option value="fis">FIS</option>
-                                    <option value="fe">FE</option>
+                                    <option value="fik">FIKK</option>
+                                    <option value="fis">FISH</option>
+                                    <option value="fe">FEB</option>
                                     <option value="profesi">PROFESI</option>
                                 </select>
                             </div>

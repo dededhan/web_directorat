@@ -1,5 +1,7 @@
 @extends('admin.admin')
 
+<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/responden_dashboard.css') }}">
+
 @section('contentadmin')
     <div class="head-title">
         <div class="left">
@@ -91,14 +93,16 @@
                         <label for="fakultas_narahubung" class="form-label">Fakultas Narahubung</label>
                         <select class="form-select" name="responden_fakultas" id="fakultas_narahubung" required>
                             <option value="">Pilih Fakultas</option>
-                            <option value="fmipa">FMIPA</option>
-                            <option value="fik">FIK</option>
-                            <option value="ft">FT</option>
-                            <option value="fbs">FBS</option>
+                            <option value="pascasarjana">PASCASARJANA</option>
                             <option value="fip">FIP</option>
-                            <option value="fe">FE</option>
-                            <option value="fis">FIS</option>
+                            <option value="fmipa">FMIPA</option>
+                            <option value="fpsi">FPsi</option>
+                            <option value="fbs">FBS</option>
                             <option value="ft">FT</option>
+                            <option value="fik">FIK</option>
+                            <option value="fish">FISH</option>
+                            <option value="feb">FEB</option>
+                            <option value="profesi">PROFESI</option>
                         </select>
                         <div class="form-text text-muted">Pilih fakultas dari dosen pengusul</div>
                     </div>
@@ -126,7 +130,8 @@
                     <div class="d-flex justify-content-end align-items-center">
                         <div class="export-buttons me-3">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importModal">
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                    data-bs-target="#importModal">
                                     <i class='bx bx-import'></i> Import Excel
                                 </button>
                                 <a href="{{ route('admin.responden.export') }}" class="btn btn-success">
@@ -202,96 +207,99 @@
         </div>
     </div>
 
-<!-- Import Excel Modal -->
-<div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="importModalLabel">Import Responden from Excel</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form id="importForm" action="{{ route('admin.responden.import') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="excelFile" class="form-label">Select Excel File</label>
-                        <input class="form-control" type="file" id="excelFile" name="file" accept=".xlsx,.xls" required>
-                        <div class="form-text">File harus sesuai dengan format yang ditentukan</div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="skipDuplicates" name="skip_duplicates" checked>
-                            <label class="form-check-label" for="skipDuplicates">
-                                Skip duplicate entries (based on email and phone)
-                            </label>
+    <!-- Import Excel Modal -->
+    <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importModalLabel">Import Responden from Excel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="importForm" action="{{ route('admin.responden.import') }}" method="POST"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="excelFile" class="form-label">Select Excel File</label>
+                            <input class="form-control" type="file" id="excelFile" name="file"
+                                accept=".xlsx,.xls" required>
+                            <div class="form-text">File harus sesuai dengan format yang ditentukan</div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="skipDuplicates"
+                                    name="skip_duplicates" checked>
+                                <label class="form-check-label" for="skipDuplicates">
+                                    Skip duplicate entries (based on email and phone)
+                                </label>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Import</button>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Import</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
     <script>
         // Import form submission
-    document.getElementById('importForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        
-        axios.post(this.action, formData)
-            .then(response => {
-                $('#importModal').modal('hide');
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: response.data.message || 'Data imported successfully',
-                }).then(() => {
-                    window.location.reload();
+        document.getElementById('importForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            axios.post(this.action, formData)
+                .then(response => {
+                    $('#importModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: response.data.message || 'Data imported successfully',
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Import Failed',
+                        text: error.response?.data?.message || 'Error importing file',
+                    });
                 });
-            })
-            .catch(error => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Import Failed',
-                    text: error.response?.data?.message || 'Error importing file',
-                });
-            });
-    });
-
-    // Filter functionality
-    document.getElementById('emailFilter').addEventListener('keyup', function() {
-        filterRespondents();
-    });
-
-    document.getElementById('phoneFilter').addEventListener('keyup', function() {
-        filterRespondents();
-    });
-
-    document.getElementById('resetFilters').addEventListener('click', function() {
-        document.getElementById('emailFilter').value = '';
-        document.getElementById('phoneFilter').value = '';
-        filterRespondents();
-    });
-
-    function filterRespondents() {
-        const email = document.getElementById('emailFilter').value.toLowerCase();
-        const phone = document.getElementById('phoneFilter').value.toLowerCase();
-        const rows = document.querySelectorAll('#respondent-table tbody tr');
-        
-        rows.forEach(row => {
-            const rowEmail = row.cells[4].textContent.toLowerCase();
-            const rowPhone = row.cells[5].textContent.toLowerCase();
-            
-            const emailMatch = email === '' || rowEmail.includes(email);
-            const phoneMatch = phone === '' || rowPhone.includes(phone);
-            
-            row.style.display = emailMatch && phoneMatch ? '' : 'none';
         });
-    }
+
+        // Filter functionality
+        document.getElementById('emailFilter').addEventListener('keyup', function() {
+            filterRespondents();
+        });
+
+        document.getElementById('phoneFilter').addEventListener('keyup', function() {
+            filterRespondents();
+        });
+
+        document.getElementById('resetFilters').addEventListener('click', function() {
+            document.getElementById('emailFilter').value = '';
+            document.getElementById('phoneFilter').value = '';
+            filterRespondents();
+        });
+
+        function filterRespondents() {
+            const email = document.getElementById('emailFilter').value.toLowerCase();
+            const phone = document.getElementById('phoneFilter').value.toLowerCase();
+            const rows = document.querySelectorAll('#respondent-table tbody tr');
+
+            rows.forEach(row => {
+                const rowEmail = row.cells[4].textContent.toLowerCase();
+                const rowPhone = row.cells[5].textContent.toLowerCase();
+
+                const emailMatch = email === '' || rowEmail.includes(email);
+                const phoneMatch = phone === '' || rowPhone.includes(phone);
+
+                row.style.display = emailMatch && phoneMatch ? '' : 'none';
+            });
+        }
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -384,154 +392,6 @@
     </script>
 
     <style>
-        .table-data {
-            margin-top: 24px;
-        }
-
-        .order {
-            background: #fff;
-            padding: 24px;
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-            border-color: #3498db;
-            box-shadow: none;
-        }
-
-        .btn-primary {
-            background-color: #3498db;
-            border-color: #3498db;
-        }
-
-        .btn-primary:hover {
-            background-color: #2980b9;
-            border-color: #2980b9;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        .badge {
-            font-size: 0.7em;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 5px;
-        }
-
-        .status-dropdown {
-            width: 140%;
-            margin-left: -10px;
-            /* Menggeser ke kiri */
-        }
-
-        .search-box {
-            margin-bottom: 20px;
-        }
-
-        .search-box input {
-            width: 300px;
-            padding: 8px;
-            border-radius: 5px;
-        }
-
-        /* Table improvements */
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1rem;
-        }
-
-        .table th {
-            background-color: #f8f9fa;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-
-        .table th,
-        .table td {
-            padding: 12px;
-            vertical-align: middle;
-        }
-
-        .table tbody tr:hover {
-            background-color: #f5f5f5;
-            transition: background-color 0.2s ease;
-        }
-
-        /* Responsive improvements */
-        @media (max-width: 768px) {
-            .search-box input {
-                width: 100%;
-            }
-
-            .table-responsive {
-                max-height: 70vh;
-            }
-        }
-
-        /* Loading state */
-        .table-loading {
-            position: relative;
-            min-height: 200px;
-        }
-
-        .table-loading::after {
-            content: "Loading...";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        /* Empty state */
-        .table-empty {
-            text-align: center;
-            padding: 40px;
-            color: #6c757d;
-        }
-
-        .btn-success {
-            background-color: #2ecc71;
-            border-color: #2ecc71;
-        }
-
-        .btn-success:hover {
-            background-color: #27ae60;
-            border-color: #27ae60;
-        }
-
-        .btn-info {
-            background-color: #3498db;
-            border-color: #3498db;
-            color: white;
-        }
-
-        .btn-info:hover {
-            background-color: #2980b9;
-            border-color: #2980b9;
-            color: white;
-        }
-
-        .export-buttons {
-            margin-bottom: 20px;
-        }
-
-        /* Add responsive styles for export buttons */
-        @media (max-width: 768px) {
-            .export-buttons {
-                margin-bottom: 10px;
-            }
-
-            .btn-group {
-                flex-direction: column;
-            }
-        }
+        
     </style>
 @endsection

@@ -34,7 +34,7 @@ const prodisByFaculty = {
         'S1 Pendidikan Kimia', 
         'S2 Pendidikan Fisika'
     ],
-    'fppsi': [
+    'fpsi': [
         'S1 Psikologi', 
         'S2 Psikologi'
     ],
@@ -86,7 +86,7 @@ const prodisByFaculty = {
         'S1 Olahraga Rekreasi', 
         'S2 Ilmu Keolahragaan'
     ],
-    'fis': [
+    'fish': [
         'D4 Usaha Perjalanan Wisata', 
         'S1 Sosiologi', 
         'S1 Pendidikan Agama Islam', 
@@ -102,7 +102,7 @@ const prodisByFaculty = {
         'S2 Pendidikan Geografi', 
         'S2 Pendidikan Pancasila Dan Kewarganegaraan'
     ],
-    'fe': [
+    'feb': [
         'D4 Akuntansi Sektor Publik', 
         'D4 Administrasi Perkantoran Digital', 
         'D4 Pemasaran Digital', 
