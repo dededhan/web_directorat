@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\QuesionerGeneralController;
 use App\Http\Controllers\AdminAlumniBerdampakController;
 use App\Http\Controllers\RespondenAnswerController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\SustainabilityController;
 use App\Http\Controllers\FormRecordHasilPengukuranController;
 use App\Http\Controllers\ProdukInovasiController;
 use App\Http\Controllers\SejarahContentController;
+
 
 use App\Http\Middleware\HandleRespondenForm;
 use Illuminate\Support\Facades\Route;
@@ -30,12 +32,12 @@ Route::get('/instagram/{id}/preview', [InstagramController::class, 'preview'])
     ->name('instagram.preview');
 
 Route::get('/api/instagram-api-posts', [App\Http\Controllers\InstagramApiController::class, 'getPosts'])
-    ->name('api.instagram-api-posts'); 
+    ->name('api.instagram-api-posts');
 Route::get('/api/youtube-videos', [App\Http\Controllers\YoutubeController::class, 'getFrontendVideos'])
     ->name('api.youtube-videos');
-    
+
 Route::get('/api/instagram-posts', [App\Http\Controllers\InstagramController::class, 'getFrontendPosts'])
-    ->name('api.instagram-posts');        
+    ->name('api.instagram-posts');
 // Route::get('/', function () {
 //     return view('home');
 // })->name('home');
@@ -51,7 +53,7 @@ Route::get('login/google', [App\Http\Controllers\Auth\GoogleController::class, '
 Route::get('auth-google-callback', [App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback']);
 
 
-Route::prefix('qsranking')->group(function(){
+Route::prefix('qsranking')->group(function () {
     Route::get('/qs-general', [QuesionerGeneralController::class, 'create'])->name('qs_general.index');
     Route::post('/qs-general', [QuesionerGeneralController::class, 'store'])->name('qs_general.store');
 
@@ -110,9 +112,7 @@ Route::get('/document', function () {
 
 Route::get('inovasi/risetunj', function () {
     return view('Inovasi.riset_unj.risetunj');
-})->name('riset.unj');
-
-;
+})->name('riset.unj');;
 
 Route::get('subdirektorat-inovasi/risetunj', function () {
     return view('subdirektorat-inovasi.riset_unj.risetunj');
@@ -137,7 +137,7 @@ Route::get('/pimpinan', function () {
 
 Route::post('/admin/sustainability', [SustainabilityController::class, 'store'])
     ->name('admin.sustainability.store');
-    
+
 Route::get('/galeri/sustainability', [App\Http\Controllers\AdminSustainabilityController::class, 'showPublic'])->name('galeri.sustainability');
 
 Route::get('/katsinov/forminformasidasar', function () {
@@ -155,8 +155,8 @@ Route::get('/sdgscenter', function () {
     return view('inovasi.katsinov.sdgscenter.sdgscenter');
 })->name('sdgscenter');
 
-Route::get('/berita/sampleberita', function () { 
-    return view('Berita.sampleberita'); 
+Route::get('/berita/sampleberita', function () {
+    return view('Berita.sampleberita');
 })->name('berita.sample');
 
 Route::get('/katsinov/formberitaacara', function () {
@@ -184,7 +184,7 @@ Route::get('/strukturorganisasipemeringkatan', function () {
 Route::get('/admin/Katsinov/formrecordhasilpengukuran', [FormRecordHasilPengukuranController::class, 'index'])
     ->name('admin.Katsinov.formrecordhasilpengukuran.index');
 
-Route::get('/katsinov-data', function() {
+Route::get('/katsinov-data', function () {
     return App\Models\Katsinov::with('scores')->get();
 });
 
@@ -196,9 +196,8 @@ Route::post('/katsinov/store', [KatsinovController::class, 'store'])
     ->name('katsinov.store')
     ->middleware('checked');
 
-Route::get('/subdirektorat-inovasi/landingpage', function () {
-    return view('subdirektorat-inovasi.LandingPageHilirisasi');
-})->name('subdirektorat-inovasi.landingpage');
+Route::get('/subdirektorat-inovasi/landingpage', [BeritaController::class, 'landingPageInovasi'])
+    ->name('subdirektorat-inovasi.landingpage');
 
 Route::get('/katsinov/pdf', [KatsinovController::class, 'downloadPDF'])->name('katsinov.pdf');
 

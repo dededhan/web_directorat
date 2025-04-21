@@ -27,7 +27,7 @@ class BeritaController extends Controller
         } else if (auth()->user()->role === 'admin_pemeringkatan') {
             return 'admin_pemeringkatan';
         }
-        
+
         return 'admin';
     }
 
@@ -38,7 +38,7 @@ class BeritaController extends Controller
     {
         $beritas = Berita::latest()->get();
         $routePrefix = $this->getRoutePrefix();
-        
+
         if (auth()->user()->role === 'admin_direktorat') {
             return view('admin.newsadmin', compact('beritas', 'routePrefix'));
         } else if (auth()->user()->role === 'admin_hilirisasi') {
@@ -64,7 +64,7 @@ class BeritaController extends Controller
                     $namaFile,
                     'public'
                 );
-                
+
                 // Create the berita record with the image path
                 $berita = Berita::create([
                     'kategori' => $request->kategori,
@@ -73,7 +73,7 @@ class BeritaController extends Controller
                     'isi' => $request->isi_berita,
                     'gambar' => $gambarPath
                 ]);
-                
+
                 if ($request->hasFile('additional_images')) {
                     foreach ($request->file('additional_images') as $image) {
                         $namaAdditionalFile = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
@@ -82,7 +82,7 @@ class BeritaController extends Controller
                             $namaAdditionalFile,
                             'public'
                         );
-                        
+
                         BeritaImage::create([
                             'berita_id' => $berita->id,
                             'path' => $additionalPath
@@ -160,6 +160,32 @@ class BeritaController extends Controller
         return view('Pemeringkatan.LandingPagePemeringkatan', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
     }
 
+    //function display news inovasi
+    public function landingPageInovasi()
+    {
+        // Regular
+        $regularNews = Berita::latest()->take(3)->get();
+
+        // Features
+        $featuredNews = Berita::latest()->take(5)->get();
+
+        // Scroll
+        $announcements = Pengumuman::where('status', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Get active program layanan
+        $programLayanan = ProgramLayanan::where('status', 1)
+            ->orderBy('id', 'desc')
+            ->take(4)
+            ->get();
+
+        // Get Instagram posts for the homepage
+        $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();
+
+        return view('subdirektorat-inovasi.LandingPageHilirisasi', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
+    }
+
     /**
      * Display news by category.
      */
@@ -190,29 +216,29 @@ class BeritaController extends Controller
     {
         // First try to find by slug
         $berita = Berita::where('slug', $slug)->first();
-        
+
         // If not found and looks like an ID, try finding by ID
         if (!$berita && is_numeric($slug)) {
             $berita = Berita::find($slug);
         }
-        
+
         // If still not found, abort
         if (!$berita) {
             abort(404, 'Berita tidak ditemukan');
         }
-        
+
         $relatedNews = Berita::where('id', '!=', $berita->id)
             ->where('kategori', $berita->kategori)
             ->latest()
             ->take(3)
             ->get();
-            
+
         $latestNews = Berita::latest()->take(4)->get();
         $popularNews = Berita::latest()->take(5)->get();
-    
+
         return view('Berita.sampleberita', compact('berita', 'relatedNews', 'latestNews', 'popularNews'));
     }
-   
+
     public function getBeritaDetail($title_or_id)
     {
         if (is_numeric($title_or_id)) {
@@ -236,7 +262,7 @@ class BeritaController extends Controller
             if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
                 Storage::disk('public')->delete($berita->gambar);
             }
-            
+
             // Delete additional images if they exist
             if ($berita->additionalImages) {
                 foreach ($berita->additionalImages as $image) {
@@ -246,10 +272,10 @@ class BeritaController extends Controller
                     $image->delete();
                 }
             }
-         
+
             // Delete the record
             $berita->delete();
-            
+
             $routePrefix = $this->getRoutePrefix();
             return redirect()->route($routePrefix . '.news.index')
                 ->with('success', 'Berita berhasil dihapus!');
@@ -274,7 +300,7 @@ class BeritaController extends Controller
             'url' => asset($url),
         ]);
     }
-    
+
     public function update(Request $request, string $id)
     {
         try {
@@ -316,7 +342,7 @@ class BeritaController extends Controller
             $berita->save();
 
             $routePrefix = $this->getRoutePrefix();
-            
+
             if ($request->ajax()) {
                 return response()->json(['success' => true, 'message' => 'Berita berhasil diperbarui!']);
             }

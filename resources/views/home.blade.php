@@ -390,6 +390,260 @@
         </div>
     </section>
 
+
+    <section class="media-section py-16 bg-gradient-to-b from-white to-gray-50">
+        <div class="container mx-auto px-6">
+            <!-- Instagram Section Header -->
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-teal-700 mb-2">Instagram DITSIP UNJ</h2>
+                <div class="flex items-center justify-center mb-4">
+                    <div class="h-1 w-16 bg-gray-300"></div>
+                    <span class="text-yellow-400 text-2xl mx-3"><i class="fab fa-instagram"></i></span>
+                    <div class="h-1 w-16 bg-gray-300"></div>
+                </div>
+                <p class="text-gray-600 max-w-2xl mx-auto">Ikuti akun Instagram kami untuk mendapatkan informasi
+                    terbaru
+                </p>
+                <a href="https://www.instagram.com/dit.isipunj/" target="_blank"
+                    class="inline-flex items-center text-teal-700 hover:text-yellow-500 mt-2 font-medium">
+                    <span>@dit.isipunj</span>
+                    <i class="fas fa-external-link-alt ml-2"></i>
+                </a>
+            </div>
+
+            <!-- Instagram Feed Grid with Dynamic Loading via JavaScript -->
+            <div id="instagram-api-feed-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Loading placeholders - will be replaced by JavaScript -->
+                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                    <div class="p-6">
+                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                    <div class="p-6">
+                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                    <div class="p-6">
+                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View More Button -->
+            <div class="text-center mt-8">
+                <a href="https://www.instagram.com/dit.isipunj/" target="_blank"
+                    class="inline-flex items-center justify-center px-6 py-3 bg-teal-700 hover:bg-teal-600 text-white font-medium rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1">
+                    <span>Lihat Semua Postingan</span>
+                    <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- YouTube Section with Consistent Card Styling -->
+    <section class="media-section py-16">
+        <!-- Decorative Elements -->
+        <div class="absolute bottom-0 right-0 w-32 h-32 bg-yellow-400 rounded-full -mr-16 -mb-16 opacity-10"></div>
+        <div class="absolute top-40 left-0 w-24 h-24 bg-teal-600 rounded-full -ml-12 opacity-10"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <!-- Section Header with Enhanced Styling -->
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-teal-700 mb-2">Youtube Universitas Negeri Jakarta</h2>
+                <div class="flex items-center justify-center mb-4">
+                    <div class="h-1 w-16 bg-gray-300"></div>
+                    <span class="text-red-500 text-2xl mx-3"><i class="fab fa-youtube"></i></span>
+                    <div class="h-1 w-16 bg-gray-300"></div>
+                </div>
+                <p class="text-gray-600 max-w-2xl mx-auto">Tonton video terbaru dari channel YouTube UNJ</p>
+            </div>
+
+
+            <!-- Dynamic YouTube Videos from Database -->
+            <div>
+                <h3 class="text-xl font-bold text-teal-700 mb-6 text-center">Video Terbaru</h3>
+                <div id="dynamic-videos-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Dynamic content will be loaded here via JavaScript -->
+                    <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                        <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                        <div class="p-6">
+                            <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                            <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                            <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                            <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="h-4 bg-gray-200 rounded w-2/4"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                        <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                        <div class="p-6">
+                            <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                            <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                            <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                            <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="h-4 bg-gray-200 rounded w-2/4"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                        <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                        <div class="p-6">
+                            <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                            <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                            <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                            <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="h-4 bg-gray-200 rounded w-2/4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Featured YouTube Videos - Hardcoded -->
+            <div class="mb-12 mt-12">
+                <h3 class="text-xl font-bold text-teal-700 mb-6 text-center">Video Unggulan</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Video 1 -->
+                    <div
+                        class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                        <div class="relative pb-[56.25%] h-0 overflow-hidden">
+                            <iframe class="absolute top-0 left-0 w-full h-full"
+                                src="https://www.youtube.com/embed/JJ0pP0kzLxQ?rel=0"
+                                title="Profil Universitas Negeri Jakarta Tahun 2020" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                            </iframe>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fab fa-youtube mr-2"></i>
+                                    <span>UNJ Official</span>
+                                </div>
+                            </div>
+                            <h3
+                                class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
+                                Profil Universitas Negeri Jakarta</h3>
+                            <p class="text-gray-600 mb-4">Mengenal lebih dalam tentang UNJ, fasilitas, dan program
+                                unggulan
+                                yang ditawarkan.</p>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <a href="https://www.youtube.com/watch?v=JJ0pP0kzLxQ" target="_blank"
+                                    class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
+                                    <span>Tonton di YouTube</span>
+                                    <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 2 -->
+                    <div
+                        class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                        <div class="relative pb-[56.25%] h-0 overflow-hidden">
+                            <iframe class="absolute top-0 left-0 w-full h-full"
+                                src="https://www.youtube.com/embed/XtmrlOGaAcE?rel=0"
+                                title="Muda dan Berkarya : Inspirasi Wirausahawan Alumni UNJ" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                            </iframe>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fab fa-youtube mr-2"></i>
+                                    <span>UNJ Official</span>
+                                </div>
+                            </div>
+                            <h3
+                                class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
+                                Muda dan Berkarya</h3>
+                            <p class="text-gray-600 mb-4">Inspirasi dari wirausahawan alumni UNJ yang sukses membangun
+                                karir.</p>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <a href="https://www.youtube.com/watch?v=XtmrlOGaAcE" target="_blank"
+                                    class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
+                                    <span>Tonton di YouTube</span>
+                                    <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 3 -->
+                    <div
+                        class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                        <div class="relative pb-[56.25%] h-0 overflow-hidden">
+                            <iframe class="absolute top-0 left-0 w-full h-full"
+                                src="https://www.youtube.com/embed/LeF0xnWIPYU?rel=0"
+                                title="Mengenal Lebih Jauh UNJ! with Wakil Rektor III UNJ" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                            </iframe>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fab fa-youtube mr-2"></i>
+                                    <span>UNJ Official</span>
+                                </div>
+                            </div>
+                            <h3
+                                class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
+                                Mengenal Lebih Jauh UNJ</h3>
+                            <p class="text-gray-600 mb-4">Wawancara eksklusif bersama Wakil Rektor III Universitas
+                                Negeri
+                                Jakarta.</p>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <a href="https://www.youtube.com/watch?v=LeF0xnWIPYU" target="_blank"
+                                    class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
+                                    <span>Tonton di YouTube</span>
+                                    <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View More Button -->
+            <div class="text-center mt-8">
+                <a href="https://www.youtube.com/channel/UCjQ4lIzs8Zm3zVD3wiL-KMw" target="_blank"
+                    class="inline-flex items-center justify-center px-6 py-3 bg-teal-700 hover:bg-teal-600 text-white font-medium rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1">
+                    <span>Lihat Semua Video</span>
+                    <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+
     <!-- Program Details Popup Modal -->
     <div id="programDetailsModal"
         class="fixed inset-0 bg-black bg-opacity-50 z-[1100] hidden items-center justify-center p-4 overflow-y-auto">
@@ -415,334 +669,11 @@
         </div>
     </div>
 
-    <!-- UNJ dalam Angka Section -->
-    {{-- <section class="unj-dalam-angka">
-        <div class="container">
-            <h1>UNJ dalam <span>Angka</span></h1>
-            <div class="grid-container">
-                <div class="grid-item">
-                    <i class="fas fa-users"></i>
-                    <p class="number">30,673</p>
-                    <p class="label">Mahasiswa</p>
-                </div>
-                <div class="grid-item">
-                    <i class="fas fa-globe"></i>
-                    <p class="number">125</p>
-                    <p class="label">Mahasiswa Internasional</p>
-                </div>
-                <div class="grid-item">
-                    <i class="fas fa-lightbulb"></i>
-                    <p class="number">130</p>
-                    <p class="label">Guru Besar</p>
-                </div>
-                <div class="grid-item">
-                    <i class="fas fa-user-tie"></i>
-                    <p class="number">1,132</p>
-                    <p class="label">Dosen</p>
-                </div>
-                <div class="grid-item">
-                    <i class="fas fa-user-tie"></i>
-                    <p class="number">4</p>
-                    <p class="label">Dosen Internasional</p>
-                </div>
-                <div class="grid-item">
-                    <i class="fas fa-user"></i>
-                    <p class="number">774</p>
-                    <p class="label">Tendik</p>
-                </div>
-                <div class="grid-item">
-                    <i class="fas fa-university"></i>
-                    <p class="number">8</p>
-                    <p class="label">Fakultas</p>
-            </div>
-            <div class="grid-item">
-                <i class="fas fa-school"></i>
-                <p class="number">1</p>
-                <p class="label">Sekolah</p>
-            </div>
-            <div class="grid-item">
-                <i class="fas fa-th"></i>
-                <p class="number">116</p>
-                <p class="label">Program Studi</p>
-            </div>
-            <div class="grid-item">
-                <i class="fas fa-graduation-cap"></i>
-                <p class="number">3,681</p>
-                <p class="label">terindeks Scopus</p>
-            </div>
-            <div class="grid-item">
-                <i class="fas fa-file-alt"></i>
-                <p class="number">2,459</p>
-                <p class="label">HKI</p>
-            </div>
-            <div class="grid-item">
-                <i class="fas fa-certificate"></i>
-                <p class="number">123</p>
-                <p class="label">Hak Paten</p>
-            </div>
-        </div>
-        <div class="badges">
-            <div class="badge">116 Prodi Terakreditasi Nasional</div>
-            <div class="badge">60 Prodi Terakreditasi Internasional</div>
-        </div>
-    </div> --}}
-    </section>
-    <script src="{{ asset('home.js') }}"></script>
 </body>
-<!-- Instagram Section with Updated Card Styling -->
-<section class="media-section py-16 bg-gradient-to-b from-white to-gray-50">
-    <div class="container mx-auto px-6">
-        <!-- Instagram Section Header -->
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-teal-700 mb-2">Instagram DITSIP UNJ</h2>
-            <div class="flex items-center justify-center mb-4">
-                <div class="h-1 w-16 bg-gray-300"></div>
-                <span class="text-yellow-400 text-2xl mx-3"><i class="fab fa-instagram"></i></span>
-                <div class="h-1 w-16 bg-gray-300"></div>
-            </div>
-            <p class="text-gray-600 max-w-2xl mx-auto">Ikuti akun Instagram kami untuk mendapatkan informasi terbaru
-            </p>
-            <a href="https://www.instagram.com/dit.isipunj/" target="_blank"
-                class="inline-flex items-center text-teal-700 hover:text-yellow-500 mt-2 font-medium">
-                <span>@dit.isipunj</span>
-                <i class="fas fa-external-link-alt ml-2"></i>
-            </a>
-        </div>
 
-        <!-- Instagram Feed Grid with Dynamic Loading via JavaScript -->
-        <div id="instagram-api-feed-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Loading placeholders - will be replaced by JavaScript -->
-            <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
-                <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
-                <div class="p-6">
-                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                    <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
-                    <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                    <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <div class="h-4 bg-gray-200 rounded w-2/4"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
-                <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
-                <div class="p-6">
-                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                    <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
-                    <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                    <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <div class="h-4 bg-gray-200 rounded w-2/4"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
-                <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
-                <div class="p-6">
-                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                    <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
-                    <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                    <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <div class="h-4 bg-gray-200 rounded w-2/4"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- View More Button -->
-        <div class="text-center mt-8">
-            <a href="https://www.instagram.com/dit.isipunj/" target="_blank"
-                class="inline-flex items-center justify-center px-6 py-3 bg-teal-700 hover:bg-teal-600 text-white font-medium rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1">
-                <span>Lihat Semua Postingan</span>
-                <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- YouTube Section with Consistent Card Styling -->
-<!-- YouTube Section with Consistent Card Styling -->
-<section class="media-section py-16">
-    <!-- Decorative Elements -->
-    <div class="absolute bottom-0 right-0 w-32 h-32 bg-yellow-400 rounded-full -mr-16 -mb-16 opacity-10"></div>
-    <div class="absolute top-40 left-0 w-24 h-24 bg-teal-600 rounded-full -ml-12 opacity-10"></div>
-
-    <div class="container mx-auto px-6 relative z-10">
-        <!-- Section Header with Enhanced Styling -->
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-teal-700 mb-2">Youtube Universitas Negeri Jakarta</h2>
-            <div class="flex items-center justify-center mb-4">
-                <div class="h-1 w-16 bg-gray-300"></div>
-                <span class="text-red-500 text-2xl mx-3"><i class="fab fa-youtube"></i></span>
-                <div class="h-1 w-16 bg-gray-300"></div>
-            </div>
-            <p class="text-gray-600 max-w-2xl mx-auto">Tonton video terbaru dari channel YouTube UNJ</p>
-        </div>
-
-
-        <!-- Dynamic YouTube Videos from Database -->
-        <div>
-            <h3 class="text-xl font-bold text-teal-700 mb-6 text-center">Video Terbaru</h3>
-            <div id="dynamic-videos-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Dynamic content will be loaded here via JavaScript -->
-                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
-                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
-                    <div class="p-6">
-                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
-                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
-                    <div class="p-6">
-                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
-                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
-                    <div class="p-6">
-                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Featured YouTube Videos - Hardcoded -->
-        <div class="mb-12 mt-12">
-            <h3 class="text-xl font-bold text-teal-700 mb-6 text-center">Video Unggulan</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Video 1 -->
-                <div
-                    class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                    <div class="relative pb-[56.25%] h-0 overflow-hidden">
-                        <iframe class="absolute top-0 left-0 w-full h-full"
-                            src="https://www.youtube.com/embed/JJ0pP0kzLxQ?rel=0"
-                            title="Profil Universitas Negeri Jakarta Tahun 2020" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                        </iframe>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center mb-3">
-                            <div class="flex items-center text-gray-500 text-sm">
-                                <i class="fab fa-youtube mr-2"></i>
-                                <span>UNJ Official</span>
-                            </div>
-                        </div>
-                        <h3
-                            class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
-                            Profil Universitas Negeri Jakarta</h3>
-                        <p class="text-gray-600 mb-4">Mengenal lebih dalam tentang UNJ, fasilitas, dan program unggulan
-                            yang ditawarkan.</p>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <a href="https://www.youtube.com/watch?v=JJ0pP0kzLxQ" target="_blank"
-                                class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                                <span>Tonton di YouTube</span>
-                                <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Video 2 -->
-                <div
-                    class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                    <div class="relative pb-[56.25%] h-0 overflow-hidden">
-                        <iframe class="absolute top-0 left-0 w-full h-full"
-                            src="https://www.youtube.com/embed/XtmrlOGaAcE?rel=0"
-                            title="Muda dan Berkarya : Inspirasi Wirausahawan Alumni UNJ" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                        </iframe>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center mb-3">
-                            <div class="flex items-center text-gray-500 text-sm">
-                                <i class="fab fa-youtube mr-2"></i>
-                                <span>UNJ Official</span>
-                            </div>
-                        </div>
-                        <h3
-                            class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
-                            Muda dan Berkarya</h3>
-                        <p class="text-gray-600 mb-4">Inspirasi dari wirausahawan alumni UNJ yang sukses membangun
-                            karir.</p>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <a href="https://www.youtube.com/watch?v=XtmrlOGaAcE" target="_blank"
-                                class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                                <span>Tonton di YouTube</span>
-                                <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Video 3 -->
-                <div
-                    class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                    <div class="relative pb-[56.25%] h-0 overflow-hidden">
-                        <iframe class="absolute top-0 left-0 w-full h-full"
-                            src="https://www.youtube.com/embed/LeF0xnWIPYU?rel=0"
-                            title="Mengenal Lebih Jauh UNJ! with Wakil Rektor III UNJ" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                        </iframe>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center mb-3">
-                            <div class="flex items-center text-gray-500 text-sm">
-                                <i class="fab fa-youtube mr-2"></i>
-                                <span>UNJ Official</span>
-                            </div>
-                        </div>
-                        <h3
-                            class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
-                            Mengenal Lebih Jauh UNJ</h3>
-                        <p class="text-gray-600 mb-4">Wawancara eksklusif bersama Wakil Rektor III Universitas Negeri
-                            Jakarta.</p>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <a href="https://www.youtube.com/watch?v=LeF0xnWIPYU" target="_blank"
-                                class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                                <span>Tonton di YouTube</span>
-                                <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-        <!-- View More Button -->
-        <div class="text-center mt-8">
-            <a href="https://www.youtube.com/channel/UCjQ4lIzs8Zm3zVD3wiL-KMw" target="_blank"
-                class="inline-flex items-center justify-center px-6 py-3 bg-teal-700 hover:bg-teal-600 text-white font-medium rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1">
-                <span>Lihat Semua Video</span>
-                <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-            </a>
-        </div>
-    </div>
-</section>
 
 <script src="{{ asset('js/instagram-api-feed.js') }}"></script>
+<script src="{{ asset('home.js') }}"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
