@@ -59,7 +59,7 @@
 </head>
 
 <body>
-    @includeIf('subdirektorat-inovasi.katsinov.sdgscenter.navbarsdg')
+@include('layout.navbar_hilirisasi')
     <section id="home" class="hero" id="heroSection">
         <div class="hero-content">
             <h2>Sustainable Development Goals Center</h2>
@@ -575,7 +575,8 @@
             </div>
         </div>
     </section>
-    @includeIf('subdirektorat-inovasi.katsinov.sdgscenter.footersdg')
+    @include('layout.footer')
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

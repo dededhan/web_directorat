@@ -96,7 +96,8 @@
     </style>
 </head>
 <body>
-@include('layout.navbar_sticky')
+@include('layout.navbar_hilirisasi')
+
 
 <div class="main-content">
     <div class="sidebar">
