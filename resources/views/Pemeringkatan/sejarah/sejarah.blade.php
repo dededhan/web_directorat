@@ -56,7 +56,7 @@
         
         .sidebar-item.active {
             background-color: #ebebeb;
-            border-left: 5px solid #176369;
+            border-left: 5px solid #277177;
         }
         
         .content {
@@ -96,7 +96,7 @@
     </style>
 </head>
 <body>
-@include('Pemeringkatan.sejarah.navbarpemeringkatan')
+@include('layout.navbar_pemeringkatan')
 
 <div class="main-content">
     <div class="sidebar">
@@ -179,6 +179,6 @@
     </script>
 <!-- Adding margin before footer -->
 <div style="margin-top: 50px"></div>
-@include('Pemeringkatan.sejarah.footerpemeringkatan')
+@include('layout.footer')
 </body>
 </html>

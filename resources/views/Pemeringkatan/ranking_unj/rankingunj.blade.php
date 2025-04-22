@@ -174,7 +174,6 @@
         }
     </style>
 </head>
-{{-- @include('Pemeringkatan.ranking_unj.navbarpemeringkatan') --}}
 @include('layout.navbar_pemeringkatan')
 <body>
     <div class="hero-section">
@@ -231,14 +230,7 @@
                 </div>
                 <p>Pemeringkatan Klaster Pendidikan Tinggi</p> 
             </a>
-            
-            <a href="{{ route('Pemeringkatan.ranking_unj.AD Scientific Index.AD Scientific Index') }}" class="ranking-card">
-                <div class="logo-container">
-                    <img src="/images/logos/AD scientific index.jpeg" alt="AD Scientific Index Logo">
-                </div>
-                <p>AD Scientific Index</p>
-            </a>
-
+        
             <a href="{{ route('Pemeringkatan.ranking_unj.scimago.scimago') }}" class="ranking-card">
                 <div class="logo-container">
                     <img src="/images/logos/scimago.png" alt="scimago">
@@ -255,5 +247,5 @@
         </div>
     </div>
 </body>
-@include('Pemeringkatan.ranking_unj.footerpemeringkatan')
+@include('layout.footer')
 </html>

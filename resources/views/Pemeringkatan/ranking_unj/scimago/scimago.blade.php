@@ -14,6 +14,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <link rel="stylesheet" href="{{ asset('home.css') }}">
     <style>
+        html, body {
+            height: 100%;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -21,12 +27,14 @@
             margin: 0;
             padding: 0;
             background-color: #f9f9f9;
+            overflow: auto !important;
         }
         
         .container {
             max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
+            padding-top: 70px; /* Space for fixed navbar */
         }
         
         h1 {
@@ -47,26 +55,29 @@
             text-align: justify;
         }
         
-        ul {
+        /* Modified: Added custom-list class to prevent global styling */
+        ul.custom-list {
             list-style-type: none;
             padding-left: 20px;
         }
         
-        li {
+        /* Scoped the bullet styling to custom lists only */
+        ul.custom-list li {
             margin-bottom: 15px;
             position: relative;
         }
         
-        li:before {
+        ul.custom-list li:before {
             content: "•";
             position: absolute;
             left: -15px;
             color: #3498db;
         }
-        nav a + a::before {
-        content: none; /* Remove the dot/separator */
-         margin: 0; /* Remove any spacing */
-            }
+        
+        /* Removed default styling from navbar list items */
+        .navbar ul li:before {
+            content: none;
+        }
         
         .indicator {
             margin-bottom: 10px;
@@ -84,6 +95,7 @@
         
         .indicators-list {
             counter-reset: indicator;
+            overflow: visible;
         }
         
         a {
@@ -95,7 +107,7 @@
             text-decoration: underline;
         }
     </style>
-    @include('Pemeringkatan.ranking_unj.Webometrics World University Ranking.navbarpemeringkatan')
+    @include('layout.navbar_pemeringkatan')
 </head>
 <body>
     <div class="container">
@@ -120,7 +132,8 @@
         
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula:</p>
         
-        <ul>
+        <!-- Changed to custom-list class to scope the bullet styling -->
+        <ul class="custom-list">
             <li><strong>Peningkatan SDM:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.</li>
             <li><strong>Kinerja Penelitian:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.</li>
             <li><strong>Kontribusi Pengabdian Masyarakat:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
@@ -129,7 +142,8 @@
         
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula:</p>
         
-        <ul>
+        <!-- Changed to custom-list class to scope the bullet styling -->
+        <ul class="custom-list">
             <li><strong>Tahun 2019:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. <a href="#">Lihat Link</a></li>
             <li><strong>Tahun 2020:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. <a href="#">lihatdetail.lorem.id</a></li>
             <li><strong>Tahun 2024:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. <a href="#">LIHAT VI</a></li>
@@ -137,5 +151,5 @@
         </ul>
     </div>
 </body>
-@include('Pemeringkatan.ranking_unj.Webometrics World University Ranking.footerpemeringkatan')
+@include('layout.footer')
 </html>
