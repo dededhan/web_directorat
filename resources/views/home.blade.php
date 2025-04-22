@@ -675,13 +675,9 @@
 <script src="{{ asset('js/instagram-api-feed.js') }}"></script>
 <script src="{{ asset('home.js') }}"></script>
 
-<script>
-    window.carouselImages = [
-        "{{ asset('images/logos/image_corousel.jpg') }}"
-    ];
-<script>
 
-</script>
+
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         // Fetch YouTube videos from the API
         fetch('/api/youtube-videos')
@@ -830,6 +826,11 @@
 
     });
     
+</script>
+<script>
+    window.carouselImages = [
+        "{{ asset('images/logos/image_corousel.jpg') }}"
+    ];
 </script>
 
 </html>
