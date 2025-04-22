@@ -6,6 +6,7 @@
     <title>Dokumen</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <style>
         body, h1, h2, h3, h4, h5, h6, p, button, input, div {
             font-family: Arial, sans-serif !important;
@@ -19,21 +20,11 @@
     <link rel="stylesheet" href="{{ asset('home.css') }}">      
 </head>
 <body>
-     <!-- Main Navbar -->
-     <div class="navbar-wrapper">
-     @include('document.navbardocument')
+     @include('layout.navbar_sticky')
 
-            
             <button class="navbar-toggle" id="navbarToggle">
                 <i class="fas fa-bars"></i>
             </button>
-            
-            
-            
-            <!-- Navbar right section removed -->
-        </div>
-    </div>
-
    <!-- Search Overlay -->
    <div class="search-overlay" id="searchOverlay">
         <button class="close-search" id="closeSearch">&times;</button>
@@ -74,7 +65,7 @@
     </div>
 
     <div class="footer-wrapper">
-        @include('document.documentfooter')
+    @include('layout.footer')
     </div>
 
     <script src="{{ asset('document.js') }}"></script>
