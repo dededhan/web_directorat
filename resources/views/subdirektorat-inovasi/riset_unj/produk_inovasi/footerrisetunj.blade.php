@@ -9,23 +9,13 @@
                     alt="UNJ Logo" class="h-full w-full object-contain" />
             </div>
             
-
                 <!-- Social Media Icons -->
                 <div class="flex space-x-5">
-                    <a href="#" class="hover:text-yellow-400 transition-colors text-xl">
+                    <a href="https://www.facebook.com/people/Direktorat-Isip-Unj/pfbid05sxgwir3WJi1yZirTaAdvbs3nQ2jypLKp349jsk6BmzxJqZaKvyYHPGUiVQr1Zu8l/" class="hover:text-yellow-500">
                         <i class="fab fa-facebook-f"></i>
                     </a>
-                    <a href="#" class="hover:text-yellow-400 transition-colors text-xl">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="#" class="hover:text-yellow-400 transition-colors text-xl">
+                    <a href="https://www.instagram.com/dit.isipunj/" target="_blank" class="hover:text-yellow-400 transition-colors text-xl">
                         <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="#" class="hover:text-yellow-400 transition-colors text-xl">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                    <a href="#" class="hover:text-yellow-400 transition-colors text-xl">
-                        <i class="fab fa-linkedin-in"></i>
                     </a>
                 </div>
             </div>
@@ -37,26 +27,15 @@
                 <div class="space-y-4 text-sm">
                     <div class="flex items-start group">
                         <i class="fas fa-map-marker-alt mt-1 mr-3 group-hover:text-yellow-400 transition-colors"></i>
-                        <p>Gedung M.Syafe'i Universitas Negeri Jakarta<br>
-                            Jl. Rawamangun Muka, RT.11/RW.14, Rawamangun<br>
-                            Jakarta Timur 13220</p>
-                    </div>
-
-                    <div class="flex items-center group">
-                        <i class="fas fa-phone mr-3 group-hover:text-yellow-400 transition-colors"></i>
-                        <a href="tel:+123123123" class="hover:text-yellow-400 transition-colors">+123123123</a>
+                        <p>Gedung M. Syafe'i Lantai 6<br>
+                            Jl. Rawamangun Muka, RT.11/RW14, Rawamangun<br>
+                            Pulo Gadung, Jakarta Timur, Daerah Khusus Jakarta, 13320</p>
                     </div>
 
                     <div class="flex items-center group">
                         <i class="fas fa-envelope mr-3 group-hover:text-yellow-400 transition-colors"></i>
-                        <a href="mailto:info@unj.ac.id"
-                            class="hover:text-yellow-400 transition-colors">info@unj.ac.id</a>
-                    </div>
-
-                    <div class="flex items-center group">
-                        <i class="fab fa-whatsapp mr-3 group-hover:text-yellow-400 transition-colors"></i>
-                        <a href="https://wa.me/6281234567890" class="hover:text-yellow-400 transition-colors">+62 812
-                            3456 7890</a>
+                        <a href="mailto:dir.inovasi@unj.ac.id"
+                        class="hover:text-yellow-400 transition-colors">dir.inovasi@unj.ac.id</a>
                     </div>
                 </div>
             </div>
@@ -104,8 +83,6 @@
 
         // Initialize footer functionality
         UNJFooter.init = function() {
-            console.log('UNJ Modern Footer initialized');
-
             // Add hover effect for contact items
             const contactItems = document.querySelectorAll('.group');
             contactItems.forEach(item => {

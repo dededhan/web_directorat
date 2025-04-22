@@ -1,27 +1,26 @@
-<!-- Navbar.blade.php - Sticky navbar for Pemeringkatan Klaster pages -->
 
 @include('loginpopup')
 
-<!-- Desktop Navbar - Sticky -->
-<nav class="navbar hidden md:block sticky top-0 z-50 bg-[#186862] shadow-md">
-    <div class="container mx-auto flex justify-between items-center py-2 px-4">
+<!-- Original Desktop Navbar (Updated with new structure) -->
+<nav class="navbar hidden md:block">
+    <div class="container mx-auto flex justify-between items-center py-4 px-6">
         <div class="flex items-center space-x-4">
         <a href="{{ route('home') }}">
     <img alt="University logo" class="h-12 w-12" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png"/>
         </a>
-            <h1 class="text-white text-xl font-bold">Subdirektorat Inovasi dan Hilirisasi</h1>
+            <h1 class="text-white text-2xl font-bold">Subdirektorat Inovasi dan Hilirisasi</h1>
         </div>
-        <ul class="flex space-x-4">
-            <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400 text-sm">Beranda</a></li>
+        <ul class="flex space-x-6">
+            <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400">Beranda</a></li>
             
             <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400 text-sm">Tentang</a>
+                <a href="#" class="text-white hover:text-yellow-400">Tentang</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                <li><a href="{{ route('pimpinan.pimpinan') }}" class="hover:text-yellow-400">Pimpinan Direktorat</a></li>
-                    <li><a href="{{ route('strukturorganisasi') }}" class="hover:text-yellow-400">Struktur Organisasi</a></li>
-                    <li><a href="{{ route('tupoksi.tupoksi') }}" class="hover:text-yellow-400">Tugas Pokok dan Fungsi</a></li>
-                    <li><a href="{{ route('subdirektorat-inovasi.sejarah.sejarah') }}" class="hover:text-yellow-400">Profil</a></li>
-                </ul>
+                     <li><a href="{{ route('pimpinan.pimpinan') }}" class="hover:text-yellow-400">Pimpinan Direktorat</a></li>
+                     <li><a href="{{ route('strukturorganisasi') }}" class="hover:text-yellow-400">Struktur Organisasi</a></li>
+                     <li><a href="{{ route('tupoksi.tupoksi') }}" class="hover:text-yellow-400">Tugas Pokok dan Fungsi</a></li>
+                     <li><a href="{{ route('subdirektorat-inovasi.sejarah.sejarah') }}" class="hover:text-yellow-400">Profil</a></li>
+                 </ul>
             </li>
             
             <li class="relative group">
@@ -37,8 +36,8 @@
             <li class="relative group">
                 <a href="#" class="text-white hover:text-yellow-400">Layanan</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="#" class="hover:text-yellow-400">Pengujian Kasinov</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">Pendaftaran Inkubisnis</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">Pengujian Katsinov</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">Pendaftaran Inkubator Bisnis</a></li>
                     <li><a href="#" class="hover:text-yellow-400">Pengujian/Sertifikasi Produk Inovasi</a></li>
                     <li><a href="#" class="hover:text-yellow-400">Join Mitra Inovasi UNJ</a></li>
                 </ul>
@@ -52,8 +51,7 @@
                 <a href="#" class="text-white hover:text-yellow-400">Inovasi UNJ</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
                     <li><a href="{{ route('riset.unj') }}" class="hover:text-yellow-400">Riset UNJ</a></li>
-                    <li><a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}" class="hover:text-yellow-400">Produk Inovasi UNJ</a></li>
-                </ul>
+                    <a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}" class="hover:text-yellow-400">Produk Inovasi UNJ</a>                </ul>
             </li>
             
             <!-- <li class="relative group">
@@ -95,7 +93,6 @@
         </div>
     </div>
 </nav>
-
 
 <!-- Mobile Sidebar - Visible by default on mobile -->
 <div id="mobile-sidebar" class="fixed top-0 right-0 w-64 h-full bg-[#186862] z-40 transform md:translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto">
@@ -301,8 +298,35 @@
         const menuIcon = document.getElementById('menu-icon');
         const mobileSidebar = document.getElementById('mobile-sidebar');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const mobileNavbar = document.getElementById('mobile-navbar');
         const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
-
+        
+        // Function to handle scroll effects
+        function handleScroll() {
+            if (window.scrollY > 10) {
+                // When scrolled, add background color
+                mobileNavbar.classList.remove('bg-transparent');
+                mobileNavbar.classList.add('bg-[#186862]');
+            } else {
+                // When at top, make transparent
+                mobileNavbar.classList.remove('bg-[#186862]');
+                mobileNavbar.classList.add('bg-transparent');
+            }
+        }
+        
+        // Add scroll event listener
+        window.addEventListener('scroll', handleScroll);
+        
+        // Set initial state for mobile devices
+        function initMobileNav() {
+            if (window.innerWidth < 768) {
+                // Default state: sidebar hidden, show hamburger icon
+                hideSidebar();
+                // Check initial scroll position
+                handleScroll();
+            }
+        }
+        
         // Function to show sidebar
         function showSidebar() {
             mobileSidebar.classList.remove('translate-x-full');
@@ -311,7 +335,7 @@
             menuIcon.classList.remove('fa-bars');
             menuIcon.classList.add('fa-times');
         }
-
+        
         // Function to hide sidebar
         function hideSidebar() {
             mobileSidebar.classList.add('translate-x-full');
@@ -320,7 +344,7 @@
             menuIcon.classList.remove('fa-times');
             menuIcon.classList.add('fa-bars');
         }
-
+        
         // Toggle sidebar visibility
         mobileMenuToggle.addEventListener('click', function() {
             if (mobileSidebar.classList.contains('translate-x-full')) {
@@ -329,13 +353,13 @@
                 hideSidebar();
             }
         });
-
+        
         // Close sidebar when X button is clicked
         document.getElementById('close-sidebar').addEventListener('click', hideSidebar);
-
+        
         // Close sidebar when clicking overlay
         sidebarOverlay.addEventListener('click', hideSidebar);
-
+        
         // Toggle dropdowns in sidebar
         dropdownButtons.forEach(button => {
             button.addEventListener('click', function() {
@@ -354,7 +378,7 @@
                         }
                     }
                 });
-
+                
                 // Toggle current dropdown
                 if (dropdownMenu.classList.contains('hidden')) {
                     dropdownMenu.classList.remove('hidden');
@@ -367,58 +391,19 @@
                 }
             });
         });
-
-        // Set the active menu item based on current URL
-        function setActiveMenuItem() {
-            // For desktop menu
-            const navLinks = document.querySelectorAll('nav ul li a');
-            const currentPath = window.location.pathname;
-
-            navLinks.forEach(link => {
-                const href = link.getAttribute('href');
-                if (href && currentPath.includes(href) && href !== '#') {
-                    link.classList.add('text-yellow-400');
-                    link.classList.add('font-bold');
-                }
-            });
-
-            // For mobile menu
-            const mobileLinks = document.querySelectorAll('#mobile-sidebar a');
-            mobileLinks.forEach(link => {
-                const href = link.getAttribute('href');
-                if (href && currentPath.includes(href) && href !== '#') {
-                    link.classList.add('text-yellow-400');
-                    link.classList.add('font-bold');
-                }
-            });
-        }
-
-        // Call functions on page load
-        hideSidebar();
-        setActiveMenuItem();
-
+        
+        // Initialize mobile navigation
+        initMobileNav();
+        
         // Handle window resize
         window.addEventListener('resize', function() {
             if (window.innerWidth >= 768) {
                 // Desktop view - hide mobile elements
                 hideSidebar();
+            } else {
+                // Check scroll position on resize
+                handleScroll();
             }
         });
     });
-    document.addEventListener('DOMContentLoaded', function() {
-    const navbar = document.querySelector('.navbar.sticky');
-    
-    if (navbar) {
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 0) {
-                navbar.style.position = 'fixed';
-                navbar.style.top = '0';
-                navbar.style.width = '100%';
-                navbar.style.zIndex = '50';
-            } else {
-                navbar.style.position = 'static';
-            }
-        });
-    }
-});
 </script>
