@@ -152,7 +152,7 @@ Route::get('/register', function () {
 // Route::get('/auth-google-redirect')
 
 Route::get('/sdgscenter', function () {
-    return view('inovasi.katsinov.sdgscenter.sdgscenter');
+    return view('subdirektorat-inovasi.katsinov.sdgscenter.sdgscenter');
 })->name('sdgscenter');
 
 Route::get('/berita/sampleberita', function () {

@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{{ asset('home.css') }}">
 </head>
 <body>
-@includeIf('Inovasi.katsinov.sdgscenter.navbarsdg')
+@includeIf('subdirektorat-inovasi.katsinov.sdgscenter.navbarsdg')
     <section id="home" class="hero" id="heroSection">
     <div class="hero-content">
         <h2>Sustainable Development Goals Center</h2>
@@ -447,7 +447,7 @@
             </div>
         </div>
     </section>
-    @includeIf('Inovasi.katsinov.sdgscenter.footersdg')
+    @includeIf('subdirektorat-inovasi.katsinov.sdgscenter.footersdg')
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
