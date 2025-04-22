@@ -20,6 +20,10 @@
             font-family: 'Arial', sans-serif;
         }
         
+        html {
+            scroll-behavior: smooth; /* Add smooth scrolling to the entire page */
+        }
+        
         body {
             background-color: #f5f5f5;
         }
@@ -73,6 +77,11 @@
             cursor: pointer;
             text-transform: uppercase;
             font-size: 0.8rem;
+            transition: background-color 0.3s ease; /* Add smooth transition for button hover */
+        }
+        
+        .hero-button:hover {
+            background-color: #0089a8; /* Darker shade for hover state */
         }
         
         .ranking-section {
@@ -180,11 +189,11 @@
         <div class="hero-content">
             <h1>PUSAT PEMERINGKATAN<br>Universitas Negeri Jakarta</h1>
             <p>Shaping Global Excellence, Empowering Future Leaders</p>
-            <button class="hero-button">Selengkapnya</button> 
+            <button class="hero-button" onclick="document.querySelector('.ranking-section').scrollIntoView({behavior: 'smooth'})">Selengkapnya</button> 
         </div>
     </div>
     
-    <div class="ranking-section">
+    <div class="ranking-section" id="rankings">
         <h2 class="ranking-title">Ranking Universitas Negeri Jakarta</h2>
         
         <div class="ranking-grid">
@@ -246,6 +255,34 @@
             </a>
         </div>
     </div>
+
+    <!-- Add smooth scroll script -->
+    <script>
+        // Add smooth scrolling to all links
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href*="#"]');
+            
+            for (const link of links) {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    
+                    // Only prevent default for in-page links
+                    if (href.startsWith('#')) {
+                        e.preventDefault();
+                        
+                        const targetId = this.getAttribute('href').substring(1);
+                        const targetElement = document.getElementById(targetId);
+                        
+                        if (targetElement) {
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 @include('layout.footer')
 </html>
