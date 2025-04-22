@@ -380,7 +380,7 @@
         }
     </style>
 </head>
-@include('Berita.navbarberita')
+@include('layout.navbar_sticky')
 <body>
     <!-- Main Content -->
     <div class="content-container">
@@ -473,6 +473,6 @@
         </div>
     </div>
 </body>
-@include('Berita.beritafooter')
+@include('layout.footer')
 
 </html>
