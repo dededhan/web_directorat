@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALUMNI IMPACT</title>
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('home.css') }}">
     
     <style>
         * {
@@ -39,95 +42,16 @@
         }
 
         /* Navbar Styles */
-        .main-navbar-wrapper {
-            width: 100%;
-            position: relative;
-            z-index: 100;
-        }
-
-        .main-navbar-wrapper > * {
-            width: 100% !important;
-            max-width: none !important;
-            margin: 0 !important;
-            padding: 0.5rem 5% !important;
-        }
-
-        .alumni-navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 5%;
-            background-color: var(--card-bg);
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 99;
-        }
-
-        .navbar-logo {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-        }
-
-        .navbar-logo img {
-            height: 45px;
-            margin-right: 1rem;
-        }
-
-        .navbar-logo-text {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #186666;
-            letter-spacing: 0.5px;
-        }
-
-        .navbar-menu {
-            display: flex;
-            align-items: center;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .menu-link {
-            color: var(--text-color);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1rem;
-            padding: 0.5rem 0;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .menu-link:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: #186666;
-            transition: var(--transition);
-        }
-
-        .menu-link:hover:after,
-        .menu-link.active:after {
-            width: 100%;
-        }
-
-        .menu-link:hover,
-        .menu-link.active {
-            color: #186666;
-        }
+        
 
         /* Hero Section */
         .hero-section {
             background-color: #D1E7DD;
             padding: 5rem 2rem;
-            color: #186666; /* Changed to match brand color */
+            color: #186666;
             text-align: center;
-            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
-            margin-bottom: 3rem; /* Added margin to create space between sections */
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%);
+            margin-bottom: 3rem;
         }
 
         .hero-content {
@@ -148,38 +72,56 @@
         }
 
         /* Container */
-        .container {
-            max-width: 1280px;
-            margin: 2rem auto; /* Reduced from 3rem to 2rem */
-            padding: 0 2rem; /* Increased from 1.5rem to 2rem */
-        }
+.container {
+    max-width: 1280px;
+    margin: 0 auto; /* Remove vertical margin */
+    padding: 0 1rem; /* Slightly reduced padding */
+}
 
-        /* Section Header */
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
+@media (min-width: 768px) {
+    .container {
+        padding: 0 2rem; /* More padding on larger screens */
+    }
+}
 
-        .section-header h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #186666;
-            margin-bottom: 1rem;
-        }
+/* Section Header */
+.section-header {
+    text-align: center;
+    margin-bottom: 2rem; /* Reduced from 3rem */
+    padding: 1rem 0; /* Added some padding */
+}
 
-        .section-divider {
-            height: 4px;
-            width: 60px;
-            background: #186666;
-            margin: 0 auto;
-            border-radius: 2px;
-        }
+.section-header h2 {
+    font-size: 1.8rem; /* Slightly reduced from 2rem */
+    font-weight: 700;
+    color: #186666;
+    margin-bottom: 0.75rem; /* Slightly reduced */
+}
+
+.section-divider {
+    height: 3px; /* Slightly thinner */
+    width: 60px;
+    background: #186666;
+    margin: 0 auto;
+    border-radius: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .section-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+}
 
         /* Alumni Grid */
         .alumni-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2.5rem; /* Increased from 2rem to 2.5rem */
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem; /* Adjusted for 3-column layout */
             margin-bottom: 3rem; /* Added margin at bottom */
         }
 
@@ -266,6 +208,10 @@
             font-size: 1.1rem; /* Increased from 1rem */
             width: 20px; /* Increased from 16px */
             text-align: center;
+            display: flex;           /* Added display flex */
+            justify-content: center; /* Center horizontally */
+            align-items: center;     /* Center vertically */
+            min-width: 20px;         /* Ensure minimum width */
         }
 
         .read-more {
@@ -332,6 +278,15 @@
             color: var(--light-text);
             font-size: 1.1rem; /* Added font size */
         }
+        body {
+            padding-top: 70px; /* Adjust based on navbar height */
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px; /* Different height for mobile */
+            }
+        }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -368,7 +323,13 @@
             
             .alumni-grid {
                 grid-template-columns: 1fr; /* Change to single column on mobile */
-                gap: 2rem;
+                gap: 1.5rem;
+            }
+            
+            @media (min-width: 640px) and (max-width: 1023px) {
+                .alumni-grid {
+                    grid-template-columns: repeat(2, 1fr); /* 2 columns on tablet */
+                }
             }
         }
     </style>
@@ -376,7 +337,7 @@
 
 <body>
     <!-- Include the Navbar -->
-    @include('galeri.alumni.navbaralumni')
+    @include('layout.navbar_sticky')
     <div class="hero-section">
         <div class="hero-content">
             <h1>Our Alumni Making an Impact</h1>
@@ -423,6 +384,6 @@
         </div>
     </div>
 
-    @include('galeri.alumni.footeralumni')
+    @include('layout.footer')
 </body>
 </html>
