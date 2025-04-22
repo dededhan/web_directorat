@@ -348,4 +348,20 @@
             }
         });
     });
+    document.addEventListener('DOMContentLoaded', function() {
+    const navbar = document.querySelector('.navbar.sticky');
+    
+    if (navbar) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 0) {
+                navbar.style.position = 'fixed';
+                navbar.style.top = '0';
+                navbar.style.width = '100%';
+                navbar.style.zIndex = '50';
+            } else {
+                navbar.style.position = 'static';
+            }
+        });
+    }
+});
 </script>

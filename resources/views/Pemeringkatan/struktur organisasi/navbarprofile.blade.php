@@ -15,15 +15,15 @@
             <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400">Beranda</a></li>
 
             <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400">Tentang</a>
+                <a href="#" class="text-white hover:text-yellow-400">Profil</a>
                 <ul
                     class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
                     <li><a href="{{ route('pimpinan.pimpinan') }}" class="hover:text-yellow-400">Pimpinan Direktorat</a></li>
-                    <li><a href="{{ route('strukturorganisasipemeringkatan') }}" class="hover:text-yellow-400">Struktur
+                    <li><a href="{{ route('strukturorganisasi') }}" class="hover:text-yellow-400">Struktur
                             Organisasi</a></li>
-                    <li><a href="{{ route('tupoksipemeringkatan') }}" class="hover:text-yellow-400">Tugas Pokok dan
+                    <li><a href="{{ route('tupoksi.tupoksi') }}" class="hover:text-yellow-400">Tugas Pokok dan
                             Fungsi</a></li>
-                            <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="hover:text-yellow-400">Profil</a></li>
+                            <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="hover:text-yellow-400">Sejarah</a></li>
                 </ul>
             </li>
 
@@ -348,4 +348,20 @@
             }
         });
     });
+    document.addEventListener('DOMContentLoaded', function() {
+    const navbar = document.querySelector('.navbar.sticky');
+    
+    if (navbar) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 0) {
+                navbar.style.position = 'fixed';
+                navbar.style.top = '0';
+                navbar.style.width = '100%';
+                navbar.style.zIndex = '50';
+            } else {
+                navbar.style.position = 'static';
+            }
+        });
+    }
+});
 </script>
