@@ -8,9 +8,14 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('unj-navbar.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('home.css') }}">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+       @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 * {
     margin: 0;
@@ -69,12 +74,11 @@ body {
 }
 
 /* Container */
-.container {
+.sustainability-container {
     max-width: 1280px;
     margin: 3rem auto;
     padding: 0 1.5rem;
 }
-
 /* Section Header */
 .section-header {
     text-align: center;
@@ -99,7 +103,7 @@ body {
 /* Alumni Grid */
 .alumni-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
 }
 
@@ -173,17 +177,27 @@ body {
 }
 
 .meta-item {
-    display: flex;
-    align-items: center;
+    display: flex !important;
+    align-items: center !important;
     gap: 0.5rem;
     color: var(--light-text);
     font-size: 0.9rem;
+    line-height: 1.5 !important;
 }
 
 .meta-item i {
     color: #3AA6A6;
     font-size: 1rem;
-    width: 16px;
+    width: 20px !important;
+    text-align: center !important;
+    margin-right: 5px !important;
+    transform: none !important;
+    vertical-align: middle !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    top: 0 !important;
 }
 
 .read-more {
@@ -214,7 +228,7 @@ body {
 }
 
 /* Empty State */
-.empty-state {
+.sustainability-empty-state {
     grid-column: 1 / -1;
     background-color: var(--card-bg);
     padding: 3rem;
@@ -223,7 +237,7 @@ body {
     box-shadow: var(--shadow);
 }
 
-.empty-icon {
+.sustainability-empty-icon {
     background-color: rgba(24, 102, 102, 0.1);
     width: 80px;
     height: 80px;
@@ -234,22 +248,51 @@ body {
     margin: 0 auto 1.5rem;
 }
 
-.empty-icon i {
+.sustainability-empty-icon i {
     font-size: 2rem;
     color: #186666;
 }
 
-.empty-state h3 {
+.sustainability-empty-state h3 {
     font-size: 1.5rem;
     color: #186666;
     margin-bottom: 0.5rem;
 }
 
-.empty-state p {
+.sustainability-empty-state p {
     color: var(--light-text);
 }
 
-/* Responsive */
+/* Icon fixes for all FontAwesome icons */
+.fa, .fas, .far, .fab {
+    transform: none !important;
+    vertical-align: middle !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Specific fix for common icons */
+.fa-calendar-alt, .fa-calendar, .fa-university, .fa-graduation-cap, .fa-document, .fa-file, .fa-link, .fa-leaf {
+    position: relative !important;
+    top: 0 !important; 
+}
+
+/* Modal meta item icons fix */
+.modal-meta .meta-item i {
+    margin-right: 10px;
+    color: var(--primary-color);
+    transform: none !important;
+    vertical-align: middle !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 20px !important;
+    text-align: center !important;
+}
+
+/* Update responsive styles to use the new class name */
 @media (max-width: 768px) {
     .alumni-navbar {
         flex-direction: column;
@@ -278,128 +321,127 @@ body {
         font-size: 1rem;
     }
     
-    .container {
+    .sustainability-container {
         padding: 0 1rem;
     }
+    
+    .alumni-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }
-        #navbar, .top-bar {
-            max-width: 100% !important;
-            width: 100% !important;
-            margin: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-        }
-        
-        body > div:first-of-type {
-            max-width: 100% !important;
-            width: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
 
-        /* Custom modal styles to match existing design */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            display: none;
-            z-index: 1000;
-            overflow-y: auto;
-        }
+#navbar, .top-bar {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+}
 
-        .modal-content {
-            background: white;
-            width: 90%;
-            max-width: 800px;
-            margin: 50px auto;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
+body > div:first-of-type {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
 
-        .modal-header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
+/* Custom modal styles to match existing design */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    z-index: 1000;
+    overflow-y: auto;
+}
 
-        .modal-close {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 800px;
+    margin: 50px auto;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
 
-        .modal-body {
-            padding: 20px;
-        }
+.modal-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
 
-        .modal-image {
-            width: 100%;
-            max-height: 400px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
+.modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
 
-        .modal-meta {
-            background-color: #f4f4f4;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
+.modal-body {
+    padding: 20px;
+}
 
-        .modal-meta .meta-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-        }
+.modal-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
 
-        .modal-meta .meta-item {
-            display: flex;
-            align-items: center;
-        }
+.modal-meta {
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
 
-        .modal-meta .meta-item i {
-            margin-right: 10px;
-            color: var(--primary-color);
-        }
+.modal-meta .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
 
-        .modal-description {
-            line-height: 1.6;
-        }
+.modal-meta .meta-item {
+    display: flex;
+    align-items: center;
+}
 
-        .gallery-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
-            margin-top: 20px;
-        }
+.modal-description {
+    line-height: 1.6;
+}
 
-        .gallery-image {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
+.gallery-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+}
 
-        .gallery-image:hover {
-            transform: scale(1.05);
-        }
+.gallery-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.gallery-image:hover {
+    transform: scale(1.05);
+}
     </style>
 </head>
-
-@include('galeri.navbaralumni')
+@include('layout.navbar_sticky')
 <body>
     
     
@@ -410,52 +452,53 @@ body {
         </div>
     </div>
     
-    <div class="container">
-        <div class="section-header">
-            <h2>Sustainability Activities</h2>
-            <div class="section-divider"></div>
-        </div>
-        
-        <div class="alumni-grid">
-            @forelse($sustainabilities as $activity)
-                <div class="alumni-card">
-                    <div class="card-image">
-                        @if($activity->photos->count() > 0)
-                            <img src="{{ asset('storage/' . $activity->photos->first()->path) }}" alt="{{ $activity->judul_kegiatan }}">
-                        @else
-                            <img src="/api/placeholder/400/300" alt="{{ $activity->judul_kegiatan }}">
-                        @endif
-                        <div class="faculty-badge">{{ strtoupper($activity->fakultas) }}</div>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">{{ $activity->judul_kegiatan }}</h3>
-                        <div class="card-meta">
-                            <div class="meta-item">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span>{{ \Carbon\Carbon::parse($activity->tanggal_kegiatan)->format('d F Y') }}</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-graduation-cap"></i>
-                                <span>{{ $activity->prodi }}</span>
-                            </div>
-                        </div>
-                        <button onclick="openModal('modal-{{ $activity->id }}')" class="read-more">
-                            <span>View Details</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-            @empty
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <i class="fas fa-leaf"></i>
-                    </div>
-                    <h3>No Sustainability Activities</h3>
-                    <p>Belum ada kegiatan sustainability yang tersedia</p>
-                </div>
-            @endforelse
-        </div>
+    <!-- Replace the existing container div with this updated version -->
+<div class="sustainability-container">
+    <div class="section-header">
+        <h2>Sustainability Activities</h2>
+        <div class="section-divider"></div>
     </div>
+    
+    <div class="alumni-grid">
+        @forelse($sustainabilities as $activity)
+            <div class="alumni-card">
+                <div class="card-image">
+                    @if($activity->photos->count() > 0)
+                        <img src="{{ asset('storage/' . $activity->photos->first()->path) }}" alt="{{ $activity->judul_kegiatan }}">
+                    @else
+                        <img src="/api/placeholder/400/300" alt="{{ $activity->judul_kegiatan }}">
+                    @endif
+                    <div class="faculty-badge">{{ strtoupper($activity->fakultas) }}</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">{{ $activity->judul_kegiatan }}</h3>
+                    <div class="card-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>{{ \Carbon\Carbon::parse($activity->tanggal_kegiatan)->format('d F Y') }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>{{ $activity->prodi }}</span>
+                        </div>
+                    </div>
+                    <button onclick="openModal('modal-{{ $activity->id }}')" class="read-more">
+                        <span>View Details</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        @empty
+            <div class="sustainability-empty-state">
+                <div class="sustainability-empty-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3>No Sustainability Activities</h3>
+                <p>Belum ada kegiatan sustainability yang tersedia</p>
+            </div>
+        @endforelse
+    </div>
+</div>
 
     @foreach($sustainabilities as $activity)
         <div id="modal-{{ $activity->id }}" class="modal">
@@ -550,6 +593,6 @@ body {
         }
     </script>
 
-    @include('galeri.footersustainability')
+@include('layout.footer')
 </body>
 </html>
