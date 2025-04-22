@@ -196,6 +196,9 @@ Route::prefix('admin')->name('admin.')
                 Route::resource('/publikasi-riset', PublikasiRisetController::class)->except(['show']);
                 Route::get('/publikasi-riset/download/{id}', [PublikasiRisetController::class, 'download'])
                     ->name('publikasi-riset.download');
+
+                Route::get('/publikasi-riset/{id}/detail', [App\Http\Controllers\PublikasiRisetController::class, 'detail'])
+                    ->name('admin.SDGs.publikasi-riset.detail');
             });
     });
 

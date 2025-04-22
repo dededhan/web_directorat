@@ -14,6 +14,48 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <link rel="stylesheet" href="{{ asset('home.css') }}">
+
+    <style>
+        /* Additional styles for publication cards */
+        .publication-links {
+            margin-top: 12px;
+        }
+        
+        .download-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        .download-link:hover {
+            background-color: #2980b9;
+        }
+        
+        .download-link i {
+            margin-right: 5px;
+        }
+        
+        .no-publications, .error-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #555;
+        }
+        
+        .error-message {
+            color: #d33;
+            background-color: #fee;
+        }
+        </style>
 </head>
 
 <body>
@@ -936,45 +978,45 @@
         });
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Fetch Program & Kegiatan data from API
-        fetch('/api/sdgscenter/programs')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Reference to DOM elements
-                const tabButtons = document.querySelectorAll('.program-tabs .tab-btn');
-                const programContent = document.querySelector('.program-content');
-                
-                // Function to render program cards
-                function renderProgramCards(category) {
-                    // Clear existing content
-                    programContent.innerHTML = '';
-                    
-                    // Get the correct category key
-                    const categoryKey = getCategoryKey(category);
-                    const programs = data[categoryKey] || [];
-                    
-                    // If no programs found for this category
-                    if (programs.length === 0) {
-                        const noDataMessage = document.createElement('div');
-                        noDataMessage.className = 'no-data';
-                        noDataMessage.textContent = 'Tidak ada data untuk kategori ini';
-                        programContent.appendChild(noDataMessage);
-                        return;
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch Program & Kegiatan data from API
+            fetch('/api/sdgscenter/programs')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
                     }
-                    
-                    // Create and append program cards
-                    programs.forEach(program => {
-                        const programCard = document.createElement('div');
-                        programCard.className = 'program-card';
-                        
-                        programCard.innerHTML = `
+                    return response.json();
+                })
+                .then(data => {
+                    // Reference to DOM elements
+                    const tabButtons = document.querySelectorAll('.program-tabs .tab-btn');
+                    const programContent = document.querySelector('.program-content');
+
+                    // Function to render program cards
+                    function renderProgramCards(category) {
+                        // Clear existing content
+                        programContent.innerHTML = '';
+
+                        // Get the correct category key
+                        const categoryKey = getCategoryKey(category);
+                        const programs = data[categoryKey] || [];
+
+                        // If no programs found for this category
+                        if (programs.length === 0) {
+                            const noDataMessage = document.createElement('div');
+                            noDataMessage.className = 'no-data';
+                            noDataMessage.textContent = 'Tidak ada data untuk kategori ini';
+                            programContent.appendChild(noDataMessage);
+                            return;
+                        }
+
+                        // Create and append program cards
+                        programs.forEach(program => {
+                            const programCard = document.createElement('div');
+                            programCard.className = 'program-card';
+
+                            programCard.innerHTML = `
                             <img src="${program.image}" alt="${program.title}">
                             <div class="program-info">
                                 <span class="date">${program.date}</span>
@@ -982,44 +1024,111 @@
                                 <p>${program.description}</p>
                             </div>
                         `;
-                        
-                        programContent.appendChild(programCard);
-                    });
-                }
-                
-                // Helper function to map button text to category key
-                function getCategoryKey(category) {
-                    switch(category) {
-                        case 'Penelitian': return 'penelitian';
-                        case 'Pengabdian Masyarakat': return 'pengabdian_masyarakat';
-                        case 'Pendidikan': return 'pendidikan';
-                        case 'Kolaborasi': return 'kolaborasi';
-                        default: return 'penelitian';
+
+                            programContent.appendChild(programCard);
+                        });
                     }
-                }
-                
-                // Add click event listeners to tab buttons
-                tabButtons.forEach(button => {
-                    button.addEventListener('click', function() {
-                        // Remove active class from all buttons
-                        tabButtons.forEach(btn => btn.classList.remove('active'));
-                        // Add active class to clicked button
-                        this.classList.add('active');
-                        // Render programs for selected category
-                        renderProgramCards(this.textContent);
+
+                    // Helper function to map button text to category key
+                    function getCategoryKey(category) {
+                        switch (category) {
+                            case 'Penelitian':
+                                return 'penelitian';
+                            case 'Pengabdian Masyarakat':
+                                return 'pengabdian_masyarakat';
+                            case 'Pendidikan':
+                                return 'pendidikan';
+                            case 'Kolaborasi':
+                                return 'kolaborasi';
+                            default:
+                                return 'penelitian';
+                        }
+                    }
+
+                    // Add click event listeners to tab buttons
+                    tabButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                            // Remove active class from all buttons
+                            tabButtons.forEach(btn => btn.classList.remove('active'));
+                            // Add active class to clicked button
+                            this.classList.add('active');
+                            // Render programs for selected category
+                            renderProgramCards(this.textContent);
+                        });
                     });
+
+                    // Initialize with the first/active category
+                    const activeTab = document.querySelector('.tab-btn.active');
+                    renderProgramCards(activeTab ? activeTab.textContent : 'Penelitian');
+                })
+                .catch(error => {
+                    console.error('Error fetching program data:', error);
+                    const programContent = document.querySelector('.program-content');
+                    programContent.innerHTML =
+                        '<div class="error-message">Terjadi kesalahan saat memuat data. Silakan coba lagi nanti.</div>';
                 });
-                
-                // Initialize with the first/active category
-                const activeTab = document.querySelector('.tab-btn.active');
-                renderProgramCards(activeTab ? activeTab.textContent : 'Penelitian');
-            })
-            .catch(error => {
-                console.error('Error fetching program data:', error);
-                const programContent = document.querySelector('.program-content');
-                programContent.innerHTML = '<div class="error-message">Terjadi kesalahan saat memuat data. Silakan coba lagi nanti.</div>';
-            });
-    });
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch Publications & Riset data from API
+            fetch('/api/sdgscenter/publications')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(publicationsData => {
+                    const publicationGrid = document.querySelector('.publication-grid');
+
+                    // Clear any existing content
+                    publicationGrid.innerHTML = '';
+
+                    if (publicationsData.length === 0) {
+                        publicationGrid.innerHTML =
+                            '<div class="no-publications">Belum ada publikasi tersedia.</div>';
+                        return;
+                    }
+
+                    // Create and append publication cards
+                    publicationsData.forEach(publication => {
+                        const publicationCard = document.createElement('div');
+                        publicationCard.className = 'publication-card';
+
+                        // Create the HTML structure for the publication card
+                        let publicationHTML = `
+                    <img src="${publication.image}" alt="${publication.title}">
+                    <div class="publication-info">
+                        <h4>${publication.title}</h4>
+                        <span class="authors">${publication.authors}</span>
+                        <p>${publication.description}</p>
+                `;
+
+                        // Add download link if document is available
+                        if (publication.has_document && publication.document_url) {
+                            publicationHTML += `
+                        <div class="publication-links">
+                            <a href="${publication.document_url}" class="download-link" target="_blank">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </div>
+                    `;
+                        }
+
+                        publicationHTML += `</div>`;
+
+                        publicationCard.innerHTML = publicationHTML;
+                        publicationGrid.appendChild(publicationCard);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching publications data:', error);
+                    const publicationGrid = document.querySelector('.publication-grid');
+                    publicationGrid.innerHTML =
+                        '<div class="error-message">Terjadi kesalahan saat memuat data publikasi. Silakan coba lagi nanti.</div>';
+                });
+        });
     </script>
 </body>
 

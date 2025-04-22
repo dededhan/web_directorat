@@ -159,6 +159,8 @@ Route::get('/sdgscenter', function () {
 
 Route::get('/api/sdgscenter/programs', [App\Http\Controllers\ProgramKegiatanController::class, 'getSDGCenterPrograms'])
     ->name('api.sdgscenter.programs');
+Route::get('/api/sdgscenter/publications', [App\Http\Controllers\PublikasiRisetController::class, 'getSDGCenterPublications'])
+    ->name('api.sdgscenter.publications');
 
 Route::get('/berita/sampleberita', function () {
     return view('Berita.sampleberita');

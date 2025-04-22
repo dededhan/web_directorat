@@ -29,8 +29,17 @@ class PublikasiRisetController extends Controller
         $routePrefix = $this->getRoutePrefix();
         
         if (auth()->user()->role === 'admin_direktorat') {
-            return view('admin.SDGs.publikasi_riset', compact('publikasiRiset', 'routePrefix'));}
-      
+            return view('admin.SDGs.publikasi_riset', compact('publikasiRiset', 'routePrefix'));
+        }
+    }
+
+    /**
+     * Get detail data for editing
+     */
+    public function detail($id)
+    {
+        $publikasi = PublikasiRiset::findOrFail($id);
+        return response()->json($publikasi);
     }
 
     public function store(Request $request)
@@ -46,6 +55,14 @@ class PublikasiRisetController extends Controller
         ]);
 
         if ($validator->fails()) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal. Mohon periksa kembali input Anda.',
+                    'errors' => $validator->errors()
+                ]);
+            }
+            
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
@@ -71,6 +88,13 @@ class PublikasiRisetController extends Controller
 
         PublikasiRiset::create($data);
 
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Publikasi/Riset berhasil disimpan'
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Publikasi/Riset berhasil disimpan');
     }
 
@@ -89,6 +113,14 @@ class PublikasiRisetController extends Controller
         ]);
 
         if ($validator->fails()) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal. Mohon periksa kembali input Anda.',
+                    'errors' => $validator->errors()
+                ]);
+            }
+            
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
@@ -124,6 +156,13 @@ class PublikasiRisetController extends Controller
 
         $publikasiRiset->update($data);
 
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Publikasi/Riset berhasil diperbarui'
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Publikasi/Riset berhasil diperbarui');
     }
 
@@ -155,5 +194,28 @@ class PublikasiRisetController extends Controller
         }
         
         return Storage::disk('public')->download($publikasiRiset->file_path, $publikasiRiset->file_nama);
+    }
+    
+    /**
+     * Get publications data for SDG Center page
+     */
+    public function getSDGCenterPublications()
+    {
+        $publications = PublikasiRiset::latest('tanggal_publikasi')
+            ->take(3)
+            ->get()
+            ->map(function($publication) {
+                return [
+                    'image' => $publication->gambar_path ? asset('storage/' . $publication->gambar_path) : asset('images/default-publication.jpg'),
+                    'title' => $publication->judul,
+                    'authors' => $publication->penulis,
+                    'description' => strip_tags(substr($publication->deskripsi, 0, 150)) . '...',
+                    'has_document' => !empty($publication->file_path),
+                    'document_url' => !empty($publication->file_path) ? route('documents.download', $publication->id) : null,
+                    'date' => $publication->tanggal_publikasi ? date('F Y', strtotime($publication->tanggal_publikasi)) : null
+                ];
+            });
+            
+        return response()->json($publications);
     }
 }
