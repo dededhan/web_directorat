@@ -187,15 +187,12 @@ Route::prefix('admin')->name('admin.')
             ->group(function () {
 
                 // Program Kegiatan
-                // Route::get('/program_kegiatan', function () {
-                //     return view('admin.SDGs.program_kegiatan');
-                // })->name('program_kegiatan');
-                Route::resource('/program-kegiatan', ProgramKegiatanController::class)->except(['show']);
 
-                // Program Kegiatan
-                // Route::get('/publikasi_riset', function () {
-                //     return view('admin.SDGs.publikasi_riset');
-                // })->name('publikasi_riset');
+                Route::resource('/program-kegiatan', ProgramKegiatanController::class)->except(['show']);
+                Route::get('/program-kegiatan/{id}/detail', [ProgramKegiatanController::class, 'detail'])
+                    ->name('program-kegiatan.detail');
+
+                // Publikasi Riset
                 Route::resource('/publikasi-riset', PublikasiRisetController::class)->except(['show']);
                 Route::get('/publikasi-riset/download/{id}', [PublikasiRisetController::class, 'download'])
                     ->name('publikasi-riset.download');

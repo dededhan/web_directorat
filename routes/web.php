@@ -13,6 +13,8 @@ use App\Http\Controllers\ProdukInovasiController;
 use App\Http\Controllers\SejarahContentController;
 use App\Http\Controllers\PimpinanController;
 
+use App\Http\Controllers\ProgramKegiatanController;
+
 
 use App\Http\Middleware\HandleRespondenForm;
 use Illuminate\Support\Facades\Route;
@@ -154,6 +156,9 @@ Route::get('/register', function () {
 Route::get('/sdgscenter', function () {
     return view('subdirektorat-inovasi.katsinov.sdgscenter.sdgscenter');
 })->name('sdgscenter');
+
+Route::get('/api/sdgscenter/programs', [App\Http\Controllers\ProgramKegiatanController::class, 'getSDGCenterPrograms'])
+    ->name('api.sdgscenter.programs');
 
 Route::get('/berita/sampleberita', function () {
     return view('Berita.sampleberita');

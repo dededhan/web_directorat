@@ -34,8 +34,8 @@ class ProgramKegiatanController extends Controller
         $routePrefix = $this->getRoutePrefix();
         
         if (auth()->user()->role === 'admin_direktorat') {
-            return view('admin.SDGs.program_kegiatan', compact('programKegiatans', 'routePrefix'));}
-
+            return view('admin.SDGs.program_kegiatan', compact('programKegiatans', 'routePrefix'));
+        }
     }
 
     /**
@@ -67,6 +67,15 @@ class ProgramKegiatanController extends Controller
         ]);
     
         return redirect()->back()->with('success', 'Program & Kegiatan berhasil disimpan');
+    }
+
+    /**
+     * Get program details for editing.
+     */
+    public function detail($id)
+    {
+        $programKegiatan = ProgramKegiatan::findOrFail($id);
+        return response()->json($programKegiatan);
     }
 
     /**
@@ -105,6 +114,13 @@ class ProgramKegiatanController extends Controller
 
         $programKegiatan->update($data);
 
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Program & Kegiatan berhasil diperbarui'
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Program & Kegiatan berhasil diperbarui');
     }
 
@@ -126,5 +142,31 @@ class ProgramKegiatanController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal menghapus Program & Kegiatan: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * API endpoint to get program data for SDG Center page.
+     */
+    public function getSDGCenterPrograms()
+    {
+        $categories = ['penelitian', 'pengabdian_masyarakat', 'pendidikan', 'kolaborasi'];
+        $programData = [];
+        
+        foreach ($categories as $category) {
+            $programData[$category] = ProgramKegiatan::where('kategori', $category)
+                ->latest()
+                ->take(3)
+                ->get()
+                ->map(function($program) {
+                    return [
+                        'image' => asset('storage/' . $program->path_gambar),
+                        'date' => $program->tanggal->format('F Y'),
+                        'title' => $program->judul,
+                        'description' => strip_tags(substr($program->deskripsi, 0, 150)) . '...'
+                    ];
+                });
+        }
+        
+        return response()->json($programData);
     }
 }
