@@ -149,8 +149,7 @@
     </style>
 </head>
 <body class="bg-gray-100">
-    @include('subdirektorat-inovasi.riset_unj.produk_inovasi.navbarprofile')
-
+@include('layout.navbar_hilirisasi')
     <!-- Main Content with increased spacing -->
     <div class="content-wrapper">
         <div class="container mx-auto px-4 py-8 max-w-4xl">
@@ -222,8 +221,7 @@
             </div>
         </div>
     </div>
-
-    @include('subdirektorat-inovasi.riset_unj.produk_inovasi.footerrisetunj')
+    @include('layout.footer')
 
     <script>
         function toggleDropdown(element) {
