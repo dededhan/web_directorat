@@ -198,112 +198,19 @@
 <!-- JavaScript for mobile sidebar -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-        const menuIcon = document.getElementById('menu-icon');
-        const mobileSidebar = document.getElementById('mobile-sidebar');
-        const sidebarOverlay = document.getElementById('sidebar-overlay');
-        const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
-
-        // Function to show sidebar
-        function showSidebar() {
-            mobileSidebar.classList.remove('translate-x-full');
-            sidebarOverlay.classList.remove('opacity-0', 'pointer-events-none');
-            sidebarOverlay.classList.add('opacity-50');
-            menuIcon.classList.remove('fa-bars');
-            menuIcon.classList.add('fa-times');
-        }
-
-        // Function to hide sidebar
-        function hideSidebar() {
-            mobileSidebar.classList.add('translate-x-full');
-            sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
-            sidebarOverlay.classList.remove('opacity-50');
-            menuIcon.classList.remove('fa-times');
-            menuIcon.classList.add('fa-bars');
-        }
-
-        // Toggle sidebar visibility
-        mobileMenuToggle.addEventListener('click', function() {
-            if (mobileSidebar.classList.contains('translate-x-full')) {
-                showSidebar();
+    const navbar = document.querySelector('.navbar.sticky');
+    
+    if (navbar) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 0) {
+                navbar.style.position = 'fixed';
+                navbar.style.top = '0';
+                navbar.style.width = '100%';
+                navbar.style.zIndex = '50';
             } else {
-                hideSidebar();
+                navbar.style.position = 'static';
             }
         });
-
-        // Close sidebar when X button is clicked
-        document.getElementById('close-sidebar').addEventListener('click', hideSidebar);
-
-        // Close sidebar when clicking overlay
-        sidebarOverlay.addEventListener('click', hideSidebar);
-
-        // Toggle dropdowns in sidebar
-        dropdownButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const dropdownMenu = this.nextElementSibling;
-                const icon = this.querySelector('i');
-                
-                // Close all other dropdowns first
-                dropdownButtons.forEach(otherButton => {
-                    if (otherButton !== button) {
-                        const otherMenu = otherButton.nextElementSibling;
-                        const otherIcon = otherButton.querySelector('i');
-                        if (!otherMenu.classList.contains('hidden')) {
-                            otherMenu.classList.add('hidden');
-                            otherIcon.classList.remove('fa-chevron-up');
-                            otherIcon.classList.add('fa-chevron-down');
-                        }
-                    }
-                });
-
-                // Toggle current dropdown
-                if (dropdownMenu.classList.contains('hidden')) {
-                    dropdownMenu.classList.remove('hidden');
-                    icon.classList.remove('fa-chevron-down');
-                    icon.classList.add('fa-chevron-up');
-                } else {
-                    dropdownMenu.classList.add('hidden');
-                    icon.classList.remove('fa-chevron-up');
-                    icon.classList.add('fa-chevron-down');
-                }
-            });
-        });
-
-        // Set the active menu item based on current URL
-        function setActiveMenuItem() {
-            // For desktop menu
-            const navLinks = document.querySelectorAll('nav ul li a');
-            const currentPath = window.location.pathname;
-
-            navLinks.forEach(link => {
-                const href = link.getAttribute('href');
-                if (href && currentPath.includes(href) && href !== '#') {
-                    link.classList.add('text-yellow-400');
-                    link.classList.add('font-bold');
-                }
-            });
-
-            // For mobile menu
-            const mobileLinks = document.querySelectorAll('#mobile-sidebar a');
-            mobileLinks.forEach(link => {
-                const href = link.getAttribute('href');
-                if (href && currentPath.includes(href) && href !== '#') {
-                    link.classList.add('text-yellow-400');
-                    link.classList.add('font-bold');
-                }
-            });
-        }
-
-        // Call functions on page load
-        hideSidebar();
-        setActiveMenuItem();
-
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 768) {
-                // Desktop view - hide mobile elements
-                hideSidebar();
-            }
-        });
-    });
+    }
+});
 </script>
