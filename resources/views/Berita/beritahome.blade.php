@@ -697,7 +697,8 @@ img, iframe, .card-img {
     </style>
 </head>
 <body>
-    @include('Berita.navbarberitautama')
+@include('layout.navbar_sticky')
+
 
     <!-- Loading indicator -->
     <div class="loading">
