@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -267,11 +269,11 @@
         }
     </style>
 </head>
-@include('pimpinan.navbar')
+@include('layout.navbar_sticky')
 <body>
     <div class="container">
         <header class="fade-in">
-            <h1>Pimpinan DISIP</h1>
+            <h1>Pimpinan DITISIP</h1>
         </header>
 
         @if($direktur)

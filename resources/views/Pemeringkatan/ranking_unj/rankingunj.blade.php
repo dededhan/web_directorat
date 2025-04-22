@@ -174,7 +174,8 @@
         }
     </style>
 </head>
-@include('Pemeringkatan.ranking_unj.navbarpemeringkatan')
+{{-- @include('Pemeringkatan.ranking_unj.navbarpemeringkatan') --}}
+@include('layout.navbar_pemeringkatan')
 <body>
     <div class="hero-section">
         <div class="hero-content">
