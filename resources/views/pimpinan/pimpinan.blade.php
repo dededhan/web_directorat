@@ -64,8 +64,12 @@
 
         .profile-image img {
             width: 100%;
-            border-radius: 5px;
+            border-radius: 50%; /* Changed to circular */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+            object-position: center top;
+            aspect-ratio: 1/1;
+            border: 5px solid #186862;
         }
 
         .profile-content {
@@ -94,19 +98,22 @@
             padding: 40px 0;
         }
 
+        /* Updated team members class for maximum spacing */
         .team-members {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between; /* Changed to space-between for maximum separation */
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 80px; /* Significantly increased spacing to 80px */
+            margin: 0 auto;
+            padding: 0 10%;  /* Added padding to push items away from edges */
         }
 
         .team-member {
-            flex: 0 0 200px;
+            flex: 0 0 240px; /* Increased width from 200px to 240px */
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 60px; /* Increased margin to 60px */
             transition: transform 0.3s ease;
         }
 
@@ -115,18 +122,20 @@
         }
 
         .member-image {
-            width: 150px;
-            height: 150px;
+            width: 180px; /* Standardized size */
+            height: 180px; /* Standardized size */
             border-radius: 50%;
             overflow: hidden;
             margin-bottom: 15px;
             border: 5px solid #186862;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         .member-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center top; /* Standardized positioning */
         }
 
         .member-info {
@@ -134,21 +143,23 @@
         }
 
         .member-info h4 {
-            font-size: 16px;
+            font-size: 18px; /* Increased from 16px */
             margin-bottom: 5px;
             color: #186862;
+            font-weight: bold; /* Added bold */
         }
 
         .member-info h5 {
             color: #666;
-            font-size: 14px;
+            font-size: 16px; /* Increased from 14px */
             font-weight: 500;
             margin-bottom: 10px;
         }
 
         .member-info p {
-            font-size: 12px;
-            color: #888;
+            font-size: 14px; /* Increased from 12px */
+            color: #555; /* Darkened from #888 */
+            line-height: 1.5; /* Added line height for better readability */
         }
 
         .detail-button {
