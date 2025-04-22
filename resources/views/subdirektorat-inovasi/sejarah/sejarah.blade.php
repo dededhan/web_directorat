@@ -96,7 +96,7 @@
     </style>
 </head>
 <body>
-@include('subdirektorat-inovasi.sejarah.navbarhilirisasi')
+@include('layout.navbar_sticky')
 
 <div class="main-content">
     <div class="sidebar">
@@ -179,6 +179,6 @@
     </script>
 <!-- Adding margin before footer -->
 <div style="margin-top: 50px"></div>
-@include('subdirektorat-inovasi.sejarah.footerpemeringkatan')
+@include('layout.footer')
 </body>
 </html>

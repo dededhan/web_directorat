@@ -138,7 +138,8 @@
     </style>
 </head>
 <body>
-@include('struktur organisasi.navbarprofile')
+@include('layout.navbar_sticky')
+
 
     <!-- Main Content -->
     <div class="container">
@@ -182,5 +183,5 @@
         });
     </script>
 </body>
-@include('struktur organisasi.footerstrukturorganisasi')
+@include('layout.footer')
 </html>
