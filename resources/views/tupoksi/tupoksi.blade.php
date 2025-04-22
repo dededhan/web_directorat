@@ -141,7 +141,7 @@
         }
     </style>
 </head>
-@include('tupoksi.navbarprofile')
+@include('layout.navbar_hilirisasi')
 <body>
     <main>
         <section class="functions" id="functions">
@@ -198,7 +198,7 @@
             </div>
         </section>
     </main>
-    @include('Profile1.profilefooter')
+    @include('layout.footer')
     <script>
         // Removed navbar-related JavaScript
         document.addEventListener('DOMContentLoaded', function() {
