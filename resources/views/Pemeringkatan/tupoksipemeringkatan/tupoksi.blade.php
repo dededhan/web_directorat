@@ -140,7 +140,7 @@
         }
     </style>
 </head>
-@include('Pemeringkatan.tupoksipemeringkatan.navbarprofile')
+@include('layout.navbar_pemeringkatan')
 <body>
     <main>
         <section class="functions" id="functions">
@@ -197,7 +197,7 @@
             </div>
         </section>
     </main>
-    @include('Pemeringkatan.tupoksipemeringkatan.tupoksifooter')
+    @include('layout.footer')
     <script>
         // Removed navbar-related JavaScript
         document.addEventListener('DOMContentLoaded', function() {
