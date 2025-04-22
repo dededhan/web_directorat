@@ -1,51 +1,53 @@
-<!-- Navbar.blade.php - Sticky navbar for Pemeringkatan Klaster pages -->
-
-
 @include('loginpopup')
 
 <!-- Desktop Navbar - Sticky -->
 <nav class="navbar hidden md:block sticky top-0 z-50 bg-[#186862] shadow-md">
-    <div class="container mx-auto flex justify-between items-center py-4 px-6">
-        <div class="flex items-center space-x-4">
-            <img alt="University logo" class="h-12 w-12"
+    <div class="container mx-auto flex items-center py-2 px-6">
+        <!-- Logo and Title Section -->
+        <a href="{{ route('home') }}" class="flex items-center">
+            <img alt="University logo" class="h-10 w-10"
                 src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
-            <h1 class="text-white text-2xl font-bold">Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</h1>
-        </div>
-        <ul class="flex space-x-6">
-            <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400">Beranda</a></li>
+            <div class="ml-4">
+                <h1 class="text-xl font-bold uppercase tracking-wide text-white">DIREKTORAT INOVASI, SISTEM INFORMASI, DAN PEMERINGKATAN</h1>
+            </div>
+        </a>
+        
+        <!-- Navigation Items - Right aligned -->
+        <ul class="flex space-x-6 ml-auto">
+            <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400 text-sm">Beranda</a></li>
 
             <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400">Profil</a>
+                <a href="#" class="text-white hover:text-yellow-400 text-sm">Profil</a>
                 <ul
                     class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('profile.profile') }}" class="hover:text-yellow-400">Tugas Pokok dan Fungsi</a></li>
-                    <li><a href="{{ route('strukturorganisasi') }}" class="hover:text-yellow-400">Struktur Organisasi</a></li>
+                    <li><a href="{{ route('profile.profile') }}" class="text-black hover:text-yellow-400 text-sm">Tugas Pokok dan Fungsi</a></li>
+                    <li><a href="{{ route('strukturorganisasi') }}" class="text-black hover:text-yellow-400 text-sm">Struktur Organisasi</a></li>
                 </ul>
             </li>
 
             <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400">Sub Direktorat</a>
+                <a href="#" class="text-white hover:text-yellow-400 text-sm">Sub Direktorat</a>
                 <ul
                     class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('subdirektorat-inovasi.landingpage') }}" class="hover:text-yellow-400">Subdirektorat Inovasi dan Hilirisasi</a></li>
-                    <li><a href="{{ route('pemeringkatan.landingpage') }}" class="hover:text-yellow-400">Subdirektorat Pemeringkatan dan Sistem Informasi</a></li>
+                    <li><a href="{{ route('subdirektorat-inovasi.landingpage') }}" class="text-black hover:text-yellow-400 text-sm">Subdirektorat Inovasi dan Hilirisasi</a></li>
+                    <li><a href="{{ route('pemeringkatan.landingpage') }}" class="text-black hover:text-yellow-400 text-sm">Subdirektorat Pemeringkatan dan Sistem Informasi</a></li>
                 </ul>
             </li>
 
-            <li><a href="{{ route('Berita.beritahome') }}" class="text-white hover:text-yellow-400">Berita</a></li>
+            <li><a href="{{ route('Berita.beritahome') }}" class="text-white hover:text-yellow-400 text-sm">Berita</a></li>
 
             <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400">Galeri</a>
+                <a href="#" class="text-white hover:text-yellow-400 text-sm">Galeri</a>
                 <ul
                     class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('alumni') }}" class="hover:text-yellow-400">Alumni Berdampak</a></li>
-                    <li><a href="{{ route('galeri.sustainability') }}" class="hover:text-yellow-400">Sustainability</a></li>
+                    <li><a href="{{ route('alumni') }}" class="text-black hover:text-yellow-400 text-sm">Alumni Berdampak</a></li>
+                    <li><a href="{{ route('galeri.sustainability') }}" class="text-black hover:text-yellow-400 text-sm">Sustainability</a></li>
                 </ul>
             </li>
 
-            <li><a href="{{ route('document.document') }}" class="text-white hover:text-yellow-400">Dokumen</a></li>
-            <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400">SSO</a></li>
-            <li><a class="login text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
+            <li><a href="{{ route('document.document') }}" class="text-white hover:text-yellow-400 text-sm">Dokumen</a></li>
+            <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400 text-sm">SSO</a></li>
+            <li><a class="login text-white text-sm" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
         </ul>
     </div>
 </nav>
