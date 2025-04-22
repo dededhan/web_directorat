@@ -451,9 +451,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Images for the carousel
     const images = [
-        "https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434",
-        "https://edura.unj.ac.id/edura-news/wp-content/uploads/2025/01/WhatsApp-Image-2025-01-16-at-11.47.23-scaled.jpeg",
-        "{{ asset('images/logos/image_corousel.jpg') }}"
+        "/images/logos/image_corousel.jpg",
     ];
     
     // Create carousel container
