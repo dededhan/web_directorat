@@ -1,9 +1,9 @@
 
 @include('loginpopup')
 <!-- Desktop Navbar - Sticky -->
-<nav class="navbar hidden md:block sticky top-0 z-50 bg-[#186862] shadow-md">
+<nav class="navbar fixed top-0 left-0 w-full z-50 bg-[#277177] shadow-md hidden md:block">
     <div class="container mx-auto flex items-center py-2 px-6">
-        <!-- Logo and Title Section -->
+        <!-- Existing navbar content remains the same -->
         <a href="{{ route('home') }}" class="flex items-center">
             <img alt="University logo" class="h-10 w-10"
                 src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
@@ -12,7 +12,7 @@
             </div>
         </a>
         
-        <!-- Navigation Items - Right aligned -->
+        <!-- Existing navigation items -->
         <ul class="flex space-x-6 ml-auto">
             <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400 text-sm">Beranda</a></li>
 
@@ -195,7 +195,18 @@
 <div id="sidebar-overlay"
     class="fixed inset-0 bg-black opacity-0 md:hidden pointer-events-none transition-opacity duration-300 ease-in-out z-30">
 </div>
+<style>
+    /* Ensure content isn't hidden behind fixed navbar */
+    body {
+        padding-top: 70px; /* Adjust based on your navbar height */
+    }
 
+    @media (max-width: 768px) {
+        body {
+            padding-top: 60px; /* Different height for mobile */
+        }
+    }
+</style>
 <!-- JavaScript for mobile sidebar -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -307,4 +318,5 @@
             }
         });
     });
+    
 </script>

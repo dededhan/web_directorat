@@ -654,6 +654,46 @@ body {
         display: none;
     }
 }
+I'll help you solve the layout jittering issue. Let's add some CSS and JavaScript optimizations directly to the existing code.
+Add the following CSS to the existing <style> block in the <head> section:
+css/* Layout Stability Enhancements */
+html {
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+}
+
+body {
+    overscroll-behavior-y: contain;
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Prevent content reflow */
+img, iframe, .card-img {
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition: height 0.3s ease;
+}
+
+/* Smooth transitions for sticky elements */
+.navbar {
+    will-change: transform, position;
+    transition: 
+        transform 0.2s ease-in-out, 
+        position 0.2s ease-in-out;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Reduce layout shifts during loading */
+.loading-placeholder {
+    background-color: #f0f0f0;
+    opacity: 0.5;
+}
     </style>
 </head>
 <body>
