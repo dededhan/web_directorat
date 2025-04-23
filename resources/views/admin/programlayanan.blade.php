@@ -28,28 +28,23 @@
             <div class="head">
                 <h3>Input Program Layanan</h3>
             </div>
-            <form id="layanan-form" action="{{ route($routePrefix . '.program-layanan.store') }}" method="POST">
+            <form id="layanan-form" action="{{ route($routePrefix . '.program-layanan.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="icon" class="form-label">Icon</label>
-                        <select class="form-select @error('icon') is-invalid @enderror" name="icon" id="icon">
-                            <option value="">Pilih Icon</option>
-                            <option value="fas fa-graduation-cap">🎓 Pendidikan</option>
-                            <option value="fas fa-book">📚 Buku</option>
-                            <option value="fas fa-money-bill-wave">💰 Keuangan</option>
-                            <option value="fas fa-certificate">🏆 Sertifikasi</option>
-                            <option value="fas fa-hands-helping">🤝 Bantuan</option>
-                            <option value="fas fa-handshake">👥 Kerjasama</option>
-                            <option value="fas fa-users">👨‍👩‍👧‍👦 Komunitas</option>
-                            <option value="fas fa-building">🏢 Institusi</option>
-                            <option value="fas fa-university">🏛️ Universitas</option>
-                            <option value="fas fa-chart-line">📈 Pengembangan</option>
-                        </select>
-                        @error('icon')
+                        <label for="image" class="form-label">Gambar Program</label>
+                        <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" id="image">
+                        @error('image')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="form-text text-muted">Pilih icon yang mewakili program layanan</div>
+                        <div class="form-text text-muted">Unggah gambar yang mewakili program layanan (max 2MB)</div>
+                        
+                        <!-- Untuk preview gambar saat edit -->
+                        @if(isset($program) && $program->image)
+                            <div class="mt-2">
+                                <img src="{{ asset('storage/' . $program->image) }}" alt="Preview" style="max-width: 100px; max-height: 100px;">
+                            </div>
+                        @endif
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="judul" class="form-label">Judul Program</label>
@@ -99,9 +94,9 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Icon</th>
                                 <th>Judul</th>
                                 <th>Deskripsi</th>
+                                <th>gambar</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -109,9 +104,15 @@
                             @foreach ($programs as $key => $program)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td><i class="{{ $program->icon }} fa-lg"></i></td>
                                     <td>{{ $program->judul }}</td>
                                     <td>{{ Str::limit(strip_tags($program->deskripsi), 50) }}</td>
+                                    <td>
+                                        @if($program->image)
+                                            <img src="{{ asset('storage/' . $program->image) }}" alt="Program Image" style="max-width: 50px; max-height: 50px;">
+                                        @else
+                                            <i class="{{ $program->icon }} fa-lg"></i>
+                                        @endif
+                                    </td>
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-sm btn-warning edit-program"
@@ -147,26 +148,16 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editProgramForm" method="POST">
+                    <form id="editProgramForm" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="edit_icon" class="form-label">Icon</label>
-                                <select class="form-select" name="icon" id="edit_icon">
-                                    <option value="">Pilih Icon</option>
-                                    <option value="fas fa-graduation-cap">🎓 Pendidikan</option>
-                                    <option value="fas fa-book">📚 Buku</option>
-                                    <option value="fas fa-money-bill-wave">💰 Keuangan</option>
-                                    <option value="fas fa-certificate">🏆 Sertifikasi</option>
-                                    <option value="fas fa-hands-helping">🤝 Bantuan</option>
-                                    <option value="fas fa-handshake">👥 Kerjasama</option>
-                                    <option value="fas fa-users">👨‍👩‍👧‍👦 Komunitas</option>
-                                    <option value="fas fa-building">🏢 Institusi</option>
-                                    <option value="fas fa-university">🏛️ Universitas</option>
-                                    <option value="fas fa-chart-line">📈 Pengembangan</option>
-                                </select>
-                                <div class="form-text text-muted">Pilih icon yang mewakili program layanan</div>
+                                <label for="edit_image" class="form-label">Gambar Program</label>
+                                <input type="file" class="form-control" name="image" id="edit_image">
+                                <div class="form-text text-muted">Unggah gambar yang mewakili program layanan (max 2MB)</div>
+                                
+                                
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="edit_judul" class="form-label">Judul Program</label>
@@ -529,7 +520,17 @@
                         showErrorAlert('Deskripsi tidak boleh lebih dari 1500 karakter.');
                         return false;
                     }
+                
                 }
+                const formData = new FormData(this);
+                const fileInput = document.getElementById('image');
+                
+                console.log('File selected:', fileInput.files.length > 0);
+                if (fileInput.files.length > 0) {
+                    console.log('File name:', fileInput.files[0].name);
+                    console.log('File size:', fileInput.files[0].size);
+                }
+                
             });
         });
 

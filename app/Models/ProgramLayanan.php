@@ -11,6 +11,7 @@ class ProgramLayanan extends Model
 
     protected $fillable = [
         'icon',
+        'image', 
         'judul', 
         'deskripsi',
         'status'

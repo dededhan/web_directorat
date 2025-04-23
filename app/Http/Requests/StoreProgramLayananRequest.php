@@ -14,7 +14,7 @@ class StoreProgramLayananRequest extends FormRequest
     public function rules()
     {
         return [
-            'icon' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'judul' => 'required|string|max:50',
             'deskripsi' => 'required|string|max:1500',
         ];

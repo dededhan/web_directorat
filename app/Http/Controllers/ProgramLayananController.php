@@ -53,6 +53,11 @@ class ProgramLayananController extends Controller
             $data = $request->validated();
             $data['status'] = true; // Default status is active
             
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('program_images', 'public');
+                $data['image'] = $imagePath;
+            }
+            
             ProgramLayanan::create($data);
             
             $routePrefix = $this->getRoutePrefix();
@@ -77,11 +82,24 @@ class ProgramLayananController extends Controller
     {
         try {
             $validated = $request->validate([
-                'icon' => 'required|string',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'judul' => 'required|string|max:50',
                 'deskripsi' => 'required|string|max:1500',
                 'status' => 'sometimes|boolean'
             ]);
+
+            if ($request->hasFile('image')) {
+                \Log::info('Image upload attempt');
+
+                // Delete old image if exists
+                if ($request->file('image')->isValid()) {
+                    $imagePath = $request->file('image')->store('program_images', 'public');
+                    \Log::info('Image stored at: ' . $imagePath);
+                    $data['image'] = $imagePath;
+                } else {
+                    \Log::error('Invalid image upload');
+                }
+            }
 
             $programLayanan->update($validated);
 
