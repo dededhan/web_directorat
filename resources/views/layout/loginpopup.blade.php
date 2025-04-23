@@ -87,6 +87,22 @@
             z-index: 10;
         }
 
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            background-color: #f9fafb;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #006666;
+            box-shadow: 0 0 0 3px rgba(0, 102, 102, 0.2);
+            background-color: #fff;
+        }
+
         .decoration-icons {
             position: absolute;
             bottom: 30px;
@@ -114,23 +130,6 @@
             transition: transform 0.25s ease;
         }
         
-        /* Custom form styles */
-        .form-input {
-            width: 100%;
-            padding: 0.75rem 0.75rem 0.75rem 2.5rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            background-color: #f9fafb;
-            transition: all 0.3s ease;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: #006666;
-            box-shadow: 0 0 0 3px rgba(0, 102, 102, 0.2);
-            background-color: #fff;
-        }
-        
         .google-btn {
             display: flex;
             align-items: center;
@@ -150,22 +149,12 @@
             background-color: #f9fafb;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
-        
-        .footer-icons {
-            display: flex;
-            gap: 12px;
-        }
-        
-        .footer-icons i {
-            font-size: 18px;
-            opacity: 0.7;
-        }
     </style>
 </head>
 
 <body class="bg-gray-100">
     <!-- Modal -->
-    <div class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" id="loginModal">
+    <div class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="loginModal">
         <div class="modal-dialog w-full max-w-4xl mx-auto">
             <div class="modal-content bg-white rounded-3xl overflow-hidden shadow-2xl">
                 <div class="modal-container">
@@ -242,10 +231,14 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // First, make sure the modal is hidden by default
+            // Make sure the modal is hidden by default
             const modal = document.getElementById('loginModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('block');
+            
+            // Hide modal first
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('block');
+            }
 
             // Only show login modal when login buttons are clicked
             const loginButtons = document.querySelectorAll('.login');
@@ -258,21 +251,31 @@
             });
 
             // Add ability to close modal by clicking outside
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.classList.add('hidden');
-                    modal.classList.remove('block');
-                }
-            });
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('block');
+                    }
+                });
+            }
 
-            // Optional: Add close button functionality
-            const closeModalButton = modal.querySelector('[data-dismiss="modal"]');
+            // Add close button functionality
+            const closeModalButton = modal?.querySelector('[data-dismiss="modal"]');
             if (closeModalButton) {
                 closeModalButton.addEventListener('click', function() {
                     modal.classList.add('hidden');
                     modal.classList.remove('block');
                 });
             }
+            
+            // Add escape key to close modal
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('block');
+                }
+            });
         });
     </script>
 </body>
