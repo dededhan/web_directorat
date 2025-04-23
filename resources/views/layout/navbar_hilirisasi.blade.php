@@ -83,7 +83,7 @@
     }
 </style>
 
-@include('loginpopup')
+@include('layout.loginpopup')
 
 <!-- Desktop Navbar with Click-Based Dropdown -->
 <nav class="navbar hidden md:block sticky top-0 z-50 bg-[#277177] shadow-md">
@@ -503,4 +503,20 @@
         // Run handleScroll on initial load
         handleScroll();
     });
+    document.addEventListener('DOMContentLoaded', function() {
+    const navbar = document.querySelector('.navbar.sticky');
+    
+    if (navbar) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 0) {
+                navbar.style.position = 'fixed';
+                navbar.style.top = '0';
+                navbar.style.width = '100%';
+                navbar.style.zIndex = '50';
+            } else {
+                navbar.style.position = 'static';
+            }
+        });
+    }
+});
 </script>

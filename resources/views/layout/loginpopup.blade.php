@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UNJ Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-    <!-- Removed Google Fonts import for Roboto -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
     <style>
         * {
@@ -78,25 +77,48 @@
             margin-bottom: 20px;
         }
 
-        .input-group i {
+        .input-icon {
             position: absolute;
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
             color: #aaa;
+            pointer-events: none;
             z-index: 10;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            background-color: #f9fafb;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #006666;
+            box-shadow: 0 0 0 3px rgba(0, 102, 102, 0.2);
+            background-color: #fff;
         }
 
         .decoration-icons {
             position: absolute;
             bottom: 30px;
             right: 30px;
+            display: flex;
+            gap: 15px;
         }
 
         .decoration-icons i {
             font-size: 20px;
-            margin-left: 10px;
             opacity: 0.5;
+            transition: opacity 0.2s ease;
+        }
+
+        .decoration-icons i:hover {
+            opacity: 0.8;
         }
 
         /* Modal animation */
@@ -106,6 +128,26 @@
 
         .modal-dialog {
             transition: transform 0.25s ease;
+        }
+        
+        .google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            background-color: #fff;
+            color: #4b5563;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .google-btn:hover {
+            background-color: #f9fafb;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
@@ -125,14 +167,18 @@
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
                             <div class="input-group">
-                                <i class="fas fa-envelope"></i>
+                                <span class="input-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
                                 <input type="email" name="email" placeholder="Email" required
-                                    class="w-full py-3 px-12 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:border-teal-800 focus:ring-2 focus:ring-teal-800 focus:ring-opacity-20 transition-all duration-300" />
+                                    class="form-input" />
                             </div>
                             <div class="input-group">
-                                <i class="fas fa-lock"></i>
+                                <span class="input-icon">
+                                    <i class="fas fa-lock"></i>
+                                </span>
                                 <input type="password" name="password" placeholder="Password" required
-                                    class="w-full py-3 px-12 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:border-teal-800 focus:ring-2 focus:ring-teal-800 focus:ring-opacity-20 transition-all duration-300" />
+                                    class="form-input" />
                             </div>
                             <div class="flex justify-center my-4">
                                 <img src="https://placehold.co/300x80" alt="reCAPTCHA verification" />
@@ -143,10 +189,9 @@
                         </form>
                         <!-- Google Sign-in Button -->
                         <div class="mt-4">
-                            <a href="{{ route('login.google') }}"
-                                class="w-full py-3 flex items-center justify-center rounded-lg bg-white border border-gray-300 text-gray-700 font-medium tracking-wide mt-3 text-center transition-all duration-300 hover:bg-gray-50">
+                            <a href="{{ route('login.google') }}" class="google-btn">
                                 <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo"
-                                    class="h-5 mr-2">
+                                    class="h-5">
                                 SIGN IN WITH GOOGLE
                             </a>
                         </div>
@@ -186,10 +231,14 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // First, make sure the modal is hidden by default
+            // Make sure the modal is hidden by default
             const modal = document.getElementById('loginModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('block');
+            
+            // Hide modal first
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('block');
+            }
 
             // Only show login modal when login buttons are clicked
             const loginButtons = document.querySelectorAll('.login');
@@ -202,21 +251,31 @@
             });
 
             // Add ability to close modal by clicking outside
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.classList.add('hidden');
-                    modal.classList.remove('block');
-                }
-            });
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('block');
+                    }
+                });
+            }
 
-            // Optional: Add close button functionality
-            const closeModalButton = modal.querySelector('[data-dismiss="modal"]');
+            // Add close button functionality
+            const closeModalButton = modal?.querySelector('[data-dismiss="modal"]');
             if (closeModalButton) {
                 closeModalButton.addEventListener('click', function() {
                     modal.classList.add('hidden');
                     modal.classList.remove('block');
                 });
             }
+            
+            // Add escape key to close modal
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('block');
+                }
+            });
         });
     </script>
 </body>

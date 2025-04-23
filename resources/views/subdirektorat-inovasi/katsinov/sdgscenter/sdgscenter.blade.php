@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDGS Center - Universitas Negeri Jakarta</title>
+    <title>SDGs Program - Universitas Negeri Jakarta</title>
     <link rel="stylesheet" href="/inovasi/sdgscenter.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
@@ -62,7 +63,7 @@
 @include('layout.navbar_hilirisasi')
     <section id="home" class="hero" id="heroSection">
         <div class="hero-content">
-            <h2>Sustainable Development Goals Center</h2>
+            <h2>Sustainable Development Goals Program </h2>
             <p>Membangun masa depan berkelanjutan melalui kolaborasi, inovasi, dan pendidikan untuk mewujudkan tujuan
                 pembangunan berkelanjutan di Indonesia.</p>
             <div class="btn-group">
@@ -82,7 +83,7 @@
                     <div class="ranking-icon">🏆</div>
                     <h4 class="ranking-title">Peringkat Nasional</h4>
                     <div class="ranking-position">#3</div>
-                    <div class="ranking-category">SDGs Research Center</div>
+                    <div class="ranking-category">SDGs Research Program</div>
                     <p>Dinobatkan sebagai salah satu pusat penelitian SDGs terbaik di Indonesia oleh Kementerian
                         Pendidikan dan Kebudayaan.</p>
                     <div class="ranking-note">Tahun 2024</div>
@@ -552,12 +553,12 @@
     <section id="about" class="about">
         <div class="container">
             <div class="section-title">
-                <h3>Tentang SDGS Center</h3>
+                <h3>Tentang SDGs Program</h3>
                 <p>Pusat Studi Pembangunan Berkelanjutan Universitas Negeri Jakarta</p>
             </div>
             <div class="about-content">
                 <div class="about-text">
-                    <p>SDGS Center Universitas Negeri Jakarta didirikan sebagai pusat keunggulan dalam penelitian,
+                    <p>SDGs Program Universitas Negeri Jakarta didirikan sebagai pusat keunggulan dalam penelitian,
                         pendidikan, dan implementasi Tujuan Pembangunan Berkelanjutan (Sustainable Development Goals).
                         Kami berkomitmen untuk berkontribusi pada pencapaian 17 tujuan pembangunan berkelanjutan melalui
                         inisiatif akademik dan proyek kolaboratif.</p>
