@@ -1962,16 +1962,16 @@ footer {
     }
 }
 .unj-content-section-header {
+    text-align: center;
     margin-bottom: 2rem;
-    border-left: 4px solid #FACC15; /* Yellow-400 for all section headers */
-    padding-left: 1rem;
 }
 
 .unj-content-section-header .unj-section-title {
     color: #0F766E; /* Teal-700 */
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.25rem;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-align: center;
 }
 
 .unj-content-section-header .unj-section-subtitle {
@@ -2011,10 +2011,11 @@ footer {
 }
 
 .unj-social-section-header .unj-section-subtitle {
-    color: #4B5563; /* Gray-600 */
-    max-width: 32rem;
-    margin-left: auto;
-    margin-right: auto;
+    font-size: 1.125rem;
+    color: #4b5563; /* gray-600 */
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .unj-social-section-header .unj-profile-link {
