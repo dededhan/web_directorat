@@ -196,63 +196,17 @@
     <div class="ranking-section" id="rankings">
         <h2 class="ranking-title">Ranking Universitas Negeri Jakarta</h2>
         
-        <div class="ranking-grid">
-            <!-- All 7 cards with corresponding logos -->
-            <a href="{{ route('Pemeringkatan.ranking_unj.Webometrics World University Ranking.Webometrics World University Ranking') }}" class="ranking-card"> 
-                <div class="logo-container">
-                    <img src="/images/logos/Webometrics-Logo.jpeg" alt="Webometrics Logo">
-                </div>
-                <p>Webometrics World University Ranking</p>
-            </a>
-            
-            <a href="{{ route('Pemeringkatan.ranking_unj.Times Higher Education Impact Rankings.Times Higher Education Impact Rankings') }}" class="ranking-card"> 
-                <div class="logo-container">
-                    <img src="/images/logos/Times_Higher_Education_logo.png" alt="Times Higher Education Logo">
-                </div>
-                <p>Times Higher Education Impact Rankings</p>
-            </a>
-            
-            <a href="{{ route('Pemeringkatan.ranking_unj.QS World University Ranking.QS World University Ranking') }}" class="ranking-card">
-                <div class="logo-container">
-                    <img src="/images/logos/QS world ranking.png"alt="QS World Ranking Logo">
-                </div>
-                <p>QS World University Ranking</p>
-            </a>
-            
-            <a href="{{ route('Pemeringkatan.ranking_unj.QS Asian University Rankings.QS Asian University Rankings') }}" class="ranking-card">
-                <div class="logo-container">
-                    <img src="/images/logos/QS asian ranking.jpg" alt="QS Asian Ranking Logo">
-                </div>
-                <p>QS Asian University Rankings</p>
-            </a>
-            
-            <a href="{{ route('Pemeringkatan.ranking_unj.UI Greenmetric World University Ranking.UI Greenmetric World University Ranking') }}" class="ranking-card">
-                <div class="logo-container">
-                    <img src="/images/logos/logo_uigm.png" alt="UI GreenMetric Logo">
-                </div>
-                <p>UI Greenmetric World University Ranking</p>
-            </a>
-            
-            <a href="{{ route('Pemeringkatan.ranking_unj.Pemeringkatan Klaster Pendidikan Tinggi.Pemeringkatan Klaster Pendidikan Tinggi') }}" class="ranking-card">
-                <div class="logo-container">
-                    <img src="/images/logos/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.png" alt="Kementerian Pendidikan Logo"> 
-                </div>
-                <p>Pemeringkatan Klaster Pendidikan Tinggi</p> 
-            </a>
-        
-            <a href="{{ route('Pemeringkatan.ranking_unj.scimago.scimago') }}" class="ranking-card">
-                <div class="logo-container">
-                    <img src="/images/logos/scimago.png" alt="scimago">
-                </div>
-                <p>scimago</p>
-            </a>
 
-            <a href="{{ route('Pemeringkatan.ranking_unj.sinta.sinta') }}" class="ranking-card">
+        <div class="ranking-grid">
+            <!-- Dynamic ranking cards from database -->
+            @foreach($rankings as $ranking)
+            <a href="{{ route('ranking.show', $ranking->slug) }}" class="ranking-card"> 
                 <div class="logo-container">
-                    <img src="/images/logos/sinta.png" alt="sinta">
+                    <img src="{{ asset('storage/' . $ranking->gambar) }}" alt="{{ $ranking->judul }}">
                 </div>
-                <p>sinta</p>
+                <p>{{ $ranking->judul }}</p>
             </a>
+            @endforeach
         </div>
     </div>
 

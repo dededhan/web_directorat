@@ -12,6 +12,7 @@ use App\Http\Controllers\FormRecordHasilPengukuranController;
 use App\Http\Controllers\ProdukInovasiController;
 use App\Http\Controllers\SejarahContentController;
 use App\Http\Controllers\PimpinanController;
+use App\Http\Controllers\RankingController;
 
 use App\Http\Controllers\ProgramKegiatanController;
 
@@ -232,9 +233,18 @@ Route::get('/sejarah-pemeringkatan', [SejarahContentController::class, 'showPubl
 Route::get('/sejarah-hilirisasi', [SejarahContentController::class, 'showPublic'])
     ->name('subdirektorat-inovasi.sejarah.sejarah');
 
-Route::get('/ranking_unj', function () {
-    return view('Pemeringkatan.ranking_unj.rankingunj');
-})->name('Pemeringkatan.ranking_unj.rankingunj');
+// Route::get('/ranking_unj', function () {
+//     return view('Pemeringkatan.ranking_unj.rankingunj');
+// })->name('Pemeringkatan.ranking_unj.rankingunj');
+
+
+Route::get('/ranking_unj', [App\Http\Controllers\RankingController::class, 'showAllRankings'])
+    ->name('Pemeringkatan.ranking_unj.rankingunj');
+
+Route::get('/ranking_unj', [App\Http\Controllers\RankingController::class, 'showAllRankings'])
+    ->name('Pemeringkatan.ranking_unj.rankingunj');
+Route::get('/ranking_unj/{slug}', [App\Http\Controllers\RankingController::class, 'show'])
+    ->name('ranking.show');
 
 Route::get('/ranking_unj/Webometrics World University Ranking', function () {
     return view('Pemeringkatan.ranking_unj.Webometrics World University Ranking.Webometrics World University Ranking');

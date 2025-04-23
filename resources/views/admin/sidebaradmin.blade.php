@@ -160,6 +160,12 @@
                         <span class="text">International Lecture</span>
                     </a>
                 </li>
+                <li class="{{ request()->routeIs('admin.ranking.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.ranking.index') }}">
+                        <i class='bx bxs-school'></i>
+                        <span class="text">Ranking Pemeringkatan</span>
+                    </a>
+                </li>
             </ul>
         </div>
 

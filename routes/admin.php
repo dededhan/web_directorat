@@ -25,6 +25,7 @@ use App\Http\Controllers\InstagramController;
 use App\Http\Controllers\ProdukInovasiController;
 use App\Http\Controllers\SejarahContentController;
 use App\Http\Controllers\PimpinanController;
+use App\Http\Controllers\RankingController;
 use Illuminate\Http\Request;
 // Ganti route yang ada dengan:
 use App\Http\Controllers\DokumenController;
@@ -143,6 +144,14 @@ Route::prefix('admin')->name('admin.')
         Route::resource('/internationallecture', DosenInternasionalController::class);
         Route::get('/internationallecture/{id}/detail', [DosenInternasionalController::class, 'getDosenDetail'])
             ->name('internationallecture.detail');
+
+        //ranking
+        Route::resource('/ranking', RankingController::class)
+            ->except(['show', 'edit']);
+        Route::get('/ranking/{id}/detail', [RankingController::class, 'getRankingDetail'])
+            ->name('ranking.detail');
+        Route::post('/ranking/upload', [RankingController::class, 'upload'])
+            ->name('ranking.upload');
 
 
         //inovasi
