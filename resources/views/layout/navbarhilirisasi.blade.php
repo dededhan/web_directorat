@@ -1,22 +1,4 @@
-<!-- navbar.blade.php for Laravel 11 with Android-size responsive design -->
 
-<!-- Social Media Bar (Original, unchanged for desktop) -->
-<div class="social-media-bar py-2 hidden md:flex">
-    <div class="container mx-auto px-6 flex justify-start space-x-4">
-        <a href="#" class="hover:text-yellow-500">
-            <i class="fab fa-facebook-f"></i>
-        </a>
-        <a href="#" class="hover:text-yellow-500">
-            <i class="fab fa-twitter"></i>
-        </a>
-        <a href="#" class="hover:text-yellow-500">
-            <i class="fab fa-instagram"></i>
-        </a>
-        <a href="#" class="hover:text-yellow-500">
-            <i class="fab fa-youtube"></i>
-        </a>  
-    </div>
-</div>
 
 @include('layout.loginpopup')
 
