@@ -45,7 +45,7 @@ function collectFormResponses() {
                     row: index, // Row index within the indicator
                     aspect: aspect,
                     score: score,
-                    dropdown: dropdownValue 
+                    dropdown: dropdownValue
                 });
             }
         });
@@ -86,9 +86,7 @@ async function submitAllIndicators() {
             formData.append(`responses[${index}][row]`, response.row);
             formData.append(`responses[${index}][aspect]`, response.aspect);
             formData.append(`responses[${index}][score]`, response.score);
-            if (response.dropdown_value) {
-                formData.append(`responses[${index}][dropdown_value]`, response.dropdown_value);
-            }   
+            formData.append(`responses[${index}][dropdown]`, response.dropdown || ''); 
 
         });
         
