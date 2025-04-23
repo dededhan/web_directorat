@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -66,11 +64,11 @@
 
         .profile-image img {
             width: 100%;
-            border-radius: 50%; /* Changed to circular */
+            border-radius: 0; /* Changed from 50% (circular) to 0 (square) */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             object-fit: cover;
             object-position: center top;
-            aspect-ratio: 1/1;
+            aspect-ratio: 1/1.2; /* Changed from 1/1 to 1/1.5 to make image taller */
             border: 5px solid #186862;
         }
 
