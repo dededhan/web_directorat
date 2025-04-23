@@ -144,6 +144,48 @@
             line-height: 1.4;
         }
         
+        /* Indikator Pemeringkatan section */
+        .indikator-section {
+            background-color: #277177;
+            padding: 15px 0;
+            margin-bottom: 0; /* No margin at bottom since it will be directly above info-section */
+        }
+        
+        .indikator-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .indikator-title {
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .indikator-search {
+            width: 300px;
+        }
+        
+        .indikator-search input {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #164044;
+            background-color: #edf2f7;
+            font-size: 0.9rem;
+        }
+        
+        .indikator-search input:focus {
+            outline: none;
+            border-color: #00a8cc;
+            box-shadow: 0 0 0 2px rgba(0, 168, 204, 0.2);
+        }
+        
         @media (max-width: 1024px) {
             .ranking-grid {
                 grid-template-columns: repeat(3, 1fr);
@@ -157,6 +199,19 @@
             
             .ranking-card {
                 height: 180px;
+            }
+            
+            .indikator-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .indikator-title {
+                margin-bottom: 10px;
+            }
+            
+            .indikator-search {
+                width: 100%;
             }
         }
         
@@ -186,7 +241,7 @@
         .info-section {
             display: flex;
             max-width: 100%;
-            margin: 0 auto 0;
+            margin: 0 auto 20px; /* Added bottom margin to create space before footer */
             padding: 0;
             background-color: #fff;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
@@ -241,15 +296,38 @@
             font-size: 0.95rem;
         }
         
-                    @media (max-width: 768px) {
+        /* Create space for footer */ 
+        .footer-spacer {
+            height: 10px; /* Additional space before footer */
+        }
+        .indikator-banner {
+            background-color: #207177;
+            padding: 15px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .indikator-banner h2 {
+            color: white;
+            font-size: 1.8rem; /* Match the font size of ranking-title */
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        @media (max-width: 768px) {
             .info-section {
                 flex-direction: column;
+                margin-bottom: 10px; /* Slightly less space on mobile */
             }
             
             .info-sidebar {
                 width: 100%;
                 border-right: none;
                 border-bottom: 1px solid #eaeaea;
+            }
+            
+            .footer-spacer {
+                height: 10px; /* Slightly less space on mobile */
             }
         }
     </style>
@@ -267,7 +345,6 @@
     <div class="ranking-section" id="rankings">
         <h2 class="ranking-title">Ranking Universitas Negeri Jakarta</h2>
         
-
         <div class="ranking-grid">
             <!-- Dynamic ranking cards from database -->
             @foreach($rankings as $ranking)
@@ -281,31 +358,37 @@
         </div>
     </div>
     
-    <!-- Updated Information Section with 12 sidebar items -->
-    <div class="info-section">
-        <div class="info-sidebar">
-            <ul>
-                <li><a href="#sejarah" class="active">Sejarah</a></li>
-                <li><a href="#visi-misi">Visi Misi</a></li>
-                <li><a href="#tujuan">Tujuan</a></li>
-                <li><a href="#rencana-strategis">Rencana Strategis</a></li>
-                <li><a href="#struktur-organisasi">Struktur Organisasi</a></li>
-                <li><a href="#prestasi">Prestasi</a></li>
-                <li><a href="#penelitian">Penelitian</a></li>
-                <li><a href="#kerjasama">Kerjasama</a></li>
-                <li><a href="#publikasi">Publikasi</a></li>
-                <li><a href="#pengabdian">Pengabdian</a></li>
-                <li><a href="#fasilitas">Fasilitas</a></li>
-                <li><a href="#kontak">Kontak</a></li>
-            </ul>
-        </div>
-        <div class="info-content" id="sejarah">
-            <h2>Sejarah</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sed sapien quam. Sed dapibus est id enim facilisis, at posuere turpis adipiscing. Quisque sit amet dui dui. Duis rhoncus velit nec est condimentum feugiat. Donec aliquam augue nec gravida lobortis. Nunc arcu mi, pretium quis dolor id, iaculis euismod libero. Pellentesque ultricies ante eu velit vulputate, nec mattis justo suscipit.</p>
-            <p>Curabitur mollis metus in nunc malesuada, vel placerat tellus vestibulum. Maecenas dignissim egestas lacus, ac elementum metus ultrices ac. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nullam quis sapien a nulla venenatis ullamcorper. Suspendisse euismod, mauris non gravida placerat, ipsum velit sollicitudin ipsum.</p>
-        </div>
-    </div>
+    <div class="indikator-banner">
+    <h2>Indikator Pemeringkatan</h2>
+</div>
 
+<!-- Original info-section without the Indikator Pemeringkatan in sidebar -->
+<div class="info-section">
+    <div class="info-sidebar">
+        <ul>
+            <li><a href="#sejarah" class="active">Sejarah</a></li>
+            <li><a href="#visi-misi">Visi Misi</a></li>
+            <li><a href="#tujuan">Tujuan</a></li>
+            <li><a href="#rencana-strategis">Rencana Strategis</a></li>
+            <li><a href="#struktur-organisasi">Struktur Organisasi</a></li>
+            <li><a href="#prestasi">Prestasi</a></li>
+            <li><a href="#penelitian">Penelitian</a></li>
+            <li><a href="#kerjasama">Kerjasama</a></li>
+            <li><a href="#publikasi">Publikasi</a></li>
+            <li><a href="#pengabdian">Pengabdian</a></li>
+            <li><a href="#fasilitas">Fasilitas</a></li>
+            <li><a href="#kontak">Kontak</a></li>
+        </ul>
+    </div>
+    <div class="info-content" id="sejarah">
+        <h2>Sejarah</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sed sapien quam. Sed dapibus est id enim facilisis, at posuere turpis adipiscing. Quisque sit amet dui dui. Duis rhoncus velit nec est condimentum feugiat. Donec aliquam augue nec gravida lobortis. Nunc arcu mi, pretium quis dolor id, iaculis euismod libero. Pellentesque ultricies ante eu velit vulputate, nec mattis justo suscipit.</p>
+        <p>Curabitur mollis metus in nunc malesuada, vel placerat tellus vestibulum. Maecenas dignissim egestas lacus, ac elementum metus ultrices ac. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nullam quis sapien a nulla venenatis ullamcorper. Suspendisse euismod, mauris non gravida placerat, ipsum velit sollicitudin ipsum.</p>
+    </div>
+</div>
+
+    <!-- Add a spacer before footer -->
+    <div class="footer-spacer"></div>
     <!-- Add smooth scroll script -->
     <script>
         // Add smooth scrolling to all links
