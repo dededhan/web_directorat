@@ -2,6 +2,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/berita_dashboard.css') }}">
+<link rel="stylesheet" href="{{ asset('css/ckeditor-content.css') }}">
+
+<style>
+
+</style>
 
 @section('contentadmin')
     <div class="head-title">
@@ -41,10 +46,14 @@
                         <label for="jabatan" class="form-label">Jabatan</label>
                         <select class="form-select @error('jabatan') is-invalid @enderror" name="jabatan" id="jabatan">
                             <option value="">Pilih Jabatan</option>
-                            <option value="Direktur Inovasi Sistem Informasi dan Pemeringkatan" {{ old('jabatan') == 'Direktur Inovasi Sistem Informasi dan Pemeringkatan' ? 'selected' : '' }}>Direktur Inovasi Sistem Informasi dan Pemeringkatan</option>
-                            <option value="Kepala Subdirektorat Inovasi dan Hilirisai" {{ old('jabatan') == 'Kepala Subdirektorat Inovasi dan Hilirisai' ? 'selected' : '' }}>
+                            <option value="Direktur Inovasi Sistem Informasi dan Pemeringkatan"
+                                {{ old('jabatan') == 'Direktur Inovasi Sistem Informasi dan Pemeringkatan' ? 'selected' : '' }}>
+                                Direktur Inovasi Sistem Informasi dan Pemeringkatan</option>
+                            <option value="Kepala Subdirektorat Inovasi dan Hilirisai"
+                                {{ old('jabatan') == 'Kepala Subdirektorat Inovasi dan Hilirisai' ? 'selected' : '' }}>
                                 Kepala Subdirektorat Inovasi dan Hilirisai</option>
-                            <option value="Kepala Subdirektorat Sistem Informasi dan Pemeringkatan" {{ old('jabatan') == 'Kepala Subdirektorat Sistem Informasi dan Pemeringkatan' ? 'selected' : '' }}>
+                            <option value="Kepala Subdirektorat Sistem Informasi dan Pemeringkatan"
+                                {{ old('jabatan') == 'Kepala Subdirektorat Sistem Informasi dan Pemeringkatan' ? 'selected' : '' }}>
                                 Kepala Subdirektorat Sistem Informasi dan Pemeringkatan</option>
                         </select>
                         @error('jabatan')
@@ -57,8 +66,7 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="deskripsi" class="form-label">Deskripsi</label>
-                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"
-                            rows="8">{{ old('deskripsi') }}</textarea>
+                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" rows="8">{{ old('deskripsi') }}</textarea>
                         @error('deskripsi')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -181,9 +189,12 @@
                             <div class="col-md-6 mb-3">
                                 <label for="edit_jabatan" class="form-label">Jabatan</label>
                                 <select class="form-select" name="jabatan" id="edit_jabatan">
-                                    <option value="Direktur Inovasi Sistem Informasi dan Pemeringkatan">Direktur Inovasi Sistem Informasi dan Pemeringkatan</option>
-                                    <option value="Kepala Subdirektorat Inovasi dan Hilirisai">Kepala Subdirektorat Inovasi dan Hilirisai</option>
-                                    <option value="Kepala Subdirektorat Sistem Informasi dan Pemeringkatan">Kepala Subdirektorat Sistem Informasi dan Pemeringkatan</option>
+                                    <option value="Direktur Inovasi Sistem Informasi dan Pemeringkatan">Direktur Inovasi
+                                        Sistem Informasi dan Pemeringkatan</option>
+                                    <option value="Kepala Subdirektorat Inovasi dan Hilirisai">Kepala Subdirektorat Inovasi
+                                        dan Hilirisai</option>
+                                    <option value="Kepala Subdirektorat Sistem Informasi dan Pemeringkatan">Kepala
+                                        Subdirektorat Sistem Informasi dan Pemeringkatan</option>
                                 </select>
                             </div>
                         </div>
@@ -218,7 +229,6 @@
     <!-- Script section -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize CKEditor for the description field
             ClassicEditor
                 .create(document.querySelector('#deskripsi'), {
                     toolbar: {
@@ -309,9 +319,10 @@
                 button.addEventListener('click', function() {
                     const form = this.closest('form');
 
-                    showConfirmationDialog('Apakah Anda yakin ingin menghapus data pimpinan ini?', () => {
-                        form.submit();
-                    });
+                    showConfirmationDialog('Apakah Anda yakin ingin menghapus data pimpinan ini?',
+                        () => {
+                            form.submit();
+                        });
                 });
             });
 
@@ -355,7 +366,8 @@
                                 'editPimpinanModal'));
                             editModal.show();
                         })
-                        .catch(error => {console.error('Error fetching pimpinan details:', error);
+                        .catch(error => {
+                            console.error('Error fetching pimpinan details:', error);
                             showErrorAlert('Gagal mengambil data pimpinan.');
                         });
                 });
@@ -404,11 +416,11 @@
             });
 
             // Flash messages for form submission results
-            @if(session('success'))
+            @if (session('success'))
                 showSuccessAlert("{{ session('success') }}");
             @endif
 
-            @if(session('error'))
+            @if (session('error'))
                 showErrorAlert("{{ session('error') }}");
             @endif
         });

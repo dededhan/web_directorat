@@ -1,0 +1,112 @@
+html body .ck-content ul,
+html body .modal-text ul,
+html body .profile-content ul,
+html body .team-member-content ul,
+#content .ck-content ul {
+    list-style-type: disc !important;
+    padding-left: 2em !important;
+    margin: 1em 0 !important;
+}
+
+html body .ck-content ol,
+html body .modal-text ol,
+html body .profile-content ol,
+html body .team-member-content ol,
+#content .ck-content ol {
+    list-style-type: decimal !important;
+    padding-left: 2em !important;
+    margin: 1em 0 !important;
+}
+
+/* List item styling with high specificity */
+html body .ck-content ul li,
+html body .modal-text ul li,
+html body .profile-content ul li,
+html body .team-member-content ul li,
+html body .ck-content ol li,
+html body .modal-text ol li,
+html body .profile-content ol li,
+html body .team-member-content ol li,
+#content .ck-content ul li,
+#content .ck-content ol li {
+    display: list-item !important;
+    margin-bottom: 0.5em !important;
+}
+
+/* Force bullets on list items */
+html body .ck-content ul>li::before,
+html body .modal-text ul>li::before,
+html body .profile-content ul>li::before,
+html body .team-member-content ul>li::before,
+#content .ck-content ul>li::before {
+    content: "•";
+    position: absolute;
+    left: -1em;
+    font-size: 1.2em;
+}
+
+/* Force numbers on ordered list items */
+html body .ck-content ol,
+html body .modal-text ol,
+html body .profile-content ol,
+html body .team-member-content ol,
+#content .ck-content ol {
+    counter-reset: item;
+}
+
+html body .ck-content ol>li,
+html body .modal-text ol>li,
+html body .profile-content ol>li,
+html body .team-member-content ol>li,
+#content .ck-content ol>li {
+    counter-increment: item;
+    position: relative;
+}
+
+html body .ck-content ol>li::before,
+html body .modal-text ol>li::before,
+html body .profile-content ol>li::before,
+html body .team-member-content ol>li::before,
+#content .ck-content ol>li::before {
+    content: counter(item) ". ";
+    position: absolute;
+    left: -1.5em;
+}
+
+/* Ensure list items have proper positioning */
+html body .ck-content ul>li,
+html body .modal-text ul>li,
+html body .profile-content ul>li,
+html body .team-member-content ul>li,
+html body .ck-content ol>li,
+html body .modal-text ol>li,
+html body .profile-content ol>li,
+html body .team-member-content ol>li,
+#content .ck-content ul>li,
+#content .ck-content ol>li {
+    position: relative;
+}
+
+/* Nested list styling */
+html body .ck-content ul ul,
+html body .ck-content ol ol,
+html body .ck-content ul ol,
+html body .ck-content ol ul,
+html body .modal-text ul ul,
+html body .modal-text ol ol,
+html body .modal-text ul ol,
+html body .modal-text ol ul,
+html body .profile-content ul ul,
+html body .profile-content ol ol,
+html body .profile-content ul ol,
+html body .profile-content ol ul,
+html body .team-member-content ul ul,
+html body .team-member-content ol ol,
+html body .team-member-content ul ol,
+html body .team-member-content ol ul,
+#content .ck-content ul ul,
+#content .ck-content ol ol,
+#content .ck-content ul ol,
+#content .ck-content ol ul {
+    margin: 0.5em 0 0.5em 2em !important;
+}

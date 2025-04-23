@@ -1,0 +1,80 @@
+.profile-content ul,
+.profile-content ol,
+.modal-text ul,
+.modal-text ol,
+.ck-content ul,
+.ck-content ol {
+    list-style-position: outside !important;
+    padding-left: 2em !important;
+    margin: 1em 0 !important;
+}
+
+.profile-content ul,
+.modal-text ul,
+.ck-content ul {
+    list-style-type: disc !important;
+}
+
+.profile-content ol,
+.modal-text ol,
+.ck-content ol {
+    list-style-type: decimal !important;
+}
+
+.profile-content li,
+.modal-text li,
+.ck-content li {
+    display: list-item !important;
+    margin-bottom: 0.5em !important;
+}
+
+/* Ensure list items are properly displayed */
+.profile-content ul > li::marker,
+.modal-text ul > li::marker,
+.ck-content ul > li::marker,
+.profile-content ol > li::marker,
+.modal-text ol > li::marker,
+.ck-content ol > li::marker {
+    display: inline !important;
+}
+
+/* Force bullets with pseudo-elements as a fallback */
+.profile-content ul > li,
+.modal-text ul > li,
+.ck-content ul > li {
+    position: relative;
+}
+
+.profile-content ul > li::before,
+.modal-text ul > li::before,
+.ck-content ul > li::before {
+    content: "•";
+    position: absolute;
+    left: -1.5em;
+    display: inline-block;
+    width: 1em;
+}
+
+/* Use CSS counters for numbered lists as fallback */
+.profile-content ol,
+.modal-text ol,
+.ck-content ol {
+    counter-reset: item;
+}
+
+.profile-content ol > li,
+.modal-text ol > li,
+.ck-content ol > li {
+    counter-increment: item;
+    position: relative;
+}
+
+.profile-content ol > li::before,
+.modal-text ol > li::before,
+.ck-content ol > li::before {
+    content: counter(item) ".";
+    position: absolute;
+    left: -1.7em;
+    width: 1.5em;
+    text-align: right;
+}
