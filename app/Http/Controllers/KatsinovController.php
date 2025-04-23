@@ -79,6 +79,7 @@ class KatsinovController extends Controller
             'responses.*.row' => 'required|integer',
             'responses.*.aspect' => 'required|string|in:T,O,R,M,P,Mf,I',
             'responses.*.score' => 'required|integer|min:0|max:5',
+            'responses.*.dropdown' => 'nullable|string|in:A,B,C,D,E,F',
         ]);
 
         // Start transaction to ensure all related data is saved or rolled back together
@@ -104,6 +105,8 @@ class KatsinovController extends Controller
                     'row_number' => $response['row'],
                     'aspect' => $response['aspect'],
                     'score' => $response['score'],
+                    'dropdown_value' => $response['dropdown'] ?? null,
+
                 ]);
             }
             
@@ -276,6 +279,7 @@ class KatsinovController extends Controller
             'responses.*.row' => 'required|integer',
             'responses.*.aspect' => 'required|string|in:T,O,R,M,P,Mf,I',
             'responses.*.score' => 'required|integer|min:0|max:5',
+            'responses.*.dropdown' => 'nullable|string|in:A,B,C,D,E,F',
         ]);
 
         DB::beginTransaction();
@@ -303,6 +307,8 @@ class KatsinovController extends Controller
                     'row_number' => $response['row'],
                     'aspect' => $response['aspect'],
                     'score' => $response['score'],
+                    'dropdown_value' => $response['dropdown'] ?? null,
+        
                 ]);
             }
             
