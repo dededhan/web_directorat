@@ -16,6 +16,7 @@
                     <th class="score-columns">4</th>
                     <th class="score-columns">5</th>
                     <th>Deskripsi</th>
+                    <th>rating</th>
                     <td rowspan="24" class="katsinov-title">KATSINOV 1</td>
                 </tr>
                 <!-- T rows -->
@@ -30,6 +31,17 @@
                     <td><input type="radio" name="indikator1_row1" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 4)></td>
                     <td><input type="radio" name="indikator1_row1" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 5)></td>
                     <td class="description-cell">Ide baru yang memberi solusi permasalahan masyarakat.</td>
+                    <td>
+                        <select name="indikator1_dropdown1" class="form-select">
+                            <option value="">Pilih</option>
+                            <option value="A" @selected($indicatorOne->isNotEmpty() && $indicatorOne[0]->dropdown_value === 'A')>Nilai 0</option>
+                            <option value="B" @selected($indicatorOne->isNotEmpty() && $indicatorOne[0]->dropdown_value === 'B')>Nilai 1</option>
+                            <option value="C" @selected($indicatorOne->isNotEmpty() && $indicatorOne[0]->dropdown_value === 'C')>Nilai 2</option>
+                            <option value="D" @selected($indicatorOne->isNotEmpty() && $indicatorOne[0]->dropdown_value === 'D')>Nilai 3</option>
+                            <option value="E" @selected($indicatorOne->isNotEmpty() && $indicatorOne[0]->dropdown_value === 'E')>Nilai 4</option>
+                            <option value="F" @selected($indicatorOne->isNotEmpty() && $indicatorOne[0]->dropdown_value === 'F')>Nilai 5</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr class="row-t">
                     <td class="row-number">2</td>

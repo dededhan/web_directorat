@@ -11,7 +11,8 @@ class KatsinovResponse extends Model
         'indicator_number',
         'row_number',
         'aspect',
-        'score'
+        'score',
+        'dropdown_value'
     ];
 
     public function katsinov()

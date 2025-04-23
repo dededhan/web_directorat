@@ -34,15 +34,18 @@ function collectFormResponses() {
             
             const aspect = aspectCell.textContent.trim();
             const checkedRadio = row.querySelector('input[type="radio"]:checked');
+            const dropdown = row.querySelector('select.form-select');
             
             if (checkedRadio) {
                 const score = parseInt(checkedRadio.value);
+                const dropdownValue = dropdown ? dropdown.value : null;
                 
                 responses.push({
                     indicator: indicatorNumber,
                     row: index, // Row index within the indicator
                     aspect: aspect,
-                    score: score
+                    score: score,
+                    dropdown: dropdownValue 
                 });
             }
         });
@@ -83,6 +86,10 @@ async function submitAllIndicators() {
             formData.append(`responses[${index}][row]`, response.row);
             formData.append(`responses[${index}][aspect]`, response.aspect);
             formData.append(`responses[${index}][score]`, response.score);
+            if (response.dropdown_value) {
+                formData.append(`responses[${index}][dropdown_value]`, response.dropdown_value);
+            }   
+
         });
         
         // Debug: Log formData entries
@@ -309,14 +316,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add CSS for highlighted rows
     const style = document.createElement('style');
     style.textContent = `
-        .selected-row {
-            background-color: rgba(23, 99, 105, 0.05);
-            transition: background-color 0.3s ease;
+        .form-select {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            width: 100%;
+            max-width: 80px;
         }
-        
-        .katsinov-table tr:hover {
-            background-color: rgba(23, 99, 105, 0.02);
+
+        .form-select:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        /* Style untuk row dengan dropdown */
+        .dropdown-cell {
+            padding: 8px;
+            text-align: center;
         }
     `;
     document.head.appendChild(style);
+
 });

@@ -103,8 +103,35 @@ document.addEventListener("DOMContentLoaded", () => {
         return highestLevel;
     }
 
+    function setupDropdowns() {
+        document.querySelectorAll('.katsinov-table').forEach(table => {
+            table.querySelectorAll('tr').forEach(row => {
+                const dropdown = row.querySelector('select.form-select');
+                if (dropdown) {
+                    dropdown.addEventListener('change', function() {
+                        // Update perhitungan jika diperlukan
+                        const indicatorContainer = table.closest('[data-indicator]');
+                        if (indicatorContainer) {
+                            const indicatorNum = indicatorContainer.dataset.indicator;
+                            calculateTotal(indicatorContainer, indicatorNum);
+                            updateKatsinovLevel();
+                        }
+
+                        // Jika ada chart, update juga
+                        if (window.updateChart) {
+                            window.updateChart();
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+
+
     // Inisialisasi
     setupRadioButtons();
+    setupDropdowns(); 
     updateKatsinovLevel();
 
     // Debugging (opsional)
@@ -321,5 +348,5 @@ document.addEventListener("DOMContentLoaded", () => {
     // Panggil fungsi setup radio button
     setupExclusiveRadioButtons();
 
-    // Sisanya tetap sama dengan kode sebelumnya...
+   
 });
