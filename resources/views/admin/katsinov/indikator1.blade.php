@@ -53,6 +53,17 @@
                     <td><input type="radio" name="indikator1_row2" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 4)></td>
                     <td><input type="radio" name="indikator1_row2" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 5)></td>
                     <td class="description-cell">Telah dilakukan pengamatan prinsip-prinsip ilmiah dasar dan publikasi ilmiah.</td>
+                    <td>
+                        <select name="indikator1_dropdown2" class="form-select">
+                            <option value="">Pilih</option>
+                            <option value="A" @selected($indicatorOne->isNotEmpty() && $indicatorOne[1]->dropdown_value === 'A')>Nilai 1</option>
+                            <option value="B" @selected($indicatorOne->isNotEmpty() && $indicatorOne[1]->dropdown_value === 'B')>Nilai 1</option>
+                            <option value="C" @selected($indicatorOne->isNotEmpty() && $indicatorOne[1]->dropdown_value === 'C')>Nilai 2</option>
+                            <option value="D" @selected($indicatorOne->isNotEmpty() && $indicatorOne[1]->dropdown_value === 'D')>Nilai 3</option>
+                            <option value="E" @selected($indicatorOne->isNotEmpty() && $indicatorOne[1]->dropdown_value === 'E')>Nilai 4</option>
+                            <option value="F" @selected($indicatorOne->isNotEmpty() && $indicatorOne[1]->dropdown_value === 'F')>Nilai 5</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr class="row-t">
                     <td class="row-number">3</td>
@@ -64,6 +75,17 @@
                     <td><input type="radio" name="indikator1_row3" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[2]->score == 4)></td>
                     <td><input type="radio" name="indikator1_row3" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[2]->score == 5)></td>
                     <td class="description-cell">Faktor yang membedakan temuan dengan temuan lain dan unsur kebaruan dari sebuah ide atau gagasan telah diidentifikasi.</td>
+                    <td>
+                        <select name="indikator1_dropdown3" class="form-select">
+                            <option value="">Pilih</option>
+                            <option value="A" @selected($indicatorOne->isNotEmpty() && $indicatorOne[2]->dropdown_value === 'A')>Nilai 2</option>
+                            <option value="B" @selected($indicatorOne->isNotEmpty() && $indicatorOne[2]->dropdown_value === 'B')>Nilai 2</option>
+                            <option value="C" @selected($indicatorOne->isNotEmpty() && $indicatorOne[2]->dropdown_value === 'C')>Nilai 2</option>
+                            <option value="D" @selected($indicatorOne->isNotEmpty() && $indicatorOne[2]->dropdown_value === 'D')>Nilai 3</option>
+                            <option value="E" @selected($indicatorOne->isNotEmpty() && $indicatorOne[2]->dropdown_value === 'E')>Nilai 4</option>
+                            <option value="F" @selected($indicatorOne->isNotEmpty() && $indicatorOne[2]->dropdown_value === 'F')>Nilai 5</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr class="row-t">
                     <td class="row-number">4</td>
