@@ -206,7 +206,7 @@ class PimpinanController extends Controller
     public function upload(Request $request)
     {
         $request->validate([
-            'upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:8192',
         ]);
 
         $path = $request->file('upload')->store('pimpinan_images', 'public');
