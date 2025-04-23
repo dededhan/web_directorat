@@ -194,7 +194,7 @@
 </head>
 
 <body class="font-sans bg-gray-100">
-    @include('navbar')
+@include('layout.navbar')
 
     <!-- Header section -->
     <header class="relative">
@@ -836,4 +836,5 @@
 </script>
 
 </html>
-@include('footerlp')
+@include('layout.footer')
+
