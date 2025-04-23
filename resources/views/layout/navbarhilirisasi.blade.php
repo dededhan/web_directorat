@@ -18,7 +18,7 @@
     </div>
 </div>
 
-@include('loginpopup')
+@include('layout.loginpopup')
 
 <!-- Original Desktop Navbar (Updated with new structure) -->
 <nav class="navbar hidden md:block">

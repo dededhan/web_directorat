@@ -196,7 +196,7 @@
 </head>
 
 <body class="font-sans bg-gray-100">
-    @include('Pemeringkatan.navbarpemeringkatan')
+    @include('layout.navbarpemeringkatan')
 
     <!-- Header section -->
     <header class="relative">

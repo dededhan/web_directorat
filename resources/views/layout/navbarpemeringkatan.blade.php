@@ -71,7 +71,7 @@
     }
 </style>
 
-@include('loginpopup')
+@include('layout.loginpopup')
 
 <!-- Desktop Navbar with Click-Based Dropdown -->
 <nav class="navbar hidden md:block">

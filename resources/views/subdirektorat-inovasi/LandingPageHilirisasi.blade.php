@@ -195,7 +195,7 @@
 </head>
 
 <body class="font-sans bg-gray-100">
-    @include('subdirektorat-inovasi.navbarhilirisasi')
+    @include('layout.navbarhilirisasi')
 
     <!-- Header section -->
     <header class="relative">
