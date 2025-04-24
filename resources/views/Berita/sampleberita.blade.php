@@ -12,6 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <link rel="stylesheet" href="{{ asset('home.css') }}">
     <link rel="stylesheet" href="{{ asset('berita.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/ckeditor-list.css') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- FONT AWESOME - SINGLE VERSION -->
@@ -402,8 +403,9 @@
             </div>
             
             <div class="article-content">
-                {!! $berita->isi !!}
-                
+                <div class="ck-content">
+                    {!! $berita->isi !!}
+                </div>
                 <div class="article-share">
                     <span>Bagikan:</span>
                     <a href="#"><i class="fab fa-facebook-f"></i></a>

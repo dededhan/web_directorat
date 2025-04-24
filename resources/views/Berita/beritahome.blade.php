@@ -300,6 +300,10 @@ body {
     background-color: rgba(22, 101, 52, 0.1);
     color: #166534;
 }
+.card-category.umum {
+    background-color: rgba(22, 101, 52, 0.1);
+    color: #555555;
+}
 
 .card-meta {
     display: flex;
