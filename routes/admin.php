@@ -330,14 +330,13 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
     });
 
 Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
-    // Route::prefix('inovasi')->name('inovasi.')
     ->group(function () {
         Route::prefix('dosen')->name('dosen.')
             ->middleware(['checked', 'role:dosen'])
             ->group(function () {
                 // Dashboard
                 Route::get('/dashboard', function () {
-                    return view('inovasi.dosen.dashboard');
+                    return view('subdirektorat-inovasi.dosen.dashboard');
                 })->name('dashboard');
 
 
@@ -349,12 +348,12 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
                 Route::resource('/forminformasidasar', FormInformasiDasarController::class);
                 Route::post('/Inovasi/dosen/forminformasidasar', [FormInformasiDasarController::class, 'store'])
-                    ->name('Inovasi.dosen.forminformasidasar.store');
+                    ->name('subdirektorat-inovasi.dosen.forminformasidasar.store');
 
                 Route::resource('/formberitaacara', BeritaAcaraController::class);
 
                 Route::get('/formjudul', function () {
-                    return view('inovasi.dosen.formjudul');
+                    return view('subdirektorat-inovasi.dosen.formjudul');
                 })->name('formjudul');
 
                 Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
