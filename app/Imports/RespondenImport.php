@@ -9,8 +9,10 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 
-class RespondenImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnError
+class RespondenImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnError, SkipsOnFailure, SkipsEmptyRows
 {
     use SkipsErrors, SkipsFailures;
     
@@ -23,9 +25,14 @@ class RespondenImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
 
     public function model(array $row)
     {
+        // Skip empty rows by checking if essential fields are empty
+        if (empty($row['email']) && empty($row['fullname']) && empty($row['jabatan'])) {
+            return null;
+        }
+        
         if ($this->skipDuplicates) {
             $exists = Responden::where('email', $row['email'])
-                ->orWhere('phone_responden', $row['phone_responden'])
+                ->orWhere('phone_responden', $row['phone_responden'] ?? null)
                 ->exists();
                 
             if ($exists) {
@@ -39,7 +46,7 @@ class RespondenImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
             'jabatan' => $row['jabatan'],
             'instansi' => $row['instansi'],
             'email' => $row['email'],
-            'phone_responden' => $row['phone_responden'],
+            'phone_responden' => $row['phone_responden'] ?? null,
             'nama_dosen_pengusul' => $row['nama_dosen_pengusul'],
             'phone_dosen' => $row['phone_dosen'],
             'fakultas' => $row['fakultas'],
@@ -51,11 +58,15 @@ class RespondenImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
     public function rules(): array
     {
         return [
+            'title' => 'required',
             'email' => 'required|email',
-            'phone_responden' => 'required',
             'fullname' => 'required',
             'jabatan' => 'required',
-            'instansi' => 'required'
+            'instansi' => 'required',
+            'nama_dosen_pengusul' => 'required',
+            'phone_dosen' => 'required',
+            'fakultas' => 'required',
+            'category' => 'required'
         ];
     }
 }
