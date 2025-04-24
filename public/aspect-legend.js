@@ -6,6 +6,9 @@ window.aspectLegend = function() {
         chart: null,
         
         init() {
+            // Explicitly ensure the spiderweb popup is closed on page load
+            this.showSpiderwebPopup = false;
+            
             this.$watch('showPopup', value => {
                 if (value) {
                     this.$nextTick(() => {
@@ -35,10 +38,8 @@ window.aspectLegend = function() {
                     }
                 });
                 
-                // Update charts if needed
-                if (window.updateSpiderwebChart) {
-                    window.updateSpiderwebChart();
-                }
+                // Don't automatically update the spiderweb chart
+                // The chart will only be updated when the user explicitly opens it
             }
         },
 
