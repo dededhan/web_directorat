@@ -337,52 +337,60 @@
         </div>
     </main>
     <!-- Program dan Layanan Section with Popup -->
-    <section class="program-section">
-        <div class="container">
+    <section class="program-section py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
             <!-- Section Header -->
-            <div class="unj-content-section-header">
-                <h2 class="unj-section-title">Program & Layanan</h2>
-                <p class="unj-section-subtitle">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan
-                    Pemeringkatan</p>
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-teal-700 mb-2">Program & Layanan</h2>
+                <div class="flex items-center justify-center mb-4">
+                    <div class="h-1 w-16 bg-gray-300"></div>
+                    <span class="text-yellow-400 text-2xl mx-3"><i class="fas fa-cogs"></i></span>
+                    <div class="h-1 w-16 bg-gray-300"></div>
+                </div>
+                <p class="text-gray-600 max-w-2xl mx-auto">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan Pemeringkatan</p>
             </div>
-
+    
             <!-- Program Cards Grid -->
-            <div class="program-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 @forelse($programLayanan as $program)
-                    <div class="program-card" data-program-id="{{ $program->id }}">
-                        <div class="card-content">
-                            <div class="icon-container">
-                                <i class="{{ $program->icon }}"></i>
+                    <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2" data-program-id="{{ $program->id }}">
+                        <div class="relative">
+                            @if($program->image)
+                                <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}" class="w-full h-48 object-cover">
+                            @else
+                                <div class="w-full h-48 bg-teal-600 flex items-center justify-center">
+                                    <i class="{{ $program->icon ?? 'fas fa-cogs' }} text-5xl text-white"></i>
+                                </div>
+                            @endif
+                            <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent h-16 opacity-70"></div>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-teal-800 text-xl mb-3">{{ $program->judul }}</h3>
+                            <div class="text-gray-600 mb-4 program-excerpt" style="min-height: 80px;">
+                                {!! Str::limit(strip_tags($program->deskripsi), 100) !!}
                             </div>
-                            <h3 class="card-title">{{ $program->judul }}</h3>
-                            <div class="card-description">
-                                {!! $program->deskripsi !!}
-                            </div>
-                            <a href="#" class="card-link program-details-btn"
-                                data-program-id="{{ $program->id }}" data-title="{{ $program->judul }}"
+                            <a href="#" class="program-details-btn inline-flex items-center text-teal-700 hover:text-yellow-500 font-medium mt-2"
+                                data-program-id="{{ $program->id }}" 
+                                data-title="{{ $program->judul }}"
                                 data-description="{{ strip_tags($program->deskripsi) }}"
                                 data-full-description="{!! htmlspecialchars($program->deskripsi_lengkap ?? $program->deskripsi) !!}">
-                                Selengkapnya
-                                <i class="fas fa-arrow-right"></i>
+                                Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
                     </div>
                 @empty
                     <!-- Fallback content if no programs are found -->
-                    <div class="program-card">
-                        <div class="card-content">
-                            <div class="icon-container">
-                                <i class="fas fa-graduation-cap"></i>
+                    <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg col-span-full">
+                        <div class="relative">
+                            <div class="w-full h-48 bg-teal-600 flex items-center justify-center">
+                                <i class="fas fa-exclamation-circle text-5xl text-white"></i>
                             </div>
-                            <h3 class="card-title">Beasiswa</h3>
-                            <p class="card-description">
-                                Program beasiswa untuk mahasiswa berprestasi dan kurang mampu, membantu meringankan
-                                biaya pendidikan.
+                        </div>
+                        <div class="p-5 text-center">
+                            <h3 class="font-bold text-teal-800 text-xl mb-3">Belum Ada Program</h3>
+                            <p class="text-gray-600 mb-4">
+                                Maaf, saat ini belum ada program layanan yang tersedia. Silakan kunjungi lagi nanti.
                             </p>
-                            <a href="#" class="card-link">
-                                Selengkapnya
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
                         </div>
                     </div>
                 @endforelse
@@ -645,29 +653,45 @@
 
 
     <!-- Program Details Popup Modal -->
-    <div id="programDetailsModal"
-        class="fixed inset-0 bg-black bg-opacity-50 z-[1100] hidden items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
-            <!-- Close Button -->
-            <button id="closeModalBtn"
-                class="absolute top-4 right-4 text-gray-600 hover:text-teal-700 transition-colors">
-                <i class="fas fa-times text-2xl"></i>
-            </button>
-
+    <div id="programDetailsModal" class="fixed inset-0 bg-black bg-opacity-60 z-[1100] hidden items-center justify-center p-4 overflow-y-auto backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative">
+            <!-- Modal Header with Image -->
+            <div class="relative h-56">
+                <div id="modalImageContainer" class="w-full h-full bg-teal-600 flex items-center justify-center">
+                    <!-- Image will be added here dynamically -->
+                    <i id="modalFallbackIcon" class="fas fa-cogs text-6xl text-white"></i>
+                </div>
+                <div class="absolute top-0 right-0 m-4">
+                    <button id="closeModalBtn" class="bg-white rounded-full p-2 shadow-md hover:bg-teal-50 transition-colors">
+                        <i class="fas fa-times text-teal-700 text-xl"></i>
+                    </button>
+                </div>
+                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent h-32"></div>
+                <div class="absolute bottom-0 left-0 w-full p-6">
+                    <h2 id="programModalTitle" class="text-3xl font-bold text-white mb-2 shadow-text"></h2>
+                </div>
+            </div>
+            
             <!-- Modal Content -->
             <div class="p-8">
-                <div id="programModalIcon"
-                    class="icon-container mx-auto mb-6 w-20 h-20 flex items-center justify-center">
-                    <i class="text-4xl text-white"></i>
-                </div>
-                <h2 id="programModalTitle" class="text-3xl font-bold text-teal-800 mb-4 text-center"></h2>
-
-                <div id="programModalDescription" class="prose max-w-prose mx-auto text-gray-700">
+                <div id="programModalDescription" class="prose max-w-none text-gray-700">
                     <!-- Dynamic content will be inserted here -->
                 </div>
             </div>
         </div>
     </div>
+    
+    <style>
+        .shadow-text {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .program-excerpt {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
 
 </body>
 
@@ -769,9 +793,10 @@
     });
     document.addEventListener('DOMContentLoaded', function() {
         const modal = document.getElementById('programDetailsModal');
-        const modalIcon = document.getElementById('programModalIcon').querySelector('i');
         const modalTitle = document.getElementById('programModalTitle');
         const modalDescription = document.getElementById('programModalDescription');
+        const modalImageContainer = document.getElementById('modalImageContainer');
+        const modalFallbackIcon = document.getElementById('modalFallbackIcon');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const programDetailsBtns = document.querySelectorAll('.program-details-btn');
 
@@ -780,14 +805,36 @@
             // Get data from button's data attributes
             const programId = btn.getAttribute('data-program-id');
             const title = btn.getAttribute('data-title');
-            const description = btn.getAttribute('data-description');
             const fullDescription = btn.getAttribute('data-full-description');
-            const iconClass = btn.closest('.program-card').querySelector('.icon-container i').className;
-
+            
+            // Get card for image reference
+            const card = btn.closest('.program-card');
+            const cardImage = card.querySelector('img');
+            
             // Set modal content
-            modalIcon.className = `${iconClass} text-4xl text-white`;
             modalTitle.textContent = title;
-            modalDescription.innerHTML = fullDescription || description;
+            modalDescription.innerHTML = fullDescription;
+            
+            // Handle image
+            if (cardImage) {
+                modalImageContainer.innerHTML = ''; // Clear previous content
+                const modalImage = document.createElement('img');
+                modalImage.src = cardImage.src;
+                modalImage.alt = title;
+                modalImage.className = 'w-full h-full object-cover';
+                modalImageContainer.appendChild(modalImage);
+                modalFallbackIcon.style.display = 'none';
+            } else {
+                // If no image, show the fallback icon
+                modalFallbackIcon.style.display = 'block';
+                // Try to get the icon class from the card
+                const cardIcon = card.querySelector('.bg-teal-600 i');
+                if (cardIcon) {
+                    modalFallbackIcon.className = cardIcon.className;
+                } else {
+                    modalFallbackIcon.className = 'fas fa-cogs text-6xl text-white';
+                }
+            }
 
             // Show modal
             modal.classList.remove('hidden');
@@ -823,9 +870,7 @@
                 modal.classList.add('hidden');
             }
         });
-
     });
-    
 </script>
 <script>
     window.carouselImages = [
