@@ -1,125 +1,164 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/inovasi/formrecordhasilpengukuran.css">
-</head>
-
 @extends('admin.admin')
 
-<body>
-    @section('contentadmin')
-    
-    <div class="form-container">
-        <form id="innovationForm" action="{{ route('admin.Katsinov.record.store', $id) }}" method="POST">
-            @csrf
-            <div class="form-header">
-                <h1 class="form-title">Record Hasil Pengukuran Katsinov</h1>
+<link rel="stylesheet" href="{{ asset('inovasi/formrecordhasilpengukuran.css') }}">
 
-                <div class="form-group">
-                    <label class="form-label">Nama Penanggungjawab</label>
-                    <input type="text" name="nama_penanggung_jawab" class="form-input"
-                        placeholder="Masukkan nama penanggungjawab"  value="{{ $record->nama_penanggung_jawab ?? '' }}"
-                        required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Institusi</label>
-                    <input type="text" name="institusi" class="form-input" placeholder="Masukkan nama institusi"  value="{{ $record->institusi ?? '' }}"
-                        required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Judul Inovasi</label>
-                    <input type="text" name="judul_inovasi" class="form-input" placeholder="Masukkan judul inovasi"  value="{{ $record->judul_inovasi ?? '' }}"
-                        required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Jenis Inovasi</label>
-                    <input type="text" name="jenis_inovasi" class="form-input" placeholder="Masukkan jenis inovasi"  value="{{ $record->jenis_inovasi ?? '' }}"
-                        required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Alamat Kontak</label>
-                    <input name="alamat_kontak" class="form-input" rows="2" placeholder="Masukkan alamat kontak"  value="{{ $record->alamat_kontak ?? '' }}"
-                    required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Phone</label>
-                    <input type="tel" name="phone" class="form-input" placeholder="Masukkan nomor telepon"  value="{{ $record->phone ?? '' }}"
-                        required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Fax</label>
-                    <input type="tel" name="fax" class="form-input" placeholder="Masukkan nomor fax"  value="{{ $record->fax ?? '' }}"
-                    required>
-                </div>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th class="header-no-border no-column centered-column" scope="col">No.</th>
-                        <th class="header-no-border aspek-column centered-column" scope="col">Aspek</th>
-                        <th class="header-no-border aktivitas-column centered-column" scope="col">Aktivitas Kunci
-                        </th>
-                        <th colspan="2">
-                            <div class="flex flex-col items-center">
-                                <span>Penilaian</span>
-                                <label class="date-label">Tanggal Penilaian</label>
-                                <input type="date" name="tanggal_penilaian" class="date-input" value="{{ $record->fax ?? '' }}"
-                                required>
-                            </div>
-                        </th>
-                        <th class="header-no-border centered-column" scope="col">Catatan Secara Umum</th>
-                    </tr>
-                    <tr>
-                        <th class="cell-no-border no-column"></th>
-                        <th class="cell-no-border"></th>
-                        <th class="cell-no-border"></th>
-                        <th>Capaian (%)</th>
-                        <th>Keterangan</th>
-                        <th class="cell-no-border"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for($i = 1; $i <= 5; $i++)
-                    <tr>
-                        <td class="no-column centered-column">{{ $i }}</td>
-                        <td>
-                            <input type="text" name="aspek_{{ $i }}" class="table-input" 
-                                value="{{ $record ? $record['aspek_'.$i] : '' }}" required>
-                        </td>
-                        <td>
-                            <input type="text" name="aktivitas_{{ $i }}" class="table-input"
-                                value="{{ $record ? $record['aktivitas_'.$i] : '' }}" required>
-                        </td>
-                        <td>
-                            <input type="number" name="capaian_{{ $i }}" min="0" max="100"
-                                class="table-input percentage-input" 
-                                value="{{ $record ? $record['capaian_'.$i] : '' }}" required>
-                        </td>
-                        <td>
-                            <input type="text" name="keterangan_{{ $i }}" class="table-input"
-                                value="{{ $record ? $record['keterangan_'.$i] : '' }}" required>
-                        </td>
-                        <td>
-                            <input type="text" name="catatan_{{ $i }}" class="table-input"
-                                value="{{ $record ? $record['catatan_'.$i] : '' }}" required>
-                        </td>
-                    </tr>
-                    @endfor
-                </tbody>
-            </table>
-
-            <div class="mt-6 flex justify-center">
-                <button type="submit" class="submit-button">
-                    {{ $record ? 'Update' : 'Submit' }} Form
-                </button>
-            </div>
+@section('contentadmin')
+    <div class="head-title">
+        <div class="left">
+            <h1>Record Hasil Pengukuran</h1>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Dashboard</a>
+                </li>
+                <li><i class='bx bx-chevron-right'></i></li>
+                <li>
+                    <a class="active" href="#">Record Hasil Pengukuran</a>
+                </li>
+            </ul>
+        </div>
     </div>
-    @endsection
 
+    <div class="table-data">
+        <div class="order">
+            <div class="head">
+                <h3>Form Record Hasil Pengukuran Katsinov</h3>
+            </div>
 
+            <form id="innovationForm" action="{{ route('admin.Katsinov.record.store', $id) }}" method="POST">
+                @csrf
+                
+                <!-- Section 1: Informasi Penanggungjawab -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>1. Informasi Penanggungjawab</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <label class="col-md-3 form-label">Nama Penanggungjawab</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="nama_penanggung_jawab" 
+                                    placeholder="Masukkan nama penanggungjawab" 
+                                    value="{{ $record->nama_penanggung_jawab ?? '' }}" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-md-3 form-label">Institusi</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="institusi" 
+                                    placeholder="Masukkan nama institusi" 
+                                    value="{{ $record->institusi ?? '' }}" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-md-3 form-label">Judul Inovasi</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="judul_inovasi" 
+                                    placeholder="Masukkan judul inovasi" 
+                                    value="{{ $record->judul_inovasi ?? '' }}" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-md-3 form-label">Jenis Inovasi</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="jenis_inovasi" 
+                                    placeholder="Masukkan jenis inovasi" 
+                                    value="{{ $record->jenis_inovasi ?? '' }}" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-md-3 form-label">Alamat Kontak</label>
+                            <div class="col-md-9">
+                                <textarea class="form-control" name="alamat_kontak" 
+                                    placeholder="Masukkan alamat kontak" required>{{ $record->alamat_kontak ?? '' }}</textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-md-3 form-label">Phone</label>
+                            <div class="col-md-9">
+                                <input type="tel" class="form-control" name="phone" 
+                                    placeholder="Masukkan nomor telepon" 
+                                    value="{{ $record->phone ?? '' }}" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-md-3 form-label">Fax</label>
+                            <div class="col-md-9">
+                                <input type="tel" class="form-control" name="fax" 
+                                    placeholder="Masukkan nomor fax" 
+                                    value="{{ $record->fax ?? '' }}" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-md-3 form-label">Tanggal Penilaian</label>
+                            <div class="col-md-9">
+                                <input type="date" class="form-control" name="tanggal_penilaian" 
+                                    value="{{ $record->tanggal_penilaian ?? '' }}" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Penilaian Inovasi -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>2. Penilaian Inovasi</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th width="50">No.</th>
+                                        <th>Aspek</th>
+                                        <th>Aktivitas Kunci</th>
+                                        <th>Capaian (%)</th>
+                                        <th>Keterangan</th>
+                                        <th>Catatan Secara Umum</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for($i = 1; $i <= 5; $i++)
+                                    <tr>
+                                        <td>{{ $i }}</td>
+                                        <td>
+                                            <input type="text" class="form-control" name="aspek_{{ $i }}" 
+                                                value="{{ $record ? $record['aspek_'.$i] : '' }}" required>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="aktivitas_{{ $i }}" 
+                                                value="{{ $record ? $record['aktivitas_'.$i] : '' }}" required>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" name="capaian_{{ $i }}" 
+                                                min="0" max="100" 
+                                                value="{{ $record ? $record['capaian_'.$i] : '' }}" required>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="keterangan_{{ $i }}" 
+                                                value="{{ $record ? $record['keterangan_'.$i] : '' }}" required>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="catatan_{{ $i }}" 
+                                                value="{{ $record ? $record['catatan_'.$i] : '' }}" required>
+                                        </td>
+                                    </tr>
+                                    @endfor
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3 d-flex justify-content-end mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> {{ $record ? 'Update' : 'Submit' }} Form
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
     <script>
         document.getElementById('innovationForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent the default form submission
@@ -172,10 +211,8 @@
 
             alert('Formulir berhasil disubmit!\n\n' + submissionDetails);
 
-            // Optional: Reset the form after successful submission
-            this.reset();
+            // Optional: Submit the form
+            this.submit();
         });
     </script>
-</body>
-
-</html>
+@endsection

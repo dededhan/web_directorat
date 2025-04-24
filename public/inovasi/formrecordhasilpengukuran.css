@@ -1,262 +1,151 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+/* Main dashboard styling */
+.table-data {
+    margin-top: 24px;
 }
 
-body {
-    background-color: #f0f2f5;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
+.order {
+    background: #fff;
+    padding: 24px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
-.form-container {
-    width: 100%;
-    max-width: 1200px;
-    background: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.form-header {
-    margin-bottom: 40px;
-    border-bottom: 1px solid #e5e7eb;
-    padding-bottom: 30px;
-}
-
-.form-title {
-    text-align: center;
-    color: #176369;
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 35px;
-    padding: 15px 0;
-    position: relative;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.form-title::before,
-.form-title::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 3px;
-    background: linear-gradient(to right, transparent, #176369, transparent);
-}
-
-.form-title span {
-    color: #176369;
-    opacity: 0.8;
-}
-
-.form-title::before {
-    width: 200px;
-    bottom: 0;
-}
-
-.form-title::after {
-    width: 100px;
-    bottom: -8px;
-}
-
-.form-group {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 20px;
+.head h3 {
+    font-weight: 600;
+    color: #2d3748;
     margin-bottom: 20px;
-    align-items: center;
+}
+
+/* Card styling */
+.card {
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 24px;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 15px 20px;
+}
+
+.card-header h4 {
+    margin: 0;
+    color: #3498db;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* Form elements */
+.form-control:focus,
+.form-select:focus {
+    border-color: #3498db;
+    box-shadow: none;
 }
 
 .form-label {
     font-weight: 500;
-    color: #374151;
-    font-size: 15px;
-    text-align: right;
+    color: #2d3748;
 }
 
-.form-input {
-    padding: 10px 14px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 15px;
+.form-text {
+    color: #718096;
+    font-size: 13px;
+}
+
+/* Subsection styling */
+.subsection {
+    margin-bottom: 30px;
+}
+
+.subsection h5 {
+    color: #3498db;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* Table styling */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table {
     width: 100%;
-    background-color: white;
-    transition: all 0.2s ease;
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background: white;
-}
-
-th, td {
-    border: 1px solid #d1d5db;
-    padding: 12px;
-    text-align: center !important;
-    font-size: 14px;
+    margin-bottom: 1rem;
+    color: #212529;
     vertical-align: middle;
 }
 
-th {
-    background-color: #176369;
+.table-bordered {
+    border: 1px solid #dee2e6;
+}
+
+.table-primary {
+    background-color: #e7f1ff;
+    color: #2c3e50;
+}
+
+.table th, .table td {
+    padding: 0.75rem;
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Button styling */
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
     color: white;
     font-weight: 500;
-    padding: 16px 12px;
+    padding: 8px 20px;
 }
 
-.header-no-border {
-    border-bottom: none;
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
 }
 
-.cell-no-border {
-    border-top: none;
+/* Form check styling */
+.form-check-input {
+    width: 18px;
+    height: 18px;
+    margin-top: 0.2rem;
 }
 
-.no-column {
-    width: 50px;
+.form-check-input:checked {
+    background-color: #3498db;
+    border-color: #3498db;
 }
 
-.aspek-column {
-    width: 200px;
+.form-check-label {
+    margin-left: 5px;
 }
 
-.aktivitas-column {
-    width: 250px;
+/* Input group */
+.input-group-text {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    color: #6c757d;
 }
 
-.table-input {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 14px;
-    text-align: center;
-    transition: all 0.2s ease;
-}
-
-.table-input:focus {
-    outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.percentage-input {
-    width: 80px;
-    margin: 0 auto;
-}
-
-.date-input {
-    padding: 8px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    width: 160px;
-    text-align: center;
-    margin-top: 8px;
-}
-
-.date-label {
-    display: block;
-    margin-bottom: 5px;
-    color: white;
-    font-size: 14px;
-}
-
-/* Column header text alignment */
-th[scope="col"],
-th,
-td,
-.table-input {
-    text-align: center !important;
-}
-
-/* Centered columns */
-td.centered-column,
-th.centered-column {
-    text-align: center !important;
-}
-
-/* Ensure table inputs are centered */
-.table-input::placeholder {
-    text-align: center;
-}
-
-@media screen and (max-width: 768px) {
-    body {
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-body {
         padding: 15px;
     }
-
-    .form-container {
-        padding: 20px;
-    }
-
-    .form-group {
-        grid-template-columns: 1fr;
-        gap: 8px;
-    }
-
+    
     .form-label {
-        text-align: left;
+        margin-bottom: 0.5rem;
     }
-
-    th, td {
-        padding: 8px;
-        font-size: 13px;
+    
+    .table th, .table td {
+        padding: 0.5rem;
     }
-}
-
-@media print {
-    body {
-        background: white;
-    }
-
-    .form-container {
-        box-shadow: none;
-    }
-}
-.submit-button {
-    background-color: #176369; 
-    color: #ffffff; 
-    border: 2px solid #34495e; 
-    border-radius: 8px; 
-    padding: 12px 24px; 
-    font-weight: 600; 
-    text-transform: uppercase; 
-    letter-spacing: 1px; 
-    transition: all 0.3s ease; 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-    cursor: pointer; 
-}
-
-.submit-button:hover {
-    background-color: #34495e; 
-    transform: translateY(-2px); 
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); 
-}
-
-.submit-button:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3); 
-}
-
-.submit-button:active {
-    transform: translateY(1px); 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
 }
