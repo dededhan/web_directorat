@@ -28,21 +28,24 @@
             <div class="head">
                 <h3>Input Program Layanan</h3>
             </div>
-            <form id="layanan-form" action="{{ route($routePrefix . '.program-layanan.store') }}" method="POST" enctype="multipart/form-data">
+            <form id="layanan-form" action="{{ route($routePrefix . '.program-layanan.store') }}" method="POST"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="image" class="form-label">Gambar Program</label>
-                        <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" id="image">
+                        <input type="file" class="form-control @error('image') is-invalid @enderror" name="image"
+                            id="image">
                         @error('image')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <div class="form-text text-muted">Unggah gambar yang mewakili program layanan (max 2MB)</div>
-                        
+
                         <!-- Untuk preview gambar saat edit -->
-                        @if(isset($program) && $program->image)
+                        @if (isset($program) && $program->image)
                             <div class="mt-2">
-                                <img src="{{ asset('storage/' . $program->image) }}" alt="Preview" style="max-width: 100px; max-height: 100px;">
+                                <img src="{{ asset('storage/' . $program->image) }}" alt="Preview"
+                                    style="max-width: 100px; max-height: 100px;">
                             </div>
                         @endif
                     </div>
@@ -107,8 +110,9 @@
                                     <td>{{ $program->judul }}</td>
                                     <td>{{ Str::limit(strip_tags($program->deskripsi), 50) }}</td>
                                     <td>
-                                        @if($program->image)
-                                            <img src="{{ asset('storage/' . $program->image) }}" alt="Program Image" style="max-width: 50px; max-height: 50px;">
+                                        @if ($program->image)
+                                            <img src="{{ asset('storage/' . $program->image) }}" alt="Program Image"
+                                                style="max-width: 50px; max-height: 50px;">
                                         @else
                                             <i class="{{ $program->icon }} fa-lg"></i>
                                         @endif
@@ -155,9 +159,10 @@
                             <div class="col-md-6 mb-3">
                                 <label for="edit_image" class="form-label">Gambar Program</label>
                                 <input type="file" class="form-control" name="image" id="edit_image">
-                                <div class="form-text text-muted">Unggah gambar yang mewakili program layanan (max 2MB)</div>
-                                
-                                
+                                <div class="form-text text-muted">Unggah gambar yang mewakili program layanan (max 2MB)
+                                </div>
+
+
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="edit_judul" class="form-label">Judul Program</label>
@@ -511,26 +516,47 @@
             });
             // Add form submit validation for new program form
             document.getElementById('layanan-form').addEventListener('submit', function(e) {
+                e.preventDefault(); // Prevent default form submission
+
+                // Get CKEditor content and validate
                 if (deskripsiEditor) {
                     const editorData = deskripsiEditor.getData();
                     const plainText = editorData.replace(/<[^>]*>/g, '');
 
                     if (plainText.length > 1500) {
-                        e.preventDefault();
                         showErrorAlert('Deskripsi tidak boleh lebih dari 1500 karakter.');
                         return false;
                     }
-                
+
+                    // Set the CKEditor content to the textarea for form submission
+                    document.getElementById('deskripsi').value = editorData;
                 }
+
+                // Create FormData with all form elements including the CKEditor content
                 const formData = new FormData(this);
-                const fileInput = document.getElementById('image');
-                
-                console.log('File selected:', fileInput.files.length > 0);
-                if (fileInput.files.length > 0) {
-                    console.log('File name:', fileInput.files[0].name);
-                    console.log('File size:', fileInput.files[0].size);
+
+                // Log form data for debugging
+                console.log('Form data being submitted:');
+                for (let pair of formData.entries()) {
+                    console.log(pair[0] + ': ' + (pair[0] === 'image' ? 'File object' : pair[1]));
                 }
-                
+
+                // Check file upload
+                const fileInput = document.getElementById('image');
+                if (fileInput.files.length > 0) {
+                    console.log('File selected:', fileInput.files[0].name);
+                    console.log('File size:', fileInput.files[0].size);
+
+                    // Validate file size client-side as well
+                    if (fileInput.files[0].size > 2 * 1024 * 1024) { // 2MB in bytes
+                        showErrorAlert('Ukuran gambar tidak boleh lebih dari 2MB.');
+                        return false;
+                    }
+                }
+
+                // Submit the form
+                this.submit();
+
             });
         });
 

@@ -26,7 +26,7 @@ class ProgramLayananController extends Controller
         } else if (auth()->user()->role === 'admin_pemeringkatan') {
             return 'admin_pemeringkatan';
         }
-        
+
         return 'admin';
     }
 
@@ -37,7 +37,7 @@ class ProgramLayananController extends Controller
     {
         $programs = ProgramLayanan::all();
         $routePrefix = $this->getRoutePrefix();
-        
+
         if (auth()->user()->role === 'admin_direktorat') {
             return view('admin.programlayanan', compact('programs', 'routePrefix'));
         } else if (auth()->user()->role === 'admin_hilirisasi') {
@@ -52,20 +52,32 @@ class ProgramLayananController extends Controller
         try {
             $data = $request->validated();
             $data['status'] = true; // Default status is active
-            
+
+            // Handle image upload
             if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('program_images', 'public');
-                $data['image'] = $imagePath;
+                \Log::info('Image upload attempt for new program');
+
+                if ($request->file('image')->isValid()) {
+                    $imagePath = $request->file('image')->store('program_images', 'public');
+                    \Log::info('Image stored at: ' . $imagePath);
+                    $data['image'] = $imagePath;
+                } else {
+                    \Log::error('Invalid image upload in new program');
+                    return back()->withInput()->with('error', 'Gambar yang diunggah tidak valid!');
+                }
+            } else {
+                \Log::info('No image uploaded for new program');
             }
-            
-            ProgramLayanan::create($data);
-            
+
+            $program = ProgramLayanan::create($data);
+            \Log::info('Program created successfully with ID: ' . $program->id);
+
             $routePrefix = $this->getRoutePrefix();
             return redirect()->route($routePrefix . '.program-layanan.index')
                 ->with('success', 'Program berhasil ditambahkan');
         } catch (\Exception $e) {
-            logger()->error('Error saving program: ' . $e->getMessage());
-            return back()->withInput()->with('error', 'Gagal menyimpan program!');
+            \Log::error('Error saving program: ' . $e->getMessage());
+            return back()->withInput()->with('error', 'Gagal menyimpan program: ' . $e->getMessage());
         }
     }
 
@@ -88,23 +100,33 @@ class ProgramLayananController extends Controller
                 'status' => 'sometimes|boolean'
             ]);
 
+            // Handle image upload
             if ($request->hasFile('image')) {
-                \Log::info('Image upload attempt');
+                \Log::info('Image upload attempt for program update');
 
-                // Delete old image if exists
                 if ($request->file('image')->isValid()) {
+                    // Delete old image if exists
+                    if ($programLayanan->image && Storage::disk('public')->exists($programLayanan->image)) {
+                        Storage::disk('public')->delete($programLayanan->image);
+                        \Log::info('Old image deleted: ' . $programLayanan->image);
+                    }
+
+                    // Store new image
                     $imagePath = $request->file('image')->store('program_images', 'public');
-                    \Log::info('Image stored at: ' . $imagePath);
-                    $data['image'] = $imagePath;
+                    \Log::info('New image stored at: ' . $imagePath);
+
+                    // Add image path to validated data
+                    $validated['image'] = $imagePath;
                 } else {
-                    \Log::error('Invalid image upload');
+                    \Log::error('Invalid image upload in program update');
                 }
             }
 
+            // Update the program with validated data
             $programLayanan->update($validated);
 
             $routePrefix = $this->getRoutePrefix();
-            
+
             if ($request->ajax()) {
                 return response()->json(['success' => true, 'message' => 'Program layanan berhasil diperbarui!']);
             }
@@ -128,7 +150,7 @@ class ProgramLayananController extends Controller
     {
         try {
             $programLayanan->delete();
-            
+
             $routePrefix = $this->getRoutePrefix();
             return redirect()->route($routePrefix . '.program-layanan.index')
                 ->with('success', 'Program berhasil dihapus');
@@ -138,7 +160,7 @@ class ProgramLayananController extends Controller
                 ->with('error', 'Gagal menghapus program: ' . $e->getMessage());
         }
     }
-    
+
     /**
      * Display active program layanan on the frontend
      */
@@ -146,10 +168,10 @@ class ProgramLayananController extends Controller
     {
         // Get active program layanan, limit to 4 for display
         $programs = ProgramLayanan::where('status', 1)
-                                  ->orderBy('id', 'desc')
-                                  ->take(4)
-                                  ->get();
-        
+            ->orderBy('id', 'desc')
+            ->take(4)
+            ->get();
+
         return view('frontend.program-section', compact('programs'));
     }
 }
