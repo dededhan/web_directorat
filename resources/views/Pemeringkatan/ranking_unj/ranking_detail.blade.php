@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <link rel="stylesheet" href="{{ asset('home.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/ckeditor-list.css') }}">
 @push('styles')
 <style>
     .indicators-list {

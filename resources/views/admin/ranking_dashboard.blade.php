@@ -3,7 +3,7 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/berita_dashboard.css') }}">
-
+<link rel="stylesheet" href="{{ asset('css/ckeditor-content.css') }}">
 @section('contentadmin')
     <div class="head-title">
         <div class="left">
