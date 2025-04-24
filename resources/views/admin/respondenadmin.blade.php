@@ -225,7 +225,7 @@
                                 accept=".xlsx,.xls" required>
                             <div class="form-text">File harus sesuai dengan format yang ditentukan</div>
                         </div>
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="skipDuplicates"
                                     name="skip_duplicates" checked>
@@ -233,7 +233,7 @@
                                     Skip duplicate entries (based on email and phone)
                                 </label>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
