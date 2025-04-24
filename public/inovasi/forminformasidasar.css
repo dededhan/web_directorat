@@ -1,242 +1,151 @@
-/* General Styles */
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;
+/* Main dashboard styling */
+.table-data {
+    margin-top: 24px;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 30px;
-    background-color: #fff;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-    border-radius: 12px;
+.order {
+    background: #fff;
+    padding: 24px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
-.header {
-    margin-bottom: 30px;
-}
-
-.header h1 {
-    color: #176369;
-    font-size: 2.4rem;
-    margin-bottom: 20px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    position: relative;
-    padding-bottom: 15px;
-}
-
-.header h1:after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 80px;
-    height: 4px;
-    background-color: #176369;
-    border-radius: 2px;
-}
-
-.header h1 .italic {
-    font-style: italic;
-    font-weight: 300;
-}
-
-/* Form Styles */
-form {
-    margin-top: 30px;
-}
-
-.section {
-    margin-bottom: 50px;
-    padding: 25px;
-    background-color: #f8f9fa;
-    border-radius: 10px;
-}
-
-.section h2 {
-    color: #176369;
-    font-size: 1.8rem;
-    margin-bottom: 25px;
-    border-bottom: 2px solid #176369;
-    padding-bottom: 12px;
+.head h3 {
     font-weight: 600;
-    letter-spacing: -0.3px;
+    color: #2d3748;
+    margin-bottom: 20px;
 }
 
+/* Card styling */
+.card {
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 24px;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 15px 20px;
+}
+
+.card-header h4 {
+    margin: 0;
+    color: #3498db;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* Form elements */
+.form-control:focus,
+.form-select:focus {
+    border-color: #3498db;
+    box-shadow: none;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #2d3748;
+}
+
+.form-text {
+    color: #718096;
+    font-size: 13px;
+}
+
+/* Subsection styling */
 .subsection {
     margin-bottom: 30px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
 }
 
-.subsection h3 {
-    color: #176369;
-    font-size: 1.4rem;
-    margin-bottom: 20px;
-    font-weight: 500;
-    display: inline-block;
-    position: relative;
-}
-
-.subsection h3:after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: #176369;
-    opacity: 0.5;
-}
-
-.subsection h3 .italic {
-    font-style: italic;
-    font-weight: 300;
-}
-
-.subsection .underline {
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-decoration-color: rgba(23, 99, 105, 0.4);
-}
-
-/* Table Styles */
-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-bottom: 25px;
-    background-color: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-}
-
-table th, table td {
-    padding: 15px;
-    border: 1px solid #e9ecef;
-    text-align: left;
-}
-
-table th {
-    background-color: #176369;
-    color: #fff;
+.subsection h5 {
+    color: #3498db;
     font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
 }
 
-table tr:nth-child(even) {
-    background-color: #f8f9fa;
+/* Table styling */
+.table-responsive {
+    overflow-x: auto;
 }
 
-table td input, table td textarea {
+.table {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    color: #212529;
+    vertical-align: middle;
 }
 
-table td input:focus, table td textarea:focus {
-    border-color: #176369;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(23, 99, 105, 0.2);
+.table-bordered {
+    border: 1px solid #dee2e6;
 }
 
-/* Radio Buttons and Checkboxes */
-.radio-group {
-    margin-bottom: 20px;
+.table-primary {
+    background-color: #e7f1ff;
+    color: #2c3e50;
 }
 
-.radio-group label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px;
-    font-size: 1rem;
-    color: #495057;
-    cursor: pointer;
+.table th, .table td {
+    padding: 0.75rem;
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6;
 }
 
-.radio-group input[type="radio"],
-.radio-group input[type="checkbox"] {
-    margin-right: 12px;
-    cursor: pointer;
-    accent-color: #176369;
+/* Button styling */
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: white;
+    font-weight: 500;
+    padding: 8px 20px;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+/* Form check styling */
+.form-check-input {
     width: 18px;
     height: 18px;
+    margin-top: 0.2rem;
 }
 
-/* Buttons */
-.submit-btn {
-    background-color: #176369;
-    /* Remove the invalid position: center; */
-    margin: 0 auto; /* Center horizontally if block element */
-    display: block; /* Make it a block element */
-    /* Rest of your properties remain the same */
-    color: #fff;
-    border: none;
-    padding: 14px 28px;
-    font-size: 1.05rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 10px rgba(23, 99, 105, 0.2);
+.form-check-input:checked {
+    background-color: #3498db;
+    border-color: #3498db;
 }
 
-.submit-btn:hover {
-    background-color: #114a4f;
+.form-check-label {
+    margin-left: 5px;
 }
 
-/* Responsive Design */
+/* Input group */
+.input-group-text {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    color: #6c757d;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    .container {
-        padding: 20px;
-        margin: 15px auto;
-    }
-    
-    .header h1 {
-        font-size: 2rem;
-    }
-    
-    .section {
+    .card-body {
         padding: 15px;
     }
     
-    .section h2 {
-        font-size: 1.5rem;
+    .form-label {
+        margin-bottom: 0.5rem;
     }
     
-    table th, table td {
-        padding: 10px;
+    .table th, .table td {
+        padding: 0.5rem;
     }
-    
-    .submit-btn {
-        width: 100%;
-        padding: 12px;
-    }
-}
-/* Add this to your CSS */
-.submit-all-container, .submit-container {
-    position: relative;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    z-index: 1; /* Lower z-index than navbar */
-}
-
-.submit-all-btn, .submit-btn {
-    position: relative;
-    display: block;
-    margin: 0 auto;
 }
