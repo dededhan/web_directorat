@@ -62,7 +62,7 @@ async function submitAllIndicators() {
         Swal.fire({
             icon: "warning",
             title: "Peringatan",
-            text: "Mohon pilih opsi radio button untuk semua pertanyaan sebelum mengirimkan formulir.",
+            text: "Mohon lengkapi semua pertanyaan sebelum mengirimkan formulir.",
             confirmButtonColor: "#176369",
         });
         return;
@@ -95,7 +95,7 @@ async function submitAllIndicators() {
             console.log(pair[0] + ': ' + pair[1]);
         }
 
-        const response = await fetch("/admin/Katsinov/store", {
+        const response = await fetch("/katsinov/store", {
             method: "POST",
             headers: {
                 "X-CSRF-TOKEN": document.querySelector(
@@ -106,16 +106,9 @@ async function submitAllIndicators() {
             body: formData,
         });
 
-        // Even if there's an error parsing JSON, we'll show success
-        // This is a temporary fix to handle the JSON parsing issue
-        try {
-            const data = await response.json();
-            if (!response.ok) {
-                console.log("Response not OK, but showing success anyway");
-            }
-        } catch (jsonError) {
-            console.log("JSON parsing error, but showing success anyway", jsonError);
-        }
+        const data = await response.json();
+        if (!response.ok)
+            throw new Error(data.message || "Gagal menyimpan data");
 
         Swal.fire({
             icon: "success",
@@ -189,11 +182,7 @@ async function submitAllIndicators() {
             showCloseButton: false,
             allowOutsideClick: false,
             width: "500px",
-            willClose: () => {
-                // Hapus flag form loaded sebelum reload
-                sessionStorage.removeItem('formLoaded');
-                window.location.reload();
-            },
+            willClose: () => window.location.reload(),
             didOpen: () => {
                 const style = document.createElement("style");
                 style.textContent = `
@@ -239,121 +228,63 @@ async function submitAllIndicators() {
     } catch (error) {
         console.error("Error submitting form:", error);
         
-        // Show success message even when there's an error
         Swal.fire({
-            icon: "success",
-            title: "🎉 Selamat!",
+            icon: "error",
+            title: "Gagal!",
             html: `
-            <div style="
-                background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
-                border-radius: 20px; 
-                padding: 30px; 
-                text-align: center;
-                max-width: 450px;
-                margin: 0 auto;
-                border: 1px solid rgba(23, 99, 105, 0.1);
-                box-shadow: 0 20px 40px rgba(23, 99, 105, 0.1);
-            ">
-                <div style="
-                    width: 80px;
-                    height: 80px;
-                    background-color: #e6f6f7;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    margin: 0 auto 20px;
-                    box-shadow: 0 10px 20px rgba(23, 99, 105, 0.1);
-                ">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#176369" stroke-width="2.5">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                        <polyline points="22 4 12 14.01 9 11.01"/>
-                    </svg>
-                </div>
-                
-                <h2 style="
-                    color: #176369;
-                    font-size: 22px;
-                    font-weight: 700;
-                    margin-bottom: 15px;
-                ">
-                    Indikator KATSINOV Berhasil
-                </h2>
-                
-                <p style="
-                    color: #2d3748; 
-                    font-size: 16px; 
-                    line-height: 1.6;
-                    margin-bottom: 20px;
-                ">
-                    Terima kasih atas partisipasi Anda. Data Anda telah berhasil disimpan dalam sistem kami dengan sempurna.
-                </p>
-                
-                <div style="
-                    background-color: #f0f9fa; 
-                    border-left: 5px solid #176369;
-                    padding: 12px 15px;
-                    border-radius: 8px;
-                    margin-bottom: 20px;
-                    text-align: left;
-                ">
-                    <p style="
-                        color: #4a5568;
-                        font-size: 14px;
-                        margin: 0;
-                    ">
-                        ⏳ Halaman akan dimuat ulang dalam beberapa saat...
-                    </p>
-                </div>
-            </div>
-        `,
+<div style="
+    background-color: #fff0f3;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+">
+    <p style="
+        color: #4a4a4a;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 10px;
+    ">
+        ${error.message}
+    </p>
+</div>
+`,
             confirmButtonText: "Tutup",
-            confirmButtonColor: "#176369",
-            showCloseButton: false,
-            allowOutsideClick: false,
-            width: "500px",
-            willClose: () => {
-                // Hapus flag form loaded sebelum reload
-                sessionStorage.removeItem('formLoaded');
-                window.location.reload();
-            },
+            confirmButtonColor: "#dc2626",
             didOpen: () => {
                 const style = document.createElement("style");
                 style.textContent = `
-                .swal2-popup {
-                    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-                    border-radius: 20px;
-                    box-shadow: 0 30px 60px rgba(23, 99, 105, 0.15);
-                    animation: softBounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                }
-
-                @keyframes softBounce {
-                    0% { transform: scale(0.8); opacity: 0; }
-                    70% { transform: scale(1.03); opacity: 0.9; }
-                    100% { transform: scale(1); opacity: 1; }
-                }
-                `;
+    .swal2-popup {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(220, 38, 38, 0.1);
+    }
+    .swal2-confirm {
+        padding: 10px 20px !important;
+        font-weight: 600;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+    }
+    .swal2-confirm:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(220, 38, 38, 0.2);
+    }
+    .swal2-icon.swal2-error {
+        margin-bottom: 10px !important;
+    }
+`;
                 document.head.appendChild(style);
             },
         });
     } finally {
         btn.disabled = false;
         btn.innerHTML = "Submit Semua Indikator KATSINOV";
-        // Reset flag jika terjadi error
-        isSubmitting = false;
     }
 }
 
 // Event listener for radio buttons to update the UI and calculations
 document.addEventListener('DOMContentLoaded', function() {
-    // Reset flag saat halaman dimuat
-    isSubmitting = false;
-    
-    // Cek apakah halaman baru dimuat (bukan hasil refresh)
-    if (!sessionStorage.getItem('formLoaded')) {
-        // Set flag bahwa form sudah dimuat
-        sessionStorage.setItem('formLoaded', 'true');
-    }
     const radioButtons = document.querySelectorAll('input[type="radio"]');
     
     radioButtons.forEach(radio => {

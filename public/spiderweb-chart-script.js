@@ -277,10 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Expose update function globally
         window.updateSpiderwebChart = updateSpiderwebChart;
         
-        // Only update the chart initially if there's actual data
-        const hasData = document.querySelectorAll('input[type="radio"]:checked').length > 0;
-        if (hasData) {
-            setTimeout(updateSpiderwebChart, 100);
-        }
+        // Initial update
+        setTimeout(updateSpiderwebChart, 100); // Small delay to ensure DOM is ready
     }
 });
