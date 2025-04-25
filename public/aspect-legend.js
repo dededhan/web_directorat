@@ -3,13 +3,13 @@ window.aspectLegend = function() {
         showPopup: false,
         showSpiderwebPopup: false,
         selectedAspect: null,
-        chart: null,
+        charts: {}, // Store chart instances by aspect code
         
         init() {
             this.$watch('showPopup', value => {
-                if (value) {
+                if (value && this.selectedAspect) {
                     this.$nextTick(() => {
-                        this.initializeChart();
+                        this.initializeChart(this.selectedAspect.code);
                     });
                 }
             });
@@ -101,73 +101,45 @@ window.aspectLegend = function() {
             this.showPopup = true;
         },
 
-        calculateAspectData(aspectCode) {
-            const scores = [];
-            const aspectConfigs = [
-                { level: 1, selector: `input[name^="indicator1_row"][name$="_${aspectCode}"]:checked` },
-                { level: 2, selector: `input[name^="indicator2_row"][name$="_${aspectCode}"]:checked` },
-                { level: 3, selector: `input[name^="indicator3_row"][name$="_${aspectCode}"]:checked` },
-                { level: 4, selector: `input[name^="indicator4_row"][name$="_${aspectCode}"]:checked` },
-                { level: 5, selector: `input[name^="indicator5_row"][name$="_${aspectCode}"]:checked` },
-                { level: 6, selector: `input[name^="indicator6_row"][name$="_${aspectCode}"]:checked` }
-            ];
-            
-            aspectConfigs.forEach(config => {
-                let levelTotal = 0;
-                
-                // Count total questions for this aspect in this level
-                const allQuestions = document.querySelectorAll(`input[name^="indicator${config.level}_row"][name$="_${aspectCode}"]`);
-                const questionsPerRow = 6; // Since each question has 6 radio buttons (0-5)
-                const totalQuestions = Math.ceil(allQuestions.length / questionsPerRow);
-                const maxPossible = totalQuestions * 5; // Each question can score up to 5 points
-                
-                // Get checked radio buttons for this level
-                const checkedRadios = document.querySelectorAll(config.selector);
-                checkedRadios.forEach(radio => {
-                    const value = parseInt(radio.value);
-                    if (!isNaN(value)) {
-                        levelTotal += value;
-                    }
-                });
-
-                const percentage = maxPossible > 0 ? (levelTotal / maxPossible) * 100 : 0;
-                
-                scores.push({
-                    level: `KATSINOV ${config.level}`,
-                    score: levelTotal,
-                    maxPossible: maxPossible,
-                    percentage: percentage
-                });
-            });
-
-            console.log(`Calculated scores for ${aspectCode}:`, scores);
-            return scores;
-        },
-
-        initializeChart() {
-            const ctx = document.getElementById('aspectChart');
-            if (!ctx) {
-                console.error('Canvas element #aspectChart not found');
+        // Method to initialize chart for a specific aspect
+        initializeAspectChart(aspectCode) {
+            if (!aspectCode) {
+                console.error('No aspect code provided for chart initialization');
                 return;
             }
             
-            const ctxObj = ctx.getContext('2d');
+            console.log(`Initializing chart for aspect: ${aspectCode}`);
             
-            if (this.chart) {
-                this.chart.destroy();
+            const canvasId = `aspectChart-${aspectCode}`;
+            const canvas = document.getElementById(canvasId);
+            
+            if (!canvas) {
+                console.error(`Canvas element with ID ${canvasId} not found`);
+                return;
             }
-
-            const aspectData = this.calculateAspectData(this.selectedAspect.code);
             
-            this.chart = new Chart(ctxObj, {
+            // If there's already a chart for this aspect, destroy it first
+            if (this.charts[aspectCode]) {
+                this.charts[aspectCode].destroy();
+            }
+            
+            const aspectData = this.calculateAspectData(aspectCode);
+            const aspectConfig = this.aspectConfig[aspectCode];
+            
+            if (!aspectConfig) {
+                console.error(`No configuration found for aspect: ${aspectCode}`);
+                return;
+            }
+            
+            this.charts[aspectCode] = new Chart(canvas.getContext('2d'), {
                 type: 'line',
                 data: {
                     labels: aspectData.map(d => d.level),
                     datasets: [{
                         label: 'Pencapaian (%)',
                         data: aspectData.map(d => d.percentage),
-                        borderColor: this.selectedAspect.color,
-                        backgroundColor: this.selectedAspect.color + '40',
+                        borderColor: aspectConfig.color,
+                        backgroundColor: aspectConfig.color + '40',
                         fill: true,
                         tension: 0.4
                     }]
@@ -196,9 +168,66 @@ window.aspectLegend = function() {
                     }
                 }
             });
+            
+            console.log(`Chart initialized for aspect: ${aspectCode}`);
+        },
+
+        calculateAspectData(aspectCode) {
+            const scores = [];
+            
+            // Calculate scores for each KATSINOV level
+            for (let level = 1; level <= 6; level++) {
+                // Find the indicator container for this level
+                const indicator = document.querySelector(`[data-indicator="${level}"]`);
+                if (!indicator) {
+                    console.warn(`Indicator for KATSINOV ${level} not found`);
+                    continue;
+                }
+                
+                let levelTotal = 0;
+                let maxPossible = 0;
+                
+                // Get all rows for this aspect in this indicator
+                const aspectRows = Array.from(indicator.querySelectorAll('tr'))
+                    .filter(row => {
+                        const aspectCell = row.querySelector('.aspect-cell');
+                        return aspectCell && aspectCell.textContent.trim() === aspectCode;
+                    });
+                
+                // Calculate scores for this aspect's rows
+                aspectRows.forEach(row => {
+                    const checkedRadio = row.querySelector('input[type="radio"]:checked');
+                    if (checkedRadio) {
+                        const value = parseInt(checkedRadio.value);
+                        if (!isNaN(value)) {
+                            levelTotal += value;
+                        }
+                    }
+                    maxPossible += 5; // Maximum possible score per question is 5
+                });
+                
+                const percentage = maxPossible > 0 ? (levelTotal / maxPossible) * 100 : 0;
+                
+                scores.push({
+                    level: `KATSINOV ${level}`,
+                    score: levelTotal,
+                    maxPossible: maxPossible,
+                    percentage: percentage
+                });
+            }
+            
+            console.log(`Calculated scores for ${aspectCode}:`, scores);
+            return scores;
+        },
+
+        // Legacy method for backward compatibility
+        initializeChart(aspectCode) {
+            return this.initializeAspectChart(aspectCode);
         },
 
         calculateAverage() {
+            if (!this.selectedAspect) return '0.00';
+            
             const aspectData = this.calculateAspectData(this.selectedAspect.code);
             const validPercentages = aspectData
                 .map(d => d.percentage)
@@ -211,6 +240,8 @@ window.aspectLegend = function() {
         },
 
         getMaxKatsinovLevel() {
+            if (!this.selectedAspect) return 0;
+            
             const aspectData = this.calculateAspectData(this.selectedAspect.code);
             let maxLevel = 0;
             
