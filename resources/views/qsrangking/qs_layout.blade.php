@@ -114,5 +114,5 @@
         <h2>{{ Str::ucfirst($category) }} Respondent Form</h2>
         @yield('form')
     </div>
-    @include('pemeringkatan.footerpemeringkatan')
+
 </body>
