@@ -1,7 +1,7 @@
 <nav>
     <!-- All content moved to right side -->
     <div class="navbar-right">
-        <!-- User Profile Section -->
+
         @auth
         <div class="profile-info">
             <img src="{{ auth()->user()->profile_picture ?? 'default-avatar.png' }}" alt="Profile Picture" class="profile-image">
@@ -17,6 +17,6 @@
         @endguest
 
         <!-- Menu Icon -->
-        <i class='bx bx-menu'></i>
+
     </div>
 </nav>

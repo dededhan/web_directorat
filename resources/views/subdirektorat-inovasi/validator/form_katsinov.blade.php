@@ -21,7 +21,7 @@
 </head>
 
 
-@extends('Inovasi.validator.index')
+@extends('subdirektorat-inovasi.validator.index')
 
 @section('contentvalidator')
 
