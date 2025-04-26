@@ -15,21 +15,18 @@
             </ul>
         </div>
     </div>
-
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-
     @if(session('error'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-
     @if ($errors->any())
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <ul class="mb-0">
@@ -40,13 +37,11 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-
     <div class="table-data">
         <div class="order">
             <div class="head">
                 <h3>Input Dokumen</h3>
             </div> 
-
             <form method="POST" action="{{ route('admin.document.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
@@ -66,7 +61,6 @@
                         <div class="form-text text-muted">Pilih tanggal publikasi dokumen</div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="judul_dokumen" class="form-label">Judul Dokumen</label>
