@@ -506,11 +506,15 @@
                     </td>
                 </tr>
                 
- <tr class="total-row">
-                    <td colspan="2">Total Skor</td>
-                    <td colspan="6" class="total-value">0</td>
-                    <td colspan="1"></td>
-                </tr>
+                <<tr class="total-row">
+                        <td colspan="2">Total Skor</td>
+                        <td colspan="6" class="total-value">0</td>
+                        <td colspan="1" style="text-align: left; padding-left: 10px;">
+                            <a href="{{ route('admin.Katsinov.lampiran.index', ['katsinov_id' => $katsinov['id'] ?? null]) }}" class="btn btn-sm" style="background-color: #277177; border-color: #277177; color: white;" target="_blank">
+                                <i class='bx bx-paperclip'></i> Lampiran
+                            </a>
+                        </td>
+                    </tr>
                 <tr class="total-row">
                     <td colspan="2">Persentase</td>
                     <td colspan="6" class="total-value">0.00%</td>
@@ -526,12 +530,6 @@
                     placeholder="Tambahkan catatan di sini..." 
                     class="notes-textarea">
                 </textarea>
-<<<<<<< HEAD
-            </div> --}}
-            <div class="katsinov-legend">
-                Skala: 0=tidak terpenuhi; 1=20%; 2=40%; 3=60%; 4=80%; 5=100% atau terpenuhi
-=======
->>>>>>> d5cfab411c4f6394eab91fb5ed3952eb1ac204aa
             </div>
         </div>
     </div>
