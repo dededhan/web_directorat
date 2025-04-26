@@ -360,7 +360,7 @@
                         <div class="indicators-wrapper">
                             <!-- Indikator 1 -->
                             <div class="indicator-card" data-indicator="1">
-                                <h4 class="indicator-header">Indikator KATSINOV 1</h4>
+                                <h4 class="indicator-header"></h4>
                                 <div class="mt-3">
                                     @include('admin.katsinov.indikator1')
                                 </div>
@@ -368,7 +368,7 @@
 
                             <!-- Indikator 2 -->
                             <div class="indicator-card" data-indicator="2">
-                                <h4 class="indicator-header">Indikator KATSINOV 2</h4>
+                                <h4 class="indicator-header"></h4>
                                 <div class="mt-3">
                                     @include('admin.katsinov.indikator2')
                                 </div>
@@ -376,7 +376,7 @@
 
                             <!-- Indikator 3 -->
                             <div class="indicator-card" data-indicator="3">
-                                <h4 class="indicator-header">Indikator KATSINOV 3</h4>
+                                <h4 class="indicator-header"></h4>
                                 <div class="mt-3">
                                     @include('admin.katsinov.indikator3')
                                 </div>
@@ -384,7 +384,7 @@
 
                             <!-- Indikator 4 -->
                             <div class="indicator-card" data-indicator="4">
-                                <h4 class="indicator-header">Indikator KATSINOV 4</h4>
+                                <h4 class="indicator-header"></h4>
                                 <div class="mt-3">
                                     @include('admin.katsinov.indikator4')
                                 </div>
@@ -392,7 +392,7 @@
 
                             <!-- Indikator 5 -->
                             <div class="indicator-card" data-indicator="5">
-                                <h4 class="indicator-header">Indikator KATSINOV 5</h4>
+                                <h4 class="indicator-header"></h4>
                                 <div class="mt-3">
                                     @include('admin.katsinov.indikator5')
                                 </div>
@@ -400,7 +400,7 @@
 
                             <!-- Indikator 6 -->
                             <div class="indicator-card" data-indicator="6">
-                                <h4 class="indicator-header">Indikator KATSINOV 6</h4>
+                                <h4 class="indicator-header"></h4>
                                 <div class="mt-3">
                                     @include('admin.katsinov.indikator6')
                                 </div>
