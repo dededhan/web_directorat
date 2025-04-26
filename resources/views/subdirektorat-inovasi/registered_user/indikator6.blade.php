@@ -1,4 +1,5 @@
 <!-- KATSINOV Assessment Section -->
+<div class="container">
 <div class="container" data-indicator="6">
     <div class="card" data-aos="fade-up">
         <div class="main-title">
@@ -173,16 +174,23 @@
                     <td class="description-cell">Telah melakukan kajian risiko untuk mendukung keputusan Inovasi Ulang atau Pengembangan Teknologi Baru.</td>
                 </tr>
                 <tr class="total-row">
-                    <td colspan="2">Total Skor</td>
-                    <td colspan="6" class="total-value">0</td>
-                    <td colspan="1"></td>
-                </tr>
+                        <td colspan="2">Total Skor</td>
+                        <td colspan="6" class="total-value">0</td>
+                        <td colspan="1" style="text-align: left; padding-left: 10px;">
+                            <a href="{{ route('admin.Katsinov.lampiran.index', ['katsinov_id' => $katsinov['id'] ?? null]) }}" class="btn btn-sm" style="background-color: #277177; border-color: #277177; color: white;" target="_blank">
+                                <i class='bx bx-paperclip'></i> Lampiran
+                            </a>
+                        </td>
+                    </tr>
                 <tr class="total-row">
                     <td colspan="2">Persentase</td>
                     <td colspan="6" class="total-value">0.00%</td>
                     <td colspan="1" class="status-cell">TIDAK TERPENUHI</td>
                 </tr>
             </table>
+            <div class="katsinov-legend">
+                Skala: 0=tidak terpenuhi; 1=20%; 2=40%; 3=60%; 4=80%; 5=100% atau terpenuhi
+            </div>
             <div class="notes-section">
                 <div class="notes-header">Catatan</div>
                 <textarea 
@@ -190,11 +198,9 @@
                     class="notes-textarea">
                 </textarea>
             </div>
-            <div class="katsinov-legend">
-                Skala: 0=tidak terpenuhi; 1=20%; 2=40%; 3=60%; 4=80%; 5=100% atau terpenuhi
-            </div>
         </div>
     </div>
 </div>
+
 <script src="{{ asset('indikator.js') }}"></script>
 

@@ -34,7 +34,7 @@
         <ul class="side-menu">
             <!-- Tabel Kasitnov -->
             <li
-                class="{{ request()->routeIs('subdirektorat-inovasi.registered_user.TableKatsinov') ? 'active' : '' }} @if (Auth::user()->status === 'unactive') disabled @endif">
+                class="{{ request()->routeIs('subdirektorat-inovasi.registered_user.tablekatsinov') ? 'active' : '' }} @if (Auth::user()->status === 'unactive') disabled @endif">
                 <a href="{{ Auth::user()->status === 'active' ? route('subdirektorat-inovasi.registered_user.tablekatsinov') : '#' }}"
                     class="@if (Auth::user()->status === 'unactive') disabled-link @endif">
                     <i class='bx bxs-graduation'></i>

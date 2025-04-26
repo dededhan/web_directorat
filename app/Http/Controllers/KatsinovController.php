@@ -24,7 +24,7 @@ class KatsinovController extends Controller
     {
         $role = Auth::user()->role;
         $katsinovs = Katsinov::with('scores')->latest()->paginate(100);
-        if(in_array($role, ['dosen', 'mahasiswa', ])){
+        if (in_array($role, ['dosen', 'mahasiswa',])) {
             $katsinovs = auth()->user()->katsinovs()->paginate();
         }
 
@@ -40,7 +40,7 @@ class KatsinovController extends Controller
             'katsinovs' => $katsinovs
         ]);
     }
-    
+
     public function create()
     {
         $view = match (Auth::user()->role) {
@@ -55,7 +55,7 @@ class KatsinovController extends Controller
             'katsinov' => collect([]),
             'indicatorOne' =>  collect([]),
             'indicatorTwo' =>  collect([]),
-            'indicatorThree' =>collect([]),
+            'indicatorThree' => collect([]),
             'indicatorFour' => collect([]),
             'indicatorFive' => collect([]),
             'indicatorSix' =>  collect([]),
@@ -109,22 +109,21 @@ class KatsinovController extends Controller
 
                 ]);
             }
-            
+
             // Process and store the aggregated scores
             $this->processAndSaveScores($katsinov->id, $validated['responses']);
-            
+
             DB::commit();
             Log::info('Katsinov data successfully saved', ['id' => $katsinov->id]);
-            
+
             return response()->json(['message' => 'Data berhasil disimpan'], 200);
-            
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error saving Katsinov data: ' . $e->getMessage(), [
                 'exception' => $e,
                 'request' => $request->all()
             ]);
-            
+
             return response()->json(['message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
     }
@@ -143,7 +142,7 @@ class KatsinovController extends Controller
             }
             $groupedResponses[$indicator][] = $response;
         }
-        
+
         // Define aspect mapping
         $aspectMap = [
             'T' => 'technology',
@@ -154,11 +153,11 @@ class KatsinovController extends Controller
             'Mf' => 'manufacturing',
             'I' => 'investment'
         ];
-        
+
         // Process each indicator
         foreach ($groupedResponses as $indicator => $indicatorResponses) {
             $aspectScores = [];
-            
+
             // Initialize all aspects with zeros
             foreach ($aspectMap as $code => $field) {
                 $aspectScores[$field] = [
@@ -166,30 +165,30 @@ class KatsinovController extends Controller
                     'count' => 0
                 ];
             }
-            
+
             // Sum up scores for each aspect
             foreach ($indicatorResponses as $response) {
                 $aspect = $response['aspect'];
                 $field = $aspectMap[$aspect] ?? null;
-                
+
                 if ($field) {
                     $aspectScores[$field]['total'] += $response['score'];
                     $aspectScores[$field]['count']++;
                 }
             }
-            
+
             // Calculate percentages
             $calculatedScores = [
                 'katsinov_id' => $katsinovId,
                 'indicator_number' => $indicator
             ];
-            
+
             foreach ($aspectScores as $field => $data) {
                 $maxPossible = $data['count'] * 5; // Max score is 5 per question
                 $percentage = $maxPossible > 0 ? ($data['total'] / $maxPossible) * 100 : 0;
                 $calculatedScores[$field] = $percentage;
             }
-            
+
             // Save the scores for this indicator
             KatsinovScore::create($calculatedScores);
         }
@@ -198,14 +197,14 @@ class KatsinovController extends Controller
     public function show(Request $request)
     {
         $katsinov = Katsinov::where('id', '=', $request->id)
-        ->with(['scores', 'responses'])
-        ->first();
+            ->with(['scores', 'responses'])
+            ->first();
         // dump($katsinov->toArray());
-        
+
         if (!$katsinov) {
             return redirect()->back()->with('error', 'Data KATSINOV tidak ditemukan');
         }
-        
+
         $data = [
             'katsinov' => $katsinov,
             'indicatorOne' =>  $katsinov->responses()->where('indicator_number', '=', 1)->get(),
@@ -215,41 +214,41 @@ class KatsinovController extends Controller
             'indicatorFive' =>  $katsinov->responses()->where('indicator_number', '=', 5)->get(),
             'indicatorSix' =>  $katsinov->responses()->where('indicator_number', '=', 6)->get(),
         ];
-        
+
         return view('admin.katsinov.form_katsinov', $data);
     }
 
     public function downloadPDF()
     {
         $katsinovs = auth()->user()->katsinovs()->with('scores')->get();
-        
+
         $pdf = PDF::loadView('inovasi.katsinov.pdf', compact('katsinovs'))
             ->setPaper('a4', 'landscape')
             ->setOptions([
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled' => true
             ]);
-        
+
         return $pdf->download('katsinov-report.pdf');
     }
-    
+
     public function latest()
     {
         $latestRecord = Katsinov::with(['scores', 'responses'])
             ->latest()
             ->first();
-    
+
         if (!$latestRecord) {
             return response()->json(['message' => 'No records found'], 404);
         }
-    
+
         return response()->json($latestRecord);
     }
 
     public function edit(Katsinov $katsinov)
     {
         $katsinov->load(['responses', 'scores']);
-        
+
         $data = [
             'katsinov' => $katsinov,
             'indicatorOne' =>  $katsinov->scores()->where('indicator_number', '=', 1)->get(),
@@ -259,7 +258,7 @@ class KatsinovController extends Controller
             'indicatorFive' =>  $katsinov->scores()->where('indicator_number', '=', 5)->get(),
             'indicatorSix' =>  $katsinov->scores()->where('indicator_number', '=', 6)->get(),
         ];
-        
+
         return view('admin.katsinov.form_katsinov', $data);
     }
 
@@ -308,25 +307,24 @@ class KatsinovController extends Controller
                     'aspect' => $response['aspect'],
                     'score' => $response['score'],
                     'dropdown_value' => $response['dropdown'] ?? null,
-        
+
                 ]);
             }
-            
+
             // Process and save the updated scores
             $this->processAndSaveScores($katsinov->id, $validated['responses']);
-            
+
             DB::commit();
             Log::info('Katsinov data successfully updated', ['id' => $katsinov->id]);
-            
+
             return response()->json(['message' => 'Data berhasil diperbarui'], 200);
-            
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error updating Katsinov data: ' . $e->getMessage(), [
                 'exception' => $e,
                 'request' => $request->all()
             ]);
-            
+
             return response()->json(['message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
     }
@@ -337,10 +335,10 @@ class KatsinovController extends Controller
             // Delete all related records first
             KatsinovResponse::where('katsinov_id', $katsinov->id)->delete();
             KatsinovScore::where('katsinov_id', $katsinov->id)->delete();
-            
+
             // Delete the main record
             $katsinov->delete();
-            
+
             return redirect()->back()->with('success', 'Data KATSINOV berhasil dihapus');
         } catch (\Exception $e) {
             Log::error('Error deleting Katsinov: ' . $e->getMessage(), ['id' => $katsinov->id]);
@@ -348,15 +346,16 @@ class KatsinovController extends Controller
         }
     }
 
-    public function lampiranIndex($katsinov_id = null){
+    public function lampiranIndex($katsinov_id = null)
+    {
         $katsinov = Katsinov::find($katsinov_id);
 
         if (!$katsinov) {
             return redirect()->back()->with('error', 'Katsinov data not found');
         }
-      
+
         $lampiran = KatsinovLampiran::where('katsinov_id', $katsinov_id)->get();
-        
+
         // Kelompokkan lampiran berdasarkan type dan category
         $groupedLampiran = [];
         foreach ($lampiran as $file) {
@@ -365,7 +364,7 @@ class KatsinovController extends Controller
 
 
         $role = Auth::user()->role;
-        
+
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov.lampiran',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.lampiran',
@@ -374,14 +373,15 @@ class KatsinovController extends Controller
             'registered_user' => 'subdirektorat-inovasi.registered_user.lampiran',
             default => 'admin.katsinov.lampiran',
         };
-    
+
         return view($view, [
             'id' => $katsinov->id,
             'lampiran' => $groupedLampiran
         ]);
     }
 
-    public function lampiranStore (Request $request, $katsinov_id){
+    public function lampiranStore(Request $request, $katsinov_id)
+    {
         $files = $request->validate([
             'aspek_teknologi' => ['array', 'min:1'],
             'aspek_teknologi.*' => ['file', 'mimes:pdf,doc,docx'],
@@ -407,29 +407,29 @@ class KatsinovController extends Controller
         // this process 47 file uploads simultaneuosly
         foreach ($files as $aspect => $categories) {
             foreach ($categories as $category => $file) {
-                if($file && $file->isValid()){
+                if ($file && $file->isValid()) {
                     $extension = $file->getClientOriginalExtension();
                     $fileName = "{$aspect}_{$category}_{$now->timestamp}.{$extension}";
-                    
+
                     // Simpan file
                     $path = $file->storeAs(
-                        "$basePath/$aspect", 
-                        $fileName, 
+                        "$basePath/$aspect",
+                        $fileName,
                         'public' // Pastikan menggunakan disk 'public'
                     );
-                    
+
                     // Hapus file lama jika ada
                     $existingFile = KatsinovLampiran::where([
                         'katsinov_id' => $katsinov_id,
                         'type' => $aspect,
                         'category' => $category
                     ])->first();
-                    
+
                     if ($existingFile) {
                         Storage::disk('public')->delete($existingFile->path);
                         $existingFile->delete();
                     }
-    
+
                     $data_files[] = [
                         'path' => $path,
                         'category' => $category,
@@ -441,7 +441,7 @@ class KatsinovController extends Controller
                 }
             }
         }
-        
+
         KatsinovLampiran::insert($data_files);
 
         // which page role should I redirect into? ¯\_(ツ)_/¯
@@ -454,40 +454,42 @@ class KatsinovController extends Controller
     {
         $katsinov = Katsinov::findOrFail($katsinov_id);
         $lampiran = $katsinov->katsinovLampirans()->get();
-        
+
         // Kelompokkan lampiran berdasarkan type (aspek)
         $groupedLampiran = $lampiran->groupBy('type');
-        
+
         return view('admin.katsinov.lampiran_show', [
             'id' => $katsinov_id,
             'lampiran' => $groupedLampiran
         ]);
     }
 
-    public function viewDocument($id) {
+    public function viewDocument($id)
+    {
         $lampiran = KatsinovLampiran::findOrFail($id);
         $path = storage_path('app/public/' . $lampiran->path);
-        
+
         if (!file_exists($path)) {
             abort(404);
         }
-    
+
         return response()->file($path, [
             'Content-Type' => mime_content_type($path),
-            'Content-Disposition' => 'inline; filename="'.basename($path).'"'
+            'Content-Disposition' => 'inline; filename="' . basename($path) . '"'
         ]);
     }
-    
-    public function inovasiIndex($katsinov_id = null){
+
+    public function inovasiIndex($katsinov_id = null)
+    {
         $katsinov = Katsinov::find($katsinov_id);
-        
+
         if (!$katsinov) {
             return redirect()->back()->with('error', 'Katsinov data not found');
         }
-        
+
         $inovasi = $katsinov->katsinovInovasis()->first();
         $role = Auth::user()->role;
-        
+
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov.formjudul',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.formjudul',
@@ -496,14 +498,15 @@ class KatsinovController extends Controller
             'registered_user' => 'subdirektorat-inovasi.registered_user.formjudul',
             default => 'admin.katsinov.formjudul',
         };
-        
+
         return view($view, [
-            'id' => $katsinov->id, 
+            'id' => $katsinov->id,
             'inovasi' => $inovasi
         ]);
     }
 
-    public function inovasiStore(Request $request, $katsinov_id){
+    public function inovasiStore(Request $request, $katsinov_id)
+    {
         $validatedData = $request->validate([
             'judul' => ['required', 'string'],
             'sub_judul' => ['required', 'string'],
@@ -537,7 +540,7 @@ class KatsinovController extends Controller
         ];
         $inovasi = KatsinovInovasi::where('katsinov_id', $katsinov_id)->first();
 
-     
+
 
         if ($inovasi) {
             // Update existing record
@@ -548,40 +551,55 @@ class KatsinovController extends Controller
             KatsinovInovasi::create($data);
             $message = 'Data inovasi berhasil disimpan!';
         }
-    
-        return redirect(route('admin.Katsinov.TableKatsinov'))->with('success', $message);
+
+        $role = Auth::user()->role;
+
+        $view = match ($role) {
+            'admin_direktorat' => 'admin.katsinov.TableKatsinov',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.tablekatsinov',
+            'dosen' => 'subdirektorat-inovasi.dosen.tablekatsinov',
+            'validator' => 'subdirektorat-inovasi.validator.tablekatsinov',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.tablekatsinov',
+            default => 'admin.katsinov.tablekatsinov',
+        };
+
+        return redirect(route($view))->with('success', $message);
     }
 
-    public function informationIndex($katsinov_id = null){
+    public function informationIndex($katsinov_id = null)
+    {
         $katsinov = Katsinov::find($katsinov_id);
         if (!$katsinov) {
             return redirect()->back()->with('error', 'Katsinov data not found');
         }
-        
+
         $role = Auth::user()->role;
         $informasi = $katsinov->katsinovInformasis()->first();
         $informasiCollection = null;
-        
-        if(!is_null($informasi)){
+
+        if (!is_null($informasi)) {
             $informasiCollection = KatsinovInformasiCollection::where('katsinov_informasi_id', $informasi->id)->get([
-                'field', 'index', 'attribute', 'value'
+                'field',
+                'index',
+                'attribute',
+                'value'
             ])->toArray();
         }
-        
+
         $groupedData = [];
-    
-        if(!is_null($informasiCollection)){
+
+        if (!is_null($informasiCollection)) {
             foreach ($informasiCollection as $item) {
                 $field = $item['field'];
                 $index = $item['index'];
-    
-                if(!isset($groupedData[$field][$index])){
+
+                if (!isset($groupedData[$field][$index])) {
                     $groupedData[$field][$index] = [];
                 }
                 $groupedData[$field][$index][$item['attribute']] = $item['value'];
             }
         }
-        
+
         // Determine the view based on user role
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov.forminformasidasar',
@@ -591,7 +609,7 @@ class KatsinovController extends Controller
             'registered_user' => 'subdirektorat-inovasi.registered_user.forminformasidasar',
             default => 'admin.katsinov.forminformasidasar',
         };
-        
+
         return view($view, [
             'id' => $katsinov->id,
             'informasi' => $informasi ?? null,
@@ -603,7 +621,8 @@ class KatsinovController extends Controller
         ]);
     }
 
-    public function informationStore(Request $request, $katsinov_id){
+    public function informationStore(Request $request, $katsinov_id)
+    {
         // dd($request->all());
         $validatedData = $request->validate([
             'person_in_charge' => ['required'],
@@ -646,16 +665,16 @@ class KatsinovController extends Controller
             'innovation_novelty'  => $validatedData['innovation_novelty'],
             'katsinov_id' => $katsinov_id
         ]);
-    
+
         $collections = [];
         // there must be a better way to do this, I just do this several foreach to get the thing done faster
         // processing of array input
         foreach ($request->team as $index => $array) {
             foreach ($array as $key => $value) {
                 $collections[] = [
-                    'field' => 'team', 
+                    'field' => 'team',
                     'index' => $index,
-                    'attribute' => $key, 
+                    'attribute' => $key,
                     'value' => $value,
                     'katsinov_informasi_id' => $information->id,
                     'created_at' => $now,
@@ -666,9 +685,9 @@ class KatsinovController extends Controller
         foreach ($request->program_implementation as $index => $array) {
             foreach ($array as $key => $value) {
                 $collections[] = [
-                    'field' => 'program_implementation', 
+                    'field' => 'program_implementation',
                     'index' => $index,
-                    'attribute' => $key, 
+                    'attribute' => $key,
                     'value' => $value,
                     'katsinov_informasi_id' => $information->id,
                     'created_at' => $now,
@@ -679,9 +698,9 @@ class KatsinovController extends Controller
         foreach ($request->innovation_partner as $index => $array) {
             foreach ($array as $key => $value) {
                 $collections[] = [
-                    'field' => 'innovation_partner', 
+                    'field' => 'innovation_partner',
                     'index' => $index,
-                    'attribute' => $key, 
+                    'attribute' => $key,
                     'value' => $value,
                     'katsinov_informasi_id' => $information->id,
                     'created_at' => $now,
@@ -692,9 +711,9 @@ class KatsinovController extends Controller
         foreach ($request->information_tech as $index => $array) {
             foreach ($array as $key => $value) {
                 $collections[] = [
-                    'field' => 'information_tech', 
+                    'field' => 'information_tech',
                     'index' => $index,
-                    'attribute' => $key, 
+                    'attribute' => $key,
                     'value' => $value,
                     'katsinov_informasi_id' => $information->id,
                     'created_at' => $now,
@@ -706,9 +725,9 @@ class KatsinovController extends Controller
         foreach ($request->information_market as $index => $array) {
             foreach ($array as $key => $value) {
                 $collections[] = [
-                    'field' => 'information_market', 
+                    'field' => 'information_market',
                     'index' => $index,
-                    'attribute' => $key, 
+                    'attribute' => $key,
                     'value' => $value,
                     'katsinov_informasi_id' => $information->id,
                     'created_at' => $now,
@@ -718,22 +737,35 @@ class KatsinovController extends Controller
         }
         $information->katsinovInformasiCollections()->insert($collections);
 
-        return redirect(route('admin.Katsinov.TableKatsinov'));
+        // Create or update the record
+        $role = Auth::user()->role;
+
+        $route = match ($role) {
+            'admin_direktorat' => 'admin.Katsinov.TableKatsinov',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.tablekatsinov',
+            'dosen' => 'subdirektorat-inovasi.dosen.tablekatsinov',
+            'validator' => 'subdirektorat-inovasi.validator.tablekatsinov',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.tablekatsinov',
+            default => 'admin.Katsinov.TableKatsinov',
+        };
+    
+        return redirect()->route($route)->with('success', 'Data informasi berhasil disimpan');
     }
 
 
 
-    public function beritaIndex($katsinov_id = null){
+    public function beritaIndex($katsinov_id = null)
+    {
         $katsinov = Katsinov::find($katsinov_id);
         // dd($berita->day);
-        
+
         if (!$katsinov) {
             return redirect()->back()->with('error', 'Katsinov data not found');
         }
-        
+
         $berita = $katsinov->katsinovBeritas()->first();
         $role = Auth::user()->role;
-        
+
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov.formberitaacara',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.formberitaacara',
@@ -750,98 +782,105 @@ class KatsinovController extends Controller
         ]);
     }
 
-    public function beritaStore(Request $request, $katsinov_id){
+    public function beritaStore(Request $request, $katsinov_id)
+    {
         try { // dd($request->all());
-        $validatedData = $request->validate([
-            'text_day' => ['required', 'string'],
-            'text_date' => ['required', 'string'],
-            'text_month' => ['required', 'string'],
-            'text_year' => ['required', 'string'],
-            'text_yearfull' => ['required', 'string'],
-            'text_decree' => ['required', 'string'],
-            'text_place' => ['required', 'string'],
-            'innovation_title' => ['required', 'string'],
-            'innovation_type' => ['required', 'string'],
-            'innovation_tki' => ['required', 'string'],
-            'innovation_opinion' => ['required', 'string'],
-            'innovation_date' => ['required', 'string'],
-            'penanggungjawab' => ['required', 'string'],
-            'ketua' => ['required', 'string'],
-            'anggota1' => ['required', 'string'],
-            'anggota2' => ['required', 'string'],
-            'penanggungjawab_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
-            'ketua_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
-            'anggota1_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
-            'anggota2_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
-        ]);
-        
-        $berita = KatsinovBerita::where('katsinov_id', $katsinov_id)->first();
+            $validatedData = $request->validate([
+                'text_day' => ['required', 'string'],
+                'text_date' => ['required', 'string'],
+                'text_month' => ['required', 'string'],
+                'text_year' => ['required', 'string'],
+                'text_yearfull' => ['required', 'string'],
+                'text_decree' => ['required', 'string'],
+                'text_place' => ['required', 'string'],
+                'innovation_title' => ['required', 'string'],
+                'innovation_type' => ['required', 'string'],
+                'innovation_tki' => ['required', 'string'],
+                'innovation_opinion' => ['required', 'string'],
+                'innovation_date' => ['required', 'string'],
+                'penanggungjawab' => ['required', 'string'],
+                'ketua' => ['required', 'string'],
+                'anggota1' => ['required', 'string'],
+                'anggota2' => ['required', 'string'],
+                'penanggungjawab_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
+                'ketua_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
+                'anggota1_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
+                'anggota2_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
+            ]);
 
-        $pdfFields = [
-            'penanggungjawab_pdf',
-            'ketua_pdf',
-            'anggota1_pdf',
-            'anggota2_pdf'
-        ];
-        
-        $pdfPaths = [];
-    
-        foreach ($pdfFields as $field) {
-            if ($request->hasFile($field)) {
-                $file = $request->file($field);
-                $filename = time() . '_' . $field . '.' . $file->getClientOriginalExtension();
-                
-                // Store file in public disk under signatures directory
-                $path = $file->storeAs('signatures', $filename, 'public');
-                $pdfPaths[$field] = $filename;
-                
-                \Log::info("File stored: {$path}");
-            } elseif ($berita && $berita->{$field}) {
-                // Keep existing file if no new file is uploaded
-                $pdfPaths[$field] = $berita->{$field};
+            $berita = KatsinovBerita::where('katsinov_id', $katsinov_id)->first();
+
+            $pdfFields = [
+                'penanggungjawab_pdf',
+                'ketua_pdf',
+                'anggota1_pdf',
+                'anggota2_pdf'
+            ];
+
+            $pdfPaths = [];
+
+            foreach ($pdfFields as $field) {
+                if ($request->hasFile($field)) {
+                    $file = $request->file($field);
+                    $filename = time() . '_' . $field . '.' . $file->getClientOriginalExtension();
+
+                    // Store file in public disk under signatures directory
+                    $path = $file->storeAs('signatures', $filename, 'public');
+                    $pdfPaths[$field] = $filename;
+
+                    \Log::info("File stored: {$path}");
+                } elseif ($berita && $berita->{$field}) {
+                    // Keep existing file if no new file is uploaded
+                    $pdfPaths[$field] = $berita->{$field};
+                }
             }
-        }
 
-    
+            $beritaData = [
+                'day' => $validatedData['text_day'],
+                'date' => $validatedData['text_date'],
+                'month' => $validatedData['text_month'],
+                'year' => $validatedData['text_year'],
+                'yearfull' => $validatedData['text_yearfull'],
+                'decree' => $validatedData['text_decree'],
+                'place' => $validatedData['text_place'],
+                'title' => $validatedData['innovation_title'],
+                'type' => $validatedData['innovation_type'],
+                'tki' => $validatedData['innovation_tki'],
+                'opinion' => $validatedData['innovation_opinion'],
+                'sign_date' => $validatedData['innovation_date'],
+                'penanggungjawab' => $validatedData['penanggungjawab'],
+                'ketua' => $validatedData['ketua'],
+                'anggota1' => $validatedData['anggota1'],
+                'anggota2' => $validatedData['anggota2'],
+                'penanggungjawab_pdf' => $pdfPaths['penanggungjawab_pdf'] ?? null,
+                'ketua_pdf' => $pdfPaths['ketua_pdf'] ?? null,
+                'anggota1_pdf' => $pdfPaths['anggota1_pdf'] ?? null,
+                'anggota2_pdf' => $pdfPaths['anggota2_pdf'] ?? null,
+                'katsinov_id' => $katsinov_id,
+            ];
 
+            // Create or update the record
+            if ($berita) {
+                $berita->update($beritaData);
+                $message = 'Berita acara berhasil diperbarui';
+                \Log::info('Berita updated:', $berita->toArray());
+            } else {
+                $berita = KatsinovBerita::create($beritaData);
+                $message = 'Berita acara berhasil disimpan';
+                \Log::info('Berita created:', $berita->toArray());
+            }
+            $role = Auth::user()->role;
 
-        $beritaData = [
-            'day' => $validatedData['text_day'], 
-            'date' => $validatedData['text_date'],
-            'month' => $validatedData['text_month'],
-            'year' => $validatedData['text_year'],
-            'yearfull' => $validatedData['text_yearfull'],
-            'decree' => $validatedData['text_decree'],
-            'place' => $validatedData['text_place'],
-            'title' => $validatedData['innovation_title'],
-            'type' => $validatedData['innovation_type'],
-            'tki' => $validatedData['innovation_tki'],
-            'opinion' => $validatedData['innovation_opinion'],
-            'sign_date' => $validatedData['innovation_date'],
-            'penanggungjawab' => $validatedData['penanggungjawab'],
-            'ketua' => $validatedData['ketua'],
-            'anggota1' => $validatedData['anggota1'],
-            'anggota2' => $validatedData['anggota2'],
-            'penanggungjawab_pdf' => $pdfPaths['penanggungjawab_pdf'] ?? null,
-            'ketua_pdf' => $pdfPaths['ketua_pdf'] ?? null,
-            'anggota1_pdf' => $pdfPaths['anggota1_pdf'] ?? null,
-            'anggota2_pdf' => $pdfPaths['anggota2_pdf'] ?? null,
-            'katsinov_id' => $katsinov_id,
-        ];
+            $view = match ($role) {
+                'admin_direktorat' => 'admin.katsinov.TableKatsinov',
+                'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.tablekatsinov',
+                'dosen' => 'subdirektorat-inovasi.dosen.tablekatsinov',
+                'validator' => 'subdirektorat-inovasi.validator.tablekatsinov',
+                'registered_user' => 'subdirektorat-inovasi.registered_user.tablekatsinov',
+                default => 'admin.katsinov.tablekatsinov',
+            };
 
-        // Create or update the record
-        if ($berita) {
-            $berita->update($beritaData);
-            $message = 'Berita acara berhasil diperbarui';
-            \Log::info('Berita updated:', $berita->toArray());
-        } else {
-            $berita = KatsinovBerita::create($beritaData);
-            $message = 'Berita acara berhasil disimpan';
-            \Log::info('Berita created:', $berita->toArray());
-        }
-
-        return redirect(route('admin.Katsinov.TableKatsinov'))->with('success', $message);
-
+            return redirect(route($view))->with('success', $message);
         } catch (\Exception $e) {
             \Log::error('Error storing berita: ' . $e->getMessage());
             \Log::error($e->getTraceAsString());
@@ -851,34 +890,34 @@ class KatsinovController extends Controller
     public function viewSignature($id, $type)
     {
         $berita = KatsinovBerita::findOrFail($id);
-        
+
         $fieldMap = [
             'penanggungjawab' => 'penanggungjawab_pdf',
             'ketua' => 'ketua_pdf',
             'anggota1' => 'anggota1_pdf',
             'anggota2' => 'anggota2_pdf'
         ];
-        
+
         if (!array_key_exists($type, $fieldMap)) {
             abort(404, 'Jenis tanda tangan tidak valid');
         }
-        
+
         $filename = $berita->{$fieldMap[$type]};
-        
+
         if (!$filename) {
             abort(404, 'Dokumen tanda tangan tidak ditemukan');
         }
-    
+
         $path = storage_path('app/public/signatures/' . $filename);
-        
+
         if (!file_exists($path)) {
             \Log::error("Signature file not found: {$path}");
             abort(404, 'File tanda tangan tidak ditemukan di server');
         }
-    
+
         return response()->file($path, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="'.$filename.'"'
+            'Content-Disposition' => 'inline; filename="' . $filename . '"'
         ]);
     }
 
@@ -888,7 +927,7 @@ class KatsinovController extends Controller
         $record = $katsinov->formRecordHasilPengukuran()->first();
 
         $role = Auth::user()->role;
-        
+
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov.formrecordhasilpengukuran',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.formrecordhasilpengukuran',
@@ -897,7 +936,6 @@ class KatsinovController extends Controller
             'registered_user' => 'subdirektorat-inovasi.registered_user.formrecordhasilpengukuran',
             default => 'admin.katsinov.formrecordhasilpengukuran',
         };
-
 
         return view($view, [
             'id' => $katsinov->id, // Pastikan variabel ini dikirim
@@ -918,7 +956,7 @@ class KatsinovController extends Controller
             'fax' => 'required|string|max:20',
             'tanggal_penilaian' => 'required|date',
         ];
-    
+
         // Generate rules untuk 5 aspek
         for ($i = 1; $i <= 5; $i++) {
             $validationRules["aspek_$i"] = 'required|string|max:255';
@@ -927,19 +965,28 @@ class KatsinovController extends Controller
             $validationRules["keterangan_$i"] = 'required|string|max:255';
             $validationRules["catatan_$i"] = 'required|string|max:255';
         }
-    
+
         $validatedData = $request->validate($validationRules);
-    
+
         try {
             // Simpan ke database
             FormRecordHasilPengukuran::updateOrCreate(
                 ['katsinov_id' => $katsinov_id],
                 array_merge($validatedData, ['katsinov_id' => $katsinov_id])
             );
-    
-            return redirect()->route('admin.Katsinov.TableKatsinov')
+
+            $role = Auth::user()->role;
+            $view = match ($role) {
+                'admin_direktorat' => 'admin.katsinov.TableKatsinov',
+                'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.tablekatsinov',
+                'dosen' => 'subdirektorat-inovasi.dosen.tablekatsinov',
+                'validator' => 'subdirektorat-inovasi.validator.tablekatsinov',
+                'registered_user' => 'subdirektorat-inovasi.registered_user.tablekatsinov',
+                default => 'admin.katsinov.tablekatsinov',
+            };
+
+            return redirect()->route($view)
                 ->with('success', 'Data berhasil disimpan!');
-                
         } catch (\Exception $e) {
             return back()->withInput()
                 ->with('error', 'Gagal menyimpan data: ' . $e->getMessage());

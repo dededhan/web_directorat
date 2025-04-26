@@ -345,7 +345,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
 
                 // Tabel Katsinov
-                Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekasitnov');
+                Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekatsinov');
                 Route::get('/form', [KatsinovController::class, 'create'])->name('form');
                 Route::get('/show/{id}', [KatsinovController::class, 'show'])->name('show');
                 Route::post('/store', [KatsinovController::class, 'store'])->name('store');

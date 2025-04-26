@@ -19,7 +19,7 @@
 <header class="header">
     <h1>Berita Acara Pengukuran Tingkat Kesiapan Teknologi</h1>
 </header>
-<form action="{{ route('admin.Katsinov.berita.store', $id) }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('subdirektorat-inovasi.dosen.berita.store', $id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     <section class="form-section">
         <p>
@@ -85,7 +85,7 @@
                     <div class="pdf-preview">
                         <div class="mt-2">
                             <span>File terupload:</span>
-                            <a href="{{ route('admin.Katsinov.signature.view', ['id' => $berita->id, 'type' => 'penanggungjawab']) }}" 
+                            <a href="{{ route('subdirektorat-inovasi.dosen.signature.view', ['id' => $berita->id, 'type' => 'penanggungjawab']) }}" 
                                target="_blank" 
                                class="document-preview">
                                Lihat Dokumen
@@ -111,7 +111,7 @@
                     @if(isset($berita) && $berita->ketua_pdf)
                         <div class="pdf-preview">
                             <span>File terupload:</span>
-                            <a href="{{ route('admin.Katsinov.signature.view', ['id' => $berita->id, 'type' => 'ketua']) }}" 
+                            <a href="{{ route('subdirektorat-inovasi.dosen.signature.view', ['id' => $berita->id, 'type' => 'ketua']) }}" 
                             target="_blank" 
                             class="document-preview">
                             Lihat Dokumen
@@ -133,7 +133,7 @@
                 @if(isset($berita) && $berita->anggota1_pdf)
                     <div class="pdf-preview">
                         <span>File terupload:</span>
-                            <a href="{{ route('admin.Katsinov.signature.view', ['id' => $berita->id, 'type' => 'anggota1']) }}" 
+                            <a href="{{ route('subdirektorat-inovasi.dosen.signature.view', ['id' => $berita->id, 'type' => 'anggota1']) }}" 
                             target="_blank" 
                             class="document-preview">
                             Lihat Dokumen
@@ -154,7 +154,7 @@
                 @if(isset($berita) && $berita->anggota2_pdf)
                     <div class="pdf-preview">
                         <span>File terupload:</span>
-                            <a href="{{ route('admin.Katsinov.signature.view', ['id' => $berita->id, 'type' => 'anggota1']) }}" 
+                            <a href="{{ route('subdirektorat-inovasi.dosen.signature.view', ['id' => $berita->id, 'type' => 'anggota1']) }}" 
                             target="_blank" 
                             class="document-preview">
                             Lihat Dokumen
