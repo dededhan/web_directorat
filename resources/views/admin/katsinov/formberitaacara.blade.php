@@ -73,26 +73,27 @@
     <section class="signature-section">
         <div class="signature-box" data-signature-id="penanggung-jawab">
             <h3 class="signature-box-title">Penanggungjawab Inovasi</h3>
-            <div class="signature-area"></div>
-            <input type="text" class="input-field" placeholder="Nama Lengkap">
-            <div class="signature-buttons">
-                <button class="signature-btn hapus">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                    Hapus
-                </button>
-                <button class="signature-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                    </svg>
-                    Upload
-                </button>
+            
+            
+    
+            <div class="pdf-upload-container">
+                <input type="file" class="pdf-upload-input" name="penanggungjawab_pdf" id="penanggungjawab_pdf" accept=".pdf">
+                @if(isset($berita) && $berita->penanggungjawab_pdf)
+                    <div class="pdf-preview">
+                        <div class="mt-2">
+                            <span>File terupload:</span>
+                            <a href="{{ route('admin.Katsinov.signature.view', ['id' => $berita->id, 'type' => 'penanggungjawab']) }}" 
+                               target="_blank" 
+                               class="document-preview">
+                               Lihat Dokumen
+                            </a>
+                        </div>
+                    </div>
+                @endif
             </div>
+
+            <input type="text" class="input-field" name="penanggungjawab" value="{{ !is_null($berita)? $berita->penanggungjawab: '' }}">
+            
         </div>
     
         <div class="signature-box" data-signature-id="tim-penilai">
@@ -100,37 +101,71 @@
     
             <div data-signature-role="ketua">
                 <p class="signature-subtitle">Ketua Tim Penilai</p>
-                <div class="signature-area"></div>
-                <input type="text" class="input-field" placeholder="Nama Lengkap">
-                <div class="signature-buttons">
-                    <button class="signature-btn hapus">Hapus</button>
-                    <button class="signature-btn">Upload</button>
-                </div>
+              {{-- here i want add pdf and preview --}}
+
+              <div class="pdf-upload-container">
+                    <input type="file" class="pdf-upload-input" name="ketua_pdf" id="ketua_pdf" accept=".pdf">
+                    @if(isset($berita) && $berita->ketua_pdf)
+                        <div class="pdf-preview">
+                            <span>File terupload:</span>
+                            <a href="{{ route('admin.Katsinov.signature.view', ['id' => $berita->id, 'type' => 'ketua']) }}" 
+                            target="_blank" 
+                            class="document-preview">
+                            Lihat Dokumen
+                            </a>
+                        </div>
+                    @endif
+              </div>
+
+                <input type="text" class="input-field" name="ketua" value="{{ !is_null($berita)? $berita->ketua: '' }}">
+                
             </div>
     
             <div data-signature-role="anggota-1">
                 <p class="signature-subtitle">Anggota 1</p>
-                <div class="signature-area"></div>
-                <input type="text" class="input-field" placeholder="Nama Lengkap">
-                <div class="signature-buttons">
-                    <button class="signature-btn hapus">Hapus</button>
-                    <button class="signature-btn">Upload</button>
-                </div>
+              {{-- here i want add pdf and preview --}}
+
+              <div class="pdf-upload-container">
+                <input type="file" class="pdf-upload-input" name="anggota1_pdf" id="anggota1_pdf" accept=".pdf">
+                @if(isset($berita) && $berita->anggota1_pdf)
+                    <div class="pdf-preview">
+                        <span>File terupload:</span>
+                            <a href="{{ route('admin.Katsinov.signature.view', ['id' => $berita->id, 'type' => 'anggota1']) }}" 
+                            target="_blank" 
+                            class="document-preview">
+                            Lihat Dokumen
+                            </a>
+                    </div>
+                @endif
+            </div>
+
+                <input type="text" class="input-field" name="anggota1" value="{{ !is_null($berita)? $berita->anggota1: '' }}">
+                
             </div>
     
             <div data-signature-role="anggota-2">
                 <p class="signature-subtitle">Anggota 2</p>
-                <div class="signature-area"></div>
-                <input type="text" class="input-field" placeholder="Nama Lengkap">
-                <div class="signature-buttons">
-                    <button class="signature-btn hapus">Hapus</button>
-                    <button class="signature-btn">Upload</button>
-                </div>
+               {{-- here i want add pdf and preview --}}
+               <div class="pdf-upload-container">
+                <input type="file" class="pdf-upload-input" name="anggota2_pdf" id="anggota2_pdf" accept=".pdf">
+                @if(isset($berita) && $berita->anggota2_pdf)
+                    <div class="pdf-preview">
+                        <span>File terupload:</span>
+                            <a href="{{ route('admin.Katsinov.signature.view', ['id' => $berita->id, 'type' => 'anggota1']) }}" 
+                            target="_blank" 
+                            class="document-preview">
+                            Lihat Dokumen
+                            </a>
+                    </div>
+                @endif
+            </div>
+                <input type="text" class="input-field"  name="anggota2" value="{{ !is_null($berita)? $berita->anggota2: '' }}">
+                
             </div>
         </div>
     </section>
+   
     <!-- Submit Button Section -->
-    @if (is_null($berita))    
     <section class="form-section" style="text-align: center;">
         <button id="submitBtn" class="submit-btn" type="submit">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
@@ -138,10 +173,10 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Submit Form
+            {{ $berita ? 'Update Form' : 'Submit Form' }}
         </button>
     </section>
-    @endif
+    
 </form>
 @endsection
 

@@ -23,8 +23,8 @@ class KatsinovController extends Controller
     public function index()
     {
         $role = Auth::user()->role;
-        $katsinovs = Katsinov::with('scores')->latest()->paginate(10);
-        if(in_array($role, ['dosen', 'mahasiswa'])){
+        $katsinovs = Katsinov::with('scores')->latest()->paginate(100);
+        if(in_array($role, ['dosen', 'mahasiswa', ])){
             $katsinovs = auth()->user()->katsinovs()->paginate();
         }
 
@@ -494,8 +494,7 @@ class KatsinovController extends Controller
             'fax' => ['required'],
             'email' => ['required', 'email:rfc:dns'],
         ]);
-
-        KatsinovInovasi::create([
+        $data = [
             'title' => $validatedData['judul'],
             'sub_title' => $validatedData['sub_judul'],
             'introduction' => $validatedData['pendahuluan'],
@@ -510,9 +509,22 @@ class KatsinovController extends Controller
             'fax' => $validatedData['fax'],
             'email' => $validatedData['email'],
             'katsinov_id' => $katsinov_id
-        ]);
+        ];
+        $inovasi = KatsinovInovasi::where('katsinov_id', $katsinov_id)->first();
 
-        return redirect(route('admin.Katsinov.TableKatsinov'));
+     
+
+        if ($inovasi) {
+            // Update existing record
+            $inovasi->update($data);
+            $message = 'Data inovasi berhasil diperbarui!';
+        } else {
+            // Create new record
+            KatsinovInovasi::create($data);
+            $message = 'Data inovasi berhasil disimpan!';
+        }
+    
+        return redirect(route('admin.Katsinov.TableKatsinov'))->with('success', $message);
     }
 
     public function informationIndex($katsinov_id = null){
@@ -671,15 +683,15 @@ class KatsinovController extends Controller
 
         return redirect(route('admin.Katsinov.TableKatsinov'));
     }
-
     public function beritaIndex($katsinov_id = null){
         $katsinov = Katsinov::find($katsinov_id);
-        $berita = $katsinov->katsinovBeritas()->first();
         // dd($berita->day);
-
+        
         if (!$katsinov) {
             return redirect()->back()->with('error', 'Katsinov data not found');
         }
+        
+        $berita = $katsinov->katsinovBeritas()->first();
         
         return view('admin.katsinov.formberitaacara', [
             'id' => $katsinov->id,
@@ -688,7 +700,7 @@ class KatsinovController extends Controller
     }
 
     public function beritaStore(Request $request, $katsinov_id){
-        // dd($request->all());
+        try { // dd($request->all());
         $validatedData = $request->validate([
             'text_day' => ['required', 'string'],
             'text_date' => ['required', 'string'],
@@ -702,9 +714,47 @@ class KatsinovController extends Controller
             'innovation_tki' => ['required', 'string'],
             'innovation_opinion' => ['required', 'string'],
             'innovation_date' => ['required', 'string'],
+            'penanggungjawab' => ['required', 'string'],
+            'ketua' => ['required', 'string'],
+            'anggota1' => ['required', 'string'],
+            'anggota2' => ['required', 'string'],
+            'penanggungjawab_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
+            'ketua_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
+            'anggota1_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
+            'anggota2_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
         ]);
+        
+        $berita = KatsinovBerita::where('katsinov_id', $katsinov_id)->first();
 
-        KatsinovBerita::create([
+        $pdfFields = [
+            'penanggungjawab_pdf',
+            'ketua_pdf',
+            'anggota1_pdf',
+            'anggota2_pdf'
+        ];
+        
+        $pdfPaths = [];
+    
+        foreach ($pdfFields as $field) {
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
+                $filename = time() . '_' . $field . '.' . $file->getClientOriginalExtension();
+                
+                // Store file in public disk under signatures directory
+                $path = $file->storeAs('signatures', $filename, 'public');
+                $pdfPaths[$field] = $filename;
+                
+                \Log::info("File stored: {$path}");
+            } elseif ($berita && $berita->{$field}) {
+                // Keep existing file if no new file is uploaded
+                $pdfPaths[$field] = $berita->{$field};
+            }
+        }
+
+    
+
+
+        $beritaData = [
             'day' => $validatedData['text_day'], 
             'date' => $validatedData['text_date'],
             'month' => $validatedData['text_month'],
@@ -717,13 +767,69 @@ class KatsinovController extends Controller
             'tki' => $validatedData['innovation_tki'],
             'opinion' => $validatedData['innovation_opinion'],
             'sign_date' => $validatedData['innovation_date'],
-            'katsinov_id' => $katsinov_id, 
-        ]);
+            'penanggungjawab' => $validatedData['penanggungjawab'],
+            'ketua' => $validatedData['ketua'],
+            'anggota1' => $validatedData['anggota1'],
+            'anggota2' => $validatedData['anggota2'],
+            'penanggungjawab_pdf' => $pdfPaths['penanggungjawab_pdf'] ?? null,
+            'ketua_pdf' => $pdfPaths['ketua_pdf'] ?? null,
+            'anggota1_pdf' => $pdfPaths['anggota1_pdf'] ?? null,
+            'anggota2_pdf' => $pdfPaths['anggota2_pdf'] ?? null,
+            'katsinov_id' => $katsinov_id,
+        ];
 
-        return redirect(route('admin.Katsinov.TableKatsinov'));
+        // Create or update the record
+        if ($berita) {
+            $berita->update($beritaData);
+            $message = 'Berita acara berhasil diperbarui';
+            \Log::info('Berita updated:', $berita->toArray());
+        } else {
+            $berita = KatsinovBerita::create($beritaData);
+            $message = 'Berita acara berhasil disimpan';
+            \Log::info('Berita created:', $berita->toArray());
+        }
+
+        return redirect(route('admin.Katsinov.TableKatsinov'))->with('success', $message);
+
+        } catch (\Exception $e) {
+            \Log::error('Error storing berita: ' . $e->getMessage());
+            \Log::error($e->getTraceAsString());
+            return back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
-
-
+    public function viewSignature($id, $type)
+    {
+        $berita = KatsinovBerita::findOrFail($id);
+        
+        $fieldMap = [
+            'penanggungjawab' => 'penanggungjawab_pdf',
+            'ketua' => 'ketua_pdf',
+            'anggota1' => 'anggota1_pdf',
+            'anggota2' => 'anggota2_pdf'
+        ];
+        
+        if (!array_key_exists($type, $fieldMap)) {
+            abort(404, 'Jenis tanda tangan tidak valid');
+        }
+        
+        $filename = $berita->{$fieldMap[$type]};
+        
+        if (!$filename) {
+            abort(404, 'Dokumen tanda tangan tidak ditemukan');
+        }
+    
+        $path = storage_path('app/public/signatures/' . $filename);
+        
+        if (!file_exists($path)) {
+            \Log::error("Signature file not found: {$path}");
+            abort(404, 'File tanda tangan tidak ditemukan di server');
+        }
+    
+        return response()->file($path, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$filename.'"'
+        ]);
+    }
 
     public function recordIndex($katsinov_id = null)
     {

@@ -1,4 +1,4 @@
-<!-- KATSINOV Assessment Section -->
+
 <div class="container" data-indicator="2">
     <div class="card" data-aos="fade-up">
         <div class="main-title">
@@ -32,12 +32,12 @@
                     <td>
                         <select name="indikator2_dropdown1" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[0]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[0]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[0]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[0]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[0]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[0]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[0]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[0]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[0]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[0]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[0]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[0]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -54,12 +54,12 @@
                     <td>
                         <select name="indikator2_dropdown2" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[1]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[1]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[1]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[1]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[1]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[1]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[1]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[1]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[1]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[1]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[1]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[1]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -76,12 +76,12 @@
                     <td>
                         <select name="indikator2_dropdown3" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -98,12 +98,12 @@
                 <td>
                         <select name="indikator2_dropdown4" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[3]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[3]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[3]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[3]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[3]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[3]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[3]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[3]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[3]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[3]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[3]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[3]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -120,12 +120,12 @@
                 <td>
                         <select name="indikator2_dropdown5" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[4]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[4]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[4]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[4]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[4]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[4]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[4]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[4]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[4]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[4]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[4]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[4]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -144,12 +144,12 @@
                 <td>
                         <select name="indikator2_dropdown6" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[5]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[5]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[5]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[5]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[5]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[5]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[5]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[5]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[5]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[5]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[5]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[5]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -166,12 +166,12 @@
                 <td>
                         <select name="indikator2_dropdown7" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[6]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[6]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[6]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[6]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[6]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[6]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[6]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[6]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[6]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[6]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[6]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[6]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -188,12 +188,12 @@
                 <td>
                         <select name="indikator2_dropdown8" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[7]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[7]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[7]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[7]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[7]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[7]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[7]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[7]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[7]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[7]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[7]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[7]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -212,12 +212,12 @@
                 <td>
                         <select name="indikator2_dropdown9" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[8]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[8]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[8]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[8]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[8]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[8]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[8]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[8]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[8]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[8]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[8]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[8]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -234,12 +234,12 @@
                 <td>
                         <select name="indikator2_dropdown10" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[9]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[9]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[9]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[9]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[9]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[9]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[9]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[9]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[9]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[9]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[9]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[9]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -256,12 +256,12 @@
                 <td>
                         <select name="indikator2_dropdown11" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[10]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[10]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[10]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[10]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[10]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[10]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[10]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[10]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[10]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[10]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[10]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[10]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -278,12 +278,12 @@
                 <td>
                         <select name="indikator2_dropdown12" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[11]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[11]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[11]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[11]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[11]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[11]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[11]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[11]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[11]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[11]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[11]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[11]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -302,12 +302,12 @@
                 <td>
                         <select name="indikator2_dropdown13" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[12]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[12]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[12]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[12]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[12]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[12]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[12]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[12]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[12]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[12]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[12]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[12]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -324,12 +324,12 @@
                 <td>
                         <select name="indikator2_dropdown14" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[13]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[13]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[13]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[13]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[13]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[13]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[13]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[13]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[13]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[13]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[13]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[13]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -343,16 +343,16 @@
                 <td><input type="radio" name="indikator2_row15" class="radio-input" value="3" @checked($indicatorTwo->isNotEmpty() && $indicatorTwo[14]->score == 3)></td>
                 <td><input type="radio" name="indikator2_row15" class="radio-input" value="4" @checked($indicatorTwo->isNotEmpty() && $indicatorTwo[14]->score == 4)></td>
                 <td><input type="radio" name="indikator2_row15" class="radio-input" value="5" @checked($indicatorTwo->isNotEmpty() && $indicatorTwo[14]->score == 5)></td>
-                <td class="description-cell">Keunggulan nilai jual yang dimiliki telah teruji kepada pelanggan.</td>
+                <td class="description-cell">Keunggulan jual yang dimiliki telah teruji kepada pelanggan.</td>
             <td>
                         <select name="indikator2_dropdown15" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[14]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[14]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[14]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[14]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[14]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[14]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[14]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[14]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[14]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[14]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[14]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[14]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
             </tr>
@@ -366,16 +366,16 @@
                     <td><input type="radio" name="indikator2_row16" class="radio-input" value="3" @checked($indicatorTwo->isNotEmpty() && $indicatorTwo[15]->score == 3)></td>
                     <td><input type="radio" name="indikator2_row16" class="radio-input" value="4" @checked($indicatorTwo->isNotEmpty() && $indicatorTwo[15]->score == 4)></td>
                     <td><input type="radio" name="indikator2_row16" class="radio-input" value="5" @checked($indicatorTwo->isNotEmpty() && $indicatorTwo[15]->score == 5)></td>
-                    <td class="description-cell">Keunggulan nilai jual yang dimiliki telah teruji kepada pelanggan.</td>
+                    <td class="description-cell">Keunggulan jual yang dimiliki telah teruji kepada pelanggan.</td>
                 <td>
                         <select name="indikator2_dropdown16" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[15]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[15]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[15]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[15]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[15]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[15]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[15]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[15]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[15]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[15]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[15]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[15]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -392,12 +392,12 @@
                 <td>
                         <select name="indikator2_dropdown17" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[16]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[16]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[16]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[16]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[16]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[16]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[16]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[16]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[16]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[16]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[16]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[16]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -414,12 +414,12 @@
                 <td>
                         <select name="indikator2_dropdown18" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[17]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[17]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[17]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[17]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[17]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[17]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[17]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[17]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[17]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[17]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[17]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[17]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -438,12 +438,12 @@
                 <td>
                         <select name="indikator2_dropdown19" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[18]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[18]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[18]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[18]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[18]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[18]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[18]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[18]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[18]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[18]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[18]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[18]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -460,12 +460,12 @@
                 <td>
                         <select name="indikator2_dropdown20" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[19]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[19]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[19]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[19]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[19]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[19]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[19]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[19]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[19]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[19]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[19]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[19]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -484,12 +484,12 @@
                 <td>
                         <select name="indikator2_dropdown21" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[20]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[20]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[20]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[20]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[20]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[20]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[20]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[20]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[20]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[20]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[20]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[20]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -506,12 +506,12 @@
                 <td>
                         <select name="indikator2_dropdown22" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[21]->dropdown_value === 'A')>Nilai 0</option>
-                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[21]->dropdown_value === 'B')>Nilai 1</option>
-                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[21]->dropdown_value === 'C')>Nilai 2</option>
-                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[21]->dropdown_value === 'D')>Nilai 3</option>
-                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[21]->dropdown_value === 'E')>Nilai 4</option>
-                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[21]->dropdown_value === 'F')>Nilai 5</option>
+                            <option value="A" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[21]->dropdown_value === 'A')>0</option>
+                            <option value="B" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[21]->dropdown_value === 'B')>1</option>
+                            <option value="C" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[21]->dropdown_value === 'C')>2</option>
+                            <option value="D" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[21]->dropdown_value === 'D')>3</option>
+                            <option value="E" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[21]->dropdown_value === 'E')>4</option>
+                            <option value="F" @selected($indicatorTwo->isNotEmpty() && $indicatorTwo[21]->dropdown_value === 'F')>5</option>
                         </select>
                     </td>
                 </tr>
@@ -526,13 +526,13 @@
                     <td colspan="1" class="status-cell">TIDAK TERPENUHI</td>
                 </tr>
             </table>
-            <div class="notes-section">
+            {{-- <div class="notes-section">
                 <div class="notes-header">Catatan</div>
                 <textarea 
                     placeholder="Tambahkan catatan di sini..." 
                     class="notes-textarea">
                 </textarea>
-            </div>
+            </div> --}}
             <div class="katsinov-legend">
                 Skala: 0=tidak terpenuhi; 1=20%; 2=40%; 3=60%; 4=80%; 5=100% atau terpenuhi
             </div>

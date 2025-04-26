@@ -507,11 +507,9 @@
                             <button type="button" class="btn btn-outline-secondary prev-section" data-target="kesiapan-pasar">
                                 <i class="fas fa-arrow-left"></i> Sebelumnya
                             </button>
-                            @if (is_null($inovasi))    
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-paper-plane"></i> Kirim Formulir
+                                <i class="fas fa-save"></i> {{ $inovasi ? 'Update' : 'Kirim' }} Formulir
                             </button>
-                            @endif
                         </div>
                     </div>
                 </form>

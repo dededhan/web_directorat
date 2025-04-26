@@ -11,7 +11,8 @@
 <section id="sidebar">
     <div class="brand">
         <!-- Use a button element instead of an icon inside a link -->
-        <button type="button" id="toggle-sidebar-btn" style="background: none; border: none; color: white; cursor: pointer; position: absolute; left: 15px; top: 50%; transform: translateY(-50%); padding: 5px; font-size: 24px;">
+        <button type="button" id="toggle-sidebar-btn"
+            style="background: none; border: none; color: white; cursor: pointer; position: absolute; left: 15px; top: 50%; transform: translateY(-50%); padding: 5px; font-size: 24px;">
             <i class='bx bx-menu'></i>
         </button>
         <i class="logo-icon"></i>
@@ -21,8 +22,8 @@
     <ul class="side-menu top">
         <!-- Dashboard -->
         <li
-            class="{{ request()->routeIs('inovasi.registered_user.dashboard') ? 'active' : '' }} @if (Auth::user()->status === 'unactive') disabled @endif">
-            <a href="{{ Auth::user()->status === 'active' ? route('inovasi.registered_user.dashboard') : '#' }}"
+            class="{{ request()->routeIs('subdirektorat-inovasi.registered_user.dashboard') ? 'active' : '' }} @if (Auth::user()->status === 'unactive') disabled @endif">
+            <a href="{{ Auth::user()->status === 'active' ? route('subdirektorat-inovasi.registered_user.dashboard') : '#' }}"
                 class="@if (Auth::user()->status === 'unactive') disabled-link @endif">
                 <i class='bx bxs-dashboard'></i>
                 <span class="text">Dashboard</span>
@@ -35,8 +36,8 @@
         <ul class="side-menu">
             <!-- Tabel Kasitnov -->
             <li
-                class="{{ request()->routeIs('inovasi.registered_user.TableKatsinov') ? 'active' : '' }} @if (Auth::user()->status === 'unactive') disabled @endif">
-                <a href="{{ Auth::user()->status === 'active' ? route('inovasi.registered_user.TableKatsinov') : '#' }}"
+                class="{{ request()->routeIs('subdirektorat-inovasi.registered_user.TableKatsinov') ? 'active' : '' }} @if (Auth::user()->status === 'unactive') disabled @endif">
+                <a href="{{ Auth::user()->status === 'active' ? route('subdirektorat-inovasi.registered_user.tablekatsinov') : '#' }}"
                     class="@if (Auth::user()->status === 'unactive') disabled-link @endif">
                     <i class='bx bxs-graduation'></i>
                     <span class="text">Tabel Kasitnov</span>
@@ -45,8 +46,8 @@
 
             <!-- Form Katsinov -->
             <li
-                class="{{ request()->routeIs('inovasi.registered_user.form') ? 'active' : '' }} @if (Auth::user()->status === 'unactive') disabled @endif">
-                <a href="{{ Auth::user()->status === 'active' ? route('inovasi.registered_user.form') : '#' }}"
+                class="{{ request()->routeIs('subdirektorat-inovasi.registered_user.form') ? 'active' : '' }} @if (Auth::user()->status === 'unactive') disabled @endif">
+                <a href="{{ Auth::user()->status === 'active' ? route('subdirektorat-inovasi.registered_user.form') : '#' }}"
                     class="@if (Auth::user()->status === 'unactive') disabled-link @endif">
                     <i class='bx bxs-file-plus'></i>
                     <span class="text">Form Katsinov</span>
@@ -54,44 +55,7 @@
             </li>
 
             <!-- Form Informasi Dasar -->
-            <li
-                class="{{ request()->routeIs('inovasi.registered_user.forminformasidasar.index') ? 'active' : '' }} @if (Auth::user()->status === 'unactive') disabled @endif">
-                <a href="{{ Auth::user()->status === 'active' ? route('inovasi.registered_user.forminformasidasar.index') : '#' }}"
-                    class="@if (Auth::user()->status === 'unactive') disabled-link @endif">
-                    <i class='bx bxs-file-plus'></i>
-                    <span class="text">Form Informasi Dasar</span>
-                </a>
-            </li>
 
-            <!-- Form Berita Acara -->
-            <li
-                class="{{ request()->routeIs('inovasi.registered_user.formberitaacara.index') ? 'active' : '' }} @if (Auth::user()->status === 'unactive') disabled @endif">
-                <a href="{{ Auth::user()->status === 'active' ? route('inovasi.registered_user.formberitaacara.index') : '#' }}"
-                    class="@if (Auth::user()->status === 'unactive') disabled-link @endif">
-                    <i class='bx bxs-file-plus'></i>
-                    <span class="text">Form Berita Acara</span>
-                </a>
-            </li>
-
-            <!-- Form Judul -->
-            <li
-                class="{{ request()->routeIs('inovasi.registered_user.formjudul') ? 'active' : '' }} @if (Auth::user()->status === 'unactive') disabled @endif">
-                <a href="{{ Auth::user()->status === 'active' ? route('inovasi.registered_user.formjudul') : '#' }}"
-                    class="@if (Auth::user()->status === 'unactive') disabled-link @endif">
-                    <i class='bx bxs-file-plus'></i>
-                    <span class="text">Form Judul</span>
-                </a>
-            </li>
-
-            <!-- Form Record -->
-            <li
-                class="{{ request()->routeIs('inovasi.registered_user.formrecordhasilpengukuran.index') ? 'active' : '' }} @if (Auth::user()->status === 'unactive') disabled @endif">
-                <a href="{{ Auth::user()->status === 'active' ? route('inovasi.registered_user.formrecordhasilpengukuran.index') : '#' }}"
-                    class="@if (Auth::user()->status === 'unactive') disabled-link @endif">
-                    <i class='bx bxs-file-plus'></i>
-                    <span class="text">Form Record</span>
-                </a>
-            </li>
         </ul>
     </div>
 

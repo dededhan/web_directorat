@@ -1,4 +1,4 @@
-@extends('Inovasi.registered_user.index')
+@extends('subdirektorat-inovasi.registered_user.index')
 
 
 
@@ -199,7 +199,8 @@
                                         <button class="btn btn-sm btn-danger">Delete</button>
                                     </div>
                                     <div class="submit-all-container">
-                                        <a href="{{ route('admin.Katsinov.show', $katsinov->id) }}" class="btn btn-success">
+                                        <a href="{{ route('admin.Katsinov.show', $katsinov->id) }}"
+                                            class="btn btn-success">
                                             Muat Record Terakhir
                                         </a>
                                         {{-- <button type="button" onclick="loadRecord()" class="submit-all-btn">

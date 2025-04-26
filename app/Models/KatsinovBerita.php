@@ -24,6 +24,15 @@ class KatsinovBerita extends Model
         'opinion',
         'sign_date',
         'katsinov_id', 
+        'penanggungjawab',
+        'penanggungjawab_pdf',
+        'ketua',
+        'ketua_pdf',
+        'anggota1',
+        'anggota1_pdf',
+        'anggota2',
+        'anggota2_pdf'
+
     ];
 
     public function katsinovs(){
