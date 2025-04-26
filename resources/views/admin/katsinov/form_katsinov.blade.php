@@ -313,37 +313,74 @@
                         </div>
 
                         <!-- Spiderweb Analysis Button & Content -->
-                        <div class="text-center mt-4" x-data="{ showSpiderwebContent: false }">
-                            <button type="button" @click="showSpiderwebContent = !showSpiderwebContent" class="btn btn-primary px-4 py-2">
-                                <i class="bx" :class="showSpiderwebContent ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
-                                Lihat Analisis Spiderweb
+                        <div class="text-center mt-5" x-data="{ showSpiderwebContent: false }">
+                            <button type="button" 
+                                    @click="showSpiderwebContent = !showSpiderwebContent" 
+                                    class="btn btn-primary rounded-pill px-5 py-2 shadow-sm d-flex align-items-center justify-content-center mx-auto">
+                                <i class="bx me-2" :class="showSpiderwebContent ? 'bx-chart' : 'bx-chart'"></i>
+                                <span>Lihat Analisis Spiderweb</span>
+                                <i class="bx ms-2" :class="showSpiderwebContent ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
                             </button>
                             
-                            <div x-show="showSpiderwebContent" x-transition class="mt-4">
-                                <div class="chart-container" style="height: 400px;">
+                            <div x-show="showSpiderwebContent" 
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0 transform -translate-y-4"
+                                x-transition:enter-end="opacity-100 transform translate-y-0"
+                                x-transition:leave="transition ease-in duration-300"
+                                x-transition:leave-start="opacity-100 transform translate-y-0"
+                                x-transition:leave-end="opacity-0 transform -translate-y-4"
+                                class="mt-4 bg-gradient p-4 rounded-lg shadow-sm" style="background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);">
+                                
+                                <div class="chart-container position-relative mx-auto bg-white p-3 rounded shadow-sm" style="height: 400px; max-width: 800px;">
                                     <canvas id="spiderwebChart"></canvas>
                                 </div>
                                 
-                                <div class="spiderweb-summary mt-4">
-                                    <div class="row">
+                                <div class="spiderweb-summary mt-4 px-2">
+                                    <div class="row g-4 justify-content-center">
                                         <div class="col-md-4">
-                                            <strong>Rata-rata Pencapaian:</strong>
-                                            <span class="rata-rata-pencapaian">0.0%</span>
+                                            <div class="card h-100 border-0 shadow-sm" style="background-color: #f0f8ff;">
+                                                <div class="card-body">
+                                                    <div class="d-flex flex-column">
+                                                        <strong class="text-primary mb-2">Rata-rata Pencapaian:</strong>
+                                                        <span class="rata-rata-pencapaian fs-4">0.0%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
+                                        
                                         <div class="col-md-4">
-                                            <strong>Aspek Terpenuhi:</strong>
-                                            <span class="aspek-terpenuhi">0 dari 7</span>
+                                            <div class="card h-100 border-0 shadow-sm" style="background-color: #f0fff0;">
+                                                <div class="card-body">
+                                                    <div class="d-flex flex-column">
+                                                        <strong class="text-success mb-2">Aspek Terpenuhi:</strong>
+                                                        <span class="aspek-terpenuhi fs-4">0 dari 7</span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
+                                        
                                         <div class="col-md-4">
-                                            <strong>Status Keseluruhan:</strong>
-                                            <span class="status-keseluruhan">Belum Terpenuhi</span>
+                                            <div class="card h-100 border-0 shadow-sm" style="background-color: #fff0f5;">
+                                                <div class="card-body">
+                                                    <div class="d-flex flex-column">
+                                                        <strong class="text-danger mb-2">Status Keseluruhan:</strong>
+                                                        <span class="status-keseluruhan fs-4">Belum Terpenuhi</span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     
-                                    <div class="katsinov-indicator mt-3">
-                                        <strong>Level KATSINOV:</strong>
-                                        <span class="value">0</span>
-                                        <p class="description text-muted">KATSINOV yang dicapai adalah = KATSINOV 0 (belum ada yang terpenuhi)</p>
+                                    <div class="katsinov-indicator mt-4">
+                                        <div class="card border-0 shadow-sm" style="background: linear-gradient(to right, #f5f7fa, #e6f0ff);">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <strong class="text-primary fs-5">Level KATSINOV:</strong>
+                                                    <span class="value bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; font-size: 1.5rem; font-weight: bold;">0</span>
+                                                </div>
+                                                <p class="description text-muted mt-3 mb-0">KATSINOV yang dicapai adalah = KATSINOV 0 (belum ada yang terpenuhi)</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -404,16 +441,6 @@
                                 <div class="mt-3">
                                     @include('admin.katsinov.indikator6')
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- KATSINOV Summary -->
-                        <div class="card mb-4 mt-4">
-                            <div class="card-header bg-primary text-white">
-                                <h5 class="m-0">KATSINOV Summary</h5>
-                            </div>
-                            <div class="card-body">
-                                @include('admin.katsinov.jumlahindikator')
                             </div>
                         </div>
                     </div>
