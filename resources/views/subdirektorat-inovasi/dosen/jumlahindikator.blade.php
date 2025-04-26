@@ -77,6 +77,7 @@
         </div>
         <p class="description">KATSINOV yang dicapai adalah = KATSINOV tertinggi yang indikatornya terpenuhi</p>
     </div>
+    
 
     <script src="{{ asset('indikator.js') }}"></script>
 </body>

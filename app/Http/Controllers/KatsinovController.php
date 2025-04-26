@@ -362,8 +362,20 @@ class KatsinovController extends Controller
         foreach ($lampiran as $file) {
             $groupedLampiran[$file->type][$file->category] = $file;
         }
+
+
+        $role = Auth::user()->role;
+        
+        $view = match ($role) {
+            'admin_direktorat' => 'admin.katsinov.lampiran',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.lampiran',
+            'dosen' => 'subdirektorat-inovasi.dosen.lampiran',
+            'validator' => 'subdirektorat-inovasi.validator.lampiran',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.lampiran',
+            default => 'admin.katsinov.lampiran',
+        };
     
-        return view('admin.katsinov.lampiran', [
+        return view($view, [
             'id' => $katsinov->id,
             'lampiran' => $groupedLampiran
         ]);
@@ -468,11 +480,24 @@ class KatsinovController extends Controller
     
     public function inovasiIndex($katsinov_id = null){
         $katsinov = Katsinov::find($katsinov_id);
-        $inovasi = $katsinov->katsinovInovasis()->first();
+        
         if (!$katsinov) {
             return redirect()->back()->with('error', 'Katsinov data not found');
         }
-        return view('admin.katsinov.formjudul', [
+        
+        $inovasi = $katsinov->katsinovInovasis()->first();
+        $role = Auth::user()->role;
+        
+        $view = match ($role) {
+            'admin_direktorat' => 'admin.katsinov.formjudul',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.formjudul',
+            'dosen' => 'subdirektorat-inovasi.dosen.formjudul',
+            'validator' => 'subdirektorat-inovasi.validator.formjudul',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.formjudul',
+            default => 'admin.katsinov.formjudul',
+        };
+        
+        return view($view, [
             'id' => $katsinov->id, 
             'inovasi' => $inovasi
         ]);
@@ -532,8 +557,11 @@ class KatsinovController extends Controller
         if (!$katsinov) {
             return redirect()->back()->with('error', 'Katsinov data not found');
         }
+        
+        $role = Auth::user()->role;
         $informasi = $katsinov->katsinovInformasis()->first();
         $informasiCollection = null;
+        
         if(!is_null($informasi)){
             $informasiCollection = KatsinovInformasiCollection::where('katsinov_informasi_id', $informasi->id)->get([
                 'field', 'index', 'attribute', 'value'
@@ -541,20 +569,30 @@ class KatsinovController extends Controller
         }
         
         $groupedData = [];
-
+    
         if(!is_null($informasiCollection)){
-        foreach ($informasiCollection as $item) {
-            $field = $item['field'];
-            $index = $item['index'];
-
-            if(!isset($groupedData[$field][$index])){
-                $groupedData[$field][$index] = [];
+            foreach ($informasiCollection as $item) {
+                $field = $item['field'];
+                $index = $item['index'];
+    
+                if(!isset($groupedData[$field][$index])){
+                    $groupedData[$field][$index] = [];
+                }
+                $groupedData[$field][$index][$item['attribute']] = $item['value'];
             }
-            $groupedData[$field][$index][$item['attribute']] = $item['value'];
-        }}
+        }
         
-        // dd($informasiCollection, $groupedData['team']);
-        return view('admin.katsinov.forminformasidasar', [
+        // Determine the view based on user role
+        $view = match ($role) {
+            'admin_direktorat' => 'admin.katsinov.forminformasidasar',
+            'dosen' => 'subdirektorat-inovasi.dosen.forminformasidasar',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.forminformasidasar',
+            'validator' => 'subdirektorat-inovasi.validator.forminformasidasar',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.forminformasidasar',
+            default => 'admin.katsinov.forminformasidasar',
+        };
+        
+        return view($view, [
             'id' => $katsinov->id,
             'informasi' => $informasi ?? null,
             'informasi_team' => $groupedData['team'] ?? null,
@@ -563,7 +601,6 @@ class KatsinovController extends Controller
             'informasi_tech' => $groupedData['information_tech'] ?? null,
             'informasi_market' => $groupedData['information_market'] ?? null,
         ]);
-        
     }
 
     public function informationStore(Request $request, $katsinov_id){
@@ -683,6 +720,9 @@ class KatsinovController extends Controller
 
         return redirect(route('admin.Katsinov.TableKatsinov'));
     }
+
+
+
     public function beritaIndex($katsinov_id = null){
         $katsinov = Katsinov::find($katsinov_id);
         // dd($berita->day);
@@ -692,8 +732,19 @@ class KatsinovController extends Controller
         }
         
         $berita = $katsinov->katsinovBeritas()->first();
+        $role = Auth::user()->role;
         
-        return view('admin.katsinov.formberitaacara', [
+        $view = match ($role) {
+            'admin_direktorat' => 'admin.katsinov.formberitaacara',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.formberitaacara',
+            'dosen' => 'subdirektorat-inovasi.dosen.formberitaacara',
+            'validator' => 'subdirektorat-inovasi.validator.formberitaacara',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.formberitaacara',
+            default => 'admin.katsinov.formberitaacara',
+        };
+
+
+        return view($view, [
             'id' => $katsinov->id,
             'berita' => $berita,
         ]);
@@ -836,7 +887,19 @@ class KatsinovController extends Controller
         $katsinov = Katsinov::find($katsinov_id);
         $record = $katsinov->formRecordHasilPengukuran()->first();
 
-        return view('admin.katsinov.formrecordhasilpengukuran', [
+        $role = Auth::user()->role;
+        
+        $view = match ($role) {
+            'admin_direktorat' => 'admin.katsinov.formrecordhasilpengukuran',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.formrecordhasilpengukuran',
+            'dosen' => 'subdirektorat-inovasi.dosen.formrecordhasilpengukuran',
+            'validator' => 'subdirektorat-inovasi.validator.formrecordhasilpengukuran',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.formrecordhasilpengukuran',
+            default => 'admin.katsinov.formrecordhasilpengukuran',
+        };
+
+
+        return view($view, [
             'id' => $katsinov->id, // Pastikan variabel ini dikirim
             'katsinov' => $katsinov, // Optional: kirim full object jika diperlukan
             'record' => $record,

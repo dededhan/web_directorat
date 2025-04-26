@@ -1,325 +1,479 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('subdirektorat-inovasi.dosen.index')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>KATSINOV-MeterO - Innovation Measurement System</title>
-    <link href="{{ asset('aspect-analysis.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('.css') }}">
-    <link rel="stylesheet" href="{{ asset('inovasi/dashboard/form_katsinov/css/form.css') }}">
+@section('contentdosen')
+<!-- CSS Files -->
+<link href="{{ asset('aspect-analysis.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('inovasi/dashboard/form_katsinov/css/form.css') }}">
 
-    <script src="{{ asset('aspect-legend.js') }}"></script>
-    <script src="{{ asset('aspect-analysis-integrated.js') }}"></script>
-    <script src="{{ asset('spiderweb-chart-script.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+<!-- Alpine.js x-cloak style -->
+<style>
+    [x-cloak] { display: none !important; }
+</style>
 
-@extends('inovasi.dosen.index')
+<!-- Scripts -->
+<script src="{{ asset('aspect-legend.js') }}"></script>
+<script src="{{ asset('aspect-analysis-integrated.js') }}"></script>
+<script src="{{ asset('spiderweb-chart-script.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-{{-- @include('admin.sidebaradmin') --}}
+<div x-data="aspectLegend()" x-init="init()">
+    <div class="head-title">
+        <div class="left">
+            <h1>KATSINOV Measurement</h1>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Dashboard</a>
+                </li>
+                <li><i class='bx bx-chevron-right'></i></li>
+                <li>
+                    <a class="active" href="#">Innovation Readiness Level</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
-{{-- @section('contentadmin')
-@endsection --}}
-
-<body x-data="aspectLegend()" x-init="init()">
-    <!-- Main Content -->
-
-    <main class="container">
-        <form id="katsinovForm" method="POST" action="{{ route('katsinov.store') }}">
-            @csrf
-            <!-- Explanation Card -->
-            <div class="card">
-                <div class="main-title">
-                    PENGUKURAN TINGKAT KESIAPAN INOVASI (KATSINOV)
-                </div>
-                <div class="content">
-                    <div class="content-title">Penjelasan</div>
-                    <div class="content-text">
-                        <span class="highlight">IRL-Meter (Innovation Readiness Level - Meter)</span> atau
-                        <span class="highlight">KATSINOV-Meter (Tingkat Kesiapan Inovasi - Meter)</span>
-                        adalah sebuah alat ukur yang digunakan untuk mengukur tingkat kesiapan atau kematangan
-                        inovasi yang dilakukan oleh suatu perusahaan dan/ atau proyek/program/kegiatan.
-                        KATSINOV-Meter menggunakan pendekatan siklus hidup inovasi, dimana dapat menggambarkan
-                        perkembangan inovasi.
-                    </div>
-
-                    <div class="content-text">
-                        Kerangka konseptual IRL adalah model <span class="highlight">6"C" (Concept, Component,
-                            Completion, Chasin, Competition, Changeover/ Closedown)</span>, yang memisahkan secara
-                        komprehensif siklus hidup inovasi ke dalam 6 fase (tingkat kesiapan), dan memberikan
-                        arah bagi manajemen dalam melaksanakan proses inovasi dengan memperhatikan 7 aspek
-                        kunci (teknologi, pasar, organisasi, manufaktur, investment, kemitraan dan risiko).
-                    </div>
-
-                    <div class="content-text">
-                        Pengukuran IRL sangat penting untuk:
-                    </div>
-                    <div class="list-container">
-                        <div class="list-item">
-                            Menggambarkan perkembangan inovasi
-                        </div>
-                        <div class="list-item">
-                            Membantu mengimplementasikan inovasi diatas siklus-hidup yang lebih efektif
-                        </div>
-                        <div class="list-item">
-                            Mengantisipasi persaingan pasar yang semakin sengit
-                        </div>
-                        <div class="list-item">
-                            Mengantisipasi tingkat inovasi atau siklus hidup teknologi yang lebih cepat
-                        </div>
-                    </div>
-                </div>
+    <div class="table-data">
+        <div class="order">
+            <div class="head">
+                <h3>PENGUKURAN TINGKAT KESIAPAN INOVASI (KATSINOV)</h3>
             </div>
 
-            <!-- Form Container -->
-            <div class="form-container">
-                <div class="document-number">No: 20190802-001</div>
+            <form id="katsinovForm" method="POST" action="{{ route('katsinov.store') }}" class="mb-4">
+                @csrf
+                
+                <!-- Explanation Card -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Penjelasan KATSINOV</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            <strong>IRL-Meter (Innovation Readiness Level - Meter)</strong> atau
+                            <strong>KATSINOV-Meter (Tingkat Kesiapan Inovasi - Meter)</strong>
+                            adalah sebuah alat ukur yang digunakan untuk mengukur tingkat kesiapan atau kematangan
+                            inovasi yang dilakukan oleh suatu perusahaan dan/atau proyek/program/kegiatan.
+                            KATSINOV-Meter menggunakan pendekatan siklus hidup inovasi, dimana dapat menggambarkan
+                            perkembangan inovasi.
+                        </p>
 
-                <div class="form-group">
-                    <div class="form-label">Nama/Judul</div>
-                    <input type="text" class="form-input" name="title" placeholder="Masukkan nama/judul"
-                        value="{{ $katsinov['title'] ?? '' }}">
-                </div>
+                        <p>
+                            Kerangka konseptual IRL adalah model <strong>6"C" (Concept, Component,
+                            Completion, Chasin, Competition, Changeover/ Closedown)</strong>, yang memisahkan secara
+                            komprehensif siklus hidup inovasi ke dalam 6 fase (tingkat kesiapan), dan memberikan
+                            arah bagi manajemen dalam melaksanakan proses inovasi dengan memperhatikan 7 aspek
+                            kunci (teknologi, pasar, organisasi, manufaktur, investment, kemitraan dan risiko).
+                        </p>
 
-                <div class="form-group">
-                    <div class="form-label">Fokus Bidang</div>
-                    <input type="text" class="form-input" name="focus_area" placeholder="Masukkan fokus bidang"
-                        value="{{ $katsinov['focus_area'] ?? '' }}">
-                </div>
-
-                <div class="form-group">
-                    <div class="form-label">Nama Proyek</div>
-                    <input type="text" class="form-input" name="project_name" placeholder="Masukkan nama proyek"
-                        value="{{ $katsinov['project_name'] ?? '' }}">
-                </div>
-
-                <div class="form-group">
-                    <div class="form-label">Nama Lembaga/Perusahaan</div>
-                    <input type="text" class="form-input" name="institution"
-                        placeholder="Masukkan nama lembaga/perusahaan" value="{{ $katsinov['institution'] ?? '' }}">
-                </div>
-
-                <div class="form-group">
-                    <div class="form-label">Alamat / Kontak</div>
-                    <div>
-                        <input type="text" class="form-input" name="address" placeholder="Masukkan alamat lengkap"
-                            value="{{ $katsinov['address'] ?? '' }}">
-                        <div style="margin-top: 0.75rem;">
-                            <input type="text" class="form-input" name="contact" placeholder="Telp / Fax / email"
-                                value="{{ $katsinov['contact'] ?? '' }}">
-                        </div>
+                        <p>Pengukuran IRL sangat penting untuk:</p>
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item">Menggambarkan perkembangan inovasi</li>
+                            <li class="list-group-item">Membantu mengimplementasikan inovasi diatas siklus-hidup yang lebih efektif</li>
+                            <li class="list-group-item">Mengantisipasi persaingan pasar yang semakin sengit</li>
+                            <li class="list-group-item">Mengantisipasi tingkat inovasi atau siklus hidup teknologi yang lebih cepat</li>
+                        </ul>
                     </div>
                 </div>
 
-                <div class="date-section">
-                    <div class="form-group">
-                        <div class="form-label">Tanggal</div>
-                        <input type="date" id="assessment_date" name="assessment_date"
-                            class="form-input @error('assessment_date') border-red-500 @enderror"
-                            value="{{ old('assessment_date', isset($katsinov['assessment_date']) ? $katsinov['assessment_date'] : date('Y-m-d')) }}"
-                            required>
+                <!-- Basic Information Form -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Informasi Dasar</h4>
                     </div>
-                </div>
-
-                <div class="progress-container">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                        <span style="font-weight: 500; color: var(--text);">Batas Minimum Capaian</span>
-                        <span
-                            style="padding: 0.5rem 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px;">80.0%</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span style="font-weight: 500; color: var(--text);">Batas Maksimum Capaian</span>
-                        <span
-                            style="padding: 0.5rem 1rem; background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: var(--text-dark); border-radius: 8px;">100.0%</span>
-                    </div>
-                </div>
-
-                <div class="legend" x-data="aspectLegend()">
-                    <h3 class="text-gray-700 mb-6 text-lg">Keterangan:</h3>
-                    <div class="legend-grid">
-                        <!-- Teknologi -->
-                        <div class="legend-item cursor-pointer" @click="openAspectAnalysis('T')">
-                            <div class="legend-box"
-                                style="background: linear-gradient(135deg, #fad961 0%, #f76b1c 100%);"></div>
-                            <span>Aspek Teknologi (T)</span>
+                    <div class="card-body">
+                        <div class="mb-3 text-center">
+                            <span class="badge bg-secondary">No: 20190802-001</span>
                         </div>
 
-                        <!-- Organisasi -->
-                        <div class="legend-item cursor-pointer" @click="openAspectAnalysis('O')">
-                            <div class="legend-box"
-                                style="background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);"></div>
-                            <span>Aspek Organisasi (O)</span>
-                        </div>
-
-                        <!-- Risiko -->
-                        <div class="legend-item cursor-pointer" @click="openAspectAnalysis('R')">
-                            <div class="legend-box"
-                                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
-                            <span>Aspek Risiko (R)</span>
-                        </div>
-
-                        <!-- Pasar -->
-                        <div class="legend-item cursor-pointer" @click="openAspectAnalysis('M')">
-                            <div class="legend-box"
-                                style="background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);"></div>
-                            <span>Aspek Pasar (M)</span>
-                        </div>
-
-                        <!-- Kemitraan -->
-                        <div class="legend-item cursor-pointer" @click="openAspectAnalysis('P')">
-                            <div class="legend-box"
-                                style="background: linear-gradient(135deg, #ffd1ff 0%, #fab2ff 100%);"></div>
-                            <span>Aspek Kemitraan (P)</span>
-                        </div>
-
-                        <!-- Manufaktur -->
-                        <div class="legend-item cursor-pointer" @click="openAspectAnalysis('Mf')">
-                            <div class="legend-box"
-                                style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);"></div>
-                            <span>Aspek Manufaktur (Mf)</span>
-                        </div>
-
-                        <!-- Investasi -->
-                        <div class="legend-item cursor-pointer" @click="openAspectAnalysis('I')">
-                            <div class="legend-box"
-                                style="background: linear-gradient(135deg, #96fbc4 0%, #f9f586 100%);"></div>
-                            <span>Aspek Investasi (I)</span>
-                        </div>
-                    </div>
-                    <!-- Aspect Analysis Popup -->
-                    <div x-show="showPopup" class="aspect-popup" @click.self="showPopup = false"
-                        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
-                        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
-                        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-                        <div class="popup-content">
-                            <div class="popup-header" :style="{ background: selectedAspect?.gradient }">
-                                <h3 class="text-white text-xl font-semibold"
-                                    x-text="'Analysis ' + selectedAspect?.name"></h3>
-                                <button @click="showPopup = false" class="popup-close">&times;</button>
+                        <div class="row mb-3">
+                            <label class="col-md-3 form-label">Nama/Judul</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="title" placeholder="Masukkan nama/judul" value="{{ $katsinov['title'] ?? '' }}">
                             </div>
+                        </div>
 
-                            <div class="popup-body">
-                                <div class="chart-container">
-                                    <canvas id="aspectChart"></canvas>
+                        <div class="row mb-3">
+                            <label class="col-md-3 form-label">Fokus Bidang</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="focus_area" placeholder="Masukkan fokus bidang" value="{{ $katsinov['focus_area'] ?? '' }}">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-md-3 form-label">Nama Proyek</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="project_name" placeholder="Masukkan nama proyek" value="{{ $katsinov['project_name'] ?? '' }}">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-md-3 form-label">Nama Lembaga/Perusahaan</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="institution" placeholder="Masukkan nama lembaga/perusahaan" value="{{ $katsinov['institution'] ?? '' }}">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-md-3 form-label">Alamat</label>
+                            <div class="col-md-9">
+                                <textarea class="form-control" name="address" placeholder="Masukkan alamat lengkap" rows="2">{{ $katsinov['address'] ?? '' }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-md-3 form-label">Kontak</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="contact" placeholder="Telp / Fax / email" value="{{ $katsinov['contact'] ?? '' }}">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-md-3 form-label">Tanggal</label>
+                            <div class="col-md-9">
+                                <input type="date" id="assessment_date" name="assessment_date"
+                                    class="form-control @error('assessment_date') border-red-500 @enderror"
+                                    value="{{ old('assessment_date', isset($katsinov['assessment_date']) ? $katsinov['assessment_date'] : date('Y-m-d')) }}" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Capaian Criteria -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Kriteria Capaian</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="d-flex justify-content-between p-3 bg-light rounded">
+                                    <span class="fw-bold">Batas Minimum Capaian</span>
+                                    <span class="badge bg-primary px-3 py-2">80.0%</span>
                                 </div>
-
-                                <div class="summary-container">
-                                    <div class="summary-item">
-                                        <span class="label">Rata-rata Pencapaian:</span>
-                                        <span class="value" x-text="calculateAverage() + '%'"></span>
-                                    </div>
-                                    <div class="summary-item">
-                                        <span class="label">Level KATSINOV Tercapai:</span>
-                                        <span class="value" x-text="getMaxKatsinovLevel()"></span>
-                                    </div>
-                                    <div class="summary-item">
-                                        <span class="label">Status:</span>
-                                        <span class="value" :class="getStatusClass()" x-text="getStatus()"></span>
-                                    </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex justify-content-between p-3 bg-light rounded">
+                                    <span class="fw-bold">Batas Maksimum Capaian</span>
+                                    <span class="badge bg-success px-3 py-2">100.0%</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="spiderweb-trigger" style="display: flex; justify-content: center; margin: 20px 0;">
-                    <button type="button" @click="openSpiderwebAnalysis()"
-                        class="bg-primary text-white px-4 py-2 rounded-full shadow-lg hover:bg-primary-dark transition-colors"
-                        style="background-color: #176369; color: white; padding: 10px 20px; border-radius: 30px;">
-                        Lihat Analisis Aspek
+
+                <!-- Aspect Legend -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Keterangan Aspek</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Aspect Cards -->
+                        <div class="row">
+                            <!-- Teknologi -->
+                            <div class="col-md-4 col-sm-6 mb-3">
+                                <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'T' }">
+                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div class="legend-box me-2" style="background: linear-gradient(135deg, #fad961 0%, #f76b1c 100%);"></div>
+                                                <span>Aspek Teknologi (T)</span>
+                                            </div>
+                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                        </div>
+                                    </div>
+                                    <div x-show="isOpen" x-transition class="mt-2">
+                                        <div class="chart-container" style="height: 300px;">
+                                            <canvas id="aspectChart-T"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Organisasi -->
+                            <div class="col-md-4 col-sm-6 mb-3">
+                                <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'O' }">
+                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div class="legend-box me-2" style="background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);"></div>
+                                                <span>Aspek Organisasi (O)</span>
+                                            </div>
+                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                        </div>
+                                    </div>
+                                    <div x-show="isOpen" x-transition class="mt-2">
+                                        <div class="chart-container" style="height: 300px;">
+                                            <canvas id="aspectChart-O"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Risiko -->
+                            <div class="col-md-4 col-sm-6 mb-3">
+                                <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'R' }">
+                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div class="legend-box me-2" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                                                <span>Aspek Risiko (R)</span>
+                                            </div>
+                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                        </div>
+                                    </div>
+                                    <div x-show="isOpen" x-transition class="mt-2">
+                                        <div class="chart-container" style="height: 300px;">
+                                            <canvas id="aspectChart-R"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pasar -->
+                            <div class="col-md-4 col-sm-6 mb-3">
+                                <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'M' }">
+                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div class="legend-box me-2" style="background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);"></div>
+                                                <span>Aspek Pasar (M)</span>
+                                            </div>
+                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                        </div>
+                                    </div>
+                                    <div x-show="isOpen" x-transition class="mt-2">
+                                        <div class="chart-container" style="height: 300px;">
+                                            <canvas id="aspectChart-M"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Kemitraan -->
+                            <div class="col-md-4 col-sm-6 mb-3">
+                                <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'P' }">
+                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div class="legend-box me-2" style="background: linear-gradient(135deg, #ffd1ff 0%, #fab2ff 100%);"></div>
+                                                <span>Aspek Kemitraan (P)</span>
+                                            </div>
+                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                        </div>
+                                    </div>
+                                    <div x-show="isOpen" x-transition class="mt-2">
+                                        <div class="chart-container" style="height: 300px;">
+                                            <canvas id="aspectChart-P"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Manufaktur -->
+                            <div class="col-md-4 col-sm-6 mb-3">
+                                <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'Mf' }">
+                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div class="legend-box me-2" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);"></div>
+                                                <span>Aspek Manufaktur (Mf)</span>
+                                            </div>
+                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                        </div>
+                                    </div>
+                                    <div x-show="isOpen" x-transition class="mt-2">
+                                        <div class="chart-container" style="height: 300px;">
+                                            <canvas id="aspectChart-Mf"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Investasi -->
+                            <div class="col-md-4 col-sm-6 mb-3">
+                                <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'I' }">
+                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div class="legend-box me-2" style="background: linear-gradient(135deg, #96fbc4 0%, #f9f586 100%);"></div>
+                                                <span>Aspek Investasi (I)</span>
+                                            </div>
+                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                        </div>
+                                    </div>
+                                    <div x-show="isOpen" x-transition class="mt-2">
+                                        <div class="chart-container" style="height: 300px;">
+                                            <canvas id="aspectChart-I"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Spiderweb Analysis Button & Content -->
+                        <div class="text-center mt-5" x-data="{ showSpiderwebContent: false }">
+                            <button type="button" 
+                                    @click="showSpiderwebContent = !showSpiderwebContent" 
+                                    class="btn btn-primary rounded-pill px-5 py-2 shadow-sm d-flex align-items-center justify-content-center mx-auto">
+                                <i class="bx me-2" :class="showSpiderwebContent ? 'bx-chart' : 'bx-chart'"></i>
+                                <span>Lihat Analisis Spiderweb</span>
+                                <i class="bx ms-2" :class="showSpiderwebContent ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                            </button>
+                            
+                            <div x-show="showSpiderwebContent" 
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0 transform -translate-y-4"
+                                x-transition:enter-end="opacity-100 transform translate-y-0"
+                                x-transition:leave="transition ease-in duration-300"
+                                x-transition:leave-start="opacity-100 transform translate-y-0"
+                                x-transition:leave-end="opacity-0 transform -translate-y-4"
+                                class="mt-4 bg-gradient p-4 rounded-lg shadow-sm" style="background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);">
+                                
+                                <div class="chart-container position-relative mx-auto bg-white p-3 rounded shadow-sm" style="height: 400px; max-width: 800px;">
+                                    <canvas id="spiderwebChart"></canvas>
+                                </div>
+                                
+                                <div class="spiderweb-summary mt-4 px-2">
+                                    <div class="row g-4 justify-content-center">
+                                        <div class="col-md-4">
+                                            <div class="card h-100 border-0 shadow-sm" style="background-color: #f0f8ff;">
+                                                <div class="card-body">
+                                                    <div class="d-flex flex-column">
+                                                        <strong class="text-primary mb-2">Rata-rata Pencapaian:</strong>
+                                                        <span class="rata-rata-pencapaian fs-4">0.0%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <div class="card h-100 border-0 shadow-sm" style="background-color: #f0fff0;">
+                                                <div class="card-body">
+                                                    <div class="d-flex flex-column">
+                                                        <strong class="text-success mb-2">Aspek Terpenuhi:</strong>
+                                                        <span class="aspek-terpenuhi fs-4">0 dari 7</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <div class="card h-100 border-0 shadow-sm" style="background-color: #fff0f5;">
+                                                <div class="card-body">
+                                                    <div class="d-flex flex-column">
+                                                        <strong class="text-danger mb-2">Status Keseluruhan:</strong>
+                                                        <span class="status-keseluruhan fs-4">Belum Terpenuhi</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="katsinov-indicator mt-4">
+                                        <div class="card border-0 shadow-sm" style="background: linear-gradient(to right, #f5f7fa, #e6f0ff);">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <strong class="text-primary fs-5">Level KATSINOV:</strong>
+                                                    <span class="value bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; font-size: 1.5rem; font-weight: bold;">0</span>
+                                                </div>
+                                                <p class="description text-muted mt-3 mb-0">KATSINOV yang dicapai adalah = KATSINOV 0 (belum ada yang terpenuhi)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+                        
+                <!-- KATSINOV Indicators Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Indikator KATSINOV</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="indicators-wrapper">
+                            <!-- Indikator 1 -->
+                            <div class="indicator-card" data-indicator="1">
+                                <h4 class="indicator-header"></h4>
+                                <div class="mt-3">
+                                    @include('subdirektorat-inovasi.dosen.indikator1')
+                                </div>
+                            </div>
+
+                            <!-- Indikator 2 -->
+                            <div class="indicator-card" data-indicator="2">
+                                <h4 class="indicator-header"></h4>
+                                <div class="mt-3">
+                                    @include('subdirektorat-inovasi.dosen.indikator2')
+                                </div>
+                            </div>
+
+                            <!-- Indikator 3 -->
+                            <div class="indicator-card" data-indicator="3">
+                                <h4 class="indicator-header"></h4>
+                                <div class="mt-3">
+                                    @include('subdirektorat-inovasi.dosen.indikator3')
+                                </div>
+                            </div>
+
+                            <!-- Indikator 4 -->
+                            <div class="indicator-card" data-indicator="4">
+                                <h4 class="indicator-header"></h4>
+                                <div class="mt-3">
+                                    @include('subdirektorat-inovasi.dosen.indikator4')
+                                </div>
+                            </div>
+
+                            <!-- Indikator 5 -->
+                            <div class="indicator-card" data-indicator="5">
+                                <h4 class="indicator-header"></h4>
+                                <div class="mt-3">
+                                    @include('subdirektorat-inovasi.dosen.indikator5')
+                                </div>
+                            </div>
+
+                            <!-- Indikator 6 -->
+                            <div class="indicator-card" data-indicator="6">
+                                <h4 class="indicator-header"></h4>
+                                <div class="mt-3">
+                                    @include('subdirektorat-inovasi.dosen.indikator6')
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit All Button -->
+                <div class="submit-all-container" style="display: flex;justify-content: center;margin-top: 2rem;margin-bottom: 2rem;">
+                    <button type="button" id="submitAllBtn" class="submit-all-btn"
+                        style="
+                            background-color: #176369;
+                            color: white;
+                            padding: 12px 24px;
+                            border: none;
+                            border-radius: 8px;
+                            font-size: 1rem;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                        "
+                        onclick="submitAllIndicators(event)">
+                        @if (!isset($katsinov) || empty($katsinov))
+                        Submit Semua Indikator KATSINOV
+                        @else
+                        Update Indikator KATSINOV
+                        @endif
                     </button>
                 </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-                <!-- Spiderweb Analysis Popup -->
-                <div x-show="showSpiderwebPopup" class="spiderweb-popup" @click.self="showSpiderwebPopup = false"
-                    x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
-                    x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
-                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                    style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000;">
-                    <div class="popup-content"
-                        style="background: white; border-radius: 10px; width: 90%; max-width: 800px; max-height: 90%; overflow: auto; padding: 20px;">
-                        <div class="popup-header"
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                            <h3 class="text-xl font-semibold">Analisis Keseluruhan Aspek KATSINOV</h3>
-                            <button @click="showSpiderwebPopup = false" class="popup-close"
-                                style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
-                        </div>
+<script src="{{ asset('inovasi/dashboard/form_katsinov/js/form.js') }}"></script>
 
-                        <div class="popup-body" style="display: flex; flex-direction: column; gap: 20px;">
-                            <div class="chart-container" style="width: 100%; height: 400px;">
-                                <canvas id="spiderwebChart"></canvas>
-                            </div>
-
-                            <div class="summary-container"
-                                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                                <div class="summary-item"
-                                    style="background: #f0f4f8; padding: 15px; border-radius: 8px;">
-                                    <span class="label block text-gray-600 mb-2">Rata-rata Pencapaian:</span>
-                                    <span class="rata-rata-pencapaian text-xl font-bold text-primary">0.0%</span>
-                                </div>
-                                <div class="summary-item"
-                                    style="background: #f0f4f8; padding: 15px; border-radius: 8px;">
-                                    <span class="label block text-gray-600 mb-2">Aspek Terpenuhi:</span>
-                                    <span class="aspek-terpenuhi text-xl font-bold text-primary">0 dari 7</span>
-                                </div>
-                                <div class="summary-item"
-                                    style="background: #f0f4f8; padding: 15px; border-radius: 8px;">
-                                    <span class="label block text-gray-600 mb-2">Status Keseluruhan:</span>
-                                    <span class="status-keseluruhan text-xl font-bold">BELUM TERPENUHI</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            {{-- @dd($indicator) --}}
-            @include('inovasi.dosen.indikator1')
-            @include('inovasi.dosen.indikator2')
-            @include('inovasi.dosen.indikator3')
-            @include('inovasi.dosen.indikator4')
-            @include('inovasi.dosen.indikator5')
-            @include('inovasi.dosen.indikator6')
-            @include('inovasi.dosen.jumlahindikator')
-            <!-- Submit All Button -->
-            <div class="submit-all-container"
-                style="
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-            ">
-                <button type="submit" id="submitAllBtn" class="submit-all-btn"
-                    style="
-                        background-color: #176369;
-                        color: white;
-                        padding: 12px 24px;
-                        border: none;
-                        border-radius: 8px;
-                        font-size: 1rem;
-                        font-weight: 600;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-                        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                    "
-                    onclick="submitAllIndicators()">
-                    @if (!isset($katsinov) || empty($katsinov))
-                        Submit Semua Indikator KATSINOV
-                    @else
-                        Update Indikator KATSINOV
-                    @endif
-                </button>
-            </div>
-        </form>
-    </main>
-
-    <script src="{{ asset('inovasi/dashboard/form_katsinov/js/form.js') }}"></script>
-</body>
-
-
-</html>
+@endsection

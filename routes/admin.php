@@ -347,20 +347,33 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 // Tabel Katsinov
                 Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekasitnov');
                 Route::get('/form', [KatsinovController::class, 'create'])->name('form');
+                Route::get('/show/{id}', [KatsinovController::class, 'show'])->name('show');
                 Route::post('/store', [KatsinovController::class, 'store'])->name('store');
                 Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
+                Route::get('/katsinov/latest', [KatsinovController::class, 'latest']);
+                Route::get('/documents/{id}', [KatsinovController::class, 'viewDocument'])
+                    ->name('document.view');
+                Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
+                    ->name('signature.view');
+                
 
-                Route::resource('/forminformasidasar', FormInformasiDasarController::class);
-                Route::post('/Inovasi/dosen/forminformasidasar', [FormInformasiDasarController::class, 'store'])
-                    ->name('subdirektorat-inovasi.dosen.forminformasidasar.store');
+                Route::get('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiIndex'])->name('inovasi.index');
+                Route::post('/form-invoasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
+                // Form Berita Acara with katsinov_id parameter
+                Route::get('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaIndex'])->name('berita.index');
+                Route::post('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaStore'])->name('berita.store');
 
-                Route::resource('/formberitaacara', BeritaAcaraController::class);
+                Route::get('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationIndex'])->name('informasi.index');
+                Route::post('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationStore'])->name('informasi.store');
+               
 
-                Route::get('/formjudul', function () {
-                    return view('subdirektorat-inovasi.dosen.formjudul');
-                })->name('formjudul');
+                // Lampiran with katsinov_id parameter
+                Route::get('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranIndex'])->name('lampiran.index');
+                Route::post('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranStore'])->name('lampiran.store');
 
-                Route::resource('/formrecordhasilpengukuran', FormRecordHasilPengukuranController::class);
+                //Form record hasil pengukuran
+                Route::get('/record-hasil/{katsinov_id?}', [KatsinovController::class, 'recordIndex'])->name('record.index');
+                Route::post('/record-hasil/{katsinov_id?}', [KatsinovController::class, 'recordStore'])->name('record.store');
             });
 
 
