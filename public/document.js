@@ -1,81 +1,87 @@
-
-
-// Toggle mo    ile menu
-document.getElementById('navbarToggle').addEventListener('click', function() {
-    const menu = document.getElementById('navbarMenu');
-    menu.classList.toggle('active');
+document.addEventListener('DOMContentLoaded', function() {
+    fetchDocuments();
     
-    // Change icon based on menu state
-    const icon = this.querySelector('i');
-    if (menu.classList.contains('active')) {
-        icon.classList.remove('fa-bars');
-        icon.classList.add('fa-times');
-    } else {
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
-    }
-});
-
-// Close search overlay when clicking outside the search box
-if (document.getElementById('searchOverlay')) {
-    document.getElementById('closeSearch').addEventListener('click', function() {
-        document.getElementById('searchOverlay').style.display = 'none';
-    });
-
-    document.getElementById('searchOverlay').addEventListener('click', function(e) {
-        if (e.target === this) {
-            this.style.display = 'none';
-        }
-    });
-}
-
-// Close mobile menu when window is resized above mobile breakpoint
-window.addEventListener('resize', function() {
-    if (window.innerWidth > 992) {
-        const navbarMenu = document.getElementById('navbarMenu');
-        if (navbarMenu) {
-            navbarMenu.classList.remove('active');
-            const icon = document.querySelector('.navbar-toggle i');
-            if (icon) {
+    // Event listeners for navbar toggle
+    document.getElementById('navbarToggle').addEventListener('click', function() {
+        const menu = document.getElementById('navbarMenu');
+        if (menu) {
+            menu.classList.toggle('active');
+            
+            // Change icon based on menu state
+            const icon = this.querySelector('i');
+            if (menu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
                 icon.classList.remove('fa-times');
                 icon.classList.add('fa-bars');
             }
         }
+    });
+
+    // Handle search overlay
+    if (document.getElementById('searchOverlay')) {
+        document.getElementById('closeSearch').addEventListener('click', function() {
+            document.getElementById('searchOverlay').style.display = 'none';
+        });
+
+        document.getElementById('searchOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
     }
-});
 
-// Fetch documents from the server
-let documents = [];
-
-// Fetch documents using AJAX
-fetch('/api/documents')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        documents = data;
-        renderDocuments(documents);
-    })
-    .catch(error => {
-        console.error('Error fetching documents:', error);
-        const documentGrid = document.getElementById('documentGrid');
-        if (documentGrid) {
-            documentGrid.innerHTML = `
-                <div class="empty-results">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <p>Failed to load documents. Please try refreshing the page.</p>
-                </div>
-            `;
+    // Close mobile menu when window is resized above mobile breakpoint
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 992) {
+            const navbarMenu = document.getElementById('navbarMenu');
+            if (navbarMenu) {
+                navbarMenu.classList.remove('active');
+                const icon = document.querySelector('.navbar-toggle i');
+                if (icon) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            }
         }
     });
+});
+
+// Global documents array
+let documents = [];
+
+// Function to fetch documents from the server
+function fetchDocuments() {
+    fetch('/api/documents')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            documents = data;
+            renderDocuments(documents);
+        })
+        .catch(error => {
+            console.error('Error fetching documents:', error);
+            const documentGrid = document.getElementById('documentGrid');
+            if (documentGrid) {
+                documentGrid.innerHTML = `
+                    <div class="empty-results">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Failed to load documents. Please try refreshing the page.</p>
+                    </div>
+                `;
+            }
+        });
+}
 
 // Format date for display
 function formatDate(dateString) {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    return new Date(dateString).toLocaleDateString('id-ID', options);
 }
 
 // Format file size for display
@@ -86,7 +92,18 @@ function formatFileSize(bytes) {
     return Math.round(bytes / 1024) + ' KB';
 }
 
-// Render documents with enhanced layout
+// Get category label with proper formatting
+function getCategoryLabel(category) {
+    const labels = {
+        'umum': 'Umum',
+        'pemeringkatan': 'Pemeringkatan',
+        'inovasi': 'Inovasi'
+    };
+    
+    return labels[category] || category;
+}
+
+// Function to render documents in the grid
 function renderDocuments(filteredDocs = documents) {
     const grid = document.getElementById('documentGrid');
     if (!grid) return;
@@ -106,13 +123,11 @@ function renderDocuments(filteredDocs = documents) {
     filteredDocs.forEach(doc => {
         const card = document.createElement('div');
         card.className = 'document-card';
+        card.dataset.category = doc.kategori;
         
-        // Determine icon based on file extension
-        const icon = doc.kategori === 'pdf' ? 'file-pdf' : 'file-word';
-        const iconColor = doc.kategori === 'pdf' ? 'text-red-600' : 'text-blue-600';
-        
-        // Sanitize document title for use in onclick attribute
-        const safeTitle = doc.judul_dokumen.replace(/"/g, '&quot;').replace(/'/g, "&#39;");
+        // All documents now use PDF icon
+        const icon = 'file-pdf';
+        const iconColor = 'text-red-600';
         
         card.innerHTML = `
             <div class="document-card-icon">
@@ -122,22 +137,23 @@ function renderDocuments(filteredDocs = documents) {
             <div class="document-card-meta">
                 <span><i class="fas fa-calendar-alt"></i> ${formatDate(doc.tanggal_publikasi)}</span>
                 <span><i class="fas fa-weight-hanging"></i> ${formatFileSize(doc.ukuran)}</span>
+                <span><i class="fas fa-folder"></i> ${getCategoryLabel(doc.kategori)}</span>
             </div>
             <div class="document-card-actions">
-                <button class="action-btn view-btn" onclick="viewDocument(${doc.id})">
+                <a href="/documents/preview/${doc.id}" class="action-btn view-btn" target="_blank">
                     <i class="fas fa-eye"></i> View
-                </button>
-                <button class="action-btn download-btn" onclick="downloadDocument(${doc.id})">
+                </a>
+                <a href="/documents/download/${doc.id}" class="action-btn download-btn">
                     <i class="fas fa-download"></i> Download
-                </button>
+                </a>
             </div>
         `;
         grid.appendChild(card);
     });
 }
 
-// Filter documents by type with active button state
-function filterDocuments(type, buttonElement) {
+// Function to filter documents by category
+function filterDocuments(category, buttonElement) {
     // Update active button state
     const categoryBtns = document.querySelectorAll('.category-btn');
     if (categoryBtns) {
@@ -148,22 +164,22 @@ function filterDocuments(type, buttonElement) {
         if (buttonElement) {
             buttonElement.classList.add('active');
         } else {
-            const typeButton = document.querySelector(`[data-type="${type}"]`);
-            if (typeButton) {
-                typeButton.classList.add('active');
+            const categoryButton = document.querySelector(`[data-category="${category}"]`);
+            if (categoryButton) {
+                categoryButton.classList.add('active');
             }
         }
     }
 
-    // Apply search filter alongside type filter
+    // Apply search filter alongside category filter
     const searchInput = document.getElementById('searchInput');
     const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
     
     let filtered = documents;
     
-    // Apply type filter
-    if (type !== 'all') {
-        filtered = filtered.filter(doc => doc.kategori === type);
+    // Apply category filter
+    if (category !== 'all') {
+        filtered = filtered.filter(doc => doc.kategori === category);
     }
     
     // Apply search filter
@@ -176,28 +192,19 @@ function filterDocuments(type, buttonElement) {
     renderDocuments(filtered);
 }
 
-// Search functionality
+// Function to search documents
 function searchDocuments() {
     const searchInput = document.getElementById('searchInput');
     if (!searchInput) return;
     
     const searchTerm = searchInput.value.toLowerCase();
-    const activeTypeElement = document.querySelector('.category-btn.active');
-    
-    if (!activeTypeElement) {
-        renderDocuments(
-            documents.filter(doc => doc.judul_dokumen.toLowerCase().includes(searchTerm))
-        );
-        return;
-    }
-    
-    const activeType = activeTypeElement.getAttribute('data-type');
+    const activeCategory = document.querySelector('.category-btn.active')?.dataset.category || 'all';
     
     let filtered = documents;
     
-    // Apply type filter if not 'all'
-    if (activeType !== 'all') {
-        filtered = filtered.filter(doc => doc.kategori === activeType);
+    // Apply category filter if not 'all'
+    if (activeCategory !== 'all') {
+        filtered = filtered.filter(doc => doc.kategori === activeCategory);
     }
     
     // Apply search filter
@@ -209,10 +216,6 @@ function searchDocuments() {
     
     renderDocuments(filtered);
 }
-
-// Pastikan kode ini dijalankan setelah DOM selesai dimuat
-// Handle edit document button clicks
-
 
 // View document in preview page
 function viewDocument(id) {

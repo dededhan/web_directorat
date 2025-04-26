@@ -42,9 +42,16 @@ class DokumenController extends Controller
     /**
      * API endpoint to get all documents for the frontend
      */
-    public function apiGetDocuments()
+    public function apiGetDocuments(Request $request)
     {
-        $dokumens = Dokumen::orderBy('tanggal_publikasi', 'desc')->get();
+        $query = Dokumen::orderBy('tanggal_publikasi', 'desc');
+        
+        // Filter by category if provided
+        if ($request->has('category') && in_array($request->category, ['umum', 'pemeringkatan', 'inovasi'])) {
+            $query->where('kategori', $request->category);
+        }
+        
+        $dokumens = $query->get();
         return response()->json($dokumens);
     }
 
@@ -204,5 +211,4 @@ class DokumenController extends Controller
                 ->withInput();
         }
     }
-
 }

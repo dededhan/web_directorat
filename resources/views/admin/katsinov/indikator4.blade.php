@@ -517,15 +517,21 @@
                     <td colspan="1" class="status-cell">TIDAK TERPENUHI</td>
                 </tr>
             </table>
-            {{-- <div class="notes-section">
+            <div class="katsinov-legend">
+                Skala: 0=tidak terpenuhi; 1=20%; 2=40%; 3=60%; 4=80%; 5=100% atau terpenuhi
+            </div>
+            <div class="notes-section">
                 <div class="notes-header">Catatan</div>
                 <textarea 
                     placeholder="Tambahkan catatan di sini..." 
                     class="notes-textarea">
                 </textarea>
+<<<<<<< HEAD
             </div> --}}
             <div class="katsinov-legend">
                 Skala: 0=tidak terpenuhi; 1=20%; 2=40%; 3=60%; 4=80%; 5=100% atau terpenuhi
+=======
+>>>>>>> d5cfab411c4f6394eab91fb5ed3952eb1ac204aa
             </div>
         </div>
     </div>

@@ -52,8 +52,17 @@
                 </div>
 
                 <div class="document-categories">
-                    <button class="category-btn" data-type="pdf" onclick="filterDocuments('pdf', this)">
-                        <i class="fas fa-file-pdf"></i> PDF Documents
+                    <button class="category-btn active" data-category="all" onclick="filterDocuments('all', this)">
+                        <i class="fas fa-folder"></i> Semua Dokumen
+                    </button>
+                    <button class="category-btn" data-category="umum" onclick="filterDocuments('umum', this)">
+                        <i class="fas fa-file-pdf"></i> Umum
+                    </button>
+                    <button class="category-btn" data-category="pemeringkatan" onclick="filterDocuments('pemeringkatan', this)">
+                        <i class="fas fa-file-pdf"></i> Pemeringkatan
+                    </button>
+                    <button class="category-btn" data-category="inovasi" onclick="filterDocuments('inovasi', this)">
+                        <i class="fas fa-file-pdf"></i> Inovasi
                     </button>
                 </div>
 

@@ -55,14 +55,18 @@ function collectFormResponses() {
     return responses;
 }
 
-async function submitAllIndicators() {
+// Enhanced Frontend Submission with Comprehensive Error Handling
+async function submitAllIndicators(event) {
+    event.preventDefault(); // Prevent default form submission
+    
     const btn = document.getElementById("submitAllBtn");
 
+    // Comprehensive validation
     if (!validateForm()) {
         Swal.fire({
             icon: "warning",
             title: "Peringatan",
-            text: "Mohon pilih opsi radio button untuk semua pertanyaan sebelum mengirimkan formulir.",
+            text: "Mohon lengkapi semua pertanyaan sebelum mengirimkan formulir.",
             confirmButtonColor: "#176369",
         });
         return;
@@ -72,288 +76,265 @@ async function submitAllIndicators() {
     btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Menyimpan...';
 
     try {
-        const responses = collectFormResponses();
-        
-        if (responses.length === 0) {
-            throw new Error("Tidak ada data yang dikumpulkan. Pastikan semua pertanyaan telah dijawab.");
-        }
-        
+        // Collect form data manually to ensure complete capture
         const formData = new FormData(document.getElementById("katsinovForm"));
-
-        // Add responses to formData
-        responses.forEach((response, index) => {
-            formData.append(`responses[${index}][indicator]`, response.indicator);
-            formData.append(`responses[${index}][row]`, response.row);
-            formData.append(`responses[${index}][aspect]`, response.aspect);
-            formData.append(`responses[${index}][score]`, response.score);
-            formData.append(`responses[${index}][dropdown]`, response.dropdown || ''); 
-
-        });
         
-        // Debug: Log formData entries
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
+        // Collect responses with detailed logging
+        const responses = collectDetailedResponses();
+        
+        // Prepare payload with separate basic information and responses
+        const payload = {
+            title: formData.get('title'),
+            focus_area: formData.get('focus_area'),
+            project_name: formData.get('project_name'),
+            institution: formData.get('institution'),
+            address: formData.get('address'),
+            contact: formData.get('contact'),
+            assessment_date: formData.get('assessment_date'),
+            responses: responses
+        };
 
-        const response = await fetch("/admin/Katsinov/store", {
+        // Detailed fetch with comprehensive error handling
+        const response = await fetch("/katsinov/store", {
             method: "POST",
             headers: {
-                "X-CSRF-TOKEN": document.querySelector(
-                    'meta[name="csrf-token"]'
-                ).content,
-                Accept: "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                "Accept": "application/json",
+                "Content-Type": "application/json"
             },
-            body: formData,
+            body: JSON.stringify(payload)
         });
 
-        // Even if there's an error parsing JSON, we'll show success
-        // This is a temporary fix to handle the JSON parsing issue
+        // Parse response text
+        const responseText = await response.text();
+        
+        // Log raw response for debugging
+        console.log('Raw Response:', responseText);
+
+        // Try to parse the response as JSON
+        let data;
         try {
-            const data = await response.json();
-            if (!response.ok) {
-                console.log("Response not OK, but showing success anyway");
-            }
-        } catch (jsonError) {
-            console.log("JSON parsing error, but showing success anyway", jsonError);
+            data = JSON.parse(responseText);
+        } catch (parseError) {
+            console.error('JSON Parsing Error:', parseError);
+            throw new Error(`Unexpected response format: ${responseText}`);
         }
 
+        // Check for successful response
+        if (!response.ok) {
+            // Handle error response from server
+            throw new Error(
+                data.message || 
+                `Submission failed with status ${response.status}`
+            );
+        }
+
+        // Success handling with fallback values
         Swal.fire({
             icon: "success",
-            title: "🎉 Selamat!",
+            title: "Berhasil!",
             html: `
-            <div style="
-                background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
-                border-radius: 20px; 
-                padding: 30px; 
-                text-align: center;
-                max-width: 450px;
-                margin: 0 auto;
-                border: 1px solid rgba(23, 99, 105, 0.1);
-                box-shadow: 0 20px 40px rgba(23, 99, 105, 0.1);
-            ">
-                <div style="
-                    width: 80px;
-                    height: 80px;
-                    background-color: #e6f6f7;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    margin: 0 auto 20px;
-                    box-shadow: 0 10px 20px rgba(23, 99, 105, 0.1);
-                ">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#176369" stroke-width="2.5">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                        <polyline points="22 4 12 14.01 9 11.01"/>
-                    </svg>
-                </div>
-                
-                <h2 style="
-                    color: #176369;
-                    font-size: 22px;
-                    font-weight: 700;
-                    margin-bottom: 15px;
-                ">
-                    Indikator KATSINOV Berhasil
-                </h2>
-                
-                <p style="
-                    color: #2d3748; 
-                    font-size: 16px; 
-                    line-height: 1.6;
-                    margin-bottom: 20px;
-                ">
-                    Terima kasih atas partisipasi Anda. Data Anda telah berhasil disimpan dalam sistem kami dengan sempurna.
-                </p>
-                
-                <div style="
-                    background-color: #f0f9fa; 
-                    border-left: 5px solid #176369;
-                    padding: 12px 15px;
-                    border-radius: 8px;
-                    margin-bottom: 20px;
-                    text-align: left;
-                ">
-                    <p style="
-                        color: #4a5568;
-                        font-size: 14px;
-                        margin: 0;
-                    ">
-                        ⏳ Halaman akan dimuat ulang dalam beberapa saat...
-                    </p>
-                </div>
+            <div style="text-align: center;">
+                <h3>Data KATSINOV Berhasil Disimpan</h3>
+                <p>Pesan: ${data.message || 'Data berhasil disimpan'}</p>
             </div>
-        `,
-            confirmButtonText: "Tutup",
-            confirmButtonColor: "#176369",
-            showCloseButton: false,
-            allowOutsideClick: false,
-            width: "500px",
-            willClose: () => {
-                // Hapus flag form loaded sebelum reload
-                sessionStorage.removeItem('formLoaded');
-                window.location.reload();
-            },
-            didOpen: () => {
-                const style = document.createElement("style");
-                style.textContent = `
-                .swal2-popup {
-                    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-                    border-radius: 20px;
-                    box-shadow: 0 30px 60px rgba(23, 99, 105, 0.15);
-                    animation: softBounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                }
-
-                @keyframes softBounce {
-                    0% { transform: scale(0.8); opacity: 0; }
-                    70% { transform: scale(1.03); opacity: 0.9; }
-                    100% { transform: scale(1); opacity: 1; }
-                }
-
-                .swal2-confirm {
-                    padding: 12px 24px !important;
-                    font-weight: 700;
-                    text-transform: uppercase;
-                    letter-spacing: 0.5px;
-                    border-radius: 10px;
-                    transition: all 0.3s ease;
-                }
-
-                .swal2-confirm:hover {
-                    transform: translateY(-3px);
-                    box-shadow: 0 6px 20px rgba(23, 99, 105, 0.3);
-                }
-
-                .swal2-icon.swal2-success {
-                    border-color: rgba(23, 99, 105, 0.2) !important;
-                }
-
-                .swal2-success-ring {
-                    border-color: #176369 !important;
-                    opacity: 0.3;
-                }
-            `;
-                document.head.appendChild(style);
-            },
+            `,
+            confirmButtonText: "OK",
+            confirmButtonColor: "#176369"
         });
-    } catch (error) {
-        console.error("Error submitting form:", error);
-        
-        // Show success message even when there's an error
-        Swal.fire({
-            icon: "success",
-            title: "🎉 Selamat!",
-            html: `
-            <div style="
-                background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
-                border-radius: 20px; 
-                padding: 30px; 
-                text-align: center;
-                max-width: 450px;
-                margin: 0 auto;
-                border: 1px solid rgba(23, 99, 105, 0.1);
-                box-shadow: 0 20px 40px rgba(23, 99, 105, 0.1);
-            ">
-                <div style="
-                    width: 80px;
-                    height: 80px;
-                    background-color: #e6f6f7;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    margin: 0 auto 20px;
-                    box-shadow: 0 10px 20px rgba(23, 99, 105, 0.1);
-                ">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#176369" stroke-width="2.5">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                        <polyline points="22 4 12 14.01 9 11.01"/>
-                    </svg>
-                </div>
-                
-                <h2 style="
-                    color: #176369;
-                    font-size: 22px;
-                    font-weight: 700;
-                    margin-bottom: 15px;
-                ">
-                    Indikator KATSINOV Berhasil
-                </h2>
-                
-                <p style="
-                    color: #2d3748; 
-                    font-size: 16px; 
-                    line-height: 1.6;
-                    margin-bottom: 20px;
-                ">
-                    Terima kasih atas partisipasi Anda. Data Anda telah berhasil disimpan dalam sistem kami dengan sempurna.
-                </p>
-                
-                <div style="
-                    background-color: #f0f9fa; 
-                    border-left: 5px solid #176369;
-                    padding: 12px 15px;
-                    border-radius: 8px;
-                    margin-bottom: 20px;
-                    text-align: left;
-                ">
-                    <p style="
-                        color: #4a5568;
-                        font-size: 14px;
-                        margin: 0;
-                    ">
-                        ⏳ Halaman akan dimuat ulang dalam beberapa saat...
-                    </p>
-                </div>
-            </div>
-        `,
-            confirmButtonText: "Tutup",
-            confirmButtonColor: "#176369",
-            showCloseButton: false,
-            allowOutsideClick: false,
-            width: "500px",
-            willClose: () => {
-                // Hapus flag form loaded sebelum reload
-                sessionStorage.removeItem('formLoaded');
-                window.location.reload();
-            },
-            didOpen: () => {
-                const style = document.createElement("style");
-                style.textContent = `
-                .swal2-popup {
-                    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-                    border-radius: 20px;
-                    box-shadow: 0 30px 60px rgba(23, 99, 105, 0.15);
-                    animation: softBounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                }
 
-                @keyframes softBounce {
-                    0% { transform: scale(0.8); opacity: 0; }
-                    70% { transform: scale(1.03); opacity: 0.9; }
-                    100% { transform: scale(1); opacity: 1; }
-                }
-                `;
-                document.head.appendChild(style);
-            },
+    } catch (error) {
+        // Comprehensive error logging and display
+        console.error("Submission Error:", error);
+        
+        Swal.fire({
+            icon: "error",
+            title: "Gagal Menyimpan!",
+            html: `
+            <div style="background-color: #fff0f3; padding: 20px; border-radius: 10px;">
+                <h4>Error Details:</h4>
+                <pre style="text-align: left; max-height: 200px; overflow-y: auto;">
+${error.message || 'Unknown error occurred'}
+                </pre>
+            </div>
+            `,
+            confirmButtonText: "Tutup",
+            confirmButtonColor: "#dc3545"
         });
     } finally {
+        // Reset button state
         btn.disabled = false;
         btn.innerHTML = "Submit Semua Indikator KATSINOV";
-        // Reset flag jika terjadi error
-        isSubmitting = false;
     }
+}
+
+// Enhanced response collection function
+function collectDetailedResponses() {
+    const responses = [];
+    
+    document.querySelectorAll('[data-indicator]').forEach(indicatorContainer => {
+        const indicatorNumber = parseInt(indicatorContainer.dataset.indicator);
+        
+        indicatorContainer.querySelectorAll('tr').forEach((row, rowIndex) => {
+            const aspectCell = row.querySelector('.aspect-cell');
+            if (!aspectCell) return;
+
+            const aspect = aspectCell.textContent.trim();
+            const checkedRadio = row.querySelector('input[type="radio"]:checked');
+            const dropdown = row.querySelector('select.form-select');
+            
+            // Prepare response object with all required fields
+            const response = {
+                indicator: indicatorNumber,
+                row: rowIndex,
+                aspect: aspect,
+                score: checkedRadio ? parseInt(checkedRadio.value) : null,
+                dropdown: dropdown ? dropdown.value : null
+            };
+
+            // Validate response before adding
+            if (response.aspect && 
+                (response.score !== null || response.dropdown) && 
+                ['T','O','R','M','P','Mf','I'].includes(response.aspect)) {
+                responses.push(response);
+            }
+        });
+    });
+
+    // Validate responses
+    if (responses.length === 0) {
+        throw new Error("Tidak ada respons yang dikumpulkan. Harap lengkapi semua bagian.");
+    }
+
+    // Log collected responses for debugging
+    console.log('Collected Responses:', JSON.stringify(responses, null, 2));
+    
+    return responses;
+}
+
+// Override default form submission
+document.getElementById('katsinovForm').addEventListener('submit', submitAllIndicators);
+// Add console logging for more debug information
+function debugSubmit(event) {
+    event.preventDefault();
+    
+    console.log("Form submission initiated");
+    
+    const formData = new FormData(document.getElementById("katsinovForm"));
+    
+    // Log all form data
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+    }
+    
+    // Log responses
+    const responses = collectDetailedResponses();
+    console.log("Detailed Responses:", responses);
+    
+    // Fetch debugging
+    fetch("/katsinov/store", {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+            "Accept": "application/json"
+        },
+        body: formData
+    })
+    .then(response => {
+        console.log("Response status:", response.status);
+        console.log("Response headers:", response.headers);
+        return response.text(); // Use text() instead of json() to see raw response
+    })
+    .then(text => {
+        console.log("Raw response text:", text);
+        try {
+            const parsed = JSON.parse(text);
+            console.log("Parsed response:", parsed);
+        } catch (error) {
+            console.error("JSON Parsing error:", error);
+        }
+    })
+    .catch(error => {
+        console.error("Fetch error:", error);
+    });
+}
+
+// Optional: Replace original submit handler with debug version
+document.getElementById('katsinovForm').addEventListener('submit', debugSubmit);
+
+// Enhanced response collection
+function collectDetailedResponses() {
+    const responses = [];
+    
+    document.querySelectorAll('[data-indicator]').forEach(indicatorContainer => {
+        const indicatorNumber = parseInt(indicatorContainer.dataset.indicator);
+        
+        indicatorContainer.querySelectorAll('tr').forEach((row, rowIndex) => {
+            const aspectCell = row.querySelector('.aspect-cell');
+            if (!aspectCell) return;
+
+            const aspect = aspectCell.textContent.trim();
+            const checkedRadio = row.querySelector('input[type="radio"]:checked');
+            const dropdown = row.querySelector('select.form-select');
+            
+            const response = {
+                indicator: indicatorNumber,
+                row: rowIndex,
+                aspect: aspect,
+                score: checkedRadio ? parseInt(checkedRadio.value) : null,
+                dropdown: dropdown ? dropdown.value : null
+            };
+
+            // Only add if it has meaningful data
+            if (response.aspect && (response.score !== null || response.dropdown)) {
+                responses.push(response);
+            }
+        });
+    });
+
+    // Log collected responses for debugging
+    console.log('Collected Responses:', JSON.stringify(responses, null, 2));
+    
+    return responses;
+}
+
+// Override default form submission
+document.getElementById('katsinovForm').addEventListener('submit', submitAllIndicators);
+
+function collectFormResponses() {
+    const responses = [];
+    
+    document.querySelectorAll('[data-indicator]').forEach(indicatorContainer => {
+        const indicatorNumber = parseInt(indicatorContainer.dataset.indicator);
+        
+        // Collect all rows in the current indicator, not just those with radio buttons
+        indicatorContainer.querySelectorAll('tr').forEach((row, index) => {
+            const aspectCell = row.querySelector('.aspect-cell');
+            if (!aspectCell) return; // Skip header and total rows
+            
+            const aspect = aspectCell.textContent.trim();
+            const checkedRadio = row.querySelector('input[type="radio"]:checked');
+            const dropdown = row.querySelector('select.form-select');
+            
+            // Always push a response, even if no radio is checked
+            const response = {
+                indicator: indicatorNumber,
+                row: index,
+                aspect: aspect,
+                score: checkedRadio ? parseInt(checkedRadio.value) : null,
+                dropdown: dropdown ? dropdown.value : null
+            };
+            
+            responses.push(response);
+        });
+    });
+    
+    console.log('Collected responses:', JSON.stringify(responses, null, 2));
+    return responses;
 }
 
 // Event listener for radio buttons to update the UI and calculations
 document.addEventListener('DOMContentLoaded', function() {
-    // Reset flag saat halaman dimuat
-    isSubmitting = false;
-    
-    // Cek apakah halaman baru dimuat (bukan hasil refresh)
-    if (!sessionStorage.getItem('formLoaded')) {
-        // Set flag bahwa form sudah dimuat
-        sessionStorage.setItem('formLoaded', 'true');
-    }
     const radioButtons = document.querySelectorAll('input[type="radio"]');
     
     radioButtons.forEach(radio => {

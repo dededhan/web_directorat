@@ -3,7 +3,6 @@
 @section('contentadmin')
 <!-- CSS Files -->
 <link href="{{ asset('aspect-analysis.css') }}" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('inovasi/forminformasidasar.css') }}">
 <link rel="stylesheet" href="{{ asset('inovasi/dashboard/form_katsinov/css/form.css') }}">
 
 <!-- Alpine.js x-cloak style -->
@@ -165,161 +164,193 @@
                 </div>
 
                 <!-- Aspect Legend -->
-                <div class="card mb-4" x-data="aspectLegend()">
+                <div class="card mb-4">
                     <div class="card-header">
                         <h4>Keterangan Aspek</h4>
                     </div>
                     <div class="card-body">
+                        <!-- Aspect Cards -->
                         <div class="row">
                             <!-- Teknologi -->
                             <div class="col-md-4 col-sm-6 mb-3">
-                                <div class="card h-100 cursor-pointer" @click="openAspectAnalysis('T')">
-                                    <div class="card-body d-flex align-items-center">
-                                        <div class="legend-box me-2" style="background: linear-gradient(135deg, #fad961 0%, #f76b1c 100%);"></div>
-                                        <span>Aspek Teknologi (T)</span>
+                                <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'T' }">
+                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div class="legend-box me-2" style="background: linear-gradient(135deg, #fad961 0%, #f76b1c 100%);"></div>
+                                                <span>Aspek Teknologi (T)</span>
+                                            </div>
+                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                        </div>
+                                    </div>
+                                    <div x-show="isOpen" x-transition class="mt-2">
+                                        <div class="chart-container" style="height: 300px;">
+                                            <canvas id="aspectChart-T"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Organisasi -->
                             <div class="col-md-4 col-sm-6 mb-3">
-                                <div class="card h-100 cursor-pointer" @click="openAspectAnalysis('O')">
-                                    <div class="card-body d-flex align-items-center">
-                                        <div class="legend-box me-2" style="background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);"></div>
-                                        <span>Aspek Organisasi (O)</span>
+                                <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'O' }">
+                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div class="legend-box me-2" style="background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);"></div>
+                                                <span>Aspek Organisasi (O)</span>
+                                            </div>
+                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                        </div>
+                                    </div>
+                                    <div x-show="isOpen" x-transition class="mt-2">
+                                        <div class="chart-container" style="height: 300px;">
+                                            <canvas id="aspectChart-O"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Risiko -->
                             <div class="col-md-4 col-sm-6 mb-3">
-                                <div class="card h-100 cursor-pointer" @click="openAspectAnalysis('R')">
-                                    <div class="card-body d-flex align-items-center">
-                                        <div class="legend-box me-2" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
-                                        <span>Aspek Risiko (R)</span>
+                                <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'R' }">
+                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div class="legend-box me-2" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                                                <span>Aspek Risiko (R)</span>
+                                            </div>
+                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                        </div>
+                                    </div>
+                                    <div x-show="isOpen" x-transition class="mt-2">
+                                        <div class="chart-container" style="height: 300px;">
+                                            <canvas id="aspectChart-R"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Pasar -->
                             <div class="col-md-4 col-sm-6 mb-3">
-                                <div class="card h-100 cursor-pointer" @click="openAspectAnalysis('M')">
-                                    <div class="card-body d-flex align-items-center">
-                                        <div class="legend-box me-2" style="background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);"></div>
-                                        <span>Aspek Pasar (M)</span>
+                                <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'M' }">
+                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div class="legend-box me-2" style="background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);"></div>
+                                                <span>Aspek Pasar (M)</span>
+                                            </div>
+                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                        </div>
+                                    </div>
+                                    <div x-show="isOpen" x-transition class="mt-2">
+                                        <div class="chart-container" style="height: 300px;">
+                                            <canvas id="aspectChart-M"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Kemitraan -->
                             <div class="col-md-4 col-sm-6 mb-3">
-                                <div class="card h-100 cursor-pointer" @click="openAspectAnalysis('P')">
-                                    <div class="card-body d-flex align-items-center">
-                                        <div class="legend-box me-2" style="background: linear-gradient(135deg, #ffd1ff 0%, #fab2ff 100%);"></div>
-                                        <span>Aspek Kemitraan (P)</span>
+                                <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'P' }">
+                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div class="legend-box me-2" style="background: linear-gradient(135deg, #ffd1ff 0%, #fab2ff 100%);"></div>
+                                                <span>Aspek Kemitraan (P)</span>
+                                            </div>
+                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                        </div>
+                                    </div>
+                                    <div x-show="isOpen" x-transition class="mt-2">
+                                        <div class="chart-container" style="height: 300px;">
+                                            <canvas id="aspectChart-P"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Manufaktur -->
                             <div class="col-md-4 col-sm-6 mb-3">
-                                <div class="card h-100 cursor-pointer" @click="openAspectAnalysis('Mf')">
-                                    <div class="card-body d-flex align-items-center">
-                                        <div class="legend-box me-2" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);"></div>
-                                        <span>Aspek Manufaktur (Mf)</span>
+                                <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'Mf' }">
+                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div class="legend-box me-2" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);"></div>
+                                                <span>Aspek Manufaktur (Mf)</span>
+                                            </div>
+                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                        </div>
+                                    </div>
+                                    <div x-show="isOpen" x-transition class="mt-2">
+                                        <div class="chart-container" style="height: 300px;">
+                                            <canvas id="aspectChart-Mf"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Investasi -->
                             <div class="col-md-4 col-sm-6 mb-3">
-                                <div class="card h-100 cursor-pointer" @click="openAspectAnalysis('I')">
-                                    <div class="card-body d-flex align-items-center">
-                                        <div class="legend-box me-2" style="background: linear-gradient(135deg, #96fbc4 0%, #f9f586 100%);"></div>
-                                        <span>Aspek Investasi (I)</span>
+                                <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'I' }">
+                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div class="legend-box me-2" style="background: linear-gradient(135deg, #96fbc4 0%, #f9f586 100%);"></div>
+                                                <span>Aspek Investasi (I)</span>
+                                            </div>
+                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                        </div>
+                                    </div>
+                                    <div x-show="isOpen" x-transition class="mt-2">
+                                        <div class="chart-container" style="height: 300px;">
+                                            <canvas id="aspectChart-I"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Aspect Analysis Button -->
-                        <div class="text-center mt-4">
-                            <button type="button" @click="openSpiderwebAnalysis()" class="btn btn-primary px-4 py-2">
-                                <i class="bx bx-analyse"></i> Lihat Analisis Aspek
+                        <!-- Spiderweb Analysis Button & Content -->
+                        <div class="text-center mt-4" x-data="{ showSpiderwebContent: false }">
+                            <button type="button" @click="showSpiderwebContent = !showSpiderwebContent" class="btn btn-primary px-4 py-2">
+                                <i class="bx" :class="showSpiderwebContent ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                Lihat Analisis Spiderweb
                             </button>
-                        </div>
-
-                        <!-- Aspect Analysis Popup -->
-                        <div x-show="showPopup" class="aspect-popup" @click.self="showPopup = false"
-                            x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
-                            x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
-                            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-                            <div class="popup-content">
-                                <div class="popup-header" :style="{ background: selectedAspect?.gradient }">
-                                    <h3 class="text-white text-xl font-semibold"
-                                        x-text="'Analysis ' + selectedAspect?.name"></h3>
-                                    <button @click="showPopup = false" class="popup-close">&times;</button>
+                            
+                            <div x-show="showSpiderwebContent" x-transition class="mt-4">
+                                <div class="chart-container" style="height: 400px;">
+                                    <canvas id="spiderwebChart"></canvas>
                                 </div>
-
-                                <div class="popup-body">
-                                    <div class="chart-container">
-                                        <canvas id="aspectChart"></canvas>
-                                    </div>
-
-                                    <div class="summary-container">
-                                        <div class="summary-item">
-                                            <span class="label">Rata-rata Pencapaian:</span>
-                                            <span class="value" x-text="calculateAverage() + '%'"></span>
+                                
+                                <div class="spiderweb-summary mt-4">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <strong>Rata-rata Pencapaian:</strong>
+                                            <span class="rata-rata-pencapaian">0.0%</span>
                                         </div>
-                                        <div class="summary-item">
-                                            <span class="label">Level KATSINOV Tercapai:</span>
-                                            <span class="value" x-text="getMaxKatsinovLevel()"></span>
+                                        <div class="col-md-4">
+                                            <strong>Aspek Terpenuhi:</strong>
+                                            <span class="aspek-terpenuhi">0 dari 7</span>
                                         </div>
-                                        <div class="summary-item">
-                                            <span class="label">Status:</span>
-                                            <span class="value" :class="getStatusClass()" x-text="getStatus()"></span>
+                                        <div class="col-md-4">
+                                            <strong>Status Keseluruhan:</strong>
+                                            <span class="status-keseluruhan">Belum Terpenuhi</span>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Spiderweb Analysis Popup -->
-                        <div x-show="showSpiderwebPopup" x-cloak class="spiderweb-popup" @click.self="showSpiderwebPopup = false"
-                            x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
-                            x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
-                            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-                            <div class="popup-content">
-                                <div class="popup-header">
-                                    <h3 class="text-xl font-semibold">Analisis Keseluruhan Aspek KATSINOV</h3>
-                                    <button @click="showSpiderwebPopup = false" class="popup-close">&times;</button>
-                                </div>
-
-                                <div class="popup-body">
-                                    <div class="chart-container">
-                                        <canvas id="spiderwebChart"></canvas>
-                                    </div>
-
-                                    <div class="summary-container">
-                                        <div class="summary-item">
-                                            <span class="label block text-gray-600 mb-2">Rata-rata Pencapaian:</span>
-                                            <span class="rata-rata-pencapaian text-xl font-bold text-primary">0.0%</span>
-                                        </div>
-                                        <div class="summary-item">
-                                            <span class="label block text-gray-600 mb-2">Aspek Terpenuhi:</span>
-                                            <span class="aspek-terpenuhi text-xl font-bold text-primary">0 dari 7</span>
-                                        </div>
-                                        <div class="summary-item">
-                                            <span class="label block text-gray-600 mb-2">Status Keseluruhan:</span>
-                                            <span class="status-keseluruhan text-xl font-bold">BELUM TERPENUHI</span>
-                                        </div>
+                                    
+                                    <div class="katsinov-indicator mt-3">
+                                        <strong>Level KATSINOV:</strong>
+                                        <span class="value">0</span>
+                                        <p class="description text-muted">KATSINOV yang dicapai adalah = KATSINOV 0 (belum ada yang terpenuhi)</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
+                </div>   
+                        
                 <!-- KATSINOV Indicators Section -->
                 <div class="card mb-4">
                     <div class="card-header">
@@ -389,29 +420,31 @@
                 </div>
 
                 <!-- Submit All Button -->
-<div class="submit-all-container" style="display: flex;justify-content: center;margin-top: 2rem;margin-bottom: 2rem;">
-    <button type="button" id="submitAllBtn" class="submit-all-btn"
-        style="
-            background-color: #176369;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        "
-        onclick="submitAllIndicators(event)">
-        @if (!isset($katsinov) || empty($katsinov))
-        Submit Semua Indikator KATSINOV
-        @else
-        Update Indikator KATSINOV
-        @endif
-    </button>
-</div>
-        </form>
+                <div class="submit-all-container" style="display: flex;justify-content: center;margin-top: 2rem;margin-bottom: 2rem;">
+                    <button type="button" id="submitAllBtn" class="submit-all-btn"
+                        style="
+                            background-color: #176369;
+                            color: white;
+                            padding: 12px 24px;
+                            border: none;
+                            border-radius: 8px;
+                            font-size: 1rem;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                        "
+                        onclick="submitAllIndicators(event)">
+                        @if (!isset($katsinov) || empty($katsinov))
+                        Submit Semua Indikator KATSINOV
+                        @else
+                        Update Indikator KATSINOV
+                        @endif
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <script src="{{ asset('inovasi/dashboard/form_katsinov/js/form.js') }}"></script>
