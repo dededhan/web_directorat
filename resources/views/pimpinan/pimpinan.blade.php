@@ -14,89 +14,6 @@
     <link rel="stylesheet" href="{{ asset('css/ckeditor-list.css') }}">
 
     <style>
-        /* Direct CSS fix for lists in pimpinan.blade.php */
-        .profile-content ul,
-        .profile-content ol,
-        .modal-text ul,
-        .modal-text ol,
-        .ck-content ul,
-        .ck-content ol {
-            list-style-position: outside !important;
-            padding-left: 2em !important;
-            margin: 1em 0 !important;
-        }
-
-        .profile-content ul,
-        .modal-text ul,
-        .ck-content ul {
-            list-style-type: disc !important;
-        }
-
-        .profile-content ol,
-        .modal-text ol,
-        .ck-content ol {
-            list-style-type: decimal !important;
-        }
-
-        .profile-content li,
-        .modal-text li,
-        .ck-content li {
-            display: list-item !important;
-            margin-bottom: 0.5em !important;
-        }
-
-        /* Ensure list items are properly displayed */
-        .profile-content ul>li::marker,
-        .modal-text ul>li::marker,
-        .ck-content ul>li::marker,
-        .profile-content ol>li::marker,
-        .modal-text ol>li::marker,
-        .ck-content ol>li::marker {
-            display: inline !important;
-        }
-
-        /* Force bullets with pseudo-elements as a fallback */
-        .profile-content ul>li,
-        .modal-text ul>li,
-        .ck-content ul>li {
-            position: relative;
-        }
-
-        .profile-content ul>li::before,
-        .modal-text ul>li::before,
-        .ck-content ul>li::before {
-            content: "•";
-            position: absolute;
-            left: -1.5em;
-            display: inline-block;
-            width: 1em;
-        }
-
-        /* Use CSS counters for numbered lists as fallback */
-        .profile-content ol,
-        .modal-text ol,
-        .ck-content ol {
-            counter-reset: item;
-        }
-
-        .profile-content ol>li,
-        .modal-text ol>li,
-        .ck-content ol>li {
-            counter-increment: item;
-            position: relative;
-        }
-
-        .profile-content ol>li::before,
-        .modal-text ol>li::before,
-        .ck-content ol>li::before {
-            content: counter(item) ".";
-            position: absolute;
-            left: -1.7em;
-            width: 1.5em;
-            text-align: right;
-        }
-    </style>
-    <style>
         * {
             margin: 0;
             padding: 0;
@@ -128,140 +45,79 @@
             letter-spacing: 2px;
         }
 
-        .director-profile {
+        .leadership-triangle {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 60px;
+            gap: 40px;
+            padding: 20px;
         }
 
-        @media (min-width: 768px) {
-            .director-profile {
-                flex-direction: row;
-                align-items: flex-start;
-            }
-        }
-
-        .profile-image {
-            flex: 0 0 280px;
-            margin-right: 30px;
-            margin-bottom: 20px;
-        }
-
-        .profile-image img {
+        .director-profile {
             width: 100%;
-            border-radius: 0;
-            /* Changed from 50% (circular) to 0 (square) */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            object-fit: cover;
-            object-position: center top;
-            aspect-ratio: 1/1.2;
-            /* Changed from 1/1 to 1/1.5 to make image taller */
-            border: 5px solid #186862;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 40px;
         }
 
-        .profile-content {
-            flex: 1;
-        }
-
-        .profile-content h2 {
-            font-size: 28px;
-            margin-bottom: 5px;
-            color: #186862;
-        }
-
-        .profile-content h3 {
-            color: #186862;
-            font-size: 18px;
+        .director-profile .profile-image {
+            width: 280px;
+            height: 280px;
             margin-bottom: 20px;
-            font-weight: 500;
         }
 
-        .profile-content p {
-            margin-bottom: 15px;
-            text-align: justify;
+        .director-profile .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid #186862;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .team-section {
-            padding: 40px 0;
-        }
-
-        /* Updated team members class for maximum spacing */
         .team-members {
             display: flex;
-            justify-content: space-between;
-            /* Changed to space-between for maximum separation */
+            justify-content: center;
             flex-wrap: wrap;
-            gap: 80px;
-            /* Significantly increased spacing to 80px */
-            margin: 0 auto;
-            padding: 0 10%;
-            /* Added padding to push items away from edges */
+            gap: 40px;
+            width: 100%;
         }
 
         .team-member {
-            flex: 0 0 240px;
-            /* Increased width from 200px to 240px */
+            width: 240px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 60px;
-            /* Increased margin to 60px */
-            transition: transform 0.3s ease;
+            text-align: center;
         }
 
-        .team-member:hover {
-            transform: translateY(-10px);
-        }
-
-        .member-image {
+        .team-member .member-image {
             width: 180px;
-            /* Standardized size */
             height: 180px;
-            /* Standardized size */
             border-radius: 50%;
             overflow: hidden;
             margin-bottom: 15px;
             border: 5px solid #186862;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .member-image img {
+        .team-member .member-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center top;
-            /* Standardized positioning */
         }
 
-        .member-info {
-            text-align: center;
-        }
-
-        .member-info h4 {
-            font-size: 18px;
-            /* Increased from 16px */
-            margin-bottom: 5px;
+        .team-member .member-info h4 {
             color: #186862;
             font-weight: bold;
-            /* Added bold */
+            margin-bottom: 5px;
         }
 
-        .member-info h5 {
+        .team-member .member-info h5 {
             color: #666;
-            font-size: 16px;
-            /* Increased from 14px */
-            font-weight: 500;
             margin-bottom: 10px;
-        }
-
-        .member-info p {
-            font-size: 14px;
-            /* Increased from 12px */
-            color: #555;
-            /* Darkened from #888 */
-            line-height: 1.5;
-            /* Added line height for better readability */
         }
 
         .detail-button {
@@ -273,7 +129,6 @@
             border: 2px solid #186862;
             border-radius: 5px;
             text-decoration: none;
-            font-weight: 500;
             transition: all 0.3s ease;
         }
 
@@ -282,6 +137,7 @@
             color: #fff;
         }
 
+        /* Modal styles remain the same as in the original code */
         .profile-modal {
             display: none;
             position: fixed;
@@ -350,72 +206,54 @@
             cursor: pointer;
         }
 
-        .fade-in {
-            animation: fadeIn 0.5s ease-in forwards;
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .leadership-triangle {
+                gap: 20px;
             }
 
-            100% {
-                opacity: 1;
-            }
-        }
-
-        .slide-up {
-            animation: slideUp 0.5s ease-in forwards;
-        }
-
-        @keyframes slideUp {
-            0% {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-
-            100% {
-                transform: translateY(0);
-                opacity: 1;
+            .director-profile,
+            .team-member {
+                width: 100%;
+                max-width: none;
             }
         }
     </style>
-</head>
-@include('layout.navbar_sticky')
+    @include('layout.navbar_sticky')
 
 <body>
     <div class="container">
-        <header class="fade-in">
+        <header>
             <h1>Pimpinan DITISIP</h1>
         </header>
 
-        @if ($direktur)
-            <div class="director-profile slide-up">
-                <div class="profile-image">
-                    <img src="{{ asset('storage/' . $direktur->gambar) }}" alt="{{ $direktur->nama }}">
-                </div>
-                <div class="profile-content">
-                    <h2>{{ $direktur->nama }}</h2>
-                    <h3>{{ $direktur->jabatan }}</h3>
-                    <div class="ck-content">
-                        {!! $direktur->deskripsi !!}
+        <div class="leadership-triangle">
+            @if ($direktur)
+                <div class="director-profile">
+                    <div class="profile-image">
+                        <img src="{{ asset('storage/' . $direktur->gambar) }}" alt="{{ $direktur->nama }}">
+                    </div>
+                    <div class="profile-content">
+                        <h2 style="color: #186862; font-size: 28px; margin-bottom: 5px;">{{ $direktur->nama }}</h2>
+                        <h3 style="color: #186862; font-size: 18px; margin-bottom: 20px;">{{ $direktur->jabatan }}</h3>
+                        <div class="ck-content">
+                            {!! $direktur->deskripsi !!}
+                        </div>
                     </div>
                 </div>
-            </div>
-        @else
-            <div class="director-profile slide-up">
-                <div class="profile-image">
-                    <img src="/api/placeholder/300/370" alt="Director Photo">
+            @else
+                <div class="director-profile">
+                    <div class="profile-image">
+                        <img src="/api/placeholder/300/300" alt="Director Photo">
+                    </div>
+                    <div class="profile-content">
+                        <h2>Direktur Inovasi Sistem Informasi dan Pemeringkatan</h2>
+                        <h3>Belum tersedia</h3>
+                        <p>Data belum tersedia.</p>
+                    </div>
                 </div>
-                <div class="profile-content">
-                    <h2>Direktur Inovasi Sistem Informasi dan Pemeringkatan</h2>
-                    <h3>Belum tersedia</h3>
-                    <p>Data belum tersedia.</p>
-                </div>
-            </div>
-        @endif
+            @endif
 
-        <div class="team-section fade-in">
             <div class="team-members">
                 @forelse($kasubdits as $kasubdit)
                     <div class="team-member">
@@ -438,6 +276,7 @@
         </div>
     </div>
 
+    <!-- Modal remains the same as in the original code -->
     <div class="profile-modal" id="profileModal">
         <div class="modal-content">
             <span class="close-button" id="closeModal">&times;</span>
@@ -509,28 +348,8 @@
                     modal.classList.remove('active');
                 }
             });
-
-            // Scroll animation
-            const observerOptions = {
-                threshold: 0.1
-            };
-
-            const observer = new IntersectionObserver(function(entries, observer) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('slide-up');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-
-            // Observe all team members
-            document.querySelectorAll('.team-member').forEach(member => {
-                observer.observe(member);
-            });
         });
     </script>
 </body>
 @include('pimpinan.footerlp')
-
 </html>
