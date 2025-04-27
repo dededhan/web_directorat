@@ -178,7 +178,7 @@ Route::prefix('admin')->name('admin.')
                 
 
                 Route::get('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiIndex'])->name('inovasi.index');
-                Route::post('/form-invoasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
+                Route::post('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
                 // Form Berita Acara with katsinov_id parameter
                 Route::get('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaIndex'])->name('berita.index');
                 Route::post('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaStore'])->name('berita.store');
@@ -358,7 +358,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 
 
                 Route::get('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiIndex'])->name('inovasi.index');
-                Route::post('/form-invoasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
+                Route::post('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
                 // Form Berita Acara with katsinov_id parameter
                 Route::get('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaIndex'])->name('berita.index');
                 Route::post('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaStore'])->name('berita.store');
@@ -440,7 +440,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
                 // Form routes
                 Route::get('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiIndex'])->name('inovasi.index');
-                Route::post('/form-invoasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
+                Route::post('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
 
                 Route::get('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaIndex'])->name('berita.index');
                 Route::post('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaStore'])->name('berita.store');
@@ -498,7 +498,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 
 
                 Route::get('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiIndex'])->name('inovasi.index');
-                Route::post('/form-invoasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
+                Route::post('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
                 // Form Berita Acara with katsinov_id parameter
                 Route::get('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaIndex'])->name('berita.index');
                 Route::post('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaStore'])->name('berita.store');
@@ -558,7 +558,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 
 
                 Route::get('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiIndex'])->name('inovasi.index');
-                Route::post('/form-invoasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
+                Route::post('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
                 // Form Berita Acara with katsinov_id parameter
                 Route::get('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaIndex'])->name('berita.index');
                 Route::post('/berita-acara/{katsinov_id?}', [KatsinovController::class, 'beritaStore'])->name('berita.store');
