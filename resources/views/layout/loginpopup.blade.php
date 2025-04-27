@@ -180,9 +180,9 @@
                                 <input type="password" name="password" placeholder="Password" required
                                     class="form-input" />
                             </div>
-                            <div class="flex justify-center my-4">
+                            <!-- <div class="flex justify-center my-4">
                                 <img src="https://placehold.co/300x80" alt="reCAPTCHA verification" />
-                            </div>
+                            </div> -->
                             <button type="submit"
                                 class="btn-primary w-full py-3 rounded-lg text-white font-medium tracking-wide mt-3">SIGN
                                 IN</button>

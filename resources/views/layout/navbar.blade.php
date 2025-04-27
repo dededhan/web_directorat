@@ -1,5 +1,5 @@
 
-@include('loginpopup')
+@include('layout.loginpopup')
 
 <!-- Original Desktop Navbar (Unchanged) -->
 <nav class="navbar hidden md:block">
