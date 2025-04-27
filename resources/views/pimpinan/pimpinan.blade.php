@@ -236,9 +236,9 @@
                     <div class="profile-content">
                         <h2 style="color: #186862; font-size: 28px; margin-bottom: 5px;">{{ $direktur->nama }}</h2>
                         <h3 style="color: #186862; font-size: 18px; margin-bottom: 20px;">{{ $direktur->jabatan }}</h3>
-                        <div class="ck-content">
+                        {{-- <div class="ck-content">
                             {!! $direktur->deskripsi !!}
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             @else
@@ -263,8 +263,8 @@
                         <div class="member-info">
                             <h4>{{ $kasubdit->nama }}</h4>
                             <h5>{{ $kasubdit->jabatan }}</h5>
-                            <p>{{ Str::limit(strip_tags($kasubdit->deskripsi), 80) }}</p>
-                            <a href="#" class="detail-button" data-id="{{ $kasubdit->id }}">Selengkapnya</a>
+                            {{-- <p>{{ Str::limit(strip_tags($kasubdit->deskripsi), 80) }}</p>
+                            <a href="#" class="detail-button" data-id="{{ $kasubdit->id }}">Selengkapnya</a> --}}
                         </div>
                     </div>
                 @empty
