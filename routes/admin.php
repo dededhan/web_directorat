@@ -173,6 +173,8 @@ Route::prefix('admin')->name('admin.')
                 Route::get('/katsinov/latest', [KatsinovController::class, 'latest']);
                 Route::get('/documents/{id}', [KatsinovController::class, 'viewDocument'])
                     ->name('document.view');
+                Route::delete('/document/{id}', [KatsinovController::class, 'destroyDocument'])->name('document.delete');
+              
                 Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
                     ->name('signature.view');
                 
@@ -437,6 +439,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 // Lampiran route
                 Route::get('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranIndex'])->name('lampiran');
                 Route::post('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranStore'])->name('lampiran.store');
+                Route::delete('/document/{id}', [KatsinovController::class, 'destroyDocument'])->name('document.delete');
 
                 // Form routes
                 Route::get('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiIndex'])->name('inovasi.index');
