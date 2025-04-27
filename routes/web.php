@@ -13,6 +13,10 @@ use App\Http\Controllers\ProdukInovasiController;
 use App\Http\Controllers\SejarahContentController;
 use App\Http\Controllers\PimpinanController;
 use App\Http\Controllers\RankingController;
+use App\Http\Controllers\InstagramApiController;
+
+
+
 
 use App\Http\Controllers\ProgramKegiatanController;
 
@@ -35,13 +39,13 @@ Route::get('/program-layanan', [App\Http\Controllers\ProgramLayananController::c
 Route::get('/instagram/{id}/preview', [InstagramController::class, 'preview'])
     ->name('instagram.preview');
 
-Route::get('/api/instagram-api-posts', [App\Http\Controllers\InstagramApiController::class, 'getPosts'])
-    ->name('api.instagram-api-posts');
+
 Route::get('/api/youtube-videos', [App\Http\Controllers\YoutubeController::class, 'getFrontendVideos'])
     ->name('api.youtube-videos');
 
-Route::get('/api/instagram-posts', [App\Http\Controllers\InstagramController::class, 'getFrontendPosts'])
-    ->name('api.instagram-posts');
+// Route::get('/api/instagram-api-posts', [App\Http\Controllers\InstagramApiController::class, 'getPosts'])
+//     ->name('api.instagram-api-posts');
+Route::get('/api/instagram-posts', [InstagramApiController::class, 'getPosts']);
 // Route::get('/', function () {
 //     return view('home');
 // })->name('home');

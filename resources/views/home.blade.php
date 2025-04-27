@@ -194,7 +194,7 @@
 </head>
 
 <body class="font-sans bg-gray-100">
-@include('layout.navbar')
+    @include('layout.navbar')
 
     <!-- Header section -->
     <header class="relative">
@@ -347,31 +347,36 @@
                     <span class="text-yellow-400 text-2xl mx-3"><i class="fas fa-cogs"></i></span>
                     <div class="h-1 w-16 bg-gray-300"></div>
                 </div>
-                <p class="text-gray-600 max-w-2xl mx-auto">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan Pemeringkatan</p>
+                <p class="text-gray-600 max-w-2xl mx-auto">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan
+                    Pemeringkatan</p>
             </div>
-    
+
             <!-- Program Cards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 @forelse($programLayanan as $program)
-                    <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2" data-program-id="{{ $program->id }}">
+                    <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                        data-program-id="{{ $program->id }}">
                         <div class="relative">
-                            @if($program->image)
-                                <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}" class="w-full h-48 object-cover">
+                            @if ($program->image)
+                                <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}"
+                                    class="w-full h-48 object-cover">
                             @else
                                 <div class="w-full h-48 bg-teal-600 flex items-center justify-center">
                                     <i class="{{ $program->icon ?? 'fas fa-cogs' }} text-5xl text-white"></i>
                                 </div>
                             @endif
-                            <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent h-16 opacity-70"></div>
+                            <div
+                                class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent h-16 opacity-70">
+                            </div>
                         </div>
                         <div class="p-5">
                             <h3 class="font-bold text-teal-800 text-xl mb-3">{{ $program->judul }}</h3>
                             <div class="text-gray-600 mb-4 program-excerpt" style="min-height: 80px;">
                                 {!! Str::limit(strip_tags($program->deskripsi), 100) !!}
                             </div>
-                            <a href="#" class="program-details-btn inline-flex items-center text-teal-700 hover:text-yellow-500 font-medium mt-2"
-                                data-program-id="{{ $program->id }}" 
-                                data-title="{{ $program->judul }}"
+                            <a href="#"
+                                class="program-details-btn inline-flex items-center text-teal-700 hover:text-yellow-500 font-medium mt-2"
+                                data-program-id="{{ $program->id }}" data-title="{{ $program->judul }}"
                                 data-description="{{ strip_tags($program->deskripsi) }}"
                                 data-full-description="{!! htmlspecialchars($program->deskripsi_lengkap ?? $program->deskripsi) !!}">
                                 Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
@@ -653,7 +658,8 @@
 
 
     <!-- Program Details Popup Modal -->
-    <div id="programDetailsModal" class="fixed inset-0 bg-black bg-opacity-60 z-[1100] hidden items-center justify-center p-4 overflow-y-auto backdrop-blur-sm">
+    <div id="programDetailsModal"
+        class="fixed inset-0 bg-black bg-opacity-60 z-[1100] hidden items-center justify-center p-4 overflow-y-auto backdrop-blur-sm">
         <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative">
             <!-- Modal Header with Image -->
             <div class="relative h-56">
@@ -662,7 +668,8 @@
                     <i id="modalFallbackIcon" class="fas fa-cogs text-6xl text-white"></i>
                 </div>
                 <div class="absolute top-0 right-0 m-4">
-                    <button id="closeModalBtn" class="bg-white rounded-full p-2 shadow-md hover:bg-teal-50 transition-colors">
+                    <button id="closeModalBtn"
+                        class="bg-white rounded-full p-2 shadow-md hover:bg-teal-50 transition-colors">
                         <i class="fas fa-times text-teal-700 text-xl"></i>
                     </button>
                 </div>
@@ -671,7 +678,7 @@
                     <h2 id="programModalTitle" class="text-3xl font-bold text-white mb-2 shadow-text"></h2>
                 </div>
             </div>
-            
+
             <!-- Modal Content -->
             <div class="p-8">
                 <div id="programModalDescription" class="prose max-w-none text-gray-700">
@@ -680,11 +687,12 @@
             </div>
         </div>
     </div>
-    
+
     <style>
         .shadow-text {
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
+
         .program-excerpt {
             display: -webkit-box;
             -webkit-line-clamp: 3;
@@ -806,15 +814,15 @@
             const programId = btn.getAttribute('data-program-id');
             const title = btn.getAttribute('data-title');
             const fullDescription = btn.getAttribute('data-full-description');
-            
+
             // Get card for image reference
             const card = btn.closest('.program-card');
             const cardImage = card.querySelector('img');
-            
+
             // Set modal content
             modalTitle.textContent = title;
             modalDescription.innerHTML = fullDescription;
-            
+
             // Handle image
             if (cardImage) {
                 modalImageContainer.innerHTML = ''; // Clear previous content
@@ -872,6 +880,116 @@
         });
     });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const feedContainer = document.getElementById('instagram-api-feed-container');
+        if (!feedContainer) return;
+
+        // Function to handle image loading errors with fallback
+        function handleImageError(img, postTitle) {
+            // Try using a default UNJ image as fallback
+            img.src = 'https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png';
+            img.alt = `${postTitle} (Image unavailable)`;
+            // Add overlay to indicate original image couldn't be loaded
+            const parent = img.parentElement;
+            const overlay = document.createElement('div');
+            overlay.className = 'absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center';
+            overlay.innerHTML = '<p class="text-white text-center px-4">Original image unavailable</p>';
+            parent.appendChild(overlay);
+        }
+
+        // Function to create Instagram card with error handling
+        function createInstagramCard(post) {
+            const postDate = new Date(post.posted_at);
+            const formattedDate = postDate.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+
+            const card = document.createElement('div');
+            card.className =
+                'media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group';
+
+            // Create HTML structure with error handling for image
+            card.innerHTML = `
+            <div class="relative">
+                <div class="relative pb-[56.25%] h-0 overflow-hidden">
+                    <img src="${post.media_url}" alt="${post.title}" 
+                         class="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                         onerror="this.onerror=null; handleImageError(this, '${post.title.replace(/'/g, "\\'")}');">
+                </div>
+                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent h-16 opacity-70"></div>
+            </div>
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center text-gray-500 text-sm">
+                        <i class="fab fa-instagram mr-2"></i>
+                        <span>@dit.isipunj</span>
+                    </div>
+                    <div class="text-gray-500 text-sm">
+                        <i class="fas fa-calendar-alt mr-1"></i>${formattedDate}
+                    </div>
+                </div>
+                <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors">
+                    ${post.title || 'Instagram Post'}
+                </h3>
+                <p class="text-gray-600 mb-4 news-excerpt">
+                    ${post.caption ? (post.caption.length > 150 ? post.caption.substring(0, 150) + '...' : post.caption) : ''}
+                </p>
+                <a href="${post.permalink}" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors">
+                    <span>View on Instagram</span>
+                    <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                </a>
+            </div>
+        `;
+
+            return card;
+        }
+
+        // Define handleImageError function in global scope
+        window.handleImageError = handleImageError;
+
+        // Fetch Instagram posts with error handling
+        fetch('/api/instagram-posts')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(posts => {
+                // Clear loading placeholders
+                feedContainer.innerHTML = '';
+
+                if (posts.length === 0) {
+                    feedContainer.innerHTML = `
+                    <div class="col-span-3 text-center py-8">
+                        <p class="text-gray-500">No Instagram posts available at this time.</p>
+                    </div>
+                `;
+                    return;
+                }
+
+                // Create and append cards for each post
+                posts.forEach(post => {
+                    if (post && post.media_url) {
+                        const card = createInstagramCard(post);
+                        feedContainer.appendChild(card);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching Instagram posts:', error);
+                feedContainer.innerHTML = `
+                <div class="col-span-3 text-center py-8">
+                    <p class="text-gray-500">Unable to load Instagram posts. Please try again later.</p>
+                </div>
+            `;
+            });
+    });
+</script>
 <script>
     window.carouselImages = [
         "{{ asset('images/logos/image_corousel.jpg') }}",
@@ -883,4 +1001,3 @@
 
 </html>
 @include('layout.footer')
-

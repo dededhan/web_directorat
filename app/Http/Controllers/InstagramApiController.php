@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
+use Carbon\Carbon;
 
 class InstagramApiController extends Controller
 {
@@ -18,13 +19,18 @@ class InstagramApiController extends Controller
         $this->accessToken = env('INSTAGRAM_ACCESS_TOKEN');
     }
     
+    /**
+     * Fetch recent media from Instagram API and store in database with improved error handling
+     * @param int $retryCount Number of retry attempts
+     * @return array Status result
+     */
     public function fetchAndStoreInstagramPosts($retryCount = 3)
     {
         $attempt = 0;
         
         while ($attempt < $retryCount) {
             try {
-
+                // Set timeout to avoid hanging requests
                 $response = Http::timeout(30)->get($this->apiUrl . 'me/media', [
                     'fields' => 'id,caption,media_type,media_url,permalink,thumbnail_url,timestamp',
                     'access_token' => $this->accessToken
@@ -35,17 +41,37 @@ class InstagramApiController extends Controller
                     
                     if (isset($data['data']) && is_array($data['data'])) {
                         $addedCount = 0;
+                        $updatedCount = 0;
                         
                         foreach ($data['data'] as $post) {
-
+                            // Only process IMAGE and CAROUSEL_ALBUM types
                             if ($post['media_type'] == 'IMAGE' || $post['media_type'] == 'CAROUSEL_ALBUM') {
-
+                                $mediaUrl = $post['media_url'] ?? ($post['thumbnail_url'] ?? null);
+                                $caption = $post['caption'] ?? '';
+                                
+                                // Check if media URL exists
+                                if (!$mediaUrl) {
+                                    Log::warning("No media URL for Instagram post {$post['id']}");
+                                    continue;
+                                }
+                                
+                                // Try to validate the media URL
+                                try {
+                                    $mediaCheck = Http::timeout(5)->head($mediaUrl);
+                                    if (!$mediaCheck->successful()) {
+                                        Log::warning("Invalid media URL for Instagram post {$post['id']}: {$mediaUrl}");
+                                        continue;
+                                    }
+                                } catch (\Exception $e) {
+                                    // Don't skip completely, the URL might work later
+                                    Log::warning("Could not validate media URL: {$e->getMessage()}");
+                                }
+                                
+                                // Check if post exists already
                                 $existingPost = InstagramApiPost::where('instagram_id', $post['id'])->first();
                                 
                                 if (!$existingPost) {
-                                    $mediaUrl = $post['media_url'] ?? ($post['thumbnail_url'] ?? null);
-                                    $caption = $post['caption'] ?? '';
-                                    
+                                    // Create new post
                                     InstagramApiPost::create([
                                         'instagram_id' => $post['id'],
                                         'title' => substr($caption, 0, 100),
@@ -53,20 +79,30 @@ class InstagramApiController extends Controller
                                         'media_url' => $mediaUrl,
                                         'permalink' => $post['permalink'],
                                         'posted_at' => $post['timestamp'],
-                                        'is_active' => true
+                                        'is_active' => true,
+                                        'last_verified' => now()
                                     ]);
                                     
                                     $addedCount++;
+                                } else {
+                                    // Update existing post (URLs might change)
+                                    $existingPost->update([
+                                        'media_url' => $mediaUrl, 
+                                        'caption' => $caption,
+                                        'last_verified' => now()
+                                    ]);
+                                    
+                                    $updatedCount++;
                                 }
                             }
                         }
                         
-
+                        // Cache the response for fallback
                         $this->cacheResponseToFile($data);
                         
                         return [
                             'success' => true, 
-                            'message' => "Instagram posts fetched and stored successfully. Added {$addedCount} new posts."
+                            'message' => "Instagram posts fetched successfully. Added {$addedCount} new posts, updated {$updatedCount} existing posts."
                         ];
                     }
                 }
@@ -75,7 +111,7 @@ class InstagramApiController extends Controller
                 $attempt++;
                 
                 if ($attempt < $retryCount) {
-                    sleep(2);
+                    sleep(2); // Wait before retrying
                 }
                 
             } catch (\Exception $e) {
@@ -83,7 +119,7 @@ class InstagramApiController extends Controller
                 $attempt++;
                 
                 if ($attempt >= $retryCount) {
-
+                    // Try using cached data as last resort
                     if ($this->tryUsingCachedResponse()) {
                         return [
                             'success' => true, 
@@ -91,20 +127,29 @@ class InstagramApiController extends Controller
                         ];
                     }
                     
+                    // If all else fails, create mock posts to ensure frontend always has content
+                    $this->createMockInstagramPosts();
+                    
                     return [
                         'success' => false, 
-                        'message' => 'Error fetching Instagram posts after '.$retryCount.' attempts: ' . $e->getMessage()
+                        'message' => 'Error fetching Instagram posts: ' . $e->getMessage() . '. Created mock posts as fallback.'
                     ];
                 }
                 
-                sleep(2);
+                sleep(2); // Wait before retrying
             }
         }
         
-        return ['success' => false, 'message' => 'Failed to fetch Instagram posts after '.$retryCount.' attempts'];
+        // If we get here, all attempts failed
+        $this->createMockInstagramPosts();
+        return ['success' => false, 'message' => 'Failed to fetch Instagram posts. Created mock posts as fallback.'];
     }
     
-
+    /**
+     * Cache Instagram API response to file for fallback
+     * @param array $data API response data
+     * @return bool Success status
+     */
     private function cacheResponseToFile($data)
     {
         try {
@@ -127,7 +172,10 @@ class InstagramApiController extends Controller
         }
     }
     
-
+    /**
+     * Try to use cached response if live API fetch fails
+     * @return bool Success status
+     */
     private function tryUsingCachedResponse()
     {
         try {
@@ -141,7 +189,7 @@ class InstagramApiController extends Controller
                     
                     foreach ($data['data'] as $post) {
                         // Only process IMAGE and CAROUSEL_ALBUM types
-                        if (($post['media_type'] == 'IMAGE' || $post['media_type'] == 'CAROUSEL_ALBUM')) {
+                        if (($post['media_type'] == 'IMAGE' || $post['media_type'] == 'CAROUSEL_ALBUM') && isset($post['media_url'])) {
                             // Check if this post already exists
                             $existingPost = InstagramApiPost::where('instagram_id', $post['id'])->first();
                             
@@ -156,7 +204,8 @@ class InstagramApiController extends Controller
                                     'media_url' => $mediaUrl,
                                     'permalink' => $post['permalink'],
                                     'posted_at' => $post['timestamp'],
-                                    'is_active' => true
+                                    'is_active' => true,
+                                    'last_verified' => now()
                                 ]);
                                 
                                 $addedCount++;
@@ -176,12 +225,22 @@ class InstagramApiController extends Controller
         }
     }
     
+    /**
+     * Create mock Instagram posts when real ones can't be fetched
+     * @return bool Success status
+     */
     private function createMockInstagramPosts()
     {
         try {
-            $mockExists = InstagramApiPost::where('instagram_id', 'like', 'mock_%')->exists();
+            // Check if we have any real posts or if mock posts already exist
+            $hasRealPosts = InstagramApiPost::where('instagram_id', 'not like', 'mock_%')
+                                         ->where('instagram_id', 'not like', 'fallback_%')
+                                         ->exists();
             
-            if (!$mockExists) {
+            $hasMockPosts = InstagramApiPost::where('instagram_id', 'like', 'mock_%')->exists();
+            
+            // Only create mock posts if we don't have any real posts or mock posts
+            if (!$hasRealPosts && !$hasMockPosts) {
                 $mockPosts = [
                     [
                         'instagram_id' => 'mock_1',
@@ -190,7 +249,8 @@ class InstagramApiController extends Controller
                         'media_url' => 'https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434',
                         'permalink' => 'https://www.instagram.com/dit.isipunj/',
                         'posted_at' => now()->subDays(1),
-                        'is_active' => true
+                        'is_active' => true,
+                        'last_verified' => now()
                     ],
                     [
                         'instagram_id' => 'mock_2',
@@ -199,7 +259,8 @@ class InstagramApiController extends Controller
                         'media_url' => 'https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png',
                         'permalink' => 'https://www.instagram.com/dit.isipunj/',
                         'posted_at' => now()->subDays(3),
-                        'is_active' => true
+                        'is_active' => true,
+                        'last_verified' => now()
                     ],
                     [
                         'instagram_id' => 'mock_3',
@@ -208,34 +269,39 @@ class InstagramApiController extends Controller
                         'media_url' => 'https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434',
                         'permalink' => 'https://www.instagram.com/dit.isipunj/',
                         'posted_at' => now()->subDays(5),
-                        'is_active' => true
+                        'is_active' => true,
+                        'last_verified' => now()
                     ],
+                    // Add more realistic mock posts
                     [
                         'instagram_id' => 'mock_4',
-                        'title' => 'Inovasi Teknologi UNJ',
-                        'caption' => 'Direktorat Inovasi, Sistem Informasi dan Pemeringkatan UNJ meluncurkan aplikasi baru untuk mahasiswa #InovasiUNJ',
+                        'title' => 'Workshop Digital Marketing',
+                        'caption' => 'Workshop Digital Marketing untuk mahasiswa UNJ. Belajar strategi pemasaran di era digital #DigitalMarketing #WorkshopUNJ',
                         'media_url' => 'https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png',
                         'permalink' => 'https://www.instagram.com/dit.isipunj/',
                         'posted_at' => now()->subDays(7),
-                        'is_active' => true
+                        'is_active' => true,
+                        'last_verified' => now()
                     ],
                     [
                         'instagram_id' => 'mock_5',
-                        'title' => 'Webinar Direktorat Pemeringkatan',
-                        'caption' => 'Webinar tentang pentingnya pemeringkatan universitas dalam era globalisasi #WebinarUNJ #PemeringkatanPT',
+                        'title' => 'UNJ Bersinergi',
+                        'caption' => 'UNJ menjalin kerjasama dengan berbagai institusi untuk meningkatkan kualitas pendidikan #UNJBersinergi #Kolaborasi',
                         'media_url' => 'https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434',
                         'permalink' => 'https://www.instagram.com/dit.isipunj/',
-                        'posted_at' => now()->subDays(10),
-                        'is_active' => true
+                        'posted_at' => now()->subDays(9),
+                        'is_active' => true,
+                        'last_verified' => now()
                     ],
                     [
                         'instagram_id' => 'mock_6',
-                        'title' => 'Kolaborasi Penelitian',
-                        'caption' => 'UNJ menjalin kerja sama penelitian dengan berbagai universitas terkemuka #KolaborasiPenelitian #UNJ',
+                        'title' => 'Pelatihan Sistem Informasi',
+                        'caption' => 'Pelatihan penggunaan sistem informasi terbaru untuk civitas akademika UNJ #SistemInformasi #UNJ',
                         'media_url' => 'https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png',
                         'permalink' => 'https://www.instagram.com/dit.isipunj/',
-                        'posted_at' => now()->subDays(12),
-                        'is_active' => true
+                        'posted_at' => now()->subDays(11),
+                        'is_active' => true,
+                        'last_verified' => now()
                     ]
                 ];
                 
@@ -253,7 +319,10 @@ class InstagramApiController extends Controller
         }
     }
     
-//base
+    /**
+     * Get basic fallback posts when everything else fails
+     * @return array Array of basic post data
+     */
     private function getBasicMockPosts()
     {
         return [
@@ -287,20 +356,28 @@ class InstagramApiController extends Controller
         ];
     }
     
+    /**
+     * Get posts for frontend display with improved error handling
+     * @return JsonResponse
+     */
     public function getPosts()
     {
         try {
-            // tryget
+            // Check for "stale" posts (posts not verified in the last 24 hours)
+            $lastVerified = InstagramApiPost::max('last_verified');
+            $needsRefresh = !$lastVerified || Carbon::parse($lastVerified)->diffInHours(now()) > 24;
+            
+            // First check if we have posts in the database
             $posts = InstagramApiPost::where('is_active', true)
                     ->orderBy('posted_at', 'desc')
                     ->take(6)
                     ->get();
-        
-            if ($posts->isEmpty()) {
-                $result = $this->fetchAndStoreInstagramPosts(2);
-                if (!$result['success']) {
-                    $this->createMockInstagramPosts();
-                }
+            
+            // If no posts or need refresh, try to fetch them
+            if ($posts->isEmpty() || $needsRefresh) {
+                $this->fetchAndStoreInstagramPosts();
+                
+                // Try to get posts again
                 $posts = InstagramApiPost::where('is_active', true)
                         ->orderBy('posted_at', 'desc')
                         ->take(6)
@@ -321,7 +398,11 @@ class InstagramApiController extends Controller
         }
     }
     
-    // fetch
+    /**
+     * Manually trigger Instagram fetch (admin only)
+     * @param Request $request
+     * @return redirect
+     */
     public function manualFetch(Request $request)
     {
         if (!auth()->check() || !auth()->user()->hasRole('admin')) {
@@ -337,7 +418,11 @@ class InstagramApiController extends Controller
         }
     }
     
-    ///clear
+    /**
+     * Clear mock posts (admin only)
+     * @param Request $request
+     * @return redirect
+     */
     public function clearMockPosts(Request $request)
     {
         if (!auth()->check() || !auth()->user()->hasRole('admin')) {
@@ -345,11 +430,54 @@ class InstagramApiController extends Controller
         }
         
         try {
-            $count = InstagramApiPost::where('instagram_id', 'like', 'mock_%')->delete();
+            $count = InstagramApiPost::where('instagram_id', 'like', 'mock_%')
+                                   ->orWhere('instagram_id', 'like', 'fallback_%')
+                                   ->delete();
             return back()->with('success', "Cleared {$count} mock Instagram posts");
         } catch (\Exception $e) {
             Log::error('Error clearing mock posts: ' . $e->getMessage());
             return back()->with('error', 'Error clearing mock posts: ' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Verify all media URLs and mark invalid ones
+     * @param Request $request
+     * @return redirect
+     */
+    public function verifyMediaUrls(Request $request)
+    {
+        if (!auth()->check() || !auth()->user()->hasRole('admin')) {
+            abort(403, 'Unauthorized');
+        }
+        
+        try {
+            $posts = InstagramApiPost::where('is_active', true)->get();
+            $invalidCount = 0;
+            
+            foreach ($posts as $post) {
+                if ($post->media_url) {
+                    try {
+                        $check = Http::timeout(5)->head($post->media_url);
+                        if (!$check->successful()) {
+                            $post->update([
+                                'is_active' => false,
+                                'last_verified' => now()
+                            ]);
+                            $invalidCount++;
+                        } else {
+                            $post->update(['last_verified' => now()]);
+                        }
+                    } catch (\Exception $e) {
+                        Log::warning("Could not verify media URL for post {$post->id}: {$e->getMessage()}");
+                    }
+                }
+            }
+            
+            return back()->with('success', "Media URLs verified. Found {$invalidCount} invalid URLs.");
+        } catch (\Exception $e) {
+            Log::error('Error verifying media URLs: ' . $e->getMessage());
+            return back()->with('error', 'Error verifying media URLs: ' . $e->getMessage());
         }
     }
 }
