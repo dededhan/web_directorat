@@ -145,6 +145,7 @@
                             <th>Nama Proyek</th>
                             <th>Status</th>
                             <th>Actions</th>
+                            <th>User</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -193,26 +194,27 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning">Edit</button>
+                                        
                                         <button class="btn btn-sm btn-danger">Delete</button>
                                     </div>
                                     <div class="btn-group-vertical mt-2">
                                         <a href="{{ route('admin.Katsinov.show', $katsinov->id) }}" class="btn btn-success btn-sm mb-1">
-                                            <i class='bx bx-refresh'></i> Load Record
+                                            <i class='bx bx-refresh'></i> Penilaian
                                         </a>
                                         <button class="btn btn-info btn-sm mb-1" type="button" data-bs-toggle="collapse" 
                                                 data-bs-target="#subforms-{{ $katsinov->id }}" aria-expanded="false">
-                                            <i class='bx bx-folder-open'></i> Manage Sub-Forms
+                                            <i class='bx bx-folder-open'></i> Formulir Pendukung
                                         </button>
                                     </div>
                                 </td>
+                                
                             </tr>
                             <!-- Collapsible Sub-forms Section -->
                             <tr class="subforms-row">
                                 <td colspan="7" class="p-0">
                                     <div class="collapse" id="subforms-{{ $katsinov->id }}">
                                         <div class="card card-body subform-container">
-                                            <h5 class="subform-title">Sub-Forms for "{{ $katsinov->title }}"</h5>
+                                            <h5 class="subform-title">Form pendukung untuk "{{ $katsinov->title }}"</h5>
                                             <div class="subform-buttons">
                                                 <a href="{{ route('admin.Katsinov.inovasi.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-file'></i> Form Judul
@@ -412,4 +414,5 @@
             }
         }
     </script>
+  
 @endsection

@@ -92,7 +92,7 @@
                             <label class="col-md-3 form-label">Tanggal Penilaian</label>
                             <div class="col-md-9">
                                 <input type="date" class="form-control" name="tanggal_penilaian" 
-                                    value="{{ $record->tanggal_penilaian ?? '' }}" required>
+                                value="{{ $record->tanggal_penilaian ? \Carbon\Carbon::parse($record->tanggal_penilaian)->format('Y-m-d') : '' }}" required>
                             </div>
                         </div>
                     </div>

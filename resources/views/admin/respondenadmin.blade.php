@@ -181,7 +181,7 @@
                                     <td>{{ $responden->category }}</td>
                                     <td>
                                         <select class="form-select status-dropdown" data-id="{{ $responden->id }}"
-                                            {{ $responden->status == 'clear' ? 'disabled' : '' }}>
+                                            {{ $responden->status == 'dones' ? 'disabled' : '' }}>
                                             <option value="belum" {{ $responden->status == 'belum' ? 'selected' : '' }}>
                                                 Belum di-email</option>
                                             <option value="done" {{ $responden->status == 'done' ? 'selected' : '' }}>

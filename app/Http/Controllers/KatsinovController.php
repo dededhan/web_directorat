@@ -73,7 +73,7 @@ class KatsinovController extends Controller
             'institution' => 'required|string|max:255',
             'address' => 'required|string',
             'contact' => 'required|string',
-            'assessment_date' => 'required|date',
+            'assessment_date' => 'required|string',
             'responses' => 'required|array',
             'responses.*.indicator' => 'required|integer|min:1|max:6',
             'responses.*.row' => 'required|integer',
@@ -85,17 +85,33 @@ class KatsinovController extends Controller
         // Start transaction to ensure all related data is saved or rolled back together
         DB::beginTransaction();
         try {
+            if (isset($validated['id'])) {
+                $katsinov = Katsinov::findOrFail($validated['id']);
+                $katsinov->update([
+                    'title' => $validated['title'],
+                    'focus_area' => $validated['focus_area'],
+                    'project_name' => $validated['project_name'],
+                    'institution' => $validated['institution'],
+                    'address' => $validated['address'],
+                    'contact' => $validated['contact'],
+                    'assessment_date' => $validated['assessment_date'],
+                ]);
+
+                $katsinov->responses()->delete();
+                $katsinov->scores()->delete();
+            } else {
             // Create the main Katsinov record
-            $katsinov = Katsinov::create([
-                'title' => $validated['title'],
-                'focus_area' => $validated['focus_area'],
-                'project_name' => $validated['project_name'],
-                'institution' => $validated['institution'],
-                'address' => $validated['address'],
-                'contact' => $validated['contact'],
-                'assessment_date' => $validated['assessment_date'],
-                'user_id' => Auth::user()->id,
-            ]);
+                $katsinov = Katsinov::create([
+                    'title' => $validated['title'],
+                    'focus_area' => $validated['focus_area'],
+                    'project_name' => $validated['project_name'],
+                    'institution' => $validated['institution'],
+                    'address' => $validated['address'],
+                    'contact' => $validated['contact'],
+                    'assessment_date' => $validated['assessment_date'],
+                    'user_id' => Auth::user()->id,
+                ]);
+            }
 
             // Store each individual response
             foreach ($validated['responses'] as $response) {
@@ -114,17 +130,14 @@ class KatsinovController extends Controller
             $this->processAndSaveScores($katsinov->id, $validated['responses']);
 
             DB::commit();
-            Log::info('Katsinov data successfully saved', ['id' => $katsinov->id]);
-
-            return response()->json(['message' => 'Data berhasil disimpan'], 200);
+            return response()->json([
+                'message' => isset($validated['id']) ? 'Data berhasil diupdate' : 'Data berhasil disimpan',
+                'id' => $katsinov->id
+            ], 200);
+    
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error saving Katsinov data: ' . $e->getMessage(), [
-                'exception' => $e,
-                'request' => $request->all()
-            ]);
-
-            return response()->json(['message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
+            return response()->json(['message' => 'Error: ' . $e->getMessage()], 500);
         }
     }
 
@@ -1045,7 +1058,7 @@ class KatsinovController extends Controller
             'alamat_kontak' => 'required|string',
             'phone' => 'required|string|max:20',
             'fax' => 'required|string|max:20',
-            'tanggal_penilaian' => 'required|date',
+            'tanggal_penilaian' => 'required|string',
         ];
 
         // Generate rules untuk 5 aspek
