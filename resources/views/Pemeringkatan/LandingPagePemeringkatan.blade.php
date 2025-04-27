@@ -381,10 +381,23 @@
                             </a>
                             
                             <div class="mt-4 pt-3 border-t border-gray-100">
-                                <a href="#" class="login block text-center bg-teal-700 hover:bg-teal-600 text-white py-2 rounded-sm font-medium transition-colors duration-300" data-bs-toggle="modal" data-bs-target="#loginModal">
-                                    Akses Program
-                                </a>
+                                <button type="button" class="login w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg hover:from-teal-500 hover:to-teal-400 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50 relative overflow-hidden group" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                    <span class="relative z-10 flex items-center justify-center">
+                                        Akses Program
+                                    </span>
+                                    <div class="absolute inset-0 w-3 bg-white bg-opacity-30 skew-x-[-20deg] group-hover:animate-shine hidden md:block"></div>
+                                </button>
                             </div>
+
+                            <style>
+                            @keyframes shine {
+                                from {transform: translateX(-100%) skew-x-[-20deg];}
+                                to {transform: translateX(300%) skew-x-[-20deg];}
+                            }
+                            .animate-shine {
+                                animation: shine 1.5s ease;
+                            }
+                            </style>
                         </div>
                     </div>
                 @empty
