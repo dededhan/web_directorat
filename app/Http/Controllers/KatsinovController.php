@@ -697,8 +697,30 @@ class KatsinovController extends Controller
             'information_tech' => ['required', 'array', 'min:1'],
             'information_market' => ['required', 'array', 'min:1'],
         ]);
-        $now = now();
-        $information =  KatsinovInformasi::create([
+
+        $informasi = KatsinovInformasi::where('katsinov_id', $katsinov_id)->first();
+        if ($informasi) {
+            // Update existing record
+            $informasi->update([
+                'pic' => $validatedData['person_in_charge'],
+                'address' => $validatedData['pic_address'],
+                'institution' => $validatedData['pic_institution'],
+                'phone' => $validatedData['pic_phone'],
+            'fax' => $validatedData['pic_fax'],
+            'innovation_title' => $validatedData['innovation_title'],
+            'innovation_name'  => $validatedData['innovation_name'],
+            'innovation_type'  => $validatedData['innovation_type'],
+            'innovation_field'  => $validatedData['innovation_field'],
+            'innovation_application'  => $validatedData['innovation_application'],
+            'innovation_duration'  => $validatedData['innovation_duration'],
+            'innovation_year'  => $validatedData['innovation_year'],
+            'innovation_summary'  => $validatedData['innovation_summary'],
+            'innovation_supremacy'  => $validatedData['innovation_supremacy'],
+            'innovation_novelty'  => $validatedData['innovation_novelty'],
+            'katsinov_id' => $katsinov_id
+        ]);
+        } else {
+        $informasi =  KatsinovInformasi::create([
             'pic' => $validatedData['person_in_charge'],
             'address' => $validatedData['pic_address'],
             'institution' => $validatedData['pic_institution'],
@@ -716,7 +738,13 @@ class KatsinovController extends Controller
             'innovation_novelty'  => $validatedData['innovation_novelty'],
             'katsinov_id' => $katsinov_id
         ]);
-
+        }
+         // Delete existing related collections to avoid duplicates
+        if ($informasi) {
+            $informasi->katsinovInformasiCollections()->delete();
+        }
+        
+        $now = now();
         $collections = [];
         // there must be a better way to do this, I just do this several foreach to get the thing done faster
         // processing of array input
@@ -727,7 +755,7 @@ class KatsinovController extends Controller
                     'index' => $index,
                     'attribute' => $key,
                     'value' => $value,
-                    'katsinov_informasi_id' => $information->id,
+                    'katsinov_informasi_id' => $informasi->id,
                     'created_at' => $now,
                     'updated_at' => $now,
                 ];
@@ -740,7 +768,7 @@ class KatsinovController extends Controller
                     'index' => $index,
                     'attribute' => $key,
                     'value' => $value,
-                    'katsinov_informasi_id' => $information->id,
+                    'katsinov_informasi_id' => $informasi->id,
                     'created_at' => $now,
                     'updated_at' => $now,
                 ];
@@ -753,7 +781,7 @@ class KatsinovController extends Controller
                     'index' => $index,
                     'attribute' => $key,
                     'value' => $value,
-                    'katsinov_informasi_id' => $information->id,
+                    'katsinov_informasi_id' => $informasi->id,
                     'created_at' => $now,
                     'updated_at' => $now,
                 ];
@@ -766,7 +794,7 @@ class KatsinovController extends Controller
                     'index' => $index,
                     'attribute' => $key,
                     'value' => $value,
-                    'katsinov_informasi_id' => $information->id,
+                    'katsinov_informasi_id' => $informasi->id,
                     'created_at' => $now,
                     'updated_at' => $now,
                 ];
@@ -780,13 +808,14 @@ class KatsinovController extends Controller
                     'index' => $index,
                     'attribute' => $key,
                     'value' => $value,
-                    'katsinov_informasi_id' => $information->id,
+                    'katsinov_informasi_id' => $informasi->id,
                     'created_at' => $now,
                     'updated_at' => $now,
                 ];
             }
         }
-        $information->katsinovInformasiCollections()->insert($collections);
+        KatsinovInformasiCollection::insert($collections);
+
 
         // Create or update the record
 
@@ -801,7 +830,7 @@ class KatsinovController extends Controller
             default => 'admin.Katsinov.TableKatsinov',
         };
         // return redirect(route($route))->with('success', $message);
-        return redirect()->route($route)->with('success', 'Data informasi berhasil disimpan');
+        return redirect()->route($route)->with('success', 'Data informasi berhasil ' . ($informasi ? 'diperbarui' : 'disimpan'));
     }
 
 

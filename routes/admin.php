@@ -355,6 +355,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::get('/katsinov/latest', [KatsinovController::class, 'latest']);
                 Route::get('/documents/{id}', [KatsinovController::class, 'viewDocument'])
                     ->name('document.view');
+                Route::delete('/document/{id}', [KatsinovController::class, 'destroyDocument'])->name('document.delete');
                 Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
                     ->name('signature.view');
                 
@@ -434,6 +435,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::post('/store', [KatsinovController::class, 'store'])->name('store');
                 Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
                 Route::get('/show/{id}', [KatsinovController::class, 'show'])->name('show');
+                
                 Route::get('/katsinov/latest', [KatsinovController::class, 'latest']);
 
                 // Lampiran route
@@ -496,6 +498,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::get('/katsinov/latest', [KatsinovController::class, 'latest']);
                 Route::get('/documents/{id}', [KatsinovController::class, 'viewDocument'])
                     ->name('document.view');
+                Route::delete('/document/{id}', [KatsinovController::class, 'destroyDocument'])->name('document.delete');
                 Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
                     ->name('signature.view');
                 
@@ -556,6 +559,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::get('/katsinov/latest', [KatsinovController::class, 'latest']);
                 Route::get('/documents/{id}', [KatsinovController::class, 'viewDocument'])
                     ->name('document.view');
+                Route::delete('/document/{id}', [KatsinovController::class, 'destroyDocument'])->name('document.delete');
                 Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
                     ->name('signature.view');
                 

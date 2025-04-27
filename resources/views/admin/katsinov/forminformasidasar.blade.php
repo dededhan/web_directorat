@@ -23,8 +23,10 @@
             <div class="head">
                 <h3>Form Informasi Dasar (Basic Information)</h3>
             </div>
-
-            <form action="{{ route('admin.Katsinov.informasi.store', $id) }}" method="POST">
+           
+          
+           
+            <form action="{{ route('admin.Katsinov.informasi.store', $id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <!-- Section 1: Informasi Inovator -->
                 <div class="card mb-4">
@@ -107,8 +109,8 @@
                                         @foreach ($informasi_team as $team)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><input type="text" class="form-control" value="{{ $team['name'] }}"></td>
-                                                <td><input type="text" class="form-control" value="{{ $team['skill'] }}"></td>
+                                                <td><input type="text" class="form-control"  name="team[{{ $loop->index }}][name]" value="{{ $team['name'] }}"></td>
+                                                <td><input type="text" class="form-control" name="team[{{ $loop->index }}][skill]" value="{{ $team['skill'] }}"></td>
                                             </tr>
                                         @endforeach
                                     @endif
@@ -279,9 +281,21 @@
                                                 @foreach ($informasi_program as $program)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td><input type="text" class="form-control" value="{{ $program['year'] }}"></td>
-                                                    <td><input type="text" class="form-control" value="{{ $program['funds'] }}"></td>
-                                                    <td><input type="text" class="form-control" value="{{ $program['source'] }}"></td>
+                                                    <td>
+                                                        <input type="text" class="form-control" 
+                                                               name="program_implementation[{{ $loop->index }}][year]" 
+                                                               value="{{ $program['year'] }}">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control" 
+                                                               name="program_implementation[{{ $loop->index }}][funds]" 
+                                                               value="{{ $program['funds'] }}">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control" 
+                                                               name="program_implementation[{{ $loop->index }}][source]" 
+                                                               value="{{ $program['source'] }}">
+                                                    </td>
                                                 </tr>
                                                 @endforeach
                                                 @endif
@@ -341,10 +355,26 @@
                                                 @foreach ($informasi_partner as $partner)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td><input type="text" class="form-control" value="{{ $partner['name'] }}"></td>
-                                                    <td><input type="text" class="form-control" value="{{ $partner['address'] }}"></td>
-                                                    <td><input type="text" class="form-control" value="{{ $partner['role'] }}"></td>
-                                                    <td><input type="text" class="form-control" value="{{ $partner['cooperation'] }}"></td>
+                                                    <td>
+                                                        <input type="text" class="form-control" 
+                                                               name="innovation_partner[{{ $loop->index }}][name]" 
+                                                               value="{{ $partner['name'] }}">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control" 
+                                                               name="innovation_partner[{{ $loop->index }}][address]" 
+                                                               value="{{ $partner['address'] }}">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control" 
+                                                               name="innovation_partner[{{ $loop->index }}][role]" 
+                                                               value="{{ $partner['role'] }}">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control" 
+                                                               name="innovation_partner[{{ $loop->index }}][cooperation]" 
+                                                               value="{{ $partner['cooperation'] }}">
+                                                    </td>
                                                 </tr>
                                                 @endforeach
                                             @endif
@@ -791,7 +821,7 @@
                 
                 <div class="mb-3 d-flex justify-content-end mt-4">
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Submit Form
+                        <i class="fas fa-save"></i> {{ $informasi ? 'Update Form' : 'Submit Form' }}
                     </button>
                 </div>
             </form>
