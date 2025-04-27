@@ -6,6 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0, user-scalable=yes" name="viewport" />
     <title>Universitas Negeri Jakarta - Direktorat Pemeringkatan</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
@@ -527,109 +528,7 @@
                 </div>
             </div>
             <!-- Featured YouTube Videos - Hardcoded -->
-            <div class="mb-12 mt-12">
-                <h3 class="text-xl font-bold text-teal-700 mb-6 text-center">Video Unggulan</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Video 1 -->
-                    <div
-                        class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                        <div class="relative pb-[56.25%] h-0 overflow-hidden">
-                            <iframe class="absolute top-0 left-0 w-full h-full"
-                                src="https://www.youtube.com/embed/JJ0pP0kzLxQ?rel=0"
-                                title="Profil Universitas Negeri Jakarta Tahun 2020" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                            </iframe>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center mb-3">
-                                <div class="flex items-center text-gray-500 text-sm">
-                                    <i class="fab fa-youtube mr-2"></i>
-                                    <span>UNJ Official</span>
-                                </div>
-                            </div>
-                            <h3
-                                class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
-                                Profil Universitas Negeri Jakarta</h3>
-                            <p class="text-gray-600 mb-4">Mengenal lebih dalam tentang UNJ, fasilitas, dan program
-                                unggulan
-                                yang ditawarkan.</p>
-                            <div class="mt-4 pt-4 border-t border-gray-100">
-                                <a href="https://www.youtube.com/watch?v=JJ0pP0kzLxQ" target="_blank"
-                                    class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                                    <span>Tonton di YouTube</span>
-                                    <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Video 2 -->
-                    <div
-                        class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                        <div class="relative pb-[56.25%] h-0 overflow-hidden">
-                            <iframe class="absolute top-0 left-0 w-full h-full"
-                                src="https://www.youtube.com/embed/XtmrlOGaAcE?rel=0"
-                                title="Muda dan Berkarya : Inspirasi Wirausahawan Alumni UNJ" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                            </iframe>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center mb-3">
-                                <div class="flex items-center text-gray-500 text-sm">
-                                    <i class="fab fa-youtube mr-2"></i>
-                                    <span>UNJ Official</span>
-                                </div>
-                            </div>
-                            <h3
-                                class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
-                                Muda dan Berkarya</h3>
-                            <p class="text-gray-600 mb-4">Inspirasi dari wirausahawan alumni UNJ yang sukses membangun
-                                karir.</p>
-                            <div class="mt-4 pt-4 border-t border-gray-100">
-                                <a href="https://www.youtube.com/watch?v=XtmrlOGaAcE" target="_blank"
-                                    class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                                    <span>Tonton di YouTube</span>
-                                    <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Video 3 -->
-                    <div
-                        class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                        <div class="relative pb-[56.25%] h-0 overflow-hidden">
-                            <iframe class="absolute top-0 left-0 w-full h-full"
-                                src="https://www.youtube.com/embed/LeF0xnWIPYU?rel=0"
-                                title="Mengenal Lebih Jauh UNJ! with Wakil Rektor III UNJ" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                            </iframe>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center mb-3">
-                                <div class="flex items-center text-gray-500 text-sm">
-                                    <i class="fab fa-youtube mr-2"></i>
-                                    <span>UNJ Official</span>
-                                </div>
-                            </div>
-                            <h3
-                                class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">
-                                Mengenal Lebih Jauh UNJ</h3>
-                            <p class="text-gray-600 mb-4">Wawancara eksklusif bersama Wakil Rektor III Universitas
-                                Negeri
-                                Jakarta.</p>
-                            <div class="mt-4 pt-4 border-t border-gray-100">
-                                <a href="https://www.youtube.com/watch?v=LeF0xnWIPYU" target="_blank"
-                                    class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                                    <span>Tonton di YouTube</span>
-                                    <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+            
                 </div>
             </div>
 
