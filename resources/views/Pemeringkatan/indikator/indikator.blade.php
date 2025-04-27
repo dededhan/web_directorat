@@ -304,7 +304,7 @@ html {
     
     <!-- Back Button -->
     <a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="back-button"> 
-    <i class="fas fa-arrow-left"></i> Kembali
+    <i class="fas fa-arrow-left"></i> Back to Rankings
     </a>
     <!-- Main Title Section -->
     <div class="page-title">
