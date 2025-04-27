@@ -339,52 +339,80 @@
         </div>
     </main>
     <!-- Program dan Layanan Section with Popup -->
-    <section class="program-section">
-        <div class="container">
+    <section class="program-section py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
             <!-- Section Header -->
-            <div class="unj-content-section-header">
-                <h2 class="unj-section-title">Program & Layanan</h2>
-                <p class="unj-section-subtitle">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-teal-700 mb-2">Program & Layanan</h2>
+                <div class="flex items-center justify-center mb-4">
+                    <div class="h-1 w-16 bg-gray-300"></div>
+                    <span class="text-yellow-400 text-2xl mx-3"><i class="fas fa-cogs"></i></span>
+                    <div class="h-1 w-16 bg-gray-300"></div>
+                </div>
+                <p class="text-gray-600 max-w-2xl mx-auto">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan
                     Pemeringkatan</p>
             </div>
 
             <!-- Program Cards Grid -->
-            <div class="program-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 @forelse($programLayanan as $program)
-                    <div class="program-card" data-program-id="{{ $program->id }}">
-                        <div class="card-content">
-                            <div class="icon-container">
-                                <i class="{{ $program->icon }}"></i>
+                    <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2" data-program-id="{{ $program->id }}">
+                        <div class="relative">
+                            @if($program->image)
+                                <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}" class="w-full h-48 object-cover">
+                            @else
+                                <div class="w-full h-48 bg-teal-600 flex items-center justify-center">
+                                    <i class="{{ $program->icon ?? 'fas fa-cogs' }} text-5xl text-white"></i>
+                                </div>
+                            @endif
+                            <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent h-16 opacity-70"></div>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-teal-800 text-xl mb-3">{{ $program->judul }}</h3>
+                            <div class="text-gray-600 mb-4 program-excerpt" style="min-height: 80px;">
+                                {!! Str::limit(strip_tags($program->deskripsi), 100) !!}
                             </div>
-                            <h3 class="card-title">{{ $program->judul }}</h3>
-                            <div class="card-description">
-                                {!! $program->deskripsi !!}
-                            </div>
-                            <a href="#" class="card-link program-details-btn"
-                                data-program-id="{{ $program->id }}" data-title="{{ $program->judul }}"
+                                            <a href="#" class="program-details-btn inline-flex items-center text-teal-700 hover:text-yellow-500 font-medium"
+                                data-program-id="{{ $program->id }}" 
+                                data-title="{{ $program->judul }}"
                                 data-description="{{ strip_tags($program->deskripsi) }}"
                                 data-full-description="{!! htmlspecialchars($program->deskripsi_lengkap ?? $program->deskripsi) !!}">
-                                Selengkapnya
-                                <i class="fas fa-arrow-right"></i>
+                                Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
+                            
+                            <div class="mt-4 pt-3 border-t border-gray-100">
+                                <button type="button" class="login w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg hover:from-teal-500 hover:to-teal-400 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50 relative overflow-hidden group" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                    <span class="relative z-10 flex items-center justify-center">
+                                        Akses Program
+                                    </span>
+                                    <div class="absolute inset-0 w-3 bg-white bg-opacity-30 skew-x-[-20deg] group-hover:animate-shine hidden md:block"></div>
+                                </button>
+                            </div>
+
+                            <style>
+                            @keyframes shine {
+                                from {transform: translateX(-100%) skew-x-[-20deg];}
+                                to {transform: translateX(300%) skew-x-[-20deg];}
+                            }
+                            .animate-shine {
+                                animation: shine 1.5s ease;
+                            }
+                            </style>
                         </div>
                     </div>
                 @empty
                     <!-- Fallback content if no programs are found -->
-                    <div class="program-card">
-                        <div class="card-content">
-                            <div class="icon-container">
-                                <i class="fas fa-graduation-cap"></i>
+                    <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg col-span-full">
+                        <div class="relative">
+                            <div class="w-full h-48 bg-teal-600 flex items-center justify-center">
+                                <i class="fas fa-exclamation-circle text-5xl text-white"></i>
                             </div>
-                            <h3 class="card-title">Beasiswa</h3>
-                            <p class="card-description">
-                                Program beasiswa untuk mahasiswa berprestasi dan kurang mampu, membantu meringankan
-                                biaya pendidikan.
+                        </div>
+                        <div class="p-5 text-center">
+                            <h3 class="font-bold text-teal-800 text-xl mb-3">Belum Ada Program</h3>
+                            <p class="text-gray-600 mb-4">
+                                Maaf, saat ini belum ada program layanan yang tersedia. Silakan kunjungi lagi nanti.
                             </p>
-                            <a href="#" class="card-link">
-                                Selengkapnya
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
                         </div>
                     </div>
                 @endforelse
@@ -527,11 +555,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Featured YouTube Videos - Hardcoded -->
            
-                </div>
-            </div>
-
             <!-- View More Button -->
             <div class="text-center mt-8">
                 <a href="https://www.youtube.com/channel/UCjQ4lIzs8Zm3zVD3wiL-KMw" target="_blank"
@@ -546,187 +570,344 @@
 
     <!-- Program Details Popup Modal -->
     <div id="programDetailsModal"
-        class="fixed inset-0 bg-black bg-opacity-50 z-[1100] hidden items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
-            <!-- Close Button -->
-            <button id="closeModalBtn"
-                class="absolute top-4 right-4 text-gray-600 hover:text-teal-700 transition-colors">
-                <i class="fas fa-times text-2xl"></i>
-            </button>
+        class="fixed inset-0 bg-black bg-opacity-60 z-[1100] hidden items-center justify-center p-4 overflow-y-auto backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative">
+            <!-- Modal Header with Image -->
+            <div class="relative h-56">
+                <div id="modalImageContainer" class="w-full h-full bg-teal-600 flex items-center justify-center">
+                    <!-- Image will be added here dynamically -->
+                    <i id="modalFallbackIcon" class="fas fa-cogs text-6xl text-white"></i>
+                </div>
+                <div class="absolute top-0 right-0 m-4">
+                    <button id="closeModalBtn"
+                        class="bg-white rounded-full p-2 shadow-md hover:bg-teal-50 transition-colors">
+                        <i class="fas fa-times text-teal-700 text-xl"></i>
+                    </button>
+                </div>
+                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent h-32"></div>
+                <div class="absolute bottom-0 left-0 w-full p-6">
+                    <h2 id="programModalTitle" class="text-3xl font-bold text-white mb-2 shadow-text"></h2>
+                </div>
+            </div>
 
             <!-- Modal Content -->
             <div class="p-8">
-                <div id="programModalIcon"
-                    class="icon-container mx-auto mb-6 w-20 h-20 flex items-center justify-center">
-                    <i class="text-4xl text-white"></i>
-                </div>
-                <h2 id="programModalTitle" class="text-3xl font-bold text-teal-800 mb-4 text-center"></h2>
-
-                <div id="programModalDescription" class="prose max-w-prose mx-auto text-gray-700">
+                <div id="programModalDescription" class="prose max-w-none text-gray-700">
                     <!-- Dynamic content will be inserted here -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer Section -->
-    @include('Pemeringkatan.footerpemeringkatan')
+    <style>
+        .shadow-text {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
 
-    <script src="{{ asset('js/instagram-api-feed.js') }}"></script>
-    <script src="{{ asset('home.js') }}"></script>
+        .program-excerpt {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
 
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Fetch YouTube videos from the API
-            fetch('/api/youtube-videos')
-                .then(response => response.json())
-                .then(videos => {
-                    const container = document.getElementById('dynamic-videos-container');
-    
-                    // Clear loading placeholders
-                    container.innerHTML = '';
-    
-                    if (videos.length === 0) {
-                        // Display a message if no videos are found
-                        container.innerHTML = `
-                            <div class="col-span-3 text-center py-8">
-                                <p class="text-gray-500">Belum ada video tersedia.</p>
-                            </div>
-                        `;
-                        return;
-                    }
-    
-                    // Generate HTML for each video
-                    videos.forEach(video => {
-                        // Extract YouTube video ID from the link
-                        let videoId = '';
-    
-                        // Handle different YouTube URL formats
-                        if (video.link.includes('youtu.be/')) {
-                            // Short URL format: https://youtu.be/VIDEO_ID
-                            videoId = video.link.split('youtu.be/')[1].split('?')[0];
-                        } else if (video.link.includes('watch?v=')) {
-                            // Standard URL format: https://www.youtube.com/watch?v=VIDEO_ID
-                            const urlParams = new URLSearchParams(video.link.split('?')[1]);
-                            videoId = urlParams.get('v');
-                        } else if (video.link.includes('/embed/')) {
-                            // Already in embed format
-                            videoId = video.link.split('/embed/')[1];
-                        } else {
-                            // Fallback
-                            videoId = video.link.replace('watch?v=', 'embed/').split('/').pop();
-                        }
-    
-                        const embedUrl = `https://www.youtube.com/embed/${videoId}?rel=0`;
-    
-                        // Create video card
-                        const videoCard = `
-                            <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-                                <div class="relative pb-[56.25%] h-0 overflow-hidden">
-                                    <iframe class="absolute top-0 left-0 w-full h-full" 
-                                        src="${embedUrl}" 
-                                        title="${video.judul}" 
-                                        frameborder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                        referrerpolicy="strict-origin-when-cross-origin" 
-                                        allowfullscreen>
-                                    </iframe>
-                                </div>
-                                <div class="p-6">
-                                    <div class="flex items-center mb-3">
-                                        <div class="flex items-center text-gray-500 text-sm">
-                                            <i class="fab fa-youtube mr-2"></i>
-                                            <span>UNJ Official</span>
-                                        </div>
-                                    </div>
-                                    <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">${video.judul}</h3>
-                                    <p class="text-gray-600 mb-4">${video.deskripsi.length > 100 ? video.deskripsi.substring(0, 100) + '...' : video.deskripsi}</p>
-                                    <div class="mt-4 pt-4 border-t border-gray-100">
-                                        <a href="${video.link}" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
-                                            <span>Tonton di YouTube</span>
-                                            <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-    
-                        // Add video card to container
-                        container.innerHTML += videoCard;
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching YouTube videos:', error);
-                    const container = document.getElementById('dynamic-videos-container');
-                    container.innerHTML = `
-                        <div class="col-span-3 text-center py-8">
-                            <p class="text-gray-500">Gagal memuat video. Silakan coba lagi nanti.</p>
-                        </div>
-                    `;
-                });
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('programDetailsModal');
-            const modalIcon = document.getElementById('programModalIcon').querySelector('i');
-            const modalTitle = document.getElementById('programModalTitle');
-            const modalDescription = document.getElementById('programModalDescription');
-            const closeModalBtn = document.getElementById('closeModalBtn');
-            const programDetailsBtns = document.querySelectorAll('.program-details-btn');
-    
-            // Function to open modal
-            function openProgramModal(btn) {
-                // Get data from button's data attributes
-                const programId = btn.getAttribute('data-program-id');
-                const title = btn.getAttribute('data-title');
-                const description = btn.getAttribute('data-description');
-                const fullDescription = btn.getAttribute('data-full-description');
-                const iconClass = btn.closest('.program-card').querySelector('.icon-container i').className;
-    
-                // Set modal content
-                modalIcon.className = `${iconClass} text-4xl text-white`;
-                modalTitle.textContent = title;
-                modalDescription.innerHTML = fullDescription || description;
-    
-                // Show modal
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            }
-    
-            // Add click event to all "Selengkapnya" buttons
-            programDetailsBtns.forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    openProgramModal(this);
-                });
-            });
-    
-            // Close modal when close button is clicked
-            closeModalBtn.addEventListener('click', function() {
-                modal.classList.remove('flex');
-                modal.classList.add('hidden');
-            });
-    
-            // Close modal when clicking outside of the modal content
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.classList.remove('flex');
-                    modal.classList.add('hidden');
-                }
-            });
-    
-            // Close modal with Escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-                    modal.classList.remove('flex');
-                    modal.classList.add('hidden');
-                }
-            });
-    
-        });
-    </script>
 </body>
 
-  
 
+<script src="{{ asset('js/instagram-api-feed.js') }}"></script>
+<script src="{{ asset('home.js') }}"></script>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fetch YouTube videos from the API
+        fetch('/api/youtube-videos')
+            .then(response => response.json())
+            .then(videos => {
+                const container = document.getElementById('dynamic-videos-container');
+
+                // Clear loading placeholders
+                container.innerHTML = '';
+
+                if (videos.length === 0) {
+                    // Display a message if no videos are found
+                    container.innerHTML = `
+                        <div class="col-span-3 text-center py-8">
+                            <p class="text-gray-500">Belum ada video tersedia.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Generate HTML for each video
+                videos.forEach(video => {
+                    // Extract YouTube video ID from the link
+                    let videoId = '';
+
+                    // Handle different YouTube URL formats
+                    if (video.link.includes('youtu.be/')) {
+                        // Short URL format: https://youtu.be/VIDEO_ID
+                        videoId = video.link.split('youtu.be/')[1].split('?')[0];
+                    } else if (video.link.includes('watch?v=')) {
+                        // Standard URL format: https://www.youtube.com/watch?v=VIDEO_ID
+                        const urlParams = new URLSearchParams(video.link.split('?')[1]);
+                        videoId = urlParams.get('v');
+                    } else if (video.link.includes('/embed/')) {
+                        // Already in embed format
+                        videoId = video.link.split('/embed/')[1];
+                    } else {
+                        // Fallback
+                        videoId = video.link.replace('watch?v=', 'embed/').split('/').pop();
+                    }
+
+                    const embedUrl = `https://www.youtube.com/embed/${videoId}?rel=0`;
+
+                    // Create video card
+                    const videoCard = `
+                        <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                            <div class="relative pb-[56.25%] h-0 overflow-hidden">
+                                <iframe class="absolute top-0 left-0 w-full h-full" 
+                                    src="${embedUrl}" 
+                                    title="${video.judul}" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                    referrerpolicy="strict-origin-when-cross-origin" 
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center mb-3">
+                                    <div class="flex items-center text-gray-500 text-sm">
+                                        <i class="fab fa-youtube mr-2"></i>
+                                        <span>UNJ Official</span>
+                                    </div>
+                                </div>
+                                <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors duration-300">${video.judul}</h3>
+                                <p class="text-gray-600 mb-4">${video.deskripsi.length > 100 ? video.deskripsi.substring(0, 100) + '...' : video.deskripsi}</p>
+                                <div class="mt-4 pt-4 border-t border-gray-100">
+                                    <a href="${video.link}" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors duration-300">
+                                        <span>Tonton di YouTube</span>
+                                        <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Add video card to container
+                    container.innerHTML += videoCard;
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching YouTube videos:', error);
+                const container = document.getElementById('dynamic-videos-container');
+                container.innerHTML = `
+                    <div class="col-span-3 text-center py-8">
+                        <p class="text-gray-500">Gagal memuat video. Silakan coba lagi nanti.</p>
+                    </div>
+                `;
+            });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('programDetailsModal');
+        const modalTitle = document.getElementById('programModalTitle');
+        const modalDescription = document.getElementById('programModalDescription');
+        const modalImageContainer = document.getElementById('modalImageContainer');
+        const modalFallbackIcon = document.getElementById('modalFallbackIcon');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const programDetailsBtns = document.querySelectorAll('.program-details-btn');
+
+        // Function to open modal
+        function openProgramModal(btn) {
+            // Get data from button's data attributes
+            const programId = btn.getAttribute('data-program-id');
+            const title = btn.getAttribute('data-title');
+            const fullDescription = btn.getAttribute('data-full-description');
+
+            // Get card for image reference
+            const card = btn.closest('.program-card');
+            const cardImage = card.querySelector('img');
+
+            // Set modal content
+            modalTitle.textContent = title;
+            modalDescription.innerHTML = fullDescription;
+
+            // Handle image
+            if (cardImage) {
+                modalImageContainer.innerHTML = ''; // Clear previous content
+                const modalImage = document.createElement('img');
+                modalImage.src = cardImage.src;
+                modalImage.alt = title;
+                modalImage.className = 'w-full h-full object-cover';
+                modalImageContainer.appendChild(modalImage);
+                modalFallbackIcon.style.display = 'none';
+            } else {
+                // If no image, show the fallback icon
+                modalFallbackIcon.style.display = 'block';
+                // Try to get the icon class from the card
+                const cardIcon = card.querySelector('.bg-teal-600 i');
+                if (cardIcon) {
+                    modalFallbackIcon.className = cardIcon.className;
+                } else {
+                    modalFallbackIcon.className = 'fas fa-cogs text-6xl text-white';
+                }
+            }
+
+            // Show modal
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // Add click event to all "Selengkapnya" buttons
+        programDetailsBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                openProgramModal(this);
+            });
+        });
+
+        // Close modal when close button is clicked
+        closeModalBtn.addEventListener('click', function() {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        });
+
+        // Close modal when clicking outside of the modal content
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const feedContainer = document.getElementById('instagram-api-feed-container');
+        if (!feedContainer) return;
+
+        // Function to handle image loading errors with fallback
+        function handleImageError(img, postTitle) {
+            // Try using a default UNJ image as fallback
+            img.src = 'https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png';
+            img.alt = `${postTitle} (Image unavailable)`;
+            // Add overlay to indicate original image couldn't be loaded
+            const parent = img.parentElement;
+            const overlay = document.createElement('div');
+            overlay.className = 'absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center';
+            overlay.innerHTML = '<p class="text-white text-center px-4">Original image unavailable</p>';
+            parent.appendChild(overlay);
+        }
+
+        // Function to create Instagram card with error handling
+        function createInstagramCard(post) {
+            const postDate = new Date(post.posted_at);
+            const formattedDate = postDate.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+
+            const card = document.createElement('div');
+            card.className =
+                'media-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group';
+
+            // Create HTML structure with error handling for image
+            card.innerHTML = `
+            <div class="relative">
+                <div class="relative pb-[56.25%] h-0 overflow-hidden">
+                    <img src="${post.media_url}" alt="${post.title}" 
+                         class="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                         onerror="this.onerror=null; handleImageError(this, '${post.title.replace(/'/g, "\\'")}');">
+                </div>
+                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent h-16 opacity-70"></div>
+            </div>
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center text-gray-500 text-sm">
+                        <i class="fab fa-instagram mr-2"></i>
+                        <span>@dit.isipunj</span>
+                    </div>
+                    <div class="text-gray-500 text-sm">
+                        <i class="fas fa-calendar-alt mr-1"></i>${formattedDate}
+                    </div>
+                </div>
+                <h3 class="font-bold text-teal-800 text-xl mb-2 group-hover:text-yellow-500 transition-colors">
+                    ${post.title || 'Instagram Post'}
+                </h3>
+                <p class="text-gray-600 mb-4 news-excerpt">
+                    ${post.caption ? (post.caption.length > 150 ? post.caption.substring(0, 150) + '...' : post.caption) : ''}
+                </p>
+                <a href="${post.permalink}" target="_blank" class="inline-flex items-center text-teal-600 hover:text-yellow-500 transition-colors">
+                    <span>View on Instagram</span>
+                    <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                </a>
+            </div>
+        `;
+
+            return card;
+        }
+
+        // Define handleImageError function in global scope
+        window.handleImageError = handleImageError;
+
+        // Fetch Instagram posts with error handling
+        fetch('/api/instagram-posts')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(posts => {
+                // Clear loading placeholders
+                feedContainer.innerHTML = '';
+
+                if (posts.length === 0) {
+                    feedContainer.innerHTML = `
+                    <div class="col-span-3 text-center py-8">
+                        <p class="text-gray-500">No Instagram posts available at this time.</p>
+                    </div>
+                `;
+                    return;
+                }
+
+                // Create and append cards for each post
+                posts.forEach(post => {
+                    if (post && post.media_url) {
+                        const card = createInstagramCard(post);
+                        feedContainer.appendChild(card);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching Instagram posts:', error);
+                feedContainer.innerHTML = `
+                <div class="col-span-3 text-center py-8">
+                    <p class="text-gray-500">Unable to load Instagram posts. Please try again later.</p>
+                </div>
+            `;
+            });
+    });
+</script>
+<script>
+    window.carouselImages = [
+        "{{ asset('images/logos/image_corousel.jpg') }}",
+        "/images/TERBUK TAMPAK DEPAN.png",
+        "/images/GEDUNG REKTORAT.png",
+        "/images/om.png",
+    ];
+</script>
+@include('layout.footer')
 </html>

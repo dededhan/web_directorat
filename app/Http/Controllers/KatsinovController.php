@@ -374,8 +374,17 @@ class KatsinovController extends Controller
             'registered_user' => 'subdirektorat-inovasi.registered_user.lampiran',
             default => null,
         };
+        
 
-        $deleteRoute = 'admin.Katsinov.document.delete'; // Add this line
+        $deleteRoute = match ($role) {
+            'admin_direktorat' => 'admin.Katsinov.document.delete',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.document.delete',
+            'dosen' => 'subdirektorat-inovasi.dosen.document.delete',
+            'validator' => 'subdirektorat-inovasi.validator.document.delete',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.document.delete',
+            default => null,
+        };
+        
         return view($view, [
             'id' => $katsinov->id,
             'lampiran' => $groupedLampiran,
