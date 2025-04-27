@@ -69,7 +69,7 @@
         }
         
         .hero-button {
-            background-color: #00a8cc;
+            background-color: #277177            ;
             color: white;
             border: none;
             padding: 8px 16px;
@@ -82,7 +82,7 @@
         }
         
         .hero-button:hover {
-            background-color: #0089a8; /* Darker shade for hover state */
+            background-color: #277177            ; /* Darker shade for hover state */
         }
         
         .ranking-section {
@@ -183,7 +183,7 @@
         
         .indikator-search input:focus {
             outline: none;
-            border-color: #00a8cc;
+            border-color: #277177;
             box-shadow: 0 0 0 2px rgba(0, 168, 204, 0.2);
         }
         
@@ -359,7 +359,6 @@
             <p>Shaping Global Excellence, Empowering Future Leaders</p>
             <div class="hero-buttons">
                 <button class="hero-button" onclick="document.querySelector('.ranking-section').scrollIntoView({behavior: 'smooth'})">Selengkapnya</button>
-                <a href="{{ route('Pemeringkatan.indikator.indikator') }}" class="hero-button">Indikator Pemeringkatan</a>
             </div>
         </div>
     </div>
@@ -383,7 +382,7 @@
     <!-- Replaced banner with a centered button -->
     <div style="text-align: center; padding: 20px 0; background-color: #f5f5f5;">
         <a href="{{ route('Pemeringkatan.indikator.indikator') }}" class="hero-button" style="font-size: 1rem; padding: 12px 25px;">Indikator Pemeringkatan</a>
-    </div>
+    </div> 
     
     <!-- Added padding/margin to prevent footer overlap -->
     <div class="footer-spacer" style="height: 50px;"></div>
