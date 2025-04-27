@@ -447,7 +447,19 @@ class KatsinovController extends Controller
         // which page role should I redirect into? ¯\_(ツ)_/¯
         // its not my job to decide which page is should be switched to
         // may the team able to solve such chaos
-        return redirect(route('admin.Katsinov.TableKatsinov'));
+
+        $role = Auth::user()->role;
+
+        $view = match ($role) {
+            'admin_direktorat' => 'admin.katsinov.TableKatsinov',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.tablekatsinov',
+            'dosen' => 'subdirektorat-inovasi.dosen.tablekatsinov',
+            'validator' => 'subdirektorat-inovasi.validator.tablekatsinov',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.tablekatsinov',
+            default => 'admin.katsinov.tablekatsinov',
+        };
+
+        return redirect(route($view));
     }
 
     public function lampiranShow($katsinov_id)
