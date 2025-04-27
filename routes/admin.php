@@ -355,6 +355,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::get('/katsinov/latest', [KatsinovController::class, 'latest']);
                 Route::get('/documents/{id}', [KatsinovController::class, 'viewDocument'])
                     ->name('document.view');
+                Route::delete('/document/{id}', [KatsinovController::class, 'destroyDocument'])->name('document.delete');
                 Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
                     ->name('signature.view');
                 
