@@ -354,33 +354,35 @@
             <!-- Program Cards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 @forelse($programLayanan as $program)
-                    <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-                        data-program-id="{{ $program->id }}">
+                    <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2" data-program-id="{{ $program->id }}">
                         <div class="relative">
-                            @if ($program->image)
-                                <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}"
-                                    class="w-full h-48 object-cover">
+                            @if($program->image)
+                                <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}" class="w-full h-48 object-cover">
                             @else
                                 <div class="w-full h-48 bg-teal-600 flex items-center justify-center">
                                     <i class="{{ $program->icon ?? 'fas fa-cogs' }} text-5xl text-white"></i>
                                 </div>
                             @endif
-                            <div
-                                class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent h-16 opacity-70">
-                            </div>
+                            <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent h-16 opacity-70"></div>
                         </div>
                         <div class="p-5">
                             <h3 class="font-bold text-teal-800 text-xl mb-3">{{ $program->judul }}</h3>
                             <div class="text-gray-600 mb-4 program-excerpt" style="min-height: 80px;">
                                 {!! Str::limit(strip_tags($program->deskripsi), 100) !!}
                             </div>
-                            <a href="#"
-                                class="program-details-btn inline-flex items-center text-teal-700 hover:text-yellow-500 font-medium mt-2"
-                                data-program-id="{{ $program->id }}" data-title="{{ $program->judul }}"
+                                            <a href="#" class="program-details-btn inline-flex items-center text-teal-700 hover:text-yellow-500 font-medium"
+                                data-program-id="{{ $program->id }}" 
+                                data-title="{{ $program->judul }}"
                                 data-description="{{ strip_tags($program->deskripsi) }}"
                                 data-full-description="{!! htmlspecialchars($program->deskripsi_lengkap ?? $program->deskripsi) !!}">
                                 Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
+                            
+                            <div class="mt-4 pt-3 border-t border-gray-100">
+                                <a href="#" class="login block text-center bg-teal-700 hover:bg-teal-600 text-white py-2 rounded-sm font-medium transition-colors duration-300" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                    Akses Program
+                                </a>
+                            </div>
                         </div>
                     </div>
                 @empty
