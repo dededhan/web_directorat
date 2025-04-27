@@ -78,6 +78,7 @@
             text-transform: uppercase;
             font-size: 0.8rem;
             transition: background-color 0.3s ease; /* Add smooth transition for button hover */
+            margin: 0 5px; /* Add margin for spacing between buttons */
         }
         
         .hero-button:hover {
@@ -213,6 +214,17 @@
             .indikator-search {
                 width: 100%;
             }
+
+            .hero-buttons {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-button {
+                margin: 5px 0;
+                width: 80%;
+            }
         }
         
         @media (max-width: 480px) {
@@ -313,6 +325,13 @@
             font-weight: 600;
             margin: 0;
         }
+
+        /* Style for the button container */
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
         
         @media (max-width: 768px) {
             .info-section {
@@ -338,7 +357,10 @@
         <div class="hero-content">
             <h1>PUSAT PEMERINGKATAN<br>Universitas Negeri Jakarta</h1>
             <p>Shaping Global Excellence, Empowering Future Leaders</p>
-            <button class="hero-button" onclick="document.querySelector('.ranking-section').scrollIntoView({behavior: 'smooth'})">Selengkapnya</button> 
+            <div class="hero-buttons">
+                <button class="hero-button" onclick="document.querySelector('.ranking-section').scrollIntoView({behavior: 'smooth'})">Selengkapnya</button>
+                <a href="{{ route('Pemeringkatan.indikator.indikator') }}" class="hero-button">Indikator Pemeringkatan</a>
+            </div>
         </div>
     </div>
     
@@ -358,10 +380,13 @@
         </div>
     </div>
     
-    <div class="indikator-banner">
-    <h2>Indikator Pemeringkatan</h2>
-</div>
-
+    <!-- Replaced banner with a centered button -->
+    <div style="text-align: center; padding: 20px 0; background-color: #f5f5f5;">
+        <a href="{{ route('Pemeringkatan.indikator.indikator') }}" class="hero-button" style="font-size: 1rem; padding: 12px 25px;">Indikator Pemeringkatan</a>
+    </div>
+    
+    <!-- Added padding/margin to prevent footer overlap -->
+    <div class="footer-spacer" style="height: 50px;"></div>
 
 </body>
 @include('layout.footer')

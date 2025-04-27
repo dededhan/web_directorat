@@ -282,9 +282,9 @@ Route::get('/ranking_unj/sinta', function () {
     return view('Pemeringkatan.ranking_unj.sinta.sinta');
 })->name('Pemeringkatan.ranking_unj.sinta.sinta');
 
-Route::get('/ranking_unj/indikator', function () {
-        return view('Pemeringkatan.ranking_unj.indikator');
-})->name('Pemeringkatan.ranking_unj.indikator');
+Route::get('/indikator', function () {
+    return view('Pemeringkatan.indikator.indikator');
+})->name('Pemeringkatan.indikator.indikator');
 
 Route::get('/Pemeringkatans', [BeritaController::class, 'landingPagePemeringkatan'])->name('pemeringkatan.landingpage');
 Route::get('/Pemeringkatans/Ranking-Universitas/klaster-perguruan-tinggi', function () {
