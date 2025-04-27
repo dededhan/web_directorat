@@ -31,10 +31,10 @@
         <div class="menu-section">
             <h3 class="section-title">Inovasi</h3>
             <ul class="side-menu">
-                <li class="{{ request()->routeIs('subdirektorat-inovasi.validator.tablekasitnov') ? 'active' : '' }}">
-                    <a href="{{ route('subdirektorat-inovasi.validator.tablekasitnov') }}">
+                <li class="{{ request()->routeIs('subdirektorat-inovasi.validator.tablekatsinov') ? 'active' : '' }}">
+                    <a href="{{ route('subdirektorat-inovasi.validator.tablekatsinov') }}">
                         <i class='bx bxs-graduation'></i>
-                        <span class="text">Tabel Kasitnov</span>
+                        <span class="text">Tabel Katsinov</span>
                     </a>
                 </li>
                 <li class="{{ request()->routeIs('subdirektorat-inovasi.validator.form') ? 'active' : '' }}">

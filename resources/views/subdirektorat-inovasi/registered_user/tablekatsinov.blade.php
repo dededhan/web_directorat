@@ -98,9 +98,9 @@
                                         <button class="btn btn-sm btn-danger">Delete</button>
                                     </div>
                                     <div class="btn-group-vertical mt-2">
-                                        <a href="{{ route('admin.Katsinov.show', $katsinov->id) }}" class="btn btn-success btn-sm mb-1">
+                                        {{-- <a href="{{ route('admin.Katsinov.show', $katsinov->id) }}" class="btn btn-success btn-sm mb-1">
                                             <i class='bx bx-refresh'></i> Load Record
-                                        </a>
+                                        </a> --}}
                                         <button class="btn btn-info btn-sm mb-1" type="button" data-bs-toggle="collapse" 
                                                 data-bs-target="#subforms-{{ $katsinov->id }}" aria-expanded="false">
                                             <i class='bx bx-folder-open'></i> Manage Sub-Forms

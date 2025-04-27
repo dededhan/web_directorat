@@ -448,18 +448,20 @@ class KatsinovController extends Controller
         // its not my job to decide which page is should be switched to
         // may the team able to solve such chaos
 
+        //problem solved
+
         $role = Auth::user()->role;
 
-        $view = match ($role) {
-            'admin_direktorat' => 'admin.katsinov.TableKatsinov',
+        $route = match ($role) {
+            'admin_direktorat' => 'admin.Katsinov.TableKatsinov',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.tablekatsinov',
             'dosen' => 'subdirektorat-inovasi.dosen.tablekatsinov',
             'validator' => 'subdirektorat-inovasi.validator.tablekatsinov',
             'registered_user' => 'subdirektorat-inovasi.registered_user.tablekatsinov',
-            default => 'admin.katsinov.tablekatsinov',
+            default => 'admin.Katsinov.TableKatsinov',
         };
-
-        return redirect(route($view));
+    
+        return redirect()->route($route)->with('success', 'Data informasi berhasil disimpan');
     }
 
     public function lampiranShow($katsinov_id)
@@ -470,7 +472,18 @@ class KatsinovController extends Controller
         // Kelompokkan lampiran berdasarkan type (aspek)
         $groupedLampiran = $lampiran->groupBy('type');
 
-        return view('admin.katsinov.lampiran_show', [
+        $role = Auth::user()->role;
+
+        $view = match ($role) {
+            'admin_direktorat' => 'admin.katsinov.lampiran_show',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.lampiran_show',
+            'dosen' => 'subdirektorat-inovasi.dosen.lampiran_show',
+            'validator' => 'subdirektorat-inovasi.validator.lampiran_show',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.lampiran_show',
+            default => 'admin.katsinov.lampiran_show',
+        };
+
+        return view($view, [
             'id' => $katsinov_id,
             'lampiran' => $groupedLampiran
         ]);
