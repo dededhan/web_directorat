@@ -21,7 +21,7 @@ class StoreUserRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
-            'role' => 'required|in:admin_direktorat,kepala_direktorat,admin_pemeringkatan,fakultas,prodi,admin_hilirisasi,kepala_sub_direktorat,wr3,dosen,mahasiswa',
+            'role' => 'required|in:admin_direktorat,kepala_direktorat,admin_pemeringkatan,fakultas,prodi,admin_hilirisasi,kepala_sub_direktorat,wr3,dosen,mahasiswa,validator',
         ];
     }
 }
