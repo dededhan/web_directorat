@@ -1,37 +1,37 @@
-/* Main Styles */
-body {
+/* Lampiran-specific styles with more specific selectors */
+.upload-lampiran-container body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.container {
+.upload-lampiran-container .container {
     max-width: 1200px;
 }
 
 /* Custom Accordion Styles */
-.custom-accordion .accordion-button {
+.upload-lampiran-container .custom-accordion .accordion-button {
     font-weight: 600;
     background-color: #f8f9fa;
     box-shadow: none;
     padding: 15px 20px;
 }
 
-.custom-accordion .accordion-button:not(.collapsed) {
+.upload-lampiran-container .custom-accordion .accordion-button:not(.collapsed) {
     color: #0d6efd;
     background-color: #e7f1ff;
 }
 
-.custom-accordion .accordion-button:focus {
+.upload-lampiran-container .custom-accordion .accordion-button:focus {
     box-shadow: none;
     border-color: rgba(13, 110, 253, 0.25);
 }
 
-.custom-accordion .accordion-body {
+.upload-lampiran-container .custom-accordion .accordion-body {
     padding: 20px;
     background-color: #fff;
 }
 
 /* Section Titles */
-.section-title {
+.upload-lampiran-container .section-title {
     font-weight: 600;
     margin-bottom: 15px;
     color: #495057;
@@ -39,47 +39,47 @@ body {
     padding-bottom: 8px;
 }
 
-/* Form Controls */
-.form-control {
+/* Lampiran Form Controls */
+.upload-lampiran-container .form-control {
     padding: 10px 12px;
     border-radius: 6px;
 }
 
-.form-control:focus {
+.upload-lampiran-container .form-control:focus {
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
-.form-label {
+.upload-lampiran-container .form-label {
     font-weight: 500;
     margin-bottom: 6px;
     color: #212529;
 }
 
 /* Upload Progress Bar */
-.upload-progress-container {
+.upload-lampiran-container .upload-progress-container {
     margin-top: 8px;
     display: none;
 }
 
-.progress {
+.upload-lampiran-container .progress {
     height: 6px;
     border-radius: 3px;
 }
 
-/* Buttons */
-.btn-primary {
+/* Lampiran Buttons */
+.upload-lampiran-container .btn-primary {
     background-color: #0d6efd;
     border-color: #0d6efd;
     padding: 8px 20px;
     font-weight: 500;
 }
 
-.btn-primary:hover {
+.upload-lampiran-container .btn-primary:hover {
     background-color: #0b5ed7;
     border-color: #0a58ca;
 }
 
-.btn-light {
+.upload-lampiran-container .btn-light {
     background-color: #f8f9fa;
     border-color: #f8f9fa;
     color: #212529;
@@ -87,33 +87,65 @@ body {
     font-weight: 500;
 }
 
-.btn-light:hover {
+.upload-lampiran-container .btn-light:hover {
     background-color: #e2e6ea;
     border-color: #dae0e5;
 }
 
+/* Lampiran Cards */
+.upload-lampiran-container .card {
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+}
+
+.upload-lampiran-container .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(0,0,0,0.125);
+    padding: 0.75rem 1.25rem;
+}
+
+.upload-lampiran-container .card-header h4 {
+    margin-bottom: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #277177;
+}
+
+.upload-lampiran-container .card-body {
+    padding: 1.25rem;
+}
+
+.upload-lampiran-container .card-body h5 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: #495057;
+}
+
 /* Modal Customization */
-.modal-content {
+.lampiran-modal .modal-content {
     border-radius: 12px;
     border: none;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
-.modal-header, .modal-footer {
+.lampiran-modal .modal-header, 
+.lampiran-modal .modal-footer {
     border-radius: 0;
     padding: 15px 20px;
 }
 
-.modal-title {
+.lampiran-modal .modal-title {
     font-weight: 600;
 }
 
-.modal-body {
+.lampiran-modal .modal-body {
     padding: 0;
 }
 
 /* Alert Styles */
-#alertContainer {
+.upload-lampiran-container #alertContainer {
     position: fixed;
     top: 20px;
     right: 20px;
@@ -121,48 +153,81 @@ body {
     max-width: 350px;
 }
 
-.alert {
+.upload-lampiran-container .alert {
     margin-bottom: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     border-left: 4px solid;
 }
 
-.alert-success {
+.upload-lampiran-container .alert-success {
     border-left-color: #28a745;
 }
 
-.alert-danger {
+.upload-lampiran-container .alert-danger {
     border-left-color: #dc3545;
 }
 
-.alert-warning {
+.upload-lampiran-container .alert-warning {
     border-left-color: #ffc107;
 }
 
-.alert-info {
+.upload-lampiran-container .alert-info {
     border-left-color: #17a2b8;
+}
+
+/* Document Preview Link */
+.upload-lampiran-container .document-preview {
+    color: #277177;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.upload-lampiran-container .document-preview:hover {
+    text-decoration: underline;
+}
+
+/* Delete Button Styles */
+.upload-lampiran-container .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* Upload Button */
+.upload-lampiran-container .btn-upload {
+    background-color: #277177;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.upload-lampiran-container .btn-upload:hover {
+    background-color: #1c5458;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .modal-dialog {
+    .lampiran-modal .modal-dialog {
         margin: 0.5rem;
     }
     
-    .modal-content {
+    .lampiran-modal .modal-content {
         border-radius: 8px;
     }
     
-    .accordion-button {
+    .upload-lampiran-container .custom-accordion .accordion-button {
         padding: 12px 15px;
     }
     
-    .accordion-body {
+    .upload-lampiran-container .custom-accordion .accordion-body {
         padding: 15px;
     }
     
-    #alertContainer {
+    .upload-lampiran-container #alertContainer {
         left: 20px;
         right: 20px;
         max-width: none;
