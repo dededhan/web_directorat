@@ -534,8 +534,15 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 // Tabel Katsinov
                 Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekatsinov');
                 Route::get('/form', [KatsinovController::class, 'create'])->name('form');
+                Route::get('/show/{id}', [KatsinovController::class, 'show'])->name('show');
                 Route::post('/store', [KatsinovController::class, 'store'])->name('store');
                 Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
+                Route::get('/katsinov/latest', [KatsinovController::class, 'latest']);
+                Route::get('/documents/{id}', [KatsinovController::class, 'viewDocument'])
+                    ->name('document.view');
+                Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
+                    ->name('signature.view');
+                
 
                 Route::get('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiIndex'])->name('inovasi.index');
                 Route::post('/form-invoasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
@@ -545,6 +552,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
                 Route::get('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationIndex'])->name('informasi.index');
                 Route::post('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationStore'])->name('informasi.store');
+               
 
                 // Lampiran with katsinov_id parameter
                 Route::get('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranIndex'])->name('lampiran.index');

@@ -26,7 +26,7 @@
                 <h3>Form Informasi Dasar (Basic Information)</h3>
             </div>
 
-            <form action="{{ route('admin.Katsinov.informasi.store', $id) }}" method="POST">
+            <form action="{{ route('subdirektorat-inovasi.registered_user.informasi.store', $id) }}" method="POST">
                 @csrf
                 <!-- Section 1: Informasi Inovator -->
                 <div class="card mb-4">

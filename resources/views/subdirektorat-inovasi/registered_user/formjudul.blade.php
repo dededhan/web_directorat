@@ -299,7 +299,7 @@
                     </div>
                 </div>
 
-                <form id="innovation-form" action="{{route('admin.Katsinov.inovasi.store', $id)}}" method="POST">
+                <form id="innovation-form" action="{{route('subdirektorat-inovasi.registered_user.inovasi.store', $id)}}" method="POST">
                     @csrf
                     <!-- Informasi Inovasi -->
                     <div class="form-section" id="info-inovasi">

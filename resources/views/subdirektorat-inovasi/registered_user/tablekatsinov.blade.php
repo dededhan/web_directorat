@@ -1,9 +1,11 @@
-@extends('subdirektorat-inovasi.dosen.index')
+@extends('subdirektorat-inovasi.registered_user.index')
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet" href="{{ asset('inovasi/dashboard/table_katsinov/css/table_katsinov.css') }}">
 
-@section('contentdosen')
+@section('contentregistered_user')
     <div class="head-title">
         <div class="left">
             <h1>KATSINOV Data</h1>
@@ -113,19 +115,19 @@
                                         <div class="card card-body subform-container">
                                             <h5 class="subform-title">Sub-Forms for "{{ $katsinov->title }}"</h5>
                                             <div class="subform-buttons">
-                                                <a href="{{ route('subdirektorat-inovasi.dosen.inovasi.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('subdirektorat-inovasi.registered_user.inovasi.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-file'></i> Form Judul
                                                 </a>
-                                                <a href="{{ route('subdirektorat-inovasi.dosen.informasi.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('subdirektorat-inovasi.registered_user.informasi.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-info-circle'></i> Form Informasi Dasar
                                                 </a>
-                                                <a href="{{ route('subdirektorat-inovasi.dosen.berita.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('subdirektorat-inovasi.registered_user.berita.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-news'></i> Form Berita Acara
                                                 </a>
-                                                <a href="{{ route('subdirektorat-inovasi.dosen.record.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('subdirektorat-inovasi.registered_user.record.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-bar-chart-alt-2'></i> Form Record Hasil
                                                 </a>
-                                                <a href="{{ route('subdirektorat-inovasi.dosen.lampiran.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('subdirektorat-inovasi.registered_user.lampiran.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-paperclip'></i> Lampiran
                                                 </a>
                                             </div>

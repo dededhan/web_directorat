@@ -24,7 +24,7 @@ class KatsinovController extends Controller
     {
         $role = Auth::user()->role;
         $katsinovs = Katsinov::with('scores')->latest()->paginate(100);
-        if (in_array($role, ['dosen', 'mahasiswa',])) {
+        if (in_array($role, ['dosen', 'mahasiswa','registered_user'])) {
             $katsinovs = auth()->user()->katsinovs()->paginate();
         }
 
@@ -881,6 +881,7 @@ class KatsinovController extends Controller
             };
 
             return redirect(route($view))->with('success', $message);
+
         } catch (\Exception $e) {
             \Log::error('Error storing berita: ' . $e->getMessage());
             \Log::error($e->getTraceAsString());

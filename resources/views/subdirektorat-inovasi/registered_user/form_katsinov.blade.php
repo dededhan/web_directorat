@@ -399,7 +399,7 @@
                             <div class="indicator-card" data-indicator="1">
                                 <h4 class="indicator-header"></h4>
                                 <div class="mt-3">
-                                    @include('subdirektorat-inovasi.dosen.indikator1')
+                                    @include('subdirektorat-inovasi.registered_user.indikator1')
                                 </div>
                             </div>
 
@@ -407,7 +407,7 @@
                             <div class="indicator-card" data-indicator="2">
                                 <h4 class="indicator-header"></h4>
                                 <div class="mt-3">
-                                    @include('subdirektorat-inovasi.dosen.indikator2')
+                                    @include('subdirektorat-inovasi.registered_user.indikator2')
                                 </div>
                             </div>
 
@@ -415,7 +415,7 @@
                             <div class="indicator-card" data-indicator="3">
                                 <h4 class="indicator-header"></h4>
                                 <div class="mt-3">
-                                    @include('subdirektorat-inovasi.dosen.indikator3')
+                                    @include('subdirektorat-inovasi.registered_user.indikator3')
                                 </div>
                             </div>
 
@@ -423,7 +423,7 @@
                             <div class="indicator-card" data-indicator="4">
                                 <h4 class="indicator-header"></h4>
                                 <div class="mt-3">
-                                    @include('subdirektorat-inovasi.dosen.indikator4')
+                                    @include('subdirektorat-inovasi.registered_user.indikator4')
                                 </div>
                             </div>
 
@@ -431,7 +431,7 @@
                             <div class="indicator-card" data-indicator="5">
                                 <h4 class="indicator-header"></h4>
                                 <div class="mt-3">
-                                    @include('subdirektorat-inovasi.dosen.indikator5')
+                                    @include('subdirektorat-inovasi.registered_user.indikator5')
                                 </div>
                             </div>
 
@@ -439,7 +439,7 @@
                             <div class="indicator-card" data-indicator="6">
                                 <h4 class="indicator-header"></h4>
                                 <div class="mt-3">
-                                    @include('subdirektorat-inovasi.dosen.indikator6')
+                                    @include('subdirektorat-inovasi.registered_user.indikator6')
                                 </div>
                             </div>
                         </div>
