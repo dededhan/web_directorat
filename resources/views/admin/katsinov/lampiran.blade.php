@@ -49,7 +49,7 @@
                                                 Lihat Dokumen
                                             </a>
                                             <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                    onclick="confirmDelete('{{ $lampiran['aspek_teknologi']['proposal']->id }}')">
+                                                    onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_teknologi']['proposal']->id )}}')">
                                                 Hapus
                                             </button>
                                         </div>
@@ -72,7 +72,7 @@
                                                 Lihat Dokumen
                                             </a>
                                             <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                    onclick="confirmDelete('{{ $lampiran['aspek_teknologi']['jadwal']->id }}')">
+                                                    onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_teknologi']['jadwal']->id )}}')">
                                                 Hapus
                                             </button>
                                         </div>
@@ -114,7 +114,7 @@
                                                     Lihat Dokumen
                                                 </a>
                                                 <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                        onclick="confirmDelete('{{ $lampiran['aspek_teknologi'][$key]->id }}')">
+                                                        onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_teknologi'][$key]->id )}}')">
                                                     Hapus
                                                 </button>
                                             </div>
@@ -145,7 +145,8 @@
                                                 Lihat Dokumen
                                             </a>
                                             <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                    onclick="confirmDelete('{{ $lampiran['aspek_teknologi']['dokumen_ilmiah']->id }}')">
+                                                    onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_teknologi']['dokumen_ilmiah']->id )}}')"
+                                                    >
                                                 Hapus
                                             </button>
                                         </div>
@@ -168,7 +169,7 @@
                                                 Lihat Dokumen
                                             </a>
                                             <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                    onclick="confirmDelete('{{ $lampiran['aspek_teknologi']['dokumen_haki']->id }}')">
+                                                    onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_teknologi']['dokumen_haki']->id )}}')">
                                                 Hapus
                                             </button>
                                         </div>
@@ -212,7 +213,7 @@
                                                 Lihat Dokumen
                                             </a>
                                             <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                    onclick="confirmDelete('{{ $lampiran['aspek_pasar'][$key]->id }}')">
+                                                    onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_pasar'][$key]->id )}}')">
                                                 Hapus
                                             </button>
                                         </div>
@@ -253,7 +254,7 @@
                                             Lihat Dokumen
                                         </a>
                                         <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                onclick="confirmDelete('{{ $lampiran['aspek_organisasi'][$key]->id }}')">
+                                                onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_organisasi'][$key]->id )}}')">
                                             Hapus
                                         </button>
                                     </div>
@@ -293,7 +294,7 @@
                                             Lihat Dokumen
                                         </a>
                                         <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                onclick="confirmDelete('{{ $lampiran['aspek_mitra'][$key]->id }}')">
+                                                onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_mitra'][$key]->id )}}')">
                                             Hapus
                                         </button>
                                     </div>
@@ -333,7 +334,7 @@
                                             Lihat Dokumen
                                         </a>
                                         <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                onclick="confirmDelete('{{ $lampiran['aspek_risiko'][$key]->id }}')">
+                                                onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_risiko'][$key]->id )}}')">
                                             Hapus
                                         </button>
                                     </div>
@@ -375,7 +376,7 @@
                                             Lihat Dokumen
                                         </a>
                                         <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                onclick="confirmDelete('{{ $lampiran['aspek_manufaktur'][$key]->id }}')">
+                                                onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_manufaktur'][$key]->id )}}')">
                                             Hapus
                                         </button>
                                     </div>
@@ -417,7 +418,7 @@
                                             Lihat Dokumen
                                         </a>
                                         <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                onclick="confirmDelete('{{ $lampiran['aspek_investasi'][$key]->id }}')">
+                                                onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_investasi'][$key]->id )}}')">
                                             Hapus
                                         </button>
                                     </div>
@@ -445,4 +446,26 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    function confirmDelete(url) {
+        if (confirm('Apakah Anda yakin ingin menghapus dokumen ini?')) {
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert('Gagal menghapus dokumen');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    }
+</script>
 @endsection

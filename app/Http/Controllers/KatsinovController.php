@@ -365,18 +365,21 @@ class KatsinovController extends Controller
 
         $role = Auth::user()->role;
 
+
         $view = match ($role) {
             'admin_direktorat' => 'admin.Katsinov.lampiran',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.lampiran',
             'dosen' => 'subdirektorat-inovasi.dosen.lampiran',
             'validator' => 'subdirektorat-inovasi.validator.lampiran',
             'registered_user' => 'subdirektorat-inovasi.registered_user.lampiran',
-            default => 'admin.Katsinov.lampiran',
+            default => null,
         };
 
+        $deleteRoute = 'admin.Katsinov.document.delete'; // Add this line
         return view($view, [
             'id' => $katsinov->id,
-            'lampiran' => $groupedLampiran
+            'lampiran' => $groupedLampiran,
+            'deleteRoute' => $deleteRoute,
         ]);
     }
 
@@ -482,28 +485,51 @@ class KatsinovController extends Controller
             'registered_user' => 'subdirektorat-inovasi.registered_user.lampiran_show',
             default => 'admin.Katsinov.lampiran_show',
         };
+        
+        $deleteRoute = 'admin.Katsinov.document.delete';
 
         return view($view, [
             'id' => $katsinov_id,
-            'lampiran' => $groupedLampiran
+            'lampiran' => $groupedLampiran,
+            'deleteRoute' => $deleteRoute,
         ]);
     }
-
+   
     public function viewDocument($id)
     {
         $lampiran = KatsinovLampiran::findOrFail($id);
         $path = storage_path('app/public/' . $lampiran->path);
-
+        
         if (!file_exists($path)) {
             abort(404);
         }
-
+        
         return response()->file($path, [
             'Content-Type' => mime_content_type($path),
             'Content-Disposition' => 'inline; filename="' . basename($path) . '"'
         ]);
     }
-
+    
+    public function destroyDocument($id)
+    {
+        try {
+            $lampiran = KatsinovLampiran::findOrFail($id);
+            // Delete file from storage
+            if (Storage::disk('public')->exists($lampiran->path)) {
+                Storage::disk('public')->delete($lampiran->path);
+            }
+            // Delete record
+            $lampiran->delete();
+    
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    
     public function inovasiIndex($katsinov_id = null)
     {
         $katsinov = Katsinov::find($katsinov_id);
