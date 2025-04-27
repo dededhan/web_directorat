@@ -10,6 +10,14 @@
     [x-cloak] { display: none !important; }
 </style>
 
+@if (!in_array(Auth::user()->role, ['admin_direktorat', 'validator']))
+<style>
+    .rating-columns {
+        display: none !important;
+    }
+</style>
+@endif
+
 <!-- Scripts -->
 <script src="{{ asset('aspect-legend.js') }}"></script>
 <script src="{{ asset('aspect-analysis-integrated.js') }}"></script>
