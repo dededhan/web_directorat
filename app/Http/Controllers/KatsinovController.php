@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Katsinov;
 use App\Models\KatsinovBerita;
 use App\Models\KatsinovInformasi;
@@ -23,10 +24,12 @@ class KatsinovController extends Controller
     public function index()
     {
         $role = Auth::user()->role;
-        $katsinovs = Katsinov::with('scores')->latest()->paginate(100);
+        $katsinovs = Katsinov::with('scores', 'user')->latest()->paginate(100);
+        $users = User::whereIn('role', ['validator'])->get(); 
         if (in_array($role, ['dosen', 'mahasiswa','registered_user'])) {
             $katsinovs = auth()->user()->katsinovs()->paginate();
         }
+
 
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov.TableKatsinov',
@@ -37,7 +40,9 @@ class KatsinovController extends Controller
         };
 
         return view($view, [
-            'katsinovs' => $katsinovs
+            'katsinovs' => $katsinovs,
+            'users' => $users // Pass users ke view
+
         ]);
     }
 
@@ -231,6 +236,18 @@ class KatsinovController extends Controller
         return view('admin.katsinov.form_katsinov', $data);
     }
 
+    public function updateUser(Request $request)
+    {
+        $request->validate([
+            'katsinov_id' => 'required|exists:katsinovs,id',
+            'user_id' => 'nullable|exists:users,id'
+        ]);
+
+        $katsinov = Katsinov::findOrFail($request->katsinov_id);
+        $katsinov->update(['user_id' => $request->user_id]);
+
+        return response()->json(['success' => true]);
+    }
     public function downloadPDF()
     {
         $katsinovs = auth()->user()->katsinovs()->with('scores')->get();

@@ -207,7 +207,18 @@
                                         </button>
                                     </div>
                                 </td>
-                                
+                                <td>
+                                    <select class="form-select user-dropdown" data-katsinov-id="{{ $katsinov->id }}">
+                                        <option value="">Pilih User</option>
+                                        @foreach ($users->sortBy('name') as $user)
+                                            <option value="{{ $user->id }}" 
+                                                {{ $katsinov->user_id == $user->id ? 'selected' : '' }}
+                                                data-role="{{ $user->role }}">
+                                                {{ $user->name }} ({{ $user->role }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </td>
                             </tr>
                             <!-- Collapsible Sub-forms Section -->
                             <tr class="subforms-row">
@@ -414,5 +425,49 @@
             }
         }
     </script>
-  
+  <script>
+document.querySelectorAll('.user-dropdown').forEach(select => {
+    select.addEventListener('change', function() {
+        const katsinovId = this.dataset.katsinovId;
+        const userId = this.value;
+
+        fetch("{{ route('admin.Katsinov.update-user') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                katsinov_id: katsinovId,
+                user_id: userId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Toastify({
+                    text: "User berhasil diperbarui!",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#4CAF50",
+                }).showToast();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Toastify({
+                text: "Gagal memperbarui user!",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "#ff0000",
+            }).showToast();
+        });
+    });
+});
+</script>
 @endsection

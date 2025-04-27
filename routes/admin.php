@@ -166,6 +166,7 @@ Route::prefix('admin')->name('admin.')
         Route::prefix('Katsinov')->name('Katsinov.')
             ->group(function () {
                 Route::get('/TableKatsinov', [KatsinovController::class, 'index'])->name('TableKatsinov');
+                Route::post('/update-user', [KatsinovController::class, 'updateUser'])->name('update-user');
                 Route::get('/form', [KatsinovController::class, 'create'])->name('form');
                 Route::get('/show/{id}', [KatsinovController::class, 'show'])->name('show');
                 Route::post('/store', [KatsinovController::class, 'store'])->name('store');
