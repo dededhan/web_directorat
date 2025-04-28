@@ -427,7 +427,10 @@
     </script>
   <script>
 document.querySelectorAll('.user-dropdown').forEach(select => {
-    select.addEventListener('change', function() {
+    select.addEventListener('change', function(event) {
+        // Prevent the row from expanding/collapsing
+        event.stopPropagation();
+
         const katsinovId = this.dataset.katsinovId;
         const userId = this.value;
 
@@ -467,6 +470,11 @@ document.querySelectorAll('.user-dropdown').forEach(select => {
                 backgroundColor: "#ff0000",
             }).showToast();
         });
+    });
+
+    // Prevent dropdown click from triggering row details
+    select.addEventListener('click', function(event) {
+        event.stopPropagation();
     });
 });
 </script>
