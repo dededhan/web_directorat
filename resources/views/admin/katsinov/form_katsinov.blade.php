@@ -85,9 +85,9 @@
                         <h4>Informasi Dasar</h4>
                     </div>
                     <div class="card-body">
-                        <div class="mb-3 text-center">
+                        <!-- <div class="mb-3 text-center">
                             <span class="badge bg-secondary">No: 20190802-001</span>
-                        </div>
+                        </div> -->
 
                         <div class="row mb-3">
                             <label class="col-md-3 form-label">Nama/Judul</label>
