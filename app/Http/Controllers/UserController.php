@@ -100,113 +100,114 @@ class UserController extends Controller
     }
 
     public function update(Request $request, User $user)
-{
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email,'.$user->id,
-        'password' => 'nullable|string|min:8',
-        'role' => 'required|string'
-    ]);
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,'.$user->id,
+            'password' => 'nullable|string|min:8',
+            'role' => 'required|string'
+        ]);
 
-    $updateData = [
-        'name' => $validated['name'],
-        'email' => $validated['email'],
-        'role' => $validated['role']
-    ];
+        $updateData = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'role' => $validated['role']
+        ];
 
-    if (!empty($validated['password'])) {
-        $updateData['password'] = bcrypt($validated['password']);
-    }
-
-    // Mulai transaction
-    \DB::beginTransaction();
-    try {
-        // Update user
-        $user->update($updateData);
-
-        // Update role-specific data if exists
-        switch ($user->role) {
-            case 'dosen':
-                if ($user->dosen) {
-                    $user->dosen->update([
-                        'name' => $validated['name'],
-                        'email' => $validated['email'],
-                    ]);
-                }
-                break;
-            case 'mahasiswa':
-                if ($user->mahasiswa) {
-                    $user->mahasiswa->update([
-                        'name' => $validated['name'],
-                        'email' => $validated['email'],
-                    ]);
-                }
-                break;
-            case 'fakultas':
-                if ($user->fakultas) {
-                    $user->fakultas->update([
-                        'name' => $validated['name'],
-                        'email' => $validated['email'],
-                    ]);
-                }
-                break;
-            case 'prodi':
-                if ($user->prodi) {
-                    $user->prodi->update([
-                        'name' => $validated['name'],
-                        'email' => $validated['email'],
-                    ]);
-                }
-                break;
+        if (!empty($validated['password'])) {
+            $updateData['password'] = bcrypt($validated['password']);
         }
 
-        \DB::commit();
-        return redirect()->route('admin.manageuser.index')->with('success', 'User berhasil diperbarui');
-    } catch (\Exception $e) {
-        \DB::rollBack();
-        Log::error('Failed to update user', ['error' => $e->getMessage()]);
-        return redirect()->back()->with('error', 'Gagal memperbarui user: ' . $e->getMessage());
-    }
-}
+        // Mulai transaction
+        \DB::beginTransaction();
+        try {
+            // Update user
+            $user->update($updateData);
 
-public function destroy(User $user)
-{
-    \DB::beginTransaction();
-    try {
-        // Hapus relasi terlebih dahulu
-        switch ($user->role) {
-            case 'dosen':
-                if ($user->dosen) {
-                    $user->dosen->delete();
-                }
-                break;
-            case 'mahasiswa':
-                if ($user->mahasiswa) {
-                    $user->mahasiswa->delete();
-                }
-                break;
-            case 'fakultas':
-                if ($user->fakultas) {
-                    $user->fakultas->delete();
-                }
-                break;
-            case 'prodi':
-                if ($user->prodi) {
-                    $user->prodi->delete();
-                }
-                break;
+            // Update role-specific data if exists
+            switch ($user->role) {
+                case 'dosen':
+                    if ($user->dosen) {
+                        $user->dosen->update([
+                            'name' => $validated['name'],
+                            'email' => $validated['email'],
+                        ]);
+                    }
+                    break;
+                case 'mahasiswa':
+                    if ($user->mahasiswa) {
+                        $user->mahasiswa->update([
+                            'name' => $validated['name'],
+                            'email' => $validated['email'],
+                        ]);
+                    }
+                    break;
+                case 'fakultas':
+                    if ($user->fakultas) {
+                        $user->fakultas->update([
+                            'name' => $validated['name'],
+                            'email' => $validated['email'],
+                        ]);
+                    }
+                    break;
+                case 'prodi':
+                    if ($user->prodi) {
+                        $user->prodi->update([
+                            'name' => $validated['name'],
+                            'email' => $validated['email'],
+                        ]);
+                    }
+                    break;
+            }
+
+            \DB::commit();
+            return redirect()->route('admin.manageuser.index')->with('success', 'User berhasil diperbarui');
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            Log::error('Failed to update user', ['error' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'Gagal memperbarui user: ' . $e->getMessage());
         }
-
-        // Hapus user
-        $user->delete();
-        
-        \DB::commit();
-        return redirect()->route('admin.manageuser.index')->with('success', 'User berhasil dihapus');
-
-    } catch (\Exception $e) {
-        \DB::rollBack();
-        Log::error('Failed to delete user', ['error' => $e->getMessage()]);
-        return redirect()->back()->with('error', 'Gagal menghapus user: ' . $e->getMessage());
     }
-}
+
+    public function destroy($id)
+    {
+        Log::debug('Received delete request for user ID: ' . $id);
+        $user = User::find($id);
+
+        if (!$user) {
+            Log::error('User tidak ditemukan', ['user_id' => $user->id]);
+            return redirect()->back()->with('error', 'User tidak ditemukan.');
+        }
+    
+        \DB::beginTransaction();
+        try {
+            Log::debug('Attempting to delete user with ID: ' . $user->id);
+            if (!$user || !$user->exists) {
+                Log::error('User not found', ['user_id' => request()->route('user')]);
+                return redirect()->back()->with('error', 'User tidak ditemukan.');
+            }
+            // Hapus relasi
+            if ($user->dosen) $user->dosen->delete();
+            if ($user->mahasiswa) $user->mahasiswa->delete();
+            if ($user->fakultas) $user->fakultas->delete();
+            if ($user->prodi) $user->prodi->delete();
+           
+            
+            // Hapus user
+            $user->delete();
+            
+            \DB::commit();
+    
+            Log::info('User deleted successfully', ['user_id' => $user->id]);
+            return redirect()->back()->with('success', 'User berhasil dihapus');
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            Log::error('Failed to delete user', [
+                'error' => $e->getMessage(), 
+                'user_id' => $user->id ?? 'null'
+            ]);
+            return redirect()->back()->with('error', 'Gagal menghapus: '.$e->getMessage());
+        }
+    }
+
 }

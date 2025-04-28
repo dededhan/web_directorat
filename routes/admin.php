@@ -109,6 +109,12 @@ Route::prefix('admin')->name('admin.')
 
 
         Route::resource('/manageuser', UserController::class);
+        Route::put('/manageuser/{user}', [UserController::class, 'update'])
+            ->name('manageuser.update');
+
+        Route::delete('/manageuser/{user}', [UserController::class, 'destroy'])
+            ->name('manageuser.destroy');
+            
         Route::put('/manageuser/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('manageuser.toggleStatus');
 
         Route::resource('/sustainability', AdminSustainabilityController::class);
