@@ -26,7 +26,7 @@
 
             <form id="innovationForm" action="{{ route('admin.Katsinov.record.store', $id) }}" method="POST">
                 @csrf
-                
+
                 <!-- Section 1: Informasi Penanggungjawab -->
                 <div class="card mb-4">
                     <div class="card-header">
@@ -36,63 +36,60 @@
                         <div class="row mb-3">
                             <label class="col-md-3 form-label">Nama Penanggungjawab</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" name="nama_penanggung_jawab" 
-                                    placeholder="Masukkan nama penanggungjawab" 
+                                <input type="text" class="form-control" name="nama_penanggung_jawab"
+                                    placeholder="Masukkan nama penanggungjawab"
                                     value="{{ $record->nama_penanggung_jawab ?? '' }}" required>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-md-3 form-label">Institusi</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" name="institusi" 
-                                    placeholder="Masukkan nama institusi" 
-                                    value="{{ $record->institusi ?? '' }}" required>
+                                <input type="text" class="form-control" name="institusi"
+                                    placeholder="Masukkan nama institusi" value="{{ $record->institusi ?? '' }}" required>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-md-3 form-label">Judul Inovasi</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" name="judul_inovasi" 
-                                    placeholder="Masukkan judul inovasi" 
-                                    value="{{ $record->judul_inovasi ?? '' }}" required>
+                                <input type="text" class="form-control" name="judul_inovasi"
+                                    placeholder="Masukkan judul inovasi" value="{{ $record->judul_inovasi ?? '' }}"
+                                    required>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-md-3 form-label">Jenis Inovasi</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" name="jenis_inovasi" 
-                                    placeholder="Masukkan jenis inovasi" 
-                                    value="{{ $record->jenis_inovasi ?? '' }}" required>
+                                <input type="text" class="form-control" name="jenis_inovasi"
+                                    placeholder="Masukkan jenis inovasi" value="{{ $record->jenis_inovasi ?? '' }}"
+                                    required>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-md-3 form-label">Alamat Kontak</label>
                             <div class="col-md-9">
-                                <textarea class="form-control" name="alamat_kontak" 
-                                    placeholder="Masukkan alamat kontak" required>{{ $record->alamat_kontak ?? '' }}</textarea>
+                                <textarea class="form-control" name="alamat_kontak" placeholder="Masukkan alamat kontak" required>{{ $record->alamat_kontak ?? '' }}</textarea>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-md-3 form-label">Phone</label>
                             <div class="col-md-9">
-                                <input type="tel" class="form-control" name="phone" 
-                                    placeholder="Masukkan nomor telepon" 
-                                    value="{{ $record->phone ?? '' }}" required>
+                                <input type="tel" class="form-control" name="phone"
+                                    placeholder="Masukkan nomor telepon" value="{{ $record->phone ?? '' }}" required>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-md-3 form-label">Fax</label>
                             <div class="col-md-9">
-                                <input type="tel" class="form-control" name="fax" 
-                                    placeholder="Masukkan nomor fax" 
+                                <input type="tel" class="form-control" name="fax" placeholder="Masukkan nomor fax"
                                     value="{{ $record->fax ?? '' }}" required>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-md-3 form-label">Tanggal Penilaian</label>
                             <div class="col-md-9">
-                                <input type="date" class="form-control" name="tanggal_penilaian" 
-                                value="{{ $record->tanggal_penilaian ? \Carbon\Carbon::parse($record->tanggal_penilaian)->format('Y-m-d') : '' }}" required>
+                                <input type="date" class="form-control" name="tanggal_penilaian"
+                                    value="{{ isset($record) && $record->tanggal_penilaian ? \Carbon\Carbon::parse($record->tanggal_penilaian)->format('Y-m-d') : '' }}"
+                                    required>
                             </div>
                         </div>
                     </div>
@@ -117,38 +114,41 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @for($i = 1; $i <= 5; $i++)
-                                    <tr>
-                                        <td>{{ $i }}</td>
-                                        <td>
-                                            <input type="text" class="form-control" name="aspek_{{ $i }}" 
-                                                value="{{ $record ? $record['aspek_'.$i] : '' }}" required>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" name="aktivitas_{{ $i }}" 
-                                                value="{{ $record ? $record['aktivitas_'.$i] : '' }}" required>
-                                        </td>
-                                        <td>
-                                            <input type="number" class="form-control" name="capaian_{{ $i }}" 
-                                                min="0" max="100" 
-                                                value="{{ $record ? $record['capaian_'.$i] : '' }}" required>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" name="keterangan_{{ $i }}" 
-                                                value="{{ $record ? $record['keterangan_'.$i] : '' }}" required>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" name="catatan_{{ $i }}" 
-                                                value="{{ $record ? $record['catatan_'.$i] : '' }}" required>
-                                        </td>
-                                    </tr>
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <tr>
+                                            <td>{{ $i }}</td>
+                                            <td>
+                                                <input type="text" class="form-control" name="aspek_{{ $i }}"
+                                                    value="{{ $record ? $record['aspek_' . $i] : '' }}" required>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    name="aktivitas_{{ $i }}"
+                                                    value="{{ $record ? $record['aktivitas_' . $i] : '' }}" required>
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control"
+                                                    name="capaian_{{ $i }}" min="0" max="100"
+                                                    value="{{ $record ? $record['capaian_' . $i] : '' }}" required>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    name="keterangan_{{ $i }}"
+                                                    value="{{ $record ? $record['keterangan_' . $i] : '' }}" required>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    name="catatan_{{ $i }}"
+                                                    value="{{ $record ? $record['catatan_' . $i] : '' }}" required>
+                                            </td>
+                                        </tr>
                                     @endfor
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="mb-3 d-flex justify-content-end mt-4">
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"></i> {{ $record ? 'Update' : 'Submit' }} Form
@@ -157,7 +157,7 @@
             </form>
         </div>
     </div>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
     <script>
         document.getElementById('innovationForm').addEventListener('submit', function(event) {
