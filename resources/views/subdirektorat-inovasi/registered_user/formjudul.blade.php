@@ -248,363 +248,363 @@
 </style>
 
 @section('contentregistered_user')
-    <div class="head-title">
-        <div class="left">
-            <h1>Form Pengajuan Inovasi</h1>
-            <ul class="breadcrumb">
-                <li>
-                    <a href="#">Dashboard</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a class="active" href="#">Form Inovasi</a>
-                </li>
-            </ul>
-        </div>
+<div class="head-title">
+    <div class="left">
+        <h1>Form Pengajuan Inovasi</h1>
+        <ul class="breadcrumb">
+            <li>
+                <a href="#">Dashboard</a>
+            </li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li>
+                <a class="active" href="#">Form Inovasi</a>
+            </li>
+        </ul>
     </div>
+</div>
 
-    <div class="table-data">
-        <div class="order">
+<div class="table-data">
+    <div class="order">
 
-            <div class="form-content">
-                <div class="progress-container">
-                    <div class="form-completion">
-                        <span id="completion-text">0% Lengkap</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress" id="progress-bar" style="width: 0%"></div>
-                    </div>
-                    <div class="progress-text">
-                        <span>Mulai</span>
-                        <span>Selesai</span>
-                    </div>
+        <div class="form-content">
+            <div class="progress-container">
+                <div class="form-completion">
+                    <span id="completion-text">0% Lengkap</span>
                 </div>
-
-                <div class="section-tabs">
-                    <div class="section-tab active" data-target="info-inovasi">
-                        <i class="fas fa-lightbulb"></i>
-                        <span>Informasi Inovasi</span>
-                    </div>
-                    <div class="section-tab" data-target="produk-teknologi">
-                        <i class="fas fa-microchip"></i>
-                        <span>Produk & Teknologi</span>
-                    </div>
-                    <div class="section-tab" data-target="kesiapan-pasar">
-                        <i class="fas fa-chart-line"></i>
-                        <span>Kesiapan Pasar</span>
-                    </div>
-                    <div class="section-tab" data-target="kontak-person">
-                        <i class="fas fa-user-circle"></i>
-                        <span>Kontak Person</span>
-                    </div>
+                <div class="progress-bar">
+                    <div class="progress" id="progress-bar" style="width: 0%"></div>
                 </div>
-
-                <form id="innovation-form" action="{{route('subdirektorat-inovasi.registered_user.inovasi.store', $id)}}" method="POST">
-                    @csrf
-                    <!-- Informasi Inovasi -->
-                    <div class="form-section" id="info-inovasi">
-                        <h2><i class="fas fa-lightbulb"></i> Informasi Inovasi</h2>
-                        
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="judul" class="form-label">
-                                    Judul Inovasi
-                                    <i class="fas fa-info-circle tooltip-icon" data-tooltip="Gunakan tiga atau empat kata yang menggambarkan inovasi dengan jelas"></i>
-                                </label>
-                                <input type="text" class="form-control" id="judul" name="judul" 
-                                       placeholder="Contoh: Sistem Pengelolaan Limbah Cerdas" 
-                                       value="{{ !is_null($inovasi)? $inovasi->title : '' }}"
-                                       maxlength="50">
-                                <div class="char-counter" id="judul-counter">0/50 karakter</div>
-                                <div class="form-text text-muted">Gunakan tiga atau empat kata yang menggambarkan inovasi</div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="sub-judul" class="form-label">
-                                    Sub Judul Inovasi
-                                    <i class="fas fa-info-circle tooltip-icon" data-tooltip="Jelaskan fitur unik atau lisensi yang membedakan inovasi Anda"></i>
-                                </label>
-                                <input type="text" class="form-control" id="sub-judul" name="sub_judul" 
-                                       placeholder="Masukkan sub judul inovasi atau unique selling point" 
-                                       value="{{ !is_null($inovasi)? $inovasi->sub_title : '' }}"
-                                       maxlength="100">
-                                <div class="char-counter" id="subjudul-counter">0/100 karakter</div>
-                                <div class="form-text text-muted">Jelaskan fitur unik atau lisensi yang membedakan inovasi Anda</div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="pendahuluan" class="form-label">
-                                    Pendahuluan
-                                    <i class="fas fa-info-circle tooltip-icon" data-tooltip="Jelaskan secara singkat maksimal 3 baris tentang tujuan, masalah yang diselesaikan, dan manfaat inovasi"></i>
-                                </label>
-                                <textarea class="form-control" id="pendahuluan" name="pendahuluan" 
-                                         placeholder="Contoh: Inovasi ini bertujuan untuk mengelola limbah dengan lebih efisien..."
-                                         rows="4" maxlength="300">{{ !is_null($inovasi)? $inovasi->introduction : '' }}</textarea>
-                                <div class="char-counter" id="pendahuluan-counter">0/300 karakter</div>
-                                <div class="form-text text-muted">Jelaskan secara singkat maksimal 3 baris</div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-actions">
-                            <div></div> <!-- Empty div for spacing -->
-                            <button type="button" class="btn btn-primary next-section" data-target="produk-teknologi">
-                                Selanjutnya <i class="fas fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Produk Teknologi -->
-                    <div class="form-section" id="produk-teknologi" style="display: none;">
-                        <h2><i class="fas fa-microchip"></i> Produk & Teknologi</h2>
-                        
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="produk-teknologi-desc" class="form-label">
-                                    Deskripsi Produk Teknologi
-                                    <i class="fas fa-info-circle tooltip-icon" data-tooltip="Jelaskan secara rinci tentang teknologi yang digunakan dan nilai bisnisnya"></i>
-                                </label>
-                                <textarea class="form-control" id="produk-teknologi-desc" name="produk_teknologi" 
-                                          placeholder="Jelaskan tentang produk teknologi, kegunaan, dan manfaat bisnisnya" 
-                                          rows="4">{{ !is_null($inovasi)? $inovasi->tech_product : '' }}</textarea>
-                                <div class="form-text text-muted">Jelaskan secara rinci tentang teknologi yang digunakan dan nilai bisnisnya</div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="keunggulan" class="form-label">
-                                    Keunggulan Kompetitif (Unique Selling Point)
-                                    <i class="fas fa-info-circle tooltip-icon" data-tooltip="Identifikasi minimal 3 keunggulan yang membedakan dengan kompetitor"></i>
-                                </label>
-                                <textarea class="form-control" id="keunggulan" name="keunggulan" 
-                                          placeholder="Jelaskan keunggulan produk dibandingkan dengan produk lain di pasar" 
-                                          rows="4">{{ !is_null($inovasi)? $inovasi->supremacy : '' }}</textarea>
-                                <div class="form-text text-muted">Identifikasi minimal 3 keunggulan yang membedakan dengan kompetitor</div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="paten" class="form-label">
-                                    Deskripsi Perlindungan Paten
-                                    <i class="fas fa-info-circle tooltip-icon" data-tooltip="Jelaskan aspek-aspek unik yang dilindungi atau akan dilindungi paten"></i>
-                                </label>
-                                <textarea class="form-control" id="paten" name="paten" 
-                                          placeholder="Jelaskan apa yang dilindungi oleh paten (metode, komposisi, dll)" 
-                                          rows="4">{{ !is_null($inovasi)? $inovasi->patent : '' }}</textarea>
-                                <div class="form-text text-muted">Jelaskan aspek-aspek unik yang dilindungi atau akan dilindungi paten</div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-outline-secondary prev-section" data-target="info-inovasi">
-                                <i class="fas fa-arrow-left"></i> Sebelumnya
-                            </button>
-                            <button type="button" class="btn btn-primary next-section" data-target="kesiapan-pasar">
-                                Selanjutnya <i class="fas fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Kesiapan Pasar -->
-                    <div class="form-section" id="kesiapan-pasar" style="display: none;">
-                        <h2><i class="fas fa-chart-line"></i> Kesiapan Teknologi & Pasar</h2>
-                        
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="kesiapan-teknologi" class="form-label">
-                                    Kesiapan Teknologi (Technology Readiness)
-                                    <i class="fas fa-info-circle tooltip-icon" data-tooltip="TRL 1-9, dari konsep dasar hingga sistem teruji di lingkungan sebenarnya"></i>
-                                </label>
-                                <textarea class="form-control" id="kesiapan-teknologi" name="kesiapan_teknologi" 
-                                          placeholder="Jelaskan kesiapan teknologi (proof of concept, prototipe, validasi, dll)" 
-                                          rows="4">{{ !is_null($inovasi)? $inovasi->tech_preparation : '' }}</textarea>
-                                <div class="form-text text-muted">Indikasikan tingkat kesiapan teknologi (TRL) dan bukti yang mendukung</div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="kesiapan-pasar-desc" class="form-label">
-                                    Kesiapan Pasar (Market Readiness)
-                                    <i class="fas fa-info-circle tooltip-icon" data-tooltip="Deskripsikan target pasar, feedback pengguna, dan peluang komersialisasi"></i>
-                                </label>
-                                <textarea class="form-control" id="kesiapan-pasar-desc" name="kesiapan_pasar" 
-                                          placeholder="Jelaskan kesiapan pasar (target pengguna, mitra komersial, investasi, dll)" 
-                                          rows="4">{{ !is_null($inovasi)? $inovasi->market_preparation : '' }}</textarea>
-                                <div class="form-text text-muted">Deskripsikan target pasar, feedback pengguna, dan peluang komersialisasi</div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-outline-secondary prev-section" data-target="produk-teknologi">
-                                <i class="fas fa-arrow-left"></i> Sebelumnya
-                            </button>
-                            <button type="button" class="btn btn-primary next-section" data-target="kontak-person">
-                                Selanjutnya <i class="fas fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Kontak Person -->
-                    <div class="form-section" id="kontak-person" style="display: none;">
-                        <h2><i class="fas fa-user-circle"></i> Kontak Person</h2>
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="nama" class="form-label">Nama Penanggungjawab Invensi</label>
-                                <div class="input-icon-wrapper">
-                                    <i class="fas fa-user"></i>
-                                    <input type="text" class="form-control" id="nama" name="nama" 
-                                           placeholder="Masukkan nama lengkap" value="{{ !is_null($inovasi)? $inovasi->name : '' }}">
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="phone" class="form-label">Nomor Telepon Kantor</label>
-                                <div class="input-icon-wrapper">
-                                    <i class="fas fa-phone"></i>
-                                    <input type="text" class="form-control" id="phone" name="phone" 
-                                           placeholder="Contoh: 021-7654321" value="{{ !is_null($inovasi)? $inovasi->phone : '' }}">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="mobile" class="form-label">Nomor Handphone</label>
-                                <div class="input-icon-wrapper">
-                                    <i class="fas fa-mobile-alt"></i>
-                                    <input type="text" class="form-control" id="mobile" name="mobile" 
-                                           placeholder="Contoh: 08123456789" value="{{ !is_null($inovasi)? $inovasi->mobile : '' }}">
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="fax" class="form-label">Nomor Fax</label>
-                                <div class="input-icon-wrapper">
-                                    <i class="fas fa-fax"></i>
-                                    <input type="text" class="form-control" id="fax" name="fax" 
-                                           placeholder="Contoh: 021-7654321" value="{{ !is_null($inovasi)? $inovasi->fax : '' }}">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="email" class="form-label">Alamat Email</label>
-                                <div class="input-icon-wrapper">
-                                    <i class="fas fa-envelope"></i>
-                                    <input type="email" class="form-control" id="email" name="email" 
-                                           placeholder="Contoh: nama@institusi.ac.id" value="{{ !is_null($inovasi)? $inovasi->email : '' }}">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-outline-secondary prev-section" data-target="kesiapan-pasar">
-                                <i class="fas fa-arrow-left"></i> Sebelumnya
-                            </button>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> {{ $inovasi ? 'Update' : 'Kirim' }} Formulir
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                <div class="progress-text">
+                    <span>Mulai</span>
+                    <span>Selesai</span>
+                </div>
             </div>
+
+            <div class="section-tabs">
+                <div class="section-tab active" data-target="info-inovasi">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>Informasi Inovasi</span>
+                </div>
+                <div class="section-tab" data-target="produk-teknologi">
+                    <i class="fas fa-microchip"></i>
+                    <span>Produk & Teknologi</span>
+                </div>
+                <div class="section-tab" data-target="kesiapan-pasar">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Kesiapan Pasar</span>
+                </div>
+                <div class="section-tab" data-target="kontak-person">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Kontak Person</span>
+                </div>
+            </div>
+
+            <form id="innovation-form" action="{{route('subdirektorat-inovasi.registered_user.inovasi.store', $id)}}" method="POST">
+                @csrf
+                <!-- Informasi Inovasi -->
+                <div class="form-section" id="info-inovasi">
+                    <h2><i class="fas fa-lightbulb"></i> Informasi Inovasi</h2>
+                    
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="judul" class="form-label">
+                                Judul Inovasi
+                                <i class="fas fa-info-circle tooltip-icon" data-tooltip="Gunakan tiga atau empat kata yang menggambarkan inovasi dengan jelas"></i>
+                            </label>
+                            <input type="text" class="form-control" id="judul" name="judul" 
+                                   placeholder="Contoh: Sistem Pengelolaan Limbah Cerdas" 
+                                   value="{{ !is_null($inovasi)? $inovasi->title : '' }}"
+                                   maxlength="50">
+                            <div class="char-counter" id="judul-counter">0/50 karakter</div>
+                            <div class="form-text text-muted">Gunakan tiga atau empat kata yang menggambarkan inovasi</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="sub-judul" class="form-label">
+                                Sub Judul Inovasi
+                                <i class="fas fa-info-circle tooltip-icon" data-tooltip="Jelaskan fitur unik atau lisensi yang membedakan inovasi Anda"></i>
+                            </label>
+                            <input type="text" class="form-control" id="sub-judul" name="sub_judul" 
+                                   placeholder="Masukkan sub judul inovasi atau unique selling point" 
+                                   value="{{ !is_null($inovasi)? $inovasi->sub_title : '' }}"
+                                   maxlength="100">
+                            <div class="char-counter" id="subjudul-counter">0/100 karakter</div>
+                            <div class="form-text text-muted">Jelaskan fitur unik atau lisensi yang membedakan inovasi Anda</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="pendahuluan" class="form-label">
+                                Pendahuluan
+                                <i class="fas fa-info-circle tooltip-icon" data-tooltip="Jelaskan secara singkat maksimal 3 baris tentang tujuan, masalah yang diselesaikan, dan manfaat inovasi"></i>
+                            </label>
+                            <textarea class="form-control" id="pendahuluan" name="pendahuluan" 
+                                     placeholder="Contoh: Inovasi ini bertujuan untuk mengelola limbah dengan lebih efisien..."
+                                     rows="4" maxlength="300">{{ !is_null($inovasi)? $inovasi->introduction : '' }}</textarea>
+                            <div class="char-counter" id="pendahuluan-counter">0/300 karakter</div>
+                            <div class="form-text text-muted">Jelaskan secara singkat maksimal 3 baris</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <div></div> <!-- Empty div for spacing -->
+                        <button type="button" class="btn btn-primary next-section" data-target="produk-teknologi">
+                            Selanjutnya <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Produk Teknologi -->
+                <div class="form-section" id="produk-teknologi" style="display: none;">
+                    <h2><i class="fas fa-microchip"></i> Produk & Teknologi</h2>
+                    
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="produk-teknologi-desc" class="form-label">
+                                Deskripsi Produk Teknologi
+                                <i class="fas fa-info-circle tooltip-icon" data-tooltip="Jelaskan secara rinci tentang teknologi yang digunakan dan nilai bisnisnya"></i>
+                            </label>
+                            <textarea class="form-control" id="produk-teknologi-desc" name="produk_teknologi" 
+                                      placeholder="Jelaskan tentang produk teknologi, kegunaan, dan manfaat bisnisnya" 
+                                      rows="4">{{ !is_null($inovasi)? $inovasi->tech_product : '' }}</textarea>
+                            <div class="form-text text-muted">Jelaskan secara rinci tentang teknologi yang digunakan dan nilai bisnisnya</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="keunggulan" class="form-label">
+                                Keunggulan Kompetitif (Unique Selling Point)
+                                <i class="fas fa-info-circle tooltip-icon" data-tooltip="Identifikasi minimal 3 keunggulan yang membedakan dengan kompetitor"></i>
+                            </label>
+                            <textarea class="form-control" id="keunggulan" name="keunggulan" 
+                                      placeholder="Jelaskan keunggulan produk dibandingkan dengan produk lain di pasar" 
+                                      rows="4">{{ !is_null($inovasi)? $inovasi->supremacy : '' }}</textarea>
+                            <div class="form-text text-muted">Identifikasi minimal 3 keunggulan yang membedakan dengan kompetitor</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="paten" class="form-label">
+                                Deskripsi Perlindungan Paten
+                                <i class="fas fa-info-circle tooltip-icon" data-tooltip="Jelaskan aspek-aspek unik yang dilindungi atau akan dilindungi paten"></i>
+                            </label>
+                            <textarea class="form-control" id="paten" name="paten" 
+                                      placeholder="Jelaskan apa yang dilindungi oleh paten (metode, komposisi, dll)" 
+                                      rows="4">{{ !is_null($inovasi)? $inovasi->patent : '' }}</textarea>
+                            <div class="form-text text-muted">Jelaskan aspek-aspek unik yang dilindungi atau akan dilindungi paten</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline-secondary prev-section" data-target="info-inovasi">
+                            <i class="fas fa-arrow-left"></i> Sebelumnya
+                        </button>
+                        <button type="button" class="btn btn-primary next-section" data-target="kesiapan-pasar">
+                            Selanjutnya <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kesiapan Pasar -->
+                <div class="form-section" id="kesiapan-pasar" style="display: none;">
+                    <h2><i class="fas fa-chart-line"></i> Kesiapan Teknologi & Pasar</h2>
+                    
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="kesiapan-teknologi" class="form-label">
+                                Kesiapan Teknologi (Technology Readiness)
+                                <i class="fas fa-info-circle tooltip-icon" data-tooltip="TRL 1-9, dari konsep dasar hingga sistem teruji di lingkungan sebenarnya"></i>
+                            </label>
+                            <textarea class="form-control" id="kesiapan-teknologi" name="kesiapan_teknologi" 
+                                      placeholder="Jelaskan kesiapan teknologi (proof of concept, prototipe, validasi, dll)" 
+                                      rows="4">{{ !is_null($inovasi)? $inovasi->tech_preparation : '' }}</textarea>
+                            <div class="form-text text-muted">Indikasikan tingkat kesiapan teknologi (TRL) dan bukti yang mendukung</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="kesiapan-pasar-desc" class="form-label">
+                                Kesiapan Pasar (Market Readiness)
+                                <i class="fas fa-info-circle tooltip-icon" data-tooltip="Deskripsikan target pasar, feedback pengguna, dan peluang komersialisasi"></i>
+                            </label>
+                            <textarea class="form-control" id="kesiapan-pasar-desc" name="kesiapan_pasar" 
+                                      placeholder="Jelaskan kesiapan pasar (target pengguna, mitra komersial, investasi, dll)" 
+                                      rows="4">{{ !is_null($inovasi)? $inovasi->market_preparation : '' }}</textarea>
+                            <div class="form-text text-muted">Deskripsikan target pasar, feedback pengguna, dan peluang komersialisasi</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline-secondary prev-section" data-target="produk-teknologi">
+                            <i class="fas fa-arrow-left"></i> Sebelumnya
+                        </button>
+                        <button type="button" class="btn btn-primary next-section" data-target="kontak-person">
+                            Selanjutnya <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kontak Person -->
+                <div class="form-section" id="kontak-person" style="display: none;">
+                    <h2><i class="fas fa-user-circle"></i> Kontak Person</h2>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nama" class="form-label">Nama Penanggungjawab Invensi</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fas fa-user"></i>
+                                <input type="text" class="form-control" id="nama" name="nama" 
+                                       placeholder="Masukkan nama lengkap" value="{{ !is_null($inovasi)? $inovasi->name : '' }}">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label">Nomor Telepon Kantor</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fas fa-phone"></i>
+                                <input type="text" class="form-control" id="phone" name="phone" 
+                                       placeholder="Contoh: 021-7654321" value="{{ !is_null($inovasi)? $inovasi->phone : '' }}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="mobile" class="form-label">Nomor Handphone</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fas fa-mobile-alt"></i>
+                                <input type="text" class="form-control" id="mobile" name="mobile" 
+                                       placeholder="Contoh: 08123456789" value="{{ !is_null($inovasi)? $inovasi->mobile : '' }}">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="fax" class="form-label">Nomor Fax</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fas fa-fax"></i>
+                                <input type="text" class="form-control" id="fax" name="fax" 
+                                       placeholder="Contoh: 021-7654321" value="{{ !is_null($inovasi)? $inovasi->fax : '' }}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="email" class="form-label">Alamat Email</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       placeholder="Contoh: nama@institusi.ac.id" value="{{ !is_null($inovasi)? $inovasi->email : '' }}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline-secondary prev-section" data-target="kesiapan-pasar">
+                            <i class="fas fa-arrow-left"></i> Sebelumnya
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> {{ $inovasi ? 'Update' : 'Kirim' }} Formulir
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Tab Navigation
-            document.querySelectorAll('.section-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    navigateToSection(tab.getAttribute('data-target'));
-                });
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tab Navigation
+        document.querySelectorAll('.section-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                navigateToSection(tab.getAttribute('data-target'));
             });
-            
-            // Next/Previous buttons
-            document.querySelectorAll('.next-section, .prev-section').forEach(button => {
-                button.addEventListener('click', () => {
-                    navigateToSection(button.getAttribute('data-target'));
-                });
-            });
-            
-            function navigateToSection(targetId) {
-                // Hide all sections
-                document.querySelectorAll('.form-section').forEach(section => {
-                    section.style.display = 'none';
-                });
-                
-                // Deactivate all tabs
-                document.querySelectorAll('.section-tab').forEach(t => {
-                    t.classList.remove('active');
-                });
-                
-                // Show target section and activate tab
-                document.getElementById(targetId).style.display = 'block';
-                document.querySelector(`.section-tab[data-target="${targetId}"]`).classList.add('active');
-                
-                // Update progress
-                updateProgress();
-            }
-            
-            // Character counters
-            function setupCharCounter(inputId, counterId, maxChars) {
-                const input = document.getElementById(inputId);
-                const counter = document.getElementById(counterId);
-                
-                if (input && counter) {
-                    // Initial count
-                    counter.textContent = `${input.value.length}/${maxChars} karakter`;
-                    
-                    // Update on input
-                    input.addEventListener('input', () => {
-                        const charCount = input.value.length;
-                        counter.textContent = `${charCount}/${maxChars} karakter`;
-                        
-                        if (charCount > maxChars) {
-                            counter.style.color = '#e53e3e';
-                        } else {
-                            counter.style.color = '#6c757d';
-                        }
-                        
-                        updateProgress();
-                    });
-                }
-            }
-            
-            setupCharCounter('judul', 'judul-counter', 50);
-            setupCharCounter('sub-judul', 'subjudul-counter', 100);
-            setupCharCounter('pendahuluan', 'pendahuluan-counter', 300);
-            
-            // Update progress bar
-            function updateProgress() {
-                const form = document.getElementById('innovation-form');
-                const inputs = form.querySelectorAll('input, textarea');
-                let filledInputs = 0;
-                let totalInputs = inputs.length;
-                
-                inputs.forEach(input => {
-                    if (input.value.trim() !== '') {
-                        filledInputs++;
-                    }
-                });
-                
-                const progressPercentage = Math.min(100, Math.round((filledInputs / totalInputs) * 100));
-                document.getElementById('progress-bar').style.width = progressPercentage + '%';
-                document.getElementById('completion-text').textContent = `${progressPercentage}% Lengkap`;
-            }
-            
-            // Initialize
-            document.getElementById('info-inovasi').style.display = 'block';
-            updateProgress();
         });
-    </script>
+        
+        // Next/Previous buttons
+        document.querySelectorAll('.next-section, .prev-section').forEach(button => {
+            button.addEventListener('click', () => {
+                navigateToSection(button.getAttribute('data-target'));
+            });
+        });
+        
+        function navigateToSection(targetId) {
+            // Hide all sections
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Deactivate all tabs
+            document.querySelectorAll('.section-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            
+            // Show target section and activate tab
+            document.getElementById(targetId).style.display = 'block';
+            document.querySelector(`.section-tab[data-target="${targetId}"]`).classList.add('active');
+            
+            // Update progress
+            updateProgress();
+        }
+        
+        // Character counters
+        function setupCharCounter(inputId, counterId, maxChars) {
+            const input = document.getElementById(inputId);
+            const counter = document.getElementById(counterId);
+            
+            if (input && counter) {
+                // Initial count
+                counter.textContent = `${input.value.length}/${maxChars} karakter`;
+                
+                // Update on input
+                input.addEventListener('input', () => {
+                    const charCount = input.value.length;
+                    counter.textContent = `${charCount}/${maxChars} karakter`;
+                    
+                    if (charCount > maxChars) {
+                        counter.style.color = '#e53e3e';
+                    } else {
+                        counter.style.color = '#6c757d';
+                    }
+                    
+                    updateProgress();
+                });
+            }
+        }
+        
+        setupCharCounter('judul', 'judul-counter', 50);
+        setupCharCounter('sub-judul', 'subjudul-counter', 100);
+        setupCharCounter('pendahuluan', 'pendahuluan-counter', 300);
+        
+        // Update progress bar
+        function updateProgress() {
+            const form = document.getElementById('innovation-form');
+            const inputs = form.querySelectorAll('input, textarea');
+            let filledInputs = 0;
+            let totalInputs = inputs.length;
+            
+            inputs.forEach(input => {
+                if (input.value.trim() !== '') {
+                    filledInputs++;
+                }
+            });
+            
+            const progressPercentage = Math.min(100, Math.round((filledInputs / totalInputs) * 100));
+            document.getElementById('progress-bar').style.width = progressPercentage + '%';
+            document.getElementById('completion-text').textContent = `${progressPercentage}% Lengkap`;
+        }
+        
+        // Initialize
+        document.getElementById('info-inovasi').style.display = 'block';
+        updateProgress();
+    });
+</script>
 @endsection

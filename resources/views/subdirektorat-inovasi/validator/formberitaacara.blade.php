@@ -82,7 +82,7 @@
                     <div class="pdf-preview">
                         <div class="mt-2">
                             <span>File terupload:</span>
-                            <a href="{{ route('admin.Katsinov.signature.view', ['id' => $berita->id, 'type' => 'penanggungjawab']) }}" 
+                            <a href="{{ route('subdirektorat-inovasi.validator.signature.view', ['id' => $berita->id, 'type' => 'penanggungjawab']) }}" 
                                target="_blank" 
                                class="document-preview">
                                Lihat Dokumen
@@ -108,7 +108,7 @@
                     @if(isset($berita) && $berita->ketua_pdf)
                         <div class="pdf-preview">
                             <span>File terupload:</span>
-                            <a href="{{ route('admin.Katsinov.signature.view', ['id' => $berita->id, 'type' => 'ketua']) }}" 
+                            <a href="{{ route('subdirektorat-inovasi.validator.signature.view', ['id' => $berita->id, 'type' => 'ketua']) }}" 
                             target="_blank" 
                             class="document-preview">
                             Lihat Dokumen
@@ -130,7 +130,7 @@
                 @if(isset($berita) && $berita->anggota1_pdf)
                     <div class="pdf-preview">
                         <span>File terupload:</span>
-                            <a href="{{ route('admin.Katsinov.signature.view', ['id' => $berita->id, 'type' => 'anggota1']) }}" 
+                            <a href="{{ route('subdirektorat-inovasi.validator.signature.view', ['id' => $berita->id, 'type' => 'anggota1']) }}" 
                             target="_blank" 
                             class="document-preview">
                             Lihat Dokumen
@@ -151,7 +151,7 @@
                 @if(isset($berita) && $berita->anggota2_pdf)
                     <div class="pdf-preview">
                         <span>File terupload:</span>
-                            <a href="{{ route('admin.Katsinov.signature.view', ['id' => $berita->id, 'type' => 'anggota1']) }}" 
+                            <a href="{{ route('subdirektorat-inovasi.validator.signature.view', ['id' => $berita->id, 'type' => 'anggota1']) }}" 
                             target="_blank" 
                             class="document-preview">
                             Lihat Dokumen
