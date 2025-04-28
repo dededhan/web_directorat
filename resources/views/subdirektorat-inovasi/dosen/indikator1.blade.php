@@ -497,9 +497,6 @@
                         <td colspan="2">Total Skor</td>
                         <td colspan="6" class="total-value">0</td>
                         <td colspan="1" style="text-align: left; padding-left: 10px;">
-                            <a href="{{ route('admin.Katsinov.lampiran.index', ['katsinov_id' => $katsinov['id'] ?? null]) }}" class="btn btn-sm" style="background-color: #277177; border-color: #277177; color: white;" target="_blank">
-                                <i class='bx bx-paperclip'></i> Lampiran
-                            </a>
                         </td>
                     </tr>
                 <tr class="total-row">
