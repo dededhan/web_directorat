@@ -205,7 +205,11 @@
                                                 data-bs-target="#subforms-{{ $katsinov->id }}" aria-expanded="false">
                                             <i class='bx bx-folder-open'></i> Formulir Pendukung
                                         </button>
-                                        <a href="{{ route('admin.katsinov.record.show', $katsinov->id) }}" class="btn btn-primary btn-sm mb-1">
+                                        <button class="btn btn-primary btn-sm mb-1" type="button" data-bs-toggle="collapse" 
+                                                data-bs-target="#summary-{{ $katsinov->id }}" aria-expanded="false">
+                                            <i class='bx bx-bar-chart-alt-2'></i> Summary
+                                        </button>
+                                        <!-- <a href="{{ route('admin.katsinov.record.show', $katsinov->id) }}" class="btn btn-primary btn-sm mb-1">
                                             <i class='bx bx-file-blank'></i> Ringkasan Hasil
                                         </a>
                                         <a href="{{ route('admin.katsinov.summary-indicator-one', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
@@ -225,7 +229,7 @@
                                         </a>
                                         <a href="{{ route('admin.katsinov.summary-indicator-six', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
                                             <i class='bx bx-file-blank'></i> Summary Indikator 6
-                                        </a>
+                                        </a> -->
 
                                     </div>
                                     </div>
@@ -267,6 +271,39 @@
                                                 </a>
                                             </div>
                                             
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Collapsible Summary Section -->
+                            <tr class="summary-row">
+                                <td colspan="7" class="p-0">
+                                    <div class="collapse" id="summary-{{ $katsinov->id }}">
+                                        <div class="card card-body subform-container">
+                                            <h5 class="subform-title">Form ringkasan untuk "{{ $katsinov->title }}"</h5>
+                                            <div class="subform-buttons">
+                                                <a href="{{ route('admin.katsinov.record.show', $katsinov->id) }}" class="btn btn-primary btn-sm mb-1">
+                                                    <i class='bx bx-file-blank'></i> Ringkasan Hasil
+                                                </a>
+                                                <a href="{{ route('admin.katsinov.summary-indicator-one', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
+                                                    <i class='bx bx-bar-chart'></i> Summary Indikator 1
+                                                </a>
+                                                <a href="{{ route('admin.katsinov.summary-indicator-two', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
+                                                    <i class='bx bx-bar-chart'></i> Summary Indikator 2
+                                                </a>
+                                                <a href="{{ route('admin.katsinov.summary-indicator-three', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
+                                                    <i class='bx bx-bar-chart'></i> Summary Indikator 3
+                                                </a>
+                                                <a href="{{ route('admin.katsinov.summary-indicator-four', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
+                                                    <i class='bx bx-bar-chart'></i> Summary Indikator 4
+                                                </a>
+                                                <a href="{{ route('admin.katsinov.summary-indicator-five', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
+                                                    <i class='bx bx-bar-chart'></i> Summary Indikator 5
+                                                </a>
+                                                <a href="{{ route('admin.katsinov.summary-indicator-six', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
+                                                    <i class='bx bx-bar-chart'></i> Summary Indikator 6
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
