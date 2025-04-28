@@ -173,14 +173,14 @@
         <div class="menu-section">
             <h3 class="section-title">Inovasi</h3>
             <ul class="side-menu">
-                <li class="{{ request()->routeIs('admin.Katsinov.TableKatsinov') ? 'active' : '' }}">
-                    <a href="{{ route('admin.Katsinov.TableKatsinov') }}">
+                <li class="{{ request()->routeIs('admin.katsinov.TableKatsinov') ? 'active' : '' }}">
+                    <a href="{{ route('admin.katsinov.TableKatsinov') }}">
                         <i class='bx bxs-graduation'></i>
                         <span class="text">Tabel Katsinov</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('admin.Katsinov.form') ? 'active' : '' }}">
-                    <a href="{{ route('admin.Katsinov.form') }}">
+                <li class="{{ request()->routeIs('admin.katsinov.form') ? 'active' : '' }}">
+                    <a href="{{ route('admin.katsinov.form') }}">
                         <i class='bx bxs-file-plus'></i>
                         <span class="text">Form Katsinov</span>
                     </a>

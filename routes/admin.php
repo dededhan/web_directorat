@@ -163,7 +163,7 @@ Route::prefix('admin')->name('admin.')
         Route::post('/produk_inovasi/upload', [ProdukInovasiController::class, 'upload'])->name('produk_inovasi.upload');
 
 
-        Route::prefix('Katsinov')->name('Katsinov.')
+        Route::prefix('katsinov')->name('katsinov.')
             ->group(function () {
                 Route::get('/TableKatsinov', [KatsinovController::class, 'index'])->name('TableKatsinov');
                 Route::post('/update-user', [KatsinovController::class, 'updateUser'])->name('update-user');

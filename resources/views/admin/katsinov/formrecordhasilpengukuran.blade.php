@@ -24,7 +24,7 @@
                 <h3>Form Record Hasil Pengukuran Katsinov</h3>
             </div>
 
-            <form id="innovationForm" action="{{ route('admin.Katsinov.record.store', $id) }}" method="POST">
+            <form id="innovationForm" action="{{ route('admin.katsinov.record.store', $id) }}" method="POST">
                 @csrf
 
                 <!-- Section 1: Informasi Penanggungjawab -->

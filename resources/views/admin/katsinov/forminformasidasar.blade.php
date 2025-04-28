@@ -26,7 +26,7 @@
            
           
            
-            <form action="{{ route('admin.Katsinov.informasi.store', $id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.katsinov.informasi.store', $id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <!-- Section 1: Informasi Inovator -->
                 <div class="card mb-4">

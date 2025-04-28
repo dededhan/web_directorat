@@ -397,7 +397,7 @@ class KatsinovController extends Controller
 
 
         $view = match ($role) {
-            'admin_direktorat' => 'admin.Katsinov.lampiran',
+            'admin_direktorat' => 'admin.katsinov.lampiran',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.lampiran',
             'dosen' => 'subdirektorat-inovasi.dosen.lampiran',
             'validator' => 'subdirektorat-inovasi.validator.lampiran',
@@ -407,7 +407,7 @@ class KatsinovController extends Controller
         
 
         $deleteRoute = match ($role) {
-            'admin_direktorat' => 'admin.Katsinov.document.delete',
+            'admin_direktorat' => 'admin.katsinov.document.delete',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.document.delete',
             'dosen' => 'subdirektorat-inovasi.dosen.document.delete',
             'validator' => 'subdirektorat-inovasi.validator.document.delete',
@@ -495,12 +495,12 @@ class KatsinovController extends Controller
         $role = Auth::user()->role;
 
         $route = match ($role) {
-            'admin_direktorat' => 'admin.Katsinov.TableKatsinov',
+            'admin_direktorat' => 'admin.katsinov.TableKatsinov',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.tablekatsinov',
             'dosen' => 'subdirektorat-inovasi.dosen.tablekatsinov',
             'validator' => 'subdirektorat-inovasi.validator.tablekatsinov',
             'registered_user' => 'subdirektorat-inovasi.registered_user.tablekatsinov',
-            default => 'admin.Katsinov.TableKatsinov',
+            default => 'admin.katsinov.TableKatsinov',
         };
     
         return redirect()->route($route)->with('success', 'Data informasi berhasil disimpan');
@@ -517,15 +517,15 @@ class KatsinovController extends Controller
         $role = Auth::user()->role;
 
         $view = match ($role) {
-            'admin_direktorat' => 'admin.Katsinov.lampiran_show',
+            'admin_direktorat' => 'admin.katsinov.lampiran_show',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.lampiran_show',
             'dosen' => 'subdirektorat-inovasi.dosen.lampiran_show',
             'validator' => 'subdirektorat-inovasi.validator.lampiran_show',
             'registered_user' => 'subdirektorat-inovasi.registered_user.lampiran_show',
-            default => 'admin.Katsinov.lampiran_show',
+            default => 'admin.katsinov.lampiran_show',
         };
         
-        $deleteRoute = 'admin.Katsinov.document.delete';
+        $deleteRoute = 'admin.katsinov.document.delete';
 
         return view($view, [
             'id' => $katsinov_id,
@@ -581,12 +581,12 @@ class KatsinovController extends Controller
         $role = Auth::user()->role;
 
         $view = match ($role) {
-            'admin_direktorat' => 'admin.Katsinov.formjudul',
+            'admin_direktorat' => 'admin.katsinov.formjudul',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.formjudul',
             'dosen' => 'subdirektorat-inovasi.dosen.formjudul',
             'validator' => 'subdirektorat-inovasi.validator.formjudul',
             'registered_user' => 'subdirektorat-inovasi.registered_user.formjudul',
-            default => 'admin.Katsinov.formjudul',
+            default => 'admin.katsinov.formjudul',
         };
 
         return view($view, [
@@ -645,12 +645,12 @@ class KatsinovController extends Controller
         $role = Auth::user()->role;
 
         $view = match ($role) {
-            'admin_direktorat' => 'admin.Katsinov.TableKatsinov',
+            'admin_direktorat' => 'admin.katsinov.TableKatsinov',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.tablekatsinov',
             'dosen' => 'subdirektorat-inovasi.dosen.tablekatsinov',
             'validator' => 'subdirektorat-inovasi.validator.tablekatsinov',
             'registered_user' => 'subdirektorat-inovasi.registered_user.tablekatsinov',
-            default => 'admin.Katsinov.tablekatsinov',
+            default => 'admin.katsinov.tablekatsinov',
         };
 
         return redirect(route($view))->with('success', $message);
@@ -692,12 +692,12 @@ class KatsinovController extends Controller
 
         // Determine the view based on user role
         $view = match ($role) {
-            'admin_direktorat' => 'admin.Katsinov.forminformasidasar',
+            'admin_direktorat' => 'admin.katsinov.forminformasidasar',
             'dosen' => 'subdirektorat-inovasi.dosen.forminformasidasar',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.forminformasidasar',
             'validator' => 'subdirektorat-inovasi.validator.forminformasidasar',
             'registered_user' => 'subdirektorat-inovasi.registered_user.forminformasidasar',
-            default => 'admin.Katsinov.forminformasidasar',
+            default => 'admin.katsinov.forminformasidasar',
         };
 
         return view($view, [
@@ -861,12 +861,12 @@ class KatsinovController extends Controller
         $role = Auth::user()->role;
 
         $route = match ($role) {
-            'admin_direktorat' => 'admin.Katsinov.TableKatsinov',
+            'admin_direktorat' => 'admin.katsinov.TableKatsinov',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.tablekatsinov',
             'dosen' => 'subdirektorat-inovasi.dosen.tablekatsinov',
             'validator' => 'subdirektorat-inovasi.validator.tablekatsinov',
             'registered_user' => 'subdirektorat-inovasi.registered_user.tablekatsinov',
-            default => 'admin.Katsinov.TableKatsinov',
+            default => 'admin.katsinov.TableKatsinov',
         };
         // return redirect(route($route))->with('success', $message);
         return redirect()->route($route)->with('success', 'Data informasi berhasil ' . ($informasi ? 'diperbarui' : 'disimpan'));
@@ -887,12 +887,12 @@ class KatsinovController extends Controller
         $role = Auth::user()->role;
 
         $view = match ($role) {
-            'admin_direktorat' => 'admin.Katsinov.formberitaacara',
+            'admin_direktorat' => 'admin.katsinov.formberitaacara',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.formberitaacara',
             'dosen' => 'subdirektorat-inovasi.dosen.formberitaacara',
             'validator' => 'subdirektorat-inovasi.validator.formberitaacara',
             'registered_user' => 'subdirektorat-inovasi.registered_user.formberitaacara',
-            default => 'admin.Katsinov.formberitaacara',
+            default => 'admin.katsinov.formberitaacara',
         };
 
 
@@ -992,12 +992,12 @@ class KatsinovController extends Controller
             $role = Auth::user()->role;
 
             $view = match ($role) {
-                'admin_direktorat' => 'admin.Katsinov.TableKatsinov',
+                'admin_direktorat' => 'admin.katsinov.TableKatsinov',
                 'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.tablekatsinov',
                 'dosen' => 'subdirektorat-inovasi.dosen.tablekatsinov',
                 'validator' => 'subdirektorat-inovasi.validator.tablekatsinov',
                 'registered_user' => 'subdirektorat-inovasi.registered_user.tablekatsinov',
-                default => 'admin.Katsinov.tablekatsinov',
+                default => 'admin.katsinov.tablekatsinov',
             };
 
             return redirect(route($view))->with('success', $message);
@@ -1050,12 +1050,12 @@ class KatsinovController extends Controller
         $role = Auth::user()->role;
 
         $view = match ($role) {
-            'admin_direktorat' => 'admin.Katsinov.formrecordhasilpengukuran',
+            'admin_direktorat' => 'admin.katsinov.formrecordhasilpengukuran',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.formrecordhasilpengukuran',
             'dosen' => 'subdirektorat-inovasi.dosen.formrecordhasilpengukuran',
             'validator' => 'subdirektorat-inovasi.validator.formrecordhasilpengukuran',
             'registered_user' => 'subdirektorat-inovasi.registered_user.formrecordhasilpengukuran',
-            default => 'admin.Katsinov.formrecordhasilpengukuran',
+            default => 'admin.katsinov.formrecordhasilpengukuran',
         };
 
         return view($view, [
@@ -1098,12 +1098,12 @@ class KatsinovController extends Controller
 
             $role = Auth::user()->role;
             $view = match ($role) {
-                'admin_direktorat' => 'admin.Katsinov.TableKatsinov',
+                'admin_direktorat' => 'admin.katsinov.TableKatsinov',
                 'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.tablekatsinov',
                 'dosen' => 'subdirektorat-inovasi.dosen.tablekatsinov',
                 'validator' => 'subdirektorat-inovasi.validator.tablekatsinov',
                 'registered_user' => 'subdirektorat-inovasi.registered_user.tablekatsinov',
-                default => 'admin.Katsinov.tablekatsinov',
+                default => 'admin.katsinov.tablekatsinov',
             };
 
             return redirect()->route($view)

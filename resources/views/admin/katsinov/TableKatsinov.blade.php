@@ -198,7 +198,7 @@
                                         <button class="btn btn-sm btn-danger">Delete</button>
                                     </div>
                                     <div class="btn-group-vertical mt-2">
-                                        <a href="{{ route('admin.Katsinov.show', $katsinov->id) }}" class="btn btn-success btn-sm mb-1">
+                                        <a href="{{ route('admin.katsinov.show', $katsinov->id) }}" class="btn btn-success btn-sm mb-1">
                                             <i class='bx bx-refresh'></i> Penilaian
                                         </a>
                                         <button class="btn btn-info btn-sm mb-1" type="button" data-bs-toggle="collapse" 
@@ -227,19 +227,19 @@
                                         <div class="card card-body subform-container">
                                             <h5 class="subform-title">Form pendukung untuk "{{ $katsinov->title }}"</h5>
                                             <div class="subform-buttons">
-                                                <a href="{{ route('admin.Katsinov.inovasi.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('admin.katsinov.inovasi.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-file'></i> Form Judul
                                                 </a>
-                                                <a href="{{ route('admin.Katsinov.informasi.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('admin.katsinov.informasi.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-info-circle'></i> Form Informasi Dasar
                                                 </a>
-                                                <a href="{{ route('admin.Katsinov.berita.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('admin.katsinov.berita.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-news'></i> Form Berita Acara
                                                 </a>
-                                                <a href="{{ route('admin.Katsinov.record.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('admin.katsinov.record.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-bar-chart-alt-2'></i> Form Record Hasil
                                                 </a>
-                                                <a href="{{ route('admin.Katsinov.lampiran.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('admin.katsinov.lampiran.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-paperclip'></i> Lampiran
                                                 </a>
                                             </div>
@@ -431,7 +431,7 @@ document.querySelectorAll('.user-dropdown').forEach(select => {
         const katsinovId = this.dataset.katsinovId;
         const userId = this.value;
 
-        fetch("{{ route('admin.Katsinov.update-user') }}", {
+        fetch("{{ route('admin.katsinov.update-user') }}", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

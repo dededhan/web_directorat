@@ -24,7 +24,7 @@
                 <h3>Sistem Upload Dokumen Lampiran</h3>
             </div>
 
-            <form method="POST" action="{{ route('admin.Katsinov.lampiran.store', $id) }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('admin.katsinov.lampiran.store', $id) }}" enctype="multipart/form-data">
                 @csrf
                 
                 <!-- Aspek Teknologi -->
@@ -43,7 +43,7 @@
                                     @if(isset($lampiran['aspek_teknologi']['proposal']))
                                         <div class="mt-2">
                                             <span>File terupload:</span>
-                                            <a href="{{ route('admin.Katsinov.document.view', $lampiran['aspek_teknologi']['proposal']->id) }}" 
+                                            <a href="{{ route('admin.katsinov.document.view', $lampiran['aspek_teknologi']['proposal']->id) }}" 
                                                 target="_blank" 
                                                 class="document-preview">
                                                 Lihat Dokumen
@@ -66,7 +66,7 @@
                                     @if(isset($lampiran['aspek_teknologi']['jadwal']))
                                         <div class="mt-2">
                                             <span>File terupload:</span>
-                                            <a href="{{ route('admin.Katsinov.document.view', $lampiran['aspek_teknologi']['jadwal']->id) }}" 
+                                            <a href="{{ route('admin.katsinov.document.view', $lampiran['aspek_teknologi']['jadwal']->id) }}" 
                                                 target="_blank" 
                                                 class="document-preview">
                                                 Lihat Dokumen
@@ -108,7 +108,7 @@
                                         @if(isset($lampiran['aspek_teknologi'][$key]))
                                             <div class="mt-2">
                                                 <span>File terupload:</span>
-                                                <a href="{{ route('admin.Katsinov.document.view', $lampiran['aspek_teknologi'][$key]->id) }}" 
+                                                <a href="{{ route('admin.katsinov.document.view', $lampiran['aspek_teknologi'][$key]->id) }}" 
                                                     target="_blank" 
                                                     class="document-preview">
                                                     Lihat Dokumen
@@ -139,7 +139,7 @@
                                     @if(isset($lampiran['aspek_teknologi']['dokumen_ilmiah']))
                                         <div class="mt-2">
                                             <span>File terupload:</span>
-                                            <a href="{{ route('admin.Katsinov.document.view', $lampiran['aspek_teknologi']['dokumen_ilmiah']->id) }}" 
+                                            <a href="{{ route('admin.katsinov.document.view', $lampiran['aspek_teknologi']['dokumen_ilmiah']->id) }}" 
                                                 target="_blank" 
                                                 class="document-preview">
                                                 Lihat Dokumen
@@ -163,7 +163,7 @@
                                     @if(isset($lampiran['aspek_teknologi']['dokumen_haki']))
                                         <div class="mt-2">
                                             <span>File terupload:</span>
-                                            <a href="{{ route('admin.Katsinov.document.view', $lampiran['aspek_teknologi']['dokumen_haki']->id) }}" 
+                                            <a href="{{ route('admin.katsinov.document.view', $lampiran['aspek_teknologi']['dokumen_haki']->id) }}" 
                                                 target="_blank" 
                                                 class="document-preview">
                                                 Lihat Dokumen
@@ -207,7 +207,7 @@
                                     @if(isset($lampiran['aspek_pasar'][$key]))
                                         <div class="mt-2">
                                             <span>File terupload:</span>
-                                            <a href="{{ route('admin.Katsinov.document.view', $lampiran['aspek_pasar'][$key]->id) }}" 
+                                            <a href="{{ route('admin.katsinov.document.view', $lampiran['aspek_pasar'][$key]->id) }}" 
                                                 target="_blank" 
                                                 class="document-preview">
                                                 Lihat Dokumen
@@ -248,7 +248,7 @@
                                 @if(isset($lampiran['aspek_organisasi'][$key]))
                                     <div class="mt-2">
                                         <span>File terupload:</span>
-                                        <a href="{{ route('admin.Katsinov.document.view', $lampiran['aspek_organisasi'][$key]->id) }}" 
+                                        <a href="{{ route('admin.katsinov.document.view', $lampiran['aspek_organisasi'][$key]->id) }}" 
                                             target="_blank" 
                                             class="document-preview">
                                             Lihat Dokumen
@@ -288,7 +288,7 @@
                                 @if(isset($lampiran['aspek_mitra'][$key]))
                                     <div class="mt-2">
                                         <span>File terupload:</span>
-                                        <a href="{{ route('admin.Katsinov.document.view', $lampiran['aspek_mitra'][$key]->id) }}" 
+                                        <a href="{{ route('admin.katsinov.document.view', $lampiran['aspek_mitra'][$key]->id) }}" 
                                             target="_blank" 
                                             class="document-preview">
                                             Lihat Dokumen
@@ -328,7 +328,7 @@
                                 @if(isset($lampiran['aspek_risiko'][$key]))
                                     <div class="mt-2">
                                         <span>File terupload:</span>
-                                        <a href="{{ route('admin.Katsinov.document.view', $lampiran['aspek_risiko'][$key]->id) }}" 
+                                        <a href="{{ route('admin.katsinov.document.view', $lampiran['aspek_risiko'][$key]->id) }}" 
                                             target="_blank" 
                                             class="document-preview">
                                             Lihat Dokumen
@@ -370,7 +370,7 @@
                                 @if(isset($lampiran['aspek_manufaktur'][$key]))
                                     <div class="mt-2">
                                         <span>File terupload:</span>
-                                        <a href="{{ route('admin.Katsinov.document.view', $lampiran['aspek_manufaktur'][$key]->id) }}" 
+                                        <a href="{{ route('admin.katsinov.document.view', $lampiran['aspek_manufaktur'][$key]->id) }}" 
                                             target="_blank" 
                                             class="document-preview">
                                             Lihat Dokumen
@@ -412,7 +412,7 @@
                                 @if(isset($lampiran['aspek_investasi'][$key]))
                                     <div class="mt-2">
                                         <span>File terupload:</span>
-                                        <a href="{{ route('admin.Katsinov.document.view', $lampiran['aspek_investasi'][$key]->id) }}" 
+                                        <a href="{{ route('admin.katsinov.document.view', $lampiran['aspek_investasi'][$key]->id) }}" 
                                             target="_blank" 
                                             class="document-preview">
                                             Lihat Dokumen
