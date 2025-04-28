@@ -214,6 +214,12 @@
                                         <a href="{{ route('admin.katsinov.summary-indicator-two', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
                                             <i class='bx bx-file-blank'></i> Summary Indikator 2
                                         </a>
+                                        <a href="{{ route('admin.katsinov.summary-indicator-three', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
+                                            <i class='bx bx-file-blank'></i> Summary Indikator 3
+                                        </a>
+                                        <a href="{{ route('admin.katsinov.summary-indicator-four', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
+                                            <i class='bx bx-file-blank'></i> Summary Indikator 4
+                                        </a>
 
                                     </div>
                                     </div>
