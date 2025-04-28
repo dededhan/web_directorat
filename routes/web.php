@@ -258,6 +258,15 @@ Route::get('/katsinov/{katsinov_id}/record/summary', [KatsinovController::class,
     Route::get('/katsinov/{katsinov_id}/summary-indicator-four', [KatsinovController::class, 'summaryIndicatorfour'])
     ->name('admin.katsinov.summary-indicator-four');
 
+    Route::get('/katsinov/{katsinov_id}/summary-indicator-five', [KatsinovController::class, 'summaryIndicatorfive'])
+    ->name('admin.katsinov.summary-indicator-five');
+
+    Route::get('/katsinov/{katsinov_id}/summary-indicator-six', [KatsinovController::class, 'summaryIndicatorsix'])
+    ->name('admin.katsinov.summary-indicator-six');
+
+
+    
+
 Route::get('/ranking_unj', [App\Http\Controllers\RankingController::class, 'showAllRankings'])
     ->name('Pemeringkatan.ranking_unj.rankingunj');
 
