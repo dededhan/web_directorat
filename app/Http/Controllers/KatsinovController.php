@@ -233,7 +233,15 @@ class KatsinovController extends Controller
             'indicatorSix' =>  $katsinov->responses()->where('indicator_number', '=', 6)->get(),
         ];
 
-        return view('admin.katsinov.form_katsinov', $data);
+        $role = Auth::user()->role;
+        $formview = match ($role) {
+            'admin_direktorat' => 'admin.katsinov.form_katsinov',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.form_katsinov',
+            'validator' => 'subdirektorat-inovasi.validator.form_katsinov',
+            default => null,
+        };
+
+        return view($formview, $data);
     }
 
     public function updateUser(Request $request)
