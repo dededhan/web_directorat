@@ -128,13 +128,12 @@
                                 <input type="text" class="form-control" name="contact" placeholder="Telp / Fax / email" value="{{ $katsinov['contact'] ?? '' }}">
                             </div>
                         </div>
-
                         <div class="row mb-3">
                             <label class="col-md-3 form-label">Tanggal</label>
                             <div class="col-md-9">
                                 <input type="date" id="assessment_date" name="assessment_date"
                                     class="form-control @error('assessment_date') border-red-500 @enderror"
-                                    value="{{ old('assessment_date', isset($katsinov['assessment_date']) ? $katsinov['assessment_date'] : date('Y-m-d')) }}" required>
+                                    value="{{ old('assessment_date', isset($katsinov['assessment_date']) ? \Carbon\Carbon::parse($katsinov['assessment_date'])->format('Y-m-d') : date('Y-m-d')) }}" required>
                             </div>
                         </div>
                     </div>

@@ -201,7 +201,8 @@ public function destroy(User $user)
         $user->delete();
         
         \DB::commit();
-        return redirect()->back()->with('success', 'User berhasil dihapus');
+        return redirect()->route('admin.manageuser.index')->with('success', 'User berhasil dihapus');
+
     } catch (\Exception $e) {
         \DB::rollBack();
         Log::error('Failed to delete user', ['error' => $e->getMessage()]);

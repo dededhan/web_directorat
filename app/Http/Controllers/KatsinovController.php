@@ -24,12 +24,22 @@ class KatsinovController extends Controller
     public function index()
     {
         $role = Auth::user()->role;
-        $katsinovs = Katsinov::with('scores', 'user')->latest()->paginate(100);
-        $users = User::whereIn('role', ['validator'])->get(); 
-        if (in_array($role, ['dosen', 'mahasiswa','registered_user'])) {
-            $katsinovs = auth()->user()->katsinovs()->paginate();
-        }
+        $users = User::whereIn('role', ['validator'])->get();
 
+        // Base query with common relationships
+        $katsinovsQuery = Katsinov::with('scores', 'user');
+
+        // Filter based on role
+        if (in_array($role, ['dosen', 'mahasiswa', 'registered_user'])) {
+            // For these roles, only show their own katsinovs
+            $katsinovs = auth()->user()->katsinovs()->with('scores', 'user')->latest()->paginate(100);
+        } elseif ($role === 'validator') {
+            // For validator role, only show katsinovs assigned to them
+            $katsinovs = $katsinovsQuery->where('user_id', Auth::id())->latest()->paginate(100);
+        } else {
+            // For admin roles, show all katsinovs
+            $katsinovs = $katsinovsQuery->latest()->paginate(100);
+        }
 
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov.TableKatsinov',
@@ -41,11 +51,9 @@ class KatsinovController extends Controller
 
         return view($view, [
             'katsinovs' => $katsinovs,
-            'users' => $users // Pass users ke view
-
+            'users' => $users // Pass users to view
         ]);
     }
-
     public function create()
     {
         $view = match (Auth::user()->role) {
@@ -105,7 +113,7 @@ class KatsinovController extends Controller
                 $katsinov->responses()->delete();
                 $katsinov->scores()->delete();
             } else {
-            // Create the main Katsinov record
+                // Create the main Katsinov record
                 $katsinov = Katsinov::create([
                     'title' => $validated['title'],
                     'focus_area' => $validated['focus_area'],
@@ -139,7 +147,6 @@ class KatsinovController extends Controller
                 'message' => isset($validated['id']) ? 'Data berhasil diupdate' : 'Data berhasil disimpan',
                 'id' => $katsinov->id
             ], 200);
-    
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['message' => 'Error: ' . $e->getMessage()], 500);
@@ -412,7 +419,7 @@ class KatsinovController extends Controller
             'registered_user' => 'subdirektorat-inovasi.registered_user.lampiran',
             default => null,
         };
-        
+
 
         $deleteRoute = match ($role) {
             'admin_direktorat' => 'admin.katsinov.document.delete',
@@ -422,7 +429,7 @@ class KatsinovController extends Controller
             'registered_user' => 'subdirektorat-inovasi.registered_user.document.delete',
             default => null,
         };
-        
+
         return view($view, [
             'id' => $katsinov->id,
             'lampiran' => $groupedLampiran,
@@ -510,7 +517,7 @@ class KatsinovController extends Controller
             'registered_user' => 'subdirektorat-inovasi.registered_user.tablekatsinov',
             default => 'admin.katsinov.TableKatsinov',
         };
-    
+
         return redirect()->route($route)->with('success', 'Data informasi berhasil disimpan');
     }
 
@@ -532,7 +539,7 @@ class KatsinovController extends Controller
             'registered_user' => 'subdirektorat-inovasi.registered_user.lampiran_show',
             default => 'admin.katsinov.lampiran_show',
         };
-        
+
         $deleteRoute = 'admin.katsinov.document.delete';
 
         return view($view, [
@@ -541,22 +548,22 @@ class KatsinovController extends Controller
             'deleteRoute' => $deleteRoute,
         ]);
     }
-   
+
     public function viewDocument($id)
     {
         $lampiran = KatsinovLampiran::findOrFail($id);
         $path = storage_path('app/public/' . $lampiran->path);
-        
+
         if (!file_exists($path)) {
             abort(404);
         }
-        
+
         return response()->file($path, [
             'Content-Type' => mime_content_type($path),
             'Content-Disposition' => 'inline; filename="' . basename($path) . '"'
         ]);
     }
-    
+
     public function destroyDocument($id)
     {
         try {
@@ -567,7 +574,7 @@ class KatsinovController extends Controller
             }
             // Delete record
             $lampiran->delete();
-    
+
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             return response()->json([
@@ -576,7 +583,7 @@ class KatsinovController extends Controller
             ], 500);
         }
     }
-    
+
     public function inovasiIndex($katsinov_id = null)
     {
         $katsinov = Katsinov::find($katsinov_id);
@@ -753,44 +760,44 @@ class KatsinovController extends Controller
                 'address' => $validatedData['pic_address'],
                 'institution' => $validatedData['pic_institution'],
                 'phone' => $validatedData['pic_phone'],
-            'fax' => $validatedData['pic_fax'],
-            'innovation_title' => $validatedData['innovation_title'],
-            'innovation_name'  => $validatedData['innovation_name'],
-            'innovation_type'  => $validatedData['innovation_type'],
-            'innovation_field'  => $validatedData['innovation_field'],
-            'innovation_application'  => $validatedData['innovation_application'],
-            'innovation_duration'  => $validatedData['innovation_duration'],
-            'innovation_year'  => $validatedData['innovation_year'],
-            'innovation_summary'  => $validatedData['innovation_summary'],
-            'innovation_supremacy'  => $validatedData['innovation_supremacy'],
-            'innovation_novelty'  => $validatedData['innovation_novelty'],
-            'katsinov_id' => $katsinov_id
-        ]);
+                'fax' => $validatedData['pic_fax'],
+                'innovation_title' => $validatedData['innovation_title'],
+                'innovation_name'  => $validatedData['innovation_name'],
+                'innovation_type'  => $validatedData['innovation_type'],
+                'innovation_field'  => $validatedData['innovation_field'],
+                'innovation_application'  => $validatedData['innovation_application'],
+                'innovation_duration'  => $validatedData['innovation_duration'],
+                'innovation_year'  => $validatedData['innovation_year'],
+                'innovation_summary'  => $validatedData['innovation_summary'],
+                'innovation_supremacy'  => $validatedData['innovation_supremacy'],
+                'innovation_novelty'  => $validatedData['innovation_novelty'],
+                'katsinov_id' => $katsinov_id
+            ]);
         } else {
-        $informasi =  KatsinovInformasi::create([
-            'pic' => $validatedData['person_in_charge'],
-            'address' => $validatedData['pic_address'],
-            'institution' => $validatedData['pic_institution'],
-            'phone' => $validatedData['pic_phone'],
-            'fax' => $validatedData['pic_fax'],
-            'innovation_title' => $validatedData['innovation_title'],
-            'innovation_name'  => $validatedData['innovation_name'],
-            'innovation_type'  => $validatedData['innovation_type'],
-            'innovation_field'  => $validatedData['innovation_field'],
-            'innovation_application'  => $validatedData['innovation_application'],
-            'innovation_duration'  => $validatedData['innovation_duration'],
-            'innovation_year'  => $validatedData['innovation_year'],
-            'innovation_summary'  => $validatedData['innovation_summary'],
-            'innovation_supremacy'  => $validatedData['innovation_supremacy'],
-            'innovation_novelty'  => $validatedData['innovation_novelty'],
-            'katsinov_id' => $katsinov_id
-        ]);
+            $informasi =  KatsinovInformasi::create([
+                'pic' => $validatedData['person_in_charge'],
+                'address' => $validatedData['pic_address'],
+                'institution' => $validatedData['pic_institution'],
+                'phone' => $validatedData['pic_phone'],
+                'fax' => $validatedData['pic_fax'],
+                'innovation_title' => $validatedData['innovation_title'],
+                'innovation_name'  => $validatedData['innovation_name'],
+                'innovation_type'  => $validatedData['innovation_type'],
+                'innovation_field'  => $validatedData['innovation_field'],
+                'innovation_application'  => $validatedData['innovation_application'],
+                'innovation_duration'  => $validatedData['innovation_duration'],
+                'innovation_year'  => $validatedData['innovation_year'],
+                'innovation_summary'  => $validatedData['innovation_summary'],
+                'innovation_supremacy'  => $validatedData['innovation_supremacy'],
+                'innovation_novelty'  => $validatedData['innovation_novelty'],
+                'katsinov_id' => $katsinov_id
+            ]);
         }
-         // Delete existing related collections to avoid duplicates
+        // Delete existing related collections to avoid duplicates
         if ($informasi) {
             $informasi->katsinovInformasiCollections()->delete();
         }
-        
+
         $now = now();
         $collections = [];
         // there must be a better way to do this, I just do this several foreach to get the thing done faster
@@ -1009,7 +1016,6 @@ class KatsinovController extends Controller
             };
 
             return redirect(route($view))->with('success', $message);
-
         } catch (\Exception $e) {
             \Log::error('Error storing berita: ' . $e->getMessage());
             \Log::error($e->getTraceAsString());
