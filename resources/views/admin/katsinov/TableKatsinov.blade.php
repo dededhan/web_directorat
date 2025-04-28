@@ -205,6 +205,17 @@
                                                 data-bs-target="#subforms-{{ $katsinov->id }}" aria-expanded="false">
                                             <i class='bx bx-folder-open'></i> Formulir Pendukung
                                         </button>
+                                        <a href="{{ route('admin.katsinov.record.show', $katsinov->id) }}" class="btn btn-primary btn-sm mb-1">
+                                            <i class='bx bx-file-blank'></i> Ringkasan Hasil
+                                        </a>
+                                        <a href="{{ route('admin.katsinov.summary-indicator-one', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
+                                            <i class='bx bx-file-blank'></i> Summary Indikator 1
+                                        </a>
+                                        <a href="{{ route('admin.katsinov.summary-indicator-two', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
+                                            <i class='bx bx-file-blank'></i> Summary Indikator 2
+                                        </a>
+
+                                    </div>
                                     </div>
                                 </td>
                                 <td>

@@ -1127,4 +1127,176 @@ class KatsinovController extends Controller
                 ->with('error', 'Gagal menyimpan data: ' . $e->getMessage());
         }
     }
+    public function recordShow($katsinov_id)
+{
+    try {
+        // Load Katsinov dengan eager loading relasi scores
+        $katsinov = Katsinov::with(['scores', 'responses', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
+        
+        // Logging untuk debug
+        \Log::info('Katsinov data loaded', [
+            'id' => $katsinov->id, 
+            'has_scores' => $katsinov->scores->count() > 0,
+            'scores_count' => $katsinov->scores->count(),
+            'raw_scores' => $katsinov->scores->toArray() // Log data skor mentah untuk inspeksi
+        ]);
+        
+        // Get record jika ada, atau buat instance baru
+        $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
+            'katsinov_id' => $katsinov_id,
+            'judul_inovasi' => $katsinov->title,
+            'rekomendasi' => '' // Default empty recommendation
+        ]);
+        
+        // Hitung skor rata-rata dengan fallback value (default value)
+        // dan tambahkan debugging untuk setiap aspek
+        $aspectScores = [
+            'technology' => $this->getAverageScore($katsinov->scores, 'technology'),
+            'organization' => $this->getAverageScore($katsinov->scores, 'organization'),
+            'risk' => $this->getAverageScore($katsinov->scores, 'risk'),
+            'market' => $this->getAverageScore($katsinov->scores, 'market'),
+            'partnership' => $this->getAverageScore($katsinov->scores, 'partnership'),
+            'manufacturing' => $this->getAverageScore($katsinov->scores, 'manufacturing'),
+            'investment' => $this->getAverageScore($katsinov->scores, 'investment')
+        ];
+        
+        // Log skor hasil kalkulasi untuk debugging
+        \Log::info('Calculated aspect scores', $aspectScores);
+        
+        // Jika semua nilai masih 0, gunakan data dummy untuk testing
+        $allZeros = array_sum(array_values($aspectScores)) == 0;
+        if ($allZeros) {
+            \Log::warning('All aspect scores are zero, check KatsinovScore records for this Katsinov');
+            
+            // Opsi: Gunakan nilai dummy untuk testing tampilan chart
+            // Uncomment baris di bawah untuk menggunakan data dummy
+            /*
+            $aspectScores = [
+                'technology' => 75,
+                'organization' => 60,
+                'risk' => 45,
+                'market' => 85,
+                'partnership' => 50,
+                'manufacturing' => 70,
+                'investment' => 55
+            ];
+            */
+        }
+        
+        return view('admin.katsinov.summarykatsinov', compact('katsinov', 'record', 'aspectScores'));
+    } catch (\Exception $e) {
+        \Log::error('Error in recordShow: ' . $e->getMessage());
+        \Log::error($e->getTraceAsString());
+        return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
+    }
 }
+
+// Helper method untuk menghitung rata-rata dengan debugging
+private function getAverageScore($scores, $field)
+{
+    if ($scores->isEmpty()) {
+        \Log::warning("No scores found for field: {$field}");
+        return 0;
+    }
+    
+    $values = $scores->pluck($field)->filter()->toArray();
+    $count = count($values);
+    
+    if ($count === 0) {
+        \Log::warning("Field {$field} has no valid values");
+        return 0;
+    }
+    
+    $sum = array_sum($values);
+    $avg = $sum / $count;
+    
+    \Log::info("Field {$field} calculation", [
+        'values' => $values,
+        'count' => $count,
+        'sum' => $sum,
+        'average' => $avg
+    ]);
+    
+    return $avg;
+}
+public function summaryIndicatorOne($katsinov_id)
+{
+    try {
+        $katsinov = Katsinov::with(['scores', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
+        
+        $aspectScores = [
+            'technology' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'technology'),
+            'market' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'market'),
+            'organization' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'organization'),
+            'manufacturing' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'manufacturing'),
+            'partnership' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'partnership'),
+            'investment' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'investment'),
+            'risk' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'risk')
+        ];
+
+        // Calculate categories for all aspects
+        $categories = [];
+        foreach ($aspectScores as $key => $score) {
+            $categories[$key] = $this->getScoreCategory($score);
+        }
+        
+        $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
+            'katsinov_id' => $katsinov_id,
+            'rekomendasi' => ''
+        ]);
+        
+        return view('admin.katsinov.summary_indicator_one', compact('katsinov', 'aspectScores', 'record', 'categories'));
+    } catch (\Exception $e) {
+        \Log::error('Error in summaryIndicatorOne: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
+    }
+}
+public function summaryIndicatortwo($katsinov_id)
+{
+    try {
+        $katsinov = Katsinov::with(['scores', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
+        
+        $aspectScores = [
+            'technology' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'technology'),
+            'market' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'market'),
+            'organization' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'organization'),
+            'manufacturing' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'manufacturing'),
+            'partnership' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'partnership'),
+            'investment' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'investment'),
+            'risk' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'risk')
+        ];
+
+        // Calculate categories for all aspects
+        $categories = [];
+        foreach ($aspectScores as $key => $score) {
+            $categories[$key] = $this->getScoreCategory($score);
+        }
+        
+        $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
+            'katsinov_id' => $katsinov_id,
+            'rekomendasi' => ''
+        ]);
+        
+        return view('admin.katsinov.summary_indicator_two', compact('katsinov', 'aspectScores', 'record', 'categories'));
+    } catch (\Exception $e) {
+        \Log::error('Error in summaryIndicatortwo: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
+    }
+}
+protected function getScoreCategory($score)
+{
+    if ($score >= 80) {
+        return 'Sangat Siap';
+    } elseif ($score >= 60) {
+        return 'Siap';
+    } elseif ($score >= 40) {
+        return 'Cukup Siap';
+    } elseif ($score >= 20) {
+        return 'Kurang Siap';
+    } else {
+        return 'Tidak Siap';
+    }
+}
+
+}
+

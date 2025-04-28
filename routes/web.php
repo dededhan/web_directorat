@@ -240,7 +240,15 @@ Route::get('/sejarah-hilirisasi', [SejarahContentController::class, 'showPublic'
 // Route::get('/ranking_unj', function () {
 //     return view('Pemeringkatan.ranking_unj.rankingunj');
 // })->name('Pemeringkatan.ranking_unj.rankingunj');
+// In web.php
 
+Route::get('/katsinov/{katsinov_id}/record/summary', [KatsinovController::class, 'recordShow'])
+    ->name('admin.katsinov.record.show')
+    ->middleware(['auth']);
+    Route::get('/katsinov/{katsinov_id}/summary-indicator-one', [KatsinovController::class, 'summaryIndicatorOne'])
+    ->name('admin.katsinov.summary-indicator-one');
+    Route::get('/katsinov/{katsinov_id}/summary-indicator-two', [KatsinovController::class, 'summaryIndicatortwo'])
+    ->name('admin.katsinov.summary-indicator-two');
 
 Route::get('/ranking_unj', [App\Http\Controllers\RankingController::class, 'showAllRankings'])
     ->name('Pemeringkatan.ranking_unj.rankingunj');
