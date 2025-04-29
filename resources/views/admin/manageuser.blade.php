@@ -125,8 +125,9 @@
                                         data-role="{{ $user->role }}">
                                     <i class='bx bx-edit-alt'></i>
                                 </button>
-                                <button class="btn btn-sm btn-danger delete-user" data-id="{{ $user->id }}">
-                                    <i class='bx bx-trash'></i>
+                                <button class="btn btn-sm btn-danger delete-user" 
+                                    data-id="{{ $user->id }}">
+                                   <i class='bx bx-trash'></i>
                                 </button>
                             </div>
                         </td>
@@ -416,7 +417,7 @@
             
             // Set form action menggunakan named route
             const form = document.getElementById('edit-user-form');
-            form.action = `/admin/manageuser/${userId}`;
+            form.action = `/admin/manageuser/${userId}`; // Pastikan route sesuai
             
             // Show modal
             modal.show();
@@ -425,14 +426,15 @@
     // Handle delete button click
     document.querySelectorAll('.delete-user').forEach(button => {
         button.addEventListener('click', function() {
-            const userId = this.dataset.id;
-            const modal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
+            const userId = this.dataset.id; 
+            console.log('User ID to delete:', userId); // Add this for debugging
+
             
             // Set form action menggunakan named route
             const form = document.getElementById('delete-user-form');
-            form.action = `/admin/manageuser/${userId}`;
+            form.action = `/admin/manageuser/${userId}`; // Pastikan route sesuai
             
-            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
             modal.show();
         });
     });

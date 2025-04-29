@@ -109,6 +109,12 @@ Route::prefix('admin')->name('admin.')
 
 
         Route::resource('/manageuser', UserController::class);
+        Route::put('/manageuser/{user}', [UserController::class, 'update'])
+            ->name('manageuser.update');
+
+        Route::delete('/manageuser/{user}', [UserController::class, 'destroy'])
+            ->name('manageuser.destroy');
+            
         Route::put('/manageuser/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('manageuser.toggleStatus');
 
         Route::resource('/sustainability', AdminSustainabilityController::class);
@@ -175,6 +181,8 @@ Route::prefix('admin')->name('admin.')
                 Route::get('/documents/{id}', [KatsinovController::class, 'viewDocument'])
                     ->name('document.view');
                 Route::delete('/document/{id}', [KatsinovController::class, 'destroyDocument'])->name('document.delete');
+
+                Route::get('/print_katsinov/{id}', [KatsinovController::class, 'downloadDetailPDF'])->name('print_katsinov');
               
                 Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
                     ->name('signature.view');
