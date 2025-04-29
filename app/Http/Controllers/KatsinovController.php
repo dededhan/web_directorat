@@ -1782,7 +1782,6 @@ class KatsinovController extends Controller
             return 'Tidak Siap';
         }
     }
-<<<<<<< HEAD
     public function summaryAspects($katsinov_id)
 {
     try {
@@ -1875,7 +1874,6 @@ class KatsinovController extends Controller
     }
 }
    
-=======
 
 
     //download pdf
@@ -2075,5 +2073,4 @@ class KatsinovController extends Controller
 
         return $outputPath;
     }
->>>>>>> 76ef1e4aa6e6dfcc474a5ec6b5e80263ccc4532d
 }
