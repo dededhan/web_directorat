@@ -71,15 +71,14 @@
         $currentRoute = Route::currentRouteName();
     @endphp
 
-
-    @if ($currentRoute !== 'admin.katsinov.show')
+    @if ($currentRoute !== 'admin.katsinov.show' && $currentRoute !== 'admin.katsinov.summary-all')
         @include('admin.sidebaradmin')
     @endif
-    
+
     <!-- CONTENT -->
     <section id="content">
         <!-- NAVBAR -->
-        @if ($currentRoute !== 'admin.katsinov.show')
+        @if ($currentRoute !== 'admin.katsinov.show' && $currentRoute !== 'admin.katsinov.summary-all')
             @include('admin.navbaradmin')
         @endif
         

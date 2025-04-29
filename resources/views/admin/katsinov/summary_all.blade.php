@@ -860,6 +860,9 @@
         </div>
     </div>
     <style>
+        #content{
+            margin-left: -130px;
+        }
         .indicator-bar {
             height: 30px;
             display: flex;
@@ -2054,6 +2057,11 @@
             background-color: #f8d7da !important;
             color: #721c24 !important;
             border: 1px solid #f5c6cb !important;
+        }
+        * {
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
         
         /* Make sure tables print completely */
