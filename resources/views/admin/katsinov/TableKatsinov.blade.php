@@ -208,10 +208,9 @@
                                                 data-bs-target="#subforms-{{ $katsinov->id }}" aria-expanded="false">
                                             <i class='bx bx-folder-open'></i> Formulir Pendukung
                                         </button>
-                                        <button class="btn btn-primary btn-sm mb-1" type="button" data-bs-toggle="collapse" 
-                                                data-bs-target="#summary-{{ $katsinov->id }}" aria-expanded="false">
-                                            <i class='bx bx-bar-chart-alt-2'></i> Summary
-                                        </button>
+                                        <a href="{{ route('admin.katsinov.summary-all', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
+                                                    <i class='bx bx-chart'></i> Summary Keseluruhan
+                                                </a>
                                         <!-- <a href="{{ route('admin.katsinov.record.show', $katsinov->id) }}" class="btn btn-primary btn-sm mb-1">
                                             <i class='bx bx-file-blank'></i> Ringkasan Hasil
                                         </a>
@@ -279,7 +278,7 @@
                                 </td>
                             </tr>
                             <!-- Collapsible Summary Section -->
-                            <tr class="summary-row">
+                            <!-- <tr class="summary-row">
                                 <td colspan="7" class="p-0">
                                     <div class="collapse" id="summary-{{ $katsinov->id }}">
                                         <div class="card card-body subform-container">
@@ -313,7 +312,7 @@
                                         </div>
                                     </div>
                                 </td>
-                            </tr>
+                            </tr> -->
                             <!-- Main details row -->
                             <tr id="details-{{ $katsinov->id }}" class="detail-row" style="display: none;">
                                 <td colspan="7">
