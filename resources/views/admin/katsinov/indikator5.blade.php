@@ -581,9 +581,9 @@
             <div class="notes-section">
                 <div class="notes-header">Catatan</div>
                 <textarea 
-                    placeholder="Tambahkan catatan di sini..." 
-                    class="notes-textarea">
-                </textarea>
+                    name="notes[5]"
+                    placeholder="Tambahkan catatan untuk Indikator 5 di sini..." 
+                    class="notes-textarea form-control">{{ $notes[5] ?? '' }}</textarea>
             </div>
         </div>
     </div>

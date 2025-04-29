@@ -52,6 +52,10 @@ class Katsinov extends Model
     {
         return $this->hasMany(KatsinovScore::class);
     }
+    public function notes()
+    {
+        return $this->hasMany(KatsinovNote::class);
+    }
 
     public function katsinovLampirans(){
         return $this->hasMany(KatsinovLampiran::class);

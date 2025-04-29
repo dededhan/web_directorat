@@ -7,6 +7,7 @@ use App\Models\Katsinov;
 use App\Models\KatsinovBerita;
 use App\Models\KatsinovInformasi;
 use App\Models\KatsinovInformasiCollection;
+use App\Models\KatsinovNote;
 use App\Models\KatsinovInovasi;
 use App\Models\FormRecordHasilPengukuran;
 use Illuminate\Http\Request;
@@ -93,6 +94,8 @@ class KatsinovController extends Controller
             'responses.*.aspect' => 'required|string|in:T,O,R,M,P,Mf,I',
             'responses.*.score' => 'required|integer|min:0|max:5',
             'responses.*.dropdown' => 'nullable|string|in:A,B,C,D,E,F',
+            'notes' => 'nullable|array',
+            'notes.*' => 'nullable|string',
         ]);
 
         // Start transaction to ensure all related data is saved or rolled back together
@@ -112,6 +115,7 @@ class KatsinovController extends Controller
 
                 $katsinov->responses()->delete();
                 $katsinov->scores()->delete();
+                $katsinov->notes()->delete(); // Delete existing notes
             } else {
                 // Create the main Katsinov record
                 $katsinov = Katsinov::create([
@@ -143,6 +147,18 @@ class KatsinovController extends Controller
             // Process and store the aggregated scores
             $this->processAndSaveScores($katsinov->id, $validated['responses']);
 
+            if (isset($validated['notes'])) {
+                foreach ($validated['notes'] as $indicatorNumber => $noteText) {
+                    if (!empty($noteText)) {
+                        KatsinovNote::create([
+                            'katsinov_id' => $katsinov->id,
+                            'indicator_number' => $indicatorNumber,
+                            'notes' => $noteText,
+                        ]);
+                    }
+                }
+            }
+
             DB::commit();
             return response()->json([
                 'message' => isset($validated['id']) ? 'Data berhasil diupdate' : 'Data berhasil disimpan',
@@ -152,6 +168,17 @@ class KatsinovController extends Controller
             DB::rollBack();
             return response()->json(['message' => 'Error: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function getNotes($katsinovId)
+    {
+        $notes = KatsinovNote::where('katsinov_id', $katsinovId)
+            ->orderBy('indicator_number')
+            ->get()
+            ->pluck('notes', 'indicator_number')
+            ->toArray();
+        
+        return $notes;
     }
 
     /**
@@ -223,13 +250,14 @@ class KatsinovController extends Controller
     public function show(Request $request)
     {
         $katsinov = Katsinov::where('id', '=', $request->id)
-            ->with(['scores', 'responses'])
+            ->with(['scores', 'responses', 'notes'])
             ->first();
         // dump($katsinov->toArray());
 
         if (!$katsinov) {
             return redirect()->back()->with('error', 'Data KATSINOV tidak ditemukan');
         }
+        $notes = $katsinov->notes->pluck('notes', 'indicator_number')->toArray();
 
         $data = [
             'katsinov' => $katsinov,
@@ -239,6 +267,7 @@ class KatsinovController extends Controller
             'indicatorFour' =>  $katsinov->responses()->where('indicator_number', '=', 4)->get(),
             'indicatorFive' =>  $katsinov->responses()->where('indicator_number', '=', 5)->get(),
             'indicatorSix' =>  $katsinov->responses()->where('indicator_number', '=', 6)->get(),
+            'notes' => $notes 
         ];
 
         $role = Auth::user()->role;
