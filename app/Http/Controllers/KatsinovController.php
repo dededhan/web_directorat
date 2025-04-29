@@ -2172,4 +2172,101 @@ class KatsinovController extends Controller
 
         return $outputPath;
     }
+
+
+    // Add this method to the KatsinovController class
+    public function printSummary($katsinov_id)
+    {
+        try {
+            // Load Katsinov with all related data (same as summaryAll method)
+            $katsinov = Katsinov::with([
+                'scores',
+                'responses',
+                'formRecordHasilPengukuran'
+            ])->findOrFail($katsinov_id);
+
+            // Prepare overall aspect scores
+            $overallAspectScores = [
+                'technology' => $this->getAverageScore($katsinov->scores, 'technology'),
+                'market' => $this->getAverageScore($katsinov->scores, 'market'),
+                'organization' => $this->getAverageScore($katsinov->scores, 'organization'),
+                'manufacturing' => $this->getAverageScore($katsinov->scores, 'manufacturing'),
+                'partnership' => $this->getAverageScore($katsinov->scores, 'partnership'),
+                'investment' => $this->getAverageScore($katsinov->scores, 'investment'),
+                'risk' => $this->getAverageScore($katsinov->scores, 'risk')
+            ];
+
+            // Prepare indicator-specific aspect scores
+            $indicatorAspectScores = [];
+            for ($indicator = 1; $indicator <= 6; $indicator++) {
+                $indicatorScores = $katsinov->scores->where('indicator_number', $indicator);
+                $indicatorAspectScores[$indicator] = [
+                    'technology' => $this->getAverageScore($indicatorScores, 'technology'),
+                    'market' => $this->getAverageScore($indicatorScores, 'market'),
+                    'organization' => $this->getAverageScore($indicatorScores, 'organization'),
+                    'manufacturing' => $this->getAverageScore($indicatorScores, 'manufacturing'),
+                    'partnership' => $this->getAverageScore($indicatorScores, 'partnership'),
+                    'investment' => $this->getAverageScore($indicatorScores, 'investment'),
+                    'risk' => $this->getAverageScore($indicatorScores, 'risk')
+                ];
+            }
+
+            // Prepare question scores
+            $questionScores = [];
+            for ($indicator = 1; $indicator <= 6; $indicator++) {
+                $indicatorResponses = $katsinov->responses()->where('indicator_number', $indicator)->get();
+
+                $aspectScores = [
+                    'technology' => $this->extractQuestionScores($indicatorResponses, 'T'),
+                    'market' => $this->extractQuestionScores($indicatorResponses, 'M'),
+                    'organization' => $this->extractQuestionScores($indicatorResponses, 'O'),
+                    'manufacturing' => $this->extractQuestionScores($indicatorResponses, 'Mf'),
+                    'partnership' => $this->extractQuestionScores($indicatorResponses, 'P'),
+                    'investment' => $this->extractQuestionScores($indicatorResponses, 'I'),
+                    'risk' => $this->extractQuestionScores($indicatorResponses, 'R')
+                ];
+
+                $questionScores[$indicator] = $aspectScores;
+            }
+
+            // Calculate average score
+            $avgScore = array_sum($overallAspectScores) / count($overallAspectScores);
+
+            // Generate PDF using the appropriate view based on role
+            $role = Auth::user()->role;
+            $view = match ($role) {
+                'admin_direktorat' => 'admin.katsinov.print_summary',
+                'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.print_summary',
+                'dosen' => 'subdirektorat-inovasi.dosen.print_summary',
+                'validator' => 'subdirektorat-inovasi.validator.print_summary',
+                'registered_user' => 'subdirektorat-inovasi.registered_user.print_summary',
+                default => 'admin.katsinov.print_summary',
+            };
+
+            $pdf = PDF::loadView($view, [
+                'katsinov' => $katsinov,
+                'overallAspectScores' => $overallAspectScores,
+                'indicatorAspectScores' => $indicatorAspectScores,
+                'questionScores' => $questionScores,
+                'avgScore' => $avgScore,
+                'overallAspectScoresJson' => json_encode($overallAspectScores),
+                'indicatorAspectScoresJson' => json_encode($indicatorAspectScores),
+                'questionScoresJson' => json_encode($questionScores)
+            ])
+                ->setPaper('a4')
+                ->setOptions([
+                    'isHtml5ParserEnabled' => true,
+                    'isRemoteEnabled' => true,
+                    'defaultFont' => 'sans-serif'
+                ]);
+
+            // Create a sanitized filename
+            $filename = 'KATSINOV_Summary_' . preg_replace('/[^a-zA-Z0-9_\-]/', '_', $katsinov->title) . '_' . date('Y-m-d') . '.pdf';
+
+            return $pdf->stream($filename);
+        } catch (\Exception $e) {
+            \Log::error('Error in printSummary: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to generate PDF: ' . $e->getMessage());
+        }
+    }
 }
