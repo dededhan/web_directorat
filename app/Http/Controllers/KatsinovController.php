@@ -2197,6 +2197,7 @@ class KatsinovController extends Controller
     
         // Use the same view as the normal form, but add the print=true parameter to trigger printing
         return redirect()->route('admin.katsinov.show', ['id' => $request->id, 'print' => 'true']);
+    }
 
     // Add this method to the KatsinovController class
     public function printSummary($katsinov_id)
