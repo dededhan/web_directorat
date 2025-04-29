@@ -140,12 +140,13 @@
                         <tr>
                             <th></th>
                             <th>ID</th>
+                            <th>user</th>
                             <th>Nama/Judul</th>
                             <th>Fokus Bidang</th>
                             <th>Nama Proyek</th>
                             <th>Status</th>
                             <th>Actions</th>
-                            <th>User</th>
+                            <th>validator</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -157,6 +158,7 @@
                                     </button>
                                 </td>
                                 <td>{{ $loop->iteration }}</td>
+                                <td>{{ $katsinov->user->name }}</td>
                                 <td>{{ $katsinov->title }}</td>
                                 <td>{{ $katsinov->focus_area }}</td>
                                 <td>{{ $katsinov->project_name }}</td>
@@ -255,6 +257,10 @@
                                     </div>
                                 </td>
                             </tr>
+<<<<<<< HEAD
+=======
+                           
+>>>>>>> 786f1065ec62add70dabe7d48e73f3a64562ea86
                             <!-- Main details row -->
                             <tr id="details-{{ $katsinov->id }}" class="detail-row" style="display: none;">
                                 <td colspan="7">
@@ -372,75 +378,19 @@
     <script src="{{ asset('inovasi/dashboard/form_katsinov/js/form.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        async function loadRecord() {
-            try {
-                const response = await fetch('/katsinov/latest');
-                if (!response.ok) throw new Error('Data tidak ditemukan');
-                const data = await response.json();
-
-                // Isi data dasar
-                document.querySelector('input[name="title"]').value = data.title || '';
-                document.querySelector('input[name="focus_area"]').value = data.focus_area || '';
-                document.querySelector('input[name="project_name"]').value = data.project_name || '';
-                document.querySelector('input[name="institution"]').value = data.institution || '';
-                document.querySelector('input[name="address"]').value = data.address || '';
-                document.querySelector('input[name="contact"]').value = data.contact || '';
-                document.querySelector('input[name="assessment_date"]').value = data.assessment_date || '';
-
-                // Isi skor per indikator dan aspek
-                data.scores.forEach(score => {
-                    const indicator = score.indicator_number;
-
-                    // Mapping aspek database ke class di form
-                    const aspectMap = {
-                        'technology': 't',
-                        'organization': 'o',
-                        'risk': 'r',
-                        'market': 'm',
-                        'partnership': 'p',
-                        'manufacturing': 'mf',
-                        'investment': 'i'
-                    };
-
-                    // Loop semua aspek
-                    Object.entries(aspectMap).forEach(([dbAspect, formAspect]) => {
-                        const percentage = score[dbAspect];
-                        const value = Math.round(percentage / 20); // Konversi ke 0-5
-
-                        // Cari semua radio button di indikator dan aspek terkait
-                        const selector =
-                            `div[data-indicator="${indicator}"] tr.row-${formAspect} input[value="${value}"]`;
-                        const radios = document.querySelectorAll(selector);
-
-                        // Set radio yang sesuai
-                        radios.forEach(radio => radio.checked = true);
-                    });
-                });
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Data berhasil dimuat!',
-                    text: 'Data terakhir telah diisi ke form',
-                });
-            } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal memuat data',
-                    text: error.message,
-                });
-            }
-        }
-    </script>
   <script>
-document.querySelectorAll('.user-dropdown').forEach(select => {
-    select.addEventListener('change', function(event) {
-        // Prevent the row from expanding/collapsing
-        event.stopPropagation();
+    //   document.addEventListener('DOMContentLoaded', function() {
+    //     calculateAllTotals();
+    // });
 
+    document.querySelectorAll('.user-dropdown').forEach(select => {
+        select.addEventListener('change', function(event) {
+            // Prevent the row from expanding/collapsing
+        event.stopPropagation();
+        
         const katsinovId = this.dataset.katsinovId;
         const moreuserId = this.value;
-
+        
         fetch("{{ route('admin.katsinov.update-user') }}", {
             method: 'POST',
             headers: {
@@ -478,11 +428,91 @@ document.querySelectorAll('.user-dropdown').forEach(select => {
             }).showToast();
         });
     });
-
+    
     // Prevent dropdown click from triggering row details
     select.addEventListener('click', function(event) {
         event.stopPropagation();
     });
 });
+</script>
+<script>
+    // function calculateAllTotals() {
+    //     document.querySelectorAll('.indicator-card').forEach(indicator => {
+    //         const rows = indicator.querySelectorAll('tr[class^="row-"]');
+    //         let total = 0;
+            
+    //         rows.forEach(row => {
+    //             const selectedRadio = row.querySelector('input[type="radio"]:checked');
+    //             if (selectedRadio) {
+    //                 total += parseInt(selectedRadio.value);
+    //             }
+    //         });
+            
+    //         const totalElement = indicator.querySelector('.total-value');
+    //         const percentage = (total / (rows.length * 5)) * 100;
+            
+    //         if (totalElement) {
+    //             totalElement.textContent = `${total} (${percentage.toFixed(2)}%)`;
+    //         }
+    //     });
+    // }
+    async function loadRecord() {
+        try {
+            const response = await fetch('/katsinov/latest');
+            if (!response.ok) throw new Error('Data tidak ditemukan');
+            const data = await response.json();
+
+            // Isi data dasar
+            document.querySelector('input[name="title"]').value = data.title || '';
+            document.querySelector('input[name="focus_area"]').value = data.focus_area || '';
+            document.querySelector('input[name="project_name"]').value = data.project_name || '';
+            document.querySelector('input[name="institution"]').value = data.institution || '';
+            document.querySelector('input[name="address"]').value = data.address || '';
+            document.querySelector('input[name="contact"]').value = data.contact || '';
+            document.querySelector('input[name="assessment_date"]').value = data.assessment_date || '';
+
+            // Isi skor per indikator dan aspek
+            data.scores.forEach(score => {
+                const indicator = score.indicator_number;
+
+                // Mapping aspek database ke class di form
+                const aspectMap = {
+                    'technology': 't',
+                    'organization': 'o',
+                    'risk': 'r',
+                    'market': 'm',
+                    'partnership': 'p',
+                    'manufacturing': 'mf',
+                    'investment': 'i'
+                };
+
+                // Loop semua aspek
+                Object.entries(aspectMap).forEach(([dbAspect, formAspect]) => {
+                    const percentage = score[dbAspect];
+                    const value = Math.round(percentage / 20); // Konversi ke 0-5
+
+                    // Cari semua radio button di indikator dan aspek terkait
+                    const selector =
+                        `div[data-indicator="${indicator}"] tr.row-${formAspect} input[value="${value}"]`;
+                    const radios = document.querySelectorAll(selector);
+
+                    // Set radio yang sesuai
+                    radios.forEach(radio => radio.checked = true);
+                });
+            });
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Data berhasil dimuat!',
+                text: 'Data terakhir telah diisi ke form',
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal memuat data',
+                text: error.message,
+            });
+        }
+    }
 </script>
 @endsection

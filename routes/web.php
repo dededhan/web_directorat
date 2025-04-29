@@ -242,30 +242,9 @@ Route::get('/sejarah-hilirisasi', [SejarahContentController::class, 'showPublic'
 // })->name('Pemeringkatan.ranking_unj.rankingunj');
 // In web.php
 
-Route::get('/katsinov/{katsinov_id}/record/summary', [KatsinovController::class, 'recordShow'])
-    ->name('admin.katsinov.record.show')
-    ->middleware(['auth']);
 
-    Route::get('/katsinov/{katsinov_id}/summary-indicator-one', [KatsinovController::class, 'summaryIndicatorOne'])
-    ->name('admin.katsinov.summary-indicator-one');
 
-    Route::get('/katsinov/{katsinov_id}/summary-indicator-two', [KatsinovController::class, 'summaryIndicatortwo'])
-    ->name('admin.katsinov.summary-indicator-two');
 
-    Route::get('/katsinov/{katsinov_id}/summary-indicator-three', [KatsinovController::class, 'summaryIndicatorthree'])
-    ->name('admin.katsinov.summary-indicator-three');
-
-    Route::get('/katsinov/{katsinov_id}/summary-indicator-four', [KatsinovController::class, 'summaryIndicatorfour'])
-    ->name('admin.katsinov.summary-indicator-four');
-
-    Route::get('/katsinov/{katsinov_id}/summary-indicator-five', [KatsinovController::class, 'summaryIndicatorfive'])
-    ->name('admin.katsinov.summary-indicator-five');
-
-    Route::get('/katsinov/{katsinov_id}/summary-indicator-six', [KatsinovController::class, 'summaryIndicatorsix'])
-    ->name('admin.katsinov.summary-indicator-six');
-
-    Route::get('admin/katsinov/summary-all/{katsinov_id}', [KatsinovController::class, 'summaryAll'])
-    ->name('admin.katsinov.summary-all');
     
 Route::get('/ranking_unj', [App\Http\Controllers\RankingController::class, 'showAllRankings'])
     ->name('Pemeringkatan.ranking_unj.rankingunj');

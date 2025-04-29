@@ -328,14 +328,20 @@
                 </tr>
                 <tr class="total-row">
                     <td colspan="2">Total Skor</td>
-                    <td colspan="6" class="total-value">0</td>
-                    <td colspan="1"></td>
+                    <td colspan="6" class="total-value">{{ $indicatorSix->sum('score')/ 2 }} </td>
+                    <td colspan="1" style="text-align: left; padding-left: 10px;">
+                        <a href="{{ route('admin.katsinov.lampiran.index', ['katsinov_id' => $katsinov['id'] ?? null]) }}" class="btn btn-sm" style="background-color: #277177; border-color: #277177; color: white;" target="_blank">
+                            <i class='bx bx-paperclip'></i> Lampiran
+                        </a>
+                    </td>
                 </tr>
-                <tr class="total-row">
-                    <td colspan="2">Persentase</td>
-                    <td colspan="6" class="total-value">0.00%</td>
-                    <td colspan="1" class="status-cell">TIDAK TERPENUHI</td>
-                </tr>
+            <tr class="total-row">
+                <td colspan="2">Persentase</td>
+                <td colspan="6" class="total-value">({{ number_format(($indicatorSix->sum('score') / (14 * 10)) * 100, 2) }}%)</td>
+                <td colspan="1" class="status-cell">
+                    {{ ($indicatorSix->sum('score') / (21 * 5)) * 100 >= 80 ? 'TERPENUHI' : 'TIDAK TERPENUHI' }}
+                </td>
+            </tr>
             </table>
            
             <div class="katsinov-legend">
