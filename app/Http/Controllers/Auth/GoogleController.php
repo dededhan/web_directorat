@@ -102,8 +102,9 @@ class GoogleController extends Controller
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
-            return redirect()->route('login')->with('error', 'Gagal login dengan Google: ' . $e->getMessage());
+            //kalo ngebug balikin
+            // return redirect()->route('login')->with('error', 'Gagal login dengan Google: ' . $e->getMessage());
+            return redirect()->route('home')->with('error', 'Gagal login dengan Google: ' . $e->getMessage());
         }
     }
 }
