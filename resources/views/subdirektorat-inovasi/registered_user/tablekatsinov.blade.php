@@ -94,7 +94,9 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning">Edit</button>
+                                        <a href="{{ route('subdirektorat-inovasi.registered_user.show', $katsinov->id) }}" class="btn btn-warning btn-sm mb-1">
+                                            <i class='bx bx-refresh'></i> Edit
+                                        </a>
                                         <button class="btn btn-sm btn-danger">Delete</button>
                                     </div>
                                     <div class="btn-group-vertical mt-2">

@@ -245,6 +245,7 @@ class KatsinovController extends Controller
             'admin_direktorat' => 'admin.katsinov.form_katsinov',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.form_katsinov',
             'validator' => 'subdirektorat-inovasi.validator.form_katsinov',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.form_katsinov',
             default => null,
         };
 
