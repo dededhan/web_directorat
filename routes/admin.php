@@ -114,7 +114,7 @@ Route::prefix('admin')->name('admin.')
 
         Route::delete('/manageuser/{user}', [UserController::class, 'destroy'])
             ->name('manageuser.destroy');
-            
+
         Route::put('/manageuser/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('manageuser.toggleStatus');
 
         Route::resource('/sustainability', AdminSustainabilityController::class);
@@ -185,9 +185,21 @@ Route::prefix('admin')->name('admin.')
                 // Route::get('/print_katsinov/{id}', [KatsinovController::class, 'downloadDetailPDF'])->name('print_katsinov');
                 Route::get('/print/{id}', [KatsinovController::class, 'printForm'])->name('print');
               
+                // Route::get('/print_katsinov/{id}', [KatsinovController::class, 'downloadDetailPDF'])->name('print_katsinov');
+
                 Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
                     ->name('signature.view');
-                
+
+                //summary
+                Route::get('{katsinov_id}/record/summary', [KatsinovController::class, 'recordShow'])->name('record.show');
+                Route::get('{katsinov_id}/summary-indicator-one', [KatsinovController::class, 'summaryIndicatorOne'])->name('summary-indicator-one');
+                Route::get('{katsinov_id}/summary-indicator-two', [KatsinovController::class, 'summaryIndicatortwo'])->name('summary-indicator-two');
+                Route::get('{katsinov_id}/summary-indicator-three', [KatsinovController::class, 'summaryIndicatorthree'])->name('summary-indicator-three');
+                Route::get('{katsinov_id}/summary-indicator-four', [KatsinovController::class, 'summaryIndicatorfour'])->name('summary-indicator-four');
+                Route::get('{katsinov_id}/summary-indicator-five', [KatsinovController::class, 'summaryIndicatorfive'])->name('summary-indicator-five');
+                Route::get('{katsinov_id}/summary-indicator-six', [KatsinovController::class, 'summaryIndicatorsix'])->name('summary-indicator-six');
+                Route::get('summary-all/{katsinov_id}', [KatsinovController::class, 'summaryAll'])->name('summary-all');
+
 
                 Route::get('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiIndex'])->name('inovasi.index');
                 Route::post('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
@@ -197,7 +209,7 @@ Route::prefix('admin')->name('admin.')
 
                 Route::get('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationIndex'])->name('informasi.index');
                 Route::post('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationStore'])->name('informasi.store');
-               
+
 
                 // Lampiran with katsinov_id parameter
                 Route::get('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranIndex'])->name('lampiran.index');
@@ -368,7 +380,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::delete('/document/{id}', [KatsinovController::class, 'destroyDocument'])->name('document.delete');
                 Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
                     ->name('signature.view');
-                
+
 
                 Route::get('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiIndex'])->name('inovasi.index');
                 Route::post('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
@@ -378,7 +390,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
                 Route::get('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationIndex'])->name('informasi.index');
                 Route::post('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationStore'])->name('informasi.store');
-               
+
 
                 // Lampiran with katsinov_id parameter
                 Route::get('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranIndex'])->name('lampiran.index');
@@ -445,7 +457,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::post('/store', [KatsinovController::class, 'store'])->name('store');
                 Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
                 Route::get('/show/{id}', [KatsinovController::class, 'show'])->name('show');
-                
+
                 Route::get('/katsinov/latest', [KatsinovController::class, 'latest']);
 
                 // Lampiran route
@@ -511,7 +523,18 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::delete('/document/{id}', [KatsinovController::class, 'destroyDocument'])->name('document.delete');
                 Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
                     ->name('signature.view');
+
                 
+                //summary
+                Route::get('{katsinov_id}/record/summary', [KatsinovController::class, 'recordShow'])->name('record.show');
+                Route::get('{katsinov_id}/summary-indicator-one', [KatsinovController::class, 'summaryIndicatorOne'])->name('summary-indicator-one');
+                Route::get('{katsinov_id}/summary-indicator-two', [KatsinovController::class, 'summaryIndicatortwo'])->name('summary-indicator-two');
+                Route::get('{katsinov_id}/summary-indicator-three', [KatsinovController::class, 'summaryIndicatorthree'])->name('summary-indicator-three');
+                Route::get('{katsinov_id}/summary-indicator-four', [KatsinovController::class, 'summaryIndicatorfour'])->name('summary-indicator-four');
+                Route::get('{katsinov_id}/summary-indicator-five', [KatsinovController::class, 'summaryIndicatorfive'])->name('summary-indicator-five');
+                Route::get('{katsinov_id}/summary-indicator-six', [KatsinovController::class, 'summaryIndicatorsix'])->name('summary-indicator-six');
+                Route::get('summary-all/{katsinov_id}', [KatsinovController::class, 'summaryAll'])->name('summary-all');
+
 
                 Route::get('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiIndex'])->name('inovasi.index');
                 Route::post('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
@@ -521,7 +544,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
                 Route::get('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationIndex'])->name('informasi.index');
                 Route::post('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationStore'])->name('informasi.store');
-               
+
 
                 // Lampiran with katsinov_id parameter
                 Route::get('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranIndex'])->name('lampiran.index');
@@ -572,7 +595,17 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::delete('/document/{id}', [KatsinovController::class, 'destroyDocument'])->name('document.delete');
                 Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
                     ->name('signature.view');
-                
+
+                //summary
+                Route::get('{katsinov_id}/record/summary', [KatsinovController::class, 'recordShow'])->name('record.show');
+                Route::get('{katsinov_id}/summary-indicator-one', [KatsinovController::class, 'summaryIndicatorOne'])->name('summary-indicator-one');
+                Route::get('{katsinov_id}/summary-indicator-two', [KatsinovController::class, 'summaryIndicatortwo'])->name('summary-indicator-two');
+                Route::get('{katsinov_id}/summary-indicator-three', [KatsinovController::class, 'summaryIndicatorthree'])->name('summary-indicator-three');
+                Route::get('{katsinov_id}/summary-indicator-four', [KatsinovController::class, 'summaryIndicatorfour'])->name('summary-indicator-four');
+                Route::get('{katsinov_id}/summary-indicator-five', [KatsinovController::class, 'summaryIndicatorfive'])->name('summary-indicator-five');
+                Route::get('{katsinov_id}/summary-indicator-six', [KatsinovController::class, 'summaryIndicatorsix'])->name('summary-indicator-six');
+                Route::get('summary-all/{katsinov_id}', [KatsinovController::class, 'summaryAll'])->name('summary-all');
+
 
                 Route::get('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiIndex'])->name('inovasi.index');
                 Route::post('/form-inovasi/{katsinov_id?}', [KatsinovController::class, 'inovasiStore'])->name('inovasi.store');
@@ -582,7 +615,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
                 Route::get('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationIndex'])->name('informasi.index');
                 Route::post('/informasi-dasar/{katsinov_id?}', [KatsinovController::class, 'informationStore'])->name('informasi.store');
-               
+
 
                 // Lampiran with katsinov_id parameter
                 Route::get('/lampiran/{katsinov_id?}', [KatsinovController::class, 'lampiranIndex'])->name('lampiran.index');

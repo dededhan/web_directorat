@@ -107,6 +107,12 @@
                                                 data-bs-target="#subforms-{{ $katsinov->id }}" aria-expanded="false">
                                             <i class='bx bx-folder-open'></i> Manage Sub-Forms
                                         </button>
+
+                                        <a href="{{ route('subdirektorat-inovasi.registered_user.summary-all', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
+                                            <i class='bx bx-chart'></i> Summary Keseluruhan
+                                        </a>
+
+                                        
                                     </div>
                                 </td>
                             </tr>
