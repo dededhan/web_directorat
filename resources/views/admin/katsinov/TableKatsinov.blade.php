@@ -242,7 +242,7 @@
                                         <option value="">Pilih User</option>
                                         @foreach ($users->sortBy('name') as $user)
                                             <option value="{{ $user->id }}" 
-                                                {{ $katsinov->user_id == $user->id ? 'selected' : '' }}
+                                                {{ $katsinov->moreuser_id == $user->id ? 'selected' : '' }}
                                                 data-role="{{ $user->role }}">
                                                 {{ $user->name }} ({{ $user->role }})
                                             </option>
@@ -498,7 +498,7 @@ document.querySelectorAll('.user-dropdown').forEach(select => {
         event.stopPropagation();
 
         const katsinovId = this.dataset.katsinovId;
-        const userId = this.value;
+        const moreuserId = this.value;
 
         fetch("{{ route('admin.katsinov.update-user') }}", {
             method: 'POST',
@@ -509,12 +509,12 @@ document.querySelectorAll('.user-dropdown').forEach(select => {
             },
             body: JSON.stringify({
                 katsinov_id: katsinovId,
-                user_id: userId
+                moreuser_id: moreuserId 
             })
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
+            if (moredata.success) {
                 Toastify({
                     text: "User berhasil diperbarui!",
                     duration: 3000,

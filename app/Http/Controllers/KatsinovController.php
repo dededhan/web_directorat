@@ -35,7 +35,7 @@ class KatsinovController extends Controller
             $katsinovs = auth()->user()->katsinovs()->with('scores', 'user')->latest()->paginate(100);
         } elseif ($role === 'validator') {
             // For validator role, only show katsinovs assigned to them
-            $katsinovs = $katsinovsQuery->where('user_id', Auth::id())->latest()->paginate(100);
+            $katsinovs = $katsinovsQuery->where('moreuser_id', Auth::id())->latest()->paginate(100);
         } else {
             // For admin roles, show all katsinovs
             $katsinovs = $katsinovsQuery->latest()->paginate(100);
@@ -123,6 +123,7 @@ class KatsinovController extends Controller
                     'contact' => $validated['contact'],
                     'assessment_date' => $validated['assessment_date'],
                     'user_id' => Auth::user()->id,
+                    'moreuser_id' => null,  
                 ]);
             }
 
@@ -251,19 +252,19 @@ class KatsinovController extends Controller
 
         return view($formview, $data);
     }
-
     public function updateUser(Request $request)
     {
         $request->validate([
             'katsinov_id' => 'required|exists:katsinovs,id',
-            'user_id' => 'nullable|exists:users,id'
+            'moreuser_id' => 'nullable|exists:users,id' // Update kolom moreuser_id
         ]);
-
+    
         $katsinov = Katsinov::findOrFail($request->katsinov_id);
-        $katsinov->update(['user_id' => $request->user_id]);
-
+        $katsinov->update(['moreuser_id' => $request->moreuser_id]); // Update moreuser_id, bukan user_id
+    
         return response()->json(['success' => true]);
     }
+
     public function downloadPDF()
     {
         $katsinovs = auth()->user()->katsinovs()->with('scores')->get();
