@@ -316,12 +316,12 @@
                 <tr class="row-mf">
                     <td class="row-number">14</td>
                     <td class="aspect-cell">Mf</td>
-                    <td><input type="radio" name="indikator1_row14" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 0)></td>
-                    <td><input type="radio" name="indikator1_row14" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 1)></td>
-                    <td><input type="radio" name="indikator1_row14" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 2)></td>
-                    <td><input type="radio" name="indikator1_row14" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 3)></td>
-                    <td><input type="radio" name="indikator1_row14" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 4)></td>
-                    <td><input type="radio" name="indikator1_row14" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 5)></td>
+                    <td><input type="radio" name="indikator1_row14" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 0)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                    <td><input type="radio" name="indikator1_row14" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 1)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                    <td><input type="radio" name="indikator1_row14" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 2)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                    <td><input type="radio" name="indikator1_row14" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 3)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                    <td><input type="radio" name="indikator1_row14" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 4)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                    <td><input type="radio" name="indikator1_row14" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 5)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
                     <td class="description-cell">Tersedia bukti konsep manufaktur melalui analitik atau eksperimen laboratorium.</td><td class="rating-columns">
                         <select name="indikator1_dropdown14" class="form-select">
                             <option value="">Pilih</option>
@@ -337,12 +337,12 @@
                 <tr class="row-mf">
                     <td class="row-number">15</td>
                     <td class="aspect-cell">Mf</td>
-                    <td><input type="radio" name="indikator1_row15" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 0)></td>
-                    <td><input type="radio" name="indikator1_row15" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 1)></td>
-                    <td><input type="radio" name="indikator1_row15" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 2)></td>
-                    <td><input type="radio" name="indikator1_row15" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 3)></td>
-                    <td><input type="radio" name="indikator1_row15" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 4)></td>
-                    <td><input type="radio" name="indikator1_row15" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 5)></td>
+                    <td><input type="radio" name="indikator1_row15" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 0)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                    <td><input type="radio" name="indikator1_row15" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 1)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                    <td><input type="radio" name="indikator1_row15" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 2)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                    <td><input type="radio" name="indikator1_row15" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 3)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                    <td><input type="radio" name="indikator1_row15" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 4)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                    <td><input type="radio" name="indikator1_row15" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 5)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
                     <td class="description-cell">Ide yang dikembangkan memiliki konsep model bisnis.</td>
                 <td class="rating-columns">
                         <select name="indikator1_dropdown15" class="form-select">
@@ -362,12 +362,12 @@
                     <td class="aspect-cell">I</td>
                     <td><input type="radio" name="row
                     <!-- Lanjutan I rows -->
-                   <td><input type="radio" name="indikator1_row16" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 0)></td>
-                   <td><input type="radio" name="indikator1_row16" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 1)></td>
-                   <td><input type="radio" name="indikator1_row16" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 2)></td>
-                   <td><input type="radio" name="indikator1_row16" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 3)></td>
-                   <td><input type="radio" name="indikator1_row16" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 4)></td>
-                   <td><input type="radio" name="indikator1_row16" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 5)></td>
+                   <td><input type="radio" name="indikator1_row16" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 0)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row16" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 1)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row16" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 2)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row16" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 3)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row16" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 4)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row16" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 5)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
                    <td class="description-cell">Ide yang dikembangkan memiliki hasil analisis pelanggan, pasar, dan pesaing.</td>
                <td class="rating-columns">
                         <select name="indikator1_dropdown16" class="form-select">
@@ -384,12 +384,12 @@
                <tr class="row-i">
                    <td class="row-number">17</td>
                    <td class="aspect-cell">I</td>
-                   <td><input type="radio" name="indikator1_row17" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 0)></td>
-                   <td><input type="radio" name="indikator1_row17" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 1)></td>
-                   <td><input type="radio" name="indikator1_row17" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 2)></td>
-                   <td><input type="radio" name="indikator1_row17" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 3)></td>
-                   <td><input type="radio" name="indikator1_row17" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 4)></td>
-                   <td><input type="radio" name="indikator1_row17" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 5)></td>
+                   <td><input type="radio" name="indikator1_row17" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 0)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row17" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 1)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row17" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 2)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row17" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 3)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row17" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 4)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row17" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 5)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
                    <td class="description-cell">Ide yang dikembangkan telah terbukti memberi solusi bagi pelanggan.</td>
                <td class="rating-columns">
                         <select name="indikator1_dropdown17" class="form-select">
@@ -406,12 +406,12 @@
                <tr class="row-i">
                    <td class="row-number">18</td>
                    <td class="aspect-cell">I</td>
-                   <td><input type="radio" name="indikator1_row18" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 0)></td>
-                   <td><input type="radio" name="indikator1_row18" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 1)></td>
-                   <td><input type="radio" name="indikator1_row18" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 2)></td>
-                   <td><input type="radio" name="indikator1_row18" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 3)></td>
-                   <td><input type="radio" name="indikator1_row18" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 4)></td>
-                   <td><input type="radio" name="indikator1_row18" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 5)></td>
+                   <td><input type="radio" name="indikator1_row18" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 0)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row18" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 1)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row18" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 2)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row18" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 3)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row18" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 4)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row18" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 5)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
                    <td class="description-cell">Telah tersusun strategi membangun jaringan kerja dan kemitraan.</td>
                <td class="rating-columns">
                         <select name="indikator1_dropdown18" class="form-select">
@@ -429,12 +429,12 @@
                <tr class="row-p">
                    <td class="row-number">19</td>
                    <td class="aspect-cell">P</td>
-                   <td><input type="radio" name="indikator1_row19" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 0)></td>
-                   <td><input type="radio" name="indikator1_row19" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 1)></td>
-                   <td><input type="radio" name="indikator1_row19" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 2)></td>
-                   <td><input type="radio" name="indikator1_row19" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 3)></td>
-                   <td><input type="radio" name="indikator1_row19" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 4)></td>
-                   <td><input type="radio" name="indikator1_row19" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 5)></td>
+                   <td><input type="radio" name="indikator1_row19" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 0)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row19" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 1)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row19" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 2)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row19" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 3)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row19" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 4)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row19" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 5)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
                    <td class="description-cell">Mitra potensial telah diidentifikasi.</td>
                <td class="rating-columns">
                         <select name="indikator1_dropdown19" class="form-select">
@@ -451,12 +451,12 @@
                <tr class="row-p">
                    <td class="row-number">20</td>
                    <td class="aspect-cell">P</td>
-                   <td><input type="radio" name="indikator1_row20" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 0)></td>
-                   <td><input type="radio" name="indikator1_row20" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 1)></td>
-                   <td><input type="radio" name="indikator1_row20" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 2)></td>
-                   <td><input type="radio" name="indikator1_row20" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 3)></td>
-                   <td><input type="radio" name="indikator1_row20" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 4)></td>
-                   <td><input type="radio" name="indikator1_row20" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 5)></td>
+                   <td><input type="radio" name="indikator1_row20" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 0)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row20" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 1)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row20" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 2)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row20" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 3)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row20" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 4)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row20" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 5)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
                    <td class="description-cell">Kajian risiko teknologi telah menjadi pertimbangan dalam setiap langkah penelitian.</td>
                <td class="rating-columns">
                         <select name="indikator1_dropdown20" class="form-select">
@@ -474,12 +474,12 @@
                <tr class="row-r">
                    <td class="row-number">21</td>
                    <td class="aspect-cell">R</td>
-                   <td><input type="radio" name="indikator1_row21" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 0)></td>
-                   <td><input type="radio" name="indikator1_row21" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 1)></td>
-                   <td><input type="radio" name="indikator1_row21" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 2)></td>
-                   <td><input type="radio" name="indikator1_row21" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 3)></td>
-                   <td><input type="radio" name="indikator1_row21" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 4)></td>
-                   <td><input type="radio" name="indikator1_row21" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 5)></td>
+                   <td><input type="radio" name="indikator1_row21" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 0)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row21" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 1)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row21" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 2)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row21" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 3)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row21" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 4)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
+                   <td><input type="radio" name="indikator1_row21" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 5)@if(request()->routeIs('subdirektorat-inovasi.validator.show')) disabled @endif></td>
                    <td class="description-cell">Pada tahap penelitian dilakukan penyusunan rencana pengendalian risiko teknologi.</td>
                <td class="rating-columns">
                         <select name="indikator1_dropdown21" class="form-select">

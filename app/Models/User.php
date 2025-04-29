@@ -24,25 +24,7 @@ class User extends Authenticatable
 
 
     // Relationships
-    public function dosen()
-    {
-        return $this->hasOne(Dosen::class);
-    }
-
-    public function mahasiswa()
-    {
-        return $this->hasOne(Mahasiswa::class);
-    }
-
-    public function fakultas()
-    {
-        return $this->hasOne(Fakultas::class);
-    }
-
-    public function prodi()
-    {
-        return $this->hasOne(Prodi::class);
-    }
+    
 
     public function hasRole($role){
         return $this->role === $role;

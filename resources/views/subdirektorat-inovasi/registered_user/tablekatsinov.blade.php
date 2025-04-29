@@ -94,7 +94,9 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning">Edit</button>
+                                        <a href="{{ route('subdirektorat-inovasi.registered_user.show', $katsinov->id) }}" class="btn btn-warning btn-sm mb-1">
+                                            <i class='bx bx-refresh'></i> Edit
+                                        </a>
                                         <button class="btn btn-sm btn-danger">Delete</button>
                                     </div>
                                     <div class="btn-group-vertical mt-2">
@@ -121,12 +123,12 @@
                                                 <a href="{{ route('subdirektorat-inovasi.registered_user.informasi.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-info-circle'></i> Form Informasi Dasar
                                                 </a>
-                                                <a href="{{ route('subdirektorat-inovasi.registered_user.berita.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
+                                                {{-- <a href="{{ route('subdirektorat-inovasi.registered_user.berita.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-news'></i> Form Berita Acara
                                                 </a>
                                                 <a href="{{ route('subdirektorat-inovasi.registered_user.record.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-bar-chart-alt-2'></i> Form Record Hasil
-                                                </a>
+                                                </a> --}}
                                                 <a href="{{ route('subdirektorat-inovasi.registered_user.lampiran.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-paperclip'></i> Lampiran
                                                 </a>
