@@ -1128,49 +1128,49 @@ class KatsinovController extends Controller
         }
     }
     public function recordShow($katsinov_id)
-{
-    try {
-        // Load Katsinov dengan eager loading relasi scores
-        $katsinov = Katsinov::with(['scores', 'responses', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
-        
-        // Logging untuk debug
-        \Log::info('Katsinov data loaded', [
-            'id' => $katsinov->id, 
-            'has_scores' => $katsinov->scores->count() > 0,
-            'scores_count' => $katsinov->scores->count(),
-            'raw_scores' => $katsinov->scores->toArray() // Log data skor mentah untuk inspeksi
-        ]);
-        
-        // Get record jika ada, atau buat instance baru
-        $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
-            'katsinov_id' => $katsinov_id,
-            'judul_inovasi' => $katsinov->title,
-            'rekomendasi' => '' // Default empty recommendation
-        ]);
-        
-        // Hitung skor rata-rata dengan fallback value (default value)
-        // dan tambahkan debugging untuk setiap aspek
-        $aspectScores = [
-            'technology' => $this->getAverageScore($katsinov->scores, 'technology'),
-            'organization' => $this->getAverageScore($katsinov->scores, 'organization'),
-            'risk' => $this->getAverageScore($katsinov->scores, 'risk'),
-            'market' => $this->getAverageScore($katsinov->scores, 'market'),
-            'partnership' => $this->getAverageScore($katsinov->scores, 'partnership'),
-            'manufacturing' => $this->getAverageScore($katsinov->scores, 'manufacturing'),
-            'investment' => $this->getAverageScore($katsinov->scores, 'investment')
-        ];
-        
-        // Log skor hasil kalkulasi untuk debugging
-        \Log::info('Calculated aspect scores', $aspectScores);
-        
-        // Jika semua nilai masih 0, gunakan data dummy untuk testing
-        $allZeros = array_sum(array_values($aspectScores)) == 0;
-        if ($allZeros) {
-            \Log::warning('All aspect scores are zero, check KatsinovScore records for this Katsinov');
-            
-            // Opsi: Gunakan nilai dummy untuk testing tampilan chart
-            // Uncomment baris di bawah untuk menggunakan data dummy
-            /*
+    {
+        try {
+            // Load Katsinov dengan eager loading relasi scores
+            $katsinov = Katsinov::with(['scores', 'responses', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
+
+            // Logging untuk debug
+            \Log::info('Katsinov data loaded', [
+                'id' => $katsinov->id,
+                'has_scores' => $katsinov->scores->count() > 0,
+                'scores_count' => $katsinov->scores->count(),
+                'raw_scores' => $katsinov->scores->toArray() // Log data skor mentah untuk inspeksi
+            ]);
+
+            // Get record jika ada, atau buat instance baru
+            $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
+                'katsinov_id' => $katsinov_id,
+                'judul_inovasi' => $katsinov->title,
+                'rekomendasi' => '' // Default empty recommendation
+            ]);
+
+            // Hitung skor rata-rata dengan fallback value (default value)
+            // dan tambahkan debugging untuk setiap aspek
+            $aspectScores = [
+                'technology' => $this->getAverageScore($katsinov->scores, 'technology'),
+                'organization' => $this->getAverageScore($katsinov->scores, 'organization'),
+                'risk' => $this->getAverageScore($katsinov->scores, 'risk'),
+                'market' => $this->getAverageScore($katsinov->scores, 'market'),
+                'partnership' => $this->getAverageScore($katsinov->scores, 'partnership'),
+                'manufacturing' => $this->getAverageScore($katsinov->scores, 'manufacturing'),
+                'investment' => $this->getAverageScore($katsinov->scores, 'investment')
+            ];
+
+            // Log skor hasil kalkulasi untuk debugging
+            \Log::info('Calculated aspect scores', $aspectScores);
+
+            // Jika semua nilai masih 0, gunakan data dummy untuk testing
+            $allZeros = array_sum(array_values($aspectScores)) == 0;
+            if ($allZeros) {
+                \Log::warning('All aspect scores are zero, check KatsinovScore records for this Katsinov');
+
+                // Opsi: Gunakan nilai dummy untuk testing tampilan chart
+                // Uncomment baris di bawah untuk menggunakan data dummy
+                /*
             $aspectScores = [
                 'technology' => 75,
                 'organization' => 60,
@@ -1181,513 +1181,513 @@ class KatsinovController extends Controller
                 'investment' => 55
             ];
             */
-        }
-        
-        return view('admin.katsinov.summarykatsinov', compact('katsinov', 'record', 'aspectScores'));
-    } catch (\Exception $e) {
-        \Log::error('Error in recordShow: ' . $e->getMessage());
-        \Log::error($e->getTraceAsString());
-        return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
-    }
-}
-
-// Helper method untuk menghitung rata-rata dengan debugging
-private function getAverageScore($scores, $field)
-{
-    if ($scores->isEmpty()) {
-        \Log::warning("No scores found for field: {$field}");
-        return 0;
-    }
-    
-    $values = $scores->pluck($field)->filter()->toArray();
-    $count = count($values);
-    
-    if ($count === 0) {
-        \Log::warning("Field {$field} has no valid values");
-        return 0;
-    }
-    
-    $sum = array_sum($values);
-    $avg = $sum / $count;
-    
-    \Log::info("Field {$field} calculation", [
-        'values' => $values,
-        'count' => $count,
-        'sum' => $sum,
-        'average' => $avg
-    ]);
-    
-    return $avg;
-}
-public function summaryIndicatorOne($katsinov_id)
-{
-    try {
-        $katsinov = Katsinov::with(['scores', 'responses', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
-        
-        // Get all responses for Indicator 1
-        $indicator1Responses = $katsinov->responses()->where('indicator_number', 1)->get();
-        
-        // Group the responses by aspect
-        $aspectResponses = [];
-        $aspectCodes = ['T', 'M', 'O', 'Mf', 'P', 'I', 'R'];
-        
-        foreach ($aspectCodes as $code) {
-            $aspectResponses[$code] = $indicator1Responses->where('aspect', $code)->values();
-        }
-        
-        // Calculate overall aspect scores
-        $aspectScores = [
-            'technology' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'technology'),
-            'market' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'market'),
-            'organization' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'organization'),
-            'manufacturing' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'manufacturing'),
-            'partnership' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'partnership'),
-            'investment' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'investment'),
-            'risk' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'risk')
-        ];
-
-        // Calculate categories for all aspects
-        $categories = [];
-        foreach ($aspectScores as $key => $score) {
-            $categories[$key] = $this->getScoreCategory($score);
-        }
-        
-        // Prepare question-level scores for each aspect
-        $questionScores = [
-            'technology' => [],
-            'market' => [],
-            'organization' => [],
-            'manufacturing' => [],
-            'partnership' => [],
-            'investment' => [],
-            'risk' => []
-        ];
-        
-        // Map the aspect codes to keys
-        $aspectMap = [
-            'T' => 'technology',
-            'M' => 'market',
-            'O' => 'organization',
-            'Mf' => 'manufacturing',
-            'P' => 'partnership',
-            'I' => 'investment',
-            'R' => 'risk'
-        ];
-        
-        // Fill the question scores array
-        foreach ($indicator1Responses as $response) {
-            $aspect = $aspectMap[$response->aspect] ?? null;
-            if ($aspect) {
-                // Map row numbers to question indices (0-based for JavaScript arrays)
-                $questionIndex = $response->row_number - 1;
-                $questionScores[$aspect][$questionIndex] = $response->score;
             }
+
+            return view('admin.katsinov.summarykatsinov', compact('katsinov', 'record', 'aspectScores'));
+        } catch (\Exception $e) {
+            \Log::error('Error in recordShow: ' . $e->getMessage());
+            \Log::error($e->getTraceAsString());
+            return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
         }
-        
-        $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
-            'katsinov_id' => $katsinov_id,
-            'rekomendasi' => ''
-        ]);
-        
-        return view('admin.katsinov.summary_indicator_one', compact(
-            'katsinov', 
-            'aspectScores', 
-            'questionScores', 
-            'record', 
-            'categories',
-            'aspectResponses'
-        ));
-    } catch (\Exception $e) {
-        \Log::error('Error in summaryIndicatorOne: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
     }
-}
 
+    // Helper method untuk menghitung rata-rata dengan debugging
+    private function getAverageScore($scores, $field)
+    {
+        if ($scores->isEmpty()) {
+            \Log::warning("No scores found for field: {$field}");
+            return 0;
+        }
 
-public function summaryIndicatorTwo($katsinov_id)
-{
-    try {
-        $katsinov = Katsinov::with(['scores', 'responses', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
-        
-        // Get all responses for Indicator 2
-        $indicator2Responses = $katsinov->responses()->where('indicator_number', 2)->get();
-        
-        // Group the responses by aspect
-        $aspectResponses = [];
-        $aspectCodes = ['T', 'M', 'O', 'Mf', 'P', 'I', 'R'];
-        
-        foreach ($aspectCodes as $code) {
-            $aspectResponses[$code] = $indicator2Responses->where('aspect', $code)->values();
-        }
-        
-        // Calculate overall aspect scores
-        $aspectScores = [
-            'technology' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'technology'),
-            'market' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'market'),
-            'organization' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'organization'),
-            'manufacturing' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'manufacturing'),
-            'partnership' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'partnership'),
-            'investment' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'investment'),
-            'risk' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'risk')
-        ];
+        $values = $scores->pluck($field)->filter()->toArray();
+        $count = count($values);
 
-        // Calculate categories for all aspects
-        $categories = [];
-        foreach ($aspectScores as $key => $score) {
-            $categories[$key] = $this->getScoreCategory($score);
+        if ($count === 0) {
+            \Log::warning("Field {$field} has no valid values");
+            return 0;
         }
-        
-        // Prepare question-level scores for each aspect
-        $questionScores = [
-            'technology' => [],
-            'market' => [],
-            'organization' => [],
-            'manufacturing' => [],
-            'partnership' => [],
-            'investment' => [],
-            'risk' => []
-        ];
-        
-        // Map the aspect codes to keys
-        $aspectMap = [
-            'T' => 'technology',
-            'M' => 'market',
-            'O' => 'organization',
-            'Mf' => 'manufacturing',
-            'P' => 'partnership',
-            'I' => 'investment',
-            'R' => 'risk'
-        ];
-        
-        // Fill the question scores array
-        foreach ($indicator2Responses as $response) {
-            $aspect = $aspectMap[$response->aspect] ?? null;
-            if ($aspect) {
-                // Map row numbers to question indices (0-based for JavaScript arrays)
-                $questionIndex = $response->row_number - 1;
-                $questionScores[$aspect][$questionIndex] = $response->score;
-            }
-        }
-        
-        $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
-            'katsinov_id' => $katsinov_id,
-            'rekomendasi' => ''
+
+        $sum = array_sum($values);
+        $avg = $sum / $count;
+
+        \Log::info("Field {$field} calculation", [
+            'values' => $values,
+            'count' => $count,
+            'sum' => $sum,
+            'average' => $avg
         ]);
-        
-        return view('admin.katsinov.summary_indicator_two', compact(
-            'katsinov', 
-            'aspectScores', 
-            'questionScores', 
-            'record', 
-            'categories',
-            'aspectResponses'
-        ));
-    } catch (\Exception $e) {
-        \Log::error('Error in summaryIndicatorTwo: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
-    }
-}
-public function summaryIndicatorThree($katsinov_id)
-{
-    try {
-        $katsinov = Katsinov::with(['scores', 'responses', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
-        
-        // Get all responses for Indicator 3
-        $indicator3Responses = $katsinov->responses()->where('indicator_number', 3)->get();
-        
-        // Group the responses by aspect
-        $aspectResponses = [];
-        $aspectCodes = ['T', 'M', 'O', 'Mf', 'P', 'I', 'R'];
-        
-        foreach ($aspectCodes as $code) {
-            $aspectResponses[$code] = $indicator3Responses->where('aspect', $code)->values();
-        }
-        
-        // Calculate overall aspect scores
-        $aspectScores = [
-            'technology' => $this->getAverageScore($katsinov->scores->where('indicator_number', 3), 'technology'),
-            'market' => $this->getAverageScore($katsinov->scores->where('indicator_number', 3), 'market'),
-            'organization' => $this->getAverageScore($katsinov->scores->where('indicator_number', 3), 'organization'),
-            'manufacturing' => $this->getAverageScore($katsinov->scores->where('indicator_number', 3), 'manufacturing'),
-            'partnership' => $this->getAverageScore($katsinov->scores->where('indicator_number', 3), 'partnership'),
-            'investment' => $this->getAverageScore($katsinov->scores->where('indicator_number', 3), 'investment'),
-            'risk' => $this->getAverageScore($katsinov->scores->where('indicator_number', 3), 'risk')
-        ];
 
-        // Calculate categories for all aspects
-        $categories = [];
-        foreach ($aspectScores as $key => $score) {
-            $categories[$key] = $this->getScoreCategory($score);
-        }
-        
-        // Prepare question-level scores for each aspect
-        $questionScores = [
-            'technology' => [],
-            'market' => [],
-            'organization' => [],
-            'manufacturing' => [],
-            'partnership' => [],
-            'investment' => [],
-            'risk' => []
-        ];
-        
-        // Map the aspect codes to keys
-        $aspectMap = [
-            'T' => 'technology',
-            'M' => 'market',
-            'O' => 'organization',
-            'Mf' => 'manufacturing',
-            'P' => 'partnership',
-            'I' => 'investment',
-            'R' => 'risk'
-        ];
-        
-        // Fill the question scores array
-        foreach ($indicator3Responses as $response) {
-            $aspect = $aspectMap[$response->aspect] ?? null;
-            if ($aspect) {
-                // Map row numbers to question indices (0-based for JavaScript arrays)
-                $questionIndex = $response->row_number - 1;
-                $questionScores[$aspect][$questionIndex] = $response->score;
-            }
-        }
-        
-        $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
-            'katsinov_id' => $katsinov_id,
-            'rekomendasi' => ''
-        ]);
-        
-        return view('admin.katsinov.summary_indicator_three', compact(
-            'katsinov', 
-            'aspectScores', 
-            'questionScores', 
-            'record', 
-            'categories',
-            'aspectResponses'
-        ));
-    } catch (\Exception $e) {
-        \Log::error('Error in summaryIndicatorThree: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
+        return $avg;
     }
-}
-public function summaryIndicatorFour($katsinov_id)
-{
-    try {
-        $katsinov = Katsinov::with(['scores', 'responses', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
-        
-        // Get all responses for Indicator 4
-        $indicator4Responses = $katsinov->responses()->where('indicator_number', 4)->get();
-        
-        // Group the responses by aspect
-        $aspectResponses = [];
-        $aspectCodes = ['T', 'M', 'O', 'Mf', 'P', 'I', 'R'];
-        
-        foreach ($aspectCodes as $code) {
-            $aspectResponses[$code] = $indicator4Responses->where('aspect', $code)->values();
-        }
-        
-        // Calculate overall aspect scores
-        $aspectScores = [
-            'technology' => $this->getAverageScore($katsinov->scores->where('indicator_number', 4), 'technology'),
-            'market' => $this->getAverageScore($katsinov->scores->where('indicator_number', 4), 'market'),
-            'organization' => $this->getAverageScore($katsinov->scores->where('indicator_number', 4), 'organization'),
-            'manufacturing' => $this->getAverageScore($katsinov->scores->where('indicator_number', 4), 'manufacturing'),
-            'partnership' => $this->getAverageScore($katsinov->scores->where('indicator_number', 4), 'partnership'),
-            'investment' => $this->getAverageScore($katsinov->scores->where('indicator_number', 4), 'investment'),
-            'risk' => $this->getAverageScore($katsinov->scores->where('indicator_number', 4), 'risk')
-        ];
-
-        // Calculate categories for all aspects
-        $categories = [];
-        foreach ($aspectScores as $key => $score) {
-            $categories[$key] = $this->getScoreCategory($score);
-        }
-        
-        // Prepare question-level scores for each aspect
-        $questionScores = [
-            'technology' => [],
-            'market' => [],
-            'organization' => [],
-            'manufacturing' => [],
-            'partnership' => [],
-            'investment' => [],
-            'risk' => []
-        ];
-        
-        // Map the aspect codes to keys
-        $aspectMap = [
-            'T' => 'technology',
-            'M' => 'market',
-            'O' => 'organization',
-            'Mf' => 'manufacturing',
-            'P' => 'partnership',
-            'I' => 'investment',
-            'R' => 'risk'
-        ];
-        
-        // Fill the question scores array
-        foreach ($indicator4Responses as $response) {
-            $aspect = $aspectMap[$response->aspect] ?? null;
-            if ($aspect) {
-                // Map row numbers to question indices (0-based for JavaScript arrays)
-                $questionIndex = $response->row_number - 1;
-                $questionScores[$aspect][$questionIndex] = $response->score;
-            }
-        }
-        
-        $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
-            'katsinov_id' => $katsinov_id,
-            'rekomendasi' => ''
-        ]);
-        
-        return view('admin.katsinov.summary_indicator_four', compact(
-            'katsinov', 
-            'aspectScores', 
-            'questionScores', 
-            'record', 
-            'categories',
-            'aspectResponses'
-        ));
-    } catch (\Exception $e) {
-        \Log::error('Error in summaryIndicatorFour: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
-    }
-}
-public function summaryIndicatorFive($katsinov_id)
-{
-    try {
-        $katsinov = Katsinov::with(['scores', 'responses', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
-        
-        // Get all responses for Indicator 5
-        $indicator5Responses = $katsinov->responses()->where('indicator_number', 5)->get();
-        
-        // Group the responses by aspect
-        $aspectResponses = [];
-        $aspectCodes = ['T', 'M', 'O', 'Mf', 'P', 'I', 'R'];
-        
-        foreach ($aspectCodes as $code) {
-            $aspectResponses[$code] = $indicator5Responses->where('aspect', $code)->values();
-        }
-        
-        // Calculate overall aspect scores
-        $aspectScores = [
-            'technology' => $this->getAverageScore($katsinov->scores->where('indicator_number', 5), 'technology'),
-            'market' => $this->getAverageScore($katsinov->scores->where('indicator_number', 5), 'market'),
-            'organization' => $this->getAverageScore($katsinov->scores->where('indicator_number', 5), 'organization'),
-            'manufacturing' => $this->getAverageScore($katsinov->scores->where('indicator_number', 5), 'manufacturing'),
-            'partnership' => $this->getAverageScore($katsinov->scores->where('indicator_number', 5), 'partnership'),
-            'investment' => $this->getAverageScore($katsinov->scores->where('indicator_number', 5), 'investment'),
-            'risk' => $this->getAverageScore($katsinov->scores->where('indicator_number', 5), 'risk')
-        ];
-
-        // Calculate categories for all aspects
-        $categories = [];
-        foreach ($aspectScores as $key => $score) {
-            $categories[$key] = $this->getScoreCategory($score);
-        }
-        
-        // Prepare question-level scores for each aspect
-        $questionScores = [
-            'technology' => [],
-            'market' => [],
-            'organization' => [],
-            'manufacturing' => [],
-            'partnership' => [],
-            'investment' => [],
-            'risk' => []
-        ];
-        
-        // Map the aspect codes to keys
-        $aspectMap = [
-            'T' => 'technology',
-            'M' => 'market',
-            'O' => 'organization',
-            'Mf' => 'manufacturing',
-            'P' => 'partnership',
-            'I' => 'investment',
-            'R' => 'risk'
-        ];
-        
-        // Fill the question scores array
-        foreach ($indicator5Responses as $response) {
-            $aspect = $aspectMap[$response->aspect] ?? null;
-            if ($aspect) {
-                // For Indicator 5, map row numbers to indices based on the specific structure
-                $rowToIndexMap = [
-                    // Technology questions
-                    1 => ['technology', 0],
-                    2 => ['technology', 1],
-                    3 => ['technology', 2],
-                    4 => ['technology', 3],
-                    // Market questions
-                    5 => ['market', 0],
-                    6 => ['market', 1],
-                    7 => ['market', 2],
-                    8 => ['market', 3],
-                    // Organization questions
-                    9 => ['organization', 0],
-                    10 => ['organization', 1],
-                    11 => ['organization', 2],
-                    12 => ['organization', 3],
-                    // Manufacturing questions
-                    13 => ['manufacturing', 0],
-                    14 => ['manufacturing', 1],
-                    15 => ['manufacturing', 2],
-                    16 => ['manufacturing', 3],
-                    // Investment questions
-                    17 => ['investment', 0],
-                    18 => ['investment', 1],
-                    // Partnership questions
-                    19 => ['partnership', 0],
-                    20 => ['partnership', 1],
-                    21 => ['partnership', 2],
-                    // Risk questions
-                    22 => ['risk', 0],
-                    23 => ['risk', 1],
-                    24 => ['risk', 2]
-                ];
-                
-                if (isset($rowToIndexMap[$response->row_number])) {
-                    list($mappedAspect, $questionIndex) = $rowToIndexMap[$response->row_number];
-                    $questionScores[$mappedAspect][$questionIndex] = $response->score;
-                }
-            }
-        }
-        
-        $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
-            'katsinov_id' => $katsinov_id,
-            'rekomendasi' => ''
-        ]);
-        
-        return view('admin.katsinov.summary_indicator_five', compact(
-            'katsinov', 
-            'aspectScores', 
-            'questionScores', 
-            'record', 
-            'categories',
-            'aspectResponses'
-        ));
-    } catch (\Exception $e) {
-        \Log::error('Error in summaryIndicatorFive: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
-    }
-}
-public function summaryIndicatorSix($katsinov_id)
+    public function summaryIndicatorOne($katsinov_id)
     {
         try {
             $katsinov = Katsinov::with(['scores', 'responses', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
-            
-            // Get all responses for Indicator 6
-            $indicator6Responses = $katsinov->responses()->where('indicator_number', 6)->get();
-            
+
+            // Get all responses for Indicator 1
+            $indicator1Responses = $katsinov->responses()->where('indicator_number', 1)->get();
+
             // Group the responses by aspect
             $aspectResponses = [];
             $aspectCodes = ['T', 'M', 'O', 'Mf', 'P', 'I', 'R'];
-            
+
+            foreach ($aspectCodes as $code) {
+                $aspectResponses[$code] = $indicator1Responses->where('aspect', $code)->values();
+            }
+
+            // Calculate overall aspect scores
+            $aspectScores = [
+                'technology' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'technology'),
+                'market' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'market'),
+                'organization' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'organization'),
+                'manufacturing' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'manufacturing'),
+                'partnership' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'partnership'),
+                'investment' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'investment'),
+                'risk' => $this->getAverageScore($katsinov->scores->where('indicator_number', 1), 'risk')
+            ];
+
+            // Calculate categories for all aspects
+            $categories = [];
+            foreach ($aspectScores as $key => $score) {
+                $categories[$key] = $this->getScoreCategory($score);
+            }
+
+            // Prepare question-level scores for each aspect
+            $questionScores = [
+                'technology' => [],
+                'market' => [],
+                'organization' => [],
+                'manufacturing' => [],
+                'partnership' => [],
+                'investment' => [],
+                'risk' => []
+            ];
+
+            // Map the aspect codes to keys
+            $aspectMap = [
+                'T' => 'technology',
+                'M' => 'market',
+                'O' => 'organization',
+                'Mf' => 'manufacturing',
+                'P' => 'partnership',
+                'I' => 'investment',
+                'R' => 'risk'
+            ];
+
+            // Fill the question scores array
+            foreach ($indicator1Responses as $response) {
+                $aspect = $aspectMap[$response->aspect] ?? null;
+                if ($aspect) {
+                    // Map row numbers to question indices (0-based for JavaScript arrays)
+                    $questionIndex = $response->row_number - 1;
+                    $questionScores[$aspect][$questionIndex] = $response->score;
+                }
+            }
+
+            $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
+                'katsinov_id' => $katsinov_id,
+                'rekomendasi' => ''
+            ]);
+
+            return view('admin.katsinov.summary_indicator_one', compact(
+                'katsinov',
+                'aspectScores',
+                'questionScores',
+                'record',
+                'categories',
+                'aspectResponses'
+            ));
+        } catch (\Exception $e) {
+            \Log::error('Error in summaryIndicatorOne: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
+        }
+    }
+
+
+    public function summaryIndicatorTwo($katsinov_id)
+    {
+        try {
+            $katsinov = Katsinov::with(['scores', 'responses', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
+
+            // Get all responses for Indicator 2
+            $indicator2Responses = $katsinov->responses()->where('indicator_number', 2)->get();
+
+            // Group the responses by aspect
+            $aspectResponses = [];
+            $aspectCodes = ['T', 'M', 'O', 'Mf', 'P', 'I', 'R'];
+
+            foreach ($aspectCodes as $code) {
+                $aspectResponses[$code] = $indicator2Responses->where('aspect', $code)->values();
+            }
+
+            // Calculate overall aspect scores
+            $aspectScores = [
+                'technology' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'technology'),
+                'market' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'market'),
+                'organization' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'organization'),
+                'manufacturing' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'manufacturing'),
+                'partnership' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'partnership'),
+                'investment' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'investment'),
+                'risk' => $this->getAverageScore($katsinov->scores->where('indicator_number', 2), 'risk')
+            ];
+
+            // Calculate categories for all aspects
+            $categories = [];
+            foreach ($aspectScores as $key => $score) {
+                $categories[$key] = $this->getScoreCategory($score);
+            }
+
+            // Prepare question-level scores for each aspect
+            $questionScores = [
+                'technology' => [],
+                'market' => [],
+                'organization' => [],
+                'manufacturing' => [],
+                'partnership' => [],
+                'investment' => [],
+                'risk' => []
+            ];
+
+            // Map the aspect codes to keys
+            $aspectMap = [
+                'T' => 'technology',
+                'M' => 'market',
+                'O' => 'organization',
+                'Mf' => 'manufacturing',
+                'P' => 'partnership',
+                'I' => 'investment',
+                'R' => 'risk'
+            ];
+
+            // Fill the question scores array
+            foreach ($indicator2Responses as $response) {
+                $aspect = $aspectMap[$response->aspect] ?? null;
+                if ($aspect) {
+                    // Map row numbers to question indices (0-based for JavaScript arrays)
+                    $questionIndex = $response->row_number - 1;
+                    $questionScores[$aspect][$questionIndex] = $response->score;
+                }
+            }
+
+            $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
+                'katsinov_id' => $katsinov_id,
+                'rekomendasi' => ''
+            ]);
+
+            return view('admin.katsinov.summary_indicator_two', compact(
+                'katsinov',
+                'aspectScores',
+                'questionScores',
+                'record',
+                'categories',
+                'aspectResponses'
+            ));
+        } catch (\Exception $e) {
+            \Log::error('Error in summaryIndicatorTwo: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
+        }
+    }
+    public function summaryIndicatorThree($katsinov_id)
+    {
+        try {
+            $katsinov = Katsinov::with(['scores', 'responses', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
+
+            // Get all responses for Indicator 3
+            $indicator3Responses = $katsinov->responses()->where('indicator_number', 3)->get();
+
+            // Group the responses by aspect
+            $aspectResponses = [];
+            $aspectCodes = ['T', 'M', 'O', 'Mf', 'P', 'I', 'R'];
+
+            foreach ($aspectCodes as $code) {
+                $aspectResponses[$code] = $indicator3Responses->where('aspect', $code)->values();
+            }
+
+            // Calculate overall aspect scores
+            $aspectScores = [
+                'technology' => $this->getAverageScore($katsinov->scores->where('indicator_number', 3), 'technology'),
+                'market' => $this->getAverageScore($katsinov->scores->where('indicator_number', 3), 'market'),
+                'organization' => $this->getAverageScore($katsinov->scores->where('indicator_number', 3), 'organization'),
+                'manufacturing' => $this->getAverageScore($katsinov->scores->where('indicator_number', 3), 'manufacturing'),
+                'partnership' => $this->getAverageScore($katsinov->scores->where('indicator_number', 3), 'partnership'),
+                'investment' => $this->getAverageScore($katsinov->scores->where('indicator_number', 3), 'investment'),
+                'risk' => $this->getAverageScore($katsinov->scores->where('indicator_number', 3), 'risk')
+            ];
+
+            // Calculate categories for all aspects
+            $categories = [];
+            foreach ($aspectScores as $key => $score) {
+                $categories[$key] = $this->getScoreCategory($score);
+            }
+
+            // Prepare question-level scores for each aspect
+            $questionScores = [
+                'technology' => [],
+                'market' => [],
+                'organization' => [],
+                'manufacturing' => [],
+                'partnership' => [],
+                'investment' => [],
+                'risk' => []
+            ];
+
+            // Map the aspect codes to keys
+            $aspectMap = [
+                'T' => 'technology',
+                'M' => 'market',
+                'O' => 'organization',
+                'Mf' => 'manufacturing',
+                'P' => 'partnership',
+                'I' => 'investment',
+                'R' => 'risk'
+            ];
+
+            // Fill the question scores array
+            foreach ($indicator3Responses as $response) {
+                $aspect = $aspectMap[$response->aspect] ?? null;
+                if ($aspect) {
+                    // Map row numbers to question indices (0-based for JavaScript arrays)
+                    $questionIndex = $response->row_number - 1;
+                    $questionScores[$aspect][$questionIndex] = $response->score;
+                }
+            }
+
+            $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
+                'katsinov_id' => $katsinov_id,
+                'rekomendasi' => ''
+            ]);
+
+            return view('admin.katsinov.summary_indicator_three', compact(
+                'katsinov',
+                'aspectScores',
+                'questionScores',
+                'record',
+                'categories',
+                'aspectResponses'
+            ));
+        } catch (\Exception $e) {
+            \Log::error('Error in summaryIndicatorThree: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
+        }
+    }
+    public function summaryIndicatorFour($katsinov_id)
+    {
+        try {
+            $katsinov = Katsinov::with(['scores', 'responses', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
+
+            // Get all responses for Indicator 4
+            $indicator4Responses = $katsinov->responses()->where('indicator_number', 4)->get();
+
+            // Group the responses by aspect
+            $aspectResponses = [];
+            $aspectCodes = ['T', 'M', 'O', 'Mf', 'P', 'I', 'R'];
+
+            foreach ($aspectCodes as $code) {
+                $aspectResponses[$code] = $indicator4Responses->where('aspect', $code)->values();
+            }
+
+            // Calculate overall aspect scores
+            $aspectScores = [
+                'technology' => $this->getAverageScore($katsinov->scores->where('indicator_number', 4), 'technology'),
+                'market' => $this->getAverageScore($katsinov->scores->where('indicator_number', 4), 'market'),
+                'organization' => $this->getAverageScore($katsinov->scores->where('indicator_number', 4), 'organization'),
+                'manufacturing' => $this->getAverageScore($katsinov->scores->where('indicator_number', 4), 'manufacturing'),
+                'partnership' => $this->getAverageScore($katsinov->scores->where('indicator_number', 4), 'partnership'),
+                'investment' => $this->getAverageScore($katsinov->scores->where('indicator_number', 4), 'investment'),
+                'risk' => $this->getAverageScore($katsinov->scores->where('indicator_number', 4), 'risk')
+            ];
+
+            // Calculate categories for all aspects
+            $categories = [];
+            foreach ($aspectScores as $key => $score) {
+                $categories[$key] = $this->getScoreCategory($score);
+            }
+
+            // Prepare question-level scores for each aspect
+            $questionScores = [
+                'technology' => [],
+                'market' => [],
+                'organization' => [],
+                'manufacturing' => [],
+                'partnership' => [],
+                'investment' => [],
+                'risk' => []
+            ];
+
+            // Map the aspect codes to keys
+            $aspectMap = [
+                'T' => 'technology',
+                'M' => 'market',
+                'O' => 'organization',
+                'Mf' => 'manufacturing',
+                'P' => 'partnership',
+                'I' => 'investment',
+                'R' => 'risk'
+            ];
+
+            // Fill the question scores array
+            foreach ($indicator4Responses as $response) {
+                $aspect = $aspectMap[$response->aspect] ?? null;
+                if ($aspect) {
+                    // Map row numbers to question indices (0-based for JavaScript arrays)
+                    $questionIndex = $response->row_number - 1;
+                    $questionScores[$aspect][$questionIndex] = $response->score;
+                }
+            }
+
+            $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
+                'katsinov_id' => $katsinov_id,
+                'rekomendasi' => ''
+            ]);
+
+            return view('admin.katsinov.summary_indicator_four', compact(
+                'katsinov',
+                'aspectScores',
+                'questionScores',
+                'record',
+                'categories',
+                'aspectResponses'
+            ));
+        } catch (\Exception $e) {
+            \Log::error('Error in summaryIndicatorFour: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
+        }
+    }
+    public function summaryIndicatorFive($katsinov_id)
+    {
+        try {
+            $katsinov = Katsinov::with(['scores', 'responses', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
+
+            // Get all responses for Indicator 5
+            $indicator5Responses = $katsinov->responses()->where('indicator_number', 5)->get();
+
+            // Group the responses by aspect
+            $aspectResponses = [];
+            $aspectCodes = ['T', 'M', 'O', 'Mf', 'P', 'I', 'R'];
+
+            foreach ($aspectCodes as $code) {
+                $aspectResponses[$code] = $indicator5Responses->where('aspect', $code)->values();
+            }
+
+            // Calculate overall aspect scores
+            $aspectScores = [
+                'technology' => $this->getAverageScore($katsinov->scores->where('indicator_number', 5), 'technology'),
+                'market' => $this->getAverageScore($katsinov->scores->where('indicator_number', 5), 'market'),
+                'organization' => $this->getAverageScore($katsinov->scores->where('indicator_number', 5), 'organization'),
+                'manufacturing' => $this->getAverageScore($katsinov->scores->where('indicator_number', 5), 'manufacturing'),
+                'partnership' => $this->getAverageScore($katsinov->scores->where('indicator_number', 5), 'partnership'),
+                'investment' => $this->getAverageScore($katsinov->scores->where('indicator_number', 5), 'investment'),
+                'risk' => $this->getAverageScore($katsinov->scores->where('indicator_number', 5), 'risk')
+            ];
+
+            // Calculate categories for all aspects
+            $categories = [];
+            foreach ($aspectScores as $key => $score) {
+                $categories[$key] = $this->getScoreCategory($score);
+            }
+
+            // Prepare question-level scores for each aspect
+            $questionScores = [
+                'technology' => [],
+                'market' => [],
+                'organization' => [],
+                'manufacturing' => [],
+                'partnership' => [],
+                'investment' => [],
+                'risk' => []
+            ];
+
+            // Map the aspect codes to keys
+            $aspectMap = [
+                'T' => 'technology',
+                'M' => 'market',
+                'O' => 'organization',
+                'Mf' => 'manufacturing',
+                'P' => 'partnership',
+                'I' => 'investment',
+                'R' => 'risk'
+            ];
+
+            // Fill the question scores array
+            foreach ($indicator5Responses as $response) {
+                $aspect = $aspectMap[$response->aspect] ?? null;
+                if ($aspect) {
+                    // For Indicator 5, map row numbers to indices based on the specific structure
+                    $rowToIndexMap = [
+                        // Technology questions
+                        1 => ['technology', 0],
+                        2 => ['technology', 1],
+                        3 => ['technology', 2],
+                        4 => ['technology', 3],
+                        // Market questions
+                        5 => ['market', 0],
+                        6 => ['market', 1],
+                        7 => ['market', 2],
+                        8 => ['market', 3],
+                        // Organization questions
+                        9 => ['organization', 0],
+                        10 => ['organization', 1],
+                        11 => ['organization', 2],
+                        12 => ['organization', 3],
+                        // Manufacturing questions
+                        13 => ['manufacturing', 0],
+                        14 => ['manufacturing', 1],
+                        15 => ['manufacturing', 2],
+                        16 => ['manufacturing', 3],
+                        // Investment questions
+                        17 => ['investment', 0],
+                        18 => ['investment', 1],
+                        // Partnership questions
+                        19 => ['partnership', 0],
+                        20 => ['partnership', 1],
+                        21 => ['partnership', 2],
+                        // Risk questions
+                        22 => ['risk', 0],
+                        23 => ['risk', 1],
+                        24 => ['risk', 2]
+                    ];
+
+                    if (isset($rowToIndexMap[$response->row_number])) {
+                        list($mappedAspect, $questionIndex) = $rowToIndexMap[$response->row_number];
+                        $questionScores[$mappedAspect][$questionIndex] = $response->score;
+                    }
+                }
+            }
+
+            $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
+                'katsinov_id' => $katsinov_id,
+                'rekomendasi' => ''
+            ]);
+
+            return view('admin.katsinov.summary_indicator_five', compact(
+                'katsinov',
+                'aspectScores',
+                'questionScores',
+                'record',
+                'categories',
+                'aspectResponses'
+            ));
+        } catch (\Exception $e) {
+            \Log::error('Error in summaryIndicatorFive: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
+        }
+    }
+    public function summaryIndicatorSix($katsinov_id)
+    {
+        try {
+            $katsinov = Katsinov::with(['scores', 'responses', 'formRecordHasilPengukuran'])->findOrFail($katsinov_id);
+
+            // Get all responses for Indicator 6
+            $indicator6Responses = $katsinov->responses()->where('indicator_number', 6)->get();
+
+            // Group the responses by aspect
+            $aspectResponses = [];
+            $aspectCodes = ['T', 'M', 'O', 'Mf', 'P', 'I', 'R'];
+
             foreach ($aspectCodes as $code) {
                 $aspectResponses[$code] = $indicator6Responses->where('aspect', $code)->values();
             }
-            
+
             // Calculate overall aspect scores
             $aspectScores = [
                 'technology' => $this->getAverageScore($katsinov->scores->where('indicator_number', 6), 'technology'),
@@ -1704,7 +1704,7 @@ public function summaryIndicatorSix($katsinov_id)
             foreach ($aspectScores as $key => $score) {
                 $categories[$key] = $this->getScoreCategory($score);
             }
-            
+
             // Prepare question-level scores for each aspect
             $questionScores = [
                 'technology' => [],
@@ -1715,7 +1715,7 @@ public function summaryIndicatorSix($katsinov_id)
                 'investment' => [],
                 'risk' => []
             ];
-            
+
             // Map the aspect codes to keys
             $aspectMap = [
                 'T' => 'technology',
@@ -1726,7 +1726,7 @@ public function summaryIndicatorSix($katsinov_id)
                 'I' => 'investment',
                 'R' => 'risk'
             ];
-            
+
             // Question index mapping for Indicator 6
             $questionIndexMap = [
                 'technology' => [0, 1, 2],
@@ -1737,7 +1737,7 @@ public function summaryIndicatorSix($katsinov_id)
                 'investment' => [10],
                 'risk' => [13]
             ];
-            
+
             // Fill the question scores array
             foreach ($indicator6Responses as $response) {
                 $aspect = $aspectMap[$response->aspect] ?? null;
@@ -1747,17 +1747,17 @@ public function summaryIndicatorSix($katsinov_id)
                     $questionScores[$aspect][$questionIndex] = $response->score;
                 }
             }
-            
+
             $record = $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran([
                 'katsinov_id' => $katsinov_id,
                 'rekomendasi' => ''
             ]);
-            
+
             return view('admin.katsinov.summary_indicator_six', compact(
-                'katsinov', 
-                'aspectScores', 
-                'questionScores', 
-                'record', 
+                'katsinov',
+                'aspectScores',
+                'questionScores',
+                'record',
                 'categories',
                 'aspectResponses'
             ));
@@ -1782,6 +1782,203 @@ public function summaryIndicatorSix($katsinov_id)
             return 'Tidak Siap';
         }
     }
+
+
+    //download pdf
+    public function downloadDetailPDF($id)
+    {
+        try {
+            // Load KATSINOV with all relationships
+            $katsinov = Katsinov::with([
+                'scores',
+                'responses',
+                'formRecordHasilPengukuran',
+                'katsinovInovasis',
+                'katsinovBeritas',
+                'katsinovInformasis',
+                'katsinovLampirans',
+                'user'
+            ])->findOrFail($id);
+
+            // Calculate aspect scores
+            $aspectScores = [
+                'technology' => $this->getAverageScore($katsinov->scores, 'technology'),
+                'organization' => $this->getAverageScore($katsinov->scores, 'organization'),
+                'risk' => $this->getAverageScore($katsinov->scores, 'risk'),
+                'market' => $this->getAverageScore($katsinov->scores, 'market'),
+                'partnership' => $this->getAverageScore($katsinov->scores, 'partnership'),
+                'manufacturing' => $this->getAverageScore($katsinov->scores, 'manufacturing'),
+                'investment' => $this->getAverageScore($katsinov->scores, 'investment')
+            ];
+
+            // Prepare data for individual indicators
+            $indicatorData = [];
+            $chartImages = [];
+
+            // Create folder for chart images if it doesn't exist
+            $chartDir = public_path('storage/chart_images');
+            if (!file_exists($chartDir)) {
+                mkdir($chartDir, 0755, true);
+            }
+
+            // Generate main chart image
+            $mainChartFilename = 'katsinov_' . $id . '_main_chart.png';
+            $this->generateChartImage($aspectScores, $mainChartFilename);
+            $chartImages['main'] = asset('storage/chart_images/' . $mainChartFilename);
+
+            for ($i = 1; $i <= 6; $i++) {
+                $indicatorAspectScores = [
+                    'technology' => $this->getAverageScore($katsinov->scores->where('indicator_number', $i), 'technology'),
+                    'organization' => $this->getAverageScore($katsinov->scores->where('indicator_number', $i), 'organization'),
+                    'risk' => $this->getAverageScore($katsinov->scores->where('indicator_number', $i), 'risk'),
+                    'market' => $this->getAverageScore($katsinov->scores->where('indicator_number', $i), 'market'),
+                    'partnership' => $this->getAverageScore($katsinov->scores->where('indicator_number', $i), 'partnership'),
+                    'manufacturing' => $this->getAverageScore($katsinov->scores->where('indicator_number', $i), 'manufacturing'),
+                    'investment' => $this->getAverageScore($katsinov->scores->where('indicator_number', $i), 'investment')
+                ];
+
+                // Generate chart for this indicator
+                $indicatorChartFilename = 'katsinov_' . $id . '_indicator_' . $i . '_chart.png';
+                $this->generateChartImage($indicatorAspectScores, $indicatorChartFilename);
+                $chartImages['indicator_' . $i] = asset('storage/chart_images/' . $indicatorChartFilename);
+
+                $indicatorData[$i] = [
+                    'responses' => $katsinov->responses()->where('indicator_number', '=', $i)->get(),
+                    'scores' => $katsinov->scores()->where('indicator_number', '=', $i)->first(),
+                    'aspectScores' => $indicatorAspectScores
+                ];
+            }
+
+            $data = [
+                'katsinov' => $katsinov,
+                'aspectScores' => $aspectScores,
+                'indicatorData' => $indicatorData,
+                'record' => $katsinov->formRecordHasilPengukuran ?? new FormRecordHasilPengukuran(['katsinov_id' => $id]),
+                'categories' => $this->calculateCategories($aspectScores),
+                'chartImages' => $chartImages
+            ];
+
+            // Generate PDF
+            $pdf = PDF::loadView('admin.katsinov.print_katsinov', $data)
+                ->setPaper('a4')
+                ->setOptions([
+                    'isHtml5ParserEnabled' => true,
+                    'isRemoteEnabled' => true,
+                    'defaultFont' => 'sans-serif',
+                    'enable_javascript' => false, // Don't need JavaScript since we're using image charts
+                    'javascript_delay' => 0
+                ]);
+
+            // Create a sanitized filename with PDF extension explicitly added
+            $baseFilename = 'KATSINOV_' . preg_replace('/[^a-zA-Z0-9_\-]/', '_', $katsinov->title) . '_' . date('Y-m-d');
+            $filename = $baseFilename . '.pdf';
+
+            // Download PDF
+            return $pdf->download($filename);
+        } catch (\Exception $e) {
+            Log::error('Error generating PDF: ' . $e->getMessage(), [
+                'katsinov_id' => $id,
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return back()->with('error', 'Error generating PDF: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Helper method to calculate categories for all aspects
+     */
+    private function calculateCategories($aspectScores)
+    {
+        $categories = [];
+        foreach ($aspectScores as $key => $score) {
+            $categories[$key] = $this->getScoreCategory($score);
+        }
+        return $categories;
+    }
+
+
+    private function generateChartImage($aspectScores, $filename)
+    {
+        $width = 600;
+        $height = 400;
+        $image = imagecreatetruecolor($width, $height);
+
+        $white = imagecolorallocate($image, 255, 255, 255);
+        imagefill($image, 0, 0, $white);
+        $textColor = imagecolorallocate($image, 51, 51, 51);
+
+        $title = "KATSINOV Assessment Chart";
+        imagestring($image, 5, 220, 20, $title, $textColor);
+
+        $centerX = $width / 2;
+        $centerY = $height / 2;
+        $radius = 150;
+
+        $aspects = [
+            'Technology' => $aspectScores['technology'],
+            'Organization' => $aspectScores['organization'],
+            'Risk' => $aspectScores['risk'],
+            'Market' => $aspectScores['market'],
+            'Partnership' => $aspectScores['partnership'],
+            'Manufacturing' => $aspectScores['manufacturing'],
+            'Investment' => $aspectScores['investment']
+        ];
+
+        $green = imagecolorallocate($image, 23, 99, 105);
+        $lightGreen = imagecolorallocate($image, 100, 200, 200);
+
+        $numAxes = count($aspects);
+        $angleStep = 2 * M_PI / $numAxes;
+
+        for ($r = $radius / 4; $r <= $radius; $r += $radius / 4) {
+            imagearc($image, $centerX, $centerY, $r * 2, $r * 2, 0, 360, $lightGreen);
+        }
+        $i = 0;
+        $points = [];
+        foreach ($aspects as $aspect => $score) {
+            $angle = $i * $angleStep - M_PI / 2;
+            $endX = $centerX + $radius * cos($angle);
+            $endY = $centerY + $radius * sin($angle);
+            imageline($image, $centerX, $centerY, $endX, $endY, $textColor);
+            $labelX = $centerX + ($radius + 20) * cos($angle);
+            $labelY = $centerY + ($radius + 20) * sin($angle);
+            imagestring($image, 2, $labelX - 20, $labelY - 10, $aspect, $textColor);
+            $scoreRatio = $score / 100;
+            $pointX = $centerX + $radius * $scoreRatio * cos($angle);
+            $pointY = $centerY + $radius * $scoreRatio * sin($angle);
+            $points[] = [$pointX, $pointY];
+
+            $i++;
+        }
+        for ($i = 0; $i < count($points); $i++) {
+            $j = ($i + 1) % count($points);
+            imageline($image, $points[$i][0], $points[$i][1], $points[$j][0], $points[$j][1], $green);
+        }
+
+        imagefilledpolygon($image, array_merge(...$points), count($points), imagecolorallocatealpha($image, 23, 99, 105, 80));
+        $i = 0;
+        foreach ($aspects as $aspect => $score) {
+            $angle = $i * $angleStep - M_PI / 2;
+            $scoreRatio = $score / 100;
+            $pointX = $centerX + $radius * $scoreRatio * cos($angle);
+            $pointY = $centerY + $radius * $scoreRatio * sin($angle);
+            imagefilledellipse($image, $pointX, $pointY, 8, 8, $green);
+            $scoreText = number_format($score, 1) . '%';
+            imagestring($image, 2, $pointX - 15, $pointY - 5, $scoreText, $textColor);
+
+            $i++;
+        }
+        $outputPath = public_path('storage/chart_images/' . $filename);
+
+        $directory = dirname($outputPath);
+        if (!file_exists($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        imagepng($image, $outputPath);
+        imagedestroy($image);
+
+        return $outputPath;
+    }
 }
-
-
