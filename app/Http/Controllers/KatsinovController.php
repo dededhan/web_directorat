@@ -2159,8 +2159,4 @@ private function extractQuestionScores($responses, $aspect)
 
         return $outputPath;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 8ad6c4808fa9dc12ba32e2a3b0d3458539a43927
