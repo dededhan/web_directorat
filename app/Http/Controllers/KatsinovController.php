@@ -35,7 +35,7 @@ class KatsinovController extends Controller
             $katsinovs = auth()->user()->katsinovs()->with('scores', 'user')->latest()->paginate(100);
         } elseif ($role === 'validator') {
             // For validator role, only show katsinovs assigned to them
-            $katsinovs = $katsinovsQuery->where('user_id', Auth::id())->latest()->paginate(100);
+            $katsinovs = $katsinovsQuery->where('moreuser_id', Auth::id())->latest()->paginate(100);
         } else {
             // For admin roles, show all katsinovs
             $katsinovs = $katsinovsQuery->latest()->paginate(100);
@@ -123,6 +123,7 @@ class KatsinovController extends Controller
                     'contact' => $validated['contact'],
                     'assessment_date' => $validated['assessment_date'],
                     'user_id' => Auth::user()->id,
+                    'moreuser_id' => null,  
                 ]);
             }
 
@@ -251,19 +252,19 @@ class KatsinovController extends Controller
 
         return view($formview, $data);
     }
-
     public function updateUser(Request $request)
     {
         $request->validate([
             'katsinov_id' => 'required|exists:katsinovs,id',
-            'user_id' => 'nullable|exists:users,id'
+            'moreuser_id' => 'nullable|exists:users,id' // Update kolom moreuser_id
         ]);
-
+    
         $katsinov = Katsinov::findOrFail($request->katsinov_id);
-        $katsinov->update(['user_id' => $request->user_id]);
-
+        $katsinov->update(['moreuser_id' => $request->moreuser_id]); // Update moreuser_id, bukan user_id
+    
         return response()->json(['success' => true]);
     }
+
     public function downloadPDF()
     {
         $katsinovs = auth()->user()->katsinovs()->with('scores')->get();
@@ -1874,6 +1875,90 @@ class KatsinovController extends Controller
         return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
     }
 }
+
+public function summaryAll($katsinov_id)
+{
+    try {
+        // Load Katsinov with all related data
+        $katsinov = Katsinov::with([
+            'scores', 
+            'responses', 
+            'formRecordHasilPengukuran'
+        ])->findOrFail($katsinov_id);
+
+        // Prepare overall aspect scores
+        $overallAspectScores = [
+            'technology' => $this->getAverageScore($katsinov->scores, 'technology'),
+            'market' => $this->getAverageScore($katsinov->scores, 'market'),
+            'organization' => $this->getAverageScore($katsinov->scores, 'organization'),
+            'manufacturing' => $this->getAverageScore($katsinov->scores, 'manufacturing'),
+            'partnership' => $this->getAverageScore($katsinov->scores, 'partnership'),
+            'investment' => $this->getAverageScore($katsinov->scores, 'investment'),
+            'risk' => $this->getAverageScore($katsinov->scores, 'risk')
+        ];
+
+        // Prepare indicator-specific aspect scores
+        $indicatorAspectScores = [];
+        for ($indicator = 1; $indicator <= 6; $indicator++) {
+            $indicatorScores = $katsinov->scores->where('indicator_number', $indicator);
+            $indicatorAspectScores[$indicator] = [
+                'technology' => $this->getAverageScore($indicatorScores, 'technology'),
+                'market' => $this->getAverageScore($indicatorScores, 'market'),
+                'organization' => $this->getAverageScore($indicatorScores, 'organization'),
+                'manufacturing' => $this->getAverageScore($indicatorScores, 'manufacturing'),
+                'partnership' => $this->getAverageScore($indicatorScores, 'partnership'),
+                'investment' => $this->getAverageScore($indicatorScores, 'investment'),
+                'risk' => $this->getAverageScore($indicatorScores, 'risk')
+            ];
+        }
+
+        // Prepare question scores
+        $questionScores = [];
+        for ($indicator = 1; $indicator <= 6; $indicator++) {
+            $indicatorResponses = $katsinov->responses()->where('indicator_number', $indicator)->get();
+
+            $aspectScores = [
+                'technology' => $this->extractQuestionScores($indicatorResponses, 'T'),
+                'market' => $this->extractQuestionScores($indicatorResponses, 'M'),
+                'organization' => $this->extractQuestionScores($indicatorResponses, 'O'),
+                'manufacturing' => $this->extractQuestionScores($indicatorResponses, 'Mf'),
+                'partnership' => $this->extractQuestionScores($indicatorResponses, 'P'),
+                'investment' => $this->extractQuestionScores($indicatorResponses, 'I'),
+                'risk' => $this->extractQuestionScores($indicatorResponses, 'R')
+            ];
+
+            $questionScores[$indicator] = $aspectScores;
+        }
+
+        // Calculate average score
+        $avgScore = array_sum($overallAspectScores) / count($overallAspectScores);
+
+        return view('admin.katsinov.summary_all', [
+            'katsinov' => $katsinov, 
+            'overallAspectScores' => $overallAspectScores, 
+            'indicatorAspectScores' => $indicatorAspectScores, 
+            'questionScores' => $questionScores, 
+            'avgScore' => $avgScore,
+            // Add JSON-encoded versions for JavaScript
+            'overallAspectScoresJson' => json_encode($overallAspectScores),
+            'indicatorAspectScoresJson' => json_encode($indicatorAspectScores),
+            'questionScoresJson' => json_encode($questionScores)
+        ]);
+    } catch (\Exception $e) {
+        \Log::error('Error in summaryAll: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Data tidak dapat ditampilkan: ' . $e->getMessage());
+    }
+}
+
+// Helper method to extract question scores for an aspect
+private function extractQuestionScores($responses, $aspect)
+{
+    return $responses
+        ->where('aspect', $aspect)
+        ->sortBy('row_number')
+        ->pluck('score')
+        ->toArray();
+}
    
 
 
@@ -2074,4 +2159,8 @@ class KatsinovController extends Controller
 
         return $outputPath;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 8ad6c4808fa9dc12ba32e2a3b0d3458539a43927

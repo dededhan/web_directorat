@@ -17,7 +17,8 @@ class Katsinov extends Model
         'institution',
         'address',
         'contact',
-        'assessment_date'
+        'assessment_date',
+        'moreuser_id'
     ];
 
     protected $casts = [
@@ -32,6 +33,10 @@ class Katsinov extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function moreUser()
+    {
+        return $this->belongsTo(User::class, 'moreuser_id'); // Relasi ke moreuser_id
+    }
     /**
      * Get the individual responses for this Katsinov assessment
      */
