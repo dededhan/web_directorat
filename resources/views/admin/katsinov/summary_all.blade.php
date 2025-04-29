@@ -91,61 +91,198 @@
         @endphp
 
         <div class="card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #277177; color: white;">
-                <h4 class="m-0">Performance by Indicator</h4>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
+    <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #277177; color: white;">
+        <h4 class="m-0">Performance by Indicator</h4>
+    </div>
+    <div class="card-body">
+        <!-- Aspect selection tabs -->
+        <ul class="nav nav-tabs mb-4" id="aspectTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="technology-tab" data-bs-toggle="tab" data-bs-target="#technology" type="button" role="tab" aria-controls="technology" aria-selected="true">Technology</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="market-tab" data-bs-toggle="tab" data-bs-target="#market" type="button" role="tab" aria-controls="market" aria-selected="false">Market</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="organization-tab" data-bs-toggle="tab" data-bs-target="#organization" type="button" role="tab" aria-controls="organization" aria-selected="false">Organization</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="manufacturing-tab" data-bs-toggle="tab" data-bs-target="#manufacturing" type="button" role="tab" aria-controls="manufacturing" aria-selected="false">Manufacturing</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="partnership-tab" data-bs-toggle="tab" data-bs-target="#partnership" type="button" role="tab" aria-controls="partnership" aria-selected="false">Partnership</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="investment-tab" data-bs-toggle="tab" data-bs-target="#investment" type="button" role="tab" aria-controls="investment" aria-selected="false">Investment</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="risk-tab" data-bs-toggle="tab" data-bs-target="#risk" type="button" role="tab" aria-controls="risk" aria-selected="false">Risk</button>
+            </li>
+        </ul>
+        
+        <!-- Tab content -->
+        <div class="tab-content" id="aspectTabContent">
+            @php
+                $aspects = ['technology', 'market', 'organization', 'manufacturing', 'partnership', 'investment', 'risk'];
+                $aspectTitles = [
+                    'technology' => 'Aspek Teknologi', 
+                    'market' => 'Aspek Pasar', 
+                    'organization' => 'Aspek Organisasi', 
+                    'manufacturing' => 'Aspek Manufaktur', 
+                    'partnership' => 'Aspek Partnership', 
+                    'investment' => 'Aspek Investment', 
+                    'risk' => 'Aspek Risiko'
+                ];
+                $aspectColors = [
+                    'technology' => 'rgb(255, 99, 132)',
+                    'market' => 'rgb(54, 162, 235)',
+                    'organization' => 'rgb(255, 206, 86)',
+                    'manufacturing' => 'rgb(75, 192, 192)',
+                    'partnership' => 'rgb(153, 102, 255)',
+                    'investment' => 'rgb(255, 159, 64)',
+                    'risk' => 'rgb(70, 150, 130)'
+                ];
+            @endphp
+            <!-- All aspects tab -->
+            <div class="tab-pane fade show active" id="all-aspects" role="tabpanel" aria-labelledby="all-aspects-tab">
+                <div class="table-responsive d-block d-md-none">
+                    <table class="table table-bordered table-sm">
                         <thead class="table-light">
                             <tr>
                                 <th>Indicator</th>
-                                <th>Technology</th>
-                                <th>Market</th>
-                                <th>Organization</th>
-                                <th>Manufacturing</th>
-                                <th>Partnership</th>
-                                <th>Investment</th>
-                                <th>Risk</th>
-                                <th>Overall</th>
+                                <th>T</th>
+                                <th>M</th>
+                                <th>O</th>
+                                <th>Mf</th>
+                                <th>P</th>
+                                <th>I</th>
+                                <th>R</th>
+                                <th>Avg</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($indicators as $index => $indicator)
                                 <tr>
-                                    <td><strong>{{ $indicatorTitles[$index] }}</strong></td>
-                                    <td>{{ number_format($indicatorAspectScores[$indicator]['technology'], 1) }}%</td>
-                                    <td>{{ number_format($indicatorAspectScores[$indicator]['market'], 1) }}%</td>
-                                    <td>{{ number_format($indicatorAspectScores[$indicator]['organization'], 1) }}%</td>
-                                    <td>{{ number_format($indicatorAspectScores[$indicator]['manufacturing'], 1) }}%</td>
-                                    <td>{{ number_format($indicatorAspectScores[$indicator]['partnership'], 1) }}%</td>
-                                    <td>{{ number_format($indicatorAspectScores[$indicator]['investment'], 1) }}%</td>
-                                    <td>{{ number_format($indicatorAspectScores[$indicator]['risk'], 1) }}%</td>
-                                    <td class="table-active">
+                                    <td><small>KAT {{ $indicator }}</small></td>
+                                    <td>{{ number_format($indicatorAspectScores[$indicator]['technology'], 0) }}</td>
+                                    <td>{{ number_format($indicatorAspectScores[$indicator]['market'], 0) }}</td>
+                                    <td>{{ number_format($indicatorAspectScores[$indicator]['organization'], 0) }}</td>
+                                    <td>{{ number_format($indicatorAspectScores[$indicator]['manufacturing'], 0) }}</td>
+                                    <td>{{ number_format($indicatorAspectScores[$indicator]['partnership'], 0) }}</td>
+                                    <td>{{ number_format($indicatorAspectScores[$indicator]['investment'], 0) }}</td>
+                                    <td>{{ number_format($indicatorAspectScores[$indicator]['risk'], 0) }}</td>
+                                    <td>
                                         @php
                                             $indicatorAvg = array_sum($indicatorAspectScores[$indicator]) / count($indicatorAspectScores[$indicator]);
                                         @endphp
-                                        <strong>{{ number_format($indicatorAvg, 1) }}%</strong>
+                                        <strong>{{ number_format($indicatorAvg, 0) }}</strong>
                                     </td>
                                 </tr>
                             @endforeach
-                            <tr class="table-secondary">
-                                <td><strong>Overall Average</strong></td>
-                                <td><strong>{{ number_format($overallAspectScores['technology'], 1) }}%</strong></td>
-                                <td><strong>{{ number_format($overallAspectScores['market'], 1) }}%</strong></td>
-                                <td><strong>{{ number_format($overallAspectScores['organization'], 1) }}%</strong></td>
-                                <td><strong>{{ number_format($overallAspectScores['manufacturing'], 1) }}%</strong></td>
-                                <td><strong>{{ number_format($overallAspectScores['partnership'], 1) }}%</strong></td>
-                                <td><strong>{{ number_format($overallAspectScores['investment'], 1) }}%</strong></td>
-                                <td><strong>{{ number_format($overallAspectScores['risk'], 1) }}%</strong></td>
-                                <td class="table-active"><strong>{{ number_format($avgScore, 1) }}%</strong></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
+                <div class="d-none d-md-block">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="chart-container" style="height: 400px;">
+                                <canvas id="performanceOverviewChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+             <!-- Individual aspect tabs -->
+             @php
+                $aspects = ['technology', 'market', 'organization', 'manufacturing', 'partnership', 'investment', 'risk'];
+                $aspectTitles = [
+                    'technology' => 'Technology', 
+                    'market' => 'Market', 
+                    'organization' => 'Organization', 
+                    'manufacturing' => 'Manufacturing', 
+                    'partnership' => 'Partnership', 
+                    'investment' => 'Investment', 
+                    'risk' => 'Risk'
+                ];
+                $aspectColors = [
+                    'technology' => 'rgb(255, 99, 132)',
+                    'market' => 'rgb(54, 162, 235)',
+                    'organization' => 'rgb(255, 206, 86)',
+                    'manufacturing' => 'rgb(75, 192, 192)',
+                    'partnership' => 'rgb(153, 102, 255)',
+                    'investment' => 'rgb(255, 159, 64)',
+                    'risk' => 'rgb(70, 150, 130)'
+                ];
+                $indicatorNames = [
+                    'KATSINOV 1', 'KATSINOV 2', 'KATSINOV 3', 
+                    'KATSINOV 4', 'KATSINOV 5', 'KATSINOV 6'
+                ];
+                $indicatorDescriptions = [
+                    'Basic Research & Technology Development',
+                    'Technology Demonstration',
+                    'Technology Refinement & Implementation',
+                    'Market Introduction & Commercialization',
+                    'Market Expansion & Support',
+                    'Sustainable Market & Future Planning'
+                ];
+            @endphp
+            @foreach($aspects as $aspect)
+                <div class="tab-pane fade" id="{{ $aspect }}" role="tabpanel" aria-labelledby="{{ $aspect }}-tab">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="chart-container" style="height: 400px;">
+                                <canvas id="{{ $aspect }}Chart"></canvas>
+                            </div>
+                            
+                            <div class="card bg-light mt-4">
+                                <div class="card-header">
+                                    <h5 class="m-0">{{ $aspectTitles[$aspect] }} Aspect Details</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>
+                                        <strong>Overall Score:</strong> 
+                                        {{ number_format($overallAspectScores[$aspect], 1) }}%
+                                        <span class="badge {{ $overallAspectScores[$aspect] >= 80 ? 'bg-success' : ($overallAspectScores[$aspect] >= 60 ? 'bg-warning' : 'bg-danger') }} ms-2">
+                                            {{ $overallAspectScores[$aspect] >= 80 ? 'Ready' : ($overallAspectScores[$aspect] >= 60 ? 'Developing' : 'Needs Review') }}
+                                        </span>
+                                    </p>
+                                    
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Indicator</th>
+                                                    <th>Score</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($indicators as $index => $indicator)
+                                                    <tr>
+                                                        <td><strong>{{ $indicatorTitles[$index] }}</strong></td>
+                                                        <td>{{ number_format($indicatorAspectScores[$indicator][$aspect], 1) }}%</td>
+                                                        <td>
+                                                            @php
+                                                                $score = $indicatorAspectScores[$indicator][$aspect];
+                                                                $statusClass = $score >= 80 ? 'bg-success' : ($score >= 60 ? 'bg-warning' : 'bg-danger');
+                                                                $statusText = $score >= 80 ? 'Ready' : ($score >= 60 ? 'Developing' : 'Needs Review');
+                                                            @endphp
+                                                            <span class="badge {{ $statusClass }}">{{ $statusText }}</span>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
-
+    </div>
+</div>
         <!-- Indicators Detail Cards -->
         @foreach($indicators as $index => $indicator)
             <div class="card mb-5">
@@ -610,6 +747,47 @@
     </div>
 </div>
 <style>
+    .indicator-bar {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.indicator-label {
+    min-width: 120px;
+    padding: 0 10px;
+    font-weight: 500;
+}
+
+.indicator-value {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    color: white;
+    font-weight: 500;
+    border-radius: 0 4px 4px 0;
+}
+
+/* Responsive fixes for tabs */
+@media (max-width: 768px) {
+    .nav-tabs {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .nav-tabs .nav-link {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.85rem;
+    }
+}
 /* Fixed styles for charts */
 .chart-container {
     position: relative;
@@ -830,68 +1008,73 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Create charts for each indicator
     for (let i = 1; i <= 6; i++) {
-        try {
-            const indicatorCtx = document.getElementById(`indicator${i}Chart`);
-            if (!indicatorCtx) {
-                console.error(`Cannot find indicator${i}Chart canvas`);
-                continue;
-            }
+    try {
+        const indicatorCtx = document.getElementById(`indicator${i}Chart`);
+        if (!indicatorCtx) {
+            console.error(`Cannot find indicator${i}Chart canvas`);
+            continue;
+        }
 
-            const indicatorData = [
-                indicatorAspectScores[i].technology || 0,
-                indicatorAspectScores[i].market || 0,
-                indicatorAspectScores[i].organization || 0,
-                indicatorAspectScores[i].manufacturing || 0,
-                indicatorAspectScores[i].partnership || 0,
-                indicatorAspectScores[i].investment || 0,
-                indicatorAspectScores[i].risk || 0
-            ];
-            
-            new Chart(indicatorCtx, {
-                type: 'bar',
-                data: {
-                    labels: aspectLabels,
-                    datasets: [{
-                        label: 'Aspect Score (%)',
-                        data: indicatorData,
-                        backgroundColor: aspectColors.map(color => color + '80'),
-                        borderColor: aspectColors,
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
+        const indicatorData = [
+            indicatorAspectScores[i].technology || 0,
+            indicatorAspectScores[i].market || 0,
+            indicatorAspectScores[i].organization || 0,
+            indicatorAspectScores[i].manufacturing || 0,
+            indicatorAspectScores[i].partnership || 0,
+            indicatorAspectScores[i].investment || 0,
+            indicatorAspectScores[i].risk || 0
+        ];
+        
+        new Chart(indicatorCtx, {
+            type: 'radar', // Changed from 'bar' to 'radar'
+            data: {
+                labels: aspectLabels,
+                datasets: [{
+                    label: 'Aspect Score (%)',
+                    data: indicatorData,
+                    backgroundColor: 'rgba(39, 113, 119, 0.2)',
+                    borderColor: 'rgb(39, 113, 119)',
+                    pointBackgroundColor: aspectColors,
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: aspectColors,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {  // Changed from 'y' to 'r' for radar chart
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            stepSize: 20,
+                            callback: function(value) {
+                                return value + '%';
                             }
                         }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
                     },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return context.parsed.y.toFixed(1) + '%';
-                                }
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw.toFixed(1) + '%';
                             }
                         }
                     }
                 }
-            });
-            console.log(`Indicator ${i} chart created successfully`);
-        } catch (error) {
-            console.error(`Error creating indicator ${i} chart:`, error);
-        }
+            }
+        });
+        console.log(`Indicator ${i} radar chart created successfully`);
+    } catch (error) {
+        console.error(`Error creating indicator ${i} chart:`, error);
     }
+}
     
     // Create individual aspect charts for each indicator
     const aspects = ['technology', 'market', 'organization', 'manufacturing', 'partnership', 'investment', 'risk'];
@@ -1062,6 +1245,446 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch (error) {
                 console.error(`Error creating chart for ${aspect} in indicator ${i}:`, error);
+            }
+        });
+    }
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const aspectColors = {
+        'technology': 'rgb(255, 99, 132)',      // Bright Pink
+        'market': 'rgb(54, 162, 235)',          // Bright Blue
+        'organization': 'rgb(255, 206, 86)',    // Bright Yellow
+        'manufacturing': 'rgb(75, 192, 192)',   // Teal
+        'partnership': 'rgb(153, 102, 255)',    // Purple
+        'investment': 'rgb(255, 159, 64)',      // Orange
+        'risk': 'rgb(70, 150, 130)'             // Dark Green
+    };
+    
+    const indicatorLabels = [
+        'KATSINOV 1', 'KATSINOV 2', 'KATSINOV 3', 
+        'KATSINOV 4', 'KATSINOV 5', 'KATSINOV 6'
+    ];
+    
+    const indicatorAspectScores = JSON.parse('{!! $indicatorAspectScoresJson !!}');
+    
+    function createLineChart(ctx, aspect) {
+        const data = [];
+        for (let i = 1; i <= 6; i++) {
+            data.push(indicatorAspectScores[i][aspect] || 0);
+        }
+        
+        return new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: indicatorLabels,
+                datasets: [{
+                    label: aspect.charAt(0).toUpperCase() + aspect.slice(1),
+                    data: data,
+                    borderColor: aspectColors[aspect],
+                    backgroundColor: aspectColors[aspect] + '40',
+                    borderWidth: 3,
+                    fill: false,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: aspectColors[aspect],
+                    pointBorderColor: 'white',
+                    pointHoverBackgroundColor: 'white',
+                    pointHoverBorderColor: aspectColors[aspect],
+                    pointHoverBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            },
+                            color: 'rgba(0,0,0,0.7)',
+                            font: {
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.1)',
+                            borderDash: [5, 5]
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'rgba(0,0,0,0.7)',
+                            font: {
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: aspect.charAt(0).toUpperCase() + aspect.slice(1) + ' Performance',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        },
+                        color: aspectColors[aspect]
+                    },
+                    tooltip: {
+                        backgroundColor: 'white',
+                        borderColor: aspectColors[aspect],
+                        borderWidth: 1,
+                        titleColor: aspectColors[aspect],
+                        bodyColor: 'black',
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '%';
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+    
+    // Initialize charts for each aspect
+    ['technology', 'market', 'organization', 'manufacturing', 'partnership', 'investment', 'risk'].forEach(aspect => {
+        const ctx = document.getElementById(`${aspect}Chart`);
+        if (ctx) {
+            createLineChart(ctx, aspect);
+        }
+    });
+    
+    // Performance Overview Chart
+    const overviewCtx = document.getElementById('performanceOverviewChart');
+    if (overviewCtx) {
+        const datasets = Object.keys(aspectColors).map(aspect => {
+            const data = [];
+            for (let i = 1; i <= 6; i++) {
+                data.push(indicatorAspectScores[i][aspect] || 0);
+            }
+            
+            return {
+                label: aspect.charAt(0).toUpperCase() + aspect.slice(1),
+                data: data,
+                borderColor: aspectColors[aspect],
+                backgroundColor: aspectColors[aspect] + '40',
+                borderWidth: 3,
+                fill: false,
+                tension: 0.4,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                pointBackgroundColor: aspectColors[aspect],
+                pointBorderColor: 'white',
+                pointHoverBackgroundColor: 'white',
+                pointHoverBorderColor: aspectColors[aspect],
+                pointHoverBorderWidth: 2
+            };
+        });
+        
+        new Chart(overviewCtx, {
+            type: 'line',
+            data: {
+                labels: indicatorLabels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            },
+                            color: 'rgba(0,0,0,0.7)',
+                            font: {
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.1)',
+                            borderDash: [5, 5]
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'rgba(0,0,0,0.7)',
+                            font: {
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Performance Overview by Indicator',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        },
+                        color: 'rgba(0,0,0,0.7)'
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'white',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '%';
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: 'rgba(0,0,0,0.7)',
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const aspectColors = {
+        'technology': {
+            line: '#FF6384',
+            area: 'rgba(255, 99, 132, 0.2)'
+        },
+        'market': {
+            line: '#36A2EB',
+            area: 'rgba(54, 162, 235, 0.2)'
+        },
+        'organization': {
+            line: '#FFCE56',
+            area: 'rgba(255, 206, 86, 0.2)'
+        },
+        'manufacturing': {
+            line: '#4BC0C0',
+            area: 'rgba(75, 192, 192, 0.2)'
+        },
+        'partnership': {
+            line: '#9966FF',
+            area: 'rgba(153, 102, 255, 0.2)'
+        },
+        'investment': {
+            line: '#FF9F40',
+            area: 'rgba(255, 159, 64, 0.2)'
+        },
+        'risk': {
+            line: '#46966E',
+            area: 'rgba(70, 150, 130, 0.2)'
+        }
+    };
+    
+    const indicatorLabels = [
+        'KATSINOV 1', 'KATSINOV 2', 'KATSINOV 3', 
+        'KATSINOV 4', 'KATSINOV 5', 'KATSINOV 6'
+    ];
+    
+    const indicatorAspectScores = JSON.parse('{!! $indicatorAspectScoresJson !!}');
+    
+    function createAreaChart(ctx, aspect) {
+        const data = [];
+        for (let i = 1; i <= 6; i++) {
+            data.push(indicatorAspectScores[i][aspect] || 0);
+        }
+        
+        return new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: indicatorLabels,
+                datasets: [{
+                    label: aspect.charAt(0).toUpperCase() + aspect.slice(1),
+                    data: data,
+                    borderColor: aspectColors[aspect].line,
+                    backgroundColor: aspectColors[aspect].area,
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: aspectColors[aspect].line,
+                    pointBorderColor: 'white',
+                    pointHoverBackgroundColor: 'white',
+                    pointHoverBorderColor: aspectColors[aspect].line,
+                    pointHoverBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            },
+                            color: 'rgba(0,0,0,0.6)',
+                            font: {
+                                weight: 'normal'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)',
+                            borderDash: [5, 5]
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'rgba(0,0,0,0.6)',
+                            font: {
+                                weight: 'normal'
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'white',
+                        borderColor: aspectColors[aspect].line,
+                        borderWidth: 1,
+                        titleColor: aspectColors[aspect].line,
+                        bodyColor: 'black',
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '%';
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+    
+    // Inisialisasi chart untuk setiap aspek
+    ['technology', 'market', 'organization', 'manufacturing', 'partnership', 'investment', 'risk'].forEach(aspect => {
+        const ctx = document.getElementById(`${aspect}Chart`);
+        if (ctx) {
+            createAreaChart(ctx, aspect);
+        }
+    });
+    
+    // Performance Overview Chart
+    const overviewCtx = document.getElementById('performanceOverviewChart');
+    if (overviewCtx) {
+        const datasets = Object.keys(aspectColors).map(aspect => {
+            const data = [];
+            for (let i = 1; i <= 6; i++) {
+                data.push(indicatorAspectScores[i][aspect] || 0);
+            }
+            
+            return {
+                label: aspect.charAt(0).toUpperCase() + aspect.slice(1),
+                data: data,
+                borderColor: aspectColors[aspect].line,
+                backgroundColor: aspectColors[aspect].area,
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                pointBackgroundColor: aspectColors[aspect].line,
+                pointBorderColor: 'white',
+                pointHoverBackgroundColor: 'white',
+                pointHoverBorderColor: aspectColors[aspect].line,
+                pointHoverBorderWidth: 2
+            };
+        });
+        
+        new Chart(overviewCtx, {
+            type: 'line',
+            data: {
+                labels: indicatorLabels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            },
+                            color: 'rgba(0,0,0,0.6)',
+                            font: {
+                                weight: 'normal'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)',
+                            borderDash: [5, 5]
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'rgba(0,0,0,0.6)',
+                            font: {
+                                weight: 'normal'
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'white',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '%';
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: 'rgba(0,0,0,0.6)',
+                            font: {
+                                weight: 'normal'
+                            }
+                        }
+                    }
+                }
             }
         });
     }
