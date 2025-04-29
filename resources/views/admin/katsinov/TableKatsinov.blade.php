@@ -203,8 +203,11 @@
                                         <a href="{{ route('admin.katsinov.show', $katsinov->id) }}" class="btn btn-success btn-sm mb-1">
                                             <i class='bx bx-refresh'></i> Penilaian
                                         </a>
-                                        <a href="{{ route('admin.katsinov.print_katsinov', $katsinov->id) }}" class="btn btn-primary btn-sm mb-1">
+                                        {{-- <a href="{{ route('admin.katsinov.print_katsinov', $katsinov->id) }}" class="btn btn-primary btn-sm mb-1">
                                             <i class='bx bx-download'></i> Download Report
+                                        </a> --}}
+                                        <a href="{{ route('admin.katsinov.show', $katsinov->id) }}?print=true" class="btn btn-info btn-sm mb-1" target="_blank">
+                                            <i class='bx bx-printer'></i> Print Form
                                         </a>
                                         <button class="btn btn-info btn-sm mb-1" type="button" data-bs-toggle="collapse" 
                                                 data-bs-target="#subforms-{{ $katsinov->id }}" aria-expanded="false">

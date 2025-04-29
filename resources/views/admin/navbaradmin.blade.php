@@ -5,7 +5,7 @@
         <!-- User Profile Section -->
         @auth
         <div class="profile-info">
-            <img src="{{ auth()->user()->profile_picture ?? 'default-avatar.png' }}" alt="Profile Picture" class="profile-image">
+            <img src="{{ auth()->user()->profile_picture ?? 'default-avatar.png' }}" alt="" class="profile-image">
             <span class="user-name">{{ auth()->user()->name }}</span>
         </div>
         @endauth

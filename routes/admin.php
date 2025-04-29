@@ -182,7 +182,8 @@ Route::prefix('admin')->name('admin.')
                     ->name('document.view');
                 Route::delete('/document/{id}', [KatsinovController::class, 'destroyDocument'])->name('document.delete');
 
-                Route::get('/print_katsinov/{id}', [KatsinovController::class, 'downloadDetailPDF'])->name('print_katsinov');
+                // Route::get('/print_katsinov/{id}', [KatsinovController::class, 'downloadDetailPDF'])->name('print_katsinov');
+                Route::get('/print/{id}', [KatsinovController::class, 'printForm'])->name('print');
               
                 Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
                     ->name('signature.view');

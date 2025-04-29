@@ -10,6 +10,8 @@
     [x-cloak] { display: none !important; }
 </style>
 
+
+
 <!-- Scripts -->
 <script src="{{ asset('aspect-legend.js') }}"></script>
 <script src="{{ asset('aspect-analysis-integrated.js') }}"></script>
@@ -34,6 +36,12 @@
             </ul>
         </div>
     </div>
+{{-- buat print --}}
+    {{-- <div class="d-flex justify-content-end mb-3">
+        <button type="button" onclick="window.print()" class="btn btn-info">
+            <i class='bx bx-printer'></i> Print Form
+        </button>
+    </div> --}}
 
     <div class="table-data">
         <div class="order">
@@ -170,19 +178,19 @@
                     <div class="card-header">
                         <h4>Keterangan Aspek</h4>
                     </div>
-                    <div class="card-body">
+                
                         <!-- Aspect Cards -->
                         <div class="row">
                             <!-- Teknologi -->
-                            <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="col-md-6 col-sm-6 mb-3">
                                 <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'T' }">
-                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                    <div class="card h-100 cursor-pointer">
                                         <div class="card-body d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
                                                 <div class="legend-box me-2" style="background: linear-gradient(135deg, #fad961 0%, #f76b1c 100%);"></div>
                                                 <span>Aspek Teknologi (T)</span>
                                             </div>
-                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                            
                                         </div>
                                     </div>
                                     <div x-show="isOpen" x-transition class="mt-2">
@@ -194,15 +202,15 @@
                             </div>
 
                             <!-- Organisasi -->
-                            <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="col-md-6 col-sm-6 mb-3">
                                 <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'O' }">
-                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                    <div class="card h-100 cursor-pointer">
                                         <div class="card-body d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
                                                 <div class="legend-box me-2" style="background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);"></div>
                                                 <span>Aspek Organisasi (O)</span>
                                             </div>
-                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                            
                                         </div>
                                     </div>
                                     <div x-show="isOpen" x-transition class="mt-2">
@@ -214,15 +222,15 @@
                             </div>
 
                             <!-- Risiko -->
-                            <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="col-md-6 col-sm-6 mb-3">
                                 <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'R' }">
-                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                    <div class="card h-100 cursor-pointer">
                                         <div class="card-body d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
                                                 <div class="legend-box me-2" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
                                                 <span>Aspek Risiko (R)</span>
                                             </div>
-                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                            
                                         </div>
                                     </div>
                                     <div x-show="isOpen" x-transition class="mt-2">
@@ -234,15 +242,15 @@
                             </div>
 
                             <!-- Pasar -->
-                            <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="col-md-6 col-sm-6 mb-3">
                                 <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'M' }">
-                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                    <div class="card h-100 cursor-pointer">
                                         <div class="card-body d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
                                                 <div class="legend-box me-2" style="background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);"></div>
                                                 <span>Aspek Pasar (M)</span>
                                             </div>
-                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                            
                                         </div>
                                     </div>
                                     <div x-show="isOpen" x-transition class="mt-2">
@@ -254,15 +262,15 @@
                             </div>
 
                             <!-- Kemitraan -->
-                            <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="col-md-6 col-sm-6 mb-3">
                                 <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'P' }">
-                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                    <div class="card h-100 cursor-pointer">
                                         <div class="card-body d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
                                                 <div class="legend-box me-2" style="background: linear-gradient(135deg, #ffd1ff 0%, #fab2ff 100%);"></div>
                                                 <span>Aspek Kemitraan (P)</span>
                                             </div>
-                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                            
                                         </div>
                                     </div>
                                     <div x-show="isOpen" x-transition class="mt-2">
@@ -274,15 +282,15 @@
                             </div>
 
                             <!-- Manufaktur -->
-                            <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="col-md-6 col-sm-6 mb-3">
                                 <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'Mf' }">
-                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                    <div class="card h-100 cursor-pointer">
                                         <div class="card-body d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
                                                 <div class="legend-box me-2" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);"></div>
                                                 <span>Aspek Manufaktur (Mf)</span>
                                             </div>
-                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                            
                                         </div>
                                     </div>
                                     <div x-show="isOpen" x-transition class="mt-2">
@@ -294,15 +302,15 @@
                             </div>
 
                             <!-- Investasi -->
-                            <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="col-md-6 col-sm-6 mb-3">
                                 <div class="aspect-dropdown" x-data="{ isOpen: false, aspectCode: 'I' }">
-                                    <div class="card h-100 cursor-pointer" @click="isOpen = !isOpen; if(isOpen) initializeAspectChart(aspectCode)">
+                                    <div class="card h-100 cursor-pointer">
                                         <div class="card-body d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
                                                 <div class="legend-box me-2" style="background: linear-gradient(135deg, #96fbc4 0%, #f9f586 100%);"></div>
                                                 <span>Aspek Investasi (I)</span>
                                             </div>
-                                            <i class="bx" :class="isOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                            
                                         </div>
                                     </div>
                                     <div x-show="isOpen" x-transition class="mt-2">
@@ -387,15 +395,12 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                
                 </div>   
                         
                 <!-- KATSINOV Indicators Section -->
                 <div class="card mb-4">
-                    <div class="card-header">
-                        <h4>Indikator KATSINOV</h4>
-                    </div>
-                    <div class="card-body">
+
                         <div class="indicators-wrapper">
                             <!-- Indikator 1 -->
                             <div class="indicator-card" data-indicator="1">
@@ -445,7 +450,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
 
                 <!-- Submit All Button -->
@@ -477,5 +481,551 @@
 </div>
 
 <script src="{{ asset('inovasi/dashboard/form_katsinov/js/form.js') }}"></script>
+{{-- <script>
+    // Check if the URL contains a print parameter and trigger printing if it does
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.location.search.includes('print=true')) {
+            // Wait for all content and charts to load
+            setTimeout(function() {
+                // Force expand all collapsed elements before printing
+                // document.querySelectorAll('.aspect-dropdown').forEach(function(dropdown) {
+                //     var isOpen = dropdown.querySelector('[x-data]').__x.$data.isOpen;
+                //     if (!isOpen) {
+                //         dropdown.querySelector('.card-body').click();
+                //     }
+                // });
 
+                // Force show the spiderweb analysis
+                if (document.querySelector('[x-data="{ showSpiderwebContent: false }"]')) {
+                    document.querySelector('[x-data="{ showSpiderwebContent: false }"]').__x.$data
+                        .showSpiderwebContent = true;
+                }
+
+                // Trigger printing after a delay to ensure content is expanded and rendered
+                setTimeout(function() {
+                    window.print();
+                }, 1000);
+            }, 1500);
+        }
+    });
+</script> --}}
+{{-- <script>
+    // Function to force all Alpine.js components to expand
+    function forceExpandAllContent() {
+        console.log('Forcibly expanding all content for printing...');
+
+        // 1. Manually add 'show' class to all potential Bootstrap collapse elements 
+        document.querySelectorAll('.collapse').forEach(function(el) {
+            el.classList.add('show');
+        });
+
+        // 2. Force Alpine.js states to expanded state
+        if (typeof window.Alpine !== 'undefined') {
+            // Wait for Alpine to be fully initialized
+            setTimeout(() => {
+                document.querySelectorAll('[x-data]').forEach(function(el) {
+                    if (el.__x && el.__x.$data) {
+                        // Force common toggle properties to be open
+                        if ('isOpen' in el.__x.$data) el.__x.$data.isOpen = true;
+                        if ('showSpiderwebContent' in el.__x.$data) el.__x.$data.showSpiderwebContent =
+                            true;
+                        if ('show' in el.__x.$data) el.__x.$data.show = true;
+                        if ('open' in el.__x.$data) el.__x.$data.open = true;
+                        if ('expanded' in el.__x.$data) el.__x.$data.expanded = true;
+                        if ('visible' in el.__x.$data) el.__x.$data.visible = true;
+                    }
+                });
+
+                console.log('Alpine.js components expanded');
+            }, 500);
+        }
+
+        // 3. Initialize all aspect charts
+        if (typeof initializeAspectChart === 'function') {
+            ['T', 'O', 'R', 'M', 'P', 'Mf', 'I'].forEach(function(aspect) {
+                try {
+                    initializeAspectChart(aspect);
+                    console.log('Initialized chart for aspect:', aspect);
+                } catch (e) {
+                    console.error('Error initializing aspect chart:', aspect, e);
+                }
+            });
+        }
+
+        // 4. Initialize spiderweb chart if exists
+        if (document.getElementById('spiderwebChart') && typeof initSpiderwebChart === 'function') {
+            try {
+                initSpiderwebChart();
+                console.log('Initialized spiderweb chart');
+            } catch (e) {
+                console.error('Error initializing spiderweb chart:', e);
+            }
+        }
+
+        // 5. Make sure all indicator cards are fully visible
+        document.querySelectorAll('.indicator-card').forEach(function(card, index) {
+            card.style.display = 'block';
+            card.style.visibility = 'visible';
+            card.style.height = 'auto';
+            card.style.overflow = 'visible';
+            console.log('Expanded indicator card:', index + 1);
+        });
+
+        // 6. Force aspect dropdowns open
+        // document.querySelectorAll('.aspect-dropdown').forEach(function(dropdown) {
+        //     const contentDiv = dropdown.querySelector('.mt-2');
+        //     if (contentDiv) {
+        //         contentDiv.style.display = 'block';
+        //         contentDiv.style.visibility = 'visible';
+        //         contentDiv.style.height = 'auto';
+        //         contentDiv.style.overflow = 'visible';
+        //     }
+        // });
+
+        // 7. Make sure chart containers are visible
+        document.querySelectorAll('.chart-container').forEach(function(container) {
+            container.style.display = 'block';
+            container.style.visibility = 'visible';
+            container.style.height = '300px';
+        });
+    }
+
+    // Auto-print when page loads with print parameter
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.location.search.includes('print=true')) {
+            console.log('Print mode detected, preparing full content display...');
+
+            // Give time for the page to fully load, then expand content
+            setTimeout(function() {
+                forceExpandAllContent();
+
+                // Allow time for charts to render completely
+                setTimeout(function() {
+                    console.log('Printing page with all content expanded...');
+                    window.print();
+                }, 2500);
+            }, 1000);
+        }
+    });
+
+    // Add click handler to print button for manual printing
+    document.addEventListener('DOMContentLoaded', function() {
+        const printButton = document.querySelector('button[onclick="window.print()"]');
+        if (printButton) {
+            // Override the default print behavior
+            printButton.onclick = function(e) {
+                e.preventDefault();
+                forceExpandAllContent();
+
+                // Allow time for content to expand
+                setTimeout(function() {
+                    window.print();
+                }, 1500);
+            };
+        }
+    });
+</script> --}}
+
+{{-- <script>
+    function aspectLegend() {
+        return {
+            init() {
+                // Your existing init code...
+
+                // Add this additional function to initialize all charts at once
+                this.initAllCharts = function() {
+                    console.log('Initializing all aspect charts for printing...');
+                    const aspectCodes = ['T', 'O', 'R', 'M', 'P', 'Mf', 'I'];
+
+                    aspectCodes.forEach(code => {
+                        const chartId = `aspectChart-${code}`;
+                        const canvas = document.getElementById(chartId);
+
+                        if (canvas) {
+                            // Make sure canvas is visible
+                            const container = canvas.closest('.chart-container');
+                            if (container) {
+                                container.style.display = 'block';
+                                container.style.visibility = 'visible';
+                                container.style.height = '300px';
+                            }
+
+                            // Initialize chart if not already done
+                            if (!canvas.chart) {
+                                try {
+                                    initializeAspectChart(code);
+                                    console.log(`Initialized chart for aspect: ${code}`);
+                                } catch (e) {
+                                    console.error(`Error initializing aspect chart ${code}:`, e);
+                                }
+                            }
+                        }
+                    });
+
+                    // Initialize spiderweb chart
+                    const spiderwebCanvas = document.getElementById('spiderwebChart');
+                    if (spiderwebCanvas) {
+                        // Make sure canvas container is visible
+                        const container = spiderwebCanvas.closest('.chart-container');
+                        if (container) {
+                            container.style.display = 'block';
+                            container.style.visibility = 'visible';
+                            container.style.height = '400px';
+                        }
+
+                        // Show parent containers
+                        const spiderwebContent = document.querySelector('div[x-show="showSpiderwebContent"]');
+                        if (spiderwebContent) {
+                            spiderwebContent.style.display = 'block';
+                            spiderwebContent.style.visibility = 'visible';
+                        }
+
+                        // Initialize chart if not already done
+                        if (!spiderwebCanvas.chart) {
+                            try {
+                                initSpiderwebChart();
+                                console.log('Initialized spiderweb chart');
+                            } catch (e) {
+                                console.error('Error initializing spiderweb chart:', e);
+                            }
+                        }
+                    }
+                };
+
+                // Check if we're in print mode and initialize all charts
+                if (window.location.search.includes('print=true')) {
+                    console.log('Print mode detected, initializing all charts...');
+                    setTimeout(() => {
+                        this.initAllCharts();
+                    }, 500);
+                }
+            }
+        };
+    }
+
+    // Additional print preparation helpers
+    function prepareForPrinting() {
+        // Force all Alpine.js components to show content
+        if (typeof window.Alpine !== 'undefined') {
+            document.querySelectorAll('[x-data]').forEach(function(el) {
+                if (el.__x && el.__x.$data) {
+                    if ('isOpen' in el.__x.$data) el.__x.$data.isOpen = true;
+                    if ('showSpiderwebContent' in el.__x.$data) el.__x.$data.showSpiderwebContent = true;
+                }
+            });
+        }
+
+        // Force CSS display for certain elements
+        // document.querySelectorAll('.aspect-dropdown .mt-2, .chart-container').forEach(el => {
+        //     el.style.display = 'block';
+        //     el.style.visibility = 'visible';
+        // });
+
+        // If aspectLegend is available, initialize all charts
+        if (typeof window.aspectLegend === 'function') {
+            const aspectLegendInstance = window.aspectLegend();
+            if (typeof aspectLegendInstance.initAllCharts === 'function') {
+                aspectLegendInstance.initAllCharts();
+            }
+        }
+    }
+
+    // Add to your print trigger script
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.location.search.includes('print=true')) {
+            setTimeout(function() {
+                prepareForPrinting();
+
+                // Allow time for charts to render
+                setTimeout(function() {
+                    window.print();
+                }, 2000);
+            }, 1000);
+        }
+    });
+</script> --}}
+
+<script>
+    function preparePrintContent() {
+console.log('Preparing content for printing...');
+
+// 1. Force all Alpine.js dropdowns and content to expand
+document.querySelectorAll('[x-data]').forEach(function(el) {
+    if (el.__x && el.__x.$data) {
+        // Force all common toggle properties to be open
+        if ('isOpen' in el.__x.$data) el.__x.$data.isOpen = true;
+        if ('showSpiderwebContent' in el.__x.$data) el.__x.$data.showSpiderwebContent = true;
+        if ('show' in el.__x.$data) el.__x.$data.show = true;
+        if ('open' in el.__x.$data) el.__x.$data.open = true;
+        if ('expanded' in el.__x.$data) el.__x.$data.expanded = true;
+        if ('visible' in el.__x.$data) el.__x.$data.visible = true;
+    }
+});
+
+// 2. Make all indicator cards visible
+document.querySelectorAll('.indicator-card').forEach(function(card) {
+    card.style.display = 'block';
+    card.style.visibility = 'visible';
+    card.style.height = 'auto';
+    card.style.overflow = 'visible';
+    card.style.pageBreakAfter = 'always'; // Add page break after each indicator
+});
+
+// 3. Force all elements with x-show to display
+document.querySelectorAll('[x-show]').forEach(function(el) {
+    el.style.display = 'block';
+    el.style.visibility = 'visible';
+    el.style.height = 'auto';
+    el.style.overflow = 'visible';
+});
+
+// 4. Make chart containers visible and ensure proper height
+document.querySelectorAll('.chart-container').forEach(function(container) {
+    container.style.display = 'block';
+    container.style.visibility = 'visible';
+    container.style.height = '300px';
+    container.style.minHeight = '300px';
+    container.style.marginBottom = '20px';
+});
+
+// 5. Force all aspect dropdown contents to show
+document.querySelectorAll('.aspect-dropdown .mt-2').forEach(function(content) {
+    content.style.display = 'block';
+    content.style.visibility = 'visible';
+    content.style.height = 'auto';
+    content.style.overflow = 'visible';
+});
+
+// 6. Initialize/refresh all charts
+initializeAllCharts();
+
+// 7. Force spiderweb content to be visible
+const spiderwebContent = document.querySelector('div[x-show="showSpiderwebContent"]');
+if (spiderwebContent) {
+    spiderwebContent.style.display = 'block';
+    spiderwebContent.style.visibility = 'visible';
+    spiderwebContent.style.height = 'auto';
+    spiderwebContent.style.overflow = 'visible';
+}
+
+// 8. Add space for proper rendering of charts
+setTimeout(function() {
+    window.scrollTo(0, 0);
+}, 500);
+
+console.log('Content preparation complete. Ready for printing...');
+}
+
+// Initialize all charts at once
+function initializeAllCharts() {
+console.log('Initializing all charts...');
+
+// Initialize aspect charts
+const aspectCodes = ['T', 'O', 'R', 'M', 'P', 'Mf', 'I'];
+aspectCodes.forEach(function(code) {
+    const chartId = `aspectChart-${code}`;
+    const canvas = document.getElementById(chartId);
+    
+    if (canvas) {
+        try {
+            // Make sure we have a clean canvas (destroy existing chart if any)
+            if (canvas.chart) {
+                canvas.chart.destroy();
+            }
+            // Call the aspect chart initialization function
+            if (typeof initializeAspectChart === 'function') {
+                initializeAspectChart(code);
+                console.log(`Initialized chart for aspect: ${code}`);
+            } else {
+                console.warn(`initializeAspectChart function not found for aspect: ${code}`);
+            }
+        } catch (e) {
+            console.error(`Error initializing aspect chart ${code}:`, e);
+        }
+    }
+});
+
+// Initialize spiderweb chart
+const spiderwebCanvas = document.getElementById('spiderwebChart');
+if (spiderwebCanvas) {
+    try {
+        // Clean up existing chart if any
+        if (spiderwebCanvas.chart) {
+            spiderwebCanvas.chart.destroy();
+        }
+        // Call the spiderweb initialization function
+        if (typeof initSpiderwebChart === 'function') {
+            initSpiderwebChart();
+            console.log('Initialized spiderweb chart');
+        } else {
+            console.warn('initSpiderwebChart function not found');
+        }
+    } catch (e) {
+        console.error('Error initializing spiderweb chart:', e);
+    }
+}
+}
+
+// Enhanced print function
+function enhancedPrint() {
+// 1. Prepare the content
+preparePrintContent();
+
+// 2. Create a print-specific stylesheet
+const printStyle = document.createElement('style');
+printStyle.id = 'print-specific-styles';
+printStyle.innerHTML = `
+    @media print {
+        * {
+            overflow: visible !important;
+           
+        }
+
+        html, body, #app, .main-content {
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        }
+            
+        #content {
+            height: auto !important;
+            overflow: visible !important;
+            margin-left: -80px !important;
+            width: 100% !important;
+            padding: 10px !important;
+        }
+        
+        /* Hide non-essential elements */
+        #header, .breadcrumb, .submit-all-btn, 
+        button:not(.indicator-tab), .head-title .left ul,
+        .toggle-details, .btn:not(.indicator-tab), .no-print, .d-flex.justify-content-end,
+        #submitAllBtn, .submit-all-container, footer, .head-title {
+            display: none !important;
+        }
+        
+        /* Reset all collapsible elements */
+        [x-show], [x-cloak], [x-transition], [x-collapse] {
+            display: block !important;
+            visibility: visible !important;
+            height: auto !important;
+            overflow: visible !important;
+            opacity: 1 !important;
+        }
+        
+        /* Ensure charts are visible */
+        .chart-container {
+            display: block !important;
+            height: 3px !important;
+            min-height: 300px !important;
+            page-break-inside: avoid !important;
+            visibility: none !important;
+            margin-bottom: 20px !important;
+        }
+
+        .katsinov-table {
+                width: 100% !important;
+                margin-top: 0 !important;
+                padding: 0 !important;
+            }
+        
+        /* Improve card appearance */
+        .container, .card, .content {
+            padding: 0 !important;
+            margin: 0 !important;
+            page-break-inside: avoid !important;
+            border: 1px solid #ddd !important;
+            box-shadow: none !important;
+            margin-bottom: 15px !important;
+        }
+        
+        /* Add page breaks between indicators */
+        .indicator-card {
+            page-break-before: always !important;
+            margin-top: 20px !important;
+            padding-top: 20px !important;
+        }
+        
+        .indicator-card:first-child {
+            page-break-before: auto !important;
+        }
+        
+        /* Support background colors and images */
+        * {
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        
+        /* Improve table rendering */
+        table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            border-spacing: 0;
+            page-break-inside: auto !important;
+        }
+            
+        
+        tr {
+            page-break-inside: avoid !important;
+            page-break-after: auto !important;
+        }
+        
+        th, td {
+            padding: 5px !important;
+            border: 1px solid #ddd !important;
+            font-size: 11pt !important;
+        }
+        
+        /* Fix spiderweb content */
+        .spiderweb-summary {
+            display: block !important;
+            visibility: visible !important;
+            height: auto !important;
+            margin-top: 20px !important;
+        }
+        
+        /* Set page properties */
+        @page {
+            size: A3 portrait;
+            margin: 0.1cm;
+        }
+    }
+`;
+document.head.appendChild(printStyle);
+
+// 3. Wait a bit for the charts to render and styles to apply
+setTimeout(function() {
+    console.log('Triggering print dialog...');
+    window.print();
+    
+    // 4. Clean up the temporary style element after printing
+    setTimeout(function() {
+        const tempStyle = document.getElementById('print-specific-styles');
+        if (tempStyle) {
+            tempStyle.remove();
+        }
+    }, 1000);
+}, 1500);
+}
+
+// Handle print button clicks and URL print parameter
+document.addEventListener('DOMContentLoaded', function() {
+// Set up the print button to use our enhanced print function
+const printButton = document.querySelector('button[onclick="window.print()"]');
+if (printButton) {
+    printButton.onclick = function(e) {
+        e.preventDefault();
+        enhancedPrint();
+    };
+}
+
+// Check if the URL contains a print parameter
+if (window.location.search.includes('print=true')) {
+    console.log('Print parameter detected, preparing print view...');
+    setTimeout(function() {
+        enhancedPrint();
+    }, 1000);
+}
+});
+    </script>
 @endsection

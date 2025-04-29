@@ -252,6 +252,7 @@ class KatsinovController extends Controller
 
         return view($formview, $data);
     }
+    
     public function updateUser(Request $request)
     {
         $request->validate([
@@ -2158,5 +2159,30 @@ private function extractQuestionScores($responses, $aspect)
         imagedestroy($image);
 
         return $outputPath;
+    }
+
+    public function printForm(Request $request)
+    {
+        $katsinov = Katsinov::where('id', '=', $request->id)
+            ->with(['scores', 'responses'])
+            ->first();
+    
+        if (!$katsinov) {
+            return redirect()->back()->with('error', 'Data KATSINOV tidak ditemukan');
+        }
+    
+        $data = [
+            'katsinov' => $katsinov,
+            'indicatorOne' =>  $katsinov->responses()->where('indicator_number', '=', 1)->get(),
+            'indicatorTwo' =>  $katsinov->responses()->where('indicator_number', '=', 2)->get(),
+            'indicatorThree' =>  $katsinov->responses()->where('indicator_number', '=', 3)->get(),
+            'indicatorFour' =>  $katsinov->responses()->where('indicator_number', '=', 4)->get(),
+            'indicatorFive' =>  $katsinov->responses()->where('indicator_number', '=', 5)->get(),
+            'indicatorSix' =>  $katsinov->responses()->where('indicator_number', '=', 6)->get(),
+            'printMode' => true, // Flag to indicate print mode
+        ];
+    
+        // Use the same view as the normal form, but add the print=true parameter to trigger printing
+        return redirect()->route('admin.katsinov.show', ['id' => $request->id, 'print' => 'true']);
     }
 }

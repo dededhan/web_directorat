@@ -60,13 +60,29 @@
     </style>
 </head>
 
-<body>
-    @include('admin.sidebaradmin')
+@php
+    $currentRoute = Route::currentRouteName();
+@endphp
 
+<body style="{{ $currentRoute === 'admin.katsinov.show' ? 'margin-left: -200px;' : '' }}">
+
+    
+    @php
+        $currentRoute = Route::currentRouteName();
+    @endphp
+
+
+    @if ($currentRoute !== 'admin.katsinov.show')
+        @include('admin.sidebaradmin')
+    @endif
+    
     <!-- CONTENT -->
     <section id="content">
         <!-- NAVBAR -->
-        @include('admin.navbaradmin')
+        @if ($currentRoute !== 'admin.katsinov.show')
+            @include('admin.navbaradmin')
+        @endif
+        
 
         <!-- MAIN -->
         <main>
