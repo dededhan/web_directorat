@@ -140,12 +140,13 @@
                         <tr>
                             <th></th>
                             <th>ID</th>
+                            <th>user</th>
                             <th>Nama/Judul</th>
                             <th>Fokus Bidang</th>
                             <th>Nama Proyek</th>
                             <th>Status</th>
                             <th>Actions</th>
-                            <th>User</th>
+                            <th>validator</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -157,6 +158,7 @@
                                     </button>
                                 </td>
                                 <td>{{ $loop->iteration }}</td>
+                                <td>{{ $katsinov->user->name }}</td>
                                 <td>{{ $katsinov->title }}</td>
                                 <td>{{ $katsinov->focus_area }}</td>
                                 <td>{{ $katsinov->project_name }}</td>
