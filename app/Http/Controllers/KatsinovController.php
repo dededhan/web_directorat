@@ -1782,6 +1782,98 @@ public function summaryIndicatorSix($katsinov_id)
             return 'Tidak Siap';
         }
     }
+    public function summaryAspects($katsinov_id)
+{
+    try {
+        // Define aspects
+        $aspects = [
+            'technology' => 'Teknologi (T)',
+            'market' => 'Pasar (M)',
+            'organization' => 'Organisasi (O)',
+            'manufacturing' => 'Manufaktur (Mf)',
+            'partnership' => 'Kemitraan (P)',
+            'investment' => 'Investasi (I)',
+            'risk' => 'Risiko (R)'
+        ];
+        
+        // Define aspect colors
+        $aspectColors = [
+            'technology' => 'rgb(255, 99, 132)',
+            'market' => 'rgb(54, 162, 235)',
+            'organization' => 'rgb(255, 206, 86)',
+            'manufacturing' => 'rgb(75, 192, 192)',
+            'partnership' => 'rgb(153, 102, 255)',
+            'investment' => 'rgb(255, 159, 64)',
+            'risk' => 'rgb(70, 150, 130)'
+        ];
+        
+        // Prepare data structure for the chart
+        $aspectData = [];
+        foreach ($aspects as $key => $name) {
+            $aspectData[$key] = [
+                'name' => $name,
+                'color' => $aspectColors[$key],
+                'data' => [] // Will be filled with scores for each indicator
+            ];
+        }
+        
+        // Get average scores for each aspect and indicator
+        for ($indicator = 1; $indicator <= 6; $indicator++) {
+            // Get average scores for this indicator across all katsinovs
+            $scores = KatsinovScore::where('indicator_number', $indicator)
+                ->select(
+                    DB::raw('AVG(technology) as technology'),
+                    DB::raw('AVG(market) as market'),
+                    DB::raw('AVG(organization) as organization'),
+                    DB::raw('AVG(manufacturing) as manufacturing'),
+                    DB::raw('AVG(partnership) as partnership'),
+                    DB::raw('AVG(investment) as investment'),
+                    DB::raw('AVG(risk) as risk')
+                )
+                ->first();
+            
+            // If no data, use zeros
+            if (!$scores) {
+                foreach ($aspects as $key => $name) {
+                    $aspectData[$key]['data'][] = 0;
+                }
+                continue;
+            }
+            
+            // Add scores to each aspect's data array
+            foreach ($aspects as $key => $name) {
+                $aspectData[$key]['data'][] = round($scores->$key, 1);
+            }
+        }
+        
+        // Prepare data for the table view
+        $tableData = [];
+        for ($i = 0; $i < 6; $i++) {
+            $row = ['indicator' => 'KATSINOV ' . ($i + 1)];
+            foreach ($aspects as $key => $name) {
+                $row[$key] = $aspectData[$key]['data'][$i];
+            }
+            $tableData[] = $row;
+        }
+        
+        // Calculate averages for each aspect
+        $averages = [];
+        foreach ($aspects as $key => $name) {
+            $averages[$key] = round(array_sum($aspectData[$key]['data']) / count($aspectData[$key]['data']), 1);
+        }
+        
+        return view('admin.katsinov.summary', [
+            'aspects' => $aspects,
+            'aspectData' => $aspectData,
+            'tableData' => $tableData,
+            'averages' => $averages
+        ]);
+    } catch (\Exception $e) {
+        \Log::error('Error in summaryAspects: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+    }
+}
+   
 }
 
 

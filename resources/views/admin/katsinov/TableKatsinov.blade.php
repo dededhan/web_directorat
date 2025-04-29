@@ -303,6 +303,9 @@
                                                 <a href="{{ route('admin.katsinov.summary-indicator-six', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
                                                     <i class='bx bx-bar-chart'></i> Summary Indikator 6
                                                 </a>
+                                                <a href="{{ route('admin.katsinov.jumlah-aspek', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
+                                                    <i class='bx bx-bar-chart'></i> Jumlah Aspek
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
