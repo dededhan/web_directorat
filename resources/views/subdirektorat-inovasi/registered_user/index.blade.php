@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,7 @@
 
     <link rel="stylesheet" href="{{ asset('admin.css') }}">
     <link rel="stylesheet" href="{{ asset('dashboard_main/sidebar_dashboardadmin.css') }}">
-    <link rel="stylesheet" href="{{ asset('dashboard_main/navbar_dashboard.css') }}">  
+    <link rel="stylesheet" href="{{ asset('dashboard_main/navbar_dashboard.css') }}">
 
     <title>Dashboard User</title>
 
@@ -48,13 +49,31 @@
         }
     </style>
 </head>
-<body>
-    @include('subdirektorat-inovasi.registered_user.sidebar')
 
+
+@php
+    $currentRoute = Route::currentRouteName();
+@endphp
+
+<body style="{{ $currentRoute === 'subdirektorat-inovasi.registered_user.show' ? 'margin-left: -200px;' : '' }}">
+
+    @php
+        $currentRoute = Route::currentRouteName();
+    @endphp
+
+
+    @if (
+        $currentRoute !== 'subdirektorat-inovasi.registered_user.show' &&
+            $currentRoute !== 'subdirektorat-inovasi.registered_user.summary-all')
+        @include('subdirektorat-inovasi.registered_user.sidebar')
+    @endif
     <!-- CONTENT -->
     <section id="content">
         <!-- NAVBAR -->
-        @include('subdirektorat-inovasi.registered_user.navbar')
+        @if ($currentRoute !== 'subdirektorat-inovasi.registered_user.show' && $currentRoute !== 'subdirektorat-inovasi.registered_user.summary-all')
+            @include('subdirektorat-inovasi.registered_user.navbar')
+        @endif
+
 
         <main>
             @yield('contentregistered_user')
@@ -64,4 +83,5 @@
     <script src="{{ asset('admin.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

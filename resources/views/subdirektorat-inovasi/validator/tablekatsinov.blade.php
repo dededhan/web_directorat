@@ -200,12 +200,19 @@
                                         <a href="{{ route('subdirektorat-inovasi.validator.show', $katsinov->id) }}" class="btn btn-success btn-sm mb-1">
                                             <i class='bx bx-refresh'></i> Load Record
                                         </a>
+                                        <a href="{{ route('subdirektorat-inovasi.validator.show', $katsinov->id) }}?print=true" class="btn btn-info btn-sm mb-1" target="_blank">
+                                            <i class='bx bx-printer'></i> Print Form
+                                        </a>
                                         <button class="btn btn-info btn-sm mb-1" type="button" data-bs-toggle="collapse" 
                                                 data-bs-target="#subforms-{{ $katsinov->id }}" aria-expanded="false">
                                             <i class='bx bx-folder-open'></i> Manage Sub-Forms
                                         </button>
                                         <a href="{{ route('subdirektorat-inovasi.validator.summary-all', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
                                             <i class='bx bx-chart'></i> Summary Keseluruhan
+                                        </a>
+                                        <a href="{{ route('subdirektorat-inovasi.validator.summary-all', ['katsinov_id' => $katsinov->id, 'print' => 'true']) }}"
+                                            class="btn btn-info btn-sm mb-1" target="_blank">
+                                            <i class='bx bx-printer'></i> Print Summary
                                         </a>
                                     </div>
                                 </td>

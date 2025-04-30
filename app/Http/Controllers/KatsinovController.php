@@ -2225,7 +2225,18 @@ class KatsinovController extends Controller
         ];
     
         // Use the same view as the normal form, but add the print=true parameter to trigger printing
-        return redirect()->route('admin.katsinov.show', ['id' => $request->id, 'print' => 'true']);
+        $role = Auth::user()->role;
+
+        $route = match ($role) {
+            'admin_direktorat' => 'admin.katsinov.show',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.show',
+            'dosen' => 'subdirektorat-inovasi.dosen.show',
+            'validator' => 'subdirektorat-inovasi.validator.show',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.show',
+            default => 'admin.katsinov.show',
+        };
+        return redirect()->route($route, ['id' => $request->id, 'print' => 'true']);
+        // return redirect()->route('admin.katsinov.show', ['id' => $request->id, 'print' => 'true']);
     }
 
     // Add this method to the KatsinovController class
