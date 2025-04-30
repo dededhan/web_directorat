@@ -54,22 +54,7 @@ function collectFormResponses() {
     console.log('Collected responses:', responses); // Debug
     return responses;
 }
-function collectNotes() {
-    const notes = {};
-    
-    // Get all notes textareas using the pattern "notes[indicator_number]"
-    document.querySelectorAll('textarea[name^="notes["]').forEach(textarea => {
-        // Extract the indicator number from the name attribute
-        const match = textarea.name.match(/notes\[(\d+)\]/);
-        if (match && match[1]) {
-            const indicatorNumber = match[1];
-            notes[indicatorNumber] = textarea.value.trim();
-        }
-    });
-    
-    console.log('Collected notes:', notes);
-    return notes;
-}
+
 // Enhanced Frontend Submission with Comprehensive Error Handling
 async function submitAllIndicators(event) {
     event.preventDefault(); // Prevent default form submission
@@ -97,7 +82,7 @@ async function submitAllIndicators(event) {
         // Collect responses with detailed logging
         const responses = collectDetailedResponses();
         // Collect notes from all indicators
-        const notes = collectNotes();
+       
         // Prepare payload with separate basic information and responses
         const payload = {
             title: formData.get('title'),
@@ -107,8 +92,7 @@ async function submitAllIndicators(event) {
             address: formData.get('address'),
             contact: formData.get('contact'),
             assessment_date: formData.get('assessment_date'),
-            responses: responses,
-            notes: notes
+            responses: responses
         };
 
         // Detailed fetch with comprehensive error handling
