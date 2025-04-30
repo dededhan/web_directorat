@@ -523,7 +523,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::delete('/document/{id}', [KatsinovController::class, 'destroyDocument'])->name('document.delete');
                 Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
                     ->name('signature.view');
-
+                    Route::get('/print/{id}', [KatsinovController::class, 'printForm'])->name('print');
                 
                 //summary
                 Route::get('{katsinov_id}/record/summary', [KatsinovController::class, 'recordShow'])->name('record.show');

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +8,12 @@
 
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png"
+        type="image/png">
 
     <link rel="stylesheet" href="{{ asset('admin.css') }}">
     <link rel="stylesheet" href="{{ asset('dashboard_main/sidebar_dashboardadmin.css') }}">
-    <link rel="stylesheet" href="{{ asset('dashboard_main/navbar_dashboard.css') }}">  
+    <link rel="stylesheet" href="{{ asset('dashboard_main/navbar_dashboard.css') }}">
 
     <title>Dashboard Validator</title>
 
@@ -49,13 +51,32 @@
         }
     </style>
 </head>
-<body>
-    @include('subdirektorat-inovasi.validator.sidebar')
+
+@php
+    $currentRoute = Route::currentRouteName();
+@endphp
+
+<body style="{{ $currentRoute === 'subdirektorat-inovasi.validator.show' ? 'margin-left: -200px;' : '' }}">
+
+    @php
+        $currentRoute = Route::currentRouteName();
+    @endphp
+
+
+    @if (
+        $currentRoute !== 'subdirektorat-inovasi.validator.show' && $currentRoute !== 'subdirektorat-inovasi.validator.summary-all')
+        @include('subdirektorat-inovasi.validator.sidebar')
+    @endif
+
 
     <!-- CONTENT -->
     <section id="content">
         <!-- NAVBAR -->
-        @include('subdirektorat-inovasi.validator.navbar')
+        @if (
+            $currentRoute !== 'subdirektorat-inovasi.validator.show' &&
+                $currentRoute !== 'subdirektorat-inovasi.validator.summary-all')
+            @include('subdirektorat-inovasi.validator.navbar')
+        @endif
 
         <main>
             @yield('contentvalidator')
@@ -65,4 +86,5 @@
     <script src="{{ asset('admin.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
