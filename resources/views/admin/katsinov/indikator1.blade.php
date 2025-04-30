@@ -360,7 +360,7 @@
                 <tr class="row-i">
                     <td class="row-number">16</td>
                     <td class="aspect-cell">I</td>
-                    <td><input type="radio" name="row
+                  
                     <!-- Lanjutan I rows -->
                    <td><input type="radio" name="indikator1_row16" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 0)@if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                    <td><input type="radio" name="indikator1_row16" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 1)@if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
