@@ -31,6 +31,10 @@ use App\Http\Controllers\BeritaController;
 
 Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
 
+Route::get('/kebijakan-privasi', function () {
+    return view('privasi.kebijakan-privasi');
+})->name('kebijakan-privasi');
+
 Route::get('/api/announcements', [App\Http\Controllers\PengumumanController::class, 'getActiveAnnouncements'])
     ->name('api.announcements');
 Route::get('/program-layanan', [App\Http\Controllers\ProgramLayananController::class, 'showFrontend'])->name('program-layanan');
