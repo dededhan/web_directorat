@@ -130,7 +130,17 @@ Route::get('subdirektorat-inovasi/risetunj', function () {
     return view('subdirektorat-inovasi.riset_unj.risetunj');
 })->name('riset.unj');
 
+Route::get('/subdirektorat-inovasi/inkubator/inkubator_bisnis_pendidikan', function () {
+    return view('subdirektorat-inovasi.inkubator.inkubator_bisnis_pendidikan');
+})->name('subdirektorat-inovasi.inkubator.inkubator_bisnis_pendidikan');
 
+Route::get('/subdirektorat-inovasi/inkubator/ekosisteminovasi', function () {
+    return view('subdirektorat-inovasi.inkubator.ekosisteminovasi');
+})->name('subdirektorat-inovasi.inkubator.ekosisteminovasi');
+
+Route::get('/subdirektorat-inovasi/inkubator/inovasiaward', function () {
+    return view('subdirektorat-inovasi.inkubator.inovasiaward');
+})->name('subdirektorat-inovasi.inkubator.inovasiaward');
 
 Route::get('subdirektorat-inovasi/risetunj/produk_inovasi', [App\Http\Controllers\ProdukInovasiController::class, 'publicIndex'])
     ->name('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi');

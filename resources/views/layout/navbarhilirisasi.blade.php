@@ -27,10 +27,10 @@
             <li class="relative group">
                 <a href="#" class="text-white hover:text-yellow-400">Program</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('sdgscenter') }}" class="hover:text-yellow-400">SDGs Activity</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">Inkubator Bisnis dan Pendidikan</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">Ekosistem Inovasi UNJ</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">Innovator Award</a></li>
+                <li><a href="{{ route('sdgscenter') }}">SDGs Activity</a></li>
+                    <li><a href="{{ route('subdirektorat-inovasi.inkubator.inkubator_bisnis_pendidikan') }}">Inkubator Bisnis dan Pendidikan</a></li>
+                    <li><a href="{{ route('subdirektorat-inovasi.inkubator.ekosisteminovasi') }}">Ekosistem Inovasi UNJ</a></li>
+                    <li><a href="{{ route('subdirektorat-inovasi.inkubator.inovasiaward') }}">Innovator Award</a></li>
                 </ul>
             </li>
             
