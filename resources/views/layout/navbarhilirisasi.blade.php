@@ -27,7 +27,7 @@
             <li class="relative group">
                 <a href="#" class="text-white hover:text-yellow-400">Program</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('sdgscenter') }}" class="hover:text-yellow-400">SDGs Center</a></li>
+                    <li><a href="{{ route('sdgscenter') }}" class="hover:text-yellow-400">SDGs Activity</a></li>
                     <li><a href="#" class="hover:text-yellow-400">Inkubator Bisnis dan Pendidikan</a></li>
                     <li><a href="#" class="hover:text-yellow-400">Ekosistem Inovasi UNJ</a></li>
                     <li><a href="#" class="hover:text-yellow-400">Innovator Award</a></li>

@@ -116,7 +116,7 @@
                     Program
                 </a>
                 <ul id="program-dropdown" class="dropdown-menu primary-dropdown hidden">
-                    <li><a href="{{ route('sdgscenter') }}">SDGs Center</a></li>
+                    <li><a href="{{ route('sdgscenter') }}">SDGs Activity</a></li>
                     <li><a href="#">Inkubator Bisnis dan Pendidikan</a></li>
                     <li><a href="#">Ekosistem Inovasi UNJ</a></li>
                     <li><a href="#">Innovator Award</a></li>
