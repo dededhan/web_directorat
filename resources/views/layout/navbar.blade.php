@@ -1,8 +1,8 @@
 
 @include('layout.loginpopup')
 
-<!-- Original Desktop Navbar (Unchanged) -->
-<nav class="navbar hidden md:block">
+<!-- Original Desktop Navbar (Now Sticky) -->
+<nav class="navbar hidden md:block fixed top-0 w-full z-50 bg-[#186862] shadow-lg">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
         <div class="flex items-center space-x-4">
         <a href="{{ route('home') }}">
