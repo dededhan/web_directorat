@@ -85,6 +85,12 @@
                         <span class="text">Pimpinan</span>
                     </a>
                 </li>
+                <li class="{{ request()->routeIs('admin.gallery.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.gallery.index') }}">
+                        <i class='bx bxs-user'></i>
+                        <span class="text">Galery</span>
+                    </a>
+                </li>
             </ul>
         </div>
 

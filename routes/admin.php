@@ -27,6 +27,7 @@ use App\Http\Controllers\SejarahContentController;
 use App\Http\Controllers\PimpinanController;
 use App\Http\Controllers\RankingController;
 use Illuminate\Http\Request;
+use App\Http\Controllers\GalleryController;
 // Ganti route yang ada dengan:
 use App\Http\Controllers\DokumenController;
 
@@ -81,6 +82,9 @@ Route::prefix('admin')->name('admin.')
 
         //sejarah
         Route::resource('/sejarah', SejarahContentController::class);
+
+        Route::resource('/gallery', GalleryController::class);
+        Route::get('/gallery/{id}/detail', [GalleryController::class, 'getGalleryDetail'])->name('gallery.detail');
 
 
         // Pimpinan routes
@@ -184,7 +188,7 @@ Route::prefix('admin')->name('admin.')
 
                 // Route::get('/print_katsinov/{id}', [KatsinovController::class, 'downloadDetailPDF'])->name('print_katsinov');
                 Route::get('/print/{id}', [KatsinovController::class, 'printForm'])->name('print');
-              
+
                 // Route::get('/print_katsinov/{id}', [KatsinovController::class, 'downloadDetailPDF'])->name('print_katsinov');
 
                 Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
@@ -450,6 +454,11 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 //sejarah
                 Route::resource('/sejarah', SejarahContentController::class);
 
+                //galery
+                // In admin.php, inside the admin route group
+                Route::resource('/gallery', GalleryController::class);
+                Route::get('/gallery/{id}/detail', [GalleryController::class, 'getGalleryDetail'])->name('gallery.detail');
+
 
                 // Tabel Katsinov
                 Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekatsinov');
@@ -523,8 +532,8 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::delete('/document/{id}', [KatsinovController::class, 'destroyDocument'])->name('document.delete');
                 Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
                     ->name('signature.view');
-                    Route::get('/print/{id}', [KatsinovController::class, 'printForm'])->name('print');
-                
+                Route::get('/print/{id}', [KatsinovController::class, 'printForm'])->name('print');
+
                 //summary
                 Route::get('{katsinov_id}/record/summary', [KatsinovController::class, 'recordShow'])->name('record.show');
                 Route::get('{katsinov_id}/summary-indicator-one', [KatsinovController::class, 'summaryIndicatorOne'])->name('summary-indicator-one');
