@@ -203,7 +203,7 @@
 <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out z-30 block md:hidden"></div>
 <!-- JavaScript for mobile sidebar -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+     document.addEventListener('DOMContentLoaded', function() {
         // Add console logs for debugging
         console.log('Window width:', window.innerWidth);
         console.log('Is mobile?', window.innerWidth < 768);
@@ -214,6 +214,7 @@
         const sidebarOverlay = document.getElementById('sidebar-overlay');
         const mobileNavbar = document.getElementById('mobile-navbar');
         const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
+        const closeSidebar = document.getElementById('close-sidebar');
         
         // Debug element existence
         console.log('Mobile navbar exists:', !!mobileNavbar);
@@ -258,13 +259,14 @@
             }
         }
         
-        // Functions to show/hide sidebar remain the same
+        // Functions to show/hide sidebar
         function showSidebar() {
             mobileSidebar.classList.remove('translate-x-full');
             sidebarOverlay.classList.remove('opacity-0', 'pointer-events-none');
             sidebarOverlay.classList.add('opacity-50');
             menuIcon.classList.remove('fa-bars');
             menuIcon.classList.add('fa-times');
+            document.body.classList.add('overflow-hidden');
         }
         
         function hideSidebar() {
@@ -273,9 +275,10 @@
             sidebarOverlay.classList.remove('opacity-50');
             menuIcon.classList.remove('fa-times');
             menuIcon.classList.add('fa-bars');
+            document.body.classList.remove('overflow-hidden');
         }
         
-        // Event listeners remain the same
+        // Event listeners for menu toggle
         if (mobileMenuToggle) {
             mobileMenuToggle.addEventListener('click', function() {
                 console.log('Mobile menu toggle clicked');
@@ -286,6 +289,37 @@
                 }
             });
         }
+        
+        // Close sidebar when X button is clicked
+        if (closeSidebar) {
+            closeSidebar.addEventListener('click', function() {
+                hideSidebar();
+            });
+        }
+        
+        // Close sidebar when overlay is clicked
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', function() {
+                hideSidebar();
+            });
+        }
+        
+        // Toggle dropdown menus in sidebar
+        dropdownButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const dropdown = this.nextElementSibling;
+                const icon = this.querySelector('.fa-chevron-down');
+                
+                // Toggle the dropdown
+                if (dropdown.classList.contains('hidden')) {
+                    dropdown.classList.remove('hidden');
+                    icon.style.transform = 'rotate(180deg)';
+                } else {
+                    dropdown.classList.add('hidden');
+                    icon.style.transform = 'rotate(0)';
+                }
+            });
+        });
         
         // Initialize mobile navigation
         initMobileNav();
