@@ -398,8 +398,7 @@
         
         <div class="main-content">
             <div class="article-meta">
-                <strong>{{ $berita->kategori == 'inovasi' ? 'Inovasi' : 'Pemeringkatan' }}, {{ date('d F Y', strtotime($berita->tanggal)) }}</strong> - 
-                {{ Str::limit(strip_tags($berita->isi), 200) }}
+                <strong>{{ $berita->kategori == 'inovasi' ? 'Inovasi' : 'Pemeringkatan' }}, {{ date('d F Y', strtotime($berita->tanggal)) }}</strong>
             </div>
             
             <div class="article-content">

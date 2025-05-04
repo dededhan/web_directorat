@@ -930,13 +930,31 @@
 
     </script>
 
-    <script>
-        window.carouselImages = [
-            "{{ asset('images/logos/image_corousel.jpg') }}",
-            "/images/TERBUK TAMPAK DEPAN.png",
-            "/images/GEDUNG REKTORAT.png",
-            "/images/om.png",
-        ];
-    </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fetch carousel images from gallery
+
+        fetch('/api/carousel-images')
+            .then(response => response.json())
+            .then(data => {
+                // Create the carouselImages array with proper paths
+                window.carouselImages = data.map(item => '/storage/' + item.image);
+
+                // If no images are found, use default images
+                if (window.carouselImages.length === 0) {
+                    window.carouselImages = [
+                        "{{ asset('images/logos/image_corousel.jpg') }}",
+                    ];
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching carousel images:', error);
+                // Fallback to default images on error
+                window.carouselImages = [
+                    "{{ asset('images/logos/image_corousel.jpg') }}",
+                ];
+            });
+    });
+</script>
 </body>
 </html>
