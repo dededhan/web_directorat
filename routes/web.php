@@ -304,10 +304,29 @@ Route::get('/indikator', function () {
     return view('Pemeringkatan.indikator.indikator');
 })->name('Pemeringkatan.indikator.indikator');
 
+//pemeringkatan
+
 Route::get('/Pemeringkatans', [BeritaController::class, 'landingPagePemeringkatan'])->name('pemeringkatan.landingpage');
 Route::get('/Pemeringkatans/Ranking-Universitas/klaster-perguruan-tinggi', function () {
     return view('Pemeringkatan.Ranking_Universitas.Pemeringkatan_Klaster_Perguruan_Tinggi');
 })->name('pemeringkatan.klaster');
+
+Route::get('/Pemeringkatans/program/global-engagement', function () {
+    return view('Pemeringkatan.program.global-engagement');
+})->name('Pemeringkatan.program.global-engagement');
+
+
+Route::get('/Pemeringkatans/program/lecturer-expose', function () {
+    return view('Pemeringkatan.program.lecturer-expose');
+})->name('Pemeringkatan.program.lecturer-expose');
+
+Route::get('/Pemeringkatans/program/international-faculty-staff', function () {
+    return view('Pemeringkatan.program.international-faculty-staff');
+})->name('Pemeringkatan.program.international-faculty-staff');
+
+Route::get('/Pemeringkatan/program/international-student-mobility', function () {
+    return view('Pemeringkatan.program.international-student-mobility');
+})->name('Pemeringkatan.program.international-student-mobility');
 
 // collection of admin-like routes
 require __DIR__ . '/admin.php';

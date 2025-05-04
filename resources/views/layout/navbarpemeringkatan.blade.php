@@ -81,10 +81,10 @@
             <li class="relative">
                 <a href="#" class="text-white hover:text-yellow-400 primary-dropdown-toggle" data-dropdown="program-dropdown">Program</a>
                 <ul id="program-dropdown" class="dropdown-menu primary-dropdown hidden">
-                    <li><a href="#">Global Engagement</a></li>
-                    <li><a href="#">Lecturer Expose</a></li>
-                    <li><a href="#">International Faculty Staff</a></li>
-                    <li><a href="#">International Student Mobility</a></li>
+                    <li><a class="hover:text-yellow-400" href="{{ route('Pemeringkatan.program.global-engagement') }}">Global Engagement</a></li>
+                    <li><a class="hover:text-yellow-400" href="{{ route('Pemeringkatan.program.lecturer-expose') }}">Lecturer Expose</a></li>
+                    <li><a class="hover:text-yellow-400" href="{{ route('Pemeringkatan.program.international-faculty-staff') }}">International Faculty Staff</a></li>
+                    <li><a class="hover:text-yellow-400" href="{{ route('Pemeringkatan.program.international-student-mobility') }}">International Student Mobility</a></li>
                     
                     <li class="relative">
                         <a href="#" class="flex justify-between items-center secondary-dropdown-toggle" data-dropdown="sustainability-dropdown">
