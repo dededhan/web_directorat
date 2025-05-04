@@ -94,16 +94,14 @@
                 font-size: 1.1rem !important;
             }
 
-            /* Carousel mobile */
             .carousel-item-enhanced {
-                flex: 0 0 100% !important;
-                max-width: 100% !important;
-                padding: 0.5rem !important;
-            }
-
-            .enhanced-carousel {
-                padding: 0 1rem;
-            }
+                    flex: 0 0 100%;
+                    max-width: 100%;
+                    padding: 0.5rem;
+                }
+                .enhanced-carousel {
+                    padding: 0 1rem;
+                }
 
             /* Program cards mobile */
             .program-card {
