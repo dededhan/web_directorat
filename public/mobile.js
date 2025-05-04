@@ -1,203 +1,228 @@
-// mobile.js - Complete Implementation
-
+// mobile.js - Complete Mobile Fix
 document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-    const mobileSidebar = document.getElementById('mobile-sidebar');
-    const sidebarOverlay = document.getElementById('sidebar-overlay');
-    const closeSidebar = document.getElementById('close-sidebar');
-    const menuIcon = document.getElementById('menu-icon');
-    
-    // Show sidebar
-    function showSidebar() {
-        mobileSidebar.classList.add('active');
-        sidebarOverlay.classList.add('active');
-        document.body.classList.add('sidebar-open');
-        menuIcon.classList.remove('fa-bars');
-        menuIcon.classList.add('fa-times');
-    }
-    
-    // Hide sidebar
-    function hideSidebar() {
-        mobileSidebar.classList.remove('active');
-        sidebarOverlay.classList.remove('active');
-        document.body.classList.remove('sidebar-open');
-        menuIcon.classList.remove('fa-times');
-        menuIcon.classList.add('fa-bars');
-    }
-    
-    // Toggle sidebar when menu button is clicked
-    if (mobileMenuToggle) {
-        mobileMenuToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            if (mobileSidebar.classList.contains('active')) {
-                hideSidebar();
-            } else {
-                showSidebar();
-            }
-        });
-    }
-    
-    // Close sidebar when close button is clicked
-    if (closeSidebar) {
-        closeSidebar.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            hideSidebar();
-        });
-    }
-    
-    // Close sidebar when overlay is clicked
-    if (sidebarOverlay) {
-        sidebarOverlay.addEventListener('click', function() {
-            hideSidebar();
-        });
-    }
-    
-    // Handle dropdown menus
-    const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
-    
-    dropdownButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const dropdown = this.nextElementSibling;
-            const icon = this.querySelector('.fa-chevron-down');
-            
-            // Toggle dropdown
-            if (dropdown.classList.contains('active')) {
-                dropdown.classList.remove('active');
-                icon.style.transform = 'rotate(0)';
-            } else {
-                // Close other dropdowns first
-                document.querySelectorAll('.sidebar-dropdown ul.active').forEach(openDropdown => {
-                    openDropdown.classList.remove('active');
-                    openDropdown.previousElementSibling.querySelector('.fa-chevron-down').style.transform = 'rotate(0)';
-                });
-                
-                dropdown.classList.add('active');
-                icon.style.transform = 'rotate(180deg)';
-            }
-        });
-    });
-    
-    // Close sidebar on escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && mobileSidebar.classList.contains('active')) {
-            hideSidebar();
-        }
-    });
-    
-    // Handle window resize
-    let resizeTimer;
-    window.addEventListener('resize', function() {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function() {
-            if (window.innerWidth > 767 && mobileSidebar.classList.contains('active')) {
-                hideSidebar();
-            }
-        }, 250);
-    });
-});
-
-// Ensure proper display on page load
-window.addEventListener('load', function() {
-    // Fix viewport meta tag
-    const viewportMeta = document.querySelector('meta[name="viewport"]');
-    if (viewportMeta) {
-        viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
-    }
-    
-    // Ensure mobile display
-    if (window.innerWidth <= 767) {
-        const mobileNavbar = document.getElementById('mobile-navbar');
-        const desktopNavbar = document.querySelector('.navbar.hidden.md\\:block');
-        
-        if (mobileNavbar) {
-            mobileNavbar.style.display = 'block';
-        }
-        
-        if (desktopNavbar) {
-            desktopNavbar.style.display = 'none';
-        }
-    }
-});
-// mobile-fixes.js - Add this to your existing mobile.js file
-document.addEventListener('DOMContentLoaded', function() {
-    // Fix 1: Prevent default zooming on mobile
+    // 1. Fix viewport settings
     const viewport = document.querySelector('meta[name="viewport"]');
     if (viewport) {
         viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
     }
 
-    // Fix 2: Mobile sidebar functionality
+    // 2. Mobile elements
     const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const menuIcon = document.getElementById('menu-icon');
     const mobileSidebar = document.getElementById('mobile-sidebar');
     const sidebarOverlay = document.getElementById('sidebar-overlay');
     const closeSidebar = document.getElementById('close-sidebar');
     const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
     
-    // Function to show sidebar
+    // 3. Debug logger
+    function log(message) {
+        console.log('Mobile Debug: ' + message);
+    }
+    
+    log('Mobile script initialized');
+    
+    // 4. Show sidebar function with direct style manipulation
     function showSidebar() {
-        mobileSidebar.style.transform = 'translateX(0)';
-        sidebarOverlay.style.opacity = '1';
-        sidebarOverlay.style.visibility = 'visible';
-        sidebarOverlay.style.pointerEvents = 'auto';
+        log('Opening sidebar');
+        
+        // Apply styles directly
+        if (mobileSidebar) {
+            mobileSidebar.style.transform = 'translateX(0)';
+            log('Sidebar transform applied');
+        }
+        
+        if (sidebarOverlay) {
+            sidebarOverlay.style.opacity = '1';
+            sidebarOverlay.style.visibility = 'visible';
+            sidebarOverlay.style.pointerEvents = 'auto';
+            log('Overlay styles applied');
+        }
+        
         document.body.classList.add('sidebar-open');
+        
+        if (menuIcon) {
+            menuIcon.classList.remove('fa-bars');
+            menuIcon.classList.add('fa-times');
+        }
     }
     
-    // Function to hide sidebar
+    // 5. Hide sidebar function with direct style manipulation
     function hideSidebar() {
-        mobileSidebar.style.transform = 'translateX(100%)';
-        sidebarOverlay.style.opacity = '0';
-        sidebarOverlay.style.visibility = 'hidden';
-        sidebarOverlay.style.pointerEvents = 'none';
+        log('Closing sidebar');
+        
+        // Apply styles directly
+        if (mobileSidebar) {
+            mobileSidebar.style.transform = 'translateX(100%)';
+            log('Sidebar transform reset');
+        }
+        
+        if (sidebarOverlay) {
+            sidebarOverlay.style.opacity = '0';
+            sidebarOverlay.style.visibility = 'hidden';
+            sidebarOverlay.style.pointerEvents = 'none';
+            log('Overlay styles reset');
+        }
+        
         document.body.classList.remove('sidebar-open');
+        
+        if (menuIcon) {
+            menuIcon.classList.remove('fa-times');
+            menuIcon.classList.add('fa-bars');
+        }
     }
     
-    // Toggle sidebar when menu button is clicked
+    // 6. Toggle sidebar with click handler
     if (mobileMenuToggle) {
+        log('Menu toggle button found');
         mobileMenuToggle.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
+            log('Menu toggle clicked');
             showSidebar();
         });
+    } else {
+        log('ERROR: Menu toggle button not found!');
     }
     
-    // Close sidebar when close button is clicked
+    // 7. Close sidebar handlers
     if (closeSidebar) {
+        log('Close button found');
         closeSidebar.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
+            log('Close button clicked');
             hideSidebar();
         });
+    } else {
+        log('ERROR: Close sidebar button not found!');
     }
     
-    // Close sidebar when overlay is clicked
     if (sidebarOverlay) {
-        sidebarOverlay.addEventListener('click', function() {
+        log('Overlay found');
+        sidebarOverlay.addEventListener('click', function(e) {
+            log('Overlay clicked');
             hideSidebar();
         });
+    } else {
+        log('ERROR: Sidebar overlay not found!');
     }
     
-    // Handle dropdown menus in sidebar
-    dropdownButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const dropdown = this.nextElementSibling;
-            const icon = this.querySelector('.fa-chevron-down');
-            
-            dropdown.classList.toggle('hidden');
-            
-            if (!dropdown.classList.contains('hidden')) {
-                icon.style.transform = 'rotate(180deg)';
-            } else {
-                icon.style.transform = 'rotate(0)';
-            }
+    // 8. Handle dropdown menus in sidebar
+    if (dropdownButtons && dropdownButtons.length > 0) {
+        log('Found ' + dropdownButtons.length + ' dropdown buttons');
+        dropdownButtons.forEach(function(button, index) {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                log('Dropdown button ' + (index + 1) + ' clicked');
+                
+                const dropdown = this.nextElementSibling;
+                const icon = this.querySelector('.fa-chevron-down');
+                
+                if (dropdown) {
+                    dropdown.classList.toggle('hidden');
+                    const isHidden = dropdown.classList.contains('hidden');
+                    log('Dropdown ' + (index + 1) + ' is now ' + (isHidden ? 'hidden' : 'visible'));
+                    
+                    if (icon) {
+                        icon.style.transform = isHidden ? 'rotate(0)' : 'rotate(180deg)';
+                    }
+                } else {
+                    log('ERROR: No dropdown found for button ' + (index + 1));
+                }
+            });
         });
-    });
+    } else {
+        log('No dropdown buttons found');
+    }
     
-    // Close sidebar on escape key
+    // 9. Close sidebar on escape key
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && !mobileSidebar.style.transform.includes('100%')) {
+        if (e.key === 'Escape') {
+            log('Escape key pressed');
             hideSidebar();
         }
     });
+    
+    // 10. Fix mobile classes on load
+    function fixMobileDisplay() {
+        log('Fixing mobile display');
+        if (window.innerWidth <= 767) {
+            // Mobile mode
+            log('Mobile width detected: ' + window.innerWidth);
+            
+            // Show mobile navbar
+            const mobileNavbar = document.getElementById('mobile-navbar');
+            if (mobileNavbar) {
+                mobileNavbar.style.display = 'block';
+                log('Mobile navbar displayed');
+            }
+            
+            // Hide desktop navbar
+            const desktopNavbar = document.querySelector('.navbar.hidden.md\\:block');
+            if (desktopNavbar) {
+                desktopNavbar.style.display = 'none';
+                log('Desktop navbar hidden');
+            }
+            
+            // Ensure sidebar and overlay are in DOM
+            if (mobileSidebar) {
+                mobileSidebar.style.display = 'block';
+                log('Sidebar display set');
+            }
+            
+            if (sidebarOverlay) {
+                sidebarOverlay.style.display = 'block';
+                log('Overlay display set');
+            }
+        }
+    }
+    
+    // Run on page load
+    fixMobileDisplay();
+    
+    // Run on resize
+    window.addEventListener('resize', fixMobileDisplay);
+    
+    // 11. Add debug function to global scope
+    window.debugMobileSidebar = function() {
+        const elements = {
+            viewport: viewport ? viewport.getAttribute('content') : 'Not found',
+            mobileMenuToggle: mobileMenuToggle ? 'Found' : 'Not found',
+            mobileSidebar: mobileSidebar ? 'Found' : 'Not found',
+            sidebarOverlay: sidebarOverlay ? 'Found' : 'Not found',
+            closeSidebar: closeSidebar ? 'Found' : 'Not found',
+            dropdownButtons: dropdownButtons ? dropdownButtons.length + ' found' : 'None found'
+        };
+        
+        const styles = {
+            sidebarTransform: mobileSidebar ? mobileSidebar.style.transform : 'N/A',
+            sidebarDisplay: mobileSidebar ? getComputedStyle(mobileSidebar).display : 'N/A',
+            overlayOpacity: sidebarOverlay ? sidebarOverlay.style.opacity : 'N/A',
+            overlayVisibility: sidebarOverlay ? sidebarOverlay.style.visibility : 'N/A',
+            bodyHasClass: document.body.classList.contains('sidebar-open')
+        };
+        
+        console.log('Mobile Debug Info:');
+        console.log('Elements:', elements);
+        console.log('Styles:', styles);
+        console.log('Window width:', window.innerWidth);
+        
+        return { elements, styles };
+    };
+    
+    // Initial styles setup
+    if (mobileSidebar) {
+        log('Setting initial sidebar style');
+        mobileSidebar.style.transform = 'translateX(100%)';
+    }
+    
+    if (sidebarOverlay) {
+        log('Setting initial overlay style');
+        sidebarOverlay.style.opacity = '0';
+        sidebarOverlay.style.visibility = 'hidden';
+        sidebarOverlay.style.pointerEvents = 'none';
+    }
+    
+    log('Mobile initialization complete');
 });
