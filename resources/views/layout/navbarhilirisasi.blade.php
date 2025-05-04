@@ -27,24 +27,21 @@
             <li class="relative group">
                 <a href="#" class="text-white hover:text-yellow-400">Program</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                <li><a href="{{ route('sdgscenter') }}">SDGs Activity</a></li>
-                    <li><a href="{{ route('subdirektorat-inovasi.inkubator.inkubator_bisnis_pendidikan') }}">Inkubator Bisnis dan Pendidikan</a></li>
-                    <li><a href="{{ route('subdirektorat-inovasi.inkubator.ekosisteminovasi') }}">Ekosistem Inovasi UNJ</a></li>
-                    <li><a href="{{ route('subdirektorat-inovasi.inkubator.inovasiaward') }}">Innovator Award</a></li>
+                <li><a class="hover:text-yellow-400" href="{{ route('sdgscenter') }}">SDGs Activity</a></li>
+                    <li><a class="hover:text-yellow-400" href="{{ route('subdirektorat-inovasi.inkubator.inkubator_bisnis_pendidikan') }}">Inkubator Bisnis dan Pendidikan</a></li>
+                    <li><a class="hover:text-yellow-400" href="{{ route('subdirektorat-inovasi.inkubator.ekosisteminovasi') }}">Ekosistem Inovasi UNJ</a></li>
+                    <li><a class="hover:text-yellow-400" href="{{ route('subdirektorat-inovasi.inkubator.inovasiaward') }}">Innovator Award</a></li>
                 </ul>
             </li>
             
-            <!-- <li class="relative group">
+            <li class="relative group">
                 <a href="#" class="text-white hover:text-yellow-400">Layanan</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="#" class="hover:text-yellow-400">Pengujian Katsinov</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">Pendaftaran Inkubator Bisnis</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">Pengujian/Sertifikasi Produk Inovasi</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">Join Mitra Inovasi UNJ</a></li>
+                    <li><a href="#" class="login hover:text-yellow-400" data-bs-toggle="modal" data-bs-target="#loginModal">Pengujian Katsinov</a></li>
+                    <li><a href="#" class="login hover:text-yellow-400" data-bs-toggle="modal" data-bs-target="#loginModal">Pendaftaran Inkubator Bisnis</a></li>
+                    <li><a href="#" class="login hover:text-yellow-400" data-bs-toggle="modal" data-bs-target="#loginModal">Pengujian/Sertifikasi Produk Inovasi</a></li>
+                    <li><a href="#" class="login hover:text-yellow-400" data-bs-toggle="modal" data-bs-target="#loginModal">Join Mitra Inovasi UNJ</a></li>
                 </ul>
-            </li> -->
-            <li class="relative group">
-                <a class="login text-white hover:text-yellow-400" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">layanan</a></li>
             </li>
             <li class="relative group">
                 <a href="{{ route('Berita.beritahome') }}" class="text-white hover:text-yellow-400">Berita</a>
