@@ -26,6 +26,7 @@ class GalleryController extends Controller
         return 'admin';
     }
 
+
     public function index()
     {
         $galleries = Gallery::latest()->paginate(10);
@@ -92,7 +93,11 @@ class GalleryController extends Controller
         $gallery = Gallery::findOrFail($id);
         return response()->json($gallery);
     }
-
+    public function getCarouselImages()
+    {
+        $carouselImages = Gallery::latest()->take(4)->get();
+        return response()->json($carouselImages);
+    }
     /**
      * Update the specified resource in storage.
      */
