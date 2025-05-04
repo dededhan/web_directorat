@@ -52,21 +52,27 @@
 <!-- Mobile Navigation Bar -->
 <nav class="navbar md:hidden fixed top-0 w-full z-20 transition-all duration-300" id="mobile-navbar">
     <div class="bg-[#186862]/95 backdrop-blur-sm shadow-lg">
-        <div class="flex justify-between items-center py-3 px-4">
-            <a href="{{ route('home') }}" class="flex items-center space-x-3">
-                <img alt="UNJ Logo" class="h-10 w-10" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png"/>
+        <div class="flex justify-between items-center py-2 px-3"> <!-- Adjusted padding -->
+            <a href="{{ route('home') }}" class="flex items-center space-x-2"> <!-- Reduced spacing -->
+                <img alt="UNJ Logo" 
+                     class="h-8 w-8" 
+                     src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png"/>
                 <div class="text-white">
-                    <h1 class="text-sm font-bold leading-tight">Direktorat Inovasi</h1>
-                    <p class="text-xs opacity-90">Universitas Negeri Jakarta</p>
+                    <h1 class="text-xs font-bold leading-tight">Direktorat Inovasi</h1> <!-- Smaller text -->
+                    <p class="text-[10px] opacity-90">Universitas Negeri Jakarta</p> <!-- Even smaller subtitle -->
                 </div>
             </a>
             
-            <button id="mobile-menu-toggle" class="text-white p-2 hover:bg-white/10 rounded-lg transition-colors">
-                <i id="menu-icon" class="fas fa-bars text-xl"></i>
+            <button id="mobile-menu-toggle" class="text-white p-1.5 hover:bg-white/10 rounded-lg transition-colors">
+                <!-- Smaller menu icon -->
+                <i id="menu-icon" class="fas fa-bars text-lg"></i>
             </button>
         </div>
     </div>
 </nav>
+
+<!-- Add spacing to prevent content overlap -->
+<div class="h-12 md:h-0"></div> 
 
 <!-- Mobile Sidebar -->
 <div id="mobile-sidebar" class="fixed top-0 right-0 w-72 h-full bg-[#186862] z-40 transform translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto">

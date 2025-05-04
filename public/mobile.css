@@ -59,8 +59,25 @@
     nav.bg-white {
         padding: 10px 15px;
     }
-}
 
+    /* Mobile navbar specific styles */
+    #mobile-navbar {
+        min-height: 48px; /* Fixed height for mobile navbar */
+    }
+    
+    #mobile-navbar .bg-\[\#186862\]\/95 {
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+    }
+    
+    /* Prevent text wrapping in mobile navbar */
+    #mobile-navbar h1 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px; /* Adjust based on your needs */
+    }
+}
 /* Small mobile devices */
 @media (max-width: 576px) {
     .carousel-item-enhanced {
