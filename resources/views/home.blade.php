@@ -13,11 +13,21 @@
     <script src="{{ asset('header-carousel.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('mobile.css') }}">
     
-    <!-- Enhanced mobile styles with !important to override Tailwind -->
     <style>
         * {
             font-family: Arial, sans-serif !important;
         }
+
+        /* main,
+        section {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            overflow-x: hidden;
+        } */
 
         .media-card {
             height: 100%;
@@ -40,129 +50,7 @@
             align-items: stretch;
         }
 
-        /* Mobile-first responsive design - Fixed */
-        @media screen and (max-width: 768px) {
-            /* Debug indicator */
-            body::after {
-                content: 'Mobile CSS Active';
-                position: fixed;
-                bottom: 10px;
-                right: 10px;
-                background: #4CAF50;
-                color: white;
-                padding: 5px 10px;
-                font-size: 12px;
-                z-index: 9999;
-                border-radius: 4px;
-            }
-
-            /* Force mobile layout */
-            .container {
-                padding-left: 1rem !important;
-                padding-right: 1rem !important;
-            }
-
-            /* Header mobile */
-            header {
-                height: 50vh !important;
-            }
-
-            header img {
-                height: 50vh !important;
-                object-fit: cover;
-            }
-
-            /* News cards mobile */
-            .bg-white.rounded-lg.overflow-hidden.shadow-md {
-                margin-bottom: 1rem;
-            }
-
-            .w-full.h-56.object-cover {
-                height: 180px !important;
-            }
-
-            /* Typography adjustments */
-            h2 {
-                font-size: 1.5rem !important;
-            }
-
-            h3 {
-                font-size: 1.25rem !important;
-            }
-
-            .font-bold.text-xl {
-                font-size: 1.1rem !important;
-            }
-
-            .carousel-item-enhanced {
-                    flex: 0 0 100%;
-                    max-width: 100%;
-                    padding: 0.5rem;
-                }
-                .enhanced-carousel {
-                    padding: 0 1rem;
-                }
-
-            /* Program cards mobile */
-            .program-card {
-                margin-bottom: 1rem !important;
-            }
-
-            /* Media section mobile */
-            .media-section {
-                padding: 2rem 0 !important;
-            }
-
-            /* Modal mobile */
-            #programDetailsModal .max-w-3xl {
-                max-width: 95% !important;
-                margin: 1rem;
-            }
-
-            /* Button adjustments */
-            .login {
-                padding: 0.75rem 1rem !important;
-                font-size: 0.875rem !important;
-            }
-        }
-
-        /* Specific mobile styles for news grid */
-        @media screen and (max-width: 640px) {
-            /* Only force single column on small phones */
-            .news-grid {
-                grid-template-columns: 1fr !important;
-                gap: 1rem !important;
-            }
-        }
-
-        /* Tablet view - maintain 2 columns for news */
-        @media screen and (min-width: 641px) and (max-width: 768px) {
-            .news-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
-        }
-
-        /* Program and media section grids - mobile */
-        @media screen and (max-width: 768px) {
-            .program-section .grid,
-            .media-section .grid {
-                grid-template-columns: 1fr !important;
-                gap: 1rem !important;
-            }
-        }
-
-        /* Larger phones - 2 columns for program and media */
-        @media screen and (min-width: 480px) and (max-width: 768px) {
-            .program-section .grid,
-            .media-section .grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
-        }
-
-        /* Font Awesome preservation */
-        .fas, .fab, .far, .fa {
-            font-family: "Font Awesome 5 Free", "Font Awesome 5 Brands" !important;
-        }
+        /* Enhanced responsive design for mobile devices */
         @media (max-width: 768px) {
             .media-section {
                 padding: 3rem 0;
