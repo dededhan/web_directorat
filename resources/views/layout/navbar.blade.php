@@ -1,7 +1,7 @@
 @include('layout.loginpopup')
 
 <!-- Desktop Navbar - hidden on mobile, visible on md and above -->
-<nav class="navbar hidden md:block fixed top-0 w-full z-50 bg-[#186862] shadow-lg">
+<nav class="navbar hidden md:flex fixed top-0 w-full z-50 bg-[#186862] shadow-lg">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
         <div class="flex items-center space-x-4">
             <a href="{{ route('home') }}">
@@ -10,7 +10,7 @@
             <h1 class="text-white text-2xl font-bold">Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</h1>
         </div>
         <ul class="flex space-x-6">
-            <li><a href="#" class="text-white hover:text-yellow-400">Beranda</a></li>
+            <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400">Beranda</a></li>
             
             <li class="relative group">
                 <a href="#" class="text-white hover:text-yellow-400">Profil</a>
@@ -27,13 +27,7 @@
                     <li><a href="{{ route('pemeringkatan.landingpage') }}" class="hover:text-yellow-400">Subdirektorat Pemeringkatan dan Sistem Informasi</a></li>
                 </ul>
             </li>
-            <li class="relative group">
-                <a href="{{ route('Berita.beritahome') }}" class="text-white hover:text-yellow-400">Berita</a>
-                <ul class="absolute hidden group-hover">
-                    <!-- <li><a href="#" class="hover:text-yellow-400">Program</a></li>
-                    <li><a href="#" class="hover:text-yellow-400">Program</a></li> -->
-                </ul>
-            </li>
+            <li><a href="{{ route('Berita.beritahome') }}" class="text-white hover:text-yellow-400">Berita</a></li>
             
             <li class="relative group">
                 <a href="#" class="text-white hover:text-yellow-400">Galeri</a>
@@ -44,36 +38,35 @@
             </li>
             <li><a href="{{ route('document.document') }}" class="text-white hover:text-yellow-400">Dokumen</a></li>
             <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400">SSO</a></li>
-            <li><a class="login text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
+            <li><a class="login text-white hover:text-yellow-400" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
         </ul>
     </div>
 </nav>
 
 <!-- Mobile Navigation Bar -->
-<nav class="navbar block md:hidden fixed top-0 w-full z-20 transition-all duration-300" id="mobile-navbar">
-    <div class="bg-[#186862]/95 backdrop-blur-sm shadow-lg">
-        <div class="flex justify-between items-center py-2 px-3">
-            <a href="{{ route('home') }}" class="flex items-center space-x-2">
-                <img alt="UNJ Logo" 
-                     class="h-8 w-8" 
-                     src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png"/>
-                <div class="text-white">
-                    <h1 class="text-xs font-bold leading-tight">Direktorat Inovasi</h1>
-                    <p class="text-[10px] opacity-90">Universitas Negeri Jakarta</p>
-                </div>
-            </a>
-            
-            <button id="mobile-menu-toggle" class="text-white p-1.5 hover:bg-white/10 rounded-lg transition-colors">
-                <i id="menu-icon" class="fas fa-bars text-lg"></i>
-            </button>
-        </div>
+<nav class="navbar md:hidden fixed top-0 w-full z-20 transition-all duration-300 bg-[#186862]/95 backdrop-blur-sm shadow-lg" id="mobile-navbar">
+    <div class="flex justify-between items-center py-2 px-3">
+        <a href="{{ route('home') }}" class="flex items-center space-x-2">
+            <img alt="UNJ Logo" 
+                 class="h-8 w-8" 
+                 src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png"/>
+            <div class="text-white">
+                <h1 class="text-xs font-bold leading-tight">Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</h1>
+                <p class="text-[10px] opacity-90">Universitas Negeri Jakarta</p>
+            </div>
+        </a>
+        
+        <button id="mobile-menu-toggle" class="text-white p-1.5 hover:bg-white/10 rounded-lg transition-colors">
+            <i id="menu-icon" class="fas fa-bars text-lg"></i>
+        </button>
     </div>
 </nav>
 
 <!-- Add spacing to prevent content overlap -->
 <div class="h-12 md:h-20"></div> 
+
 <!-- Mobile Sidebar -->
-<div id="mobile-sidebar" class="fixed top-0 right-0 w-72 h-full bg-[#186862] z-40 transform translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto block md:hidden">
+<div id="mobile-sidebar" class="fixed top-0 right-0 w-72 h-full bg-[#186862] z-40 transform translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto md:hidden">
     <!-- Sidebar Header -->
     <div class="flex items-center justify-between p-4 border-b border-white/10">
         <a href="{{ route('home') }}" class="flex items-center space-x-3">
@@ -189,128 +182,101 @@
                     <span>SSO</span>
                 </a>
             </li>
+            
+            <li>
+                <a href="#" class="flex items-center text-white py-3 px-4 hover:bg-white/10 login" data-bs-toggle="modal" data-bs-target="#loginModal">
+                    <i class="fas fa-sign-in-alt w-6"></i>
+                    <span>Masuk</span>
+                </a>
+            </li>
         </ul>
-
-        <div class="p-4 mt-4">
-            <button class="login w-full bg-white text-[#186862] py-2.5 px-4 rounded-lg font-medium hover:bg-white/90 transition-colors flex items-center justify-center space-x-2" data-bs-toggle="modal" data-bs-target="#loginModal">
-                <i class="fas fa-sign-in-alt"></i>
-                <span>Masuk</span>
-            </button>
-        </div>
     </div>
 </div>
 
 <!-- Overlay -->
-<div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out z-30 block md:hidden"></div>
+<div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out z-30 md:hidden"></div>
+
 <!-- JavaScript for mobile sidebar -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Add console logs for debugging
-        console.log('Window width:', window.innerWidth);
-        console.log('Is mobile?', window.innerWidth < 768);
-        
         const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const closeSidebar = document.getElementById('close-sidebar');
         const menuIcon = document.getElementById('menu-icon');
         const mobileSidebar = document.getElementById('mobile-sidebar');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
-        const mobileNavbar = document.getElementById('mobile-navbar');
         const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
         
-        // Debug element existence
-        console.log('Mobile navbar exists:', !!mobileNavbar);
-        console.log('Mobile sidebar exists:', !!mobileSidebar);
-        
-        // Function to handle scroll effects
-        function handleScroll() {
-            if (window.scrollY > 10) {
-                // When scrolled, add background color
-                mobileNavbar.classList.remove('bg-transparent');
-                mobileNavbar.classList.add('bg-[#186862]');
-            } else {
-                // At top, make transparent if needed
-                mobileNavbar.classList.remove('bg-[#186862]');
-                mobileNavbar.classList.add('bg-transparent');
-            }
-        }
-        
-        // Add scroll event listener
-        window.addEventListener('scroll', handleScroll);
-        
-        // Set initial state for mobile devices
-        function initMobileNav() {
-            if (window.innerWidth < 768) {
-                console.log('Initializing mobile navigation');
-                // Make sure mobile elements are displayed correctly
-                document.querySelectorAll('.md\\:hidden').forEach(el => {
-                    console.log('Found md:hidden element:', el);
-                    el.style.display = 'block';
-                });
-                document.querySelectorAll('.hidden.md\\:block').forEach(el => {
-                    console.log('Found hidden md:block element:', el);
-                    el.style.display = 'none';
-                });
-                
-                // Default state: sidebar hidden, show hamburger icon
-                hideSidebar();
-                // Check initial scroll position
-                handleScroll();
-            } else {
-                console.log('Desktop view detected');
-            }
-        }
-        
-        // Functions to show/hide sidebar remain the same
+        // Function to show sidebar
         function showSidebar() {
             mobileSidebar.classList.remove('translate-x-full');
             sidebarOverlay.classList.remove('opacity-0', 'pointer-events-none');
             sidebarOverlay.classList.add('opacity-50');
-            menuIcon.classList.remove('fa-bars');
-            menuIcon.classList.add('fa-times');
+            document.body.classList.add('overflow-hidden');
         }
         
+        // Function to hide sidebar
         function hideSidebar() {
             mobileSidebar.classList.add('translate-x-full');
             sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
             sidebarOverlay.classList.remove('opacity-50');
-            menuIcon.classList.remove('fa-times');
-            menuIcon.classList.add('fa-bars');
+            document.body.classList.remove('overflow-hidden');
         }
         
-        // Event listeners remain the same
+        // Toggle sidebar when hamburger menu is clicked
         if (mobileMenuToggle) {
             mobileMenuToggle.addEventListener('click', function() {
-                console.log('Mobile menu toggle clicked');
-                if (mobileSidebar.classList.contains('translate-x-full')) {
-                    showSidebar();
-                } else {
-                    hideSidebar();
-                }
+                showSidebar();
             });
         }
         
-        // Initialize mobile navigation
-        initMobileNav();
-        
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            console.log('Window resized to:', window.innerWidth);
-            if (window.innerWidth >= 768) {
-                // Desktop view - hide mobile elements
+        // Close sidebar when X button is clicked
+        if (closeSidebar) {
+            closeSidebar.addEventListener('click', function() {
                 hideSidebar();
-            } else {
-                // Mobile view - ensure proper visibility
-                initMobileNav();
-            }
+            });
+        }
+        
+        // Close sidebar when overlay is clicked
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', function() {
+                hideSidebar();
+            });
+        }
+        
+        // Toggle dropdown menus in sidebar
+        dropdownButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const dropdown = this.nextElementSibling;
+                const icon = this.querySelector('.fa-chevron-down');
+                
+                // Toggle the dropdown
+                if (dropdown.classList.contains('hidden')) {
+                    dropdown.classList.remove('hidden');
+                    icon.style.transform = 'rotate(180deg)';
+                } else {
+                    dropdown.classList.add('hidden');
+                    icon.style.transform = 'rotate(0)';
+                }
+            });
+        });
+        
+        // Close sidebar when clicking a link that's not a dropdown toggle
+        const sidebarLinks = document.querySelectorAll('#mobile-sidebar a:not(.sidebar-dropdown a)');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                hideSidebar();
+            });
         });
     });
 </script>
 
 <style>
-/* Your existing styles */
+/* Dropdown arrow transition */
 .fa-chevron-down {
     transition: transform 0.2s ease;
 }
 
+/* Custom scrollbar for sidebar */
 #mobile-sidebar {
     scrollbar-width: thin;
     scrollbar-color: rgba(255,255,255,0.2) transparent;
@@ -329,16 +295,9 @@
     border-radius: 2px;
 }
 
-/* Force mobile elements to show on small screens */
-@media (max-width: 767px) {
-    #mobile-navbar, 
-    #mobile-sidebar,
-    #sidebar-overlay {
-        display: block !important;
-    }
-    
-    .navbar.hidden.md\:block {
-        display: none !important;
-    }
+/* Active state for sidebar items */
+.sidebar-active {
+    background-color: rgba(255,255,255,0.1);
+    border-left: 3px solid #FFC107;
 }
 </style>
