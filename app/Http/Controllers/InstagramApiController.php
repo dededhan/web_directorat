@@ -380,7 +380,7 @@ class InstagramApiController extends Controller
                 // Try to get posts again
                 $posts = InstagramApiPost::where('is_active', true)
                         ->orderBy('posted_at', 'desc')
-                        ->take(6)
+                        ->take(3)
                         ->get();
             }
             
