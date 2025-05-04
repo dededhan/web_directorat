@@ -1,326 +1,187 @@
-/* mobile.css - Complete Implementation */
+/* mobile-fixes.css - Add these styles to your mobile.css file */
 
-/* Reset viewport zooming issue */
-@media (max-width: 767px) {
-    html, body {
-        min-width: 320px;
-        width: 100%;
-        overflow-x: hidden;
-    }
+/* Fix 1: Reset viewport zoom and prevent horizontal scrolling */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
 }
 
-/* Mobile navbar base styles */
-@media (max-width: 767px) {
-    #mobile-navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1000;
-        background-color: #186862;
-        display: block !important;
-    }
-
-    /* Remove blur effects */
-    #mobile-navbar .bg-\[#186862\]\/95 {
-        background-color: #186862 !important;
-        backdrop-filter: none !important;
-    }
-
-    /* Navbar container */
-    #mobile-navbar .flex.justify-between {
-        padding: 8px 12px;
-        align-items: center;
-        min-height: 50px;
-        max-height: 60px;
-    }
-
-    /* Logo section */
-    #mobile-navbar .flex.items-center.space-x-2 {
-        flex: 1;
-        max-width: calc(100% - 50px);
-        align-items: center;
-    }
-
-    /* UNJ Logo */
-    #mobile-navbar img {
-        height: 32px;
-        width: 32px;
-        flex-shrink: 0;
-        object-fit: contain;
-    }
-
-    /* Text container */
-    #mobile-navbar .text-white {
-        margin-left: 10px;
-        flex: 1;
-        overflow: hidden;
-    }
-
-    /* Title - shorter for mobile */
-    #mobile-navbar h1 {
-        font-size: 13px !important;
-        font-weight: 600 !important;
-        line-height: 1.2 !important;
-        margin: 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    /* Hide subtitle on mobile */
-    #mobile-navbar p {
-        display: none !important;
-    }
-
-    /* Menu toggle button */
-    #mobile-menu-toggle {
-        width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: transparent;
-        border: none;
-        color: white;
-        cursor: pointer;
-        flex-shrink: 0;
-        border-radius: 4px;
-        margin-left: 8px;
-        padding: 0;
-    }
-
-    #mobile-menu-toggle:active {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    #menu-icon {
-        font-size: 20px;
-        line-height: 1;
-    }
-}
-
-/* Mobile sidebar styles */
-@media (max-width: 767px) {
-    #mobile-sidebar {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 280px;
-        height: 100vh;
-        height: 100dvh;
-        background-color: #186862;
-        z-index: 1100;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        display: block !important;
-    }
-
-    #mobile-sidebar.active {
-        transform: translateX(0);
-    }
-
-    /* Sidebar header */
-    #mobile-sidebar .flex.items-center.justify-between {
-        padding: 12px 16px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        min-height: 50px;
-    }
-
-    /* Close button */
-    #close-sidebar {
-        width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: transparent;
-        border: none;
-        color: white;
-        cursor: pointer;
-        border-radius: 4px;
-        padding: 0;
-    }
-
-    #close-sidebar:active {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    /* Menu items */
-    #mobile-sidebar ul {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-    }
-
-    #mobile-sidebar li {
-        margin: 0;
-    }
-
-    #mobile-sidebar a,
-    #mobile-sidebar button {
-        display: flex;
-        align-items: center;
-        padding: 12px 16px;
-        color: white;
-        text-decoration: none;
-        font-size: 15px;
-        width: 100%;
-        text-align: left;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-    }
-
-    #mobile-sidebar a:hover,
-    #mobile-sidebar button:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    /* Icons in sidebar */
-    #mobile-sidebar i {
-        width: 24px;
-        font-size: 16px;
-        margin-right: 12px;
-        text-align: center;
-    }
-
-    /* Dropdown styles */
-    #mobile-sidebar .fa-chevron-down {
-        margin-left: auto;
-        font-size: 12px;
-        transition: transform 0.2s ease;
-    }
-
-    #mobile-sidebar .sidebar-dropdown ul {
-        background-color: rgba(0, 0, 0, 0.1);
-        display: none;
-    }
-
-    #mobile-sidebar .sidebar-dropdown ul.active {
-        display: block;
-    }
-
-    #mobile-sidebar .sidebar-dropdown ul a {
-        padding-left: 52px;
-        font-size: 14px;
-    }
-}
-
-/* Overlay styles */
-@media (max-width: 767px) {
-    #sidebar-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 1050;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-        display: block !important;
-    }
-
-    #sidebar-overlay.active {
-        opacity: 1;
-        visibility: visible;
-    }
-}
-
-/* Content spacing */
-@media (max-width: 767px) {
-    .h-12.md\:h-20 {
-        height: 50px !important;
-    }
-
-    body {
-        padding-top: 50px;
-    }
-    
-    main, section {
-        max-width: 100%;
-        overflow-x: hidden;
-    }
-}
-
-/* Fix for landscape mode */
-@media (max-width: 767px) and (orientation: landscape) {
-    #mobile-navbar .flex.justify-between {
-        min-height: 45px;
-        max-height: 50px;
-        padding: 6px 12px;
-    }
-
-    #mobile-navbar img {
-        height: 28px;
-        width: 28px;
-    }
-
-    #mobile-navbar h1 {
-        font-size: 12px !important;
-    }
-
-    .h-12.md\:h-20 {
-        height: 45px !important;
-    }
-}
-
-/* Small devices */
-@media (max-width: 360px) {
-    #mobile-navbar h1 {
-        font-size: 12px !important;
-    }
-
-    #mobile-sidebar {
-        width: 260px;
-    }
-}
-
-/* Safe area fixes for notched devices */
-@supports (padding: max(0px)) {
-    #mobile-navbar {
-        padding-top: env(safe-area-inset-top);
-    }
-
-    #mobile-sidebar {
-        padding-bottom: env(safe-area-inset-bottom);
-    }
-}
-
-/* Fix z-index stacking */
+/* Fix 2: Mobile Sidebar Styles */
 #mobile-navbar {
-    z-index: 1000 !important;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #186862;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#sidebar-overlay {
-    z-index: 1050 !important;
+#mobile-navbar .flex.justify-between {
+    padding: 8px 16px;
+    align-items: center;
+    min-height: 50px;
+    max-height: 60px;
 }
 
+#mobile-navbar img {
+    height: 32px;
+    width: 32px;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+#mobile-navbar h1 {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#mobile-navbar p {
+    display: none !important;
+}
+
+#mobile-menu-toggle {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: 4px;
+    padding: 0;
+}
+
+#mobile-menu-toggle:active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#menu-icon {
+    font-size: 20px;
+    line-height: 1;
+}
+
+/* Improved mobile sidebar */
 #mobile-sidebar {
-    z-index: 1100 !important;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100%;
+    height: 100vh;
+    background-color: #186862;
+    z-index: 1100;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
-/* Fix display issues */
-@media (max-width: 767px) {
-    .navbar.hidden.md\:block {
-        display: none !important;
-    }
-    
-    .navbar.block.md\:hidden,
-    #mobile-navbar {
-        display: block !important;
-    }
-    
-    #mobile-sidebar,
-    #sidebar-overlay {
-        display: block !important;
-    }
+#mobile-sidebar .flex.items-center.justify-between {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    min-height: 50px;
+}
+
+#close-sidebar {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 0;
+}
+
+#close-sidebar:active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#mobile-sidebar ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+#mobile-sidebar li {
+    margin: 0;
+}
+
+#mobile-sidebar a,
+#mobile-sidebar button {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#mobile-sidebar a:hover,
+#mobile-sidebar button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#mobile-sidebar i {
+    width: 24px;
+    font-size: 16px;
+    margin-right: 12px;
+    text-align: center;
+}
+
+#mobile-sidebar .fa-chevron-down {
+    margin-left: auto;
+    font-size: 12px;
+    transition: transform 0.2s ease;
+}
+
+#mobile-sidebar .sidebar-dropdown ul {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#mobile-sidebar .sidebar-dropdown ul.hidden {
+    display: none;
+}
+
+#mobile-sidebar .sidebar-dropdown ul a {
+    padding-left: 52px;
+    font-size: 14px;
+}
+
+/* Overlay styling */
+#sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
 }
 
 /* Prevent body scroll when sidebar is open */
@@ -328,4 +189,32 @@ body.sidebar-open {
     overflow: hidden;
     position: fixed;
     width: 100%;
+}
+
+/* Content spacing */
+.h-12.md\:h-20 {
+    height: 50px !important;
+}
+
+body {
+    padding-top: 50px;
+}
+
+/* Fix for iOS safari */
+@supports (-webkit-touch-callout: none) {
+    #mobile-sidebar {
+        height: -webkit-fill-available;
+    }
+}
+
+/* Fix for notched devices */
+@supports (padding: max(0px)) {
+    #mobile-navbar {
+        padding-top: env(safe-area-inset-top);
+    }
+    
+    #mobile-sidebar {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
 }

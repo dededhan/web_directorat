@@ -1,49 +1,37 @@
-// Enhanced Mobile Navbar JavaScript
+// mobile.js - Complete Implementation
+
 document.addEventListener('DOMContentLoaded', function() {
     const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-    const menuIcon = document.getElementById('menu-icon');
     const mobileSidebar = document.getElementById('mobile-sidebar');
     const sidebarOverlay = document.getElementById('sidebar-overlay');
     const closeSidebar = document.getElementById('close-sidebar');
-    const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
+    const menuIcon = document.getElementById('menu-icon');
     
-    // Track sidebar state
-    let isSidebarOpen = false;
-    
-    // Enhanced show/hide functions with smooth animations
+    // Show sidebar
     function showSidebar() {
-        if (isSidebarOpen) return;
-        
         mobileSidebar.classList.add('active');
         sidebarOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        document.body.classList.add('sidebar-open');
         menuIcon.classList.remove('fa-bars');
         menuIcon.classList.add('fa-times');
-        isSidebarOpen = true;
-        
-        // Add aria attributes for accessibility
-        mobileMenuToggle.setAttribute('aria-expanded', 'true');
     }
     
+    // Hide sidebar
     function hideSidebar() {
-        if (!isSidebarOpen) return;
-        
         mobileSidebar.classList.remove('active');
         sidebarOverlay.classList.remove('active');
-        document.body.style.overflow = '';
+        document.body.classList.remove('sidebar-open');
         menuIcon.classList.remove('fa-times');
         menuIcon.classList.add('fa-bars');
-        isSidebarOpen = false;
-        
-        // Update aria attributes
-        mobileMenuToggle.setAttribute('aria-expanded', 'false');
     }
     
-    // Toggle sidebar
+    // Toggle sidebar when menu button is clicked
     if (mobileMenuToggle) {
         mobileMenuToggle.addEventListener('click', function(e) {
             e.preventDefault();
-            if (isSidebarOpen) {
+            e.stopPropagation();
+            
+            if (mobileSidebar.classList.contains('active')) {
                 hideSidebar();
             } else {
                 showSidebar();
@@ -51,54 +39,51 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Close sidebar when clicking close button
+    // Close sidebar when close button is clicked
     if (closeSidebar) {
         closeSidebar.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             hideSidebar();
         });
     }
     
-    // Close sidebar when clicking overlay
+    // Close sidebar when overlay is clicked
     if (sidebarOverlay) {
         sidebarOverlay.addEventListener('click', function() {
             hideSidebar();
         });
     }
     
-    // Enhanced dropdown functionality
+    // Handle dropdown menus
+    const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
+    
     dropdownButtons.forEach(button => {
-        const dropdown = button.nextElementSibling;
-        const icon = button.querySelector('.fa-chevron-down');
-        
         button.addEventListener('click', function(e) {
             e.preventDefault();
+            const dropdown = this.nextElementSibling;
+            const icon = this.querySelector('.fa-chevron-down');
             
-            // Close other dropdowns
-            dropdownButtons.forEach(otherButton => {
-                if (otherButton !== button) {
-                    const otherDropdown = otherButton.nextElementSibling;
-                    const otherIcon = otherButton.querySelector('.fa-chevron-down');
-                    
-                    if (!otherDropdown.classList.contains('hidden')) {
-                        otherDropdown.classList.add('hidden');
-                        otherIcon.style.transform = 'rotate(0)';
-                        otherButton.setAttribute('aria-expanded', 'false');
-                    }
-                }
-            });
-            
-            // Toggle current dropdown
-            const isHidden = dropdown.classList.contains('hidden');
-            dropdown.classList.toggle('hidden');
-            icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0)';
-            button.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+            // Toggle dropdown
+            if (dropdown.classList.contains('active')) {
+                dropdown.classList.remove('active');
+                icon.style.transform = 'rotate(0)';
+            } else {
+                // Close other dropdowns first
+                document.querySelectorAll('.sidebar-dropdown ul.active').forEach(openDropdown => {
+                    openDropdown.classList.remove('active');
+                    openDropdown.previousElementSibling.querySelector('.fa-chevron-down').style.transform = 'rotate(0)';
+                });
+                
+                dropdown.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
         });
     });
     
     // Close sidebar on escape key
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && isSidebarOpen) {
+        if (e.key === 'Escape' && mobileSidebar.classList.contains('active')) {
             hideSidebar();
         }
     });
@@ -108,75 +93,23 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('resize', function() {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function() {
-            if (window.innerWidth > 767 && isSidebarOpen) {
+            if (window.innerWidth > 767 && mobileSidebar.classList.contains('active')) {
                 hideSidebar();
             }
         }, 250);
     });
-    
-    // Prevent body scroll when sidebar is open
-    function preventBodyScroll(e) {
-        if (isSidebarOpen) {
-            e.preventDefault();
-        }
-    }
-    
-    // Touch event handling for better mobile experience
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchEndX = 0;
-    let touchEndY = 0;
-    
-    document.addEventListener('touchstart', function(e) {
-        touchStartX = e.changedTouches[0].screenX;
-        touchStartY = e.changedTouches[0].screenY;
-    }, { passive: true });
-    
-    document.addEventListener('touchend', function(e) {
-        touchEndX = e.changedTouches[0].screenX;
-        touchEndY = e.changedTouches[0].screenY;
-        handleSwipe();
-    }, { passive: true });
-    
-    function handleSwipe() {
-        const swipeThreshold = 50;
-        const swipeDistanceX = touchStartX - touchEndX;
-        const swipeDistanceY = Math.abs(touchStartY - touchEndY);
-        
-        // Only handle horizontal swipes
-        if (swipeDistanceY < swipeThreshold) {
-            if (swipeDistanceX > swipeThreshold && !isSidebarOpen) {
-                // Swipe left - open sidebar
-                showSidebar();
-            } else if (swipeDistanceX < -swipeThreshold && isSidebarOpen) {
-                // Swipe right - close sidebar
-                hideSidebar();
-            }
-        }
-    }
-    
-    // Initialize aria attributes
-    if (mobileMenuToggle) {
-        mobileMenuToggle.setAttribute('aria-expanded', 'false');
-        mobileMenuToggle.setAttribute('aria-label', 'Toggle navigation menu');
-    }
-    
-    dropdownButtons.forEach(button => {
-        button.setAttribute('aria-expanded', 'false');
-        button.setAttribute('aria-haspopup', 'true');
-    });
 });
-
-// Helper function to check if device is mobile
-function isMobileDevice() {
-    return window.innerWidth <= 767 || 
-           /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
 
 // Ensure proper display on page load
 window.addEventListener('load', function() {
-    if (isMobileDevice()) {
-        // Force mobile navbar display
+    // Fix viewport meta tag
+    const viewportMeta = document.querySelector('meta[name="viewport"]');
+    if (viewportMeta) {
+        viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+    }
+    
+    // Ensure mobile display
+    if (window.innerWidth <= 767) {
         const mobileNavbar = document.getElementById('mobile-navbar');
         const desktopNavbar = document.querySelector('.navbar.hidden.md\\:block');
         
@@ -188,4 +121,83 @@ window.addEventListener('load', function() {
             desktopNavbar.style.display = 'none';
         }
     }
+});
+// mobile-fixes.js - Add this to your existing mobile.js file
+document.addEventListener('DOMContentLoaded', function() {
+    // Fix 1: Prevent default zooming on mobile
+    const viewport = document.querySelector('meta[name="viewport"]');
+    if (viewport) {
+        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+    }
+
+    // Fix 2: Mobile sidebar functionality
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileSidebar = document.getElementById('mobile-sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const closeSidebar = document.getElementById('close-sidebar');
+    const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
+    
+    // Function to show sidebar
+    function showSidebar() {
+        mobileSidebar.style.transform = 'translateX(0)';
+        sidebarOverlay.style.opacity = '1';
+        sidebarOverlay.style.visibility = 'visible';
+        sidebarOverlay.style.pointerEvents = 'auto';
+        document.body.classList.add('sidebar-open');
+    }
+    
+    // Function to hide sidebar
+    function hideSidebar() {
+        mobileSidebar.style.transform = 'translateX(100%)';
+        sidebarOverlay.style.opacity = '0';
+        sidebarOverlay.style.visibility = 'hidden';
+        sidebarOverlay.style.pointerEvents = 'none';
+        document.body.classList.remove('sidebar-open');
+    }
+    
+    // Toggle sidebar when menu button is clicked
+    if (mobileMenuToggle) {
+        mobileMenuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            showSidebar();
+        });
+    }
+    
+    // Close sidebar when close button is clicked
+    if (closeSidebar) {
+        closeSidebar.addEventListener('click', function(e) {
+            e.preventDefault();
+            hideSidebar();
+        });
+    }
+    
+    // Close sidebar when overlay is clicked
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', function() {
+            hideSidebar();
+        });
+    }
+    
+    // Handle dropdown menus in sidebar
+    dropdownButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const dropdown = this.nextElementSibling;
+            const icon = this.querySelector('.fa-chevron-down');
+            
+            dropdown.classList.toggle('hidden');
+            
+            if (!dropdown.classList.contains('hidden')) {
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                icon.style.transform = 'rotate(0)';
+            }
+        });
+    });
+    
+    // Close sidebar on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !mobileSidebar.style.transform.includes('100%')) {
+            hideSidebar();
+        }
+    });
 });
