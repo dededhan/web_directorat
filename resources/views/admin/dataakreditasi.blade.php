@@ -57,6 +57,9 @@
                             <option value="fe">FE</option>
                             <option value="profesi">PROFESI</option>
                         </select>
+                        @error('fakultas')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                         <div class="form-text text-muted">Pilih fakultas yang akan diinput data akreditasinya</div>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -64,6 +67,9 @@
                         <select class="form-select" name="prodi" id="prodi" disabled>
                             <option value="">Pilih Program Studi</option>
                         </select>
+                        @error('prodi')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                         <div class="form-text text-muted">Pilih program studi yang akan diinput data akreditasinya</div>
                     </div>
                 </div>
@@ -76,8 +82,9 @@
                             <option value="ban-pt">BAN-PT</option>
                             <option value="lam-infokom">LAM INFOKOM</option>
                             <option value="lam-teknik">LAM TEKNIK</option>
-                            <option value="lam-ekonomi">LAM EKONOMI</option>
+                            <option value="lam-ekonomi">LAMEMBA</option>
                             <option value="lam-pendidikan">LAM PENDIDIKAN</option>
+                            <option value="lam-sains">LAMSAMA</option>
                         </select>
                         <div class="form-text text-muted">Pilih lembaga yang mengeluarkan akreditasi</div>
                     </div>
@@ -152,7 +159,19 @@
                             <tr>
                                 <td>{{ strtoupper($akreditasi->fakultas) }}</td>
                                 <td>{{ $akreditasi->prodi }}</td>
-                                <td>{{ ucwords(str_replace('-', ' ', $akreditasi->lembaga_akreditasi)) }}</td>
+                                @php
+                                // Tambahkan mapping untuk lembaga akreditasi
+                                $lembagaMapping = [
+                                    'ban-pt' => 'BAN-PT',
+                                    'lam-infokom' => 'LAM INFOKOM',
+                                    'lam-teknik' => 'LAM TEKNIK',
+                                    'lam-ekonomi' => 'LAMEMBA',
+                                    'lam-pendidikan' => 'LAM PENDIDIKAN',
+                                    'lam-sains' => 'LAMSAMA'
+                                ];
+                            @endphp
+                            
+                            <td>{{ $lembagaMapping[$akreditasi->lembaga_akreditasi] ?? $akreditasi->lembaga_akreditasi }}</td>
                                 <td>
                                     @php
                                         $peringkatLabels = [
