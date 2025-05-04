@@ -32,7 +32,7 @@
             position: relative;
             width: 100%;
             height: 300px;
-            background-image: url('https://img.jakpost.net/c/2019/08/06/2019_08_06_77550_1565061483._large.jpg');
+            background-image: url("/images/GEDUNG REKTORAT.png");
             background-size: cover;
             background-position: center;
             display: flex;
@@ -101,8 +101,8 @@
         .ranking-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            max-width: 1200px;
+            gap: 30px; /* Increased from 20px */
+            max-width: 1500px; /* Increased from 1200px */
             margin: 0 auto;
             padding: 0 20px;
         }
@@ -110,17 +110,17 @@
         .ranking-card {
             background-color: white;
             border-radius: 30px;
-            padding: 30px 20px;
+            padding: 50px 35px; /* Increased from 30px 20px */
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 200px;
+            height: 250px; /* Increased from 200px */
             position: relative;
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin: 5px;
+            margin: 8px; /* Increased from 5px */
             text-decoration: none;
             color: inherit;
         }
@@ -131,18 +131,18 @@
         }
         
         .ranking-card img {
-            height: 80px;
+            height: 100px; /* Increased from 80px */
             width: auto;
             max-width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 25px; /* Increased from 20px */
             object-fit: contain;
         }
         
         .ranking-card p {
-            font-size: 0.9rem;
+            font-size: 1.1rem; /* Increased from 0.9rem */
             text-align: center;
             color: #333;
-            line-height: 1.4;
+            line-height: 1.5; /* Increased from 1.4 */
         }
         
         /* Indikator Pemeringkatan section */
@@ -191,15 +191,20 @@
             .ranking-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
+            
+            .ranking-card {
+                height: 230px; /* Adjusted for tablet */
+            }
         }
         
         @media (max-width: 768px) {
             .ranking-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 20px; /* Reduced gap for smaller screens */
             }
             
             .ranking-card {
-                height: 180px;
+                height: 220px; /* Adjusted for mobile */
             }
             
             .indikator-container {
@@ -229,9 +234,12 @@
         
         @media (max-width: 480px) {
             .ranking-grid {
-                grid-template-columns: 1fr;
-            }
-            
+                    grid-template-columns: 1fr;
+                }
+                
+                .ranking-card {
+                    height: 200px; /* Slightly smaller for very small screens */
+                }
             .hero-content h1 {
                 font-size: 1.8rem;
             }
@@ -242,11 +250,11 @@
         }
         
         .logo-container {
-            height: 80px;
+            height: 100px; /* Increased from 80px */
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px; /* Increased from 20px */
         }
         
         /* Additional styles for the information section */
