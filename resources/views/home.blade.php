@@ -1006,6 +1006,134 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    function isMobileDevice() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const mobileKeywords = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+            const isMobileUA = mobileKeywords.test(userAgent);
+            const isMobileWidth = window.innerWidth <= 768;
+            const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            
+            return (isMobileUA && hasTouch) || (isMobileWidth && hasTouch) || (isMobileUA && isMobileWidth);
+        }
+
+        // Add mobile indicator
+        document.addEventListener('DOMContentLoaded', function() {
+            const indicator = document.getElementById('mobile-indicator');
+            if (indicator) {
+                indicator.style.display = 'block';
+                indicator.style.cssText = `
+                    position: fixed;
+                    top: 10px;
+                    left: 10px;
+                    background: ${isMobileDevice() ? '#4CAF50' : '#ff5722'};
+                    color: white;
+                    padding: 5px 10px;
+                    font-size: 12px;
+                    z-index: 9999;
+                    border-radius: 4px;
+                `;
+                indicator.textContent = `${isMobileDevice() ? 'Mobile' : 'Desktop'}: ${window.innerWidth}x${window.innerHeight}`;
+                
+                window.addEventListener('resize', function() {
+                    indicator.textContent = `${isMobileDevice() ? 'Mobile' : 'Desktop'}: ${window.innerWidth}x${window.innerHeight}`;
+                    indicator.style.background = isMobileDevice() ? '#4CAF50' : '#ff5722';
+                });
+            }
+
+            // Apply mobile class if needed
+            if (isMobileDevice()) {
+                document.body.classList.add('mobile-mode');
+                console.log('Mobile mode activated');
+            }
+
+            // Check media query
+            const mq = window.matchMedia('(max-width: 768px)');
+            console.log('Media query (max-width: 768px) matches:', mq.matches);
+            
+            mq.addListener(function(e) {
+                console.log('Media query changed:', e.matches);
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('programDetailsModal');
+        const modalTitle = document.getElementById('programModalTitle');
+        const modalDescription = document.getElementById('programModalDescription');
+        const modalImageContainer = document.getElementById('modalImageContainer');
+        const modalFallbackIcon = document.getElementById('modalFallbackIcon');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const programDetailsBtns = document.querySelectorAll('.program-details-btn');
+
+        // Function to open modal
+        function openProgramModal(btn) {
+            // Get data from button's data attributes
+            const programId = btn.getAttribute('data-program-id');
+            const title = btn.getAttribute('data-title');
+            const fullDescription = btn.getAttribute('data-full-description');
+
+            // Get card for image reference
+            const card = btn.closest('.program-card');
+            const cardImage = card.querySelector('img');
+
+            // Set modal content
+            modalTitle.textContent = title;
+            modalDescription.innerHTML = fullDescription;
+
+            // Handle image
+            if (cardImage) {
+                modalImageContainer.innerHTML = ''; // Clear previous content
+                const modalImage = document.createElement('img');
+                modalImage.src = cardImage.src;
+                modalImage.alt = title;
+                modalImage.className = 'w-full h-full object-cover';
+                modalImageContainer.appendChild(modalImage);
+                modalFallbackIcon.style.display = 'none';
+            } else {
+                // If no image, show the fallback icon
+                modalFallbackIcon.style.display = 'block';
+                // Try to get the icon class from the card
+                const cardIcon = card.querySelector('.bg-teal-600 i');
+                if (cardIcon) {
+                    modalFallbackIcon.className = cardIcon.className;
+                } else {
+                    modalFallbackIcon.className = 'fas fa-cogs text-6xl text-white';
+                }
+            }
+
+            // Show modal
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // Add click event to all "Selengkapnya" buttons
+        programDetailsBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                openProgramModal(this);
+            });
+        });
+
+        // Close modal when close button is clicked
+        closeModalBtn.addEventListener('click', function() {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        });
+
+        // Close modal when clicking outside of the modal content
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+        });
+        });
 </script>
 
 <script>
