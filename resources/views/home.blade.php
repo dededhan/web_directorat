@@ -17,43 +17,44 @@
     
     <!-- CRITICAL MOBILE DETECTION SCRIPT - Add right after stylesheets -->
     <script>
-    // Force mobile detection and layout
-    (function() {
-        function forceMobileLayout() {
-            // Check if we're on a mobile device
-            const isMobile = window.innerWidth <= 767;
-            
-            if (isMobile) {
-                // Force mobile classes
-                document.body.classList.add('mobile-view');
-                
-                // Show mobile navbar, hide desktop
-                const mobileNavbar = document.getElementById('mobile-navbar');
-                const desktopNavbar = document.querySelector('.navbar.hidden.md\\:block');
-                
-                if (mobileNavbar) {
-                    mobileNavbar.style.display = 'block';
-                    mobileNavbar.style.visibility = 'visible';
-                }
-                
-                if (desktopNavbar) {
-                    desktopNavbar.style.display = 'none';
-                    desktopNavbar.style.visibility = 'hidden';
-                }
-            }
+// Critical fix for sidebar and overlay
+(function() {
+    // Run after DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get key elements
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        
+        // Fix sidebar initial state
+        if (mobileSidebar) {
+            mobileSidebar.style.transform = 'translateX(100%)';
         }
         
-        // Run immediately
-        forceMobileLayout();
+        // Fix overlay initial state
+        if (sidebarOverlay) {
+            sidebarOverlay.style.opacity = '0';
+            sidebarOverlay.style.visibility = 'hidden';
+            sidebarOverlay.style.pointerEvents = 'none';
+        }
         
-        // Run after short delays to override any later scripts
-        setTimeout(forceMobileLayout, 100);
-        setTimeout(forceMobileLayout, 500);
-        
-        // Make sure mobile layout is applied after full page load
-        window.addEventListener('load', forceMobileLayout);
-    })();
-    </script>
+        // Fix overlay click handling
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', function() {
+                // Hide sidebar when overlay is clicked
+                if (mobileSidebar) {
+                    mobileSidebar.style.transform = 'translateX(100%)';
+                }
+                // Hide overlay
+                sidebarOverlay.style.opacity = '0';
+                sidebarOverlay.style.visibility = 'hidden';
+                sidebarOverlay.style.pointerEvents = 'none';
+                // Allow body scrolling again
+                document.body.classList.remove('sidebar-open');
+            });
+        }
+    });
+})();
+</script>
     
     <style>
         /* CRITICAL MOBILE FIXES - Directly in the head for priority loading */
