@@ -155,7 +155,9 @@
             <!-- Card Content -->
             <div class="card bg-white p-6 md:p-10 mb-10 animate-fade-in" style="animation-delay: 0.1s; border-top: 4px solid #00796b;">
                 <div class="prose prose-teal max-w-none">
-                    {!! $ranking->deskripsi !!}
+                    <div class="ck-content">
+                        {!! $ranking->deskripsi !!}
+                    </div>
                 </div>
             </div>
             
