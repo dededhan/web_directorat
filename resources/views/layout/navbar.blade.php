@@ -50,6 +50,7 @@
 </nav>
 
 <!-- Mobile Navigation Bar -->
+<!-- Mobile Navigation Bar -->
 <nav class="navbar block md:hidden fixed top-0 w-full z-20 transition-all duration-300" id="mobile-navbar">
     <div class="bg-[#186862]/95 backdrop-blur-sm shadow-lg">
         <div class="flex justify-between items-center py-2 px-3">
@@ -58,8 +59,8 @@
                      class="h-8 w-8" 
                      src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png"/>
                 <div class="text-white">
-                    <h1 class="text-xs font-bold leading-tight">Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</h1>
-                    <p class="text-[10px] opacity-90">Universitas Negeri Jakarta</p>
+                    <h1 class="text-xs font-bold leading-tight">DITISIP UNJ</h1>
+                    <p class="text-[10px] opacity-90">Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</p>
                 </div>
             </a>
             
@@ -203,139 +204,78 @@
 <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out z-30 block md:hidden"></div>
 <!-- JavaScript for mobile sidebar -->
 <script>
-     document.addEventListener('DOMContentLoaded', function() {
-        // Add console logs for debugging
-        console.log('Window width:', window.innerWidth);
-        console.log('Is mobile?', window.innerWidth < 768);
-        
-        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-        const menuIcon = document.getElementById('menu-icon');
-        const mobileSidebar = document.getElementById('mobile-sidebar');
-        const sidebarOverlay = document.getElementById('sidebar-overlay');
-        const mobileNavbar = document.getElementById('mobile-navbar');
-        const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
-        const closeSidebar = document.getElementById('close-sidebar');
-        
-        // Debug element existence
-        console.log('Mobile navbar exists:', !!mobileNavbar);
-        console.log('Mobile sidebar exists:', !!mobileSidebar);
-        
-        // Function to handle scroll effects
-        function handleScroll() {
-            if (window.scrollY > 10) {
-                // When scrolled, add background color
-                mobileNavbar.classList.remove('bg-transparent');
-                mobileNavbar.classList.add('bg-[#186862]');
-            } else {
-                // At top, make transparent if needed
-                mobileNavbar.classList.remove('bg-[#186862]');
-                mobileNavbar.classList.add('bg-transparent');
-            }
-        }
-        
-        // Add scroll event listener
-        window.addEventListener('scroll', handleScroll);
-        
-        // Set initial state for mobile devices
-        function initMobileNav() {
-            if (window.innerWidth < 768) {
-                console.log('Initializing mobile navigation');
-                // Make sure mobile elements are displayed correctly
-                document.querySelectorAll('.md\\:hidden').forEach(el => {
-                    console.log('Found md:hidden element:', el);
-                    el.style.display = 'block';
-                });
-                document.querySelectorAll('.hidden.md\\:block').forEach(el => {
-                    console.log('Found hidden md:block element:', el);
-                    el.style.display = 'none';
-                });
-                
-                // Default state: sidebar hidden, show hamburger icon
-                hideSidebar();
-                // Check initial scroll position
-                handleScroll();
-            } else {
-                console.log('Desktop view detected');
-            }
-        }
-        
-        // Functions to show/hide sidebar
-        function showSidebar() {
-            mobileSidebar.classList.remove('translate-x-full');
-            sidebarOverlay.classList.remove('opacity-0', 'pointer-events-none');
-            sidebarOverlay.classList.add('opacity-50');
-            menuIcon.classList.remove('fa-bars');
-            menuIcon.classList.add('fa-times');
-            document.body.classList.add('overflow-hidden');
-        }
-        
-        function hideSidebar() {
-            mobileSidebar.classList.add('translate-x-full');
-            sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
-            sidebarOverlay.classList.remove('opacity-50');
-            menuIcon.classList.remove('fa-times');
-            menuIcon.classList.add('fa-bars');
-            document.body.classList.remove('overflow-hidden');
-        }
-        
-        // Event listeners for menu toggle
-        if (mobileMenuToggle) {
-            mobileMenuToggle.addEventListener('click', function() {
-                console.log('Mobile menu toggle clicked');
-                if (mobileSidebar.classList.contains('translate-x-full')) {
-                    showSidebar();
-                } else {
-                    hideSidebar();
-                }
-            });
-        }
-        
-        // Close sidebar when X button is clicked
-        if (closeSidebar) {
-            closeSidebar.addEventListener('click', function() {
-                hideSidebar();
-            });
-        }
-        
-        // Close sidebar when overlay is clicked
-        if (sidebarOverlay) {
-            sidebarOverlay.addEventListener('click', function() {
-                hideSidebar();
-            });
-        }
-        
-        // Toggle dropdown menus in sidebar
-        dropdownButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const dropdown = this.nextElementSibling;
-                const icon = this.querySelector('.fa-chevron-down');
-                
-                // Toggle the dropdown
-                if (dropdown.classList.contains('hidden')) {
-                    dropdown.classList.remove('hidden');
-                    icon.style.transform = 'rotate(180deg)';
-                } else {
-                    dropdown.classList.add('hidden');
-                    icon.style.transform = 'rotate(0)';
-                }
-            });
+    // Mobile Navbar JavaScript Fix
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileSidebar = document.getElementById('mobile-sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const closeSidebar = document.getElementById('close-sidebar');
+    
+    // Show sidebar
+    function showSidebar() {
+        mobileSidebar.classList.add('active');
+        sidebarOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    // Hide sidebar
+    function hideSidebar() {
+        mobileSidebar.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    
+    // Toggle sidebar when menu button is clicked
+    if (mobileMenuToggle) {
+        mobileMenuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            showSidebar();
         });
-        
-        // Initialize mobile navigation
-        initMobileNav();
-        
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            console.log('Window resized to:', window.innerWidth);
-            if (window.innerWidth >= 768) {
-                // Desktop view - hide mobile elements
-                hideSidebar();
+    }
+    
+    // Close sidebar when close button is clicked
+    if (closeSidebar) {
+        closeSidebar.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            hideSidebar();
+        });
+    }
+    
+    // Close sidebar when overlay is clicked
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', function() {
+            hideSidebar();
+        });
+    }
+    
+    // Handle dropdown menus
+    const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
+    
+    dropdownButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const dropdown = this.nextElementSibling;
+            const icon = this.querySelector('.fa-chevron-down');
+            
+            dropdown.classList.toggle('show');
+            
+            if (dropdown.classList.contains('show')) {
+                icon.style.transform = 'rotate(180deg)';
             } else {
-                // Mobile view - ensure proper visibility
-                initMobileNav();
+                icon.style.transform = 'rotate(0)';
             }
         });
     });
+    
+    // Close sidebar on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            hideSidebar();
+        }
+    });
+});
 </script>
 
 <style>
