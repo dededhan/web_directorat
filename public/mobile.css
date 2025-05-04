@@ -1,214 +1,68 @@
-/* mobile.css - Optimized mobile styles for Universitas Negeri Jakarta website */
+/* Add this to your mobile.css file or create a new CSS file */
 
-/* Base mobile optimizations */
-@media (max-width: 768px) {
-    /* General layout fixes */
-    body {
-        overflow-x: hidden;
-        width: 100%;
+/* Ensure proper navbar display on mobile */
+@media (max-width: 767px) {
+    /* Force desktop navbar to be hidden */
+    .navbar.hidden.md\:block {
+        display: none !important;
     }
     
-    .container {
-        width: 100%;
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-    
-    /* Header adjustments */
-    header img.object-cover {
-        height: 50vh;
-    }
-    
-    /* News card adjustments */
-    .grid-cols-1 {
-        grid-template-columns: 1fr;
-    }
-    
-    .bg-white.rounded-lg {
-        width: 100%;
-    }
-    
-    /* Enhanced carousel adjustments */
-    .carousel-inner {
-        display: flex;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scroll-snap-type: x mandatory;
-        padding-bottom: 15px;
-    }
-    
-    .carousel-item-enhanced {
-        scroll-snap-align: start;
-        flex: 0 0 90%;
-        max-width: 90%;
-        margin-right: 15px;
-    }
-    
-    /* Program cards adjustments */
-    .program-card {
-        width: 100%;
-        margin-bottom: 20px;
-    }
-    
-    /* Footer adjustments */
-    footer .grid {
-        grid-template-columns: 1fr;
-    }
-    
-    /* Navigation menu adjustments */
-    nav.bg-white {
-        padding: 10px 15px;
-    }
-
-    /* Mobile navbar specific styles */
+    /* Force mobile navbar to be shown */
+    .navbar.block.md\:hidden, 
     #mobile-navbar {
-        min-height: 48px; /* Fixed height for mobile navbar */
+        display: block !important;
     }
     
-    #mobile-navbar .bg-\[\#186862\]\/95 {
-        -webkit-backdrop-filter: blur(8px);
-        backdrop-filter: blur(8px);
-    }
-    
-    /* Prevent text wrapping in mobile navbar */
-    #mobile-navbar h1 {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 200px; /* Adjust based on your needs */
-    }
-}
-/* Small mobile devices */
-@media (max-width: 576px) {
-    .carousel-item-enhanced {
-        flex: 0 0 100%;
-        max-width: 100%;
-        margin-right: 0;
-    }
-    
-    header img.object-cover {
-        height: 40vh;
-    }
-    
-    /* Section header adjustments */
-    .unj-section-title {
-        font-size: 1.5rem;
-    }
-    
-    /* Programs section adjustments */
-    .program-section .grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .media-section .grid {
-        grid-template-columns: 1fr;
-    }
-    
-    /* Better card spacing */
-    .gap-6, .gap-8 {
-        gap: 1rem;
-    }
-    
-    .py-16 {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-    }
-    
-    .py-12 {
-        padding-top: 1.5rem;
-        padding-bottom: 1.5rem;
-    }
-    
-    .mb-12 {
-        margin-bottom: 1.5rem;
-    }
-    
-    .mb-16 {
-        margin-bottom: 1.5rem;
-    }
-}
-
-/* Handle touch interactions better */
-.mobile-mode .carousel-inner {
-    cursor: grab;
-}
-
-.mobile-mode .carousel-inner:active {
-    cursor: grabbing;
-}
-
-/* Fix for modals on mobile */
-.mobile-mode #programDetailsModal {
-    padding: 0;
-}
-
-.mobile-mode #programDetailsModal .bg-white {
-    max-height: 90vh;
-    border-radius: 15px 15px 0 0;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: 0;
-}
-
-/* Fix for news card scaling */
-.mobile-mode .news-card-enhanced {
-    min-height: unset;
-}
-
-/* Fix card heights on mobile */
-.mobile-mode .media-card {
-    height: auto;
-}
-
-/* Optimizing tap targets */
-.mobile-mode a, 
-.mobile-mode button, 
-.mobile-mode [role="button"] {
-    min-height: 44px;
-    min-width: 44px;
-}
-
-/* Optimize images */
-.mobile-mode img {
-    max-width: 100%;
-}
-
-/* Fix scrolling performance */
-.mobile-mode .scrolling-down {
-    /* Hide some elements when scrolling down to improve performance */
-    position: relative;
-}
-
-/* Navigation toggle animation */
-.mobile-mode .nav-toggle {
-    display: block;
-}
-
-/* Fix for Android WebView specific issues */
-@supports (-webkit-appearance:none) {
-    .mobile-mode input, 
-    .mobile-mode textarea {
-        font-size: 16px; /* Prevents zoom on focus */
-    }
-}
-
-/* Fix layout for very small devices */
-@media (max-width: 360px) {
+    /* Add proper spacing for content */
     body {
-        font-size: 14px;
+        padding-top: 50px; /* Adjust based on your navbar height */
     }
     
-    .h1, h1 {
-        font-size: 1.5rem;
+    /* Fix for z-index issues */
+    #mobile-navbar {
+        z-index: 50 !important;
     }
     
-    .h2, h2 {
-        font-size: 1.25rem;
+    #mobile-sidebar {
+        z-index: 51 !important;
     }
     
-    .program-card .p-5 {
-        padding: 0.75rem;
+    #sidebar-overlay {
+        z-index: 49 !important;
+    }
+}
+
+/* Fix for iOS Safari and other mobile browsers */
+@supports (-webkit-touch-callout: none) {
+    /* iOS specific fixes */
+    .navbar.block.md\:hidden {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+    }
+    
+    #mobile-sidebar {
+        height: 100vh !important;
+        max-height: -webkit-fill-available !important;
+    }
+}
+
+/* Mobile device orientation changes */
+@media (max-width: 767px) and (orientation: landscape) {
+    /* Adjust for landscape mode on mobile */
+    #mobile-sidebar {
+        padding-bottom: 20px;
+    }
+}
+
+/* High pixel density devices (for better readability) */
+@media (max-width: 767px) and (-webkit-min-device-pixel-ratio: 2), 
+       (max-width: 767px) and (min-resolution: 192dpi) {
+    /* Improve text rendering on high-DPI screens */
+    #mobile-navbar h1,
+    #mobile-navbar p {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
 }

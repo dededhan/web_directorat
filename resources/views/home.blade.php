@@ -852,5 +852,106 @@
             });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Improved mobile detection function
+    function detectMobile() {
+        // Check for mobile user agent
+        const userAgent = navigator.userAgent.toLowerCase();
+        const mobileKeywords = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+        const isMobileUA = mobileKeywords.test(userAgent);
+        
+        // Check viewport width
+        const isMobileWidth = window.innerWidth < 768;
+        
+        // Check touch capability
+        const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        
+        // Combined detection
+        const isMobile = (isMobileUA || isMobileWidth) && hasTouch;
+        
+        console.log('Mobile Detection:', {
+            userAgent: userAgent,
+            width: window.innerWidth,
+            isMobileUA: isMobileUA, 
+            isMobileWidth: isMobileWidth,
+            hasTouch: hasTouch,
+            isMobile: isMobile
+        });
+        
+        return isMobile;
+    }
+    
+    // Apply appropriate classes based on device
+    function applyMobileClasses() {
+        const isMobile = detectMobile();
+        document.body.classList.toggle('is-mobile', isMobile);
+        
+        // Force correct display of navbar elements
+        if (isMobile) {
+            // Hide desktop navbar
+            document.querySelectorAll('.navbar.hidden.md\\:block').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Show mobile navbar and sidebar
+            document.querySelectorAll('.navbar.block.md\\:hidden, #mobile-sidebar, #sidebar-overlay').forEach(el => {
+                el.style.display = 'block';
+            });
+            
+            console.log('Mobile mode activated');
+        } else {
+            // Show desktop navbar
+            document.querySelectorAll('.navbar.hidden.md\\:block').forEach(el => {
+                el.style.display = 'block';
+            });
+            
+            // Hide mobile elements
+            document.querySelectorAll('.navbar.block.md\\:hidden').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            console.log('Desktop mode activated');
+        }
+    }
+    
+    // Run on page load
+    applyMobileClasses();
+    
+    // Run on window resize
+    window.addEventListener('resize', applyMobileClasses);
+    
+    // Optional debug indicator in corner of screen
+    function addDebugIndicator() {
+        const indicator = document.createElement('div');
+        indicator.id = 'debug-mobile-indicator';
+        indicator.style.cssText = `
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            z-index: 9999;
+            border-radius: 4px;
+        `;
+        
+        const updateIndicator = () => {
+            const isMobile = detectMobile();
+            indicator.textContent = `${isMobile ? 'Mobile' : 'Desktop'}: ${window.innerWidth}x${window.innerHeight}`;
+            indicator.style.background = isMobile ? 'rgba(76,175,80,0.9)' : 'rgba(255,87,34,0.9)';
+        };
+        
+        document.body.appendChild(indicator);
+        updateIndicator();
+        
+        window.addEventListener('resize', updateIndicator);
+    }
+    
+    // Uncomment to add visual debugging (can be removed in production)
+    // addDebugIndicator();
+});
+</script>
 </body>
 </html>
