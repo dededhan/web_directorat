@@ -165,6 +165,142 @@
         .fas, .fab, .far, .fa {
             font-family: "Font Awesome 5 Free", "Font Awesome 5 Brands" !important;
         }
+        @media (max-width: 768px) {
+            .media-section {
+                padding: 3rem 0;
+            }
+
+            .media-section .grid {
+                gap: 2rem;
+            }
+
+            .media-card {
+                min-height: 360px;
+            }
+
+            .media-card h3 {
+                font-size: 1.125rem;
+            }
+
+            .media-card p {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Hyperlink Color */
+        .news-excerpt a {
+            color: #0D9488;
+            text-decoration: underline;
+            transition: color 0.2s ease;
+        }
+
+        .news-excerpt a:hover {
+            color: #F59E0B;
+        }
+
+        .news-marquee a {
+            color: #facc15;
+            text-decoration: underline;
+        }
+
+        .news-marquee strong,
+        .news-marquee b {
+            font-weight: bold;
+            color: white;
+        }
+
+        .news-marquee em,
+        .news-marquee i {
+            font-style: italic;
+        }
+
+        .news-marquee * {
+            color: white;
+        }
+
+        .news-marquee .text-yellow-400 {
+            color: #facc15 !important;
+        }
+
+        .program-card {
+            margin-bottom: 25px;
+        }
+
+        .card-content {
+            padding: 20px;
+            text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .icon-container {
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            margin-bottom: 15px;
+        }
+
+        .card-description {
+            margin-bottom: 20px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-description p {
+            margin: 0;
+            padding: 0 10px;
+        }
+
+        .card-link {
+            margin-top: auto;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .card-link:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        html,
+        body,
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        span,
+        div:not(.fas):not(.fab):not(.far):not(.fa),
+        a:not(.fas):not(.fab):not(.far):not(.fa),
+        button,
+        input,
+        textarea,
+        select,
+        label {
+            font-family: Arial, sans-serif !important;
+        }
+
+        /* Preserve Font Awesome icons */
+        .fas,
+        .fab,
+        .far,
+        .fa,
+        [class^="fa-"],
+        [class*=" fa-"],
+        i.fas,
+        i.fab,
+        i.far,
+        i.fa {
+            font-family: "Font Awesome 5 Free", "Font Awesome 5 Brands", "FontAwesome" !important;
+        }
     </style>
 </head>
 
