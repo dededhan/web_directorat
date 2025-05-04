@@ -1,134 +1,191 @@
-/**
- * Perbaikan untuk memastikan fungsi mobile.js dijalankan dengan benar
- * Tambahkan kode ini di bagian bawah file mobile.js yang ada 
- * ATAU tambahkan sebagai file baru dan panggil setelah mobile.js
- */
-
-// Segera deteksi perangkat mobile saat script dimuat
-const _isMobileDevice = (function() {
-    // Deteksi dengan beberapa metode
-    const userAgent = navigator.userAgent.toLowerCase();
-    const mobileKeywords = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
-    const isMobileUA = mobileKeywords.test(userAgent);
-    const isMobileWidth = window.innerWidth <= 768;
-    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+// Enhanced Mobile Navbar JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const menuIcon = document.getElementById('menu-icon');
+    const mobileSidebar = document.getElementById('mobile-sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const closeSidebar = document.getElementById('close-sidebar');
+    const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
     
-    // Kembalikan true jika setidaknya dua kriteria terpenuhi
-    return (isMobileUA && hasTouch) || (isMobileWidth && hasTouch) || (isMobileUA && isMobileWidth);
-})();
-
-// Fungsi perbaikan untuk layout mobile
-function fixMobileLayout() {
-    if (!_isMobileDevice) return;
+    // Track sidebar state
+    let isSidebarOpen = false;
     
-    console.log('Applying mobile layout fixes');
+    // Enhanced show/hide functions with smooth animations
+    function showSidebar() {
+        if (isSidebarOpen) return;
+        
+        mobileSidebar.classList.add('active');
+        sidebarOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        menuIcon.classList.remove('fa-bars');
+        menuIcon.classList.add('fa-times');
+        isSidebarOpen = true;
+        
+        // Add aria attributes for accessibility
+        mobileMenuToggle.setAttribute('aria-expanded', 'true');
+    }
     
-    // Tambahkan class mobile-mode ke body
-    document.body.classList.add('mobile-mode');
+    function hideSidebar() {
+        if (!isSidebarOpen) return;
+        
+        mobileSidebar.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+        menuIcon.classList.remove('fa-times');
+        menuIcon.classList.add('fa-bars');
+        isSidebarOpen = false;
+        
+        // Update aria attributes
+        mobileMenuToggle.setAttribute('aria-expanded', 'false');
+    }
     
-    // Perbaikan grid layout untuk mobile
-    const grids = document.querySelectorAll('.grid');
-    if (window.innerWidth <= 768) {
-        grids.forEach(grid => {
-            // Ubah grid multi-kolom menjadi satu kolom untuk mobile
-            if (grid.classList.contains('md:grid-cols-2') || 
-                grid.classList.contains('lg:grid-cols-3') ||
-                grid.classList.contains('md:grid-cols-3')) {
-                grid.style.display = 'grid';
-                grid.style.gridTemplateColumns = '1fr';
-                grid.style.gap = '1rem';
+    // Toggle sidebar
+    if (mobileMenuToggle) {
+        mobileMenuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (isSidebarOpen) {
+                hideSidebar();
+            } else {
+                showSidebar();
             }
         });
     }
     
-    // Perbaikan carousel untuk mobile
-    const carousels = document.querySelectorAll('.carousel-inner');
-    carousels.forEach(carousel => {
-        carousel.style.display = 'flex';
-        carousel.style.overflowX = 'auto';
-        carousel.style.webkitOverflowScrolling = 'touch';
-        carousel.style.scrollSnapType = 'x mandatory';
-        carousel.style.paddingBottom = '15px';
+    // Close sidebar when clicking close button
+    if (closeSidebar) {
+        closeSidebar.addEventListener('click', function(e) {
+            e.preventDefault();
+            hideSidebar();
+        });
+    }
+    
+    // Close sidebar when clicking overlay
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', function() {
+            hideSidebar();
+        });
+    }
+    
+    // Enhanced dropdown functionality
+    dropdownButtons.forEach(button => {
+        const dropdown = button.nextElementSibling;
+        const icon = button.querySelector('.fa-chevron-down');
         
-        // Atur ukuran item carousel
-        const items = carousel.querySelectorAll('.carousel-item-enhanced');
-        items.forEach(item => {
-            item.style.flex = '0 0 90%';
-            item.style.maxWidth = '90%';
-            item.style.marginRight = '10px';
-            item.style.scrollSnapAlign = 'start';
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Close other dropdowns
+            dropdownButtons.forEach(otherButton => {
+                if (otherButton !== button) {
+                    const otherDropdown = otherButton.nextElementSibling;
+                    const otherIcon = otherButton.querySelector('.fa-chevron-down');
+                    
+                    if (!otherDropdown.classList.contains('hidden')) {
+                        otherDropdown.classList.add('hidden');
+                        otherIcon.style.transform = 'rotate(0)';
+                        otherButton.setAttribute('aria-expanded', 'false');
+                    }
+                }
+            });
+            
+            // Toggle current dropdown
+            const isHidden = dropdown.classList.contains('hidden');
+            dropdown.classList.toggle('hidden');
+            icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0)';
+            button.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
         });
     });
     
-    // Perbaikan ukuran card
-    const mediaCards = document.querySelectorAll('.media-card');
-    mediaCards.forEach(card => {
-        card.style.height = 'auto';
+    // Close sidebar on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && isSidebarOpen) {
+            hideSidebar();
+        }
     });
     
-    // Perbaikan gambar untuk tidak overflow
-    const images = document.querySelectorAll('img');
-    images.forEach(img => {
-        img.style.maxWidth = '100%';
-        img.style.height = 'auto';
+    // Handle window resize
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            if (window.innerWidth > 767 && isSidebarOpen) {
+                hideSidebar();
+            }
+        }, 250);
     });
     
-    // Perbaikan untuk modal pada mobile
-    const modal = document.getElementById('programDetailsModal');
-    if (modal) {
-        modal.style.padding = '0';
-        
-        const modalContent = modal.querySelector('.bg-white');
-        if (modalContent) {
-            // Untuk tampilan modal full-bottom pada mobile
-            modalContent.addEventListener('click', function(e) {
-                e.stopPropagation(); // Prevent modal from closing when content is clicked
-            });
+    // Prevent body scroll when sidebar is open
+    function preventBodyScroll(e) {
+        if (isSidebarOpen) {
+            e.preventDefault();
         }
     }
     
-    // Perbaikan spacing untuk mobile
-    if (window.innerWidth <= 480) {
-        // Atur padding pada elemen dengan class p-6, p-5
-        document.querySelectorAll('.p-6, .p-5').forEach(el => {
-            el.style.padding = '0.75rem';
-        });
+    // Touch event handling for better mobile experience
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+    
+    document.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+    
+    document.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
+        handleSwipe();
+    }, { passive: true });
+    
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const swipeDistanceX = touchStartX - touchEndX;
+        const swipeDistanceY = Math.abs(touchStartY - touchEndY);
         
-        // Atur margin pada elemen dengan class mb-12, mb-16
-        document.querySelectorAll('.mb-12, .mb-16').forEach(el => {
-            el.style.marginBottom = '1.5rem';
-        });
-        
-        // Atur padding pada elemen dengan class py-16, py-12
-        document.querySelectorAll('.py-16').forEach(el => {
-            el.style.paddingTop = '2rem';
-            el.style.paddingBottom = '2rem';
-        });
-        
-        document.querySelectorAll('.py-12').forEach(el => {
-            el.style.paddingTop = '1.5rem';
-            el.style.paddingBottom = '1.5rem';
-        });
+        // Only handle horizontal swipes
+        if (swipeDistanceY < swipeThreshold) {
+            if (swipeDistanceX > swipeThreshold && !isSidebarOpen) {
+                // Swipe left - open sidebar
+                showSidebar();
+            } else if (swipeDistanceX < -swipeThreshold && isSidebarOpen) {
+                // Swipe right - close sidebar
+                hideSidebar();
+            }
+        }
     }
-}
-
-// Panggil fungsi saat DOM selesai dimuat
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', fixMobileLayout);
-} else {
-    // Jika DOMContentLoaded sudah terjadi
-    fixMobileLayout();
-}
-
-// Panggil ulang saat window di-resize
-window.addEventListener('resize', function() {
-    fixMobileLayout();
+    
+    // Initialize aria attributes
+    if (mobileMenuToggle) {
+        mobileMenuToggle.setAttribute('aria-expanded', 'false');
+        mobileMenuToggle.setAttribute('aria-label', 'Toggle navigation menu');
+    }
+    
+    dropdownButtons.forEach(button => {
+        button.setAttribute('aria-expanded', 'false');
+        button.setAttribute('aria-haspopup', 'true');
+    });
 });
 
-// Panggil ulang saat orientasi berubah
-window.addEventListener('orientationchange', function() {
-    setTimeout(fixMobileLayout, 200);
-});
+// Helper function to check if device is mobile
+function isMobileDevice() {
+    return window.innerWidth <= 767 || 
+           /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
 
-// Pastikan fungsi berjalan dengan baik meskipun mobile.js utama gagal
-window.mobileFixesApplied = true;
+// Ensure proper display on page load
+window.addEventListener('load', function() {
+    if (isMobileDevice()) {
+        // Force mobile navbar display
+        const mobileNavbar = document.getElementById('mobile-navbar');
+        const desktopNavbar = document.querySelector('.navbar.hidden.md\\:block');
+        
+        if (mobileNavbar) {
+            mobileNavbar.style.display = 'block';
+        }
+        
+        if (desktopNavbar) {
+            desktopNavbar.style.display = 'none';
+        }
+    }
+});

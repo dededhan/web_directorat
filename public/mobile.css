@@ -1,68 +1,293 @@
-/* Add this to your mobile.css file or create a new CSS file */
+/* Enhanced Mobile Navbar Layout */
 
-/* Ensure proper navbar display on mobile */
+/* Base mobile navbar container */
 @media (max-width: 767px) {
-    /* Force desktop navbar to be hidden */
-    .navbar.hidden.md\:block {
-        display: none !important;
-    }
-    
-    /* Force mobile navbar to be shown */
-    .navbar.block.md\:hidden, 
     #mobile-navbar {
-        display: block !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 50;
+        background-color: #186862;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
-    
-    /* Add proper spacing for content */
-    body {
-        padding-top: 50px; /* Adjust based on your navbar height */
-    }
-    
-    /* Fix for z-index issues */
-    #mobile-navbar {
-        z-index: 50 !important;
-    }
-    
-    #mobile-sidebar {
-        z-index: 51 !important;
-    }
-    
-    #sidebar-overlay {
-        z-index: 49 !important;
-    }
-}
 
-/* Fix for iOS Safari and other mobile browsers */
-@supports (-webkit-touch-callout: none) {
-    /* iOS specific fixes */
-    .navbar.block.md\:hidden {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
+    /* Main navbar content */
+    #mobile-navbar .bg-[#186862]/95 {
+        background-color: #186862 !important;
+        backdrop-filter: none; /* Remove blur effect for better performance */
     }
-    
-    #mobile-sidebar {
-        height: 100vh !important;
-        max-height: -webkit-fill-available !important;
-    }
-}
 
-/* Mobile device orientation changes */
-@media (max-width: 767px) and (orientation: landscape) {
-    /* Adjust for landscape mode on mobile */
-    #mobile-sidebar {
-        padding-bottom: 20px;
+    /* Flex container for logo and menu */
+    #mobile-navbar .flex.justify-between {
+        padding: 8px 12px;
+        align-items: center;
+        min-height: 56px; /* Standard mobile navbar height */
     }
-}
 
-/* High pixel density devices (for better readability) */
-@media (max-width: 767px) and (-webkit-min-device-pixel-ratio: 2), 
-       (max-width: 767px) and (min-resolution: 192dpi) {
-    /* Improve text rendering on high-DPI screens */
-    #mobile-navbar h1,
+    /* Logo section */
+    #mobile-navbar .flex.items-center.space-x-2 {
+        flex: 1;
+        max-width: calc(100% - 48px); /* Leave space for menu button */
+    }
+
+    /* UNJ Logo */
+    #mobile-navbar img {
+        height: 32px;
+        width: 32px;
+        flex-shrink: 0;
+    }
+
+    /* Text container */
+    #mobile-navbar .text-white {
+        margin-left: 8px;
+        line-height: 1.2;
+        flex: 1;
+        min-width: 0; /* Allow text to shrink */
+    }
+
+    /* Main title */
+    #mobile-navbar h1 {
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        margin-bottom: 2px;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        word-break: break-word;
+    }
+
+    /* Subtitle */
     #mobile-navbar p {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        font-size: 9px !important;
+        opacity: 0.9;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Menu toggle button */
+    #mobile-menu-toggle {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+    }
+
+    #mobile-menu-toggle:active {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    #menu-icon {
+        font-size: 20px;
+    }
+}
+
+/* Sidebar styles */
+@media (max-width: 767px) {
+    #mobile-sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 280px;
+        height: 100vh;
+        height: -webkit-fill-available; /* For iOS Safari */
+        background-color: #186862;
+        box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Sidebar header */
+    #mobile-sidebar .flex.items-center.justify-between {
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        min-height: 56px; /* Match navbar height */
+    }
+
+    /* Close button */
+    #close-sidebar {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+    }
+
+    /* Menu items */
+    #mobile-sidebar ul {
+        padding: 8px 0;
+    }
+
+    #mobile-sidebar li {
+        margin: 2px 0;
+    }
+
+    /* Menu links */
+    #mobile-sidebar a,
+    #mobile-sidebar button {
+        padding: 12px 16px;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        color: white;
+        transition: background-color 0.2s ease;
+    }
+
+    #mobile-sidebar a:active,
+    #mobile-sidebar button:active {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Icons in menu */
+    #mobile-sidebar i {
+        width: 24px;
+        font-size: 16px;
+        text-align: center;
+        margin-right: 12px;
+    }
+
+    /* Dropdown arrows */
+    #mobile-sidebar .fa-chevron-down {
+        font-size: 12px;
+        transition: transform 0.2s ease;
+    }
+
+    /* Dropdown menu items */
+    #mobile-sidebar .sidebar-dropdown ul {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    #mobile-sidebar .sidebar-dropdown ul a {
+        padding-left: 52px; /* Align with parent item text */
+        font-size: 14px;
+    }
+}
+
+/* Overlay */
+@media (max-width: 767px) {
+    #sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    #sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+/* Content spacing adjustment */
+@media (max-width: 767px) {
+    .h-12.md\:h-20 {
+        height: 56px !important; /* Match navbar height */
+    }
+}
+
+/* Smooth animations for sidebar */
+@media (max-width: 767px) {
+    #mobile-sidebar {
+        transform: translateX(100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #mobile-sidebar.active {
+        transform: translateX(0);
+    }
+}
+
+/* Landscape mode adjustments */
+@media (max-width: 767px) and (orientation: landscape) {
+    #mobile-navbar .flex.justify-between {
+        min-height: 48px;
+        padding: 6px 12px;
+    }
+
+    #mobile-navbar img {
+        height: 28px;
+        width: 28px;
+    }
+
+    #mobile-navbar h1 {
+        font-size: 10px !important;
+    }
+
+    .h-12.md\:h-20 {
+        height: 48px !important;
+    }
+}
+
+/* Small phone adjustments */
+@media (max-width: 360px) {
+    #mobile-navbar h1 {
+        font-size: 10px !important;
+    }
+
+    #mobile-navbar p {
+        display: none; /* Hide subtitle on very small screens */
+    }
+
+    #mobile-sidebar {
+        width: 260px;
+    }
+}
+
+/* Fix for iOS safe areas */
+@supports (padding: max(0px)) {
+    #mobile-navbar {
+        padding-top: max(0px, env(safe-area-inset-top));
+    }
+
+    #mobile-sidebar {
+        padding-bottom: max(20px, env(safe-area-inset-bottom));
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    #mobile-navbar {
+        border-bottom: 2px solid white;
+    }
+
+    #mobile-sidebar .flex.items-center.justify-between {
+        border-bottom: 2px solid white;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    #mobile-sidebar,
+    #sidebar-overlay,
+    #mobile-sidebar .fa-chevron-down {
+        transition: none !important;
+    }
+}
+
+/* Dark mode support (if implemented) */
+@media (prefers-color-scheme: dark) {
+    #mobile-navbar,
+    #mobile-sidebar {
+        background-color: #0f4c4b;
+    }
+    
+    #mobile-sidebar .sidebar-dropdown ul {
+        background-color: rgba(0, 0, 0, 0.2);
     }
 }

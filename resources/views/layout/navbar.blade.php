@@ -339,39 +339,143 @@
 </script>
 
 <style>
-/* Your existing styles */
-.fa-chevron-down {
-    transition: transform 0.2s ease;
-}
+/* Inline style fixes for navbar.blade.php */
 
-#mobile-sidebar {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.2) transparent;
-}
-
-#mobile-sidebar::-webkit-scrollbar {
-    width: 4px;
-}
-
-#mobile-sidebar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-#mobile-sidebar::-webkit-scrollbar-thumb {
-    background-color: rgba(255,255,255,0.2);
-    border-radius: 2px;
-}
-
-/* Force mobile elements to show on small screens */
+/* Mobile Navbar Specific Fixes */
 @media (max-width: 767px) {
-    #mobile-navbar, 
-    #mobile-sidebar,
-    #sidebar-overlay {
-        display: block !important;
+    /* Fix overflow issues */
+    #mobile-navbar,
+    #mobile-sidebar {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
     }
     
-    .navbar.hidden.md\:block {
-        display: none !important;
+    /* Fix text rendering on mobile */
+    #mobile-navbar h1,
+    #mobile-navbar p,
+    #mobile-sidebar a,
+    #mobile-sidebar button {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+    
+    /* Fix tap highlight on iOS */
+    #mobile-menu-toggle,
+    #close-sidebar,
+    #mobile-sidebar a,
+    #mobile-sidebar button {
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Fix sidebar scrolling on iOS */
+    #mobile-sidebar {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+    
+    /* Fix navbar shadow on scroll */
+    #mobile-navbar.scrolled {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Fix button active states */
+    #mobile-menu-toggle:active,
+    #close-sidebar:active {
+        transform: scale(0.95);
+    }
+    
+    /* Better contrast for accessibility */
+    #mobile-navbar a,
+    #mobile-navbar button,
+    #mobile-sidebar a,
+    #mobile-sidebar button {
+        color: #ffffff;
+        text-decoration: none;
+    }
+    
+    /* Fix icon alignment */
+    #mobile-navbar .fas,
+    #mobile-sidebar .fas,
+    #mobile-navbar .fab,
+    #mobile-sidebar .fab {
+        vertical-align: middle;
+        line-height: 1;
+    }
+}
+
+/* Android-specific fixes */
+@media (max-width: 767px) and (-webkit-min-device-pixel-ratio: 2) {
+    #mobile-navbar h1 {
+        letter-spacing: 0.01em;
+    }
+}
+
+/* Fix for notched devices (iPhone X and above) */
+@supports (padding: max(0px)) {
+    @media (max-width: 767px) {
+        #mobile-navbar {
+            padding-top: max(8px, env(safe-area-inset-top));
+        }
+        
+        #mobile-sidebar {
+            padding-top: max(0px, env(safe-area-inset-top));
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
+        }
+        
+        .h-12.md\:h-20 {
+            height: calc(56px + max(0px, env(safe-area-inset-top))) !important;
+        }
+    }
+}
+
+/* Fix for iOS PWA mode */
+@media (display-mode: standalone) {
+    #mobile-navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+}
+
+/* Fix for keyboard appearance on mobile */
+@media (max-width: 767px) {
+    .login-form input:focus,
+    .login-form textarea:focus,
+    .login-form select:focus {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+
+/* Accessibility improvements */
+@media (max-width: 767px) {
+    #mobile-menu-toggle:focus,
+    #close-sidebar:focus,
+    #mobile-sidebar a:focus,
+    #mobile-sidebar button:focus {
+        outline: 2px solid #FBBF24;
+        outline-offset: 2px;
+    }
+    
+    /* High contrast mode */
+    @media (prefers-contrast: high) {
+        #mobile-navbar,
+        #mobile-sidebar {
+            border: 1px solid white;
+        }
+    }
+    
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        #mobile-sidebar,
+        #sidebar-overlay,
+        #mobile-menu-toggle,
+        #close-sidebar {
+            transition: none !important;
+        }
     }
 }
 </style>
