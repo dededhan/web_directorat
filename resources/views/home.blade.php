@@ -8,187 +8,129 @@
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-    <!-- Removed Google Fonts import for Roboto -->
     <link rel="stylesheet" href="{{ asset('home.css') }}">
     <link rel="stylesheet" href="{{ asset('header-carousel.css') }}">
     <script src="{{ asset('header-carousel.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('mobile.css') }}">
-    <script src="{{ asset('mobile.js') }}"></script>
-
-    <!-- Added Arial font style -->
+    
+    <!-- Enhanced mobile styles with !important to override Tailwind -->
     <style>
         * {
             font-family: Arial, sans-serif !important;
         }
 
-        /* main,
-        section {
-            max-width: 100%;
-            overflow-x: hidden;
-        }
+        /* Mobile-first responsive design */
+        @media screen and (max-width: 768px) {
+            /* Debug indicator */
+            body::after {
+                content: 'Mobile CSS Active';
+                position: fixed;
+                bottom: 10px;
+                right: 10px;
+                background: #4CAF50;
+                color: white;
+                padding: 5px 10px;
+                font-size: 12px;
+                z-index: 9999;
+                border-radius: 4px;
+            }
 
-        .container {
-            max-width: 100%;
-            overflow-x: hidden;
-        } */
+            /* Force mobile layout */
+            .container {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
 
-        .media-card {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
+            /* Header mobile */
+            header {
+                height: 50vh !important;
+            }
 
-        .media-card .p-6 {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
+            header img {
+                height: 50vh !important;
+                object-fit: cover;
+            }
 
-        .media-card .mt-4 {
-            margin-top: auto;
-        }
+            /* Grid mobile layout */
+            .grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
 
-        /* Make all cards the same height */
-        .grid {
-            align-items: stretch;
-        }
+            /* News cards mobile */
+            .bg-white.rounded-lg.overflow-hidden.shadow-md {
+                margin-bottom: 1rem;
+            }
 
-        /* Enhanced responsive design for mobile devices */
-        @media (max-width: 768px) {
+            .w-full.h-56.object-cover {
+                height: 180px !important;
+            }
+
+            /* Typography adjustments */
+            h2 {
+                font-size: 1.5rem !important;
+            }
+
+            h3 {
+                font-size: 1.25rem !important;
+            }
+
+            .font-bold.text-xl {
+                font-size: 1.1rem !important;
+            }
+
+            /* Carousel mobile */
+            .carousel-item-enhanced {
+                flex: 0 0 100% !important;
+                max-width: 100% !important;
+                padding: 0.5rem !important;
+            }
+
+            .enhanced-carousel {
+                padding: 0 1rem;
+            }
+
+            /* Program cards mobile */
+            .program-card {
+                margin-bottom: 1rem !important;
+            }
+
+            /* Media section mobile */
             .media-section {
-                padding: 3rem 0;
+                padding: 2rem 0 !important;
             }
 
             .media-section .grid {
-                gap: 2rem;
+                grid-template-columns: 1fr !important;
             }
 
-            .media-card {
-                min-height: 360px;
+            /* Modal mobile */
+            #programDetailsModal .max-w-3xl {
+                max-width: 95% !important;
+                margin: 1rem;
             }
 
-            .media-card h3 {
-                font-size: 1.125rem;
-            }
-
-            .media-card p {
-                font-size: 0.875rem;
+            /* Button adjustments */
+            .login {
+                padding: 0.75rem 1rem !important;
+                font-size: 0.875rem !important;
             }
         }
 
-        /* Hyperlink Color */
-        .news-excerpt a {
-            color: #0D9488;
-            text-decoration: underline;
-            transition: color 0.2s ease;
+        /* Larger phones */
+        @media screen and (min-width: 480px) and (max-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            .media-section .grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
         }
 
-        .news-excerpt a:hover {
-            color: #F59E0B;
-        }
-
-        .news-marquee a {
-            color: #facc15;
-            text-decoration: underline;
-        }
-
-        .news-marquee strong,
-        .news-marquee b {
-            font-weight: bold;
-            color: white;
-        }
-
-        .news-marquee em,
-        .news-marquee i {
-            font-style: italic;
-        }
-
-        .news-marquee * {
-            color: white;
-        }
-
-        .news-marquee .text-yellow-400 {
-            color: #facc15 !important;
-        }
-
-        .program-card {
-            margin-bottom: 25px;
-        }
-
-        .card-content {
-            padding: 20px;
-            text-align: center;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .icon-container {
-            margin-bottom: 15px;
-        }
-
-        .card-title {
-            margin-bottom: 15px;
-        }
-
-        .card-description {
-            margin-bottom: 20px;
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .card-description p {
-            margin: 0;
-            padding: 0 10px;
-        }
-
-        .card-link {
-            margin-top: auto;
-            padding: 8px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .card-link:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        html,
-        body,
-        p,
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        span,
-        div:not(.fas):not(.fab):not(.far):not(.fa),
-        a:not(.fas):not(.fab):not(.far):not(.fa),
-        button,
-        input,
-        textarea,
-        select,
-        label {
-            font-family: Arial, sans-serif !important;
-        }
-
-        /* Preserve Font Awesome icons */
-        .fas,
-        .fab,
-        .far,
-        .fa,
-        [class^="fa-"],
-        [class*=" fa-"],
-        i.fas,
-        i.fab,
-        i.far,
-        i.fa {
-            font-family: "Font Awesome 5 Free", "Font Awesome 5 Brands", "FontAwesome" !important;
+        /* Font Awesome preservation */
+        .fas, .fab, .far, .fa {
+            font-family: "Font Awesome 5 Free", "Font Awesome 5 Brands" !important;
         }
     </style>
 </head>
@@ -196,31 +138,32 @@
 <body class="font-sans bg-gray-100">
     @include('layout.navbar')
 
-    <!-- Header section -->
-    <header class="relative">
-        <!-- The carousel will be dynamically inserted here by JavaScript -->
-        <img alt="Universitas Negeri Jakarta building with a sculpture in front" class="w-full h-screen object-cover"
-            src="https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434" />
-        <div class="absolute inset-0 bg-teal-900 bg-opacity-50 flex flex-col justify-center items-start p-8">
+    <!-- Mobile detection indicator -->
+    <div id="mobile-indicator" style="display: none;"></div>
+
+    <!-- Header section with responsive classes -->
+    <header class="relative h-screen md:h-screen">
+        <img alt="Universitas Negeri Jakarta building with a sculpture in front" 
+             class="w-full h-full object-cover"
+             src="https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434" />
+        <div class="absolute inset-0 bg-teal-900 bg-opacity-50 flex flex-col justify-center items-start p-4 md:p-8">
             <div class="flex items-center space-x-4">
             </div>
             <div class="mt-16">
             </div>
         </div>
     </header>
+
+    <!-- Announcement bar -->
     <div class="bg-gradient-to-r from-teal-700 to-teal-800 py-3 shadow-lg">
-        <div class="container mx-auto px-6">
+        <div class="container mx-auto px-4 md:px-6">
             <div class="flex items-center space-x-4">
-                <!-- Icon Pengumuman -->
-                <div class="bg-yellow-400 p-2 rounded-full">
+                <div class="bg-yellow-400 p-2 rounded-full flex-shrink-0">
                     <i class="fas fa-bullhorn text-teal-800 text-lg"></i>
                 </div>
-                <!-- Teks Berjalan - Dynamic from database -->
-                <marquee class="flex-1 text-white font-medium news-marquee" behavior="scroll" direction="left"
-                    scrollamount="5">
+                <marquee class="flex-1 text-white font-medium news-marquee" behavior="scroll" direction="left" scrollamount="5">
                     @if (isset($announcements) && count($announcements) > 0)
-                        {{ $announcements[0]->icon }} <span
-                            class="text-yellow-400 font-bold">{{ $announcements[0]->judul_pengumuman }}</span>
+                        {{ $announcements[0]->icon }} <span class="text-yellow-400 font-bold">{{ $announcements[0]->judul_pengumuman }}</span>
                         {!! $announcements[0]->isi_pengumuman !!}
                     @else
                         <span class="text-yellow-400 font-bold">Belum ada pengumuman</span>
@@ -228,65 +171,50 @@
                 </marquee>
             </div>
         </div>
-        <!-- Hidden data for JavaScript -->
-        @if (isset($announcements))
-            <script type="application/json" id="announcements-data">
-        {!! json_encode($announcements) !!}
-        </script>
-        @endif
-
     </div>
-    <!-- Main content -->
-    <main class="container mx-auto py-12 px-6">
-        <!-- Section Header with better styling -->
-        <div class="unj-content-section-header">
-            <h2 class="unj-section-title">Berita Terbaru</h2>
-            <p class="unj-section-subtitle">Informasi terkini dari Universitas Negeri Jakarta</p>
-        </div>
-        <!-- Filter and View Options -->
-        <div>
+
+    <!-- Main content with responsive padding -->
+    <main class="container mx-auto py-6 md:py-12 px-4 md:px-6">
+        <div class="unj-content-section-header mb-8">
+            <h2 class="unj-section-title text-2xl md:text-3xl">Berita Terbaru</h2>
+            <p class="unj-section-subtitle text-sm md:text-base">Informasi terkini dari Universitas Negeri Jakarta</p>
         </div>
 
-
-        <!-- Regular News Grid with first 3 news items -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <!-- Regular News Grid - fully responsive -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-8 md:mb-16">
             @php
-                // Take the first 3 news items for the regular grid
                 $regularNews = $featuredNews->take(3);
             @endphp
 
             @foreach ($regularNews as $news)
-                <div
-                    class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                     <div class="relative">
-                        <img alt="{{ $news->judul }}" class="w-full h-56 object-cover"
+                        <img alt="{{ $news->judul }}" class="w-full h-48 md:h-56 object-cover"
                             src="{{ asset('storage/' . $news->gambar) }}" />
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-24">
-                        </div>
-                        <div
-                            class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-20 md:h-24"></div>
+                        <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-xs md:text-sm font-semibold">
                             {{ ucfirst($news->kategori) }}
                         </div>
                     </div>
-                    <div class="p-5">
+                    <div class="p-4 md:p-5">
                         <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center text-gray-500 text-sm">
+                            <div class="flex items-center text-gray-500 text-xs md:text-sm">
                                 <i class="fas fa-user-circle mr-2"></i>Admin
                             </div>
-                            <div class="text-gray-500 text-sm">
+                            <div class="text-gray-500 text-xs md:text-sm">
                                 <i class="fas fa-calendar-alt mr-1"></i>{{ date('d M Y', strtotime($news->tanggal)) }}
                             </div>
                         </div>
                         <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="block">
-                            <h2 class="font-bold text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
+                            <h2 class="font-bold text-lg md:text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
                                 {{ $news->judul }}
                             </h2>
                         </a>
-                        <p class="text-gray-600 mb-4">
+                        <p class="text-gray-600 mb-4 text-sm md:text-base">
                             {{ Str::limit(strip_tags($news->isi), 100) }}
                         </p>
                         <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}"
-                            class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
+                            class="inline-block text-teal-700 hover:text-yellow-500 font-medium text-sm md:text-base">
                             Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                         </a>
                     </div>
@@ -294,38 +222,36 @@
             @endforeach
         </div>
 
-        <!-- Enhanced Featured News Carousel with remaining news items -->
+        <!-- Enhanced Featured News Carousel -->
         <div class="enhanced-carousel">
-            <div class="enhanced-carousel-title">Berita Terbaru</div>
+            <div class="enhanced-carousel-title text-xl md:text-2xl">Berita Terbaru</div>
             <div class="carousel">
                 <div class="carousel-inner">
                     @php
-                        // Skip the first 3 news items and use the rest for the carousel
                         $carouselNews = $featuredNews->slice(3);
                     @endphp
                     @foreach ($carouselNews as $featured)
                         <div class="carousel-item-enhanced">
                             <div class="news-card-enhanced">
                                 <div class="news-image-container">
-                                    <img alt="{{ $featured->judul }}" class="news-image"
+                                    <img alt="{{ $featured->judul }}" class="news-image h-48 md:h-auto"
                                         src="{{ asset('storage/' . $featured->gambar) }}" />
                                     <div class="news-tag-enhanced">{{ ucfirst($featured->kategori) }}</div>
                                 </div>
-                                <div class="news-content">
-                                    <div class="news-meta">
+                                <div class="news-content p-4">
+                                    <div class="news-meta text-xs md:text-sm">
                                         <i class="fas fa-user-circle mr-2"></i>Admin
                                         <span class="mx-2">|</span>
-                                        <i
-                                            class="fas fa-calendar-alt mr-2"></i>{{ date('d M Y', strtotime($featured->tanggal)) }}
+                                        <i class="fas fa-calendar-alt mr-2"></i>{{ date('d M Y', strtotime($featured->tanggal)) }}
                                     </div>
                                     <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}">
-                                        <h3 class="news-title">{{ $featured->judul }}</h3>
+                                        <h3 class="news-title text-lg md:text-xl">{{ $featured->judul }}</h3>
                                     </a>
-                                    <p class="news-excerpt">
+                                    <p class="news-excerpt text-sm md:text-base">
                                         {!! Str::limit($featured->isi, 150) !!}
                                     </p>
                                     <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}"
-                                        class="news-link">
+                                        class="news-link text-sm md:text-base">
                                         Baca selengkapnya <i class="fas fa-arrow-right"></i>
                                     </a>
                                 </div>
@@ -336,81 +262,57 @@
             </div>
         </div>
     </main>
-    <!-- Program dan Layanan Section with Popup -->
-    <section class="program-section py-16 bg-gray-50">
-        <div class="container mx-auto px-6">
-            <!-- Section Header -->
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-teal-700 mb-2">Program & Layanan</h2>
+
+    <!-- Program Section - mobile optimized -->
+    <section class="program-section py-8 md:py-16 bg-gray-50">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="text-center mb-8 md:mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold text-teal-700 mb-2">Program & Layanan</h2>
                 <div class="flex items-center justify-center mb-4">
                     <div class="h-1 w-16 bg-gray-300"></div>
-                    <span class="text-yellow-400 text-2xl mx-3"><i class="fas fa-cogs"></i></span>
+                    <span class="text-yellow-400 text-xl md:text-2xl mx-3"><i class="fas fa-cogs"></i></span>
                     <div class="h-1 w-16 bg-gray-300"></div>
                 </div>
-                <p class="text-gray-600 max-w-2xl mx-auto">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan
-                    Pemeringkatan</p>
+                <p class="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan Pemeringkatan</p>
             </div>
 
-            <!-- Program Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 @forelse($programLayanan as $program)
-                    <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2" data-program-id="{{ $program->id }}">
+                    <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
                         <div class="relative">
                             @if($program->image)
                                 <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}" class="w-full h-48 object-cover">
                             @else
                                 <div class="w-full h-48 bg-teal-600 flex items-center justify-center">
-                                    <i class="{{ $program->icon ?? 'fas fa-cogs' }} text-5xl text-white"></i>
+                                    <i class="{{ $program->icon ?? 'fas fa-cogs' }} text-4xl md:text-5xl text-white"></i>
                                 </div>
                             @endif
-                            <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent h-16 opacity-70"></div>
                         </div>
-                        <div class="p-5">
-                            <h3 class="font-bold text-teal-800 text-xl mb-3">{{ $program->judul }}</h3>
-                            <div class="text-gray-600 mb-4 program-excerpt" style="min-height: 80px;">
+                        <div class="p-4 md:p-5">
+                            <h3 class="font-bold text-teal-800 text-lg md:text-xl mb-3">{{ $program->judul }}</h3>
+                            <div class="text-gray-600 mb-4 program-excerpt text-sm md:text-base" style="min-height: 60px;">
                                 {!! Str::limit(strip_tags($program->deskripsi), 100) !!}
                             </div>
-                                            <a href="#" class="program-details-btn inline-flex items-center text-teal-700 hover:text-yellow-500 font-medium"
+                            <a href="#" class="program-details-btn inline-flex items-center text-teal-700 hover:text-yellow-500 font-medium text-sm md:text-base"
                                 data-program-id="{{ $program->id }}" 
                                 data-title="{{ $program->judul }}"
-                                data-description="{{ strip_tags($program->deskripsi) }}"
                                 data-full-description="{!! htmlspecialchars($program->deskripsi_lengkap ?? $program->deskripsi) !!}">
                                 Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                             
                             <div class="mt-4 pt-3 border-t border-gray-100">
-                                <button type="button" class="login w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg hover:from-teal-500 hover:to-teal-400 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50 relative overflow-hidden group" data-bs-toggle="modal" data-bs-target="#loginModal">
-                                    <span class="relative z-10 flex items-center justify-center">
-                                        Akses Program
-                                    </span>
-                                    <div class="absolute inset-0 w-3 bg-white bg-opacity-30 skew-x-[-20deg] group-hover:animate-shine hidden md:block"></div>
+                                <button type="button" class="login w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-2 md:py-3 px-4 md:px-6 rounded-lg font-semibold text-sm md:text-base">
+                                    Akses Program
                                 </button>
                             </div>
-
-                            <style>
-                            @keyframes shine {
-                                from {transform: translateX(-100%) skew-x-[-20deg];}
-                                to {transform: translateX(300%) skew-x-[-20deg];}
-                            }
-                            .animate-shine {
-                                animation: shine 1.5s ease;
-                            }
-                            </style>
                         </div>
                     </div>
                 @empty
-                    <!-- Fallback content if no programs are found -->
                     <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg col-span-full">
-                        <div class="relative">
-                            <div class="w-full h-48 bg-teal-600 flex items-center justify-center">
-                                <i class="fas fa-exclamation-circle text-5xl text-white"></i>
-                            </div>
-                        </div>
-                        <div class="p-5 text-center">
+                        <div class="p-8 text-center">
+                            <i class="fas fa-exclamation-circle text-5xl text-teal-600 mb-4"></i>
                             <h3 class="font-bold text-teal-800 text-xl mb-3">Belum Ada Program</h3>
-                            <p class="text-gray-600 mb-4">
-                                Maaf, saat ini belum ada program layanan yang tersedia. Silakan kunjungi lagi nanti.
-                            </p>
+                            <p class="text-gray-600">Maaf, saat ini belum ada program layanan yang tersedia.</p>
                         </div>
                     </div>
                 @endforelse
@@ -418,208 +320,119 @@
         </div>
     </section>
 
-
-    <section class="media-section py-16 bg-gradient-to-b from-white to-gray-50">
-        <div class="container mx-auto px-6">
-            <!-- Instagram Section Header -->
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-teal-700 mb-2">Instagram DITSIP UNJ</h2>
+    <!-- Instagram Section -->
+    <section class="media-section py-8 md:py-16 bg-gradient-to-b from-white to-gray-50">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="text-center mb-8 md:mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold text-teal-700 mb-2">Instagram DITSIP UNJ</h2>
                 <div class="flex items-center justify-center mb-4">
                     <div class="h-1 w-16 bg-gray-300"></div>
-                    <span class="text-yellow-400 text-2xl mx-3"><i class="fab fa-instagram"></i></span>
+                    <span class="text-yellow-400 text-xl md:text-2xl mx-3"><i class="fab fa-instagram"></i></span>
                     <div class="h-1 w-16 bg-gray-300"></div>
                 </div>
-                <p class="text-gray-600 max-w-2xl mx-auto">Ikuti akun Instagram kami untuk mendapatkan informasi
-                    terbaru
-                </p>
+                <p class="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">Ikuti akun Instagram kami untuk mendapatkan informasi terbaru</p>
                 <a href="https://www.instagram.com/dit.isipunj/" target="_blank"
-                    class="inline-flex items-center text-teal-700 hover:text-yellow-500 mt-2 font-medium">
+                    class="inline-flex items-center text-teal-700 hover:text-yellow-500 mt-2 font-medium text-sm md:text-base">
                     <span>@dit.isipunj</span>
                     <i class="fas fa-external-link-alt ml-2"></i>
                 </a>
             </div>
 
-            <!-- Instagram Feed Grid with Dynamic Loading via JavaScript -->
-            <div id="instagram-api-feed-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Loading placeholders - will be replaced by JavaScript -->
-                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
-                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
-                    <div class="p-6">
-                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
+            <div id="instagram-api-feed-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
+                <!-- Loading placeholders -->
+                @for ($i = 0; $i < 3; $i++)
+                    <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+                        <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
+                        <div class="p-4 md:p-6">
+                            <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
+                            <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                            <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
                         </div>
                     </div>
-                </div>
-                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
-                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
-                    <div class="p-6">
-                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
-                    <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
-                    <div class="p-6">
-                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                        <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <div class="h-4 bg-gray-200 rounded w-2/4"></div>
-                        </div>
-                    </div>
-                </div>
+                @endfor
             </div>
 
-            <!-- View More Button -->
             <div class="text-center mt-8">
                 <a href="https://www.instagram.com/dit.isipunj/" target="_blank"
-                    class="inline-flex items-center justify-center px-6 py-3 bg-teal-700 hover:bg-teal-600 text-white font-medium rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1">
+                    class="inline-flex items-center justify-center px-4 md:px-6 py-2 md:py-3 bg-teal-700 hover:bg-teal-600 text-white font-medium rounded-lg text-sm md:text-base">
                     <span>Lihat Semua Postingan</span>
-                    <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                    <i class="fas fa-external-link-alt ml-2"></i>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- YouTube Section with Consistent Card Styling -->
-    <section class="media-section py-16">
-        <!-- Decorative Elements -->
-        <div class="absolute bottom-0 right-0 w-32 h-32 bg-yellow-400 rounded-full -mr-16 -mb-16 opacity-10"></div>
-        <div class="absolute top-40 left-0 w-24 h-24 bg-teal-600 rounded-full -ml-12 opacity-10"></div>
-
-        <div class="container mx-auto px-6 relative z-10">
-            <!-- Section Header with Enhanced Styling -->
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-teal-700 mb-2">Youtube Universitas Negeri Jakarta</h2>
+    <!-- YouTube Section -->
+    <section class="media-section py-8 md:py-16">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="text-center mb-8 md:mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold text-teal-700 mb-2">Youtube Universitas Negeri Jakarta</h2>
                 <div class="flex items-center justify-center mb-4">
                     <div class="h-1 w-16 bg-gray-300"></div>
-                    <span class="text-red-500 text-2xl mx-3"><i class="fab fa-youtube"></i></span>
+                    <span class="text-red-500 text-xl md:text-2xl mx-3"><i class="fab fa-youtube"></i></span>
                     <div class="h-1 w-16 bg-gray-300"></div>
                 </div>
-                <p class="text-gray-600 max-w-2xl mx-auto">Tonton video terbaru dari channel YouTube UNJ</p>
+                <p class="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">Tonton video terbaru dari channel YouTube UNJ</p>
             </div>
 
-
-            <!-- Dynamic YouTube Videos from Database -->
-            <div>
-                <h3 class="text-xl font-bold text-teal-700 mb-6 text-center">Video Terbaru</h3>
-                <div id="dynamic-videos-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Dynamic content will be loaded here via JavaScript -->
+            <div id="dynamic-videos-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
+                <!-- Loading placeholders -->
+                @for ($i = 0; $i < 3; $i++)
                     <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
                         <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
-                        <div class="p-6">
+                        <div class="p-4 md:p-6">
                             <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
                             <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
                             <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                            <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                            <div class="mt-4 pt-4 border-t border-gray-100">
-                                <div class="h-4 bg-gray-200 rounded w-2/4"></div>
-                            </div>
                         </div>
                     </div>
-                    <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
-                        <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
-                        <div class="p-6">
-                            <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                            <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
-                            <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                            <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                            <div class="mt-4 pt-4 border-t border-gray-100">
-                                <div class="h-4 bg-gray-200 rounded w-2/4"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
-                        <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
-                        <div class="p-6">
-                            <div class="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                            <div class="h-6 bg-gray-200 rounded w-full mb-2"></div>
-                            <div class="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                            <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                            <div class="mt-4 pt-4 border-t border-gray-100">
-                                <div class="h-4 bg-gray-200 rounded w-2/4"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endfor
             </div>
-           
-            <!-- View More Button -->
+
             <div class="text-center mt-8">
                 <a href="https://www.youtube.com/channel/UCjQ4lIzs8Zm3zVD3wiL-KMw" target="_blank"
-                    class="inline-flex items-center justify-center px-6 py-3 bg-teal-700 hover:bg-teal-600 text-white font-medium rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1">
+                    class="inline-flex items-center justify-center px-4 md:px-6 py-2 md:py-3 bg-teal-700 hover:bg-teal-600 text-white font-medium rounded-lg text-sm md:text-base">
                     <span>Lihat Semua Video</span>
-                    <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                    <i class="fas fa-external-link-alt ml-2"></i>
                 </a>
             </div>
         </div>
     </section>
 
-
-    <!-- Program Details Popup Modal -->
-    <div id="programDetailsModal"
-        class="fixed inset-0 bg-black bg-opacity-60 z-[1100] hidden items-center justify-center p-4 overflow-y-auto backdrop-blur-sm">
+    <!-- Program Details Modal -->
+    <div id="programDetailsModal" class="fixed inset-0 bg-black bg-opacity-60 z-[1100] hidden items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative">
-            <!-- Modal Header with Image -->
-            <div class="relative h-56">
+            <div class="relative h-48 md:h-56">
                 <div id="modalImageContainer" class="w-full h-full bg-teal-600 flex items-center justify-center">
-                    <!-- Image will be added here dynamically -->
                     <i id="modalFallbackIcon" class="fas fa-cogs text-6xl text-white"></i>
                 </div>
                 <div class="absolute top-0 right-0 m-4">
-                    <button id="closeModalBtn"
-                        class="bg-white rounded-full p-2 shadow-md hover:bg-teal-50 transition-colors">
+                    <button id="closeModalBtn" class="bg-white rounded-full p-2 shadow-md hover:bg-teal-50">
                         <i class="fas fa-times text-teal-700 text-xl"></i>
                     </button>
                 </div>
-                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent h-32"></div>
-                <div class="absolute bottom-0 left-0 w-full p-6">
-                    <h2 id="programModalTitle" class="text-3xl font-bold text-white mb-2 shadow-text"></h2>
+                <div class="absolute bottom-0 left-0 w-full p-4 md:p-6">
+                    <h2 id="programModalTitle" class="text-2xl md:text-3xl font-bold text-white shadow-text"></h2>
                 </div>
             </div>
-
-            <!-- Modal Content -->
-            <div class="p-8">
-                <div id="programModalDescription" class="prose max-w-none text-gray-700">
-                    <!-- Dynamic content will be inserted here -->
+            <div class="p-4 md:p-8">
+                <div id="programModalDescription" class="prose max-w-none text-gray-700 text-sm md:text-base">
+                    <!-- Dynamic content -->
                 </div>
             </div>
         </div>
     </div>
 
-    <style>
-        .shadow-text {
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-        }
+    @include('layout.footer')
 
-        .program-excerpt {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-    </style>
+    <!-- Load mobile.js with enhanced detection -->
+    <script src="{{ asset('mobile.js') }}"></script>
+    <script src="{{ asset('js/instagram-api-feed.js') }}"></script>
+    <script src="{{ asset('home.js') }}"></script>
 
-</body>
-
-
-<script src="{{ asset('js/instagram-api-feed.js') }}"></script>
-<script src="{{ asset('home.js') }}"></script>
-
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
+    <!-- Enhanced mobile detection and debugging -->
+    <script>
+         document.addEventListener('DOMContentLoaded', function() {
         // Fetch YouTube videos from the API
         fetch('/api/youtube-videos')
             .then(response => response.json())
@@ -708,7 +521,56 @@
                 `;
             });
     });
-    document.addEventListener('DOMContentLoaded', function() {
+        // Mobile detection
+        function isMobileDevice() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const mobileKeywords = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+            const isMobileUA = mobileKeywords.test(userAgent);
+            const isMobileWidth = window.innerWidth <= 768;
+            const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            
+            return (isMobileUA && hasTouch) || (isMobileWidth && hasTouch) || (isMobileUA && isMobileWidth);
+        }
+
+        // Add mobile indicator
+        document.addEventListener('DOMContentLoaded', function() {
+            const indicator = document.getElementById('mobile-indicator');
+            if (indicator) {
+                indicator.style.display = 'block';
+                indicator.style.cssText = `
+                    position: fixed;
+                    top: 10px;
+                    left: 10px;
+                    background: ${isMobileDevice() ? '#4CAF50' : '#ff5722'};
+                    color: white;
+                    padding: 5px 10px;
+                    font-size: 12px;
+                    z-index: 9999;
+                    border-radius: 4px;
+                `;
+                indicator.textContent = `${isMobileDevice() ? 'Mobile' : 'Desktop'}: ${window.innerWidth}x${window.innerHeight}`;
+                
+                window.addEventListener('resize', function() {
+                    indicator.textContent = `${isMobileDevice() ? 'Mobile' : 'Desktop'}: ${window.innerWidth}x${window.innerHeight}`;
+                    indicator.style.background = isMobileDevice() ? '#4CAF50' : '#ff5722';
+                });
+            }
+
+            // Apply mobile class if needed
+            if (isMobileDevice()) {
+                document.body.classList.add('mobile-mode');
+                console.log('Mobile mode activated');
+            }
+
+            // Check media query
+            const mq = window.matchMedia('(max-width: 768px)');
+            console.log('Media query (max-width: 768px) matches:', mq.matches);
+            
+            mq.addListener(function(e) {
+                console.log('Media query changed:', e.matches);
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
         const modal = document.getElementById('programDetailsModal');
         const modalTitle = document.getElementById('programModalTitle');
         const modalDescription = document.getElementById('programModalDescription');
@@ -788,9 +650,6 @@
             }
         });
     });
-</script>
-
-<script>
     document.addEventListener('DOMContentLoaded', function() {
         const feedContainer = document.getElementById('instagram-api-feed-container');
         if (!feedContainer) return;
@@ -898,15 +757,16 @@
             `;
             });
     });
-</script>
-<script>
-    window.carouselImages = [
-        "{{ asset('images/logos/image_corousel.jpg') }}",
-        "/images/TERBUK TAMPAK DEPAN.png",
-        "/images/GEDUNG REKTORAT.png",
-        "/images/om.png",
-    ];
-</script>
 
+    </script>
+
+    <script>
+        window.carouselImages = [
+            "{{ asset('images/logos/image_corousel.jpg') }}",
+            "/images/TERBUK TAMPAK DEPAN.png",
+            "/images/GEDUNG REKTORAT.png",
+            "/images/om.png",
+        ];
+    </script>
+</body>
 </html>
-@include('layout.footer')
