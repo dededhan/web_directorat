@@ -617,7 +617,152 @@
 <script src="{{ asset('home.js') }}"></script>
 
 
+<style>
+    /* Perbaikan responsivitas dasar */
+    @media (max-width: 768px) {
+        /* Memastikan container tidak overflow */
+        main, section, .container {
+            max-width: 100%;
+            overflow-x: hidden;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        
+        /* Mengatur grid untuk mobile */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        /* Mengatur carousel untuk mobile */
+        .carousel-inner {
+            display: flex;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+        }
+        
+        .carousel-item-enhanced {
+            flex: 0 0 90%;
+            max-width: 90%;
+            margin-right: 10px;
+            scroll-snap-align: start;
+        }
+        
+        /* Mengatur tinggi card yang konsisten */
+        .media-card, .program-card {
+            height: auto;
+            margin-bottom: 1rem;
+        }
+        
+        /* Memastikan gambar tidak overflow */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* Mengatur program cards */
+        .program-section .grid {
+            grid-template-columns: 1fr;
+        }
+        
+        /* Mengatur ukuran header */
+        header img.object-cover {
+            height: 50vh;
+        }
+        
+        /* Mengatur spacing */
+        .py-16 {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        
+        .py-12 {
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem; 
+        }
+        
+        .px-6 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        .mb-16, .mb-12 {
+            margin-bottom: 1.5rem;
+        }
+    }
+    
+    /* Perbaikan untuk device sangat kecil */
+    @media (max-width: 480px) {
+        header img.object-cover {
+            height: 40vh;
+        }
+        
+        .carousel-item-enhanced {
+            flex: 0 0 100%;
+            max-width: 100%;
+            margin-right: 0;
+        }
+        
+        .p-6, .p-5 {
+            padding: 0.75rem;
+        }
+    }
+</style>
 
+<!-- Script ini memastikan bahwa JS mobile.js dipanggil dengan benar -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Cek dan terapkan mode mobile
+    if (typeof window.mobileUtils !== 'undefined' && window.mobileUtils.isMobileDevice()) {
+        console.log('Applying mobile optimizations');
+        document.body.classList.add('mobile-mode');
+        
+        // Memastikan viewport diatur dengan benar
+        const viewport = document.querySelector('meta[name="viewport"]');
+        if (viewport) {
+            viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+        }
+        
+        // Mengoptimalkan carousel
+        const carousels = document.querySelectorAll('.carousel-inner');
+        carousels.forEach(carousel => {
+            carousel.style.display = 'flex';
+            carousel.style.overflowX = 'auto';
+            carousel.style.webkitOverflowScrolling = 'touch';
+            carousel.style.scrollSnapType = 'x mandatory';
+            
+            const items = carousel.querySelectorAll('.carousel-item-enhanced');
+            items.forEach(item => {
+                item.style.flex = '0 0 90%';
+                item.style.maxWidth = '90%';
+                item.style.marginRight = '10px';
+                item.style.scrollSnapAlign = 'start';
+            });
+        });
+        
+        // Mengoptimalkan target sentuhan
+        if (typeof window.mobileUtils.optimizeTapTargets === 'function') {
+            window.mobileUtils.optimizeTapTargets();
+        }
+        
+        // Perbaikan untuk grid
+        const grids = document.querySelectorAll('.grid');
+        if (window.innerWidth <= 768) {
+            grids.forEach(grid => {
+                if (grid.classList.contains('grid-cols-3') || 
+                    grid.classList.contains('md:grid-cols-3') ||
+                    grid.classList.contains('lg:grid-cols-3') ||
+                    grid.classList.contains('grid-cols-2') ||
+                    grid.classList.contains('md:grid-cols-2')) {
+                    grid.style.gridTemplateColumns = '1fr';
+                }
+            });
+        }
+    }
+});
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Fetch YouTube videos from the API

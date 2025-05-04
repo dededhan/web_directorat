@@ -1,289 +1,197 @@
-/* mobile.css - Specific styles for mobile devices */
+/* mobile.css - Optimized mobile styles for Universitas Negeri Jakarta website */
 
-/* Set proper viewport for consistent mobile rendering */
-@media (max-width: 767px) {
-    /* General mobile optimizations */
-    html, body {
+/* Base mobile optimizations */
+@media (max-width: 768px) {
+    /* General layout fixes */
+    body {
         overflow-x: hidden;
         width: 100%;
-        -webkit-text-size-adjust: 100%;
     }
     
-    /* Force properly sized content */
-    * {
-        max-width: 100%;
-        box-sizing: border-box;
-    }
-    
-    /* Improved tap targets */
-    a, button, .card-link, .news-link {
-        min-height: 44px;
-        display: inline-flex;
-        align-items: center;
-    }
-    
-    /* Enhanced text readability */
-    body {
-        line-height: 1.6;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-    
-    /* Mobile-first header and carousel */
-    header {
-        height: 50vh !important;
-    }
-    
-    .header-carousel {
-        height: 50vh !important;
-    }
-    
-    /* News grid - Single column for smallest screens */
-    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 {
-        display: grid !important;
-        grid-template-columns: repeat(1, 1fr) !important;
-        gap: 1rem !important;
-    }
-    
-    /* Two columns for larger phones */
-    @media (min-width: 480px) and (max-width: 767px) {
-        .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 {
-            grid-template-columns: repeat(2, 1fr) !important;
-        }
-    }
-    
-    /* News cards optimized */
-    .bg-white.rounded-lg.overflow-hidden.shadow-md {
-        height: auto !important;
-        margin-bottom: 1rem;
-    }
-    
-    .w-full.h-56.object-cover {
-        height: 180px !important;
-    }
-    
-    /* Card content with better spacing */
-    .p-5 {
-        padding: 1rem !important;
-    }
-    
-    /* Optimized text sizes */
-    .font-bold.text-xl {
-        font-size: 1.1rem !important;
-        line-height: 1.4 !important;
-        margin-bottom: 0.5rem !important;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-    
-    .text-gray-600.mb-4 {
-        font-size: 0.9rem !important;
-        line-height: 1.5 !important;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        margin-bottom: 0.75rem !important;
-    }
-    
-    /* Enhanced carousel for mobile */
-    .carousel-item-enhanced {
-        flex: 0 0 100% !important;
-        max-width: 100% !important;
-        padding: 0.75rem !important;
-    }
-    
-    @media (min-width: 568px) and (max-width: 767px) {
-        .carousel-item-enhanced {
-            flex: 0 0 50% !important;
-            max-width: 50% !important;
-        }
-    }
-    
-    .news-image {
-        height: 180px !important;
-    }
-    
-    .news-content {
-        padding: 1rem !important;
-    }
-    
-    /* Program and Layanan cards */
-    .program-grid {
-        grid-template-columns: repeat(1, 1fr) !important;
-        gap: 1rem !important;
-    }
-    
-    @media (min-width: 480px) and (max-width: 767px) {
-        .program-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-        }
-    }
-    
-    .program-card {
-        margin-bottom: 1rem;
-    }
-    
-    .card-content {
-        padding: 1rem !important;
-    }
-    
-    /* UNJ dalam Angka grid */
-    .unj-dalam-angka .grid-container {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 1rem !important;
-    }
-    
-    @media (min-width: 480px) and (max-width: 767px) {
-        .unj-dalam-angka .grid-container {
-            grid-template-columns: repeat(3, 1fr) !important;
-        }
-    }
-    
-    .unj-dalam-angka .grid-item {
-        padding: 1rem !important;
-    }
-    
-    /* Section headers */
-    .section-title, .unj-section-title {
-        font-size: 1.5rem !important;
-    }
-    
-    .section-subtitle, .unj-section-subtitle {
-        font-size: 0.9rem !important;
-    }
-    
-    /* Instagram and YouTube sections */
-    .media-section {
-        padding: 2rem 0 !important;
-    }
-    
-    .media-section .grid {
-        grid-template-columns: repeat(1, 1fr) !important;
-        gap: 1.5rem !important;
-    }
-    
-    @media (min-width: 580px) and (max-width: 767px) {
-        .media-section .grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-        }
-    }
-    
-    /* Better mobile navbar */
-    #mobile-navbar {
-        padding: 0.5rem 0;
-    }
-    
-    #mobile-sidebar {
-        width: 80% !important;
-        max-width: 280px;
-    }
-    
-    /* Improved form elements for mobile */
-    input, select, textarea {
-        font-size: 16px !important; /* Prevents iOS zoom on focus */
-    }
-    
-    /* Better spacing for sections */
-    section, .py-12, .py-16 {
-        padding-top: 2.5rem !important;
-        padding-bottom: 2.5rem !important;
-    }
-    
-    .mb-16, .mb-12 {
-        margin-bottom: 2rem !important;
-    }
-    
-    /* Container padding adjustments */
     .container {
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
+        width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
     }
     
-    /* Footer improvements */
-    footer .grid {
-        grid-template-columns: 1fr !important;
-        gap: 2rem !important;
+    /* Header adjustments */
+    header img.object-cover {
+        height: 50vh;
     }
     
-    /* Better margins and spacing */
-    .mb-8 {
-        margin-bottom: 1.5rem !important;
+    /* News card adjustments */
+    .grid-cols-1 {
+        grid-template-columns: 1fr;
     }
     
-    .mt-8 {
-        margin-top: 1.5rem !important;
+    .bg-white.rounded-lg {
+        width: 100%;
     }
     
-    .p-6 {
-        padding: 1.25rem !important;
-    }
-    
-    /* Login popup positioning */
-    .login-popup {
-        width: 90% !important;
-        max-width: 350px !important;
-    }
-    
-    /* Fix any scrolling issues */
-    .overflow-x-auto {
+    /* Enhanced carousel adjustments */
+    .carousel-inner {
+        display: flex;
+        overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 15px;
+    }
+    
+    .carousel-item-enhanced {
+        scroll-snap-align: start;
+        flex: 0 0 90%;
+        max-width: 90%;
+        margin-right: 15px;
+    }
+    
+    /* Program cards adjustments */
+    .program-card {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    /* Footer adjustments */
+    footer .grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Navigation menu adjustments */
+    nav.bg-white {
+        padding: 10px 15px;
     }
 }
 
-/* Android-specific fixes for better performance */
-@supports (-webkit-touch-callout: none) {
-    /* Force hardware acceleration */
-    .carousel, .carousel-inner, .carousel-item-enhanced,
-    .news-card-enhanced, .bg-white.rounded-lg.overflow-hidden.shadow-md,
-    #mobile-sidebar, .header-carousel, .header-slide {
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
+/* Small mobile devices */
+@media (max-width: 576px) {
+    .carousel-item-enhanced {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-right: 0;
     }
     
-    /* Better image rendering */
-    img {
-        image-rendering: -webkit-optimize-contrast;
+    header img.object-cover {
+        height: 40vh;
     }
     
-    /* Fix for Android WebView font rendering */
-    body, p, h1, h2, h3, h4, h5, h6, a, span, div {
-        text-rendering: optimizeLegibility;
+    /* Section header adjustments */
+    .unj-section-title {
+        font-size: 1.5rem;
     }
     
-    /* Fix for Android button rendering */
-    button, .card-link, .news-link, a {
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    }
-}
-
-/* Small phone fixes (iPhone SE size) */
-@media (max-width: 374px) {
-    .font-bold.text-xl {
-        font-size: 1rem !important;
+    /* Programs section adjustments */
+    .program-section .grid {
+        grid-template-columns: 1fr;
     }
     
-    .text-gray-600.mb-4 {
-        font-size: 0.85rem !important;
-        -webkit-line-clamp: 2;
-    }
-    
-    .w-full.h-56.object-cover,
-    .news-image {
-        height: 160px !important;
-    }
-    
-    .p-5, .card-content, .news-content {
-        padding: 0.75rem !important;
-    }
-    
-    .program-grid,
-    .unj-dalam-angka .grid-container,
     .media-section .grid {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: 1fr;
+    }
+    
+    /* Better card spacing */
+    .gap-6, .gap-8 {
+        gap: 1rem;
+    }
+    
+    .py-16 {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    
+    .py-12 {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+    
+    .mb-12 {
+        margin-bottom: 1.5rem;
+    }
+    
+    .mb-16 {
+        margin-bottom: 1.5rem;
+    }
+}
+
+/* Handle touch interactions better */
+.mobile-mode .carousel-inner {
+    cursor: grab;
+}
+
+.mobile-mode .carousel-inner:active {
+    cursor: grabbing;
+}
+
+/* Fix for modals on mobile */
+.mobile-mode #programDetailsModal {
+    padding: 0;
+}
+
+.mobile-mode #programDetailsModal .bg-white {
+    max-height: 90vh;
+    border-radius: 15px 15px 0 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+}
+
+/* Fix for news card scaling */
+.mobile-mode .news-card-enhanced {
+    min-height: unset;
+}
+
+/* Fix card heights on mobile */
+.mobile-mode .media-card {
+    height: auto;
+}
+
+/* Optimizing tap targets */
+.mobile-mode a, 
+.mobile-mode button, 
+.mobile-mode [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Optimize images */
+.mobile-mode img {
+    max-width: 100%;
+}
+
+/* Fix scrolling performance */
+.mobile-mode .scrolling-down {
+    /* Hide some elements when scrolling down to improve performance */
+    position: relative;
+}
+
+/* Navigation toggle animation */
+.mobile-mode .nav-toggle {
+    display: block;
+}
+
+/* Fix for Android WebView specific issues */
+@supports (-webkit-appearance:none) {
+    .mobile-mode input, 
+    .mobile-mode textarea {
+        font-size: 16px; /* Prevents zoom on focus */
+    }
+}
+
+/* Fix layout for very small devices */
+@media (max-width: 360px) {
+    body {
+        font-size: 14px;
+    }
+    
+    .h1, h1 {
+        font-size: 1.5rem;
+    }
+    
+    .h2, h2 {
+        font-size: 1.25rem;
+    }
+    
+    .program-card .p-5 {
+        padding: 0.75rem;
     }
 }
