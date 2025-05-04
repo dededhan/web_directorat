@@ -1,7 +1,7 @@
-// mobile.js - Enhanced to force desktop layout while preserving mobile navbar
+// mobile.js - Force desktop layout while keeping mobile navbar
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Mobile script initialized - desktop layout force version');
+    console.log('Mobile script initialized - desktop layout hybrid version');
     
     // 1. Fix viewport settings
     const viewport = document.querySelector('meta[name="viewport"]');
@@ -23,10 +23,10 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Mobile Debug: ' + message);
     }
     
-    // 3. Force mobile navbar but desktop layout content
-    function forceDesktopLayoutOnMobile() {
+    // 3. Force mobile navbar but desktop layout for content
+    function forceDesktopOnMobile() {
         if (window.innerWidth <= 767) {
-            // Get navbar elements
+            // Mobile navbar setup
             const mobileNavbar = document.getElementById('mobile-navbar');
             const desktopNavbar = document.querySelector('.navbar.hidden.md\\:block');
             
@@ -45,77 +45,88 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add mobile class to body
             document.body.classList.add('mobile-view');
             
-            // Force desktop-like layout for content areas
+            // === FORCE DESKTOP LAYOUT FOR ALL CONTENT SECTIONS ===
             
-            // 1. News grid - force 3 columns
+            // 1. News Grid - Force 3 columns like desktop
             const newsGrid = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3');
             if (newsGrid) {
                 newsGrid.style.display = 'grid';
                 newsGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
-                newsGrid.style.gap = '0.5rem';
-                log('News grid set to 3 columns');
+                newsGrid.style.gap = '1rem';
+                log('News grid set to desktop layout (3 columns)');
             }
             
-            // 2. Carousel - force 3 items
+            // 2. Featured News Carousel - Force 3 items
             const carouselItems = document.querySelectorAll('.carousel-item-enhanced');
             carouselItems.forEach(function(item) {
                 item.style.flex = '0 0 33.333%';
                 item.style.maxWidth = '33.333%';
             });
-            log('Carousel set to 3 items');
+            log('Carousel set to desktop layout (3 items)');
             
-            // 3. Program grid - force 4 columns
-            const programGrid = document.querySelector('.program-grid, .grid.grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-4');
+            // 3. Program Grid - Force 4 columns like desktop
+            const programGrid = document.querySelector('.program-section .grid, .grid.grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-4');
             if (programGrid) {
                 programGrid.style.display = 'grid';
                 programGrid.style.gridTemplateColumns = 'repeat(4, 1fr)';
-                programGrid.style.gap = '0.5rem';
-                log('Program grid set to 4 columns');
+                programGrid.style.gap = '0.75rem';
+                log('Program grid set to desktop layout (4 columns)');
             }
             
-            // 4. Instagram/YouTube grid - force 3 columns
-            const mediaGrids = document.querySelectorAll('#instagram-api-feed-container, #dynamic-videos-container, .grid.grid-cols-1.sm\\:grid-cols-2.md\\:grid-cols-3');
-            mediaGrids.forEach(function(grid) {
-                grid.style.display = 'grid';
-                grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
-                grid.style.gap = '0.5rem';
-            });
-            log('Media grids set to 3 columns');
+            // 4. Instagram & YouTube grids - Force 3 columns like desktop
+            const instagramGrid = document.getElementById('instagram-api-feed-container');
+            const youtubeGrid = document.getElementById('dynamic-videos-container');
             
-            // 5. Footer grid - force 3 columns
+            if (instagramGrid) {
+                instagramGrid.style.display = 'grid';
+                instagramGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+                instagramGrid.style.gap = '0.75rem';
+                log('Instagram grid set to desktop layout (3 columns)');
+            }
+            
+            if (youtubeGrid) {
+                youtubeGrid.style.display = 'grid';
+                youtubeGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+                youtubeGrid.style.gap = '0.75rem';
+                log('YouTube grid set to desktop layout (3 columns)');
+            }
+            
+            // 5. Footer grid - Force 3 columns like desktop
             const footerGrid = document.querySelector('footer .grid');
             if (footerGrid) {
                 footerGrid.style.display = 'grid';
                 footerGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
                 footerGrid.style.gap = '1rem';
-                log('Footer grid set to 3 columns');
+                log('Footer grid set to desktop layout (3 columns)');
             }
             
-            // Check for very small screens and adjust if needed
-            if (window.innerWidth <= 359) {
-                // Reduce to 2 columns for very small screens
-                const allGrids = document.querySelectorAll('.grid');
+            // Handle very small screens (under 360px)
+            if (window.innerWidth < 360) {
+                // Switch to 2 columns for very small screens
+                const allGrids = [newsGrid, programGrid, instagramGrid, youtubeGrid];
                 allGrids.forEach(function(grid) {
-                    grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+                    if (grid) {
+                        grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+                    }
                 });
                 
-                // Make carousel 2 items
+                // Carousel 2 items
                 carouselItems.forEach(function(item) {
                     item.style.flex = '0 0 50%';
                     item.style.maxWidth = '50%';
                 });
                 
-                log('Adjusted to 2 columns for very small screen');
+                log('Adjusted to 2 columns for very small screen width: ' + window.innerWidth);
             }
         }
     }
     
     // 4. Run immediately
-    forceDesktopLayoutOnMobile();
+    forceDesktopOnMobile();
     
     // 5. Run after short delays to override any other scripts
-    setTimeout(forceDesktopLayoutOnMobile, 100);
-    setTimeout(forceDesktopLayoutOnMobile, 500);
+    setTimeout(forceDesktopOnMobile, 100);
+    setTimeout(forceDesktopOnMobile, 500);
     
     // 6. Show sidebar function with proper overlay handling
     function showSidebar() {
@@ -261,37 +272,76 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // 13. Run on resize to maintain correct display
-    window.addEventListener('resize', forceDesktopLayoutOnMobile);
+    // 13. Observe DOM changes to maintain desktop layout on dynamic content
+    const observer = new MutationObserver(function(mutations) {
+        // Check if any of the content sections have been changed
+        let needsUpdate = false;
+        
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList' && 
+                (mutation.target.id === 'instagram-api-feed-container' || 
+                 mutation.target.id === 'dynamic-videos-container' ||
+                 mutation.target.classList.contains('grid'))) {
+                needsUpdate = true;
+            }
+        });
+        
+        if (needsUpdate) {
+            log('Content changed, reapplying desktop layout');
+            forceDesktopOnMobile();
+        }
+    });
     
-    // 14. Run after page load
-    window.addEventListener('load', forceDesktopLayoutOnMobile);
+    // Start observing the entire document
+    observer.observe(document.body, { 
+        childList: true, 
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['class', 'style']
+    });
     
-    // 15. Override any existing forceDesktopLayout function
+    // 14. Run on resize to maintain correct display
+    window.addEventListener('resize', forceDesktopOnMobile);
+    
+    // 15. Run after page load
+    window.addEventListener('load', forceDesktopOnMobile);
+    
+    // 16. Override existing forceDesktopLayout function if it exists
     if (window.forceDesktopLayout) {
-        log('Original forceDesktopLayout function found, overriding');
+        log('Overriding existing forceDesktopLayout function');
         const originalFn = window.forceDesktopLayout;
         window.forceDesktopLayout = function() {
             originalFn.apply(this, arguments);
-            forceDesktopLayoutOnMobile();
+            forceDesktopOnMobile();
         };
     } else {
-        // Create the function if it doesn't exist
-        window.forceDesktopLayout = forceDesktopLayoutOnMobile;
+        // Create a global function
+        window.forceDesktopLayout = forceDesktopOnMobile;
     }
     
-    // 16. Setup event listeners for dynamically loaded content
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                // Something was added to the DOM, check if we need to update layout
-                forceDesktopLayoutOnMobile();
-            }
-        });
-    });
+    // Fix carousel if needed by overriding its functions
+    if (typeof window.adjustForMobile === 'function') {
+        const originalAdjust = window.adjustForMobile;
+        window.adjustForMobile = function() {
+            originalAdjust.apply(this, arguments);
+            // Force our desktop layout after the carousel tries to adjust
+            setTimeout(forceDesktopOnMobile, 10);
+        };
+        log('Carousel adjustForMobile function overridden');
+    }
     
-    // Observe the entire body for changes
-    observer.observe(document.body, { childList: true, subtree: true });
+    // Initial style setup for sidebar and overlay
+    if (mobileSidebar) {
+        log('Setting initial sidebar style');
+        mobileSidebar.style.transform = 'translateX(100%)';
+    }
     
-    log('Mobile initialization complete - desktop layout force enabled');
+    if (sidebarOverlay) {
+        log('Setting initial overlay style');
+        sidebarOverlay.style.opacity = '0';
+        sidebarOverlay.style.visibility = 'hidden';
+        sidebarOverlay.style.pointerEvents = 'none';
+    }
+    
+    log('Mobile initialization complete - desktop content layout enabled');
 });

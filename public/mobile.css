@@ -1,6 +1,6 @@
-/* mobile.css - Force desktop layout on mobile devices */
+/* mobile.css - Force desktop layout on mobile devices except for navbar */
 
-/* 1. Critical viewport and base reset */
+/* 1. Base viewport settings */
 html, body {
     max-width: 100%;
     overflow-x: hidden;
@@ -8,9 +8,9 @@ html, body {
     -ms-text-size-adjust: 100%;
 }
 
-/* 2. Mobile navbar styling - Keep this part */
+/* 2. KEEP MOBILE NAVBAR - But make all content sections desktop-like */
 @media (max-width: 767px) {
-    /* Force mobile navbar display */
+    /* Mobile navbar styling - Keep this part */
     #mobile-navbar {
         display: block !important;
         visibility: visible !important;
@@ -34,7 +34,7 @@ html, body {
         pointer-events: none !important;
     }
 
-    /* Mobile sidebar styling - Fixed positioning and width */
+    /* Mobile sidebar styling - Only for navigation */
     #mobile-sidebar {
         position: fixed !important;
         top: 0 !important;
@@ -54,7 +54,7 @@ html, body {
         will-change: transform !important;
     }
     
-    /* Overlay styling - Semi-transparent background */
+    /* Overlay styling when sidebar is open */
     #sidebar-overlay {
         position: fixed !important;
         top: 0 !important;
@@ -71,7 +71,7 @@ html, body {
         will-change: opacity !important;
     }
     
-    /* Fix overlay when sidebar is open */
+    /* Overlay visible state */
     body.sidebar-open #sidebar-overlay {
         opacity: 1 !important;
         visibility: visible !important;
@@ -85,200 +85,200 @@ html, body {
         width: 100% !important;
         height: 100% !important;
     }
-}
 
-/* 3. DESKTOP LAYOUT FOR MOBILE - MAIN CONTENT SECTIONS */
-@media (max-width: 767px) {
-    /* === NEWS SECTION === */
-    /* Maintain desktop grid for news */
+    /* === DESKTOP LAYOUT FOR MOBILE - FORCE ALL CONTENT AREAS TO USE DESKTOP LAYOUT === */
+    
+    /* 1. BERITA TERBARU SECTION - Force 3 columns like desktop */
     .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 {
         display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important; /* Force 3 columns like desktop */
-        gap: 0.5rem !important; /* Smaller gap on mobile */
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 1rem !important;
     }
     
-    /* Adjust news card styling */
-    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 > div {
-        width: 100% !important;
+    /* Make card content smaller to fit mobile screen */
+    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 .p-5 {
+        padding: 0.75rem !important;
     }
     
     /* Adjust image heights */
-    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 img.w-full.h-56 {
-        height: 120px !important; /* Smaller image height */
+    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 .w-full.h-56 {
+        height: 120px !important;
     }
     
-    /* Make text smaller */
+    /* Adjust text sizes */
     .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 .font-bold.text-xl {
-        font-size: 0.8rem !important;
-        line-height: 1.1 !important;
+        font-size: 0.85rem !important;
+        line-height: 1.2 !important;
     }
     
     .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 .text-gray-600.mb-4 {
+        font-size: 0.75rem !important;
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        max-height: 2.4em;
+    }
+    
+    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 .text-gray-500.text-sm {
         font-size: 0.7rem !important;
-        -webkit-line-clamp: 2 !important;
-        overflow: hidden !important;
-        display: -webkit-box !important;
-        -webkit-box-orient: vertical !important;
-        max-height: 2.8rem !important;
     }
     
-    /* Adjust padding */
-    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 .p-5 {
-        padding: 0.5rem !important;
-    }
-    
-    /* === ENHANCED CAROUSEL === */
-    /* Force 3 items like desktop */
+    /* 2. ENHANCED CAROUSEL - Force 3 items visible like desktop */
     .carousel-item-enhanced {
         flex: 0 0 33.333% !important;
         max-width: 33.333% !important;
-        padding: 0.25rem !important;
+        padding: 0.5rem !important;
     }
     
-    /* Adjust carousel image heights */
+    .news-card-enhanced {
+        height: 100% !important;
+    }
+    
     .news-image {
         height: 120px !important;
     }
     
-    /* Adjust carousel content */
     .news-content {
-        padding: 0.5rem !important;
+        padding: 0.75rem !important;
     }
     
     .news-title {
-        font-size: 0.8rem !important;
+        font-size: 0.85rem !important;
         margin-bottom: 0.25rem !important;
     }
     
     .news-excerpt {
-        font-size: 0.7rem !important;
-        -webkit-line-clamp: 2 !important;
-        line-height: 1.2 !important;
+        font-size: 0.75rem !important;
+        -webkit-line-clamp: 2;
+        max-height: 2.4em;
     }
     
-    /* === PROGRAM & LAYANAN SECTION === */
-    /* Force 4 columns like desktop */
-    .program-grid, 
+    .news-meta {
+        font-size: 0.7rem !important;
+    }
+    
+    /* 3. PROGRAM & LAYANAN SECTION - Force 4 columns like desktop */
+    .program-section .grid,
     .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 {
         display: grid !important;
         grid-template-columns: repeat(4, 1fr) !important;
-        gap: 0.5rem !important;
+        gap: 0.75rem !important;
     }
     
-    /* Adjust program card sizing */
+    /* Make program cards smaller to fit */
     .program-card {
         margin-bottom: 0.5rem !important;
+    }
+    
+    .program-card .relative .w-full.h-48 {
+        height: 100px !important;
     }
     
     .program-card .p-4 {
         padding: 0.5rem !important;
     }
     
-    /* Adjust program content text */
-    .program-card h3 {
-        font-size: 0.8rem !important;
+    .program-card h3.font-bold {
+        font-size: 0.85rem !important;
         margin-bottom: 0.25rem !important;
     }
     
     .program-card .text-gray-600 {
-        font-size: 0.7rem !important;
-        min-height: 50px !important;
+        font-size: 0.75rem !important;
+        min-height: 40px !important;
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
     
-    /* Program card image */
-    .program-card .w-full.h-48 {
-        height: 100px !important;
+    .program-card .inline-flex,
+    .program-card button {
+        font-size: 0.75rem !important;
     }
     
-    /* === INSTAGRAM & YOUTUBE SECTIONS === */
-    /* Force 3 columns like desktop */
+    /* 4. INSTAGRAM & YOUTUBE SECTIONS - Force 3 columns like desktop */
     #instagram-api-feed-container,
     #dynamic-videos-container,
-    .grid.grid-cols-1.sm\:grid-cols-2.md\:grid-cols-3 {
+    .media-section .grid.grid-cols-1.sm\:grid-cols-2.md\:grid-cols-3 {
         display: grid !important;
         grid-template-columns: repeat(3, 1fr) !important;
-        gap: 0.5rem !important;
+        gap: 0.75rem !important;
     }
     
-    /* Size adjustments for cards */
+    /* Adjust media cards */
     .media-card {
-        min-height: 0 !important;
+        min-height: auto !important;
     }
     
+    .media-card .pb-\[56\.25\%\] {
+        padding-bottom: 56.25% !important; /* Maintain aspect ratio */
+    }
+    
+    .media-card .p-4, 
     .media-card .p-6 {
         padding: 0.5rem !important;
     }
     
     .media-card h3 {
-        font-size: 0.8rem !important;
+        font-size: 0.85rem !important;
         margin-bottom: 0.25rem !important;
     }
     
     .media-card p {
-        font-size: 0.7rem !important;
-        -webkit-line-clamp: 2 !important;
-        overflow: hidden !important;
-        display: -webkit-box !important;
-        -webkit-box-orient: vertical !important;
-        max-height: 2.8rem !important;
+        font-size: 0.75rem !important;
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        max-height: 2.4em !important;
     }
     
-    /* === FOOTER SECTION === */
-    /* Force 3 columns in footer like desktop */
+    /* 5. FOOTER SECTION - Force 3 columns like desktop */
     footer .grid {
         display: grid !important;
         grid-template-columns: repeat(3, 1fr) !important;
         gap: 1rem !important;
     }
     
-    /* Adjust footer text sizes */
     footer .text-xl {
-        font-size: 0.9rem !important;
+        font-size: 1rem !important;
     }
     
-    footer .text-base {
-        font-size: 0.8rem !important;
+    /* 6. SECTION HEADERS - Make them smaller but maintain style */
+    .section-title, 
+    .text-2xl.md\:text-3xl, 
+    .unj-section-title,
+    .section-header h2,
+    .text-center h2 {
+        font-size: 1.25rem !important;
     }
     
-    /* Fix spacing */
+    .section-subtitle,
+    .unj-section-subtitle,
+    .text-gray-600.max-w-2xl {
+        font-size: 0.85rem !important;
+    }
+    
+    /* 7. CONTAINER & SPACING - Adjust padding for mobile while keeping desktop layout */
     .container {
+        width: 100% !important;
+        max-width: 100% !important;
         padding-left: 0.5rem !important;
         padding-right: 0.5rem !important;
     }
     
-    /* Fix section spacing */
-    .py-8, .py-12, .py-16 {
+    .py-12, .py-16 {
         padding-top: 1.5rem !important;
         padding-bottom: 1.5rem !important;
     }
     
-    /* Header height adjustment */
-    header.relative.h-screen {
-        height: 40vh !important; /* Shorter header on mobile */
-    }
-}
-
-/* 4. Font size and spacing optimization for mobile */
-@media (max-width: 767px) {
-    /* General text size reduction */
-    h1, .text-4xl {
-        font-size: 1.5rem !important;
+    .py-8 {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
     }
     
-    h2, .text-3xl {
-        font-size: 1.25rem !important;
-    }
-    
-    h3, .text-2xl {
-        font-size: 1.125rem !important;
-    }
-    
-    /* Section titles */
-    .section-title, .unj-section-title {
-        font-size: 1.25rem !important;
-    }
-    
-    /* Section spacing */
     .mb-16 {
         margin-bottom: 1.5rem !important;
     }
@@ -287,14 +287,13 @@ html, body {
         margin-bottom: 1rem !important;
     }
     
-    /* Button adjustments */
-    button, .button, .btn {
-        padding: 0.35rem 0.75rem !important;
-        font-size: 0.875rem !important;
+    /* 8. HEADER IMAGE - Make it shorter on mobile */
+    header.relative.h-screen {
+        height: 40vh !important;
     }
 }
 
-/* 5. Safe fixes for iOS Safari, and other browsers */
+/* iOS Safari specific fixes */
 @supports (-webkit-touch-callout: none) {
     #mobile-sidebar {
         height: -webkit-fill-available !important;
@@ -308,7 +307,7 @@ html, body {
     }
 }
 
-/* 6. Safe area fixes for notched phones */
+/* Safe area fixes for notched phones */
 @supports (padding: max(0px)) {
     #mobile-navbar {
         padding-top: env(safe-area-inset-top);
@@ -320,39 +319,26 @@ html, body {
     }
 }
 
-/* 7. Stack order fixes */
+/* Make sure toolbar buttons are visible */
 @media (max-width: 767px) {
-    .social-media-bar {
-        z-index: 999 !important;
-    }
-    
-    #mobile-navbar {
-        z-index: 1000 !important;
-    }
-    
-    #sidebar-overlay {
-        z-index: 1050 !important;
-    }
-    
-    #mobile-sidebar {
-        z-index: 1100 !important;
-    }
-    
-    #programDetailsModal {
-        z-index: 1200 !important;
+    .carousel-control {
+        width: 30px !important;
+        height: 30px !important;
+        opacity: 0.9 !important;
     }
 }
 
-/* 8. Extra small device optimization for <360px screens */
+/* Very small devices (under 360px) adjustments */
 @media (max-width: 359px) {
-    /* Reduce to 2 columns for the smallest screens */
+    /* Switch to 2 columns for the smallest screens */
     .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3,
+    .program-section .grid,
     .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4,
-    .grid.grid-cols-1.sm\:grid-cols-2.md\:grid-cols-3 {
+    #instagram-api-feed-container,
+    #dynamic-videos-container {
         grid-template-columns: repeat(2, 1fr) !important;
     }
     
-    /* Make carousel 2 items */
     .carousel-item-enhanced {
         flex: 0 0 50% !important;
         max-width: 50% !important;
