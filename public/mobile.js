@@ -1,7 +1,7 @@
-// mobile.js - Complete implementation with fixes for sidebar and black background
+// mobile.js - Enhanced to force desktop layout while preserving mobile navbar
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Mobile script initialized - enhanced version');
+    console.log('Mobile script initialized - desktop layout force version');
     
     // 1. Fix viewport settings
     const viewport = document.querySelector('meta[name="viewport"]');
@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Mobile Debug: ' + message);
     }
     
-    // 3. Force mobile layout for mobile devices
-    function forceMobileLayout() {
+    // 3. Force mobile navbar but desktop layout content
+    function forceDesktopLayoutOnMobile() {
         if (window.innerWidth <= 767) {
             // Get navbar elements
             const mobileNavbar = document.getElementById('mobile-navbar');
@@ -45,48 +45,83 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add mobile class to body
             document.body.classList.add('mobile-view');
             
-            // Make sure sidebar is in the correct initial state
-            if (mobileSidebar) {
-                mobileSidebar.style.transform = 'translateX(100%)';
+            // Force desktop-like layout for content areas
+            
+            // 1. News grid - force 3 columns
+            const newsGrid = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3');
+            if (newsGrid) {
+                newsGrid.style.display = 'grid';
+                newsGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+                newsGrid.style.gap = '0.5rem';
+                log('News grid set to 3 columns');
             }
             
-            if (sidebarOverlay) {
-                sidebarOverlay.style.opacity = '0';
-                sidebarOverlay.style.visibility = 'hidden';
-                sidebarOverlay.style.pointerEvents = 'none';
-            }
-            
-            // Override any desktop styles that might be applied
-            const grid = document.querySelectorAll('.grid');
-            grid.forEach(function(item) {
-                if (window.innerWidth < 480) {
-                    item.style.gridTemplateColumns = 'repeat(1, 1fr)';
-                } else {
-                    item.style.gridTemplateColumns = 'repeat(2, 1fr)';
-                }
+            // 2. Carousel - force 3 items
+            const carouselItems = document.querySelectorAll('.carousel-item-enhanced');
+            carouselItems.forEach(function(item) {
+                item.style.flex = '0 0 33.333%';
+                item.style.maxWidth = '33.333%';
             });
+            log('Carousel set to 3 items');
             
-            // Fix header height
-            const header = document.querySelector('header.h-screen');
-            if (header) {
-                header.style.height = '60vh';
+            // 3. Program grid - force 4 columns
+            const programGrid = document.querySelector('.program-grid, .grid.grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-4');
+            if (programGrid) {
+                programGrid.style.display = 'grid';
+                programGrid.style.gridTemplateColumns = 'repeat(4, 1fr)';
+                programGrid.style.gap = '0.5rem';
+                log('Program grid set to 4 columns');
+            }
+            
+            // 4. Instagram/YouTube grid - force 3 columns
+            const mediaGrids = document.querySelectorAll('#instagram-api-feed-container, #dynamic-videos-container, .grid.grid-cols-1.sm\\:grid-cols-2.md\\:grid-cols-3');
+            mediaGrids.forEach(function(grid) {
+                grid.style.display = 'grid';
+                grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+                grid.style.gap = '0.5rem';
+            });
+            log('Media grids set to 3 columns');
+            
+            // 5. Footer grid - force 3 columns
+            const footerGrid = document.querySelector('footer .grid');
+            if (footerGrid) {
+                footerGrid.style.display = 'grid';
+                footerGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+                footerGrid.style.gap = '1rem';
+                log('Footer grid set to 3 columns');
+            }
+            
+            // Check for very small screens and adjust if needed
+            if (window.innerWidth <= 359) {
+                // Reduce to 2 columns for very small screens
+                const allGrids = document.querySelectorAll('.grid');
+                allGrids.forEach(function(grid) {
+                    grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+                });
+                
+                // Make carousel 2 items
+                carouselItems.forEach(function(item) {
+                    item.style.flex = '0 0 50%';
+                    item.style.maxWidth = '50%';
+                });
+                
+                log('Adjusted to 2 columns for very small screen');
             }
         }
     }
     
-    // 4. Run forceMobileLayout immediately
-    forceMobileLayout();
+    // 4. Run immediately
+    forceDesktopLayoutOnMobile();
     
     // 5. Run after short delays to override any other scripts
-    setTimeout(forceMobileLayout, 100);
-    setTimeout(forceMobileLayout, 500);
+    setTimeout(forceDesktopLayoutOnMobile, 100);
+    setTimeout(forceDesktopLayoutOnMobile, 500);
     
-    // 6. CRITICAL FIX: Show sidebar function with proper overlay handling
+    // 6. Show sidebar function with proper overlay handling
     function showSidebar() {
         log('Opening sidebar');
         
-        // CRITICAL: First make sure the body is marked as having sidebar open
-        // This applies CSS that prevents scrolling and fixes the overlay
+        // Add sidebar-open class to body
         document.body.classList.add('sidebar-open');
         
         // Apply styles directly to sidebar
@@ -96,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
             log('Sidebar transform applied');
         }
         
-        // CRITICAL: Apply styles directly to overlay - must be visible and have pointer events
+        // Apply styles to overlay
         if (sidebarOverlay) {
             sidebarOverlay.style.opacity = '1';
             sidebarOverlay.style.visibility = 'visible';
@@ -111,17 +146,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 7. CRITICAL FIX: Hide sidebar function with proper overlay handling
+    // 7. Hide sidebar function with proper overlay handling
     function hideSidebar() {
         log('Closing sidebar');
         
-        // Apply styles directly to sidebar
+        // Apply styles to sidebar
         if (mobileSidebar) {
             mobileSidebar.style.transform = 'translateX(100%)';
             log('Sidebar transform reset');
         }
         
-        // CRITICAL: Apply styles directly to overlay - must be invisible and have no pointer events
+        // Apply styles to overlay
         if (sidebarOverlay) {
             sidebarOverlay.style.opacity = '0';
             sidebarOverlay.style.visibility = 'hidden';
@@ -129,8 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
             log('Overlay styles reset');
         }
         
-        // CRITICAL: Remove the sidebar-open class from body AFTER changing the overlay
-        // This will allow the page to scroll again
+        // Remove sidebar-open class from body
         document.body.classList.remove('sidebar-open');
         
         // Change menu icon back
@@ -166,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
         log('ERROR: Close sidebar button not found!');
     }
     
-    // 10. CRITICAL: Handle overlay clicks to close sidebar
+    // 10. Handle overlay clicks to close sidebar
     if (sidebarOverlay) {
         log('Overlay found');
         sidebarOverlay.addEventListener('click', function(e) {
@@ -176,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         log('ERROR: Sidebar overlay not found!');
         
-        // If the overlay doesn't exist, create it
+        // If overlay doesn't exist, create it
         const body = document.body;
         const newOverlay = document.createElement('div');
         newOverlay.id = 'sidebar-overlay';
@@ -228,57 +262,36 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // 13. Run on resize to maintain correct display
-    window.addEventListener('resize', forceMobileLayout);
+    window.addEventListener('resize', forceDesktopLayoutOnMobile);
     
     // 14. Run after page load
-    window.addEventListener('load', forceMobileLayout);
+    window.addEventListener('load', forceDesktopLayoutOnMobile);
     
-    // 15. CRITICAL: Override any existing force desktop layout functions
+    // 15. Override any existing forceDesktopLayout function
     if (window.forceDesktopLayout) {
-        log('Overriding forceDesktopLayout function');
+        log('Original forceDesktopLayout function found, overriding');
         const originalFn = window.forceDesktopLayout;
         window.forceDesktopLayout = function() {
-            // Call original function
             originalFn.apply(this, arguments);
-            
-            // Then forcefully apply our mobile layout if needed
-            if (window.innerWidth <= 767) {
-                forceMobileLayout();
-            }
+            forceDesktopLayoutOnMobile();
         };
-    }
-    
-    // 16. Add debug function
-    window.debugMobileSidebar = function() {
-        const elements = {
-            viewport: viewport ? viewport.getAttribute('content') : 'Not found',
-            mobileMenuToggle: mobileMenuToggle ? 'Found' : 'Not found',
-            mobileSidebar: mobileSidebar ? 'Found' : 'Not found',
-            sidebarOverlay: sidebarOverlay ? 'Found' : 'Not found',
-            closeSidebar: closeSidebar ? 'Found' : 'Not found',
-            dropdownButtons: dropdownButtons ? dropdownButtons.length + ' found' : 'None found'
-        };
-        
-        const styles = {
-            sidebarTransform: mobileSidebar ? mobileSidebar.style.transform : 'N/A',
-            sidebarDisplay: mobileSidebar ? getComputedStyle(mobileSidebar).display : 'N/A',
-            overlayOpacity: sidebarOverlay ? sidebarOverlay.style.opacity : 'N/A',
-            overlayVisibility: sidebarOverlay ? sidebarOverlay.style.visibility : 'N/A',
-            bodyHasClass: document.body.classList.contains('sidebar-open')
-        };
-        
-        log('Mobile Debug Info:');
-        log('Elements: ' + JSON.stringify(elements));
-        log('Styles: ' + JSON.stringify(styles));
-        log('Window width: ' + window.innerWidth);
-        
-        return { elements, styles };
-    };
-    
-    // Run final check to make sure all key elements are properly styled
-    if (mobileSidebar && sidebarOverlay) {
-        log('Final setup complete');
     } else {
-        log('ERROR: Critical elements missing!');
+        // Create the function if it doesn't exist
+        window.forceDesktopLayout = forceDesktopLayoutOnMobile;
     }
+    
+    // 16. Setup event listeners for dynamically loaded content
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                // Something was added to the DOM, check if we need to update layout
+                forceDesktopLayoutOnMobile();
+            }
+        });
+    });
+    
+    // Observe the entire body for changes
+    observer.observe(document.body, { childList: true, subtree: true });
+    
+    log('Mobile initialization complete - desktop layout force enabled');
 });
