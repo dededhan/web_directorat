@@ -1,4 +1,62 @@
-// mobile.js - Complete Mobile Fix
+// Add this code at the top of your mobile.js file
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Immediately set correct navbar visibility based on screen width
+    function setCorrectNavbar() {
+        const isMobile = window.innerWidth <= 767;
+        
+        // Get navbar elements
+        const mobileNavbar = document.getElementById('mobile-navbar');
+        const desktopNavbar = document.querySelector('.navbar.hidden.md\\:block');
+        
+        if (!mobileNavbar || !desktopNavbar) {
+            console.error('Navbar elements not found');
+            return;
+        }
+        
+        // Force correct display based on viewport width
+        if (isMobile) {
+            // Mobile mode - show mobile navbar, hide desktop
+            mobileNavbar.style.display = 'block';
+            desktopNavbar.style.display = 'none';
+            document.body.classList.add('mobile-view');
+        } else {
+            // Desktop mode - hide mobile navbar, show desktop
+            mobileNavbar.style.display = 'none';
+            desktopNavbar.style.display = 'block';
+            document.body.classList.remove('mobile-view');
+        }
+    }
+    
+    // Run immediately
+    setCorrectNavbar();
+    
+    // Also run on resize
+    window.addEventListener('resize', setCorrectNavbar);
+    
+    // Add a MutationObserver to prevent other scripts from changing navbar visibility
+    const observer = new MutationObserver(function(mutations) {
+        const isMobile = window.innerWidth <= 767;
+        
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && 
+                (mutation.attributeName === 'style' || mutation.attributeName === 'class')) {
+                // If display style was changed, force it back to our preferred state
+                setCorrectNavbar();
+            }
+        });
+    });
+    
+    // Observe both navbars for changes
+    const mobileNavbar = document.getElementById('mobile-navbar');
+    const desktopNavbar = document.querySelector('.navbar.hidden.md\\:block');
+    
+    if (mobileNavbar && desktopNavbar) {
+        observer.observe(mobileNavbar, { attributes: true });
+        observer.observe(desktopNavbar, { attributes: true });
+    }
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     // 1. Fix viewport settings
     const viewport = document.querySelector('meta[name="viewport"]');
