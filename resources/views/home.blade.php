@@ -40,7 +40,7 @@
             align-items: stretch;
         }
 
-        /* Mobile-first responsive design */
+        /* Mobile-first responsive design - Fixed */
         @media screen and (max-width: 768px) {
             /* Debug indicator */
             body::after {
@@ -70,12 +70,6 @@
             header img {
                 height: 50vh !important;
                 object-fit: cover;
-            }
-
-            /* Grid mobile layout */
-            .grid {
-                grid-template-columns: 1fr !important;
-                gap: 1rem !important;
             }
 
             /* News cards mobile */
@@ -121,10 +115,6 @@
                 padding: 2rem 0 !important;
             }
 
-            .media-section .grid {
-                grid-template-columns: 1fr !important;
-            }
-
             /* Modal mobile */
             #programDetailsModal .max-w-3xl {
                 max-width: 95% !important;
@@ -138,12 +128,34 @@
             }
         }
 
-        /* Larger phones */
-        @media screen and (min-width: 480px) and (max-width: 768px) {
-            .grid {
+        /* Specific mobile styles for news grid */
+        @media screen and (max-width: 640px) {
+            /* Only force single column on small phones */
+            .news-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+        }
+
+        /* Tablet view - maintain 2 columns for news */
+        @media screen and (min-width: 641px) and (max-width: 768px) {
+            .news-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
             }
+        }
 
+        /* Program and media section grids - mobile */
+        @media screen and (max-width: 768px) {
+            .program-section .grid,
+            .media-section .grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+        }
+
+        /* Larger phones - 2 columns for program and media */
+        @media screen and (min-width: 480px) and (max-width: 768px) {
+            .program-section .grid,
             .media-section .grid {
                 grid-template-columns: repeat(2, 1fr) !important;
             }
@@ -194,7 +206,7 @@
         </div>
     </div>
 
-    <!-- Regular News Grid with first 3 news items -->
+    <!-- Main content wrapper -->
     <main class="container mx-auto py-6 md:py-12 px-4 md:px-6">
         <!-- Section Header with better styling -->
         <div class="unj-content-section-header mb-8">
@@ -202,8 +214,8 @@
             <p class="unj-section-subtitle text-sm md:text-base">Informasi terkini dari Universitas Negeri Jakarta</p>
         </div>
 
-        <!-- Regular News Grid with first 3 news items -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-8 md:mb-16">
+        <!-- Regular News Grid with first 3 news items - Add news-grid class -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-8 md:mb-16 news-grid">
             @php
                 // Take the first 3 news items for the regular grid
                 $regularNews = $featuredNews->take(3);
