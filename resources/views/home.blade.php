@@ -19,6 +19,27 @@
             font-family: Arial, sans-serif !important;
         }
 
+        .media-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .media-card .p-6 {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .media-card .mt-4 {
+            margin-top: auto;
+        }
+
+        /* Make all cards the same height */
+        .grid {
+            align-items: stretch;
+        }
+
         /* Mobile-first responsive design */
         @media screen and (max-width: 768px) {
             /* Debug indicator */
@@ -174,44 +195,49 @@
     </div>
 
     <!-- Regular News Grid with first 3 news items -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+    <main class="container mx-auto py-6 md:py-12 px-4 md:px-6">
+        <!-- Section Header with better styling -->
+        <div class="unj-content-section-header mb-8">
+            <h2 class="unj-section-title text-2xl md:text-3xl">Berita Terbaru</h2>
+            <p class="unj-section-subtitle text-sm md:text-base">Informasi terkini dari Universitas Negeri Jakarta</p>
+        </div>
+
+        <!-- Regular News Grid with first 3 news items -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-8 md:mb-16">
             @php
                 // Take the first 3 news items for the regular grid
                 $regularNews = $featuredNews->take(3);
             @endphp
 
             @foreach ($regularNews as $news)
-                <div
-                    class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                     <div class="relative">
-                        <img alt="{{ $news->judul }}" class="w-full h-56 object-cover"
+                        <img alt="{{ $news->judul }}" class="w-full h-48 md:h-56 object-cover"
                             src="{{ asset('storage/' . $news->gambar) }}" />
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-24">
-                        </div>
-                        <div
-                            class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-20 md:h-24"></div>
+                        <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-xs md:text-sm font-semibold">
                             {{ ucfirst($news->kategori) }}
                         </div>
                     </div>
-                    <div class="p-5">
+                    <div class="p-4 md:p-5">
                         <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center text-gray-500 text-sm">
+                            <div class="flex items-center text-gray-500 text-xs md:text-sm">
                                 <i class="fas fa-user-circle mr-2"></i>Admin
                             </div>
-                            <div class="text-gray-500 text-sm">
+                            <div class="text-gray-500 text-xs md:text-sm">
                                 <i class="fas fa-calendar-alt mr-1"></i>{{ date('d M Y', strtotime($news->tanggal)) }}
                             </div>
                         </div>
                         <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="block">
-                            <h2 class="font-bold text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
+                            <h2 class="font-bold text-lg md:text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
                                 {{ $news->judul }}
                             </h2>
                         </a>
-                        <p class="text-gray-600 mb-4">
+                        <p class="text-gray-600 mb-4 text-sm md:text-base">
                             {{ Str::limit(strip_tags($news->isi), 100) }}
                         </p>
                         <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}"
-                            class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
+                            class="inline-block text-teal-700 hover:text-yellow-500 font-medium text-sm md:text-base">
                             Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                         </a>
                     </div>
@@ -221,7 +247,7 @@
 
         <!-- Enhanced Featured News Carousel with remaining news items -->
         <div class="enhanced-carousel">
-            <div class="enhanced-carousel-title">Berita Terbaru</div>
+            <div class="enhanced-carousel-title text-xl md:text-2xl">Berita Terbaru</div>
             <div class="carousel">
                 <div class="carousel-inner">
                     @php
@@ -232,25 +258,24 @@
                         <div class="carousel-item-enhanced">
                             <div class="news-card-enhanced">
                                 <div class="news-image-container">
-                                    <img alt="{{ $featured->judul }}" class="news-image"
+                                    <img alt="{{ $featured->judul }}" class="news-image h-48 md:h-auto"
                                         src="{{ asset('storage/' . $featured->gambar) }}" />
                                     <div class="news-tag-enhanced">{{ ucfirst($featured->kategori) }}</div>
                                 </div>
-                                <div class="news-content">
-                                    <div class="news-meta">
+                                <div class="news-content p-4">
+                                    <div class="news-meta text-xs md:text-sm">
                                         <i class="fas fa-user-circle mr-2"></i>Admin
                                         <span class="mx-2">|</span>
-                                        <i
-                                            class="fas fa-calendar-alt mr-2"></i>{{ date('d M Y', strtotime($featured->tanggal)) }}
+                                        <i class="fas fa-calendar-alt mr-2"></i>{{ date('d M Y', strtotime($featured->tanggal)) }}
                                     </div>
                                     <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}">
-                                        <h3 class="news-title">{{ $featured->judul }}</h3>
+                                        <h3 class="news-title text-lg md:text-xl">{{ $featured->judul }}</h3>
                                     </a>
-                                    <p class="news-excerpt">
+                                    <p class="news-excerpt text-sm md:text-base">
                                         {!! Str::limit($featured->isi, 150) !!}
                                     </p>
                                     <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}"
-                                        class="news-link">
+                                        class="news-link text-sm md:text-base">
                                         Baca selengkapnya <i class="fas fa-arrow-right"></i>
                                     </a>
                                 </div>
