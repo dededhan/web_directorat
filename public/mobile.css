@@ -1,6 +1,6 @@
-/* mobile.css - Complete fix for mobile navbar and sidebar */
+/* mobile.css - Comprehensive fix for desktop mode showing on mobile */
 
-/* 1. Reset and prevent zooming */
+/* 1. Critical viewport reset - prevents zooming and sizing issues */
 html, body {
     max-width: 100%;
     overflow-x: hidden;
@@ -8,17 +8,30 @@ html, body {
     -ms-text-size-adjust: 100%;
 }
 
-/* 2. Mobile navbar styling */
+/* 2. Mobile navbar styling - CRITICAL section */
 @media (max-width: 767px) {
+    /* Force mobile navbar to display */
     #mobile-navbar {
+        display: block !important;
+        visibility: visible !important;
         position: fixed !important;
-        top: 0;
-        left: 0;
-        width: 100%;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
         z-index: 1000 !important;
         background-color: #186862 !important;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        display: block !important;
+    }
+
+    /* Force hide desktop navbar */
+    .navbar.hidden.md\:block,
+    nav.navbar:not(#mobile-navbar) {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
     }
 
     /* Remove blur effects */
@@ -99,22 +112,22 @@ html, body {
         line-height: 1;
     }
 
-    /* 3. Mobile sidebar styling - CRITICAL FIX */
+    /* Mobile sidebar styling - CRITICAL */
     #mobile-sidebar {
         position: fixed !important;
-        top: 0;
-        right: 0;
-        width: 280px;
-        height: 100vh;
-        background-color: #186862;
+        top: 0 !important;
+        right: 0 !important;
+        width: 280px !important;
+        height: 100vh !important;
+        background-color: #186862 !important;
         z-index: 1100 !important;
         transform: translateX(100%) !important; /* Start offscreen */
-        transition: transform 0.3s ease;
-        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        transition: transform 0.3s ease !important;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
         display: block !important;
-        will-change: transform; /* Improve performance */
+        will-change: transform !important; /* Improve performance */
     }
     
     /* Force hardware acceleration */
@@ -201,7 +214,7 @@ html, body {
         transition: transform 0.2s ease;
     }
 
-    /* Fixed dropdown display - CRITICAL FIX */
+    /* Fixed dropdown display - CRITICAL */
     #mobile-sidebar .sidebar-dropdown ul {
         background-color: rgba(0, 0, 0, 0.1);
         display: none;
@@ -221,33 +234,33 @@ html, body {
         font-size: 14px;
     }
 
-    /* 4. Overlay styling - CRITICAL FIX */
+    /* Overlay styling - CRITICAL */
     #sidebar-overlay {
         position: fixed !important;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background-color: rgba(0, 0, 0, 0.5) !important;
         z-index: 1050 !important;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-        pointer-events: none;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        transition: opacity 0.3s ease, visibility 0.3s ease !important;
+        pointer-events: none !important;
         display: block !important;
-        will-change: opacity; /* Improve performance */
+        will-change: opacity !important; /* Improve performance */
     }
 
-    /* 5. Content spacing adjustment */
+    /* Content spacing adjustment */
     .h-12.md\:h-20 {
         height: 50px !important;
     }
 
     body {
-        padding-top: 50px;
+        padding-top: 50px !important;
     }
 
-    /* 6. Prevent body scroll when sidebar is open */
+    /* Prevent body scroll when sidebar is open */
     body.sidebar-open {
         overflow: hidden !important;
         position: fixed !important;
@@ -255,40 +268,46 @@ html, body {
         height: 100% !important;
     }
 
-    /* 7. Fix for landscape mode */
-    @media (orientation: landscape) {
-        #mobile-navbar .flex.justify-between {
-            min-height: 45px;
-            max-height: 50px;
-            padding: 6px 12px;
-        }
+    /* Responsive grid adjustments */
+    .grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
 
-        #mobile-navbar img {
-            height: 28px;
-            width: 28px;
-        }
-
-        #mobile-navbar h1 {
-            font-size: 12px !important;
+    @media (min-width: 480px) {
+        .grid {
+            grid-template-columns: repeat(2, 1fr) !important;
         }
     }
 
-    /* 8. Small devices adjustments */
+    /* Mobile navigation links */
+    .md\:hidden {
+        display: block !important;
+    }
+
+    .hidden.md\:block, 
+    .hidden.md\:flex, 
+    .hidden.md\:grid {
+        display: none !important;
+    }
+
+    /* Fix for very small screens */
     @media (max-width: 360px) {
         #mobile-navbar h1 {
             font-size: 12px !important;
         }
 
         #mobile-sidebar {
-            width: 260px;
+            width: 260px !important;
         }
     }
 }
 
-/* 9. iOS Safari specific fixes */
+/* iOS Safari specific fixes */
 @supports (-webkit-touch-callout: none) {
     #mobile-sidebar {
-        height: -webkit-fill-available;
+        height: -webkit-fill-available !important;
     }
     
     /* Prevent iOS Safari overscroll behavior */
@@ -299,7 +318,7 @@ html, body {
     }
 }
 
-/* 10. Safe area fixes for notched phones */
+/* Safe area fixes for notched phones */
 @supports (padding: max(0px)) {
     #mobile-navbar {
         padding-top: env(safe-area-inset-top);
@@ -311,7 +330,7 @@ html, body {
     }
 }
 
-/* 11. Fix text rendering */
+/* Fix text rendering */
 #mobile-navbar h1,
 #mobile-navbar p,
 #mobile-sidebar a,
@@ -320,7 +339,7 @@ html, body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* 12. Remove tap highlight on mobile */
+/* Remove tap highlight on mobile */
 #mobile-menu-toggle,
 #close-sidebar,
 #mobile-sidebar a,
@@ -328,7 +347,7 @@ html, body {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* 13. Adjust z-index to ensure proper stacking */
+/* Stack order fixes */
 @media (max-width: 767px) {
     .social-media-bar {
         z-index: 999 !important;
@@ -348,5 +367,15 @@ html, body {
     
     #programDetailsModal {
         z-index: 1200 !important;
+    }
+}
+
+/* Fix any animations that might cause flicker */
+@media (max-width: 767px) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }
