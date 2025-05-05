@@ -637,6 +637,7 @@
             
             <!-- International Lecturers -->
             <div class="prestasi-item">
+            <a href="{{ route('daptar.calonadjunct') }}" div class="prestasi-item">
                 <div class="prestasi-icon">
                     <i class="fa fa-users"></i>
                 </div>

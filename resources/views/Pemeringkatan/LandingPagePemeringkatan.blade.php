@@ -598,7 +598,6 @@
             </div>
         </div>
     </div>
-
     <section class="unj-prestasi-container mb-16">
     <div class="container mx-auto px-4">
         <div class="section-title text-center mb-8">
@@ -646,6 +645,7 @@
             
             <!-- International Lecturers -->
             <div class="prestasi-item">
+            <a href="{{ route('daptar.calonadjunct') }}" div class="prestasi-item">
                 <div class="prestasi-icon">
                     <i class="fa fa-users"></i>
                 </div>
