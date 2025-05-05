@@ -49,7 +49,7 @@ class GalleryController extends Controller
             // Validate the request
             $request->validate([
                 'category' => 'required|in:direktorat,inovasi,pemeringkatan',
-                'image' => 'required|image|max:102400', // 100MB max
+                'image' => 'required|image|mimes:jpeg,png,jpg|max:102400',
             ]);
 
             // Check if image exists and is valid
