@@ -662,3 +662,73 @@ document.addEventListener("DOMContentLoaded", function () {
             initHeaderCarousel(defaultImages);
         });
 });
+// UNJ dalam Angka - animate numbers on scroll
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to animate counting up
+    function animateCountUp(el) {
+        const target = parseInt(el.innerText.replace(/[.,]/g, ''));
+        const duration = 2000; // Duration in milliseconds
+        const step = Math.ceil(target / (duration / 16)); // ~60fps
+        let current = 0;
+        const timer = setInterval(() => {
+            current += step;
+            if (current >= target) {
+                el.innerText = target.toLocaleString('id-ID');
+                clearInterval(timer);
+            } else {
+                el.innerText = current.toLocaleString('id-ID');
+            }
+        }, 16);
+    }
+    
+    // Check if an element is in viewport
+    function isInViewport(element) {
+        const rect = element.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    }
+    
+    // Get all number elements
+    const numberElements = document.querySelectorAll('.prestasi-number, .akreditasi-number');
+    let animated = false;
+    
+    // Function to check scroll position and animate if in viewport
+    function checkScroll() {
+        if (animated) return;
+        
+        const section = document.querySelector('.unj-prestasi-container');
+        if (isInViewport(section)) {
+            numberElements.forEach(el => {
+                // Skip if it's "Prodi" text in the number
+                if (el.innerText.includes('Prodi')) {
+                    // Extract the number part
+                    const numText = el.innerText.split(' ')[0];
+                    const num = parseInt(numText.replace(/[.,]/g, ''));
+                    
+                    // Animate just the number
+                    const originalText = el.innerText;
+                    const countUp = (current) => {
+                        if (current <= num) {
+                            el.innerText = current + ' ' + originalText.split(' ').slice(1).join(' ');
+                            setTimeout(() => countUp(current + Math.ceil(num/50)), 30);
+                        }
+                    };
+                    countUp(0);
+                } else {
+                    animateCountUp(el);
+                }
+            });
+            animated = true;
+        }
+    }
+    
+    // Listen for scroll events
+    window.addEventListener('scroll', checkScroll);
+    
+    // Check on initial load too
+    checkScroll();
+});
