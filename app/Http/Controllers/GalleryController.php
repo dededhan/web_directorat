@@ -44,23 +44,31 @@ class GalleryController extends Controller
     }
 
     public function store(Request $request)
-    {
-        try {
-            // Validate the request
-            $request->validate([
-                'category' => 'required|in:direktorat,inovasi,pemeringkatan',
-                'image' => 'required|image|mimes:jpeg,png,jpg|max:102400',
-            ]);
+{
+    try {
+        // Validate the request
+        $request->validate([
+            'category' => 'required|in:direktorat,inovasi,pemeringkatan',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:102400',
+        ]);
 
-            // Check if image exists and is valid
-            if ($request->hasFile('image')) {
-                $fileName = time() . '_' . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+        // Ensure directory exists
+        if (!Storage::disk('public')->exists('gallery-images')) {
+            Storage::disk('public')->makeDirectory('gallery-images');
+        }
+
+        // Check if image exists and is valid
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $fileName = time() . '_' . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+            
+            // Add more detailed error handling during upload
+            try {
                 $imagePath = $request->file('image')->storeAs(
                     'gallery-images',
                     $fileName,
                     'public'
                 );
-
+                
                 // Create the gallery record with the image path
                 Gallery::create([
                     'category' => $request->category,
@@ -70,20 +78,28 @@ class GalleryController extends Controller
                 $routePrefix = $this->getRoutePrefix();
                 return redirect()->route($routePrefix . '.gallery.index')
                     ->with('success', 'Gallery item successfully saved!');
-            } else {
-                // Handle the case where image upload failed
+            } catch (\Exception $uploadEx) {
+                \Log::error('Image upload failed: ' . $uploadEx->getMessage());
                 return redirect()->back()
-                    ->with('error', 'Image upload failed. Please ensure the file is valid.')
+                    ->with('error', 'Image upload failed: ' . $uploadEx->getMessage())
                     ->withInput();
             }
-        } catch (\Exception $e) {
-            // Log the error and return with error message
-            \Log::error('Error storing gallery item: ' . $e->getMessage());
+        } else {
+            // Handle the case where image upload failed
+            \Log::error('Image validation failed');
             return redirect()->back()
-                ->with('error', 'Failed to add gallery item: ' . $e->getMessage())
+                ->with('error', 'Image upload failed. Please ensure the file is valid.')
                 ->withInput();
         }
+    } catch (\Exception $e) {
+        // Log the error and return with error message
+        \Log::error('Error storing gallery item: ' . $e->getMessage());
+        \Log::error('Stack trace: ' . $e->getTraceAsString());
+        return redirect()->back()
+            ->with('error', 'Failed to add gallery item: ' . $e->getMessage())
+            ->withInput();
     }
+}
 
     /**
      * Get gallery item details for editing
