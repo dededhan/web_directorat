@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/inovasi/sdgscenter.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
@@ -72,7 +71,113 @@
             </div>
         </div>
     </section>
-    <section id="rankings" class="rankings">
+    
+    <!-- SDGs Program Section -->
+<section id="what-is-sdgs" class="what-is-sdgs">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Main SDGs Banner Image -->
+        <div class="mb-12">
+            <img src="/images/sdgs.png", 
+                 alt="Sustainable Development Goals" class="w-full max-w-5xl mx-auto">
+        </div>
+        
+        <!-- What is SDGs Section -->
+        <div class="flex flex-col md:flex-row mb-10">
+            <!-- Left Column - Title -->
+            <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                <h2 class="text-2xl font-bold text-gray-800">What Is Sustainable Development Goals (SDGs) ?</h2>
+            </div>
+            
+            <!-- Right Column - Description -->
+            <div class="w-full md:w-2/3">
+                <p class="text-base text-gray-700 leading-relaxed">
+                Pendidikan tinggi memiliki peran strategis dalam pencapaian Tujuan Pembangunan Berkelanjutan atau Sustainable Development Goals (SDGs) yang dicanangkan oleh Perserikatan Bangsa-Bangsa (PBB). Dengan 17 tujuan utama yang mencakup isu-isu seperti pengentasan kemiskinan, pendidikan berkualitas, kesetaraan gender, aksi iklim, dan kemitraan global, perguruan tinggi diharapkan menjadi pusat inovasi, penelitian, dan pengabdian yang berorientasi pada keberlanjutan.
+                </p>
+                <p class="text-base text-gray-700 leading-relaxed">
+                Program SDGs di perguruan tinggi merupakan upaya terstruktur untuk mengintegrasikan prinsip-prinsip pembangunan berkelanjutan ke dalam kurikulum, riset, tata kelola, serta kegiatan kemasyarakatan. Melalui pendekatan ini, perguruan tinggi tidak hanya mencetak lulusan yang kompeten, tetapi juga berwawasan lingkungan, sosial, dan ekonomi jangka panjang.
+                </p>
+            </div>
+        </div>
+        
+        <hr class="border-gray-300 my-8">
+    </div>
+</section>
+
+<!-- SDGs Program Section -->
+<section id="sdgs-program" class="sdgs-program py-8">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row">
+            <!-- Left Column - Logo -->
+            <div class="w-full md:w-1/3 mb-6 md:mb-0 flex justify-center md:justify-start items-start pt-0">
+                <img src="/images/unjsdg.png" alt="SDGs Logo" class="w-90 h-auto object-contain -mt-8">
+            </div>
+            
+            <!-- Right Column - Content -->
+            <div class="w-full md:w-2/3">
+                <!-- Title -->
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-[#1D796B]">SDG's Program</h2>
+                    <div class="w-24 h-1 bg-[#1D796B] mt-2"></div>
+                    <p class="text-gray-700 mt-4">
+                        Pendidikan tinggi memiliki peran strategis dalam pencapaian Tujuan Pembangunan Berkelanjutan
+                    </p>
+                </div>
+                
+                <!-- Implementasi SDGs Section -->
+                <div class="mt-8">
+                        <h3 class="text-lg font-semibold text-[#1D796B] mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-[#1D796B]" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z"></path>
+                        </svg>
+                        Implementasi SDGs di Kampus
+                    </h3>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Integrasi topik SDGs dalam mata kuliah dan modul pembelajaran.</span>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Penelitian interdisipliner yang berkontribusi pada pencapaian target SDGs.</span>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Pengembangan kampus hijau dan berkelanjutan.</span>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Pengabdian masyarakat yang fokus pada pemberdayaan lokal.</span>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Kolaborasi internasional untuk proyek-proyek keberlanjutan.</span>
+                        </div>
+                    </div>
+                    
+                    <div class="italic text-gray-700 mt-4">
+                        Dengan mengadopsi SDGs sebagai kerangka kerja, perguruan tinggi tidak hanya berperan sebagai <span class="text-[#1D796B]">center of excellence</span>, tetapi juga sebagai <span class="text-[#1D796B]">agent of change</span> dalam pembangunan global yang adil, inklusif, dan berkelanjutan.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    <!-- <section id="rankings" class="rankings">
         <div class="container">
             <div class="section-title">
                 <h3>Peringkat & Prestasi</h3>
@@ -110,7 +215,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- SDGs Full-Screen Carousel Section -->
     <section id="goals" class="goals">
         <div class="container">
