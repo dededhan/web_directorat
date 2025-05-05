@@ -133,6 +133,10 @@ Route::get('subdirektorat-inovasi/risetunj', function () {
     return view('subdirektorat-inovasi.riset_unj.risetunj');
 })->name('riset.unj');
 
+Route::get('daptarcalonadjunct', function () {
+    return view('daptarcalonadjunct.daptarcalonadjunct');
+})->name('daptar.calonadjunct');
+
 Route::get('/subdirektorat-inovasi/inkubator/inkubator_bisnis_pendidikan', function () {
     return view('subdirektorat-inovasi.inkubator.inkubator_bisnis_pendidikan');
 })->name('subdirektorat-inovasi.inkubator.inkubator_bisnis_pendidikan');
