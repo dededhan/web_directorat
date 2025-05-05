@@ -77,9 +77,9 @@
                             <option value="fppsi">FPsi</option>
                             <option value="fbs">FBS</option>
                             <option value="ft">FT</option>
-                            <option value="fik">FIKk</option>
-                            <option value="fis">FISh</option>
-                            <option value="fe">FEb</option>
+                            <option value="fik">FIK</option>
+                            <option value="fis">FISH</option>
+                            <option value="fe">FEB</option>
                             <option value="profesi">PROFESI</option>
                         </select>
                         <div class="form-text text-muted">Pilih fakultas asal alumni yang bersangkutan</div>
