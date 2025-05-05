@@ -244,6 +244,26 @@
             background-color: var(--light-color);
         }
 
+        /* List styling */
+        .inkubator-list {
+            margin-left: 20px;
+            margin-bottom: 1rem;
+        }
+
+        .inkubator-list li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .inkubator-list li::before {
+            content: '•';
+            color: var(--primary-color);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
         @media (max-width: 768px) {
             .inkubator-hero {
                 height: 300px;
@@ -262,107 +282,143 @@
         <div class="inkubator-container">
             <div class="inkubator-hero">
                 <div class="inkubator-hero-content">
-                    <h2>Membangun Ekosistem Inovasi</h2>
-                    <p>Inkubator Bisnis dan Pendidikan dirancang untuk memfasilitasi pertumbuhan startup, mendukung pengembangan ide-ide kreatif, dan mentransformasi penelitian menjadi solusi bisnis yang berkelanjutan.</p>
+                    <h2>Inkubator Bisnis</h2>
+                    <p>Menjembatani Inovasi Akademik dengan Kebutuhan Industri dan Masyarakat</p>
                     <a href="#" class="inkubator-btn">Pelajari Lebih Lanjut</a>
                 </div>
             </div>
 
             <section class="inkubator-section">
-                <h2 class="inkubator-section-title">Tentang Inkubator Bisnis dan Pendidikan</h2>
-                <p>Inkubator Bisnis dan Pendidikan adalah program yang dirancang untuk membantu pertumbuhan dan keberhasilan perusahaan pemula (startup) dan inovasi pendidikan melalui berbagai dukungan sumber daya dan layanan. Program ini menyediakan lingkungan yang kondusif bagi entrepreneur dan inovator untuk mengembangkan ide-ide mereka menjadi bisnis yang berkelanjutan.</p>
-                <p>Melalui pendampingan intensif, akses ke jaringan mentor, dan infrastruktur pendukung, inkubator membantu mempercepat pertumbuhan usaha dan mengurangi risiko kegagalan yang sering dihadapi oleh startup pada tahap awal pengembangan.</p>
+                <h2 class="inkubator-section-title">Tentang Inkubator Bisnis</h2>
+                <p>Inkubator bisnis adalah unit yang dibentuk untuk mendukung dosen, mahasiswa dan alumni dalam mengembangkan ide bisnis menjadi usaha nyata. Inkubator ini menjadi jembatan antara hasil pendidikan dan riset dengan kebutuhan dunia industri dan masyarakat.</p>
+                <p>Melalui program ini, kami membantu mengubah potensi akademik menjadi solusi bisnis yang berkelanjutan dan berdampak positif terhadap masyarakat.</p>
                 
-                <div class="inkubator-cards">
-                    <div class="inkubator-card">
-                        <div class="inkubator-card-img"></div>
-                        <div class="inkubator-card-content">
-                            <h3>Inkubator Bisnis</h3>
-                            <p>Program yang dirancang untuk membantu pengembangan usaha rintisan (startup) melalui pendampingan, akses ke mentor, permodalan, dan jaringan industri.</p>
-                            <a href="#" class="inkubator-btn">Detail Program</a>
-                        </div>
-                    </div>
-                    <div class="inkubator-card">
-                        <div class="inkubator-card-img"></div>
-                        <div class="inkubator-card-content">
-                            <h3>Inkubator Pendidikan</h3>
-                            <p>Fokus pada pengembangan inovasi di bidang pendidikan, termasuk teknologi pembelajaran, metode pengajaran baru, dan solusi untuk meningkatkan kualitas pendidikan.</p>
-                            <a href="#" class="inkubator-btn">Detail Program</a>
-                        </div>
-                    </div>
-                    <div class="inkubator-card">
-                        <div class="inkubator-card-img"></div>
-                        <div class="inkubator-card-content">
-                            <h3>Hubungan Industri</h3>
-                            <p>Membangun jembatan antara penelitian akademis dan kebutuhan industri, memfasilitasi kolaborasi yang saling menguntungkan dan transfer pengetahuan.</p>
-                            <a href="#" class="inkubator-btn">Detail Program</a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="inkubator-section">
-                <h2 class="inkubator-section-title">Layanan Kami</h2>
                 <div class="inkubator-features">
                     <div class="inkubator-feature">
                         <div class="inkubator-feature-icon">1</div>
                         <div class="inkubator-feature-content">
-                            <h3>Mentoring dan Pendampingan</h3>
-                            <p>Akses ke jaringan mentor berpengalaman yang dapat memberikan bimbingan, masukan, dan saran strategis untuk pengembangan bisnis dan inovasi pendidikan.</p>
+                            <h3>Tujuan Utama</h3>
+                            <ul class="inkubator-list">
+                                <li>Menumbuhkan jiwa kewirausahaan di kalangan sivitas akademika.</li>
+                                <li>Mendorong hilirisasi hasil riset dan inovasi.</li>
+                                <li>Menyediakan wadah pengembangan usaha rintisan (startup).</li>
+                            </ul>
                         </div>
                     </div>
+                    
                     <div class="inkubator-feature">
                         <div class="inkubator-feature-icon">2</div>
                         <div class="inkubator-feature-content">
-                            <h3>Akses Pendanaan</h3>
-                            <p>Membantu startup dan inovator pendidikan mendapatkan akses ke berbagai sumber pendanaan, termasuk investor, hibah, dan program kemitraan.</p>
+                            <h3>Peran Inkubator Bisnis dalam Pendidikan Tinggi</h3>
+                            <ul class="inkubator-list">
+                                <li>Wadah Edukasi Praktis</li>
+                                <li>Komersialisasi Inovasi</li>
+                                <li>Pembinaan dan Pendampingan</li>
+                                <li>Peluang Pendanaan</li>
+                                <li>Kolaborasi Multi-Pihak</li>
+                            </ul>
                         </div>
                     </div>
+                    
                     <div class="inkubator-feature">
                         <div class="inkubator-feature-icon">3</div>
                         <div class="inkubator-feature-content">
-                            <h3>Pelatihan dan Workshop</h3>
-                            <p>Program pelatihan khusus yang dirancang untuk meningkatkan keterampilan dan pengetahuan dalam berbagai aspek bisnis dan inovasi pendidikan.</p>
-                        </div>
-                    </div>
-                    <div class="inkubator-feature">
-                        <div class="inkubator-feature-icon">4</div>
-                        <div class="inkubator-feature-content">
-                            <h3>Ruang Kerja dan Fasilitas</h3>
-                            <p>Menyediakan ruang kerja yang kondusif, akses ke laboratorium, dan infrastruktur pendukung lainnya untuk membantu pengembangan produk dan layanan.</p>
-                        </div>
-                    </div>
-                    <div class="inkubator-feature">
-                        <div class="inkubator-feature-icon">5</div>
-                        <div class="inkubator-feature-content">
-                            <h3>Jaringan dan Kemitraan</h3>
-                            <p>Membuka peluang kemitraan dan kolaborasi dengan berbagai pihak, termasuk industri, investor, lembaga penelitian, dan jaringan profesional.</p>
+                            <h3>Manfaat Inkubator Bisnis bagi Perguruan Tinggi</h3>
+                            <ul class="inkubator-list">
+                                <li>Meningkatkan reputasi dan kontribusi kampus dalam pembangunan ekonomi.</li>
+                                <li>Menjadi indikator kinerja tridharma perguruan tinggi (terutama dalam pengabdian dan inovasi).</li>
+                                <li>Menciptakan lulusan yang lebih siap kerja dan bahkan siap menciptakan lapangan kerja.</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </section>
 
             <section class="inkubator-section">
-                <h2 class="inkubator-section-title">Manfaat Inkubator</h2>
+                <h2 class="inkubator-section-title">Program Kami</h2>
+                <div class="inkubator-cards">
+                    <div class="inkubator-card">
+                        <div class="inkubator-card-img"></div>
+                        <div class="inkubator-card-content">
+                            <h3>Program Mentoring</h3>
+                            <p>Akses ke jaringan mentor berpengalaman yang memberikan bimbingan strategis untuk pengembangan bisnis inovatif.</p>
+                            <a href="#" class="inkubator-btn">Detail Program</a>
+                        </div>
+                    </div>
+                    <div class="inkubator-card">
+                        <div class="inkubator-card-img"></div>
+                        <div class="inkubator-card-content">
+                            <h3>Pendanaan Startup</h3>
+                            <p>Membantu usaha rintisan mendapatkan akses ke berbagai sumber pendanaan, termasuk investor dan program kemitraan.</p>
+                            <a href="#" class="inkubator-btn">Detail Program</a>
+                        </div>
+                    </div>
+                    <div class="inkubator-card">
+                        <div class="inkubator-card-img"></div>
+                        <div class="inkubator-card-content">
+                            <h3>Akses Pasar</h3>
+                            <p>Membangun jembatan antara startup kampus dengan pasar potensial melalui jaringan industri dan mitra strategis.</p>
+                            <a href="#" class="inkubator-btn">Detail Program</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="inkubator-section">
+                <h2 class="inkubator-section-title">Layanan Pendampingan</h2>
+                <div class="inkubator-features">
+                    <div class="inkubator-feature">
+                        <div class="inkubator-feature-icon"><i class="fas fa-lightbulb"></i></div>
+                        <div class="inkubator-feature-content">
+                            <h3>Pengembangan Ide Bisnis</h3>
+                            <p>Membantu mengembangkan ide menjadi model bisnis yang layak dan berkelanjutan melalui workshop dan konsultasi.</p>
+                        </div>
+                    </div>
+                    <div class="inkubator-feature">
+                        <div class="inkubator-feature-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="inkubator-feature-content">
+                            <h3>Pelatihan Kewirausahaan</h3>
+                            <p>Program pelatihan yang dirancang untuk mengembangkan keterampilan bisnis dan mindset wirausaha.</p>
+                        </div>
+                    </div>
+                    <div class="inkubator-feature">
+                        <div class="inkubator-feature-icon"><i class="fas fa-handshake"></i></div>
+                        <div class="inkubator-feature-content">
+                            <h3>Akses ke Jaringan</h3>
+                            <p>Membuka pintu ke jaringan mentor, investor, dan mitra industri yang dapat mendukung perkembangan bisnis.</p>
+                        </div>
+                    </div>
+                    <div class="inkubator-feature">
+                        <div class="inkubator-feature-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="inkubator-feature-content">
+                            <h3>Riset Pasar</h3>
+                            <p>Dukungan dalam melakukan riset pasar dan validasi produk untuk memastikan relevansi bisnis.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="inkubator-section">
+                <h2 class="inkubator-section-title">Kisah Sukses</h2>
                 <div class="inkubator-testimonials">
                     <div class="inkubator-testimonial">
-                        <p>Inkubator membantu kami mengembangkan ide bisnis dengan pendampingan intensif dan akses ke jaringan investor. Dalam waktu 6 bulan, kami berhasil meluncurkan produk dan mendapatkan pendanaan awal.</p>
-                        <span class="inkubator-testimonial-author">Tim Startup XYZ</span>
+                        <p>Program inkubator membantu kami menerjemahkan hasil riset menjadi produk yang siap pasar. Pendampingan intensif membuat kami dapat berkembang lebih cepat.</p>
+                        <span class="inkubator-testimonial-author">Tim Startup EdTech</span>
                     </div>
                     <div class="inkubator-testimonial">
-                        <p>Program pendampingan di inkubator membuat kami lebih fokus dalam pengembangan produk dan strategi bisnis. Mentor-mentor berpengalaman memberi masukan yang sangat berharga untuk kemajuan startup kami.</p>
-                        <span class="inkubator-testimonial-author">Inovator Pendidikan ABC</span>
+                        <p>Jaringan mentor dan akses ke industri yang diberikan oleh inkubator menjadi kunci keberhasilan kami mendapatkan pendanaan awal.</p>
+                        <span class="inkubator-testimonial-author">Alumni Inkubator Bisnis</span>
                     </div>
                     <div class="inkubator-testimonial">
-                        <p>Fasilitas dan jaringan yang disediakan oleh inkubator membantu kami melakukan riset dan pengembangan produk dengan lebih efisien. Kami juga mendapatkan akses ke pasar potensial melalui program kemitraan.</p>
-                        <span class="inkubator-testimonial-author">Pendiri Startup DEF</span>
+                        <p>Berkat program inkubator, inovasi yang awalnya hanya ide di laboratorium kini telah menjadi bisnis yang melayani ribuan pengguna.</p>
+                        <span class="inkubator-testimonial-author">Dosen Pewirausaha</span>
                     </div>
                 </div>
             </section>
 
             <div class="inkubator-cta">
-                <h2>Tertarik Bergabung dengan Program Inkubator?</h2>
-                <p>Daftarkan ide atau startup Anda sekarang dan mulailah perjalanan transformasi menuju bisnis yang sukses dan berkelanjutan.</p>
+                <h2>Siap Mengembangkan Ide Bisnis Anda?</h2>
+                <p>Jadilah bagian dari ekosistem inovasi dan kewirausahaan. Daftarkan diri atau tim Anda sekarang dan mulai perjalanan membangun bisnis yang berdampak.</p>
                 <a href="#" class="inkubator-btn inkubator-btn-cta">Daftar Sekarang</a>
             </div>
         </div>
