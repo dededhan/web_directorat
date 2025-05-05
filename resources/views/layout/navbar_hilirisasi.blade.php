@@ -144,7 +144,8 @@
                     Inovasi UNJ
                 </a>
                 <ul id="inovasi-dropdown" class="dropdown-menu primary-dropdown hidden">
-                    <li><a href="{{ route('riset.unj') }}">Riset UNJ</a></li>
+                    <li><a href="https://lppm.unj.ac.id/" class="hover:text-yellow-400" target="_blank" rel="noopener noreferrer">Riset UNJ</a></li>
+                    {{-- <li><a href="{{ route('riset.unj') }}">Riset UNJ</a></li> --}}
                     <li><a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}">Produk Inovasi UNJ</a></li>
                 </ul>
             </li>
