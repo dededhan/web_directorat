@@ -49,11 +49,11 @@
                             <option value="pascasarjana">PASCASARJANA</option>
                             <option value="fip">FIP</option>
                             <option value="fmipa">FMIPA</option>
-                            <option value="fppsi">FPPsi</option>
+                            <option value="fppsi">FPsi</option>
                             <option value="fbs">FBS</option>
                             <option value="ft">FT</option>
-                            <option value="fik">FIK</option>
-                            <option value="fis">FIS</option>
+                            <option value="fik">FIKK</option>
+                            <option value="fis">FISH</option>
                             <option value="fe">FE</option>
                             <option value="profesi">PROFESI</option>
                         </select>
@@ -83,7 +83,7 @@
                             <option value="lam-infokom">LAM INFOKOM</option>
                             <option value="lam-teknik">LAM TEKNIK</option>
                             <option value="lam-ekonomi">LAMEMBA</option>
-                            <option value="lam-pendidikan">LAM PENDIDIKAN</option>
+                            <option value="lam-pendidikan">LAMDIK</option>
                             <option value="lam-sains">LAMSAMA</option>
                         </select>
                         <div class="form-text text-muted">Pilih lembaga yang mengeluarkan akreditasi</div>
