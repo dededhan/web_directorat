@@ -169,7 +169,7 @@ class ProgramLayananController extends Controller
         // Get active program layanan, limit to 4 for display
         $programs = ProgramLayanan::where('status', 1)
             ->orderBy('id', 'desc')
-            ->take(4)
+            ->take(6)
             ->get();
 
         return view('frontend.program-section', compact('programs'));
