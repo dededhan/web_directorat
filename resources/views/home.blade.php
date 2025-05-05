@@ -602,7 +602,7 @@
             <!-- Students -->
             <div class="prestasi-item">
                 <div class="prestasi-icon">
-                    <img src="/images/icons/student-hat.svg" alt="Students" onerror="this.onerror=null; this.src='/images/icons/student-hat.png'; if(this.src.indexOf('.png') !== -1) this.onerror=null; this.innerHTML='<i class=\'fas fa-user-graduate\'></i>';">
+                    <i class="fa fa-user-graduate"></i>
                 </div>
                 <div class="prestasi-number">30.673</div>
                 <div class="prestasi-title">Mahasiswa</div>
@@ -611,7 +611,7 @@
             <!-- International Students -->
             <div class="prestasi-item">
                 <div class="prestasi-icon">
-                    <img src="/images/icons/globe.svg" alt="International Students" onerror="this.onerror=null; this.src='/images/icons/globe.png'; if(this.src.indexOf('.png') !== -1) this.onerror=null; this.innerHTML='<i class=\'fas fa-globe-americas\'></i>';">
+                    <i class="fa fa-globe"></i>
                 </div>
                 <div class="prestasi-number">125</div>
                 <div class="prestasi-title">Mahasiswa Internasional</div>
@@ -620,7 +620,7 @@
             <!-- Professors -->
             <div class="prestasi-item">
                 <div class="prestasi-icon">
-                    <img src="/images/icons/professor.svg" alt="Professors" onerror="this.onerror=null; this.src='/images/icons/professor.png'; if(this.src.indexOf('.png') !== -1) this.onerror=null; this.innerHTML='<i class=\'fas fa-chalkboard-teacher\'></i>';">
+                    <i class="fa fa-chalkboard-teacher"></i>
                 </div>
                 <div class="prestasi-number">130</div>
                 <div class="prestasi-title">Guru Besar</div>
@@ -629,7 +629,7 @@
             <!-- Lecturers -->
             <div class="prestasi-item">
                 <div class="prestasi-icon">
-                    <img src="/images/icons/lecturer.svg" alt="Lecturers" onerror="this.onerror=null; this.src='/images/icons/lecturer.png'; if(this.src.indexOf('.png') !== -1) this.onerror=null; this.innerHTML='<i class=\'fas fa-user-tie\'></i>';">
+                    <i class="fa fa-user-tie"></i>
                 </div>
                 <div class="prestasi-number">1.132</div>
                 <div class="prestasi-title">Dosen</div>
@@ -638,7 +638,7 @@
             <!-- International Lecturers -->
             <div class="prestasi-item">
                 <div class="prestasi-icon">
-                    <img src="/images/icons/int-lecturer.svg" alt="International Lecturers" onerror="this.onerror=null; this.src='/images/icons/int-lecturer.png'; if(this.src.indexOf('.png') !== -1) this.onerror=null; this.innerHTML='<i class=\'fas fa-user-friends\'></i>';">
+                    <i class="fa fa-users"></i>
                 </div>
                 <div class="prestasi-number">4</div>
                 <div class="prestasi-title">Dosen Internasional</div>
@@ -647,7 +647,7 @@
             <!-- Staff -->
             <div class="prestasi-item">
                 <div class="prestasi-icon">
-                    <img src="/images/icons/staff.svg" alt="Staff" onerror="this.onerror=null; this.src='/images/icons/staff.png'; if(this.src.indexOf('.png') !== -1) this.onerror=null; this.innerHTML='<i class=\'fas fa-user-cog\'></i>';">
+                    <i class="fa fa-user-cog"></i>
                 </div>
                 <div class="prestasi-number">774</div>
                 <div class="prestasi-title">Tendik</div>
@@ -659,7 +659,7 @@
             <!-- Faculties -->
             <div class="prestasi-item">
                 <div class="prestasi-icon">
-                    <img src="/images/icons/faculty.svg" alt="Faculties" onerror="this.onerror=null; this.src='/images/icons/faculty.png'; if(this.src.indexOf('.png') !== -1) this.onerror=null; this.innerHTML='<i class=\'fas fa-university\'></i>';">
+                    <i class="fa fa-university"></i>
                 </div>
                 <div class="prestasi-number">8</div>
                 <div class="prestasi-title">Fakultas</div>
@@ -668,7 +668,7 @@
             <!-- Graduate School -->
             <div class="prestasi-item">
                 <div class="prestasi-icon">
-                    <img src="/images/icons/graduate.svg" alt="Graduate School" onerror="this.onerror=null; this.src='/images/icons/graduate.png'; if(this.src.indexOf('.png') !== -1) this.onerror=null; this.innerHTML='<i class=\'fas fa-graduation-cap\'></i>';">
+                    <i class="fa fa-graduation-cap"></i>
                 </div>
                 <div class="prestasi-number">1</div>
                 <div class="prestasi-title">Sekolah Pascasarjana</div>
@@ -677,7 +677,7 @@
             <!-- Study Programs -->
             <div class="prestasi-item">
                 <div class="prestasi-icon">
-                    <img src="/images/icons/program.svg" alt="Study Programs" onerror="this.onerror=null; this.src='/images/icons/program.png'; if(this.src.indexOf('.png') !== -1) this.onerror=null; this.innerHTML='<i class=\'fas fa-th-large\'></i>';">
+                    <i class="fa fa-th-large"></i>
                 </div>
                 <div class="prestasi-number">116</div>
                 <div class="prestasi-title">Program Studi</div>
@@ -686,7 +686,7 @@
             <!-- Scopus Indexed -->
             <div class="prestasi-item">
                 <div class="prestasi-icon">
-                    <img src="/images/icons/scopus.svg" alt="Scopus Indexed" onerror="this.onerror=null; this.src='/images/icons/scopus.png'; if(this.src.indexOf('.png') !== -1) this.onerror=null; this.innerHTML='<i class=\'fas fa-book\'></i>';">
+                    <i class="fa fa-book"></i>
                 </div>
                 <div class="prestasi-number">3.881</div>
                 <div class="prestasi-title">terindeks Scopus</div>
@@ -695,7 +695,7 @@
             <!-- HKI (Intellectual Property Rights) -->
             <div class="prestasi-item">
                 <div class="prestasi-icon">
-                    <img src="/images/icons/hki.svg" alt="HKI" onerror="this.onerror=null; this.src='/images/icons/hki.png'; if(this.src.indexOf('.png') !== -1) this.onerror=null; this.innerHTML='<i class=\'fas fa-file-alt\'></i>';">
+                    <i class="fa fa-file-alt"></i>
                 </div>
                 <div class="prestasi-number">2.459</div>
                 <div class="prestasi-title">HKI</div>
@@ -704,7 +704,7 @@
             <!-- Patents -->
             <div class="prestasi-item">
                 <div class="prestasi-icon">
-                    <img src="/images/icons/patent.svg" alt="Patents" onerror="this.onerror=null; this.src='/images/icons/patent.png'; if(this.src.indexOf('.png') !== -1) this.onerror=null; this.innerHTML='<i class=\'fas fa-certificate\'></i>';">
+                    <i class="fa fa-certificate"></i>
                 </div>
                 <div class="prestasi-number">123</div>
                 <div class="prestasi-title">Hak Paten</div>
@@ -714,7 +714,7 @@
         <!-- Accreditation badges -->
         <div class="akreditasi-wrapper">
             <div class="akreditasi-item">
-                <div class="akreditasi-number">116 Prodi</div>
+                <div class="akreditasi-number">114 Prodi</div>
                 <div class="akreditasi-title">Terakreditasi Nasional</div>
             </div>
             <div class="akreditasi-item">

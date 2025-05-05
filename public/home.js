@@ -662,73 +662,134 @@ document.addEventListener("DOMContentLoaded", function () {
             initHeaderCarousel(defaultImages);
         });
 });
-// UNJ dalam Angka - animate numbers on scroll
-document.addEventListener('DOMContentLoaded', function() {
-    // Function to animate counting up
-    function animateCountUp(el) {
-        const target = parseInt(el.innerText.replace(/[.,]/g, ''));
-        const duration = 2000; // Duration in milliseconds
-        const step = Math.ceil(target / (duration / 16)); // ~60fps
-        let current = 0;
-        const timer = setInterval(() => {
-            current += step;
-            if (current >= target) {
-                el.innerText = target.toLocaleString('id-ID');
-                clearInterval(timer);
-            } else {
-                el.innerText = current.toLocaleString('id-ID');
-            }
-        }, 16);
-    }
-    
-    // Check if an element is in viewport
-    function isInViewport(element) {
-        const rect = element.getBoundingClientRect();
-        return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        );
-    }
-    
-    // Get all number elements
-    const numberElements = document.querySelectorAll('.prestasi-number, .akreditasi-number');
-    let animated = false;
-    
-    // Function to check scroll position and animate if in viewport
-    function checkScroll() {
-        if (animated) return;
+
+    // Check if Font Awesome is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to check if Font Awesome is loaded
+        function isFontAwesomeLoaded() {
+            const span = document.createElement('span');
+            span.className = 'fa';
+            span.style.display = 'none';
+            document.body.insertBefore(span, document.body.firstChild);
+            const beforeStyle = window.getComputedStyle(span, ':before');
+            const loaded = beforeStyle.getPropertyValue('font-family').includes('Font');
+            document.body.removeChild(span);
+            return loaded;
+        }
+
+        // If Font Awesome is not loaded, add it
+        if (!isFontAwesomeLoaded()) {
+            console.log('Font Awesome not detected, adding it');
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css';
+            document.head.appendChild(link);
+        }
         
-        const section = document.querySelector('.unj-prestasi-container');
-        if (isInViewport(section)) {
-            numberElements.forEach(el => {
-                // Skip if it's "Prodi" text in the number
-                if (el.innerText.includes('Prodi')) {
-                    // Extract the number part
-                    const numText = el.innerText.split(' ')[0];
-                    const num = parseInt(numText.replace(/[.,]/g, ''));
-                    
-                    // Animate just the number
-                    const originalText = el.innerText;
-                    const countUp = (current) => {
-                        if (current <= num) {
-                            el.innerText = current + ' ' + originalText.split(' ').slice(1).join(' ');
-                            setTimeout(() => countUp(current + Math.ceil(num/50)), 30);
+        // Fallback solution if icons still don't appear
+        setTimeout(function() {
+            const icons = document.querySelectorAll('.prestasi-icon i');
+            const fallbackIcons = {
+                'fa-user-graduate': '👨‍🎓',
+                'fa-globe': '🌎',
+                'fa-chalkboard-teacher': '👨‍🏫',
+                'fa-user-tie': '👨‍💼',
+                'fa-users': '👥',
+                'fa-user-cog': '👨‍🔧',
+                'fa-university': '🏛️',
+                'fa-graduation-cap': '🎓',
+                'fa-th-large': '📋',
+                'fa-book': '📚',
+                'fa-file-alt': '📄',
+                'fa-certificate': '🏅'
+            };
+            
+            icons.forEach(function(icon) {
+                if (getComputedStyle(icon, ':before').content === 'none' || 
+                    getComputedStyle(icon, ':before').content === '') {
+                    // Find which icon class is applied
+                    for (const [iconClass, emoji] of Object.entries(fallbackIcons)) {
+                        if (icon.classList.contains(iconClass)) {
+                            // Use emoji as fallback
+                            icon.textContent = emoji;
+                            break;
                         }
-                    };
-                    countUp(0);
-                } else {
-                    animateCountUp(el);
+                    }
+                    // Default fallback
+                    if (icon.textContent === '') {
+                        icon.textContent = '🔣';
+                    }
                 }
             });
-            animated = true;
+        }, 1000);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to animate counting up
+        function animateCountUp(el) {
+            const target = parseInt(el.innerText.replace(/[.,]/g, ''));
+            const duration = 2000; // Duration in milliseconds
+            const step = Math.ceil(target / (duration / 16)); // ~60fps
+            let current = 0;
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    el.innerText = target.toLocaleString('id-ID');
+                    clearInterval(timer);
+                } else {
+                    el.innerText = current.toLocaleString('id-ID');
+                }
+            }, 16);
         }
-    }
-    
-    // Listen for scroll events
-    window.addEventListener('scroll', checkScroll);
-    
-    // Check on initial load too
-    checkScroll();
-});
+        
+        // Check if an element is in viewport
+        function isInViewport(element) {
+            const rect = element.getBoundingClientRect();
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+        }
+        
+        // Get all number elements
+        const numberElements = document.querySelectorAll('.prestasi-number, .akreditasi-number');
+        let animated = false;
+        
+        // Function to check scroll position and animate if in viewport
+        function checkScroll() {
+            if (animated) return;
+            
+            const section = document.querySelector('.unj-prestasi-container');
+            if (isInViewport(section)) {
+                numberElements.forEach(el => {
+                    // Skip if it's "Prodi" text in the number
+                    if (el.innerText.includes('Prodi')) {
+                        // Extract the number part
+                        const numText = el.innerText.split(' ')[0];
+                        const num = parseInt(numText.replace(/[.,]/g, ''));
+                        
+                        // Animate just the number
+                        const originalText = el.innerText;
+                        const countUp = (current) => {
+                            if (current <= num) {
+                                el.innerText = current + ' ' + originalText.split(' ').slice(1).join(' ');
+                                setTimeout(() => countUp(current + Math.ceil(num/50)), 30);
+                            }
+                        };
+                        countUp(0);
+                    } else {
+                        animateCountUp(el);
+                    }
+                });
+                animated = true;
+            }
+        }
+        
+        // Listen for scroll events
+        window.addEventListener('scroll', checkScroll);
+        
+        // Check on initial load too
+        checkScroll();
+    });
