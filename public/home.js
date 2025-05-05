@@ -228,17 +228,18 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("resize", forceDesktopLayout);
 });
 
-// Detect if we're on mobile and adjust viewport for best experience
+// IMPORTANT: Removed viewport manipulation that was causing zoom issues
+// The following code has been commented out to prevent viewport scaling on mobile
+
+/*
 document.addEventListener("DOMContentLoaded", function () {
     function isMobileDevice() {
         return window.innerWidth <= 767;
     }
 
     if (isMobileDevice()) {
-        // Add a meta viewport tag that allows zooming but starts with a scale that shows desktop-like layout
-        const existingViewport = document.querySelector(
-            'meta[name="viewport"]'
-        );
+        // This code was causing the zoom issue by forcing a desktop viewport on mobile
+        const existingViewport = document.querySelector('meta[name="viewport"]');
         if (existingViewport) {
             existingViewport.setAttribute(
                 "content",
@@ -247,12 +248,12 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             const metaTag = document.createElement("meta");
             metaTag.name = "viewport";
-            metaTag.content =
-                "width=1024, initial-scale=0.5, user-scalable=yes";
+            metaTag.content = "width=1024, initial-scale=0.5, user-scalable=yes";
             document.head.appendChild(metaTag);
         }
     }
 });
+*/
 
 // Enhanced Carousel for both mobile and desktop (featured news section)
 document.addEventListener("DOMContentLoaded", function () {

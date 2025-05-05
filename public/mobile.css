@@ -1,197 +1,346 @@
-/* mobile.css - Optimized mobile styles for Universitas Negeri Jakarta website */
+/* mobile.css - Force desktop layout on mobile devices except for navbar */
 
-/* Base mobile optimizations */
-@media (max-width: 768px) {
-    /* General layout fixes */
-    body {
-        overflow-x: hidden;
-        width: 100%;
-    }
-    
-    .container {
-        width: 100%;
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-    
-    /* Header adjustments */
-    header img.object-cover {
-        height: 50vh;
-    }
-    
-    /* News card adjustments */
-    .grid-cols-1 {
-        grid-template-columns: 1fr;
-    }
-    
-    .bg-white.rounded-lg {
-        width: 100%;
-    }
-    
-    /* Enhanced carousel adjustments */
-    .carousel-inner {
-        display: flex;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scroll-snap-type: x mandatory;
-        padding-bottom: 15px;
-    }
-    
-    .carousel-item-enhanced {
-        scroll-snap-align: start;
-        flex: 0 0 90%;
-        max-width: 90%;
-        margin-right: 15px;
-    }
-    
-    /* Program cards adjustments */
-    .program-card {
-        width: 100%;
-        margin-bottom: 20px;
-    }
-    
-    /* Footer adjustments */
-    footer .grid {
-        grid-template-columns: 1fr;
-    }
-    
-    /* Navigation menu adjustments */
-    nav.bg-white {
-        padding: 10px 15px;
-    }
+/* 1. Base viewport settings */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
 }
 
-/* Small mobile devices */
-@media (max-width: 576px) {
+/* 2. KEEP MOBILE NAVBAR - But make all content sections desktop-like */
+@media (max-width: 767px) {
+    /* Mobile navbar styling - Keep this part */
+    #mobile-navbar {
+        display: block !important;
+        visibility: visible !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        z-index: 1000 !important;
+        background-color: #186862 !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Hide desktop navbar forcefully */
+    .navbar.hidden.md\:block,
+    nav.navbar:not(#mobile-navbar) {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    /* Mobile sidebar styling - Only for navigation */
+    #mobile-sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        right: 0 !important;
+        left: auto !important;
+        width: 80% !important;
+        max-width: 320px !important;
+        height: 100vh !important;
+        background-color: #186862 !important;
+        z-index: 1100 !important;
+        transform: translateX(100%) !important;
+        transition: transform 0.3s ease !important;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        display: block !important;
+        will-change: transform !important;
+    }
+    
+    /* Overlay styling when sidebar is open */
+    #sidebar-overlay {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background-color: rgba(0, 0, 0, 0.5) !important;
+        z-index: 1050 !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        transition: opacity 0.3s ease, visibility 0.3s ease !important;
+        pointer-events: none !important;
+        display: block !important;
+        will-change: opacity !important;
+    }
+    
+    /* Overlay visible state */
+    body.sidebar-open #sidebar-overlay {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+    }
+    
+    /* Prevent body scroll when sidebar is open */
+    body.sidebar-open {
+        overflow: hidden !important;
+        position: fixed !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    /* === DESKTOP LAYOUT FOR MOBILE - FORCE ALL CONTENT AREAS TO USE DESKTOP LAYOUT === */
+    
+    /* 1. BERITA TERBARU SECTION - Force 3 columns like desktop */
+    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 1rem !important;
+    }
+    
+    /* Make card content smaller to fit mobile screen */
+    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 .p-5 {
+        padding: 0.75rem !important;
+    }
+    
+    /* Adjust image heights */
+    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 .w-full.h-56 {
+        height: 120px !important;
+    }
+    
+    /* Adjust text sizes */
+    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 .font-bold.text-xl {
+        font-size: 0.85rem !important;
+        line-height: 1.2 !important;
+    }
+    
+    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 .text-gray-600.mb-4 {
+        font-size: 0.75rem !important;
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        max-height: 2.4em;
+    }
+    
+    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 .text-gray-500.text-sm {
+        font-size: 0.7rem !important;
+    }
+    
+    /* 2. ENHANCED CAROUSEL - Force 3 items visible like desktop */
     .carousel-item-enhanced {
-        flex: 0 0 100%;
-        max-width: 100%;
-        margin-right: 0;
+        flex: 0 0 33.333% !important;
+        max-width: 33.333% !important;
+        padding: 0.5rem !important;
     }
     
-    header img.object-cover {
-        height: 40vh;
+    .news-card-enhanced {
+        height: 100% !important;
     }
     
-    /* Section header adjustments */
-    .unj-section-title {
-        font-size: 1.5rem;
+    .news-image {
+        height: 120px !important;
     }
     
-    /* Programs section adjustments */
-    .program-section .grid {
-        grid-template-columns: 1fr;
+    .news-content {
+        padding: 0.75rem !important;
     }
     
-    .media-section .grid {
-        grid-template-columns: 1fr;
+    .news-title {
+        font-size: 0.85rem !important;
+        margin-bottom: 0.25rem !important;
     }
     
-    /* Better card spacing */
-    .gap-6, .gap-8 {
-        gap: 1rem;
+    .news-excerpt {
+        font-size: 0.75rem !important;
+        -webkit-line-clamp: 2;
+        max-height: 2.4em;
     }
     
-    .py-16 {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
+    .news-meta {
+        font-size: 0.7rem !important;
     }
     
-    .py-12 {
-        padding-top: 1.5rem;
-        padding-bottom: 1.5rem;
+    /* 3. PROGRAM & LAYANAN SECTION - Force 4 columns like desktop */
+    .program-section .grid,
+    .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 0.75rem !important;
     }
     
-    .mb-12 {
-        margin-bottom: 1.5rem;
+    /* Make program cards smaller to fit */
+    .program-card {
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .program-card .relative .w-full.h-48 {
+        height: 100px !important;
+    }
+    
+    .program-card .p-4 {
+        padding: 0.5rem !important;
+    }
+    
+    .program-card h3.font-bold {
+        font-size: 0.85rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+    
+    .program-card .text-gray-600 {
+        font-size: 0.75rem !important;
+        min-height: 40px !important;
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .program-card .inline-flex,
+    .program-card button {
+        font-size: 0.75rem !important;
+    }
+    
+    /* 4. INSTAGRAM & YOUTUBE SECTIONS - Force 3 columns like desktop */
+    #instagram-api-feed-container,
+    #dynamic-videos-container,
+    .media-section .grid.grid-cols-1.sm\:grid-cols-2.md\:grid-cols-3 {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 0.75rem !important;
+    }
+    
+    /* Adjust media cards */
+    .media-card {
+        min-height: auto !important;
+    }
+    
+    .media-card .pb-\[56\.25\%\] {
+        padding-bottom: 56.25% !important; /* Maintain aspect ratio */
+    }
+    
+    .media-card .p-4, 
+    .media-card .p-6 {
+        padding: 0.5rem !important;
+    }
+    
+    .media-card h3 {
+        font-size: 0.85rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+    
+    .media-card p {
+        font-size: 0.75rem !important;
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        max-height: 2.4em !important;
+    }
+    
+    /* 5. FOOTER SECTION - Force 3 columns like desktop */
+    footer .grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 1rem !important;
+    }
+    
+    footer .text-xl {
+        font-size: 1rem !important;
+    }
+    
+    /* 6. SECTION HEADERS - Make them smaller but maintain style */
+    .section-title, 
+    .text-2xl.md\:text-3xl, 
+    .unj-section-title,
+    .section-header h2,
+    .text-center h2 {
+        font-size: 1.25rem !important;
+    }
+    
+    .section-subtitle,
+    .unj-section-subtitle,
+    .text-gray-600.max-w-2xl {
+        font-size: 0.85rem !important;
+    }
+    
+    /* 7. CONTAINER & SPACING - Adjust padding for mobile while keeping desktop layout */
+    .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+    
+    .py-12, .py-16 {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+    
+    .py-8 {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
     }
     
     .mb-16 {
-        margin-bottom: 1.5rem;
-    }
-}
-
-/* Handle touch interactions better */
-.mobile-mode .carousel-inner {
-    cursor: grab;
-}
-
-.mobile-mode .carousel-inner:active {
-    cursor: grabbing;
-}
-
-/* Fix for modals on mobile */
-.mobile-mode #programDetailsModal {
-    padding: 0;
-}
-
-.mobile-mode #programDetailsModal .bg-white {
-    max-height: 90vh;
-    border-radius: 15px 15px 0 0;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: 0;
-}
-
-/* Fix for news card scaling */
-.mobile-mode .news-card-enhanced {
-    min-height: unset;
-}
-
-/* Fix card heights on mobile */
-.mobile-mode .media-card {
-    height: auto;
-}
-
-/* Optimizing tap targets */
-.mobile-mode a, 
-.mobile-mode button, 
-.mobile-mode [role="button"] {
-    min-height: 44px;
-    min-width: 44px;
-}
-
-/* Optimize images */
-.mobile-mode img {
-    max-width: 100%;
-}
-
-/* Fix scrolling performance */
-.mobile-mode .scrolling-down {
-    /* Hide some elements when scrolling down to improve performance */
-    position: relative;
-}
-
-/* Navigation toggle animation */
-.mobile-mode .nav-toggle {
-    display: block;
-}
-
-/* Fix for Android WebView specific issues */
-@supports (-webkit-appearance:none) {
-    .mobile-mode input, 
-    .mobile-mode textarea {
-        font-size: 16px; /* Prevents zoom on focus */
-    }
-}
-
-/* Fix layout for very small devices */
-@media (max-width: 360px) {
-    body {
-        font-size: 14px;
+        margin-bottom: 1.5rem !important;
     }
     
-    .h1, h1 {
-        font-size: 1.5rem;
+    .mb-12, .mb-8 {
+        margin-bottom: 1rem !important;
     }
     
-    .h2, h2 {
-        font-size: 1.25rem;
+    /* 8. HEADER IMAGE - Make it shorter on mobile */
+    header.relative.h-screen {
+        height: 40vh !important;
+    }
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+    #mobile-sidebar {
+        height: -webkit-fill-available !important;
     }
     
-    .program-card .p-5 {
-        padding: 0.75rem;
+    /* Prevent iOS Safari overscroll behavior */
+    html, body {
+        position: relative;
+        overflow-x: hidden;
+        height: 100%;
+    }
+}
+
+/* Safe area fixes for notched phones */
+@supports (padding: max(0px)) {
+    #mobile-navbar {
+        padding-top: env(safe-area-inset-top);
+    }
+    
+    #mobile-sidebar {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* Make sure toolbar buttons are visible */
+@media (max-width: 767px) {
+    .carousel-control {
+        width: 30px !important;
+        height: 30px !important;
+        opacity: 0.9 !important;
+    }
+}
+
+/* Very small devices (under 360px) adjustments */
+@media (max-width: 359px) {
+    /* Switch to 2 columns for the smallest screens */
+    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3,
+    .program-section .grid,
+    .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4,
+    #instagram-api-feed-container,
+    #dynamic-videos-container {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    
+    .carousel-item-enhanced {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
     }
 }

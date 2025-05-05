@@ -3,18 +3,115 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!-- UPDATED VIEWPORT META TAG - Critical for mobile display -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Universitas Negeri Jakarta - Direktorat Pemeringkatan</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('home.css') }}">
     <link rel="stylesheet" href="{{ asset('header-carousel.css') }}">
-    <script src="{{ asset('header-carousel.js') }}"></script>
+    <!-- Load mobile.css first to ensure its styles take precedence -->
     <link rel="stylesheet" href="{{ asset('mobile.css') }}">
+    <script src="{{ asset('header-carousel.js') }}"></script>
     
-    <!-- Enhanced mobile styles with !important to override Tailwind -->
+    <!-- CRITICAL MOBILE DETECTION SCRIPT - Add right after stylesheets -->
+    <script>
+// Critical fix for sidebar and overlay
+(function() {
+    // Run after DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get key elements
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        
+        // Fix sidebar initial state
+        if (mobileSidebar) {
+            mobileSidebar.style.transform = 'translateX(100%)';
+        }
+        
+        // Fix overlay initial state
+        if (sidebarOverlay) {
+            sidebarOverlay.style.opacity = '0';
+            sidebarOverlay.style.visibility = 'hidden';
+            sidebarOverlay.style.pointerEvents = 'none';
+        }
+        
+        // Fix overlay click handling
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', function() {
+                // Hide sidebar when overlay is clicked
+                if (mobileSidebar) {
+                    mobileSidebar.style.transform = 'translateX(100%)';
+                }
+                // Hide overlay
+                sidebarOverlay.style.opacity = '0';
+                sidebarOverlay.style.visibility = 'hidden';
+                sidebarOverlay.style.pointerEvents = 'none';
+                // Allow body scrolling again
+                document.body.classList.remove('sidebar-open');
+            });
+        }
+    });
+})();
+</script>
+    
     <style>
+        /* CRITICAL MOBILE FIXES - Directly in the head for priority loading */
+        @media (max-width: 767px) {
+            /* Force mobile layout */
+            html, body {
+                width: 100% !important;
+                min-width: 100% !important;
+                max-width: 100vw !important;
+                overflow-x: hidden !important;
+                -webkit-text-size-adjust: 100% !important;
+            }
+            
+            /* Fixed navbar styles */
+            #mobile-navbar {
+                display: block !important;
+                visibility: visible !important;
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100% !important;
+                z-index: 1000 !important;
+                background-color: #186862 !important;
+            }
+            
+            /* Hide desktop navbar forcefully */
+            .navbar.hidden.md\:block, 
+            nav.navbar:not(#mobile-navbar) {
+                display: none !important;
+                visibility: hidden !important;
+                height: 0 !important;
+                overflow: hidden !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+            }
+            
+            /* Ensure proper spacing for mobile content */
+            .container {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            
+            /* Mobile optimization for grid layouts */
+            .grid {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+            }
+            
+            @media (min-width: 480px) {
+                .grid {
+                    grid-template-columns: repeat(2, 1fr) !important;
+                }
+            }
+        }
+        
         * {
             font-family: Arial, sans-serif !important;
         }
@@ -40,131 +137,7 @@
             align-items: stretch;
         }
 
-        /* Mobile-first responsive design - Fixed */
-        @media screen and (max-width: 768px) {
-            /* Debug indicator */
-            body::after {
-                content: 'Mobile CSS Active';
-                position: fixed;
-                bottom: 10px;
-                right: 10px;
-                background: #4CAF50;
-                color: white;
-                padding: 5px 10px;
-                font-size: 12px;
-                z-index: 9999;
-                border-radius: 4px;
-            }
-
-            /* Force mobile layout */
-            .container {
-                padding-left: 1rem !important;
-                padding-right: 1rem !important;
-            }
-
-            /* Header mobile */
-            header {
-                height: 50vh !important;
-            }
-
-            header img {
-                height: 50vh !important;
-                object-fit: cover;
-            }
-
-            /* News cards mobile */
-            .bg-white.rounded-lg.overflow-hidden.shadow-md {
-                margin-bottom: 1rem;
-            }
-
-            .w-full.h-56.object-cover {
-                height: 180px !important;
-            }
-
-            /* Typography adjustments */
-            h2 {
-                font-size: 1.5rem !important;
-            }
-
-            h3 {
-                font-size: 1.25rem !important;
-            }
-
-            .font-bold.text-xl {
-                font-size: 1.1rem !important;
-            }
-
-            /* Carousel mobile */
-            .carousel-item-enhanced {
-                flex: 0 0 100% !important;
-                max-width: 100% !important;
-                padding: 0.5rem !important;
-            }
-
-            .enhanced-carousel {
-                padding: 0 1rem;
-            }
-
-            /* Program cards mobile */
-            .program-card {
-                margin-bottom: 1rem !important;
-            }
-
-            /* Media section mobile */
-            .media-section {
-                padding: 2rem 0 !important;
-            }
-
-            /* Modal mobile */
-            #programDetailsModal .max-w-3xl {
-                max-width: 95% !important;
-                margin: 1rem;
-            }
-
-            /* Button adjustments */
-            .login {
-                padding: 0.75rem 1rem !important;
-                font-size: 0.875rem !important;
-            }
-        }
-
-        /* Specific mobile styles for news grid */
-        @media screen and (max-width: 640px) {
-            /* Only force single column on small phones */
-            .news-grid {
-                grid-template-columns: 1fr !important;
-                gap: 1rem !important;
-            }
-        }
-
-        /* Tablet view - maintain 2 columns for news */
-        @media screen and (min-width: 641px) and (max-width: 768px) {
-            .news-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
-        }
-
-        /* Program and media section grids - mobile */
-        @media screen and (max-width: 768px) {
-            .program-section .grid,
-            .media-section .grid {
-                grid-template-columns: 1fr !important;
-                gap: 1rem !important;
-            }
-        }
-
-        /* Larger phones - 2 columns for program and media */
-        @media screen and (min-width: 480px) and (max-width: 768px) {
-            .program-section .grid,
-            .media-section .grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
-        }
-
-        /* Font Awesome preservation */
-        .fas, .fab, .far, .fa {
-            font-family: "Font Awesome 5 Free", "Font Awesome 5 Brands" !important;
-        }
+        /* Enhanced responsive design for mobile devices */
         @media (max-width: 768px) {
             .media-section {
                 padding: 3rem 0;
@@ -305,10 +278,24 @@
 </head>
 
 <body class="font-sans bg-gray-100">
+    <!-- EARLY INIT SCRIPT - Forces mobile detection before content loads -->
+    <script>
+    (function() {
+        // Immediately check if we're on mobile and set appropriate classes
+        if (window.innerWidth <= 767) {
+            document.body.classList.add('mobile-view');
+            // Set a flag in localStorage so other scripts can detect mobile mode
+            localStorage.setItem('isMobileView', 'true');
+        } else {
+            localStorage.setItem('isMobileView', 'false');
+        }
+    })();
+    </script>
+
     @include('layout.navbar')
 
     <!-- Mobile detection indicator -->
-    <div id="mobile-indicator" style="display: none;"></div>
+    <div id="mobile-indicator" class="hidden"></div>
 
     <!-- Header section with responsive classes -->
     <header class="relative h-screen md:h-screen">
@@ -342,50 +329,57 @@
         </div>
     </div>
 
-    <!-- Main content wrapper -->
-    <main class="container mx-auto py-6 md:py-12 px-4 md:px-6">
+    <!-- Main content -->
+    <main class="container mx-auto py-12 px-6">
         <!-- Section Header with better styling -->
-        <div class="unj-content-section-header mb-8">
-            <h2 class="unj-section-title text-2xl md:text-3xl">Berita Terbaru</h2>
-            <p class="unj-section-subtitle text-sm md:text-base">Informasi terkini dari Universitas Negeri Jakarta</p>
+        <div class="unj-content-section-header">
+            <h2 class="unj-section-title">Berita Terbaru</h2>
+            <p class="unj-section-subtitle">Informasi terkini dari Universitas Negeri Jakarta</p>
+        </div>
+        <!-- Filter and View Options -->
+        <div>
         </div>
 
-        <!-- Regular News Grid with first 3 news items - Add news-grid class -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-8 md:mb-16 news-grid">
+
+        <!-- Regular News Grid with first 3 news items -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             @php
                 // Take the first 3 news items for the regular grid
                 $regularNews = $featuredNews->take(3);
             @endphp
 
             @foreach ($regularNews as $news)
-                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div
+                    class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                     <div class="relative">
-                        <img alt="{{ $news->judul }}" class="w-full h-48 md:h-56 object-cover"
+                        <img alt="{{ $news->judul }}" class="w-full h-56 object-cover"
                             src="{{ asset('storage/' . $news->gambar) }}" />
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-20 md:h-24"></div>
-                        <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-xs md:text-sm font-semibold">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-24">
+                        </div>
+                        <div
+                            class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
                             {{ ucfirst($news->kategori) }}
                         </div>
                     </div>
-                    <div class="p-4 md:p-5">
+                    <div class="p-5">
                         <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center text-gray-500 text-xs md:text-sm">
+                            <div class="flex items-center text-gray-500 text-sm">
                                 <i class="fas fa-user-circle mr-2"></i>Admin
                             </div>
-                            <div class="text-gray-500 text-xs md:text-sm">
+                            <div class="text-gray-500 text-sm">
                                 <i class="fas fa-calendar-alt mr-1"></i>{{ date('d M Y', strtotime($news->tanggal)) }}
                             </div>
                         </div>
                         <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="block">
-                            <h2 class="font-bold text-lg md:text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
+                            <h2 class="font-bold text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
                                 {{ $news->judul }}
                             </h2>
                         </a>
-                        <p class="text-gray-600 mb-4 text-sm md:text-base">
+                        <p class="text-gray-600 mb-4">
                             {{ Str::limit(strip_tags($news->isi), 100) }}
                         </p>
                         <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}"
-                            class="inline-block text-teal-700 hover:text-yellow-500 font-medium text-sm md:text-base">
+                            class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
                             Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                         </a>
                     </div>
@@ -395,7 +389,7 @@
 
         <!-- Enhanced Featured News Carousel with remaining news items -->
         <div class="enhanced-carousel">
-            <div class="enhanced-carousel-title text-xl md:text-2xl">Berita Terbaru</div>
+            <div class="enhanced-carousel-title">Berita Terbaru</div>
             <div class="carousel">
                 <div class="carousel-inner">
                     @php
@@ -406,24 +400,25 @@
                         <div class="carousel-item-enhanced">
                             <div class="news-card-enhanced">
                                 <div class="news-image-container">
-                                    <img alt="{{ $featured->judul }}" class="news-image h-48 md:h-auto"
+                                    <img alt="{{ $featured->judul }}" class="news-image"
                                         src="{{ asset('storage/' . $featured->gambar) }}" />
                                     <div class="news-tag-enhanced">{{ ucfirst($featured->kategori) }}</div>
                                 </div>
-                                <div class="news-content p-4">
-                                    <div class="news-meta text-xs md:text-sm">
+                                <div class="news-content">
+                                    <div class="news-meta">
                                         <i class="fas fa-user-circle mr-2"></i>Admin
                                         <span class="mx-2">|</span>
-                                        <i class="fas fa-calendar-alt mr-2"></i>{{ date('d M Y', strtotime($featured->tanggal)) }}
+                                        <i
+                                            class="fas fa-calendar-alt mr-2"></i>{{ date('d M Y', strtotime($featured->tanggal)) }}
                                     </div>
                                     <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}">
-                                        <h3 class="news-title text-lg md:text-xl">{{ $featured->judul }}</h3>
+                                        <h3 class="news-title">{{ $featured->judul }}</h3>
                                     </a>
-                                    <p class="news-excerpt text-sm md:text-base">
+                                    <p class="news-excerpt">
                                         {!! Str::limit($featured->isi, 150) !!}
                                     </p>
                                     <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}"
-                                        class="news-link text-sm md:text-base">
+                                        class="news-link">
                                         Baca selengkapnya <i class="fas fa-arrow-right"></i>
                                     </a>
                                 </div>
@@ -597,14 +592,252 @@
 
     @include('layout.footer')
 
-    <!-- Load mobile.js with enhanced detection -->
+    <!-- Load mobile.js EARLIER to ensure it runs before other scripts -->
     <script src="{{ asset('mobile.js') }}"></script>
     <script src="{{ asset('js/instagram-api-feed.js') }}"></script>
     <script src="{{ asset('home.js') }}"></script>
-
-    <!-- Enhanced mobile detection and debugging -->
+    
     <script>
-         document.addEventListener('DOMContentLoaded', function() {
+   // Enhanced mobile.js - Complete implementation
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Mobile script initialized - enhanced version');
+    
+    // Fix viewport settings
+    const viewport = document.querySelector('meta[name="viewport"]');
+    if (viewport) {
+        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+        console.log('Viewport meta tag updated');
+    }
+
+    // Mobile elements
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const menuIcon = document.getElementById('menu-icon');
+    const mobileSidebar = document.getElementById('mobile-sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const closeSidebar = document.getElementById('close-sidebar');
+    const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
+    
+    // Force mobile navbar for mobile devices
+    function forceMobileLayout() {
+        if (window.innerWidth <= 767) {
+            // Get navbar elements
+            const mobileNavbar = document.getElementById('mobile-navbar');
+            const desktopNavbar = document.querySelector('.navbar.hidden.md\\:block');
+            
+            if (mobileNavbar) {
+                mobileNavbar.style.display = 'block';
+                mobileNavbar.style.visibility = 'visible';
+                console.log('Mobile navbar displayed');
+            }
+            
+            if (desktopNavbar) {
+                desktopNavbar.style.display = 'none';
+                desktopNavbar.style.visibility = 'hidden';
+                console.log('Desktop navbar hidden');
+            }
+            
+            // Add mobile class to body
+            document.body.classList.add('mobile-view');
+        }
+    }
+    
+    // Run immediately
+    forceMobileLayout();
+    
+    // Run after short delays to override any other scripts
+    setTimeout(forceMobileLayout, 100);
+    setTimeout(forceMobileLayout, 500);
+    
+    // Show sidebar function with direct style manipulation
+    function showSidebar() {
+        console.log('Opening sidebar');
+        
+        // Apply styles directly
+        if (mobileSidebar) {
+            mobileSidebar.style.transform = 'translateX(0)';
+            mobileSidebar.style.display = 'block';
+            console.log('Sidebar transform applied');
+        }
+        
+        if (sidebarOverlay) {
+            sidebarOverlay.style.opacity = '1';
+            sidebarOverlay.style.visibility = 'visible';
+            sidebarOverlay.style.pointerEvents = 'auto';
+            console.log('Overlay styles applied');
+        }
+        
+        document.body.classList.add('sidebar-open');
+        
+        if (menuIcon) {
+            menuIcon.classList.remove('fa-bars');
+            menuIcon.classList.add('fa-times');
+        }
+    }
+    
+    // Hide sidebar function with direct style manipulation
+    function hideSidebar() {
+        console.log('Closing sidebar');
+        
+        // Apply styles directly
+        if (mobileSidebar) {
+            mobileSidebar.style.transform = 'translateX(100%)';
+            console.log('Sidebar transform reset');
+        }
+        
+        if (sidebarOverlay) {
+            sidebarOverlay.style.opacity = '0';
+            sidebarOverlay.style.visibility = 'hidden';
+            sidebarOverlay.style.pointerEvents = 'none';
+            console.log('Overlay styles reset');
+        }
+        
+        document.body.classList.remove('sidebar-open');
+        
+        if (menuIcon) {
+            menuIcon.classList.remove('fa-times');
+            menuIcon.classList.add('fa-bars');
+        }
+    }
+    
+    // Toggle sidebar with click handler
+    if (mobileMenuToggle) {
+        console.log('Menu toggle button found');
+        mobileMenuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Menu toggle clicked');
+            showSidebar();
+        });
+    } else {
+        console.log('ERROR: Menu toggle button not found!');
+    }
+    
+    // Close sidebar handlers
+    if (closeSidebar) {
+        console.log('Close button found');
+        closeSidebar.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Close button clicked');
+            hideSidebar();
+        });
+    } else {
+        console.log('ERROR: Close sidebar button not found!');
+    }
+    
+    if (sidebarOverlay) {
+        console.log('Overlay found');
+        sidebarOverlay.addEventListener('click', function(e) {
+            console.log('Overlay clicked');
+            hideSidebar();
+        });
+    } else {
+        console.log('ERROR: Sidebar overlay not found!');
+    }
+    
+    // Handle dropdown menus in sidebar
+    if (dropdownButtons && dropdownButtons.length > 0) {
+        console.log('Found ' + dropdownButtons.length + ' dropdown buttons');
+        dropdownButtons.forEach(function(button, index) {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Dropdown button ' + (index + 1) + ' clicked');
+                
+                const dropdown = this.nextElementSibling;
+                const icon = this.querySelector('.fa-chevron-down');
+                
+                if (dropdown) {
+                    dropdown.classList.toggle('hidden');
+                    const isHidden = dropdown.classList.contains('hidden');
+                    console.log('Dropdown ' + (index + 1) + ' is now ' + (isHidden ? 'hidden' : 'visible'));
+                    
+                    if (icon) {
+                        icon.style.transform = isHidden ? 'rotate(0)' : 'rotate(180deg)';
+                    }
+                } else {
+                    console.log('ERROR: No dropdown found for button ' + (index + 1));
+                }
+            });
+        });
+    } else {
+        console.log('No dropdown buttons found');
+    }
+    
+    // Close sidebar on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            console.log('Escape key pressed');
+            hideSidebar();
+        }
+    });
+    
+    // Run on resize to maintain correct display
+    window.addEventListener('resize', forceMobileLayout);
+    
+    // Run after page load
+    window.addEventListener('load', forceMobileLayout);
+    
+    // Add debug function
+    window.debugMobileSidebar = function() {
+        const elements = {
+            viewport: viewport ? viewport.getAttribute('content') : 'Not found',
+            mobileMenuToggle: mobileMenuToggle ? 'Found' : 'Not found',
+            mobileSidebar: mobileSidebar ? 'Found' : 'Not found',
+            sidebarOverlay: sidebarOverlay ? 'Found' : 'Not found',
+            closeSidebar: closeSidebar ? 'Found' : 'Not found',
+            dropdownButtons: dropdownButtons ? dropdownButtons.length + ' found' : 'None found'
+        };
+        
+        const styles = {
+            sidebarTransform: mobileSidebar ? mobileSidebar.style.transform : 'N/A',
+            sidebarDisplay: mobileSidebar ? getComputedStyle(mobileSidebar).display : 'N/A',
+            overlayOpacity: sidebarOverlay ? sidebarOverlay.style.opacity : 'N/A',
+            overlayVisibility: sidebarOverlay ? sidebarOverlay.style.visibility : 'N/A',
+            bodyHasClass: document.body.classList.contains('sidebar-open')
+        };
+        
+        console.log('Mobile Debug Info:');
+        console.log('Elements:', elements);
+        console.log('Styles:', styles);
+        console.log('Window width:', window.innerWidth);
+        
+        return { elements, styles };
+    };
+    
+    // Override any existing force desktop layout functions
+    if (window.forceDesktopLayout) {
+        console.log('Overriding forceDesktopLayout function');
+        const originalFn = window.forceDesktopLayout;
+        window.forceDesktopLayout = function() {
+            // Call original function
+            originalFn.apply(this, arguments);
+            
+            // Then forcefully apply our mobile layout if needed
+            if (window.innerWidth <= 767) {
+                forceMobileLayout();
+            }
+        };
+    }
+    
+    // Initial styles setup
+    if (mobileSidebar) {
+        console.log('Setting initial sidebar style');
+        mobileSidebar.style.transform = 'translateX(100%)';
+    }
+    
+    if (sidebarOverlay) {
+        console.log('Setting initial overlay style');
+        sidebarOverlay.style.opacity = '0';
+        sidebarOverlay.style.visibility = 'hidden';
+        sidebarOverlay.style.pointerEvents = 'none';
+    }
+    
+    console.log('Mobile initialization complete');
+});
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
         // Fetch YouTube videos from the API
         fetch('/api/youtube-videos')
             .then(response => response.json())
@@ -693,8 +926,87 @@
                 `;
             });
     });
-        // Mobile detection
-        function isMobileDevice() {
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('programDetailsModal');
+        const modalTitle = document.getElementById('programModalTitle');
+        const modalDescription = document.getElementById('programModalDescription');
+        const modalImageContainer = document.getElementById('modalImageContainer');
+        const modalFallbackIcon = document.getElementById('modalFallbackIcon');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const programDetailsBtns = document.querySelectorAll('.program-details-btn');
+
+        // Function to open modal
+        function openProgramModal(btn) {
+            // Get data from button's data attributes
+            const programId = btn.getAttribute('data-program-id');
+            const title = btn.getAttribute('data-title');
+            const fullDescription = btn.getAttribute('data-full-description');
+
+            // Get card for image reference
+            const card = btn.closest('.program-card');
+            const cardImage = card.querySelector('img');
+
+            // Set modal content
+            modalTitle.textContent = title;
+            modalDescription.innerHTML = fullDescription;
+
+            // Handle image
+            if (cardImage) {
+                modalImageContainer.innerHTML = ''; // Clear previous content
+                const modalImage = document.createElement('img');
+                modalImage.src = cardImage.src;
+                modalImage.alt = title;
+                modalImage.className = 'w-full h-full object-cover';
+                modalImageContainer.appendChild(modalImage);
+                modalFallbackIcon.style.display = 'none';
+            } else {
+                // If no image, show the fallback icon
+                modalFallbackIcon.style.display = 'block';
+                // Try to get the icon class from the card
+                const cardIcon = card.querySelector('.bg-teal-600 i');
+                if (cardIcon) {
+                    modalFallbackIcon.className = cardIcon.className;
+                } else {
+                    modalFallbackIcon.className = 'fas fa-cogs text-6xl text-white';
+                }
+            }
+
+            // Show modal
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // Add click event to all "Selengkapnya" buttons
+        programDetailsBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                openProgramModal(this);
+            });
+        });
+
+        // Close modal when close button is clicked
+        closeModalBtn.addEventListener('click', function() {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        });
+
+        // Close modal when clicking outside of the modal content
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+        });
+    });
+    function isMobileDevice() {
             const userAgent = navigator.userAgent.toLowerCase();
             const mobileKeywords = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
             const isMobileUA = mobileKeywords.test(userAgent);
@@ -821,7 +1133,10 @@
                 modal.classList.add('hidden');
             }
         });
-    });
+        });
+</script>
+
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         const feedContainer = document.getElementById('instagram-api-feed-container');
         if (!feedContainer) return;
@@ -929,34 +1244,14 @@
             `;
             });
     });
-
-    </script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Fetch carousel images from gallery
-
-        fetch('/api/carousel-images')
-            .then(response => response.json())
-            .then(data => {
-                // Create the carouselImages array with proper paths
-                window.carouselImages = data.map(item => '/storage/' + item.image);
-
-                // If no images are found, use default images
-                if (window.carouselImages.length === 0) {
-                    window.carouselImages = [
-                        "{{ asset('images/logos/image_corousel.jpg') }}",
-                    ];
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching carousel images:', error);
-                // Fallback to default images on error
-                window.carouselImages = [
-                    "{{ asset('images/logos/image_corousel.jpg') }}",
-                ];
-            });
-    });
 </script>
-</body>
+<script>
+    window.carouselImages = [
+        "{{ asset('images/logos/image_corousel.jpg') }}",
+        "/images/TERBUK TAMPAK DEPAN.png",
+        "/images/GEDUNG REKTORAT.png",
+        "/images/om.png",
+    ];
+</script>
+
 </html>
