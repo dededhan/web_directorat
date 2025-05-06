@@ -84,7 +84,7 @@
                     <li><a class="hover:text-yellow-400" href="{{ route('Pemeringkatan.program.global-engagement') }}">Global Engagement</a></li>
                     <li><a class="hover:text-yellow-400" href="{{ route('Pemeringkatan.program.lecturer-expose') }}">Lecturer Expose</a></li>
                     <li><a class="hover:text-yellow-400" href="{{ route('Pemeringkatan.program.international-faculty-staff') }}">International Faculty Staff</a></li>
-                    <li><a class="hover:text-yellow-400" href="{{ route('Pemeringkatan.program.international-student-mobility') }}">International Student Mobility</a></li>
+                    <li><a class="hover:text-yellow-400" href="https://unj.ac.id/international/resources/">International Student Mobility</a></li>
                     
                     <li class="relative">
                         <a href="#" class="flex justify-between items-center secondary-dropdown-toggle" data-dropdown="sustainability-dropdown">
