@@ -35,11 +35,13 @@
                             <option value="mrs">Mrs.</option>
                             <option value="ms">Ms.</option>
                         </select>
+                        <div class="form-text text-muted">Pilih title/gelar yang sesuai dengan responden</div>
                     </div>
                     <div class="col-md-8 mb-3">
                         <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
                         <input type="text" class="form-control" name="responden_fullname" id="nama_lengkap" required>
-                        <small class="form-text text-muted">Masukkan nama lengkap responden beserta gelar akademik (jika ada)</small>
+                        <div class="form-text text-muted">Masukkan nama lengkap responden beserta gelar akademik (jika ada)
+                        </div>
                     </div>
                 </div>
 
@@ -47,12 +49,12 @@
                     <div class="col-md-6 mb-3">
                         <label for="jabatan" class="form-label">Jabatan</label>
                         <input type="text" class="form-control" name="responden_jabatan" id="jabatan" required>
-                        <small class="form-text text-muted">Masukkan jabatan/posisi responden di instansi tempat bekerja</small>
+                        <div class="form-text text-muted">Masukkan jabatan/posisi responden di instansi tempat bekerja</div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="instansi" class="form-label">Instansi</label>
                         <input type="text" class="form-control" name="responden_instansi" id="instansi" required>
-                        <small class="form-text text-muted">Masukkan nama instansi/perusahaan tempat responden bekerja</small>
+                        <div class="form-text text-muted">Masukkan nama instansi/perusahaan tempat responden bekerja</div>
                     </div>
                 </div>
 
@@ -60,12 +62,12 @@
                     <div class="col-md-6 mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" name="email" id="email" required>
-                        <small class="form-text text-muted">Masukkan alamat email aktif responden untuk keperluan survey</small>
+                        <div class="form-text text-muted">Masukkan alamat email aktif responden untuk keperluan survey</div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="nomor_responden" class="form-label">Nomor Responden</label>
                         <input type="text" class="form-control" name="phone_responden" id="nomor_responden">
-                        <small class="form-text text-muted">Masukkan nomor telepon aktif responden (format: 08xxxx)</small>
+                        <div class="form-text text-muted">Masukkan nomor telepon aktif responden (format: 08xxxx)</div>
                         @error('phone_responden')
                             <span style="color: red">Nomor hp sama</span>
                         @enderror
@@ -76,13 +78,13 @@
                     <div class="col-md-6 mb-3">
                         <label for="nama_dosen" class="form-label">Nama Dosen</label>
                         <input type="text" class="form-control" name="responden_dosen" id="nama_dosen" required>
-                        <small class="form-text text-muted">Masukkan nama lengkap dosen yang mengusulkan responden</small>
+                        <div class="form-text text-muted">Masukkan nama lengkap dosen yang mengusulkan responden</div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="nomor_narahubung" class="form-label">Nomor Narahubung</label>
                         <input type="text" class="form-control" name="responden_dosen_phone" id="nomor_narahubung"
                             required>
-                        <small class="form-text text-muted">Masukkan nomor telepon aktif dosen pengusul (format: 08xxxx)</small>
+                        <div class="form-text text-muted">Masukkan nomor telepon aktif dosen pengusul (format: 08xxxx)</div>
                     </div>
                 </div>
 
@@ -102,7 +104,7 @@
                             <option value="feb">FEB</option>
                             <option value="profesi">PROFESI</option>
                         </select>
-                        <small class="form-text text-muted">Pilih fakultas dari dosen pengusul</small>
+                        <div class="form-text text-muted">Pilih fakultas dari dosen pengusul</div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Tipe Responden</label>
@@ -110,7 +112,8 @@
                             <option value="academic">Academic</option>
                             <option value="employer">Employer</option>
                         </select>
-                        <small class="form-text text-muted">Pilih kategori responden: Academic (dari institusi pendidikan) atau Employer (dari dunia kerja/industri)</small>
+                        <div class="form-text text-muted">Pilih kategori responden: Academic (dari institusi pendidikan)
+                            atau Employer (dari dunia kerja/industri)</div>
                     </div>
                 </div>
 
@@ -125,36 +128,6 @@
                 <div class="head">
                     <h3>Daftar Responden</h3>
                     <div class="d-flex justify-content-end align-items-center">
-                        <form method="GET" action="{{ route('admin.responden.index') }}" class="me-3">
-                            <div class="row g-2 align-items-center">
-                                <div class="col-auto">
-                                    <select class="form-select" name="kategori" id="filterKategori">
-                                        <option value="">Semua Kategori</option>
-                                        <option value="academic" {{ request('kategori') == 'academic' ? 'selected' : '' }}>Academic</option>
-                                        <option value="employer" {{ request('kategori') == 'employer' ? 'selected' : '' }}>Employer</option>
-                                    </select>
-                                </div>
-                                <div class="col-auto">
-                                    <select class="form-select" name="fakultas" id="filterFakultas">
-                                        <option value="">Semua Fakultas</option>
-                                        <option value="pascasarjana" {{ request('fakultas') == 'pascasarjana' ? 'selected' : '' }}>PASCASARJANA</option>
-                                        <option value="fip" {{ request('fakultas') == 'fip' ? 'selected' : '' }}>FIP</option>
-                                        <option value="fmipa" {{ request('fakultas') == 'fmipa' ? 'selected' : '' }}>FMIPA</option>
-                                        <option value="fpsi" {{ request('fakultas') == 'fpsi' ? 'selected' : '' }}>FPsi</option>
-                                        <option value="fbs" {{ request('fakultas') == 'fbs' ? 'selected' : '' }}>FBS</option>
-                                        <option value="ft" {{ request('fakultas') == 'ft' ? 'selected' : '' }}>FT</option>
-                                        <option value="fik" {{ request('fakultas') == 'fik' ? 'selected' : '' }}>FIKK</option>
-                                        <option value="fish" {{ request('fakultas') == 'fish' ? 'selected' : '' }}>FISH</option>
-                                        <option value="feb" {{ request('fakultas') == 'feb' ? 'selected' : '' }}>FEB</option>
-                                        <option value="profesi" {{ request('fakultas') == 'profesi' ? 'selected' : '' }}>PROFESI</option>
-                                    </select>
-                                </div>
-                                <div class="col-auto">
-                                    <button type="submit" class="btn btn-primary">Filter</button>
-                                    <a href="{{ route('admin.responden.index') }}" class="btn btn-secondary">Reset</a>
-                                </div>
-                            </div>
-                        </form>
                         <div class="export-buttons me-3">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importModal">
@@ -168,8 +141,10 @@
                         <div class="search-box">
                             <input type="text" id="searchInput" class="form-control" placeholder="Search...">
                         </div>
+                        
                     </div>
                 </div>
+                
 
                 <div class="table-responsive">
                     <table class="table table-striped" id="respondent-table">
@@ -184,23 +159,10 @@
                                 <th>No. Responden</th>
                                 <th>Nama Dosen</th>
                                 <th>No. Narahubung</th>
-                                <th>
-                                    <a href="{{ request()->fullUrlWithQuery(['sort' => 'fakultas', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
-                                        fakultas
-                                        @if(request('sort') == 'fakultas')
-                                            {!! request('direction') == 'asc' ? '↑' : '↓' !!}
-                                        @endif
-                                    </a>
-                                </th>
-                                <th>
-                                    <a href="{{ request()->fullUrlWithQuery(['sort' => 'category', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
-                                        category
-                                        @if(request('sort') == 'category')
-                                            {!! request('direction') == 'asc' ? '↑' : '↓' !!}
-                                        @endif
-                                    </a>
-                                </th>
+                                <th>Fakultas</th>
+                                <th>Kategori</th>
                                 <th>Status</th>
+
                             </tr>
                         </thead>
                         <tbody id="respondent-list">
@@ -231,23 +193,25 @@
                                             @endif
                                         </select>
                                     </td>
+
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="12" class="text-center">Data Belum Ada</td>
-                                </tr>
+                                <span>Data Belum Ada</span>
                             @endforelse
+                            <!-- Pagination -->
+                            
                         </tbody>
                     </table>
-                    
-                    <!-- Pagination moved to the bottom -->
                     <div class="custom-pagination d-flex justify-content-end mt-3">
-                        {{ $respondens->appends(request()->query())->links('pagination::bootstrap-5') }}
+                        {{ $respondens->links('pagination::bootstrap-5') }}
                     </div>
+                  
+
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Import Excel Modal -->
     <div class="modal fade pt-3" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
         <div class="modal-dialog pt-3">
