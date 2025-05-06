@@ -150,16 +150,17 @@ class AdminRespondenController extends Controller
         
         return view('admin.responden.index', compact('respondens'));
     }
-    public function export()
+    public function export(Request $request)
     {
-        return Excel::download(new RespondenExport, 'responden-data.xlsx');
+        $kategori = $request->input('kategori');
+        $fakultas = $request->input('fakultas');
+        return Excel::download(new RespondenExport($kategori, $fakultas), 'responden-data.xlsx');
     }
-
-    /**
-     * Export responden data to CSV.
-     */
-    public function exportCSV()
+    
+    public function exportCSV(Request $request)
     {
-        return Excel::download(new RespondenExport, 'responden-data.csv');
+        $kategori = $request->input('kategori');
+        $fakultas = $request->input('fakultas');
+        return Excel::download(new RespondenExport($kategori, $fakultas), 'responden-data.csv');
     }
 }

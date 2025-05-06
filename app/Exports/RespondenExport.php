@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Responden;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -11,14 +11,30 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Illuminate\Support\Str;
 
-class RespondenExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithStyles
+class RespondenExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize, WithStyles
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
+    protected $kategori;
+    protected $fakultas;
+
+    public function __construct($kategori = null, $fakultas = null)
     {
-        return Responden::all();
+        $this->kategori = $kategori;
+        $this->fakultas = $fakultas;
+    }
+ 
+    public function query()
+    {
+        $query = Responden::query();
+
+        if ($this->kategori) {
+            $query->where('category', $this->kategori);
+        }
+
+        if ($this->fakultas) {
+            $query->where('fakultas', $this->fakultas);
+        }
+
+        return $query;
     }
 
     /**

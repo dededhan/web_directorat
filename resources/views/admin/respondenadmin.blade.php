@@ -130,16 +130,12 @@
                     <div class="d-flex justify-content-end align-items-center">
                         <div class="export-buttons me-3">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                    data-bs-target="#importModal">
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importModal">
                                     <i class='bx bx-import'></i> Import Excel
                                 </button>
-                                <a href="{{ route('admin.responden.export') }}" class="btn btn-success">
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exportFilterModal">
                                     <i class='bx bx-export'></i> Export Excel
-                                </a>
-                                <a href="{{ route('admin.responden.exportCSV') }}" class="btn btn-info">
-                                    <i class='bx bx-export'></i> Export CSV
-                                </a>
+                                </button>
                             </div>
                         </div>
                         <div class="search-box">
@@ -152,6 +148,7 @@
                     <table class="table table-striped" id="respondent-table">
                         <thead>
                             <tr>
+                                <th>No</th>
                                 <th>Title</th>
                                 <th>Nama Lengkap</th>
                                 <th>Jabatan</th>
@@ -169,6 +166,7 @@
                         <tbody id="respondent-list">
                             @forelse ($respondens as $responden)
                                 <tr>
+                                    <td>1</td>
                                     <td>{{ Str::ucfirst($responden->title) }}</td>
                                     <td>{{ $responden->fullname }}</td>
                                     <td>{{ $responden->jabatan }}</td>
@@ -208,8 +206,8 @@
     </div>
 
     <!-- Import Excel Modal -->
-    <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade pt-3" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+        <div class="modal-dialog pt-3">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="importModalLabel">Import Responden from Excel</h5>
@@ -240,6 +238,50 @@
                         <button type="submit" class="btn btn-primary">Import</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Export Filter Modal -->
+    <div class="modal fade pt-3" id="exportFilterModal" tabindex="-1" aria-labelledby="exportFilterModalLabel" aria-hidden="true" >
+        <div class="modal-dialog pt-3" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exportFilterModalLabel">Filter Export</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="filterCategory" class="form-label">Kategori</label>
+                        <select class="form-select" id="filterCategory">
+                            <option value="">Semua Kategori</option>
+                            <option value="academic">Academic</option>
+                            <option value="employer">Employer</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="filterFakultas" class="form-label">Fakultas</label>
+                        <select class="form-select" id="filterFakultas">
+                            <option value="">Semua Fakultas</option>
+                            <option value="pascasarjana">PASCASARJANA</option>
+                            <option value="fip">FIP</option>
+                            <option value="fmipa">FMIPA</option>
+                            <option value="fpsi">FPsi</option>
+                            <option value="fbs">FBS</option>
+                            <option value="ft">FT</option>
+                            <option value="fik">FIKK</option>
+                            <option value="fish">FISH</option>
+                            <option value="feb">FEB</option>
+                            <option value="profesi">PROFESI</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="exportFilteredExcel">Export Excel</button>
+                    <button type="button" class="btn btn-info" id="exportFilteredCSV">Export CSV</button>
+                </div>
             </div>
         </div>
     </div>
@@ -305,6 +347,32 @@
         document.addEventListener('DOMContentLoaded', function() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+            document.getElementById('exportFilteredExcel').addEventListener('click', function() {
+                const category = document.getElementById('filterCategory').value;
+                const fakultas = document.getElementById('filterFakultas').value;
+                
+                let url = '{{ route("admin.responden.export") }}?';
+                const params = [];
+                if (category) params.push(`kategori=${encodeURIComponent(category)}`);
+                if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
+                url += params.join('&');
+                
+                window.location.href = url;
+            });
+
+            // Handle CSV Export
+            document.getElementById('exportFilteredCSV').addEventListener('click', function() {
+                const category = document.getElementById('filterCategory').value;
+                const fakultas = document.getElementById('filterFakultas').value;
+                
+                let url = '{{ route("admin.responden.exportCSV") }}?';
+                const params = [];
+                if (category) params.push(`kategori=${encodeURIComponent(category)}`);
+                if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
+                url += params.join('&');
+                
+                window.location.href = url;
+            });
             document.querySelectorAll('.status-dropdown').forEach(select => {
                 // Initial state check
                 const updateButton = select.closest('tr').querySelector('.update-status');
