@@ -21,28 +21,34 @@ class AdminRespondenController extends Controller
      */
     public function index(Request $request)
     {
-        $sort      = $request->get('sort', 'fullname');
+        $sort = $request->get('sort', 'fullname');
         $direction = $request->get('direction', 'asc');
-
-        // 2. Whitelist allowed columns to avoid SQL injection
-        $allowed = [
-            'title','fullname','jabatan','instansi',
-            'email','phone_responden','nama_dosen_pengusul',
-            'phone_dosen','fakultas','category','status'
-        ];
-        if (! in_array($sort, $allowed)) {
+    
+        // Validate sort parameters
+        $allowedSorts = ['title', 'fullname', 'jabatan', 'instansi', 'email', 'phone_responden', 'nama_dosen_pengusul', 'phone_dosen', 'fakultas', 'category', 'status'];
+        if (!in_array($sort, $allowedSorts)) {
             $sort = 'fullname';
         }
-        if (! in_array($direction, ['asc','desc'])) {
-            $direction = 'asc';
+        $direction = in_array(strtolower($direction), ['asc', 'desc']) ? $direction : 'asc';
+    
+        $query = Responden::query();
+    
+        // Apply filters
+        if ($request->filled('kategori')) {
+            $query->where('category', $request->kategori);
         }
-
-        // 3. Build query, order, paginate, and append query string
-        $respondens = Responden::orderBy('fullname','asc') // or your dynamic sort
-                         ->paginate(25);
-
+        if ($request->filled('fakultas')) {
+            $query->where('fakultas', $request->fakultas);
+        }
+    
+        // Apply sorting
+        $query->orderBy($sort, $direction);
+    
+        $respondens = $query->paginate(25)->appends($request->query());
+    
         return view('admin.respondenadmin', compact('respondens'));
     }
+    
 
     /**
      * Show the form for creating a new resource.
