@@ -828,7 +828,80 @@
                             <div class="faculty-tag">Scopus: 9</div>
                         </div>
                     </div>
+
+                    <div class="faculty-profile">
+                        <div class="faculty-profile-header">
+                            <div class="faculty-profile-avatar">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="faculty-profile-info">
+                                <div class="faculty-profile-name">Sunny Owen</div>
+                                <div class="faculty-profile-position">Fakultas Ilmu Sosial dan Humaniora (FISH)</div>
+                                <div class="faculty-profile-origin">
+                                    <img src="https://cdn.countryflags.com/thumbs/US/flag-400.png" alt="US Flag">
+                                    <span>California State Polytecnic University</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="faculty-profile-body">
+                            <div class="faculty-profile-section">
+                                <div class="faculty-profile-section-title">Bidang Keahlian</div>
+                                <p>Komunikasi Internasional</p>
+                            </div>
+                            <div class="faculty-tag">QS WUR: 1401+</div>
+                        </div>
+                    </div>
+
+                    <div class="faculty-profile">
+                        <div class="faculty-profile-header">
+                            <div class="faculty-profile-avatar">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="faculty-profile-info">
+                                <div class="faculty-profile-name">Wang Yung Hui</div>
+                                <div class="faculty-profile-position">Pascasarjana</div>
+                                <div class="faculty-profile-origin">
+                                    <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" alt="China Flag">
+                                    <span>CCNU</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="faculty-profile-body">
+                            <div class="faculty-profile-section">
+                                <div class="faculty-profile-section-title">Bidang Keahlian</div>
+                                <p>Political Science</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faculty-profile">
+                        <div class="faculty-profile-header">
+                            <div class="faculty-profile-avatar">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="faculty-profile-info">
+                                <div class="faculty-profile-name">Prof. Dr. rer. Nat. Hesham A. El Enshasy</div>
+                                <div class="faculty-profile-position">UNJ</div>
+                                <div class="faculty-profile-origin">
+                                    <img src="https://cdn.countryflags.com/thumbs/malaysia/flag-400.png" alt="Malaysia Flag">
+                                    <span>Universiti Teknologi Malaysia</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="faculty-profile-body">
+                            <div class="faculty-profile-section">
+                                <div class="faculty-profile-section-title">Bidang Keahlian</div>
+                                <p>Political Science</p>
+                            </div>
+                            <div class="faculty-tag">QS WUR: 181</div>
+                            <div class="faculty-tag">QS Subject: 88(Chemical Engineering)</div>
+                            <div class="faculty-tag">Scopus: 40</div>
+                        </div>
+                    </div>
                 </div>
+
+
+               
             </section>
 
             <section class="faculty-section">
