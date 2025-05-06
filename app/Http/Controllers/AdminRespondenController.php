@@ -19,11 +19,29 @@ class AdminRespondenController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.respondenadmin', [
-            'respondens' => Responden::all()
-        ]);
+        $sort      = $request->get('sort', 'fullname');
+        $direction = $request->get('direction', 'asc');
+
+        // 2. Whitelist allowed columns to avoid SQL injection
+        $allowed = [
+            'title','fullname','jabatan','instansi',
+            'email','phone_responden','nama_dosen_pengusul',
+            'phone_dosen','fakultas','category','status'
+        ];
+        if (! in_array($sort, $allowed)) {
+            $sort = 'fullname';
+        }
+        if (! in_array($direction, ['asc','desc'])) {
+            $direction = 'asc';
+        }
+
+        // 3. Build query, order, paginate, and append query string
+        $respondens = Responden::orderBy('fullname','asc') // or your dynamic sort
+                         ->paginate(25);
+
+        return view('admin.respondenadmin', compact('respondens'));
     }
 
     /**

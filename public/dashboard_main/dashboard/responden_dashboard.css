@@ -136,6 +136,25 @@
 .export-buttons {
     margin-bottom: 20px;
 }
+.custom-pagination {
+    margin-top: 20px;
+}
+
+.custom-pagination .pagination {
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.custom-pagination .page-item.active .page-link {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: white;
+}
+
+.custom-pagination .page-link {
+    color: #3498db;
+    border-radius: 8px;
+}
 
 /* Add responsive styles for export buttons */
 @media (max-width: 768px) {

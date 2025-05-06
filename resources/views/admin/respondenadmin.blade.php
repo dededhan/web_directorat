@@ -141,8 +141,10 @@
                         <div class="search-box">
                             <input type="text" id="searchInput" class="form-control" placeholder="Search...">
                         </div>
+                        
                     </div>
                 </div>
+                
 
                 <div class="table-responsive">
                     <table class="table table-striped" id="respondent-table">
@@ -164,9 +166,9 @@
                             </tr>
                         </thead>
                         <tbody id="respondent-list">
-                            @forelse ($respondens as $responden)
+                            @forelse($respondens as $i => $responden)
                                 <tr>
-                                    <td>1</td>
+                                    <td>{{ $respondens->firstItem() + $i }}</td>
                                     <td>{{ Str::ucfirst($responden->title) }}</td>
                                     <td>{{ $responden->fullname }}</td>
                                     <td>{{ $responden->jabatan }}</td>
@@ -196,9 +198,14 @@
                             @empty
                                 <span>Data Belum Ada</span>
                             @endforelse
+                            <!-- Pagination -->
+                            
                         </tbody>
                     </table>
-
+                    <div class="custom-pagination d-flex justify-content-end mt-3">
+                        {{ $respondens->links('pagination::bootstrap-5') }}
+                    </div>
+                  
 
                 </div>
             </div>
