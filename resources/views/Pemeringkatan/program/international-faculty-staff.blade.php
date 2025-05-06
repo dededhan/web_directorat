@@ -540,6 +540,12 @@
             </div>
         </div>
 
+        <div class="container mx-auto">
+            <section class="faculty-section">
+                <img src="{{ asset('images/Lecturer.png') }}" alt="International Faculty Staff" class="w-full">
+            </section>
+        </div>
+
         <div class="container mx-auto px-6 py-8">
             <section class="faculty-section">
                 <h2 class="faculty-section-title text-3xl font-bold">Tentang International Faculty Staff</h2>
