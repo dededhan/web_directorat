@@ -312,17 +312,18 @@
             <div class="ekosistem-hero">
                 <div class="ekosistem-hero-content">
                     <h2>Ekosistem Inovasi UNJ</h2>
-                    <p>Membangun sinergi antara mahasiswa, peneliti, industri, dan pemerintah untuk menciptakan solusi inovatif yang berdampak pada masyarakat dan lingkungan.</p>
-                    <a href="#" class="ekosistem-btn">Pelajari Lebih Lanjut</a>
+                    {{-- <p>Membangun sinergi antara mahasiswa, peneliti, industri, dan pemerintah untuk menciptakan solusi inovatif yang berdampak pada masyarakat dan lingkungan.</p>
+                    <a href="#" class="ekosistem-btn">Pelajari Lebih Lanjut</a> --}}
                 </div>
             </div>
 
             <section class="ekosistem-section">
                 <h2 class="ekosistem-section-title">Tentang Ekosistem Inovasi UNJ</h2>
-                <p>Ekosistem Inovasi UNJ merupakan sebuah sistem kolaboratif yang menghubungkan berbagai pemangku kepentingan untuk menciptakan, mengembangkan, dan mengimplementasikan inovasi. Ekosistem ini dirancang untuk memfasilitasi transfer pengetahuan, teknologi, dan sumber daya antara mahasiswa, peneliti, industri, dan masyarakat.</p>
-                <p>Dengan menggabungkan keunggulan akademik UNJ dan kebutuhan industri serta masyarakat, ekosistem inovasi ini bertujuan untuk menghasilkan solusi yang relevan, berkelanjutan, dan berdampak positif bagi perkembangan ekonomi, sosial, dan lingkungan.</p>
+                <p>Ekosistem Inovasi UNJ merupakan sebuah sistem kolaboratif yang menghubungkan berbagai pemangku kepentingan untuk menciptakan, mengembangkan, dan mengimplementasikan inovasi. Ekosistem ini dirancang untuk memfasilitasi transfer pengetahuan, teknologi, dan sumber daya antara mahasiswa, peneliti, industri, dan masyarakat.
+                </p>
+                {{-- <p>Dengan menggabungkan keunggulan akademik UNJ dan kebutuhan industri serta masyarakat, ekosistem inovasi ini bertujuan untuk menghasilkan solusi yang relevan, berkelanjutan, dan berdampak positif bagi perkembangan ekonomi, sosial, dan lingkungan.</p> --}}
                 
-                <div class="ekosistem-cards">
+                {{-- <div class="ekosistem-cards">
                     <div class="ekosistem-card">
                         <div class="ekosistem-card-img"></div>
                         <div class="ekosistem-card-content">
@@ -383,53 +384,79 @@
                         <h3>Inkubasi</h3>
                         <p>Menyediakan dukungan dan sumber daya untuk mengembangkan ide inovatif menjadi produk atau layanan yang siap dipasarkan.</p>
                     </div>
-                </div>
+                </div> --}}
             </section>
 
             <section class="ekosistem-section">
-                <h2 class="ekosistem-section-title">Proses Inovasi</h2>
-                <p>Ekosistem Inovasi UNJ menerapkan pendekatan sistematis dalam proses inovasi, mulai dari tahap identifikasi masalah hingga implementasi dan evaluasi:</p>
-                
-                <div class="ekosistem-process">
+                <h2 class="ekosistem-section-title">Tujuan Ekosistem Inovasi di Perguruan Tinggi
+                </h2>
+                {{-- <p>Ekosistem Inovasi UNJ menerapkan pendekatan sistematis dalam proses inovasi, mulai dari tahap identifikasi masalah hingga implementasi dan evaluasi:</p>
+                 --}}
+                {{-- <div class="ekosistem-process"> --}}
                     <div class="ekosistem-process-item">
                         <div class="ekosistem-process-number">1</div>
                         <div class="ekosistem-process-content">
-                            <div class="ekosistem-process-title">Identifikasi Masalah & Peluang</div>
-                            <p>Mengidentifikasi permasalahan dan peluang di masyarakat, industri, atau lingkungan yang membutuhkan solusi inovatif.</p>
+                            <div class="ekosistem-process-title">Mendorong terciptanya budaya inovasi di lingkungan kampus</div>
+                            <p>Menanamkan nilai-nilai kreatif, kolaboratif, dan solutif dalam kegiatan akademik maupun non-akademik.</p>
                         </div>
                     </div>
                     <div class="ekosistem-process-item">
                         <div class="ekosistem-process-number">2</div>
                         <div class="ekosistem-process-content">
-                            <div class="ekosistem-process-title">Pengembangan Ide</div>
-                            <p>Melakukan brainstorming dan pengembangan ide solusi melalui kolaborasi multidisiplin dan metode design thinking.</p>
+                            <div class="ekosistem-process-title">Memfasilitasi pengembangan riset yang aplikatif dan berdampak
+                            </div>
+                            <p>Meningkatkan kualitas dan relevansi penelitian agar dapat diimplementasikan dalam dunia industri, masyarakat, maupun kebijakan publik.
+                            </p>
                         </div>
                     </div>
                     <div class="ekosistem-process-item">
                         <div class="ekosistem-process-number">3</div>
                         <div class="ekosistem-process-content">
-                            <div class="ekosistem-process-title">Prototyping & Pengujian</div>
-                            <p>Membuat prototipe dan melakukan pengujian untuk memvalidasi kelayakan teknis dan nilai dari solusi yang dikembangkan.</p>
+                            <div class="ekosistem-process-title">Menjembatani kolaborasi antara kampus, industri, pemerintah, dan masyarakat (quadruple helix)</div>
+                            <p>Membangun sinergi antaraktor dalam proses hilirisasi hasil penelitian menjadi produk, layanan, atau kebijakan yang bermanfaat.
+                            </p>
                         </div>
                     </div>
                     <div class="ekosistem-process-item">
                         <div class="ekosistem-process-number">4</div>
                         <div class="ekosistem-process-content">
-                            <div class="ekosistem-process-title">Implementasi & Skalabilitas</div>
-                            <p>Mengimplementasikan solusi dan mengembangkan strategi untuk memperluas dampak dan jangkauan inovasi.</p>
+                            <div class="ekosistem-process-title">Mendukung pertumbuhan startup dan kewirausahaan berbasis teknologi pada civitas akademika
+                            </div>
+                            <p>Menjadi inkubator ide dan bisnis inovatif yang dapat membuka lapangan kerja dan meningkatkan daya saing nasional.
+                            </p>
                         </div>
                     </div>
                     <div class="ekosistem-process-item">
                         <div class="ekosistem-process-number">5</div>
                         <div class="ekosistem-process-content">
-                            <div class="ekosistem-process-title">Evaluasi & Perbaikan</div>
-                            <p>Mengevaluasi hasil implementasi dan melakukan perbaikan berkelanjutan untuk meningkatkan efektivitas solusi.</p>
+                            <div class="ekosistem-process-title">Memperkuat sistem perlindungan dan pemanfaatan kekayaan intelektual (HKI)
+                            </div>
+                            <p>Mendorong dosen dan mahasiswa untuk menghasilkan karya inovatif yang dilindungi secara hukum dan berpotensi dikomersialisasikan.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="ekosistem-process-item">
+                        <div class="ekosistem-process-number">6</div>
+                        <div class="ekosistem-process-content">
+                            <div class="ekosistem-process-title">Menyediakan sarana, prasarana, dan kebijakan pendukung inovasi yang terintegrasi
+                            </div>
+                            <p>Membangun infrastruktur seperti laboratorium inovasi, maker space, pusat inkubasi bisnis, serta regulasi yang mendukung iklim inovatif.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="ekosistem-process-item">
+                        <div class="ekosistem-process-number">7</div>
+                        <div class="ekosistem-process-content">
+                            <div class="ekosistem-process-title">Menjadi pusat unggulan dalam pengembangan ilmu pengetahuan dan teknologi yang relevan dengan tantangan lokal dan global
+                            </div>
+                            <p>Berperan aktif dalam menjawab isu-isu strategis seperti pendidikan, lingkungan, energi, ekonomi kreatif, dan transformasi digital.
+                            </p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section class="ekosistem-section">
+            {{-- <section class="ekosistem-section">
                 <h2 class="ekosistem-section-title">Pencapaian Ekosistem Inovasi UNJ</h2>
                 
                 <div class="ekosistem-stats">
@@ -477,7 +504,7 @@
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> --}}
 
             <div class="ekosistem-cta">
                 <h2>Bergabunglah dengan Ekosistem Inovasi UNJ</h2>

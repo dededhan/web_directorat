@@ -18,7 +18,7 @@ class StoreAlumniBerdampakRequest extends FormRequest
             'judul_berita' => 'required|string|max:255',
             'tanggal_berita' => 'required|date',
             'fakultas' => 'required|in:pascasarjana,fip,fmipa,fppsi,fbs,ft,fik,fis,fe,profesi',
-            'prodi' => 'required|string',
+            'prodi' => 'nullable|string',
             'link_berita' => 'required|url|max:500',
         ];
     }

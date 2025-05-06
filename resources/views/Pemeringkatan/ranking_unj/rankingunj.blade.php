@@ -477,7 +477,7 @@
 
     </div>
 
-    {{-- <div class="ranking-section" id="rankings">
+    <div class="ranking-section" id="rankings">
         <h2 class="ranking-title">Ranking Universitas Negeri Jakarta</h2>
         
         <div class="ranking-grid">
@@ -491,7 +491,7 @@
             </a>
             @endforeach
         </div>
-    </div> --}}
+    </div>
 
     <!-- Replaced banner with a centered button -->
     <div style="text-align: center; padding: 20px 0; background-color: #f5f5f5;">

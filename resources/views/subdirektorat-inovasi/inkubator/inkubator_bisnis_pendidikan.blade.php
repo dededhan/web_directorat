@@ -283,15 +283,15 @@
             <div class="inkubator-hero">
                 <div class="inkubator-hero-content">
                     <h2>Inkubator Bisnis</h2>
-                    <p>Menjembatani Inovasi Akademik dengan Kebutuhan Industri dan Masyarakat</p>
-                    <a href="#" class="inkubator-btn">Pelajari Lebih Lanjut</a>
+                    {{-- <p>Menjembatani Inovasi Akademik dengan Kebutuhan Industri dan Masyarakat</p>
+                    <a href="#" class="inkubator-btn">Pelajari Lebih Lanjut</a> --}}
                 </div>
             </div>
 
             <section class="inkubator-section">
                 <h2 class="inkubator-section-title">Tentang Inkubator Bisnis</h2>
-                <p>Inkubator bisnis adalah unit yang dibentuk untuk mendukung dosen, mahasiswa dan alumni dalam mengembangkan ide bisnis menjadi usaha nyata. Inkubator ini menjadi jembatan antara hasil pendidikan dan riset dengan kebutuhan dunia industri dan masyarakat.</p>
-                <p>Melalui program ini, kami membantu mengubah potensi akademik menjadi solusi bisnis yang berkelanjutan dan berdampak positif terhadap masyarakat.</p>
+                <p>Inkubator bisnis adalah unit atau lembaga yang dibentuk untuk mendukung dosen, mahasiswa dan alumni dalam mengembangkan ide bisnis menjadi usaha nyata. Inkubator ini menjadi jembatan antara hasil pendidikan dan riset dengan kebutuhan dunia industri dan masyarakat.
+                </p>
                 
                 <div class="inkubator-features">
                     <div class="inkubator-feature">
@@ -333,7 +333,7 @@
                     </div>
                 </div>
             </section>
-
+{{-- 
             <section class="inkubator-section">
                 <h2 class="inkubator-section-title">Program Kami</h2>
                 <div class="inkubator-cards">
@@ -414,7 +414,7 @@
                         <span class="inkubator-testimonial-author">Dosen Pewirausaha</span>
                     </div>
                 </div>
-            </section>
+            </section> --}}
 
             <div class="inkubator-cta">
                 <h2>Siap Mengembangkan Ide Bisnis Anda?</h2>

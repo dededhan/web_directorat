@@ -84,13 +84,13 @@
                         </select>
                         <div class="form-text text-muted">Pilih fakultas asal alumni yang bersangkutan</div>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    {{-- <div class="col-md-6 mb-3">
                         <label for="prodi" class="form-label">Program Studi</label>
                         <select class="form-select" name="prodi" id="prodi" disabled>
                             <option value="">Pilih Program Studi</option>
                         </select>
                         <div class="form-text text-muted">Pilih program studi asal alumni yang bersangkutan</div>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <div class="row">
@@ -120,7 +120,7 @@
                                 <th>Judul Berita/Artikel</th>
                                 <th>Tanggal</th>
                                 <th>Fakultas</th>
-                                <th>Program Studi</th>
+                                {{-- <th>Program Studi</th> --}}
                                 <th>Link</th>
                                 <th>Actions</th>
                             </tr>
@@ -131,7 +131,7 @@
                                 <td>{{ $alumni->judul_berita }}</td>
                                 <td>{{ $alumni->tanggal_berita }}</td>
                                 <td>{{ strtoupper($alumni->fakultas) }}</td>
-                                <td>{{ $alumni->prodi }}</td>
+                                {{-- <td>{{ $alumni->prodi }}</td> --}}
                                 <td>
                                     <a href="{{ $alumni->link_berita }}" target="_blank" class="btn btn-sm btn-info">
                                         View Link
@@ -210,13 +210,13 @@
                                 </select>
                                 <div class="form-text text-muted">Pilih fakultas asal alumni yang bersangkutan</div>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
                                 <label for="edit_prodi" class="form-label">Program Studi</label>
                                 <select class="form-select" name="prodi" id="edit_prodi">
                                     <option value="">Pilih Program Studi</option>
                                 </select>
                                 <div class="form-text text-muted">Pilih program studi asal alumni yang bersangkutan</div>
-                            </div>
+                            </div> --}}
                         </div>
     
                         <div class="row">
