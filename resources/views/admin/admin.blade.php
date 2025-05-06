@@ -84,8 +84,10 @@
         
 
         <!-- MAIN -->
-        <main>
-            @yield('contentadmin')
+        <main class="content-wrapper">
+            <div class="content-container">
+                @yield('contentadmin')
+            </div>
         </main>
     </section>
 
