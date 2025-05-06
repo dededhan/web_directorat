@@ -94,7 +94,7 @@
         }
         
         .content-container {
-            max-width: 850px;
+            max-width: 9050px;
             margin: 0 auto;
         }
         
