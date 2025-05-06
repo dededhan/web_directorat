@@ -35,13 +35,11 @@
                             <option value="mrs">Mrs.</option>
                             <option value="ms">Ms.</option>
                         </select>
-                        <div class="form-text text-muted">Pilih title/gelar yang sesuai dengan responden</div>
                     </div>
                     <div class="col-md-8 mb-3">
                         <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
                         <input type="text" class="form-control" name="responden_fullname" id="nama_lengkap" required>
-                        <div class="form-text text-muted">Masukkan nama lengkap responden beserta gelar akademik (jika ada)
-                        </div>
+                        <small class="form-text text-muted">Masukkan nama lengkap responden beserta gelar akademik (jika ada)</small>
                     </div>
                 </div>
 
@@ -49,12 +47,12 @@
                     <div class="col-md-6 mb-3">
                         <label for="jabatan" class="form-label">Jabatan</label>
                         <input type="text" class="form-control" name="responden_jabatan" id="jabatan" required>
-                        <div class="form-text text-muted">Masukkan jabatan/posisi responden di instansi tempat bekerja</div>
+                        <small class="form-text text-muted">Masukkan jabatan/posisi responden di instansi tempat bekerja</small>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="instansi" class="form-label">Instansi</label>
                         <input type="text" class="form-control" name="responden_instansi" id="instansi" required>
-                        <div class="form-text text-muted">Masukkan nama instansi/perusahaan tempat responden bekerja</div>
+                        <small class="form-text text-muted">Masukkan nama instansi/perusahaan tempat responden bekerja</small>
                     </div>
                 </div>
 
@@ -62,12 +60,12 @@
                     <div class="col-md-6 mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" name="email" id="email" required>
-                        <div class="form-text text-muted">Masukkan alamat email aktif responden untuk keperluan survey</div>
+                        <small class="form-text text-muted">Masukkan alamat email aktif responden untuk keperluan survey</small>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="nomor_responden" class="form-label">Nomor Responden</label>
                         <input type="text" class="form-control" name="phone_responden" id="nomor_responden">
-                        <div class="form-text text-muted">Masukkan nomor telepon aktif responden (format: 08xxxx)</div>
+                        <small class="form-text text-muted">Masukkan nomor telepon aktif responden (format: 08xxxx)</small>
                         @error('phone_responden')
                             <span style="color: red">Nomor hp sama</span>
                         @enderror
@@ -78,13 +76,13 @@
                     <div class="col-md-6 mb-3">
                         <label for="nama_dosen" class="form-label">Nama Dosen</label>
                         <input type="text" class="form-control" name="responden_dosen" id="nama_dosen" required>
-                        <div class="form-text text-muted">Masukkan nama lengkap dosen yang mengusulkan responden</div>
+                        <small class="form-text text-muted">Masukkan nama lengkap dosen yang mengusulkan responden</small>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="nomor_narahubung" class="form-label">Nomor Narahubung</label>
                         <input type="text" class="form-control" name="responden_dosen_phone" id="nomor_narahubung"
                             required>
-                        <div class="form-text text-muted">Masukkan nomor telepon aktif dosen pengusul (format: 08xxxx)</div>
+                        <small class="form-text text-muted">Masukkan nomor telepon aktif dosen pengusul (format: 08xxxx)</small>
                     </div>
                 </div>
 
@@ -104,7 +102,7 @@
                             <option value="feb">FEB</option>
                             <option value="profesi">PROFESI</option>
                         </select>
-                        <div class="form-text text-muted">Pilih fakultas dari dosen pengusul</div>
+                        <small class="form-text text-muted">Pilih fakultas dari dosen pengusul</small>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Tipe Responden</label>
@@ -112,8 +110,7 @@
                             <option value="academic">Academic</option>
                             <option value="employer">Employer</option>
                         </select>
-                        <div class="form-text text-muted">Pilih kategori responden: Academic (dari institusi pendidikan)
-                            atau Employer (dari dunia kerja/industri)</div>
+                        <small class="form-text text-muted">Pilih kategori responden: Academic (dari institusi pendidikan) atau Employer (dari dunia kerja/industri)</small>
                     </div>
                 </div>
 
@@ -141,10 +138,8 @@
                         <div class="search-box">
                             <input type="text" id="searchInput" class="form-control" placeholder="Search...">
                         </div>
-                        
                     </div>
                 </div>
-                
 
                 <div class="table-responsive">
                     <table class="table table-striped" id="respondent-table">
@@ -162,7 +157,6 @@
                                 <th>Fakultas</th>
                                 <th>Kategori</th>
                                 <th>Status</th>
-
                             </tr>
                         </thead>
                         <tbody id="respondent-list">
@@ -193,25 +187,23 @@
                                             @endif
                                         </select>
                                     </td>
-
                                 </tr>
                             @empty
-                                <span>Data Belum Ada</span>
+                                <tr>
+                                    <td colspan="12" class="text-center">Data Belum Ada</td>
+                                </tr>
                             @endforelse
-                            <!-- Pagination -->
-                            
                         </tbody>
                     </table>
+                    
+                    <!-- Pagination moved to the bottom -->
                     <div class="custom-pagination d-flex justify-content-end mt-3">
                         {{ $respondens->links('pagination::bootstrap-5') }}
                     </div>
-                  
-
                 </div>
             </div>
         </div>
     </div>
-
     <!-- Import Excel Modal -->
     <div class="modal fade pt-3" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
         <div class="modal-dialog pt-3">
