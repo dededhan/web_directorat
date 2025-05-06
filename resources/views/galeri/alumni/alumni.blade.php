@@ -390,6 +390,50 @@
             z-index: 2;
         }
 
+        /* Alumni Philosophy Section */
+        .alumni-philosophy {
+            background-color: #f5f9fa;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+            border-top: 1px solid rgba(30, 157, 175, 0.1);
+            border-bottom: 1px solid rgba(30, 157, 175, 0.1);
+        }
+        
+        .philosophy-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 0 1.5rem;
+        }
+        
+        .philosophy-title {
+            color: var(--primary-color);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .philosophy-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+        
+        .philosophy-text {
+            color: var(--text-color);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-top: 2rem;
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .alumni-grid {
@@ -445,6 +489,14 @@
             .alumni-grid {
                 grid-template-columns: 1fr;
                 gap: 1.8rem;
+            }
+            
+            .philosophy-title {
+                font-size: 1.8rem;
+            }
+            
+            .philosophy-text {
+                font-size: 1rem;
             }
         }
 
@@ -510,6 +562,16 @@
     </div>
     
     <div class="container">
+        <!-- Added new Alumni Philosophy section -->
+        <div class="alumni-philosophy" data-aos="fade-up">
+            <div class="philosophy-content">
+                <h2 class="philosophy-title">Alumni Berdampak: Pilar Kekuatan dan Sumber Inspirasi UNJ</h2>
+                <p class="philosophy-text">
+                    Alumni berdampak adalah pilar kekuatan, sumber inspirasi, dan duta terbaik bagi sebuah institusi pendidikan. Mereka adalah manifestasi dari investasi pendidikan yang berhasil, dan kontribusi mereka adalah tolok ukur sejati dari keberhasilan sebuah lembaga dalam mencetak pemimpin masa depan dan agen perubahan yang positif.
+                </p>
+            </div>
+        </div>
+        
         <div class="section-header" data-aos="fade-up">
             <h2>Alumni Success Stories</h2>
             <p class="section-description">Kisah-kisah inspiratif alumni UNJ yang telah membuat dampak positif di berbagai bidang dan menjadi kebanggaan almamater</p>

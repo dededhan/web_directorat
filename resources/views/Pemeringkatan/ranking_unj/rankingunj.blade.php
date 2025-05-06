@@ -401,7 +401,7 @@
         </div>
     </div>
 
-    <div class="ranking-section" id="rankings">
+    {{-- <div class="ranking-section" id="rankings">
         <h2 class="ranking-title">Ranking Universitas Negeri Jakarta</h2>
 
         <div class="ranking-grid">
@@ -474,8 +474,7 @@
                 <p>Akreditasi</p>
             </a>
         </div>
-
-    </div>
+    </div> --}}
 
     <div class="ranking-section" id="rankings">
         <h2 class="ranking-title">Ranking Universitas Negeri Jakarta</h2>
