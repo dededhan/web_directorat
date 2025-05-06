@@ -26,7 +26,8 @@
 }
 
 .table-responsive {
-    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .badge {
@@ -137,7 +138,8 @@
     margin-bottom: 20px;
 }
 .custom-pagination {
-    margin-top: 20px;
+    margin-top: auto;
+    padding-top: 1rem;
 }
 
 .custom-pagination .pagination {
@@ -165,4 +167,12 @@
     .btn-group {
         flex-direction: column;
     }
+}
+.form-text {
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.form-control, .form-select {
+    margin-bottom: 0;
 }
