@@ -128,6 +128,36 @@
                 <div class="head">
                     <h3>Daftar Responden</h3>
                     <div class="d-flex justify-content-end align-items-center">
+                        <form method="GET" action="{{ route('admin.responden.index') }}" class="me-3">
+                            <div class="row g-2 align-items-center">
+                                <div class="col-auto">
+                                    <select class="form-select" name="kategori" id="filterKategori">
+                                        <option value="">Semua Kategori</option>
+                                        <option value="academic" {{ request('kategori') == 'academic' ? 'selected' : '' }}>Academic</option>
+                                        <option value="employer" {{ request('kategori') == 'employer' ? 'selected' : '' }}>Employer</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <select class="form-select" name="fakultas" id="filterFakultas">
+                                        <option value="">Semua Fakultas</option>
+                                        <option value="pascasarjana" {{ request('fakultas') == 'pascasarjana' ? 'selected' : '' }}>PASCASARJANA</option>
+                                        <option value="fip" {{ request('fakultas') == 'fip' ? 'selected' : '' }}>FIP</option>
+                                        <option value="fmipa" {{ request('fakultas') == 'fmipa' ? 'selected' : '' }}>FMIPA</option>
+                                        <option value="fpsi" {{ request('fakultas') == 'fpsi' ? 'selected' : '' }}>FPsi</option>
+                                        <option value="fbs" {{ request('fakultas') == 'fbs' ? 'selected' : '' }}>FBS</option>
+                                        <option value="ft" {{ request('fakultas') == 'ft' ? 'selected' : '' }}>FT</option>
+                                        <option value="fik" {{ request('fakultas') == 'fik' ? 'selected' : '' }}>FIKK</option>
+                                        <option value="fish" {{ request('fakultas') == 'fish' ? 'selected' : '' }}>FISH</option>
+                                        <option value="feb" {{ request('fakultas') == 'feb' ? 'selected' : '' }}>FEB</option>
+                                        <option value="profesi" {{ request('fakultas') == 'profesi' ? 'selected' : '' }}>PROFESI</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                    <a href="{{ route('admin.responden.index') }}" class="btn btn-secondary">Reset</a>
+                                </div>
+                            </div>
+                        </form>
                         <div class="export-buttons me-3">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importModal">
@@ -159,8 +189,22 @@
                                 <th>No. Responden</th>
                                 <th>Nama Dosen</th>
                                 <th>No. Narahubung</th>
-                                <th>Fakultas</th>
-                                <th>Kategori</th>
+                                <th>
+                                    <a href="{{ request()->fullUrlWithQuery(['sort' => 'fakultas', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
+                                        fakultas
+                                        @if(request('sort') == 'fakultas')
+                                            {!! request('direction') == 'asc' ? '↑' : '↓' !!}
+                                        @endif
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="{{ request()->fullUrlWithQuery(['sort' => 'category', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
+                                        category
+                                        @if(request('sort') == 'category')
+                                            {!! request('direction') == 'asc' ? '↑' : '↓' !!}
+                                        @endif
+                                    </a>
+                                </th>
                                 <th>Status</th>
 
                             </tr>
@@ -203,7 +247,7 @@
                         </tbody>
                     </table>
                     <div class="custom-pagination d-flex justify-content-end mt-3">
-                        {{ $respondens->links('pagination::bootstrap-5') }}
+                        {{ $respondens->appends(request()->query())->links('pagination::bootstrap-5') }}
                     </div>
                   
 
