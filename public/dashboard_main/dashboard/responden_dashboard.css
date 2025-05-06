@@ -26,8 +26,8 @@
 }
 
 .table-responsive {
-    display: flex;
-    flex-direction: column;
+    overflow-x: auto;
+    margin-bottom: 20px;
 }
 
 .badge {
@@ -138,13 +138,16 @@
     margin-bottom: 20px;
 }
 .custom-pagination {
-    margin-top: auto;
-    padding-top: 1rem;
+    margin-top: 20px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
 }
 
 .custom-pagination .pagination {
     justify-content: flex-end;
     gap: 5px;
+    margin-bottom: 0;
 }
 
 .custom-pagination .page-item.active .page-link {
@@ -168,11 +171,12 @@
         flex-direction: column;
     }
 }
-.form-text {
-    display: block;
-    margin-top: 0.25rem;
-}
 
-.form-control, .form-select {
-    margin-bottom: 0;
+/* Move form helper text below the inputs */
+.form-text.text-muted {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #6c757d;
+    position: relative;
+    display: block;
 }
