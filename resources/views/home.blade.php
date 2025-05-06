@@ -431,61 +431,268 @@
     </main>
 
     <!-- Program Section - mobile optimized -->
-    <section class="program-section py-8 md:py-16 bg-gray-50">
-        <div class="container mx-auto px-4 md:px-6">
-            <div class="text-center mb-8 md:mb-12">
-                <h2 class="text-2xl md:text-3xl font-bold text-teal-700 mb-2">Program & Layanan</h2>
-                <div class="flex items-center justify-center mb-4">
-                    <div class="h-1 w-16 bg-gray-300"></div>
-                    <span class="text-yellow-400 text-xl md:text-2xl mx-3"><i class="fas fa-cogs"></i></span>
-                    <div class="h-1 w-16 bg-gray-300"></div>
-                </div>
-                <p class="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan Pemeringkatan</p>
+<section class="program-section py-8 md:py-16 bg-gray-50">
+    <div class="container mx-auto px-4 md:px-6">
+        <div class="text-center mb-8 md:mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-teal-700 mb-2">Program & Layanan</h2>
+            <div class="flex items-center justify-center mb-4">
+                <div class="h-1 w-16 bg-gray-300"></div>
+                <span class="text-yellow-400 text-xl md:text-2xl mx-3"><i class="fas fa-cogs"></i></span>
+                <div class="h-1 w-16 bg-gray-300"></div>
             </div>
+            <p class="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan Pemeringkatan</p>
+        </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                @forelse($programLayanan as $program)
-                    <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
-                        <div class="relative">
-                            @if($program->image)
-                                <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}" class="w-full h-48 object-cover">
-                            @else
-                                <div class="w-full h-48 bg-teal-600 flex items-center justify-center">
-                                    <i class="{{ $program->icon ?? 'fas fa-cogs' }} text-4xl md:text-5xl text-white"></i>
+        <!-- First 3 items in grid - ADDING specific classes for matching -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-8 program-main-grid">
+            @forelse($programLayanan->take(3) as $program)
+                <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
+                    <div class="relative">
+                        @if($program->image)
+                            <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}" class="w-full h-48 object-cover">
+                        @else
+                            <div class="w-full h-48 bg-teal-600 flex items-center justify-center">
+                                <i class="{{ $program->icon ?? 'fas fa-cogs' }} text-4xl md:text-5xl text-white"></i>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="p-4 md:p-5">
+                        <h3 class="font-bold text-teal-800 text-lg md:text-xl mb-3">{{ $program->judul }}</h3>
+                        <div class="text-gray-600 mb-4 program-excerpt text-sm md:text-base" style="min-height: 60px;">
+                            {!! Str::limit(strip_tags($program->deskripsi), 100) !!}
+                        </div>
+                        <a href="#" class="program-details-btn inline-flex items-center text-teal-700 hover:text-yellow-500 font-medium text-sm md:text-base"
+                            data-program-id="{{ $program->id }}" 
+                            data-title="{{ $program->judul }}"
+                            data-full-description="{!! htmlspecialchars($program->deskripsi_lengkap ?? $program->deskripsi) !!}">
+                            Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                        
+                        <div class="mt-4 pt-3 border-t border-gray-100">
+                            <button type="button" class="login w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-2 md:py-3 px-4 md:px-6 rounded-lg font-semibold text-sm md:text-base">
+                                Akses Program
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg col-span-full">
+                    <div class="p-8 text-center">
+                        <i class="fas fa-exclamation-circle text-5xl text-teal-600 mb-4"></i>
+                        <h3 class="font-bold text-teal-800 text-xl mb-3">Belum Ada Program</h3>
+                        <p class="text-gray-600">Maaf, saat ini belum ada program layanan yang tersedia.</p>
+                    </div>
+                </div>
+            @endforelse
+        </div>
+
+        <!-- Carousel for additional items (if more than 3) -->
+        @if(count($programLayanan) > 3)
+        <div class="mt-8">
+            <h3 class="text-xl font-semibold text-teal-700 mb-4 text-center">Program Lainnya</h3>
+            <!-- Container with exact same width as top grid -->
+            <div class="program-carousel-container mx-auto"> 
+                <!-- Use exact same padding as the top container -->
+                <div class="program-carousel relative">
+                    <!-- Critical: set exact width to parent container -->
+                    <div class="swiper-container"> 
+                        <div class="swiper-wrapper">
+                            @foreach($programLayanan->skip(3) as $program)
+                            <div class="swiper-slide"> 
+                                <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full">
+                                    <div class="relative">
+                                        @if($program->image)
+                                            <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}" class="w-full h-48 object-cover">
+                                        @else
+                                            <div class="w-full h-48 bg-teal-600 flex items-center justify-center">
+                                                <i class="{{ $program->icon ?? 'fas fa-cogs' }} text-4xl md:text-5xl text-white"></i>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="p-4 md:p-5">
+                                        <h3 class="font-bold text-teal-800 text-lg md:text-xl mb-3">{{ $program->judul }}</h3>
+                                        <div class="text-gray-600 mb-4 program-excerpt text-sm md:text-base" style="min-height: 60px;">
+                                            {!! Str::limit(strip_tags($program->deskripsi), 100) !!}
+                                        </div>
+                                        <a href="#" class="program-details-btn inline-flex items-center text-teal-700 hover:text-yellow-500 font-medium text-sm md:text-base"
+                                            data-program-id="{{ $program->id }}" 
+                                            data-title="{{ $program->judul }}"
+                                            data-full-description="{!! htmlspecialchars($program->deskripsi_lengkap ?? $program->deskripsi) !!}">
+                                            Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
+                                        </a>
+                                        
+                                        <div class="mt-4 pt-3 border-t border-gray-100">
+                                            <button type="button" class="login w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-2 md:py-3 px-4 md:px-6 rounded-lg font-semibold text-sm md:text-base">
+                                                Akses Program
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                            @endif
-                        </div>
-                        <div class="p-4 md:p-5">
-                            <h3 class="font-bold text-teal-800 text-lg md:text-xl mb-3">{{ $program->judul }}</h3>
-                            <div class="text-gray-600 mb-4 program-excerpt text-sm md:text-base" style="min-height: 60px;">
-                                {!! Str::limit(strip_tags($program->deskripsi), 100) !!}
                             </div>
-                            <a href="#" class="program-details-btn inline-flex items-center text-teal-700 hover:text-yellow-500 font-medium text-sm md:text-base"
-                                data-program-id="{{ $program->id }}" 
-                                data-title="{{ $program->judul }}"
-                                data-full-description="{!! htmlspecialchars($program->deskripsi_lengkap ?? $program->deskripsi) !!}">
-                                Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
-                            </a>
-                            
-                            <div class="mt-4 pt-3 border-t border-gray-100">
-                                <button type="button" class="login w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-2 md:py-3 px-4 md:px-6 rounded-lg font-semibold text-sm md:text-base">
-                                    Akses Program
-                                </button>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
-                @empty
-                    <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg col-span-full">
-                        <div class="p-8 text-center">
-                            <i class="fas fa-exclamation-circle text-5xl text-teal-600 mb-4"></i>
-                            <h3 class="font-bold text-teal-800 text-xl mb-3">Belum Ada Program</h3>
-                            <p class="text-gray-600">Maaf, saat ini belum ada program layanan yang tersedia.</p>
-                        </div>
-                    </div>
-                @endforelse
+                    <!-- Position buttons outside the container but within view -->
+                    <div class="swiper-button-next hidden md:flex"></div>
+                    <div class="swiper-button-prev hidden md:flex"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
             </div>
         </div>
-    </section>
+        @endif
+    </div>
+</section>
+
+<!-- Initialize Swiper JS -->
+@if(count($programLayanan) > 3)
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Wait for layout to fully render
+        setTimeout(() => {
+            // Configure swiper with exact measurements and prevent overscroll
+            const swiper = new Swiper('.swiper-container', {
+                slidesPerView: 1,
+                spaceBetween: 16, // gap-4 equivalent
+                loop: false,
+                preventInteractionOnTransition: true,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 16, // Exact gap-4 measurement
+                    },
+                    768: {
+                        slidesPerView: 3,
+                        spaceBetween: 24, // Match gap-6
+                        // Critical fix - prevent partial showing of next slide
+                        slidesOffsetAfter: 0,
+                        slidesOffsetBefore: 0
+                    }
+                },
+                on: {
+                    init: function() {
+                        // Force full layout recalculation
+                        this.update();
+                    },
+                    resize: function() {
+                        // Update on any window resize
+                        this.update();
+                    }
+                }
+            });
+        }, 200);
+    });
+</script>
+@endif
+
+<!-- Add Swiper CSS and JS -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<style>
+    /* Match carousel container to the top grid width exactly */
+    .program-carousel-container {
+        width: 100%;
+        padding-left: 16px;
+        padding-right: 16px;
+        overflow: hidden; /* Prevent horizontal scroll */
+    }
+    
+    @media (min-width: 768px) {
+        .program-carousel-container {
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+    }
+    
+    /* Make the carousel structure match the grid */
+    .program-carousel {
+        padding-bottom: 30px;
+        width: 100%;
+        position: relative;
+    }
+    
+    /* Match width for swiper with the grid container */
+    .swiper-container {
+        overflow: hidden;
+        padding-bottom: 30px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .swiper-wrapper {
+        align-items: stretch;
+        /* Fix to prevent partial view of 4th slide */
+        width: auto !important;
+    }
+    
+    /* Position navigation buttons exactly at container edges */
+    .swiper-button-next,
+    .swiper-button-prev {
+        color: #0d9488;
+        background: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: -20px;
+        z-index: 10;
+        top: 50%;
+    }
+    
+    .swiper-button-next {
+        right: 0;
+    }
+    
+    .swiper-button-prev {
+        left: 0;
+    }
+    
+    .swiper-button-next::after,
+    .swiper-button-prev::after {
+        font-size: 20px;
+    }
+    
+    .swiper-pagination-bullet-active {
+        background: #0d9488;
+    }
+    
+    /* Fix to prevent partial view of 4th slide */
+    .swiper-slide {
+        height: auto;
+        box-sizing: border-box;
+        width: 100% !important; /* Force exactly 3 slides on desktop */
+    }
+    
+    /* Make slides match the grid cell width exactly */
+    @media (min-width: 640px) {
+        .swiper-slide {
+            width: calc((100% - 16px) / 2) !important; /* 2 slides on tablet */
+        }
+    }
+    
+    @media (min-width: 768px) {
+        .swiper-slide {
+            width: calc((100% - 48px) / 3) !important; /* 3 slides on desktop */
+        }
+    }
+    
+    /* Prevent swiper from showing partial slides */
+    .swiper-container-horizontal > .swiper-wrapper {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+</style>
 
     <!-- Instagram Section -->
     <section class="media-section py-8 md:py-16 bg-gradient-to-b from-white to-gray-50">
