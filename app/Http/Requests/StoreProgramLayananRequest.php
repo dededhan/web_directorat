@@ -17,6 +17,7 @@ class StoreProgramLayananRequest extends FormRequest
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'judul' => 'required|string|max:50',
             'deskripsi' => 'required|string|max:1500',
+            'kategori' => 'required|in:direktorat,pemeringkatan,inovasi',
         ];
     }
 }

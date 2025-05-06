@@ -14,10 +14,9 @@ class ProgramLayanan extends Model
         'image', 
         'judul', 
         'deskripsi',
-        'status'
+        'status',
+        'kategori'
     ];
 
-    protected $casts = [
-        'status' => 'boolean'
-    ];
+    protected $casts = [];
 }

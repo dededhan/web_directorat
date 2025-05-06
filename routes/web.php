@@ -15,6 +15,7 @@ use App\Http\Controllers\PimpinanController;
 use App\Http\Controllers\RankingController;
 use App\Http\Controllers\InstagramApiController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\ProgramLayananController;
 
 
 
@@ -264,7 +265,9 @@ Route::get('/sejarah-hilirisasi', [SejarahContentController::class, 'showPublic'
 // In web.php
 
 
-
+// Route::get('/', [ProgramLayananController::class, 'showHome'])->name('home');
+// Route::get('/hilirisasi', [ProgramLayananController::class, 'showHilirisasi'])->name('hilirisasi');
+// Route::get('/pemeringkatan', [ProgramLayananController::class, 'showPemeringkatan'])->name('pemeringkatan');
 
     
 Route::get('/ranking_unj', [App\Http\Controllers\RankingController::class, 'showAllRankings'])

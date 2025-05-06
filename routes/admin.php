@@ -60,6 +60,7 @@ Route::prefix('admin')->name('admin.')
         Route::resource('/program-layanan', ProgramLayananController::class);
         Route::get('/program-layanan/{id}/detail', [ProgramLayananController::class, 'getProgramDetail'])
             ->name('program-layanan.detail');
+        Route::put('program-layanan/{programLayanan}', [ProgramLayananController::class, 'update'])->name('program-layanan.update');
 
         //Youtube
         Route::resource('/youtube', YoutubeController::class)
@@ -324,7 +325,7 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
         Route::resource('/program-layanan', ProgramLayananController::class);
         Route::get('/program-layanan/{id}/detail', [ProgramLayananController::class, 'getProgramDetail'])
             ->name('program-layanan.detail');
-
+        Route::put('program-layanan/{programLayanan}', [ProgramLayananController::class, 'update'])->name('program-layanan.update');
         //Youtube
         Route::resource('/youtube', YoutubeController::class)
             ->except(['show', 'edit']);
@@ -430,7 +431,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::resource('/program-layanan', ProgramLayananController::class);
                 Route::get('/program-layanan/{id}/detail', [ProgramLayananController::class, 'getProgramDetail'])
                     ->name('program-layanan.detail');
-
+                Route::put('program-layanan/{programLayanan}', [ProgramLayananController::class, 'update'])->name('program-layanan.update');
                 //Youtube
                 Route::resource('/youtube', YoutubeController::class)
                     ->except(['show', 'edit']);

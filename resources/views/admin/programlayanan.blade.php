@@ -31,7 +31,22 @@
             <form id="layanan-form" action="{{ route($routePrefix . '.program-layanan.store') }}" method="POST"
                 enctype="multipart/form-data">
                 @csrf
+                <!-- Add this to your form -->
                 <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="kategori" class="form-label">Kategori</label>
+                        <select class="form-select @error('kategori') is-invalid @enderror" 
+                                name="kategori" id="kategori" required>
+                            <option value="direktorat" {{ old('kategori') == 'direktorat' ? 'selected' : '' }}>Direktorat</option>
+                            <option value="pemeringkatan" {{ old('kategori') == 'pemeringkatan' ? 'selected' : '' }}>Pemeringkatan</option>
+                            <option value="inovasi" {{ old('kategori') == 'inovasi' ? 'selected' : '' }}>Inovasi</option>
+                        </select>
+                        @error('kategori')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <div class="form-text text-muted">Pilih kategori program</div>
+                    </div>
+                
                     <div class="col-md-6 mb-3">
                         <label for="image" class="form-label">Gambar Program</label>
                         <input type="file" class="form-control @error('image') is-invalid @enderror" name="image"
@@ -97,6 +112,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Kategori</th>
                                 <th>Judul</th>
                                 <th>Deskripsi</th>
                                 <th>gambar</th>
@@ -107,6 +123,7 @@
                             @foreach ($programs as $key => $program)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
+                                    <td>{{ $program->kategori }}</td>
                                     <td>{{ $program->judul }}</td>
                                     <td>{{ Str::limit(strip_tags($program->deskripsi), 50) }}</td>
                                     <td>
@@ -120,7 +137,9 @@
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-sm btn-warning edit-program"
-                                                data-id="{{ $program->id }}">
+                                                data-id="{{ $program->id }}"
+                                                data-url="{{ route($routePrefix . '.program-layanan.detail', $program->id) }}">
+                                                
                                                 <i class='bx bx-edit'></i> Edit
                                             </button>
                                             <form method="POST"
@@ -155,7 +174,22 @@
                     <form id="editProgramForm" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
+                        <!-- Add this to your form -->
                         <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="kategori" class="form-label">Kategori</label>
+                                <select class="form-select @error('kategori') is-invalid @enderror" 
+                                        name="kategori" id="edit_kategori" required>
+                                    <option value="direktorat" {{ old('kategori') == 'direktorat' ? 'selected' : '' }}>Direktorat</option>
+                                    <option value="pemeringkatan" {{ old('kategori') == 'pemeringkatan' ? 'selected' : '' }}>Pemeringkatan</option>
+                                    <option value="inovasi" {{ old('kategori') == 'inovasi' ? 'selected' : '' }}>Inovasi</option>
+                                </select>
+                                @error('kategori')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div class="form-text text-muted">Pilih kategori program</div>
+                            </div>
+                        
                             <div class="col-md-6 mb-3">
                                 <label for="edit_image" class="form-label">Gambar Program</label>
                                 <input type="file" class="form-control" name="image" id="edit_image">
@@ -367,77 +401,72 @@
             document.querySelectorAll('.edit-program').forEach(button => {
                 button.addEventListener('click', function() {
                     const programId = this.dataset.id;
-                    const routePrefix = '{{ $routePrefix }}';
-
-                    // Convert route prefix with dots to path with slashes
-                    const routePath = routePrefix.replace(/\./g, '/');
+                    const detailUrl = this.dataset.url; // Use the provided URL from data-url attribute
 
                     // Fetch program details via AJAX
-                    fetch(`/${routePath}/program-layanan/${programId}/detail`)
+                    fetch(detailUrl)
                         .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
+                            if (!response.ok) throw new Error('Network response was not ok');
                             return response.json();
                         })
                         .then(data => {
-                            // Populate the edit form
+                            // Populate form fields
+                            document.getElementById('edit_kategori').value = data.kategori;
                             document.getElementById('edit_judul').value = data.judul;
-                            document.getElementById('edit_icon').value = data.icon;
-                            document.getElementById('edit_status').value = data.status ? '1' :
-                                '0';
+                            document.getElementById('edit_status').value = data.status ? '1' : '0';
 
-                            // Set content to the CKEditor
+                            // Set CKEditor content
                             if (editDeskripsiEditor) {
                                 editDeskripsiEditor.setData(data.deskripsi);
-
-                                // Update character counter after setting data
-                                setTimeout(() => {
-                                    const editorData = editDeskripsiEditor.getData();
-                                    const plainText = editorData.replace(/<[^>]*>/g,
-                                        '');
-                                    const charCount = plainText.length;
-                                    const editCharCountContainer = document
-                                        .querySelector('#editProgramModal .char-count');
-
-                                    document.getElementById('edit-char-count')
-                                        .textContent = charCount;
-
-                                    if (charCount > 1500) {
-                                        editCharCountContainer.classList.add(
-                                            'text-danger');
-                                        document.getElementById('saveEditProgram')
-                                            .disabled = true;
-                                    } else if (charCount > 1450) {
-                                        editCharCountContainer.classList.add(
-                                            'text-warning');
-                                        editCharCountContainer.classList.remove(
-                                            'text-danger');
-                                        document.getElementById('saveEditProgram')
-                                            .disabled = false;
-                                    } else {
-                                        editCharCountContainer.classList.remove(
-                                            'text-warning', 'text-danger');
-                                        document.getElementById('saveEditProgram')
-                                            .disabled = false;
-                                    }
-                                }, 100); // Short timeout to ensure editor is populated
                             }
 
-                            // Set the form action with correct path structure
+                            // Update form action
                             const form = document.getElementById('editProgramForm');
-                            form.action = `/${routePath}/program-layanan/${programId}`;
+                            form.action = `{{ route($routePrefix . '.program-layanan.update', '') }}/${programId}`;
 
-                            // Show the modal
-                            new bootstrap.Modal(document.getElementById('editProgramModal'))
-                                .show();
+                            // Show modal
+                            new bootstrap.Modal(document.getElementById('editProgramModal')).show();
                         })
                         .catch(error => {
-                            console.error('Error fetching program details:', error);
-                            showErrorAlert('Gagal mengambil data program layanan.');
+                            console.error('Error:', error);
+                            showErrorAlert('Failed to load program data');
                         });
                 });
             });
+
+            // Handle save button click - OPTIMIZED VERSION
+            document.getElementById('saveEditProgram').addEventListener('click', function() {
+                const form = document.getElementById('editProgramForm');
+                const formData = new FormData(form);
+
+                // Add CKEditor content to form data
+                if (editDeskripsiEditor) {
+                    formData.set('deskripsi', editDeskripsiEditor.getData());
+                }
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.reload(); // Refresh to show updated data
+                    } else {
+                        showErrorAlert(data.message || 'Update failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showErrorAlert('An error occurred during update');
+                });
+            });
+    
 
             // Handle save button click in edit modal
 

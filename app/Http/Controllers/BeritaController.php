@@ -125,6 +125,7 @@ class BeritaController extends Controller
 
         // Get active program layanan
         $programLayanan = ProgramLayanan::where('status', 1)
+            ->where('kategori', 'direktorat')
             ->orderBy('id', 'desc')
             ->take(6)
             ->get();
@@ -150,6 +151,7 @@ class BeritaController extends Controller
 
         // Get active program layanan
         $programLayanan = ProgramLayanan::where('status', 1)
+            ->where('kategori', 'pemeringkatan')
             ->orderBy('id', 'desc')
             ->take(6)
             ->get();
@@ -176,6 +178,7 @@ class BeritaController extends Controller
 
         // Get active program layanan
         $programLayanan = ProgramLayanan::where('status', 1)
+            ->where('kategori', 'inovasi')
             ->orderBy('id', 'desc')
             ->take(6)
             ->get();
