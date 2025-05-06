@@ -31,8 +31,8 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="judul" class="form-label">Judul Peringkat</label>
-                        <input type="text" class="form-control @error('judul') is-invalid @enderror"
-                            name="judul" id="judul" value="{{ old('judul') }}">
+                        <input type="text" class="form-control @error('judul') is-invalid @enderror" name="judul"
+                            id="judul" value="{{ old('judul') }}">
                         @error('judul')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -43,8 +43,7 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="deskripsi" class="form-label">Deskripsi Peringkat</label>
-                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"
-                            rows="8">{{ old('deskripsi') }}</textarea>
+                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" rows="8">{{ old('deskripsi') }}</textarea>
                         @error('deskripsi')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -60,7 +59,8 @@
                         @error('gambar')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="form-text text-muted">Upload gambar logo peringkat (format: JPG, PNG, atau JPEG, max 2MB)
+                        <div class="form-text text-muted">Upload gambar logo peringkat (format: JPG, PNG, atau JPEG, max
+                            2MB)
                         </div>
                     </div>
                 </div>
@@ -142,8 +142,7 @@
     </div>
 
     <!-- Modal untuk mengedit peringkat -->
-    <div class="modal fade" id="editRankingModal" tabindex="-1" aria-labelledby="editRankingModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="editRankingModal" tabindex="-1" aria-labelledby="editRankingModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -233,46 +232,70 @@
         }
 
         // Initialize CKEditor for new ranking
-        ClassicEditor
-            .create(document.querySelector('#deskripsi'), {
-                extraPlugins: [MyCustomUploadAdapterPlugin],
-                toolbar: {
-                    items: [
-                        'heading', '|',
-                        'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
-                        'imageUpload', 'blockQuote', 'undo', 'redo'
-                    ]
-                },
-                image: {
-                    toolbar: ['imageTextAlternative', 'imageStyle:inline', 'imageStyle:block', 'imageStyle:side']
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        const commonConfig = {
+            extraPlugins: [MyCustomUploadAdapterPlugin],
+            toolbar: {
+                items: [
+                    'heading', '|',
+                    'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+                    'alignment', 'fontColor', 'fontBackgroundColor', '|',
+                    'imageUpload', 'imageResize', 'blockQuote', '|',
+                    'insertTable', 'undo', 'redo'
+                ]
+            },
+            image: {
+                toolbar: [
+                    'imageTextAlternative',
+                    'imageStyle:inline',
+                    'imageStyle:block',
+                    'imageStyle:side',
+                    'toggleImageCaption',
+                    'imageResize:25',
+                    'imageResize:50',
+                    'imageResize:75',
+                    'imageResize:Original'
+                ],
+                resizeOptions: [{
+                        name: 'resizeImage:original',
+                        label: 'Original',
+                        value: null
+                    },
+                    {
+                        name: 'resizeImage:50',
+                        label: '50%',
+                        value: '50'
+                    },
+                    {
+                        name: 'resizeImage:75',
+                        label: '75%',
+                        value: '75'
+                    }
+                ]
+            },
+            table: {
+                contentToolbar: [
+                    'tableColumn', 'tableRow', 'mergeTableCells',
+                    'tableProperties', 'tableCellProperties'
+                ]
+            },
+            alignment: {
+                options: ['left', 'right', 'center', 'justify']
+            },
+            caption: {
+                colorPicker: true
+            }
+        };
 
-        // Initialize CKEditor for edit form
-        let editRankingEditor;
-        ClassicEditor
-            .create(document.querySelector('#edit_deskripsi'), {
-                extraPlugins: [MyCustomUploadAdapterPlugin],
-                toolbar: {
-                    items: [
-                        'heading', '|',
-                        'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
-                        'imageUpload', 'blockQuote', 'undo', 'redo'
-                    ]
-                },
-                image: {
-                    toolbar: ['imageTextAlternative', 'imageStyle:inline', 'imageStyle:block', 'imageStyle:side']
-                }
-            })
+        // Initialize both editors with this config
+        ClassicEditor.create(document.querySelector('#deskripsi'), commonConfig)
+            .catch(console.error);
+
+        ClassicEditor.create(document.querySelector('#edit_deskripsi'), commonConfig)
             .then(editor => {
                 editRankingEditor = editor;
             })
-            .catch(error => {
-                console.error(error);
-            });
+            .catch(console.error);
+
 
         document.addEventListener('DOMContentLoaded', function() {
             // SweetAlert helper functions
@@ -332,9 +355,10 @@
                 button.addEventListener('click', function() {
                     const form = this.closest('form');
 
-                    showConfirmationDialog('Apakah Anda yakin ingin menghapus peringkat ini?', () => {
-                        form.submit();
-                    });
+                    showConfirmationDialog('Apakah Anda yakin ingin menghapus peringkat ini?',
+                        () => {
+                            form.submit();
+                        });
                 });
             });
 
