@@ -1,96 +1,71 @@
 /* Navbar Positioning Fix */
-#content nav {
-    position: fixed !important;
-    top: 0 !important;
-    left: 280px !important; /* Adjust based on sidebar width */
-    width: calc(100% - 280px) !important;
+.navbar-admin {
+    position: fixed;
+    top: 0;
+    left: 280px; /* Sidebar width */
+    right: 0;
     height: 56px;
-    z-index: 9999 !important; /* Ensure navbar is above all other elements */
+    z-index: 1000;
     background: #ffffff;
     display: flex;
+    justify-content: flex-end;
     align-items: center;
-    justify-content: space-between;
     padding: 0 24px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
 /* When sidebar is collapsed */
-#sidebar.hide ~ #content nav {
-    left: 60px !important;
-    width: calc(100% - 60px) !important;
+#sidebar.hide ~ #content .navbar-admin {
+    left: 60px;
 }
 
 /* Main content spacing */
 #content main {
-    padding-top: 76px !important; /* 56px navbar height + 20px spacing */
-    width: 100%;
-    position: relative;
+    padding-top: 76px; /* Navbar height + 20px */
+    padding-left: 280px; /* Same as sidebar width */
+    transition: all 0.3s ease;
 }
 
-/* Submit Button Fix */
-.submit-all-container, .submit-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    margin: 2rem 0;
-    z-index: 1;
+#sidebar.hide ~ #content main {
+    padding-left: 60px;
 }
 
-.submit-all-btn, .submit-btn {
-    position: relative;
-    background-color: #176369;
-    color: white;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Fix navbar right content */
+/* Navbar right content */
 .navbar-right {
     display: flex;
     align-items: center;
     gap: 20px;
-    margin-left: auto; /* Push to the right */
 }
 
-/* Fix form containers to ensure they don't overlap with navbar */
-.form-container, .section, .card {
-    position: relative;
-    z-index: 1; /* Lower than navbar */
-    margin-top: 1rem;
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-/* Ensure the container has a proper stacking context */
-.container {
-    position: relative;
-    z-index: 1;
-    padding-top: 60px; /* Space for navbar */
+.profile-image {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
-/* Fix sidebar z-index to be below navbar */
-#sidebar {
-    z-index: 9998 !important; /* Just below navbar */
-    position: fixed;
+.user-name {
+    font-weight: 500;
 }
 
-/* Media query for mobile responsiveness */
+/* Media queries */
 @media screen and (max-width: 768px) {
-    #content nav {
+    .navbar-admin {
         left: 0 !important;
-        width: 100% !important;
     }
     
-    #content {
-        width: 100%;
-        left: 0;
+    #content main {
+        padding-left: 0 !important;
     }
     
-    .submit-all-btn, .submit-btn {
-        width: 100%;
-        max-width: 300px;
+    #sidebar.hide ~ #content main {
+        padding-left: 0 !important;
     }
 }
