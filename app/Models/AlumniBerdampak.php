@@ -15,7 +15,7 @@ class AlumniBerdampak extends Model
         'judul_berita',
         'tanggal_berita',
         'fakultas',
-        'prodi',
+        // 'prodi',
         'link_berita'
     ];
 }

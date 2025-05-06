@@ -144,3 +144,11 @@ html body .team-member-content ol ul,
 .ck-content .text-justify {
     text-align: justify;
 }
+
+/* In your ckeditor-content.css */
+.ck.ck-toolbar.ck-toolbar_grouping > .ck-toolbar__items {
+    flex-wrap: wrap !important;
+}
+.ck.ck-dropdown .ck-button.ck-dropdown__button {
+    min-width: 120px;
+}

@@ -144,7 +144,7 @@
                                                 data-judul="{{ $alumni->judul_berita }}"
                                                 data-tanggal="{{ $alumni->tanggal_berita }}"
                                                 data-fakultas="{{ $alumni->fakultas }}"
-                                                data-prodi="{{ $alumni->prodi }}"
+                                                {{-- data-prodi="{{ $alumni->prodi }}" --}}
                                                 data-link="{{ $alumni->link_berita }}">
                                             <i class="fas fa-edit"></i> Edit
                                         </button>
@@ -275,9 +275,9 @@
     
         // Handle fakultas change for create form
         document.getElementById('fakultas').addEventListener('change', function() {
-            const prodiSelect = document.getElementById('prodi');
-            prodiSelect.disabled = false;
-            updateProdiOptions(this.value, prodiSelect);
+            // const prodiSelect = document.getElementById('prodi');
+            // prodiSelect.disabled = false;
+            // updateProdiOptions(this.value, prodiSelect);
         });
     
         // Handle edit button
@@ -293,10 +293,10 @@
                 document.getElementById('edit_link_berita').value = this.dataset.link;
                 
                 // Enable and populate prodi
-                const editProdiSelect = document.getElementById('edit_prodi');
-                editProdiSelect.disabled = false;
-                updateProdiOptions(this.dataset.fakultas, editProdiSelect);
-                editProdiSelect.value = this.dataset.prodi;
+                // const editProdiSelect = document.getElementById('edit_prodi');
+                // editProdiSelect.disabled = false;
+                // updateProdiOptions(this.dataset.fakultas, editProdiSelect);
+                // editProdiSelect.value = this.dataset.prodi;
                 
                 // Set form action
                 document.getElementById('edit-alumni-form').action = `/admin/alumniberdampak/${alumniId}`;

@@ -33,7 +33,7 @@ class AdminAlumniBerdampakController extends Controller
             'judul_berita' => $request->judul_berita,
             'tanggal_berita' => $request->tanggal_berita,
             'fakultas' => $request->fakultas,
-            'prodi' => $request->prodi,
+            // 'prodi' => $request->prodi,
             'link_berita' => $request->link_berita,
         ]);
 
@@ -66,7 +66,7 @@ class AdminAlumniBerdampakController extends Controller
             'judul_berita' => $request->judul_berita,
             'tanggal_berita' => $request->tanggal_berita,
             'fakultas' => $request->fakultas,
-
+            // 'prodi' => $request->prodi,
             'link_berita' => $request->link_berita,
         ]);
 
