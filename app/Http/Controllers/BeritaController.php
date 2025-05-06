@@ -151,7 +151,7 @@ class BeritaController extends Controller
         // Get active program layanan
         $programLayanan = ProgramLayanan::where('status', 1)
             ->orderBy('id', 'desc')
-            ->take(4)
+            ->take(6)
             ->get();
 
         // Get Instagram posts for the homepage
@@ -177,7 +177,7 @@ class BeritaController extends Controller
         // Get active program layanan
         $programLayanan = ProgramLayanan::where('status', 1)
             ->orderBy('id', 'desc')
-            ->take(4)
+            ->take(6)
             ->get();
 
         // Get Instagram posts for the homepage
