@@ -412,7 +412,7 @@
                     <img src="/images/logos/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.png"
                         alt="Kementerian Pendidikan Logo">
                 </div>
-                <p>Pemeringkatan Klaster Pendidikan Tinggi</p>
+                <p>Pemeringkatan Perguruan Tinggi Indonesia</p>
             </a>
 
             <!-- QS World University Ranking -->
@@ -464,6 +464,14 @@
                     <img src="/images/logos/scimago.png" alt="Scimago Logo">
                 </div>
                 <p>Scimago Institutions Rankings</p>
+            </a>
+
+            <a href="https://unj.ac.id/akreditasi/" class="ranking-card" target="_blank"
+                rel="noopener noreferrer">
+                <div class="logo-container">
+                    <img src="/images/logos/Logo Baru UNJ.png" alt="Scimago Logo">
+                </div>
+                <p>Akreditasi</p>
             </a>
         </div>
 

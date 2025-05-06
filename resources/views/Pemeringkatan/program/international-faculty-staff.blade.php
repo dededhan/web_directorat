@@ -316,6 +316,217 @@
                 margin-bottom: 1rem;
             }
         }
+
+        * {
+            font-family: Arial, sans-serif !important;
+        }
+        
+        .faculty-page {
+            --primary-color: #186862;
+            --secondary-color: #125a54;
+            --accent-color: #facc15;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+
+        .faculty-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://i.ibb.co/5rvZ2Lr/international-faculty.jpg') center/cover no-repeat;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .faculty-hero-content {
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .faculty-section {
+            background-color: white;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .faculty-section-title {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .faculty-profile {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .faculty-profile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .faculty-profile-header {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            background-color: #f8f9fa;
+        }
+
+        .faculty-profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .faculty-profile-info {
+            flex: 1;
+        }
+
+        .faculty-profile-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .faculty-profile-position {
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .faculty-profile-origin {
+            display: flex;
+            align-items: center;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        .faculty-profile-origin img {
+            width: 20px;
+            height: 15px;
+            margin-right: 0.5rem;
+        }
+
+        .faculty-profile-body {
+            padding: 1.5rem;
+        }
+
+        .faculty-profile-section {
+            margin-bottom: 1rem;
+        }
+
+        .faculty-profile-section-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .faculty-profile-section p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .faculty-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .faculty-stat {
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+        }
+        
+        .faculty-tag {
+            display: inline-block;
+            background-color: #e2f8f6;
+            color: var(--primary-color);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .faculty-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .faculty-filter-btn {
+            background-color: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            color: #4b5563;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .faculty-filter-btn:hover, .faculty-filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .faculty-hero {
+                height: 300px;
+            }
+
+            .faculty-hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .faculty-section {
+                padding: 1.5rem;
+            }
+
+            .faculty-profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .faculty-profile-avatar {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .faculty-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -374,67 +585,247 @@
             </section>
 
             <section class="faculty-section">
-                <h2 class="faculty-section-title text-3xl font-bold">Staf Pengajar Internasional</h2>
-                <p class="mb-6">UNJ dengan bangga telah menjalin kerja sama dengan berbagai tenaga pengajar internasional yang berkontribusi pada pengembangan kualitas pendidikan:</p>
+                <h2 class="faculty-section-title text-2xl font-bold content-">Adjunct Professor UNJ Tahun 2025</h2>
+                <p class="mb-6">Universitas Negeri Jakarta berkolaborasi dengan akademisi internasional terkemuka untuk meningkatkan kualitas pendidikan dan penelitian. Para Adjunct Professor ini membawa keahlian dari berbagai negara dan bidang untuk memperkaya lingkungan akademik UNJ.</p>
                 
-                <div class="space-y-6">
+                {{-- <div class="faculty-filter mb-6">
+                    <button class="faculty-filter-btn active">Semua</button>
+                    <button class="faculty-filter-btn">FT</button>
+                    <button class="faculty-filter-btn">FMIPA</button>
+                    <button class="faculty-filter-btn">FPsi</button>
+                    <button class="faculty-filter-btn">FEB</button>
+                    <button class="faculty-filter-btn">FISH</button>
+                    <button class="faculty-filter-btn">Lainnya</button>
+                </div>
+                 --}}
+                <div class="faculty-grid">
+                    <!-- Prof. Ir, Dr Sitti Asmah Binti Hassan -->
                     <div class="faculty-profile">
                         <div class="faculty-profile-header">
                             <div class="faculty-profile-avatar">
-                                <img src="https://i.ibb.co/0QF0KBw/prof-sarah.jpg" alt="Prof. Sarah Johnson">
+                                <i class="fas fa-user-tie"></i>
                             </div>
                             <div class="faculty-profile-info">
-                                <div class="faculty-profile-name">Prof. Sarah Johnson, Ph.D</div>
-                                <div class="faculty-profile-position">Visiting Professor - Educational Technology</div>
+                                <div class="faculty-profile-name">Prof. Ir, Dr Sitti Asmah Binti Hassan</div>
+                                <div class="faculty-profile-position">Fakultas Teknik (FT)</div>
                                 <div class="faculty-profile-origin">
-                                    <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" alt="USA Flag">
-                                    <span>Massachusetts Institute of Technology (MIT), USA</span>
+                                    <img src="https://cdn.countryflags.com/thumbs/malaysia/flag-400.png" alt="Malaysia Flag">
+                                    <span>School of Civil Engineering, Universiti Teknologi Malaysia</span>
                                 </div>
                             </div>
                         </div>
                         <div class="faculty-profile-body">
                             <div class="faculty-profile-section">
                                 <div class="faculty-profile-section-title">Bidang Keahlian</div>
-                                <p>Instructional Design, Learning Analytics, Artificial Intelligence in Education</p>
+                                <p>Transportation & Traffic Engineering</p>
                             </div>
-                            <div class="faculty-profile-section">
-                                <div class="faculty-profile-section-title">Kegiatan di UNJ</div>
-                                <p>Mengajar mata kuliah Educational Technology Innovation, memberikan workshop untuk dosen UNJ, dan memimpin proyek penelitian tentang adaptif learning.</p>
-                            </div>
-                            <div class="faculty-profile-section">
-                                <div class="faculty-profile-section-title">Testimonial</div>
-                                <p class="italic">"Pengalaman mengajar di UNJ sangat berharga. Para mahasiswa sangat antusias dan ingin belajar. Saya melihat potensi besar untuk mengembangkan kolaborasi riset jangka panjang antara MIT dan UNJ."</p>
-                            </div>
+                            <div class="faculty-tag">QS WUR: 181</div>
+                            <div class="faculty-tag">QS Subject: 102</div>
+                            <div class="faculty-tag">Scopus: 12</div>
                         </div>
                     </div>
                     
+                    <!-- Prof Dr Jungshan Chang -->
                     <div class="faculty-profile">
                         <div class="faculty-profile-header">
                             <div class="faculty-profile-avatar">
-                                <img src="https://i.ibb.co/0MzvbgF/dr-takashi.jpg" alt="Dr. Takashi Yamamoto">
+                                <i class="fas fa-user-tie"></i>
                             </div>
                             <div class="faculty-profile-info">
-                                <div class="faculty-profile-name">Dr. Takashi Yamamoto</div>
-                                <div class="faculty-profile-position">Full-time International Lecturer - Environmental Science</div>
+                                <div class="faculty-profile-name">Prof Dr Jungshan Chang</div>
+                                <div class="faculty-profile-position">Fakultas Matematika dan Ilmu Pengetahuan Alam (FMIPA)</div>
                                 <div class="faculty-profile-origin">
-                                    <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" alt="Japan Flag">
-                                    <span>Kyoto University, Japan</span>
+                                    <img src="https://cdn.countryflags.com/thumbs/taiwan/flag-400.png" alt="Taiwan Flag">
+                                    <span>Taipei Medical University</span>
                                 </div>
                             </div>
                         </div>
                         <div class="faculty-profile-body">
                             <div class="faculty-profile-section">
                                 <div class="faculty-profile-section-title">Bidang Keahlian</div>
-                                <p>Climate Change Adaptation, Sustainable Urban Development, Environmental Impact Assessment</p>
+                                <p>Biomedis</p>
                             </div>
+                            <div class="faculty-tag">QS WUR: 611-620</div>
+                            <div class="faculty-tag">QS Subject: 201-250</div>
+                            <div class="faculty-tag">Scopus: 19</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Assoc. Prof Dr Muhammad Irfan Ashraf -->
+                    <div class="faculty-profile">
+                        <div class="faculty-profile-header">
+                            <div class="faculty-profile-avatar">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="faculty-profile-info">
+                                <div class="faculty-profile-name">Assoc. Prof Dr Muhammad Irfan Ashraf</div>
+                                <div class="faculty-profile-position">Fakultas Matematika dan Ilmu Pengetahuan Alam (FMIPA)</div>
+                                <div class="faculty-profile-origin">
+                                    <img src="https://cdn.countryflags.com/thumbs/pakistan/flag-400.png" alt="Pakistan Flag">
+                                    <span>Sarghoda University</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="faculty-profile-body">
                             <div class="faculty-profile-section">
-                                <div class="faculty-profile-section-title">Kegiatan di UNJ</div>
-                                <p>Mengajar mata kuliah Environmental Science, membimbing penelitian mahasiswa S2 dan S3, serta memimpin proyek penelitian kolaboratif UNJ-Kyoto University tentang urban sustainability.</p>
+                                <div class="faculty-profile-section-title">Bidang Keahlian</div>
+                                <p>Biotechnology</p>
                             </div>
+                            <div class="faculty-tag">Scopus: 25</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Prof. Madya dr. Nor ba`yah binti Abdul Kadir -->
+                    <div class="faculty-profile">
+                        <div class="faculty-profile-header">
+                            <div class="faculty-profile-avatar">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="faculty-profile-info">
+                                <div class="faculty-profile-name">Prof. Madya dr. Nor ba`yah binti Abdul Kadir</div>
+                                <div class="faculty-profile-position">Fakultas Psikologi (FPsi)</div>
+                                <div class="faculty-profile-origin">
+                                    <img src="https://cdn.countryflags.com/thumbs/malaysia/flag-400.png" alt="Malaysia Flag">
+                                    <span>Pusat Kajian Psikologi & Kesejahteraan Manusia, Universitas Kebangsaan Malaysia</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="faculty-profile-body">
                             <div class="faculty-profile-section">
-                                <div class="faculty-profile-section-title">Testimonial</div>
-                                <p class="italic">"Jakarta adalah laboratorium yang sempurna untuk studi kasus adaptasi perubahan iklim perkotaan. Kolaborasi dengan akademisi UNJ telah membuka wawasan baru dan pendekatan lokal yang sangat berharga bagi penelitian saya."</p>
+                                <div class="faculty-profile-section-title">Bidang Keahlian</div>
+                                <p>Health Psychology</p>
                             </div>
+                            <div class="faculty-tag">QS WUR: 138</div>
+                            <div class="faculty-tag">QS Subject: 301-350</div>
+                            <div class="faculty-tag">Scopus: 8</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Assoc. Prof. Abdul Rahim Bin Zumrah -->
+                    <div class="faculty-profile">
+                        <div class="faculty-profile-header">
+                            <div class="faculty-profile-avatar">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="faculty-profile-info">
+                                <div class="faculty-profile-name">Assoc. Prof. Abdul Rahim Bin Zumrah</div>
+                                <div class="faculty-profile-position">Fakultas Ekonomi dan Bisnis (FEB)</div>
+                                <div class="faculty-profile-origin">
+                                    <img src="https://cdn.countryflags.com/thumbs/malaysia/flag-400.png" alt="Malaysia Flag">
+                                    <span>Universiti Sains Islam Malaysia (USIM)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="faculty-profile-body">
+                            <div class="faculty-profile-section">
+                                <div class="faculty-profile-section-title">Bidang Keahlian</div>
+                                <p>Human Resource Management</p>
+                            </div>
+                            <div class="faculty-tag">QS WUR: 1401+</div>
+                            <div class="faculty-tag">Scopus: 19</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Dr. Ainul Azreen Adam -->
+                    <div class="faculty-profile">
+                        <div class="faculty-profile-header">
+                            <div class="faculty-profile-avatar">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="faculty-profile-info">
+                                <div class="faculty-profile-name">Dr. Ainul Azreen Adam</div>
+                                <div class="faculty-profile-position">Fakultas Ekonomi dan Bisnis (FEB)</div>
+                                <div class="faculty-profile-origin">
+                                    <img src="https://cdn.countryflags.com/thumbs/malaysia/flag-400.png" alt="Malaysia Flag">
+                                    <span>Graduate Business School, Universiti Teknologi Mara (UiTM)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="faculty-profile-body">
+                            <div class="faculty-profile-section">
+                                <div class="faculty-profile-section-title">Bidang Keahlian</div>
+                                <p>Business Administration</p>
+                            </div>
+                            <div class="faculty-tag">QS WUR: 587</div>
+                            <div class="faculty-tag">QS Subject: 401-450</div>
+                            <div class="faculty-tag">Scopus: 3</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Dr. Ammar Salamh Alrawahna -->
+                    <div class="faculty-profile">
+                        <div class="faculty-profile-header">
+                            <div class="faculty-profile-avatar">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="faculty-profile-info">
+                                <div class="faculty-profile-name">Dr. Ammar Salamh Alrawahna</div>
+                                <div class="faculty-profile-position">Fakultas Ekonomi dan Bisnis (FEB)</div>
+                                <div class="faculty-profile-origin">
+                                    <img src="https://cdn.countryflags.com/thumbs/jordan/flag-400.png" alt="Jordan Flag">
+                                    <span>Amman Arab University</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="faculty-profile-body">
+                            <div class="faculty-profile-section">
+                                <div class="faculty-profile-section-title">Bidang Keahlian</div>
+                                <p>Business Analysis and Development</p>
+                            </div>
+                            <div class="faculty-tag">QS Arab Region: 110</div>
+                            <div class="faculty-tag">Scopus: 2</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Dr. Aslam Mia -->
+                    <div class="faculty-profile">
+                        <div class="faculty-profile-header">
+                            <div class="faculty-profile-avatar">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="faculty-profile-info">
+                                <div class="faculty-profile-name">Dr. Aslam Mia</div>
+                                <div class="faculty-profile-position">Fakultas Ekonomi dan Bisnis (FEB)</div>
+                                <div class="faculty-profile-origin">
+                                    <img src="https://cdn.countryflags.com/thumbs/bangladesh/flag-400.png" alt="Bangladesh Flag">
+                                    <span>Universiti Sains Malaysia</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="faculty-profile-body">
+                            <div class="faculty-profile-section">
+                                <div class="faculty-profile-section-title">Bidang Keahlian</div>
+                                <p>Finance</p>
+                            </div>
+                            <div class="faculty-tag">QS WUR: 146</div>
+                            <div class="faculty-tag">QS Subject: 201-250</div>
+                            <div class="faculty-tag">Scopus: 13</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Prof. Dr. Zainudin bin Hassan -->
+                    <div class="faculty-profile">
+                        <div class="faculty-profile-header">
+                            <div class="faculty-profile-avatar">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="faculty-profile-info">
+                                <div class="faculty-profile-name">Prof. Dr. Zainudin bin Hassan</div>
+                                <div class="faculty-profile-position">Fakultas Ilmu Sosial dan Humaniora (FISH)</div>
+                                <div class="faculty-profile-origin">
+                                    <img src="https://cdn.countryflags.com/thumbs/malaysia/flag-400.png" alt="Malaysia Flag">
+                                    <span>Universiti Teknologi Malaysia</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="faculty-profile-body">
+                            <div class="faculty-profile-section">
+                                <div class="faculty-profile-section-title">Bidang Keahlian</div>
+                                <p>Sosiologi Pendidikan & Pembangunan</p>
+                            </div>
+                            <div class="faculty-tag">QS WUR: 181</div>
+                            <div class="faculty-tag">QS Subject: 249</div>
+                            <div class="faculty-tag">Scopus: 9</div>
                         </div>
                     </div>
                 </div>
@@ -582,5 +973,25 @@
     </div>
     
     @include('layout.footer')
+
+    <script>
+        // Simple filter functionality - can be enhanced with proper data filtering
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.faculty-filter-btn');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Here you would add actual filtering logic
+                    // This is just a placeholder for the UI interaction
+                });
+            });
+        });
+        </script>
 </body>
 </html>
