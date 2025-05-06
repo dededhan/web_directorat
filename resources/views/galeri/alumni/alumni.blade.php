@@ -9,19 +9,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <link rel="stylesheet" href="{{ asset('home.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
         :root {
-            --primary-color: #186666;
-            --secondary-color: #2A8D8D;
-            --accent-color: #3AA6A6;
+            --primary-color: #0B5563;
+            --secondary-color: #147D8E;
+            --accent-color: #1E9DAF;
+            --light-accent: #D1E7DD;
             --text-color: #1f2937;
             --light-text: #6b7280;
             --border-color: #e5e7eb;
@@ -39,90 +42,159 @@
             margin: 0;
             padding: 0;
             overflow-x: hidden;
+            padding-top: 70px;
         }
-
-        /* Navbar Styles */
-        
 
         /* Hero Section */
         .hero-section {
-            background-color: #D1E7DD;
-            padding: 5rem 2rem;
-            color: #186666;
+            position: relative;
+            background: linear-gradient(135deg, #0B5563, #1E9DAF);
+            padding: 7rem 2rem 9rem;
+            color: white;
             text-align: center;
-            clip-path: polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%);
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
             margin-bottom: 3rem;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 25L75 50L50 75L25 50Z" fill="%231E9DAF" fill-opacity="0.1"/></svg>');
+            background-size: 100px 100px;
+            opacity: 0.3;
         }
 
         .hero-content {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         .hero-content h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: -0.5px;
         }
 
         .hero-content p {
-            font-size: 1.2rem;
-            font-weight: 400; /* Increased from 300 */
-            opacity: 0.9;
+            font-size: 1.4rem;
+            font-weight: 400;
+            opacity: 0.95;
+            max-width: 80%;
+            margin: 0 auto;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        /* Stats Bar */
+        .stats-container {
+            max-width: 1000px;
+            margin: -4rem auto 4rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stat-item {
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border-right: 1px solid #f0f0f0;
+            transition: var(--transition);
+        }
+
+        .stat-item:last-child {
+            border-right: none;
+        }
+
+        .stat-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .stat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 1rem;
+            background-color: rgba(30, 157, 175, 0.1);
+            border-radius: 50%;
+            color: var(--accent-color);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            color: var(--light-text);
+            font-size: 1rem;
+            font-weight: 500;
         }
 
         /* Container */
-.container {
-    max-width: 1280px;
-    margin: 0 auto; /* Remove vertical margin */
-    padding: 0 1rem; /* Slightly reduced padding */
-}
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
 
-@media (min-width: 768px) {
-    .container {
-        padding: 0 2rem; /* More padding on larger screens */
-    }
-}
+        /* Section Header */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 1rem 0;
+        }
 
-/* Section Header */
-.section-header {
-    text-align: center;
-    margin-bottom: 2rem; /* Reduced from 3rem */
-    padding: 1rem 0; /* Added some padding */
-}
+        .section-header h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
 
-.section-header h2 {
-    font-size: 1.8rem; /* Slightly reduced from 2rem */
-    font-weight: 700;
-    color: #186666;
-    margin-bottom: 0.75rem; /* Slightly reduced */
-}
+        .section-header h2::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
 
-.section-divider {
-    height: 3px; /* Slightly thinner */
-    width: 60px;
-    background: #186666;
-    margin: 0 auto;
-    border-radius: 2px;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .section-header {
-        margin-bottom: 1.5rem;
-    }
-
-    .section-header h2 {
-        font-size: 1.5rem;
-    }
-}
+        .section-description {
+            max-width: 700px;
+            margin: 1.5rem auto 0;
+            color: var(--light-text);
+            font-size: 1.1rem;
+        }
 
         /* Alumni Grid */
         .alumni-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 2rem; /* Adjusted for 3-column layout */
-            margin-bottom: 3rem; /* Added margin at bottom */
+            gap: 2.5rem;
+            margin-bottom: 4rem;
         }
 
         .alumni-card {
@@ -134,84 +206,91 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            border: 1px solid #e5e7eb; /* Added border for more definition */
+            position: relative;
+            border: 1px solid #e5e7eb;
         }
 
         .alumni-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-7px);
             box-shadow: var(--hover-shadow);
         }
 
         .card-image {
-            height: 220px;
+            height: 180px;
             position: relative;
             overflow: hidden;
+            background: linear-gradient(135deg, #0B5563, #1E9DAF);
         }
 
-        .card-image img {
+        .card-image::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            transition: transform 0.7s ease;
-        }
-
-        .alumni-card:hover .card-image img {
-            transform: scale(1.05);
-        }
-
-        .faculty-badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background-color: #186666;
-            color: white;
-            padding: 0.3rem 0.7rem;
-            border-radius: 99px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            background-image: url('data:image/svg+xml;utf8,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><path d="M30 15L45 30L30 45L15 30Z" fill="%231E9DAF" fill-opacity="0.15"/></svg>');
+            background-size: 60px 60px;
+            opacity: 0.5;
         }
 
         .card-content {
-            padding: 1.8rem; /* Increased from 1.5rem */
+            padding: 2rem;
             display: flex;
             flex-direction: column;
             flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-decoration {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 120px;
+            height: 120px;
+            background: var(--light-accent);
+            border-radius: 0 0 0 100%;
+            opacity: 0.3;
+            z-index: 1;
         }
 
         .card-title {
-            font-size: 1.3rem; /* Increased from 1.2rem */
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #186666;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
             line-height: 1.4;
+            position: relative;
+            z-index: 2;
         }
 
         .card-meta {
-            margin-bottom: 1.8rem; /* Increased from 1.5rem */
+            margin-bottom: 2rem;
             display: flex;
             flex-direction: column;
-            gap: 0.8rem; /* Increased from 0.7rem */
+            gap: 0.9rem;
+            position: relative;
+            z-index: 2;
         }
 
         .meta-item {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.7rem;
             color: var(--light-text);
-            font-size: 0.95rem; /* Increased from 0.9rem */
+            font-size: 1rem;
         }
 
         .meta-item i {
-            color: #3AA6A6;
-            font-size: 1.1rem; /* Increased from 1rem */
-            width: 20px; /* Increased from 16px */
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            width: 24px;
             text-align: center;
-            display: flex;           /* Added display flex */
-            justify-content: center; /* Center horizontally */
-            align-items: center;     /* Center vertically */
-            min-width: 20px;         /* Ensure minimum width */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 24px;
         }
 
         .read-more {
@@ -219,18 +298,22 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.8rem 1.5rem; /* Increased from 0.7rem 1.2rem */
-            background-color: rgba(24, 102, 102, 0.1);
-            color: #186666;
+            padding: 1rem 1.8rem;
+            background-color: rgba(30, 157, 175, 0.08);
+            color: var(--primary-color);
             text-decoration: none;
             border-radius: 0.5rem;
-            font-weight: 600; /* Increased from 500 */
+            font-weight: 600;
             transition: var(--transition);
+            border: 1px solid transparent;
+            position: relative;
+            z-index: 2;
         }
 
         .read-more:hover {
-            background-color: #186666;
+            background-color: var(--primary-color);
             color: white;
+            border-color: var(--primary-color);
         }
 
         .read-more i {
@@ -238,98 +321,136 @@
         }
 
         .read-more:hover i {
-            transform: translateX(3px);
+            transform: translateX(5px);
         }
 
         /* Empty State */
         .empty-state {
             grid-column: 1 / -1;
             background-color: var(--card-bg);
-            padding: 3.5rem; /* Increased from 3rem */
+            padding: 4rem;
             border-radius: 1rem;
             text-align: center;
             box-shadow: var(--shadow);
-            border: 1px solid #e5e7eb; /* Added border */
+            border: 1px solid #e5e7eb;
         }
 
         .empty-icon {
-            background-color: rgba(24, 102, 102, 0.1);
-            width: 90px; /* Increased from 80px */
-            height: 90px; /* Increased from 80px */
+            background: linear-gradient(135deg, rgba(30, 157, 175, 0.1), rgba(11, 85, 99, 0.1));
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.8rem; /* Increased from 1.5rem */
+            margin: 0 auto 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
         .empty-icon i {
-            font-size: 2.2rem; /* Increased from 2rem */
-            color: #186666;
+            font-size: 2.4rem;
+            color: var(--primary-color);
         }
 
         .empty-state h3 {
-            font-size: 1.6rem; /* Increased from 1.5rem */
-            color: #186666;
-            margin-bottom: 0.7rem; /* Increased from 0.5rem */
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
         }
 
         .empty-state p {
             color: var(--light-text);
-            font-size: 1.1rem; /* Added font size */
+            font-size: 1.2rem;
+            max-width: 500px;
+            margin: 0 auto;
         }
-        body {
-            padding-top: 70px; /* Adjust based on navbar height */
+
+        /* Featured Alumni */
+        .featured-alumni {
+            margin-bottom: 5rem;
+            padding: 3rem 0;
+            background-color: rgba(30, 157, 175, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-alumni::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="M100 50L150 100L100 150L50 100Z" fill="%231E9DAF" fill-opacity="0.03"/></svg>');
+            background-size: 200px 200px;
+        }
+
+        .featured-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .alumni-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+            
+            .stats-container {
+                margin-top: -3rem;
+            }
         }
 
         @media (max-width: 768px) {
             body {
-                padding-top: 60px; /* Different height for mobile */
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .alumni-navbar {
-                flex-direction: column;
-                padding: 1rem;
-            }
-            
-            .navbar-logo {
-                margin-bottom: 1rem;
-            }
-            
-            .navbar-menu {
-                width: 100%;
-                justify-content: center;
-                gap: 1.5rem;
+                padding-top: 60px;
             }
             
             .hero-section {
-                padding: 3rem 1rem;
+                padding: 5rem 1.5rem 7rem;
             }
             
             .hero-content h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
             
             .hero-content p {
-                font-size: 1rem;
+                font-size: 1.1rem;
+                max-width: 100%;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+                margin-top: -2rem;
+            }
+            
+            .stat-item {
+                border-right: none;
+                border-bottom: 1px solid #f0f0f0;
+            }
+            
+            .stat-item:last-child {
+                border-bottom: none;
             }
             
             .container {
-                padding: 0 1.5rem; /* Increased from 1rem */
+                padding: 0 1.5rem;
+            }
+            
+            .section-header h2 {
+                font-size: 1.8rem;
             }
             
             .alumni-grid {
-                grid-template-columns: 1fr; /* Change to single column on mobile */
-                gap: 1.5rem;
+                grid-template-columns: 1fr;
+                gap: 1.8rem;
             }
-            
-            @media (min-width: 640px) and (max-width: 1023px) {
-                .alumni-grid {
-                    grid-template-columns: repeat(2, 1fr); /* 2 columns on tablet */
-                }
+        }
+
+        @media (min-width: 640px) and (max-width: 1023px) {
+            .alumni-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -338,23 +459,145 @@
 <body>
     <!-- Include the Navbar -->
     @include('layout.navbar_sticky')
-    <div class="hero-section">
-        <div class="hero-content">
-            <h1>Our Alumni Making an Impact</h1>
-            <p>Discover how UNJ graduates are making a difference in the world</p>
+    
+    <div class="hero-section" style="background: none; overflow: visible; position: relative; clip-path: none; padding-bottom: 6rem;">
+        <!-- Hero image with overlay -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow: hidden;">
+            <img src="https://asset.kompas.com/crops/3ObZCQJoEGDX_DegAY47y7sfoWg=/25x0:1177x768/1200x800/data/photo/2024/10/29/67203cebeb82e.jpeg" 
+                style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4);" alt="UNJ Campus">
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 150px; 
+                background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.7));"></div>
+        </div>
+        
+        <!-- Decorative shape at bottom -->
+        <div style="position: absolute; bottom: -1px; left: 0; right: 0; z-index: 1;">
+            <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                <path d="M0 50L80 43.3C160 36.7 320 23.3 480 26.7C640 30 800 50 960 56.7C1120 63.3 1280 56.7 1360 53.3L1440 50V100H1360C1280 100 1120 100 960 100C800 100 640 100 480 100C320 100 160 100 80 100H0V50Z" 
+                    fill="#f9fafb"/>
+            </svg>
+        </div>
+        
+        <div class="hero-content" data-aos="fade-up" data-aos-duration="800" style="position: relative; z-index: 2; max-width: 1000px; padding: 8rem 2rem 4rem;">
+            <h1 style="font-size: 4rem; text-shadow: 0 2px 15px rgba(0,0,0,0.5); margin-bottom: 1.5rem;">Our Alumni Making an Impact</h1>
+            <p style="font-size: 1.5rem; max-width: 800px; margin: 0 auto; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">
+                Discover how UNJ graduates are creating positive change and achieving excellence across Indonesia and beyond
+            </p>
         </div>
     </div>
     
+    <div class="stats-container" data-aos="fade-up" data-aos-delay="200">
+        <div class="stat-item">
+            <div class="stat-icon">
+                <i class="fas fa-user-graduate fa-lg"></i>
+            </div>
+            <div class="stat-number">3.000.000+</div>
+            <div class="stat-label">Alumni</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">
+                <i class="fas fa-globe-asia fa-lg"></i>
+            </div>
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Negara</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">
+                <i class="fas fa-users fa-lg"></i>
+            </div>
+            <div class="stat-number">10+</div>
+            <div class="stat-label">Ikatan Alumni</div>
+        </div>
+    </div>
+    
+    <section class="featured-alumni">
+        <div class="container featured-container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Featured Alumni</h2>
+                <p class="section-description">Alumni UNJ yang telah berhasil menempati posisi strategis dan memberikan kontribusi signifikan bagi bangsa dan negara</p>
+            </div>
+            
+            <!-- This content is just a placeholder based on the image provided and does not rely on backend logic -->
+            <div class="alumni-grid">
+                <div class="alumni-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-content">
+                        <div class="card-decoration"></div>
+                        <h3 class="card-title">H. Juri Ardiantoro, Ph.D.</h3>
+                        <div class="card-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-briefcase"></i>
+                                <span>Wakil Menteri Sekretaris Negara</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>Fakultas Ilmu Pendidikan</span>
+                            </div>
+                        </div>
+                        <a href="#" target="_blank" class="read-more">
+                            <span>View Profile</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="alumni-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card-content">
+                        <div class="card-decoration"></div>
+                        <h3 class="card-title">Dr. H. Wihaji, S.Ag., M.Pd.</h3>
+                        <div class="card-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-briefcase"></i>
+                                <span>Menteri Kependudukan dan Pembangunan Keluarga</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>Fakultas Ilmu Pendidikan</span>
+                            </div>
+                        </div>
+                        <a href="#" target="_blank" class="read-more">
+                            <span>View Profile</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="alumni-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card-content">
+                        <div class="card-decoration"></div>
+                        <h3 class="card-title">Jenderal TNI (Purn.) Dr. H. Wiranto, S.H., S.I.P., M.M.</h3>
+                        <div class="card-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-briefcase"></i>
+                                <span>Penasihat Khusus Presiden Bidang Politik dan Keamanan</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>Fakultas Ilmu Sosial</span>
+                            </div>
+                        </div>
+                        <a href="#" target="_blank" class="read-more">
+                            <span>View Profile</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
     <div class="container">
-        <div class="section-header">
+        <div class="section-header" data-aos="fade-up">
             <h2>Alumni Success Stories</h2>
-            <div class="section-divider"></div>
+            <p class="section-description">Kisah-kisah inspiratif alumni UNJ yang telah membuat dampak positif di berbagai bidang dan menjadi kebanggaan almamater</p>
         </div>
         
         <div class="alumni-grid">
             @forelse($alumniBerdampak as $alumni)
-                <div class="alumni-card">
+                <div class="alumni-card" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                    <div class="card-image">
+                        <!-- Decorative background only -->
+                    </div>
                     <div class="card-content">
+                        <div class="card-decoration"></div>
                         <h3 class="card-title">{{ $alumni->judul_berita }}</h3>
                         <div class="card-meta">
                             <div class="meta-item">
@@ -373,17 +616,29 @@
                     </div>
                 </div>
             @empty
-                <div class="empty-state">
+                <div class="empty-state" data-aos="fade-up">
                     <div class="empty-icon">
                         <i class="fas fa-newspaper"></i>
                     </div>
                     <h3>No Alumni Stories Yet</h3>
-                    <p>Belum ada berita alumni yang tersedia</p>
+                    <p>Belum ada berita alumni yang tersedia saat ini. Silakan kembali lagi nanti untuk melihat kisah-kisah inspiratif dari para alumni UNJ.</p>
                 </div>
             @endforelse
         </div>
     </div>
-
+    
+    
     @include('layout.footer')
+    
+    <script>
+        // Initialize AOS animation library
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                once: true,
+                duration: 800,
+                easing: 'ease-out-cubic'
+            });
+        });
+    </script>
 </body>
 </html>
