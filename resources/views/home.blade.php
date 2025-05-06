@@ -533,13 +533,13 @@
     <section class="media-section py-8 md:py-16">
         <div class="container mx-auto px-4 md:px-6">
             <div class="text-center mb-8 md:mb-12">
-                <h2 class="text-2xl md:text-3xl font-bold text-teal-700 mb-2">Youtube Universitas Negeri Jakarta</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-teal-700 mb-2">Galeri Video</h2>
                 <div class="flex items-center justify-center mb-4">
                     <div class="h-1 w-16 bg-gray-300"></div>
                     <span class="text-red-500 text-xl md:text-2xl mx-3"><i class="fab fa-youtube"></i></span>
                     <div class="h-1 w-16 bg-gray-300"></div>
                 </div>
-                <p class="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">Tonton video terbaru dari channel YouTube UNJ</p>
+        
             </div>
 
             <div id="dynamic-videos-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
