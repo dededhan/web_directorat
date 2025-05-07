@@ -15,6 +15,7 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('home.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/ckeditor-list.css') }}">
 </head>
 <style>
 /* Global Styles */
@@ -333,8 +334,10 @@ html {
         <!-- Content Area -->
         @if($indikators->isNotEmpty())
             <div class="info-content" id="indikator-{{ $indikators->first()->id }}">
-                <h2>{{ $indikators->first()->judul }}</h2>
-                {!! $indikators->first()->deskripsi !!}
+                <h2>{{ $indikators->first()->judul }}</h2>\
+                <div class="ck-content">
+                    {!! $indikators->first()->deskripsi !!}
+                </div>
             </div>
         @else
             <div class="info-content" id="default">
