@@ -635,8 +635,9 @@
                     <div class="p-6 border-b border-gray-100">
                         <div class="flex items-center">
                             <div class="faculty-profile-avatar">
-                                <img src="{{ asset('images/irfan.jpg') }}" alt="Assoc. Prof. Dr. Muhammad Irfan Ashraf"
-                                     class="w-24 h-24 object-cover rounded-full border border-gray-300 shadow">
+                                <img src="{{ asset('images/irfan.jpg') }}"
+                                    alt="Assoc. Prof. Dr. Muhammad Irfan Ashraf"
+                                    class="w-24 h-24 object-cover rounded-full border border-gray-300 shadow">
                             </div>
                             <div class="ml-4">
                                 <h3 class="font-semibold text-lg text-teal-700">Assoc. Prof. Dr. Muhammad Irfan Ashraf
@@ -832,50 +833,152 @@
                 </div>
             </section>
 
-            <!-- Process Section -->
-            <section id="process" class="mb-20">
-                <h2 class="section-title text-3xl">Proses Rekrutmen & Seleksi</h2>
+            <!-- Syarat Pengusulan Section -->
+            <section id="requirements" class="mb-20">
+                <h2 class="section-title text-3xl">Syarat Pengusulan Adjunct Professor</h2>
 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Step 1 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm mb-6">
+                    <p class="text-gray-700 mb-6">Untuk memperluas upaya perwujudan WCU, pada tahun 2024 Kantor Wakil
+                        Rektor Bidang Perencanaan dan Bisnis UNJ melalui Pusat Layanan Internasional menawarkan
+                        kesempatan kepada fakultas untuk dapat mengusulkan Adjunct Professor yang akan dikontrak dalam
+                        jangka waktu satu tahun. Adapun persyaratan:</p>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Requirement 1 -->
+                        <div class="process-card">
+                            <div class="process-number">1</div>
+                            <h3 class="font-semibold text-lg text-teal-700 mb-2">Kualifikasi Akademik</h3>
+                            <p class="text-gray-600">
+                                Dosen perguruan tinggi luar negeri (PTLN) di Universitas <strong>QS 200 (by
+                                    Subject)</strong>,
+                                berkewarganegaraan asing, bergelar professor atau minimal associate professor,
+                                berpendidikan S3.
+                            </p>
+                        </div>
+
+                        <!-- Requirement 2 -->
+                        <div class="process-card">
+                            <div class="process-number">2</div>
+                            <h3 class="font-semibold text-lg text-teal-700 mb-2">Pengalaman Profesional</h3>
+                            <p class="text-gray-600">
+                                Memiliki pengalaman pengajaran, penelitian, dan pelayanan/kemitraan
+                                paling singkat <strong>5 tahun</strong>.
+                            </p>
+                        </div>
+
+                        <!-- Requirement 3 -->
+                        <div class="process-card">
+                            <div class="process-number">3</div>
+                            <h3 class="font-semibold text-lg text-teal-700 mb-2">Pengalaman Kolaborasi</h3>
+                            <p class="text-gray-600">
+                                Memiliki pengalaman menjadi anggota tim kerjasama dalam kegiatan penelitian
+                                dan pengembangan ilmu pengetahuan/teknologi di perguruan tinggi.
+                            </p>
+                        </div>
+
+                        <!-- Requirement 4 -->
+                        <div class="process-card">
+                            <div class="process-number">4</div>
+                            <h3 class="font-semibold text-lg text-teal-700 mb-2">Publikasi Ilmiah</h3>
+                            <p class="text-gray-600">
+                                Memiliki publikasi ilmiah minimal <strong>3 artikel</strong> pada jurnal internasional
+                                bereputasi dengan:<br>
+                                - SCImago JR ≥ 0.3 <em>atau</em><br>
+                                - JIF WoS ≥ 0.02<br>
+                                (Minimal 2 artikel sebagai penulis pertama/korespondensi)
+                            </p>
+                        </div>
+
+                        <!-- Requirement 5 -->
+                        <div class="process-card">
+                            <div class="process-number">5</div>
+                            <h3 class="font-semibold text-lg text-teal-700 mb-2">Reputasi Akademik</h3>
+                            <p class="text-gray-600">
+                                Memiliki karya ilmiah yang diakui secara internasional dengan
+                                <strong>H-index Scopus ≥ 6</strong>.
+                            </p>
+                        </div>
+
+                        <!-- Requirement 6 & 7 -->
+                        <div class="process-card md:col-span-2">
+                            <div class="process-number">6/7</div>
+                            <h3 class="font-semibold text-lg text-teal-700 mb-2">Kontribusi Wajib</h3>
+                            <p class="text-gray-600">
+                                Harus memenuhi salah satu:<br>
+                                <strong>Opsi Pengajaran:</strong><br>
+                                - Mengajar minimal 3x/semester<br>
+                                - Membimbing/menguji minimal 2 tugas akhir<br><br>
+
+                                <strong>Opsi Penelitian:</strong><br>
+                                - Mendampingi penulisan artikel<br>
+                                - Menghasilkan minimal 2 artikel Q3 bersama per tahun
+                            </p>
+                        </div>
+                        <div class="bg-teal-50 p-6 rounded-xl border border-teal-200">
+                            <h4 class="font-semibold text-teal-800 mb-3 flex items-center">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                Catatan Penting:
+                            </h4>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2">
+                                <li>Pengusulan melalui fakultas masing-masing</li>
+                                <li>Dokumen pendukung harus diverifikasi</li>
+                                <li>Masa kontrak 1 tahun dengan evaluasi berkala</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Luaran Program Section -->
+            <section id="outputs" class="mb-20">
+                <h2 class="section-title text-3xl">Luaran Program Adjunct Professor</h2>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Output 1 -->
                     <div class="process-card">
                         <div class="process-number">1</div>
-                        <h3 class="font-semibold text-lg text-teal-700 mb-3">Identifikasi Kebutuhan</h3>
-                        <p class="text-gray-600">Analisis kebutuhan pengajar internasional berdasarkan program studi,
-                            kurikulum, dan rencana strategis pengembangan UNJ.</p>
+                        <h3 class="font-semibold text-lg text-teal-700 mb-2">Publikasi Ilmiah</h3>
+                        <p class="text-gray-600">
+                            <strong>Minimal 2 Artikel</strong> penelitian bersama pada
+                            <span class="font-semibold text-teal-600">jurnal terindeks Scopus Q2</span>.
+                            Publikasi harus menunjukkan kolaborasi aktif antara adjunct professor dan dosen UNJ.
+                        </p>
                     </div>
 
-                    <!-- Step 2 -->
+                    <!-- Output 2 -->
                     <div class="process-card">
                         <div class="process-number">2</div>
-                        <h3 class="font-semibold text-lg text-teal-700 mb-3">Publikasi Lowongan</h3>
-                        <p class="text-gray-600">Pengumuman rekrutmen melalui jaringan universitas mitra, portal
-                            akademik internasional, dan asosiasi profesional global.</p>
+                        <h3 class="font-semibold text-lg text-teal-700 mb-2">Pembelajaran Kolaboratif</h3>
+                        <p class="text-gray-600">
+                            <strong>Minimal 2 RPS</strong> (Rencana Pembelajaran Semester) bersama atau
+                            <strong>2 naskah bimbingan</strong> tugas akhir mahasiswa.
+                            Dokumen harus menunjukkan kontribusi langsung adjunct professor.
+                        </p>
                     </div>
 
-                    <!-- Step 3 -->
+                    <!-- Output 3 -->
                     <div class="process-card">
                         <div class="process-number">3</div>
-                        <h3 class="font-semibold text-lg text-teal-700 mb-3">Seleksi Kandidat</h3>
-                        <p class="text-gray-600">Proses evaluasi kandidat berdasarkan kualifikasi akademik, pengalaman
-                            mengajar, publikasi ilmiah, dan profil penelitian.</p>
+                        <h3 class="font-semibold text-lg text-teal-700 mb-2">Kerjasama Institusional</h3>
+                        <p class="text-gray-600">
+                            <strong>Minimal 1 dokumen kerjasama</strong> dalam bentuk:
+                            <br>- MOU (Memorandum of Understanding)
+                            <br>- IA (Implementation Agreement)
+                            <br>Khusus untuk universitas yang belum memiliki perjanjian kerja sama.
+                        </p>
                     </div>
+                </div>
 
-                    <!-- Step 4 -->
-                    <div class="process-card">
-                        <div class="process-number">4</div>
-                        <h3 class="font-semibold text-lg text-teal-700 mb-3">Wawancara & Demo Mengajar</h3>
-                        <p class="text-gray-600">Asesmen kemampuan pengajaran dan komunikasi kandidat melalui wawancara
-                            dan demonstrasi mengajar virtual/tatap muka.</p>
-                    </div>
-
-                    <!-- Step 5 -->
-                    <div class="process-card">
-                        <div class="process-number">5</div>
-                        <h3 class="font-semibold text-lg text-teal-700 mb-3">Onboarding & Orientasi</h3>
-                        <p class="text-gray-600">Program pengenalan UNJ, sistem akademik, budaya Indonesia, dan
-                            dukungan adaptasi kehidupan di Jakarta.</p>
-                    </div>
+                <div class="bg-teal-50 p-6 rounded-xl border border-teal-200 mt-8">
+                    <h4 class="font-semibold text-teal-800 mb-3 flex items-center">
+                        <i class="fas fa-clipboard-check mr-2"></i>
+                        Mekanisme Pelaporan:
+                    </h4>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>Laporan progres triwulanan ke Pusat Layanan Internasional</li>
+                        <li>Dokumen luaran harus diserahkan maksimal 1 bulan sebelum akhir kontrak</li>
+                        <li>Verifikasi akhir oleh tim penjaminan mutu UNJ</li>
+                    </ul>
                 </div>
             </section>
 
@@ -1002,7 +1105,7 @@
                     // Show/hide faculty profiles based on filter
                     facultyProfiles.forEach(profile => {
                         if (filterValue === 'all' || profile.getAttribute(
-                            'data-faculty') === filterValue) {
+                                'data-faculty') === filterValue) {
                             profile.style.display = 'block';
                         } else {
                             profile.style.display = 'none';
