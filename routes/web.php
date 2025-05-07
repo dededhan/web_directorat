@@ -314,6 +314,9 @@ Route::get('/indikator', function () {
     return view('Pemeringkatan.indikator.indikator');
 })->name('Pemeringkatan.indikator.indikator');
 
+Route::get('/indikator', [App\Http\Controllers\IndikatorController::class, 'showAllIndikators'])
+    ->name('Pemeringkatan.indikator.indikator');
+
 //pemeringkatan
 
 Route::get('/Pemeringkatans', [BeritaController::class, 'landingPagePemeringkatan'])->name('pemeringkatan.landingpage');

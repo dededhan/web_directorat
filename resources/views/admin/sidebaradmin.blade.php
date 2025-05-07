@@ -172,6 +172,13 @@
                         <span class="text">Ranking Pemeringkatan</span>
                     </a>
                 </li>
+
+                <li class="{{ request()->routeIs('admin.indikator.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.indikator.index') }}">
+                        <i class='bx bxs-school'></i>
+                        <span class="text">Indikator Pemeringkatan</span>
+                    </a>
+                </li>
             </ul>
         </div>
 

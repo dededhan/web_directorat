@@ -30,6 +30,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\GalleryController;
 // Ganti route yang ada dengan:
 use App\Http\Controllers\DokumenController;
+use App\Http\Controllers\IndikatorController;
 
 
 
@@ -163,6 +164,13 @@ Route::prefix('admin')->name('admin.')
             ->name('ranking.detail');
         Route::post('/ranking/upload', [RankingController::class, 'upload'])
             ->name('ranking.upload');
+
+        //indicator
+        Route::resource('/indikator', IndikatorController::class)
+            ->except(['show', 'edit']);
+        Route::get('/indikator/{id}/detail', [IndikatorController::class, 'getIndikatorDetail'])
+            ->name('indikator.detail');
+
 
 
         //inovasi

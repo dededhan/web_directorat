@@ -9,10 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('indikators', function (Blueprint $table) {
             $table->id();
+            $table->string('judul', 200);
+            $table->text('deskripsi');
+            $table->string('section')->index(); // e.g., 'sejarah', 'visi-misi', etc.
             $table->timestamps();
         });
     }
