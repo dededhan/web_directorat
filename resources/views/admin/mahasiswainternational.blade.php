@@ -60,8 +60,8 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="nim" class="form-label">Student ID (NIM)</label>
-                        <input type="text" class="form-control" id="nim" name="nim" required>
+                        <label for="nim" class="form-label">Student ID (NIM)(OPTIONAL)</label>
+                        <input type="text" class="form-control" id="nim" name="nim">
                         <div class="form-text text-muted">Enter the student's identification number</div>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -94,13 +94,13 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="fakultas" class="form-label">Faculty</label>
-                        <input type="text" class="form-control" id="fakultas" name="fakultas" required>
+                        <label for="fakultas" class="form-label">Faculty(OPTIONAL)</label>
+                        <input type="text" class="form-control" id="fakultas" name="fakultas" >
                         <div class="form-text text-muted">Enter the faculty name</div>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="program_studi" class="form-label">Department</label>
-                        <input type="text" class="form-control" id="program_studi" name="program_studi" required>
+                        <label for="program_studi" class="form-label">Department(OPTIONAL)</label>
+                        <input type="text" class="form-control" id="program_studi" name="program_studi" >
                         <div class="form-text text-muted">Enter the department name</div>
                     </div>
                 </div>
@@ -206,7 +206,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="edit_nim" class="form-label">Student ID (NIM)</label>
-                                <input type="text" class="form-control" name="nim" id="edit_nim" required>
+                                <input type="text" class="form-control" name="nim" id="edit_nim" >
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="edit_negara" class="form-label">Country</label>
@@ -237,11 +237,11 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="edit_fakultas" class="form-label">Faculty</label>
-                                <input type="text" class="form-control" name="fakultas" id="edit_fakultas" required>
+                                <input type="text" class="form-control" name="fakultas" id="edit_fakultas" >
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="edit_program_studi" class="form-label">Department</label>
-                                <input type="text" class="form-control" name="program_studi" id="edit_program_studi" required>
+                                <input type="text" class="form-control" name="program_studi" id="edit_program_studi" >
                             </div>
                         </div>
 
