@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALUMNI IMPACT</title>
+    <title>ALUMNI IMPACT - UNJ</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <link rel="stylesheet" href="{{ asset('home.css') }}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     
     <style>
         * {
@@ -30,112 +29,126 @@
             --border-color: #e5e7eb;
             --background-color: #f9fafb;
             --card-bg: #ffffff;
+            --header-bg: #166270;
+            --dark-overlay: rgba(0, 0, 0, 0.6);
             --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             --hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             --transition: all 0.3s ease;
         }
 
         body {
-            background-color: var(--background-color);
             color: var(--text-color);
             line-height: 1.6;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
-            padding-top: 70px;
         }
 
         /* Hero Section */
         .hero-section {
             position: relative;
-            background: linear-gradient(135deg, #0B5563, #1E9DAF);
-            padding: 7rem 2rem 9rem;
+            height: 70vh;
+            min-height: 500px;
             color: white;
-            text-align: center;
-            clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
-            margin-bottom: 3rem;
             overflow: hidden;
         }
 
-        .hero-section::before {
-            content: "";
+        .hero-background {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 25L75 50L50 75L25 50Z" fill="%231E9DAF" fill-opacity="0.1"/></svg>');
-            background-size: 100px 100px;
-            opacity: 0.3;
-        }
-
-        .hero-content {
-            max-width: 900px;
-            margin: 0 auto;
-            position: relative;
             z-index: 1;
         }
 
-        .hero-content h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 1.5rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            letter-spacing: -0.5px;
+        .hero-background img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.3);
+            aspect-ratio: 1/1;
         }
 
-        .hero-content p {
-            font-size: 1.4rem;
-            font-weight: 400;
-            opacity: 0.95;
-            max-width: 80%;
-            margin: 0 auto;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
         }
-        
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 8rem 2rem 0;
+            text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto;
+            font-weight: 400;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
         /* Stats Bar */
         .stats-container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: -4rem auto 4rem;
             background: white;
-            border-radius: 1rem;
+            border-radius: 0.75rem;
             box-shadow: var(--shadow);
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            overflow: hidden;
             position: relative;
             z-index: 10;
+            overflow: hidden;
+        }
+
+        .stats-wrapper {
+            display: flex;
+            justify-content: space-between;
         }
 
         .stat-item {
-            padding: 2rem 1.5rem;
+            flex: 1;
+            padding: 2rem 1rem;
             text-align: center;
-            border-right: 1px solid #f0f0f0;
-            transition: var(--transition);
+            border-right: 1px solid #eee;
         }
 
         .stat-item:last-child {
             border-right: none;
         }
 
-        .stat-item:hover {
-            background-color: #f9fafb;
-        }
-
         .stat-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 50px;
-            height: 50px;
-            margin: 0 auto 1rem;
-            background-color: rgba(30, 157, 175, 0.1);
             border-radius: 50%;
-            color: var(--accent-color);
+            color: var(--primary-color);
+            font-size: 1.2rem;
         }
 
         .stat-number {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--primary-color);
             margin-bottom: 0.3rem;
@@ -144,21 +157,64 @@
         .stat-label {
             color: var(--light-text);
             font-size: 1rem;
-            font-weight: 500;
         }
 
         /* Container */
         .container {
-            max-width: 1280px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1.5rem;
+            padding: 0 2rem;
+        }
+
+        /* Alumni Philosophy Section */
+        .alumni-philosophy {
+            background-color: white;
+            padding: 4rem 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow);
+        }
+
+        .philosophy-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .philosophy-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .philosophy-title::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        .philosophy-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         /* Section Header */
         .section-header {
             text-align: center;
             margin-bottom: 3rem;
-            padding: 1rem 0;
+            padding-top: 2rem;
         }
 
         .section-header h2 {
@@ -220,18 +276,6 @@
             position: relative;
             overflow: hidden;
             background: linear-gradient(135deg, #0B5563, #1E9DAF);
-        }
-
-        .card-image::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><path d="M30 15L45 30L30 45L15 30Z" fill="%231E9DAF" fill-opacity="0.15"/></svg>');
-            background-size: 60px 60px;
-            opacity: 0.5;
         }
 
         .card-content {
@@ -365,75 +409,6 @@
             margin: 0 auto;
         }
 
-        /* Featured Alumni */
-        .featured-alumni {
-            margin-bottom: 5rem;
-            padding: 3rem 0;
-            background-color: rgba(30, 157, 175, 0.05);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .featured-alumni::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="M100 50L150 100L100 150L50 100Z" fill="%231E9DAF" fill-opacity="0.03"/></svg>');
-            background-size: 200px 200px;
-        }
-
-        .featured-container {
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Alumni Philosophy Section */
-        .alumni-philosophy {
-            background-color: #f5f9fa;
-            padding: 3rem 0;
-            margin-bottom: 3rem;
-            border-top: 1px solid rgba(30, 157, 175, 0.1);
-            border-bottom: 1px solid rgba(30, 157, 175, 0.1);
-        }
-        
-        .philosophy-content {
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: center;
-            padding: 0 1.5rem;
-        }
-        
-        .philosophy-title {
-            color: var(--primary-color);
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .philosophy-title::after {
-            content: "";
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: var(--accent-color);
-            border-radius: 2px;
-        }
-        
-        .philosophy-text {
-            color: var(--text-color);
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-top: 2rem;
-        }
-
         /* Responsive */
         @media (max-width: 1024px) {
             .alumni-grid {
@@ -441,126 +416,95 @@
                 gap: 2rem;
             }
             
-            .stats-container {
-                margin-top: -3rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding-top: 60px;
-            }
-            
-            .hero-section {
-                padding: 5rem 1.5rem 7rem;
-            }
-            
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero-content p {
-                font-size: 1.1rem;
-                max-width: 100%;
-            }
-            
-            .stats-container {
-                grid-template-columns: 1fr;
-                margin-top: -2rem;
+            .stats-wrapper {
+                flex-direction: column;
             }
             
             .stat-item {
                 border-right: none;
-                border-bottom: 1px solid #f0f0f0;
+                border-bottom: 1px solid #eee;
             }
             
             .stat-item:last-child {
                 border-bottom: none;
             }
             
+            .hero-title {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                height: 60vh;
+                min-height: 400px;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .philosophy-title {
+                font-size: 1.7rem;
+            }
+            
             .container {
                 padding: 0 1.5rem;
             }
             
-            .section-header h2 {
-                font-size: 1.8rem;
-            }
-            
             .alumni-grid {
                 grid-template-columns: 1fr;
-                gap: 1.8rem;
-            }
-            
-            .philosophy-title {
-                font-size: 1.8rem;
-            }
-            
-            .philosophy-text {
-                font-size: 1rem;
-            }
-        }
-
-        @media (min-width: 640px) and (max-width: 1023px) {
-            .alumni-grid {
-                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
 </head>
+@include('layout.navbar')
 
 <body>
-    <!-- Include the Navbar -->
-    @include('layout.navbar_sticky')
-    
-    <div class="hero-section" style="background: none; overflow: visible; position: relative; clip-path: none; padding-bottom: 6rem;">
-        <!-- Hero image with overlay -->
-        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow: hidden;">
-            <img src="https://asset.kompas.com/crops/3ObZCQJoEGDX_DegAY47y7sfoWg=/25x0:1177x768/1200x800/data/photo/2024/10/29/67203cebeb82e.jpeg" 
-                style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4);" alt="UNJ Campus">
-            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 150px; 
-                background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.7));"></div>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background">
+            <img src="https://asset.kompas.com/crops/3ObZCQJoEGDX_DegAY47y7sfoWg=/25x0:1177x768/1200x800/data/photo/2024/10/29/67203cebeb82e.jpeg" alt="Alumni Background">
         </div>
-        
-        <!-- Decorative shape at bottom -->
-        <div style="position: absolute; bottom: -1px; left: 0; right: 0; z-index: 1;">
-            <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                <path d="M0 50L80 43.3C160 36.7 320 23.3 480 26.7C640 30 800 50 960 56.7C1120 63.3 1280 56.7 1360 53.3L1440 50V100H1360C1280 100 1120 100 960 100C800 100 640 100 480 100C320 100 160 100 80 100H0V50Z" 
-                    fill="#f9fafb"/>
-            </svg>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Alumni Impact</h1>
+            <p class="hero-subtitle">Discover how our graduates are creating positive change and achieving excellence across Indonesia and beyond</p>
         </div>
-        
-        <div class="hero-content" data-aos="fade-up" data-aos-duration="800" style="position: relative; z-index: 2; max-width: 1000px; padding: 8rem 2rem 4rem;">
-            <h1 style="font-size: 4rem; text-shadow: 0 2px 15px rgba(0,0,0,0.5); margin-bottom: 1.5rem;">Our Alumni Making an Impact</h1>
-            <p style="font-size: 1.5rem; max-width: 800px; margin: 0 auto; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">
-                Discover how UNJ graduates are creating positive change and achieving excellence across Indonesia and beyond
-            </p>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="stats-container">
+        <div class="stats-wrapper">
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="stat-number">3.000.000+</div>
+                <div class="stat-label">Alumni</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <i class="fas fa-globe-asia"></i>
+                </div>
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Negara</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-number">10+</div>
+                <div class="stat-label">Ikatan Alumni</div>
+            </div>
         </div>
     </div>
-    
-    <div class="stats-container" data-aos="fade-up" data-aos-delay="200">
-        <div class="stat-item">
-            <div class="stat-icon">
-                <i class="fas fa-user-graduate fa-lg"></i>
-            </div>
-            <div class="stat-number">3.000.000+</div>
-            <div class="stat-label">Alumni</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-icon">
-                <i class="fas fa-globe-asia fa-lg"></i>
-            </div>
-            <div class="stat-number">50+</div>
-            <div class="stat-label">Negara</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-icon">
-                <i class="fas fa-users fa-lg"></i>
-            </div>
-            <div class="stat-number">10+</div>
-            <div class="stat-label">Ikatan Alumni</div>
-        </div>
-    </div>
-    
+
+    <!-- Main Content with Laravel Logic -->
     <div class="container">
         <!-- Added new Alumni Philosophy section -->
         <div class="alumni-philosophy" data-aos="fade-up">
@@ -613,8 +557,6 @@
             @endforelse
         </div>
     </div>
-    
-    
     @include('layout.footer')
     
     <script>
