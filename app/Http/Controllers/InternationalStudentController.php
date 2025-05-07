@@ -77,12 +77,12 @@ class InternationalStudentController extends Controller
             // Otherwise validate here:
             $validatedData = $request->validate([
                 'nama_mahasiswa' => 'required|string|max:255',
-                'nim' => 'required|string|max:50',
+                'nim' => 'nullable|string|max:50',
                 'negara' => 'required|string|max:100',
                 'kategori' => 'required|in:inbound,outbound',
                 'status' => 'required|in:fulltime,parttime,other',
-                'fakultas' => 'required|string|max:100',
-                'program_studi' => 'required|string|max:100',
+                'fakultas' => 'nullable|string|max:100',
+                'program_studi' => 'nullable|string|max:100',
                 'periode_mulai' => 'required|date',
                 'periode_akhir' => 'required|date|after:periode_mulai',
             ]);
