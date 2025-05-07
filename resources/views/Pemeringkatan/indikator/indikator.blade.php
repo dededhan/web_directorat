@@ -334,7 +334,7 @@ html {
         <!-- Content Area -->
         @if($indikators->isNotEmpty())
             <div class="info-content" id="indikator-{{ $indikators->first()->id }}">
-                <h2>{{ $indikators->first()->judul }}</h2>\
+                <h2>{{ $indikators->first()->judul }}</h2>
                 <div class="ck-content">
                     {!! $indikators->first()->deskripsi !!}
                 </div>
