@@ -1,8 +1,6 @@
-<nav>
-    <!-- All content moved to right side -->
+<link rel="stylesheet" href="{{ asset('position-fix.css') }}">
+<nav class="navbar-admin">
     <div class="navbar-right">
-    <link rel="stylesheet" href="{{ asset('position-fix.css') }}">
-        <!-- User Profile Section -->
         @auth
         <div class="profile-info">
             <img src="{{ auth()->user()->profile_picture ?? 'default-avatar.png' }}" alt="" class="profile-image">
@@ -16,7 +14,5 @@
             <span class="user-name">Guest</span>
         </div>
         @endguest
-
-        <!-- Menu Icon -->
     </div>
 </nav>

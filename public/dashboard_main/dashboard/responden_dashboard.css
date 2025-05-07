@@ -1,5 +1,6 @@
+/* Update table spacing */
 .table-data {
-    margin-top: 24px;
+    margin-top: 40px; /* Increased margin */
 }
 
 .order {
@@ -7,6 +8,7 @@
     padding: 24px;
     border-radius: 20px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Added margin */
 }
 
 .form-control:focus,
@@ -25,8 +27,11 @@
     border-color: #2980b9;
 }
 
+/* Ensure proper table scrolling */
 .table-responsive {
     overflow-x: auto;
+    margin-bottom: 20px;
+    max-height: none; /* Remove max-height */
 }
 
 .badge {
@@ -136,13 +141,20 @@
 .export-buttons {
     margin-bottom: 20px;
 }
+
+/* Update pagination positioning */
 .custom-pagination {
     margin-top: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    position: relative; /* Changed from absolute */
+    bottom: auto; /* Remove fixed bottom */
 }
 
 .custom-pagination .pagination {
     justify-content: flex-end;
     gap: 5px;
+    margin-bottom: 0;
 }
 
 .custom-pagination .page-item.active .page-link {
@@ -165,4 +177,15 @@
     .btn-group {
         flex-direction: column;
     }
+}
+
+/* Move form helper text below the inputs */
+/* Form helper text positioning */
+.form-text.text-muted {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem; /* Added margin bottom */
+    font-size: 0.8rem;
+    color: #6c757d;
+    position: relative;
+    display: block;
 }

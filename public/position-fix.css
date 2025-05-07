@@ -22,9 +22,12 @@
 
 /* Main content spacing */
 #content main {
-    padding-top: 76px !important; /* 56px navbar height + 20px spacing */
+    padding-top: 76px !important; /* Increased padding */
+    padding-bottom: 40px !important; /* Added bottom padding */
     width: 100%;
     position: relative;
+    min-height: calc(100vh - 56px);
+    overflow: visible !important;
 }
 
 /* Submit Button Fix */
@@ -69,6 +72,13 @@
     position: relative;
     z-index: 1;
     padding-top: 60px; /* Space for navbar */
+    margin-top: 20px; /* Added margin */
+}
+
+.container, .table-data {
+    position: relative;
+    z-index: 1;
+    margin-top: 20px; /* Added margin */
 }
 
 /* Fix sidebar z-index to be below navbar */
