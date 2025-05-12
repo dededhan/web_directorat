@@ -357,20 +357,28 @@
 
             <section>
                 @php
+                    // Get unique years from the data
                     $years = $facultyStaffs->pluck('tahun')->unique()->sort()->values();
+
+                    // Set default year to display (current year if available, otherwise the latest year in data)
                     $currentYear = request(
                         'year',
                         $years->contains(date('Y')) ? date('Y') : ($years->count() > 0 ? $years->last() : date('Y')),
                     );
                 @endphp
-                <h2 class="section-title text-3xl">Adjunct Professor UNJ Tahun {{ $currentYear }}</h2>
-                <div class="mb-5 flex flex-wrap gap-3">
-                    @foreach ($years as $year)
-                        <button class="year-btn {{ $year == $currentYear ? 'active' : '' }}"
-                            data-year="{{ $year }}">
-                            {{ $year }}
-                        </button>
-                    @endforeach
+
+                <!-- Title with dropdown -->
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="section-title text-3xl">Adjunct Professor UNJ Tahun
+                        <select id="year-dropdown"
+                            class="text-3xl font-bold bg-transparent border-none focus:outline-none text-teal-700">
+                            @foreach ($years as $year)
+                                <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>
+                                    {{ $year }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </h2>
                 </div>
                 <div class="mb-8 flex flex-wrap gap-3">
                     <button class="filter-btn active" data-filter="all">Semua</button>
@@ -779,6 +787,7 @@
             const facultyGrid = document.getElementById('faculty-grid');
             const searchInput = document.getElementById('faculty-search');
             const yearButtons = document.querySelectorAll('.year-btn');
+            const yearDropdown = document.getElementById('year-dropdown');
 
             // Get all the faculty profiles from the grid
             const facultyProfilesInGrid = Array.from(facultyGrid.querySelectorAll('.faculty-profile'));
@@ -788,35 +797,23 @@
             let displayCount = initialDisplayCount;
 
 
-            yearButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove active class from all year buttons
-                    yearButtons.forEach(btn => btn.classList.remove('active'));
+            yearDropdown.addEventListener('change', function() {
+                const selectedYear = this.value;
 
-                    // Add active class to clicked button
-                    this.classList.add('active');
+                // Filter profiles by year
+                facultyProfilesInGrid.forEach(profile => {
+                    const profileYear = profile.getAttribute('data-year');
 
-                    const selectedYear = this.getAttribute('data-year');
-
-                    // Update the heading
-                    document.querySelector('.section-title').textContent =
-                        `Adjunct Professor UNJ Tahun ${selectedYear}`;
-
-                    // Filter profiles by year
-                    facultyProfilesInGrid.forEach(profile => {
-                        const profileYear = profile.getAttribute('data-year');
-
-                        if (profileYear === selectedYear) {
-                            profile.classList.remove('year-hidden');
-                        } else {
-                            profile.classList.add('year-hidden');
-                        }
-                    });
-
-                    // Reset display count and update display
-                    displayCount = initialDisplayCount;
-                    updateDisplayedItems();
+                    if (profileYear === selectedYear) {
+                        profile.classList.remove('year-hidden');
+                    } else {
+                        profile.classList.add('year-hidden');
+                    }
                 });
+
+                // Reset display count and update display
+                displayCount = initialDisplayCount;
+                updateDisplayedItems();
             });
 
             // Function to update the displayed items
@@ -839,7 +836,8 @@
                 // Hide load more button if all visible items are displayed
                 const totalVisible = facultyProfilesInGrid.filter(profile =>
                     !profile.classList.contains('filter-hidden') &&
-                    !profile.classList.contains('search-hidden')).length;
+                    !profile.classList.contains('search-hidden') &&
+                    !profile.classList.contains('year-hidden')).length;
 
                 if (totalVisible <= visibleCount) {
                     loadMoreBtn.style.display = 'none';
