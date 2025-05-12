@@ -16,22 +16,17 @@ use App\Http\Controllers\RankingController;
 use App\Http\Controllers\InstagramApiController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ProgramLayananController;
-
-
-
-
 use App\Http\Controllers\ProgramKegiatanController;
-
-
 use App\Http\Middleware\HandleRespondenForm;
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\Auth\LoginController;
-
-
 use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\InternationalFacultyStaffController;
+
+
 
 Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
+
 
 Route::get('/kebijakan-privasi', function () {
     return view('privasi.kebijakan-privasi');
@@ -333,10 +328,13 @@ Route::get('/Pemeringkatans/program/lecturer-expose', function () {
     return view('Pemeringkatan.program.lecturer-expose');
 })->name('Pemeringkatan.program.lecturer-expose');
 
-Route::get('/Pemeringkatans/program/international-faculty-staff', function () {
-    return view('Pemeringkatan.program.international-faculty-staff');
-})->name('Pemeringkatan.program.international-faculty-staff');
+// Route::get('/Pemeringkatans/program/international-faculty-staff', function () {
+//     return view('Pemeringkatan.program.international-faculty-staff');
+// })->name('Pemeringkatan.program.international-faculty-staff');
 
+Route::get('/Pemeringkatans/program/international-faculty-staff', [InternationalFacultyStaffController::class, 'publicIndex'])
+    ->name('Pemeringkatan.program.international-faculty-staff');
+    
 Route::get('/Pemeringkatan/program/international-student-mobility', function () {
     return view('Pemeringkatan.program.international-student-mobility');
 })->name('Pemeringkatan.program.international-student-mobility');

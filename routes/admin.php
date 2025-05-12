@@ -28,6 +28,7 @@ use App\Http\Controllers\PimpinanController;
 use App\Http\Controllers\RankingController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\InternationalFacultyStaffController;
 // Ganti route yang ada dengan:
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\IndikatorController;
@@ -164,6 +165,12 @@ Route::prefix('admin')->name('admin.')
             ->name('ranking.detail');
         Route::post('/ranking/upload', [RankingController::class, 'upload'])
             ->name('ranking.upload');
+
+
+        //international
+        Route::resource('/international_faculty_staff', InternationalFacultyStaffController::class);
+        Route::get('/international_faculty_staff/{id}/detail', [InternationalFacultyStaffController::class, 'getStaffDetail'])
+            ->name('international_faculty_staff.detail');
 
         //indicator
         Route::resource('/indikator', IndikatorController::class)

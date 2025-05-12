@@ -182,6 +182,20 @@
             </ul>
         </div>
 
+        <!-- International Section -->
+
+        <div class="menu-section">
+            <h3 class="section-title">Lecture Staff International</h3>
+            <ul class="side-menu">
+                <li class="{{ request()->routeIs('admin.international_faculty_staff.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.international_faculty_staff.index') }}">
+                        <i class='bx bxs-graduation'></i>
+                        <span class="text">Faculty Staff Profile</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
         <!-- Inovasi Section -->
         <div class="menu-section">
             <h3 class="section-title">Inovasi</h3>

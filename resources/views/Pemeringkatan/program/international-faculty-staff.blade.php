@@ -273,7 +273,7 @@
 
             <!-- Program Types -->
             <section id="programs" class="mt-10 mb-20">
-                <h2 class="section-title text-3xl">Jenis Program</h2>
+                <h2 class="section-title text-3xl">Aktivitas Dosen Asing</h2>
                 <div class="grid md:grid-cols-3 gap-8">
                     <!-- Program Card 1 -->
                     <div class="card group">
@@ -355,414 +355,102 @@
                 </div>
             </section>
 
-            <!-- Professors Section -->
+            <section>
+                <!-- Professors Section -->
 
-            <h2 class="section-title text-3xl">Adjunct Professor UNJ Tahun 2025</h2>
+                <h2 class="section-title text-3xl">Adjunct Professor UNJ Tahun 2025</h2>
 
-            <!-- Filters -->
-            <div class="mb-8 flex flex-wrap gap-3">
-                <button class="filter-btn active" data-filter="all">Semua</button>
-                <button class="filter-btn" data-filter="FT">FT</button>
-                <button class="filter-btn" data-filter="FMIPA">FMIPA</button>
-                <button class="filter-btn" data-filter="FPsi">FPsi</button>
-                <button class="filter-btn" data-filter="FEB">FEB</button>
-                <button class="filter-btn" data-filter="FISH">FISH</button>
-                <button class="filter-btn" data-filter="Pascasarjana">Pascasarjana</button>
-            </div>
+                <!-- Filters -->
+                <div class="mb-8 flex flex-wrap gap-3">
+                    <button class="filter-btn active" data-filter="all">Semua</button>
+                    <button class="filter-btn" data-filter="FT">FT</button>
+                    <button class="filter-btn" data-filter="FMIPA">FMIPA</button>
+                    <button class="filter-btn" data-filter="FPsi">FPsi</button>
+                    <button class="filter-btn" data-filter="FEB">FEB</button>
+                    <button class="filter-btn" data-filter="FISH">FISH</button>
+                    <button class="filter-btn" data-filter="Pascasarjana">Pascasarjana</button>
+                </div>
 
-            <!-- Search -->
-            <div class="relative mb-8">
-                <input type="text" placeholder="Cari profesor berdasarkan nama atau bidang keahlian..."
-                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
-                <i class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-            </div>
-
-            <!-- Faculty Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Faculty Profile 1 -->
-                <div class="faculty-profile bg-white rounded-xl overflow-hidden shadow-sm" data-faculty="FPsi">
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex items-center">
-                            <div class="faculty-profile-avatar">
-                                <i class="fas fa-user-tie"></i>
+                <!-- Search -->
+                <div class="relative mb-8">
+                    <input type="text" placeholder="Cari profesor berdasarkan nama atau bidang keahlian..."
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+                    <i class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+                <!-- Faculty Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="faculty-grid">
+                    @foreach ($facultyStaffs as $staff)
+                        <div class="faculty-profile bg-white rounded-xl overflow-hidden shadow-sm"
+                            data-faculty="{{ $staff->fakultas }}">
+                            <div class="p-6 border-b border-gray-100">
+                                <div class="flex items-center">
+                                    <div class="faculty-profile-avatar">
+                                        @if ($staff->foto_path)
+                                            <img src="{{ Storage::url($staff->foto_path) }}" alt="{{ $staff->nama }}"
+                                                class="w-full h-full object-cover rounded-full">
+                                        @else
+                                            <i class="fas fa-user-tie"></i>
+                                        @endif
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="font-semibold text-lg text-teal-700">{{ $staff->nama }}</h3>
+                                        <div class="text-sm text-gray-600 mt-1">
+                                            @php
+                                                $fakultasNames = [
+                                                    'pascasarjana' => 'Pascasarjana',
+                                                    'fip' => 'Fakultas Ilmu Pendidikan (FIP)',
+                                                    'fmipa' => 'Fakultas Matematika dan Ilmu Pengetahuan Alam (FMIPA)',
+                                                    'fppsi' => 'Fakultas Psikologi (FPsi)',
+                                                    'fbs' => 'Fakultas Bahasa dan Seni (FBS)',
+                                                    'ft' => 'Fakultas Teknik (FT)',
+                                                    'fik' => 'Fakultas Ilmu Keolahragaan (FIKK)',
+                                                    'fis' => 'Fakultas Ilmu Sosial dan Humaniora (FISH)',
+                                                    'fe' => 'Fakultas Ekonomi dan Bisnis (FEB)',
+                                                    'profesi' => 'PROFESI',
+                                                ];
+                                            @endphp
+                                            {{ $fakultasNames[$staff->fakultas] ?? ucfirst($staff->fakultas) }}
+                                        </div>
+                                        <div class="flex items-center mt-2">
+                                            <span class="text-sm text-gray-600">{{ $staff->universitas_asal }}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="ml-4">
-                                <h3 class="font-semibold text-lg text-teal-700">Prof. Madya Dr. Norba'yah binti Abdul
-                                    Kadir</h3>
-                                <div class="text-sm text-gray-600 mt-1">Fakultas Psikologi (FPsi)</div>
-                                <div class="flex items-center mt-2">
-                                    <img src="https://cdn.countryflags.com/thumbs/malaysia/flag-400.png"
-                                        alt="Malaysia Flag" class="country-flag">
-                                    <span class="text-sm text-gray-600">Universiti Kebangsaan Malaysia</span>
+                            <div class="p-6">
+                                <div class="mb-3">
+                                    <h4 class="text-sm font-semibold text-gray-700">Bidang Keahlian</h4>
+                                    <p class="text-gray-600">{{ $staff->bidang_keahlian }}</p>
+                                </div>
+                                <div class="flex flex-wrap mt-3">
+                                    @if ($staff->qs_wur)
+                                        <span class="faculty-tag">QS WUR: {{ $staff->qs_wur }}</span>
+                                    @endif
+
+                                    @if ($staff->qs_subject)
+                                        <span class="faculty-tag">QS Subject: {{ $staff->qs_subject }}</span>
+                                    @endif
+
+                                    @if ($staff->scopus)
+                                        <span class="faculty-tag">Scopus: {{ $staff->scopus }}</span>
+                                    @endif
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="mb-3">
-                            <h4 class="text-sm font-semibold text-gray-700">Bidang Keahlian</h4>
-                            <p class="text-gray-600">Health Psychology dan Kesehatan Mental</p>
-                        </div>
-                        <div class="flex flex-wrap mt-3">
-                            <span class="faculty-tag">QS WUR: 138</span>
-                            <span class="faculty-tag">QS Subject: 301-350 (Psychology)</span>
-                            <span class="faculty-tag">Scopus: 8</span>
-                        </div>
-                    </div>
-                </div>
+                    @endforeach
 
-                <!-- Faculty Profile 2 -->
-                <div class="faculty-profile bg-white rounded-xl overflow-hidden shadow-sm" data-faculty="FT">
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex items-center">
-                            <div class="faculty-profile-avatar">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="font-semibold text-lg text-teal-700">Prof. Ir. Dr. Sitti Asmah Binti Hassan
-                                </h3>
-                                <div class="text-sm text-gray-600 mt-1">Fakultas Teknik (FT)</div>
-                                <div class="flex items-center mt-2">
-                                    <img src="https://cdn.countryflags.com/thumbs/malaysia/flag-400.png"
-                                        alt="Malaysia Flag" class="country-flag">
-                                    <span class="text-sm text-gray-600">Universiti Teknologi Malaysia</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="mb-3">
-                            <h4 class="text-sm font-semibold text-gray-700">Bidang Keahlian</h4>
-                            <p class="text-gray-600">Transportation & Traffic Engineering</p>
-                        </div>
-                        <div class="flex flex-wrap mt-3">
-                            <span class="faculty-tag">QS WUR: 181</span>
-                            <span class="faculty-tag">QS Subject: 102 (Engineering)</span>
-                            <span class="faculty-tag">Scopus: 12</span>
-                        </div>
+                    <!-- Load More button -->
+                    <div class="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center my-8">
+                        <button class="btn-secondary flex items-center" id="load-more-btn">
+                            <span>Lihat Lebih Banyak</span>
+                            <i class="fas fa-chevron-down ml-2"></i>
+                        </button>
                     </div>
                 </div>
-
-                <!-- Faculty Profile 3 -->
-                <div class="faculty-profile bg-white rounded-xl overflow-hidden shadow-sm" data-faculty="FISH">
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex items-center">
-                            <div class="faculty-profile-avatar">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="font-semibold text-lg text-teal-700">Prof. Dr. Zainudin bin Hassan</h3>
-                                <div class="text-sm text-gray-600 mt-1">Fakultas Ilmu Sosial dan Humaniora (FISH)</div>
-                                <div class="flex items-center mt-2">
-                                    <img src="https://cdn.countryflags.com/thumbs/malaysia/flag-400.png"
-                                        alt="Malaysia Flag" class="country-flag">
-                                    <span class="text-sm text-gray-600">Universiti Teknologi Malaysia</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="mb-3">
-                            <h4 class="text-sm font-semibold text-gray-700">Bidang Keahlian</h4>
-                            <p class="text-gray-600">Sosiologi Pendidikan & Pembangunan</p>
-                        </div>
-                        <div class="flex flex-wrap mt-3">
-                            <span class="faculty-tag">QS WUR: 181</span>
-                            <span class="faculty-tag">QS Subject: 249 (Social Sciences)</span>
-                            <span class="faculty-tag">Scopus: 9</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Faculty Profile 4 -->
-                <div class="faculty-profile bg-white rounded-xl overflow-hidden shadow-sm" data-faculty="FEB">
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex items-center">
-                            <div class="faculty-profile-avatar">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="font-semibold text-lg text-teal-700">Dr. Aslam Mia</h3>
-                                <div class="text-sm text-gray-600 mt-1">Fakultas Ekonomi dan Bisnis (FEB)</div>
-                                <div class="flex items-center mt-2">
-                                    <img src="https://cdn.countryflags.com/thumbs/bangladesh/flag-400.png"
-                                        alt="Bangladesh Flag" class="country-flag">
-                                    <span class="text-sm text-gray-600">Universiti Sains Malaysia</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="mb-3">
-                            <h4 class="text-sm font-semibold text-gray-700">Bidang Keahlian</h4>
-                            <p class="text-gray-600">Finance</p>
-                        </div>
-                        <div class="flex flex-wrap mt-3">
-                            <span class="faculty-tag">QS WUR: 146</span>
-                            <span class="faculty-tag">QS Subject: 201-250 (Business)</span>
-                            <span class="faculty-tag">Scopus: 13</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Faculty Profile 5 -->
-                <div class="faculty-profile bg-white rounded-xl overflow-hidden shadow-sm" data-faculty="FEB">
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex items-center">
-                            <div class="faculty-profile-avatar">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="font-semibold text-lg text-teal-700">Assoc. Prof. Dr. Abdul Rahim bin Zumrah
-                                </h3>
-                                <div class="text-sm text-gray-600 mt-1">Fakultas Ekonomi dan Bisnis (FEB)</div>
-                                <div class="flex items-center mt-2">
-                                    <img src="https://cdn.countryflags.com/thumbs/malaysia/flag-400.png"
-                                        alt="Malaysia Flag" class="country-flag">
-                                    <span class="text-sm text-gray-600">Universiti Sains Islam Malaysia (USIM)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="mb-3">
-                            <h4 class="text-sm font-semibold text-gray-700">Bidang Keahlian</h4>
-                            <p class="text-gray-600">Human Resource Management</p>
-                        </div>
-                        <div class="flex flex-wrap mt-3">
-                            <span class="faculty-tag">QS WUR: 1401+</span>
-                            <span class="faculty-tag">Scopus: 19</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Faculty Profile 6 -->
-                <div class="faculty-profile bg-white rounded-xl overflow-hidden shadow-sm" data-faculty="FEB">
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex items-center">
-                            <div class="faculty-profile-avatar">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="font-semibold text-lg text-teal-700">Dr. Ammar Salamh Alrawahna</h3>
-                                <div class="text-sm text-gray-600 mt-1">Fakultas Ekonomi dan Bisnis (FEB)</div>
-                                <div class="flex items-center mt-2">
-                                    <img src="https://cdn.countryflags.com/thumbs/jordan/flag-400.png"
-                                        alt="Jordan Flag" class="country-flag">
-                                    <span class="text-sm text-gray-600">Amman Arab University</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="mb-3">
-                            <h4 class="text-sm font-semibold text-gray-700">Bidang Keahlian</h4>
-                            <p class="text-gray-600">Business Analysis and Development</p>
-                        </div>
-                        <div class="flex flex-wrap mt-3">
-                            <span class="faculty-tag">QS Arab Region: 110</span>
-                            <span class="faculty-tag">Scopus: 2</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Faculty Profile 7 -->
-                <div class="faculty-profile bg-white rounded-xl overflow-hidden shadow-sm" data-faculty="FEB">
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex items-center">
-                            <div class="faculty-profile-avatar">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="font-semibold text-lg text-teal-700">Dr. Ainul Azreen Adam</h3>
-                                <div class="text-sm text-gray-600 mt-1">Fakultas Ekonomi dan Bisnis (FEB)</div>
-                                <div class="flex items-center mt-2">
-                                    <img src="https://cdn.countryflags.com/thumbs/malaysia/flag-400.png"
-                                        alt="Malaysia Flag" class="country-flag">
-                                    <span class="text-sm text-gray-600">Graduate Business School, Universiti Teknologi
-                                        Mara (UiTM)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="mb-3">
-                            <h4 class="text-sm font-semibold text-gray-700">Bidang Keahlian</h4>
-                            <p class="text-gray-600">Business Administration</p>
-                        </div>
-                        <div class="flex flex-wrap mt-3">
-                            <span class="faculty-tag">QS WUR: 587</span>
-                            <span class="faculty-tag">QS Subject: 401-450 (Business and Management)</span>
-                            <span class="faculty-tag">Scopus: 3</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Faculty Profile 8 -->
-                <div class="faculty-profile bg-white rounded-xl overflow-hidden shadow-sm" data-faculty="FMIPA">
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex items-center">
-                            <div class="faculty-profile-avatar">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="font-semibold text-lg text-teal-700">Prof. Dr. Jungshan Chang</h3>
-                                <div class="text-sm text-gray-600 mt-1">Fakultas Matematika dan Ilmu Pengetahuan Alam
-                                    (FMIPA)</div>
-                                <div class="flex items-center mt-2">
-                                    <img src="https://cdn.countryflags.com/thumbs/taiwan/flag-400.png"
-                                        alt="Taiwan Flag" class="country-flag">
-                                    <span class="text-sm text-gray-600">Taipei Medical University</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="mb-3">
-                            <h4 class="text-sm font-semibold text-gray-700">Bidang Keahlian</h4>
-                            <p class="text-gray-600">Biomedis</p>
-                        </div>
-                        <div class="flex flex-wrap mt-3">
-                            <span class="faculty-tag">QS WUR: 611-620</span>
-                            <span class="faculty-tag">QS Subject: 201-250 (Medicine)</span>
-                            <span class="faculty-tag">Scopus: 19</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Faculty Profile 9 -->
-                <div class="faculty-profile bg-white rounded-xl overflow-hidden shadow-sm" data-faculty="FMIPA">
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex items-center">
-                            <div class="faculty-profile-avatar">
-                                <img src="{{ asset('images/irfan.jpg') }}"
-                                    alt="Assoc. Prof. Dr. Muhammad Irfan Ashraf"
-                                    class="w-24 h-24 object-cover rounded-full border border-gray-300 shadow">
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="font-semibold text-lg text-teal-700">Assoc. Prof. Dr. Muhammad Irfan Ashraf
-                                </h3>
-                                <div class="text-sm text-gray-600 mt-1">Fakultas Matematika dan Ilmu Pengetahuan Alam
-                                    (FMIPA)</div>
-                                <div class="flex items-center mt-2">
-                                    <img src="https://cdn.countryflags.com/thumbs/pakistan/flag-400.png"
-                                        alt="Pakistan Flag" class="country-flag">
-                                    <span class="text-sm text-gray-600">Sarghoda University</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="mb-3">
-                            <h4 class="text-sm font-semibold text-gray-700">Bidang Keahlian</h4>
-                            <p class="text-gray-600">Biotechnology</p>
-                        </div>
-                        <div class="flex flex-wrap mt-3">
-                            <span class="faculty-tag">Scopus: 25</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Faculty Profile 10 -->
-                <div class="faculty-profile bg-white rounded-xl overflow-hidden shadow-sm" data-faculty="FISH">
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex items-center">
-                            <div class="faculty-profile-avatar">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="font-semibold text-lg text-teal-700">Sunny Owen</h3>
-                                <div class="text-sm text-gray-600 mt-1">Fakultas Ilmu Sosial dan Humaniora (FISH)</div>
-                                <div class="flex items-center mt-2">
-                                    <img src="https://cdn.countryflags.com/thumbs/united-states/flag-400.png"
-                                        alt="USA Flag" class="country-flag">
-                                    <span class="text-sm text-gray-600">California State Polytechnic University</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="mb-3">
-                            <h4 class="text-sm font-semibold text-gray-700">Bidang Keahlian</h4>
-                            <p class="text-gray-600">Komunikasi Internasional</p>
-                        </div>
-                        <div class="flex flex-wrap mt-3">
-                            <span class="faculty-tag">QS WUR: 1401+</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Faculty Profile 11 -->
-                <div class="faculty-profile bg-white rounded-xl overflow-hidden shadow-sm"
-                    data-faculty="Pascasarjana">
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex items-center">
-                            <div class="faculty-profile-avatar">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="font-semibold text-lg text-teal-700">Wang Yung Hui</h3>
-                                <div class="text-sm text-gray-600 mt-1">Pascasarjana</div>
-                                <div class="flex items-center mt-2">
-                                    <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" alt="China Flag"
-                                        class="country-flag">
-                                    <span class="text-sm text-gray-600">CCNU</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="mb-3">
-                            <h4 class="text-sm font-semibold text-gray-700">Bidang Keahlian</h4>
-                            <p class="text-gray-600">Political Science</p>
-                        </div>
-                        <div class="flex flex-wrap mt-3">
-                            <!-- No rankings available -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Faculty Profile 12 -->
-                <div class="faculty-profile bg-white rounded-xl overflow-hidden shadow-sm" data-faculty="UNJ">
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex items-center">
-                            <div class="faculty-profile-avatar">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="font-semibold text-lg text-teal-700">Prof. Dr. rer. Nat. Hesham A. El
-                                    Enshasy</h3>
-                                <div class="text-sm text-gray-600 mt-1">Universitas Negeri Jakarta (UNJ)</div>
-                                <div class="flex items-center mt-2">
-                                    <img src="https://cdn.countryflags.com/thumbs/egypt/flag-400.png" alt="Egypt Flag"
-                                        class="country-flag">
-                                    <span class="text-sm text-gray-600">Universiti Teknologi Malaysia</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="mb-3">
-                            <h4 class="text-sm font-semibold text-gray-700">Bidang Keahlian</h4>
-                            <p class="text-gray-600">Management and Industrial Biotechnology</p>
-                        </div>
-                        <div class="flex flex-wrap mt-3">
-                            <span class="faculty-tag">QS WUR: 181</span>
-                            <span class="faculty-tag">QS Subject: 88 (Chemical Engineering)</span>
-                            <span class="faculty-tag">Scopus: 40</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Load More button -->
-                <div class="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center my-8">
-                    <button class="btn-secondary flex items-center">
-                        <span>Lihat Lebih Banyak</span>
-                        <i class="fas fa-chevron-down ml-2"></i>
-                    </button>
-                </div>
-            </div>
             </section>
+
+
+
 
             <!-- Benefits Section -->
             <section id="benefits" class="mb-20">
@@ -1052,35 +740,7 @@
             </section>
 
             <!-- CTA Section -->
-            <section
-                class="relative overflow-hidden bg-gradient-to-r from-teal-700 to-teal-800 text-white p-10 rounded-3xl shadow-lg text-center mb-10">
-                <div class="absolute top-0 right-0 w-64 h-64 opacity-10">
-                    <i class="fas fa-globe-asia text-9xl"></i>
-                </div>
-                <div class="relative z-10">
-                    <h2 class="text-3xl font-bold mb-4">Tertarik untuk Berkolaborasi?</h2>
-                    <p class="mb-8 max-w-3xl mx-auto">UNJ selalu terbuka untuk menjalin kerja sama dengan akademisi dan
-                        institusi pendidikan tinggi dari seluruh dunia. Bergabunglah dengan komunitas akademik kami dan
-                        jadilah bagian dari perjalanan UNJ menuju world-class university.</p>
-                    <div class="flex flex-wrap justify-center gap-4">
-                        <a href="#"
-                            class="bg-white text-teal-800 px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:bg-yellow-400 hover:text-teal-900 shadow-lg hover:shadow-xl flex items-center">
-                            <i class="fas fa-file-alt mr-2"></i>
-                            <span>Informasi Rekrutmen</span>
-                        </a>
-                        <a href="#"
-                            class="bg-white text-teal-800 px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:bg-yellow-400 hover:text-teal-900 shadow-lg hover:shadow-xl flex items-center">
-                            <i class="fas fa-handshake mr-2"></i>
-                            <span>Institutional Partnership</span>
-                        </a>
-                        <a href="#"
-                            class="bg-white text-teal-800 px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:bg-yellow-400 hover:text-teal-900 shadow-lg hover:shadow-xl flex items-center">
-                            <i class="fas fa-envelope mr-2"></i>
-                            <span>Hubungi Kami</span>
-                        </a>
-                    </div>
-                </div>
-            </section>
+
         </div>
         @include('layout.footer')
 
@@ -1091,9 +751,62 @@
         document.addEventListener('DOMContentLoaded', function() {
             const filterButtons = document.querySelectorAll('.filter-btn');
             const facultyProfiles = document.querySelectorAll('.faculty-profile');
+            const loadMoreBtn = document.getElementById('load-more-btn');
+            const facultyGrid = document.getElementById('faculty-grid');
+            const searchInput = document.getElementById('faculty-search');
 
+            // Get all the faculty profiles from the grid
+            const facultyProfilesInGrid = Array.from(facultyGrid.querySelectorAll('.faculty-profile'));
+
+            // Initially, display a limited number of faculty profiles
+            const initialDisplayCount = 9; // Show first 9 items
+            let displayCount = initialDisplayCount;
+
+            // Function to update the displayed items
+            function updateDisplayedItems() {
+                let visibleCount = 0;
+                facultyProfilesInGrid.forEach((profile, index) => {
+                    const isFilterHidden = profile.classList.contains('filter-hidden');
+                    const isSearchHidden = profile.classList.contains('search-hidden');
+
+                    if (!isFilterHidden && !isSearchHidden && visibleCount < displayCount) {
+                        profile.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        profile.style.display = 'none';
+                    }
+                });
+
+                // Hide load more button if all visible items are displayed
+                const totalVisible = facultyProfilesInGrid.filter(profile =>
+                    !profile.classList.contains('filter-hidden') &&
+                    !profile.classList.contains('search-hidden')).length;
+
+                if (totalVisible <= visibleCount) {
+                    loadMoreBtn.style.display = 'none';
+                } else {
+                    loadMoreBtn.style.display = 'flex';
+                }
+            }
+
+            // Apply initial display
+            facultyProfilesInGrid.forEach((profile) => {
+                profile.classList.remove('filter-hidden', 'search-hidden');
+            });
+            updateDisplayedItems();
+
+            // Load more button functionality
+            loadMoreBtn.addEventListener('click', function() {
+                displayCount += 6; // Load 6 more items
+                updateDisplayedItems();
+            });
+
+            // Filter buttons functionality
             filterButtons.forEach(button => {
                 button.addEventListener('click', function() {
+                    // Reset display count to initial
+                    displayCount = initialDisplayCount;
+
                     // Remove active class from all buttons
                     filterButtons.forEach(btn => btn.classList.remove('active'));
 
@@ -1103,63 +816,39 @@
                     const filterValue = this.getAttribute('data-filter');
 
                     // Show/hide faculty profiles based on filter
-                    facultyProfiles.forEach(profile => {
+                    facultyProfilesInGrid.forEach(profile => {
                         if (filterValue === 'all' || profile.getAttribute(
-                                'data-faculty') === filterValue) {
-                            profile.style.display = 'block';
+                            'data-faculty') === filterValue) {
+                            profile.classList.remove('filter-hidden');
                         } else {
-                            profile.style.display = 'none';
+                            profile.classList.add('filter-hidden');
                         }
                     });
+
+                    // Update displayed items
+                    updateDisplayedItems();
                 });
             });
 
             // Search functionality
-            const searchInput = document.querySelector('input[type="text"]');
-
             searchInput.addEventListener('input', function() {
+                // Reset display count to initial
+                displayCount = initialDisplayCount;
+
                 const searchTerm = this.value.toLowerCase();
 
-                facultyProfiles.forEach(profile => {
+                facultyProfilesInGrid.forEach(profile => {
                     const name = profile.querySelector('h3').textContent.toLowerCase();
                     const expertise = profile.querySelector('p').textContent.toLowerCase();
 
                     if (name.includes(searchTerm) || expertise.includes(searchTerm)) {
-                        profile.style.display = 'block';
+                        profile.classList.remove('search-hidden');
                     } else {
-                        profile.style.display = 'none';
+                        profile.classList.add('search-hidden');
                     }
                 });
-            });
 
-            // Smooth scroll for navigation
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-
-            // Sticky header effect
-            const header = document.querySelector('.fixed');
-
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 100) {
-                    header.classList.add('bg-white/95', 'backdrop-blur-sm', 'shadow-md');
-                    header.classList.remove('bg-white');
-                } else {
-                    header.classList.remove('bg-white/95', 'backdrop-blur-sm', 'shadow-md');
-                    header.classList.add('bg-white');
-                }
+                updateDisplayedItems();
             });
         });
     </script>
