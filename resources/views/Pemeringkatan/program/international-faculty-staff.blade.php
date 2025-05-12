@@ -369,7 +369,7 @@
 
                 <!-- Title with dropdown -->
                 <div class="flex items-center justify-between mb-6">
-                    <h2 class="section-title text-3xl">Adjunct Professor UNJ Tahun
+                    <h2 class="section-title text-3xl">Dosen Asing UNJ Tahun
                         <select id="year-dropdown"
                             class="text-3xl font-bold bg-transparent border-none focus:outline-none text-teal-700">
                             @foreach ($years as $year)
@@ -445,6 +445,9 @@
                                         </div>
                                         <div class="flex items-center mt-2">
                                             <span class="text-sm text-gray-600">{{ $staff->universitas_asal }}</span>
+                                        </div>
+                                        <div class="flex items-center mt-2">
+                                            <span class="text-sm text-gray-600">{{ $staff->tahun }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -706,7 +709,7 @@
             <section id="achievements" class="mb-20">
                 <h2 class="section-title text-3xl">Pencapaian Program</h2>
 
-                <div class="grid md:grid-cols-4 gap-6 mb-10">
+                <div class="grid md:grid-cols-3 gap-6 mb-10">
                     <!-- Stat 1 -->
                     <div class="stat-card">
                         <div class="text-4xl font-bold text-teal-700 mb-2">25+</div>
@@ -725,11 +728,6 @@
                         <div class="text-teal-800 font-medium">Negara Asal</div>
                     </div>
 
-                    <!-- Stat 4 -->
-                    <div class="stat-card">
-                        <div class="text-4xl font-bold text-teal-700 mb-2">40+</div>
-                        <div class="text-teal-800 font-medium">Publikasi Kolaboratif</div>
-                    </div>
                 </div>
 
                 <div class="bg-white p-8 rounded-2xl shadow-sm">
