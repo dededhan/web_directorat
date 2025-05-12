@@ -356,32 +356,56 @@
             </section>
 
             <section>
-                <!-- Professors Section -->
-
-                <h2 class="section-title text-3xl">Adjunct Professor UNJ Tahun 2025</h2>
-
-                <!-- Filters -->
+                @php
+                    $years = $facultyStaffs->pluck('tahun')->unique()->sort()->values();
+                    $currentYear = request(
+                        'year',
+                        $years->contains(date('Y')) ? date('Y') : ($years->count() > 0 ? $years->last() : date('Y')),
+                    );
+                @endphp
+                <h2 class="section-title text-3xl">Adjunct Professor UNJ Tahun {{ $currentYear }}</h2>
+                <div class="mb-5 flex flex-wrap gap-3">
+                    @foreach ($years as $year)
+                        <button class="year-btn {{ $year == $currentYear ? 'active' : '' }}"
+                            data-year="{{ $year }}">
+                            {{ $year }}
+                        </button>
+                    @endforeach
+                </div>
                 <div class="mb-8 flex flex-wrap gap-3">
                     <button class="filter-btn active" data-filter="all">Semua</button>
-                    <button class="filter-btn" data-filter="FT">FT</button>
-                    <button class="filter-btn" data-filter="FMIPA">FMIPA</button>
-                    <button class="filter-btn" data-filter="FPsi">FPsi</button>
-                    <button class="filter-btn" data-filter="FEB">FEB</button>
-                    <button class="filter-btn" data-filter="FISH">FISH</button>
-                    <button class="filter-btn" data-filter="Pascasarjana">Pascasarjana</button>
+                    @php
+                        $faculties = $facultyStaffs->pluck('fakultas')->unique();
+                        $fakultasNames = [
+                            'pascasarjana' => 'Pascasarjana',
+                            'fip' => 'FIP',
+                            'fmipa' => 'FMIPA',
+                            'fppsi' => 'FPsi',
+                            'fbs' => 'FBS',
+                            'ft' => 'FT',
+                            'fik' => 'FIKK',
+                            'fis' => 'FISH',
+                            'fe' => 'FEB',
+                            'profesi' => 'PROFESI',
+                        ];
+                    @endphp
+                    @foreach ($faculties as $faculty)
+                        @if (isset($fakultasNames[$faculty]))
+                            <button class="filter-btn"
+                                data-filter="{{ $faculty }}">{{ $fakultasNames[$faculty] }}</button>
+                        @endif
+                    @endforeach
                 </div>
 
-                <!-- Search -->
                 <div class="relative mb-8">
                     <input type="text" placeholder="Cari profesor berdasarkan nama atau bidang keahlian..."
                         class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                     <i class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                 </div>
-                <!-- Faculty Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="faculty-grid">
                     @foreach ($facultyStaffs as $staff)
                         <div class="faculty-profile bg-white rounded-xl overflow-hidden shadow-sm"
-                            data-faculty="{{ $staff->fakultas }}">
+                            data-faculty="{{ $staff->fakultas }}" data-year="{{ $staff->tahun }}">
                             <div class="p-6 border-b border-gray-100">
                                 <div class="flex items-center">
                                     <div class="faculty-profile-avatar">
@@ -754,6 +778,7 @@
             const loadMoreBtn = document.getElementById('load-more-btn');
             const facultyGrid = document.getElementById('faculty-grid');
             const searchInput = document.getElementById('faculty-search');
+            const yearButtons = document.querySelectorAll('.year-btn');
 
             // Get all the faculty profiles from the grid
             const facultyProfilesInGrid = Array.from(facultyGrid.querySelectorAll('.faculty-profile'));
@@ -762,14 +787,48 @@
             const initialDisplayCount = 9; // Show first 9 items
             let displayCount = initialDisplayCount;
 
+
+            yearButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all year buttons
+                    yearButtons.forEach(btn => btn.classList.remove('active'));
+
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    const selectedYear = this.getAttribute('data-year');
+
+                    // Update the heading
+                    document.querySelector('.section-title').textContent =
+                        `Adjunct Professor UNJ Tahun ${selectedYear}`;
+
+                    // Filter profiles by year
+                    facultyProfilesInGrid.forEach(profile => {
+                        const profileYear = profile.getAttribute('data-year');
+
+                        if (profileYear === selectedYear) {
+                            profile.classList.remove('year-hidden');
+                        } else {
+                            profile.classList.add('year-hidden');
+                        }
+                    });
+
+                    // Reset display count and update display
+                    displayCount = initialDisplayCount;
+                    updateDisplayedItems();
+                });
+            });
+
             // Function to update the displayed items
             function updateDisplayedItems() {
                 let visibleCount = 0;
                 facultyProfilesInGrid.forEach((profile, index) => {
                     const isFilterHidden = profile.classList.contains('filter-hidden');
                     const isSearchHidden = profile.classList.contains('search-hidden');
+                    const isYearHidden = profile.classList.contains('year-hidden');
 
-                    if (!isFilterHidden && !isSearchHidden && visibleCount < displayCount) {
+                    if (!isFilterHidden && !isSearchHidden && !isYearHidden && visibleCount <
+                        displayCount) {
                         profile.style.display = 'block';
                         visibleCount++;
                     } else {
@@ -818,7 +877,7 @@
                     // Show/hide faculty profiles based on filter
                     facultyProfilesInGrid.forEach(profile => {
                         if (filterValue === 'all' || profile.getAttribute(
-                            'data-faculty') === filterValue) {
+                                'data-faculty') === filterValue) {
                             profile.classList.remove('filter-hidden');
                         } else {
                             profile.classList.add('filter-hidden');
