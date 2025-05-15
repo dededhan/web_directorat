@@ -478,17 +478,17 @@
 
     <div class="ranking-section" id="rankings">
         <h2 class="ranking-title">Ranking Universitas Negeri Jakarta</h2>
-        
+
         <div class="ranking-grid">
             <!-- Dynamic ranking cards from database -->
             @foreach ($rankings as $ranking)
-            <a href="{{ route('ranking.show', $ranking->slug) }}" class="ranking-card"> 
-                <div class="logo-container">
-                    <img src="{{ asset('storage/' . $ranking->gambar) }}" alt="{{ $ranking->judul }}">
-                </div>
-                <p>{{ $ranking->judul }}</p>
-                <p style="color: #099259">{{ $ranking->score_ranking }}</p>
-            </a>
+                <a href="{{ route('ranking.show', $ranking->slug) }}" class="ranking-card">
+                    <div class="logo-container">
+                        <img src="{{ asset('storage/' . $ranking->gambar) }}" alt="{{ $ranking->judul }}">
+                    </div>
+                    <p>{{ $ranking->judul }}</p>
+                    <p style="color: #099259">{{ $ranking->score_ranking }}</p>
+                </a>
             @endforeach
         </div>
     </div>

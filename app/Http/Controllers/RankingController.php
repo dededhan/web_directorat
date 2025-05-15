@@ -102,6 +102,7 @@ class RankingController extends Controller
                 'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
             $ranking->judul = $validated['judul'];
+            $ranking->score_ranking = $validated['score_ranking'];  
             $ranking->deskripsi = $validated['deskripsi'];
             if ($request->hasFile('gambar') && $request->file('gambar')->isValid()) {
                 if ($ranking->gambar && Storage::disk('public')->exists($ranking->gambar)) {
