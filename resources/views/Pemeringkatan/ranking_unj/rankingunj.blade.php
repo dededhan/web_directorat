@@ -487,6 +487,7 @@
                     <img src="{{ asset('storage/' . $ranking->gambar) }}" alt="{{ $ranking->judul }}">
                 </div>
                 <p>{{ $ranking->judul }}</p>
+                <p style="color: #099259">{{ $ranking->score_ranking }}</p>
             </a>
             @endforeach
         </div>

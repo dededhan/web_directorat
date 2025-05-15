@@ -10,7 +10,7 @@ class Ranking extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['judul', 'slug', 'gambar', 'deskripsi'];
+    protected $fillable = ['judul', 'score_ranking', 'slug', 'gambar', 'deskripsi'];
 
     // Auto-generate slug from title before saving
     protected static function boot()

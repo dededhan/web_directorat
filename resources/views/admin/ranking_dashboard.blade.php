@@ -39,6 +39,17 @@
                         <div class="form-text text-muted">Masukkan judul peringkat (maksimal 200 karakter)</div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="score_ranking" class="form-label">Skor Peringkat(Optional)</label>
+                        <input type="text" class="form-control @error('score_ranking') is-invalid @enderror" 
+                            name="score_ranking" id="score_ranking" value="{{ old('score_ranking') }}">
+                        @error('score_ranking')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <div class="form-text text-muted">Masukkan skor peringkat (contoh: 100.0)</div>
+                    </div>
+                </div>
 
                 <div class="row">
                     <div class="col-md-12 mb-3">
@@ -83,6 +94,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Judul Peringkat</th>
+                                <th>Skor</th>
                                 <th>Logo</th>
                                 <th>Deskripsi</th>
                                 <th>Actions</th>
@@ -93,6 +105,7 @@
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $ranking->judul }}</td>
+                                    <td>{{ $ranking->score_ranking }}</td>
                                     <td>
                                         <button class="btn btn-sm btn-info view-image"
                                             data-image="{{ asset('storage/' . $ranking->gambar) }}"
@@ -159,6 +172,13 @@
                                 <input type="text" class="form-control" name="judul" id="edit_judul">
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="edit_score_ranking" class="form-label">Skor Peringkat(Optional)</label>
+                                <input type="text" class="form-control" name="score_ranking" id="edit_score_ranking">
+                            </div>
+                        </div>
+                        
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label for="edit_deskripsi" class="form-label">Deskripsi Peringkat</label>
@@ -382,6 +402,7 @@
                         .then(data => {
                             // Populate the edit form
                             document.getElementById('edit_judul').value = data.judul;
+                            document.getElementById('edit_score_ranking').value = data.score_ranking; 
 
                             // Set content to the CKEditor
                             if (editRankingEditor) {

@@ -42,6 +42,7 @@ class RankingController extends Controller
         try {
             $validated = $request->validate([
                 'judul' => 'required|string|max:200',
+                'score_ranking' => 'nullable|string|max:50',
                 'deskripsi' => 'required|string',
                 'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
@@ -54,6 +55,7 @@ class RankingController extends Controller
                 );
                 $ranking = Ranking::create([
                     'judul' => $request->judul,
+                    'score_ranking' => $request->score_ranking, 
                     'deskripsi' => $request->deskripsi,
                     'gambar' => $gambarPath,
                     'slug' => Str::slug($request->judul)
@@ -95,6 +97,7 @@ class RankingController extends Controller
             $ranking = Ranking::findOrFail($id);
             $validated = $request->validate([
                 'judul' => 'required|string|max:200',
+                'score_ranking' => 'nullable|string|max:50', 
                 'deskripsi' => 'required|string',
                 'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
