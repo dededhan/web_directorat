@@ -710,24 +710,23 @@
                 <h2 class="section-title text-3xl">Pencapaian Program</h2>
 
                 <div class="grid md:grid-cols-3 gap-6 mb-10">
-                    <!-- Stat 1 -->
+                    <!-- Stat 1: Adjunct Professors -->
                     <div class="stat-card">
-                        <div class="text-4xl font-bold text-teal-700 mb-2">25+</div>
-                        <div class="text-teal-800 font-medium">Visiting Professors</div>
+                        <div class="text-4xl font-bold text-teal-700 mb-2">{{ $stats['adjunctProfessors'] }}</div>
+                        <div class="text-teal-800 font-medium">Adjunct Professors</div>
                     </div>
 
-                    <!-- Stat 2 -->
+                    <!-- Stat 2: Full-time Professors -->
                     <div class="stat-card">
-                        <div class="text-4xl font-bold text-teal-700 mb-2">12</div>
+                        <div class="text-4xl font-bold text-teal-700 mb-2">{{ $stats['fullTimeProfessors'] }}</div>
                         <div class="text-teal-800 font-medium">Full-time Int'l Lecturers</div>
                     </div>
 
-                    <!-- Stat 3 -->
+                    <!-- Stat 3: Unique Universities -->
                     <div class="stat-card">
-                        <div class="text-4xl font-bold text-teal-700 mb-2">18</div>
-                        <div class="text-teal-800 font-medium">Negara Asal</div>
+                        <div class="text-4xl font-bold text-teal-700 mb-2">{{ $stats['uniqueUniversities'] }}</div>
+                        <div class="text-teal-800 font-medium">Universitas Asal</div>
                     </div>
-
                 </div>
 
                 <div class="bg-white p-8 rounded-2xl shadow-sm">

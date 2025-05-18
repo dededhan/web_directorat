@@ -13,7 +13,14 @@ class InternationalFacultyStaffController extends Controller
     public function publicIndex()
     {
         $facultyStaffs = InternationalFacultyStaff::all();
-        return view('Pemeringkatan.program.international-faculty-staff', compact('facultyStaffs'));
+        
+        $stats = [
+            'adjunctProfessors' => InternationalFacultyStaff::where('category', 'adjunct')->count(),
+            'fullTimeProfessors' => InternationalFacultyStaff::where('category', 'fulltime')->count(),
+            'uniqueUniversities' => InternationalFacultyStaff::distinct('universitas_asal')->count('universitas_asal')
+        ];
+        
+        return view('Pemeringkatan.program.international-faculty-staff', compact('facultyStaffs', 'stats'));
     }
     public function index()
     {
