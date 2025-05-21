@@ -193,8 +193,15 @@
                         <span class="text">Faculty Staff Profile</span>
                     </a>
                 </li>
+                <li class="{{ request()->routeIs('admin.international-activities') ? 'active' : '' }}">
+                    <a href="{{ route('admin.international-activities.index') }}">
+                        <i class='bx bxs-graduation'></i>
+                        <span class="text">Aktivitas Dosen Asing</span>
+                    </a>
+                </li>
             </ul>
         </div>
+        
 
         <!-- Inovasi Section -->
         <div class="menu-section">

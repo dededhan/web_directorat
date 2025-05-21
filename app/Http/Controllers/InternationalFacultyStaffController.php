@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\InternationalFacultyStaff;
+use App\Models\AktivitasDosenAsing;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreInternationalFacultyStaffRequest;
 use Illuminate\Support\Facades\Storage;
@@ -13,6 +14,7 @@ class InternationalFacultyStaffController extends Controller
     public function publicIndex()
     {
         $facultyStaffs = InternationalFacultyStaff::all();
+        $activities = AktivitasDosenAsing::latest()->get();
         
         $stats = [
             'adjunctProfessors' => InternationalFacultyStaff::where('category', 'adjunct')->count(),
@@ -20,7 +22,7 @@ class InternationalFacultyStaffController extends Controller
             'uniqueUniversities' => InternationalFacultyStaff::distinct('universitas_asal')->count('universitas_asal')
         ];
         
-        return view('Pemeringkatan.program.international-faculty-staff', compact('facultyStaffs', 'stats'));
+        return view('Pemeringkatan.program.international-faculty-staff', compact('facultyStaffs', 'stats', 'activities'));
     }
     public function index()
     {
@@ -131,4 +133,31 @@ class InternationalFacultyStaffController extends Controller
                 ->with('error', 'Gagal menghapus data dosen internasional: ' . $e->getMessage());
         }
     }
+    public function showInternationalFacultyStaff()
+    {
+        // Fetch activities for the International Faculty Staff page
+        $activities = AktivitasDosenAsing::latest()->get();
+        
+        // Fetch faculty staff data
+        $facultyStaffs = FacultyStaff::all();
+        
+        // Statistics that appear to be used in the view
+        $stats = [
+            'adjunctProfessors' => FacultyStaff::where('type', 'adjunct')->count(),
+            'fullTimeProfessors' => FacultyStaff::where('type', 'full-time')->count(),
+            'uniqueUniversities' => FacultyStaff::distinct()->count('universitas_asal')
+        ];
+        
+        return view('layout.pemeringkatan.international_faculty_staff', compact('activities', 'facultyStaffs', 'stats'));
+    }
+    
+    // Your other controller methods...
+    
+    // API endpoint for modal content
+    public function getActivityDetails($id)
+    {
+        $activity = AktivitasDosenAsing::findOrFail($id);
+        return response()->json($activity);
+    }
+
 }

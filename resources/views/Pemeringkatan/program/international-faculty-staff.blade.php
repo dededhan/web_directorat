@@ -275,86 +275,65 @@
             <section id="programs" class="mt-10 mb-20">
                 <h2 class="section-title text-3xl">Aktivitas Dosen Asing</h2>
                 <div class="grid md:grid-cols-3 gap-8">
-                    <!-- Program Card 1 -->
+                    @forelse($activities as $activity)
+                    <!-- Program Card -->
                     <div class="card group">
                         <div class="h-48 overflow-hidden relative">
-                            <img src="https://i.ibb.co/TqLnQZp/visiting-professor.jpg"
-                                alt="Visiting Professor mengajar di kelas"
+                            <img src="{{ asset('storage/' . $activity->gambar) }}"
+                                alt="{{ $activity->judul }}"
                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                                 <div class="p-4 text-white">
-                                    <h4 class="font-bold">Visiting Professor Program</h4>
+                                    <h4 class="font-bold">{{ $activity->judul }}</h4>
                                 </div>
                             </div>
                         </div>
                         <div class="p-6">
-                            <h3 class="text-xl font-bold text-teal-700 mb-3">Visiting Professor Program</h3>
-                            <p class="mb-4 text-gray-600">Program yang mendatangkan profesor dari universitas mitra luar
-                                negeri untuk memberikan kuliah, melakukan penelitian bersama, dan membangun kerja sama
-                                akademik selama 1-3 bulan.</p>
-                            <a href="#"
-                                class="inline-flex items-center text-teal-700 font-medium hover:text-teal-800 transition-colors">
+                            <h3 class="text-xl font-bold text-teal-700 mb-3">{{ $activity->judul }}</h3>
+                            <p class="mb-4 text-gray-600">{{ Str::limit(strip_tags($activity->isi), 120) }}</p>
+                            <button type="button" 
+                                data-activity-id="{{ $activity->id }}" 
+                                class="show-details-btn inline-flex items-center text-teal-700 font-medium hover:text-teal-800 transition-colors">
                                 <span>Pelajari Lebih Lanjut</span>
                                 <i class="fas fa-arrow-right ml-2 text-sm"></i>
-                            </a>
+                            </button>
                         </div>
                     </div>
-
-                    <!-- Program Card 2 -->
-                    <div class="card group">
-                        <div class="h-48 overflow-hidden relative">
-                            <img src="https://i.ibb.co/hFw71Sp/international-lecturer.jpg"
-                                alt="International Lecturer berdiskusi dengan mahasiswa"
-                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-                                <div class="p-4 text-white">
-                                    <h4 class="font-bold">Full-time International Lecturer</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-teal-700 mb-3">Full-time International Lecturer</h3>
-                            <p class="mb-4 text-gray-600">Rekrutmen dosen tetap dari berbagai negara untuk memperkuat
-                                kurikulum internasional dan menciptakan lingkungan pembelajaran multikultural di kampus
-                                UNJ.</p>
-                            <a href="#"
-                                class="inline-flex items-center text-teal-700 font-medium hover:text-teal-800 transition-colors">
-                                <span>Pelajari Lebih Lanjut</span>
-                                <i class="fas fa-arrow-right ml-2 text-sm"></i>
-                            </a>
-                        </div>
+                    @empty
+                    <div class="col-span-3 text-center py-8">
+                        <p class="text-gray-500">Belum ada aktivitas dosen asing yang ditambahkan.</p>
                     </div>
-
-                    <!-- Program Card 3 -->
-                    <div class="card group">
-                        <div class="h-48 overflow-hidden relative">
-                            <img src="https://i.ibb.co/3YHdggL/expert-exchange.jpg"
-                                alt="Expert Exchange Program dengan dosen luar negeri"
-                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-                                <div class="p-4 text-white">
-                                    <h4 class="font-bold">Expert Exchange Program</h4>
-                                </div>
+                    @endforelse
+                </div>
+            </section>
+            
+            <!-- Activity Detail Modal -->
+            <div id="detailModal" class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4">
+                <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="flex justify-between items-center border-b p-4">
+                        <h3 class="text-xl font-bold text-teal-700" id="modalTitle">Detail Aktivitas</h3>
+                        <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    <div class="p-6" id="modalContent">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="md:w-1/3">
+                                <img id="modalImage" src="" alt="Activity Image" class="w-full h-auto rounded">
+                                <p class="mt-3 text-sm text-gray-500">
+                                    Tanggal: <span id="modalDate" class="font-medium"></span>
+                                </p>
                             </div>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-teal-700 mb-3">Expert Exchange Program</h3>
-                            <p class="mb-4 text-gray-600">Program pertukaran staf akademik dengan universitas mitra luar
-                                negeri, memberikan kesempatan bagi dosen UNJ untuk mengajar di luar negeri dan menerima
-                                dosen dari universitas mitra.</p>
-                            <a href="#"
-                                class="inline-flex items-center text-teal-700 font-medium hover:text-teal-800 transition-colors">
-                                <span>Pelajari Lebih Lanjut</span>
-                                <i class="fas fa-arrow-right ml-2 text-sm"></i>
-                            </a>
+                            <div class="md:w-2/3">
+                                <h4 id="modalHeading" class="text-2xl font-bold text-teal-700 mb-4"></h4>
+                                <div id="modalBody" class="prose max-w-none"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </section>
-
+            </div>
+            
             <section>
                 @php
                     // Get unique years from the data
@@ -906,6 +885,89 @@
             });
         });
     </script>
+    
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('detailModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const detailButtons = document.querySelectorAll('.show-details-btn');
+        
+        // Close modal when clicking the close button
+        closeModalBtn.addEventListener('click', function() {
+            modal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        });
+        
+        // Close modal when clicking outside the modal content
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        });
+        
+        // Handle Escape key press
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        });
+        
+        // Add click event for detail buttons
+        detailButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const activityId = this.getAttribute('data-activity-id');
+                fetchActivityDetails(activityId);
+            });
+        });
+        
+        function fetchActivityDetails(id) {
+            // Show loading state
+            document.getElementById('modalHeading').textContent = 'Loading...';
+            document.getElementById('modalBody').innerHTML = '<div class="flex justify-center"><div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-700"></div></div>';
+            document.getElementById('modalImage').src = '';
+            document.getElementById('modalDate').textContent = '';
+            
+            // Display the modal
+            modal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+            
+            // Fetch the activity details
+            fetch(`/api/aktivitas-dosen-asing/${id}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('modalTitle').textContent = 'Detail Aktivitas';
+                    document.getElementById('modalHeading').textContent = data.judul;
+                    document.getElementById('modalBody').innerHTML = data.isi;
+                    document.getElementById('modalImage').src = `/storage/${data.gambar}`;
+                    document.getElementById('modalImage').alt = data.judul;
+                    
+                    // Format date
+                    const date = new Date(data.tanggal);
+                    const formattedDate = new Intl.DateTimeFormat('id-ID', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    }).format(date);
+                    document.getElementById('modalDate').textContent = formattedDate;
+                })
+                .catch(error => {
+                    console.error('Error fetching activity details:', error);
+                    document.getElementById('modalHeading').textContent = 'Error';
+                    document.getElementById('modalBody').innerHTML = '<p class="text-red-500">Gagal memuat detail aktivitas. Silakan coba lagi nanti.</p>';
+                    document.getElementById('modalImage').src = '';
+                    document.getElementById('modalDate').textContent = '';
+                });
+        }
+    });
+    </script>
+    
 </body>
 
 </html>
