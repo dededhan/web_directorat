@@ -449,7 +449,7 @@
                 <div class="prestasi-icon">
                     <i class="fa fa-chalkboard-teacher"></i>
                 </div>
-                <div class="prestasi-number">130</div>
+                <div class="prestasi-number">131</div>
                 <div class="prestasi-title">Guru Besar</div>
             </div>
             
@@ -464,7 +464,7 @@
             
             <!-- International Lecturers -->
             <div class="prestasi-item">
-            <a href="{{ route('daptar.calonadjunct') }}" div class="prestasi-item">
+            <a href="{{ route('Pemeringkatan.program.international-faculty-staff') }}" div class="prestasi-item">
                 <div class="prestasi-icon">
                     <i class="fa fa-users"></i>
                 </div>
@@ -516,7 +516,7 @@
                 <div class="prestasi-icon">
                     <i class="fa fa-book"></i>
                 </div>
-                <div class="prestasi-number">3.881</div>
+                <div class="prestasi-number">3.681</div>
                 <div class="prestasi-title">terindeks Scopus</div>
             </div>
             
@@ -536,18 +536,6 @@
                 </div>
                 <div class="prestasi-number">123</div>
                 <div class="prestasi-title">Hak Paten</div>
-            </div>
-        </div>
-        
-        <!-- Accreditation badges -->
-        <div class="akreditasi-wrapper">
-            <div class="akreditasi-item">
-                <div class="akreditasi-number">114 Prodi</div>
-                <div class="akreditasi-title">Terakreditasi Nasional</div>
-            </div>
-            <div class="akreditasi-item">
-                <div class="akreditasi-number">60 Prodi</div>
-                <div class="akreditasi-title">Terakreditasi Internasional</div>
             </div>
         </div>
     </div>
