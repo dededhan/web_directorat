@@ -17,7 +17,7 @@ class StoreMataKuliahRequest extends FormRequest
             'semester' => 'required|string|max:20',
             'kode_matkul' => 'required|string|max:20',
             'fakultas' => 'required|string',
-            'prodi' => 'required|string',
+            'prodi' => 'nullable|string',
             'deskripsi' => 'required|string|min:100',
         ];
     
