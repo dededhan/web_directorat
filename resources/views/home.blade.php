@@ -797,125 +797,108 @@
         </div>
     </div>
 
-    <section class="unj-prestasi-container mb-16">
+    <section class="unj-prestasi-container py-12 md:py-16 bg-slate-100">
     <div class="container mx-auto px-4">
-        <div class="section-title text-center mb-8">
-            <h2 class="text-3xl font-bold">UNJ dalam <span class="highlight">Prestasi</span></h2>
-            <div class="title-underline mb-4"></div>
-        </div>
-        
-        <!-- First Row -->
-        <div class="prestasi-grid">
-            <!-- Students -->
-            <div class="prestasi-item">
-                <div class="prestasi-icon">
+        <div class="section-title text-center mb-10 md:mb-16">  <h2 class="text-3xl sm:text-4xl font-bold text-slate-800">
+                 <span class="text-emerald-600">UNJ dalam Prestasi</span>
+            </h2>
+            <div class="mt-4 h-1.5 w-28 bg-emerald-600 mx-auto rounded-full"></div> </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 md:gap-8">
+
+            <div class="prestasi-card bg-white rounded-lg border border-slate-200 p-6 flex flex-col items-center text-center transition-all duration-300 ease-in-out hover:shadow-xl hover:border-emerald-500 hover:-translate-y-1"> <div class="text-emerald-500 text-5xl mb-4">
                     <i class="fa fa-user-graduate"></i>
                 </div>
-                <div class="prestasi-number">30.673</div>
-                <div class="prestasi-title">Mahasiswa</div>
+                <div class="text-4xl font-bold text-slate-700 mb-1">30.673</div>
+                <div class="text-base text-slate-500 font-medium">Mahasiswa</div>
             </div>
-            
-            <!-- International Students -->
-            <div class="prestasi-item">
-                <div class="prestasi-icon">
+
+            <div class="prestasi-card bg-white rounded-lg border border-slate-200 p-6 flex flex-col items-center text-center transition-all duration-300 ease-in-out hover:shadow-xl hover:border-sky-500 hover:-translate-y-1">
+                <div class="text-sky-500 text-5xl mb-4">
                     <i class="fa fa-globe"></i>
                 </div>
-                <div class="prestasi-number">125</div>
-                <div class="prestasi-title">Mahasiswa Internasional</div>
+                <div class="text-4xl font-bold text-slate-700 mb-1">125</div>
+                <div class="text-base text-slate-500 font-medium">Mahasiswa Internasional</div>
             </div>
-            
-            <!-- Professors -->
-            <div class="prestasi-item">
-                <div class="prestasi-icon">
+
+            <div class="prestasi-card bg-white rounded-lg border border-slate-200 p-6 flex flex-col items-center text-center transition-all duration-300 ease-in-out hover:shadow-xl hover:border-purple-500 hover:-translate-y-1">
+                <div class="text-purple-500 text-5xl mb-4">
                     <i class="fa fa-chalkboard-teacher"></i>
                 </div>
-                <div class="prestasi-number">131</div>
-                <div class="prestasi-title">Guru Besar</div>
+                <div class="text-4xl font-bold text-slate-700 mb-1">131</div>
+                <div class="text-base text-slate-500 font-medium">Guru Besar</div>
             </div>
-            
-            <!-- Lecturers -->
-            <div class="prestasi-item">
-                <div class="prestasi-icon">
+
+            <div class="prestasi-card bg-white rounded-lg border border-slate-200 p-6 flex flex-col items-center text-center transition-all duration-300 ease-in-out hover:shadow-xl hover:border-indigo-500 hover:-translate-y-1">
+                <div class="text-indigo-500 text-5xl mb-4">
                     <i class="fa fa-user-tie"></i>
                 </div>
-                <div class="prestasi-number">1.132</div>
-                <div class="prestasi-title">Dosen</div>
+                <div class="text-4xl font-bold text-slate-700 mb-1">1.132</div>
+                <div class="text-base text-slate-500 font-medium">Dosen</div>
             </div>
-            
-            <!-- International Lecturers -->
-            <div class="prestasi-item">
-            <a href="{{ route('Pemeringkatan.program.international-faculty-staff') }}" div class="prestasi-item">
-                <div class="prestasi-icon">
+
+            <a href="{{ route('Pemeringkatan.program.international-faculty-staff') }}" class="prestasi-card block bg-white rounded-lg border border-slate-200 p-6 flex flex-col items-center text-center transition-all duration-300 ease-in-out hover:shadow-xl hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 hover:-translate-y-1">
+                <div class="text-red-500 text-5xl mb-4">
                     <i class="fa fa-users"></i>
                 </div>
-                <div class="prestasi-number">4</div>
-                <div class="prestasi-title">Dosen Internasional</div>
-            </div>
-            
-            <!-- Staff -->
-            <div class="prestasi-item">
-                <div class="prestasi-icon">
+                <div class="text-4xl font-bold text-slate-700 mb-1">4</div>
+                <div class="text-base text-slate-500 font-medium">Dosen Internasional</div>
+            </a>
+
+            <div class="prestasi-card bg-white rounded-lg border border-slate-200 p-6 flex flex-col items-center text-center transition-all duration-300 ease-in-out hover:shadow-xl hover:border-orange-500 hover:-translate-y-1">
+                <div class="text-orange-500 text-5xl mb-4">
                     <i class="fa fa-user-cog"></i>
                 </div>
-                <div class="prestasi-number">774</div>
-                <div class="prestasi-title">Tendik</div>
+                <div class="text-4xl font-bold text-slate-700 mb-1">774</div>
+                <div class="text-base text-slate-500 font-medium">Tendik</div>
             </div>
-        </div>
-        
-        <!-- Second Row -->
-        <div class="prestasi-grid">
-            <!-- Faculties -->
-            <div class="prestasi-item">
-                <div class="prestasi-icon">
+
+            <div class="prestasi-card bg-white rounded-lg border border-slate-200 p-6 flex flex-col items-center text-center transition-all duration-300 ease-in-out hover:shadow-xl hover:border-lime-500 hover:-translate-y-1">
+                <div class="text-lime-500 text-5xl mb-4">
                     <i class="fa fa-university"></i>
                 </div>
-                <div class="prestasi-number">8</div>
-                <div class="prestasi-title">Fakultas</div>
+                <div class="text-4xl font-bold text-slate-700 mb-1">8</div>
+                <div class="text-base text-slate-500 font-medium">Fakultas</div>
             </div>
-            
-            <!-- Graduate School -->
-            <div class="prestasi-item">
-                <div class="prestasi-icon">
+
+            <div class="prestasi-card bg-white rounded-lg border border-slate-200 p-6 flex flex-col items-center text-center transition-all duration-300 ease-in-out hover:shadow-xl hover:border-cyan-500 hover:-translate-y-1">
+                <div class="text-cyan-500 text-5xl mb-4">
                     <i class="fa fa-graduation-cap"></i>
                 </div>
-                <div class="prestasi-number">1</div>
-                <div class="prestasi-title">Sekolah Pascasarjana</div>
+                <div class="text-4xl font-bold text-slate-700 mb-1">1</div>
+                <div class="text-base text-slate-500 font-medium">Sekolah Pascasarjana</div>
             </div>
-            
-            <!-- Study Programs -->
-            <div class="prestasi-item">
-                <div class="prestasi-icon">
+
+            <div class="prestasi-card bg-white rounded-lg border border-slate-200 p-6 flex flex-col items-center text-center transition-all duration-300 ease-in-out hover:shadow-xl hover:border-pink-500 hover:-translate-y-1">
+                <div class="text-pink-500 text-5xl mb-4">
                     <i class="fa fa-th-large"></i>
                 </div>
-                <div class="prestasi-number">116</div>
-                <div class="prestasi-title">Program Studi</div>
+                <div class="text-4xl font-bold text-slate-700 mb-1">116</div>
+                <div class="text-base text-slate-500 font-medium">Program Studi</div>
             </div>
-            
-            <!-- Scopus Indexed -->
-            <div class="prestasi-item">
-                <div class="prestasi-icon">
+
+            <div class="prestasi-card bg-white rounded-lg border border-slate-200 p-6 flex flex-col items-center text-center transition-all duration-300 ease-in-out hover:shadow-xl hover:border-green-500 hover:-translate-y-1">
+                <div class="text-green-500 text-5xl mb-4">
                     <i class="fa fa-book"></i>
                 </div>
-                <div class="prestasi-number">3.681</div>
-                <div class="prestasi-title">terindeks Scopus</div>
+                <div class="text-4xl font-bold text-slate-700 mb-1">3.681</div>
+                <div class="text-base text-slate-500 font-medium">terindeks Scopus</div>
             </div>
-            
-            <!-- HKI (Intellectual Property Rights) -->
-            <div class="prestasi-item">
-                <div class="prestasi-icon">
+
+            <div class="prestasi-card bg-white rounded-lg border border-slate-200 p-6 flex flex-col items-center text-center transition-all duration-300 ease-in-out hover:shadow-xl hover:border-amber-500 hover:-translate-y-1">
+                <div class="text-amber-500 text-5xl mb-4">
                     <i class="fa fa-file-alt"></i>
                 </div>
-                <div class="prestasi-number">2.459</div>
-                <div class="prestasi-title">HKI</div>
+                <div class="text-4xl font-bold text-slate-700 mb-1">2.459</div>
+                <div class="text-base text-slate-500 font-medium">HKI</div>
             </div>
-            
-            <!-- Patents -->
-            <div class="prestasi-item">
-                <div class="prestasi-icon">
+
+            <div class="prestasi-card bg-white rounded-lg border border-slate-200 p-6 flex flex-col items-center text-center transition-all duration-300 ease-in-out hover:shadow-xl hover:border-rose-500 hover:-translate-y-1">
+                <div class="text-rose-500 text-5xl mb-4">
                     <i class="fa fa-certificate"></i>
                 </div>
-                <div class="prestasi-number">123</div>
-                <div class="prestasi-title">Hak Paten</div>
+                <div class="text-4xl font-bold text-slate-700 mb-1">123</div>
+                <div class="text-base text-slate-500 font-medium">Hak Paten</div>
             </div>
         </div>
     </div>
