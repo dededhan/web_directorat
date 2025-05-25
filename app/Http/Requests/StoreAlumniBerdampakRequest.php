@@ -20,6 +20,7 @@ class StoreAlumniBerdampakRequest extends FormRequest
             'fakultas' => 'required|in:pascasarjana,fip,fmipa,fppsi,fbs,ft,fik,fis,fe,profesi',
             // 'prodi' => 'nullable|string',
             'link_berita' => 'required|url|max:500',
+            'image'=> 'required|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
 }

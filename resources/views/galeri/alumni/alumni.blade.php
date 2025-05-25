@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
-    
+
     <style>
         * {
             margin: 0;
@@ -96,7 +97,7 @@
             font-size: 3.5rem;
             font-weight: 800;
             margin-bottom: 1rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .hero-subtitle {
@@ -104,7 +105,7 @@
             max-width: 700px;
             margin: 0 auto;
             font-weight: 400;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         /* Stats Bar */
@@ -415,20 +416,20 @@
                 grid-template-columns: repeat(2, 1fr);
                 gap: 2rem;
             }
-            
+
             .stats-wrapper {
                 flex-direction: column;
             }
-            
+
             .stat-item {
                 border-right: none;
                 border-bottom: 1px solid #eee;
             }
-            
+
             .stat-item:last-child {
                 border-bottom: none;
             }
-            
+
             .hero-title {
                 font-size: 2.8rem;
             }
@@ -439,23 +440,23 @@
                 height: 60vh;
                 min-height: 400px;
             }
-            
+
             .hero-title {
                 font-size: 2.2rem;
             }
-            
+
             .hero-subtitle {
                 font-size: 1.1rem;
             }
-            
+
             .philosophy-title {
                 font-size: 1.7rem;
             }
-            
+
             .container {
                 padding: 0 1.5rem;
             }
-            
+
             .alumni-grid {
                 grid-template-columns: 1fr;
             }
@@ -468,12 +469,14 @@
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-background">
-            <img src="https://asset.kompas.com/crops/3ObZCQJoEGDX_DegAY47y7sfoWg=/25x0:1177x768/1200x800/data/photo/2024/10/29/67203cebeb82e.jpeg" alt="Alumni Background">
+            <img src="https://asset.kompas.com/crops/3ObZCQJoEGDX_DegAY47y7sfoWg=/25x0:1177x768/1200x800/data/photo/2024/10/29/67203cebeb82e.jpeg"
+                alt="Alumni Background">
         </div>
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <h1 class="hero-title">Alumni Impact</h1>
-            <p class="hero-subtitle">Discover how our graduates are creating positive change and achieving excellence across Indonesia and beyond</p>
+            <p class="hero-subtitle">Discover how our graduates are creating positive change and achieving excellence
+                across Indonesia and beyond</p>
         </div>
     </section>
 
@@ -511,21 +514,35 @@
             <div class="philosophy-content">
                 <h2 class="philosophy-title">Alumni Berdampak: Pilar Kekuatan dan Sumber Inspirasi UNJ</h2>
                 <p class="philosophy-text">
-                    Alumni berdampak adalah pilar kekuatan, sumber inspirasi, dan duta terbaik bagi sebuah institusi pendidikan. Mereka adalah manifestasi dari investasi pendidikan yang berhasil, dan kontribusi mereka adalah tolok ukur sejati dari keberhasilan sebuah lembaga dalam mencetak pemimpin masa depan dan agen perubahan yang positif.
+                    Alumni berdampak adalah pilar kekuatan, sumber inspirasi, dan duta terbaik bagi sebuah institusi
+                    pendidikan. Mereka adalah manifestasi dari investasi pendidikan yang berhasil, dan kontribusi mereka
+                    adalah tolok ukur sejati dari keberhasilan sebuah lembaga dalam mencetak pemimpin masa depan dan
+                    agen perubahan yang positif.
                 </p>
             </div>
         </div>
-        
+
         <div class="section-header" data-aos="fade-up">
             <h2>Alumni Success Stories</h2>
-            <p class="section-description">Kisah-kisah inspiratif alumni UNJ yang telah membuat dampak positif di berbagai bidang dan menjadi kebanggaan almamater</p>
+            <p class="section-description">Kisah-kisah inspiratif alumni UNJ yang telah membuat dampak positif di
+                berbagai bidang dan menjadi kebanggaan almamater</p>
         </div>
-        
+
         <div class="alumni-grid">
             @forelse($alumniBerdampak as $alumni)
                 <div class="alumni-card" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="card-image">
-                        <!-- Decorative background only -->
+                        {{-- Check if an image exists for this alumni record --}}
+                        @if ($alumni->image)
+                            {{-- Use Storage::url() to get the public URL for the image --}}
+                            <img src="{{ Storage::url($alumni->image) }}"
+                                alt="Gambar untuk {{ $alumni->judul_berita }}">
+                        @else
+                            {{-- Display a default placeholder if no image is available --}}
+                            <div class="image-placeholder">
+                                <i class="fas fa-newspaper"></i>
+                            </div>
+                        @endif
                     </div>
                     <div class="card-content">
                         <div class="card-decoration"></div>
@@ -535,9 +552,10 @@
                                 <i class="fas fa-calendar-alt"></i>
                                 <span>{{ \Carbon\Carbon::parse($alumni->tanggal_berita)->format('d F Y') }}</span>
                             </div>
+                            {{-- Assuming 'fakultas' is the correct field you want to show --}}
                             <div class="meta-item">
-                                <i class="fas fa-graduation-cap"></i>
-                                <span>{{ $alumni->prodi }}</span>
+                                <i class="fas fa-university"></i>
+                                <span>{{ strtoupper($alumni->fakultas) }}</span>
                             </div>
                         </div>
                         <a href="{{ $alumni->link_berita }}" target="_blank" class="read-more">
@@ -552,13 +570,14 @@
                         <i class="fas fa-newspaper"></i>
                     </div>
                     <h3>No Alumni Stories Yet</h3>
-                    <p>Belum ada berita alumni yang tersedia saat ini. Silakan kembali lagi nanti untuk melihat kisah-kisah inspiratif dari para alumni UNJ.</p>
+                    <p>Belum ada berita alumni yang tersedia saat ini. Silakan kembali lagi nanti untuk melihat
+                        kisah-kisah inspiratif dari para alumni UNJ.</p>
                 </div>
             @endforelse
         </div>
     </div>
     @include('layout.footer')
-    
+
     <script>
         // Initialize AOS animation library
         document.addEventListener('DOMContentLoaded', function() {
@@ -570,4 +589,5 @@
         });
     </script>
 </body>
+
 </html>

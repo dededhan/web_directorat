@@ -16,6 +16,13 @@ class AlumniBerdampak extends Model
         'tanggal_berita',
         'fakultas',
         // 'prodi',
-        'link_berita'
+        'link_berita',
+        'image',
+        'user_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

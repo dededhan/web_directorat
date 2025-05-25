@@ -48,7 +48,7 @@
                 <h3>Input Berita Alumni Berdampak</h3>
             </div> 
 
-            <form id="alumni-form" action="{{ route('admin.alumniberdampak.store') }}" method="POST">
+            <form id="alumni-form" action="{{ route('admin.alumniberdampak.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-12 mb-3">
@@ -100,6 +100,12 @@
                         <div class="form-text text-muted">Masukkan link berita/artikel dari sumber terpercaya (media massa online, website resmi institusi, atau publikasi resmi lainnya)</div>
                     </div>
                 </div>
+                 <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="image" class="form-label">Gambar</label>
+                        <input type="file" class="form-control" name="image" id="image">
+                    </div>
+                </div>
 
                 <div class="mb-3 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -122,6 +128,8 @@
                                 <th>Fakultas</th>
                                 {{-- <th>Program Studi</th> --}}
                                 <th>Link</th>
+                                <th>Gambar</th>
+                                <th>Ditambahkan Oleh</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -137,6 +145,12 @@
                                         View Link
                                     </a>
                                 </td>
+                                <td>
+                                    @if($alumni->image)
+                                        <img src="{{ Storage::url($alumni->image) }}" alt="Image" width="100">
+                                    @endif
+                                </td>
+                                <td>{{ $alumni->user->name ?? 'admin direktorat' }}</td>
                                 <td>
                                     <div class="btn-group">
                                         <button class="btn btn-sm btn-warning edit-alumni" 
@@ -173,7 +187,7 @@
                     <h5 class="modal-title" id="editAlumniModalLabel">Edit Alumni Berdampak</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="edit-alumni-form" method="POST">
+                <form id="edit-alumni-form" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
@@ -224,6 +238,12 @@
                                 <label for="edit_link_berita" class="form-label">Link Berita/Artikel</label>
                                 <input type="url" class="form-control" name="link_berita" id="edit_link_berita">
                                 <div class="form-text text-muted">Masukkan link berita/artikel dari sumber terpercaya</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="edit_image" class="form-label">Gambar</label>
+                                <input type="file" class="form-control" name="image" id="edit_image">
                             </div>
                         </div>
                     </div>

@@ -126,7 +126,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>User</th>
+                                <th>Ditambahkan Oleh</th>
                                 <th>Kategori</th>
                                 <th>Tanggal</th>
                                 <th>Judul Berita</th>

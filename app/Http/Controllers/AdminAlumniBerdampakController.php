@@ -6,54 +6,43 @@ namespace App\Http\Controllers;
 use App\Models\AlumniBerdampak;
 use App\Http\Requests\StoreAlumniBerdampakRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
+
 
 class AdminAlumniBerdampakController extends Controller
 {
     public function index()
     {
-        $alumniBerdampak = AlumniBerdampak::latest()->get();
+       $alumniBerdampak = AlumniBerdampak::with('user')->latest()->get();
 
-        if (Auth::user()->role === 'admin_direktorat') {
-            return view('admin.alumniberdampak', compact('alumniBerdampak'));
-        } else if (Auth::user()->role === 'prodi') {
-            return view('prodi.alumniberdampak', compact('alumniBerdampak'));
-        } else if (Auth::user()->role === 'fakultas') {
-            return view('fakultas.alumniberdampak', compact('alumniBerdampak'));
-        } else if (Auth::user()->role === 'admin_pemeringkatan'){
-            return view('admin_pemeringkatan.alumniberdampak', compact('alumniBerdampak'));
-        }
+        $viewMap = [
+            'admin_direktorat' => 'admin.alumniberdampak',
+            'prodi' => 'prodi.alumniberdampak',
+            'fakultas' => 'fakultas.alumniberdampak',
+            'admin_pemeringkatan' => 'admin_pemeringkatan.alumniberdampak',
+        ];
 
-        // return view('admin.alumniberdampak', compact('alumniBerdampak'));
+        $view = $viewMap[Auth::user()->role] ?? 'admin.alumniberdampak';
+
+        return view($view, compact('alumniBerdampak'));
     }
 
     public function store(StoreAlumniBerdampakRequest $request)
     {
-        AlumniBerdampak::create([
-            'judul_berita' => $request->judul_berita,
-            'tanggal_berita' => $request->tanggal_berita,
-            'fakultas' => $request->fakultas,
-            // 'prodi' => $request->prodi,
-            'link_berita' => $request->link_berita,
-        ]);
+        $data = $request->validated();
+        $data['user_id'] = Auth::id();
 
-        if (Auth::user()->role === 'admin_direktorat') {
-            return redirect()->route('admin.alumniberdampak.index')
-                ->with('success', 'Data berhasil disimpan!');
-        } else if (Auth::user()->role === 'prodi') {
-            return redirect()->route('prodi.alumniberdampak.index')
-                ->with('success', 'Data berhasil disimpan!');
-        } else if (Auth::user()->role === 'fakultas') {
-            return redirect()->route('fakultas.alumniberdampak.index')
-                ->with('success', 'Data berhasil disimpan!');
-        } else if (Auth::user()->role === 'admin_pemeringkatan'){
-            return redirect()->route('admin_pemeringkatan.alumniberdampak.index')
-                ->with('success', 'Data berhasil disimpan!');
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('public/images');
         }
 
-        // return redirect()->route('admin.alumniberdampak.index')
-        //     ->with('success', 'Data berhasil disimpan!');
+        AlumniBerdampak::create($data);
+
+        return back()->with('success', 'Data berhasil disimpan!');
     }
+
 
     public function edit(AlumniBerdampak $alumniberdampak)
     {
@@ -61,23 +50,27 @@ class AdminAlumniBerdampakController extends Controller
     }
 
     public function update(StoreAlumniBerdampakRequest $request, AlumniBerdampak $alumniberdampak)
-    {
-        $alumniberdampak->update([
-            'judul_berita' => $request->judul_berita,
-            'tanggal_berita' => $request->tanggal_berita,
-            'fakultas' => $request->fakultas,
-            // 'prodi' => $request->prodi,
-            'link_berita' => $request->link_berita,
-        ]);
+{
+        $data = $request->validated();
 
-        return redirect()->back()
-                ->with('success', 'Mata kuliah berhasil diperbarui');
+        if ($request->hasFile('image')) {
+            if ($alumniberdampak->image) {
+                Storage::delete($alumniberdampak->image);
+            }
+            $data['image'] = $request->file('image')->store('public/images');
+        }
+
+        $alumniberdampak->update($data);
+
+        return back()->with('success', 'Data berhasil diperbarui');
     }
 
-    public function destroy(AlumniBerdampak $alumniberdampak)
+     public function destroy(AlumniBerdampak $alumniberdampak)
     {
+        if ($alumniberdampak->image) {
+            Storage::delete($alumniberdampak->image);
+        }
         $alumniberdampak->delete();
-        return redirect()->back()
-                ->with('success', 'Mata kuliah berhasil dihapus');
+        return back()->with('success', 'Data berhasil dihapus');
     }
 }
