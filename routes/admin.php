@@ -178,7 +178,7 @@ Route::prefix('admin')->name('admin.')
         Route::get('/international-activities/{id}/detail', [InternationalFacultyStaffActivitiesController::class, 'detail']);
 
 
-        
+
         //indicator
         Route::resource('/indikator', IndikatorController::class)
             ->except(['show', 'edit']);
@@ -269,42 +269,42 @@ Route::prefix('admin')->name('admin.')
 Route::prefix('prodi')->name('prodi.')
     ->middleware(['checked', 'role:prodi'])
     ->group(function () {
-        // Dashboard
         Route::get('/', function () {
             return redirect(route('prodi.dashboard'));
         });
-
         Route::get('/dashboard', function () {
             return view('prodi.dashboard');
         })->name('dashboard');
+
+        // Sustainability routes for prodi
         Route::resource('/sustainability', AdminSustainabilityController::class);
+        Route::get('/sustainability/{id}/detail', [AdminSustainabilityController::class, 'getSustainabilityDetail'])
+            ->name('sustainability.detail');
 
-        //Mata Kuliah
-        // Route::get('/matakuliah-sustainability', function () {
-        //     return view('admin.matakuliahsustainability');
-        // })->name('matakuliah-sustainability');
-
+        Route::resource('/matakuliah', AdminMataKuliahController::class);
         Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
         Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
-        //Alumni
         Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
         Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
-
-        //responden
         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
     });
 
 Route::prefix('fakultas')->name('fakultas.')
     ->middleware(['checked', 'role:fakultas'])
     ->group(function () {
-        Route::get('/', function () { return redirect(route('fakultas.dashboard')); });
-        Route::get('/dashboard', function () { return view('fakultas.dashboard'); })->name('dashboard');
+        Route::get('/', function () {
+            return redirect(route('fakultas.dashboard'));
+        });
+        Route::get('/dashboard', function () {
+            return view('fakultas.dashboard');
+        })->name('dashboard');
 
         // Sustainability routes for fakultas
         Route::resource('/sustainability', AdminSustainabilityController::class);
         Route::get('/sustainability/{id}/detail', [AdminSustainabilityController::class, 'getSustainabilityDetail'])
             ->name('sustainability.detail');
 
+        Route::resource('/matakuliah', AdminMataKuliahController::class);
         Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
         Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
         Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');

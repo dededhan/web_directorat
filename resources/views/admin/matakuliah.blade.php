@@ -12,13 +12,12 @@
                 </li>
                 <li><i class='bx bx-chevron-right'></i></li>
                 <li>
-                    <a class="active" href="#">Input Mata Kuliah</a>
+                    <a class="active" href="{{ route('admin.matakuliah.index') }}">Input Mata Kuliah</a>
                 </li>
             </ul>
         </div>
     </div>
 
-    <!-- Alert Messages -->
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -35,6 +34,7 @@
 
     @if ($errors->any())
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Whoops!</strong> Ada beberapa masalah dengan input Anda.<br><br>
             <ul class="mb-0">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -55,65 +55,77 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="nama_matkul" class="form-label">Nama Mata Kuliah</label>
-                        <input type="text" class="form-control" name="nama_matkul" id="nama_matkul">
-                        <div class="form-text text-muted">Masukkan nama lengkap mata kuliah sesuai dengan kurikulum</div>
+                        <input type="text" class="form-control @error('nama_matkul') is-invalid @enderror" name="nama_matkul" id="nama_matkul" value="{{ old('nama_matkul') }}">
+                        @error('nama_matkul') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="form-text text-muted">Masukkan nama lengkap mata kuliah.</div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="semester" class="form-label">Semester</label>
-                        <input type="text" class="form-control" name="semester" id="semester">
-                        <div class="form-text text-muted">Masukkan semester berapa mata kuliah ini diajarkan (contoh: 1, 2, 3, dst)</div>
+                        <input type="text" class="form-control @error('semester') is-invalid @enderror" name="semester" id="semester" value="{{ old('semester') }}">
+                        @error('semester') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="form-text text-muted">Contoh: 1, 2, 3, dst.</div>
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="kode_matkul" class="form-label">Kode Mata Kuliah</label>
-                        <input type="text" class="form-control" name="kode_matkul" id="kode_matkul">
-                        <div class="form-text text-muted">Masukkan kode mata kuliah sesuai dengan kurikulum (contoh: MK001)</div>
+                        <input type="text" class="form-control @error('kode_matkul') is-invalid @enderror" name="kode_matkul" id="kode_matkul" value="{{ old('kode_matkul') }}">
+                        @error('kode_matkul') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="form-text text-muted">Contoh: MK001. Harus unik.</div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="fakultas" class="form-label">Fakultas</label>
-                        <select class="form-select" name="fakultas" id="fakultas">
+                        <select class="form-select @error('fakultas') is-invalid @enderror" name="fakultas" id="fakultas">
                             <option value="">Pilih Fakultas</option>
-                            <option value="pascasarjana">PASCASARJANA</option>
-                            <option value="fip">FIP</option>
-                            <option value="fmipa">FMIPA</option>
-                            <option value="fppsi">FPsi</option>
-                            <option value="fbs">FBS</option>
-                            <option value="ft">FT</option>
-                            <option value="fik">FIKK</option>
-                            <option value="fis">FISH</option>
-                            <option value="fe">FEB</option>
-                            <option value="profesi">PROFESI</option>
+                            {{-- Loop through faculties_data if passed from controller, or use static options --}}
+                            @php
+                                $faculties = $faculties_data ?? [ // Fallback if not passed
+                                    'PASCASARJANA' => ['name' => 'Pascasarjana'], 'FIP' => ['name' => 'FIP'],
+                                    'FMIPA' => ['name' => 'FMIPA'], 'FPPSI' => ['name' => 'FPsi'],
+                                    'FBS' => ['name' => 'FBS'], 'FT' => ['name' => 'FT'],
+                                    'FIK' => ['name' => 'FIKK'], 'FIS' => ['name' => 'FISH'], // Assuming FIKK is correct, adjust if FIK
+                                    'FE' => ['name' => 'FEB'], 'PROFESI' => ['name' => 'Profesi']
+                                ];
+                            @endphp
+                            @foreach ($faculties as $key => $faculty)
+                                <option value="{{ strtolower($key) }}" {{ old('fakultas') == strtolower($key) ? 'selected' : '' }}>{{ $faculty['name'] }}</option>
+                            @endforeach
                         </select>
-                        <div class="form-text text-muted">Pilih fakultas yang menyelenggarakan mata kuliah ini</div>
+                        @error('fakultas') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="form-text text-muted">Pilih fakultas penyelenggara.</div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="prodi" class="form-label">Program Studi</label>
-                        <select class="form-select" name="prodi" id="prodi" disabled>
+                        <select class="form-select @error('prodi') is-invalid @enderror" name="prodi" id="prodi" {{ old('fakultas') ? '' : 'disabled' }}>
                             <option value="">Pilih Program Studi</option>
+                            {{-- Options will be populated by matakuliah_dashboard.js --}}
+                            {{-- If old('prodi') exists, it means there was a validation error, try to reselect --}}
                         </select>
-                        <div class="form-text text-muted">Pilih program studi yang menyelenggarakan mata kuliah ini</div>
+                        @error('prodi') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="form-text text-muted">Pilih program studi (opsional jika mata kuliah level fakultas).</div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="rps" class="form-label">RPS Mata Kuliah</label>
-                        <input type="file" class="form-control" name="rps" id="rps" accept=".pdf,.doc,.docx">
-                        <div class="form-text text-muted">Upload dokumen RPS dalam format PDF, DOC, atau DOCX. Pastikan RPS sudah disetujui dan ditandatangani</div>
+                        <input type="file" class="form-control @error('rps') is-invalid @enderror" name="rps" id="rps" accept=".pdf,.doc,.docx">
+                        @error('rps') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="form-text text-muted">Upload RPS (PDF, DOC, DOCX, max 10MB).</div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="deskripsi" class="form-label">Deskripsi Mata Kuliah</label>
-                        <textarea class="form-control" name="deskripsi" id="deskripsi" rows="4"></textarea>
-                        <div class="form-text text-muted">Deskripsikan mata kuliah secara lengkap (minimal 100 kata), termasuk tujuan pembelajaran, capaian pembelajaran, dan keterkaitan dengan sustainability</div>
+                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" rows="4">{{ old('deskripsi') }}</textarea>
+                        @error('deskripsi') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="form-text text-muted">Deskripsi lengkap (minimal 50 karakter).</div>
                     </div>
                 </div>
 
@@ -134,6 +146,7 @@
                         <thead>
                             <tr>
                                 <th>Nama Mata Kuliah</th>
+                                <th>Kode</th>
                                 <th>Semester</th>
                                 <th>Fakultas</th>
                                 <th>Program Studi</th>
@@ -143,50 +156,53 @@
                             </tr>
                         </thead>
                         <tbody id="matakuliah-list">
-                            @foreach($matakuliahs as $matakuliah)
+                            @forelse($matakuliahs as $matakuliah)
                                 <tr>
                                     <td>{{ $matakuliah->nama_matkul }}</td>
+                                    <td>{{ $matakuliah->kode_matkul }}</td>
                                     <td>{{ $matakuliah->semester }}</td>
-                                    <td>{{ ucfirst($matakuliah->fakultas) }}</td> {{-- Contoh konversi ke huruf kapital --}}
-                                    <td>{{ $matakuliah->prodi }}</td>
+                                    <td>{{ strtoupper($matakuliah->fakultas) }}</td>
+                                    <td>{{ $matakuliah->prodi ?? 'N/A (Fakultas)' }}</td>
                                     <td>
-                                        <a href="{{ Storage::url($matakuliah->rps_path) }}" class="btn btn-sm btn-info">
-                                            Download RPS
+                                        @if($matakuliah->rps_path)
+                                        <a href="{{ Storage::url($matakuliah->rps_path) }}" target="_blank" class="btn btn-sm btn-info">
+                                            View RPS
                                         </a>
+                                        @else
+                                        No RPS
+                                        @endif
                                     </td>
                                     <td>{{ Str::limit($matakuliah->deskripsi, 50) }}</td>
                                     <td>
                                         <div class="btn-group">
                                             <button class="btn btn-sm btn-warning edit-matakuliah" 
                                                     data-id="{{ $matakuliah->id }}"
-                                                    data-nama="{{ $matakuliah->nama_matkul }}"
-                                                    data-semester="{{ $matakuliah->semester }}"
-                                                    data-kode="{{ $matakuliah->kode_matkul }}"
-                                                    data-fakultas="{{ $matakuliah->fakultas }}"
-                                                    data-prodi="{{ $matakuliah->prodi }}"
-                                                    data-rps="{{ $matakuliah->rps_path }}"
-                                                    data-deskripsi="{{ $matakuliah->deskripsi }}">
+                                                    data-bs-toggle="modal" data-bs-target="#editMatakuliahModal">
                                                 Edit
                                             </button>
-                                            <form action="{{ route('admin.matakuliah.destroy', $matakuliah->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger delete-matakuliah">
-                                                    Delete
-                                                </button>
-                                            </form>
+                                            <button class="btn btn-sm btn-danger delete-matakuliah" data-id="{{ $matakuliah->id }}" data-nama="{{ $matakuliah->nama_matkul }}">
+                                                Delete
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="8" class="text-center">Belum ada data mata kuliah.</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
+                @if($matakuliahs->hasPages())
+                    <div class="mt-3">
+                        {{ $matakuliahs->links() }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>
 
-    <!-- Edit Modal -->
     <div class="modal fade" id="editMatakuliahModal" tabindex="-1" role="dialog" aria-labelledby="editMatakuliahModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -194,9 +210,10 @@
                     <h5 class="modal-title" id="editMatakuliahModalLabel">Edit Mata Kuliah</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="edit-matakuliah-form" method="POST" enctype="multipart/form-data">
+                <form id="edit-matakuliah-form" method="POST" enctype="multipart/form-data"> {{-- Action will be set by JS --}}
                     @csrf
                     @method('PUT')
+                    <input type="hidden" name="matakuliah_id" id="edit_matakuliah_id">
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12 mb-3">
@@ -221,22 +238,17 @@
                             <div class="col-md-6 mb-3">
                                 <label for="edit_fakultas" class="form-label">Fakultas</label>
                                 <select class="form-select" name="fakultas" id="edit_fakultas">
-                                    <option value="pascasarjana">PASCASARJANA</option>
-                                    <option value="fip">FIP</option>
-                                    <option value="fmipa">FMIPA</option>
-                                    <option value="fppsi">FPPsi</option>
-                                    <option value="fbs">FBS</option>
-                                    <option value="ft">FT</option>
-                                    <option value="fik">FIK</option>
-                                    <option value="fis">FIS</option>
-                                    <option value="fe">FE</option>
-                                    <option value="profesi">PROFESI</option>
+                                    <option value="">Pilih Fakultas</option>
+                                     @foreach ($faculties as $key => $faculty)
+                                        <option value="{{ strtolower($key) }}">{{ $faculty['name'] }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="edit_prodi" class="form-label">Program Studi</label>
-                                <select class="form-select" name="prodi" id="edit_prodi">
+                                <select class="form-select" name="prodi" id="edit_prodi" disabled>
                                     <option value="">Pilih Program Studi</option>
+                                    {{-- Populated by JS --}}
                                 </select>
                             </div>
                         </div>
@@ -245,8 +257,7 @@
                             <div class="col-md-12 mb-3">
                                 <label for="edit_rps" class="form-label">RPS Mata Kuliah (Opsional)</label>
                                 <input type="file" class="form-control" name="rps" id="edit_rps" accept=".pdf,.doc,.docx">
-                                <div class="form-text text-muted">Biarkan kosong jika tidak ingin mengubah file RPS</div>
-                             
+                                <div class="form-text text-muted">Biarkan kosong jika tidak ingin mengubah file RPS. <span id="current_rps_info"></span></div>
                             </div>
                         </div>
 
@@ -265,253 +276,164 @@
             </div>
         </div>
     </div>
-
-    <!-- Include jQuery if not already included -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/matakuliah_dashboard.css') }}">
     
-    <!-- Include Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- Delete Form (action set by JavaScript) --}}
+    <form id="delete-matakuliah-form" method="POST" style="display: none;">
+        @csrf
+        @method('DELETE')
+    </form>
 
+    {{-- Assuming jQuery, Bootstrap JS, SweetAlert2 are loaded in admin.admin layout --}}
+    {{-- matakuliah_dashboard.js should handle the dynamic prodi dropdown --}}
     <script src="{{ asset('dashboard_main/dashboard/matakuliah_dashboard.js') }}"></script>
     
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-// Handle edit button
-document.querySelectorAll('.edit-matakuliah').forEach(button => {
-    button.addEventListener('click', function() {
-        const matkulId = this.dataset.id;
-        const modal = new bootstrap.Modal(document.getElementById('editMatakuliahModal'));
-        
-        // Populate form data
-        document.getElementById('edit_nama_matkul').value = this.dataset.nama;
-        document.getElementById('edit_semester').value = this.dataset.semester;
-        document.getElementById('edit_kode_matkul').value = this.dataset.kode;
-        document.getElementById('edit_fakultas').value = this.dataset.fakultas;
-        document.getElementById('edit_deskripsi').value = this.dataset.deskripsi;
-        
-        // Set prodi value and enable it
-        const prodiSelect = document.getElementById('edit_prodi');
-        prodiSelect.value = this.dataset.prodi;
-        prodiSelect.disabled = false;
-        
-        
-        
-        // Set form action
-        document.getElementById('edit-matakuliah-form').action = `/admin/matakuliah/${matkulId}`;
-        
-        // Show modal
-        modal.show();
-    });
-});
-
-// Handle delete confirmation
-document.querySelectorAll('.delete-matakuliah').forEach(button => {
-    button.addEventListener('click', function(e) {
-        e.preventDefault();
-        const form = this.closest('form');
-        
-        Swal.fire({
-            title: 'Konfirmasi Hapus',
-            text: "Apakah Anda yakin ingin menghapus mata kuliah ini?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                form.submit();
-            }
-        });
-    });
-});
-
-// Handle fakultas change for prodi selection
-document.getElementById('edit_fakultas').addEventListener('change', function() {
-    const prodiSelect = document.getElementById('edit_prodi');
-    prodiSelect.disabled = false;
-    updateProdiOptions(this.value, prodiSelect);
-});
-
-function updateProdiOptions(fakultas, selectElement) {
-    // Clear existing options
-    selectElement.innerHTML = '<option value="">Pilih Program Studi</option>';
-    
-    // Add options based on fakultas
-    const prodiOptions = {
-    'pascasarjana': [
-        'S3 Penelitian Dan Evaluasi Pendidikan', 
-        'S2 Penelitian Dan Evaluasi Pendidikan', 
-        'S2 Manajemen Lingkungan', 
-        'S3 Ilmu Manajemen', 
-        'S3 Manajemen Pendidikan', 
-        'S3 Pendidikan Dasar', 
-        'S2 Linguistik Terapan', 
-        'S3 Pendidikan Kependudukan Dan Lingkungan Hidup', 
-        'S2 Pendidikan Lingkungan', 
-        'S3 Pendidikan Jasmani', 
-        'S3 Teknologi Pendidikan', 
-        'S3 Linguistik Terapan', 
-        'S3 Pendidikan Anak Usia Dini', 
-        'S2 Manajemen Pendidikan Tinggi'
-    ],
-    'fip': [
-        'S2 Bimbingan Konseling', 
-        'S1 Bimbingan Dan Konseling', 
-        'S1 Pendidikan Luar Biasa', 
-        'S1 Manajemen Pendidikan', 
-        'S1 Pendidikan Masyarakat', 
-        'S1 Pendidikan Guru Pendidikan Anak Usia Dini', 
-        'S2 Pendidikan Dasar', 
-        'S2 Teknologi Pendidikan', 
-        'S1 Pendidikan Guru Sekolah Dasar', 
-        'S1 Teknologi Pendidikan', 
-        'S2 Pendidikan Masyarakat', 
-        'S2 Pendidikan Khusus', 
-        'S1 Perpustakaan dan Sains Informasi'
-    ],
-    'fmipa': [
-        'S1 Kimia', 
-        'S1 Statistika', 
-        'S1 Matematika', 
-        'S1 Pendidikan Matematika', 
-        'S1 Biologi', 
-        'S1 Ilmu Komputer', 
-        'S1 Fisika', 
-        'S2 Pendidikan Kimia', 
-        'S2 Pendidikan Biologi', 
-        'S2 Pendidikan Matematika', 
-        'S1 Pendidikan Biologi', 
-        'S1 Pendidikan Fisika', 
-        'S1 Pendidikan Kimia', 
-        'S2 Pendidikan Fisika'
-    ],
-    'fppsi': [
-        'S1 Psikologi', 
-        'S2 Psikologi'
-    ],
-    'fbs': [
-        'S1 Pendidikan Musik', 
-        'S1 Pendidikan Tari', 
-        'S1 Pendidikan Seni Rupa', 
-        'S1 Pendidikan Bahasa Jepang', 
-        'S1 Sastra Indonesia', 
-        'S1 Pendidikan Bahasa Dan Sastra Indonesia', 
-        'S1 Pendidikan Bahasa Perancis', 
-        'S1 Sastra Inggris', 
-        'S1 Pendidikan Bahasa Jerman', 
-        'S1 Pendidikan Bahasa Inggris', 
-        'S2 Pendidikan Bahasa Inggris', 
-        'S1 Pendidikan Bahasa Arab', 
-        'S2 Pendidikan Bahasa Arab', 
-        'S1 Pendidikan Bahasa Mandarin', 
-        'S2 Pendidikan Seni'
-    ],
-    'ft': [
-        'S1 Pendidikan Teknik Elektronika', 
-        'D4 Kosmetik dan Perawatan Kecantikan', 
-        'D4 Teknik Rekayasa Manufaktur', 
-        'D4 Seni Kuliner dan Pengolahan Jasa Makanan', 
-        'D4 Desain mode', 
-        'D4 Manajemen Pelabuhan dan Logistik Maritim', 
-        'S1 Pendidikan Teknik Informatika Dan Komputer', 
-        'S1 Pendidikan Tata Boga', 
-        'S1 Pendidikan Tata Busana', 
-        'S1 Pendidikan Tata Rias', 
-        'S1 Pendidikan Kesejahteraan Keluarga', 
-        'S2 Pendidikan Teknologi Dan Kejuruan', 
-        'S1 Pendidikan Teknik Bangunan', 
-        'S1 Pendidikan Teknik Elektro', 
-        'S1 Pendidikan Teknik Mesin', 
-        'D4 Teknik Rekayasa Otomasi', 
-        'D4 Teknologi Rekayasa Konstruksi Bangunan Gedung', 
-        'S1 Rekayasa Keselamatan Kebakaran', 
-        'S1 Teknik Mesin', 
-        'S1 Sistem dan Teknologi Informasi'
-    ],
-    'fik': [
-        'S1 Ilmu Keolahragaan', 
-        'S1 Pendidikan Kepelatihan Olahraga', 
-        'S1 Pendidikan Jasmani, Kesehatan Dan Rekreasi', 
-        'S2 Pendidikan Jasmani', 
-        'S1 Kepelatihan Kecabangan Olahraga', 
-        'S1 Olahraga Rekreasi', 
-        'S2 Ilmu Keolahragaan'
-    ],
-    'fis': [
-        'D4 Usaha Perjalanan Wisata', 
-        'S1 Sosiologi', 
-        'S1 Pendidikan Agama Islam', 
-        'S1 Pendidikan Sosiologi', 
-        'S2 Pendidikan Sejarah', 
-        'D4 Hubungan Masyarakat dan Komunikasi Digital', 
-        'S1 Pendidikan Pancasila Dan Kewarganegaraan', 
-        'S1 Pendidikan Geografi', 
-        'S1 Pendidikan IPS', 
-        'S1 Pendidikan Sejarah', 
-        'S1 Ilmu Komunikasi (ILKOM)', 
-        'S1 Geografi', 
-        'S2 Pendidikan Geografi', 
-        'S2 Pendidikan Pancasila Dan Kewarganegaraan'
-    ],
-    'fe': [
-        'D4 Akuntansi Sektor Publik', 
-        'D4 Administrasi Perkantoran Digital', 
-        'D4 Pemasaran Digital', 
-        'S1 Akuntansi', 
-        'S1 Manajemen', 
-        'S1 Pendidikan Ekonomi', 
-        'S2 Manajemen', 
-        'S1 Pendidikan Administrasi Perkantoran', 
-        'S1 Bisnis Digital', 
-        'S2 Akuntansi', 
-        'S1 Pendidikan Akuntansi', 
-        'S2 Pendidikan Ekonomi', 
-        'S1 Pendidikan Bisnis'
-    ],
-    'profesi': [
-        'Profesi PPG'
-    ]
-    };
-    
-    if (prodiOptions[fakultas]) {
-        prodiOptions[fakultas].forEach(prodi => {
-            const option = document.createElement('option');
-            option.value = prodi;
-            option.textContent = prodi;
-            selectElement.appendChild(option);
-        });
-    }
-}
-</script>
-
     <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const facultiesData = @json($faculties_data ?? []); // Ensure this is passed from controller
+
+        // Function to populate prodi dropdown (reusable for edit modal)
+        function populateProdiDropdown(fakultasValue, prodiSelectElement, selectedProdi = null) {
+            prodiSelectElement.innerHTML = '<option value="">Pilih Program Studi</option>';
+            prodiSelectElement.disabled = true;
+
+            if (fakultasValue && facultiesData[fakultasValue.toUpperCase()] && facultiesData[fakultasValue.toUpperCase()].programs) {
+                prodiSelectElement.disabled = false;
+                facultiesData[fakultasValue.toUpperCase()].programs.forEach(prodi => {
+                    const option = document.createElement('option');
+                    option.value = prodi; // Assuming prodi names are stored as is
+                    option.textContent = prodi;
+                    if (selectedProdi && prodi === selectedProdi) {
+                        option.selected = true;
+                    }
+                    prodiSelectElement.appendChild(option);
+                });
+            }
+             // Add an option for "Fakultas Level" or "No Prodi" if prodi is nullable
+            const noProdiOption = document.createElement('option');
+            noProdiOption.value = ""; 
+            noProdiOption.textContent = "-- Level Fakultas (Tanpa Prodi) --";
+            if (selectedProdi === null || selectedProdi === "") {
+                noProdiOption.selected = true;
+            }
+            prodiSelectElement.insertBefore(noProdiOption, prodiSelectElement.firstChild.nextSibling); // Insert after "Pilih Program Studi"
+        }
+
+        // Handle fakultas change for the main form
+        const mainFakultasSelect = document.getElementById('fakultas');
+        const mainProdiSelect = document.getElementById('prodi');
+        if (mainFakultasSelect) {
+            mainFakultasSelect.addEventListener('change', function() {
+                populateProdiDropdown(this.value, mainProdiSelect);
+            });
+            // Trigger change if old fakultas value exists (e.g., after validation error)
+            if (mainFakultasSelect.value) {
+                populateProdiDropdown(mainFakultasSelect.value, mainProdiSelect, "{{ old('prodi') }}");
+            }
+        }
+
+        // Handle fakultas change for the edit modal form
+        const editFakultasSelect = document.getElementById('edit_fakultas');
+        const editProdiSelect = document.getElementById('edit_prodi');
+        if (editFakultasSelect) {
+            editFakultasSelect.addEventListener('change', function() {
+                populateProdiDropdown(this.value, editProdiSelect);
+            });
+        }
+        
+        // Handle Edit button clicks
+        document.querySelectorAll('.edit-matakuliah').forEach(button => {
+            button.addEventListener('click', function() {
+                const matkulId = this.dataset.id;
+                const editForm = document.getElementById('edit-matakuliah-form');
+                editForm.action = `{{ url('admin/matakuliah') }}/${matkulId}`;
+                document.getElementById('edit_matakuliah_id').value = matkulId;
+
+                // Fetch matakuliah details via AJAX
+                // The AdminMataKuliahController@edit method returns JSON
+                fetch(`{{ url('admin/matakuliah') }}/${matkulId}/edit`, { 
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': csrfToken 
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('edit_nama_matkul').value = data.nama_matkul;
+                    document.getElementById('edit_semester').value = data.semester;
+                    document.getElementById('edit_kode_matkul').value = data.kode_matkul;
+                    
+                    const currentFakultas = data.fakultas ? data.fakultas.toLowerCase() : '';
+                    editFakultasSelect.value = currentFakultas;
+                    populateProdiDropdown(currentFakultas, editProdiSelect, data.prodi);
+
+                    document.getElementById('edit_deskripsi').value = data.deskripsi;
+                    
+                    const currentRpsInfo = document.getElementById('current_rps_info');
+                    if(data.rps_path){
+                        currentRpsInfo.innerHTML = `File saat ini: <a href="/storage/${data.rps_path}" target="_blank">${data.rps_path.split('/').pop()}</a>`;
+                    } else {
+                        currentRpsInfo.innerHTML = '<em>Tidak ada file RPS terunggah.</em>';
+                    }
+                    document.getElementById('edit_rps').value = ''; // Clear file input
+                })
+                .catch(error => {
+                    console.error('Error fetching matakuliah details:', error);
+                    Swal.fire('Error', 'Gagal mengambil detail mata kuliah. ' + error.message, 'error');
+                });
+            });
+        });
+
+        // Handle Delete button clicks
+        document.querySelectorAll('.delete-matakuliah').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent direct form submission if it's wrapped in a form
+                const matkulId = this.dataset.id;
+                const matkulNama = this.dataset.nama;
+                const deleteForm = document.getElementById('delete-matakuliah-form');
+                deleteForm.action = `{{ url('admin/matakuliah') }}/${matkulId}`;
+
+                Swal.fire({
+                    title: 'Anda Yakin?',
+                    text: `Apakah Anda ingin menghapus mata kuliah "${matkulNama}"? Tindakan ini tidak dapat dibatalkan.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        deleteForm.submit();
+                    }
+                });
+            });
+        });
+        
         // Display SweetAlert for flash messages
-document.addEventListener('DOMContentLoaded', function() {
-    @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil!',
-            text: '{{ session('success') }}',
-            timer: 2000
-        });
-    @endif
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @endif
 
-    @if(session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Gagal!',
-            text: '{{ session('error') }}',
-            timer: 2000
-        });
-    @endif
-});
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: '{{ session('error') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @endif
+    });
     </script>
-
-    <style>
-       
-    </style>
 @endsection
