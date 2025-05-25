@@ -38,7 +38,9 @@
                             <option value="pemeringkatan" {{ old('kategori') == 'pemeringkatan' ? 'selected' : '' }}>
                                 Pemeringkatan</option>
                             <option value="umum" {{ old('kategori') == 'umum' ? 'selected' : '' }}>
-                                umum</option>
+                                Umum</option>
+                            <option value="fakultas" {{ old('kategori') == 'fakultas' ? 'selected' : '' }}>Fakultas</option>
+                            <option value="prodi" {{ old('kategori') == 'prodi' ? 'selected' : '' }}>Prodi</option>
                         </select>
                         @error('kategori')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -124,6 +126,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>User</th>
                                 <th>Kategori</th>
                                 <th>Tanggal</th>
                                 <th>Judul Berita</th>
@@ -136,13 +139,16 @@
                             @foreach ($beritas as $index => $berita)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
+                                    <td>{{ $berita->user->name ?? 'admin direktorat' }}</td>
                                     <td>
                                         <span
                                             class="badge bg-{{ [
                                                 'inovasi' => 'primary',
                                                 'pemeringkatan' => 'success',
                                                 'umum' => 'info',
-                                            ][$berita->kategori] }}">
+                                                'fakultas' => 'warning',
+                                                'prodi' => 'danger'
+                                           ][$berita->kategori] ?? 'secondary' }}">
                                             {{ ucfirst($berita->kategori) }}
                                         </span>
                                     </td>
@@ -216,6 +222,8 @@
                                     <option value="inovasi">Inovasi</option>
                                     <option value="pemeringkatan">Pemeringkatan</option>
                                     <option value="umum">umum</option>
+                                    <option value="fakultas">Fakultas</option>
+                                    <option value="prodi">Prodi</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">

@@ -10,6 +10,7 @@ use App\Models\Pengumuman;
 use App\Models\ProgramLayanan;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Instagram;
+use Illuminate\Support\Facades\Auth; 
 
 class BeritaController extends Controller
 {
@@ -17,37 +18,42 @@ class BeritaController extends Controller
      * Get the correct route name prefix based on authenticated user role
      */
     private function getRoutePrefix()
-    {
-        if (auth()->user()->role === 'admin_direktorat') {
-            return 'admin';
-        } else if (auth()->user()->role === 'admin_hilirisasi') {
-            return 'subdirektorat-inovasi.admin_hilirisasi';
-        } else if (auth()->user()->role === 'admin_inovasi') {
-            return 'subdirektorat-inovasi.admin_inovasi';
-        } else if (auth()->user()->role === 'admin_pemeringkatan') {
-            return 'admin_pemeringkatan';
+        {
+        $role = auth()->user()->role;
+        switch ($role) {
+            case 'admin_direktorat':
+                return 'admin';
+            case 'admin_hilirisasi':
+                return 'subdirektorat-inovasi.admin_hilirisasi';
+            case 'admin_inovasi':
+                return 'subdirektorat-inovasi.admin_inovasi';
+            case 'admin_pemeringkatan':
+                return 'admin_pemeringkatan';
+            default:
+                return 'admin';
         }
-
-        return 'admin';
     }
+
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $beritas = Berita::latest()->get();
+         $beritas = Berita::with('user')->latest()->get();
         $routePrefix = $this->getRoutePrefix();
+        $viewName = 'admin.newsadmin';
 
-        if (auth()->user()->role === 'admin_direktorat') {
-            return view('admin.newsadmin', compact('beritas', 'routePrefix'));
-        } else if (auth()->user()->role === 'admin_hilirisasi') {
-            return view('subdirektorat-inovasi.admin_hilirisasi.newsadmin', compact('beritas', 'routePrefix'));
-        } else if (auth()->user()->role === 'admin_inovasi') {
-            return view('subdirektorat-inovasi.admin_inovasi.newsadmin', compact('beritas', 'routePrefix'));
-        } else if (auth()->user()->role === 'admin_pemeringkatan') {
-            return view('admin_pemeringkatan.newsadmin', compact('beritas', 'routePrefix'));
+        $role = auth()->user()->role;
+        if ($role === 'admin_hilirisasi') {
+            $viewName = 'subdirektorat-inovasi.admin_hilirisasi.newsadmin';
+        } elseif ($role === 'admin_inovasi') {
+            $viewName = 'subdirektorat-inovasi.admin_inovasi.newsadmin';
+        } elseif ($role === 'admin_pemeringkatan') {
+            $viewName = 'admin_pemeringkatan.newsadmin';
         }
+
+        return view($viewName, compact('beritas', 'routePrefix'));
     }
 
     /**
@@ -67,6 +73,7 @@ class BeritaController extends Controller
 
                 // Create the berita record with the image path
                 $berita = Berita::create([
+                    'user_id' => Auth::id(),
                     'kategori' => $request->kategori,
                     'tanggal' => $request->tanggal,
                     'judul' => $request->judul_berita,

@@ -11,6 +11,7 @@ class Berita extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'kategori',
         'tanggal',
         'judul',
@@ -39,6 +40,11 @@ class Berita extends Model
             }
         });
     }
+     public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 
     public function images()
     {
