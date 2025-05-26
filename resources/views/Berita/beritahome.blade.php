@@ -305,6 +305,16 @@ body {
     color: #555555;
 }
 
+.card-category.fakultas {
+    background-color: rgba(22, 101, 52, 0.1);
+    color: #0c66cc;
+}
+
+.card-category.prodi {
+    background-color: rgba(22, 101, 52, 0.1);
+    color: #05cf7b;
+}
+
 .card-meta {
     display: flex;
     justify-content: space-between;
