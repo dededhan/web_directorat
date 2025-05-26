@@ -51,8 +51,9 @@ class BeritaController extends Controller
             $viewName = 'subdirektorat-inovasi.admin_inovasi.newsadmin';
         } elseif ($role === 'admin_pemeringkatan') {
             $viewName = 'admin_pemeringkatan.newsadmin';
+        } elseif ($role === 'admin_direktorat') {
+            $viewName = 'admin.newsadmin';
         }
-
         return view($viewName, compact('beritas', 'routePrefix'));
     }
 
@@ -318,7 +319,7 @@ class BeritaController extends Controller
 
             // Validate the request
             $validated = $request->validate([
-                'kategori' => 'required|in:inovasi,pemeringkatan,umum',
+                'kategori' => 'required|in:inovasi,pemeringkatan,umum,fakultas,prodi',
                 'tanggal' => 'required|date',
                 'judul_berita' => 'required|string|max:200',
                 'isi_berita' => 'required|string',
