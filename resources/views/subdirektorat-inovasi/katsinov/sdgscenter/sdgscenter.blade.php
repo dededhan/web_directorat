@@ -55,6 +55,27 @@
             color: #d33;
             background-color: #fee;
         }
+        .course-tabs {
+            display: flex;
+            justify-content: center; /* Ini akan menengahkan item-item di dalamnya secara horizontal */
+            align-items: center; /* Opsional: jika Anda juga ingin menengahkan secara vertikal (jika div memiliki tinggi tertentu) */
+            gap: 10px; /* Opsional: untuk memberi jarak antar tombol */
+            padding: 10px; /* Opsional: untuk memberi sedikit ruang di dalam div */
+            }
+
+        .tab-btn {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            }
+
+        .tab-btn.active {
+            background-color: #277177;
+            color: white;
+            border-color: #277177;
+            }
+            
         </style>
 </head>
 
@@ -654,6 +675,278 @@
                 </div>
             </div>
         </div>
+    </section>
+    <section id="sustainability-courses" class="courses">
+        <div class="container">
+            <div class="section-title">
+                <h3>Mata Kuliah Sustainability</h3>
+                <p>Jelajahi berbagai mata kuliah yang dirancang untuk memperdalam pemahaman dan keahlian dalam pembangunan berkelanjutan.</p>
+            </div>
+            <div class="relative flex items-center justify-center mt-4">
+                <button class="course-tab-arrow left-arrow flex items-center justify-center rounded-full shadow bg-white border border-gray-300 hover:bg-[#277177] hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed" style="width:32px;height:32px;font-size:1.1rem;cursor:pointer;">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="course-tabs-wrapper overflow-hidden flex-1 flex justify-center" style="max-width: 600px;">
+                    <div class="course-tabs flex transition-all duration-300 justify-center gap-2" style="width:max-content;">
+                        <button class="tab-btn active" data-faculty="FIP">FIP</button>
+                        <button class="tab-btn" data-faculty="FEB">FEB</button>
+                        <button class="tab-btn" data-faculty="FMIPA">FMIPA</button>
+                        <button class="tab-btn" data-faculty="FIS">FIS</button>
+                        <button class="tab-btn" data-faculty="FT">FT</button>
+                        <button class="tab-btn" data-faculty="FBS">FBS</button>
+                        <button class="tab-btn" data-faculty="FP">FP</button>
+                        <button class="tab-btn" data-faculty="FIO">FIO</button>
+                    </div>
+                </div>
+                <button class="course-tab-arrow right-arrow flex items-center justify-center rounded-full shadow bg-white border border-gray-300 hover:bg-[#277177] hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed" style="width:32px;height:32px;font-size:1.1rem;cursor:pointer;">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="course-cards-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 mt-8 justify-center"></div>
+        </div>
+        <style>
+            .course-tabs .tab-btn {
+                margin: 0 1px;
+                padding: 7px 18px;
+                border-radius: 20px;
+                border: 1.5px solid #277177;
+                background: #fff;
+                color: #277177;
+                font-weight: 500;
+                font-size: 15px;
+                transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+                box-shadow: 0 1px 4px rgba(39,113,119,0.07);
+                outline: none;
+            }
+            .course-tabs .tab-btn.active,
+            .course-tabs .tab-btn:hover {
+                background: linear-gradient(90deg, #277177 80%, #1D796B 100%);
+                color: #fff;
+                border-color: #277177;
+                box-shadow: 0 2px 8px rgba(39,113,119,0.13);
+            }
+            .course-tab-arrow {
+                box-shadow: 0 1px 4px rgba(39,113,119,0.10);
+                border: 1.5px solid #277177;
+                color: #277177;
+                background: #fff;
+                transition: background 0.2s, color 0.2s, border 0.2s;
+                margin: 0 2px !important;
+            }
+            .course-tab-arrow:hover:not(:disabled) {
+                background: #277177;
+                color: #fff;
+                border-color: #277177;
+            }
+            .course-tab-arrow:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+            .course-cards-grid {
+                margin-top: 2rem;
+                justify-items: center;
+                display: grid;
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+                gap: 10px; /* Ubah gap dari 18px ke 10px agar jarak antar card lebih rapat */
+            }
+            @media (min-width: 640px) {
+                .course-cards-grid {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+            }
+            @media (min-width: 1024px) {
+                .course-cards-grid {
+                    grid-template-columns: repeat(4, minmax(0, 1fr));
+                }
+            }
+            .course-card {
+                background: #fff;
+                border-radius: 12px;
+                box-shadow: 0 2px 12px rgba(39,113,119,0.08);
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                transition: box-shadow 0.2s;
+                border: 1.5px solid #e5e7eb;
+                max-width: 320px;
+                width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .course-card:hover {
+                box-shadow: 0 6px 24px rgba(39,113,119,0.18);
+                border-color: #277177;
+            }
+            .course-card img {
+                width: 100%;
+                height: 160px;
+                object-fit: cover;
+            }
+            .course-card-body {
+                padding: 18px 16px 14px 16px;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+            .course-title {
+                font-size: 1.08rem;
+                font-weight: 600;
+                color: #277177;
+                margin-bottom: 6px;
+            }
+            .course-desc {
+                font-size: 0.97rem;
+                color: #444;
+                margin-bottom: 10px;
+                flex: 1;
+            }
+            .course-meta {
+                font-size: 0.89rem;
+                color: #888;
+            }
+        </style>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Dummy data for each faculty
+                const courseData = {
+                    FIP: [
+                        {
+                            image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+                            title: 'Pendidikan Lingkungan Hidup',
+                            desc: 'Mempelajari konsep, isu, dan strategi pendidikan lingkungan untuk keberlanjutan.',
+                            meta: '2 SKS | Semester 4'
+                        },
+                    ],
+                    FEB: [
+                        {
+                            image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
+                            title: 'Ekonomi Sirkular',
+                            desc: 'Konsep ekonomi sirkular dan penerapannya dalam bisnis modern.',
+                            meta: '2 SKS | Semester 5'
+                        },
+                    ],
+                    FMIPA: [
+                        {
+                            image: 'https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=crop&w=400&q=80',
+                            title: 'Sains Lingkungan',
+                            desc: 'Dasar-dasar sains lingkungan dan aplikasinya dalam kehidupan.',
+                            meta: '3 SKS | Semester 3'
+                        },
+                        
+                    ],
+                    FIS: [
+                        {
+                            image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+                            title: 'Sosiologi Lingkungan',
+                            desc: 'Analisis hubungan masyarakat dan lingkungan dalam konteks pembangunan.',
+                            meta: '2 SKS | Semester 4'
+                        }
+                    ],
+                    FT: [
+                        {
+                            image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80',
+                            title: 'Teknologi Energi Terbarukan',
+                            desc: 'Pengenalan teknologi energi terbarukan dan aplikasinya.',
+                            meta: '3 SKS | Semester 6'
+                        }
+                    ],
+                    FBS: [
+                        {
+                            image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80',
+                            title: 'Komunikasi Lingkungan',
+                            desc: 'Strategi komunikasi untuk isu-isu lingkungan dan keberlanjutan.',
+                            meta: '2 SKS | Semester 5'
+                        }
+                    ],
+                    FP: [
+                        {
+                            image: 'https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=crop&w=400&q=80',
+                            title: 'Pertanian Berkelanjutan',
+                            desc: 'Teknik pertanian ramah lingkungan dan efisien.',
+                            meta: '3 SKS | Semester 4'
+                        }
+                    ],
+                    FIO: [
+                        {
+                            image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+                            title: 'Olahraga dan Lingkungan',
+                            desc: 'Hubungan antara aktivitas olahraga dan pelestarian lingkungan.',
+                            meta: '2 SKS | Semester 3'
+                        }
+                    ]
+                };
+
+                const tabsContainer = document.querySelector('.course-tabs');
+                const tabButtons = Array.from(document.querySelectorAll('.course-tabs .tab-btn'));
+                const leftArrow = document.querySelector('.course-tab-arrow.left-arrow');
+                const rightArrow = document.querySelector('.course-tab-arrow.right-arrow');
+                const visibleCount = 5;
+                let startIdx = 0;
+
+                function updateTabs() {
+                    tabButtons.forEach((btn, idx) => {
+                        if (idx >= startIdx && idx < startIdx + visibleCount) {
+                            btn.style.display = '';
+                        } else {
+                            btn.style.display = 'none';
+                        }
+                    });
+                    leftArrow.disabled = startIdx === 0;
+                    rightArrow.disabled = startIdx + visibleCount >= tabButtons.length;
+                }
+
+                leftArrow.addEventListener('click', function() {
+                    if (startIdx > 0) {
+                        startIdx--;
+                        updateTabs();
+                    }
+                });
+
+                rightArrow.addEventListener('click', function() {
+                    if (startIdx + visibleCount < tabButtons.length) {
+                        startIdx++;
+                        updateTabs();
+                    }
+                });
+
+                // Card rendering
+                const cardsGrid = document.querySelector('.course-cards-grid');
+                function renderCards(faculty) {
+                    cardsGrid.innerHTML = '';
+                    const courses = courseData[faculty] || [];
+                    if (courses.length === 0) {
+                        cardsGrid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-8">Belum ada mata kuliah untuk fakultas ini.</div>';
+                        return;
+                    }
+                    courses.slice(0, 4).forEach(course => {
+                        const card = document.createElement('div');
+                        card.className = 'course-card';
+                        card.innerHTML = `
+                            <img src="${course.image}" alt="${course.title}">
+                            <div class="course-card-body">
+                                <div class="course-title">${course.title}</div>
+                                <div class="course-desc">${course.desc}</div>
+                                <div class="course-meta">${course.meta}</div>
+                            </div>
+                        `;
+                        cardsGrid.appendChild(card);
+                    });
+                }
+
+                // Tab click event
+                tabButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        tabButtons.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        renderCards(this.dataset.faculty);
+                    });
+                });
+
+                // Initial state
+                updateTabs();
+                renderCards('FIP');
+            });
+        </script>
     </section>
     <section id="about" class="about">
         <div class="container">
