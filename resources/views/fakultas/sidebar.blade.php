@@ -65,6 +65,12 @@
         <div class="menu-section">
             <h3 class="section-title">Data Tables</h3>
             <ul class="side-menu">
+                <li class="{{ request()->routeIs('fakultas.responden.index') ? 'active' : '' }}">
+                    <a href="{{ route('fakultas.responden.index') }}">
+                        <i class='bx bxs-user-voice'></i>
+                        <span class="text">Responden</span>
+                    </a>
+                </li>
                 <li class="{{ Request::is('fakultas/qsresponden*') ? 'active' : '' }}">
                     <a href="{{ route('fakultas.qsresponden.index') }}">
                         <i class='bx bxs-spreadsheet'></i>

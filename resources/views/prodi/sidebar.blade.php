@@ -64,6 +64,13 @@
         <div class="menu-section">
             <h3 class="section-title">Data Tables</h3>
             <ul class="side-menu">
+
+                <li class="{{ request()->routeIs('prodi.responden.index') ? 'active' : '' }}">
+                    <a href="{{ route('prodi.responden.index') }}">
+                        <i class='bx bxs-user-voice'></i>
+                        <span class="text">Responden</span>
+                    </a>
+                </li>
                 <li class="{{ request()->routeIs('prodi.qsresponden.index') ? 'active' : '' }}">
                     <a href="{{ route('prodi.qsresponden.index') }}">
                         <i class='bx bxs-spreadsheet'></i>

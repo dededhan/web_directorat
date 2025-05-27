@@ -290,6 +290,10 @@ Route::prefix('prodi')->name('prodi.')
         Route::get('/sustainability/{id}/detail', [AdminSustainabilityController::class, 'getSustainabilityDetail'])
             ->name('sustainability.detail');
 
+        Route::resource('/responden', AdminRespondenController::class);
+        Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
+            ->name('responden.update');
+
         Route::resource('/matakuliah', AdminMataKuliahController::class);
         Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
         Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
@@ -322,6 +326,9 @@ Route::prefix('fakultas')->name('fakultas.')
         Route::resource('/sustainability', AdminSustainabilityController::class);
         Route::get('/sustainability/{id}/detail', [AdminSustainabilityController::class, 'getSustainabilityDetail'])
             ->name('sustainability.detail');
+        Route::resource('/responden', AdminRespondenController::class);
+        Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
+            ->name('responden.update');
 
         Route::resource('/matakuliah', AdminMataKuliahController::class);
         Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
