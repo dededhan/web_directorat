@@ -29,6 +29,10 @@ class BeritaController extends Controller
                 return 'subdirektorat-inovasi.admin_inovasi';
             case 'admin_pemeringkatan':
                 return 'admin_pemeringkatan';
+            case 'fakultas':
+                return 'fakultas';
+            case 'prodi':
+                return 'prodi';
             default:
                 return 'admin';
         }
@@ -53,6 +57,10 @@ class BeritaController extends Controller
             $viewName = 'admin_pemeringkatan.newsadmin';
         } elseif ($role === 'admin_direktorat') {
             $viewName = 'admin.newsadmin';
+        } elseif ($role === 'fakultas') {
+            $viewName = 'fakultas.newsadmin';
+        } elseif ($role === 'prodi') {
+            $viewName = 'prodi.newsadmin';
         }
         return view($viewName, compact('beritas', 'routePrefix'));
     }

@@ -276,6 +276,15 @@ Route::prefix('prodi')->name('prodi.')
             return view('prodi.dashboard');
         })->name('dashboard');
 
+        // News
+        Route::resource('/news', BeritaController::class)
+            ->except(['show', 'edit', 'update']);
+        Route::get('/berita/{id}/detail', [BeritaController::class, 'getBeritaDetail'])
+            ->name('news.detail');
+        Route::put('/berita/{id}', [BeritaController::class, 'update'])
+            ->name('news.update');
+        Route::post('/berita/upload', [BeritaController::class, 'upload'])->name('news.upload');
+
         // Sustainability routes for prodi
         Route::resource('/sustainability', AdminSustainabilityController::class);
         Route::get('/sustainability/{id}/detail', [AdminSustainabilityController::class, 'getSustainabilityDetail'])
@@ -298,6 +307,16 @@ Route::prefix('fakultas')->name('fakultas.')
         Route::get('/dashboard', function () {
             return view('fakultas.dashboard');
         })->name('dashboard');
+
+
+        // News
+        Route::resource('/news', BeritaController::class)
+            ->except(['show', 'edit', 'update']);
+        Route::get('/berita/{id}/detail', [BeritaController::class, 'getBeritaDetail'])
+            ->name('news.detail');
+        Route::put('/berita/{id}', [BeritaController::class, 'update'])
+            ->name('news.update');
+        Route::post('/berita/upload', [BeritaController::class, 'upload'])->name('news.upload');
 
         // Sustainability routes for fakultas
         Route::resource('/sustainability', AdminSustainabilityController::class);

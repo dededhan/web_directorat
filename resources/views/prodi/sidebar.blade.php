@@ -25,6 +25,13 @@
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
+
+                <li class="{{ request()->routeIs('prodi.news.index') ? 'active' : '' }}">
+                    <a href="{{ route('prodi.news.index') }}">
+                        <i class='bx bxs-news'></i>
+                        <span class="text">Berita</span>
+                    </a>
+                </li>
             </ul>
         </div>
 
