@@ -125,16 +125,16 @@
 <div class="table-data mt-4">
     <div class="order">
         <div class="head">
-            <h3>System Users</h3>
+            <h3>Akun Pemeringkatan</h3>
             <div class="search-box">
-                <input type="text" id="searchSystemInput" class="form-control" placeholder="Cari pengguna sistem...">
+                <input type="text" id="searchPemeringkatanInput" class="form-control" placeholder="Cari akun pemeringkatan...">
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table" id="system-users-table">
+            <table class="table" id="pemeringkatan-users-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>No</th>
                         <th>Nama</th>
                         <th>Email</th>
                         <th>Role</th>
@@ -143,9 +143,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users->where('role', '!=', 'registered_user') as $user)
+                    @php
+                        $pemeringkatanRoles = ['admin_pemeringkatan', 'fakultas', 'prodi'];
+                    @endphp
+                    @foreach ($users->whereIn('role', $pemeringkatanRoles) as $user)
                     <tr>
-                        <td>{{ $user->id }}</td>
+                         <td>{{ $loop->iteration }}</td>
                         <td>
                             @if($user->avatar)
                                 <div class="d-flex align-items-center">
@@ -179,7 +182,7 @@
                                     data-id="{{ $user->id }}">
                                    <i class='bx bx-trash'></i>
                                 </button>
-                                 <form action="{{ route('admin.manageuser.toggleStatus', $user->id) }}" method="POST" style="display:inline;">
+                                <form action="{{ route('admin.manageuser.toggleStatus', $user->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('PUT')
                                     <button type="submit" class="btn btn-sm btn-{{ $user->status === 'active' ? 'warning' : 'success' }}">
@@ -196,6 +199,85 @@
     </div>
 </div>
 
+{{-- NEW: Inovasi Accounts Table --}}
+<div class="table-data mt-4">
+    <div class="order">
+        <div class="head">
+            <h3>Akun Inovasi</h3>
+            <div class="search-box">
+                <input type="text" id="searchInovasiInput" class="form-control" placeholder="Cari akun inovasi...">
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table" id="inovasi-users-table">
+                 <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $excludedRoles = ['admin_pemeringkatan', 'fakultas', 'prodi', 'registered_user'];
+                    @endphp
+                    @foreach ($users->whereNotIn('role', $excludedRoles) as $user)
+                    <tr>
+                       <td>{{ $loop->iteration }}</td>
+                        <td>
+                            @if($user->avatar)
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ $user->avatar }}" alt="Avatar" class="rounded-circle me-2" width="30" onerror="this.style.display='none'">
+                                    {{ $user->name }}
+                                </div>
+                            @else
+                                {{ $user->name }}
+                            @endif
+                        </td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->role }}</td>
+                        <td>
+                             @if($user->status === 'active')
+                                <span class="badge bg-success">Aktif</span>
+                            @else
+                                <span class="badge bg-danger">Tidak Aktif</span>
+                            @endif
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-primary edit-user"
+                                        data-id="{{ $user->id }}"
+                                        data-name="{{ $user->name }}"
+                                        data-email="{{ $user->email }}"
+                                        data-role="{{ $user->role }}"
+                                        data-status="{{ $user->status }}">
+                                    <i class='bx bx-edit-alt'></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger delete-user"
+                                    data-id="{{ $user->id }}">
+                                   <i class='bx bx-trash'></i>
+                                </button>
+                                <form action="{{ route('admin.manageuser.toggleStatus', $user->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-sm btn-{{ $user->status === 'active' ? 'warning' : 'success' }}">
+                                        {{ $user->status === 'active' ? 'Nonaktifkan' : 'Aktifkan' }}
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{{-- Registered Users Table (Unchanged) --}}
 <div class="table-data mt-4">
     <div class="order">
         <div class="head">
@@ -211,7 +293,7 @@
             <table class="table" id="registered-users-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>No</th>
                         <th>Nama</th>
                         <th>Email</th>
                         <th>Registrasi</th>
@@ -223,7 +305,7 @@
                 <tbody>
                     @foreach ($users->where('role', 'registered_user') as $user)
                     <tr>
-                        <td>{{ $user->id }}</td>
+                       <td>{{ $loop->iteration }}</td>
                         <td>
                             <div class="d-flex align-items-center">
                                 @if($user->avatar)
@@ -271,6 +353,7 @@
     </div>
 </div>
 
+{{-- Modals (Edit and Delete) - Unchanged --}}
 <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -376,7 +459,6 @@
     </div>
 </div>
 
-
 <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -400,7 +482,7 @@
 </div>
 
 <style>
-    /* Existing Styles - No changes needed here for this feature */
+    /* Existing Styles - No changes needed here */
     .table-data { margin-top: 24px; }
     .order { background: #fff; padding: 24px; border-radius: 20px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); }
     .head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
@@ -421,9 +503,10 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
+{{-- UPDATED SCRIPT --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // --- Add User Form Logic ---
+    // --- Add User Form Logic (No changes needed here) ---
     const addUserForm = document.getElementById('addUserForm');
     const roleSelect = document.getElementById('role');
     const nameStandardDiv = document.getElementById('name_standard_div');
@@ -443,7 +526,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedRole = roleSelect.value;
         fakultasSelectionDiv.style.display = 'none';
         prodiSelectionDiv.style.display = 'none';
-        prodiProgramStudyOtherDiv.style.display = 'none'; // Hide 'other' input by default
+        prodiProgramStudyOtherDiv.style.display = 'none';
         nameStandardDiv.style.display = 'block'; 
         hiddenNameInput.value = ''; 
         nameStandardInput.value = ''; 
@@ -463,15 +546,15 @@ document.addEventListener('DOMContentLoaded', function() {
             hiddenNameInput.required = true;
             prodiFacultyAbbrSelect.value = ''; 
             prodiProgramStudySelect.innerHTML = '<option value="">Pilih Program Studi</option><option value="_OTHER_">Lainnya (Ketik Manual)...</option>'; 
-            prodiProgramStudyOtherInput.value = ''; // Clear 'other' input
+            prodiProgramStudyOtherInput.value = '';
         }
         updateHiddenName();
     }
 
     function updateProgramStudiesDropdown(facultyAbbr, targetProgramDropdown, targetOtherDiv, targetOtherInput) {
         targetProgramDropdown.innerHTML = '<option value="">Memuat...</option>';
-        targetOtherDiv.style.display = 'none'; // Hide 'other' div when faculty changes
-        targetOtherInput.value = ''; // Clear 'other' input
+        targetOtherDiv.style.display = 'none';
+        targetOtherInput.value = '';
 
         let options = '<option value="">Pilih Program Studi</option>';
         if (facultyAbbr && facultiesAndProgramsData[facultyAbbr] && facultiesAndProgramsData[facultyAbbr].programs) {
@@ -493,14 +576,14 @@ document.addEventListener('DOMContentLoaded', function() {
             let program = prodiProgramStudySelect.value;
             if (program === '_OTHER_') {
                 program = prodiProgramStudyOtherInput.value.trim();
-                prodiProgramStudyOtherDiv.style.display = faculty ? 'block' : 'none'; // Show if faculty is selected
+                prodiProgramStudyOtherDiv.style.display = faculty ? 'block' : 'none';
             } else {
                 prodiProgramStudyOtherDiv.style.display = 'none';
             }
-            if (faculty && program) { // Ensure both faculty and program (either selected or typed) are present
+            if (faculty && program) {
                 finalName = `${faculty}-${program}`;
             } else {
-                finalName = ''; // Or handle as an error, prevent submission, etc.
+                finalName = '';
             }
         } else {
             finalName = nameStandardInput.value; 
@@ -508,14 +591,11 @@ document.addEventListener('DOMContentLoaded', function() {
         hiddenNameInput.value = finalName;
     }
     
-    roleSelect.addEventListener('change', function() {
-        updateAddFormVisibility();
-    });
-
+    roleSelect.addEventListener('change', updateAddFormVisibility);
     fakultasNameFakultasSelect.addEventListener('change', updateHiddenName);
     prodiFacultyAbbrSelect.addEventListener('change', function() {
         updateProgramStudiesDropdown(this.value, prodiProgramStudySelect, prodiProgramStudyOtherDiv, prodiProgramStudyOtherInput);
-        updateHiddenName(); // Update name in case prodi was already selected
+        updateHiddenName();
     });
     prodiProgramStudySelect.addEventListener('change', function() {
         if (this.value === '_OTHER_') {
@@ -523,28 +603,24 @@ document.addEventListener('DOMContentLoaded', function() {
             prodiProgramStudyOtherInput.focus();
         } else {
             prodiProgramStudyOtherDiv.style.display = 'none';
-            prodiProgramStudyOtherInput.value = ''; // Clear if another option is chosen
+            prodiProgramStudyOtherInput.value = '';
         }
         updateHiddenName();
     });
     prodiProgramStudyOtherInput.addEventListener('input', updateHiddenName);
     nameStandardInput.addEventListener('input', updateHiddenName); 
 
-
-    // --- Edit User Modal Logic ---
+    // --- Edit User Modal Logic (No changes needed here) ---
     const editUserModalElement = document.getElementById('editUserModal');
     const editUserModal = new bootstrap.Modal(editUserModalElement);
     const editUserForm = document.getElementById('edit-user-form');
     const editRoleSelect = document.getElementById('edit_role');
     const editOriginalNameInput = document.getElementById('edit_original_name');
-
     const editNameStandardDiv = document.getElementById('edit_name_standard_div');
     const editNameStandardInput = document.getElementById('edit_name_standard');
     const editHiddenNameInput = document.getElementById('edit_name'); 
-
     const editFakultasSelectionDiv = document.getElementById('edit_fakultas_selection_div');
     const editFakultasNameFakultasSelect = document.getElementById('edit_fakultas_name_fakultas');
-
     const editProdiSelectionDiv = document.getElementById('edit_prodi_selection_div');
     const editProdiFacultyAbbrSelect = document.getElementById('edit_prodi_faculty_abbr');
     const editProdiProgramStudySelect = document.getElementById('edit_prodi_program_study');
@@ -563,14 +639,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const parts = name.split('-', 2);
             faculty = parts[0];
             program = parts[1] || '';
-
-            // Check if this program is in the predefined list for the faculty
             if (facultiesAndProgramsData[faculty] && facultiesAndProgramsData[faculty].programs) {
                 if (!facultiesAndProgramsData[faculty].programs.includes(program)) {
-                    isOtherProdi = true; // It's not in the list, so it must have been an "other" entry
+                    isOtherProdi = true;
                 }
             } else {
-                isOtherProdi = true; // Faculty not found or has no programs, assume "other"
+                isOtherProdi = true;
             }
         }
         return { faculty, program, isOtherProdi };
@@ -650,7 +724,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 editProdiFacultyAbbrSelect.value = faculty;
                 updateProgramStudiesDropdown(faculty, editProdiProgramStudySelect, editProdiProgramStudyOtherDiv, editProdiProgramStudyOtherInput);
                 
-                setTimeout(() => { // Allow dropdown to populate
+                setTimeout(() => {
                     if (isOtherProdi) {
                         editProdiProgramStudySelect.value = '_OTHER_';
                         editProdiProgramStudyOtherInput.value = program;
@@ -667,7 +741,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 editNameStandardInput.value = currentName;
             }
             
-            document.getElementById('edit_email').value = currentEmail; // Ensure email field ID is correct
+            document.getElementById('edit_email').value = currentEmail;
             document.getElementById('edit_password').value = ''; 
 
             updateEditHiddenName(); 
@@ -684,7 +758,6 @@ document.addEventListener('DOMContentLoaded', function() {
             editProdiProgramStudyOtherDiv.style.display = 'none';
             editProdiProgramStudyOtherInput.value = '';
         }
-       // updateEditHiddenName(); // Already called by updateEditFormVisibility
     });
 
     editFakultasNameFakultasSelect.addEventListener('change', updateEditHiddenName);
@@ -705,7 +778,7 @@ document.addEventListener('DOMContentLoaded', function() {
     editProdiProgramStudyOtherInput.addEventListener('input', updateEditHiddenName);
     editNameStandardInput.addEventListener('input', updateEditHiddenName);
 
-    updateAddFormVisibility(); // Initial setup for Add form
+    updateAddFormVisibility();
 
     // --- Delete User Modal ---
     const deleteUserModalElement = document.getElementById('deleteUserModal');
@@ -727,7 +800,7 @@ document.addEventListener('DOMContentLoaded', function() {
         Swal.fire({ icon: 'error', title: 'Gagal!', text: '{{ session('error') }}', timer: 3000, showConfirmButton: false });
     @endif
 
-    // --- Search functionality ---
+    // --- UPDATED Search functionality ---
     function setupSearch(inputId, tableId) {
         const searchInput = document.getElementById(inputId);
         if (!searchInput) return;
@@ -740,7 +813,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    setupSearch('searchSystemInput', 'system-users-table');
+    // Setup search for all three tables
+    setupSearch('searchPemeringkatanInput', 'pemeringkatan-users-table');
+    setupSearch('searchInovasiInput', 'inovasi-users-table');
     setupSearch('searchRegisteredInput', 'registered-users-table');
 });
 </script>
