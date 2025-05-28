@@ -95,7 +95,7 @@ class UsersSeeder extends Seeder
         foreach ($facultiesAndProgramsData as $facultyAbbr => $facultyData) {
             // Create User record for Fakultas role
             $fakultasUserNameInUserTable = strtoupper($facultyAbbr);
-            $fakultasUserEmail = strtolower($facultyAbbr) . '@gmail.com'; 
+            $fakultasUserEmail = strtolower($facultyAbbr) . '@unj.ac.id'; 
             
             User::firstOrCreate(
                 ['email' => $fakultasUserEmail],
@@ -111,7 +111,7 @@ class UsersSeeder extends Seeder
             if (!empty($facultyData['programs'])) {
                 foreach ($facultyData['programs'] as $prodiName) {
                     $sanitizedProdiNameForEmail = strtolower(Str::slug($prodiName, '')); 
-                    $prodiUserEmail = $sanitizedProdiNameForEmail . '@gmail.com';
+                    $prodiUserEmail = $sanitizedProdiNameForEmail . '@unj.ac.id';
                     $prodiUserNameInUserTable = $fakultasUserNameInUserTable . '-' . $prodiName;
 
                     User::firstOrCreate(
