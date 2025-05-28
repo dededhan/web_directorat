@@ -323,6 +323,9 @@ Route::get('/Pemeringkatans/program/global-engagement', function () {
     return view('Pemeringkatan.program.global-engagement');
 })->name('Pemeringkatan.program.global-engagement');
 
+Route::get('/Pemeringkatans/programsustainability/programsustainability', function () {
+    return view('Pemeringkatan.programsustainability.programsustainability');
+})->name('Pemeringkatan.programsustainability.programsustainability');
 
 Route::get('/Pemeringkatans/program/lecturer-expose', function () {
     return view('Pemeringkatan.program.lecturer-expose');
