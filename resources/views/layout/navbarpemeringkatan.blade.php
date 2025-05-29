@@ -91,19 +91,13 @@
                             <i class="fas fa-chevron-right ml-2"></i>
                         </a>
                         <ul id="sustainability-dropdown" class="dropdown-menu nested-menu secondary-dropdown hidden">
-                            <li><a href="#">Kegiatan Sustainability</a></li>
+                            <li><a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}">Kegiatan Sustainability</a></li>
                             <li><a href="#">Mata Kuliah Sustainability</a></li>
                             
-                            <li class="relative">
-                                <a href="#" class="flex justify-between items-center tertiary-dropdown-toggle" data-dropdown="program-sustainability-dropdown">
+                           <li class="relative">
+                                <a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}" class="flex justify-between items-center">
                                     Program Sustainability UNJ
-                                    <i class="fas fa-chevron-right ml-2"></i>
                                 </a>
-                                <ul id="program-sustainability-dropdown" class="dropdown-menu nested-menu tertiary-dropdown hidden">
-                                    <li><a href="#">Tagihan Listrik</a></li>
-                                    <li><a href="#">BBM</a></li>
-                                    <li><a href="#">Sarpras Ramah Lingkungan</a></li>
-                                </ul>
                             </li>
                         </ul>
                     </li>
@@ -245,7 +239,7 @@
                                 </button>
                                 <ul class="hidden bg-[#0d4540]">
                                     <li>
-                                        <a href="#" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">
+                                        <a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">
                                             Kegiatan Sustainability
                                         </a>
                                     </li>
@@ -260,25 +254,8 @@
                                         <div class="nested-nested-sidebar-dropdown">
                                             <button class="flex justify-between items-center w-full text-white py-3 px-8 hover:bg-[#0a3c38]">
                                                 Program Sustainability UNJ
-                                                <i class="fas fa-chevron-right"></i>
+                                                
                                             </button>
-                                            <ul class="hidden bg-[#083633]">
-                                                <li>
-                                                    <a href="#" class="block text-white py-3 px-10 hover:bg-[#062f2c]">
-                                                        Tagihan Listrik
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="block text-white py-3 px-10 hover:bg-[#062f2c]">
-                                                        BBM
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="block text-white py-3 px-10 hover:bg-[#062f2c]">
-                                                        Sarpras Ramah Lingkungan
-                                                    </a>
-                                                </li>
-                                            </ul>
                                         </div>
                                     </li>
                                 </ul>

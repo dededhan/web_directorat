@@ -327,6 +327,10 @@ Route::get('/Pemeringkatans/programsustainability/programsustainability', functi
     return view('Pemeringkatan.programsustainability.programsustainability');
 })->name('Pemeringkatan.programsustainability.programsustainability');
 
+Route::get('/Pemeringkatan/kegiatansustainability/kegiatansustainability', function () {
+    return view('Pemeringkatan.kegiatansustainability.kegiatansustainability');
+})->name('Pemeringkatan.kegiatansustainability.kegiatansustainability');
+
 Route::get('/Pemeringkatans/program/lecturer-expose', function () {
     return view('Pemeringkatan.program.lecturer-expose');
 })->name('Pemeringkatan.program.lecturer-expose');
