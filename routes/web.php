@@ -319,6 +319,10 @@ Route::get('/Pemeringkatans/Ranking-Universitas/klaster-perguruan-tinggi', funct
     return view('Pemeringkatan.Ranking_Universitas.Pemeringkatan_Klaster_Perguruan_Tinggi');
 })->name('pemeringkatan.klaster');
 
+Route::get('/Pemeringkatans/matakuliahsustainability/matakuliahsustainability', function () {
+    return view('Pemeringkatan.matakuliahsustainability.matakuliahsustainability');
+})->name('Pemeringkatan.matakuliahsustainability.matakuliahsustainability');
+
 Route::get('/Pemeringkatans/program/global-engagement', function () {
     return view('Pemeringkatan.program.global-engagement');
 })->name('Pemeringkatan.program.global-engagement');
@@ -330,6 +334,7 @@ Route::get('/Pemeringkatans/programsustainability/programsustainability', functi
 Route::get('/Pemeringkatan/kegiatansustainability/kegiatansustainability', function () {
     return view('Pemeringkatan.kegiatansustainability.kegiatansustainability');
 })->name('Pemeringkatan.kegiatansustainability.kegiatansustainability');
+
 
 Route::get('/Pemeringkatans/program/lecturer-expose', function () {
     return view('Pemeringkatan.program.lecturer-expose');
