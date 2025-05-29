@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreRespondenRequest;
 use App\Http\Requests\UpdateRespondenRequest;
 use App\Models\Responden;
-use App\Models\User; // Added
+use App\Models\User;
 use Illuminate\Validation\Rule;
 use App\Imports\RespondenImport;
 use App\Exports\RespondenExport;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Auth; // Added
-use Illuminate\Support\Facades\Log;   // Added
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB; // Added for database queries
 
 class AdminRespondenController extends Controller
 {
@@ -22,11 +23,11 @@ class AdminRespondenController extends Controller
         $userFaculty = null;
 
         if ($user->role === 'fakultas') {
-            $userFaculty = strtolower($user->name); 
+            $userFaculty = strtolower($user->name);
         } elseif ($user->role === 'prodi') {
             $parts = explode('-', $user->name, 2);
             if (count($parts) === 2) {
-                $userFaculty = strtolower($parts[0]); 
+                $userFaculty = strtolower($parts[0]);
             } else {
                 Log::warning('Responden: Unexpected name format for prodi user: ' . $user->name, ['user_id' => $user->id]);
                 $userFaculty = strtolower($user->name);
@@ -44,21 +45,21 @@ class AdminRespondenController extends Controller
 
         $sort = $request->get('sort', 'fullname');
         $direction = $request->get('direction', 'asc');
-    
+
         $allowedSorts = ['title', 'fullname', 'jabatan', 'instansi', 'email', 'phone_responden', 'nama_dosen_pengusul', 'phone_dosen', 'fakultas', 'category', 'status'];
         if (!in_array($sort, $allowedSorts)) {
-            $sort = 'fullname'; 
+            $sort = 'fullname';
         }
         $direction = in_array(strtolower($direction), ['asc', 'desc']) ? $direction : 'asc';
-    
+
         $query = Responden::query();
-    
+
         if ($role === 'fakultas' || $role === 'prodi') {
             if ($userInfo['faculty_code']) {
                 $query->where('fakultas', $userInfo['faculty_code']);
             } else {
                 Log::warning('Responden Index: Could not determine faculty for user.', ['user_id' => $user->id, 'role' => $role]);
-                $query->whereRaw('1 = 0'); 
+                $query->whereRaw('1 = 0');
             }
         }
 
@@ -68,12 +69,20 @@ class AdminRespondenController extends Controller
         if (in_array($role, ['admin_direktorat', 'admin_pemeringkatan']) && $request->filled('fakultas')) {
             $query->where('fakultas', $request->fakultas);
         }
-    
+
+        // Add year filter if 'tahun' column exists and is provided in request
+        if ($request->filled('tahun') && Schema::hasColumn('respondens', 'tahun')) { // Assuming 'tahun' column
+            $query->where('tahun', $request->tahun);
+        } elseif ($request->filled('tahun')) { // Fallback to created_at if 'tahun' column doesn't exist
+            $query->whereYear('created_at', $request->tahun);
+        }
+
+
         $query->orderBy($sort, $direction);
         $respondens = $query->paginate(25)->appends($request->query());
-    
-        $viewData = ['respondens' => $respondens, 'user_info' => $userInfo]; 
-        $routePrefix = ''; 
+
+        $viewData = ['respondens' => $respondens, 'user_info' => $userInfo];
+        $routePrefix = '';
 
         switch ($role) {
             case 'admin_direktorat':
@@ -81,30 +90,30 @@ class AdminRespondenController extends Controller
                 return view('admin.respondenadmin', $viewData + ['routePrefix' => $routePrefix]);
             case 'admin_pemeringkatan':
                 $routePrefix = 'admin_pemeringkatan';
-                return view('admin_pemeringkatan.respondenadmin', $viewData + ['routePrefix' => $routePrefix]); // Ensure this view exists
+                return view('admin_pemeringkatan.respondenadmin', $viewData + ['routePrefix' => $routePrefix]);
             case 'fakultas':
                 $routePrefix = 'fakultas';
                 return view('fakultas.respondenadmin', $viewData + ['routePrefix' => $routePrefix]);
             case 'prodi':
                 $routePrefix = 'prodi';
-                return view('prodi.respondenadmin', $viewData + ['routePrefix' => $routePrefix]); 
+                return view('prodi.respondenadmin', $viewData + ['routePrefix' => $routePrefix]);
             default:
                 Log::error('Responden Index: Unhandled role.', ['user_id' => $user->id, 'role' => $role]);
                 return redirect('/')->with('error', 'Akses tidak sah.');
         }
     }
-    
+
 
     public function create()
     {
         if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas'])) {
-             return redirect()->back()->with('error', 'Anda tidak diizinkan membuat responden.');
+            return redirect()->back()->with('error', 'Anda tidak diizinkan membuat responden.');
         }
         $viewData = [];
-        if(Auth::user()->role === 'admin_direktorat' || Auth::user()->role === 'admin_pemeringkatan'){
+        if (Auth::user()->role === 'admin_direktorat' || Auth::user()->role === 'admin_pemeringkatan') {
             // $viewData['faculties'] = ... // Fetch faculties if admin needs to select
         }
-        return view('admin.responden.create', $viewData); // A generic create view, or role-specific
+        return view('admin.responden.create', $viewData);
     }
 
     public function store(StoreRespondenRequest $request)
@@ -112,9 +121,9 @@ class AdminRespondenController extends Controller
         $user = Auth::user();
         $role = $user->role;
         $respondenValidated = $request->validated();
-        
+
         if (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas'])) {
-             return redirect()->back()->with('error', 'Anda tidak diizinkan menyimpan responden.')->withInput();
+            return redirect()->back()->with('error', 'Anda tidak diizinkan menyimpan responden.')->withInput();
         }
 
         if ($role === 'fakultas') {
@@ -122,7 +131,7 @@ class AdminRespondenController extends Controller
             if ($userInfo['faculty_code']) {
                 if (isset($respondenValidated['responden_fakultas']) && $respondenValidated['responden_fakultas'] !== $userInfo['faculty_code']) {
                     Log::warning('Fakultas user trying to store responden for different faculty.', [
-                        'user_id' => $user->id, 
+                        'user_id' => $user->id,
                         'submitted_fakultas' => $respondenValidated['responden_fakultas'],
                         'user_fakultas' => $userInfo['faculty_code']
                     ]);
@@ -142,9 +151,10 @@ class AdminRespondenController extends Controller
             'phone_responden' => $respondenValidated['phone_responden'],
             'nama_dosen_pengusul' => $respondenValidated['responden_dosen'],
             'phone_dosen' => $respondenValidated['responden_dosen_phone'],
-            'fakultas' => $respondenValidated['responden_fakultas'], 
+            'fakultas' => $respondenValidated['responden_fakultas'],
             'category' => $respondenValidated['responden_category'],
-            // 'user_id' => $user->id, // kalo mau simpan unlock aje - grants
+            // 'user_id' => $user->id, //
+            // 'tahun' => $request->input('tahun_input_field', date('Y')), // Add this if you have a dedicated 'tahun' field in the form/table
         ]);
 
         $redirectRouteName = 'admin.responden.index';
@@ -168,12 +178,13 @@ class AdminRespondenController extends Controller
                 return redirect()->route($role . '.responden.index')->with('error', 'Anda tidak diizinkan melihat detail responden ini.');
             }
         } elseif (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan'])) {
-             return redirect()->route($role . '.dashboard')->with('error', 'Akses tidak sah.');
+            return redirect()->route($role . '.dashboard')->with('error', 'Akses tidak sah.');
         }
-        $viewName = 'admin.responden.show';
-        if($role === 'fakultas') $viewName = 'fakultas.responden.show';
-        if($role === 'prodi') $viewName = 'prodi.responden.show';
-        return response()->json($responden);
+        // $viewName = 'admin.responden.show'; // Assuming you might have a show view
+        // if($role === 'fakultas') $viewName = 'fakultas.responden.show';
+        // if($role === 'prodi') $viewName = 'prodi.responden.show';
+        // return view($viewName, compact('responden'));
+        return response()->json($responden); // If primarily used for AJAX details
     }
 
     public function edit(Responden $responden)
@@ -184,48 +195,53 @@ class AdminRespondenController extends Controller
 
         if ($role === 'fakultas' && $userInfo['faculty_code']) {
             if ($responden->fakultas !== $userInfo['faculty_code']) {
-                return response()->json(['message' => 'Anda tidak diizinkan mengedit responden ini.'], 403); 
+                return response()->json(['message' => 'Anda tidak diizinkan mengedit responden ini.'], 403);
             }
         } elseif (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan'])) {
-             return response()->json(['message' => 'Anda tidak diizinkan mengedit responden ini.'], 403); 
-
+            return response()->json(['message' => 'Anda tidak diizinkan mengedit responden ini.'], 403);
         }
 
-        if(request()->ajax()){
+        if (request()->ajax()) {
             return response()->json($responden);
         }
         $viewData = ['responden' => $responden];
-         if(Auth::user()->role === 'admin_direktorat' || Auth::user()->role === 'admin_pemeringkatan'){
-        }
-        return view('admin.responden.edit', $viewData); 
+        //  if(Auth::user()->role === 'admin_direktorat' || Auth::user()->role === 'admin_pemeringkatan'){
+        // }
+        // return view('admin.responden.edit', $viewData); // Or role-specific edit views
+        // Fallback or decide on a default edit view if not AJAX
+        $editView = 'admin.responden.edit'; // Default
+        if ($role === 'fakultas') $editView = 'fakultas.responden.edit';
+        // Add other roles if they have specific edit views
+        return view($editView, $viewData);
     }
 
-    public function update(UpdateRespondenRequest $request, $id)
+    public function update(UpdateRespondenRequest $request, $id) // UpdateRespondenRequest should have authorize() return true
     {
         $responden = Responden::findOrFail($id);
         $user = Auth::user();
         $role = $user->role;
         $userInfo = $this->getUserFacultyInfo($user);
-        $validated = $request->validated();
+        $validated = $request->validated(); // Ensure UpdateRespondenRequest has rules() defined
 
         if ($role === 'fakultas' && $userInfo['faculty_code']) {
             if ($responden->fakultas !== $userInfo['faculty_code']) {
                 return response()->json(['message' => 'Anda tidak diizinkan memperbarui responden ini.'], 403);
             }
+            // Ensure faculty is not changed by faculty user, or set it explicitly
             $validated['fakultas'] = $userInfo['faculty_code'];
         } elseif (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan'])) {
-             return response()->json(['message' => 'Anda tidak diizinkan memperbarui responden ini.'], 403);
+            return response()->json(['message' => 'Anda tidak diizinkan memperbarui responden ini.'], 403);
         }
-        
+
         $responden->update($validated);
-        
+
         if ($request->ajax()) {
             return response()->json([
                 'message' => 'Data berhasil diperbarui',
                 'data' => $responden
             ]);
         }
-        // role standard
+
         $redirectRouteName = 'admin.responden.index';
         if ($role === 'fakultas') $redirectRouteName = 'fakultas.responden.index';
         if ($role === 'admin_pemeringkatan') $redirectRouteName = 'admin_pemeringkatan.responden.index';
@@ -241,16 +257,16 @@ class AdminRespondenController extends Controller
         $validated = $request->validate([
             'status' => ['required', Rule::in(['belum', 'done', 'dones', 'clear'])]
         ]);
-    
+
         $responden = Responden::findOrFail($id);
         $responden->update($validated);
-    
+
         return response()->json([
             'message' => 'Status berhasil diperbarui',
             'new_status' => $validated['status']
         ]);
     }
-     
+
     public function destroy(Responden $responden)
     {
         $user = Auth::user();
@@ -267,7 +283,7 @@ class AdminRespondenController extends Controller
 
         try {
             $responden->delete();
-            $redirectRouteName = 'admin.responden.index'; 
+            $redirectRouteName = 'admin.responden.index';
             if ($role === 'fakultas') $redirectRouteName = 'fakultas.responden.index';
             if ($role === 'admin_pemeringkatan') $redirectRouteName = 'admin_pemeringkatan.responden.index';
 
@@ -280,59 +296,133 @@ class AdminRespondenController extends Controller
 
     public function import(Request $request)
     {
-         if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan'])) {
+        if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan'])) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
         $request->validate(['file' => 'required|mimes:xlsx,xls']);
         try {
             Excel::import(new RespondenImport($request->has('skip_duplicates')), $request->file('file'));
             return redirect()->back()->with('success', 'Data responden berhasil diimport!');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errorMessages = [];
+            foreach ($failures as $failure) {
+                $errorMessages[] = 'Row ' . $failure->row() . ': ' . implode(', ', $failure->errors());
+            }
+            return redirect()->back()->with('error', 'Error importing file: ' . implode('; ', $errorMessages));
         } catch (\Exception $e) {
+            Log::error('Import Error: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString());
             return redirect()->back()->with('error', 'Error importing file: ' . $e->getMessage());
         }
     }
 
-    public function filter(Request $request) 
+    public function filter(Request $request)
     {
+
         if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan'])) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
+
         $query = Responden::query();
-        if ($request->filled('email')) { 
+        if ($request->filled('email')) {
             $query->where('email', 'like', '%' . $request->email . '%');
         }
         if ($request->filled('phone')) {
             $query->where('phone_responden', 'like', '%' . $request->phone . '%');
         }
-        //pusing wak
         if ($request->filled('category')) {
             $query->where('category', $request->category);
         }
         if ($request->filled('fakultas')) {
             $query->where('fakultas', $request->fakultas);
         }
+        // Add year filter if 'tahun' column exists and is provided in request
+        if ($request->filled('tahun') && \Illuminate\Support\Facades\Schema::hasColumn('respondens', 'tahun')) {
+            $query->where('tahun', $request->tahun);
+        } elseif ($request->filled('tahun')) {
+            $query->whereYear('created_at', $request->tahun);
+        }
+
         $respondens = $query->paginate(25)->appends($request->query());
-        
-        return view('admin.respondenadmin', compact('respondens')); 
+
+        // Determine the correct view based on role, similar to index()
+        $role = Auth::user()->role;
+        $viewName = 'admin.respondenadmin'; // Default
+        if ($role === 'admin_pemeringkatan') {
+            $viewName = 'admin_pemeringkatan.respondenadmin';
+        } // Add other roles if they have specific views for filtered results
+
+        return view($viewName, compact('respondens'));
     }
 
     public function export(Request $request)
     {
-         if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan'])) {
+        if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan'])) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
         $kategori = $request->input('kategori');
         $fakultas = $request->input('fakultas');
-        return Excel::download(new RespondenExport($kategori, $fakultas), 'responden-data.xlsx');
+        $tahun = $request->input('tahun'); // Added year parameter
+        return Excel::download(new RespondenExport($kategori, $fakultas, $tahun), 'responden-data.xlsx');
     }
-    
+
     public function exportCSV(Request $request)
     {
-         if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan'])) {
+        if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan'])) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
         $kategori = $request->input('kategori');
         $fakultas = $request->input('fakultas');
-        return Excel::download(new RespondenExport($kategori, $fakultas), 'responden-data.csv');
+        $tahun = $request->input('tahun'); // Added year parameter
+        return Excel::download(new RespondenExport($kategori, $fakultas, $tahun), 'responden-data.csv');
+    }
+
+
+    public function getChartData(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $role = $user->role;
+            $userInfo = $this->getUserFacultyInfo($user);
+
+            $query = Responden::query();
+
+            // Apply role-based filtering
+            if ($role === 'fakultas' || $role === 'prodi') {
+                if ($userInfo['faculty_code']) {
+                    $query->where('fakultas', $userInfo['faculty_code']);
+                } else {
+                    Log::warning('Chart Data: Could not determine faculty for user.', ['user_id' => $user->id, 'role' => $role]);
+                    return response()->json([]);
+                }
+            }
+
+            // Get all responden data with required fields
+            $respondens = $query->select([
+                'id',
+                'fullname',
+                'fakultas',
+                'category',
+                'status',
+                'created_at'
+            ])->get();
+
+            // Transform data for frontend
+            $chartData = $respondens->map(function ($responden) {
+                return [
+                    'id' => $responden->id,
+                    'name' => $responden->fullname,
+                    'fakultas' => $responden->fakultas,
+                    'category' => $responden->category,
+                    'status' => $responden->status,
+                    'year' => $responden->created_at ? $responden->created_at->year : date('Y')
+                ];
+            });
+
+            return response()->json($chartData);
+        } catch (\Exception $e) {
+            Log::error('Error fetching chart data: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to fetch chart data'], 500);
+        }
     }
 }

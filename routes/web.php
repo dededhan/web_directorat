@@ -23,8 +23,14 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\InternationalFacultyStaffController;
 use App\Http\Controllers\DokumenController;
+use App\Http\Controllers\AdminRespondenController;
 
+Route::get('/api/responden-chart-data', [AdminRespondenController::class, 'getChartData'])->name('api.responden.chart-data');
 
+// Alternative: If you want to group it with other API routes
+Route::prefix('api')->group(function () {
+    Route::get('/responden-chart-data', [AdminRespondenController::class, 'getChartData'])->name('api.responden.chart-data');
+});
 
 Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
 

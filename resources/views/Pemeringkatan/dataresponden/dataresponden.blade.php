@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         * {
             margin: 0;
@@ -78,10 +78,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-
-        .dropdown-wrapper label::before {
-            font-size: 20px;
         }
 
         select {
@@ -160,7 +156,7 @@
 
         .chart.overview {
             justify-content: center;
-            gap: 80px;
+            gap: 80px; /* Adjusted gap for potentially 3 bars */
         }
 
         .chart.faculty {
@@ -185,8 +181,8 @@
         }
 
         .bar.overview-bar {
-            width: 120px;
-            min-width: 120px;
+            width: 100px; /* Adjusted width for potentially 3 bars */
+            min-width: 90px;
         }
 
         .bar.faculty-bar {
@@ -200,46 +196,6 @@
             z-index: 50;
         }
 
-        .bar::before {
-            content: attr(data-value);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%) translateY(-10px);
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-            background: rgba(44, 62, 80, 0.95);
-            padding: 8px 12px;
-            border-radius: 8px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            z-index: 1000;
-            pointer-events: none;
-        }
-
-        .bar::after {
-            content: '';
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%) translateY(-4px);
-            border: 6px solid transparent;
-            border-top-color: rgba(44, 62, 80, 0.95);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1000;
-            pointer-events: none;
-        }
-
-        .bar:hover::before,
-        .bar:hover::after {
-            opacity: 1;
-        }
-
-        /* Custom tooltip for better visibility */
         .tooltip {
             position: absolute;
             background: rgba(44, 62, 80, 0.95);
@@ -279,7 +235,7 @@
         }
 
         .chart-labels.overview {
-            gap: 80px;
+            gap: 80px; /* Adjusted gap for potentially 3 labels */
         }
 
         .chart-labels.faculty {
@@ -298,7 +254,7 @@
         }
 
         .label.overview-label {
-            width: 120px;
+            width: 100px;  /* Adjusted width for potentially 3 labels */
             font-size: 18px;
             color: #2c3e50;
         }
@@ -334,20 +290,53 @@
             margin-top: 40px;
         }
 
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+            font-size: 18px;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Category Colors */
-        .total { background: linear-gradient(135deg, #667eea, #764ba2); }
-        .employee { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .total { background: linear-gradient(135deg, #667eea, #764ba2); } /* For total responden bar */
+        .employer { background: linear-gradient(135deg, #43e97b, #38f9d7); }
         .academic { background: linear-gradient(135deg, #4facfe, #00f2fe); }
 
         /* Faculty Colors */
-        .faculty-1 { background: linear-gradient(135deg, #e5233c, #c41e3a); }
-        .faculty-2 { background: linear-gradient(135deg, #dda73a, #bf9000); }
-        .faculty-3 { background: linear-gradient(135deg, #4c9f38, #2d5016); }
-        .faculty-4 { background: linear-gradient(135deg, #c5192d, #8b0000); }
-        .faculty-5 { background: linear-gradient(135deg, #ff3a21, #e73c7e); }
-        .faculty-6 { background: linear-gradient(135deg, #26bde2, #1a8fb8); }
-        .faculty-7 { background: linear-gradient(135deg, #fcc30b, #dd9900); }
-        .faculty-8 { background: linear-gradient(135deg, #a21942, #8b1538); }
+        .faculty-fip { background: linear-gradient(135deg, #e5233c, #c41e3a); }
+        .faculty-fbs { background: linear-gradient(135deg, #dda73a, #bf9000); }
+        .faculty-fmipa { background: linear-gradient(135deg, #4c9f38, #2d5016); }
+        .faculty-ft { background: linear-gradient(135deg, #c5192d, #8b0000); }
+        .faculty-fis { background: linear-gradient(135deg, #ff3a21, #e73c7e); }
+        .faculty-fe { background: linear-gradient(135deg, #26bde2, #1a8fb8); }
+        .faculty-fpp { background: linear-gradient(135deg, #fcc30b, #dd9900); }
+        .faculty-fik { background: linear-gradient(135deg, #a21942, #8b1538); }
+        
+        /* Status Colors (ensure these classes provide distinct backgrounds if not already covered by faculty colors) */
+        /* If status colors are to be unique, define them here like .status-belum, .status-done etc. */
+        /* For now, re-using some faculty colors for demonstration as per original file */
+        .status-belum { background: linear-gradient(135deg, #e5233c, #c41e3a); } /* Example color */
+        .status-done { background: linear-gradient(135deg, #43e97b, #38f9d7); } /* Example color */
+        .status-dones { background: linear-gradient(135deg, #4facfe, #00f2fe); } /* Example color */
+        .status-clear { background: linear-gradient(135deg, #667eea, #764ba2); } /* Example color */
+
 
         @media (max-width: 768px) {
             .header h1 {
@@ -375,7 +364,7 @@
             }
 
             .chart.overview {
-                gap: 40px;
+                gap: 40px; /* Adjusted */
             }
 
             .chart.faculty {
@@ -383,7 +372,7 @@
             }
 
             .chart-labels.overview {
-                gap: 40px;
+                gap: 40px; /* Adjusted */
             }
 
             .chart-labels.faculty {
@@ -391,8 +380,8 @@
             }
 
             .bar.overview-bar {
-                width: 100px;
-                min-width: 80px;
+                width: 80px; /* Adjusted */
+                min-width: 70px;
             }
 
             .bar.faculty-bar {
@@ -401,7 +390,7 @@
             }
 
             .label.overview-label {
-                width: 100px;
+                width: 80px; /* Adjusted */
                 font-size: 16px;
             }
 
@@ -432,16 +421,16 @@
             }
 
             .chart.overview {
-                gap: 20px;
+                gap: 20px; /* Adjusted */
             }
 
             .chart-labels.overview {
-                gap: 20px;
+                gap: 20px; /* Adjusted */
             }
 
             .bar.overview-bar {
-                width: 80px;
-                min-width: 70px;
+                width: 70px; /* Adjusted */
+                min-width: 60px;
             }
 
             .bar.faculty-bar {
@@ -450,7 +439,7 @@
             }
 
             .label.overview-label {
-                width: 80px;
+                width: 70px; /* Adjusted */
                 font-size: 14px;
             }
 
@@ -462,97 +451,129 @@
         }
     </style>
 </head>
-     @include('layout.navbar_pemeringkatan')
 <body>
+    @include('layout.navbar_pemeringkatan')
+    
     <div class="main-content-wrapper">
         <div class="header">
             <h1>Data Responden</h1>
+            <p>Dashboard Analisis Responden Universitas</p>
         </div>
 
         <div class="dropdown-container">
             <div class="dropdown-wrapper">
                 <label for="year-select">📅 Tahun</label>
-                <select id="year-select" onchange="updateOverviewChart()" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400 text-base font-medium bg-white shadow-sm transition">
+                <select id="year-select" onchange="updateCharts()" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400 text-base font-medium bg-white shadow-sm transition">
                     <option value="2024">2024</option>
                     <option value="2025" selected>2025</option>
                 </select>
             </div>
+            <div class="dropdown-wrapper">
+                <label for="faculty-select">🏛️ Fakultas</label>
+                <select id="faculty-select" onchange="updateCharts()" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400 text-base font-medium bg-white shadow-sm transition">
+                    <option value="">Semua Fakultas</option>
+                    <option value="fip">FIP - Fakultas Ilmu Pendidikan</option>
+                    <option value="fbs">FBS - Fakultas Bahasa dan Seni</option>
+                    <option value="fmipa">FMIPA - Fakultas Matematika dan IPA</option>
+                    <option value="ft">FT - Fakultas Teknik</option>
+                    <option value="fis">FIS - Fakultas Ilmu Sosial</option>
+                    <option value="fe">FE - Fakultas Ekonomi</option>
+                    <option value="fpp">FPP - Fakultas Pendidikan Psikologi</option>
+                    <option value="fik">FIK - Fakultas Ilmu Keolahragaan</option>
+                </select>
+            </div>
         </div>
 
-        <!-- Custom tooltip element -->
         <div id="custom-tooltip" class="tooltip"></div>
 
-        <!-- Overview Chart: Total Employee & Academic -->
         <div class="chart-section">
-            <h2 class="chart-title" id="overview-chart-title">Total Employee dan Academic Tahun 2025</h2>
+            <h2 class="chart-title" id="overview-chart-title">Total Responden Tahun 2025</h2>
             <div class="chart-container">
                 <div class="chart-wrapper">
-                    <div class="chart overview" id="overview-chart"></div>
-                    <div class="chart-labels overview" id="overview-labels"></div>
+                    <div id="overview-loading" class="loading">Memuat data...</div>
+                    <div class="chart overview" id="overview-chart" style="display: none;"></div>
+                    <div class="chart-labels overview" id="overview-labels" style="display: none;"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Employee by Faculty -->
         <div class="chart-section section-divider">
-            <h2 class="chart-title">Employee Berdasarkan Fakultas</h2>
+            <h2 class="chart-title" id="employer-faculty-chart-title">Employee Berdasarkan Fakultas Tahun 2025</h2>
             <div class="chart-container">
                 <div class="chart-wrapper">
-                    <div class="chart faculty" id="employee-chart"></div>
-                    <div class="chart-labels faculty" id="employee-labels"></div>
+                    <div id="employer-loading" class="loading">Memuat data...</div>
+                    <div class="chart faculty" id="employer-chart" style="display: none;"></div>
+                    <div class="chart-labels faculty" id="employer-labels" style="display: none;"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Academic by Faculty -->
         <div class="chart-section section-divider">
-            <h2 class="chart-title">Academic Berdasarkan Fakultas</h2>
+            <h2 class="chart-title" id="academic-faculty-chart-title">Academic Berdasarkan Fakultas Tahun 2025</h2>
             <div class="chart-container">
                 <div class="chart-wrapper">
-                    <div class="chart faculty" id="academic-chart"></div>
-                    <div class="chart-labels faculty" id="academic-labels"></div>
+                    <div id="academic-loading" class="loading">Memuat data...</div>
+                    <div class="chart faculty" id="academic-chart" style="display: none;"></div>
+                    <div class="chart-labels faculty" id="academic-labels" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-section section-divider">
+            <h2 class="chart-title" id="status-chart-title">Distribusi Status Responden Tahun 2025</h2>
+            <div class="chart-container">
+                <div class="chart-wrapper">
+                    <div id="status-loading" class="loading">Memuat data...</div>
+                    <div class="chart overview" id="status-chart" style="display: none;"></div>
+                    <div class="chart-labels overview" id="status-labels" style="display: none;"></div>
                 </div>
             </div>
         </div>
     </div>
-    @include('layout.footer') 
+
+    @include('layout.footer')
+
     <script>
-        const overviewCategories = ["Employee", "Academic"];
-        const facultyNames = ["FIP", "FBS", "FMIPA", "FT", "FIS", "FE", "FPP", "FIK"];
+        // Configuration
+        const facultyMapping = {
+            'fip': 'FIP',
+            'fbs': 'FBS', 
+            'fmipa': 'FMIPA',
+            'ft': 'FT',
+            'fis': 'FIS',
+            'fe': 'FE',
+            'fpp': 'FPP',
+            'fik': 'FIK'
+        };
+
         const facultyFullNames = {
-            FIP: "Fakultas Ilmu Pendidikan",
-            FBS: "Fakultas Bahasa dan Seni",
-            FMIPA: "Fakultas Matematika dan IPA",
-            FT: "Fakultas Teknik",
-            FIS: "Fakultas Ilmu Sosial",
-            FE: "Fakultas Ekonomi",
-            FPP: "Fakultas Pendidikan Psikologi",
-            FIK: "Fakultas Ilmu Keolahragaan"
-        };
-        
-        // Colors
-        const overviewColors = ['employee', 'academic'];
-        const facultyColors = ['faculty-1', 'faculty-2', 'faculty-3', 'faculty-4', 'faculty-5', 'faculty-6', 'faculty-7', 'faculty-8'];
-
-        // Sample data - you can modify these numbers as needed
-        const overviewData = {
-            2024: [100, 110], // [Employee, Academic] for 2024
-            2025: [70, 100]  // [Employee, Academic] for 2025
+            'FIP': 'Fakultas Ilmu Pendidikan',
+            'FBS': 'Fakultas Bahasa dan Seni',
+            'FMIPA': 'Fakultas Matematika dan IPA',
+            'FT': 'Fakultas Teknik',
+            'FIS': 'Fakultas Ilmu Sosial',
+            'FE': 'Fakultas Ekonomi',
+            'FPP': 'Fakultas Pendidikan Psikologi',
+            'FIK': 'Fakultas Ilmu Keolahragaan'
         };
 
-        // Employee data by faculty
-        const employeeData = [55, 58, 48, 68, 60, 52, 42, 45]; // FIP, FBS, FMIPA, FT, FIS, FE, FPP, FIK
+        // Adjusted overviewColors to match the new three-bar setup
+        const overviewColors = ['employer', 'academic', 'total']; // CSS classes for styling
+        const facultyColors = ['faculty-fip', 'faculty-fbs', 'faculty-fmipa', 'faculty-ft', 'faculty-fis', 'faculty-fe', 'faculty-fpp', 'faculty-fik'];
+        // Define specific CSS classes for status bars for clarity, or use existing ones if appropriate
+        const statusColors = ['status-belum', 'status-done', 'status-dones', 'status-clear'];
 
-        // Academic data by faculty
-        const academicData = [30, 34, 30, 42, 35, 36, 23, 27]; // FIP, FBS, FMIPA, FT, FIS, FE, FPP, FIK
+
+        // Global data storage (not strictly needed with current fetch-on-update approach)
+        // let allRespondenData = []; // To store initially fetched data
 
         // Custom tooltip functionality
         const tooltip = document.getElementById('custom-tooltip');
 
         function showTooltip(event, text) {
             tooltip.textContent = text;
-            tooltip.style.left = event.pageX + 'px';
-            tooltip.style.top = (event.pageY - 60) + 'px';
+            tooltip.style.left = event.pageX + 15 + 'px'; // Offset slightly from cursor
+            tooltip.style.top = (event.pageY - 50) + 'px'; // Position above cursor
             tooltip.classList.add('show');
         }
 
@@ -560,46 +581,189 @@
             tooltip.classList.remove('show');
         }
 
-        function createOverviewChart(containerId, labelsId, data, categories, colors) {
-            const chartContainer = document.getElementById(containerId);
-            const labelsContainer = document.getElementById(labelsId);
+        // Fetch data from Laravel backend
+        async function fetchRespondenData() {
+            try {
+                const response = await fetch('/api/responden-chart-data', { // Ensure this route is correct
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                });
+
+                if (!response.ok) {
+                    console.error('Network response was not ok', response);
+                    return null; // Return null on error
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                return null; // Return null on error
+            }
+        }
+
+        // Create overview chart (employer vs Academic vs Total)
+        function createOverviewChart(dataCounts, categories, colorClasses) {
+            const chartContainer = document.getElementById('overview-chart');
+            const labelsContainer = document.getElementById('overview-labels');
+            const loadingElement = document.getElementById('overview-loading');
             
             chartContainer.innerHTML = '';
             labelsContainer.innerHTML = '';
 
-            const maxValue = Math.max(...data);
+            // Check if dataCounts is valid and has values
+            if (!dataCounts || dataCounts.length === 0 || dataCounts.every(val => val === 0 && categories.length > 0) ) {
+                 // If all counts are zero, we might still want to show 0-height bars
+                 // So, only show "Tidak ada data" if there are no categories to even attempt to plot
+                if (categories.length === 0) {
+                    loadingElement.textContent = 'Tidak ada kategori untuk ditampilkan.';
+                    loadingElement.style.display = 'block';
+                    chartContainer.style.display = 'none';
+                    labelsContainer.style.display = 'none';
+                    return;
+                }
+            }
             
-            data.forEach((value, index) => {
-                // Create bar container
+            loadingElement.style.display = 'none';
+            chartContainer.style.display = 'flex';
+            labelsContainer.style.display = 'flex';
+
+            const maxValue = Math.max(...dataCounts, 1); // Use Math.max(...dataCounts, 1) to avoid division by zero if all are 0
+            
+            dataCounts.forEach((value, index) => {
                 const barContainer = document.createElement('div');
                 barContainer.className = 'bar-container';
                 
-                // Create bar
                 const bar = document.createElement('div');
-                bar.className = `bar overview-bar ${colors[index]}`;
-                bar.style.height = `${(value / maxValue) * 320}px`;
-                bar.setAttribute('data-value', `${value} orang`);
-                bar.title = `${categories[index]}: ${value} orang`;
-                
-                // Add animation delay for staggered effect
+                // Use colorClasses to assign CSS classes for bar styling
+                bar.className = `bar overview-bar ${colorClasses[index]}`; 
+                bar.style.height = `${maxValue > 0 ? (value / maxValue) * 320 : 0}px`;
                 bar.style.animationDelay = `${index * 0.2}s`;
 
-                // Enhanced tooltip events
                 bar.addEventListener('mouseenter', (e) => {
                     showTooltip(e, `${categories[index]}: ${value} orang`);
                 });
-
-                bar.addEventListener('mousemove', (e) => {
-                    tooltip.style.left = e.pageX + 'px';
-                    tooltip.style.top = (e.pageY - 60) + 'px';
+                bar.addEventListener('mousemove', (e) => { // Keep tooltip position updated
+                    tooltip.style.left = e.pageX + 15 + 'px';
+                    tooltip.style.top = (e.pageY - 50) + 'px';
                 });
-
                 bar.addEventListener('mouseleave', hideTooltip);
                 
                 barContainer.appendChild(bar);
                 chartContainer.appendChild(barContainer);
 
-                // Create label
+                const label = document.createElement('div');
+                label.className = 'label overview-label';
+                label.textContent = categories[index];
+                labelsContainer.appendChild(label);
+            });
+        }
+        
+        // Create faculty chart
+        function createFacultyChart(containerId, labelsId, loadingId, dataCounts, facultyDisplayNames, colorClasses) {
+            const chartContainer = document.getElementById(containerId);
+            const labelsContainer = document.getElementById(labelsId);
+            const loadingElement = document.getElementById(loadingId);
+            
+            chartContainer.innerHTML = '';
+            labelsContainer.innerHTML = '';
+
+            if (!dataCounts || facultyDisplayNames.length === 0) {
+                loadingElement.textContent = 'Tidak ada data fakultas untuk ditampilkan.';
+                loadingElement.style.display = 'block';
+                chartContainer.style.display = 'none';
+                labelsContainer.style.display = 'none';
+                return;
+            }
+            // If dataCounts might be all zeros, still proceed to draw 0-height bars.
+            // const allZero = dataCounts.every(val => val === 0);
+            // if (allZero) {
+            //    loadingElement.textContent = 'Tidak ada data untuk filter ini.'; // Or just show 0-height bars
+            // }
+
+
+            loadingElement.style.display = 'none';
+            chartContainer.style.display = 'flex';
+            labelsContainer.style.display = 'flex';
+
+            const maxValue = Math.max(...dataCounts, 1); // Use Math.max(...dataCounts, 1) to avoid division by zero
+            
+            dataCounts.forEach((value, index) => {
+                const barContainer = document.createElement('div');
+                barContainer.className = 'bar-container';
+                
+                const bar = document.createElement('div');
+                bar.className = `bar faculty-bar ${colorClasses[index % colorClasses.length]}`; // Cycle through colors if not enough
+                bar.style.height = `${maxValue > 0 ? (value / maxValue) * 280 : 0}px`;
+                bar.style.animationDelay = `${index * 0.1}s`;
+
+                bar.addEventListener('mouseenter', (e) => {
+                    const fullName = facultyFullNames[facultyDisplayNames[index]] || facultyDisplayNames[index];
+                    showTooltip(e, `${fullName}: ${value} orang`);
+                });
+                bar.addEventListener('mousemove', (e) => { // Keep tooltip position updated
+                    tooltip.style.left = e.pageX + 15 + 'px';
+                    tooltip.style.top = (e.pageY - 50) + 'px';
+                });
+                bar.addEventListener('mouseleave', hideTooltip);
+                
+                barContainer.appendChild(bar);
+                chartContainer.appendChild(barContainer);
+
+                const label = document.createElement('div');
+                label.className = 'label faculty-label';
+                label.textContent = facultyDisplayNames[index]; // Use the display name (e.g., FIP)
+                labelsContainer.appendChild(label);
+            });
+        }
+
+        // Create status distribution chart (reuses createOverviewChart logic)
+        function createStatusChart(dataCounts, categories, colorClasses) {
+            const chartContainer = document.getElementById('status-chart');
+            const labelsContainer = document.getElementById('status-labels');
+            const loadingElement = document.getElementById('status-loading');
+
+            chartContainer.innerHTML = '';
+            labelsContainer.innerHTML = '';
+
+            if (!dataCounts || dataCounts.length === 0 || dataCounts.every(val => val === 0 && categories.length > 0)) {
+                 if (categories.length === 0) {
+                    loadingElement.textContent = 'Tidak ada status untuk ditampilkan.';
+                    loadingElement.style.display = 'block';
+                    chartContainer.style.display = 'none';
+                    labelsContainer.style.display = 'none';
+                    return;
+                }
+            }
+
+            loadingElement.style.display = 'none';
+            chartContainer.style.display = 'flex';
+            labelsContainer.style.display = 'flex';
+
+            const maxValue = Math.max(...dataCounts, 1);
+
+            dataCounts.forEach((value, index) => {
+                const barContainer = document.createElement('div');
+                barContainer.className = 'bar-container';
+
+                const bar = document.createElement('div');
+                bar.className = `bar overview-bar ${colorClasses[index % colorClasses.length]}`;
+                bar.style.height = `${maxValue > 0 ? (value / maxValue) * 320 : 0}px`;
+                bar.style.animationDelay = `${index * 0.2}s`;
+
+                bar.addEventListener('mouseenter', (e) => {
+                    showTooltip(e, `${categories[index]}: ${value} responden`);
+                });
+                bar.addEventListener('mousemove', (e) => {
+                    tooltip.style.left = e.pageX + 15 + 'px';
+                    tooltip.style.top = (e.pageY - 50) + 'px';
+                });
+                bar.addEventListener('mouseleave', hideTooltip);
+
+                barContainer.appendChild(bar);
+                chartContainer.appendChild(barContainer);
+
                 const label = document.createElement('div');
                 label.className = 'label overview-label';
                 label.textContent = categories[index];
@@ -607,80 +771,137 @@
             });
         }
 
-        function createFacultyChart(containerId, labelsId, data, facultyNames, colors) {
-            const chartContainer = document.getElementById(containerId);
-            const labelsContainer = document.getElementById(labelsId);
-            
-            chartContainer.innerHTML = '';
-            labelsContainer.innerHTML = '';
 
-            const maxValue = Math.max(...data);
-            
-            data.forEach((value, index) => {
-                // Create bar container
-                const barContainer = document.createElement('div');
-                barContainer.className = 'bar-container';
-                
-                // Create bar
-                const bar = document.createElement('div');
-                bar.className = `bar faculty-bar ${colors[index]}`;
-                bar.style.height = `${(value / maxValue) * 280}px`;
-                bar.setAttribute('data-value', `${value} orang`);
-                bar.title = `${facultyNames[index]}: ${value} orang`;
-                
-                // Add animation delay for staggered effect
-                bar.style.animationDelay = `${index * 0.1}s`;
-
-                // Enhanced tooltip events
-                bar.addEventListener('mouseenter', (e) => {
-                    const fullName = facultyFullNames[facultyNames[index]] || facultyNames[index];
-                    showTooltip(e, `${fullName}: ${value} orang`);
-                });
-
-                bar.addEventListener('mousemove', (e) => {
-                    tooltip.style.left = e.pageX + 'px';
-                    tooltip.style.top = (e.pageY - 60) + 'px';
-                });
-
-                bar.addEventListener('mouseleave', hideTooltip);
-                
-                barContainer.appendChild(bar);
-                chartContainer.appendChild(barContainer);
-
-                // Create label
-                const label = document.createElement('div');
-                label.className = 'label faculty-label';
-                label.textContent = facultyNames[index];
-                labelsContainer.appendChild(label);
-            });
-        }
-
-        function updateOverviewChart() {
+        // Update all charts
+        async function updateCharts() {
             const selectedYear = document.getElementById('year-select').value;
-            const data = overviewData[selectedYear];
-            const titleElement = document.getElementById('overview-chart-title');
-            titleElement.textContent = `Total Employee dan Academic Tahun ${selectedYear}`;
-            createOverviewChart('overview-chart', 'overview-labels', data, overviewCategories, overviewColors);
+            const selectedFacultyCode = document.getElementById('faculty-select').value; // This will be 'fip', 'fbs', etc. or ""
+            
+            // Show loading states
+            document.getElementById('overview-loading').style.display = 'block';
+            document.getElementById('employer-loading').style.display = 'block';
+            document.getElementById('academic-loading').style.display = 'block';
+            document.getElementById('status-loading').style.display = 'block';
+            
+            document.getElementById('overview-chart').style.display = 'none';
+            document.getElementById('overview-labels').style.display = 'none';
+            document.getElementById('employer-chart').style.display = 'none';
+            document.getElementById('employer-labels').style.display = 'none';
+            document.getElementById('academic-chart').style.display = 'none';
+            document.getElementById('academic-labels').style.display = 'none';
+            document.getElementById('status-chart').style.display = 'none';
+            document.getElementById('status-labels').style.display = 'none';
+
+            // Update titles with selected year
+            document.getElementById('overview-chart-title').textContent = `Total Responden Tahun ${selectedYear}`;
+            document.getElementById('employer-faculty-chart-title').textContent = `Employee Berdasarkan Fakultas Tahun ${selectedYear}`;
+            document.getElementById('academic-faculty-chart-title').textContent = `Academic Berdasarkan Fakultas Tahun ${selectedYear}`;
+            document.getElementById('status-chart-title').textContent = `Distribusi Status Responden Tahun ${selectedYear}`;
+
+            // Fetch fresh data
+            const rawData = await fetchRespondenData();
+            
+            if (!rawData) {
+                ['overview-loading', 'employer-loading', 'academic-loading', 'status-loading'].forEach(id => {
+                    document.getElementById(id).textContent = 'Error memuat data. Coba lagi nanti.';
+                    document.getElementById(id).style.display = 'block';
+                });
+                return;
+            }
+
+            // Filter data by selected year
+            const dataForSelectedYear = rawData.filter(item => item.year == selectedYear);
+
+            if (dataForSelectedYear.length === 0) {
+                const noDataMessage = `Tidak ada data responden untuk tahun ${selectedYear}.`;
+                ['overview-loading', 'employer-loading', 'academic-loading', 'status-loading'].forEach(id => {
+                    document.getElementById(id).textContent = noDataMessage;
+                    document.getElementById(id).style.display = 'block';
+                });
+                // Ensure charts remain hidden
+                createOverviewChart([], [], []); // Call with empty to clear if previously drawn
+                createFacultyChart('employer-chart', 'employer-labels', 'employer-loading', [], [], []);
+                createFacultyChart('academic-chart', 'academic-labels', 'academic-loading', [], [], []);
+                createStatusChart([], [], []);
+                return;
+            }
+            
+            // Data for Overview and Status charts (filtered by year AND selected faculty if any)
+            let filteredDataForOverviewAndStatus = [...dataForSelectedYear];
+            if (selectedFacultyCode) { // if a specific faculty is selected
+                filteredDataForOverviewAndStatus = filteredDataForOverviewAndStatus.filter(item => item.fakultas && item.fakultas.toLowerCase() === selectedFacultyCode);
+            }
+
+            // --- 1. Process Overview Chart Data (employer, Academic, Total) ---
+            const employerCount = filteredDataForOverviewAndStatus.filter(item => item.category === 'employer').length;
+            const academicCount = filteredDataForOverviewAndStatus.filter(item => item.category === 'academic').length;
+            const totalRespondenCount = employerCount + academicCount; 
+            
+            const overviewDataCounts = [employerCount, academicCount, totalRespondenCount];
+            const overviewCategories = ['employer', 'Academic', 'Total Responden'];
+            createOverviewChart(overviewDataCounts, overviewCategories, overviewColors);
+
+            // --- 2. Process Faculty Data for employer & Academic (uses dataForSelectedYear - only filtered by year) ---
+            const employerFacultyDataCounts = [];
+            const academicFacultyDataCounts = [];
+            const facultyDisplayNamesForChart = []; // e.g., ['FIP', 'FBS', ...]
+
+            Object.keys(facultyMapping).forEach(facultyKeyLower => { // 'fip', 'fbs', ...
+                const facultyDisplayName = facultyMapping[facultyKeyLower]; // 'FIP', 'FBS', ...
+                
+                const employerInFaculty = dataForSelectedYear.filter(item => 
+                    item.fakultas && item.fakultas.toLowerCase() === facultyKeyLower && item.category === 'employer'
+                ).length;
+                const academicInFaculty = dataForSelectedYear.filter(item => 
+                    item.fakultas && item.fakultas.toLowerCase() === facultyKeyLower && item.category === 'academic'
+                ).length;
+
+                employerFacultyDataCounts.push(employerInFaculty);
+                academicFacultyDataCounts.push(academicInFaculty);
+                facultyDisplayNamesForChart.push(facultyDisplayName);
+            });
+
+            createFacultyChart('employer-chart', 'employer-labels', 'employer-loading', 
+                employerFacultyDataCounts, facultyDisplayNamesForChart, facultyColors);
+            
+            createFacultyChart('academic-chart', 'academic-labels', 'academic-loading', 
+                academicFacultyDataCounts, facultyDisplayNamesForChart, facultyColors);
+
+            const statusCounts = {
+                'belum': 0,
+                'done': 0,
+                'dones': 0, 
+                'clear': 0
+            };
+            const statusLabels = ['Belum', 'Done', 'Dones', 'Clear']; 
+
+            filteredDataForOverviewAndStatus.forEach(item => {
+                if (statusCounts.hasOwnProperty(item.status)) {
+                    statusCounts[item.status]++;
+                } else if (item.status) { // Log unexpected status
+                    console.warn(`Unexpected status value: ${item.status}`);
+                }
+            });
+            
+            // Ensure the order of statusDataCounts matches statusLabels
+            const statusDataCounts = statusLabels.map(label => statusCounts[label.toLowerCase()] || 0);
+            // If status values in db are exactly 'belum', 'done', 'dones', 'clear':
+            // const statusDataCounts = [statusCounts.belum, statusCounts.done, statusCounts.dones, statusCounts.clear];
+
+            createStatusChart(statusDataCounts, statusLabels, statusColors);
         }
 
-        function initializeCharts() {
-            // Initialize overview chart
-            updateOverviewChart();
-            
-            // Initialize employee by faculty chart
-            createFacultyChart('employee-chart', 'employee-labels', employeeData, facultyNames, facultyColors);
-            
-            // Initialize academic by faculty chart
-            createFacultyChart('academic-chart', 'academic-labels', academicData, facultyNames, facultyColors);
-        }
-
-        // Initialize all charts when page loads
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            initializeCharts();
+            updateCharts();
         });
 
-        // Hide tooltip when clicking elsewhere
-        document.addEventListener('click', hideTooltip);
+        // Hide tooltip when clicking elsewhere (optional, if it gets stuck)
+        // document.addEventListener('click', (event) => {
+        //    if (!tooltip.contains(event.target) && !event.target.classList.contains('bar')) {
+        //        hideTooltip();
+        //    }
+        // });
     </script>
 </body>
 </html>
