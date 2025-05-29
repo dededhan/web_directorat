@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\InternationalFacultyStaffController;
+use App\Http\Controllers\DokumenController;
 
 
 
@@ -331,11 +332,12 @@ Route::get('/Pemeringkatans/programsustainability/programsustainability', functi
     return view('Pemeringkatan.programsustainability.programsustainability');
 })->name('Pemeringkatan.programsustainability.programsustainability');
 
-Route::get('/Pemeringkatan/kegiatansustainability/kegiatansustainability', function () {
+Route::get('/Pemeringkatan/kegiatansustainability', function () {
     return view('Pemeringkatan.kegiatansustainability.kegiatansustainability');
 })->name('Pemeringkatan.kegiatansustainability.kegiatansustainability');
+Route::get('/api/sustainability-graph-data', [AdminSustainabilityController::class, 'getGraphData'])->name('api.sustainability.graph_data');
 
-Route::get('/Pemeringkatan/dataresponden/dataresponden', function () {
+Route::get('/Pemeringkatan/dataresponden', function () {
     return view('Pemeringkatan.dataresponden.dataresponden');
 })->name('Pemeringkatan.dataresponden.dataresponden');
 
@@ -354,5 +356,8 @@ Route::get('/Pemeringkatan/program/international-student-mobility', function () 
     return view('Pemeringkatan.program.international-student-mobility');
 })->name('Pemeringkatan.program.international-student-mobility');
 
-// collection of admin-like routes
+
+
+
+
 require __DIR__ . '/admin.php';
