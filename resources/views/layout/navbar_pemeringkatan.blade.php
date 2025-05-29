@@ -92,8 +92,8 @@
                             <i class="fas fa-chevron-right ml-2"></i>
                         </a>
                         <ul id="sustainability-dropdown" class="dropdown-menu nested-menu secondary-dropdown hidden">
-                            <li><a href="#">Kegiatan Sustainability</a></li>
-                            <li><a href="#">Mata Kuliah Sustainability</a></li>
+                            <li><a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}">Kegiatan Sustainability</a></li>
+                            <li><a href="{{ route('Pemeringkatan.matakuliahsustainability.matakuliahsustainability') }}">Mata Kuliah Sustainability</a></li>
                             
                             <li class="relative">
                                 <a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}" class="flex justify-between items-center">
@@ -104,14 +104,9 @@
                     </li>
                     
                     <li class="relative">
-                        <a href="#" class="flex justify-between items-center secondary-dropdown-toggle" data-dropdown="data-responden-dropdown">
+                        <a href="{{ route('Pemeringkatan.dataresponden.dataresponden') }}" class="flex justify-between items-center">
                             Data Responden
-                            <i class="fas fa-chevron-right ml-2"></i>
                         </a>
-                        <ul id="data-responden-dropdown" class="dropdown-menu nested-menu secondary-dropdown hidden">
-                            <li><a href="#">Academic</a></li>
-                            <li><a href="#">Employee</a></li>
-                        </ul>
                     </li>
                 </ul>
             </li>

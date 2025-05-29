@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kegiatan Sustainability</title>
+    <title>Data Responden</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -317,7 +317,7 @@
 
     <div class="main-content-wrapper">
         <div class="header">
-            <h1>Kegiatan Sustainability</h1>
+            <h1>Data Responden</h1>
             <p>Sustainable Development Goals Monitoring</p>
         </div>
 
@@ -332,7 +332,7 @@
         </div>
 
         <div class="chart-section">
-            <h2 class="chart-title" id="year-chart-title">Progress Kegiatan Sustainability Tahun 2025</h2>
+            <h2 class="chart-title" id="year-chart-title">Progress Data Responden Tahun 2025</h2>
             <div class="chart-container">
                 <div class="chart" id="year-chart"></div>
                 <div class="chart-labels" id="year-labels"></div>
@@ -357,7 +357,7 @@
             </div>
 
             <div class="chart-section">
-                <h2 class="chart-title" id="faculty-chart-title">Progress SDGs Fakultas Ilmu Pendidikan (FIP)</h2>
+                <h2 class="chart-title" id="faculty-chart-title">Progress Data Responden Fakultas Ilmu Pendidikan (FIP)</h2>
                 <div class="chart-container">
                     <div class="chart" id="faculty-chart"></div>
                     <div class="chart-labels" id="faculty-labels"></div>
@@ -455,7 +455,7 @@
             const selectedYear = document.getElementById('year-select').value;
             const data = yearData[selectedYear];
             const titleElement = document.getElementById('year-chart-title');
-            titleElement.textContent = `Progress Kegiatan Sustainability Tahun ${selectedYear}`;
+            titleElement.textContent = `Progress Data Responden Tahun ${selectedYear}`;
             createChart('year-chart', 'year-labels', data, sdgGoals);
         }
 
@@ -463,7 +463,7 @@
             const selectedFaculty = document.getElementById('faculty-select').value;
             const data = facultyData[selectedFaculty];
             const titleElement = document.getElementById('faculty-chart-title');
-            titleElement.textContent = `Progress Kegiatan Sustainability ${facultyNames[selectedFaculty]}`;
+            titleElement.textContent = `Progress Data Responden ${facultyNames[selectedFaculty]}`;
             createChart('faculty-chart', 'faculty-labels', data, sdgGoals);
         }
 
