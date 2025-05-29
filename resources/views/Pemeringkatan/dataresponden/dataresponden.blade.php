@@ -22,10 +22,10 @@
             min-height: 100vh;
         }
 
-
         .header {
             text-align: center;
             margin-bottom: 40px;
+            padding-top: 40px;
         }
 
         .header h1 {
@@ -131,28 +131,51 @@
         .chart-container {
             background: white;
             border-radius: 20px;
-            padding: 40px;
+            padding: 40px 40px 20px 40px;
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(10px);
-            max-width: 2000px;
+            max-width: 1400px;
             margin: 0 auto;
+            position: relative;
+        }
+
+        .chart-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .chart {
             display: flex;
             align-items: end;
-            justify-content: space-between;
-            height: 450px;
-            padding: 30px 0;
+            justify-content: center;
+            height: 400px;
+            padding: 20px 0;
             border-bottom: 3px solid #ecf0f1;
-            gap: 12px;
-            overflow-x: auto;
+            gap: 20px;
+            position: relative;
+            width: 100%;
+        }
+
+        .chart.overview {
+            justify-content: center;
+            gap: 80px;
+        }
+
+        .chart.faculty {
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .bar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
         }
 
         .bar {
-            flex: 1;
-            min-width: 50px;
             border-radius: 8px 8px 0 0;
             position: relative;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -161,56 +184,136 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
+        .bar.overview-bar {
+            width: 120px;
+            min-width: 120px;
+        }
+
+        .bar.faculty-bar {
+            width: 80px;
+            min-width: 60px;
+        }
+
         .bar:hover {
             transform: scale(1.08) translateY(-5px);
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-            z-index: 10;
+            z-index: 50;
         }
 
         .bar::before {
             content: attr(data-value);
             position: absolute;
-            top: -35px;
+            bottom: 100%;
             left: 50%;
-            transform: translateX(-50%);
-            font-size: 13px;
+            transform: translateX(-50%) translateY(-10px);
+            font-size: 14px;
             font-weight: 600;
-            color: #2c3e50;
-            background: white;
-            padding: 4px 8px;
-            border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            color: white;
+            background: rgba(44, 62, 80, 0.95);
+            padding: 8px 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            z-index: 1000;
+            pointer-events: none;
         }
 
-        .bar:hover::before {
+        .bar::after {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-4px);
+            border: 6px solid transparent;
+            border-top-color: rgba(44, 62, 80, 0.95);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .bar:hover::before,
+        .bar:hover::after {
+            opacity: 1;
+        }
+
+        /* Custom tooltip for better visibility */
+        .tooltip {
+            position: absolute;
+            background: rgba(44, 62, 80, 0.95);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: rgba(44, 62, 80, 0.95);
+        }
+
+        .tooltip.show {
             opacity: 1;
         }
 
         .chart-labels {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             margin-top: 20px;
-            gap: 12px;
-            overflow-x: auto;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .chart-labels.overview {
+            gap: 80px;
+        }
+
+        .chart-labels.faculty {
+            justify-content: space-between;
+            gap: 15px;
         }
 
         .label {
-            flex: 1;
-            min-width: 50px;
             text-align: center;
-            font-size: 13px;
-            color: #5a6c7d;
-            font-weight: 500;
+            font-size: 16px;
+            color: #2c3e50;
+            font-weight: 600;
             line-height: 1.3;
-            padding: 8px 4px;
+            padding: 10px 5px;
             transition: color 0.3s ease;
         }
 
-        .label:hover {
+        .label.overview-label {
+            width: 120px;
+            font-size: 18px;
             color: #2c3e50;
-            font-weight: 600;
+        }
+
+        .label.faculty-label {
+            width: 80px;
+            min-width: 60px;
+            font-size: 12px;
+            word-wrap: break-word;
+        }
+
+        .label:hover {
+            color: #667eea;
+            font-weight: 700;
+            transform: translateY(-2px);
         }
 
         @keyframes growUp {
@@ -225,30 +328,26 @@
             }
         }
 
-        .faculty-section {
+        .section-divider {
             border-top: 4px solid #ecf0f1;
             padding-top: 50px;
             margin-top: 40px;
         }
 
-        /* SDG Colors */
-        .sdg-1 { background: linear-gradient(135deg, #e5233c, #c41e3a); }
-        .sdg-2 { background: linear-gradient(135deg, #dda73a, #bf9000); }
-        .sdg-3 { background: linear-gradient(135deg, #4c9f38, #2d5016); }
-        .sdg-4 { background: linear-gradient(135deg, #c5192d, #8b0000); }
-        .sdg-5 { background: linear-gradient(135deg, #ff3a21, #e73c7e); }
-        .sdg-6 { background: linear-gradient(135deg, #26bde2, #1a8fb8); }
-        .sdg-7 { background: linear-gradient(135deg, #fcc30b, #dd9900); }
-        .sdg-8 { background: linear-gradient(135deg, #a21942, #8b1538); }
-        .sdg-9 { background: linear-gradient(135deg, #fd6925, #e55100); }
-        .sdg-10 { background: linear-gradient(135deg, #dd1367, #b8094d); }
-        .sdg-11 { background: linear-gradient(135deg, #fd9d24, #e67e00); }
-        .sdg-12 { background: linear-gradient(135deg, #bf8b2e, #9d6e00); }
-        .sdg-13 { background: linear-gradient(135deg, #3f7e44, #2d5a31); }
-        .sdg-14 { background: linear-gradient(135deg, #0a97d9, #0066cc); }
-        .sdg-15 { background: linear-gradient(135deg, #56c02b, #3d8b21); }
-        .sdg-16 { background: linear-gradient(135deg, #00689d, #004d7a); }
-        .sdg-17 { background: linear-gradient(135deg, #19486a, #0f2c3d); }
+        /* Category Colors */
+        .total { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .employee { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .academic { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+
+        /* Faculty Colors */
+        .faculty-1 { background: linear-gradient(135deg, #e5233c, #c41e3a); }
+        .faculty-2 { background: linear-gradient(135deg, #dda73a, #bf9000); }
+        .faculty-3 { background: linear-gradient(135deg, #4c9f38, #2d5016); }
+        .faculty-4 { background: linear-gradient(135deg, #c5192d, #8b0000); }
+        .faculty-5 { background: linear-gradient(135deg, #ff3a21, #e73c7e); }
+        .faculty-6 { background: linear-gradient(135deg, #26bde2, #1a8fb8); }
+        .faculty-7 { background: linear-gradient(135deg, #fcc30b, #dd9900); }
+        .faculty-8 { background: linear-gradient(135deg, #a21942, #8b1538); }
 
         @media (max-width: 768px) {
             .header h1 {
@@ -271,20 +370,49 @@
 
             .chart {
                 height: 350px;
-                gap: 8px;
-                padding: 20px 0;
+                gap: 15px;
+                padding: 15px 0;
             }
 
-            .label {
-                font-size: 11px;
+            .chart.overview {
+                gap: 40px;
             }
 
-            .bar {
-                min-width: 35px;
+            .chart.faculty {
+                gap: 10px;
+            }
+
+            .chart-labels.overview {
+                gap: 40px;
+            }
+
+            .chart-labels.faculty {
+                gap: 10px;
+            }
+
+            .bar.overview-bar {
+                width: 100px;
+                min-width: 80px;
+            }
+
+            .bar.faculty-bar {
+                width: 60px;
+                min-width: 45px;
+            }
+
+            .label.overview-label {
+                width: 100px;
+                font-size: 16px;
+            }
+
+            .label.faculty-label {
+                width: 60px;
+                min-width: 45px;
+                font-size: 10px;
             }
 
             .chart-container {
-                padding: 25px;
+                padding: 30px 20px 15px 20px;
             }
         }
 
@@ -299,129 +427,140 @@
 
             .chart {
                 height: 300px;
-                gap: 6px;
+                gap: 8px;
+                padding: 10px 0;
             }
 
-            .bar {
-                min-width: 25px;
+            .chart.overview {
+                gap: 20px;
             }
 
-            .label {
-                font-size: 10px;
+            .chart-labels.overview {
+                gap: 20px;
+            }
+
+            .bar.overview-bar {
+                width: 80px;
+                min-width: 70px;
+            }
+
+            .bar.faculty-bar {
+                width: 40px;
+                min-width: 35px;
+            }
+
+            .label.overview-label {
+                width: 80px;
+                font-size: 14px;
+            }
+
+            .label.faculty-label {
+                width: 40px;
+                min-width: 35px;
+                font-size: 9px;
             }
         }
     </style>
 </head>
-<body>
      @include('layout.navbar_pemeringkatan')
-
+<body>
     <div class="main-content-wrapper">
         <div class="header">
             <h1>Data Responden</h1>
-            <p>Sustainable Development Goals Monitoring</p>
         </div>
 
         <div class="dropdown-container">
             <div class="dropdown-wrapper">
                 <label for="year-select">📅 Tahun</label>
-                <select id="year-select" onchange="updateYearChart()"class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400 text-base font-medium bg-white shadow-sm transition">>
+                <select id="year-select" onchange="updateOverviewChart()" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400 text-base font-medium bg-white shadow-sm transition">
                     <option value="2024">2024</option>
                     <option value="2025" selected>2025</option>
                 </select>
             </div>
         </div>
 
+        <!-- Custom tooltip element -->
+        <div id="custom-tooltip" class="tooltip"></div>
+
+        <!-- Overview Chart: Total Employee & Academic -->
         <div class="chart-section">
-            <h2 class="chart-title" id="year-chart-title">Progress Data Responden Tahun 2025</h2>
+            <h2 class="chart-title" id="overview-chart-title">Total Employee dan Academic Tahun 2025</h2>
             <div class="chart-container">
-                <div class="chart" id="year-chart"></div>
-                <div class="chart-labels" id="year-labels"></div>
+                <div class="chart-wrapper">
+                    <div class="chart overview" id="overview-chart"></div>
+                    <div class="chart-labels overview" id="overview-labels"></div>
+                </div>
             </div>
         </div>
 
-        <div class="faculty-section">
-            <div class="dropdown-container">
-                <div class="dropdown-wrapper">
-                    <label for="faculty-select">🏛️ Fakultas</label>
-                    <select id="faculty-select" onchange="updateFacultyChart()" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400 text-base font-medium bg-white shadow-sm transition">
-                        <option value="FIP">Fakultas Ilmu Pendidikan (FIP)</option>
-                        <option value="FBS">Fakultas Bahasa dan Seni (FBS)</option>
-                        <option value="FMIPA">Fakultas Matematika dan IPA (FMIPA)</option>
-                        <option value="FT">Fakultas Teknik</option>
-                        <option value="FIS">Fakultas Ilmu Sosial</option>
-                        <option value="FE">Fakultas Ekonomi</option>
-                        <option value="FPP">Fakultas Pendidikan Psikologi</option>
-                        <option value="FIK">Fakultas Ilmu Keolahragaan</option>
-                    </select>
+        <!-- Employee by Faculty -->
+        <div class="chart-section section-divider">
+            <h2 class="chart-title">Employee Berdasarkan Fakultas</h2>
+            <div class="chart-container">
+                <div class="chart-wrapper">
+                    <div class="chart faculty" id="employee-chart"></div>
+                    <div class="chart-labels faculty" id="employee-labels"></div>
                 </div>
             </div>
+        </div>
 
-            <div class="chart-section">
-                <h2 class="chart-title" id="faculty-chart-title">Progress Data Responden Fakultas Ilmu Pendidikan (FIP)</h2>
-                <div class="chart-container">
-                    <div class="chart" id="faculty-chart"></div>
-                    <div class="chart-labels" id="faculty-labels"></div>
+        <!-- Academic by Faculty -->
+        <div class="chart-section section-divider">
+            <h2 class="chart-title">Academic Berdasarkan Fakultas</h2>
+            <div class="chart-container">
+                <div class="chart-wrapper">
+                    <div class="chart faculty" id="academic-chart"></div>
+                    <div class="chart-labels faculty" id="academic-labels"></div>
                 </div>
             </div>
         </div>
     </div>
-
+    @include('layout.footer') 
     <script>
-        const sdgGoals = [
-            "No Poverty",
-            "Zero Hunger", 
-            "Good Health",
-            "Quality Education",
-            "Gender Equality",
-            "Clean Water",
-            "Clean Energy",
-            "Decent Work",
-            "Innovation",
-            "Reduced Inequality",
-            "Sustainable Cities",
-            "Responsible Consumption",
-            "Climate Action",
-            "Life Below Water",
-            "Life on Land",
-            "Peace & Justice",
-            "Partnerships"
-        ];
-
-        // SDG official colors
-        const sdgColors = [
-            'sdg-1', 'sdg-2', 'sdg-3', 'sdg-4', 'sdg-5', 'sdg-6', 'sdg-7', 'sdg-8', 'sdg-9',
-            'sdg-10', 'sdg-11', 'sdg-12', 'sdg-13', 'sdg-14', 'sdg-15', 'sdg-16', 'sdg-17'
-        ];
-
-        // Sample data
-        const yearData = {
-            2024: [65, 72, 58, 84, 69, 77, 63, 71, 56, 68, 74, 62, 59, 51, 67, 73, 81],
-            2025: [68, 75, 61, 87, 72, 80, 66, 74, 59, 71, 77, 65, 62, 54, 70, 76, 84]
-        };
-
-        const facultyData = {
-            FIP: [75, 82, 68, 91, 79, 73, 66, 78, 62, 74, 80, 69, 65, 58, 72, 83, 88],
-            FBS: [70, 77, 63, 86, 74, 68, 61, 73, 57, 69, 75, 64, 60, 53, 67, 78, 83],
-            FMIPA: [72, 69, 85, 83, 71, 89, 92, 76, 88, 73, 78, 71, 74, 67, 81, 75, 80],
-            FT: [68, 64, 79, 80, 67, 85, 89, 91, 85, 70, 82, 78, 76, 63, 77, 72, 77],
-            FIS: [78, 74, 66, 88, 83, 71, 63, 75, 59, 81, 84, 67, 71, 56, 69, 86, 89],
-            FE: [71, 68, 62, 85, 76, 69, 65, 87, 79, 78, 81, 84, 68, 54, 66, 79, 91],
-            FPP: [74, 71, 89, 87, 81, 73, 67, 76, 61, 84, 79, 69, 66, 57, 75, 88, 85],
-            FIK: [69, 73, 91, 84, 77, 75, 68, 74, 58, 72, 77, 63, 64, 59, 83, 81, 82]
-        };
-
-        const facultyNames = {
-            FIP: "Fakultas Ilmu Pendidikan (FIP)",
-            FBS: "Fakultas Bahasa dan Seni (FBS)",
-            FMIPA: "Fakultas Matematika dan IPA (FMIPA)",
+        const overviewCategories = ["Employee", "Academic"];
+        const facultyNames = ["FIP", "FBS", "FMIPA", "FT", "FIS", "FE", "FPP", "FIK"];
+        const facultyFullNames = {
+            FIP: "Fakultas Ilmu Pendidikan",
+            FBS: "Fakultas Bahasa dan Seni",
+            FMIPA: "Fakultas Matematika dan IPA",
             FT: "Fakultas Teknik",
             FIS: "Fakultas Ilmu Sosial",
             FE: "Fakultas Ekonomi",
             FPP: "Fakultas Pendidikan Psikologi",
             FIK: "Fakultas Ilmu Keolahragaan"
         };
+        
+        // Colors
+        const overviewColors = ['employee', 'academic'];
+        const facultyColors = ['faculty-1', 'faculty-2', 'faculty-3', 'faculty-4', 'faculty-5', 'faculty-6', 'faculty-7', 'faculty-8'];
 
-        function createChart(containerId, labelsId, data, goals) {
+        // Sample data - you can modify these numbers as needed
+        const overviewData = {
+            2024: [100, 110], // [Employee, Academic] for 2024
+            2025: [70, 100]  // [Employee, Academic] for 2025
+        };
+
+        // Employee data by faculty
+        const employeeData = [55, 58, 48, 68, 60, 52, 42, 45]; // FIP, FBS, FMIPA, FT, FIS, FE, FPP, FIK
+
+        // Academic data by faculty
+        const academicData = [30, 34, 30, 42, 35, 36, 23, 27]; // FIP, FBS, FMIPA, FT, FIS, FE, FPP, FIK
+
+        // Custom tooltip functionality
+        const tooltip = document.getElementById('custom-tooltip');
+
+        function showTooltip(event, text) {
+            tooltip.textContent = text;
+            tooltip.style.left = event.pageX + 'px';
+            tooltip.style.top = (event.pageY - 60) + 'px';
+            tooltip.classList.add('show');
+        }
+
+        function hideTooltip() {
+            tooltip.classList.remove('show');
+        }
+
+        function createOverviewChart(containerId, labelsId, data, categories, colors) {
             const chartContainer = document.getElementById(containerId);
             const labelsContainer = document.getElementById(labelsId);
             
@@ -431,50 +570,117 @@
             const maxValue = Math.max(...data);
             
             data.forEach((value, index) => {
-                // Create bar with SDG color
+                // Create bar container
+                const barContainer = document.createElement('div');
+                barContainer.className = 'bar-container';
+                
+                // Create bar
                 const bar = document.createElement('div');
-                bar.className = `bar ${sdgColors[index]}`;
-                bar.style.height = `${(value / maxValue) * 100}%`;
-                bar.setAttribute('data-value', `${value}%`);
-                bar.title = `${goals[index]}: ${value}%`;
+                bar.className = `bar overview-bar ${colors[index]}`;
+                bar.style.height = `${(value / maxValue) * 320}px`;
+                bar.setAttribute('data-value', `${value} orang`);
+                bar.title = `${categories[index]}: ${value} orang`;
                 
                 // Add animation delay for staggered effect
-                bar.style.animationDelay = `${index * 0.1}s`;
+                bar.style.animationDelay = `${index * 0.2}s`;
+
+                // Enhanced tooltip events
+                bar.addEventListener('mouseenter', (e) => {
+                    showTooltip(e, `${categories[index]}: ${value} orang`);
+                });
+
+                bar.addEventListener('mousemove', (e) => {
+                    tooltip.style.left = e.pageX + 'px';
+                    tooltip.style.top = (e.pageY - 60) + 'px';
+                });
+
+                bar.addEventListener('mouseleave', hideTooltip);
                 
-                chartContainer.appendChild(bar);
+                barContainer.appendChild(bar);
+                chartContainer.appendChild(barContainer);
 
                 // Create label
                 const label = document.createElement('div');
-                label.className = 'label';
-                label.textContent = goals[index];
+                label.className = 'label overview-label';
+                label.textContent = categories[index];
                 labelsContainer.appendChild(label);
             });
         }
 
-        function updateYearChart() {
+        function createFacultyChart(containerId, labelsId, data, facultyNames, colors) {
+            const chartContainer = document.getElementById(containerId);
+            const labelsContainer = document.getElementById(labelsId);
+            
+            chartContainer.innerHTML = '';
+            labelsContainer.innerHTML = '';
+
+            const maxValue = Math.max(...data);
+            
+            data.forEach((value, index) => {
+                // Create bar container
+                const barContainer = document.createElement('div');
+                barContainer.className = 'bar-container';
+                
+                // Create bar
+                const bar = document.createElement('div');
+                bar.className = `bar faculty-bar ${colors[index]}`;
+                bar.style.height = `${(value / maxValue) * 280}px`;
+                bar.setAttribute('data-value', `${value} orang`);
+                bar.title = `${facultyNames[index]}: ${value} orang`;
+                
+                // Add animation delay for staggered effect
+                bar.style.animationDelay = `${index * 0.1}s`;
+
+                // Enhanced tooltip events
+                bar.addEventListener('mouseenter', (e) => {
+                    const fullName = facultyFullNames[facultyNames[index]] || facultyNames[index];
+                    showTooltip(e, `${fullName}: ${value} orang`);
+                });
+
+                bar.addEventListener('mousemove', (e) => {
+                    tooltip.style.left = e.pageX + 'px';
+                    tooltip.style.top = (e.pageY - 60) + 'px';
+                });
+
+                bar.addEventListener('mouseleave', hideTooltip);
+                
+                barContainer.appendChild(bar);
+                chartContainer.appendChild(barContainer);
+
+                // Create label
+                const label = document.createElement('div');
+                label.className = 'label faculty-label';
+                label.textContent = facultyNames[index];
+                labelsContainer.appendChild(label);
+            });
+        }
+
+        function updateOverviewChart() {
             const selectedYear = document.getElementById('year-select').value;
-            const data = yearData[selectedYear];
-            const titleElement = document.getElementById('year-chart-title');
-            titleElement.textContent = `Progress Data Responden Tahun ${selectedYear}`;
-            createChart('year-chart', 'year-labels', data, sdgGoals);
+            const data = overviewData[selectedYear];
+            const titleElement = document.getElementById('overview-chart-title');
+            titleElement.textContent = `Total Employee dan Academic Tahun ${selectedYear}`;
+            createOverviewChart('overview-chart', 'overview-labels', data, overviewCategories, overviewColors);
         }
 
-        function updateFacultyChart() {
-            const selectedFaculty = document.getElementById('faculty-select').value;
-            const data = facultyData[selectedFaculty];
-            const titleElement = document.getElementById('faculty-chart-title');
-            titleElement.textContent = `Progress Data Responden ${facultyNames[selectedFaculty]}`;
-            createChart('faculty-chart', 'faculty-labels', data, sdgGoals);
+        function initializeCharts() {
+            // Initialize overview chart
+            updateOverviewChart();
+            
+            // Initialize employee by faculty chart
+            createFacultyChart('employee-chart', 'employee-labels', employeeData, facultyNames, facultyColors);
+            
+            // Initialize academic by faculty chart
+            createFacultyChart('academic-chart', 'academic-labels', academicData, facultyNames, facultyColors);
         }
 
-        // Initialize charts
+        // Initialize all charts when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            updateYearChart();
-            updateFacultyChart();
+            initializeCharts();
         });
-    </script>
 
-    <!-- Uncomment when you have the footer component -->
-     @include('layout.footer') 
+        // Hide tooltip when clicking elsewhere
+        document.addEventListener('click', hideTooltip);
+    </script>
 </body>
 </html>
