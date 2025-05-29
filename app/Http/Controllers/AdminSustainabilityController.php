@@ -71,6 +71,7 @@ class AdminSustainabilityController extends Controller
                 return 'dashboard'; // Fallback route
         }
     }
+    
 
 
     public function index()
@@ -145,6 +146,7 @@ class AdminSustainabilityController extends Controller
         $role = $user->role;
         $validatedData = $request->validated(); // Retrieve validated data
         $userInfo = $this->getUserFacultyProdiInfo($user);
+        
 
         try {
             // Add user_id to track who created it
@@ -256,21 +258,23 @@ class AdminSustainabilityController extends Controller
             }
         }
         // Admin_direktorat can update any.
+          // Define SDG options for validation
+        $sdgOptions = [];
+        for ($i = 1; $i <= 17; $i++) {
+            $sdgOptions[] = 'SDG ' . $i;
+        }
 
         // Basic validation, replace with UpdateSustainabilityRequest if you have one.
-        $validatedData = $request->validate([
+        $validationRules = [
             'judul_kegiatan' => 'required|string|max:255',
             'tanggal_kegiatan' => 'required|date',
             'fakultas' => 'required|string|max:50', // Admin might change this
-            'prodi' => 'nullable|string',          // Admin might change this, or fakultas for their prodis
-            'link_kegiatan' => 'nullable|url|max:255',
+            'prodi' => 'nullable|string|max:255',        // Admin might change this, or fakultas for their prodis
+            'link_kegiatan' => 'nullable|url|max:2048', // Increased to align with StoreRequest
             'deskripsi_kegiatan' => 'required|string',
-            // Assuming foto_kegiatan in the form is for adding new photos, not replacing all.
-            // If it's name="foto_kegiatan[]" for multiple files:
-            'foto_kegiatan.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            // If it's name="foto_kegiatan" for a single file (less likely with "multiple" in blade):
-            // 'foto_kegiatan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+            'foto_kegiatan.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8192', // Aligned
+            'sdg_goal' => ['nullable', 'string', Rule::in($sdgOptions)], 
+        ];
             
         try {
             if ($role === 'fakultas') {

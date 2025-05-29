@@ -34,6 +34,7 @@ class StoreMataKuliahRequest extends FormRequest
             'fakultas' => $fakultasValidation,
             'prodi' => $prodiValidation,
             'deskripsi' => 'required|string|min:50',
+               'sdgs_group' => 'required|string|max:200',
 
         ];
     

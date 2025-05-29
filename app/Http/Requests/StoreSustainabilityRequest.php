@@ -39,6 +39,7 @@ class StoreSustainabilityRequest extends FormRequest
             'foto_kegiatan' => 'nullable|array', // The array of photos is optional
             'foto_kegiatan.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:8192', // If photos are provided, validate each. Max 8MB.
             'deskripsi_kegiatan' => 'required|string',
+            'sdg_goal' => ['nullable', 'string', Rule::in($sdgOptions)],
         ];
     }
 
