@@ -7,7 +7,7 @@
             <img alt="University logo" class="h-10 w-10"
                 src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
             <div class="ml-4">
-                <h1 class="text-xl font-bold uppercase tracking-wide text-white">DIREKTORAT INOVASI, SISTEM INFORMASI, DAN PEMERINGKATAN</h1>
+                <h1 class="text-xl font-bold uppercase tracking-wide text-white">Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</h1>
             </div>
         </a>
         
@@ -30,7 +30,7 @@
                 <ul
                     class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
                     <li><a href="{{ route('subdirektorat-inovasi.landingpage') }}" class="text-black hover:text-yellow-400 text-sm">Subdirektorat Inovasi dan Hilirisasi</a></li>
-                    <li><a href="{{ route('pemeringkatan.landingpage') }}" class="text-black hover:text-yellow-400 text-sm">Subdirektorat Pemeringkatan dan Sistem Informasi</a></li>
+                    <li><a href="{{ route('pemeringkatan.landingpage') }}" class="text-black hover:text-yellow-400 text-sm">Subdirektorat Sistem Informasi dan Pemeringkatan </a></li>
                 </ul>
             </li>
 
