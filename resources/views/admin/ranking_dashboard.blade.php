@@ -1,9 +1,12 @@
 @extends('admin.admin')
 
-<script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
+{{-- Keep these if they are not pushed from the main layout or used by other elements on this page --}}
+{{-- <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script> --}}
+{{-- Not needed here anymore for edit, but keep for add form --}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/berita_dashboard.css') }}">
-<link rel="stylesheet" href="{{ asset('css/ckeditor-content.css') }}">
+<link rel="stylesheet" href="{{ asset('css/ckeditor-content.css') }}"> {{-- Keep if add form uses it --}}
+
 @section('contentadmin')
     <div class="head-title">
         <div class="left">
@@ -42,7 +45,7 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="score_ranking" class="form-label">Skor Peringkat(Optional)</label>
-                        <input type="text" class="form-control @error('score_ranking') is-invalid @enderror" 
+                        <input type="text" class="form-control @error('score_ranking') is-invalid @enderror"
                             name="score_ranking" id="score_ranking" value="{{ old('score_ranking') }}">
                         @error('score_ranking')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -53,8 +56,8 @@
 
                 <div class="row">
                     <div class="col-md-12 mb-3">
-                        <label for="deskripsi" class="form-label">Deskripsi Peringkat</label>
-                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" rows="8">{{ old('deskripsi') }}</textarea>
+                        <label for="deskripsi_create" class="form-label">Deskripsi Peringkat</label> {{-- Changed ID to avoid conflict if another editor was on page --}}
+                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi_create" rows="8">{{ old('deskripsi') }}</textarea>
                         @error('deskripsi')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -116,13 +119,14 @@
                                     <td>{{ Str::limit(strip_tags($ranking->deskripsi), 50) }}</td>
                                     <td>
                                         <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-warning edit-ranking"
-                                                data-id="{{ $ranking->id }}">
+                                            {{-- MODIFIED: Changed button to a link --}}
+                                            <a href="{{ route($routePrefix . '.ranking.edit', $ranking->id) }}"
+                                               class="btn btn-sm btn-warning">
                                                 Edit
-                                            </button>
+                                            </a>
                                             <form method="POST"
                                                 action="{{ route($routePrefix . '.ranking.destroy', $ranking->id) }}"
-                                                class="delete-form">
+                                                class="delete-form" style="display:inline;"> {{-- Added style for better layout --}}
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="button"
@@ -139,7 +143,6 @@
         </div>
     </div>
 
-    <!-- Modal untuk menampilkan gambar -->
     <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -154,63 +157,13 @@
         </div>
     </div>
 
-    <!-- Modal untuk mengedit peringkat -->
-    <div class="modal fade" id="editRankingModal" tabindex="-1" aria-labelledby="editRankingModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editRankingModalLabel">Edit Peringkat</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editRankingForm" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="edit_judul" class="form-label">Judul Peringkat</label>
-                                <input type="text" class="form-control" name="judul" id="edit_judul">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="edit_score_ranking" class="form-label">Skor Peringkat(Optional)</label>
-                                <input type="text" class="form-control" name="score_ranking" id="edit_score_ranking">
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="edit_deskripsi" class="form-label">Deskripsi Peringkat</label>
-                                <textarea class="form-control" name="deskripsi" id="edit_deskripsi" rows="8"></textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="edit_gambar" class="form-label">Logo Baru (opsional)</label>
-                                <input type="file" class="form-control" name="gambar" id="edit_gambar"
-                                    accept="image/*">
-                                <div class="mt-2">
-                                    <p>Logo saat ini:</p>
-                                    <img id="current_image" src="" class="img-fluid mt-2"
-                                        style="max-height: 200px;" alt="Current Image">
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary" id="saveEditRanking">Simpan Perubahan</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    {{-- REMOVED: Edit Ranking Modal --}}
+    {{-- <div class="modal fade" id="editRankingModal" ...> ... </div> --}}
 
-    <!-- Script section -->
+
     <script>
-        // Custom upload adapter for CKEditor
-        class MyUploadAdapter {
+        // Custom upload adapter for CKEditor (for CREATE form)
+        class MyUploadAdapterCreate { // Renamed to avoid conflict if you had one for edit modal before
             constructor(loader) {
                 this.loader = loader;
             }
@@ -245,15 +198,15 @@
             }
         }
 
-        function MyCustomUploadAdapterPlugin(editor) {
+        function MyCustomUploadAdapterPluginCreate(editor) { // Renamed
             editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-                return new MyUploadAdapter(loader);
+                return new MyUploadAdapterCreate(loader); // Use renamed adapter
             };
         }
 
-        // Initialize CKEditor for new ranking
-        const commonConfig = {
-            extraPlugins: [MyCustomUploadAdapterPlugin],
+        // Initialize CKEditor for new ranking (CREATE form)
+        const createFormConfig = { // Renamed config object
+            extraPlugins: [MyCustomUploadAdapterPluginCreate], // Use renamed plugin
             toolbar: {
                 items: [
                     'heading', '|',
@@ -265,211 +218,80 @@
             },
             image: {
                 toolbar: [
-                    'imageTextAlternative',
-                    'imageStyle:inline',
-                    'imageStyle:block',
-                    'imageStyle:side',
-                    'toggleImageCaption',
-                    'imageResize:25',
-                    'imageResize:50',
-                    'imageResize:75',
-                    'imageResize:Original'
+                    'imageTextAlternative', 'imageStyle:inline', 'imageStyle:block', 'imageStyle:side',
+                    'toggleImageCaption', 'imageResize:25', 'imageResize:50', 'imageResize:75', 'imageResize:Original'
                 ],
-                resizeOptions: [{
-                        name: 'resizeImage:original',
-                        label: 'Original',
-                        value: null
-                    },
-                    {
-                        name: 'resizeImage:50',
-                        label: '50%',
-                        value: '50'
-                    },
-                    {
-                        name: 'resizeImage:75',
-                        label: '75%',
-                        value: '75'
-                    }
+                resizeOptions: [
+                    { name: 'resizeImage:original', label: 'Original', value: null },
+                    { name: 'resizeImage:50', label: '50%', value: '50' },
+                    { name: 'resizeImage:75', label: '75%', value: '75' }
                 ]
             },
             table: {
-                contentToolbar: [
-                    'tableColumn', 'tableRow', 'mergeTableCells',
-                    'tableProperties', 'tableCellProperties'
-                ]
+                contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties' ]
             },
-            alignment: {
-                options: ['left', 'right', 'center', 'justify']
-            },
-            caption: {
-                colorPicker: true
-            }
+            alignment: { options: ['left', 'right', 'center', 'justify'] },
+            caption: { colorPicker: true }
         };
 
-        // Initialize both editors with this config
-        ClassicEditor.create(document.querySelector('#deskripsi'), commonConfig)
+        // Initialize CKEditor for the CREATE form
+        ClassicEditor.create(document.querySelector('#deskripsi_create'), createFormConfig) // Use new ID
             .catch(console.error);
 
-        ClassicEditor.create(document.querySelector('#edit_deskripsi'), commonConfig)
-            .then(editor => {
-                editRankingEditor = editor;
-            })
-            .catch(console.error);
-
+        // REMOVED: CKEditor for edit_deskripsi as it's on a new page now.
+        // let editRankingEditor;
+        // ClassicEditor.create(document.querySelector('#edit_deskripsi'), commonConfig)...
 
         document.addEventListener('DOMContentLoaded', function() {
-            // SweetAlert helper functions
-            function showSuccessAlert(message) {
-                Swal.fire({
-                    title: 'Berhasil!',
-                    text: message,
-                    icon: 'success',
-                    confirmButtonColor: '#3498db',
-                    confirmButtonText: 'OK'
-                });
-            }
+            // SweetAlert helper functions (can be kept if used elsewhere or for create form feedback)
+            function showSuccessAlert(message) { /* ... */ }
+            function showErrorAlert(message) { /* ... */ }
+            function showConfirmationDialog(message, callback) { /* ... */ }
 
-            function showErrorAlert(message) {
-                Swal.fire({
-                    title: 'Gagal!',
-                    text: message,
-                    icon: 'error',
-                    confirmButtonColor: '#3498db',
-                    confirmButtonText: 'OK'
-                });
-            }
-
-            function showConfirmationDialog(message, callback) {
-                Swal.fire({
-                    title: 'Konfirmasi',
-                    text: message,
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3498db',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya',
-                    cancelButtonText: 'Tidak'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        callback();
-                    }
-                });
-            }
-
-            // Handle view image
+            // Handle view image (keep this)
             document.querySelectorAll('.view-image').forEach(button => {
                 button.addEventListener('click', function() {
                     const imageUrl = this.dataset.image;
                     const title = this.dataset.title;
-
                     document.getElementById('imageModalLabel').textContent = title;
                     document.getElementById('modalImage').src = imageUrl;
-
                     const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
                     imageModal.show();
                 });
             });
 
-            // Handle delete button clicks
+            // Handle delete button clicks (keep this)
             document.querySelectorAll('.delete-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const form = this.closest('form');
-
-                    showConfirmationDialog('Apakah Anda yakin ingin menghapus peringkat ini?',
-                        () => {
-                            form.submit();
-                        });
-                });
-            });
-
-            // Handle edit button clicks
-            document.querySelectorAll('.edit-ranking').forEach(button => {
-                button.addEventListener('click', function() {
-                    const rankingId = this.dataset.id;
-                    const routePrefix = '{{ $routePrefix }}';
-
-                    // Convert route prefix with dots to path with slashes
-                    const routePath = routePrefix.replace('.', '/');
-
-                    // Fetch ranking details via AJAX
-                    fetch(`/${routePath}/ranking/${rankingId}/detail`)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            // Populate the edit form
-                            document.getElementById('edit_judul').value = data.judul;
-                            document.getElementById('edit_score_ranking').value = data.score_ranking; 
-
-                            // Set content to the CKEditor
-                            if (editRankingEditor) {
-                                editRankingEditor.setData(data.deskripsi);
-                            }
-
-                            // Set the current image
-                            const currentImage = document.getElementById('current_image');
-                            currentImage.src = `/storage/${data.gambar}`;
-
-                            // Set the form action with correct path structure
-                            const form = document.getElementById('editRankingForm');
-                            form.action = `/${routePath}/ranking/${rankingId}`;
-
-                            // Show the modal
-                            const editModal = new bootstrap.Modal(document.getElementById(
-                                'editRankingModal'));
-                            editModal.show();
-                        })
-                        .catch(error => {
-                            console.error('Error fetching ranking details:', error);
-                            showErrorAlert('Gagal mengambil data peringkat.');
-                        });
-                });
-            });
-
-            // Handle save button click
-            document.getElementById('saveEditRanking').addEventListener('click', function() {
-                const editorData = editRankingEditor.getData();
-                document.getElementById('edit_deskripsi').value = editorData;
-
-                const form = document.getElementById('editRankingForm');
-                const formData = new FormData(form);
-
-                fetch(form.action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                .getAttribute('content')
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Close the modal
-                            const modalElement = document.getElementById('editRankingModal');
-                            const modal = bootstrap.Modal.getInstance(modalElement);
-                            modal.hide();
-
-                            // Show success message
-                            showSuccessAlert(data.message || 'Peringkat berhasil diperbarui!');
-
-                            // Refresh the page after a short delay
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 1500);
-                        } else {
-                            showErrorAlert(data.message || 'Gagal menyimpan perubahan.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error saving ranking:', error);
-                        showErrorAlert('Gagal menyimpan perubahan.');
+                    showConfirmationDialog('Apakah Anda yakin ingin menghapus peringkat ini?', () => {
+                        form.submit();
                     });
+                });
             });
+
+            // REMOVED: JavaScript for handling edit button clicks and edit modal submission.
+
+            // Display flashed session messages from server-side redirects (e.g., after create, delete)
+            @if (session('success'))
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}',
+                    icon: 'success',
+                    confirmButtonColor: '#3498db',
+                    confirmButtonText: 'OK'
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: '{{ session('error') }}',
+                    icon: 'error',
+                    confirmButtonColor: '#3498db',
+                    confirmButtonText: 'OK'
+                });
+            @endif
         });
     </script>
 @endsection

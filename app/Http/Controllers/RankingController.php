@@ -6,18 +6,20 @@ use App\Models\Ranking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log; // Import Log facade
 
 class RankingController extends Controller
 {
 
     private function getRoutePrefix()
     {
-        if (auth()->user()->role === 'admin_direktorat') {
+        $role = auth()->user()->role;
+        if ($role === 'admin_direktorat') {
             return 'admin';
-        } else if (auth()->user()->role === 'admin_pemeringkatan') {
+        } else if ($role === 'admin_pemeringkatan') {
             return 'admin_pemeringkatan';
         }
-
+        // Default or fallback prefix if needed
         return 'admin';
     }
 
@@ -28,12 +30,11 @@ class RankingController extends Controller
         $routePrefix = $this->getRoutePrefix();
 
         if (auth()->user()->role === 'admin_direktorat') {
-            return view('admin.ranking_dashboard', compact('rankings', 'routePrefix'));
+             return view('admin.ranking_dashboard', compact('rankings', 'routePrefix'));
         } else if (auth()->user()->role === 'admin_pemeringkatan') {
-            return view('admin_pemeringkatan.ranking_dashboard', compact('rankings', 'routePrefix'));
+             return view('admin_pemeringkatan.ranking_dashboard', compact('rankings', 'routePrefix'));
         }
-
-        return view('admin.ranking_dashboard', compact('rankings', 'routePrefix'));
+        return view('admin.ranking_dashboard', compact('rankings', 'routePrefix')); // Or redirect, or abort
     }
 
 
@@ -46,6 +47,7 @@ class RankingController extends Controller
                 'deskripsi' => 'required|string',
                 'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
+
             if ($request->hasFile('gambar')) {
                 $namaFile = time() . '_' . uniqid() . '.' . $request->file('gambar')->getClientOriginalExtension();
                 $gambarPath = $request->file('gambar')->storeAs(
@@ -53,9 +55,9 @@ class RankingController extends Controller
                     $namaFile,
                     'public'
                 );
-                $ranking = Ranking::create([
+                Ranking::create([
                     'judul' => $request->judul,
-                    'score_ranking' => $request->score_ranking, 
+                    'score_ranking' => $request->score_ranking,
                     'deskripsi' => $request->deskripsi,
                     'gambar' => $gambarPath,
                     'slug' => Str::slug($request->judul)
@@ -64,13 +66,12 @@ class RankingController extends Controller
                 return redirect()->route($routePrefix . '.ranking.index')
                     ->with('success', 'Ranking berhasil disimpan!');
             } else {
-
                 return redirect()->back()
                     ->with('error', 'Upload gambar gagal. Pastikan file gambar valid.')
                     ->withInput();
             }
         } catch (\Exception $e) {
-            \Log::error('Error storing ranking: ' . $e->getMessage());
+            Log::error('Error storing ranking: ' . $e->getMessage()); // Use Log facade
             return redirect()->back()
                 ->with('error', 'Gagal menambahkan ranking: ' . $e->getMessage())
                 ->withInput();
@@ -83,7 +84,22 @@ class RankingController extends Controller
         $ranking = Ranking::where('slug', $slug)->firstOrFail();
         return view('Pemeringkatan.ranking_unj.ranking_detail', compact('ranking'));
     }
-    
+
+
+    // New edit method
+    public function edit(Ranking $ranking) 
+    {
+        $routePrefix = $this->getRoutePrefix();
+        $viewPath = $routePrefix . '.ranking_edit';
+        if (!view()->exists($viewPath)) {
+            $viewPath = 'admin.ranking_edit';
+            if (!view()->exists($viewPath)) {
+                 abort(404, "Edit view for ranking not found.");
+            }
+        }
+        return view($viewPath, compact('ranking', 'routePrefix'));
+    }
+
 
     public function getRankingDetail($id)
     {
@@ -91,23 +107,28 @@ class RankingController extends Controller
         return response()->json($ranking);
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id) 
     {
         try {
             $ranking = Ranking::findOrFail($id);
             $validated = $request->validate([
                 'judul' => 'required|string|max:200',
-                'score_ranking' => 'nullable|string|max:50', 
+                'score_ranking' => 'nullable|string|max:50',
                 'deskripsi' => 'required|string',
                 'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
+
             $ranking->judul = $validated['judul'];
-            $ranking->score_ranking = $validated['score_ranking'];  
+            $ranking->score_ranking = $validated['score_ranking'];
             $ranking->deskripsi = $validated['deskripsi'];
+            $ranking->slug = Str::slug($validated['judul']);
+
             if ($request->hasFile('gambar') && $request->file('gambar')->isValid()) {
+                // Delete old image if it exists
                 if ($ranking->gambar && Storage::disk('public')->exists($ranking->gambar)) {
                     Storage::disk('public')->delete($ranking->gambar);
                 }
+                // Store new image
                 $namaFile = time() . '_' . uniqid() . '.' . $request->file('gambar')->getClientOriginalExtension();
                 $gambarPath = $request->file('gambar')->storeAs(
                     'ranking-images',
@@ -119,16 +140,14 @@ class RankingController extends Controller
 
             $ranking->save();
             $routePrefix = $this->getRoutePrefix();
-            if ($request->ajax()) {
-                return response()->json(['success' => true, 'message' => 'Ranking berhasil diperbarui!']);
-            }
+
+            // Removed AJAX check as form submission will be standard
             return redirect()->route($routePrefix . '.ranking.index')
                 ->with('success', 'Ranking berhasil diperbarui!');
+
         } catch (\Exception $e) {
-            \Log::error('Error updating ranking: ' . $e->getMessage());
-            if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => 'Gagal memperbarui ranking: ' . $e->getMessage()]);
-            }
+            Log::error('Error updating ranking: ' . $e->getMessage()); // Use Log facade
+            // Removed AJAX check
             return redirect()->back()
                 ->with('error', 'Gagal memperbarui ranking: ' . $e->getMessage())
                 ->withInput();
@@ -148,7 +167,7 @@ class RankingController extends Controller
             return redirect()->route($routePrefix . '.ranking.index')
                 ->with('success', 'Ranking berhasil dihapus!');
         } catch (\Exception $e) {
-            \Log::error('Error deleting ranking: ' . $e->getMessage());
+            Log::error('Error deleting ranking: ' . $e->getMessage()); // Use Log facade
             return redirect()->back()
                 ->with('error', 'Gagal menghapus ranking: ' . $e->getMessage());
         }
@@ -160,14 +179,13 @@ class RankingController extends Controller
         $request->validate([
             'upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
-        $path = $request->file('upload')->store('ranking_images', 'public');
+        $path = $request->file('upload')->store('ranking-images', 'public'); 
         $url = Storage::url($path);
-
         return response()->json([
             'url' => asset($url),
         ]);
     }
+
     public function showAllRankings()
     {
         $rankings = Ranking::all();

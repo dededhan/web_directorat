@@ -26,6 +26,7 @@ use App\Http\Controllers\ProdukInovasiController;
 use App\Http\Controllers\SejarahContentController;
 use App\Http\Controllers\PimpinanController;
 use App\Http\Controllers\RankingController;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\InternationalFacultyStaffController;
@@ -161,9 +162,10 @@ Route::prefix('admin')->name('admin.')
 
         //ranking
         Route::resource('/ranking', RankingController::class)
-            ->except(['show', 'edit']);
+            ->except(['show']);
+        Route::get('/ranking/{ranking}/edit', [RankingController::class, 'edit'])->name('ranking.edit'); // Explicit edit route
         Route::get('/ranking/{id}/detail', [RankingController::class, 'getRankingDetail'])
-            ->name('ranking.detail');
+            ->name('ranking.detail'); // This can be kept if used elsewhere, or removed if only for the old modal
         Route::post('/ranking/upload', [RankingController::class, 'upload'])
             ->name('ranking.upload');
 
