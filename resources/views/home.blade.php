@@ -343,48 +343,47 @@
 
         <!-- Regular News Grid with first 3 news items -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            @php
-                // Take the first 3 news items for the regular grid
-                $regularNews = $featuredNews->take(3);
-            @endphp
-
-            @foreach ($regularNews as $news)
-                <div
-                    class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                    <div class="relative">
-                        <img alt="{{ $news->judul }}" class="w-full h-56 object-cover"
-                            src="{{ asset('storage/' . $news->gambar) }}" />
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-24">
-                        </div>
-                        <div
-                            class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
-                            {{ ucfirst($news->kategori) }}
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center text-gray-500 text-sm">
-                                <i class="fas fa-user-circle mr-2"></i>Admin
+            @if($regularNews && $regularNews->count() > 0)
+                @foreach ($regularNews as $news)
+                    <div
+                        class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="relative">
+                            <img alt="{{ $news->judul }}" class="w-full h-56 object-cover"
+                                src="{{ asset('storage/' . $news->gambar) }}" />
+                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-24">
                             </div>
-                            <div class="text-gray-500 text-sm">
-                                <i class="fas fa-calendar-alt mr-1"></i>{{ date('d M Y', strtotime($news->tanggal)) }}
+                            <div
+                                class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-sm font-semibold">
+                                {{ ucfirst($news->kategori) }}
                             </div>
                         </div>
-                        <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="block">
-                            <h2 class="font-bold text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
-                                {{ $news->judul }}
-                            </h2>
-                        </a>
-                        <p class="text-gray-600 mb-4">
-                            {{ Str::limit(strip_tags($news->isi), 100) }}
-                        </p>
-                        <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}"
-                            class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
-                            Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                        </a>
+                        <div class="p-5">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fas fa-user-circle mr-2"></i>Admin
+                                </div>
+                                <div class="text-gray-500 text-sm">
+                                    <i class="fas fa-calendar-alt mr-1"></i>{{ date('d M Y', strtotime($news->tanggal)) }}
+                                </div>
+                            </div>
+                            <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="block">
+                                <h2 class="font-bold text-xl mb-3 text-teal-800 hover:text-yellow-600 transition-colors">
+                                    {{ $news->judul }}
+                                </h2>
+                            </a>
+                            <p class="text-gray-600 mb-4">
+                                {{ Str::limit(strip_tags($news->isi), 100) }}
+                            </p>
+                            <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}"
+                                class="inline-block text-teal-700 hover:text-yellow-500 font-medium">
+                                Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            @else
+                <p class="col-span-full text-center text-gray-500">Tidak ada berita reguler untuk ditampilkan.</p>
+            @endif
         </div>
 
         <!-- Enhanced Featured News Carousel with remaining news items -->
@@ -392,39 +391,39 @@
             <div class="enhanced-carousel-title">Berita Terbaru</div>
             <div class="carousel">
                 <div class="carousel-inner">
-                    @php
-                        // Skip the first 3 news items and use the rest for the carousel
-                        $carouselNews = $featuredNews->slice(3);
-                    @endphp
-                    @foreach ($carouselNews as $featured)
-                        <div class="carousel-item-enhanced">
-                            <div class="news-card-enhanced">
-                                <div class="news-image-container">
-                                    <img alt="{{ $featured->judul }}" class="news-image"
-                                        src="{{ asset('storage/' . $featured->gambar) }}" />
-                                    <div class="news-tag-enhanced">{{ ucfirst($featured->kategori) }}</div>
-                                </div>
-                                <div class="news-content">
-                                    <div class="news-meta">
-                                        <i class="fas fa-user-circle mr-2"></i>Admin
-                                        <span class="mx-2">|</span>
-                                        <i
-                                            class="fas fa-calendar-alt mr-2"></i>{{ date('d M Y', strtotime($featured->tanggal)) }}
+                     @if($featuredNews && $featuredNews->count() > 0)
+                        @foreach ($featuredNews as $featured) {{-- Changed variable to $featuredItem for clarity --}}
+                            <div class="carousel-item-enhanced">
+                                <div class="news-card-enhanced">
+                                    <div class="news-image-container">
+                                        <img alt="{{ $featured->judul }}" class="news-image"
+                                            src="{{ asset('storage/' . $featured->gambar) }}" />
+                                        <div class="news-tag-enhanced">{{ ucfirst($featured->kategori) }}</div>
                                     </div>
-                                    <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}">
-                                        <h3 class="news-title">{{ $featured->judul }}</h3>
-                                    </a>
-                                    <p class="news-excerpt">
-                                        {!! Str::limit($featured->isi, 150) !!}
-                                    </p>
-                                    <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}"
-                                        class="news-link">
-                                        Baca selengkapnya <i class="fas fa-arrow-right"></i>
-                                    </a>
+                                    <div class="news-content">
+                                        <div class="news-meta">
+                                            <i class="fas fa-user-circle mr-2"></i>Admin
+                                            <span class="mx-2">|</span>
+                                            <i
+                                                class="fas fa-calendar-alt mr-2"></i>{{ date('d M Y', strtotime($featured->tanggal)) }}
+                                        </div>
+                                        <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}">
+                                            <h3 class="news-title">{{ $featured->judul }}</h3>
+                                        </a>
+                                        <p class="news-excerpt">
+                                            {!! Str::limit($featured->isi, 150) !!}
+                                        </p>
+                                        <a href="{{ route('Berita.show', ['slug' => $featured->slug]) }}"
+                                            class="news-link">
+                                            Baca selengkapnya <i class="fas fa-arrow-right"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    @else
+                        <div class="text-center text-gray-500 p-4">Tidak ada berita lainnya untuk ditampilkan di carousel.</div>
+                    @endif
                 </div>
             </div>
         </div>

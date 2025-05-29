@@ -249,10 +249,7 @@
 
         <!-- Regular News Grid with first 3 news items -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            @php
-                // Take the first 3 news items for the regular grid
-                $regularNews = $featuredNews->take(3);
-            @endphp
+            @if($regularNews && $regularNews->count() > 0)
 
             @foreach ($regularNews as $news)
                 <div
@@ -291,6 +288,9 @@
                     </div>
                 </div>
             @endforeach
+            @else
+                <p class="col-span-full text-center text-gray-500">Tidak ada berita reguler untuk ditampilkan.</p>
+            @endif
         </div>
 
         <!-- Enhanced Featured News Carousel with remaining news items -->
@@ -298,11 +298,8 @@
             <div class="enhanced-carousel-title">Berita Terbaru</div>
             <div class="carousel">
                 <div class="carousel-inner">
-                    @php
-                        // Skip the first 3 news items and use the rest for the carousel
-                        $carouselNews = $featuredNews->slice(3);
-                    @endphp
-                    @foreach ($carouselNews as $featured)
+                   @if($featuredNews && $featuredNews->count() > 0)
+                    @foreach ($featuredNews as $featured)
                         <div class="carousel-item-enhanced">
                             <div class="news-card-enhanced">
                                 <div class="news-image-container">
@@ -331,6 +328,9 @@
                             </div>
                         </div>
                     @endforeach
+                    @else
+                <p class="col-span-full text-center text-gray-500">Tidak ada berita reguler untuk ditampilkan.</p>
+            @endif
                 </div>
             </div>
         </div>

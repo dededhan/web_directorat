@@ -128,12 +128,26 @@ class BeritaController extends Controller
      */
     public function homeNews()
     {
-        // Regular
-        $regularNews = Berita::latest()->take(3)->get();
+        $countRegularNews = 3; // Number of newest items for the regular section
 
-        // Features
-        $featuredNews = Berita::latest()->take(6)->get();
+        // --- Regular News ---
+        // Get the newest 'Berita' items for the regular section
+        $regularNews = Berita::latest() // Orders by created_at descending (newest first)
+                             ->take($countRegularNews)
+                             ->get();
 
+        // --- Featured News (for Carousel) ---
+        // Get the IDs of the news items already taken for $regularNews
+        $regularNewsIds = $regularNews->pluck('id')->toArray();
+
+        // Now, get other 'Berita' items, excluding the regular ones.
+        // "take all berita on there" can mean a few things:
+        // Option A: Take a specific larger number for the carousel (e.g., next 10 or 15)
+        $countFeaturedCarousel = 10; // Example: show 10 items in the carousel
+        $featuredNews = Berita::whereNotIn('id', $regularNewsIds) // Exclude regular news
+                               ->latest()
+                               ->take($countFeaturedCarousel)
+                               ->get();
         // Scroll
         $announcements = Pengumuman::where('status', true)
             ->orderBy('created_at', 'desc')
@@ -154,11 +168,24 @@ class BeritaController extends Controller
 
     public function landingPagePemeringkatan()
     {
-        // Regular
-        $regularNews = Berita::latest()->take(3)->get();
+        $categoryName = 'pemeringkatan'; // The specific category you want to filter by
+        $countRegularNews = 3;
+        $countFeaturedNews = 5;
 
-        // Features
-        $featuredNews = Berita::latest()->take(5)->get();
+        // --- Regular News (from 'pemeringkatan' category) ---
+        $regularNews = Berita::where('kategori', $categoryName) // Filter by category
+                             ->latest()                         // Order by newest first
+                             ->take($countRegularNews)          // Take the first 3
+                             ->get();
+
+        // --- Featured News (from 'pemeringkatan' category, excluding regular ones) ---
+        // We use skip() to bypass the items already taken for $regularNews
+        $featuredNews = Berita::where('kategori', $categoryName) // Filter by category
+                              ->latest()                          // Order by newest first
+                              ->skip($countRegularNews)           // Skip the 3 items taken for regularNews
+                              ->take($countFeaturedNews)          // Take the next 5 items
+                              ->get();
+
 
         // Scroll
         $announcements = Pengumuman::where('status', true)
@@ -181,11 +208,24 @@ class BeritaController extends Controller
     //function display news inovasi
     public function landingPageInovasi()
     {
-        // Regular
-        $regularNews = Berita::latest()->take(3)->get();
+        $categoryName = 'inovasi'; // The specific category you want to filter by
+        $countRegularNews = 3;
+        $countFeaturedNews = 5;
 
-        // Features
-        $featuredNews = Berita::latest()->take(5)->get();
+        // --- Regular News (from 'pemeringkatan' category) ---
+        $regularNews = Berita::where('kategori', $categoryName) // Filter by category
+                             ->latest()                         // Order by newest first
+                             ->take($countRegularNews)          // Take the first 3
+                             ->get();
+
+        // --- Featured News (from 'pemeringkatan' category, excluding regular ones) ---
+        // We use skip() to bypass the items already taken for $regularNews
+        $featuredNews = Berita::where('kategori', $categoryName) // Filter by category
+                              ->latest()                          // Order by newest first
+                              ->skip($countRegularNews)           // Skip the 3 items taken for regularNews
+                              ->take($countFeaturedNews)          // Take the next 5 items
+                              ->get();
+
 
         // Scroll
         $announcements = Pengumuman::where('status', true)
