@@ -324,7 +324,7 @@
         <div class="dropdown-container">
             <div class="dropdown-wrapper">
                 <label for="year-select">📅 Tahun</label>
-                <select id="year-select" onchange="updateYearChart()"class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400 text-base font-medium bg-white shadow-sm transition">>
+                <select id="year-select" onchange="updateCharts()"class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400 text-base font-medium bg-white shadow-sm transition">>
                     <option value="2024">2024</option>
                     <option value="2025" selected>2025</option>
                 </select>
@@ -343,7 +343,7 @@
             <div class="dropdown-container">
                 <div class="dropdown-wrapper">
                     <label for="faculty-select">🏛️ Fakultas</label>
-                    <select id="faculty-select" onchange="updateFacultyChart()" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400 text-base font-medium bg-white shadow-sm transition">
+                    <select id="faculty-select" onchange="updateFacultyChart()"  class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400 text-base font-medium bg-white shadow-sm transition">
                         <option value="FIP">Fakultas Ilmu Pendidikan (FIP)</option>
                         <option value="FBS">Fakultas Bahasa dan Seni (FBS)</option>
                         <option value="FMIPA">Fakultas Matematika dan IPA (FMIPA)</option>
@@ -367,113 +367,108 @@
     </div>
 
     <script>
-        const sdgGoals = [
-            "No Poverty",
-            "Zero Hunger", 
-            "Good Health",
-            "Quality Education",
-            "Gender Equality",
-            "Clean Water",
-            "Clean Energy",
-            "Decent Work",
-            "Innovation",
-            "Reduced Inequality",
-            "Sustainable Cities",
-            "Responsible Consumption",
-            "Climate Action",
-            "Life Below Water",
-            "Life on Land",
-            "Peace & Justice",
-            "Partnerships"
-        ];
+    const sdgGoals = [
+        "No Poverty",
+        "Zero Hunger", 
+        "Good Health",
+        "Quality Education",
+        "Gender Equality",
+        "Clean Water",
+        "Clean Energy",
+        "Decent Work",
+        "Innovation",
+        "Reduced Inequality",
+        "Sustainable Cities",
+        "Responsible Consumption",
+        "Climate Action",
+        "Life Below Water",
+        "Life on Land",
+        "Peace & Justice",
+        "Partnerships"
+    ];
 
-        // SDG official colors
-        const sdgColors = [
-            'sdg-1', 'sdg-2', 'sdg-3', 'sdg-4', 'sdg-5', 'sdg-6', 'sdg-7', 'sdg-8', 'sdg-9',
-            'sdg-10', 'sdg-11', 'sdg-12', 'sdg-13', 'sdg-14', 'sdg-15', 'sdg-16', 'sdg-17'
-        ];
+    const sdgColors = [
+        'sdg-1', 'sdg-2', 'sdg-3', 'sdg-4', 'sdg-5', 'sdg-6', 'sdg-7', 'sdg-8', 'sdg-9',
+        'sdg-10', 'sdg-11', 'sdg-12', 'sdg-13', 'sdg-14', 'sdg-15', 'sdg-16', 'sdg-17'
+    ];
 
-        // Sample data
-        const yearData = {
-            2024: [65, 72, 58, 84, 69, 77, 63, 71, 56, 68, 74, 62, 59, 51, 67, 73, 81],
-            2025: [68, 75, 61, 87, 72, 80, 66, 74, 59, 71, 77, 65, 62, 54, 70, 76, 84]
-        };
+    const facultyNames = {
+        FIP: "Fakultas Ilmu Pendidikan (FIP)",
+        FBS: "Fakultas Bahasa dan Seni (FBS)",
+        FMIPA: "Fakultas Matematika dan IPA (FMIPA)",
+        FT: "Fakultas Teknik",
+        FIS: "Fakultas Ilmu Sosial",
+        FE: "Fakultas Ekonomi",
+        FPP: "Fakultas Pendidikan Psikologi",
+        FIK: "Fakultas Ilmu Keolahragaan"
+    };
 
-        const facultyData = {
-            FIP: [75, 82, 68, 91, 79, 73, 66, 78, 62, 74, 80, 69, 65, 58, 72, 83, 88],
-            FBS: [70, 77, 63, 86, 74, 68, 61, 73, 57, 69, 75, 64, 60, 53, 67, 78, 83],
-            FMIPA: [72, 69, 85, 83, 71, 89, 92, 76, 88, 73, 78, 71, 74, 67, 81, 75, 80],
-            FT: [68, 64, 79, 80, 67, 85, 89, 91, 85, 70, 82, 78, 76, 63, 77, 72, 77],
-            FIS: [78, 74, 66, 88, 83, 71, 63, 75, 59, 81, 84, 67, 71, 56, 69, 86, 89],
-            FE: [71, 68, 62, 85, 76, 69, 65, 87, 79, 78, 81, 84, 68, 54, 66, 79, 91],
-            FPP: [74, 71, 89, 87, 81, 73, 67, 76, 61, 84, 79, 69, 66, 57, 75, 88, 85],
-            FIK: [69, 73, 91, 84, 77, 75, 68, 74, 58, 72, 77, 63, 64, 59, 83, 81, 82]
-        };
+    function createChart(containerId, labelsId, data, goals) {
+        const chartContainer = document.getElementById(containerId);
+        const labelsContainer = document.getElementById(labelsId);
+        
+        chartContainer.innerHTML = '';
+        labelsContainer.innerHTML = '';
 
-        const facultyNames = {
-            FIP: "Fakultas Ilmu Pendidikan (FIP)",
-            FBS: "Fakultas Bahasa dan Seni (FBS)",
-            FMIPA: "Fakultas Matematika dan IPA (FMIPA)",
-            FT: "Fakultas Teknik",
-            FIS: "Fakultas Ilmu Sosial",
-            FE: "Fakultas Ekonomi",
-            FPP: "Fakultas Pendidikan Psikologi",
-            FIK: "Fakultas Ilmu Keolahragaan"
-        };
+        // Handle case where all values are zero
+        const maxValue = Math.max(...data) || 1;
+        
+        data.forEach((value, index) => {
+            const bar = document.createElement('div');
+            bar.className = `bar ${sdgColors[index]}`;
+            bar.style.height = `${(value / maxValue) * 100}%`;
+            bar.setAttribute('data-value', `${value}`);
+            bar.title = `${goals[index]}: ${value} Kegiatan`;
+            bar.style.animationDelay = `${index * 0.1}s`;
+            chartContainer.appendChild(bar);
 
-        function createChart(containerId, labelsId, data, goals) {
-            const chartContainer = document.getElementById(containerId);
-            const labelsContainer = document.getElementById(labelsId);
-            
-            chartContainer.innerHTML = '';
-            labelsContainer.innerHTML = '';
-
-            const maxValue = Math.max(...data);
-            
-            data.forEach((value, index) => {
-                // Create bar with SDG color
-                const bar = document.createElement('div');
-                bar.className = `bar ${sdgColors[index]}`;
-                bar.style.height = `${(value / maxValue) * 100}%`;
-                bar.setAttribute('data-value', `${value}%`);
-                bar.title = `${goals[index]}: ${value}%`;
-                
-                // Add animation delay for staggered effect
-                bar.style.animationDelay = `${index * 0.1}s`;
-                
-                chartContainer.appendChild(bar);
-
-                // Create label
-                const label = document.createElement('div');
-                label.className = 'label';
-                label.textContent = goals[index];
-                labelsContainer.appendChild(label);
-            });
-        }
-
-        function updateYearChart() {
-            const selectedYear = document.getElementById('year-select').value;
-            const data = yearData[selectedYear];
-            const titleElement = document.getElementById('year-chart-title');
-            titleElement.textContent = `Progress Kegiatan Sustainability Tahun ${selectedYear}`;
-            createChart('year-chart', 'year-labels', data, sdgGoals);
-        }
-
-        function updateFacultyChart() {
-            const selectedFaculty = document.getElementById('faculty-select').value;
-            const data = facultyData[selectedFaculty];
-            const titleElement = document.getElementById('faculty-chart-title');
-            titleElement.textContent = `Progress Kegiatan Sustainability ${facultyNames[selectedFaculty]}`;
-            createChart('faculty-chart', 'faculty-labels', data, sdgGoals);
-        }
-
-        // Initialize charts
-        document.addEventListener('DOMContentLoaded', function() {
-            updateYearChart();
-            updateFacultyChart();
+            const label = document.createElement('div');
+            label.className = 'label';
+            label.textContent = goals[index];
+            labelsContainer.appendChild(label);
         });
-    </script>
+    }
 
+    async function updateYearChart() {
+        const year = document.getElementById('year-select').value;
+        try {
+            const response = await fetch(`/Pemeringkatan/kegiatansustainability/yearly?year=${year}`);
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            const data = await response.json();
+            document.getElementById('year-chart-title').textContent = `Progress Kegiatan Sustainability Tahun ${year}`;
+            createChart('year-chart', 'year-labels', data, sdgGoals);
+        } catch (error) {
+            console.error('Error fetching yearly data:', error);
+        }
+    }
+
+    async function updateFacultyChart() {
+        const faculty = document.getElementById('faculty-select').value;
+        const year = document.getElementById('year-select').value;
+        
+        try {
+            const response = await fetch(`/Pemeringkatan/kegiatansustainability/faculty?faculty=${faculty.toLowerCase()}&year=${year}`);
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            const data = await response.json();
+            document.getElementById('faculty-chart-title').textContent = 
+                `Progress Kegiatan Sustainability ${facultyNames[faculty]} Tahun ${year}`;
+            createChart('faculty-chart', 'faculty-labels', data, sdgGoals);
+        } catch (error) {
+            console.error('Error fetching faculty data:', error);
+        }
+    }
+
+    function updateCharts() {
+        updateYearChart();
+        updateFacultyChart();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCharts();
+    });
+</script>
     <!-- Uncomment when you have the footer component -->
      @include('layout.footer') 
 </body>

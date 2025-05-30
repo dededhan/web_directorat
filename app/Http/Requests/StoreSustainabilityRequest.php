@@ -3,6 +3,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth; // Added to check user role for conditional validation
+use Illuminate\Validation\Rule;
 
 class StoreSustainabilityRequest extends FormRequest
 {

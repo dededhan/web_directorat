@@ -5,13 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Sustainability;
 use App\Models\SustainabilityPhoto;
 use App\Http\Requests\StoreSustainabilityRequest;
-// If you have an UpdateSustainabilityRequest, use it. Otherwise, validation is inline.
-// use App\Http\Requests\UpdateSustainabilityRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User; // Added
-use Illuminate\Support\Facades\Log; // Added
+use App\Models\User;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class AdminSustainabilityController extends Controller
 {
@@ -71,7 +70,7 @@ class AdminSustainabilityController extends Controller
                 return 'dashboard'; // Fallback route
         }
     }
-    
+
 
 
     public function index()
@@ -97,7 +96,7 @@ class AdminSustainabilityController extends Controller
             if ($userInfo['faculty_code'] && $userInfo['prodi_name']) {
                 // Prodi can only see their own entries
                 $sustainabilitiesQuery->where('fakultas', $userInfo['faculty_code'])
-                                      ->where('prodi', $userInfo['prodi_name']);
+                    ->where('prodi', $userInfo['prodi_name']);
             } else {
                 Log::warning('Prodi user has no faculty_code or prodi_name identified.', ['user_id' => $user->id, 'user_name' => $user->name]);
                 $sustainabilitiesQuery->whereRaw('1 = 0'); // Return no results
@@ -131,22 +130,22 @@ class AdminSustainabilityController extends Controller
                 break;
             case 'admin_pemeringkatan':
                 $viewName = 'admin_pemeringkatan.sustainability';
-                 $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
+                $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
                 break;
             default:
                 return redirect('/')->with('error', 'View not defined for your role in sustainability.');
         }
-        
+
         return view($viewName, $viewData);
     }
-    
+
     public function store(StoreSustainabilityRequest $request)
     {
         $user = Auth::user();
         $role = $user->role;
         $validatedData = $request->validated(); // Retrieve validated data
         $userInfo = $this->getUserFacultyProdiInfo($user);
-        
+
 
         try {
             // Add user_id to track who created it
@@ -164,7 +163,7 @@ class AdminSustainabilityController extends Controller
                 // Further validation: ensure selected prodi (if any) belongs to $userInfo['faculty_code']
             } elseif ($role === 'prodi') {
                 if (!$userInfo['faculty_code'] || !$userInfo['prodi_name']) {
-                     return redirect()->back()->with('error', 'Fakultas atau Program Studi tidak teridentifikasi untuk akun Anda.')->withInput();
+                    return redirect()->back()->with('error', 'Fakultas atau Program Studi tidak teridentifikasi untuk akun Anda.')->withInput();
                 }
                 $validatedData['fakultas'] = $userInfo['faculty_code'];
                 $validatedData['prodi'] = $userInfo['prodi_name'];
@@ -172,7 +171,7 @@ class AdminSustainabilityController extends Controller
             // For admin_direktorat, fakultas and prodi come directly from the form as per StoreSustainabilityRequest.
 
             $sustainability = Sustainability::create($validatedData);
-            
+
             if ($request->hasFile('foto_kegiatan')) {
                 $files = $request->file('foto_kegiatan'); // This can be an array if input name is foto_kegiatan[]
                 if (!is_array($files)) {
@@ -191,7 +190,7 @@ class AdminSustainabilityController extends Controller
             }
 
             return redirect()->route($this->getRoleBasedRouteName('index'))
-                             ->with('success', 'Kegiatan berhasil disimpan!');
+                ->with('success', 'Kegiatan berhasil disimpan!');
         } catch (\Exception $e) {
             Log::error('Error storing sustainability: ' . $e->getMessage() . ' for user role: ' . $role, ['request_data' => $request->all(), 'user_id' => $user->id]);
             return redirect()->back()
@@ -221,7 +220,7 @@ class AdminSustainabilityController extends Controller
         } elseif ($user->role === 'prodi') {
             $userInfo = $this->getUserFacultyProdiInfo($user);
             if (($sustainability->fakultas !== $userInfo['faculty_code'] || $sustainability->prodi !== $userInfo['prodi_name']) && $sustainability->user_id !== $user->id) {
-                 return response()->json(['error' => 'Unauthorized'], 403);
+                return response()->json(['error' => 'Unauthorized'], 403);
             }
         }
         // Admins can access any detail
@@ -248,17 +247,17 @@ class AdminSustainabilityController extends Controller
         if ($role === 'fakultas') {
             // Fakultas can edit items from their faculty, or items they specifically created (even if prodi is under them but created by prodi user)
             // Simplified: Can edit if item.fakultas matches user.fakultas OR if user is owner.
-             if ($sustainability->fakultas !== $userInfo['faculty_code'] && !$isOwner) {
+            if ($sustainability->fakultas !== $userInfo['faculty_code'] && !$isOwner) {
                 return redirect()->back()->with('error', 'Unauthorized action. Not your faculty and you are not the owner.');
             }
         } elseif ($role === 'prodi') {
             // Prodi can only edit items they created AND that match their prodi/faculty assignment.
             if (!(($sustainability->fakultas === $userInfo['faculty_code'] && $sustainability->prodi === $userInfo['prodi_name']) && $isOwner)) {
-                 return redirect()->back()->with('error', 'Unauthorized action. Not your prodi or you are not the owner.');
+                return redirect()->back()->with('error', 'Unauthorized action. Not your prodi or you are not the owner.');
             }
         }
         // Admin_direktorat can update any.
-          // Define SDG options for validation
+        // Define SDG options for validation
         $sdgOptions = [];
         for ($i = 1; $i <= 17; $i++) {
             $sdgOptions[] = 'SDG ' . $i;
@@ -273,9 +272,9 @@ class AdminSustainabilityController extends Controller
             'link_kegiatan' => 'nullable|url|max:2048', // Increased to align with StoreRequest
             'deskripsi_kegiatan' => 'required|string',
             'foto_kegiatan.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8192', // Aligned
-            'sdg_goal' => ['nullable', 'string', Rule::in($sdgOptions)], 
+            'sdg_goal' => ['nullable', 'string', Rule::in($sdgOptions)],
         ];
-            
+
         try {
             if ($role === 'fakultas') {
                 $validatedData['fakultas'] = $userInfo['faculty_code'];
@@ -286,16 +285,16 @@ class AdminSustainabilityController extends Controller
                 $validatedData['fakultas'] = $userInfo['faculty_code'];
                 $validatedData['prodi'] = $userInfo['prodi_name'];
             }
-            
+
             $sustainability->update($validatedData);
-            
+
             if ($request->hasFile('foto_kegiatan')) {
                 $files = $request->file('foto_kegiatan');
                 if (!is_array($files)) {
                     $files = [$files];
                 }
                 foreach ($files as $file) {
-                     if ($file->isValid()) {
+                    if ($file->isValid()) {
                         $path = $file->store('sustainability', 'public');
                         SustainabilityPhoto::create([
                             'sustainability_id' => $sustainability->id,
@@ -304,7 +303,7 @@ class AdminSustainabilityController extends Controller
                     }
                 }
             }
-            
+
             $redirectRoute = $this->getRoleBasedRouteName('index');
             if ($request->ajax()) {
                 return response()->json([
@@ -313,7 +312,6 @@ class AdminSustainabilityController extends Controller
                 ]);
             }
             return redirect()->route($redirectRoute)->with('success', 'Data kegiatan sustainability berhasil diperbarui!');
-                
         } catch (\Exception $e) {
             Log::error('Error updating sustainability ID ' . $id . ': ' . $e->getMessage(), ['request_data' => $request->all(), 'user_id' => $user->id]);
             if ($request->ajax()) {
@@ -339,31 +337,30 @@ class AdminSustainabilityController extends Controller
         // Authorization Check
         if ($role === 'fakultas') {
             if ($sustainability->fakultas !== $userInfo['faculty_code'] && !$isOwner) {
-                 return redirect()->back()->with('error', 'Unauthorized action to delete.');
+                return redirect()->back()->with('error', 'Unauthorized action to delete.');
             }
         } elseif ($role === 'prodi') {
-             if (!(($sustainability->fakultas === $userInfo['faculty_code'] && $sustainability->prodi === $userInfo['prodi_name']) && $isOwner)) {
+            if (!(($sustainability->fakultas === $userInfo['faculty_code'] && $sustainability->prodi === $userInfo['prodi_name']) && $isOwner)) {
                 return redirect()->back()->with('error', 'Unauthorized action to delete.');
             }
         }
-            
+
         try {
             foreach ($sustainability->photos as $photo) {
                 Storage::disk('public')->delete($photo->path);
                 $photo->delete();
             }
-            
+
             $sustainability->delete();
-            
+
             $redirectRoute = $this->getRoleBasedRouteName('index');
             if ($request->ajax()) {
                 return response()->json(['success' => true, 'message' => 'Data kegiatan berhasil dihapus!']);
             }
             return redirect()->route($redirectRoute)->with('success', 'Data kegiatan sustainability berhasil dihapus!');
-
         } catch (\Exception $e) {
             Log::error('Error deleting sustainability ID ' . $id . ': ' . $e->getMessage(), ['user_id' => $user->id]);
-             if ($request->ajax()) {
+            if ($request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'Gagal menghapus data: ' . $e->getMessage()]);
             }
             return redirect()->back()
@@ -372,7 +369,8 @@ class AdminSustainabilityController extends Controller
     }
 
 
-    private function getFacultyProgramDataForView() {
+    private function getFacultyProgramDataForView()
+    {
 
         return [
             'PASCASARJANA' => ['name' => 'Pascasarjana', 'programs' => ['S3 Penelitian Dan Evaluasi Pendidikan', 'S2 Penelitian Dan Evaluasi Pendidikan', 'S2 Manajemen Lingkungan', 'S3 Ilmu Manajemen', 'S3 Manajemen Pendidikan', 'S3 Pendidikan Dasar', 'S2 Linguistik Terapan', 'S3 Pendidikan Kependudukan Dan Lingkungan Hidup', 'S2 Pendidikan Lingkungan', 'S3 Pendidikan Jasmani', 'S3 Teknologi Pendidikan', 'S3 Linguistik Terapan', 'S3 Pendidikan Anak Usia Dini', 'S2 Manajemen Pendidikan Tinggi']],
@@ -386,5 +384,60 @@ class AdminSustainabilityController extends Controller
             'FE' => ['name' => 'FE (Fakultas Ekonomi)', 'programs' => ['D4 Akuntansi Sektor Publik', 'D4 Administrasi Perkantoran Digital', 'D4 Pemasaran Digital', 'S1 Akuntansi', 'S1 Manajemen', 'S1 Pendidikan Ekonomi', 'S2 Manajemen', 'S1 Pendidikan Administrasi Perkantoran', 'S1 Bisnis Digital', 'S2 Akuntansi', 'S1 Pendidikan Akuntansi', 'S2 Pendidikan Ekonomi', 'S1 Pendidikan Bisnis']],
             'PROFESI' => ['name' => 'Program Profesi', 'programs' => ['Profesi PPG']]
         ];
+    }
+
+    public function getYearlyData(Request $request)
+    {
+        $year = $request->query('year');
+        if (!preg_match('/^\d{4}$/', $year)) {
+            return response()->json(['error' => 'Invalid year'], 400);
+        }
+
+        $counts = array_fill(0, 17, 0);
+
+        $results = Sustainability::whereYear('tanggal_kegiatan', $year)
+            ->select('sdg_goal', DB::raw('count(*) as total'))
+            ->groupBy('sdg_goal')
+            ->get();
+
+        foreach ($results as $result) {
+            if ($result->sdg_goal && preg_match('/SDG\s*(\d+)/i', $result->sdg_goal, $matches)) {
+                $sdgNum = (int)$matches[1];
+                if ($sdgNum >= 1 && $sdgNum <= 17) {
+                    $counts[$sdgNum - 1] = $result->total;
+                }
+            }
+        }
+
+        return response()->json($counts);
+    }
+
+    public function getFacultyData(Request $request)
+    {
+        $faculty = strtolower($request->query('faculty'));
+        $year = $request->query('year');
+
+        if (!preg_match('/^\d{4}$/', $year)) {
+            return response()->json(['error' => 'Invalid year'], 400);
+        }
+
+        $counts = array_fill(0, 17, 0);
+
+        $results = Sustainability::where('fakultas', $faculty)
+            ->whereYear('tanggal_kegiatan', $year)
+            ->select('sdg_goal', DB::raw('count(*) as total'))
+            ->groupBy('sdg_goal')
+            ->get();
+
+        foreach ($results as $result) {
+            if ($result->sdg_goal && preg_match('/SDG\s*(\d+)/i', $result->sdg_goal, $matches)) {
+                $sdgNum = (int)$matches[1];
+                if ($sdgNum >= 1 && $sdgNum <= 17) {
+                    $counts[$sdgNum - 1] = $result->total;
+                }
+            }
+        }
+
+        return response()->json($counts);
     }
 }

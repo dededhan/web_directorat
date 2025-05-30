@@ -24,6 +24,7 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\InternationalFacultyStaffController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\AdminRespondenController;
+use App\Http\Controllers\AdminSustainabilityController;
 
 Route::get('/api/responden-chart-data', [AdminRespondenController::class, 'getChartData'])->name('api.responden.chart-data');
 
@@ -341,7 +342,8 @@ Route::get('/Pemeringkatans/programsustainability/programsustainability', functi
 Route::get('/Pemeringkatan/kegiatansustainability', function () {
     return view('Pemeringkatan.kegiatansustainability.kegiatansustainability');
 })->name('Pemeringkatan.kegiatansustainability.kegiatansustainability');
-Route::get('/api/sustainability-graph-data', [AdminSustainabilityController::class, 'getGraphData'])->name('api.sustainability.graph_data');
+Route::get('/Pemeringkatan/kegiatansustainability/yearly', [AdminSustainabilityController::class, 'getYearlyData']);
+Route::get('/Pemeringkatan/kegiatansustainability/faculty', [AdminSustainabilityController::class, 'getFacultyData']);
 
 Route::get('/Pemeringkatan/dataresponden', function () {
     return view('Pemeringkatan.dataresponden.dataresponden');
