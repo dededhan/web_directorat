@@ -7,7 +7,7 @@ use App\Models\User; // Added
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreMataKuliahRequest; // Assuming this will be updated for conditional validation
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log; // Added
 
 class AdminMataKuliahController extends Controller
@@ -22,14 +22,14 @@ class AdminMataKuliahController extends Controller
         $userFacultyKeyForData = null;
 
         if ($user->role === 'fakultas') {
-            $userFaculty = strtolower($user->name); 
+            $userFaculty = strtolower($user->name);
             $userFacultyKeyForData = strtoupper($user->name);
         } elseif ($user->role === 'prodi') {
             $parts = explode('-', $user->name, 2);
             if (count($parts) === 2) {
-                $userFaculty = strtolower($parts[0]); 
+                $userFaculty = strtolower($parts[0]);
                 $userFacultyKeyForData = strtoupper($parts[0]);
-                $userProdi = $parts[1];   
+                $userProdi = $parts[1];
             } else {
                 Log::warning('Unexpected name format for prodi user for Mata Kuliah: ' . $user->name . ' ID: ' . $user->id);
                 $userFaculty = strtolower($user->name); // Fallback, though likely an error
@@ -45,8 +45,8 @@ class AdminMataKuliahController extends Controller
     private function getRoleBasedRouteName(string $actionSuffix)
     {
         $user = Auth::user();
-        if (!$user) return 'login'; 
-        
+        if (!$user) return 'login';
+
         $role = $user->role;
         $baseRouteName = 'matakuliah.' . $actionSuffix;
 
@@ -79,16 +79,16 @@ class AdminMataKuliahController extends Controller
                 $matakuliahsQuery->where('fakultas', $userInfo['faculty_code']);
             } else {
                 Log::warning('Mata Kuliah: Fakultas user has no faculty_code.', ['user_id' => $user->id, 'user_name' => $user->name]);
-                $matakuliahsQuery->whereRaw('1 = 0'); 
+                $matakuliahsQuery->whereRaw('1 = 0');
             }
             $matakuliahs = $matakuliahsQuery->paginate(10);
         } elseif ($role === 'prodi') {
             if ($userInfo['faculty_code'] && $userInfo['prodi_name']) {
                 $matakuliahsQuery->where('fakultas', $userInfo['faculty_code'])
-                                 ->where('prodi', $userInfo['prodi_name']);
+                    ->where('prodi', $userInfo['prodi_name']);
             } else {
                 Log::warning('Mata Kuliah: Prodi user has no faculty_code or prodi_name.', ['user_id' => $user->id, 'user_name' => $user->name]);
-                $matakuliahsQuery->whereRaw('1 = 0'); 
+                $matakuliahsQuery->whereRaw('1 = 0');
             }
             $matakuliahs = $matakuliahsQuery->paginate(10);
         } else {
@@ -109,7 +109,7 @@ class AdminMataKuliahController extends Controller
                 break;
             case 'fakultas':
                 $viewName = 'fakultas.matakuliah';
-                 if ($userInfo['faculty_key']) {
+                if ($userInfo['faculty_key']) {
                     $allFacultiesData = $this->getFacultyProgramDataForView();
                     $viewData['prodi_list_for_fakultas'] = $allFacultiesData[strtoupper($userInfo['faculty_key'])]['programs'] ?? [];
                 } else {
@@ -123,7 +123,7 @@ class AdminMataKuliahController extends Controller
             default:
                 return redirect('/')->with('error', 'View not defined for your role in Mata Kuliah.');
         }
-        
+
         return view($viewName, $viewData);
     }
 
@@ -143,12 +143,12 @@ class AdminMataKuliahController extends Controller
                 }
                 $validatedData['fakultas'] = $userInfo['faculty_code'];
                 // 'prodi' comes from the form, can be null or a selected prodi under this faculty
-                if (empty($validatedData['prodi'])) { 
+                if (empty($validatedData['prodi'])) {
                     $validatedData['prodi'] = null;
                 }
             } elseif ($role === 'prodi') {
                 if (!$userInfo['faculty_code'] || !$userInfo['prodi_name']) {
-                     return redirect()->back()->with('error', 'Fakultas atau Program Studi tidak teridentifikasi.')->withInput();
+                    return redirect()->back()->with('error', 'Fakultas atau Program Studi tidak teridentifikasi.')->withInput();
                 }
                 $validatedData['fakultas'] = $userInfo['faculty_code'];
                 $validatedData['prodi'] = $userInfo['prodi_name'];
@@ -167,7 +167,7 @@ class AdminMataKuliahController extends Controller
             MataKuliah::create($validatedData);
 
             return redirect()->route($this->getRoleBasedRouteName('index'))
-                             ->with('success', 'Mata Kuliah berhasil disimpan!');
+                ->with('success', 'Mata Kuliah berhasil disimpan!');
         } catch (\Exception $e) {
             Log::error('Error storing Mata Kuliah: ' . $e->getMessage(), ['request_data' => $request->except('rps'), 'user_id' => $user->id]);
             return redirect()->back()
@@ -194,7 +194,7 @@ class AdminMataKuliahController extends Controller
             }
         } elseif ($role === 'prodi') {
             if (!(($matakuliah->fakultas === $userInfo['faculty_code'] && $matakuliah->prodi === $userInfo['prodi_name']) && $isOwner)) {
-                 return response()->json(['error' => 'Unauthorized. Not your prodi or owner.'], 403);
+                return response()->json(['error' => 'Unauthorized. Not your prodi or owner.'], 403);
             }
         }
         // Admins can edit any.
@@ -216,19 +216,19 @@ class AdminMataKuliahController extends Controller
             }
             // Fakultas can change prodi within their faculty or set to null
             $validatedData['fakultas'] = $userInfo['faculty_code']; // Enforce faculty
-             if ($request->has('prodi') && empty($validatedData['prodi'])) {
+            if ($request->has('prodi') && empty($validatedData['prodi'])) {
                 $validatedData['prodi'] = null;
             }
         } elseif ($role === 'prodi') {
             if (!(($matakuliah->fakultas === $userInfo['faculty_code'] && $matakuliah->prodi === $userInfo['prodi_name']) && $isOwner)) {
-                 return redirect()->back()->with('error', 'Unauthorized to update. Not your prodi or owner.');
+                return redirect()->back()->with('error', 'Unauthorized to update. Not your prodi or owner.');
             }
             // Prodi cannot change their faculty or prodi
             $validatedData['fakultas'] = $userInfo['faculty_code'];
             $validatedData['prodi'] = $userInfo['prodi_name'];
         }
         // Admins can change anything validated.
-        
+
         try {
             if ($request->hasFile('rps')) {
                 // Delete old file if it exists
@@ -240,13 +240,12 @@ class AdminMataKuliahController extends Controller
             }
 
             $matakuliah->update($validatedData);
-            
+
             $redirectRoute = $this->getRoleBasedRouteName('index');
             if ($request->ajax()) { // If called from an AJAX request (e.g., modal form)
                 return response()->json(['success' => true, 'message' => 'Mata Kuliah berhasil diperbarui!']);
             }
             return redirect()->route($redirectRoute)->with('success', 'Mata Kuliah berhasil diperbarui!');
-                
         } catch (\Exception $e) {
             Log::error('Error updating Mata Kuliah ID ' . $matakuliah->id . ': ' . $e->getMessage(), ['request_data' => $request->except('rps'), 'user_id' => $user->id]);
             if ($request->ajax()) {
@@ -266,12 +265,12 @@ class AdminMataKuliahController extends Controller
         $isOwner = ($matakuliah->user_id === $user->id);
 
         // Authorization
-         if ($role === 'fakultas') {
+        if ($role === 'fakultas') {
             if ($matakuliah->fakultas !== $userInfo['faculty_code'] && !$isOwner) {
                 return redirect()->back()->with('error', 'Unauthorized to delete. Not your faculty or owner.');
             }
         } elseif ($role === 'prodi') {
-             if (!(($matakuliah->fakultas === $userInfo['faculty_code'] && $matakuliah->prodi === $userInfo['prodi_name']) && $isOwner)) {
+            if (!(($matakuliah->fakultas === $userInfo['faculty_code'] && $matakuliah->prodi === $userInfo['prodi_name']) && $isOwner)) {
                 return redirect()->back()->with('error', 'Unauthorized to delete. Not your prodi or owner.');
             }
         }
@@ -282,19 +281,18 @@ class AdminMataKuliahController extends Controller
             if ($matakuliah->rps_path && Storage::disk('public')->exists($matakuliah->rps_path)) {
                 Storage::disk('public')->delete($matakuliah->rps_path);
             }
-            
+
             $matakuliah->delete();
-            
+
             $redirectRoute = $this->getRoleBasedRouteName('index');
             if ($request->ajax()) {
-                 return response()->json(['success' => true, 'message' => 'Mata Kuliah berhasil dihapus!']);
+                return response()->json(['success' => true, 'message' => 'Mata Kuliah berhasil dihapus!']);
             }
             return redirect()->route($redirectRoute)->with('success', 'Mata Kuliah berhasil dihapus!');
-
         } catch (\Exception $e) {
             Log::error('Error deleting Mata Kuliah ID ' . $matakuliah->id . ': ' . $e->getMessage(), ['user_id' => $user->id]);
             if ($request->ajax()) {
-                 return response()->json(['success' => false, 'message' => 'Gagal menghapus Mata Kuliah: ' . $e->getMessage()]);
+                return response()->json(['success' => false, 'message' => 'Gagal menghapus Mata Kuliah: ' . $e->getMessage()]);
             }
             return redirect()->back()
                 ->with('error', 'Gagal menghapus Mata Kuliah: ' . $e->getMessage());
@@ -304,7 +302,8 @@ class AdminMataKuliahController extends Controller
     /**
      * Provides faculty and program data.
      */
-    private function getFacultyProgramDataForView() {
+    private function getFacultyProgramDataForView()
+    {
         // This should be consistent with UserController and other controllers.
         // Ideally, fetch from a centralized config or service.
         // Keys (PASCASARJANA, FIP) are uppercase for consistency.
@@ -321,5 +320,59 @@ class AdminMataKuliahController extends Controller
             'FE' => ['name' => 'FE (Fakultas Ekonomi)', 'programs' => ['D4 Akuntansi Sektor Publik', 'D4 Administrasi Perkantoran Digital', 'D4 Pemasaran Digital', 'S1 Akuntansi', 'S1 Manajemen', 'S1 Pendidikan Ekonomi', 'S2 Manajemen', 'S1 Pendidikan Administrasi Perkantoran', 'S1 Bisnis Digital', 'S2 Akuntansi', 'S1 Pendidikan Akuntansi', 'S2 Pendidikan Ekonomi', 'S1 Pendidikan Bisnis']],
             'PROFESI' => ['name' => 'Program Profesi', 'programs' => ['Profesi PPG']]
         ];
+    }
+
+    public function matakuliahSustainabilityView()
+    {
+        return view('Pemeringkatan.matakuliahsustainability.matakuliahsustainability');
+    }
+
+    public function getSustainabilityData()
+    {
+        // Get distinct years from courses
+        $years = MataKuliah::selectRaw('YEAR(created_at) as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+
+        $yearData = [];
+        foreach ($years as $year) {
+            // Get SDG distribution for each year
+            $sdgCounts = MataKuliah::whereYear('created_at', $year)
+                ->selectRaw('sdgs_group, COUNT(*) as count')
+                ->groupBy('sdgs_group')
+                ->get()
+                ->keyBy('sdgs_group');
+
+            $data = [];
+            for ($i = 1; $i <= 17; $i++) {
+                $sdg = "SDGs $i";
+                $data[] = $sdgCounts->has($sdg) ? $sdgCounts[$sdg]->count : 0;
+            }
+            $yearData[$year] = $data;
+        }
+
+        // Get faculty data
+        $faculties = array_keys($this->getFacultyProgramDataForView());
+        $facultyData = [];
+        foreach ($faculties as $faculty) {
+            $sdgCounts = MataKuliah::where('fakultas', strtolower($faculty))
+                ->selectRaw('sdgs_group, COUNT(*) as count')
+                ->groupBy('sdgs_group')
+                ->get()
+                ->keyBy('sdgs_group');
+
+            $data = [];
+            for ($i = 1; $i <= 17; $i++) {
+                $sdg = "SDGs $i";
+                $data[] = $sdgCounts->has($sdg) ? $sdgCounts[$sdg]->count : 0;
+            }
+            $facultyData[$faculty] = $data;
+        }
+
+        return response()->json([
+            'yearData' => $yearData,
+            'facultyData' => $facultyData
+        ]);
     }
 }

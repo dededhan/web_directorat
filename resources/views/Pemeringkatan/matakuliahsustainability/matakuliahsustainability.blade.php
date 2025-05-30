@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -89,7 +90,7 @@
             border: 2px solid transparent;
             border-radius: 12px;
             background: linear-gradient(white, white) padding-box,
-                        linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
+                linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
             font-size: 16px;
             color: #2c3e50;
             cursor: pointer;
@@ -219,6 +220,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -232,23 +234,73 @@
         }
 
         /* SDG Colors */
-        .sdg-1 { background: linear-gradient(135deg, #e5233c, #c41e3a); }
-        .sdg-2 { background: linear-gradient(135deg, #dda73a, #bf9000); }
-        .sdg-3 { background: linear-gradient(135deg, #4c9f38, #2d5016); }
-        .sdg-4 { background: linear-gradient(135deg, #c5192d, #8b0000); }
-        .sdg-5 { background: linear-gradient(135deg, #ff3a21, #e73c7e); }
-        .sdg-6 { background: linear-gradient(135deg, #26bde2, #1a8fb8); }
-        .sdg-7 { background: linear-gradient(135deg, #fcc30b, #dd9900); }
-        .sdg-8 { background: linear-gradient(135deg, #a21942, #8b1538); }
-        .sdg-9 { background: linear-gradient(135deg, #fd6925, #e55100); }
-        .sdg-10 { background: linear-gradient(135deg, #dd1367, #b8094d); }
-        .sdg-11 { background: linear-gradient(135deg, #fd9d24, #e67e00); }
-        .sdg-12 { background: linear-gradient(135deg, #bf8b2e, #9d6e00); }
-        .sdg-13 { background: linear-gradient(135deg, #3f7e44, #2d5a31); }
-        .sdg-14 { background: linear-gradient(135deg, #0a97d9, #0066cc); }
-        .sdg-15 { background: linear-gradient(135deg, #56c02b, #3d8b21); }
-        .sdg-16 { background: linear-gradient(135deg, #00689d, #004d7a); }
-        .sdg-17 { background: linear-gradient(135deg, #19486a, #0f2c3d); }
+        .sdg-1 {
+            background: linear-gradient(135deg, #e5233c, #c41e3a);
+        }
+
+        .sdg-2 {
+            background: linear-gradient(135deg, #dda73a, #bf9000);
+        }
+
+        .sdg-3 {
+            background: linear-gradient(135deg, #4c9f38, #2d5016);
+        }
+
+        .sdg-4 {
+            background: linear-gradient(135deg, #c5192d, #8b0000);
+        }
+
+        .sdg-5 {
+            background: linear-gradient(135deg, #ff3a21, #e73c7e);
+        }
+
+        .sdg-6 {
+            background: linear-gradient(135deg, #26bde2, #1a8fb8);
+        }
+
+        .sdg-7 {
+            background: linear-gradient(135deg, #fcc30b, #dd9900);
+        }
+
+        .sdg-8 {
+            background: linear-gradient(135deg, #a21942, #8b1538);
+        }
+
+        .sdg-9 {
+            background: linear-gradient(135deg, #fd6925, #e55100);
+        }
+
+        .sdg-10 {
+            background: linear-gradient(135deg, #dd1367, #b8094d);
+        }
+
+        .sdg-11 {
+            background: linear-gradient(135deg, #fd9d24, #e67e00);
+        }
+
+        .sdg-12 {
+            background: linear-gradient(135deg, #bf8b2e, #9d6e00);
+        }
+
+        .sdg-13 {
+            background: linear-gradient(135deg, #3f7e44, #2d5a31);
+        }
+
+        .sdg-14 {
+            background: linear-gradient(135deg, #0a97d9, #0066cc);
+        }
+
+        .sdg-15 {
+            background: linear-gradient(135deg, #56c02b, #3d8b21);
+        }
+
+        .sdg-16 {
+            background: linear-gradient(135deg, #00689d, #004d7a);
+        }
+
+        .sdg-17 {
+            background: linear-gradient(135deg, #19486a, #0f2c3d);
+        }
 
         @media (max-width: 768px) {
             .header h1 {
@@ -312,8 +364,9 @@
         }
     </style>
 </head>
+
 <body>
-     @include('layout.navbar_pemeringkatan')
+    @include('layout.navbar_pemeringkatan')
 
     <div class="main-content-wrapper">
         <div class="header">
@@ -324,7 +377,8 @@
         <div class="dropdown-container">
             <div class="dropdown-wrapper">
                 <label for="year-select">📅 Tahun</label>
-                <select id="year-select" onchange="updateYearChart()"class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400 text-base font-medium bg-white shadow-sm transition">>
+                <select id="year-select"
+                    onchange="updateYearChart()"class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400 text-base font-medium bg-white shadow-sm transition">>
                     <option value="2024">2024</option>
                     <option value="2025" selected>2025</option>
                 </select>
@@ -343,7 +397,8 @@
             <div class="dropdown-container">
                 <div class="dropdown-wrapper">
                     <label for="faculty-select">🏛️ Fakultas</label>
-                    <select id="faculty-select" onchange="updateFacultyChart()" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400 text-base font-medium bg-white shadow-sm transition">
+                    <select id="faculty-select" onchange="updateFacultyChart()"
+                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400 text-base font-medium bg-white shadow-sm transition">
                         <option value="FIP">Fakultas Ilmu Pendidikan (FIP)</option>
                         <option value="FBS">Fakultas Bahasa dan Seni (FBS)</option>
                         <option value="FMIPA">Fakultas Matematika dan IPA (FMIPA)</option>
@@ -357,7 +412,8 @@
             </div>
 
             <div class="chart-section">
-                <h2 class="chart-title" id="faculty-chart-title">Progress Mata Kuliah Sustainability Fakultas Ilmu Pendidikan (FIP)</h2>
+                <h2 class="chart-title" id="faculty-chart-title">Progress Mata Kuliah Sustainability Fakultas Ilmu
+                    Pendidikan (FIP)</h2>
                 <div class="chart-container">
                     <div class="chart" id="faculty-chart"></div>
                     <div class="chart-labels" id="faculty-labels"></div>
@@ -369,7 +425,7 @@
     <script>
         const sdgGoals = [
             "No Poverty",
-            "Zero Hunger", 
+            "Zero Hunger",
             "Good Health",
             "Quality Education",
             "Gender Equality",
@@ -424,12 +480,12 @@
         function createChart(containerId, labelsId, data, goals) {
             const chartContainer = document.getElementById(containerId);
             const labelsContainer = document.getElementById(labelsId);
-            
+
             chartContainer.innerHTML = '';
             labelsContainer.innerHTML = '';
 
             const maxValue = Math.max(...data);
-            
+
             data.forEach((value, index) => {
                 // Create bar with SDG color
                 const bar = document.createElement('div');
@@ -437,10 +493,10 @@
                 bar.style.height = `${(value / maxValue) * 100}%`;
                 bar.setAttribute('data-value', `${value}%`);
                 bar.title = `${goals[index]}: ${value}%`;
-                
+
                 // Add animation delay for staggered effect
                 bar.style.animationDelay = `${index * 0.1}s`;
-                
+
                 chartContainer.appendChild(bar);
 
                 // Create label
@@ -472,9 +528,63 @@
             updateYearChart();
             updateFacultyChart();
         });
+
+        let sustainabilityData = {
+            yearData: {},
+            facultyData: {}
+        };
+
+        // Fetch data from server
+        function fetchSustainabilityData() {
+            fetch("{{ route('pemeringkatan.sustainability.data') }}")
+                .then(response => response.json())
+                .then(data => {
+                    sustainabilityData = data;
+                    updateYearChart();
+                    updateFacultyChart();
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    // Fallback to sample data if API fails
+                    sustainabilityData = {
+                        yearData: {
+                            2024: [65, 72, 58, 84, 69, 77, 63, 71, 56, 68, 74, 62, 59, 51, 67, 73, 81],
+                            2025: [68, 75, 61, 87, 72, 80, 66, 74, 59, 71, 77, 65, 62, 54, 70, 76, 84]
+                        },
+                        facultyData: {
+                            FIP: [75, 82, 68, 91, 79, 73, 66, 78, 62, 74, 80, 69, 65, 58, 72, 83, 88],
+                            // ... other faculties ...
+                        }
+                    };
+                    updateYearChart();
+                    updateFacultyChart();
+                });
+        }
+
+        function updateYearChart() {
+            const selectedYear = document.getElementById('year-select').value;
+            const data = sustainabilityData.yearData[selectedYear] || [];
+            const titleElement = document.getElementById('year-chart-title');
+            titleElement.textContent = `Progress Mata Kuliah Sustainability Tahun ${selectedYear}`;
+            createChart('year-chart', 'year-labels', data, sdgGoals);
+        }
+
+        function updateFacultyChart() {
+            const selectedFaculty = document.getElementById('faculty-select').value;
+            const data = sustainabilityData.facultyData[selectedFaculty] || [];
+            const titleElement = document.getElementById('faculty-chart-title');
+            titleElement.textContent = `Progress Mata Kuliah Sustainability ${facultyNames[selectedFaculty]}`;
+            createChart('faculty-chart', 'faculty-labels', data, sdgGoals);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchSustainabilityData();
+        });
     </script>
 
     <!-- Uncomment when you have the footer component -->
-     @include('layout.footer') 
+    @include('layout.footer')
 </body>
+
 </html>

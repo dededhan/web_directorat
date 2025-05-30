@@ -25,6 +25,7 @@ use App\Http\Controllers\InternationalFacultyStaffController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\AdminRespondenController;
 use App\Http\Controllers\AdminSustainabilityController;
+use App\Http\Controllers\AdminMataKuliahController;
 
 Route::get('/api/responden-chart-data', [AdminRespondenController::class, 'getChartData'])->name('api.responden.chart-data');
 
@@ -327,9 +328,12 @@ Route::get('/Pemeringkatans/Ranking-Universitas/klaster-perguruan-tinggi', funct
     return view('Pemeringkatan.Ranking_Universitas.Pemeringkatan_Klaster_Perguruan_Tinggi');
 })->name('pemeringkatan.klaster');
 
-Route::get('/Pemeringkatans/matakuliahsustainability/matakuliahsustainability', function () {
-    return view('Pemeringkatan.matakuliahsustainability.matakuliahsustainability');
-})->name('Pemeringkatan.matakuliahsustainability.matakuliahsustainability');
+Route::get('/Pemeringkatans/matakuliahsustainability', 
+    [AdminMataKuliahController::class, 'matakuliahSustainabilityView'])
+    ->name('Pemeringkatan.matakuliahsustainability.matakuliahsustainability');
+Route::get('/pemeringkatan/sustainability-data', 
+    [AdminMataKuliahController::class, 'getSustainabilityData'])
+    ->name('pemeringkatan.sustainability.data');
 
 Route::get('/Pemeringkatans/program/global-engagement', function () {
     return view('Pemeringkatan.program.global-engagement');
