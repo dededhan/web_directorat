@@ -3,21 +3,7 @@
 <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/sustainability_dashboard.css') }}">
 
 @section('contentadmin')
-    <div class="head-title">
-        <div class="left">
-            <h1>Sustainability</h1>
-            <ul class="breadcrumb">
-                <li>
-                    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a class="active" href="#">Input Kegiatan Sustainability</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
+    {{-- ... (head-title, alerts, errors sections remain the same) ... --}}
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -52,32 +38,21 @@
             <form id="sustainability-form" method="POST" action="{{ route('admin.sustainability.store') }}"
                 enctype="multipart/form-data">
                 @csrf
+                {{-- ... (SDG Goal, Judul Kegiatan, Tanggal Kegiatan rows remain the same) ... --}}
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="edit_sdg_goal" class="form-label">Kelompok Kategori</label>
-                        <select class="form-select" name="sdg_goal" id="edit_sdg_goal">
+                        <select class="form-select" name="sdg_goal" id="sdg_goal_main"> {{-- Changed ID to be unique --}}
                             <option value="">Pilih Kelompok Kategori</option>
                             @php
-                                // Fallback if $sdgDetailsList is not passed from controller,
-                                // but passing from controller is preferred.
                                 $sdgGoalsData = $sdgDetailsList ?? [
-                                    1 => "Tanpa Kemiskinan",
-                                    2 => "Tanpa Kelaparan",
-                                    3 => "Kehidupan Sehat dan Sejahtera",
-                                    4 => "Pendidikan Berkualitas",
-                                    5 => "Kesetaraan Gender",
-                                    6 => "Air Bersih dan Sanitasi Layak",
-                                    7 => "Energi Bersih dan Terjangkau",
-                                    8 => "Pekerjaan Layak dan Pertumbuhan Ekonomi",
-                                    9 => "Industri, Inovasi, dan Infrastruktur",
-                                    10 => "Berkurangnya Kesenjangan",
-                                    11 => "Kota dan Pemukiman yang Berkelanjutan",
-                                    12 => "Konsumsi dan Produksi yang Bertanggung Jawab",
-                                    13 => "Penanganan Perubahan Iklim",
-                                    14 => "Ekosistem Lautan",
-                                    15 => "Ekosistem Daratan",
-                                    16 => "Perdamaian, Keadilan, dan Kelembagaan yang Tangguh",
-                                    17 => "Kemitraan untuk Mencapai Tujuan",
+                                    1 => "Tanpa Kemiskinan", 2 => "Tanpa Kelaparan", 3 => "Kehidupan Sehat dan Sejahtera",
+                                    4 => "Pendidikan Berkualitas", 5 => "Kesetaraan Gender", 6 => "Air Bersih dan Sanitasi Layak",
+                                    7 => "Energi Bersih dan Terjangkau", 8 => "Pekerjaan Layak dan Pertumbuhan Ekonomi",
+                                    9 => "Industri, Inovasi, dan Infrastruktur", 10 => "Berkurangnya Kesenjangan",
+                                    11 => "Kota dan Pemukiman yang Berkelanjutan", 12 => "Konsumsi dan Produksi yang Bertanggung Jawab",
+                                    13 => "Penanganan Perubahan Iklim", 14 => "Ekosistem Lautan", 15 => "Ekosistem Daratan",
+                                    16 => "Perdamaian, Keadilan, dan Kelembagaan yang Tangguh", 17 => "Kemitraan untuk Mencapai Tujuan",
                                 ];
                             @endphp
                             @foreach ($sdgGoalsData as $number => $description)
@@ -88,7 +63,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-12 mb-3">
+                     <div class="col-md-12 mb-3"> {{-- Moved Judul Kegiatan here if preferred, or keep original layout --}}
                         <label for="judul_kegiatan" class="form-label">Judul Kegiatan</label>
                         <input type="text" class="form-control @error('judul_kegiatan') is-invalid @enderror"
                             name="judul_kegiatan" id="judul_kegiatan" value="{{ old('judul_kegiatan') }}">
@@ -111,22 +86,20 @@
                     </div>
                 </div>
 
+
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="fakultas" class="form-label">Fakultas</label>
                         <select class="form-select @error('fakultas') is-invalid @enderror" name="fakultas" id="fakultas">
                             <option value="">Pilih Fakultas</option>
-                            <option value="pascasarjana" {{ old('fakultas') == 'pascasarjana' ? 'selected' : '' }}>
-                                PASCASARJANA</option>
-                            <option value="fip" {{ old('fakultas') == 'fip' ? 'selected' : '' }}>FIP</option>
-                            <option value="fmipa" {{ old('fakultas') == 'fmipa' ? 'selected' : '' }}>FMIPA</option>
-                            <option value="fppsi" {{ old('fakultas') == 'fppsi' ? 'selected' : '' }}>FPsi</option>
-                            <option value="fbs" {{ old('fakultas') == 'fbs' ? 'selected' : '' }}>FBS</option>
-                            <option value="ft" {{ old('fakultas') == 'ft' ? 'selected' : '' }}>FT</option>
-                            <option value="fik" {{ old('fakultas') == 'fik' ? 'selected' : '' }}>FIKK</option>
-                            <option value="fis" {{ old('fakultas') == 'fis' ? 'selected' : '' }}>FISH</option>
-                            <option value="fe" {{ old('fakultas') == 'fe' ? 'selected' : '' }}>FEB</option>
-                            <option value="profesi" {{ old('fakultas') == 'profesi' ? 'selected' : '' }}>PROFESI</option>
+                            {{-- Dynamically populate from $faculties_data --}}
+                            @if(isset($faculties_data) && is_array($faculties_data))
+                                @foreach($faculties_data as $key => $facultyInfo)
+                                    <option value="{{ strtolower($key) }}" {{ old('fakultas') == strtolower($key) ? 'selected' : '' }}>
+                                        {{ $facultyInfo['name'] }}
+                                    </option>
+                                @endforeach
+                            @endif
                         </select>
                         @error('fakultas')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -135,19 +108,19 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="prodi" class="form-label">Program Studi</label>
-                        <select class="form-select @error('prodi') is-invalid @enderror" name="prodi" id="prodi"
-                            disabled>
+                        <select class="form-select @error('prodi') is-invalid @enderror" name="prodi" id="prodi" disabled>
                             <option value="">Pilih Program Studi</option>
-                            {{-- Options will be populated by sustainability_dashboard.js --}}
+                            {{-- Options will be populated by JavaScript --}}
                         </select>
                         @error('prodi')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="form-text text-muted">Pilih program studi terkait kegiatan</div>
+                        <div class="form-text text-muted">Pilih program studi terkait kegiatan (opsional jika level fakultas)</div>
                     </div>
                 </div>
 
-                <div class="row">
+                {{-- ... (Link Kegiatan, Foto Kegiatan, Deskripsi Kegiatan, Submit button rows remain the same) ... --}}
+                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="link_kegiatan" class="form-label">Link Kegiatan</label>
                         <input type="url" class="form-control @error('link_kegiatan') is-invalid @enderror"
@@ -155,15 +128,13 @@
                         @error('link_kegiatan')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="form-text text-muted">Masukkan link dokumentasi kegiatan (YouTube/Media Sosial/Google
-                            Drive)</div>
+                        <div class="form-text text-muted">Masukkan link dokumentasi kegiatan (YouTube/Media Sosial/Google Drive)</div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="foto_kegiatan" class="form-label">Foto-foto Kegiatan</label>
-                        {{-- Changed name to foto_kegiatan[] for multiple file uploads --}}
                         <input type="file"
                             class="form-control @error('foto_kegiatan') is-invalid @enderror @error('foto_kegiatan.*') is-invalid @enderror"
                             name="foto_kegiatan[]" id="foto_kegiatan" multiple accept="image/*">
@@ -173,8 +144,7 @@
                         @error('foto_kegiatan.*')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="form-text text-muted">Upload foto-foto dokumentasi kegiatan (format: JPG, PNG, WEBP,
-                            JPEG, max 8MB per foto).</div>
+                        <div class="form-text text-muted">Upload foto-foto dokumentasi kegiatan (format: JPG, PNG, WEBP, JPEG, max 8MB per foto).</div>
                     </div>
                 </div>
 
@@ -186,8 +156,7 @@
                         @error('deskripsi_kegiatan')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="form-text text-muted">Tuliskan deskripsi lengkap mengenai kegiatan yang dilaksanakan
-                        </div>
+                        <div class="form-text text-muted">Tuliskan deskripsi lengkap mengenai kegiatan yang dilaksanakan</div>
                     </div>
                 </div>
 
@@ -197,18 +166,18 @@
             </form>
         </div>
 
+        {{-- ... (Table of activities, pagination, photoModal remain the same) ... --}}
         <div class="table-data mt-4">
             <div class="order">
                 <div class="head">
                     <h3>Daftar Kegiatan Sustainability</h3>
                 </div>
-
                 <div class="table-responsive">
-                    <table class="table table-striped" id="sustainability-table">
+                     <table class="table table-striped" id="sustainability-table">
                         <thead>
                             <tr>
                                 <th>Ditambahkan Oleh</th>
-                                <th>Kategori kelompok</th> 
+                                <th>Kategori kelompok</th>
                                 <th>Judul Kegiatan</th>
                                 <th>Tanggal</th>
                                 <th>Fakultas</th>
@@ -221,15 +190,13 @@
                         </thead>
                         <tbody id="sustainability-list">
                             @forelse($sustainabilities as $activity)
-                            
                                 <tr>
                                     <td>{{ $activity->user->name ?? ($activity->user_id ?? 'N/A') }}</td>
-                                    <td>{{ $activity->sdg_goal ?? 'N/A' }}</td> 
+                                    <td>{{ $activity->sdg_goal ?? 'N/A' }}</td>
                                     <td>{{ $activity->judul_kegiatan }}</td>
-                                    {{-- Ensure tanggal_kegiatan is Carbon instance or cast to date in model --}}
                                     <td>{{ \Carbon\Carbon::parse($activity->tanggal_kegiatan)->format('d M Y') }}</td>
                                     <td>{{ strtoupper($activity->fakultas) }}</td>
-                                    <td>{{ $activity->prodi ?? 'N/A' }}</td>
+                                    <td>{{ $activity->prodi ?? 'N/A (Fakultas)' }}</td>
                                     <td>
                                         @if ($activity->link_kegiatan)
                                             <a href="{{ $activity->link_kegiatan }}" target="_blank"
@@ -241,7 +208,7 @@
                                     <td>
                                         @if ($activity->photos && $activity->photos->count() > 0)
                                             <button class="btn btn-sm btn-info view-photos"
-                                                data-photos='@json($activity->photos->pluck('path'))' data-bs-toggle="modal"
+                                                data-photos='@json($activity->photos->pluck("path"))' data-bs-toggle="modal"
                                                 data-bs-target="#photoModal">
                                                 View Photos ({{ $activity->photos->count() }})
                                             </button>
@@ -253,7 +220,7 @@
                                     <td>
                                         <div class="btn-group">
                                             <button class="btn btn-sm btn-warning edit-activity"
-                                                data-id="{{ $activity->id }}" {{-- data-judul, data-tanggal etc. will be fetched via AJAX now for consistency --}}
+                                                data-id="{{ $activity->id }}"
                                                 data-bs-toggle="modal" data-bs-target="#editModal">
                                                 Edit
                                             </button>
@@ -267,13 +234,13 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="text-center">Belum ada data kegiatan sustainability.</td>
+                                    <td colspan="10" class="text-center">Belum ada data kegiatan sustainability.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
-                @if ($sustainabilities->hasPages())
+                 @if ($sustainabilities->hasPages())
                     <div class="mt-3">
                         {{ $sustainabilities->links() }}
                     </div>
@@ -282,6 +249,7 @@
         </div>
     </div>
 
+    {{-- Photo Modal --}}
     <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -296,6 +264,7 @@
         </div>
     </div>
 
+    {{-- Edit Modal --}}
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -303,34 +272,34 @@
                     <h5 class="modal-title" id="editModalLabel">Edit Kegiatan Sustainability</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                {{-- Form action will be set by JavaScript --}}
-                <form id="edit-form" method="POST" enctype="multipart/form-data">
+                <form id="edit-form" method="POST" enctype="multipart/form-data"> {{-- Action set by JS --}}
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
-                        <input type="hidden" id="edit_activity_id" name="activity_id">
-                        <div class="row">
+                        <input type="hidden" id="edit_activity_id" name="activity_id"> {{-- Still useful if not using route model binding in JS form action --}}
+                        {{-- ... (SDG Goal, Judul Kegiatan, Tanggal Kegiatan rows for edit modal remain the same) ... --}}
+                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="edit_sdg_goal" class="form-label">SDG Goal</label>
-                                <select class="form-select" name="sdg_goal" id="edit_sdg_goal">
-                                    <option value="">Pilih SDG Goal (Opsional)</option>
-                                    @for ($i = 1; $i <= 17; $i++)
-                                        <option value="SDG {{ $i }}">SDG {{ $i }}</option>
-                                    @endfor
+                                <label for="edit_sdg_goal_modal" class="form-label">Kelompok Kategori</label> {{-- Changed ID --}}
+                                <select class="form-select" name="sdg_goal" id="edit_sdg_goal_modal">
+                                    <option value="">Pilih Kelompok Kategori (Opsional)</option>
+                                     @foreach ($sdgGoalsData as $number => $description) {{-- Re-use $sdgGoalsData --}}
+                                        @php $optionValue = "SDG " . $number; @endphp
+                                        <option value="{{ $optionValue }}">
+                                            SDGs {{ $number }}: {{ $description }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-12 mb-3">
+                           <div class="col-md-12 mb-3">
                                 <label for="edit_judul_kegiatan" class="form-label">Judul Kegiatan</label>
-                                <input type="text" class="form-control" name="judul_kegiatan"
-                                    id="edit_judul_kegiatan">
+                                <input type="text" class="form-control" name="judul_kegiatan" id="edit_judul_kegiatan">
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="edit_tanggal_kegiatan" class="form-label">Tanggal Kegiatan</label>
-                                <input type="date" class="form-control" name="tanggal_kegiatan"
-                                    id="edit_tanggal_kegiatan">
+                                <input type="date" class="form-control" name="tanggal_kegiatan" id="edit_tanggal_kegiatan">
                             </div>
                         </div>
 
@@ -339,27 +308,23 @@
                                 <label for="edit_fakultas" class="form-label">Fakultas</label>
                                 <select class="form-select" name="fakultas" id="edit_fakultas">
                                     <option value="">Pilih Fakultas</option>
-                                    <option value="pascasarjana">PASCASARJANA</option>
-                                    <option value="fip">FIP</option>
-                                    <option value="fmipa">FMIPA</option>
-                                    <option value="fppsi">FPsi</option>
-                                    <option value="fbs">FBS</option>
-                                    <option value="ft">FT</option>
-                                    <option value="fik">FIKK</option>
-                                    <option value="fis">FISH</option>
-                                    <option value="fe">FEB</option>
-                                    <option value="profesi">PROFESI</option>
+                                     @if(isset($faculties_data) && is_array($faculties_data))
+                                        @foreach($faculties_data as $key => $facultyInfo)
+                                            <option value="{{ strtolower($key) }}">{{ $facultyInfo['name'] }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="edit_prodi" class="form-label">Program Studi</label>
-                                {{-- This will be populated by JS based on #edit_fakultas selection --}}
-                                <select class="form-select" name="prodi" id="edit_prodi">
+                                <select class="form-select" name="prodi" id="edit_prodi" disabled>
                                     <option value="">Pilih Program Studi</option>
+                                    {{-- Populated by JS --}}
                                 </select>
                             </div>
                         </div>
 
+                        {{-- ... (Link Kegiatan, Foto Kegiatan, Deskripsi Kegiatan rows for edit modal remain the same) ... --}}
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label for="edit_link_kegiatan" class="form-label">Link Kegiatan</label>
@@ -369,13 +334,9 @@
 
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="edit_foto_kegiatan" class="form-label">Tambah Foto-foto Kegiatan
-                                    (Opsional)</label>
-                                {{-- Changed name to foto_kegiatan[] --}}
-                                <input type="file" class="form-control" name="foto_kegiatan[]"
-                                    id="edit_foto_kegiatan" multiple accept="image/*">
-                                <div class="form-text text-muted">Upload foto baru jika ingin menambah. Foto lama tidak
-                                    akan dihapus otomatis. Biarkan kosong jika tidak ingin menambah foto.</div>
+                                <label for="edit_foto_kegiatan" class="form-label">Tambah Foto-foto Kegiatan (Opsional)</label>
+                                <input type="file" class="form-control" name="foto_kegiatan[]" id="edit_foto_kegiatan" multiple accept="image/*">
+                                <div class="form-text text-muted">Upload foto baru jika ingin menambah. Foto lama tidak akan dihapus otomatis. Biarkan kosong jika tidak ingin menambah foto.</div>
                                 <div id="edit_current_photos" class="mt-2">
                                     <p>Foto saat ini:</p>
                                     {{-- Current photos will be listed here by JavaScript --}}
@@ -404,15 +365,89 @@
         @method('DELETE')
     </form>
 
-    {{-- Assuming jQuery, Bootstrap JS, SweetAlert2 are loaded in admin.admin layout --}}
-    {{-- This script might rely on sustainability_dashboard.js for prodi dropdown population --}}
-    {{-- The JS for edit/delete AJAX should be here or in a loaded JS specific to this admin view --}}
     <script src="{{ asset('dashboard_main/dashboard/sustainability_dashboard.js') }}"></script>
-    {{-- ^ This JS likely handles the dynamic prodi dropdown based on fakultas selection for admin --}}
+    {{-- ^ This JS likely handles the dynamic prodi dropdown based on fakultas selection for admin for the OLD setup.
+         We will add new JS below to override/enhance this for sustainability.blade.php specifically,
+         following the matakuliah.blade.php pattern. --}}
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        // Ensure $faculties_data is available from the controller, otherwise provide an empty object.
+        const facultiesData = @json($faculties_data ?? []);
+
+        function populateProdiDropdown(fakultasValue, prodiSelectElement, selectedProdi = null, currentFacultiesData) {
+            prodiSelectElement.innerHTML = '<option value="">Pilih Program Studi</option>'; // Default first
+            const fakultasLevelOptionHTML = '<option value="">-- Level Fakultas (Tanpa Prodi) --</option>';
+            prodiSelectElement.disabled = true;
+
+            if (fakultasValue && typeof fakultasValue === 'string') { // fakultasValue is lowercase e.g. "fmipa"
+                const facultyKey = fakultasValue.toUpperCase(); // Convert to UPPERCASE for lookup e.g. "FMIPA"
+
+                if (currentFacultiesData[facultyKey] && currentFacultiesData[facultyKey].programs) {
+                    const programs = currentFacultiesData[facultyKey].programs;
+                    if (programs.length > 0) {
+                        prodiSelectElement.disabled = false;
+                        prodiSelectElement.innerHTML += fakultasLevelOptionHTML; // Add level fakultas option
+
+                        programs.forEach(prodi => {
+                            const option = document.createElement('option');
+                            option.value = prodi;
+                            option.textContent = prodi;
+                            prodiSelectElement.appendChild(option);
+                        });
+                    } else { // Faculty exists but has no programs listed, still allow "Level Fakultas"
+                        prodiSelectElement.disabled = false;
+                        prodiSelectElement.innerHTML += fakultasLevelOptionHTML;
+                    }
+                } else { // No valid faculty key found or no programs defined for it
+                     prodiSelectElement.innerHTML += fakultasLevelOptionHTML; // Still allow "Level Fakultas"
+                     prodiSelectElement.disabled = false; // Keep it enabled for "Level Fakultas" selection
+                }
+            } else { // No faculty selected
+                prodiSelectElement.innerHTML += fakultasLevelOptionHTML;
+                prodiSelectElement.disabled = true; // Or false if you want to allow selecting "Level Fakultas" even without parent faculty
+            }
+
+            // Set the selected prodi if provided
+            if (selectedProdi) {
+                prodiSelectElement.value = selectedProdi;
+            } else if (!prodiSelectElement.disabled) {
+                 // If prodi is not pre-selected, and dropdown is enabled,
+                 // default to "Pilih Program Studi" or "-- Level Fakultas --"
+                 // Check if the "-- Level Fakultas --" was explicitly chosen (empty string for prodi)
+                 if (selectedProdi === "" && selectedProdi !== null) { // Explicitly faculty level
+                     prodiSelectElement.value = "";
+                 } else if (selectedProdi === null) { // Nothing was pre-selected for prodi
+                     prodiSelectElement.value = ""; // Default to "Pilih Program Studi" which might also be the value for "Level Fakultas" if structured that way
+                 }
+            }
+             // Ensure "Pilih Program Studi" is selected if no prodi and no specific "Level Fakultas" indicated
+            if (prodiSelectElement.disabled || (!selectedProdi && selectedProdi !== "" )) {
+                 if(prodiSelectElement.options.length > 0 && prodiSelectElement.options[0].value === "") {
+                    prodiSelectElement.value = ""; // Default to "Pilih Program Studi"
+                 }
+            }
+        }
+
+        // Main form: Fakultas and Prodi dropdown logic
+        const mainFakultasSelect = document.getElementById('fakultas');
+        const mainProdiSelect = document.getElementById('prodi');
+
+        if (mainFakultasSelect && mainProdiSelect) {
+            mainFakultasSelect.addEventListener('change', function() {
+                populateProdiDropdown(this.value, mainProdiSelect, null, facultiesData);
+            });
+
+            // Initial population on page load if a faculty is already selected (e.g., from old input)
+            if (mainFakultasSelect.value) {
+                const oldProdiValue = "{{ old('prodi') }}";
+                populateProdiDropdown(mainFakultasSelect.value, mainProdiSelect, oldProdiValue, facultiesData);
+            } else {
+                mainProdiSelect.innerHTML = '<option value="">Pilih Program Studi</option><option value="">-- Level Fakultas (Tanpa Prodi) --</option>';
+                mainProdiSelect.disabled = true;
+            }
+        }
 
         // Handle View Photos button
         document.querySelectorAll('.view-photos').forEach(button => {
@@ -420,19 +455,13 @@
                 const photos = JSON.parse(this.dataset.photos);
                 const gallery = document.getElementById('photoGallery');
                 gallery.innerHTML = '';
-
                 if (photos && photos.length > 0) {
                     photos.forEach(path => {
                         const img = document.createElement('img');
-                        // Ensure the path starts with /storage/ if it's coming directly from DB
-                        // Or adjust if your $activity->photos->pluck("path") already has it.
                         img.src = path.startsWith('http') ? path : `/storage/${path}`;
                         img.classList.add('img-fluid', 'mb-3', 'rounded');
-                        img.style.maxHeight = '400px';
-                        img.style.objectFit = 'contain';
-                        img.style.display = 'block'; // Ensure images are block elements
-                        img.style.marginLeft = 'auto'; // Center images
-                        img.style.marginRight = 'auto';
+                        img.style.maxHeight = '400px'; img.style.objectFit = 'contain';
+                        img.style.display = 'block'; img.style.marginLeft = 'auto'; img.style.marginRight = 'auto';
                         gallery.appendChild(img);
                     });
                 } else {
@@ -446,43 +475,29 @@
             button.addEventListener('click', function() {
                 const activityId = this.dataset.id;
                 const editForm = document.getElementById('edit-form');
-                // Make sure your update route name is correct, or use url() helper
-                editForm.action = `{{ url('admin/sustainability') }}/${activityId}`; // Assuming this matches your PUT route
+                editForm.action = `{{ url('admin/sustainability') }}/${activityId}`;
 
-                fetch(`{{ url('admin/sustainability') }}/${activityId}/detail`, { // Your AJAX detail route
+                fetch(`{{ url('admin/sustainability') }}/${activityId}/detail`, {
                     method: 'GET',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': csrfToken
-                    }
+                    headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': csrfToken }
                 })
                 .then(response => {
                     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     return response.json();
                 })
                 .then(data => {
-                    // document.getElementById('edit_activity_id').value = data.id; // Not needed if using route model binding for form action
+                    document.getElementById('edit_activity_id').value = data.id;
                     document.getElementById('edit_judul_kegiatan').value = data.judul_kegiatan;
                     if (data.tanggal_kegiatan) {
                         document.getElementById('edit_tanggal_kegiatan').value = data.tanggal_kegiatan.split('T')[0];
                     }
-                    document.getElementById('edit_sdg_goal').value = data.sdg_goal || ""; // Set SDG Goal
+                    document.getElementById('edit_sdg_goal_modal').value = data.sdg_goal || ""; // Use correct ID
 
                     const editFakultasSelect = document.getElementById('edit_fakultas');
-                    editFakultasSelect.value = data.fakultas;
+                    editFakultasSelect.value = data.fakultas; // data.fakultas is lowercase from DB
 
-                    // Trigger change on fakultas to populate prodi
-                    const event = new Event('change', { bubbles: true }); // Ensure event bubbles if needed
-                    editFakultasSelect.dispatchEvent(event);
-
-                    setTimeout(() => {
-                        const editProdiSelect = document.getElementById('edit_prodi');
-                        if (data.prodi) {
-                            editProdiSelect.value = data.prodi;
-                        } else {
-                           editProdiSelect.value = "";
-                        }
-                    }, 300); // Increased delay slightly, adjust if prodi options load slower
+                    const editProdiSelect = document.getElementById('edit_prodi');
+                    populateProdiDropdown(data.fakultas, editProdiSelect, data.prodi, facultiesData);
 
                     document.getElementById('edit_link_kegiatan').value = data.link_kegiatan || '';
                     document.getElementById('edit_deskripsi_kegiatan').value = data.deskripsi_kegiatan;
@@ -491,6 +506,7 @@
                     currentPhotosDiv.innerHTML = '<p>Foto saat ini:</p>';
                     if (data.photos && data.photos.length > 0) {
                         data.photos.forEach(photo => {
+                            // ... (photo display logic remains the same)
                             const imgContainer = document.createElement('div');
                             imgContainer.classList.add('mb-2', 'd-inline-block', 'position-relative', 'me-2');
                             const img = document.createElement('img');
@@ -503,7 +519,7 @@
                     } else {
                         currentPhotosDiv.innerHTML += '<p><em>Tidak ada foto terunggah.</em></p>';
                     }
-                    document.getElementById('edit_foto_kegiatan').value = ''; // Clear file input
+                    document.getElementById('edit_foto_kegiatan').value = '';
                 })
                 .catch(error => {
                     console.error('Error fetching activity details:', error);
@@ -512,14 +528,13 @@
             });
         });
 
-        // Handle Delete button clicks
+        // Handle Delete button clicks (remains the same)
         document.querySelectorAll('.delete-activity').forEach(button => {
             button.addEventListener('click', function() {
                 const activityId = this.dataset.id;
                 const activityJudul = this.dataset.judul;
                 const deleteForm = document.getElementById('delete-form');
-                // Make sure your delete route name is correct or use url() helper
-                deleteForm.action = `{{ url('admin/sustainability') }}/${activityId}`; // Assuming this matches your DELETE route
+                deleteForm.action = `{{ url('admin/sustainability') }}/${activityId}`;
 
                 Swal.fire({
                     title: 'Anda Yakin?',
@@ -532,45 +547,36 @@
                     cancelButtonText: 'Batal'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        deleteForm.submit();
+                        deleteForm.submit(); // Submit the form
                     }
                 });
             });
         });
 
-        // Display SweetAlert for flash messages from PHP session
+
+        // SweetAlert for flash messages (remains the same)
         @if(session('success'))
             Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: '{{ session("success") }}',
-                timer: 3000,
-                showConfirmButton: false
+                icon: 'success', title: 'Berhasil!', text: '{{ session("success") }}',
+                timer: 3000, showConfirmButton: false
             });
         @endif
-
         @if(session('error'))
             Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: '{{ session("error") }}',
-                timer: 3000, // You can adjust timer or make it require confirmation
-                showConfirmButton: true // Changed to true for errors, user might want to read it
+                icon: 'error', title: 'Gagal!', text: '{{ session("error") }}',
+                showConfirmButton: true // Keep true for errors
             });
         @endif
 
-        // Clear Bootstrap alert messages after SweetAlert displays them (optional)
+        // Optional: Clear Bootstrap alerts after SweetAlert
         setTimeout(() => {
             let alertSuccessNode = document.querySelector('.alert-success');
-            if(alertSuccessNode) {
-                new bootstrap.Alert(alertSuccessNode).close();
-            }
-            let alertErrorNode = document.querySelector('.alert-danger'); // General error, not session('error')
-             if(alertErrorNode && !alertErrorNode.querySelector('ul')) { // Don't close validation errors
+            if(alertSuccessNode) new bootstrap.Alert(alertSuccessNode).close();
+            let alertErrorNode = document.querySelector('.alert-danger');
+             if(alertErrorNode && !alertErrorNode.querySelector('ul')) {
                 new bootstrap.Alert(alertErrorNode).close();
             }
-        }, 3500); // A bit after SweetAlert timer
-
+        }, 3500);
     });
     </script>
 @endsection

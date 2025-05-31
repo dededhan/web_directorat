@@ -348,6 +348,8 @@ Route::get('/Pemeringkatan/kegiatansustainability', function () {
 })->name('Pemeringkatan.kegiatansustainability.kegiatansustainability');
 Route::get('/Pemeringkatan/kegiatansustainability/yearly', [AdminSustainabilityController::class, 'getYearlyData']);
 Route::get('/Pemeringkatan/kegiatansustainability/faculty', [AdminSustainabilityController::class, 'getFacultyData']);
+Route::get('/Pemeringkatan/kegiatansustainability/get-distinct-years', [AdminSustainabilityController::class, 'getDistinctYears'])
+     ->name('pemeringkatan.sustainability.distinctYears');
 
 Route::get('/Pemeringkatan/dataresponden', function () {
     return view('Pemeringkatan.dataresponden.dataresponden');

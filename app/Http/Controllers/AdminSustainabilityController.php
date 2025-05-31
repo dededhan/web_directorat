@@ -440,4 +440,20 @@ class AdminSustainabilityController extends Controller
 
         return response()->json($counts);
     }
+
+
+        public function getDistinctYears()
+    {
+        try {
+            $years = Sustainability::select(DB::raw('YEAR(tanggal_kegiatan) as year'))
+                                   ->whereNotNull('tanggal_kegiatan') 
+                                   ->distinct()
+                                   ->orderBy('year', 'desc')
+                                   ->pluck('year');
+            return response()->json($years);
+        } catch (\Exception $e) {
+            Log::error('Error fetching distinct sustainability years: ' . $e->getMessage());
+            return response()->json(['error' => 'Could not fetch years'], 500);
+        }
+    }
 }

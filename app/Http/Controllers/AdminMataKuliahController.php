@@ -322,6 +322,8 @@ class AdminMataKuliahController extends Controller
         ];
     }
 
+    
+
     public function matakuliahSustainabilityView()
     {
         return view('Pemeringkatan.matakuliahsustainability.matakuliahsustainability');
