@@ -3,7 +3,6 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth; // Added to check user role for conditional validation
-use Illuminate\Validation\Rule;
 
 class StoreSustainabilityRequest extends FormRequest
 {
@@ -40,7 +39,7 @@ class StoreSustainabilityRequest extends FormRequest
             'foto_kegiatan' => 'nullable|array', // The array of photos is optional
             'foto_kegiatan.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:8192', // If photos are provided, validate each. Max 8MB.
             'deskripsi_kegiatan' => 'required|string',
-            'sdg_goal' => ['nullable', 'string', Rule::in($sdgOptions)],
+            'sdg_goal' => ['nullable', 'string'],
         ];
     }
 
