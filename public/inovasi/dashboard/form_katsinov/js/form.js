@@ -69,7 +69,7 @@ async function submitAllIndicators(event) {
             text: "Mohon lengkapi semua pertanyaan sebelum mengirimkan formulir.",
             confirmButtonColor: "#176369",
         });
-        return;
+        // return;
     }
 
     btn.disabled = true;
@@ -141,7 +141,18 @@ async function submitAllIndicators(event) {
             </div>
             `,
             confirmButtonText: "OK",
-            confirmButtonColor: "#176369"
+            confirmButtonColor: "#176369",
+             allowOutsideClick: false, // Mencegah menutup alert dengan klik di luar
+            allowEscapeKey: false    // Mencegah menutup alert dengan tombol Esc
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    // MODIFIKASI DI SINI: Kembali ke halaman sebelumnya
+                    window.history.back();
+                }
+            }
         });
 
     } catch (error) {

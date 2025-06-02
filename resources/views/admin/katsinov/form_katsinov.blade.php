@@ -13,8 +13,9 @@
 
 
 <!-- Scripts -->
-<script src="{{ asset('aspect-legend.js') }}"></script>
-<script src="{{ asset('aspect-analysis-integrated.js') }}"></script>
+
+{{-- <script src="{{ asset('aspect-legend.js') }}"></script>
+<script src="{{ asset('aspect-analysis-integrated.js') }}"></script> --}}
 <script src="{{ asset('spiderweb-chart-script.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -362,7 +363,7 @@
                                             <div class="card h-100 border-0 shadow-sm" style="background-color: #f0fff0;">
                                                 <div class="card-body">
                                                     <div class="d-flex flex-column">
-                                                        <strong class="text-success mb-2">Aspek Terpenuhi:</strong>
+                                                        <strong class="text-success mb-2">Katsinov Terpenuhi:</strong>
                                                         <span class="aspek-terpenuhi fs-4">0 dari 7</span>
                                                     </div>
                                                 </div>
@@ -750,54 +751,7 @@
 console.log('Preparing content for printing...');
 
 // 1. Force all Alpine.js dropdowns and content to expand
-document.querySelectorAll('[x-data]').forEach(function(el) {
-    if (el.__x && el.__x.$data) {
-        // Force all common toggle properties to be open
-        if ('isOpen' in el.__x.$data) el.__x.$data.isOpen = true;
-        if ('showSpiderwebContent' in el.__x.$data) el.__x.$data.showSpiderwebContent = true;
-        if ('show' in el.__x.$data) el.__x.$data.show = true;
-        if ('open' in el.__x.$data) el.__x.$data.open = true;
-        if ('expanded' in el.__x.$data) el.__x.$data.expanded = true;
-        if ('visible' in el.__x.$data) el.__x.$data.visible = true;
-    }
-});
 
-// 2. Make all indicator cards visible
-document.querySelectorAll('.indicator-card').forEach(function(card) {
-    card.style.display = 'block';
-    card.style.visibility = 'visible';
-    card.style.height = 'auto';
-    card.style.overflow = 'visible';
-    card.style.pageBreakAfter = 'always'; // Add page break after each indicator
-});
-
-// 3. Force all elements with x-show to display
-document.querySelectorAll('[x-show]').forEach(function(el) {
-    el.style.display = 'block';
-    el.style.visibility = 'visible';
-    el.style.height = 'auto';
-    el.style.overflow = 'visible';
-});
-
-// 4. Make chart containers visible and ensure proper height
-document.querySelectorAll('.chart-container').forEach(function(container) {
-    container.style.display = 'block';
-    container.style.visibility = 'visible';
-    container.style.height = '300px';
-    container.style.minHeight = '300px';
-    container.style.marginBottom = '20px';
-});
-
-// 5. Force all aspect dropdown contents to show
-document.querySelectorAll('.aspect-dropdown .mt-2').forEach(function(content) {
-    content.style.display = 'block';
-    content.style.visibility = 'visible';
-    content.style.height = 'auto';
-    content.style.overflow = 'visible';
-});
-
-// 6. Initialize/refresh all charts
-initializeAllCharts();
 
 // 7. Force spiderweb content to be visible
 const spiderwebContent = document.querySelector('div[x-show="showSpiderwebContent"]');
