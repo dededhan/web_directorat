@@ -1,41 +1,50 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Konfigurasi indikator
     const INDICATOR_CONFIGS = [
-        { id: 1, rows: 22 },
-        { id: 2, rows: 21 },
-        { id: 3, rows: 21 },
-        { id: 4, rows: 22 },
-        { id: 5, rows: 24 },
-        { id: 6, rows: 14 },
+         { id: 1, rows: 22, name: "Indikator KATSINOV 1" },
+        { id: 2, rows: 21, name: "Indikator KATSINOV 2" },
+        { id: 3, rows: 21, name: "Indikator KATSINOV 3" },
+        { id: 4, rows: 22, name: "Indikator KATSINOV 4" },
+        { id: 5, rows: 24, name: "Indikator KATSINOV 5" },
+        { id: 6, rows: 14, name: "Indikator KATSINOV 6" },
     ];
 
+    const MIN_PERCENTAGE_TO_PROCEED = 80.0;
     // Fungsi untuk menandai radio button secara unik
     function setupRadioButtons() {
-        const indicators = document.querySelectorAll(".card");
+        const indicatorCards = document.querySelectorAll(".indicator-card");
 
-        indicators.forEach((indicator, index) => {
-            const indicatorNum =
-                indicator
-                    .querySelector(".main-title")
-                    ?.textContent.match(/\d+/)?.[0] || index + 1;
+        indicatorCards.forEach((indicatorCard) => {
+            const indicatorNum = parseInt(indicatorCard.dataset.indicator);
+            const config = INDICATOR_CONFIGS.find(c => c.id === indicatorNum);
+            if (!config) return;
 
-            indicator
-                .querySelectorAll(".radio-input")
-                .forEach((radio, rowIndex) => {
-                    const aspectCell = radio
-                        .closest("tr")
-                        ?.querySelector(".aspect-cell");
-                    const aspect = aspectCell?.textContent.trim() || "Unknown";
+            // Set indicator header text (if you want dynamic titles based on config)
+            const headerElement = indicatorCard.querySelector(".indicator-header");
+            if (headerElement) {
+                // headerElement.textContent = config.name; // Already set in Blade
+            }
 
-                    // Nama radio button unik untuk setiap indikator dan baris
-                    radio.setAttribute(
-                        "name",
-                        `indicator${indicatorNum}_row${rowIndex + 1}_${aspect}`
-                    );
+            indicatorCard
+                .querySelectorAll("table.katsinov-table tr:not(.total-row)") // Process only data rows
+                .forEach((row, rowIndex) => {
+                    if (rowIndex === 0) return; // Skip header row of the table
 
-                    radio.addEventListener("change", () => {
-                        calculateTotal(indicator, indicatorNum);
-                        updateKatsinovLevel();
+                    const radioInputs = row.querySelectorAll(".radio-input");
+                    const aspectCell = row.querySelector(".aspect-cell");
+                    const aspect = aspectCell?.textContent.trim() || `aspect${rowIndex}`;
+
+                    radioInputs.forEach((radio) => {
+                        // Make name unique per row within an indicator
+                        radio.setAttribute(
+                            "name",
+                            `indicator${indicatorNum}_row${rowIndex}` // Simplified naming, original Blade already handles uniqueness well for submission
+                        );
+                        radio.addEventListener("change", () => {
+                            calculateTotal(indicatorCard, indicatorNum);
+                            updateIndicatorVisibility(); // Updated to control flow
+                            updateKatsinovLevel(); // If you have this for overall level
+                        });
                     });
                 });
         });
@@ -46,35 +55,88 @@ document.addEventListener("DOMContentLoaded", () => {
         const config = INDICATOR_CONFIGS.find(
             (c) => c.id === parseInt(indicatorNum)
         );
-        if (!config) return;
+        if (!config) return { total: 0, percentage: 0 };
 
-        let total = 0;
+        let totalScore = 0;
         const rows = config.rows;
 
-        // Pilih radio button yang sesuai dengan indikator
-        const selector = `input[name^="indicator${indicatorNum}_"]:checked`;
-        const checkedRadios = card.querySelectorAll(selector);
+        // Select checked radio buttons specific to this indicator card
+        const checkedRadios = card.querySelectorAll(
+            'input[type="radio"]:checked'
+        );
 
         checkedRadios.forEach((radio) => {
-            total += parseInt(radio.value);
+            totalScore += parseInt(radio.value);
         });
 
-        const totalElement = card.querySelector(".total-value");
-        const percentageElement = card.querySelectorAll(".total-value")[1];
-        const statusElement = card.querySelector(".status-cell");
+        const totalElement = card.querySelector("tr.total-row td.total-value"); // First total-value for score
+        const percentageElement = card.querySelector("tr.total-row:last-child td.total-value"); // Second total-value for percentage
+        const statusElement = card.querySelector("tr.total-row:last-child td.status-cell");
 
-        const maxPossible = rows * 5;
-        const percentage = (total / maxPossible) * 100;
+        const maxPossibleScore = rows * 5;
+        const percentage = maxPossibleScore > 0 ? (totalScore / maxPossibleScore) * 100 : 0;
 
-        if (totalElement) totalElement.textContent = total;
-        if (percentageElement)
-            percentageElement.textContent = percentage.toFixed(2) + "%";
-        if (statusElement)
+        if (totalElement) totalElement.textContent = totalScore; // Display raw score if needed, or score/2 as per your blade.
+                                                              // Your blade shows `sum('score') / 2`. If radio values are 0-5, then this sum is correct.
+                                                              // If you intend to display the sum of values 0-5, then it's just `totalScore`.
+                                                              // For this logic, the raw `totalScore` and `percentage` are what matter.
+
+        if (percentageElement) percentageElement.textContent = `(${percentage.toFixed(2)}%)`; // Matched blade format
+
+        if (statusElement) {
             statusElement.textContent =
-                percentage > 0 ? "TERPENUHI" : "TIDAK TERPENUHI";
-
-        return { total, percentage };
+                percentage >= MIN_PERCENTAGE_TO_PROCEED ? "TERPENUHI" : "TIDAK TERPENUHI";
+        }
+        return { total: totalScore, percentage: percentage };
     }
+
+    // Fungsi untuk mengontrol visibilitas indikator
+    function updateIndicatorVisibility() {
+        let previousIndicatorPassed = true;
+
+        for (let i = 1; i <= INDICATOR_CONFIGS.length; i++) {
+            const currentIndicatorCard = document.querySelector(
+                `.indicator-card[data-indicator="${i}"]`
+            );
+            const nextIndicatorCard = document.querySelector(
+                `.indicator-card[data-indicator="${i + 1}"]`
+            );
+
+            if (!currentIndicatorCard) continue;
+
+            if (i === 1) { // Indicator 1 is always processed for visibility check
+                currentIndicatorCard.style.display = 'block';
+            }
+
+            // If the current indicator is supposed to be visible (either it's the first or the previous one passed)
+            if (currentIndicatorCard.style.display === 'block') {
+                const result = calculateTotal(currentIndicatorCard, i); // Recalculate to be sure
+                if (result.percentage < MIN_PERCENTAGE_TO_PROCEED) {
+                    previousIndicatorPassed = false;
+                     // Hide all subsequent indicators
+                    for (let j = i + 1; j <= INDICATOR_CONFIGS.length; j++) {
+                        const subseqCard = document.querySelector(`.indicator-card[data-indicator="${j}"]`);
+                        if (subseqCard) subseqCard.style.display = 'none';
+                    }
+                }
+
+                if (nextIndicatorCard) {
+                    if (previousIndicatorPassed) {
+                        nextIndicatorCard.style.display = 'block';
+                    } else {
+                        nextIndicatorCard.style.display = 'none';
+                    }
+                }
+            } else {
+                // If current card is hidden, all subsequent ones should also be hidden
+                if (nextIndicatorCard) {
+                    nextIndicatorCard.style.display = 'none';
+                }
+                previousIndicatorPassed = false; // Ensures no further indicators are shown
+            }
+        }
+    }
+
 
     // Fungsi update level KATSINOV
     function updateKatsinovLevel() {
@@ -132,12 +194,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Inisialisasi
     setupRadioButtons();
     setupDropdowns(); 
+    updateIndicatorVisibility(); // Initial check
     updateKatsinovLevel();
 
     // Debugging (opsional)
     window.debugKatsinov = {
         calculateTotal,
         updateKatsinovLevel,
+        updateIndicatorVisibility,
         INDICATOR_CONFIGS,
     };
 });

@@ -78,13 +78,30 @@ async function submitAllIndicators(event) {
     try {
         // Collect form data manually to ensure complete capture
         const formData = new FormData(document.getElementById("katsinovForm"));
+        const detailedResponses = collectDetailedResponses();
         
-        // Collect responses with detailed logging
-        const responses = collectDetailedResponses();
-        // Collect notes from all indicators
-       
-        // Prepare payload with separate basic information and responses
-        const payload = {
+        if (detailedResponses.length === 0) {
+             // Check if indicator 1 was even attempted
+            const indicator1Card = document.querySelector(`.indicator-card[data-indicator="1"]`);
+            const indicator1Radios = indicator1Card ? indicator1Card.querySelectorAll('input[type="radio"]:checked').length : 0;
+
+            if (indicator1Radios === 0) {
+                 Swal.fire({
+                    icon: "warning",
+                    title: "Peringatan",
+                    text: "Mohon isi setidaknya Indikator KATSINOV 1.",
+                    confirmButtonColor: "#176369",
+                });
+                btn.disabled = false;
+                btn.innerHTML = document.querySelector('input[name="id"]') ? "Update Indikator KATSINOV" : "Submit Semua Indikator KATSINOV";
+                return;
+            }
+            // If indicator 1 was filled but failed, detailedResponses will be empty as per logic.
+            // The backend should handle this (e.g., save basic info and 0 progress).
+        }
+
+      const payload = {
+            id: formData.get('id') || null, 
             title: formData.get('title'),
             focus_area: formData.get('focus_area'),
             project_name: formData.get('project_name'),
@@ -92,8 +109,34 @@ async function submitAllIndicators(event) {
             address: formData.get('address'),
             contact: formData.get('contact'),
             assessment_date: formData.get('assessment_date'),
-            responses: responses
+            responses: detailedResponses, // Use the filtered responses
+            notes: {} // *** INITIALIZE NOTES OBJECT ***
+           
         };
+        const uniqueIndicatorsInResponse = [...new Set(detailedResponses.map(item => item.indicator))];
+
+        uniqueIndicatorsInResponse.forEach(indicatorNum => {
+            const indicatorCard = document.querySelector(`.indicator-card[data-indicator="${indicatorNum}"]`);
+            if (indicatorCard && indicatorCard.style.display === 'block') { // Ensure card is visible
+                const noteTextArea = indicatorCard.querySelector(`textarea[name="notes[${indicatorNum}]"]`);
+                if (noteTextArea) {
+                    payload.notes[indicatorNum] = noteTextArea.value;
+                }
+            }
+        });
+        // If no indicators passed, but you still want to save notes for indicator 1 (if it was attempted)
+        if (detailedResponses.length === 0) {
+            const indicator1Card = document.querySelector(`.indicator-card[data-indicator="1"]`);
+            if (indicator1Card && indicator1Card.style.display === 'block') {
+                const noteTextArea1 = indicator1Card.querySelector(`textarea[name="notes[1]"]`);
+                if (noteTextArea1 && noteTextArea1.value.trim() !== "") {
+                    payload.notes[1] = noteTextArea1.value;
+                }
+            }
+        }
+
+         console.log("Final payload being sent:", JSON.stringify(payload, null, 2));
+
 
         // Detailed fetch with comprehensive error handling
         const response = await fetch("/katsinov/store", {
@@ -183,46 +226,68 @@ ${error.message || 'Unknown error occurred'}
 // Enhanced response collection function
 function collectDetailedResponses() {
     const responses = [];
-    
-    document.querySelectorAll('[data-indicator]').forEach(indicatorContainer => {
-        const indicatorNumber = parseInt(indicatorContainer.dataset.indicator);
-        
-        indicatorContainer.querySelectorAll('tr').forEach((row, rowIndex) => {
+    const MIN_PERCENTAGE_TO_SUBMIT = 80.0; // Same threshold
+
+    for (let i = 1; i <= 6; i++) { // Assuming max 6 indicators
+        const indicatorContainer = document.querySelector(`.indicator-card[data-indicator="${i}"]`);
+
+        // If indicator container doesn't exist or is hidden, stop collecting for this and subsequent ones.
+        if (!indicatorContainer || indicatorContainer.style.display === 'none') {
+            break; // Stop processing further indicators
+        }
+
+        // Get the calculated percentage for this indicator
+        // We rely on indikator.js having updated the DOM
+        const percentageTextElement = indicatorContainer.querySelector("tr.total-row:last-child td.total-value"); // e.g., (90.00%)
+        let currentPercentage = 0;
+        if (percentageTextElement && percentageTextElement.textContent) {
+            const match = percentageTextElement.textContent.match(/\(([\d.]+)\s*%\)/);
+            if (match && match[1]) {
+                currentPercentage = parseFloat(match[1]);
+            }
+        }
+
+        // If current indicator's percentage is below threshold, DO NOT collect its data, and stop.
+        if (currentPercentage < MIN_PERCENTAGE_TO_SUBMIT) {
+            break; // Stop processing. Data for this indicator (i) and subsequent ones will not be sent.
+        }
+
+        // If we reach here, the current indicator (i) has passed the threshold and its data should be collected.
+        indicatorContainer.querySelectorAll('table.katsinov-table tr').forEach((row, rowIndex) => {
             const aspectCell = row.querySelector('.aspect-cell');
-            if (!aspectCell) return;
+            if (!aspectCell) return; // Skip header/total rows
 
             const aspect = aspectCell.textContent.trim();
             const checkedRadio = row.querySelector('input[type="radio"]:checked');
             const dropdown = row.querySelector('select.form-select');
             
-            // Prepare response object with all required fields
             const response = {
-                indicator: indicatorNumber,
-                row: rowIndex,
+                indicator: i, // Use the current loop's indicator number
+                row: rowIndex, // This is the visual row index, might need adjustment if you map to specific sub-questions
                 aspect: aspect,
                 score: checkedRadio ? parseInt(checkedRadio.value) : null,
                 dropdown: dropdown ? dropdown.value : null
             };
 
-            // Validate response before adding
             if (response.aspect && 
-                (response.score !== null || response.dropdown) && 
-                ['T','O','R','M','P','Mf','I'].includes(response.aspect)) {
+                (response.score !== null || (response.dropdown && response.dropdown !== "")) &&
+                ['T','O','R','M','P','Mf','I'].includes(response.aspect)) { // Ensure valid aspects
                 responses.push(response);
             }
         });
-    });
 
-    // Validate responses
-    if (responses.length === 0) {
-        throw new Error("Tidak ada respons yang dikumpulkan. Harap lengkapi semua bagian.");
+        // Collect notes for this valid indicator
+        const noteTextArea = indicatorContainer.querySelector(`textarea[name="notes[${i}]"]`);
+        if (noteTextArea && noteTextArea.value.trim() !== "") {
+            // The main payload construction will grab all notes, or you can add them here
+            // For simplicity, let the FormData in submitAllIndicators grab the notes.
+        }
     }
-
-    // Log collected responses for debugging
-    console.log('Collected Responses:', JSON.stringify(responses, null, 2));
     
+    console.log('Collected responses to be sent:', JSON.stringify(responses, null, 2));
     return responses;
 }
+
 
 // Override default form submission
 document.getElementById('katsinovForm').addEventListener('submit', submitAllIndicators);

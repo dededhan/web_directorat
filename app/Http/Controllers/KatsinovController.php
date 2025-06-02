@@ -81,6 +81,7 @@ class KatsinovController extends Controller
         // dd($request->all());
         // Validate the basic katsinov data
         $validated = $request->validate([
+            'id' => 'sometimes|nullable|integer|exists:katsinovs,id', 
             'title' => 'required|string|max:255',
             'focus_area' => 'required|string|max:255',
             'project_name' => 'required|string|max:255',
@@ -101,7 +102,8 @@ class KatsinovController extends Controller
         // Start transaction to ensure all related data is saved or rolled back together
         DB::beginTransaction();
         try {
-            if (isset($validated['id'])) {
+             $katsinov = null;
+             if (!empty($validated['id'])) { // Check if ID is present and not empty for update
                 $katsinov = Katsinov::findOrFail($validated['id']);
                 $katsinov->update([
                     'title' => $validated['title'],
@@ -132,17 +134,36 @@ class KatsinovController extends Controller
             }
 
             // Store each individual response
-            foreach ($validated['responses'] as $response) {
-                KatsinovResponse::create([
-                    'katsinov_id' => $katsinov->id,
-                    'indicator_number' => $response['indicator'],
-                    'row_number' => $response['row'],
-                    'aspect' => $response['aspect'],
-                    'score' => $response['score'],
-                    'dropdown_value' => $response['dropdown'] ?? null,
-
-                ]);
+           if (!empty($validated['responses'])) {
+                foreach ($validated['responses'] as $response) {
+                    KatsinovResponse::create([
+                        'katsinov_id' => $katsinov->id,
+                        'indicator_number' => $response['indicator'],
+                        'row_number' => $response['row'], // Ensure this maps correctly
+                        'aspect' => $response['aspect'],
+                        'score' => $response['score'],
+                        'dropdown_value' => $response['dropdown'] ?? null,
+                    ]);
+                }
+                // Process and store the aggregated scores only if there are responses
+                $this->processAndSaveScores($katsinov->id, $validated['responses']);
             }
+
+
+            // Store notes
+            if (!empty($validated['notes'])) {
+                foreach ($validated['notes'] as $indicatorNumber => $noteText) {
+                    if (!empty(trim($noteText))) { // Check if note text is not just whitespace
+                        KatsinovNote::create([
+                            'katsinov_id' => $katsinov->id,
+                            'indicator_number' => $indicatorNumber,
+                            'notes' => $noteText, // Assuming your column is 'notes'
+                        ]);
+                    }
+                }
+            }
+
+        
 
             // Process and store the aggregated scores
             $this->processAndSaveScores($katsinov->id, $validated['responses']);

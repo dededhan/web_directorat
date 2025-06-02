@@ -60,7 +60,7 @@
                     <td class="rating-columns">
                         <select name="indikator1_dropdown2" class="form-select">
                             <option value="">Pilih</option>
-                            <option value="A" @selected($indicatorOne->isNotEmpty() && $indicatorOne[1]->dropdown_value === 'A')>1</option>
+                            <option value="A" @selected($indicatorOne->isNotEmpty() && $indicatorOne[1]->dropdown_value === 'A')>0</option>
                             <option value="B" @selected($indicatorOne->isNotEmpty() && $indicatorOne[1]->dropdown_value === 'B')>1</option>
                             <option value="C" @selected($indicatorOne->isNotEmpty() && $indicatorOne[1]->dropdown_value === 'C')>2</option>
                             <option value="D" @selected($indicatorOne->isNotEmpty() && $indicatorOne[1]->dropdown_value === 'D')>3</option>
@@ -536,10 +536,9 @@
            <!-- Move notes section outside of the table -->
             <div class="notes-section">
                 <div class="notes-header">Catatan</div>
-                    <textarea 
-                        name="notes[1]"
-                        placeholder="Tambahkan catatan untuk Indikator 1 di sini..." 
-                        class="notes-textarea form-control">{{ $notes[1] ?? '' }}</textarea>
+                    <textarea name="notes[1]"
+          placeholder="Tambahkan catatan untuk Indikator 1 di sini..."
+          class="notes-textarea form-control">{{ $notes[1] ?? '' }}</textarea>
             </div>   
         </div>
     </div>
