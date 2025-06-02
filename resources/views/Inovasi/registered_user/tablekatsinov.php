@@ -201,7 +201,7 @@
                                     <div class="submit-all-container">
                                         <a href="{{ route('admin.Katsinov.show', $katsinov->id) }}"
                                             class="btn btn-success">
-                                            Muat Record Terakhir
+                                            Penilaian
                                         </a>
                                         {{-- <button type="button" onclick="loadRecord()" class="submit-all-btn">
                                             

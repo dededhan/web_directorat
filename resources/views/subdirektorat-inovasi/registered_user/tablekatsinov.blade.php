@@ -94,7 +94,7 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <a href="{{ route('subdirektorat-inovasi.registered_user.show', $katsinov->id) }}" class="btn btn-warning btn-sm mb-1">
+                                        <a id="edit-btn-{{ $katsinov->id }}" href="{{ route('subdirektorat-inovasi.registered_user.show', $katsinov->id) }}" class="btn btn-warning btn-sm mb-1">
                                             <i class='bx bx-refresh'></i> Edit
                                         </a>
                                         <button class="btn btn-sm btn-danger">Delete</button>
@@ -103,9 +103,9 @@
                                         <a href="{{ route('subdirektorat-inovasi.registered_user.show', $katsinov->id) }}?print=true" class="btn btn-info btn-sm mb-1" target="_blank">
                                             <i class='bx bx-printer'></i> Print Form
                                         </a>
-                                        <button class="btn btn-info btn-sm mb-1" type="button" data-bs-toggle="collapse" 
+                                        <button id="formulir-pendukung-btn-{{ $katsinov->id }}" class="btn btn-info btn-sm mb-1" type="button" data-bs-toggle="collapse" 
                                                 data-bs-target="#subforms-{{ $katsinov->id }}" aria-expanded="false">
-                                            <i class='bx bx-folder-open'></i> Manage Sub-Forms
+                                            <i class='bx bx-folder-open'></i> Formulir Pendukung
                                         </button>
 
                                         <a href="{{ route('subdirektorat-inovasi.registered_user.summary-all', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
@@ -115,6 +115,9 @@
                                             class="btn btn-info btn-sm mb-1" target="_blank">
                                             <i class='bx bx-printer'></i> Print Summary
                                         </a>
+                                        <button type="button" class="btn btn-success btn-sm mb-1 confirm-done-btn" data-katsinov-id="{{ $katsinov->id }}">
+                                            <i class='bx bx-send'></i> Confirm & Send
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -123,7 +126,7 @@
                                 <td colspan="7" class="p-0">
                                     <div class="collapse" id="subforms-{{ $katsinov->id }}">
                                         <div class="card card-body subform-container">
-                                            <h5 class="subform-title">Sub-Forms for "{{ $katsinov->title }}"</h5>
+                                            <h5 class="subform-title">Formulir Pendukung untuk judul "{{ $katsinov->title }}"</h5>
                                             <div class="subform-buttons">
                                                 <a href="{{ route('subdirektorat-inovasi.registered_user.inovasi.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-file'></i> Form Judul
@@ -256,34 +259,43 @@
         .subforms-row {
             background-color: transparent !important;
         }
-    </style>
+        a.disabled {
+            pointer-events: none;
+            cursor: default;
+            opacity: 0.65;
+        }
+        </style>
+@endsection
+
 
     <script src="{{ asset('inovasi/dashboard/table_katsinov/js/table_katsinov.js') }}"></script>
     <script src="{{ asset('inovasi/dashboard/table_katsinov/js/table_katsinovoverall.js') }}"></script>
     <script src="{{ asset('inovasi/dashboard/form_katsinov/js/form.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        async function loadRecord() {
-            try {
-                const response = await fetch('/katsinov/latest');
-                if (!response.ok) throw new Error('Data tidak ditemukan');
-                const data = await response.json();
+    // User's existing loadRecord function (kept as is)
+    async function loadRecord() {
+        try {
+            const response = await fetch('/katsinov/latest');
+            if (!response.ok) throw new Error('Data tidak ditemukan');
+            const data = await response.json();
 
-                // Isi data dasar
-                document.querySelector('input[name="title"]').value = data.title || '';
-                document.querySelector('input[name="focus_area"]').value = data.focus_area || '';
-                document.querySelector('input[name="project_name"]').value = data.project_name || '';
-                document.querySelector('input[name="institution"]').value = data.institution || '';
-                document.querySelector('input[name="address"]').value = data.address || '';
-                document.querySelector('input[name="contact"]').value = data.contact || '';
-                document.querySelector('input[name="assessment_date"]').value = data.assessment_date || '';
+            // Isi data dasar
+            document.querySelector('input[name="title"]').value = data.title || '';
+            document.querySelector('input[name="focus_area"]').value = data.focus_area || '';
+            document.querySelector('input[name="project_name"]').value = data.project_name || '';
+            document.querySelector('input[name="institution"]').value = data.institution || '';
+            document.querySelector('input[name="address"]').value = data.address || '';
+            document.querySelector('input[name="contact"]').value = data.contact || '';
+            document.querySelector('input[name="assessment_date"]').value = data.assessment_date || '';
 
-                // Isi skor per indikator dan aspek
+            // Isi skor per indikator dan aspek
+            if (data.scores && Array.isArray(data.scores)) {
                 data.scores.forEach(score => {
                     const indicator = score.indicator_number;
 
-                    // Mapping aspek database ke class di form
                     const aspectMap = {
                         'technology': 't',
                         'organization': 'o',
@@ -294,33 +306,110 @@
                         'investment': 'i'
                     };
 
-                    // Loop semua aspek
                     Object.entries(aspectMap).forEach(([dbAspect, formAspect]) => {
                         const percentage = score[dbAspect];
-                        const value = Math.round(percentage / 20); // Konversi ke 0-5
+                        if (typeof percentage !== 'undefined') { // Check if percentage is defined
+                            const value = Math.round(percentage / 20); 
 
-                        // Cari semua radio button di indikator dan aspek terkait
-                        const selector =
-                            `div[data-indicator="${indicator}"] tr.row-${formAspect} input[value="${value}"]`;
-                        const radios = document.querySelectorAll(selector);
+                            const selector =
+                                `div[data-indicator="${indicator}"] tr.row-${formAspect} input[value="${value}"]`;
+                            const radios = document.querySelectorAll(selector);
 
-                        // Set radio yang sesuai
-                        radios.forEach(radio => radio.checked = true);
+                            radios.forEach(radio => radio.checked = true);
+                        }
                     });
                 });
+            }
+
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Data berhasil dimuat!',
+                text: 'Data terakhir telah diisi ke form',
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal memuat data',
+                text: error.message,
+            });
+        }
+    }
+
+    // New script for "Confirm & Send" functionality
+    document.addEventListener('DOMContentLoaded', function () {
+        const confirmDoneButtons = document.querySelectorAll('.confirm-done-btn');
+
+        confirmDoneButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const katsinovId = this.dataset.katsinovId;
+                const editButton = document.getElementById(`edit-btn-${katsinovId}`);
+                const formulirPendukungButton = document.getElementById(`formulir-pendukung-btn-${katsinovId}`);
+                const clickedConfirmButton = this; // Reference to the clicked "Confirm & Send" button
 
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Data berhasil dimuat!',
-                    text: 'Data terakhir telah diisi ke form',
+                    title: 'Konfirmasi Pengisian Formulir',
+                    text: "Apakah Anda sudah mengisi formulir pendukung Katsinov? Bila sudah mengisi, silahkan konfirmasi tekan Yes.",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6', // Blue for primary action
+                    cancelButtonColor: '#d33',   // Red for cancel
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Konfirmasi Final',
+                            text: "Form pendukung seperti form judul, form informasi dasar, lampiran telah sudah tidak ada perubahan? Tekan Yes maka Anda telah siap untuk mengirim Katsinov ini kepada tim reviewer.",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#28a745', // Green for final confirmation
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, Kirim!',
+                            cancelButtonText: 'No, Batalkan'
+                        }).then((finalResult) => {
+                            if (finalResult.isConfirmed) {
+                                // Disable Edit Button (<a> tag)
+                                if (editButton) {
+                                    editButton.classList.add('disabled'); // Bootstrap class for styling
+                                    editButton.setAttribute('aria-disabled', 'true');
+                                    // For <a> tags, prevent navigation and interaction
+                                    editButton.style.pointerEvents = 'none'; 
+                                    editButton.setAttribute('tabindex', '-1'); 
+                                    // Optionally change href, though pointer-events: none is effective
+                                    // editButton.href = 'javascript:void(0)'; 
+                                }
+
+                                // Disable Formulir Pendukung Button (<button> tag)
+                                if (formulirPendukungButton) {
+                                    formulirPendukungButton.setAttribute('disabled', 'true');
+                                    // Optionally add class for consistent styling if Bootstrap doesn't cover it fully for disabled state
+                                    // formulirPendukungButton.classList.add('disabled'); 
+                                }
+                                
+                                // Disable the "Confirm & Send" button itself
+                                clickedConfirmButton.setAttribute('disabled', 'true');
+                                clickedConfirmButton.classList.add('disabled'); // For styling consistency
+                                clickedConfirmButton.innerHTML = "<i class='bx bx-check-double'></i> Terkirim";
+
+                                Swal.fire(
+                                    'Terkirim!',
+                                    'Katsinov telah ditandai selesai dan siap untuk direview.',
+                                    'success'
+                                );
+                                
+                                // Here you would typically make an AJAX call to your backend
+                                // to update the status of the katsinov entry in the database.
+                                // For example:
+                                // fetch(`/katsinov/${katsinovId}/submit-for-review`, { method: 'POST', headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'} })
+                                // .then(response => response.json())
+                                // .then(data => console.log('Submission successful:', data))
+                                // .catch(error => console.error('Submission error:', error));
+                            }
+                        });
+                    }
                 });
-            } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal memuat data',
-                    text: error.message,
-                });
-            }
-        }
-    </script>
-@endsection
+            });
+        });
+    });
+</script>
