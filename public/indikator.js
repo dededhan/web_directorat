@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Konfigurasi indikator
     const INDICATOR_CONFIGS = [
-        { id: 1, rows: 21 },
-        { id: 2, rows: 22 },
+        { id: 1, rows: 22 },
+        { id: 2, rows: 21 },
         { id: 3, rows: 21 },
         { id: 4, rows: 22 },
         { id: 5, rows: 24 },

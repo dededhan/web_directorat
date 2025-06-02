@@ -452,22 +452,23 @@
                                             'Kebutuhan akan sumber daya, dana dan fasilitas penelitian telah dikonfirmasi.',
                                             'Tersedia saluran komunikasi tanpa hambatan.',
                                         ],
-                                        'manufacturing' => [
-                                            'Konsekuensi hasil temuan telah diidentifikasi melalui dasar manufaktur ekonomis.',
-                                            'Tersedia bukti konsep manufaktur melalui analitik atau eksperimen laboratorium.',
-                                            'Ide yang dikembangkan memiliki konsep model bisnis.',
+                                        'manufacturing' => [ // Now 3 questions
+                                            'Konsekuensi hasil temuan telah diidentifikasi melalui dasar manufaktur ekonomis.', // Row 13
+                                            'Teridentifikasi dalam konsep manufaktur secara teknis dan ekonomis.', // NEW Row 14
+                                            'Tersedia bukti konsep manufaktur melalui analitik atau eksperimen laboratorium.', // Row 15 (old 14)
                                         ],
-                                        'partnership' => [
-                                            'Mitra potensial telah diidentifikasi.',
-                                            'Kajian risiko teknologi telah menjadi pertimbangan dalam setiap langkah penelitian.',
+                                        'investment' => [ // Now 3 questions, one moved from manufacturing
+                                            'Ide yang dikembangkan memiliki konsep model bisnis.', // Row 16 (old 15, aspect Mf -> I)
+                                            'Ide yang dikembangkan memiliki hasil analisis pelanggan, pasar, dan pesaing.', // Row 17 (old 16)
+                                            'Ide yang dikembangkan telah terbukti memberi solusi bagi pelanggan.', // Row 18 (old 17)
                                         ],
-                                        'investment' => [
-                                            'Ide yang dikembangkan memiliki hasil analisis pelanggan, pasar, dan pesaing.',
-                                            'Ide yang dikembangkan telah terbukti memberi solusi bagi pelanggan.',
-                                            'Telah tersusun strategi membangun jaringan kerja dan kemitraan.',
+                                        'partnership' => [ // Now 2 questions, one moved from investment
+                                            'Telah tersusun strategi membangun jaringan kerja dan kemitraan.', // Row 19 (old 18, aspect I -> P)
+                                            'Mitra potensial telah diidentifikasi.', // Row 20 (old 19)
                                         ],
-                                        'risk' => [
-                                            'Pada tahap penelitian dilakukan penyusunan rencana pengendalian risiko teknologi.',
+                                        'risk' => [ // Now 2 questions, one moved from partnership/new
+                                            'Kajian risiko teknologi telah menjadi pertimbangan dalam setiap langkah penelitian.', // Row 21 (old 20, aspect P -> R)
+                                            'Pada tahap penelitian dilakukan penyusunan rencana pengendalian risiko teknologi.',// Row 22 (old 21)
                                         ],
                                     ],
                                     2 => [
@@ -498,7 +499,6 @@
                                             'Pola kemitraan dibangun dengan tepat.',
                                         ],
                                         'investment' => [
-                                            'Keunggulan jual yang dimiliki telah teruji kepada pelanggan.',
                                             'Keunggulan jual yang dimiliki telah teruji kepada pelanggan.',
                                             'Solusi yang ditawarkan kepada pelanggan memunculkan daya tarik yang menguntungkan di pasar.',
                                             'Validasi value proposition, channel, segmen pelanggan, model hubungan dengan pelanggan yang ada, dan aliran revenue terbukti telah dilakukan.',
@@ -1214,8 +1214,8 @@
                 'market': 'rgb(54, 162, 235)',
                 'organization': 'rgb(255, 206, 86)',
                 'manufacturing': 'rgb(75, 192, 192)',
-                'partnership': 'rgb(153, 102, 255)',
                 'investment': 'rgb(255, 159, 64)',
+                'partnership': 'rgb(153, 102, 255)',
                 'risk': 'rgb(70, 150, 130)'
             };
 
@@ -1226,17 +1226,17 @@
                     'market': 3,
                     'organization': 4,
                     'manufacturing': 3,
-                    'partnership': 2,
                     'investment': 3,
-                    'risk': 1
+                    'partnership': 2,
+                    'risk': 2
                 },
                 2: {
                     'technology': 5,
                     'market': 3,
                     'organization': 4,
                     'manufacturing': 2,
+                    'investment': 3,
                     'partnership': 2,
-                    'investment': 4,
                     'risk': 2
                 },
                 3: {
@@ -1244,8 +1244,8 @@
                     'market': 3,
                     'organization': 3,
                     'manufacturing': 3,
-                    'partnership': 2,
                     'investment': 3,
+                    'partnership': 2,
                     'risk': 2
                 },
                 4: {
@@ -1253,8 +1253,8 @@
                     'market': 4,
                     'organization': 3,
                     'manufacturing': 4,
-                    'partnership': 2,
                     'investment': 2,
+                    'partnership': 2,
                     'risk': 3
                 },
                 5: {
@@ -1262,8 +1262,8 @@
                     'market': 4,
                     'organization': 4,
                     'manufacturing': 4,
-                    'partnership': 3,
                     'investment': 2,
+                    'partnership': 3,
                     'risk': 3
                 },
                 6: {
@@ -1271,8 +1271,8 @@
                     'market': 4,
                     'organization': 2,
                     'manufacturing': 1,
-                    'partnership': 2,
                     'investment': 1,
+                    'partnership': 2,
                     'risk': 1
                 }
             };

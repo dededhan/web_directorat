@@ -16,7 +16,7 @@
 
 {{-- <script src="{{ asset('aspect-legend.js') }}"></script>
 <script src="{{ asset('aspect-analysis-integrated.js') }}"></script> --}}
-<script src="{{ asset('spiderweb-chart-script.js') }}"></script>
+{{-- <script src="{{ asset('spiderweb-chart-script.js') }}"></script> --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -323,7 +323,7 @@
                             </div>
                         </div>
 
-                        <!-- Spiderweb Analysis Button & Content -->
+                        {{-- <!-- Spiderweb Analysis Button & Content -->
                         <div class="text-center mt-5" x-data="{ showSpiderwebContent: false }">
                             <button type="button" 
                                     @click="showSpiderwebContent = !showSpiderwebContent" 
@@ -395,7 +395,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                 
                 </div>   
                         
