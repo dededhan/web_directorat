@@ -219,6 +219,8 @@ Route::prefix('admin')->name('admin.')
                 Route::get('/signature/{id}/{type}', [KatsinovController::class, 'viewSignature'])
                     ->name('signature.view');
 
+
+                Route::get('/download-pengukuran-report/{katsinov_id}', [KatsinovController::class, 'downloadPengukuranHasilReport'])->name('download-pengukuran-report'); // New Route
                 //summary
                 Route::get('{katsinov_id}/record/summary', [KatsinovController::class, 'recordShow'])->name('record.show');
                 Route::get('{katsinov_id}/summary-indicator-one', [KatsinovController::class, 'summaryIndicatorOne'])->name('summary-indicator-one');

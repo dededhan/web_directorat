@@ -209,7 +209,8 @@
                                             class="btn btn-primary btn-sm mb-1">
                                             <i class='bx bx-download'></i> Download Report
                                         </a> --}}
-                                        <a href="{{ route('admin.katsinov.show', $katsinov->id) }}?print=true" class="btn btn-info btn-sm mb-1" target="_blank">
+                                        <a href="{{ route('admin.katsinov.show', $katsinov->id) }}?print=true"
+                                            class="btn btn-info btn-sm mb-1" target="_blank">
                                             <i class='bx bx-printer'></i> Print Form
                                         </a>
                                         <button class="btn btn-info btn-sm mb-1" type="button" data-bs-toggle="collapse"
@@ -223,6 +224,10 @@
                                         <a href="{{ route('admin.katsinov.summary-all', ['katsinov_id' => $katsinov->id, 'print' => 'true']) }}"
                                             class="btn btn-info btn-sm mb-1" target="_blank">
                                             <i class='bx bx-printer'></i> Print Summary
+                                        </a>
+                                        <a href="{{ route('admin.katsinov.download-pengukuran-report', ['katsinov_id' => $katsinov->id]) }}"
+                                            class="btn btn-secondary btn-sm mb-1" target="_blank">
+                                            <i class='bx bxs-file-doc'></i> Download Report Pengukuran
                                         </a>
                                     </div>
                                 </td>
@@ -266,69 +271,68 @@
                                                     class="btn btn-primary btn-sm">
                                                     <i class='bx bx-paperclip'></i> Lampiran
                                                 </a>
-                                                
+
                                             </div>
 
                                         </div>
                                     </div>
                                 </td>
                             </tr>
-                                <!-- Main details row -->
-                                <tr id="details-{{ $katsinov->id }}" class="detail-row" style="display: none;">
-                                    <td colspan="7">
-                                        <div class="detail-content">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="card mb-3">
-                                                        <div class="card-header">Basic Information</div>
-                                                        <div class="card-body">
-                                                            <p><strong>Lembaga:</strong> {{ $katsinov->institution }}</p>
-                                                            <p><strong>Alamat:</strong> {{ $katsinov->address }}</p>
-                                                            <p><strong>Kontak:</strong> {{ $katsinov->contact }}</p>
-                                                            <p><strong>Tanggal Input:</strong>
-                                                                {{ $katsinov->assessment_date }}
-                                                            </p>
-                                                        </div>
+                            <!-- Main details row -->
+                            <tr id="details-{{ $katsinov->id }}" class="detail-row" style="display: none;">
+                                <td colspan="7">
+                                    <div class="detail-content">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="card mb-3">
+                                                    <div class="card-header">Basic Information</div>
+                                                    <div class="card-body">
+                                                        <p><strong>Lembaga:</strong> {{ $katsinov->institution }}</p>
+                                                        <p><strong>Alamat:</strong> {{ $katsinov->address }}</p>
+                                                        <p><strong>Kontak:</strong> {{ $katsinov->contact }}</p>
+                                                        <p><strong>Tanggal Input:</strong>
+                                                            {{ $katsinov->assessment_date }}
+                                                        </p>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-8">
-                                                    <div class="card mb-3">
-                                                        <div
-                                                            class="card-header d-flex justify-content-between align-items-center">
-                                                            <span>Aspect Analysis</span>
-                                                            <div class="btn-group">
-                                                                <button class="btn btn-sm btn-outline-primary"
-                                                                    onclick="showBarChart({{ $katsinov->id }})">Bar
-                                                                    Chart</button>
-                                                                <button class="btn btn-sm btn-outline-primary"
-                                                                    onclick="showSpiderweb({{ $katsinov->id }})">Spiderweb</button>
-                                                            </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card mb-3">
+                                                    <div
+                                                        class="card-header d-flex justify-content-between align-items-center">
+                                                        <span>Aspect Analysis</span>
+                                                        <div class="btn-group">
+                                                            <button class="btn btn-sm btn-outline-primary"
+                                                                onclick="showBarChart({{ $katsinov->id }})">Bar
+                                                                Chart</button>
+                                                            <button class="btn btn-sm btn-outline-primary"
+                                                                onclick="showSpiderweb({{ $katsinov->id }})">Spiderweb</button>
                                                         </div>
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-md-5 aspect-summary">
-                                                                    <div class="aspect-grid">
-                                                                        @foreach ($aspects as $key => $label)
-                                                                            <div class="aspect-item">
-                                                                                <h6>{{ $label }}</h6>
-                                                                                <p>{{ $averages[$key] }}%</p>
-                                                                            </div>
-                                                                        @endforeach
-                                                                        <div class="aspect-item overall">
-                                                                            <h6>Overall Average</h6>
-                                                                            <p>{{ $overallAvg }}%</p>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-5 aspect-summary">
+                                                                <div class="aspect-grid">
+                                                                    @foreach ($aspects as $key => $label)
+                                                                        <div class="aspect-item">
+                                                                            <h6>{{ $label }}</h6>
+                                                                            <p>{{ $averages[$key] }}%</p>
                                                                         </div>
+                                                                    @endforeach
+                                                                    <div class="aspect-item overall">
+                                                                        <h6>Overall Average</h6>
+                                                                        <p>{{ $overallAvg }}%</p>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-7">
-                                                                    <div id="barChart-{{ $katsinov->id }}"
-                                                                        class="chart-container">
-                                                                        <canvas></canvas>
-                                                                    </div>
-                                                                    <div id="spiderWeb-{{ $katsinov->id }}"
-                                                                        class="chart-container" style="display:none;">
-                                                                        <canvas></canvas>
-                                                                    </div>
+                                                            </div>
+                                                            <div class="col-md-7">
+                                                                <div id="barChart-{{ $katsinov->id }}"
+                                                                    class="chart-container">
+                                                                    <canvas></canvas>
+                                                                </div>
+                                                                <div id="spiderWeb-{{ $katsinov->id }}"
+                                                                    class="chart-container" style="display:none;">
+                                                                    <canvas></canvas>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -336,8 +340,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </td>
-                                </tr>
+                                    </div>
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>

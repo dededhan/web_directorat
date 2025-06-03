@@ -81,7 +81,7 @@ class KatsinovController extends Controller
         // dd($request->all());
         // Validate the basic katsinov data
         $validated = $request->validate([
-            'id' => 'sometimes|nullable|integer|exists:katsinovs,id', 
+            'id' => 'sometimes|nullable|integer|exists:katsinovs,id',
             'title' => 'required|string|max:255',
             'focus_area' => 'required|string|max:255',
             'project_name' => 'required|string|max:255',
@@ -102,8 +102,8 @@ class KatsinovController extends Controller
         // Start transaction to ensure all related data is saved or rolled back together
         DB::beginTransaction();
         try {
-             $katsinov = null;
-             if (!empty($validated['id'])) { // Check if ID is present and not empty for update
+            $katsinov = null;
+            if (!empty($validated['id'])) { // Check if ID is present and not empty for update
                 $katsinov = Katsinov::findOrFail($validated['id']);
                 $katsinov->update([
                     'title' => $validated['title'],
@@ -134,7 +134,7 @@ class KatsinovController extends Controller
             }
 
             // Store each individual response
-           if (!empty($validated['responses'])) {
+            if (!empty($validated['responses'])) {
                 foreach ($validated['responses'] as $response) {
                     KatsinovResponse::create([
                         'katsinov_id' => $katsinov->id,
@@ -163,7 +163,7 @@ class KatsinovController extends Controller
                 }
             }
 
-        
+
 
             // Process and store the aggregated scores
             $this->processAndSaveScores($katsinov->id, $validated['responses']);
@@ -198,7 +198,7 @@ class KatsinovController extends Controller
             ->get()
             ->pluck('notes', 'indicator_number')
             ->toArray();
-        
+
         return $notes;
     }
 
@@ -288,7 +288,7 @@ class KatsinovController extends Controller
             'indicatorFour' =>  $katsinov->responses()->where('indicator_number', '=', 4)->get(),
             'indicatorFive' =>  $katsinov->responses()->where('indicator_number', '=', 5)->get(),
             'indicatorSix' =>  $katsinov->responses()->where('indicator_number', '=', 6)->get(),
-            'notes' => $notes 
+            'notes' => $notes
         ];
 
         $role = Auth::user()->role;
@@ -302,7 +302,7 @@ class KatsinovController extends Controller
 
         return view($formview, $data);
     }
-    
+
     public function updateUser(Request $request)
     {
         $request->validate([
@@ -2229,11 +2229,11 @@ class KatsinovController extends Controller
         $katsinov = Katsinov::where('id', '=', $request->id)
             ->with(['scores', 'responses'])
             ->first();
-    
+
         if (!$katsinov) {
             return redirect()->back()->with('error', 'Data KATSINOV tidak ditemukan');
         }
-    
+
         $data = [
             'katsinov' => $katsinov,
             'indicatorOne' =>  $katsinov->responses()->where('indicator_number', '=', 1)->get(),
@@ -2244,7 +2244,7 @@ class KatsinovController extends Controller
             'indicatorSix' =>  $katsinov->responses()->where('indicator_number', '=', 6)->get(),
             'printMode' => true, // Flag to indicate print mode
         ];
-    
+
         // Use the same view as the normal form, but add the print=true parameter to trigger printing
         $role = Auth::user()->role;
 
@@ -2353,6 +2353,166 @@ class KatsinovController extends Controller
         } catch (\Exception $e) {
             \Log::error('Error in printSummary: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to generate PDF: ' . $e->getMessage());
+        }
+    }
+
+    public function downloadPengukuranHasilReport(Request $request, $katsinov_id)
+    {
+        try {
+            $katsinov = Katsinov::with([
+                'user',
+                'scores',
+                'katsinovInovasis', // Assuming 'JUDUL INOVASI' might be here if not on katsinov model directly
+                'katsinovBeritas' // For 'LEMBAR PENGESAHAN'
+            ])->findOrFail($katsinov_id);
+
+            $data = [];
+
+            // General Info
+            $data['judul_inovasi'] = $katsinov->title ?? 'Mobil Pedesaan'; // [cite: 2]
+            $data['bidang_inovasi'] = $katsinov->focus_area ?? 'Teknologi Transportasi'; // [cite: 2]
+            $data['lembaga_instansi'] = $katsinov->institution ?? 'Universitas Negeri Semarang (Unnes)'; // [cite: 2]
+            $data['alamat_kontak'] = ($katsinov->address && $katsinov->contact) ? ($katsinov->address . ', Phone: ' . $katsinov->contact) : 'Jalan Sekaran, Sekaran, Gunung Pati, Kota Semarang, Jawa Tengah 50229, Phone: (024) 8508092'; // [cite: 2]
+            $data['tahun_laporan'] = '2017'; // As per document [cite: 3]
+
+            // Lembar Pengesahan Info
+            // Assuming the first katsinovBeritas record is relevant
+            $beritaAcara = $katsinov->katsinovBeritas->first();
+            if ($beritaAcara) {
+                $data['pengesahan_tempat_tanggal'] = ($beritaAcara->place ?? '(Tempat)') . ', ' . ($beritaAcara->sign_date ? date('d-m-Y', strtotime($beritaAcara->sign_date)) : 'D-M-Y'); // [cite: 5]
+                // Mapping based on typical roles, adjust NIP source as needed
+                $data['penanggung_jawab_pengukuran'] = $beritaAcara->penanggungjawab ?? 'Nama Penanggung Jawab';
+                $data['penanggung_jawab_nip'] = 'NIP. ' . ($beritaAcara->penanggungjawab_nip ?? '.........................'); // Assuming NIP field exists or add one
+                $data['ketua_tim_pelaksana'] = $beritaAcara->ketua ?? 'Nama Ketua Tim';
+                $data['ketua_tim_pelaksana_nip'] = 'NIP. ' . ($beritaAcara->ketua_nip ?? '.........................'); // Assuming NIP field exists
+                // Tim Pengendali Pengukuran might be one of the 'anggota' or a separate field. Placeholder for now.
+                $data['tim_pengendali_pengukuran'] = $beritaAcara->anggota1 ?? 'Nama Tim Pengendali'; // Example mapping
+                $data['tim_pengendali_nip'] = 'NIP. ' . ($beritaAcara->anggota1_nip ?? '.........................'); // Assuming NIP field exists [cite: 5]
+            } else {
+                $data['pengesahan_tempat_tanggal'] = '(Tempat, D-M-Y)'; // [cite: 5]
+                $data['penanggung_jawab_pengukuran'] = 'Nama Penanggung Jawab';
+                $data['penanggung_jawab_nip'] = 'NIP. .........................';
+                $data['ketua_tim_pelaksana'] = 'Nama Ketua Tim';
+                $data['ketua_tim_pelaksana_nip'] = 'NIP. .........................';
+                $data['tim_pengendali_pengukuran'] = 'Nama Tim Pengendali';
+                $data['tim_pengendali_nip'] = 'NIP. .........................'; // [cite: 5]
+            }
+
+
+            // Katsinov Levels Data
+            $katsinov_levels_data = [];
+            $aspect_keys = ['technology', 'market', 'organization', 'manufacturing', 'partnership', 'investment', 'risk'];
+            $level_descriptions = [
+                1 => "Level Katsinov 1 merupakan Tahap Konsep, yaitu prinsip-prinsip ilmiah dasar dari inovasi telah diamati dan dilaporkan, dan fungsi kritikal dan/atau karakteristik telah dikonfirmasi melalui kegiatan eksperimen di laboratorium.", // [cite: 7, 21]
+                2 => "Pada level Katsinov 2 ini merupakan tahap validasi komponen, yaitu komponen telah dikembangkan dan divalidasi, dan prototipe telah dikembangkan dalam rangka mendemonstrasikan teknologi di lingkungan yang relevan.", // [cite: 22]
+                3 => "Level Katsinov 3 merupakan Tahap Penyelesaian, yaitu pengembangan teknologi telah diselesaikan dan seluruh fungsi sistem telah terbukti di lapangan melalui demonstrasi di lingkungan yang sebenarnya." // [cite: 36, 46]
+            ];
+
+            for ($level_num = 1; $level_num <= 3; $level_num++) {
+                $score_record = $katsinov->scores->where('indicator_number', $level_num)->first();
+                $current_level_data = ['level_deskripsi' => $level_descriptions[$level_num] ?? 'Deskripsi Level ' . $level_num];
+                $current_level_data['aspek_scores'] = [];
+
+                if ($score_record) {
+                    $total_score_sum = 0;
+                    $valid_aspect_count = 0;
+                    foreach ($aspect_keys as $key) {
+                        $aspect_score = $score_record->$key ?? 0;
+                        $current_level_data['aspek_scores'][ucfirst($key)] = $aspect_score;
+                        $total_score_sum += $aspect_score;
+                        if (isset($score_record->$key)) { // only count aspects that are set
+                            $valid_aspect_count++;
+                        }
+                    }
+                    $current_level_data['total_kesiapan_level'] = $valid_aspect_count > 0 ? ($total_score_sum / $valid_aspect_count) : 0;
+                } else {
+                    $current_level_data['total_kesiapan_level'] = 0; // Default if no score record
+                    foreach ($aspect_keys as $key) {
+                        $current_level_data['aspek_scores'][ucfirst($key)] = 0;
+                    }
+                }
+
+                $current_level_data['batas_kesiapan'] = 80; // [cite: 8, 23, 37]
+                $current_level_data['memenuhi_kesiapan'] = $current_level_data['total_kesiapan_level'] >= $current_level_data['batas_kesiapan'];
+
+                // Specific explanations based on document
+                if ($level_num == 1 && $score_record) {
+                    // Example: if total_kesiapan_level is 96.36 as in doc [cite: 8]
+                    // This is already handled by the general text construction using 'memenuhi_kesiapan'
+                }
+                if ($level_num == 2 && $score_record) {
+                    $manufaktur_score = $current_level_data['aspek_scores']['Manufaktur'] ?? 0;
+                    $investment_score = $current_level_data['aspek_scores']['Investment'] ?? 0;
+                    if ($manufaktur_score == 100 && $investment_score == 100) {
+                        $current_level_data['penjelasan_capaian_level_2_manufaktur_investment'] = "Jika melihat Gambar 7, aspek yang telah memenuhi capaian 100% adalah manufaktur dan investment;"; // [cite: 25]
+                    }
+                    // This part is more complex as it refers to a "Gambar 7" and general conditions
+                    $other_aspects_gt_80 = [];
+                    $risk_is_80 = false;
+                    foreach (['Teknologi', 'Partnership', 'Organisasi', 'Pasar'] as $aspect_name) {
+                        if (($current_level_data['aspek_scores'][$aspect_name] ?? 0) > 80) {
+                            $other_aspects_gt_80[] = strtolower($aspect_name);
+                        }
+                    }
+                    if (!empty($other_aspects_gt_80)) {
+                        $current_level_data['penjelasan_capaian_level_2_lainnya'] = "untuk aspek " . implode(', ', $other_aspects_gt_80) . " capaiannya > 80%; ";
+                    }
+                    if (($current_level_data['aspek_scores']['Risiko'] ?? 0) == 80) {
+                        $current_level_data['penjelasan_capaian_level_2_lainnya'] = ($current_level_data['penjelasan_capaian_level_2_lainnya'] ?? '') . "sedangkan untuk aspek penanganan risiko capaiannya 80%."; // [cite: 26]
+                    }
+                }
+                if ($level_num == 3 && $score_record) {
+                    $above_80_aspects = [];
+                    $below_80_aspects = [];
+                    foreach ($current_level_data['aspek_scores'] as $name => $score) {
+                        if (in_array($name, ['Organisasi', 'Pasar', 'Partnership', 'Risiko'])) { // Based on doc [cite: 38]
+                            if ($score >= 80) $above_80_aspects[] = $name;
+                        }
+                        if (in_array($name, ['Investment', 'Manufaktur', 'Teknologi'])) { // Based on doc [cite: 39]
+                            if ($score < 80) $below_80_aspects[] = $name;
+                        }
+                    }
+                    $current_level_data['penjelasan_capaian_level_3']['above_80'] = !empty($above_80_aspects) ? "Aspek yang memiliki capaian diatas atau sama dengan 80% adalah " . implode(", ", $above_80_aspects) . "." : ""; // [cite: 38]
+                    $current_level_data['penjelasan_capaian_level_3']['below_80'] = !empty($below_80_aspects) ? "Sedangkan aspek yang memiliki capaian dibawah 80% adalah " . implode(", ", $below_80_aspects) . "." : ""; // [cite: 39]
+                }
+
+
+                $katsinov_levels_data[$level_num] = $current_level_data;
+            }
+            $data['katsinov_levels_data'] = $katsinov_levels_data;
+
+            // Rekomendasi Data (Static placeholders as per "Empty" document)
+            $data['rekomendasi_teknis'] = [ // [cite: 48, 50, 51, 52]
+                ['aspek' => 'Teknologi', 'rekomendasi_new_armada' => 'Segera menyelesaikan prototipe mobil pedesaan yang baru (yang menggunakan pendanaan dari Kemenristekdikti).'],
+                ['aspek' => 'Pasar', 'rekomendasi_new_armada' => 'Mendukung analisis pasar yang dilakukan oleh Unnes melalui dukungan data pasar yang dimiliki.'],
+                ['aspek' => 'Organisasi', 'rekomendasi_new_armada' => 'Melaksanakan lingkup pekerjaan, tanggungjawab dan output sesuai organisasi WBS (Work Breakdown Structure) atau PBS (Product Breakdown Structure).'],
+                ['aspek' => 'Organisasi', 'rekomendasi_new_armada' => 'Bersama dengan mitra lain menyusun dan menetapkan strategi inovasi.'], // Note: "Organisasi" appears twice in source [cite: 48, 50]
+                ['aspek' => 'Organisasi', 'rekomendasi_new_armada' => 'Bersama dengan mitra lain menyusun Business Plan.'],
+                ['aspek' => 'Manufaktur', 'rekomendasi_new_armada' => 'Meningkatkan kesiapan produksi mobil 0.'], // [cite: 50]
+                ['aspek' => 'Partnership', 'rekomendasi_new_armada' => 'Merubah kerjasama yang sifatnya kontraktual menuju kerjasama yang formal, dimana ada sharing pendanaan dan risiko.'], // [cite: 50]
+                ['aspek' => 'Partnership', 'rekomendasi_new_armada' => 'Memformalkan kerjasama dengan mitra lain, serta menyusun rencana dan mengimplementasikan kerjasama.'], // [cite: 52]
+                ['aspek' => 'Investment', 'rekomendasi_new_armada' => 'Memperkuat Market Value Proposition (MVP) mobil pedesaan level 0.'], // [cite: 52]
+                ['aspek' => 'Investment', 'rekomendasi_new_armada' => 'Melakukan identifikasi dan validasi terhadap IKU (Indikator Kinerja Utama) dan target targetnya di manufaktur mobil pedesaan level 0.'],
+                ['aspek' => 'Risiko', 'rekomendasi_new_armada' => 'Melaksanakan rencana pengendalian risiko secara komprehensif di manufaktur mobil pedesaan level 0.'], // [cite: 52]
+            ];
+            $data['rekomendasi_kebijakan'] = [ // [cite: 54, 56]
+                ['bentuk_rekomendasi' => '', 'lembaga_bertanggung_jawab' => 'Kemenristekdikti, Sekretaris Kabinet'],
+                ['bentuk_rekomendasi' => '', 'lembaga_bertanggung_jawab' => 'Kemenristekdikti, Kemenkeu'],
+                ['bentuk_rekomendasi' => '', 'lembaga_bertanggung_jawab' => 'Kemenristekdikti, Kemperin'],
+                ['bentuk_rekomendasi' => '', 'lembaga_bertanggung_jawab' => 'Kemenprind, Kemenristekdikti'], // Typo Kemenprind likely Kemendag or Kemenperin
+                ['bentuk_rekomendasi' => '', 'lembaga_bertanggung_jawab' => 'Kemenristekdikti'],
+                ['bentuk_rekomendasi' => '', 'lembaga_bertanggung_jawab' => 'Kemenhub, Polri'], // [cite: 56]
+            ];
+
+
+            $data['logo_base64'] = 'iVBORw0KGgoAAAANSUhEUgAAANkAAAA5CAYAAAC2ESFFAAACsklEQVR4nO3cv2sTcRzH8e85bN3GugkIghBcXJxFwcHFQXAQ3LqIoKCbi0sVwcHBydFJcXNxUFHBXUHBwcEFByf+A8TJs2kvJ5LgcUq/9A2BvHo/eHkfPtl7uXe3AAQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEEQBEHw/4F9sxNRAmCxbLld7XY7P/p6R8NiscxmI0xWKyvbKqIirP9tH8xms63uX7/fL4vFkscqI28CSM4iKkLK5XI6nU4mk0IsJ8uV+bXb7YbFYkELsX/a4POf3MZuNptOp5NCoRDw8fn5iZPEeb0GAEBRXL7356MIAlGkMeDG12IAgOJa7h+fnx9/LhaLpVKpoN0uIuXz+eoXGUL0pRpA0fT7/UmS5Hq9vj6fDwIgPjg4ACCAauAAYQIQJwDqAJYAFAAYAMqA5IHkQPIgeRA8SD4kH0oLJAfSg5ID6UHJgfKg5ER6UHLSg5ID+aGkQHJQwigZkAxIBiQDEkCSAUmAZDAyQDIgGXgcSARkIMJBZCBdEBlIFIgsRDaIDSQLIgOSA0mBNCApkB5IAqQAEgBJgLSAZEBCIBmQAEgGJAOSAkgaIAmQDEgGJAOSg8hAskByIDmQDMgYyIAkQNrALCDSAcgBIADyQPQkYyACIAEgAxIi7ZkAyYAsQBoQZSASkDxIBiQDEgZIAiQDEgZIAqQMkDJAGSAJkAxIMkDJAEkaIAmQNEACJAUgKZAeSAqkJ5BMSAGkAIJASgAkASQFUgYpA5QCUmA8kDyQPADy/AEgKZAeSAqkARJgMgAZIAmQNEACYAmQAJgCXgMyQCkAyYAUQNEAJACKQE0AHIAkADIAkAAIAMgAyADYAEgAyADQAJAAiADoAEgAyADIAAgCQIAkCAIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiC+A9+AWgMEfaQRjNqAAAAAElFTkSuQmCC'; // [cite: 1]
+
+            // Load view and generate PDF
+            $pdf = Pdf::loadView('admin.katsinov.report_pengukuran_hasil_pdf', $data);
+            return $pdf->stream('Laporan_Pengukuran_Kesiapan_Inovasi_(' . $katsinov->title . ').pdf');
+        } catch (\Exception $e) {
+            Log::error('Error generating Pengukuran Hasil Report PDF: ' . $e->getMessage(), ['katsinov_id' => $katsinov_id, 'trace' => $e->getTraceAsString()]);
+            return redirect()->back()->with('error', 'Gagal membuat laporan PDF: ' . $e->getMessage());
         }
     }
 }
