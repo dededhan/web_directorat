@@ -229,6 +229,10 @@
                                             class="btn btn-secondary btn-sm mb-1" target="_blank">
                                             <i class='bx bxs-file-doc'></i> Download Report Pengukuran
                                         </a>
+                                        <a href="{{ route('admin.katsinov.certificate', $katsinov->id) }}"
+                                            class="btn btn-warning btn-sm mb-1" target="_blank"> {{-- Changed to warning for different color --}}
+                                            <i class='bx bxs-award'></i> Download Sertifikat
+                                        </a>
                                     </div>
                                 </td>
                                 <td>

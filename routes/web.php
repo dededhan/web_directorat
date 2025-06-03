@@ -234,6 +234,11 @@ Route::post('/katsinov/store', [KatsinovController::class, 'store'])
     ->name('katsinov.store')
     ->middleware('checked');
 
+// Inside your authenticated admin group or a relevant group
+Route::get('/admin/katsinov/{id}/certificate', [KatsinovController::class, 'downloadCertificate'])
+    ->name('admin.katsinov.certificate')
+    ->middleware('auth'); // Or your specific admin middleware
+
 Route::get('/subdirektorat-inovasi/landingpage', [BeritaController::class, 'landingPageInovasi'])
     ->name('subdirektorat-inovasi.landingpage');
 

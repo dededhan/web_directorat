@@ -2515,4 +2515,57 @@ class KatsinovController extends Controller
             return redirect()->back()->with('error', 'Gagal membuat laporan PDF: ' . $e->getMessage());
         }
     }
+     public function downloadCertificate($id)
+    {
+        $katsinov = Katsinov::with('user')->findOrFail($id);
+
+        // --- Base64 Encoded Images ---
+        // Replace these with your actual Base64 strings
+        // Option 1: Store them in .env or config (better for large strings)
+        // $logoTutWuriBase64 = config('app.logo_tut_wuri_base64');
+        // $logoUnjBase64 = config('app.logo_unj_base64');
+        // $certificateBackgroundBase64 = config('app.certificate_background_base64');
+
+        // Option 2: Define directly (for smaller strings or quick testing)
+        // It's highly recommended to get the actual Base64 string of your certificate image
+        // For example: $certificateBackgroundBase64 = file_get_contents(public_path('path_to_your_screenshot_image.jpg'));
+        // And then base64_encode($certificateBackgroundBase64) if it's not already encoded.
+        // However, for dompdf, providing the image path to CSS `url()` is often better for background.
+        // But if you want a fully self-contained HTML for PDF, base64 is the way.
+
+        // Example: How to get base64 of an image in public path
+        // $imagePath = public_path('images/certificate_bg.jpg'); // Make sure this image exists
+        // $imageData = '';
+        // if (file_exists($imagePath)) {
+        //     $imageData = base64_encode(file_get_contents($imagePath));
+        // } else {
+        //     // Handle error: background image not found
+        //     // For now, let's use a placeholder or expect it to be in the view
+        // }
+        // $certificateBackgroundBase64 = $imageData; // Assign to variable
+
+        // For simplicity in this example, I'll assume you'll paste the very long Base64 string
+        // of your certificate background directly into the certificate_template.blade.php
+        // or load it here as shown above.
+        // For this example to run, let's define a placeholder.
+        // YOU MUST REPLACE THIS WITH THE ACTUAL BASE64 OF YOUR CERTIFICATE IMAGE
+        $certificateBackgroundBase64 = "PASTE_YOUR_CERTIFICATE_BACKGROUND_IMAGE_BASE64_STRING_HERE";
+        // $logoTutWuriBase64 = "PASTE_LOGO_TUT_WURI_BASE64_STRING_HERE";
+        // $logoUnjBase64 = "PASTE_LOGO_UNJ_BASE64_STRING_HERE";
+
+
+        $data = [
+            'katsinov' => $katsinov,
+            'certificateBackgroundBase64' => $certificateBackgroundBase64,
+            // 'logoTutWuriBase64' => $logoTutWuriBase64, // Uncomment if using separate logos
+            // 'logoUnjBase64' => $logoUnjBase64,          // Uncomment if using separate logos
+        ];
+
+        $pdf = PDF::loadView('admin.katsinov.certificate_template', $data)
+                    ->setPaper('a4', 'landscape');
+
+        $filename = 'Sertifikat_Katsinov_' . preg_replace('/[^A-Za-z0-9\-]/', '', $katsinov->user->name) . '_' . $katsinov->id . '.pdf';
+
+        return $pdf->download($filename);
+    }
 }
