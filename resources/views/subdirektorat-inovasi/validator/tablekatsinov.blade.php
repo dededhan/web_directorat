@@ -192,20 +192,17 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </div>
+                                    
                                     <div class="btn-group-vertical mt-2">
                                         <a href="{{ route('subdirektorat-inovasi.validator.show', $katsinov->id) }}" class="btn btn-success btn-sm mb-1">
-                                            <i class='bx bx-refresh'></i> Load Record
+                                            <i class='bx bx-refresh'></i> Penilaian
                                         </a>
-                                        <a href="{{ route('subdirektorat-inovasi.validator.show', $katsinov->id) }}?print=true" class="btn btn-info btn-sm mb-1" target="_blank">
-                                            <i class='bx bx-printer'></i> Print Form
-                                        </a>
+                                        {{-- <a href="{{ route('subdirektorat-inovasi.validator.show', $katsinov->id) }}?print=true" class="btn btn-info btn-sm mb-1" target="_blank">
+                                            <i class='bx bx-printer'></i> Print hasil penilaian
+                                        </a> --}}
                                         <button class="btn btn-info btn-sm mb-1" type="button" data-bs-toggle="collapse" 
                                                 data-bs-target="#subforms-{{ $katsinov->id }}" aria-expanded="false">
-                                            <i class='bx bx-folder-open'></i> Manage Sub-Forms
+                                            <i class='bx bx-folder-open'></i> Formulir pendukung  
                                         </button>
                                         <a href="{{ route('subdirektorat-inovasi.validator.summary-all', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm mb-1">
                                             <i class='bx bx-chart'></i> Summary Keseluruhan
@@ -222,7 +219,7 @@
                                 <td colspan="7" class="p-0">
                                     <div class="collapse" id="subforms-{{ $katsinov->id }}">
                                         <div class="card card-body subform-container">
-                                            <h5 class="subform-title">Sub-Forms for "{{ $katsinov->title }}"</h5>
+                                            <h5 class="subform-title">Formulir pendukung untuk judul "{{ $katsinov->title }}"</h5>
                                             <div class="subform-buttons">
                                                 <a href="{{ route('subdirektorat-inovasi.validator.inovasi.index', ['katsinov_id' => $katsinov->id]) }}" class="btn btn-primary btn-sm">
                                                     <i class='bx bx-file'></i> Form Judul

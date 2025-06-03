@@ -817,11 +817,11 @@
                 </div>
             </div>
             
-            <div class="mb-3 d-flex justify-content-end mt-4">
+            {{-- <div class="mb-3 d-flex justify-content-end mt-4">
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i> {{ $informasi ? 'Update Form' : 'Submit Form' }}
                 </button>
-            </div>
+            </div> --}}
         </form>
     </div>
 </div>

@@ -46,10 +46,6 @@
                                             class="document-preview">
                                             Lihat Dokumen
                                         </a>
-                                        <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_teknologi']['proposal']->id )}}')">
-                                            Hapus
-                                        </button>
                                     </div>
                                 @endif
                                 <div class="upload-progress-container">
@@ -69,10 +65,6 @@
                                             class="document-preview">
                                             Lihat Dokumen
                                         </a>
-                                        <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_teknologi']['jadwal']->id )}}')">
-                                            Hapus
-                                        </button>
                                     </div>
                                 @endif
                                 <div class="upload-progress-container">
@@ -111,10 +103,6 @@
                                                 class="document-preview">
                                                 Lihat Dokumen
                                             </a>
-                                            <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                    onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_teknologi'][$key]->id )}}')">
-                                                Hapus
-                                            </button>
                                         </div>
                                     @endif
                                     <div class="upload-progress-container">
@@ -142,11 +130,7 @@
                                             class="document-preview">
                                             Lihat Dokumen
                                         </a>
-                                        <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_teknologi']['dokumen_ilmiah']->id )}}')"
-                                                >
-                                            Hapus
-                                        </button>
+                                        
                                     </div>
                                 @endif
                                 <div class="upload-progress-container">
@@ -166,10 +150,6 @@
                                             class="document-preview">
                                             Lihat Dokumen
                                         </a>
-                                        <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_teknologi']['dokumen_haki']->id )}}')">
-                                            Hapus
-                                        </button>
                                     </div>
                                 @endif
                                 <div class="upload-progress-container">
@@ -210,10 +190,6 @@
                                             class="document-preview">
                                             Lihat Dokumen
                                         </a>
-                                        <button type="button" class="btn btn-sm btn-danger ms-2" 
-                                                onclick="confirmDelete('{{ route($deleteRoute, $lampiran['aspek_pasar'][$key]->id )}}')">
-                                            Hapus
-                                        </button>
                                     </div>
                                 @endif
                                 <div class="upload-progress-container">
