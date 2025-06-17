@@ -24,16 +24,15 @@
                     <td rowspan="24" class="katsinov-title">KATSINOV 1</td>
                 </tr>
                 <!-- T rows -->
-                <tr class="row-t">
+                 <tr class="row-t">
                     <td class="row-number">1</td>
                     <td class="aspect-cell">T</td>
-                    {{-- NUMERIC INDEX SUPERIORITY RAAAHHH!!!! --}}
-                    <td><input type="radio" name="indikator1_row1" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 0)@if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td><input type="radio" name="indikator1_row1" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 1)@if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td><input type="radio" name="indikator1_row1" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 2)@if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td><input type="radio" name="indikator1_row1" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 3)@if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td><input type="radio" name="indikator1_row1" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 4)@if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td><input type="radio" name="indikator1_row1" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 5)@if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
+                    <td data-description="Deskripsi untuk Indikator 1, Baris 1, Nilai 0"><input type="radio" name="indikator1_row1" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 0) @if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
+                    <td data-description="Deskripsi untuk Indikator 1, Baris 1, Nilai 1"><input type="radio" name="indikator1_row1" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 1) @if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
+                    <td data-description="Deskripsi untuk Indikator 1, Baris 1, Nilai 2"><input type="radio" name="indikator1_row1" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 2) @if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
+                    <td data-description="Deskripsi untuk Indikator 1, Baris 1, Nilai 3"><input type="radio" name="indikator1_row1" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 3) @if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
+                    <td data-description="Deskripsi untuk Indikator 1, Baris 1, Nilai 4"><input type="radio" name="indikator1_row1" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 4) @if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
+                    <td data-description="Deskripsi untuk Indikator 1, Baris 1, Nilai 5"><input type="radio" name="indikator1_row1" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 5) @if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Ide baru yang memberi solusi permasalahan masyarakat.</td>
                     <td class="rating-columns">
                         <select name="indikator1_dropdown1" class="form-select" >
@@ -50,12 +49,12 @@
                 <tr class="row-t">
                     <td class="row-number">2</td>
                     <td class="aspect-cell">T</td>
-                    <td><input type="radio" name="indikator1_row2" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 0)@if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td><input type="radio" name="indikator1_row2" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 1)@if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td><input type="radio" name="indikator1_row2" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 2)@if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td><input type="radio" name="indikator1_row2" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 3)@if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td><input type="radio" name="indikator1_row2" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 4)@if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td><input type="radio" name="indikator1_row2" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 5)@if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
+                    <td data-description="Deskripsi untuk Indikator 1, Baris 2, Nilai 0"><input type="radio" name="indikator1_row2" class="radio-input" value="0" @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 0) @if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
+                    <td data-description="Deskripsi untuk Indikator 1, Baris 2, Nilai 1"><input type="radio" name="indikator1_row2" class="radio-input" value="1" @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 1) @if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
+                    <td data-description="Deskripsi untuk Indikator 1, Baris 2, Nilai 2"><input type="radio" name="indikator1_row2" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 2) @if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
+                    <td data-description="Deskripsi untuk Indikator 1, Baris 2, Nilai 3"><input type="radio" name="indikator1_row2" class="radio-input" value="3" @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 3) @if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
+                    <td data-description="Deskripsi untuk Indikator 1, Baris 2, Nilai 4"><input type="radio" name="indikator1_row2" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 4) @if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
+                    <td data-description="Deskripsi untuk Indikator 1, Baris 2, Nilai 5"><input type="radio" name="indikator1_row2" class="radio-input" value="5" @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 5) @if(request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Telah dilakukan pengamatan prinsip-prinsip ilmiah dasar dan publikasi ilmiah.</td>
                     <td class="rating-columns">
                         <select name="indikator1_dropdown2" class="form-select">

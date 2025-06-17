@@ -35,7 +35,31 @@ body {
    
 }
 
+#radio-tooltip {
+    position: fixed;
+    display: none;
+    padding: 10px 15px;
+    background-color: #ffffff; /* Latar belakang putih */
+    color: #333333; /* Teks gelap agar kontras */
+    border-radius: 6px;
+    font-size: 14px;
+    z-index: 1000;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1)); /* Alternatif box-shadow yang lebih baik untuk bentuk custom */
+    transform: translate(-50%, -110%); /* Pusatkan tooltip di atas kursor */
+}
 
+/* Membuat panah dengan pseudo-element ::after */
+#radio-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%; /* Posisi di bawah tooltip */
+    left: 50%; /* Tepat di tengah */
+    margin-left: -8px;
+    border-width: 8px;
+    border-style: solid;
+    border-color: #ffffff transparent transparent transparent; /* Atas putih, sisi lain transparan */
+}
 /* Card Styles */
 .card {
     background: var(--white);

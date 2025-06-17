@@ -1,4 +1,41 @@
 document.addEventListener("DOMContentLoaded", () => {
+      // --- TOOLTIP FUNCTIONALITY ---
+    function setupTooltips() {
+        const tooltip = document.createElement('div');
+        tooltip.id = 'radio-tooltip';
+        document.body.appendChild(tooltip);
+
+        const radioCells = document.querySelectorAll('td[data-description]');
+
+        radioCells.forEach(cell => {
+            cell.addEventListener('mouseenter', (event) => {
+                const description = cell.getAttribute('data-description');
+                if (description) {
+                    tooltip.textContent = description;
+                    tooltip.style.display = 'block';
+                    updateTooltipPosition(event, tooltip);
+                }
+            });
+
+            cell.addEventListener('mousemove', (event) => {
+                if (tooltip.style.display === 'block') {
+                    updateTooltipPosition(event, tooltip);
+                }
+            });
+
+            cell.addEventListener('mouseleave', () => {
+                tooltip.style.display = 'none';
+            });
+        });
+    }
+
+    function updateTooltipPosition(event, tooltip) {
+        const x = event.clientX;
+        const y = event.clientY;
+        tooltip.style.top = `${y + 10}px`;
+        tooltip.style.left = `${x + 10}px`;
+    }
+
     // Konfigurasi indikator
     const INDICATOR_CONFIGS = [
          { id: 1, rows: 22, name: "Indikator KATSINOV 1" },
@@ -194,6 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Inisialisasi
     setupRadioButtons();
     setupDropdowns(); 
+     setupTooltips();
     updateIndicatorVisibility(); // Initial check
     updateKatsinovLevel();
 
