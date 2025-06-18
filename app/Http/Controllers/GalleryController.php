@@ -111,7 +111,7 @@ class GalleryController extends Controller
     }
     public function getCarouselImages()
     {
-        $carouselImages = Gallery::latest()->take(4)->get();
+        $carouselImages = Gallery::latest()->get();
         return response()->json($carouselImages);
     }
     /**
