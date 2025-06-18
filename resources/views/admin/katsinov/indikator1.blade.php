@@ -21,26 +21,26 @@
                 <tr class="row-t">
                     <td class="row-number">1</td>
                     <td class="aspect-cell">T</td>
-                    <td data-description="Belum dilakukan validasi terhadap komponen individu dari teknologi."><input
+                    <td data-description="Tidak ditemui ide baru yang memberi solusi."><input
                             type="radio" name="indikator1_row1" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 0) @if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Persiapan pelaksanaan validasi dan uji komponen individu dari teknologi secara terpisah.">
+                        data-description="Ide baru bersifat Inkremental, belum menawarkan solusi.">
                         <input type="radio" name="indikator1_row1" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 1) @if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Mulai dilakukan validasi dan uji komponen individu dari teknologi secara terpisah di lingkungan laboratorium.">
+                        data-description="Ide bersifat Inkremental dan menawarkan solusi.">
                         <input type="radio" name="indikator1_row1" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 2) @if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Telah selesai dan lolos validasi dan uji komponen individu dari teknologi secara terpisah di lingkungan laboratorium.">
+                        data-description="Ide bersifat Distinctive dan belum menawarkan solusi.">
                         <input type="radio" name="indikator1_row1" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 3) @if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Mulai dilakukan validasi dan uji di lingkungan simulasi."><input
+                    <td data-description="Ide bersifat Distinctive dan sudah menawarkan solusi yang tepat."><input
                             type="radio" name="indikator1_row1" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 4) @if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Telah selesai dan lolos validasi dan uji di lingkungan laboratorium dan simulasi.">
+                        data-description="Ide bersifat terobosan dan mengubah, serta memberikan solusi yang tepat.">
                         <input type="radio" name="indikator1_row1" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[0]->score == 5) @if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Ide baru yang memberi solusi permasalahan masyarakat.</td>
@@ -60,26 +60,26 @@
                     <td class="row-number">2</td>
                     <td class="aspect-cell">T</td>
                     <td
-                        data-description="Belum dilakukan demonstrasi purnarupa (Prototype) a (alpha) pada lingkungan yang relevan.">
+                        data-description="Belum dilakukan pengamatan prinsip-prinsip ilmiah dasar dan publikasi ilmiah.">
                         <input type="radio" name="indikator1_row2" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 0) @if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Persiapan untuk melaksanakan tahapan pembuatan purnarupa (Prototype) a (alpha).">
+                        data-description="Telah dilakukan pengamatan tetapi belum memiliki dukungan ilmiah yang kuat.">
                         <input type="radio" name="indikator1_row2" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 1) @if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah dilakukan pembuatan purnarupa (Prototype) a (alpha) dan diketahui kondisi lingkungan operasi sesungguhnya.><input type="radio"
+                    <td data-description="Telah dilakukan pengamatan yang memberikan dukungan ilmiah namun lemah bagi keberhasilan mewujudkan ide."><input type="radio"
                         name="indikator1_row2" class="radio-input" value="2" @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 2)
                         @if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Telah diperoleh purnarupa (Prototype) a (alpha), diketahui kondisi lingkungan operasi, serta keberhasilan modeling & simulasi untuk kinerja sistem.">
+                        data-description="Telah dilakukan pengamatan yang memberikan dukungan ilmiah dan cukup kuat bagi keberhasilan mewujudkan ide.">
                         <input type="radio" name="indikator1_row2" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 3) @if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Telah dilakukan pengujian Prototype) a (alpha) pada kondisi lingkungan operasi sesungguhnya.">
+                        data-description="Telah dilakukan pengamatan sehingga memberikan dukungan ilmiah yang kuat bagi keberhasilan mewujudkan ide.">
                         <input type="radio" name="indikator1_row2" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 4) @if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Telah dilakukan pengujian Prototype) a (alpha) dengan diketahui: kondisi lingkungan, kebutuhan investasi, proses fabrikasi, keberhasilan modeling & simulasi, serta hasil uji layak secara teknis (engineering feasibility).">
+                        data-description="Telah dilakukan pengamatan sehingga memberikan dukungan ilmiah yang sangat kuat bagi keberhasilan mewujudkan ide.">
                         <input type="radio" name="indikator1_row2" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[1]->score == 5) @if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Telah dilakukan pengamatan prinsip-prinsip ilmiah dasar dan publikasi
@@ -100,23 +100,23 @@
                     <td class="row-number">3</td>
                     <td class="aspect-cell">T</td>
 
-                    <td data-description="Teknologi belum layak secara teknis."><input type="radio"
+                    <td data-description="Tidak memiliki unsur kebaruan dan daya beda dengan temuan lainnya."><input type="radio"
                             name="indikator1_row3" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[2]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Tahap persiapan pembuatan purnarupa (Prototype) a (alpha) untuk pengujian teknis.">
+                        data-description="Memiliki daya beda dengan temuan lain tetapi tidak memiliki unsur kebaruan.">
                         <input type="radio" name="indikator1_row3" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[2]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Purnarupa (prototype) a (alpha) diperoleh."><input type="radio"
+                    <td data-description="Memiliki kebaruan tetapi daya beda dengan temuan lain lemah."><input type="radio"
                             name="indikator1_row3" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[2]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Purnarupa (Prototype) a (alpha) telah diperoleh dan pengujian awal dilakukan ">
+                        data-description="Kebaruan bersifat inkremental (berkembang sedikit demi sedikit secara teratur) dan daya beda yang kuat.">
                         <input type="radio" name="indikator1_row3" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[2]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Purnarupa (Prototype) a (alpha) telah diperoleh dan dilakukan iterasi pengujian. @checked($indicatorOne->isNotEmpty() && $indicatorOne[2]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Teknologi
-                        dinyatakan layak secara teknis (engineering feasibility) melalui serangkaian pengujian."><input
+                    <td data-description="Kebaruan bersifat khas, dan daya beda yang kuat.">
+                        <input type="radio" name="indikator1_row3" class="radio-input" value="4" @checked($indicatorOne->isNotEmpty() && $indicatorOne[2]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
+                    <td data-description="Kebaruan bersifat lompatan dan daya beda yang kuat."><input
                             type="radio" name="indikator1_row3" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[2]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
 
@@ -137,22 +137,22 @@
                 <tr class="row-t">
                     <td class="row-number">4</td>
                     <td class="aspect-cell">T</td>
-                    <td data-description="Belum dilakukan pendaftaran kekayaan intelektual."><input type="radio"
+                    <td data-description="Belum dapat diidentifikasi tahapan riset dan targetnya."><input type="radio"
                             name="indikator1_row4" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[3]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Tahap mempelajari persyaratan pendaftaran kekayaan intelektual."><input
+                    <td data-description="Tahapan riset dan targetnya sudah mencapai tahap Perencanaan."><input
                             type="radio" name="indikator1_row4" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[3]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Tahap mempersiapkan persyaratan pendaftaran kekayaan intelektual."><input
+                    <td data-description="Tahapan riset dan targetnya sudah mencapai tahap Perencanaan dan Pelaksanaan."><input
                             type="radio" name="indikator1_row4" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[3]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Tahap melengkapi persyaratan pendaftaran kekayaan intelektual"><input
+                    <td data-description="Tahapan riset dan targetnya sudah mencapai tahap Perencanaan, Pelaksanaan dan Pelaporan Penelitian."><input
                             type="radio" name="indikator1_row4" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[3]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Tahap pendaftaran kekayaan intelektual"><input type="radio"
+                    <td data-description="Tahapan riset dan targetnya: Sudah Memiliki Purnarupa (Prototype)."><input type="radio"
                             name="indikator1_row4" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[3]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah terdaftar dan telah menerima bukti pembayaran biaya permohonan."><input
+                    <td data-description="Purnarupa (protype) sudah terbukti kebenaran dan keamanannya."><input
                             type="radio" name="indikator1_row4" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[3]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Mengidentifikasi tahapan riset dan targetnya.</td>
@@ -172,24 +172,24 @@
                     <td class="row-number">5</td>
                     <td class="aspect-cell">T</td>
                     <td
-                        data-description="Secara teknis belum memberikan solusi terhadap permasalahan yang dihadapi masyarakat.">
+                        data-description="Belum dilakukan Pengujian.">
                         <input type="radio" name="indikator1_row5" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[4]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Tahap identifikasi kebutuhan solusi terhadap permasalahan yang dihadapi masyarakat.">
+                        data-description="Dalam persiapan Pengujian.">
                         <input type="radio" name="indikator1_row5" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[4]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Sistem yang diajukan cukup praktis karena teknologi yang tersedia cukup untuk diaplikasikan.">
+                        data-description="Telah dilakukan Pengujian Awal Teori.">
                         <input type="radio" name="indikator1_row5" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[4]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Hanya syarat 1 dan 2 yang telah terpenuhi."><input type="radio"
+                    <td data-description="Telah dilakukan Pengujian Awal Teori, secara Intensif, namun belum dapat disimpulkan."><input type="radio"
                             name="indikator1_row5" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[4]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Hanya syarat 1, 2, dan 3 yang telah terpenuhi."><input type="radio"
+                    <td data-description="Telah dilakukan Pengujian Awal Teori, secara Intensif, hampir diperoleh kesimpulan."><input type="radio"
                             name="indikator1_row5" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[4]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Keempat Syarat Kelayakan Teknis telah terpenuhi."><input type="radio"
+                    <td data-description="Telah dilakukan Pengujian Awal Teori, secara Intensif, sudah diperoleh kesimpulan."><input type="radio"
                             name="indikator1_row5" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[4]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Teknologi yang akan dikembangkan telah layak secara ilmiah (scientific
@@ -209,22 +209,22 @@
                 <tr class="row-m">
                     <td class="row-number">6</td>
                     <td class="aspect-cell">M</td>
-                    <td data-description="Tidak ada identifikasi terhadap pelanggan akhir yang ingin disasar."><input
+                    <td data-description="Produk Inovasi belum memperhatikan kebutuhan pasar."><input
                             type="radio" name="indikator1_row6" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[5]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah dimulai proses identifikasi pelanggan akhir."><input type="radio"
+                    <td data-description="Produk Inovasi sedikit memperhatikan kebutuhan pasar."><input type="radio"
                             name="indikator1_row6" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[5]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Proses awal identifikasi pelangan akhir telah dilakukan."><input
+                    <td data-description="Produk Inovasi sudah berorientasi kebutuhan pasar."><input
                             type="radio" name="indikator1_row6" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[5]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Proses identifikasi pelanggan akhir telah selesai."><input type="radio"
+                    <td data-description="Produk Inovasi sudah berorientasi kebutuhan pasar, namun belum ada riset pada pasar."><input type="radio"
                             name="indikator1_row6" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[5]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Profil pelanggan akhir telah dianalisis."><input type="radio"
+                    <td data-description="Produk Inovasi sudah berorientasi kebutuhan pasar, ada riset pasar, belum terjadi feedback dari pelanggan."><input type="radio"
                             name="indikator1_row6" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[5]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Rincian profil calon pelanggan akhir diuraikan secara lengkap."><input
+                    <td data-description="Produk Inovasi sudah berorientasi kebutuhan pasar, ada riset pasar, belum terjadi feedback dari pelanggan."><input
                             type="radio" name="indikator1_row6" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[5]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Inovasi dilakukan berdasarkan permintaan dan/atau kebutuhan pelanggan.
@@ -244,25 +244,25 @@
                 <tr class="row-m">
                     <td class="row-number">7</td>
                     <td class="aspect-cell">M</td>
-                    <td data-description="Tidak memiliki rencana peluncuran produk ke pasar (business plan)."><input
+                    <td data-description="Tidak dilakukan riset pasar."><input
                             type="radio" name="indikator1_row7" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[6]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Memiliki ide/gagasan tentang rencana peluncuran produk ke pasar."><input
+                    <td data-description="Telah dilakukan riset pasar, tetapi belum teridentifikasi: keinginan, kebutuhan, permintaan pelanggan."><input
                             type="radio" name="indikator1_row7" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[6]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Garis besar materi rencana strategi peluncuran produk ke pasar telah disusun.">
+                        data-description="Telah dilakukan riset pasar, dan teridentifikasi: kebutuhan pelanggan.">
                         <input type="radio" name="indikator1_row7" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[6]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Dokumen strategi peluncuran produk ke pasar sedang disusun."><input
+                    <td data-description="Telah dilakukan riset pasar, dan teridentifikasi: keinginan pelanggan."><input
                             type="radio" name="indikator1_row7" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[6]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Tahap analisi dan finalisasi penyusunan dokumen strategi peluncuran produk ke pasar.">
+                        data-description="Telah dilakukan riset pasar, dan teridentifikasi: permintaan pelanggan.">
                         <input type="radio" name="indikator1_row7" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[6]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Dokumen strategi peluncuran produk (business plan) yang lengkap mencakup STP dan 4P telah selesai.">
+                        data-description="Telah dilakukan riset pasar, sudah teridentifikasi: keinginan, kebutuhan dan permintaan pelanggan.">
                         <input type="radio" name="indikator1_row7" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[6]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Permintaan dan kebutuhan pelanggan telah diidentifikasi.</td>
@@ -281,23 +281,23 @@
                 <tr class="row-m">
                     <td class="row-number">8</td>
                     <td class="aspect-cell">M</td>
-                    <td data-description="Tidak ada informasi terkait modal intelektual."><input type="radio"
+                    <td data-description="Belum dilakukan riset pasar."><input type="radio"
                             name="indikator1_row8" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[7]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Ada ide/gagagsan untuk menyiapkan modal intelektual."><input type="radio"
+                    <td data-description="Persiapan dan mulai dilakukan riset pasar."><input type="radio"
                             name="indikator1_row8" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[7]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Mulai disiapkan penyusunan rincian modal intelektual."><input
+                    <td data-description="Telah dilakukan riset pasar dan teridentifikasi: Variabel Geografis."><input
                             type="radio" name="indikator1_row8" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[7]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Tahap finalisasi penyusunan rincian modal intelektual"><input type="radio"
+                    <td data-description="Telah dilakukan riset pasar dan teridentifikasi: Opsi lokasi pasar yang akan dituju."><input type="radio"
                             name="indikator1_row8" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[7]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Rincian modal intelektual telah disiapkan dan diuraikan tidak secara lengkap.">
+                        data-description="Sedang dilakukan pengujian riset pasar pada opsi pasar yang dituju.">
                         <input type="radio" name="indikator1_row8" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[7]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Rincian modal intelektual telah disiapkan dan diuraikan secara lengkap.">
+                    <td data-description="Sudah dilakukan riset pasar dan memilih lokasi pasar yang akan dituju.">
                         <input type="radio" name="indikator1_row8" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[7]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Telah mengidentifikasikan lokasi pasar yang akan dituju.</td>
@@ -316,22 +316,22 @@
                 <tr class="row-o">
                     <td class="row-number">9</td>
                     <td class="aspect-cell">O</td>
-                    <td data-description="Belum disusun analisis dan rencana bisnis."><input type="radio"
+                    <td data-description="Belum memiliki strategi inovasi."><input type="radio"
                             name="indikator1_row9" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[8]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Persiapan penyusunan rencana bisnis."><input type="radio"
+                    <td data-description="Tahap persiapan penyusunan strategi inovasi."><input type="radio"
                             name="indikator1_row9" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[8]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Mulai penyusunan awal rencana bisnis."><input type="radio"
+                    <td data-description="Dalam penyusunan strategi inovasi."><input type="radio"
                             name="indikator1_row9" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[8]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Tahap penyelesaian analisis bisnis."><input type="radio"
+                    <td data-description="Telah menyusun strategi, namun belum diterapkan."><input type="radio"
                             name="indikator1_row9" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[8]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah diselesaikan analisis bisnis, dan tahap penyelesaian rencana bisnis">
+                    <td data-description="Telah menyusun strategi, dan telah menetapkan strategi inovasi.">
                         <input type="radio" name="indikator1_row9" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[8]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah dikeluarkan analisis dan rencana bisnis."><input type="radio"
+                    <td data-description="Telah menyusun strategi, dan telah menetapkan dan menjalankan strategi inovasi."><input type="radio"
                             name="indikator1_row9" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[8]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Telah memiliki strategi inovasi.</td>
@@ -350,27 +350,27 @@
                 <tr class="row-o">
                     <td class="row-number">10</td>
                     <td class="aspect-cell">O</td>
-                    <td data-description="Tidak memiliki dan melibatkan individu-individu kunci."><input
+                    <td data-description="Belum didefiniskan lingkup proyek dan tugas tim."><input
                             type="radio" name="indikator1_row10" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[9]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Memiliki beberapa individu kunci yang memiliki keahlian unik, tetapi tidak dilibatkan secara aktif.">
+                        data-description="Tahap persiapan penyusunan lingkup proyek dan tugas tim.">
                         <input type="radio" name="indikator1_row10" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[9]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Memiliki beberapa individu kunci dengan keahlian uniknya, tetapi kurang diberikan tanggung jawab pada posisi strategis.">
+                        data-description="Tahap penyusunan lingkup proyek dan tugas tim.">
                         <input type="radio" name="indikator1_row10" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[9]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Memiliki beberapa individu kunci dengan keahlian uniknya dan diberikan tanggung jawab pada posisi yang strategis.">
+                        data-description="Penyusunan lingkup proyek dan tugas tim sudah selesai.">
                         <input type="radio" name="indikator1_row10" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[9]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Memiliki individu-individu kunci dengan keahlian uniknya yang sulit digantikan (berkaitan dengan jumlah), tetapi belum secara optimal diberikan tanggung jawab pada posisi yang strategis.">
+                        data-description="Penyusunan lingkup proyek dan tugas tim sudah selesai dan masih dalam proses penetapan.">
                         <input type="radio" name="indikator1_row10" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[9]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td
-                        data-description="Memiliki individu-individu kunci dengani keahlian uniknya yang sulit digantikan (berkaitan dengan jumlah) dan diberikan tanggung jawab pada posisi yang strategis.">
+                        data-description="Penyusunan lingkup proyek dan tugas tim sudah selesai dan sudah ditetapkan.">
                         <input type="radio" name="indikator1_row10" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[9]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Lingkup proyek dan tugas telah diidentifikasi.</td>
@@ -389,22 +389,22 @@
                 <tr class="row-o">
                     <td class="row-number">11</td>
                     <td class="aspect-cell">O</td>
-                    <td data-description="Belum ada persyaratan proyek dan daftar mitra proyek."><input
+                    <td data-description="Belum ada kepastian sumber daya (SDM & SDA) dan dana serta fasilitas penelitian yang dibutuhkan."><input
                             type="radio" name="indikator1_row11" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[10]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Dalam proses identifikasi persyaratan proyek dan daftar mitra proyek."><input type="radio"
+                    <td data-description="Hanya memiliki salah satu kepastian diantara: SDM, Laboratorium, Sumber Dana."><input type="radio"
                             name="indikator1_row11" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[10]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Sudah ada persyaratan proyek, tetapi belum ada mitra, atau sebaliknya."><input
+                    <td data-description="Sudah memiliki dua kepastian diantara: SDM, Laboratorium, Sumber Dana."><input
                             type="radio" name="indikator1_row11" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[10]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Sudah ada persyaratan proyek dan daftar mitra proyek, tetapi belum disetujui."><input type="radio"
+                    <td data-description="Sudah memiliki kepastian SDM, Laboratorium, Sumber Dana."><input type="radio"
                             name="indikator1_row11" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[10]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Sudah ada persyaratan proyek dan daftar mitra proyek, dan dalam proses persetujuan."><input
+                    <td data-description="Sudah memiliki kepastian SDM, Laboratorium, Sumber Dana, tetapi masih membutuhkan dukungan layanan lainnya."><input
                             type="radio" name="indikator1_row11" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[10]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Sudah ada persyaratan proyek dan daftar mitra proyek yang telah disetujui.">
+                    <td data-description="Sudah memiliki kepastian SDM, Laboratorium, Sumber Dana dan dukungan layanan lainnya.">
                         <input type="radio" name="indikator1_row11" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[10]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Kebutuhan akan sumber daya, dana dan fasilitas penelitian telah
@@ -424,23 +424,22 @@
                 <tr class="row-o">
                     <td class="row-number">12</td>
                     <td class="aspect-cell">O</td>
-                    <td data-description="Belum ada tanggung jawab dan persetujuan batas waktu proyek."><input type="radio"
+                    <td data-description="Tidak ada akses komunikasi Digital."><input type="radio"
                             name="indikator1_row12" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[11]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Dalam proses identifikasi beban dan tanggung jawab dalam pelaksanaan proyek, dan proses penyusunan jadwal."><input type="radio"
+                    <td data-description="Hanya ada saluran Telepon."><input type="radio"
                             name="indikator1_row12" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[11]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Sudah ada tanggungjawab proyek, tetapi belum ada batas waktu proyek, atau sebaliknya."><input
+                    <td data-description="Hanya ada saluran telepon dan perpustakaan."><input
                             type="radio" name="indikator1_row12" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[11]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Sudah ada tanggung jawab dan persetujuan batas waktu proyek, tetapi belum disetujui."><input type="radio"
+                    <td data-description="Ada saluran Telepon dan salah satu diantara: Jaringan Internet atau Perpustakaan."><input type="radio"
                             name="indikator1_row12" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[11]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Sudah ada penanggungjawab dan batas waktu proyek, dan dalam proses persetujuan."><input
+                    <td data-description="Ada saluran Telepon dan Perpustakaan serta jaringan internet."><input
                             type="radio" name="indikator1_row12" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[11]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah tersedia penanggungjawab dan batas waktu proyek yang disetujui.
-">
+                    <td data-description="Ada saluran Telepon, Jaringan Internet, Perpustakaan dan E-Library.">
                         <input type="radio" name="indikator1_row12" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[11]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Tersedia saluran komunikasi tanpa hambatan.</td>
@@ -459,22 +458,22 @@
                 <tr class="row-mf">
                     <td class="row-number">13</td>
                     <td class="aspect-cell">Mf</td>
-                    <td data-description="Belum diidentifikasi teknologi dan komponen kritikal."><input
+                    <td data-description="Belum teridentifikasi implikasi dasar manufaktur."><input
                             type="radio" name="indikator1_row13" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[12]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Persiapan identifikasi teknologi dan komponen kritikal."><input
+                    <td data-description="Persiapan pelaksanaan identifikasi awal implikasi dasar manufaktur."><input
                             type="radio" name="indikator1_row13" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[12]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Mulai dilakukan identifikasi awal teknologi & komponen kritikal dengan capaian 40%."><input
+                    <td data-description="Telah dilakukan identifikasi awal implikasi dasar manufaktur."><input
                             type="radio" name="indikator1_row13" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[12]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Identifikasi teknologi dan komponen kritikal dalam penyelesaian dengan capaian 60%."><input
+                    <td data-description="Telah teridentifikasi implikasi dasar manufaktur secara teknis."><input
                             type="radio" name="indikator1_row13" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[12]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Identifikasi teknologi dan komponen kritikal dalam penyelesaian dengan capaian 80%."><input
+                    <td data-description="Telah teridentifikasi implikasi dasar manufaktur secara teknis dan dalam proses identifikasi dasar manufaktur secara ekonomis."><input
                             type="radio" name="indikator1_row13" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[12]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah secara komplit (capaian 100%) diidentifikasi teknologi dan komponen kritikal."><input
+                    <td data-description="Teridentifikasi implikasi (konsekuensi atau akibat langsung dari hasil penemuan suatu penelitian ilmiah) dasar manufaktur."><input
                             type="radio" name="indikator1_row13" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[12]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Konsekuensi hasil temuan telah diidentifikasi melalui dasar manufaktur
@@ -494,22 +493,22 @@
                 <tr class="row-mf">
                     <td class="row-number">14</td>
                     <td class="aspect-cell">Mf</td>
-                    <td data-description="Belum dapat diperlihatkan kesiapan sub system/system dalam suatu lingkungan produksi yang relevan."><input type="radio"
+                    <td data-description="Belum teridentifikasi konsep manufaktur."><input type="radio"
                             name="indikator1_row14" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Tahap persiapan awal membangun kesiapan sub system/system dalam suatu lingkungan produksi yang relevan"><input type="radio"
+                    <td data-description="Persiapan pelaksanaan identifikasi konsep manufaktur."><input type="radio"
                             name="indikator1_row14" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah diperlihatkan kesiapan sub system/system dalam suatu lingkungan produksi yang relevan yang mencakup kesiapan material."><input type="radio"
+                    <td data-description="Telah dilakukan identifikasi awal konsep manufaktur."><input type="radio"
                             name="indikator1_row14" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah diperlihatkan kesiapan sub system/system dalam suatu lingkungan produksi yang relevan yang mencakup kesiapan material dan perkakas "><input
+                    <td data-description="Telah teridentifikasi konsep manufaktur dalam pengertian proses manufaktur secara teknis."><input
                             type="radio" name="indikator1_row14" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah diperlihatkan kesiapan sub system/system dalam suatu lingkungan produksi yang relevan yang mencakup kesiapan material, perkakas dan alat uji prototype."><input
+                    <td data-description="Proses penyelesaian konsep manufaktur dalam pengertian proses manufaktur secara ekonomis."><input
                             type="radio" name="indikator1_row14" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah diperlihatkan kesiapan sub system/system dalam suatu lingkungan produksi yang relevan yang mencakup kesiapan material, perkakas, alat uji prototype, dan keahlian personel."><input
+                    <td data-description="Telah teridentifikasi konsep manufaktur: Proses manufaktur secara teknis dan ekonomis."><input
                             type="radio" name="indikator1_row14" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[13]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Teridentifikasi dalam konsep manufaktur secara teknis dan ekonomis.
@@ -529,22 +528,22 @@
                 <tr class="row-mf">
                     <td class="row-number">15</td>
                     <td class="aspect-cell">Mf</td>
-                    <td data-description="Tidak ada bukti bahwa solusi yang ditawarkan kepada pelanggan memunculkan daya tarik yang menguntungkan di pasar."><input type="radio"
+                    <td data-description="Belum dilakukan validasi konsep manufaktur melalui analitik atau eksperimen laboratorium."><input type="radio"
                             name="indikator1_row15" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Memiliki keunggulan nilai jual namun belum melakukan survey pasar."><input type="radio"
+                    <td data-description="Tahap persiapan validasi konsep manufaktur melalui analitik atau eksperimen laboratorium."><input type="radio"
                             name="indikator1_row15" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Keunggulan nilai jual (value proposition) sedang di uji terap melalui survey pasar."><input type="radio"
+                    <td data-description="Telah dilakukan validasi awal konsep manufaktur melalui analitik atau eksperimen laboratorium, dengan capaian 40%."><input type="radio"
                             name="indikator1_row15" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Memiliki keunggulan nilai jual dibanding dengan kompetitor untuk pasar yang terbatas."><input type="radio"
+                    <td data-description="Telah dilakukan validasi konsep manufaktur melalui analitik atau eksperimen laboratorium dengan capaian 60%."><input type="radio"
                             name="indikator1_row15" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Keunggulan nilai jual (value proposition) sedang diverifikasi dan divalidasi melalui uji terap untuk pasar yang lebih luas."><input type="radio"
+                    <td data-description="Telah dilakukan validasi konsep manufaktur melalui analitik atau eksperimen laboratorium dengan capaian 80%."><input type="radio"
                             name="indikator1_row15" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Memiliki keunggulan dibanding kompetitor dan teruji dalam survey pasar yang lebih luas."><input
+                    <td data-description="Telah diselesaikan validasi konsep manufaktur melalui analitik atau eksperimen laboratorium, dan telah diperoleh bukti konsep manufaktur."><input
                             type="radio" name="indikator1_row15" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[14]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Tersedia bukti konsep manufaktur melalui analitik atau eksperimen
@@ -565,22 +564,22 @@
                     <td class="row-number">16</td>
                     <td class="aspect-cell">I</td>
                     
-                    <td data-description="Tidak ada bukti bahwa solusi yang ditawarkan kepada pelanggan memunculkan daya tarik yang menguntungkan di pasar."><input type="radio"
+                    <td data-description="Tidak punya konsep model bisnis untuk ide yang dikembangkan."><input type="radio"
                             name="indikator1_row16" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Ide yang dikembangkan menjadi prototype sesuai dengan kebutuhan pelanggan."><input type="radio"
+                    <td data-description="Persiapan dan mulai menyusun konsep model bisnis berdasarkan ide yang dikembangkan."><input type="radio"
                             name="indikator1_row16" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Prototype yang dikembangkan memiliki nilai lebih dibanding kompetitor."><input
+                    <td data-description="Sedang menyusun konsep model bisnis untuk ide yang dikembangkan."><input
                             type="radio" name="indikator1_row16" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Prototype yang dikembangkan dilakukan uji pasar"><input
+                    <td data-description="Konsep model bisnis untuk ide yang dikembangkan belum lengkap dan jelas."><input
                             type="radio" name="indikator1_row16" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Dilakukan proyeksi keuntungan terhadap prototype yang dikembangkan."><input
+                    <td data-description="Konsep model bisnis untuk ide yang dikembangkan cukup lengkap dan jelas."><input
                             type="radio" name="indikator1_row16" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Diperoleh proyeksi keuntungan dari prototype yang dikembangkan."><input type="radio"
+                    <td data-description="Konsep model bisnis untuk ide yang dikembangkan lengkap dan jelas."><input type="radio"
                             name="indikator1_row16" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[15]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     
@@ -601,22 +600,22 @@
                     <td class="row-number">17</td>
                     <td class="aspect-cell">I</td>
 
-                    <td data-description="Tidak ada bukti dilakukannya: validasi value proposition, channel, segmen pelanggan, model hubungan dengan pelanggan yang ada, dan aliran revenue."><input
+                    <td data-description="Tidak ada analisis pelanggan, pasar dan pesaing dari ide yang dikembangkan."><input
                             type="radio" name="indikator1_row17" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah ditetapkan MPV dan segmen pelanggan."><input type="radio"
+                    <td data-description="Sedang mulai menyusun analisis pelanggan, pasar dan pesaing terhadap ide yang dikembangkan."><input type="radio"
                             name="indikator1_row17" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah ditetapkan channel dan model hubungan dengan pelanggan yang ada."><input type="radio"
+                    <td data-description="Hanya ada hasil analisis pesaing dari ide yang dikembangkan."><input type="radio"
                             name="indikator1_row17" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah dihasilkan analisis aliran revenue."><input type="radio"
+                    <td data-description="Hanya Ada hasil analisis pelanggan dari ide yang dikembangkan."><input type="radio"
                             name="indikator1_row17" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah dilakukan validasi antara MPV, segmen pelanggan, channel, hubungan dengan pelanggan yang ada dan aliran revenue."><input
+                    <td data-description="Hanya Ada hasil analisis pelanggan dan pesaing dari ide yang dikembangkan."><input
                             type="radio" name="indikator1_row17" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Bukti-bukti yang ada saling berkaitan dalam menentukan aliran revenue."><input
+                    <td data-description="Ada hasil analisis pelanggan, pasar dan pesaing dari ide yang dikembangkan."><input
                             type="radio" name="indikator1_row17" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[16]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
 
@@ -637,22 +636,22 @@
                 <tr class="row-p">
                     <td class="row-number">18</td>
                     <td class="aspect-cell">I</td>
-                    <td data-description="Belum dilakukan penggalian informasi dan seleksi mitra."><input type="radio"
+                    <td data-description="Tidak ada bukti bahwa ide yang dikembangkan telah memberikan solusi bagi pelanggan."><input type="radio"
                             name="indikator1_row18" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Dilakukan penggalian informasi mitra."><input type="radio"
+                    <td data-description="Mulai dilakukan percobaan dan percontohan terhadap ide yang dikembangkan dapat memberi solusi bagi pelanggan."><input type="radio"
                             name="indikator1_row18" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Diperoleh database mitra, dan penyusunan kriteria untuk seleksi mitra."><input
+                    <td data-description="Percobaan dan percontohan telah selesai (belum dianalisis berdasarkan kekuatan, kelemahan, peluang dan tantangan- SWOT analysis)."><input
                             type="radio" name="indikator1_row18" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Diperoleh database mitra dan kriteria untuk seleksi mitra."><input
+                    <td data-description="Ada bukti yang Lemah bahwa ide yang dikembangkan telah memberikan solusi bagi pelanggan."><input
                             type="radio" name="indikator1_row18" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Diperoleh database mitra dan kriteria seleksi mitra, serta mulai dilakukan seleksi mitra.">
+                    <td data-description="Ada bukti yang cukup kuat bahwa ide yang dikembangkan telah memberikan solusi bagi pelanggan.">
                         <input type="radio" name="indikator1_row18" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah dilakukan penggalian informasi dan seleksi mitra, dan telah diperoleh database mitra, kriteria seleksi mitra dan calon mitra potensial hasil seleksi.">
+                    <td data-description="Ada bukti yang sangat kuat bahwa ide yang dikembangkan telah memberikan solusi bagi pelanggan.">
                         <input type="radio" name="indikator1_row18" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[17]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Ide yang dikembangkan telah terbukti memberi solusi bagi pelanggan.
@@ -672,22 +671,22 @@
                 <tr class="row-i">
                     <td class="row-number">19</td>
                     <td class="aspect-cell">P</td>
-                    <td data-description="Belum terbangun pola kemitraan yang tepat."><input type="radio"
+                    <td data-description="Belum ada strategi membangun jejaring kerja dan kemitraan."><input type="radio"
                             name="indikator1_row19" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Mengkaji konsep pola kemitraan."><input type="radio"
+                    <td data-description="Tahap persiapan penyusunan strategi membangun jejaring kerja dan kemitraan."><input type="radio"
                             name="indikator1_row19" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah diperoleh konsep pola kemitraan yang lebih tepat."><input type="radio"
+                    <td data-description="Identifikasi kekuatan, kelemahan, peluang dan ancaman dalam membangun jejaring kerja dan kemitraan."><input type="radio"
                             name="indikator1_row19" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Validasi konsep pola kemitraan yang lebih tepat."><input
+                    <td data-description="Analisis SWOT."><input
                             type="radio" name="indikator1_row19" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Upaya pembangunan pola kemitraan berdasar konsep yang disusun."><input
+                    <td data-description="Analisis faktor internal dan eksternal untuk menurunkan strategi."><input
                             type="radio" name="indikator1_row19" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Telah dibangun pola kemitraan yang lebih tepat dalam pengembangan usaha untuk mencapai tujuan bisnis bersama.">
+                    <td data-description="Telah diperoleh strategi membangun jejaring kerja dan kemitraan.">
                         <input type="radio" name="indikator1_row19" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[18]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Telah tersusun strategi membangun jaringan kerja dan kemitraan.</td>
@@ -706,22 +705,22 @@
                 <tr class="row-r">
                     <td class="row-number">20</td>
                     <td class="aspect-cell">P</td>
-                    <td data-description="Tidak ada kajian risiko teknologi dan tidak menjadi pertimbangan dalam setiap tahap pengembangan teknologi."><input type="radio"
+                    <td data-description="Belum diidentifikasi mitra potensial."><input type="radio"
                             name="indikator1_row20" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Sedang disusun materi penelitian atau kajian risiko teknologi dalam setiap tahap pengembangan teknologi."><input type="radio"
+                    <td data-description="SeTahap persiapan identifikasi mitra potensial."><input type="radio"
                             name="indikator1_row20" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Kajian risiko teknologi pada setiap tahap pengembangan teknologi telah selesai (belum menjadi pertimbangan)."><input type="radio"
+                    <td data-description="Identifikasi awal terkait relevansi mitra dengan program pengembangan yang dilakukan."><input type="radio"
                             name="indikator1_row20" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Kajian risiko telah menjadi pertimbangan dalam beberapa tahap pengembangan teknologi."><input type="radio"
+                    <td data-description="Identifikasi lanjutan, mencakup: relevansi mitra dengan program pengembangan yang dilakukan, serta peta peran dan kontribusi mitra."><input type="radio"
                             name="indikator1_row20" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Kajian risiko telah menjadi pertimbangan dalam hampir setiap tahap pengembangan teknologi."><input
+                    <td data-description="Tahap penyelesaian identifikasi, mencakup: relevansi mitra dengan program pengembangan yang dilakukan, peta peran dan kontribusi mitra, serta upaya memaksimalkan peran dan kontribusi mitra."><input
                             type="radio" name="indikator1_row20" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Kajian risiko telah menjadi pertimbangan dalam setiap tahap pengembangan teknologi."><input
+                    <td data-description="Telah tersedia hasil identifikasi mitra potensial, mencakup: relevansi mitra dengan program pengembangan yang dilakukan, peta peran dan kontribusi mitra, serta upaya memaksimalkan peran dan kontribusi mitra."><input
                             type="radio" name="indikator1_row20" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[19]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Mitra potensial telah diidentifikasi.</td>
@@ -740,22 +739,22 @@
                 <tr class="row-r">
                     <td class="row-number">21</td>
                     <td class="aspect-cell">R</td>
-                    <td data-description="Tidak disusun rencana pengendalian risiko teknologi pada tahap pengembangan teknologi."><input type="radio"
+                    <td data-description="Tidak ada kajian risiko teknologi dan tidak menjadi pertimbangan dalam setiap langkah penelitian."><input type="radio"
                             name="indikator1_row21" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Memiki ide/gagasan pengendalian risiko teknologi pada tahap pengembangan teknologi."><input type="radio"
+                    <td data-description="Sedang disusun materi penelitian atau kajian risiko teknologi."><input type="radio"
                             name="indikator1_row21" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Garis besar materi rencana pengendalian risiko teknologi pada tahap tahap pengembangan teknologi telah disusun."><input type="radio"
+                    <td data-description="Kajian risiko teknologi telah selesai (belum menjadi pertimbangan)."><input type="radio"
                             name="indikator1_row21" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Mulai menyusun rencana pengendalian risiko teknologi pada tahap pengembangan teknologi."><input type="radio"
+                    <td data-description="Kajian risiko telah menjadi pertimbangan dalam beberapa langkah penelitian."><input type="radio"
                             name="indikator1_row21" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Tahap penyelesaian penyusunan rencana pengendalian risiko teknologi pada tahap pengembangan teknologi."><input
+                    <td data-description="Kajian risiko telah menjadi pertimbangan dalam hampir setiap langkah penelitian."><input
                             type="radio" name="indikator1_row21" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Tersusun rencana pengendalian risiko teknologi pada tahap tahap pengembangan teknologi."><input
+                    <td data-description="Kajian risiko telah menjadi pertimbangan dalam setiap langkah penelitian."><input
                             type="radio" name="indikator1_row21" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[20]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Kajian risiko teknologi telah menjadi pertimbangan dalam setiap
@@ -775,22 +774,22 @@
                 <tr class="row-r">
                     <td class="row-number">22</td>
                     <td class="aspect-cell">R</td>
-                    <td data-description="Tidak ada rencana pengendalian risiko. Skor: 0 (0%)"><input type="radio"
+                    <td data-description="Tidak disusun rencana pengendalian risiko teknologi pada tahap penelitian."><input type="radio"
                             name="indikator1_row22" class="radio-input" value="0"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[21]->score == 0)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Identifikasi awal untuk rencana pengendalian. Skor: 1 (20%)"><input
+                    <td data-description="Memiki ide/gagasan pengendalian risiko teknologi pada tahap penelitian."><input
                             type="radio" name="indikator1_row22" class="radio-input" value="1"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[21]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Draft rencana pengendalian risiko dibuat. Skor: 2 (40%)"><input
+                    <td data-description="Garis besar materi rencana pengendalian risiko teknologi pada tahap penelitian telah disusun."><input
                             type="radio" name="indikator1_row22" class="radio-input" value="2"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[21]->score == 2)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Rencana pengendalian risiko telah disusun. Skor: 3 (60%)"><input
+                    <td data-description="Mulai menyusun rencana pengendalian risiko teknologi pada tahap penelitian."><input
                             type="radio" name="indikator1_row22" class="radio-input" value="3"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[21]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Rencana pengendalian risiko telah diimplementasikan. Skor: 4 (80%)"><input
+                    <td data-description="Tahap penyelesaian penyusunan rencana pengendalian risiko teknologi pada tahap penelitian."><input
                             type="radio" name="indikator1_row22" class="radio-input" value="4"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[21]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                    <td data-description="Rencana pengendalian risiko dievaluasi secara berkala. Skor: 5 (100%)"><input
+                    <td data-description="Tersusun rencana pengendalian risiko teknologi pada tahap penelitian."><input
                             type="radio" name="indikator1_row22" class="radio-input" value="5"
                             @checked($indicatorOne->isNotEmpty() && $indicatorOne[21]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                     <td class="description-cell">Pada tahap penelitian dilakukan penyusunan rencana pengendalian risiko
