@@ -8,7 +8,7 @@
             <img alt="University logo" class="h-10 w-10"
                 src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
             <div class="ml-4">
-                <h1 class="text-xl font-bold uppercase tracking-wide text-white">DIREKTORAT INOVASI, SISTEM INFORMASI, DAN PEMERINGKATAN</h1>
+                <h1 class="text-2xl font-bold  tracking-wide text-white">Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</h1>
             </div>
         </a>
         

@@ -62,7 +62,7 @@
                 <img alt="University logo" class="h-12 w-12"
                     src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
             </a>
-            <h1 class="text-white text-2xl font-bold">Subdirektorat Pemeringkatan dan Sistem Informasi</h1>
+            <h1 class="text-white text-2xl font-bold">Subdirektorat  Sistem Informasi dan Pemeringkatan </h1>
         </div>
         <ul class="flex space-x-6">
             <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400">Beranda</a></li>
