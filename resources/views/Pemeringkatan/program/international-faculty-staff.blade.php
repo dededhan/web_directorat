@@ -308,7 +308,6 @@
                 </div>
             </section>
             
-            <!-- Activity Detail Modal -->
             <div id="detailModal" class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4">
                 <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                     <div class="flex justify-between items-center border-b p-4">
@@ -385,7 +384,7 @@
                 </div>
 
                 <div class="relative mb-8">
-                    <input type="text" placeholder="Cari profesor berdasarkan nama atau bidang keahlian..."
+                    <input id="faculty-search" type="text" placeholder="Cari profesor berdasarkan nama atau bidang keahlian..."
                         class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                     <i class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                 </div>
@@ -762,127 +761,138 @@
             const loadMoreBtn = document.getElementById('load-more-btn');
             const facultyGrid = document.getElementById('faculty-grid');
             const searchInput = document.getElementById('faculty-search');
-            const yearButtons = document.querySelectorAll('.year-btn');
             const yearDropdown = document.getElementById('year-dropdown');
 
-            // Get all the faculty profiles from the grid
-            const facultyProfilesInGrid = Array.from(facultyGrid.querySelectorAll('.faculty-profile'));
+            // This entire block is wrapped in a try-catch to prevent errors from stopping other scripts.
+            try {
+                // Get all the faculty profiles from the grid
+                const facultyProfilesInGrid = Array.from(facultyGrid.querySelectorAll('.faculty-profile'));
 
-            // Initially, display a limited number of faculty profiles
-            const initialDisplayCount = 9; // Show first 9 items
-            let displayCount = initialDisplayCount;
+                // Initially, display a limited number of faculty profiles
+                const initialDisplayCount = 9; // Show first 9 items
+                let displayCount = initialDisplayCount;
 
+                if (yearDropdown) {
+                    yearDropdown.addEventListener('change', function() {
+                        const selectedYear = this.value;
 
-            yearDropdown.addEventListener('change', function() {
-                const selectedYear = this.value;
+                        // Filter profiles by year
+                        facultyProfilesInGrid.forEach(profile => {
+                            const profileYear = profile.getAttribute('data-year');
 
-                // Filter profiles by year
-                facultyProfilesInGrid.forEach(profile => {
-                    const profileYear = profile.getAttribute('data-year');
+                            if (profileYear === selectedYear) {
+                                profile.classList.remove('year-hidden');
+                            } else {
+                                profile.classList.add('year-hidden');
+                            }
+                        });
 
-                    if (profileYear === selectedYear) {
-                        profile.classList.remove('year-hidden');
-                    } else {
-                        profile.classList.add('year-hidden');
-                    }
-                });
-
-                // Reset display count and update display
-                displayCount = initialDisplayCount;
-                updateDisplayedItems();
-            });
-
-            // Function to update the displayed items
-            function updateDisplayedItems() {
-                let visibleCount = 0;
-                facultyProfilesInGrid.forEach((profile, index) => {
-                    const isFilterHidden = profile.classList.contains('filter-hidden');
-                    const isSearchHidden = profile.classList.contains('search-hidden');
-                    const isYearHidden = profile.classList.contains('year-hidden');
-
-                    if (!isFilterHidden && !isSearchHidden && !isYearHidden && visibleCount <
-                        displayCount) {
-                        profile.style.display = 'block';
-                        visibleCount++;
-                    } else {
-                        profile.style.display = 'none';
-                    }
-                });
-
-                // Hide load more button if all visible items are displayed
-                const totalVisible = facultyProfilesInGrid.filter(profile =>
-                    !profile.classList.contains('filter-hidden') &&
-                    !profile.classList.contains('search-hidden') &&
-                    !profile.classList.contains('year-hidden')).length;
-
-                if (totalVisible <= visibleCount) {
-                    loadMoreBtn.style.display = 'none';
-                } else {
-                    loadMoreBtn.style.display = 'flex';
+                        // Reset display count and update display
+                        displayCount = initialDisplayCount;
+                        updateDisplayedItems();
+                    });
                 }
-            }
+                
+                // Function to update the displayed items
+                function updateDisplayedItems() {
+                    let visibleCount = 0;
+                    facultyProfilesInGrid.forEach((profile, index) => {
+                        const isFilterHidden = profile.classList.contains('filter-hidden');
+                        const isSearchHidden = profile.classList.contains('search-hidden');
+                        const isYearHidden = profile.classList.contains('year-hidden');
 
-            // Apply initial display
-            facultyProfilesInGrid.forEach((profile) => {
-                profile.classList.remove('filter-hidden', 'search-hidden');
-            });
-            updateDisplayedItems();
-
-            // Load more button functionality
-            loadMoreBtn.addEventListener('click', function() {
-                displayCount += 6; // Load 6 more items
-                updateDisplayedItems();
-            });
-
-            // Filter buttons functionality
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Reset display count to initial
-                    displayCount = initialDisplayCount;
-
-                    // Remove active class from all buttons
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-
-                    // Add active class to clicked button
-                    this.classList.add('active');
-
-                    const filterValue = this.getAttribute('data-filter');
-
-                    // Show/hide faculty profiles based on filter
-                    facultyProfilesInGrid.forEach(profile => {
-                        if (filterValue === 'all' || profile.getAttribute(
-                                'data-faculty') === filterValue) {
-                            profile.classList.remove('filter-hidden');
+                        if (!isFilterHidden && !isSearchHidden && !isYearHidden && visibleCount <
+                            displayCount) {
+                            profile.style.display = 'block';
+                            visibleCount++;
                         } else {
-                            profile.classList.add('filter-hidden');
+                            profile.style.display = 'none';
                         }
                     });
 
-                    // Update displayed items
-                    updateDisplayedItems();
-                });
-            });
+                    // Hide load more button if all visible items are displayed
+                    const totalVisible = facultyProfilesInGrid.filter(profile =>
+                        !profile.classList.contains('filter-hidden') &&
+                        !profile.classList.contains('search-hidden') &&
+                        !profile.classList.contains('year-hidden')).length;
 
-            // Search functionality
-            searchInput.addEventListener('input', function() {
-                // Reset display count to initial
-                displayCount = initialDisplayCount;
-
-                const searchTerm = this.value.toLowerCase();
-
-                facultyProfilesInGrid.forEach(profile => {
-                    const name = profile.querySelector('h3').textContent.toLowerCase();
-                    const expertise = profile.querySelector('p').textContent.toLowerCase();
-
-                    if (name.includes(searchTerm) || expertise.includes(searchTerm)) {
-                        profile.classList.remove('search-hidden');
-                    } else {
-                        profile.classList.add('search-hidden');
+                    if (loadMoreBtn) {
+                        if (totalVisible <= visibleCount) {
+                            loadMoreBtn.style.display = 'none';
+                        } else {
+                            loadMoreBtn.style.display = 'flex';
+                        }
                     }
+                }
+
+                // Apply initial display
+                facultyProfilesInGrid.forEach((profile) => {
+                    profile.classList.remove('filter-hidden', 'search-hidden');
+                });
+                updateDisplayedItems();
+
+                // Load more button functionality
+                if (loadMoreBtn) {
+                    loadMoreBtn.addEventListener('click', function() {
+                        displayCount += 6; // Load 6 more items
+                        updateDisplayedItems();
+                    });
+                }
+
+                // Filter buttons functionality
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        // Reset display count to initial
+                        displayCount = initialDisplayCount;
+
+                        // Remove active class from all buttons
+                        filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                        // Add active class to clicked button
+                        this.classList.add('active');
+
+                        const filterValue = this.getAttribute('data-filter');
+
+                        // Show/hide faculty profiles based on filter
+                        facultyProfilesInGrid.forEach(profile => {
+                            if (filterValue === 'all' || profile.getAttribute(
+                                    'data-faculty') === filterValue) {
+                                profile.classList.remove('filter-hidden');
+                            } else {
+                                profile.classList.add('filter-hidden');
+                            }
+                        });
+
+                        // Update displayed items
+                        updateDisplayedItems();
+                    });
                 });
 
-                updateDisplayedItems();
-            });
+                // Search functionality
+                if (searchInput) {
+                    searchInput.addEventListener('input', function() {
+                        // Reset display count to initial
+                        displayCount = initialDisplayCount;
+
+                        const searchTerm = this.value.toLowerCase();
+
+                        facultyProfilesInGrid.forEach(profile => {
+                            const name = profile.querySelector('h3').textContent.toLowerCase();
+                            const expertise = profile.querySelector('p').textContent.toLowerCase();
+
+                            if (name.includes(searchTerm) || expertise.includes(searchTerm)) {
+                                profile.classList.remove('search-hidden');
+                            } else {
+                                profile.classList.add('search-hidden');
+                            }
+                        });
+
+                        updateDisplayedItems();
+                    });
+                }
+            } catch (e) {
+                console.error("An error occurred in the faculty filter/search script:", e);
+            }
         });
     </script>
     
@@ -891,6 +901,12 @@
         const modal = document.getElementById('detailModal');
         const closeModalBtn = document.getElementById('closeModal');
         const detailButtons = document.querySelectorAll('.show-details-btn');
+        
+        // Ensure modal elements exist before adding listeners
+        if (!modal || !closeModalBtn || !detailButtons.length) {
+            console.error("Modal elements not found. The modal will not function.");
+            return;
+        }
         
         // Close modal when clicking the close button
         closeModalBtn.addEventListener('click', function() {
@@ -933,11 +949,14 @@
             modal.classList.remove('hidden');
             document.body.classList.add('overflow-hidden');
             
+            // FIX: Use Laravel's url() helper to generate the correct API endpoint URL.
+            const fetchUrl = `{{ url('/api/aktivitas-dosen-asing') }}/${id}`;
+            
             // Fetch the activity details
-            fetch(`/api/aktivitas-dosen-asing/${id}`)
+            fetch(fetchUrl)
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        throw new Error(`Network response was not ok, status: ${response.status}`);
                     }
                     return response.json();
                 })
@@ -961,7 +980,7 @@
                     console.error('Error fetching activity details:', error);
                     document.getElementById('modalHeading').textContent = 'Error';
                     document.getElementById('modalBody').innerHTML = '<p class="text-red-500">Gagal memuat detail aktivitas. Silakan coba lagi nanti.</p>';
-                    document.getElementById('modalImage').src = '';
+                    document.getElementById('modalImage').src = 'https://placehold.co/600x400/EEE/31343C?text=Image+Not+Found';
                     document.getElementById('modalDate').textContent = '';
                 });
         }

@@ -6,38 +6,47 @@ use App\Models\AktivitasDosenAsing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use App\Models\InternationalActivity;
+
 
 class InternationalFacultyStaffActivitiesController extends Controller
 {
     private function getRoutePrefix()
     {
-        if (auth()->user()->role === 'admin_direktorat') {
-            return 'admin';
-        } else if (auth()->user()->role === 'admin_hilirisasi') {
-            return 'subdirektorat-inovasi.admin_hilirisasi';
-        } else if (auth()->user()->role === 'admin_inovasi') {
-            return 'subdirektorat-inovasi.admin_inovasi';
-        } else if (auth()->user()->role === 'admin_pemeringkatan') {
-            return 'admin_pemeringkatan';
+        $role = auth()->user()->role;
+        switch ($role) {
+            case 'admin_direktorat':
+                return 'admin';
+            case 'admin_hilirisasi':
+                return 'subdirektorat-inovasi.admin_hilirisasi';
+            case 'admin_inovasi':
+                return 'subdirektorat-inovasi.admin_inovasi';
+            case 'admin_pemeringkatan':
+                return 'admin_pemeringkatan';
+            default:
+                return 'admin';
         }
-
-        return 'admin';
     }
 
     public function index()
     {
         $activities = AktivitasDosenAsing::latest()->get();
         $routePrefix = $this->getRoutePrefix();
+        $userRole = Auth::user()->role;
 
-        if (auth()->user()->role === 'admin_direktorat') {
-            return view('admin.international_faculty_staff_activities', compact('activities', 'routePrefix'));
-        } else if (Auth::user()->role === 'prodi') {
-            return view('prodi.international_faculty_staff_activities', compact('activities', 'routePrefix'));
-        } else if (Auth::user()->role === 'fakultas') {
-            return view('fakultas.international_faculty_staff_activities', compact('activities', 'routePrefix'));
-        } else if (Auth::user()->role === 'admin_pemeringkatan') {
-            return view('admin_pemeringkatan.international_faculty_staff_activities', compact('activities', 'routePrefix'));
+        $viewMap = [
+            'admin_direktorat' => 'admin.international_faculty_staff_activities',
+            'prodi' => 'prodi.international_faculty_staff_activities',
+            'fakultas' => 'fakultas.international_faculty_staff_activities',
+            'admin_pemeringkatan' => 'admin_pemeringkatan.international_faculty_staff_activities',
+        ];
+        
+        if (isset($viewMap[$userRole])) {
+            return view($viewMap[$userRole], compact('activities', 'routePrefix'));
         }
+
+        // Fallback for any other roles if necessary
+        return view('admin.international_faculty_staff_activities', compact('activities', 'routePrefix'));
     }
 
     public function store(Request $request)
@@ -58,7 +67,7 @@ class InternationalFacultyStaffActivitiesController extends Controller
                     'public'
                 );
 
-                $activity = AktivitasDosenAsing::create([
+                AktivitasDosenAsing::create([
                     'tanggal' => $validated['tanggal'],
                     'judul' => $validated['judul_berita'],
                     'isi' => $validated['isi_berita'],
@@ -136,9 +145,15 @@ class InternationalFacultyStaffActivitiesController extends Controller
         }
     }
     
+    /**
+     * FIX: This function was using the wrong Model. 
+     * Corrected from InternationalActivity to AktivitasDosenAsing.
+     * It's better to use the show() method and remove this one to avoid duplication,
+     * but this fix will make it work.
+     */
     public function detail($id)
     {
-        $activity = InternationalActivity::findOrFail($id);
+        $activity = AktivitasDosenAsing::findOrFail($id);
         return response()->json($activity);
     }
 
@@ -162,6 +177,12 @@ class InternationalFacultyStaffActivitiesController extends Controller
                 ->with('error', 'Gagal menghapus aktivitas: ' . $e->getMessage());
         }
     }
+
+    /**
+     * This is the recommended function to fetch activity details for an API call.
+     * Ensure your route in routes/api.php points to this method.
+     * Example: Route::get('/aktivitas-dosen-asing/{id}', [InternationalFacultyStaffActivitiesController::class, 'show']);
+     */
     public function show($id)
     {
         try {
