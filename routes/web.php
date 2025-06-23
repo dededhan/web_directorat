@@ -151,4 +151,5 @@ Route::get('/indikator', [\App\Http\Controllers\IndikatorController::class, 'sho
 
 
 // Admin routes should be required at the end
+require __DIR__ . '/api.php';
 require __DIR__ . '/admin.php';

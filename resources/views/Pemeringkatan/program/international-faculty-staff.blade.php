@@ -276,39 +276,39 @@
                 <h2 class="section-title text-3xl">Aktivitas Dosen Asing</h2>
                 <div class="grid md:grid-cols-3 gap-8">
                     @forelse($activities as $activity)
-                    <!-- Program Card -->
-                    <div class="card group">
-                        <div class="h-48 overflow-hidden relative">
-                            <img src="{{ asset('storage/' . $activity->gambar) }}"
-                                alt="{{ $activity->judul }}"
-                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-                                <div class="p-4 text-white">
-                                    <h4 class="font-bold">{{ $activity->judul }}</h4>
+                        <!-- Program Card -->
+                        <div class="card group">
+                            <div class="h-48 overflow-hidden relative">
+                                <img src="{{ asset('storage/' . $activity->gambar) }}" alt="{{ $activity->judul }}"
+                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                                    <div class="p-4 text-white">
+                                        <h4 class="font-bold">{{ $activity->judul }}</h4>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-teal-700 mb-3">{{ $activity->judul }}</h3>
+                                <p class="mb-4 text-gray-600">{{ Str::limit(strip_tags($activity->isi), 120) }}</p>
+                                <button type="button"
+                                    data-detail-url="{{ route('api.aktivitas-dosen-asing.show', ['id' => $activity->id]) }}"
+                                    class="show-details-btn inline-flex items-center text-teal-700 font-medium hover:text-teal-800 transition-colors">
+                                    <span>Pelajari Lebih Lanjut</span>
+                                    <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-teal-700 mb-3">{{ $activity->judul }}</h3>
-                            <p class="mb-4 text-gray-600">{{ Str::limit(strip_tags($activity->isi), 120) }}</p>
-                            <button type="button" 
-                                data-activity-id="{{ $activity->id }}" 
-                                class="show-details-btn inline-flex items-center text-teal-700 font-medium hover:text-teal-800 transition-colors">
-                                <span>Pelajari Lebih Lanjut</span>
-                                <i class="fas fa-arrow-right ml-2 text-sm"></i>
-                            </button>
-                        </div>
-                    </div>
                     @empty
-                    <div class="col-span-3 text-center py-8">
-                        <p class="text-gray-500">Belum ada aktivitas dosen asing yang ditambahkan.</p>
-                    </div>
+                        <div class="col-span-3 text-center py-8">
+                            <p class="text-gray-500">Belum ada aktivitas dosen asing yang ditambahkan.</p>
+                        </div>
                     @endforelse
                 </div>
             </section>
-            
-            <div id="detailModal" class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4">
+
+            <div id="detailModal"
+                class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4">
                 <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                     <div class="flex justify-between items-center border-b p-4">
                         <h3 class="text-xl font-bold text-teal-700" id="modalTitle">Detail Aktivitas</h3>
@@ -332,7 +332,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <section>
                 @php
                     // Get unique years from the data
@@ -384,7 +384,8 @@
                 </div>
 
                 <div class="relative mb-8">
-                    <input id="faculty-search" type="text" placeholder="Cari profesor berdasarkan nama atau bidang keahlian..."
+                    <input id="faculty-search" type="text"
+                        placeholder="Cari profesor berdasarkan nama atau bidang keahlian..."
                         class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                     <i class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                 </div>
@@ -396,7 +397,8 @@
                                 <div class="flex items-center">
                                     <div class="faculty-profile-avatar">
                                         @if ($staff->foto_path)
-                                            <img src="{{ Storage::url($staff->foto_path) }}" alt="{{ $staff->nama }}"
+                                            <img src="{{ Storage::url($staff->foto_path) }}"
+                                                alt="{{ $staff->nama }}"
                                                 class="w-full h-full object-cover rounded-full">
                                         @else
                                             <i class="fas fa-user-tie"></i>
@@ -792,7 +794,7 @@
                         updateDisplayedItems();
                     });
                 }
-                
+
                 // Function to update the displayed items
                 function updateDisplayedItems() {
                     let visibleCount = 0;
@@ -895,65 +897,61 @@
             }
         });
     </script>
-    
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const modal = document.getElementById('detailModal');
         const closeModalBtn = document.getElementById('closeModal');
         const detailButtons = document.querySelectorAll('.show-details-btn');
         
-        // Ensure modal elements exist before adding listeners
         if (!modal || !closeModalBtn || !detailButtons.length) {
             console.error("Modal elements not found. The modal will not function.");
             return;
         }
         
-        // Close modal when clicking the close button
-        closeModalBtn.addEventListener('click', function() {
+        closeModalBtn.addEventListener('click', () => {
             modal.classList.add('hidden');
             document.body.classList.remove('overflow-hidden');
         });
         
-        // Close modal when clicking outside the modal content
-        modal.addEventListener('click', function(e) {
+        modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.classList.add('hidden');
                 document.body.classList.remove('overflow-hidden');
             }
         });
         
-        // Handle Escape key press
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
                 modal.classList.add('hidden');
                 document.body.classList.remove('overflow-hidden');
             }
         });
         
-        // Add click event for detail buttons
         detailButtons.forEach(button => {
             button.addEventListener('click', function() {
-                const activityId = this.getAttribute('data-activity-id');
-                fetchActivityDetails(activityId);
+                // Use the new data-detail-url attribute which contains the correct URL
+                const fetchUrl = this.getAttribute('data-detail-url');
+                fetchActivityDetails(fetchUrl);
             });
         });
         
-        function fetchActivityDetails(id) {
-            // Show loading state
+        function fetchActivityDetails(url) {
+            if (!url) {
+                console.error('Fetch URL is not provided.');
+                return;
+            }
+
+            document.getElementById('modalTitle').textContent = 'Loading...';
             document.getElementById('modalHeading').textContent = 'Loading...';
             document.getElementById('modalBody').innerHTML = '<div class="flex justify-center"><div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-700"></div></div>';
             document.getElementById('modalImage').src = '';
             document.getElementById('modalDate').textContent = '';
             
-            // Display the modal
             modal.classList.remove('hidden');
             document.body.classList.add('overflow-hidden');
             
-            // FIX: Use Laravel's url() helper to generate the correct API endpoint URL.
-            const fetchUrl = `{{ url('/api/aktivitas-dosen-asing') }}/${id}`;
-            
-            // Fetch the activity details
-            fetch(fetchUrl)
+            fetch(url)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`Network response was not ok, status: ${response.status}`);
@@ -964,10 +962,13 @@
                     document.getElementById('modalTitle').textContent = 'Detail Aktivitas';
                     document.getElementById('modalHeading').textContent = data.judul;
                     document.getElementById('modalBody').innerHTML = data.isi;
-                    document.getElementById('modalImage').src = `/storage/${data.gambar}`;
+                    
+                    // Construct image URL using the application's base URL for robustness
+                    const baseUrl = window.location.origin;
+                    const imageUrl = `${baseUrl}/storage/${data.gambar}`;
+                    document.getElementById('modalImage').src = imageUrl;
                     document.getElementById('modalImage').alt = data.judul;
                     
-                    // Format date
                     const date = new Date(data.tanggal);
                     const formattedDate = new Intl.DateTimeFormat('id-ID', {
                         day: 'numeric',
@@ -978,15 +979,15 @@
                 })
                 .catch(error => {
                     console.error('Error fetching activity details:', error);
-                    document.getElementById('modalHeading').textContent = 'Error';
-                    document.getElementById('modalBody').innerHTML = '<p class="text-red-500">Gagal memuat detail aktivitas. Silakan coba lagi nanti.</p>';
-                    document.getElementById('modalImage').src = 'https://placehold.co/600x400/EEE/31343C?text=Image+Not+Found';
-                    document.getElementById('modalDate').textContent = '';
+                    document.getElementById('modalTitle').textContent = 'Error';
+                    document.getElementById('modalHeading').textContent = 'Gagal Memuat';
+                    document.getElementById('modalBody').innerHTML = '<p class="text-red-500">Gagal memuat detail aktivitas. Pastikan Anda terhubung ke internet dan coba lagi.</p>';
+                    document.getElementById('modalImage').src = '';
                 });
         }
     });
-    </script>
-    
+</script>
+
 </body>
 
 </html>
