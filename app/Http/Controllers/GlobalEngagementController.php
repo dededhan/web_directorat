@@ -61,15 +61,17 @@ class GlobalEngagementController extends Controller
     // --- "PROGRAM" SECTION ---
     public function storeProgram(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'objectives' => 'nullable|string', // FIX: Changed to nullable
-            'activities' => 'nullable|string', // FIX: Changed to nullable
+            'objectives' => 'required|string', // Changed back to required
+            'activities' => 'required|string', // Changed back to required
         ]);
 
-        GlobalEngagementProgram::create($request->all());
-        return back()->with('success_program', 'New program has been added.');
+        // Create the program with the validated data.
+        GlobalEngagementProgram::create($validatedData);
+
+        return back()->with('success_program', 'New program has been added successfully.');
     }
 
     public function editProgram($id)

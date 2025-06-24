@@ -80,7 +80,7 @@
         
         {{-- ADD NEW PROGRAM FORM --}}
         <h4 class="mb-3">Add New Program</h4>
-        <form id="program-form" action="{{ route('admin.global.engagement.program.store') }}" method="POST" class="mb-5">
+        <form id="program-form" action="{{ route('admin.global.engagement.program.store') }}" method="POST" class="mb-5" novalidate>
             @csrf
             <div class="mb-3">
                 <label for="prog_title" class="form-label">Title</label>
@@ -211,106 +211,59 @@
         </div>
     </div>
 </div>
-
 <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        let aboutEditor, descEditor, objectivesEditor, activitiesEditor;
+        console.log("Minimal script for debugging is RUNNING.");
 
-        // Initialize CKEditor for About content
-        ClassicEditor
-            .create(document.querySelector('#about_content'))
-            .then(editor => {
-                aboutEditor = editor;
-            })
-            .catch(error => {
-                console.error('Error initializing about editor:', error);
-            });
+        let descEditor, objectivesEditor, activitiesEditor;
 
-        // Initialize CKEditor for Program Description
+        // Initialize ONLY the editors for the program form
         ClassicEditor
             .create(document.querySelector('#prog_desc'))
             .then(editor => {
                 descEditor = editor;
+                console.log("✅ Description editor loaded.");
             })
-            .catch(error => {
-                console.error('Error initializing description editor:', error);
-            });
+            .catch(error => console.error("❌ Description editor FAILED to load:", error));
 
-        // Initialize CKEditor for Program Objectives
         ClassicEditor
             .create(document.querySelector('#prog_obj'))
             .then(editor => {
                 objectivesEditor = editor;
+                console.log("✅ Objectives editor loaded.");
             })
-            .catch(error => { 
-                console.error('Error initializing objectives editor:', error); 
-            });
+            .catch(error => console.error("❌ Objectives editor FAILED to load:", error));
 
-        // Initialize CKEditor for Program Activities
         ClassicEditor
             .create(document.querySelector('#prog_act'))
             .then(editor => {
                 activitiesEditor = editor;
+                console.log("✅ Activities editor loaded.");
             })
-            .catch(error => { 
-                console.error('Error initializing activities editor:', error); 
-            });
-            
-        // Handle "Tentang" form submission
-        const aboutForm = document.getElementById('about-form');
-        if (aboutForm) {
-            aboutForm.addEventListener('submit', function(event) {
-                if (aboutEditor) {
-                    const aboutContent = document.querySelector('#about_content');
-                    aboutContent.value = aboutEditor.getData();
-                }
-            });
-        }
+            .catch(error => console.error("❌ Activities editor FAILED to load:", error));
 
-        // Handle "Program" form submission with proper CKEditor data sync
+        // --- The Form Submission Logic ---
         const programForm = document.getElementById('program-form');
+
         if (programForm) {
-            programForm.addEventListener('submit', function(event) {
-                // Prevent default submission temporarily
-                event.preventDefault();
-                
-                // Update all textarea values with CKEditor data
+            programForm.addEventListener('submit', function() {
+                console.log("👍 Submit button clicked. Attempting to update textareas...");
+
+                // Use CKEditor's built-in function to update the underlying textarea
                 if (descEditor) {
-                    document.querySelector('#prog_desc').value = descEditor.getData();
+                    descEditor.updateSourceElement();
+                    console.log("Updated Description textarea.");
                 }
                 if (objectivesEditor) {
-                    document.querySelector('#prog_obj').value = objectivesEditor.getData();
+                    objectivesEditor.updateSourceElement();
+                    console.log("Updated Objectives textarea.");
                 }
                 if (activitiesEditor) {
-                    document.querySelector('#prog_act').value = activitiesEditor.getData();
+                    activitiesEditor.updateSourceElement();
+                    console.log("Updated Activities textarea.");
                 }
-                
-                // Basic validation
-                const title = document.querySelector('#prog_title').value.trim();
-                const description = descEditor ? descEditor.getData().trim() : '';
-                const objectives = objectivesEditor ? objectivesEditor.getData().trim() : '';
-                const activities = activitiesEditor ? activitiesEditor.getData().trim() : '';
-                
-                if (!title) {
-                    alert('Title is required');
-                    return false;
-                }
-                if (!description) {
-                    alert('Description is required');
-                    return false;
-                }
-                if (!objectives) {
-                    alert('Objectives is required');
-                    return false;
-                }
-                if (!activities) {
-                    alert('Activities is required');
-                    return false;
-                }
-                
-                // If validation passes, submit the form
-                this.submit();
+                console.log("Update complete. Allowing form to submit.");
             });
         }
     });
