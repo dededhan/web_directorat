@@ -172,6 +172,12 @@
                         <span class="text">Ranking Pemeringkatan</span>
                     </a>
                 </li>
+                <li class="{{ request()->routeIs('admin.global.engagement.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.global.engagement.dashboard') }}">
+                        <i class='bx bxs-globe'></i>
+                        <span class="text">Global Engagement</span>
+                    </a>
+                </li>
 
                 <li class="{{ request()->routeIs('admin.indikator.index') ? 'active' : '' }}">
                     <a href="{{ route('admin.indikator.index') }}">
@@ -201,7 +207,7 @@
                 </li>
             </ul>
         </div>
-        
+
 
         <!-- Inovasi Section -->
         <div class="menu-section">

@@ -21,6 +21,7 @@ use App\Http\Controllers\InternationalFacultyStaffController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\AdminMataKuliahController;
 use App\Http\Controllers\AdminSustainabilityController;
+use App\Http\Controllers\GlobalEngagementController;
 
 /*
 |--------------------------------------------------------------------------

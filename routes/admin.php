@@ -26,6 +26,7 @@ use App\Http\Controllers\ProdukInovasiController;
 use App\Http\Controllers\SejarahContentController;
 use App\Http\Controllers\PimpinanController;
 use App\Http\Controllers\RankingController;
+use App\Http\Controllers\GlobalEngagementController;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\GalleryController;
@@ -169,6 +170,25 @@ Route::prefix('admin')->name('admin.')
         Route::post('/ranking/upload', [RankingController::class, 'upload'])
             ->name('ranking.upload');
 
+
+        Route::prefix('global')->name('global.')->middleware(['checked', 'role:admin_direktorat'])->group(function () {
+            Route::get('engagement', [GlobalEngagementController::class, 'dashboard'])->name('engagement.dashboard');
+
+            // "Tentang" Section
+            Route::post('engagement/about', [GlobalEngagementController::class, 'updateAbout'])->name('engagement.about.update');
+
+            // "Program" Section
+            Route::post('engagement/programs', [GlobalEngagementController::class, 'storeProgram'])->name('engagement.program.store');
+            Route::get('engagement/programs/{id}/edit', [GlobalEngagementController::class, 'editProgram'])->name('engagement.program.edit');
+            Route::put('engagement/programs/{id}', [GlobalEngagementController::class, 'updateProgram'])->name('engagement.program.update');
+            Route::delete('engagement/programs/{id}', [GlobalEngagementController::class, 'destroyProgram'])->name('engagement.program.destroy');
+
+            // "Partner" Section
+            Route::post('engagement/partners', [GlobalEngagementController::class, 'storePartner'])->name('engagement.partner.store');
+            Route::get('engagement/partners/{id}/edit', [GlobalEngagementController::class, 'editPartner'])->name('engagement.partner.edit');
+            Route::put('engagement/partners/{id}', [GlobalEngagementController::class, 'updatePartner'])->name('engagement.partner.update');
+            Route::delete('engagement/partners/{id}', [GlobalEngagementController::class, 'destroyPartner'])->name('engagement.partner.destroy');
+        });
 
         //international
         Route::resource('/international_faculty_staff', InternationalFacultyStaffController::class);
