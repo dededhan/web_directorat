@@ -1,15 +1,24 @@
 @extends('qsrangking.qs_layout')
 
 @section('form')
+    {{-- New style block to make the layout more compact --}}
+    <style>
+        .form-section {
+            margin-bottom: 1.5rem; /* Reduced vertical space between sections */
+            padding-bottom: 1.5rem;
+        }
+        .section-title {
+            margin-bottom: 1rem; /* Reduced space below section titles */
+        }
+    </style>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- Logic for Country Dropdown (existing) ---
             fetch('https://restcountries.com/v3.1/all')
                 .then(response => response.json())
                 .then(data => {
-                    const sortedCountries = data.sort((a, b) => {
-                        return a.name.common.localeCompare(b.name.common);
-                    });
-                    
+                    const sortedCountries = data.sort((a, b) => a.name.common.localeCompare(b.name.common));
                     const countrySelect = document.querySelector('select[name="answer_country"]');
                     countrySelect.innerHTML = '<option value="">Select Country</option>';
                     sortedCountries.forEach(country => {
@@ -21,6 +30,7 @@
                 })
                 .catch(error => console.error('Error fetching countries:', error));
 
+            // --- Logic for Industry Dropdown (existing) ---
             const institutionSelect = document.getElementById('institution_select');
             const otherInstitutionInput = document.getElementById('institution_other_input');
             const hiddenInstitutionInput = document.getElementById('answer_institution_hidden');
@@ -36,25 +46,64 @@
             }
 
             institutionSelect.addEventListener('change', syncInstitutionValue);
-            
             otherInstitutionInput.addEventListener('input', () => {
                 if (institutionSelect.value === 'other') {
                     hiddenInstitutionInput.value = otherInstitutionInput.value;
                 }
             });
-
             syncInstitutionValue();
+
+            // --- NEW: DYNAMIC SURVEY YEAR GENERATION ---
+            const surveyContainer = document.getElementById('survey-participation-container');
+            const currentYear = new Date().getFullYear();
+            const yearsToShow = [currentYear, currentYear - 1]; // Shows current and previous year
+
+            yearsToShow.forEach(year => {
+                const formGroup = document.createElement('div');
+                formGroup.className = 'form-group';
+
+                const label = document.createElement('label');
+                label.className = 'form-label';
+                label.textContent = `${year} Survey`;
+
+                const radioGroup = document.createElement('div');
+                radioGroup.className = 'radio-group';
+                
+                // Create "Yes" and "No" radio buttons for the year
+                ['yes', 'no'].forEach(val => {
+                    const div = document.createElement('div');
+                    div.className = 'form-check';
+
+                    const input = document.createElement('input');
+                    input.className = 'form-check-input';
+                    input.type = 'radio';
+                    input.name = `survey_participation[${year}]`; // Name is now an array
+                    input.value = val;
+                    input.required = true;
+
+                    const label = document.createElement('label');
+                    label.className = 'form-check-label';
+                    label.textContent = val.charAt(0).toUpperCase() + val.slice(1); // "Yes" or "No"
+
+                    div.append(input, label);
+                    radioGroup.append(div);
+                });
+
+                formGroup.append(label, radioGroup);
+                surveyContainer.appendChild(formGroup);
+            });
         });
     </script>
 
     <form method="POST" action="{{ route('qs-employee.store') }}">
         @csrf
+        {{-- Personal Information Section --}}
         <div class="form-section">
             <div class="section-title">Personal Information</div>
-            <div class="form-group">
+            <div class="form-group" style="flex: 0.5 1 150px;">
                 <label class="form-label">Title</label>
-                <select class="form-select" name="answer_title">
-                    <option value="">Select Title</option>
+                <select class="form-select" name="answer_title" required>
+                    <option value="">Select</option>
                     <option value="mr">Mr.</option>
                     <option value="ms">Ms.</option>
                 </select>
@@ -62,20 +111,22 @@
             </div>
             <div class="form-group">
                 <label class="form-label">First Name</label>
-                <input type="text" class="form-control" name="answer_firstname">
+                <input type="text" class="form-control" name="answer_firstname" required>
                 @error('answer_firstname') {{ $message }} @enderror
             </div>
             <div class="form-group">
                 <label class="form-label">Last Name</label>
-                <input type="text" class="form-control" name="answer_lastname">
+                <input type="text" class="form-control" name="answer_lastname" required>
                 @error('answer_lastname') {{ $message }} @enderror
             </div>
         </div>
+
+        {{-- Professional Details Section --}}
         <div class="form-section">
             <div class="section-title">Professional Details</div>
             <div class="form-group">
                 <label class="form-label">Job Title</label>
-                <select class="form-select" name="answer_job_title">
+                <select class="form-select" name="answer_job_title" required>
                     <option value="">Select Job Title</option>
                     <option value="ceo">CEO/President/Managing Director</option>
                     <option value="coo">COO/CFO/CTO/CIO/CMO</option>
@@ -91,10 +142,9 @@
                 </select>
                 @error('answer_job_title') {{ $message }} @enderror
             </div>
-            <!-- === MODIFIED INSTITUTION/INDUSTRY FIELD === -->
             <div class="form-group">
                 <label class="form-label">Industry</label>
-                <select class="form-select" id="institution_select">
+                <select class="form-select" id="institution_select" required>
                     <option value="">Select Industry</option>
                     <option value="Agriculture/Fishing/Forestry">Agriculture/Fishing/Forestry</option>
                     <option value="Construction/Real Estate">Construction/Real Estate</option>
@@ -125,71 +175,54 @@
                     <option value="Utilities">Utilities</option>
                     <option value="other">Yang lain: (input)</option>
                 </select>
-                <!-- This input is for the "Other" option and is hidden by default -->
                 <input type="text" class="form-control mt-2" id="institution_other_input" style="display: none;" placeholder="Please specify your industry">
-                <!-- This hidden input will hold the final value for the backend -->
                 <input type="hidden" name="answer_institution" id="answer_institution_hidden">
                 @error('answer_institution') {{ $message }} @enderror
             </div>
-            <!-- === END OF MODIFICATION === -->
             <div class="form-group">
                 <label class="form-label">Company Name</label>
-                <input type="text" class="form-control" name="answer_company">
+                <input type="text" class="form-control" name="answer_company" required>
                 @error('answer_company') {{ $message }} @enderror
             </div>
         </div>
+
+        {{-- Contact Information Section --}}
         <div class="form-section">
             <div class="section-title">Contact Information</div>
             <div class="form-group">
                 <label class="form-label">Country</label>
-                <select class="form-select" name="answer_country">
+                <select class="form-select" name="answer_country" required>
                     <option value="">Select Country</option>
-                    <!-- Countries will be populated by JavaScript -->
                 </select>
                 @error('answer_country') {{ $message }} @enderror
             </div>
             <div class="form-group">
                 <label class="form-label">Email</label>
-                <input type="email" class="form-control" name="answer_email">
+                <input type="email" class="form-control" name="answer_email" required>
                 @error('email') {{ $message }} @enderror
             </div>
             <div class="form-group">
                 <label class="form-label">Phone</label>
-                <input type="tel" class="form-control" name="answer_phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" pattern="[0-9]+" title="Please enter numbers only">
+                <input type="tel" class="form-control" name="answer_phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" pattern="[0-9]+" title="Please enter numbers only" required>
                 @error('phone') {{ $message }} @enderror
             </div>
         </div>
-        <div class="form-section">
-            <div class="section-title">Survey Participation</div>
-            <div class="form-group">
-                <label class="form-label">2023 Survey</label>
-                <div class="radio-group">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" value="yes" name="answer_survey_2023">
-                        <label class="form-check-label">Yes</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" value="no" name="answer_survey_2023">
-                        <label class="form-check-label">No</label>
-                    </div>
-                    @error('answer_survey_2023') {{ $message }} @enderror
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label">2024 Survey</label>
-                <div class="radio-group">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" value="yes" name="answer_survey_2024">
-                        <label class="form-check-label">Yes</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" value="no" name="answer_survey_2024">
-                        <label class="form-check-label">No</label>
-                    </div>
-                    @error('answer_survey_2024') {{ $message }} @enderror
-                </div>
-            </div>
+
+        <!-- === DYNAMIC SURVEY PARTICIPATION SECTION === -->
+        <div class="form-section" id="survey-participation-container">
+            {{-- This div will be populated dynamically by the script --}}
         </div>
+        <!-- IMPORTANT: The backend needs to be updated to handle this data.
+             The form now sends an array named 'survey_participation', like:
+             survey_participation[2024] = 'yes'
+             survey_participation[2023] = 'no'
+
+             Your 'RespondenAnswerController' and database schema must be changed.
+             Instead of 'survey_2023' and 'survey_2024' columns, consider a single
+             JSON or TEXT column (e.g., 'survey_data') to store the participation results.
+        -->
+        @error('survey_participation') {{ $message }} @enderror
+        
         <button type="submit" class="btn-submit">Submit Survey</button>
     </form>
 @stop
