@@ -71,9 +71,9 @@ body {
     transition: transform 0.3s ease;
 }
 
-.card:hover {
+/* .card:hover {
     transform: translateY(-10px);
-}
+} */
 
 .main-title {
     background: #176369;
@@ -199,7 +199,7 @@ body {
     gap: 1rem;
 }
 
-.legend-item {
+/* .legend-item {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -208,11 +208,11 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease;
-}
+} */
 
-.legend-item:hover {
+/* .legend-item:hover {
     transform: scale(1.03);
-}
+} */
 
 .legend-box {
     width: 24px;
@@ -427,7 +427,7 @@ body {
         height: 300px;
     }
 }
-.analyze-btn {
+/* .analyze-btn {
     background-color: #176369;
     transition: all 0.3s ease;
 }
@@ -435,7 +435,7 @@ body {
 .analyze-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(23, 99, 105, 0.2);
-}
+} */
 
 .aspect-popup {
     position: fixed;
