@@ -2568,4 +2568,90 @@ class KatsinovController extends Controller
 
         return $pdf->download($filename);
     }
+    public function showRatingSummary($katsinov_id)
+{
+    try {
+        // Ambil data Katsinov beserta relasi scores dan responses
+        $katsinov = Katsinov::with(['scores', 'responses'])->findOrFail($katsinov_id);
+
+        // Inisialisasi array untuk menyimpan nilai dropdown
+        $dropdownValues = [];
+
+        // Mapping dari kode aspek ke nama aspek yang digunakan di view
+        $aspectMap = [
+            'T' => 'technology',
+            'M' => 'market',
+            'O' => 'organization',
+            'Mf' => 'manufacturing',
+            'P' => 'partnership',
+            'I' => 'investment',
+            'R' => 'risk'
+        ];
+
+        // --- START OF CORRECTION ---
+        // Group responses by indicator and then by aspect code
+        $groupedResponses = $katsinov->responses->groupBy(['indicator_number', 'aspect']);
+
+        // Loop through the grouped data to build the correctly indexed array
+        foreach ($groupedResponses as $indicator => $aspects) {
+            if (!isset($dropdownValues[$indicator])) {
+                $dropdownValues[$indicator] = [];
+            }
+            foreach ($aspects as $aspectCode => $responses) {
+                $aspectKey = $aspectMap[$aspectCode] ?? null;
+                if ($aspectKey) {
+                    if (!isset($dropdownValues[$indicator][$aspectKey])) {
+                        $dropdownValues[$indicator][$aspectKey] = [];
+                    }
+
+                    // Sort responses by their original row number to ensure the correct order
+                    // Then, use ->values() to reset the keys to be a 0-based index
+                    $sortedResponses = $responses->sortBy('row_number')->values();
+
+                    // Now the loop index ($qIndex) will be 0, 1, 2... for each aspect group, matching the view
+                    foreach ($sortedResponses as $qIndex => $response) {
+                        $dropdownValues[$indicator][$aspectKey][$qIndex] = $response->dropdown_value;
+                    }
+                }
+            }
+        }
+        // --- END OF CORRECTION ---
+
+
+        // Hitung skor rata-rata per aspek untuk ditampilkan di chart (menggunakan logika yang sama dengan summaryAll)
+        $overallAspectScores = [
+            'technology' => $this->getAverageScore($katsinov->scores, 'technology'),
+            'market' => $this->getAverageScore($katsinov->scores, 'market'),
+            'organization' => $this->getAverageScore($katsinov->scores, 'organization'),
+            'manufacturing' => $this->getAverageScore($katsinov->scores, 'manufacturing'),
+            'partnership' => $this->getAverageScore($katsinov->scores, 'partnership'),
+            'investment' => $this->getAverageScore($katsinov->scores, 'investment'),
+            'risk' => $this->getAverageScore($katsinov->scores, 'risk')
+        ];
+        
+        // Menentukan view berdasarkan role pengguna
+        $role = Auth::user()->role;
+        $view = match ($role) {
+            'admin_direktorat' => 'admin.katsinov.summary_rating',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.summary_rating',
+            'dosen' => 'subdirektorat-inovasi.dosen.summary_rating',
+            'validator' => 'subdirektorat-inovasi.validator.summary_rating',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.summary_rating',
+            default => 'admin.katsinov.summary_rating', 
+        };
+
+
+        // Kirim semua data yang dibutuhkan ke view
+        return view($view, [
+            'katsinov' => $katsinov,
+            'dropdownValues' => $dropdownValues, // Variabel ini sekarang sudah terisi dengan benar
+            'overallAspectScores' => $overallAspectScores, // Untuk data chart
+            'overallAspectScoresJson' => json_encode($overallAspectScores) // Untuk JavaScript
+        ]);
+
+    } catch (\Exception $e) {
+        \Log::error('Error in showRatingSummary: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Gagal menampilkan halaman Summary Rating: ' . $e->getMessage());
+    }
+}
 }

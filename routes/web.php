@@ -118,6 +118,7 @@ Route::get('/katsinov/form', [KatsinovController::class, 'create'])->name('katsi
 Route::post('/katsinov/store', [KatsinovController::class, 'store'])->name('katsinov.store')->middleware('checked');
 Route::get('/admin/katsinov/{id}/certificate', [KatsinovController::class, 'downloadCertificate'])->name('admin.katsinov.certificate')->middleware('auth');
 Route::get('/katsinov/pdf', [KatsinovController::class, 'downloadPDF'])->name('katsinov.pdf');
+Route::get('/katsinov/{katsinov_id}/summary-rating', [KatsinovController::class, 'showRatingSummary'])->name('admin.katsinov.summary-rating');
 
 // Sejarah Routes
 Route::get('/sejarah-pemeringkatan', [SejarahContentController::class, 'showPublic'])->name('Pemeringkatan.sejarah.sejarah');

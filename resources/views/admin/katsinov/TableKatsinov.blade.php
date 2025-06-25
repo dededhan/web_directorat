@@ -221,6 +221,10 @@
                                             class="btn btn-primary btn-sm mb-1">
                                             <i class='bx bx-chart'></i> Summary Keseluruhan
                                         </a>
+                                        <a href="{{ route('admin.katsinov.summary-rating', ['katsinov_id' => $katsinov->id]) }}"
+                                            class="btn btn-secondary btn-sm mb-1">
+                                            <i class='bx bxs-star-half'></i> Summary Rating
+                                        </a>
                                         <a href="{{ route('admin.katsinov.summary-all', ['katsinov_id' => $katsinov->id, 'print' => 'true']) }}"
                                             class="btn btn-info btn-sm mb-1" target="_blank">
                                             <i class='bx bx-printer'></i> Print Summary
