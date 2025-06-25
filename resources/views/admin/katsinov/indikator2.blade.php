@@ -62,7 +62,7 @@
                         <td data-description="Persiapan untuk melaksanakan tahapan pembuatan purnarupa (Prototype) a (alpha).">
                                 <input type="radio" name="indikator2_row2" class="radio-input" value="1"
                                 @checked($indicatorTwo->isNotEmpty() && $indicatorTwo[1]->score == 1)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                        <td data-description="Telah dilakukan pembuatan purnarupa (Prototype) a (alpha) dan diketahui kondisi lingkungan operasi sesungguhnya.><input type="radio"
+                        <td data-description="Telah dilakukan pembuatan purnarupa (Prototype) a (alpha) dan diketahui kondisi lingkungan operasi sesungguhnya."><input type="radio"
                                 name="indikator2_row2" class="radio-input" value="2" @checked($indicatorTwo->isNotEmpty() && $indicatorTwo[1]->score == 2)
                                 @if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                         <td data-description="Telah diperoleh purnarupa (Prototype) a (alpha), diketahui kondisi lingkungan operasi, serta keberhasilan modeling & simulasi untuk kinerja sistem.">
@@ -101,9 +101,10 @@
                         <td data-description="Purnarupa (Prototype) a (alpha) telah diperoleh dan pengujian awal dilakukan ">
                                 <input type="radio" name="indikator2_row3" class="radio-input" value="3"
                                 @checked($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->score == 3)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                        <td data-description="Purnarupa (Prototype) a (alpha) telah diperoleh dan dilakukan iterasi pengujian. @checked($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
-                        <td data-description="Teknologi
-                                dinyatakan layak secara teknis (engineering feasibility) melalui serangkaian pengujian."><input
+                        <td data-description="Purnarupa (Prototype) a (alpha) telah diperoleh dan dilakukan iterasi pengujian."> 
+                            <input type="radio" name="indikator2_row4" class="radio-input" value="4"
+                            @checked($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->score == 4)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
+                        <td data-description="Teknologi dinyatakan layak secara teknis (engineering feasibility) melalui serangkaian pengujian."><input
                                 type="radio" name="indikator2_row3" class="radio-input" value="5"
                                 @checked($indicatorTwo->isNotEmpty() && $indicatorTwo[2]->score == 5)@if (request()->routeIs('admin.katsinov.show')) disabled @endif></td>
                         <td class="description-cell">Teknologi dinyatakan layak secara teknis.</td>
