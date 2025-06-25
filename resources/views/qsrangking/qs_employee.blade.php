@@ -2,21 +2,16 @@
 
 @section('form')
     <script>
-        // Fetch countries when the page loads
         document.addEventListener('DOMContentLoaded', function() {
             fetch('https://restcountries.com/v3.1/all')
                 .then(response => response.json())
                 .then(data => {
-                    // Sort countries alphabetically by name
                     const sortedCountries = data.sort((a, b) => {
                         return a.name.common.localeCompare(b.name.common);
                     });
                     
                     const countrySelect = document.querySelector('select[name="answer_country"]');
-                    // Clear existing options except the first one
                     countrySelect.innerHTML = '<option value="">Select Country</option>';
-                    
-                    // Add countries to select element
                     sortedCountries.forEach(country => {
                         const option = document.createElement('option');
                         option.value = country.name.common;
@@ -25,6 +20,30 @@
                     });
                 })
                 .catch(error => console.error('Error fetching countries:', error));
+
+            const institutionSelect = document.getElementById('institution_select');
+            const otherInstitutionInput = document.getElementById('institution_other_input');
+            const hiddenInstitutionInput = document.getElementById('answer_institution_hidden');
+
+            function syncInstitutionValue() {
+                if (institutionSelect.value === 'other') {
+                    otherInstitutionInput.style.display = 'block';
+                    hiddenInstitutionInput.value = otherInstitutionInput.value;
+                } else {
+                    otherInstitutionInput.style.display = 'none';
+                    hiddenInstitutionInput.value = institutionSelect.value;
+                }
+            }
+
+            institutionSelect.addEventListener('change', syncInstitutionValue);
+            
+            otherInstitutionInput.addEventListener('input', () => {
+                if (institutionSelect.value === 'other') {
+                    hiddenInstitutionInput.value = otherInstitutionInput.value;
+                }
+            });
+
+            syncInstitutionValue();
         });
     </script>
 
@@ -72,11 +91,47 @@
                 </select>
                 @error('answer_job_title') {{ $message }} @enderror
             </div>
+            <!-- === MODIFIED INSTITUTION/INDUSTRY FIELD === -->
             <div class="form-group">
-                <label class="form-label">Institution</label>
-                <input type="text" class="form-control" name="answer_institution">
+                <label class="form-label">Industry</label>
+                <select class="form-select" id="institution_select">
+                    <option value="">Select Industry</option>
+                    <option value="Agriculture/Fishing/Forestry">Agriculture/Fishing/Forestry</option>
+                    <option value="Construction/Real Estate">Construction/Real Estate</option>
+                    <option value="Consulting/Professional Service">Consulting/Professional Service</option>
+                    <option value="Consumer Goods">Consumer Goods</option>
+                    <option value="Defense/Security/Rescue">Defense/Security/Rescue</option>
+                    <option value="Education">Education</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Entertainment/Leisure">Entertainment/Leisure</option>
+                    <option value="Finance/Banking">Finance/Banking</option>
+                    <option value="Government/Public Sector">Government/Public Sector</option>
+                    <option value="Health/Medical">Health/Medical</option>
+                    <option value="Hospitality/Travel/Tourism">Hospitality/Travel/Tourism</option>
+                    <option value="HR/Recruitment/Training">HR/Recruitment/Training</option>
+                    <option value="Law">Law</option>
+                    <option value="Logistics/Transportation">Logistics/Transportation</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                    <option value="Media/Advertising">Media/Advertising</option>
+                    <option value="Metals/Mining">Metals/Mining</option>
+                    <option value="Non-profit/Charity">Non-profit/Charity</option>
+                    <option value="Oil & Gas">Oil & Gas</option>
+                    <option value="Pharma/Biotech">Pharma/Biotech</option>
+                    <option value="R&D/Science">R&D/Science</option>
+                    <option value="Renewable Energy">Renewable Energy</option>
+                    <option value="Retail/Wholesale">Retail/Wholesale</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Telecoms">Telecoms</option>
+                    <option value="Utilities">Utilities</option>
+                    <option value="other">Yang lain: (input)</option>
+                </select>
+                <!-- This input is for the "Other" option and is hidden by default -->
+                <input type="text" class="form-control mt-2" id="institution_other_input" style="display: none;" placeholder="Please specify your industry">
+                <!-- This hidden input will hold the final value for the backend -->
+                <input type="hidden" name="answer_institution" id="answer_institution_hidden">
                 @error('answer_institution') {{ $message }} @enderror
             </div>
+            <!-- === END OF MODIFICATION === -->
             <div class="form-group">
                 <label class="form-label">Company Name</label>
                 <input type="text" class="form-control" name="answer_company">
