@@ -15,37 +15,37 @@ class UsersSeeder extends Seeder
     {
         $existingUserdata = [
             [
-                'name'=>'Admin Direktorat',
-                'email'=>'admind123@gmail.com',
-                'password'=>Hash::make('admin123'),
+                'name'=>'Direktorat',
+                'email'=>'admindirektorat12345@gmail.com',
+                'password'=>Hash::make('admin12345'),
                 'role'=>'admin_direktorat',
                 'status' => 'active',
             ],
             [
                 'name'=>'kepala direktorat',
                 'email'=>'headdir@gmail.com',
-                'password'=>Hash::make('direk123'),
+                'password'=>Hash::make('direktorat050505'),
                 'role'=>'kepala_direktorat',
                 'status' => 'active',
             ],
             [
                 'name'=>'Admin Pemeringkatan',
                 'email'=>'adminpemeringkatan@gmail.com',
-                'password'=>Hash::make('admin123'),
+                'password'=>Hash::make('pemeringkatan242424'),
                 'role'=>'admin_pemeringkatan',
                 'status' => 'active',
             ],
             [
-                'name'=>'Admin hilirisasi',
+                'name'=>'Admin Inovasi',
                 'email'=>'adminhil123@gmail.com',
-                'password'=>Hash::make('admin123'),
+                'password'=>Hash::make('inovasi242424'),
                 'role'=>'admin_hilirisasi',
                 'status' => 'active',
             ],
             [
-                'name'=>'kepala sub direktorat',
-                'email'=>'kepsub@gmail.com', 
-                'password'=>Hash::make('subdir123'),
+                'name'=>'Kepala Sub Dir',
+                'email'=>'kepsub@gmail.com',
+                'password'=>Hash::make('subdir12345'),
                 'role'=>'kepala_sub_direktorat',
                 'status' => 'active',
             ],
@@ -95,8 +95,8 @@ class UsersSeeder extends Seeder
         foreach ($facultiesAndProgramsData as $facultyAbbr => $facultyData) {
             // Create User record for Fakultas role
             $fakultasUserNameInUserTable = strtoupper($facultyAbbr);
-            $fakultasUserEmail = strtolower($facultyAbbr) . '@unj.ac.id'; 
-            
+            $fakultasUserEmail = strtolower($facultyAbbr) . '@unj.ac.id';
+
             User::firstOrCreate(
                 ['email' => $fakultasUserEmail],
                 [
@@ -110,7 +110,7 @@ class UsersSeeder extends Seeder
             // Create User records for Prodi roles
             if (!empty($facultyData['programs'])) {
                 foreach ($facultyData['programs'] as $prodiName) {
-                    $sanitizedProdiNameForEmail = strtolower(Str::slug($prodiName, '')); 
+                    $sanitizedProdiNameForEmail = strtolower(Str::slug($prodiName, ''));
                     $prodiUserEmail = $sanitizedProdiNameForEmail . '@unj.ac.id';
                     $prodiUserNameInUserTable = $fakultasUserNameInUserTable . '-' . $prodiName;
 
@@ -136,7 +136,7 @@ class UsersSeeder extends Seeder
             'FPPSI' => ['name' => 'FPPSI (Fakultas Psikologi)', 'programs' => ['S1 Psikologi', 'S2 Psikologi']],
             'FBS' => ['name' => 'FBS (Fakultas Bahasa dan Seni)', 'programs' => ['S1 Pendidikan Musik', 'S1 Pendidikan Tari', 'S1 Pendidikan Seni Rupa', 'S1 Pendidikan Bahasa Jepang', 'S1 Sastra Indonesia', 'S1 Pendidikan Bahasa Dan Sastra Indonesia', 'S1 Pendidikan Bahasa Perancis', 'S1 Sastra Inggris', 'S1 Pendidikan Bahasa Jerman', 'S1 Pendidikan Bahasa Inggris', 'S2 Pendidikan Bahasa Inggris', 'S1 Pendidikan Bahasa Arab', 'S2 Pendidikan Bahasa Arab', 'S1 Pendidikan Bahasa Mandarin', 'S2 Pendidikan Seni']],
             'FT' => ['name' => 'FT (Fakultas Teknik)', 'programs' => ['S1 Pendidikan Teknik Elektronika', 'D4 Kosmetik dan Perawatan Kecantikan', 'D4 Teknik Rekayasa Manufaktur', 'D4 Seni Kuliner dan Pengolahan Jasa Makanan', 'D4 Desain mode', 'D4 Manajemen Pelabuhan dan Logistik Maritim', 'S1 Pendidikan Teknik Informatika Dan Komputer', 'S1 Pendidikan Tata Boga', 'S1 Pendidikan Tata Busana', 'S1 Pendidikan Tata Rias', 'S1 Pendidikan Kesejahteraan Keluarga', 'S2 Pendidikan Teknologi Dan Kejuruan', 'S1 Pendidikan Teknik Bangunan', 'S1 Pendidikan Teknik Elektro', 'S1 Pendidikan Teknik Mesin', 'D4 Teknik Rekayasa Otomasi', 'D4 Teknologi Rekayasa Konstruksi Bangunan Gedung', 'S1 Rekayasa Keselamatan Kebakaran', 'S1 Teknik Mesin', 'S1 Sistem dan Teknologi Informasi']],
-            'FIK' => ['name' => 'FIK (Fakultas Ilmu Keolahragaan)', 'programs' => ['S1 Ilmu Keolahragaan', 'S1 Pendidikan Kepelatihan Olahraga', 'S1 Pendidikan Jasmani, Kesehatan Dan Rekreasi', 'S2 Pendidikan Jasmani', 'S1 Kepelatihan Kecabangan Olahraga', 'S1 Olahraga Rekreasi', 'S2 Ilmu Keolahragaan']],
+            'FIKK' => ['name' => 'FIKK (Fakultas Ilmu Keolahragaan)', 'programs' => ['S1 Ilmu Keolahragaan', 'S1 Pendidikan Kepelatihan Olahraga', 'S1 Pendidikan Jasmani, Kesehatan Dan Rekreasi', 'S2 Pendidikan Jasmani', 'S1 Kepelatihan Kecabangan Olahraga', 'S1 Olahraga Rekreasi', 'S2 Ilmu Keolahragaan']],
             'FIS' => ['name' => 'FIS (Fakultas Ilmu Sosial)', 'programs' => ['D4 Usaha Perjalanan Wisata', 'S1 Sosiologi', 'S1 Pendidikan Agama Islam', 'S1 Pendidikan Sosiologi', 'S2 Pendidikan Sejarah', 'D4 Hubungan Masyarakat dan Komunikasi Digital', 'S1 Pendidikan Pancasila Dan Kewarganegaraan', 'S1 Pendidikan Geografi', 'S1 Pendidikan IPS', 'S1 Pendidikan Sejarah', 'S1 Ilmu Komunikasi (ILKOM)', 'S1 Geografi', 'S2 Pendidikan Geografi', 'S2 Pendidikan Pancasila Dan Kewarganegaraan']],
             'FE' => ['name' => 'FE (Fakultas Ekonomi)', 'programs' => ['D4 Akuntansi Sektor Publik', 'D4 Administrasi Perkantoran Digital', 'D4 Pemasaran Digital', 'S1 Akuntansi', 'S1 Manajemen', 'S1 Pendidikan Ekonomi', 'S2 Manajemen', 'S1 Pendidikan Administrasi Perkantoran', 'S1 Bisnis Digital', 'S2 Akuntansi', 'S1 Pendidikan Akuntansi', 'S2 Pendidikan Ekonomi', 'S1 Pendidikan Bisnis']],
             'PROFESI' => ['name' => 'Program Profesi', 'programs' => ['Profesi PPG']]
