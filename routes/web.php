@@ -35,6 +35,9 @@ Route::get('/instagram/{id}/preview', [InstagramController::class, 'preview'])->
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/reload-captcha', function () {return response()->json(['captcha'=> captcha_img('default')]);
+})->name('captcha.reload');
+
 
 // Google Login
 Route::get('login/google', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle'])->name('login.google');

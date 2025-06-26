@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Rules\Recaptcha; 
 
 class LoginController extends Controller
 {
@@ -17,10 +18,13 @@ class LoginController extends Controller
     {
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
+            'g-recaptcha-response' => ['required', new Recaptcha()] // <-- Add this line
         ]);
 
-        if (Auth::attempt($credentials)) {
+        $authCredentials = $request->only('email', 'password');
+
+        if (Auth::attempt($authCredentials)) {
             $request->session()->regenerate();
             // much clean, me like :D
             $next = match (Auth::user()->role) {

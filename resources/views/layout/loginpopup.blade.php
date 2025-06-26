@@ -7,6 +7,7 @@
     <title>UNJ Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         * {
             font-family: Arial, sans-serif !important;
@@ -179,10 +180,18 @@
                                 </span>
                                 <input type="password" name="password" placeholder="Password" required
                                     class="form-input" />
+                            </div>   
+                            
+                            <div class="flex justify-center my-4">
+                                <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
                             </div>
-                            <!-- <div class="flex justify-center my-4">
-                                <img src="https://placehold.co/300x80" alt="reCAPTCHA verification" />
-                            </div> -->
+                            
+                            @if ($errors->has('g-recaptcha-response'))
+                                <span class="text-red-500 text-sm block text-center mb-2">
+                                    {{ $errors->first('g-recaptcha-response') }}
+                                </span>
+                            @endif
+
                             <button type="submit"
                                 class="btn-primary w-full py-3 rounded-lg text-white font-medium tracking-wide mt-3">SIGN
                                 IN</button>
