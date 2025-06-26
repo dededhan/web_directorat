@@ -77,8 +77,10 @@ Route::view('/strukturorganisasi', 'struktur organisasi.strukturorganisasi')->na
 Route::view('/daptarcalonadjunct', 'daptarcalonadjunct.daptarcalonadjunct')->name('daptar.calonadjunct');
 Route::view('/register', 'register')->name('register');
 // FIX: Added route for sdgscenter and corrected view path.
-Route::view('/sdgscenter', 'subdirektorat-inovasi.sdgscenter')->name('sdgscenter');
-
+// Route::view('/sdgscenter', 'subdirektorat-inovasi.sdgscenter')->name('sdgscenter');
+Route::get('/sdgscenter', function () {
+    return view('subdirektorat-inovasi.katsinov.sdgscenter.sdgscenter');
+})->name('sdgscenter');
 
 // Inovasi Routes
 Route::prefix('inovasi')->name('inovasi.')->group(function () {
