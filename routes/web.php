@@ -23,17 +23,6 @@ use App\Http\Controllers\AdminMataKuliahController;
 use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\GlobalEngagementController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
 Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
 
 Route::get('/kebijakan-privasi', function () {
@@ -74,6 +63,8 @@ Route::get('/documents/download/{id}', [DokumenController::class, 'download'])->
 // Berita routes
 Route::get('/Berita', [BeritaController::class, 'allNews'])->name('Berita.beritahome');
 Route::get('/Berita/all', [BeritaController::class, 'allNews'])->name('berita.all');
+// FIX: Added route for filtering news by category
+Route::get('/Berita/kategori/{kategori}', [BeritaController::class, 'allNews'])->name('berita.kategori');
 Route::get('/Berita/detail/{slug}', [BeritaController::class, 'show'])->name('Berita.show');
 Route::get('/berita/{id}', function ($id) {
     return redirect()->route('Berita.show', ['id' => $id]);
@@ -85,6 +76,9 @@ Route::view('/profile', 'Profile1.profile')->name('profile.profile');
 Route::view('/strukturorganisasi', 'struktur organisasi.strukturorganisasi')->name('strukturorganisasi');
 Route::view('/daptarcalonadjunct', 'daptarcalonadjunct.daptarcalonadjunct')->name('daptar.calonadjunct');
 Route::view('/register', 'register')->name('register');
+// FIX: Added route for sdgscenter and corrected view path.
+Route::view('/sdgscenter', 'subdirektorat-inovasi.sdgscenter')->name('sdgscenter');
+
 
 // Inovasi Routes
 Route::prefix('inovasi')->name('inovasi.')->group(function () {
@@ -101,7 +95,6 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')->group(fu
     Route::view('/inkubator/ekosisteminovasi', 'subdirektorat-inovasi.inkubator.ekosisteminovasi')->name('inkubator.ekosisteminovasi');
     Route::view('/inkubator/inovasiaward', 'subdirektorat-inovasi.inkubator.inovasiaward')->name('inkubator.inovasiaward');
     Route::get('/risetunj/produk_inovasi', [ProdukInovasiController::class, 'publicIndex'])->name('riset_unj.produk_inovasi.produkinovasi');
-    Route::view('/sdgscenter', 'subdirektorat-inovasi.katsinov.sdgscenter.sdgscenter')->name('sdgscenter');
     Route::get('/landingpage', [BeritaController::class, 'landingPageInovasi'])->name('landingpage');
 });
 
