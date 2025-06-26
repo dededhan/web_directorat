@@ -12,12 +12,10 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Instagram;
 use Illuminate\Support\Facades\Auth;
 use Mews\Purifier\Facades\Purifier;
+use Illuminate\Support\Str; // Import the Str class for slug generation
 
 class BeritaController extends Controller
 {
-    /**
-     * Get the correct route name prefix based on authenticated user role
-     */
     private function getRoutePrefix()
     {
         $role = auth()->user()->role;
@@ -68,11 +66,12 @@ class BeritaController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * ENHANCEMENT: Added data purification and unique slug generation.
      */
     public function store(StoreBeritaRequest $request)
     {
         try {
-            // Check if image exists and is valid
+            // The StoreBeritaRequest already validates the input, which is the first line of defense.
             if ($request->hasFile('gambar')) {
                 $namaFile = time() . '_' . uniqid() . '.' . $request->file('gambar')->getClientOriginalExtension();
                 $gambarPath = $request->file('gambar')->storeAs(
@@ -80,14 +79,22 @@ class BeritaController extends Controller
                     $namaFile,
                     'public'
                 );
+                
+                // Security: Sanitize rich text and title inputs to prevent XSS attacks.
+                $cleanJudul = Purifier::clean($request->judul_berita);
+                $cleanIsi = Purifier::clean($request->isi_berita);
 
-                // Create the berita record with the image path
+                // Robustness: Create a unique slug from the title for clean URLs and reliable lookup.
+                $slug = $this->createUniqueSlug($cleanJudul);
+
+                // Create the berita record with the sanitized and prepared data
                 $berita = Berita::create([
                     'user_id' => Auth::id(),
                     'kategori' => $request->kategori,
                     'tanggal' => $request->tanggal,
-                    'judul' => $request->judul_berita,
-                    'isi' => Purifier::clean($request->isi_berita),
+                    'judul' => $cleanJudul,
+                    'isi' => $cleanIsi,
+                    'slug' => $slug, // Save the generated slug
                     'gambar' => $gambarPath
                 ]);
 
@@ -122,159 +129,41 @@ class BeritaController extends Controller
                 ->withInput();
         }
     }
+    
     /**
-     * Display news on the home page.
+     * Creates a unique slug for a Berita item.
+     *
+     * @param string $title
+     * @param int $excludeId
+     * @return string
      */
-    public function homeNews()
+    private function createUniqueSlug(string $title, int $excludeId = 0): string
     {
-        $countRegularNews = 3; // Number of newest items for the regular section
-        $regularNews = Berita::latest() // Orders by created_at descending (newest first)
-            ->take($countRegularNews)
-            ->get();
-        $regularNewsIds = $regularNews->pluck('id')->toArray();
+        $slug = Str::slug($title, '-');
+        $originalSlug = $slug;
+        $count = 1;
 
-        $countFeaturedCarousel = 10; // Example: show 10 items in the carousel
-        $featuredNews = Berita::whereNotIn('id', $regularNewsIds) // Exclude regular news
-            ->latest()
-            ->take($countFeaturedCarousel)
-            ->get();
-        // Scroll
-        $announcements = Pengumuman::where('status', true)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        // Get active program layanan
-        $programLayanan = ProgramLayanan::where('status', 1)
-
-            ->orderBy('id', 'desc')
-
-            ->get();
-
-        // Get Instagram posts for the homepage
-        $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();
-
-        return view('home', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
-    }
-
-    public function landingPagePemeringkatan()
-    {
-        $categoryName = 'pemeringkatan'; // The specific category you want to filter by
-        $countRegularNews = 3;
-        $countFeaturedNews = 5;
-
-        // --- Regular News (from 'pemeringkatan' category) ---
-        $regularNews = Berita::where('kategori', $categoryName) // Filter by category
-            ->latest()                         // Order by newest first
-            ->take($countRegularNews)          // Take the first 3
-            ->get();
-
-        // --- Featured News (from 'pemeringkatan' category, excluding regular ones) ---
-        // We use skip() to bypass the items already taken for $regularNews
-        $featuredNews = Berita::where('kategori', $categoryName) // Filter by category
-            ->latest()                          // Order by newest first
-            ->skip($countRegularNews)           // Skip the 3 items taken for regularNews
-            ->take($countFeaturedNews)          // Take the next 5 items
-            ->get();
-
-
-        // Scroll
-        $announcements = Pengumuman::where('status', true)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        // Get active program layanan
-        $programLayanan = ProgramLayanan::where('status', 1)
-            ->where('kategori', 'pemeringkatan')
-            ->orderBy('id', 'desc')
-            ->take(6)
-            ->get();
-
-        // Get Instagram posts for the homepage
-        $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();
-
-        return view('Pemeringkatan.LandingPagePemeringkatan', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
-    }
-
-    //function display news inovasi
-    public function landingPageInovasi()
-    {
-        $categoryName = 'inovasi'; // The specific category you want to filter by
-        $countRegularNews = 3;
-        $countFeaturedNews = 5;
-
-        // --- Regular News (from 'pemeringkatan' category) ---
-        $regularNews = Berita::where('kategori', $categoryName) // Filter by category
-            ->latest()                         // Order by newest first
-            ->take($countRegularNews)          // Take the first 3
-            ->get();
-
-        // --- Featured News (from 'pemeringkatan' category, excluding regular ones) ---
-        // We use skip() to bypass the items already taken for $regularNews
-        $featuredNews = Berita::where('kategori', $categoryName) // Filter by category
-            ->latest()                          // Order by newest first
-            ->skip($countRegularNews)           // Skip the 3 items taken for regularNews
-            ->take($countFeaturedNews)          // Take the next 5 items
-            ->get();
-
-
-        // Scroll
-        $announcements = Pengumuman::where('status', true)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        // Get active program layanan
-        $programLayanan = ProgramLayanan::where('status', 1)
-            ->where('kategori', 'inovasi')
-            ->orderBy('id', 'desc')
-            ->take(6)
-            ->get();
-
-        // Get Instagram posts for the homepage
-        $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();
-
-        return view('subdirektorat-inovasi.LandingPageHilirisasi', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
-    }
-
-    /**
-     * Display news by category.
-     */
-    public function kategori(string $kategori)
-    {
-        // Validate the category
-        if (!in_array($kategori, ['inovasi', 'pemeringkatan', 'umum'])) {
-            return redirect()->route('berita.all')
-                ->with('error', 'Kategori tidak valid.');
+        // Loop until a unique slug is found. The 'where' clause ensures we don't conflict
+        // with other records, and '!= excludeId' allows the update operation to work correctly.
+        while (Berita::where('slug', $slug)->where('id', '!=', $excludeId)->exists()) {
+            $slug = "{$originalSlug}-{$count}";
+            $count++;
         }
 
-        $beritas = Berita::where('kategori', $kategori)
-            ->latest()
-            ->paginate(9); // Show 9 news per page
-
-        $pageTitle = 'Berita ' . ucfirst($kategori);
-
-        return view('Berita.beritahome', compact('beritas', 'pageTitle'));
+        return $slug;
     }
 
-    public function allNews()
-    {
-        $beritas = Berita::latest()->paginate(9); // Show 9 news per page
-        return view('Berita.beritahome', compact('beritas'));
-    }
-
+    /**
+     * Display the specified resource.
+     * ENHANCEMENT: Now reliably finds news by its unique slug.
+     */
     public function show(string $slug)
     {
-        // First try to find by slug
-        $berita = Berita::where('slug', $slug)->first();
+        // Security: Finding by a unique slug is more secure and reliable than using an ID or partial title.
+        $berita = Berita::where('slug', $slug)->firstOrFail();
 
-        // If not found and looks like an ID, try finding by ID
-        if (!$berita && is_numeric($slug)) {
-            $berita = Berita::find($slug);
-        }
-
-        // If still not found, abort
-        if (!$berita) {
-            abort(404, 'Berita tidak ditemukan');
-        }
+        // The 'isi' (content) of the news is rendered in the view.
+        // Because we sanitized it with Purifier before saving, it is safe to render with {!! !!} in Blade.
 
         $relatedNews = Berita::where('id', '!=', $berita->id)
             ->where('kategori', $berita->kategori)
@@ -287,88 +176,51 @@ class BeritaController extends Controller
 
         return view('Berita.sampleberita', compact('berita', 'relatedNews', 'latestNews', 'popularNews'));
     }
-
-    public function getBeritaDetail($title_or_id)
+    
+    /**
+     * Fetches details for a specific news item for the edit modal.
+     * ENHANCEMENT: Simplified to fetch by ID only, making it more secure and efficient.
+     */
+    public function getBeritaDetail($id)
     {
-        if (is_numeric($title_or_id)) {
-            $berita = Berita::findOrFail($title_or_id);
-        } else {
-            $title = str_replace('-', ' ', $title_or_id);
-            $berita = Berita::where('judul', 'LIKE', "%{$title}%")->firstOrFail();
-        }
-
+        // Security: Removed title-based searching (`LIKE`) to prevent potential SQL injection vectors
+        // and improve performance. Relying on the unique ID is best practice.
+        $berita = Berita::findOrFail($id);
         return response()->json($berita);
     }
+    
     /**
-     * Remove the specified resource from storage.
+     * Update the specified resource in storage.
+     * ENHANCEMENT: Added data purification and slug regeneration on title change.
      */
-    public function destroy(string $id)
-    {
-        try {
-            $berita = Berita::findOrFail($id);
-
-            // Delete the image file from storage
-            if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
-                Storage::disk('public')->delete($berita->gambar);
-            }
-
-            // Delete additional images if they exist
-            if ($berita->additionalImages) {
-                foreach ($berita->additionalImages as $image) {
-                    if (Storage::disk('public')->exists($image->path)) {
-                        Storage::disk('public')->delete($image->path);
-                    }
-                    $image->delete();
-                }
-            }
-
-            // Delete the record
-            $berita->delete();
-
-            $routePrefix = $this->getRoutePrefix();
-            return redirect()->route($routePrefix . '.news.index')
-                ->with('success', 'Berita berhasil dihapus!');
-        } catch (\Exception $e) {
-            \Log::error('Error deleting news: ' . $e->getMessage());
-            return redirect()->back()
-                ->with('error', 'Gagal menghapus berita: ' . $e->getMessage());
-        }
-    }
-
-    // app/Http/Controllers/BeritaController.php
-    public function upload(Request $request)
-    {
-        $request->validate([
-            'upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        $path = $request->file('upload')->store('news_images', 'public');
-        $url = Storage::url($path);
-
-        return response()->json([
-            'url' => asset($url),
-        ]);
-    }
-
     public function update(Request $request, string $id)
     {
         try {
             $berita = Berita::findOrFail($id);
 
-            // Validate the request
+            // Security: Validate all incoming data.
             $validated = $request->validate([
                 'kategori' => 'required|in:inovasi,pemeringkatan,umum,fakultas,prodi',
                 'tanggal' => 'required|date',
                 'judul_berita' => 'required|string|max:200',
                 'isi_berita' => 'required|string',
-                'gambar' => 'nullable|image|max:2048',
+                'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            // Update the text fields
+            // Security: Sanitize inputs to prevent XSS, same as in the store method.
+            $cleanJudul = Purifier::clean($validated['judul_berita']);
+            $cleanIsi = Purifier::clean($validated['isi_berita']);
+
+            // Update the model's attributes
             $berita->kategori = $validated['kategori'];
             $berita->tanggal = $validated['tanggal'];
-            $berita->judul = $validated['judul_berita'];
-            $berita->isi = Purifier::clean($validated['isi_berita']);
+            $berita->judul = $cleanJudul;
+            $berita->isi = $cleanIsi;
+            
+            // Robustness: If the title was changed, regenerate the slug to keep the URL current.
+            if ($berita->isDirty('judul')) {
+                $berita->slug = $this->createUniqueSlug($cleanJudul, $berita->id);
+            }
 
             // Handle image update if a new one was uploaded
             if ($request->hasFile('gambar') && $request->file('gambar')->isValid()) {
@@ -409,5 +261,170 @@ class BeritaController extends Controller
                 ->with('error', 'Gagal memperbarui berita: ' . $e->getMessage())
                 ->withInput();
         }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        try {
+            $berita = Berita::findOrFail($id);
+
+            // Delete the image file from storage
+            if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
+                Storage::disk('public')->delete($berita->gambar);
+            }
+
+            // Delete additional images if they exist
+            if ($berita->additionalImages) {
+                foreach ($berita->additionalImages as $image) {
+                    if (Storage::disk('public')->exists($image->path)) {
+                        Storage::disk('public')->delete($image->path);
+                    }
+                    $image->delete();
+                }
+            }
+
+            // Delete the record
+            $berita->delete();
+
+            $routePrefix = $this->getRoutePrefix();
+            return redirect()->route($routePrefix . '.news.index')
+                ->with('success', 'Berita berhasil dihapus!');
+        } catch (\Exception $e) {
+            \Log::error('Error deleting news: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'Gagal menghapus berita: ' . $e->getMessage());
+        }
+    }
+    
+    // The methods below are unchanged as they were not the focus of the security enhancement.
+
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $path = $request->file('upload')->store('news_images', 'public');
+        $url = Storage::url($path);
+
+        return response()->json([
+            'url' => asset($url),
+        ]);
+    }
+
+    public function homeNews()
+    {
+        $countRegularNews = 3;
+        $regularNews = Berita::latest()
+            ->take($countRegularNews)
+            ->get();
+        $regularNewsIds = $regularNews->pluck('id')->toArray();
+
+        $countFeaturedCarousel = 10;
+        $featuredNews = Berita::whereNotIn('id', $regularNewsIds)
+            ->latest()
+            ->take($countFeaturedCarousel)
+            ->get();
+        
+        $announcements = Pengumuman::where('status', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $programLayanan = ProgramLayanan::where('status', 1)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();
+
+        return view('home', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
+    }
+
+    public function landingPagePemeringkatan()
+    {
+        $categoryName = 'pemeringkatan';
+        $countRegularNews = 3;
+        $countFeaturedNews = 5;
+
+        $regularNews = Berita::where('kategori', $categoryName)
+            ->latest()
+            ->take($countRegularNews)
+            ->get();
+
+        $featuredNews = Berita::where('kategori', $categoryName)
+            ->latest()
+            ->skip($countRegularNews)
+            ->take($countFeaturedNews)
+            ->get();
+
+        $announcements = Pengumuman::where('status', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $programLayanan = ProgramLayanan::where('status', 1)
+            ->where('kategori', 'pemeringkatan')
+            ->orderBy('id', 'desc')
+            ->take(6)
+            ->get();
+
+        $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();
+
+        return view('Pemeringkatan.LandingPagePemeringkatan', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
+    }
+
+    public function landingPageInovasi()
+    {
+        $categoryName = 'inovasi';
+        $countRegularNews = 3;
+        $countFeaturedNews = 5;
+
+        $regularNews = Berita::where('kategori', $categoryName)
+            ->latest()
+            ->take($countRegularNews)
+            ->get();
+
+        $featuredNews = Berita::where('kategori', $categoryName)
+            ->latest()
+            ->skip($countRegularNews)
+            ->take($countFeaturedNews)
+            ->get();
+
+        $announcements = Pengumuman::where('status', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $programLayanan = ProgramLayanan::where('status', 1)
+            ->where('kategori', 'inovasi')
+            ->orderBy('id', 'desc')
+            ->take(6)
+            ->get();
+
+        $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();
+
+        return view('subdirektorat-inovasi.LandingPageHilirisasi', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
+    }
+
+    public function kategori(string $kategori)
+    {
+        if (!in_array($kategori, ['inovasi', 'pemeringkatan', 'umum'])) {
+            return redirect()->route('berita.all')
+                ->with('error', 'Kategori tidak valid.');
+        }
+
+        $beritas = Berita::where('kategori', $kategori)
+            ->latest()
+            ->paginate(9);
+
+        $pageTitle = 'Berita ' . ucfirst($kategori);
+
+        return view('Berita.beritahome', compact('beritas', 'pageTitle'));
+    }
+
+    public function allNews()
+    {
+        $beritas = Berita::latest()->paginate(9);
+        return view('Berita.beritahome', compact('beritas'));
     }
 }
