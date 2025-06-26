@@ -10,7 +10,8 @@ use App\Models\Pengumuman;
 use App\Models\ProgramLayanan;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Instagram;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
+use Mews\Purifier\Facades\Purifier;
 
 class BeritaController extends Controller
 {
@@ -18,7 +19,7 @@ class BeritaController extends Controller
      * Get the correct route name prefix based on authenticated user role
      */
     private function getRoutePrefix()
-        {
+    {
         $role = auth()->user()->role;
         switch ($role) {
             case 'admin_direktorat':
@@ -44,7 +45,7 @@ class BeritaController extends Controller
      */
     public function index()
     {
-         $beritas = Berita::with('user')->latest()->get();
+        $beritas = Berita::with('user')->latest()->get();
         $routePrefix = $this->getRoutePrefix();
         $viewName = 'admin.newsadmin';
 
@@ -86,7 +87,7 @@ class BeritaController extends Controller
                     'kategori' => $request->kategori,
                     'tanggal' => $request->tanggal,
                     'judul' => $request->judul_berita,
-                    'isi' => $request->isi_berita,
+                    'isi' => Purifier::clean($request->isi_berita),
                     'gambar' => $gambarPath
                 ]);
 
@@ -110,13 +111,11 @@ class BeritaController extends Controller
                 return redirect()->route($routePrefix . '.news.index')
                     ->with('success', 'Berita berhasil disimpan!');
             } else {
-                // Handle the case where image upload failed
                 return redirect()->back()
                     ->with('error', 'Upload gambar gagal. Pastikan file gambar valid.')
                     ->withInput();
             }
         } catch (\Exception $e) {
-            // Log the error and return with error message
             \Log::error('Error storing news: ' . $e->getMessage());
             return redirect()->back()
                 ->with('error', 'Gagal menambahkan berita: ' . $e->getMessage())
@@ -129,25 +128,16 @@ class BeritaController extends Controller
     public function homeNews()
     {
         $countRegularNews = 3; // Number of newest items for the regular section
-
-        // --- Regular News ---
-        // Get the newest 'Berita' items for the regular section
         $regularNews = Berita::latest() // Orders by created_at descending (newest first)
-                             ->take($countRegularNews)
-                             ->get();
-
-        // --- Featured News (for Carousel) ---
-        // Get the IDs of the news items already taken for $regularNews
+            ->take($countRegularNews)
+            ->get();
         $regularNewsIds = $regularNews->pluck('id')->toArray();
 
-        // Now, get other 'Berita' items, excluding the regular ones.
-        // "take all berita on there" can mean a few things:
-        // Option A: Take a specific larger number for the carousel (e.g., next 10 or 15)
         $countFeaturedCarousel = 10; // Example: show 10 items in the carousel
         $featuredNews = Berita::whereNotIn('id', $regularNewsIds) // Exclude regular news
-                               ->latest()
-                               ->take($countFeaturedCarousel)
-                               ->get();
+            ->latest()
+            ->take($countFeaturedCarousel)
+            ->get();
         // Scroll
         $announcements = Pengumuman::where('status', true)
             ->orderBy('created_at', 'desc')
@@ -155,9 +145,9 @@ class BeritaController extends Controller
 
         // Get active program layanan
         $programLayanan = ProgramLayanan::where('status', 1)
-            
+
             ->orderBy('id', 'desc')
-           
+
             ->get();
 
         // Get Instagram posts for the homepage
@@ -174,17 +164,17 @@ class BeritaController extends Controller
 
         // --- Regular News (from 'pemeringkatan' category) ---
         $regularNews = Berita::where('kategori', $categoryName) // Filter by category
-                             ->latest()                         // Order by newest first
-                             ->take($countRegularNews)          // Take the first 3
-                             ->get();
+            ->latest()                         // Order by newest first
+            ->take($countRegularNews)          // Take the first 3
+            ->get();
 
         // --- Featured News (from 'pemeringkatan' category, excluding regular ones) ---
         // We use skip() to bypass the items already taken for $regularNews
         $featuredNews = Berita::where('kategori', $categoryName) // Filter by category
-                              ->latest()                          // Order by newest first
-                              ->skip($countRegularNews)           // Skip the 3 items taken for regularNews
-                              ->take($countFeaturedNews)          // Take the next 5 items
-                              ->get();
+            ->latest()                          // Order by newest first
+            ->skip($countRegularNews)           // Skip the 3 items taken for regularNews
+            ->take($countFeaturedNews)          // Take the next 5 items
+            ->get();
 
 
         // Scroll
@@ -214,17 +204,17 @@ class BeritaController extends Controller
 
         // --- Regular News (from 'pemeringkatan' category) ---
         $regularNews = Berita::where('kategori', $categoryName) // Filter by category
-                             ->latest()                         // Order by newest first
-                             ->take($countRegularNews)          // Take the first 3
-                             ->get();
+            ->latest()                         // Order by newest first
+            ->take($countRegularNews)          // Take the first 3
+            ->get();
 
         // --- Featured News (from 'pemeringkatan' category, excluding regular ones) ---
         // We use skip() to bypass the items already taken for $regularNews
         $featuredNews = Berita::where('kategori', $categoryName) // Filter by category
-                              ->latest()                          // Order by newest first
-                              ->skip($countRegularNews)           // Skip the 3 items taken for regularNews
-                              ->take($countFeaturedNews)          // Take the next 5 items
-                              ->get();
+            ->latest()                          // Order by newest first
+            ->skip($countRegularNews)           // Skip the 3 items taken for regularNews
+            ->take($countFeaturedNews)          // Take the next 5 items
+            ->get();
 
 
         // Scroll
@@ -378,7 +368,7 @@ class BeritaController extends Controller
             $berita->kategori = $validated['kategori'];
             $berita->tanggal = $validated['tanggal'];
             $berita->judul = $validated['judul_berita'];
-            $berita->isi = $validated['isi_berita'];
+            $berita->isi = Purifier::clean($validated['isi_berita']);
 
             // Handle image update if a new one was uploaded
             if ($request->hasFile('gambar') && $request->file('gambar')->isValid()) {
