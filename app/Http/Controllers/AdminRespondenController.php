@@ -79,7 +79,10 @@ class AdminRespondenController extends Controller
 
 
         $query->orderBy($sort, $direction);
-        $respondens = $query->paginate(25)->appends($request->query());
+        
+        // $respondens = $query->paginate(25)->appends($request->query());
+        $respondens = $query->paginate(1000)->appends($request->query());
+
 
         $viewData = ['respondens' => $respondens, 'user_info' => $userInfo];
         $routePrefix = '';
