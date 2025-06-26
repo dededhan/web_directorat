@@ -29,8 +29,8 @@ class PengumumanController extends Controller
             return 'subdirektorat-inovasi.admin_inovasi';
         } else if (auth()->user()->hasRole('admin_pemeringkatan')) {
             return 'admin_pemeringkatan';
-        } 
-        
+        }
+
         return 'admin';
     }
 
@@ -41,7 +41,7 @@ class PengumumanController extends Controller
     {
         $pengumumans = Pengumuman::all();
         $routePrefix = $this->getRoutePrefix();
-        
+
         if (auth()->user()->hasRole('admin_direktorat')) {
             return view('admin.newsscroll', compact('pengumumans', 'routePrefix'));
         } elseif (auth()->user()->hasRole('admin_hilirisasi')) {
@@ -74,6 +74,10 @@ class PengumumanController extends Controller
     {
         try {
             $data = $request->validated();
+            $data['judul_pengumuman'] = Purifier::clean($data['judul_pengumuman']);
+            $data['icon'] = Purifier::clean($data['icon']);
+            $data['isi_pengumuman'] = Purifier::clean($data['isi_pengumuman']);
+
             $data['status'] = true;
 
             // Debug data sebelum disimpan
@@ -108,10 +112,14 @@ class PengumumanController extends Controller
                 'status' => 'sometimes|boolean'
             ]);
 
+            $data['judul_pengumuman'] = Purifier::clean($data['judul_pengumuman']);
+            $data['icon'] = Purifier::clean($data['icon']);
+            $data['isi_pengumuman'] = Purifier::clean($data['isi_pengumuman']);
+
             $news_scroll->update($validated);
 
             $routePrefix = $this->getRoutePrefix();
-            
+
             if ($request->ajax()) {
                 return response()->json(['success' => true, 'message' => 'Pengumuman berhasil diperbarui!']);
             }
