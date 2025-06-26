@@ -83,12 +83,16 @@ Route::get('/sdgscenter', function () {
 })->name('sdgscenter');
 
 // Inovasi Routes
-Route::prefix('inovasi')->name('inovasi.')->group(function () {
+Route::prefix('inovasi')->group(function () {
     Route::view('/risetunj', 'Inovasi.riset_unj.risetunj')->name('riset.unj');
     Route::view('/katsinov/forminformasidasar', 'inovasi.katsinov.forminformasidasar')->name('katsinov.informasidasar');
     Route::view('/katsinov/formberitaacara', 'inovasi.katsinov.formberitaacara')->name('katsinov.formberitaacara');
     Route::view('/katsinov/formjudul', 'inovasi.katsinov.formjudul')->name('katsinov.formjudul');
 });
+
+// Route::get('inovasi/risetunj', function () {
+//     return view('Inovasi.riset_unj.risetunj');
+// })->name('riset.unj');;
 
 // Subdirektorat Inovasi Routes
 Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')->group(function () {
