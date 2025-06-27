@@ -1,6 +1,9 @@
 @extends('admin.admin')
-<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/sejarah_dashboard.css') }}">
+<!-- <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/sejarah_dashboard.css') }}"> -->
 @section('contentadmin')
+@vite([
+        'resources/css/admin/sejarah_dashboard.css'
+    ])
     <div class="head-title">
         <div class="left">
             <h1>Edit Konten Halaman Sejarah</h1>

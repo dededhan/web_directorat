@@ -1,11 +1,17 @@
 @extends('admin.admin')
 
+@section('contentadmin')
+@vite([
+        'resources/css/admin/berita_dashboard.css',
+        'resources/css/admin/ckeditor-content.css',
+    ])
+
 {{-- Keep these if they are not pushed from the main layout or used by other elements on this page --}}
 {{-- <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script> --}}
 {{-- Not needed here anymore for edit, but keep for add form --}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/berita_dashboard.css') }}">
-<link rel="stylesheet" href="{{ asset('css/ckeditor-content.css') }}"> {{-- Keep if add form uses it --}}
+<!-- <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/berita_dashboard.css') }}">
+<link rel="stylesheet" href="{{ asset('css/ckeditor-content.css') }}"> {{-- Keep if add form uses it --}} -->
 
 @section('contentadmin')
     <div class="head-title">

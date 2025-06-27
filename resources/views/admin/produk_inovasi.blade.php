@@ -2,9 +2,12 @@
 
 <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/produk_inovasi.css') }}">
+<!-- <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/produk_inovasi.css') }}"> -->
 
 @section('contentadmin')
+ @vite([
+        'resources/css/admin/produk_inovasi.css'
+    ])
     <div class="head-title">
         <div class="left">
             <h1>Produk Inovasi</h1>

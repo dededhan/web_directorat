@@ -1,6 +1,15 @@
 @extends('admin.admin')
-<link rel="stylesheet" href="{{ asset('dashboard_main/document_dashboard.css') }}">
+
+{{-- <link rel="stylesheet" href="{{ asset('dashboard_main/document_dashboard.css') }}"> --}}
+
 @section('contentadmin')
+    {{-- Awal: Perubahan untuk Vite --}}
+    @vite([
+        'resources/css/admin/document_dashboard.css',
+        'resources/js/admin/document.js'
+    ])
+    {{-- Akhir: Perubahan untuk Vite --}}
+
     <div class="head-title">
         <div class="left">
             <h1>Dokumen</h1>
@@ -166,7 +175,6 @@
         </div>
     </div>
 
-    <!-- Edit Modal -->
     <div class="modal fade" id="editDocumentModal" tabindex="-1" role="dialog" aria-labelledby="editDocumentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -224,14 +232,12 @@
         </div>
     </div>
 
-    <!-- Include jQuery if not already included -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
-    <!-- Include Bootstrap JS and SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="{{ asset('resources/movejs/document.js') }}"></script>
+    {{-- <script src="{{ asset('resources/movejs/document.js') }}"></script> --}}
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {

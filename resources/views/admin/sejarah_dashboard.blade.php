@@ -1,6 +1,8 @@
 @extends('admin.admin')
-<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/sejarah_dashboard.css') }}">
-
+<!-- <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/sejarah_dashboard.css') }}"> -->
+@vite([
+        'resources/css/admin/sejarah_dashboard.css'
+    ])
 @section('contentadmin')
     <div class="head-title">
         <div class="left">
@@ -335,7 +337,7 @@
 
 <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/sejarah_dashboard.css') }}">
+<!-- <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/sejarah_dashboard.css') }}"> -->
 @endsection
 
 

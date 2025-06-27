@@ -1,9 +1,16 @@
 @extends('admin.admin')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/dashboard_admin.css') }}">
+{{-- <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/dashboard_admin.css') }}"> --}}
 
 
 @section('contentadmin')
+    {{-- Awal: Perubahan untuk Vite --}}
+    @vite([
+        'resources/css/admin/dashboard_admin.css',
+        'resources/js/admin/dashboard_admin.js' {{-- Path disesuaikan untuk Vite dan typo diperbaiki --}}
+    ])
+    {{-- Akhir: Perubahan untuk Vite --}}
+
     <div class="head-title">
         <div class="left">
             <h1>Dashboard Direktorat</h1>
@@ -23,7 +30,6 @@
         </a>
     </div>
 
-    <!-- Quick Stats Section (Redesigned) -->
     <div class="container quick-stats-container">
         <div class="section-title">
             <h2>Overview</h2>
@@ -61,14 +67,12 @@
         </div>
     </div>
 
-    <!-- UNJ dalam Prestasi Section -->
     <div class="container unj-prestasi-container">
         <div class="section-title text-center">
             <h2>UNJ dalam <span class="highlight">Prestasi</span></h2>
             <div class="title-underline"></div>
         </div>
         <div class="prestasi-grid">
-            <!-- Row 1 -->
             <div class="prestasi-item">
                 <div class="prestasi-icon">
                     <i class='bx bxs-group'></i>
@@ -112,7 +116,6 @@
                 <div class="prestasi-title">Tendik</div>
             </div>
             
-            <!-- Row 2 -->
             <div class="prestasi-item">
                 <div class="prestasi-icon">
                     <i class='bx bxs-building-house'></i>
@@ -157,7 +160,6 @@
             </div>
         </div>
         
-        <!-- Akreditasi Info -->
         <div class="akreditasi-wrapper">
             <div class="akreditasi-item nasional">
                 <div class="akreditasi-number">116 Prodi</div>
@@ -170,7 +172,6 @@
         </div>
     </div>
 
-    <!-- Visitor Chart Container -->
     <div class="container chart-container">
         <div class="section-title">
             <h2>Visitor Statistics</h2>
@@ -183,7 +184,6 @@
         </div>
     </div>
 
-    <!-- Recent Activity Table -->
     <div class="container activity-container">
         <div class="section-title">
             <h2>Recent Activity</h2>
@@ -229,9 +229,10 @@
         </div>
     </div>
 
+    {{-- Script lokal sudah dipindah ke Vite, hanya CDN yang tersisa di @push --}}
     @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <script src="{{ asset('resources/movejs/dashboard_admin..js') }}"></script>
+    {{-- <script src="{{ asset('resources/movejs/dashboard_admin..js') }}"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>

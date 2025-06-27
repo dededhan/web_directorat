@@ -1,8 +1,16 @@
 @extends('admin.admin')
 
-<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/matakuliah_dashboard.css') }}">
+<!-- <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/matakuliah_dashboard.css') }}"> -->
 
 @section('contentadmin')
+
+ {{-- Awal: Perubahan untuk Vite --}}
+    @vite([
+        'resources/css/admin/matakuliah_dashboard.css',
+        'resources/js/admin/matakuliah_dashboard.js'
+    ])
+    {{-- Akhir: Perubahan untuk Vite --}}
+    
     <div class="head-title">
         <div class="left">
             <h1>Mata Kuliah Sustainability</h1>
@@ -373,7 +381,7 @@ $optionValue = 'SDGs ' . $number;
 
     {{-- Assuming jQuery, Bootstrap JS, SweetAlert2 are loaded in admin.admin layout --}}
     {{-- matakuliah_dashboard.js should handle the dynamic prodi dropdown --}}
-    <script src="{{ asset('resources/movejs/matakuliah_dashboard.js') }}"></script>
+    <!-- <script src="{{ asset('resources/movejs/matakuliah_dashboard.js') }}"></script> -->
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

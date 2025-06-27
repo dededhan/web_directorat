@@ -1,10 +1,17 @@
 @extends('admin.admin')
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/international_lecture_dashboard.css') }}">
+{{-- <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/international_lecture_dashboard.css') }}"> --}}
 
 
 @section('contentadmin')
+    {{-- Awal: Perubahan untuk Vite --}}
+    @vite([
+        'resources/css/admin/international_lecture_dashboard.css',
+        'resources/js/admin/international_lecture_dashboard.js'
+    ])
+    {{-- Akhir: Perubahan untuk Vite --}}
+
     <div class="head-title">
         <div class="left">
             <h1>Dosen Internasional</h1>
@@ -171,7 +178,6 @@
         </div>
     </div>
 
-    <!-- Modal untuk mengedit dosen -->
     <div class="modal fade" id="editDosenModal" tabindex="-1" aria-labelledby="editDosenModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -252,49 +258,7 @@
             </div>
         </div>
     </div>
-
-    <style>
-        /* .table-data {
-            margin-top: 24px;
-        }
-
-        .order {
-            background: #fff;
-            padding: 24px;
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-            border-color: #3498db;
-            box-shadow: none;
-        }
-
-        .btn-primary {
-            background-color: #3498db;
-            border-color: #3498db;
-        }
-
-        .btn-primary:hover {
-            background-color: #2980b9;
-            border-color: #2980b9;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 5px;
-        }
-
-        .badge {
-            font-size: 0.7em;
-        } */
-    </style>
-
-    <!-- Include internationallecture_dashboard.js for fakultas & prodi dropdown logic and other functionality -->
-    <script src="{{ asset('resources/movejs/international_lecture_dashboard.js') }}"></script>
+    
+    {{-- Script lokal sudah dipindah ke Vite --}}
+    {{-- <script src="{{ asset('resources/movejs/international_lecture_dashboard.js') }}"></script> --}}
 @endsection

@@ -1,8 +1,11 @@
+@vite([
+        'resources/css/sidebar_dashboardadmin.css'
+    ])
 <!-- SIDEBAR -->
 <section id="sidebar">
     <!-- Brand Logo -->
 
-    <link rel="stylesheet" href="{{ asset('dashboard_main/sidebar_dashboardadmin.css') }}">
+    <!-- <link rel="stylesheet" href="{{ asset('dashboard_main/sidebar_dashboardadmin.css') }}"> -->
     <div class="brand">
         <!-- Use a button element instead of an icon inside a link -->
         <button type="button" id="toggle-sidebar-btn"

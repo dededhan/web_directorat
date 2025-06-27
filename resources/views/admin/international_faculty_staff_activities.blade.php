@@ -1,9 +1,16 @@
 @extends('admin.admin')
 
-<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/matakuliah_dashboard.css') }}">
+<!-- <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/matakuliah_dashboard.css') }}"> -->
 
 
 @section('contentadmin')
+{{-- Awal: Perubahan untuk Vite --}}
+    @vite([
+        'resources/css/admin/matakuliah_dashboard.css',
+        'resources/js/admin/berita_dashboard.js' {{-- Path disesuaikan untuk Vite --}}
+    ])
+    {{-- Akhir: Perubahan untuk Vite --}}
+
 <div class="head-title">
     <div class="left">
         <h1>Aktivitas Dosen Asing</h1>
@@ -211,7 +218,7 @@
  };
 </script>
 
-{{-- <script src="{{ asset('dashboard_main/dashboard/berita_dashboard.js') }}"></script> --}}
+<!-- <script src="{{ asset('dashboard_main/dashboard/berita_dashboard.js') }}"></script> -->
 
 <script>
  // Custom upload adapter needs to be defined inline to access Blade variables
