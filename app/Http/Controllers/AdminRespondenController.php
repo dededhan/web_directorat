@@ -270,29 +270,47 @@ class AdminRespondenController extends Controller
         ]);
     }
 
-    public function destroy(Responden $responden)
+    public function destroy(Request $request, Responden $responden)
     {
         $user = Auth::user();
         $role = $user->role;
         $userInfo = $this->getUserFacultyInfo($user);
 
+        // Authorization logic
         if ($role === 'fakultas' && $userInfo['faculty_code']) {
             if ($responden->fakultas !== $userInfo['faculty_code']) {
+                if ($request->ajax()) {
+                    return response()->json(['message' => 'Anda tidak diizinkan menghapus responden ini.'], 403);
+                }
                 return redirect()->back()->with('error', 'Anda tidak diizinkan menghapus responden ini.');
             }
         } elseif (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan'])) {
+            if ($request->ajax()) {
+                return response()->json(['message' => 'Anda tidak diizinkan menghapus responden ini.'], 403);
+            }
             return redirect()->back()->with('error', 'Anda tidak diizinkan menghapus responden ini.');
         }
 
         try {
             $responden->delete();
+
+            if ($request->ajax()) {
+                return response()->json(['message' => 'Responden berhasil dihapus.']);
+            }
+
             $redirectRouteName = 'admin.responden.index';
             if ($role === 'fakultas') $redirectRouteName = 'fakultas.responden.index';
             if ($role === 'admin_pemeringkatan') $redirectRouteName = 'admin_pemeringkatan.responden.index';
-
+            
             return redirect()->route($redirectRouteName)->with('success', 'Responden berhasil dihapus.');
+
         } catch (\Exception $e) {
             Log::error('Error deleting responden: ' . $e->getMessage());
+            
+            if ($request->ajax()) {
+                return response()->json(['message' => 'Gagal menghapus responden.'], 500);
+            }
+
             return redirect()->back()->with('error', 'Gagal menghapus responden.');
         }
     }

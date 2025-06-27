@@ -9,5 +9,20 @@ class Responden extends Model
 {
     /** @use HasFactory<\Database\Factories\RespondenFactory> */
     use HasFactory;
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'title',
+        'fullname',
+        'jabatan',
+        'instansi',
+        'email',
+        'phone_responden',
+        'nama_dosen_pengusul',
+        'phone_dosen',
+        'fakultas',
+        'category',
+        'status',
+        // 'user_id', // Uncomment if you have this column and want to update it
+        // 'tahun',   // Uncomment if you have this column and want to update it
+    ];
+
 }
