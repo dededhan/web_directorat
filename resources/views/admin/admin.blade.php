@@ -8,13 +8,13 @@
 
     {{-- Awal: Perubahan untuk Vite --}}
     @vite([
-        'resources/css/app.css', {{-- Asumsi Anda memiliki file ini sebagai entry point utama --}}
+        'resources/css/app.css',
         'resources/css/admin/admin.css',
         'resources/css/admin/sidebar_dashboardadmin.css',
         'resources/css/admin/navbar_dashboard.css',
         'resources/css/scrollbar-fix.css',
-        'resources/js/app.js',  {{-- Asumsi Anda memiliki file ini sebagai entry point utama --}}
-        'resources/js/admin/admin.js' {{-- Path disesuaikan untuk Vite --}}
+        'resources/js/app.js',  
+        'resources/js/admin/admin.js' 
     ])
     {{-- Akhir: Perubahan untuk Vite --}}
 
