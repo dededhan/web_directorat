@@ -1,0 +1,191 @@
+/* Update table spacing */
+.table-data {
+    margin-top: 40px; /* Increased margin */
+}
+
+.order {
+    background: #fff;
+    padding: 24px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Added margin */
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #3498db;
+    box-shadow: none;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+/* Ensure proper table scrolling */
+.table-responsive {
+    overflow-x: auto;
+    margin-bottom: 20px;
+    max-height: none; /* Remove max-height */
+}
+
+.badge {
+    font-size: 0.7em;
+}
+
+.btn-group {
+    display: flex;
+    gap: 5px;
+}
+
+.status-dropdown {
+    width: 140%;
+    margin-left: -10px;
+    /* Menggeser ke kiri */
+}
+
+.search-box {
+    margin-bottom: 20px;
+}
+
+.search-box input {
+    width: 300px;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+/* Table improvements */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    vertical-align: middle;
+}
+
+.table tbody tr:hover {
+    background-color: #f5f5f5;
+    transition: background-color 0.2s ease;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .search-box input {
+        width: 100%;
+    }
+
+    .table-responsive {
+        max-height: 70vh;
+    }
+}
+
+/* Loading state */
+.table-loading {
+    position: relative;
+    min-height: 200px;
+}
+
+.table-loading::after {
+    content: "Loading...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Empty state */
+.table-empty {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.btn-success {
+    background-color: #2ecc71;
+    border-color: #2ecc71;
+}
+
+.btn-success:hover {
+    background-color: #27ae60;
+    border-color: #27ae60;
+}
+
+.btn-info {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: white;
+}
+
+.btn-info:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+    color: white;
+}
+
+.export-buttons {
+    margin-bottom: 20px;
+}
+
+/* Update pagination positioning */
+.custom-pagination {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    position: relative; /* Changed from absolute */
+    bottom: auto; /* Remove fixed bottom */
+}
+
+.custom-pagination .pagination {
+    justify-content: flex-end;
+    gap: 5px;
+    margin-bottom: 0;
+}
+
+.custom-pagination .page-item.active .page-link {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: white;
+}
+
+.custom-pagination .page-link {
+    color: #3498db;
+    border-radius: 8px;
+}
+
+/* Add responsive styles for export buttons */
+@media (max-width: 768px) {
+    .export-buttons {
+        margin-bottom: 10px;
+    }
+
+    .btn-group {
+        flex-direction: column;
+    }
+}
+
+/* Move form helper text below the inputs */
+/* Form helper text positioning */
+.form-text.text-muted {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem; /* Added margin bottom */
+    font-size: 0.8rem;
+    color: #6c757d;
+    position: relative;
+    display: block;
+}

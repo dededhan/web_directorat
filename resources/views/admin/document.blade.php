@@ -231,7 +231,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="{{ asset('admin/document.js') }}"></script>
+    <script src="{{ asset('resources/movejs/document.js') }}"></script>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {

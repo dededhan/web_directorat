@@ -399,9 +399,9 @@
         }
     </style>
 
-    <script src="{{ asset('inovasi/dashboard/table_katsinov/js/table_katsinov.js') }}"></script>
-    <script src="{{ asset('inovasi/dashboard/table_katsinov/js/table_katsinovoverall.js') }}"></script>
-    <script src="{{ asset('inovasi/dashboard/form_katsinov/js/form.js') }}"></script>
+    <script src="{{ asset('resources/movejs/table_katsinov.js') }}"></script>
+    <script src="{{ asset('resources/movejs/table_katsinovoverall.js') }}"></script>
+    <script src="{{ asset('resources/movejs/form.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

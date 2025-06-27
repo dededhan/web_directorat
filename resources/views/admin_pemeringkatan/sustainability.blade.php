@@ -304,7 +304,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <!-- Load sustainability_dashboard.js for fakultas & prodi dropdown logic -->
-    <script src="{{ asset('dashboard_main/dashboard/sustainability_dashboard.js') }}"></script>
+    <script src="{{ asset('resource/movejs/sustainability_dashboard.js') }}"></script>
     
     <script>
         // Handle edit button clicks

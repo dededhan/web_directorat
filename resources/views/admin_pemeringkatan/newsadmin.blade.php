@@ -266,7 +266,7 @@
         };
     </script>
 
-    {{-- <script src="{{ asset('dashboard_main/dashboard/berita_dashboard.js') }}"></script> --}}
+    {{-- <script src="{{ asset('resource/movejs/berita_dashboard.js') }}"></script> --}}
 
     <script>
         // Custom upload adapter needs to be defined inline to access Blade variables

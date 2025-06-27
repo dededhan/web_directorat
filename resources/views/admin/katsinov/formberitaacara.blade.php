@@ -181,7 +181,7 @@
 @endsection
 
 
-{{-- <script src="{{ asset('inovasi/dashboard/form_katsinov/js/berita_acara.js') }}"></script> --}}
+{{-- <script src="{{ asset('resource/movejs/berita_acara.js') }}"></script> --}}
 
 
 

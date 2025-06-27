@@ -115,6 +115,6 @@
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('register.js') }}"></script>
+    <script src="{{ asset('resource/movejs/register.js') }}"></script>
 </body>
 </html>

@@ -1,0 +1,237 @@
+/* Reset and ensure consistent positioning */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Content area styling */
+#content {
+    position: relative;
+    width: calc(100% - 280px);
+    left: 280px;
+    transition: all .3s ease;
+    min-height: 100vh;
+}
+
+#sidebar.hide ~ #content {
+    width: calc(100% - 60px);
+    left: 60px;
+}
+
+/* Fixed navigation styling with higher specificity */
+body #content nav {
+    height: 56px;
+    background: #ffffff;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-family: var(--lato);
+    position: fixed !important;
+    top: 0 !important;
+    right: 0;
+    left: 280px !important;
+    width: calc(100% - 280px) !important;
+    z-index: 2000 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all .3s ease;
+    margin: 0 !important;
+    border: none !important;
+}
+
+body #sidebar.hide ~ #content nav {
+    left: 60px !important;
+    width: calc(100% - 60px) !important;
+}
+
+/* Logo styling */
+nav .logo img {
+    height: 40px;
+}
+
+/* Navigation links */
+#content nav a {
+    color: var(--dark);
+}
+
+#content nav .nav-link {
+    font-size: 16px;
+    transition: .3s ease;
+}
+
+#content nav .nav-link:hover {
+    color: var(--blue);
+}
+
+/* Container for right-aligned content */
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Profile section styling */
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-right: 8px;
+}
+
+.profile-image {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-name {
+    color: #342E37;
+    font-weight: 500;
+}
+
+/* Menu icon styling */
+#content nav .bx.bx-menu {
+    font-size: 24px;
+    color: #342E37;
+    cursor: pointer;
+}
+
+/* Main content area with proper spacing */
+#content main {
+    width: 100%;
+    padding: 36px 24px;
+    font-family: var(--poppins);
+    max-height: calc(100vh - 56px);
+    overflow-y: auto;
+    margin-top: 56px !important; /* Force space for fixed navbar */
+}
+
+#content main .head-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+#content main .head-title .left h1 {
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--dark);
+}
+
+#content main .head-title .left .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+#content main .head-title .left .breadcrumb li {
+    color: var(--dark);
+}
+
+#content main .head-title .left .breadcrumb li a {
+    color: var(--dark-grey);
+    pointer-events: none;
+}
+
+#content main .head-title .left .breadcrumb li a.active {
+    color: var(--blue);
+    pointer-events: unset;
+}
+
+#content main .head-title .btn-download {
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 36px;
+    background: #176369;
+    color: var(--light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+#content main .box-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-top: 36px;
+}
+
+#content main .box-info li {
+    padding: 24px;
+    background: var(--light);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+#content main .box-info li .bx {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    font-size: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#content main .box-info li:nth-child(1) .bx {
+    background: var(--light-blue);
+    color: var(--blue);
+}
+
+#content main .box-info li:nth-child(2) .bx {
+    background: var(--light-yellow);
+    color: var(--yellow);
+}
+
+#content main .box-info li:nth-child(3) .bx {
+    background: var(--light-orange);
+    color: var(--orange);
+}
+
+#content main .box-info li .text h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+#content main .box-info li .text p {
+    color: var(--dark);    
+}
+
+/* Fix for any potential stacking context issues */
+#sidebar {
+    z-index: 1499 !important; /* Just below navbar */
+}
+
+/* Media queries for potential responsive issues */
+@media screen and (max-width: 768px) {
+    body #content nav {
+		z-index: 9999 !important; /* Much higher z-index */
+		position: fixed !important;
+		top: 0 !important;
+	}
+    
+    #content {
+        width: 100%;
+        left: 0;
+    }
+    
+    #sidebar.hide ~ #content nav {
+        left: 0 !important;
+        width: 100% !important;
+    }
+}

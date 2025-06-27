@@ -373,7 +373,7 @@ $optionValue = 'SDGs ' . $number;
 
     {{-- Assuming jQuery, Bootstrap JS, SweetAlert2 are loaded in admin.admin layout --}}
     {{-- matakuliah_dashboard.js should handle the dynamic prodi dropdown --}}
-    <script src="{{ asset('dashboard_main/dashboard/matakuliah_dashboard.js') }}"></script>
+    <script src="{{ asset('resources/movejs/matakuliah_dashboard.js') }}"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

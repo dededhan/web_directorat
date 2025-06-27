@@ -296,5 +296,5 @@
     </style>
 
     <!-- Include internationallecture_dashboard.js for fakultas & prodi dropdown logic and other functionality -->
-    <script src="{{ asset('dashboard_main/dashboard/international_lecture_dashboard.js') }}"></script>
+    <script src="{{ asset('resources/movejs/international_lecture_dashboard.js') }}"></script>
 @endsection

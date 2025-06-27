@@ -365,7 +365,7 @@
         @method('DELETE')
     </form>
 
-    <script src="{{ asset('dashboard_main/dashboard/sustainability_dashboard.js') }}"></script>
+    <script src="{{ asset('resources/movejs/sustainability_dashboard.js') }}"></script>
     {{-- ^ This JS likely handles the dynamic prodi dropdown based on fakultas selection for admin for the OLD setup.
          We will add new JS below to override/enhance this for sustainability.blade.php specifically,
          following the matakuliah.blade.php pattern. --}}

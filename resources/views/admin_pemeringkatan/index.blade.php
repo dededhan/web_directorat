@@ -62,7 +62,7 @@
         </main>
     </section>
 
-    <script src="{{ asset('admin.js') }}"></script>
+    <script src="{{ asset('resources/movejs/admin.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

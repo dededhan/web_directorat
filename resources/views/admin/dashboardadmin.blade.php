@@ -231,7 +231,7 @@
 
     @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <script src="{{ asset('dashboard_main/dashboard/dashboard_admin..js') }}"></script>
+    <script src="{{ asset('resources/movejs/dashboard_admin..js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>

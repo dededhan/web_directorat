@@ -316,5 +316,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Include international_student_dashboard.js for functionality -->
-    <script src="{{ asset('dashboard_main/dashboard/international_student_dashboard.js') }}"></script>
+    <script src="{{ asset('resources/movejs/international_student_dashboard.js') }}"></script>
 @endsection

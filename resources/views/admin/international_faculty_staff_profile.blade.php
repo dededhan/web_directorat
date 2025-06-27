@@ -1,6 +1,6 @@
 @extends('admin.admin')
 
-<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/matakuliah_dashboard.css') }}">
+<link rel="stylesheet" href="{{ asset('resources/movejs/matakuliah_dashboard.css') }}">
 
 @section('contentadmin')
     <div class="head-title">

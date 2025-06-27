@@ -29,9 +29,9 @@
 
     <!-- Scripts -->
 
-    {{-- <script src="{{ asset('aspect-legend.js') }}"></script>
-<script src="{{ asset('aspect-analysis-integrated.js') }}"></script> --}}
-    {{-- <script src="{{ asset('spiderweb-chart-script.js') }}"></script> --}}
+    {{-- <script src="{{ asset('resource/movejs/aspect-legend.js') }}"></script>
+<script src="{{ asset('resource/movejs/aspect-analysis-integrated.js') }}"></script> --}}
+    {{-- <script src="{{ asset('resource/movejs/spiderweb-chart-script.js') }}"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -525,7 +525,7 @@
         </div>
     </div>
 
-    <script src="{{ asset('inovasi/dashboard/form_katsinov/js/form.js') }}"></script>
+    <script src="{{ asset('resource/movejs/form.js') }}"></script>
     {{-- <script>
     // Check if the URL contains a print parameter and trigger printing if it does
     document.addEventListener('DOMContentLoaded', function() {

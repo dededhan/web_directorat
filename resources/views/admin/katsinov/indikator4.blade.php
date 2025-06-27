@@ -536,5 +536,5 @@
         </div>
     </div>
 </div>
-<script src="{{ asset('indikator.js') }}"></script>
+<script src="{{ asset('resources/movejs/indikator.js') }}"></script>
 

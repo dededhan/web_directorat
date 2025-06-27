@@ -1,0 +1,139 @@
+/* Document Management Styling */
+.table-data {
+    margin-top: 24px;
+}
+
+.order {
+    background: #fff;
+    padding: 24px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 24px;
+}
+
+.head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.head h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #342E37;
+}
+
+/* Form Styling */
+.form-control:focus, 
+.form-select:focus {
+    border-color: #3498db;
+    box-shadow: none;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.form-text {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+/* Button Styling */
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-group {
+    display: flex;
+    gap: 5px;
+}
+
+/* Table Styling */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.table th {
+    white-space: nowrap;
+    font-weight: 600;
+    color: #342E37;
+    border-bottom: 2px solid #dee2e6;
+    padding: 12px;
+}
+
+.table td {
+    padding: 12px;
+    vertical-align: middle;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Badge Styling */
+.badge {
+    font-size: 0.7em;
+    padding: 6px 10px;
+    border-radius: 50px;
+}
+
+.badge.bg-danger {
+    background-color: #dc3545 !important;
+}
+
+.badge.bg-primary {
+    background-color: #3498db !important;
+}
+
+/* File Upload Styling */
+input[type="file"] {
+    padding: 8px;
+    line-height: 1.5;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .order {
+        padding: 16px;
+    }
+    
+    .table td, .table th {
+        padding: 8px;
+    }
+    
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    .btn-group .btn {
+        margin-bottom: 5px;
+        width: 100%;
+    }
+}

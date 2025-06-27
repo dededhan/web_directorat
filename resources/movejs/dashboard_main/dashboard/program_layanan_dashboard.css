@@ -1,0 +1,135 @@
+.char-count {
+    font-size: 0.8rem;
+    color: #6c757d;
+    text-align: right;
+}
+
+.text-warning {
+    color: #ffc107 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+/* Add a transition for smooth color changes */
+.char-count {
+    transition: color 0.3s ease;
+}
+
+/* CKEditor content styles when approaching limit */
+.ck.ck-editor__editable.ck-content.char-limit-warning {
+    border-color: #ffc107 !important;
+}
+
+.ck.ck-editor__editable.ck-content.char-limit-exceeded {
+    border-color: #dc3545 !important;
+}
+
+.table-data {
+    margin-top: 24px;
+}
+
+.order {
+    background: #fff;
+    padding: 24px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #3498db;
+    box-shadow: none;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.badge {
+    font-size: 0.7em;
+}
+
+.btn-group {
+    display: flex;
+    gap: 5px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.table th {
+    white-space: nowrap;
+}
+
+/* Custom styles for CKEditor */
+.ck-editor__editable {
+    min-height: 150px;
+}
+
+/* Alert styling */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+/* Responsive styles for smaller screens */
+.search-container {
+    width: 300px;
+}
+
+/* Icon colors and sizing */
+.fa-graduation-cap {
+    color: #4e73df;
+}
+.fa-book {
+    color: #1cc88a;
+}
+.fa-money-bill-wave {
+    color: #36b9cc;
+}
+.fa-certificate {
+    color: #f6c23e;
+}
+.fa-hands-helping,
+.fa-handshake {
+    color: #e74a3b;
+}
+.fa-users {
+    color: #fd7e14;
+}
+.fa-building,
+.fa-university {
+    color: #6f42c1;
+}
+.fa-chart-line {
+    color: #20c997;
+}
+.fa-lg {
+    font-size: 1.5em;
+}

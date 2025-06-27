@@ -950,9 +950,9 @@
     @include('layout.footer')
 
     <!-- Load mobile.js EARLIER to ensure it runs before other scripts -->
-    <script src="{{ asset('mobile.js') }}"></script>
-    <script src="{{ asset('js/instagram-api-feed.js') }}"></script>
-    <script src="{{ asset('home.js') }}"></script>
+    <script src="{{ asset('resources/movejs/mobile.js') }}"></script>
+    <script src="{{ asset('resources/movejs/instagram-api-feed.js') }}"></script>
+    <script src="{{ asset('resources/movejs/home.js') }}"></script>
 
     <script>
         // Enhanced mobile.js - Complete implementation

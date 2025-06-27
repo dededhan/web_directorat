@@ -136,5 +136,5 @@
     </div>
 
 
-    <script src="{{ asset('admin/document.js') }}"></script>
+    <script src="{{ asset('resources/movejs/document.js') }}"></script>
 @endsection
