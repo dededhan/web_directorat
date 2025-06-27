@@ -49,7 +49,7 @@ class RespondenImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
             'phone_responden' => $row['phone_responden'] ?? null,
             'nama_dosen_pengusul' => $row['nama_dosen_pengusul'],
             'phone_dosen' => $row['phone_dosen'],
-            'fakultas' => $row['fakultas'],
+           'fakultas' => strtolower($row['fakultas']), 
             'category' => $row['category'],
             'status' => 'belum'
         ]);
