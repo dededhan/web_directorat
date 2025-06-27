@@ -81,7 +81,7 @@ class BeritaController extends Controller
                 );
                 
                 // Security: Sanitize rich text and title inputs to prevent XSS attacks.
-                $cleanJudul = Purifier::clean($request->judul_berita);
+                $cleanJudul = strip_tags($request->judul_berita);
                 $cleanIsi = Purifier::clean($request->isi_berita);
 
                 // Robustness: Create a unique slug from the title for clean URLs and reliable lookup.
