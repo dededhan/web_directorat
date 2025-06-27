@@ -118,13 +118,20 @@ Route::prefix('admin')->name('admin.')
             ->name('responden.exportCSV');
 
 
-        Route::resource('/manageuser', UserController::class);
-        Route::put('/manageuser/{user}', [UserController::class, 'update'])
-            ->name('manageuser.update');
+        // Route::resource('/manageuser', UserController::class);
+        // Route::put('/manageuser/{user}', [UserController::class, 'update'])
+        //     ->name('manageuser.update');
 
-        Route::delete('/manageuser/{user}', [UserController::class, 'destroy'])
-            ->name('manageuser.destroy');
+        // Route::delete('/manageuser/{user}', [UserController::class, 'destroy'])
+        //     ->name('manageuser.destroy');
 
+        // Route::put('/manageuser/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('manageuser.toggleStatus');
+
+        Route::resource('/manageuser', UserController::class)->parameters([
+            'manageuser' => 'user'
+        ]);
+
+        // This route for toggling status is separate and is correct.
         Route::put('/manageuser/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('manageuser.toggleStatus');
 
         Route::resource('/sustainability', AdminSustainabilityController::class);
