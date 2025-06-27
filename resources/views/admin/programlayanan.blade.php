@@ -2,9 +2,12 @@
 
 <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/program_layanan_dashboard.css') }}">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"> -->
 
 @section('contentadmin')
+@vite([
+        'resources/css/admin/program_layanan_dashboard.css'
+    ])
     <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

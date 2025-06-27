@@ -1,6 +1,16 @@
 @extends('admin.admin')
-<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/alumniberdampak_dashboard.css') }}">
+
+{{-- Link CSS lama dipindahkan ke dalam Vite --}}
+{{-- <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/alumniberdampak_dashboard.css') }}"> --}}
+
 @section('contentadmin')
+    {{-- Awal: Perubahan untuk Vite --}}
+    @vite([
+        'resources/css/admin/alumniberdampak_dashboard.css',
+        'resources/js/admin/alumniberdampak_dashboard.js'
+    ])
+    {{-- Akhir: Perubahan untuk Vite --}}
+
     <div class="head-title">
         <div class="left">
             <h1>Alumni Berdampak</h1>
@@ -16,7 +26,6 @@
         </div>
     </div>
 
-    <!-- Alert Messages -->
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -256,14 +265,15 @@
         </div>
     </div>
 
-    <!-- Include jQuery if not already included -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
-    <!-- Include Bootstrap JS and SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('dashboard_main/dashboard/alumniberdampak_dashboard.js') }}"></script>
+    
+    {{-- Script lama dikomentari karena sudah dihandle Vite --}}
+    {{-- <script src="{{ asset('dashboard_main/dashboard/alumniberdampak_dashboard.js') }}"></script> --}}
 
+    {{-- Script inline bisa tetap di sini --}}
     <script>
         // Program studi options
         const prodiOptions = {
@@ -311,12 +321,6 @@
                 document.getElementById('edit_tanggal_berita').value = this.dataset.tanggal;
                 document.getElementById('edit_fakultas').value = this.dataset.fakultas;
                 document.getElementById('edit_link_berita').value = this.dataset.link;
-                
-                // Enable and populate prodi
-                // const editProdiSelect = document.getElementById('edit_prodi');
-                // editProdiSelect.disabled = false;
-                // updateProdiOptions(this.dataset.fakultas, editProdiSelect);
-                // editProdiSelect.value = this.dataset.prodi;
                 
                 // Set form action
                 document.getElementById('edit-alumni-form').action = `/admin/alumniberdampak/${alumniId}`;
@@ -367,9 +371,6 @@
         }
     </script>
     <script>
-        // Program studi for each fakultas based on the sustainability_dashboard.js data
-        
-
         // Display SweetAlert for flash messages
         document.addEventListener('DOMContentLoaded', function() {
             @if(session('success'))
@@ -391,8 +392,4 @@
             @endif
         });
     </script>
-
-    <style>
-        
-    </style>
 @endsection

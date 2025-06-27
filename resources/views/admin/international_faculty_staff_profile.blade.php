@@ -1,8 +1,14 @@
 @extends('admin.admin')
 
-<link rel="stylesheet" href="{{ asset('resources/movejs/matakuliah_dashboard.css') }}">
+<!-- <link rel="stylesheet" href="{{ asset('resources/movejs/matakuliah_dashboard.css') }}"> -->
 
 @section('contentadmin')
+
+    {{-- Awal: Perubahan untuk Vite --}}
+    @vite([
+        'resources/admin/matakuliah_dashboard.css'
+    ])
+    {{-- Akhir: Perubahan untuk Vite --}}
     <div class="head-title">
         <div class="left">
             <h1>International Faculty Staff Profile</h1>

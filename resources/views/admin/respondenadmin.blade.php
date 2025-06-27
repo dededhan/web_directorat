@@ -1,6 +1,9 @@
 @extends('admin.admin')
 
-<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/responden_dashboard.css') }}">
+<!-- <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/responden_dashboard.css') }}"> -->
+@vite([
+        'resources/css/admin/responden_dashboard.css'
+    ])
 
 @section('contentadmin')
     <div class="head-title">

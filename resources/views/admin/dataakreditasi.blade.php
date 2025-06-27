@@ -1,9 +1,17 @@
 @extends('admin.admin')
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/akreditasi_dashboard.css') }}">
+<!-- <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/akreditasi_dashboard.css') }}"> -->
 
 @section('contentadmin')
+
+{{-- Awal: Perubahan untuk Vite --}}
+    @vite([
+        'resources/css/admin/akreditasi_dashboard.css',
+        'resources/js/admin/akreditasi_dashboard.js'
+    ])
+    {{-- Akhir: Perubahan untuk Vite --}}
+
     <div class="head-title">
         <div class="left">
             <h1>Data Akreditasi</h1>
@@ -354,6 +362,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Include akreditasi_dashboard.js for fakultas & prodi dropdown logic and other functionality -->
-    <script src="{{ asset('resources/movejs/akreditasi_dashboard.js') }}"></script>
+    <!-- <script src="{{ asset('resources/movejs/akreditasi_dashboard.js') }}"></script> -->
 
  @endsection   

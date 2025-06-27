@@ -4,6 +4,11 @@
 <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/berita_dashboard.css') }}">
 
 @section('contentadmin')
+{{-- Awal: Perubahan untuk Vite --}}
+    @vite([
+        'resources/css/admin/berita_dashboard.css'
+    ])
+    {{-- Akhir: Perubahan untuk Vite --}}
     <div class="head-title">
         <div class="left">
             <h1>Gallery</h1>
