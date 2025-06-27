@@ -102,7 +102,7 @@
                             <option value="fpsi">FPsi</option>
                             <option value="fbs">FBS</option>
                             <option value="ft">FT</option>
-                            <option value="fik">FIKK</option>
+                            <option value="fikk">FIKK</option>
                             <option value="fish">FISH</option>
                             <option value="feb">FEB</option>
                             <option value="profesi">PROFESI</option>
@@ -149,7 +149,8 @@
                                         <option value="fpsi" {{ request('fakultas') == 'fpsi' ? 'selected' : '' }}>FPsi</option>
                                         <option value="fbs" {{ request('fakultas') == 'fbs' ? 'selected' : '' }}>FBS</option>
                                         <option value="ft" {{ request('fakultas') == 'ft' ? 'selected' : '' }}>FT</option>
-                                        <option value="fik" {{ request('fakultas') == 'fik' ? 'selected' : '' }}>FIKK</option>
+                                        <option value="fikk" {{ strtolower(request('fakultas')) == 'fikk' ? 'selected' : '' }}>FIKK</option>
+
                                         <option value="fish" {{ request('fakultas') == 'fish' ? 'selected' : '' }}>FISH</option>
                                         <option value="feb" {{ request('fakultas') == 'feb' ? 'selected' : '' }}>FEB</option>
                                         <option value="profesi" {{ request('fakultas') == 'profesi' ? 'selected' : '' }}>PROFESI</option>
@@ -224,7 +225,7 @@
                                     <td>{{ $responden->phone_responden }}</td>
                                     <td>{{ $responden->nama_dosen_pengusul }}</td>
                                     <td>{{ $responden->phone_dosen }}</td>
-                                    <td>{{ $responden->fakultas }}</td>
+                                    <td>{{ strtoupper($responden->fakultas) }}</td>
                                     <td>{{ $responden->category }}</td>
                                     <td>
                                         <select class="form-select status-dropdown" data-id="{{ $responden->id }}"
@@ -324,7 +325,7 @@
                             <option value="fpsi">FPsi</option>
                             <option value="fbs">FBS</option>
                             <option value="ft">FT</option>
-                            <option value="fik">FIKK</option>
+                            <option value="fikk">FIKK</option>
                             <option value="fish">FISH</option>
                             <option value="feb">FEB</option>
                             <option value="profesi">PROFESI</option>
