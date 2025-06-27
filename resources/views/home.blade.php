@@ -17,10 +17,8 @@
 
     @vite([
         'resources/css/home.css',
-        'resources/css/header-carousel.css',
         'resources/css/mobile.css',
         'resources/js/home.js',
-        'resources/js/header-carousel.js',
         'resources/js/mobile.js',
         'resources/js/instagram-api-feed.js',
     ])
