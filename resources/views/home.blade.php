@@ -9,7 +9,11 @@
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-    @vite(['resources/css/home.css', 'resources/css/header-carousel.css', 'resources/css/mobile.css'])
+    <link rel="stylesheet" href="{{ asset('home.css') }}">
+    <link rel="stylesheet" href="{{ asset('header-carousel.css') }}">
+    <!-- Load mobile.css first to ensure its styles take precedence -->
+    <link rel="stylesheet" href="{{ asset('mobile.css') }}">
+    <script src="{{ asset('header-carousel.js') }}"></script>
 
     <!-- CRITICAL MOBILE DETECTION SCRIPT - Add right after stylesheets -->
     <script>
@@ -289,7 +293,6 @@
             }
         })();
     </script>
-    @vite(['resources/js/home.js', 'resources/js/mobile.js', 'resources/js/header-carousel.js', 'resources/js/instagram-api-feed.js'])
 
     @include('layout.navbar')
 
@@ -947,7 +950,9 @@
     @include('layout.footer')
 
     <!-- Load mobile.js EARLIER to ensure it runs before other scripts -->
-
+    <script src="{{ asset('mobile.js') }}"></script>
+    <script src="{{ asset('js/instagram-api-feed.js') }}"></script>
+    <script src="{{ asset('home.js') }}"></script>
 
     <script>
         // Enhanced mobile.js - Complete implementation
