@@ -9,23 +9,17 @@
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ asset('home.css') }}">
-    <link rel="stylesheet" href="{{ asset('header-carousel.css') }}">
-    <!-- Load mobile.css first to ensure its styles take precedence -->
-    <link rel="stylesheet" href="{{ asset('mobile.css') }}">
-    <script src="{{ asset('header-carousel.js') }}"></script>
 
-    <!-- CRITICAL MOBILE DETECTION SCRIPT - Add right after stylesheets -->
+        @vite([
+        'resources/css/home.css',
+        'resources/css/header-carousel.css',
+        'resources/css/mobile.css'
+    ])
     <script>
-        // Critical fix for sidebar and overlay
         (function() {
-            // Run after DOM is fully loaded
             document.addEventListener('DOMContentLoaded', function() {
-                // Get key elements
                 const mobileSidebar = document.getElementById('mobile-sidebar');
                 const sidebarOverlay = document.getElementById('sidebar-overlay');
-
-                // Fix sidebar initial state
                 if (mobileSidebar) {
                     mobileSidebar.style.transform = 'translateX(100%)';
                 }
@@ -280,7 +274,11 @@
 </head>
 
 <body class="font-sans bg-gray-100">
-    <!-- EARLY INIT SCRIPT - Forces mobile detection before content loads -->
+        @vite([
+        'resources/js/home.js',
+        'resources/js/mobile.js',
+        'resources/js/header-carousel.js'
+    ])
     <script>
         (function() {
             // Immediately check if we're on mobile and set appropriate classes
