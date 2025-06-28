@@ -1,12 +1,11 @@
 @extends('admin.admin')
 
-{{-- <link rel="stylesheet" href="{{ asset('dashboard_main/document_dashboard.css') }}"> --}}
 
 @section('contentadmin')
     {{-- Awal: Perubahan untuk Vite --}}
     @vite([
         'resources/css/admin/document_dashboard.css',
-        'resources/js/admin/document.js'
+        'resources/js/document/document.js'
     ])
     {{-- Akhir: Perubahan untuk Vite --}}
 

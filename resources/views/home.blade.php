@@ -474,7 +474,7 @@
                             <div class="mt-4 pt-3 border-t border-gray-100">
                                 @if (!empty($program->url))
                                     <a href="{{ $program->url }}" target="_blank" rel="noopener noreferrer"
-                                    class="login w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-2 md:py-3 px-4 md:px-6 rounded-lg font-semibold text-sm md:text-base inline-block hover:from-teal-700 hover:to-teal-600">
+                                    class="w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-2 md:py-3 px-4 md:px-6 rounded-lg font-semibold text-sm md:text-base inline-block hover:from-teal-700 hover:to-teal-600">
                                         Akses Program
                                     </a>
                                 @else
@@ -540,7 +540,7 @@
                                                         @if (!empty($program->url))
                                                             <a href="{{ $program->url }}" target="_blank" rel="noopener noreferrer"
                                                             class="w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-2 md:py-3 px-4 md:px-6 rounded-lg font-semibold text-sm md:text-base inline-block hover:from-teal-700 hover:to-teal-600">
-                                                                Akses Program
+                                                                Akses URL
                                                             </a>
                                                         @else
                                                             <button type="button"

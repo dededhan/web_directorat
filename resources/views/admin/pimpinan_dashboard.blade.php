@@ -1,8 +1,6 @@
 @extends('admin.admin')
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/berita_dashboard.css') }}">
-<link rel="stylesheet" href="{{ asset('css/ckeditor-content.css') }}"> -->
 
 <style>
 
@@ -10,7 +8,7 @@
 
 @section('contentadmin')
  @vite([
-        'resources/css/admin/dashboard/berita_dashboard.css',
+        'resources/css/admin/berita_dashboard.css',
         'resources/css/admin/ckeditor-content.css'
     ])
     {{-- Akhir: Perubahan untuk Vite --}}
