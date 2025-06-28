@@ -13,6 +13,7 @@ class ProgramLayanan extends Model
         'icon',
         'image', 
         'judul', 
+        'url',
         'deskripsi',
         'status',
         'kategori'
