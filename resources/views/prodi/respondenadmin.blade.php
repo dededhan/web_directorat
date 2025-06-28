@@ -1,12 +1,14 @@
 @extends('prodi.index')
-<link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/responden_dashboard.css') }}">
+@vite([
+        'resources/css/admin/responden_dashboard.css'
+    ])
 @section('contentprodi')
     <div class="head-title">
         <div class="left">
             <h1>Responden</h1>
             <ul class="breadcrumb">
                 <li>
-                    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+                    <a href="{{ route('prodi.dashboard') }}">Dashboard</a>
                 </li>
                 <li><i class='bx bx-chevron-right'></i></li>
                 <li>
@@ -22,7 +24,7 @@
                 <h3>Responden Survey Input</h3>
             </div>
 
-            <form id="survey-form" method="POST" action="{{ route('admin.responden.store') }}">
+            <form id="survey-form" method="POST" action="{{ route('prodi.responden.store') }}">
                 @csrf
                 <div class="row">
                     <div class="col-md-4 mb-3">
@@ -97,7 +99,7 @@
                             <option value="fpsi">FPsi</option>
                             <option value="fbs">FBS</option>
                             <option value="ft">FT</option>
-                            <option value="fik">FIKK</option>
+                            <option value="fikk">FIKK</option>
                             <option value="fish">FISH</option>
                             <option value="feb">FEB</option>
                             <option value="profesi">PROFESI</option>
@@ -126,7 +128,7 @@
                 <div class="head">
                     <h3>Daftar Responden</h3>
                     <div class="d-flex justify-content-end align-items-center">
-                        <form method="GET" action="{{ route('admin.responden.index') }}" class="me-3">
+                        <form method="GET" action="{{ route('prodi.responden.index') }}" class="me-3">
                             <div class="row g-2 align-items-center">
                                 <div class="col-auto">
                                     <select class="form-select" name="kategori" id="filterKategori">
@@ -144,7 +146,8 @@
                                         <option value="fpsi" {{ request('fakultas') == 'fpsi' ? 'selected' : '' }}>FPsi</option>
                                         <option value="fbs" {{ request('fakultas') == 'fbs' ? 'selected' : '' }}>FBS</option>
                                         <option value="ft" {{ request('fakultas') == 'ft' ? 'selected' : '' }}>FT</option>
-                                        <option value="fik" {{ request('fakultas') == 'fik' ? 'selected' : '' }}>FIKK</option>
+                                        <option value="fikk" {{ strtolower(request('fakultas')) == 'fikk' ? 'selected' : '' }}>FIKK</option>
+
                                         <option value="fish" {{ request('fakultas') == 'fish' ? 'selected' : '' }}>FISH</option>
                                         <option value="feb" {{ request('fakultas') == 'feb' ? 'selected' : '' }}>FEB</option>
                                         <option value="profesi" {{ request('fakultas') == 'profesi' ? 'selected' : '' }}>PROFESI</option>
@@ -152,7 +155,7 @@
                                 </div>
                                 <div class="col-auto">
                                     <button type="submit" class="btn btn-primary">Filter</button>
-                                    <a href="{{ route('admin.responden.index') }}" class="btn btn-secondary">Reset</a>
+                                    <a href="{{ route('prodi.responden.index') }}" class="btn btn-secondary">Reset</a>
                                 </div>
                             </div>
                         </form>
@@ -204,23 +207,25 @@
                                     </a>
                                 </th>
                                 <th>Status</th>
+                                <th>Action</th>
 
                             </tr>
                         </thead>
                         <tbody id="respondent-list">
                             @forelse($respondens as $i => $responden)
-                                <tr>
+                                {{-- ADD THE ID TO THE TR ELEMENT AND CLASSES TO THE TD ELEMENTS --}}
+                                <tr id="responden-row-{{ $responden->id }}">
                                     <td>{{ $respondens->firstItem() + $i }}</td>
-                                    <td>{{ Str::ucfirst($responden->title) }}</td>
-                                    <td>{{ $responden->fullname }}</td>
-                                    <td>{{ $responden->jabatan }}</td>
-                                    <td>{{ $responden->instansi }}</td>
-                                    <td>{{ $responden->email }}</td>
-                                    <td>{{ $responden->phone_responden }}</td>
-                                    <td>{{ $responden->nama_dosen_pengusul }}</td>
-                                    <td>{{ $responden->phone_dosen }}</td>
-                                    <td>{{ $responden->fakultas }}</td>
-                                    <td>{{ $responden->category }}</td>
+                                    <td class="responden-title">{{ Str::ucfirst($responden->title) }}</td>
+                                    <td class="responden-fullname">{{ $responden->fullname }}</td>
+                                    <td class="responden-jabatan">{{ $responden->jabatan }}</td>
+                                    <td class="responden-instansi">{{ $responden->instansi }}</td>
+                                    <td class="responden-email">{{ $responden->email }}</td>
+                                    <td class="responden-phone_responden">{{ $responden->phone_responden }}</td>
+                                    <td class="responden-nama_dosen_pengusul">{{ $responden->nama_dosen_pengusul }}</td>
+                                    <td class="responden-phone_dosen">{{ $responden->phone_dosen }}</td>
+                                    <td class="responden-fakultas">{{ strtoupper($responden->fakultas) }}</td>
+                                    <td class="responden-category">{{ $responden->category }}</td>
                                     <td>
                                         <select class="form-select status-dropdown" data-id="{{ $responden->id }}"
                                             {{ $responden->status == 'dones' ? 'disabled' : '' }}>
@@ -235,13 +240,22 @@
                                             @endif
                                         </select>
                                     </td>
-
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-warning btn-sm edit-btn" data-id="{{ $responden->id }}" data-bs-toggle="modal" data-bs-target="#editRespondenModal">
+                                                <i class='bx bxs-edit'></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="{{ $responden->id }}">
+                                                <i class='bx bxs-trash'></i>
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                             @empty
-                                <span>Data Belum Ada</span>
+                                <tr>
+                                    <td colspan="13" class="text-center">Data Belum Ada</td>
+                                </tr>
                             @endforelse
-                            <!-- Pagination -->
-                            
                         </tbody>
                     </table>
                     <div class="custom-pagination d-flex justify-content-end mt-3">
@@ -253,7 +267,99 @@
             </div>
         </div>
     </div>
+{{-- MODAL EDIT --}}
+    <div class="modal fade" id="editRespondenModal" tabindex="-1" aria-labelledby="editRespondenModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editRespondenModalLabel">Edit Responden</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="edit-survey-form" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="edit_title" class="form-label">Mr/Mrs/Ms</label>
+                                <select class="form-select" name="title" id="edit_title" required>
+                                    <option value="mr">Mr.</option>
+                                    <option value="mrs">Mrs.</option>
+                                    <option value="ms">Ms.</option>
+                                </select>
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <label for="edit_fullname" class="form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control" name="fullname" id="edit_fullname" required>
+                            </div>
+                        </div>
 
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_jabatan" class="form-label">Jabatan</label>
+                                <input type="text" class="form-control" name="jabatan" id="edit_jabatan" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_instansi" class="form-label">Instansi</label>
+                                <input type="text" class="form-control" name="instansi" id="edit_instansi" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_email" class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" id="edit_email" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_phone_responden" class="form-label">Nomor Responden</label>
+                                <input type="text" class="form-control" name="phone_responden" id="edit_phone_responden">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_nama_dosen_pengusul" class="form-label">Nama Dosen</label>
+                                <input type="text" class="form-control" name="nama_dosen_pengusul" id="edit_nama_dosen_pengusul" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_phone_dosen" class="form-label">Nomor Narahubung</label>
+                                <input type="text" class="form-control" name="phone_dosen" id="edit_phone_dosen" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_fakultas" class="form-label">Fakultas Narahubung</label>
+                                <select class="form-select" name="fakultas" id="edit_fakultas" required>
+                                    <option value="pascasarjana">PASCASARJANA</option>
+                                    <option value="fip">FIP</option>
+                                    <option value="fmipa">FMIPA</option>
+                                    <option value="fpsi">FPsi</option>
+                                    <option value="fbs">FBS</option>
+                                    <option value="ft">FT</option>
+                                    <option value="fikk">FIKK</option>
+                                    <option value="fish">FISH</option>
+                                    <option value="feb">FEB</option>
+                                    <option value="profesi">PROFESI</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_category" class="form-label">Tipe Responden</label>
+                                <select class="form-select" name="category" id="edit_category" required>
+                                    <option value="academic">Academic</option>
+                                    <option value="employer">Employer</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <!-- Import Excel Modal -->
     <div class="modal fade pt-3" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
         <div class="modal-dialog pt-3">
@@ -262,7 +368,7 @@
                     <h5 class="modal-title" id="importModalLabel">Import Responden from Excel</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="importForm" action="{{ route('admin.responden.import') }}" method="POST"
+                <form id="importForm" action="{{ route('prodi.responden.import') }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
@@ -319,7 +425,7 @@
                             <option value="fpsi">FPsi</option>
                             <option value="fbs">FBS</option>
                             <option value="ft">FT</option>
-                            <option value="fik">FIKK</option>
+                            <option value="fikk">FIKK</option>
                             <option value="fish">FISH</option>
                             <option value="feb">FEB</option>
                             <option value="profesi">PROFESI</option>
@@ -336,6 +442,129 @@
     </div>
 
     <script>
+        // edit delete 
+    document.addEventListener('DOMContentLoaded', function() {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const routePrefix = "{{ $routePrefix ?? 'admin' }}";
+
+            // Handle Edit button click
+            document.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const respondenId = this.dataset.id;
+                    const url = `/${routePrefix}/responden/${respondenId}/edit`;
+                    
+                    axios.get(url)
+                        .then(response => {
+                            const responden = response.data;
+                            const form = document.getElementById('edit-survey-form');
+                            
+                            form.action = `/${routePrefix}/responden/${respondenId}`;
+                            
+                            form.querySelector('#edit_title').value = responden.title;
+                            form.querySelector('#edit_fullname').value = responden.fullname;
+                            form.querySelector('#edit_jabatan').value = responden.jabatan;
+                            form.querySelector('#edit_instansi').value = responden.instansi;
+                            form.querySelector('#edit_email').value = responden.email;
+                            form.querySelector('#edit_phone_responden').value = responden.phone_responden;
+                            form.querySelector('#edit_nama_dosen_pengusul').value = responden.nama_dosen_pengusul;
+                            form.querySelector('#edit_phone_dosen').value = responden.phone_dosen;
+                            form.querySelector('#edit_fakultas').value = responden.fakultas;
+                            form.querySelector('#edit_category').value = responden.category;
+                        })
+                        .catch(error => {
+                             Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal Memuat Data',
+                                text: 'Tidak dapat memuat data untuk diedit.',
+                            });
+                            console.error('Error fetching responden data:', error);
+                        });
+                });
+            });
+
+            // Handle Edit form submission
+            document.getElementById('edit-survey-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const form = e.target;
+                const url = form.action;
+                const formData = new FormData(form);
+
+                axios.post(url, formData)
+                    .then(response => {
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('editRespondenModal'));
+                        modal.hide();
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: response.data.message,
+                        });
+                        
+                        // Update table row with new data
+                        const updatedData = response.data.data;
+                        const row = document.getElementById(`responden-row-${updatedData.id}`);
+                        if(row) {
+                            row.querySelector('.responden-title').textContent = updatedData.title.charAt(0).toUpperCase() + updatedData.title.slice(1);
+                            row.querySelector('.responden-fullname').textContent = updatedData.fullname;
+                            row.querySelector('.responden-jabatan').textContent = updatedData.jabatan;
+                            row.querySelector('.responden-instansi').textContent = updatedData.instansi;
+                            row.querySelector('.responden-email').textContent = updatedData.email;
+                            row.querySelector('.responden-phone_responden').textContent = updatedData.phone_responden;
+                            row.querySelector('.responden-nama_dosen_pengusul').textContent = updatedData.nama_dosen_pengusul;
+                            row.querySelector('.responden-phone_dosen').textContent = updatedData.phone_dosen;
+                            row.querySelector('.responden-fakultas').textContent = updatedData.prodi.toUpperCase();
+                            row.querySelector('.responden-category').textContent = updatedData.category;
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: error.response?.data?.message || 'Terjadi kesalahan saat memperbarui data.',
+                        });
+                        console.error('Error updating responden:', error);
+                    });
+            });
+
+            // Handle Delete button click
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const respondenId = this.dataset.id;
+                    const url = `/${routePrefix}/responden/${respondenId}`;
+
+                    Swal.fire({
+                        title: 'Anda yakin?',
+                        text: "Data yang dihapus tidak dapat dikembalikan!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            axios.delete(url, { headers: { 'X-CSRF-TOKEN': csrfToken } })
+                                .then(response => {
+                                    Swal.fire(
+                                        'Dihapus!',
+                                        'Data responden berhasil dihapus.',
+                                        'success'
+                                    );
+                                    document.getElementById(`responden-row-${respondenId}`).remove();
+                                })
+                                .catch(error => {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Gagal!',
+                                        text: error.response?.data?.message || 'Terjadi kesalahan saat menghapus data.',
+                                    });
+                                    console.error('Error deleting responden:', error);
+                                });
+                        }
+                    });
+                });
+            });
+
         // Import form submission
         document.getElementById('importForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -391,6 +620,7 @@
                 row.style.display = emailMatch && phoneMatch ? '' : 'none';
             });
         }
+    }); 
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -400,7 +630,7 @@
                 const category = document.getElementById('filterCategory').value;
                 const fakultas = document.getElementById('filterFakultas').value;
                 
-                let url = '{{ route("admin.responden.export") }}?';
+                let url = '{{ route("prodi.responden.export") }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
                 if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
@@ -414,7 +644,7 @@
                 const category = document.getElementById('filterCategory').value;
                 const fakultas = document.getElementById('filterFakultas').value;
                 
-                let url = '{{ route("admin.responden.exportCSV") }}?';
+                let url = '{{ route("prodi.responden.exportCSV") }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
                 if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
