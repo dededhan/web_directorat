@@ -12,7 +12,7 @@
         'resources/css/admin/admin.css',
         'resources/css/admin/sidebar_dashboardadmin.css',
         'resources/css/admin/navbar_dashboard.css',
-        'resources/css/scrollbar-fix.css',
+        'resources/css/admin/scrollbar-fix.css',
         'resources/js/app.js',  
         'resources/js/admin/admin.js' 
     ])

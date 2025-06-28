@@ -1,5 +1,5 @@
 @vite([
-        'resources/css/sidebar_dashboardadmin.css'
+        'resources/css/admin/sidebar_dashboardadmin.css'
     ])
 <!-- SIDEBAR -->
 <section id="sidebar">

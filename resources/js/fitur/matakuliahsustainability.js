@@ -82,22 +82,6 @@
             });
         }
 
-        function updateYearChart() {
-            const selectedYear = document.getElementById('year-select').value;
-            const data = yearData[selectedYear];
-            const titleElement = document.getElementById('year-chart-title');
-            titleElement.textContent = `Progress Mata Kuliah Sustainability Tahun ${selectedYear}`;
-            createChart('year-chart', 'year-labels', data, sdgGoals);
-        }
-
-        function updateFacultyChart() {
-            const selectedFaculty = document.getElementById('faculty-select').value;
-            const data = facultyData[selectedFaculty];
-            const titleElement = document.getElementById('faculty-chart-title');
-            titleElement.textContent = `Progress Mata Kuliah Sustainability ${facultyNames[selectedFaculty]}`;
-            createChart('faculty-chart', 'faculty-labels', data, sdgGoals);
-        }
-
         // Initialize charts
         document.addEventListener('DOMContentLoaded', function() {
             updateYearChart();

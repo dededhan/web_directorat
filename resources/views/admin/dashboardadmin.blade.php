@@ -7,7 +7,7 @@
     {{-- Awal: Perubahan untuk Vite --}}
     @vite([
         'resources/css/admin/dashboard_admin.css',
-        'resources/js/admin/dashboard_admin.js' {{-- Path disesuaikan untuk Vite dan typo diperbaiki --}}
+        'resources/js/admin/dashboard_admin.js'
     ])
     {{-- Akhir: Perubahan untuk Vite --}}
 
