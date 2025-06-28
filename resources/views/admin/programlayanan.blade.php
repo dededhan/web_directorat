@@ -2,8 +2,6 @@
 
 <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/program_layanan_dashboard.css') }}">
 
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"> -->
-
 @section('contentadmin')
 @vite([
         'resources/css/admin/program_layanan_dashboard.css'
@@ -34,7 +32,6 @@
             <form id="layanan-form" action="{{ route($routePrefix . '.program-layanan.store') }}" method="POST"
                 enctype="multipart/form-data">
                 @csrf
-                <!-- Add this to your form -->
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="kategori" class="form-label">Kategori</label>
@@ -59,7 +56,6 @@
                         @enderror
                         <div class="form-text text-muted">Unggah gambar yang mewakili program layanan (max 2MB)</div>
 
-                        <!-- Untuk preview gambar saat edit -->
                         @if (isset($program) && $program->image)
                             <div class="mt-2">
                                 <img src="{{ asset('storage/' . $program->image) }}" alt="Preview"
@@ -75,6 +71,15 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <div class="form-text text-muted">Masukkan judul program layanan (maksimal 50 karakter)</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="url" class="form-label">URL (Opsional)</label>
+                        <input type="url" class="form-control @error('url') is-invalid @enderror" name="url"
+                            id="url" value="{{ old('url') }}" placeholder="https://example.com">
+                        @error('url')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <div class="form-text text-muted">Masukkan URL eksternal jika program memiliki tautan khusus.</div>
                     </div>
                 </div>
 
@@ -165,7 +170,6 @@
         </div>
     </div>
 
-    <!-- Modal untuk mengedit program layanan -->
     <div class="modal fade" id="editProgramModal" tabindex="-1" aria-labelledby="editProgramModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -177,7 +181,6 @@
                     <form id="editProgramForm" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        <!-- Add this to your form -->
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="kategori" class="form-label">Kategori</label>
@@ -206,6 +209,11 @@
                                 <input type="text" class="form-control" name="judul" id="edit_judul">
                                 <div class="form-text text-muted">Masukkan judul program layanan (maksimal 50 karakter)
                                 </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_url" class="form-label">URL (Opsional)</label>
+                                <input type="url" class="form-control" name="url" id="edit_url" placeholder="https://example.com">
+                                <div class="form-text text-muted">Masukkan URL eksternal jika program memiliki tautan khusus.</div>
                             </div>
                         </div>
                         <div class="row">
@@ -237,7 +245,6 @@
         </div>
     </div>
 
-    <!-- Script section -->
     <script>
         // Set global variables for use in external JS file
         const appConfig = {
@@ -416,6 +423,7 @@
                             // Populate form fields
                             document.getElementById('edit_kategori').value = data.kategori;
                             document.getElementById('edit_judul').value = data.judul;
+                            document.getElementById('edit_url').value = data.url;
                             document.getElementById('edit_status').value = data.status ? '1' : '0';
 
                             // Set CKEditor content

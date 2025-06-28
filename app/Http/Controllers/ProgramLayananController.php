@@ -97,6 +97,7 @@ class ProgramLayananController extends Controller
                 'kategori' => 'required|in:direktorat,pemeringkatan,inovasi',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'judul' => 'required|string|max:50',
+                'url' => 'nullable|url|max:255',
                 'deskripsi' => 'required|string|max:1500',
                 'status' => 'sometimes|boolean'
             ]);

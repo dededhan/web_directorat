@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <!-- UPDATED VIEWPORT META TAG - Critical for mobile display -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Universitas Negeri Jakarta - Direktorat Pemeringkatan</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
@@ -10,7 +9,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     {{-- <link rel="stylesheet" href="{{ asset('home.css') }}">
     <link rel="stylesheet" href="{{ asset('header-carousel.css') }}">
-    <!-- Load mobile.css first to ensure its styles take precedence -->
     <link rel="stylesheet" href="{{ asset('mobile.css') }}">
     <script src="{{ asset('header-carousel.js') }}"></script> --}}
 
@@ -21,7 +19,6 @@
         'resources/js/mobile.js',
         'resources/js/instagram-api-feed.js',
     ])
-    <!-- CRITICAL MOBILE DETECTION SCRIPT - Add right after stylesheets -->
     <script>
         // Critical fix for sidebar and overlay
         (function() {
@@ -286,7 +283,6 @@
 </head>
 
 <body class="font-sans bg-gray-100">
-    <!-- EARLY INIT SCRIPT - Forces mobile detection before content loads -->
     <script>
         (function() {
             // Immediately check if we're on mobile and set appropriate classes
@@ -302,10 +298,8 @@
 
     @include('layout.navbar')
 
-    <!-- Mobile detection indicator -->
     <div id="mobile-indicator" class="hidden"></div>
 
-    <!-- Header section with responsive classes -->
     <header class="relative h-screen md:h-screen">
         <img alt="Universitas Negeri Jakarta building with a sculpture in front" class="w-full h-full object-cover"
             src="https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434" />
@@ -317,7 +311,6 @@
         </div>
     </header>
 
-    <!-- Announcement bar -->
     <div class="bg-gradient-to-r from-teal-700 to-teal-800 py-3 shadow-lg">
         <div class="container mx-auto px-4 md:px-6">
             <div class="flex items-center space-x-4">
@@ -337,19 +330,15 @@
         </div>
     </div>
 
-    <!-- Berita -->
     <main class="container mx-auto py-12 px-6">
-        <!-- Section Header with better styling -->
         <div class="unj-content-section-header">
             <h2 class="unj-section-title">Berita Terbaru</h2>
             <p class="unj-section-subtitle">Informasi terkini dari Universitas Negeri Jakarta</p>
         </div>
-        <!-- Filter and View Options -->
         <div>
         </div>
 
 
-        <!-- Regular News Grid with first 3 news items -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             @if ($regularNews && $regularNews->count() > 0)
                 @foreach ($regularNews as $news)
@@ -397,7 +386,6 @@
             @endif
         </div>
 
-        <!-- Enhanced Featured News Carousel with remaining news items -->
         <div class="enhanced-carousel">
             <div class="enhanced-carousel-title">Berita Terbaru</div>
             <div class="carousel">
@@ -442,7 +430,6 @@
         </div>
     </main>
 
-    <!-- Program Section - mobile optimized -->
     <section class="program-section py-8 md:py-16 bg-gray-50">
         <div class="container mx-auto px-4 md:px-6">
             <div class="text-center mb-8 md:mb-12">
@@ -456,7 +443,6 @@
                     Sistem Informasi dan Pemeringkatan</p>
             </div>
 
-            <!-- First 3 items in grid - ADDING specific classes for matching -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-8 program-main-grid">
                 @forelse($programLayanan->take(3) as $program)
                     <div
@@ -486,10 +472,17 @@
                             </a>
 
                             <div class="mt-4 pt-3 border-t border-gray-100">
-                                <button type="button"
-                                    class="login w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-2 md:py-3 px-4 md:px-6 rounded-lg font-semibold text-sm md:text-base">
-                                    Akses Program
-                                </button>
+                                @if (!empty($program->url))
+                                    <a href="{{ $program->url }}" target="_blank" rel="noopener noreferrer"
+                                    class="login w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-2 md:py-3 px-4 md:px-6 rounded-lg font-semibold text-sm md:text-base inline-block hover:from-teal-700 hover:to-teal-600">
+                                        Akses Program
+                                    </a>
+                                @else
+                                    <button type="button"
+                                        class="login w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-2 md:py-3 px-4 md:px-6 rounded-lg font-semibold text-sm md:text-base">
+                                        Akses Program
+                                    </button>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -504,15 +497,11 @@
                 @endforelse
             </div>
 
-            <!-- Carousel for additional items (if more than 3) -->
             @if (count($programLayanan) > 3)
                 <div class="mt-8">
                     <h3 class="text-xl font-semibold text-teal-700 mb-4 text-center">Program Lainnya</h3>
-                    <!-- Container with exact same width as top grid -->
                     <div class="program-carousel-container mx-auto">
-                        <!-- Use exact same padding as the top container -->
                         <div class="program-carousel relative">
-                            <!-- Critical: set exact width to parent container -->
                             <div class="swiper-container">
                                 <div class="swiper-wrapper">
                                     @foreach ($programLayanan->skip(3) as $program)
@@ -548,10 +537,17 @@
                                                     </a>
 
                                                     <div class="mt-4 pt-3 border-t border-gray-100">
-                                                        <button type="button"
-                                                            class="login w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-2 md:py-3 px-4 md:px-6 rounded-lg font-semibold text-sm md:text-base">
-                                                            Akses Program
-                                                        </button>
+                                                        @if (!empty($program->url))
+                                                            <a href="{{ $program->url }}" target="_blank" rel="noopener noreferrer"
+                                                            class="w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-2 md:py-3 px-4 md:px-6 rounded-lg font-semibold text-sm md:text-base inline-block hover:from-teal-700 hover:to-teal-600">
+                                                                Akses Program
+                                                            </a>
+                                                        @else
+                                                            <button type="button"
+                                                                class="login w-full text-center bg-gradient-to-r from-teal-600 to-teal-500 text-white py-2 md:py-3 px-4 md:px-6 rounded-lg font-semibold text-sm md:text-base">
+                                                                Akses Program
+                                                            </button>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -559,7 +555,6 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <!-- Position buttons outside the container but within view -->
                             <div class="swiper-button-next hidden md:flex"></div>
                             <div class="swiper-button-prev hidden md:flex"></div>
                             <div class="swiper-pagination"></div>
@@ -570,7 +565,6 @@
         </div>
     </section>
 
-    <!-- Initialize Swiper JS -->
     @if (count($programLayanan) > 3)
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -619,7 +613,6 @@
         </script>
     @endif
 
-    <!-- Add Swiper CSS and JS -->
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
@@ -725,7 +718,6 @@
         }
     </style>
 
-    <!-- Instagram Section -->
     <section class="media-section py-8 md:py-16 bg-gradient-to-b from-white to-gray-50">
         <div class="container mx-auto px-4 md:px-6">
             <div class="text-center mb-8 md:mb-12">
@@ -746,7 +738,6 @@
 
             <div id="instagram-api-feed-container"
                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
-                <!-- Loading placeholders -->
                 @for ($i = 0; $i < 3; $i++)
                     <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
                         <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
@@ -769,7 +760,6 @@
         </div>
     </section>
 
-    <!-- YouTube Section -->
     <section class="media-section py-8 md:py-16">
         <div class="container mx-auto px-4 md:px-6">
             <div class="text-center mb-8 md:mb-12">
@@ -783,7 +773,6 @@
             </div>
 
             <div id="dynamic-videos-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
-                <!-- Loading placeholders -->
                 @for ($i = 0; $i < 3; $i++)
                     <div class="media-card bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
                         <div class="relative pb-[56.25%] h-0 overflow-hidden bg-gray-200"></div>
@@ -806,7 +795,6 @@
         </div>
     </section>
 
-    <!-- Program Details Modal -->
     <div id="programDetailsModal"
         class="fixed inset-0 bg-black bg-opacity-60 z-[1100] hidden items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative">
@@ -825,8 +813,7 @@
             </div>
             <div class="p-4 md:p-8">
                 <div id="programModalDescription" class="prose max-w-none text-gray-700 text-sm md:text-base">
-                    <!-- Dynamic content -->
-                </div>
+                    </div>
             </div>
         </div>
     </div>
@@ -955,8 +942,7 @@
 
     @include('layout.footer')
 
-    {{-- <!-- Load mobile.js EARLIER to ensure it runs before other scripts -->
-    <script src="{{ asset('resources/movejs/mobile.js') }}"></script>
+    {{-- <script src="{{ asset('resources/movejs/mobile.js') }}"></script>
     <script src="{{ asset('resources/movejs/instagram-api-feed.js') }}"></script>
     <script src="{{ asset('resources/movejs/home.js') }}"></script> --}}
 
