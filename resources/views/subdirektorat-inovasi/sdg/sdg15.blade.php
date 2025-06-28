@@ -3,85 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail SDG 15: Ekosistem Daratan - Universitas Negeri Jakarta</title>
+    <title>SDG 15: Ekosistem Daratan - Universitas Negeri Jakarta</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <style>
-        body { font-family: 'Roboto', sans-serif; background-color: #f8f9fa; }
-        .sdg-header { background-color: #56C02B; color: white; padding: 4rem 1.5rem; text-align: center; }
-        .sdg-icon-container { max-width: 180px; margin: 0 auto 1.5rem auto; background-color: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .sdg-icon-container img { width: 100%; height: auto; object-fit: contain; }
-        .sdg-title { font-size: 2.5rem; font-weight: 700; }
-        .sdg-subtitle { font-size: 1.25rem; margin-top: 0.5rem; opacity: 0.9; }
-        .section-title { font-size: 2rem; font-weight: 700; color: #333; text-align: center; margin-bottom: 2rem; border-bottom: 3px solid #56C02B; display: inline-block; padding-bottom: 0.5rem; }
-        .news-card { background-color: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s; }
-        .news-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
-        .news-card img { width: 100%; height: 200px; object-fit: cover; }
-        .news-card-content { padding: 1.5rem; }
-        .news-card-title { font-size: 1.2rem; font-weight: 700; color: #333; margin-bottom: 0.75rem; }
-        .news-card-text { color: #666; margin-bottom: 1rem; line-height: 1.6; }
-        .news-card-link { color: #56C02B; font-weight: 700; text-decoration: none; transition: color 0.3s; }
-        .news-card-link:hover { color: #469c22; }
-        .back-link { display: inline-flex; align-items: center; gap: 0.5rem; margin: 2rem 0; color: #1D796B; font-weight: 700; text-decoration: none; transition: color 0.3s; }
-        .back-link:hover { color: #165c52; }
-    </style>
-    @include('layout.navbar_hilirisasi')
-</head>
-<body class="bg-gray-50">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
 
-    <header class="sdg-header">
-        <div class="container mx-auto px-4">
-            <div class="sdg-icon-container">
-                <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-15.jpg" alt="Icon SDG 15">
+    @include('layout.navbar_hilirisasi')
+
+    <script>
+      // Custom Tailwind configuration
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              inter: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              'sdg-land-green': '#56C02B',
+              'sdg-land-green-dark': '#449922',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-sdg-land-green text-white">
+        <div class="container mx-auto px-6 pt-24 pb-20 flex flex-col md:flex-row items-center gap-8">
+            <div class="bg-white p-4 rounded-xl shadow-2xl w-40 h-40 md:w-48 md:h-48 flex-shrink-0">
+                <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-15.jpg" alt="Icon SDG 15" class="w-full h-full object-contain">
             </div>
-            <h1 class="sdg-title">SDG 15: Ekosistem Daratan</h1>
-            <p class="sdg-subtitle">Melindungi, merestorasi, dan mempromosikan pemanfaatan berkelanjutan ekosistem darat, mengelola hutan secara berkelanjutan, memerangi penggurunan, dan menghentikan serta membalikkan degradasi lahan dan menghentikan hilangnya keanekaragaman hayati.</p>
+            <div class="text-center md:text-left mt-6 md:mt-0">
+                <h1 class="text-4xl lg:text-5xl font-extrabold tracking-tight">SDG 15: Ekosistem Daratan</h1>
+                <p class="mt-3 text-lg lg:text-xl font-medium opacity-90 max-w-2xl">Melindungi, memulihkan, dan mendorong pemanfaatan berkelanjutan ekosistem darat, serta menghentikan hilangnya keanekaragaman hayati.</p>
+            </div>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-12">
-        <section id="penjelasan-sdg" class="mb-16">
-            <div class="max-w-4xl mx-auto text-center mb-8"><h2 class="section-title">Tentang Tujuan Ini</h2></div>
-            <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
-                <p class="text-gray-700 text-lg leading-relaxed mb-4">SDG 15 berfokus pada perlindungan "kehidupan di darat". Tujuannya adalah memastikan konservasi, restorasi, dan pemanfaatan berkelanjutan ekosistem darat dan perairan tawar darat beserta jasanya. Target utamanya adalah mengelola semua jenis hutan secara berkelanjutan, menghentikan deforestasi, merestorasi hutan yang terdegradasi, dan secara substansial meningkatkan aforestasi dan reboisasi secara global.</p>
-                <p class="text-gray-700 text-lg leading-relaxed mb-4">Tujuan ini juga bertujuan untuk memerangi penggurunan, memulihkan lahan dan tanah yang terdegradasi, termasuk lahan yang terkena dampak penggurunan, kekeringan, dan banjir. Selain itu, SDG 15 menyerukan tindakan mendesak untuk mengakhiri perburuan dan perdagangan ilegal spesies flora dan fauna yang dilindungi.</p>
-                <p class="text-gray-700 text-lg leading-relaxed">Universitas Negeri Jakarta berkontribusi melalui program "Kampus Hijau" dengan menanam ribuan pohon dan memperluas area resapan biopori. Program studi Biologi melakukan penelitian tentang keanekaragaman hayati dan konservasi spesies, sementara program KKN mahasiswa seringkali melibatkan kegiatan reboisasi dan edukasi lingkungan kepada masyarakat di sekitar kawasan hutan.</p>
+    <main>
+        <section id="penjelasan-sdg" class="py-16 lg:py-24 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Tentang Tujuan Ini</h2>
+                    <p class="mt-3 text-lg text-gray-600">Hutan adalah paru-paru planet kita, menyediakan oksigen, dan merupakan rumah bagi jutaan spesies.</p>
+                    <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-land-green rounded-full"></div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                        <h3 class="font-bold text-xl text-gray-900 mb-4">Komitmen Global</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            SDG 15 berkomitmen untuk **memastikan konservasi, restorasi, dan pemanfaatan berkelanjutan ekosistem darat dan air tawar**, sejalan dengan kewajiban berdasarkan perjanjian internasional.
+                        </p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                         <h3 class="font-bold text-xl text-gray-900 mb-4">Target Utama</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                           Mempromosikan pengelolaan semua jenis hutan secara berkelanjutan, menghentikan deforestasi, memulihkan hutan yang terdegradasi, serta menghentikan hilangnya keanekaragaman hayati dan melindungi spesies yang terancam punah.
+                        </p>
+                    </div>
+                    <div class="bg-green-50 border-l-4 border-sdg-land-green p-8 rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                         <h3 class="font-bold text-xl text-gray-900 mb-4">Peran Kami di UNJ</h3>
+                         <p class="font-semibold text-gray-800 leading-relaxed">
+                            Kami berkontribusi melalui riset biologi dan geografi tentang konservasi keanekaragaman hayati, program reboisasi, dan pendidikan lingkungan untuk meningkatkan kesadaran tentang pentingnya menjaga ekosistem darat.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="target-sdg" class="py-16 lg:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Target Global SDG 15</h2>
+                    <p class="mt-3 text-lg text-gray-600">Indikator spesifik yang menjadi fokus bersama hingga tahun 2030.</p>
+                    <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-land-green rounded-full"></div>
+                </div>
+                <div class="max-w-4xl mx-auto space-y-6">
+                    <div class="flex items-start gap-5 bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-xl hover:border-sdg-land-green border-2 border-transparent transition-all duration-300">
+                        <div class="flex-shrink-0 bg-sdg-land-green text-white w-14 h-14 rounded-full flex items-center justify-center font-extrabold text-xl">15.1</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">Konservasi dan Restorasi Ekosistem Darat</h3>
+                            <p class="text-gray-600 mt-1">Memastikan konservasi, restorasi dan pemanfaatan berkelanjutan ekosistem darat dan air tawar pedalaman serta jasa lingkungannya.</p>
+                        </div>
+                    </div>
+                     <div class="flex items-start gap-5 bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-xl hover:border-sdg-land-green border-2 border-transparent transition-all duration-300">
+                        <div class="flex-shrink-0 bg-sdg-land-green text-white w-14 h-14 rounded-full flex items-center justify-center font-extrabold text-xl">15.2</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">Menghentikan Deforestasi</h3>
+                            <p class="text-gray-600 mt-1">Mempromosikan pelaksanaan pengelolaan semua jenis hutan secara berkelanjutan, menghentikan deforestasi, merestorasi hutan yang terdegradasi, dan meningkatkan aforestasi dan reboisasi secara substansial.</p>
+                        </div>
+                    </div>
+                     <div class="flex items-start gap-5 bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-xl hover:border-sdg-land-green border-2 border-transparent transition-all duration-300">
+                        <div class="flex-shrink-0 bg-sdg-land-green text-white w-14 h-14 rounded-full flex items-center justify-center font-extrabold text-xl">15.5</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">Menghentikan Kehilangan Keanekaragaman Hayati</h3>
+                            <p class="text-gray-600 mt-1">Mengambil tindakan yang mendesak dan signifikan untuk mengurangi degradasi habitat alami, menghentikan hilangnya keanekaragaman hayati dan melindungi serta mencegah kepunahan spesies yang terancam.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="berita-terkait">
-            <div class="text-center mb-10"><h2 class="section-title">Berita & Kegiatan Terkait</h2></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="news-card">
-                    <img src="https://via.placeholder.com/400x200.png?text=Program+Kampus+Hijau" alt="Berita 1">
-                    <div class="news-card-content">
-                        <h3 class="news-card-title">Lewat Program Kampus Hijau, UNJ Tanam 5000 Pohon di Area Kampus dan Sekitarnya</h3>
-                        <p class="news-card-text">Gerakan ini bertujuan untuk meningkatkan tutupan hijau, mengurangi emisi karbon, dan menciptakan lingkungan belajar yang lebih sejuk dan asri.</p>
-                        <a href="#" class="news-card-link">Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i></a>
+        <section id="berita-terkait" class="py-16 lg:py-24 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Aksi & Inovasi UNJ</h2>
+                    <p class="mt-3 text-lg text-gray-600">Berita, kegiatan, dan program yang kami lakukan untuk mendukung SDG 15.</p>
+                     <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-land-green rounded-full"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                    <div class="lg:col-span-3 bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col">
+                        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2071&auto=format&fit=crop" alt="Hutan Kampus" class="w-full h-64 object-cover">
+                        <div class="p-8 flex-grow flex flex-col">
+                            <h3 class="font-bold text-2xl mb-3 text-gray-900">UNJ Resmikan Arboretum sebagai Laboratorium Hidup dan Paru-paru Kampus</h3>
+                            <p class="text-gray-600 mb-6 flex-grow">UNJ mendedikasikan sebagian lahan kampusnya sebagai arboretum yang menampung berbagai jenis tanaman lokal dan langka. Area ini berfungsi sebagai pusat penelitian botani, sarana edukasi lingkungan, sekaligus area resapan air untuk kampus.</p>
+                            <a href="#" class="mt-auto self-start inline-block bg-sdg-land-green text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-land-green-dark transition-colors duration-300">
+                                Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-2 flex flex-col gap-8">
+                        <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col sm:flex-row lg:flex-col">
+                            <img src="https://images.unsplash.com/photo-1594723453368-47253856868a?q=80&w=1964&auto=format&fit=crop" alt="Satwa Liar" class="w-full sm:w-1/3 lg:w-full h-48 sm:h-auto lg:h-40 object-cover">
+                            <div class="p-6 flex-grow flex flex-col">
+                                <h3 class="font-bold text-xl mb-2 text-gray-900">Riset UNJ: Pemetaan Koridor Satwa Liar di Lanskap Perkotaan</h3>
+                                <p class="text-gray-600 mb-4 text-sm flex-grow">Tim Biologi menggunakan kamera jebak dan GPS tracking untuk memetakan pergerakan satwa liar di area hijau sekitar Jakarta sebagai dasar kebijakan konservasi.</p>
+                                <a href="#" class="mt-auto self-start text-sdg-land-green font-semibold hover:text-sdg-land-green-dark transition-colors">
+                                    Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col sm:flex-row lg:flex-col">
+                            <img src="https://images.unsplash.com/photo-1599399008985-e0b82b9846a8?q=80&w=2070&auto=format&fit=crop" alt="Reboisasi" class="w-full sm:w-1/3 lg:w-full h-48 sm:h-auto lg:h-40 object-cover">
+                            <div class="p-6 flex-grow flex flex-col">
+                                <h3 class="font-bold text-xl mb-2 text-gray-900">KKN Tematik UNJ Fokus pada Reboisasi Lahan Kritis di Hulu Sungai</h3>
+                                <p class="text-gray-600 mb-4 text-sm flex-grow">Mahasiswa melakukan penanaman pohon di lahan kritis di kawasan hulu sungai untuk mencegah erosi dan menjaga ketersediaan air tanah.</p>
+                                <a href="#" class="mt-auto self-start text-sdg-land-green font-semibold hover:text-sdg-land-green-dark transition-colors">
+                                    Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="news-card">
-                    <img src="https://via.placeholder.com/400x200.png?text=Konservasi+Spesies" alt="Berita 2">
-                    <div class="news-card-content">
-                        <h3 class="news-card-title">Tim Biologi UNJ Lakukan Ekspedisi Identifikasi Flora Langka di Taman Nasional Gunung Gede Pangrango</h3>
-                        <p class="news-card-text">Ekspedisi ini berhasil mendokumentasikan beberapa spesies tumbuhan endemik yang terancam punah dan merumuskan strategi konservasinya.</p>
-                        <a href="#" class="news-card-link">Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i></a>
-                    </div>
+            </div>
+        </section>
+        
+        <section id="publikasi-terkait" class="py-16 lg:py-24 bg-green-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Publikasi Terkait</h2>
+                    <p class="mt-3 text-lg text-gray-600">Kajian dan penelitian dari civitas academica UNJ tentang ekosistem daratan.</p>
+                    <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-land-green rounded-full"></div>
                 </div>
-                <div class="news-card">
-                    <img src="https://via.placeholder.com/400x200.png?text=Edukasi+Lingkungan" alt="Berita 3">
-                    <div class="news-card-content">
-                        <h3 class="news-card-title">Mahasiswa KKN UNJ Ajarkan Anak-Anak Desa Pentingnya Menjaga Hutan</h3>
-                        <p class="news-card-text">Melalui permainan dan cerita, mahasiswa menanamkan kecintaan dan kesadaran akan pentingnya kelestarian hutan sejak dini.</p>
-                        <a href="#" class="news-card-link">Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i></a>
-                    </div>
+                <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg">
+                    <ul class="divide-y divide-gray-200">
+                        <li class="p-6">
+                            <a href="#" class="flex items-center gap-5 group">
+                                <i class="fas fa-file-alt text-3xl text-sdg-land-green flex-shrink-0"></i>
+                                <div class="flex-grow">
+                                    <h3 class="font-semibold text-lg text-gray-900 group-hover:text-sdg-land-green-dark transition-colors">Keanekaragaman Jenis Tumbuhan Bawah pada Berbagai Tingkat Suksesi Hutan di Taman Nasional Gede Pangrango</h3>
+                                    <p class="text-sm text-gray-500 mt-1">Dr. Biologi. Endah Sulistyawati, M.Si. | Jurnal Biologi Indonesia Vol. 20, No. 1, 2024</p>
+                                </div>
+                                <i class="fas fa-download ml-auto text-xl text-gray-400 group-hover:text-sdg-land-green-dark transition-transform group-hover:scale-110"></i>
+                            </a>
+                        </li>
+                        <li class="p-6">
+                             <a href="#" class="flex items-center gap-5 group">
+                                <i class="fas fa-file-alt text-3xl text-sdg-land-green flex-shrink-0"></i>
+                                <div class="flex-grow">
+                                    <h3 class="font-semibold text-lg text-gray-900 group-hover:text-sdg-land-green-dark transition-colors">Analisis Perubahan Penutupan Lahan dan Dampaknya terhadap Laju Erosi di DAS Ciliwung Hulu</h3>
+                                    <p class="text-sm text-gray-500 mt-1">Prof. Dr. Geografi. Nandi, M.Sc. | Jurnal Geografi dan Konservasi Vol. 15, No. 2, 2023</p>
+                                </div>
+                                <i class="fas fa-download ml-auto text-xl text-gray-400 group-hover:text-sdg-land-green-dark transition-transform group-hover:scale-110"></i>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </section>
     </main>
+
+    @include('layout.footer')
+
 </body>
-@include('layout.footer')
 </html>
