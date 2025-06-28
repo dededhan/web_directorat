@@ -278,7 +278,7 @@
                                 <p>Mengakhiri kelaparan, mencapai ketahanan pangan dan gizi yang baik, serta mendorong
                                     pertanian berkelanjutan. Fokus pada akses terhadap makanan, perbaikan nutrisi, dan
                                     meningkatkan produktivitas pertanian secara berkelanjutan.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                                <a href="{{ route('sdg.show', ['id' => 2]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -296,7 +296,7 @@
                                 <p>Memastikan kehidupan yang sehat dan mendorong kesejahteraan bagi semua di segala
                                     usia. Berfokus pada pengurangan angka kematian ibu dan anak, mengakhiri epidemi
                                     penyakit menular, dan memastikan akses universal ke layanan kesehatan.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                                 <a href="{{ route('sdg.show', ['id' => 3]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -314,7 +314,7 @@
                                 <p>Memastikan pendidikan yang inklusif dan berkualitas serta mendorong kesempatan
                                     belajar seumur hidup bagi semua. Memastikan semua anak mendapatkan akses pendidikan
                                     dan pelatihan keterampilan yang sesuai.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                                <a href="{{ route('sdg.show', ['id' => 4]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -332,7 +332,7 @@
                                 <p>Mencapai kesetaraan gender dan memberdayakan kaum perempuan dan anak perempuan.
                                     Menghilangkan segala bentuk diskriminasi dan kekerasan terhadap perempuan dan
                                     memastikan partisipasi penuh mereka di semua tingkatan.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                                <a href="{{ route('sdg.show', ['id' => 5]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -350,7 +350,8 @@
                                 <p>Memastikan ketersediaan dan pengelolaan air bersih dan sanitasi yang berkelanjutan
                                     bagi semua. Meningkatkan kualitas air, mengurangi polusi, dan melindungi ekosistem
                                     yang berkaitan dengan air.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                              <a href="{{ route('sdg.show', ['id' => 6]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+
                             </div>
                         </div>
                     </div>
@@ -368,7 +369,7 @@
                                 <p>Memastikan akses ke energi yang terjangkau, andal, berkelanjutan, dan modern bagi
                                     semua. Meningkatkan penggunaan energi terbarukan dan efisiensi energi dalam sistem
                                     energi global.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                                <a href="{{ route('sdg.show', ['id' => 7]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -386,7 +387,7 @@
                                 <p>Mendorong pertumbuhan ekonomi yang inklusif dan berkelanjutan, lapangan kerja penuh
                                     dan produktif, serta pekerjaan yang layak bagi semua. Fokus pada inovasi,
                                     kewirausahaan, dan penciptaan lapangan kerja.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                                <a href="{{ route('sdg.show', ['id' => 8]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -404,7 +405,7 @@
                                 <p>Membangun infrastruktur yang tangguh, mendorong industrialisasi yang inklusif dan
                                     berkelanjutan, serta memupuk inovasi. Meningkatkan akses ke teknologi informasi dan
                                     komunikasi.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                                <a href="{{ route('sdg.show', ['id' => 9]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -422,7 +423,7 @@
                                 <p>Mengurangi kesenjangan dalam dan antar negara. Mendorong inklusi sosial, ekonomi, dan
                                     politik bagi semua, terlepas dari usia, jenis kelamin, disabilitas, ras, etnis, atau
                                     status lainnya.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                                <a href="{{ route('sdg.show', ['id' => 10]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -440,7 +441,7 @@
                                 <p>Menjadikan kota dan permukiman inklusif, aman, tangguh, dan berkelanjutan. Memastikan
                                     akses ke perumahan yang layak dan terjangkau, transportasi publik, dan ruang publik
                                     yang aman.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                                <a href="{{ route('sdg.show', ['id' => 11]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -458,7 +459,7 @@
                                 <p>Memastikan pola konsumsi dan produksi yang berkelanjutan. Mengurangi limbah,
                                     mendorong daur ulang, dan mendorong praktik bisnis yang berkelanjutan dan pengadaan
                                     publik yang berkelanjutan.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                                <a href="{{ route('sdg.show', ['id' => 12]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -476,7 +477,7 @@
                                 <p>Mengambil tindakan segera untuk memerangi perubahan iklim dan dampaknya. Memperkuat
                                     ketahanan dan kapasitas adaptasi terhadap bahaya terkait iklim dan bencana alam di
                                     semua negara.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                                <a href="{{ route('sdg.show', ['id' => 13]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -494,7 +495,7 @@
                                 <p>Melestarikan dan memanfaatkan secara berkelanjutan sumber daya laut untuk pembangunan
                                     berkelanjutan. Mengurangi polusi laut, melindungi ekosistem pesisir dan laut, dan
                                     mengakhiri penangkapan ikan berlebihan.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                                <a href="{{ route('sdg.show', ['id' => 14]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -512,7 +513,7 @@
                                 <p>Melindungi, memulihkan, dan mendorong pemanfaatan berkelanjutan ekosistem darat,
                                     mengelola hutan secara berkelanjutan, memerangi penggurunan, dan menghentikan dan
                                     membalikkan degradasi lahan dan menghentikan hilangnya keanekaragaman hayati.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                                <a href="{{ route('sdg.show', ['id' => 15]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -530,7 +531,7 @@
                                 <p>Mendorong masyarakat yang damai dan inklusif untuk pembangunan berkelanjutan,
                                     menyediakan akses keadilan bagi semua dan membangun institusi yang efektif,
                                     akuntabel, dan inklusif di semua tingkatan.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                                <a href="{{ route('sdg.show', ['id' => 16]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -548,7 +549,7 @@
                                 <p>Memperkuat sarana pelaksanaan dan merevitalisasi kemitraan global untuk pembangunan
                                     berkelanjutan. Memobilisasi sumber daya, berbagi pengetahuan dan teknologi, dan
                                     membangun kapasitas untuk mencapai SDGs.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                                <a href="{{ route('sdg.show', ['id' => 17]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
                             </div>
                         </div>
                     </div>

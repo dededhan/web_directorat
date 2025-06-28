@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail SDG 1: Tanpa Kemiskinan - Universitas Negeri Jakarta</title>
+    <title>Detail SDG 2: Tanpa Kelaparan - Universitas Negeri Jakarta</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    @include('layout.navbar_hilirisasi')
+     @include('layout.navbar_hilirisasi')
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f8f9fa;
         }
+        /* Warna spesifik untuk SDG 2 */
         .sdg-header {
-            background-color: #e5243b; /* Warna spesifik untuk SDG 1 */
+            background-color: #DDA63A; 
             color: white;
             padding: 4rem 1.5rem;
             text-align: center;
@@ -49,7 +50,7 @@
             color: #333;
             text-align: center;
             margin-bottom: 2rem;
-            border-bottom: 3px solid #e5243b; /* Warna spesifik untuk SDG 1 */
+            border-bottom: 3px solid #DDA63A; /* Warna spesifik untuk SDG 2 */
             display: inline-block;
             padding-bottom: 0.5rem;
         }
@@ -84,13 +85,13 @@
             line-height: 1.6;
         }
         .news-card-link {
-            color: #e5243b; /* Warna spesifik untuk SDG 1 */
+            color: #DDA63A; /* Warna spesifik untuk SDG 2 */
             font-weight: 700;
             text-decoration: none;
             transition: color 0.3s;
         }
         .news-card-link:hover {
-            color: #c41a2c;
+            color: #b38627;
         }
         .back-link {
             display: inline-flex;
@@ -112,10 +113,10 @@
     <header class="sdg-header">
         <div class="container mx-auto px-4">
             <div class="sdg-icon-container">
-                <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-01.jpg" alt="Icon SDG 1">
+                <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-02.jpg" alt="Icon SDG 2">
             </div>
-            <h1 class="sdg-title">SDG 1: Tanpa Kemiskinan</h1>
-            <p class="sdg-subtitle">Mengakhiri kemiskinan dalam segala bentuk di manapun.</p>
+            <h1 class="sdg-title">SDG 2: Tanpa Kelaparan</h1>
+            <p class="sdg-subtitle">Mengakhiri kelaparan, mencapai ketahanan pangan dan gizi yang baik, serta mendorong pertanian berkelanjutan.</p>
         </div>
     </header>
 
@@ -126,13 +127,13 @@
             </div>
             <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
                 <p class="text-gray-700 text-lg leading-relaxed mb-4">
-                    Tujuan Pembangunan Berkelanjutan (SDG) 1 berfokus untuk mengakhiri kemiskinan dalam semua manifestasinya pada tahun 2030. Ini mencakup target untuk memberantas kemiskinan ekstrem (hidup dengan kurang dari $1.90 per hari), mengurangi separuh proporsi orang yang hidup dalam kemiskinan menurut definisi nasional, serta menerapkan sistem perlindungan sosial yang sesuai secara nasional.
+                    Tujuan Pembangunan Berkelanjutan (SDG) 2 berupaya mengakhiri kelaparan dan segala bentuk kekurangan gizi pada tahun 2030. Ini mencakup jaminan akses terhadap makanan yang aman, bergizi, dan cukup bagi semua orang, sepanjang tahun. Tujuan ini sangat penting, terutama bagi anak-anak serta masyarakat miskin dan rentan.
                 </p>
                 <p class="text-gray-700 text-lg leading-relaxed mb-4">
-                    Lebih dari itu, tujuan ini juga bertujuan untuk memastikan bahwa semua laki-laki dan perempuan, terutama yang miskin dan rentan, memiliki hak yang sama terhadap sumber daya ekonomi, akses terhadap layanan dasar, kepemilikan dan kontrol atas tanah, serta bentuk-bentuk properti lainnya, warisan, sumber daya alam, teknologi baru yang sesuai, dan jasa keuangan, termasuk keuangan mikro.
+                    Secara spesifik, targetnya meliputi peningkatan produktivitas pertanian dan pendapatan produsen pangan skala kecil, penerapan praktik pertanian berkelanjutan yang mampu beradaptasi dengan perubahan iklim, serta pemeliharaan keragaman genetik benih, tanaman, dan hewan ternak. SDG 2 juga menyerukan adanya investasi dalam infrastruktur pedesaan, riset pertanian, dan pengembangan teknologi.
                 </p>
                 <p class="text-gray-700 text-lg leading-relaxed">
-                    Di Universitas Negeri Jakarta, kami berkontribusi melalui penelitian mengenai kebijakan sosial, program pengabdian masyarakat yang memberdayakan ekonomi lokal, serta pendidikan yang membuka akses bagi semua kalangan untuk meningkatkan taraf hidup dan memutus rantai kemiskinan.
+                    Universitas Negeri Jakarta berkontribusi aktif melalui penelitian inovatif di bidang pangan dan gizi, program pengabdian masyarakat yang berfokus pada edukasi ketahanan pangan dan pertanian urban, serta pengembangan kurikulum yang mendukung terciptanya ahli-ahli di bidang pertanian dan pangan berkelanjutan.
                 </p>
             </div>
         </section>
@@ -144,28 +145,28 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="news-card">
-                    <img src="https://via.placeholder.com/400x200.png?text=Kegiatan+UNJ+1" alt="Berita 1">
+                    <img src="https://via.placeholder.com/400x200.png?text=Pertanian+Urban+UNJ" alt="Berita 1">
                     <div class="news-card-content">
-                        <h3 class="news-card-title">UNJ Gelar Pelatihan Kewirausahaan untuk Masyarakat Rentan</h3>
-                        <p class="news-card-text">Sebagai bagian dari program pengabdian masyarakat, UNJ memberikan pelatihan untuk meningkatkan keterampilan wirausaha dan kemandirian ekonomi.</p>
+                        <h3 class="news-card-title">Mahasiswa UNJ Edukasi Warga tentang Pertanian Urban di Lahan Sempit</h3>
+                        <p class="news-card-text">Melalui program KKN, mahasiswa memberikan pelatihan hidroponik dan vertikultur untuk meningkatkan ketahanan pangan tingkat rumah tangga di perkotaan.</p>
                         <a href="#" class="news-card-link">Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i></a>
                     </div>
                 </div>
 
                 <div class="news-card">
-                    <img src="https://via.placeholder.com/400x200.png?text=Kegiatan+UNJ+2" alt="Berita 2">
+                    <img src="https://via.placeholder.com/400x200.png?text=Riset+Pangan+UNJ" alt="Berita 2">
                     <div class="news-card-content">
-                        <h3 class="news-card-title">Studi FIS UNJ: Dampak Perubahan Iklim terhadap Kemiskinan Petani</h3>
-                        <p class="news-card-text">Penelitian terbaru dari Fakultas Ilmu Sosial menyoroti bagaimana perubahan iklim memperburuk kondisi ekonomi petani di beberapa daerah di Indonesia.</p>
+                        <h3 class="news-card-title">Riset FMIPA UNJ Kembangkan Pangan Alternatif Berbasis Sorgum</h3>
+                        <p class="news-card-text">Tim peneliti dari Fakultas MIPA berhasil mengolah sorgum menjadi tepung bernutrisi tinggi sebagai alternatif pengganti gandum untuk mendukung diversifikasi pangan.</p>
                         <a href="#" class="news-card-link">Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i></a>
                     </div>
                 </div>
 
                 <div class="news-card">
-                    <img src="https://via.placeholder.com/400x200.png?text=Kegiatan+UNJ+3" alt="Berita 3">
+                    <img src="https://via.placeholder.com/400x200.png?text=Seminar+Ketahanan+Pangan" alt="Berita 3">
                     <div class="news-card-content">
-                        <h3 class="news-card-title">Kolaborasi dengan Pemda untuk Program Perlindungan Sosial</h3>
-                        <p class="news-card-text">Pusat Studi SDGs UNJ bekerja sama dengan pemerintah daerah untuk merancang skema perlindungan sosial yang lebih efektif dan tepat sasaran.</p>
+                        <h3 class="news-card-title">UNJ Gelar Seminar Nasional Ketahanan Pangan di Era Perubahan Iklim</h3>
+                        <p class="news-card-text">Pakar dari berbagai universitas dan lembaga berkumpul untuk membahas strategi dan inovasi dalam menghadapi tantangan ketahanan pangan masa depan.</p>
                         <a href="#" class="news-card-link">Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i></a>
                     </div>
                 </div>
@@ -175,5 +176,5 @@
     </main>
 
     </body>
-    @include('layout.footer')
+        @include('layout.footer')
 </html>
