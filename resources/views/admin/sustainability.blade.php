@@ -1,6 +1,5 @@
 @extends('admin.admin')
 
-<!-- <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/sustainability_dashboard.css') }}"> -->
 @vite([
         'resources/css/admin/sustainability_dashboard.css'
     ])

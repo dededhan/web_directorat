@@ -358,6 +358,17 @@ Route::prefix('fakultas')->name('fakultas.')
         Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
             ->name('responden.update');
 
+        // Untuk update status khusus (POST)
+        Route::post('/responden/update-status/{id}', [AdminRespondenController::class, 'updateStatus'])
+            ->name('responden.updateStatus');
+
+        Route::post('/responden/import', [AdminRespondenController::class, 'import'])->name('responden.import');
+        Route::get('/responden/filter', [AdminRespondenController::class, 'filter'])->name('responden.filter');
+        Route::get('/responden/export/excel', [AdminRespondenController::class, 'export'])
+            ->name('responden.export');
+        Route::get('/responden/export/csv', [AdminRespondenController::class, 'exportCSV'])
+            ->name('responden.exportCSV');
+
         Route::resource('/matakuliah', AdminMataKuliahController::class);
         Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
         Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
