@@ -258,12 +258,10 @@
                                     alt="SDG 1">
                             </div>
                             <div class="sdgs-slide-info">
-                                <h2>Tanpa Kemiskinan</h2>
-                                <p>Mengakhiri kemiskinan dalam segala bentuk di manapun. Tujuan ini berfokus pada
-                                    penyediaan layanan dasar, perlindungan sosial, dan memastikan semua orang memiliki
-                                    akses yang setara terhadap sumber daya ekonomi.</p>
-                                <a href="#" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
-                            </div>
+                            <h2>Tanpa Kemiskinan</h2>
+                            <p>Mengakhiri kemiskinan dalam segala bentuk di manapun. Tujuan ini berfokus pada penyediaan layanan dasar, perlindungan sosial, dan memastikan semua orang memiliki akses yang setara terhadap sumber daya ekonomi.</p>
+                            <a href="{{ route('sdg.show', ['id' => 1]) }}" class="sdgs-learn-more">Pelajari Lebih Lanjut</a>
+                        </div>
                         </div>
                     </div>
 

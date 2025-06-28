@@ -73,6 +73,14 @@ Route::get('/berita/{id}', function ($id) {
     return redirect()->route('Berita.show', ['id' => $id]);
 });
 
+Route::get('/sdg/{id}', function ($id) {
+    // Memastikan view untuk SDG yang diminta ada
+    if (!view()->exists("subdirektorat-inovasi.sdg.sdg{$id}")) {
+        abort(404);
+    }
+    return view("subdirektorat-inovasi.sdg.sdg{$id}");
+})->where('id', '^(1[0-7]|[1-9])$')->name('sdg.show');
+
 // Static Pages
 Route::view('/tupoksi', 'tupoksi.tupoksi')->name('tupoksi.tupoksi');
 Route::view('/profile', 'Profile1.profile')->name('profile.profile');

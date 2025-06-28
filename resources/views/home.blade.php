@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <!-- UPDATED VIEWPORT META TAG - Critical for mobile display -->
