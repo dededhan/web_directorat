@@ -10,12 +10,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    {{-- <link rel="stylesheet" href="{{ asset('home.css') }}"> --}}
     
     <script>
-        // Konfigurasi Tailwind untuk warna kustom dan font
         tailwind.config = {
             theme: {
                 extend: {
@@ -33,31 +31,9 @@
     </script>
 
     <style>
-        /* CSS Tambahan untuk efek dan komponen kustom */
         .hero {
             transition: background-image 1s ease-in-out;
         }
-        
-        /*
-         * Style untuk carousel SDGs dikembalikan ke versi semula.
-         * Ini memastikan fungsionalitas dan tampilan carousel tidak berubah.
-        */
-        .sdgs-slider-container {
-            display: flex;
-            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        }
-
-        .sdgs-slide::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: var(--sdg-color, #333);
-            opacity: 0.9;
-            z-index: 1;
-            transition: background-color 0.5s ease;
-        }
-
-        /* Styling untuk skeleton loader */
         .skeleton-card {
             background-color: #f3f4f6;
             border-radius: 0.5rem;
@@ -73,13 +49,157 @@
             border-radius: 0.25rem;
             margin-bottom: 0.5rem;
         }
-        
-        /* Animasi untuk skeleton loader */
         @keyframes pulse {
             50% { opacity: .5; }
         }
         .animate-pulse {
             animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* === DESAIN SDG CAROUSEL YANG DISEMPURNAKAN === */
+        #sdg-carousel-container {
+            position: relative;
+            max-width: 950px;
+            margin: 2rem auto;
+        }
+        .sdg-slide-custom {
+            display: none; /* Sembunyikan semua slide secara default */
+            border-radius: 1.25rem; /* Sudut lebih melengkung */
+            overflow: hidden;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2);
+            background-color: #ffffff;
+            min-height: 550px; /* Atur tinggi minimum */
+        }
+        .sdg-slide-custom.active {
+            display: flex; /* Hanya tampilkan slide yang aktif */
+            animation: slide-in 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        @keyframes slide-in {
+            from {
+                opacity: 0.5;
+                transform: translateY(20px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .left-panel {
+            width: 45%;
+            color: white;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 1.5rem;
+            position: relative;
+        }
+        .left-panel::before { /* Menambahkan overlay gradasi untuk kedalaman */
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 100%);
+            z-index: 1;
+        }
+        .left-panel > * {
+            position: relative;
+            z-index: 2;
+        }
+        .left-panel h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+        }
+        .left-panel h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        }
+        .left-panel .icon {
+            font-size: 6rem;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+        }
+        .right-panel {
+            width: 55%;
+            padding: 3rem 3.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .right-panel h3 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #2c3e50;
+        }
+        .right-panel hr {
+            border-width: 3px;
+            width: 60px;
+            margin: 1.25rem 0;
+        }
+        .right-panel p {
+            color: white;
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+        }
+        .learn-more-btn {
+            display: inline-block;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px; /* Bentuk pil */
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px -5px var(--shadow-color, rgba(0,0,0,0.5));
+            align-self: flex-start; /* Agar tidak memenuhi lebar */
+        }
+        .learn-more-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px -5px var(--shadow-color, rgba(0,0,0,0.5));
+        }
+        .number-circle {
+            position: absolute;
+            bottom: 2rem;
+            right: 2.5rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            font-weight: 800;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            border: 3px solid rgba(255, 255, 255, 0.5);
+        }
+        .pagination-dots {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+        .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            opacity: 0.6;
+        }
+        .dot:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+        .dot.active {
+            opacity: 1;
+            transform: scale(1.4);
+            box-shadow: 0 0 0 3px white, 0 0 0 5px var(--dot-color, #ccc);
         }
     </style>
 </head>
@@ -106,6 +226,7 @@
         </div>
     </section>
 
+    {{-- Sections lainnya tetap sama --}}
     <section id="what-is-sdgs" class="py-20 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center max-w-4xl mx-auto mb-16">
@@ -179,68 +300,67 @@
         </div>
     </section>
 
-    <section id="goals" class="py-20 bg-gray-50">
-    <div class="container mx-auto px-6 text-center mb-12">
-        <h3 class="text-4xl font-bold text-gray-800">17 Tujuan Pembangunan Berkelanjutan</h3>
-        <p class="text-lg text-gray-600 mt-2 max-w-3xl mx-auto">Komitmen global untuk mengakhiri kemiskinan, melindungi bumi, dan memastikan kemakmuran bagi semua.</p>
-    </div>
-    <div class="relative w-full h-[70vh] overflow-hidden rounded-xl shadow-2xl mx-auto max-w-7xl">
-        <div class="sdgs-slider-container w-[1700%] h-full">
-            @for ($i = 1; $i <= 17; $i++)
-                @php
-                    // Data SDGs dengan penambahan deskripsi singkat
-                    $sdgData = [
-                        1 => ['color' => '#e5243b', 'title' => 'Tanpa Kemiskinan', 'description' => 'Mengakhiri kemiskinan dalam segala bentuk di mana pun.'],
-                        2 => ['color' => '#DDA63A', 'title' => 'Tanpa Kelaparan', 'description' => 'Mengakhiri kelaparan, mencapai ketahanan pangan dan gizi yang baik, serta meningkatkan pertanian berkelanjutan.'],
-                        3 => ['color' => '#4C9F38', 'title' => 'Kehidupan Sehat dan Sejahtera', 'description' => 'Menjamin kehidupan yang sehat dan mendorong kesejahteraan bagi semua orang di segala usia.'],
-                        4 => ['color' => '#C5192D', 'title' => 'Pendidikan Berkualitas', 'description' => 'Menjamin pendidikan berkualitas yang inklusif dan adil serta mempromosikan kesempatan belajar seumur hidup untuk semua.'],
-                        5 => ['color' => '#FF3A21', 'title' => 'Kesetaraan Gender', 'description' => 'Mencapai kesetaraan gender dan memberdayakan semua perempuan dan anak perempuan.'],
-                        6 => ['color' => '#26BDE2', 'title' => 'Air Bersih dan Sanitasi Layak', 'description' => 'Menjamin ketersediaan dan pengelolaan air dan sanitasi yang berkelanjutan untuk semua.'],
-                        7 => ['color' => '#FCC30B', 'title' => 'Energi Bersih dan Terjangkau', 'description' => 'Menjamin akses energi yang terjangkau, andal, berkelanjutan, dan modern untuk semua.'],
-                        8 => ['color' => '#A21942', 'title' => 'Pekerjaan Layak dan Pertumbuhan Ekonomi', 'description' => 'Mempromosikan pertumbuhan ekonomi berkelanjutan dan inklusif, kesempatan kerja penuh dan produktif, serta pekerjaan yang layak untuk semua.'],
-                        9 => ['color' => '#FD6925', 'title' => 'Industri, Inovasi dan Infrastruktur', 'description' => 'Membangun infrastruktur yang tangguh, mempromosikan industrialisasi yang inklusif dan berkelanjutan, serta mendorong inovasi.'],
-                        10 => ['color' => '#DD1367', 'title' => 'Berkurangnya Kesenjangan', 'description' => 'Mengurangi ketimpangan di dalam dan antar negara.'],
-                        11 => ['color' => '#FD9D24', 'title' => 'Kota dan Permukiman Berkelanjutan', 'description' => 'Menjadikan kota dan pemukiman manusia inklusif, aman, tangguh, dan berkelanjutan.'],
-                        12 => ['color' => '#BF8B2E', 'title' => 'Konsumsi dan Produksi Bertanggung Jawab', 'description' => 'Menjamin pola konsumsi dan produksi yang berkelanjutan.'],
-                        13 => ['color' => '#3F7E44', 'title' => 'Penanganan Perubahan Iklim', 'description' => 'Mengambil tindakan segera untuk memerangi perubahan iklim dan dampaknya.'],
-                        14 => ['color' => '#0A97D9', 'title' => 'Ekosistem Lautan', 'description' => 'Melestarikan dan memanfaatkan samudra, laut, dan sumber daya laut secara berkelanjutan untuk pembangunan berkelanjutan.'],
-                        15 => ['color' => '#56C02B', 'title' => 'Ekosistem Daratan', 'description' => 'Melindungi, memulihkan, dan mempromosikan pemanfaatan ekosistem darat secara berkelanjutan.'],
-                        16 => ['color' => '#00689D', 'title' => 'Perdamaian, Keadilan, dan Kelembagaan Kuat', 'description' => 'Mempromosikan masyarakat yang damai dan inklusif untuk pembangunan berkelanjutan.'],
-                        17 => ['color' => '#19486A', 'title' => 'Kemitraan untuk Mencapai Tujuan', 'description' => 'Memperkuat sarana pelaksanaan dan merevitalisasi kemitraan global untuk pembangunan berkelanjutan.'],
-                    ];
-                    $currentSdg = $sdgData[$i];
-                @endphp
-                <div class="sdgs-slide w-[calc(100%/17)] h-full flex-shrink-0 relative text-white" style="--sdg-color: {{ $currentSdg['color'] }};">
-                    <div class="relative z-10 h-full flex items-end p-8 md:p-12 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
-                        <div class="w-full">
-                            <div class="flex items-start md:items-center gap-4 mb-4">
-                                <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}.jpg" alt="SDG {{ $i }}" class="w-16 h-16 rounded-md shadow-lg flex-shrink-0">
-                                <div>
-                                    <p class="font-bold text-lg">Tujuan {{ $i }}</p>
-                                    <h2 class="text-3xl md:text-4xl font-extrabold">{{ $currentSdg['title'] }}</h2>
-                                </div>
-                            </div>
-                            {{-- PENAMBAHAN DESKRIPSI --}}
-                            <p class="mt-2 text-white/90 text-base md:text-lg max-w-3xl leading-relaxed">{{ $currentSdg['description'] }}</p>
+    <section id="goals" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h3 class="text-4xl font-bold text-gray-800">17 Tujuan Pembangunan Berkelanjutan</h3>
+                <p class="text-lg text-gray-600 mt-2 max-w-3xl mx-auto">Jelajahi setiap tujuan untuk melihat bagaimana kita semua dapat berkontribusi untuk masa depan yang lebih baik.</p>
+            </div>
 
-                            <a href="{{ route('sdg.show', ['id' => $i]) }}" class="inline-block mt-4 bg-white text-gray-800 font-bold py-2 px-5 rounded-full hover:bg-opacity-90 transition-transform transform hover:scale-105">
-                                Lihat Detail <i class="fas fa-arrow-right ml-2"></i>
-                            </a>
+            @php
+                $sdgData = [
+                    1 => ['color' => '#e5243b', 'en_title' => 'NO POVERTY', 'icon' => 'fa-solid fa-users-line', 'title' => 'Tanpa Kemiskinan', 'description' => 'Mengakhiri kemiskinan dalam segala bentuk di mana pun.'],
+                    2 => ['color' => '#DDA63A', 'en_title' => 'ZERO HUNGER', 'icon' => 'fa-solid fa-utensils', 'title' => 'Tanpa Kelaparan', 'description' => 'Mengakhiri kelaparan, mencapai ketahanan pangan dan gizi yang baik, serta meningkatkan pertanian berkelanjutan.'],
+                    3 => ['color' => '#4C9F38', 'en_title' => 'GOOD HEALTH AND WELL-BEING', 'icon' => 'fa-solid fa-heart-pulse', 'title' => 'Kehidupan Sehat dan Sejahtera', 'description' => 'Menjamin kehidupan yang sehat dan mendorong kesejahteraan bagi semua orang di segala usia.'],
+                    4 => ['color' => '#C5192D', 'en_title' => 'QUALITY EDUCATION', 'icon' => 'fa-solid fa-graduation-cap', 'title' => 'Pendidikan Berkualitas', 'description' => 'Menjamin pendidikan berkualitas yang inklusif dan adil serta mempromosikan kesempatan belajar seumur hidup untuk semua.'],
+                    5 => ['color' => '#FF3A21', 'en_title' => 'GENDER EQUALITY', 'icon' => 'fa-solid fa-venus-mars', 'title' => 'Kesetaraan Gender', 'description' => 'Mencapai kesetaraan gender dan memberdayakan semua perempuan dan anak perempuan.'],
+                    6 => ['color' => '#26BDE2', 'en_title' => 'CLEAN WATER AND SANITATION', 'icon' => 'fa-solid fa-hand-holding-droplet', 'title' => 'Air Bersih dan Sanitasi Layak', 'description' => 'Menjamin ketersediaan dan pengelolaan air dan sanitasi yang berkelanjutan untuk semua.'],
+                    7 => ['color' => '#FCC30B', 'en_title' => 'AFFORDABLE AND CLEAN ENERGY', 'icon' => 'fa-solid fa-bolt', 'title' => 'Energi Bersih dan Terjangkau', 'description' => 'Menjamin akses energi yang terjangkau, andal, berkelanjutan, dan modern untuk semua.'],
+                    8 => ['color' => '#A21942', 'en_title' => 'DECENT WORK AND ECONOMIC GROWTH', 'icon' => 'fa-solid fa-arrow-trend-up', 'title' => 'Pekerjaan Layak dan Pertumbuhan Ekonomi', 'description' => 'Mempromosikan pertumbuhan ekonomi berkelanjutan, kesempatan kerja penuh, serta pekerjaan yang layak untuk semua.'],
+                    9 => ['color' => '#FD6925', 'en_title' => 'INDUSTRY, INNOVATION AND INFRASTRUCTURE', 'icon' => 'fa-solid fa-microchip', 'title' => 'Industri, Inovasi dan Infrastruktur', 'description' => 'Membangun infrastruktur yang tangguh, mempromosikan industrialisasi yang inklusif dan berkelanjutan, serta mendorong inovasi.'],
+                    10 => ['color' => '#DD1367', 'en_title' => 'REDUCED INEQUALITIES', 'icon' => 'fa-solid fa-scale-unbalanced', 'title' => 'Berkurangnya Kesenjangan', 'description' => 'Mengurangi ketimpangan di dalam dan antar negara.'],
+                    11 => ['color' => '#FD9D24', 'en_title' => 'SUSTAINABLE CITIES AND COMMUNITIES', 'icon' => 'fa-solid fa-city', 'title' => 'Kota dan Permukiman Berkelanjutan', 'description' => 'Menjadikan kota dan pemukiman manusia inklusif, aman, tangguh, dan berkelanjutan.'],
+                    12 => ['color' => '#BF8B2E', 'en_title' => 'RESPONSIBLE CONSUMPTION AND PRODUCTION', 'icon' => 'fa-solid fa-recycle', 'title' => 'Konsumsi dan Produksi Bertanggung Jawab', 'description' => 'Menjamin pola konsumsi dan produksi yang berkelanjutan.'],
+                    13 => ['color' => '#3F7E44', 'en_title' => 'CLIMATE ACTION', 'icon' => 'fa-solid fa-cloud-sun-rain', 'title' => 'Penanganan Perubahan Iklim', 'description' => 'Mengambil tindakan segera untuk memerangi perubahan iklim dan dampaknya.'],
+                    14 => ['color' => '#0A97D9', 'en_title' => 'LIFE BELOW WATER', 'icon' => 'fa-solid fa-water', 'title' => 'Ekosistem Lautan', 'description' => 'Melestarikan dan memanfaatkan samudra, laut, dan sumber daya laut secara berkelanjutan.'],
+                    15 => ['color' => '#56C02B', 'en_title' => 'LIFE ON LAND', 'icon' => 'fa-solid fa-tree', 'title' => 'Ekosistem Daratan', 'description' => 'Melindungi, memulihkan, dan mempromosikan pemanfaatan ekosistem darat secara berkelanjutan.'],
+                    16 => ['color' => '#00689D', 'en_title' => 'PEACE, JUSTICE AND STRONG INSTITUTIONS', 'icon' => 'fa-solid fa-landmark-flag', 'title' => 'Perdamaian, Keadilan, dan Kelembagaan Kuat', 'description' => 'Mempromosikan masyarakat yang damai dan inklusif untuk pembangunan berkelanjutan.'],
+                    17 => ['color' => '#19486A', 'en_title' => 'PARTNERSHIPS FOR THE GOALS', 'icon' => 'fa-solid fa-handshake-angle', 'title' => 'Kemitraan untuk Mencapai Tujuan', 'description' => 'Memperkuat sarana pelaksanaan dan merevitalisasi kemitraan global untuk pembangunan berkelanjutan.'],
+                ];
+            @endphp
+            
+            <div id="sdg-carousel-container">
+                @foreach ($sdgData as $i => $data)
+                    <div class="sdg-slide-custom @if($i == 1) active @endif" data-slide="{{ $i }}">
+                        <div class="left-panel" style="background-color: {{ $data['color'] }};">
+                            <h1>{{ $i }}</h1>
+                            <h2>{{ $data['en_title'] }}</h2>
+                            <i class="{{ $data['icon'] }} icon"></i>
+                        </div>
+                        <div class="right-panel">
+                             <h3>{{ $data['title'] }}</h3>
+                             <hr style="border-color: {{ $data['color'] }};">
+                             <p>{{ $data['description'] }}</p>
+                             <a href="{{ route('sdg.show', ['id' => $i]) }}" class="learn-more-btn" style="background-color: {{ $data['color'] }}; --shadow-color: {{ $data['color'] }}80;">
+                                Pelajari Lebih Lanjut
+                             </a>
+                             <div class="number-circle" style="background-color: {{ $data['color'] }};">
+                                {{ $i }}
+                            </div>
                         </div>
                     </div>
+                @endforeach
+                
+                <div class="pagination-dots">
+                    @foreach ($sdgData as $i => $data)
+                        <button class="dot @if($i == 1) active @endif" data-slide-to="{{ $i }}" style="background-color: {{ $data['color'] }}; --dot-color: {{ $data['color'] }};"></button>
+                    @endforeach
                 </div>
-            @endfor
+            </div>
         </div>
-        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex flex-wrap justify-center gap-1.5 p-2 bg-black/30 backdrop-blur-sm rounded-full">
-            @for ($i = 1; $i <= 17; $i++)
-                <div class="sdgs-pagination-number w-7 h-7 flex items-center justify-center font-bold text-white rounded-full cursor-pointer transition-all duration-300" data-index="{{ $i-1 }}" style="background-color: {{ $sdgData[$i]['color'] }};">
-                    {{ $i }}
-                </div>
-            @endfor
-        </div>
-    </div>
-</section>
+    </section>
 
+    {{-- Sections lainnya tetap sama --}}
     <section id="programs" class="py-20 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-12">
@@ -308,37 +428,47 @@
             }, 5000);
         }
 
-        // --- SDGs CAROUSEL (JavaScript for original design) ---
-        const sliderContainer = document.querySelector('.sdgs-slider-container');
-        if (sliderContainer) {
-            const slides = sliderContainer.querySelectorAll('.sdgs-slide');
-            const paginationNumbers = document.querySelectorAll('.sdgs-pagination-number');
-            let currentIndex = 0;
+        // --- NEW SDG CAROUSEL SCRIPT ---
+        const sdgCarousel = document.getElementById('sdg-carousel-container');
+        if (sdgCarousel) {
+            const slides = sdgCarousel.querySelectorAll('.sdg-slide-custom');
+            const dots = sdgCarousel.querySelectorAll('.dot');
+            let currentIndex = 1; // Start from slide 1
             let autoPlayInterval;
 
-            function goToSlide(index, manual = false) {
-                if (index < 0) index = slides.length - 1;
-                if (index >= slides.length) index = 0;
-                
-                sliderContainer.style.transform = `translateX(-${index * (100 / slides.length)}%)`;
-                
-                paginationNumbers.forEach((btn, i) => {
-                    btn.classList.toggle('scale-125', i === index);
-                    btn.classList.toggle('ring-2', i === index);
-                    btn.classList.toggle('ring-white', i === index);
-                    btn.classList.toggle('shadow-lg', i === index);
-                });
-                
+            function showSlide(index) {
+                // Deactivate current slide and dot
+                const currentSlide = sdgCarousel.querySelector(`.sdg-slide-custom.active`);
+                const currentDot = sdgCarousel.querySelector(`.dot.active`);
+                if (currentSlide) currentSlide.classList.remove('active');
+                if (currentDot) currentDot.classList.remove('active');
+
+                // Activate new slide and dot
                 currentIndex = index;
-                if(manual) resetAutoPlay();
+                const newSlide = sdgCarousel.querySelector(`.sdg-slide-custom[data-slide="${currentIndex}"]`);
+                const newDot = sdgCarousel.querySelector(`.dot[data-slide-to="${currentIndex}"]`);
+                if (newSlide) newSlide.classList.add('active');
+                if (newDot) newDot.classList.add('active');
             }
 
-            paginationNumbers.forEach(btn => {
-                btn.addEventListener('click', () => goToSlide(parseInt(btn.dataset.index), true));
+            function nextSlide() {
+                let nextIndex = currentIndex + 1;
+                if (nextIndex > slides.length) {
+                    nextIndex = 1;
+                }
+                showSlide(nextIndex);
+            }
+
+            dots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const slideIndex = parseInt(dot.getAttribute('data-slide-to'));
+                    showSlide(slideIndex);
+                    resetAutoPlay(); // Reset timer on manual click
+                });
             });
-            
+
             function startAutoPlay() {
-                autoPlayInterval = setInterval(() => goToSlide(currentIndex + 1), 6000);
+                autoPlayInterval = setInterval(nextSlide, 6000); // Change slide every 6 seconds
             }
 
             function resetAutoPlay() {
@@ -346,11 +476,6 @@
                 startAutoPlay();
             }
             
-            const carouselWrapper = sliderContainer.parentElement;
-            carouselWrapper.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
-            carouselWrapper.addEventListener('mouseleave', startAutoPlay);
-
-            goToSlide(0);
             startAutoPlay();
         }
 
@@ -552,7 +677,6 @@
                     fetchAndRenderCourses(this.textContent);
                 });
             });
-            // Load initial courses for the active tab
             fetchAndRenderCourses('FIP');
         }
         
