@@ -125,7 +125,7 @@
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Aksi & Inovasi UNJ</h2>
                     <p class="mt-3 text-lg text-gray-600">Berita, kegiatan, dan program yang kami lakukan untuk mendukung SDG 7.</p>
-                     <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-yellow rounded-full"></div>
+                    <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-yellow rounded-full"></div>
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">UNJ Jadi Percontohan Kampus Hijau dengan Pemasangan Panel Surya Skala Besar</h3>
                             <p class="text-gray-600 mb-6 flex-grow">Bekerja sama dengan BUMN sektor energi, UNJ menginstalasi sistem Pembangkit Listrik Tenaga Surya (PLTS) Atap di beberapa gedung utama kampus. Langkah ini bertujuan untuk mengurangi jejak karbon dan biaya listrik, sekaligus menjadi laboratorium hidup bagi mahasiswa.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-yellow text-gray-900 font-semibold px-6 py-3 rounded-lg hover:bg-sdg-yellow-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 7, 'slug' => 'unj-jadi-percontohan-kampus-hijau-plts']) }}" class="mt-auto self-start inline-block bg-sdg-yellow text-gray-900 font-semibold px-6 py-3 rounded-lg hover:bg-sdg-yellow-dark transition-colors duration-300">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Riset FT UNJ: Pemanfaatan Limbah Organik Pasar Menjadi Biogas</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Tim peneliti mengembangkan digester biogas skala kecil untuk mengolah sampah organik dari pasar menjadi energi untuk memasak bagi pedagang.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-yellow font-bold hover:text-sdg-yellow-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 7, 'slug' => 'riset-ft-unj-pemanfaatan-limbah-organik-pasar']) }}" class="mt-auto self-start text-sdg-yellow font-bold hover:text-sdg-yellow-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">UNJ Gelar Lomba Inovasi Efisiensi Energi untuk Mahasiswa</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Kompetisi tahunan ini menantang mahasiswa untuk menciptakan alat atau sistem yang dapat menghemat penggunaan energi di rumah tangga.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-yellow font-bold hover:text-sdg-yellow-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 7, 'slug' => 'unj-gelar-lomba-inovasi-efisiensi-energi']) }}" class="mt-auto self-start text-sdg-yellow font-bold hover:text-sdg-yellow-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -164,7 +164,7 @@
                 </div>
             </div>
         </section>
-        
+                
         <section id="publikasi-terkait" class="py-16 lg:py-24 bg-yellow-50">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">

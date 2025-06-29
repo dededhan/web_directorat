@@ -124,8 +124,8 @@
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Aksi & Inovasi UNJ</h2>
-                    <p class="mt-3 text-lg text-gray-600">Berita, kegiatan, dan program yang kami lakukan для mendukung SDG 5.</p>
-                     <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-orange rounded-full"></div>
+                    <p class="mt-3 text-lg text-gray-600">Berita, kegiatan, dan program yang kami lakukan untuk mendukung SDG 5.</p>
+                    <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-orange rounded-full"></div>
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">Pusat Studi Gender UNJ Luncurkan Satgas PPKS untuk Ciptakan Kampus Aman</h3>
                             <p class="text-gray-600 mb-6 flex-grow">Dalam upaya menciptakan lingkungan belajar yang aman dan bebas dari kekerasan seksual, UNJ meresmikan Satuan Tugas Pencegahan dan Penanganan Kekerasan Seksual (Satgas PPKS). Inisiatif ini menjadi ujung tombak dalam advokasi, edukasi, dan penanganan kasus.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-orange text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-orange-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 5, 'slug' => 'pusat-studi-gender-unj-luncurkan-satgas-ppks']) }}" class="mt-auto self-start inline-block bg-sdg-orange text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-orange-dark transition-colors duration-300">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Program "Women in Leadership" Bekali Mahasiswi UNJ</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Serangkaian workshop dan mentoring untuk meningkatkan kapasitas kepemimpinan mahasiswi UNJ di berbagai bidang organisasi.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-orange font-semibold hover:text-sdg-orange-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 5, 'slug' => 'program-women-in-leadership-bekali-mahasiswi-unj']) }}" class="mt-auto self-start text-sdg-orange font-semibold hover:text-sdg-orange-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">FIS UNJ Teliti Kesenjangan Upah Berbasis Gender di Sektor Informal</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Riset terbaru dari Fakultas Ilmu Sosial menyoroti tantangan yang dihadapi perempuan pekerja di sektor informal Jakarta.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-orange font-semibold hover:text-sdg-orange-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 5, 'slug' => 'fis-unj-teliti-kesenjangan-upah-berbasis-gender']) }}" class="mt-auto self-start text-sdg-orange font-semibold hover:text-sdg-orange-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>

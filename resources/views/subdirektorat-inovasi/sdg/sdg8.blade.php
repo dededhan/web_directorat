@@ -125,7 +125,7 @@
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Aksi & Inovasi UNJ</h2>
                     <p class="mt-3 text-lg text-gray-600">Berita, kegiatan, dan program yang kami lakukan untuk mendukung SDG 8.</p>
-                     <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-maroon rounded-full"></div>
+                    <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-maroon rounded-full"></div>
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">FEB UNJ Luncurkan Inkubator Bisnis "UNJPreneur" untuk Cetak Wirausahawan Muda</h3>
                             <p class="text-gray-600 mb-6 flex-grow">Fakultas Ekonomi dan Bisnis (FEB) UNJ meresmikan pusat inkubasi bisnis yang memberikan pendampingan, akses permodalan, dan jejaring bagi mahasiswa dan alumni yang ingin memulai usaha. Program ini bertujuan untuk meningkatkan jumlah wirausahawan baru yang inovatif.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-maroon text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-maroon-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 8, 'slug' => 'feb-unj-luncurkan-inkubator-bisnis-unjpreneur']) }}" class="mt-auto self-start inline-block bg-sdg-maroon text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-maroon-dark transition-colors duration-300">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">UNJ Adakan Pelatihan Pemasaran Digital untuk UMKM Binaan</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Program pengabdian masyarakat memberikan pelatihan gratis kepada puluhan UMKM di sekitar kampus untuk meningkatkan daya saing mereka di era digital.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-maroon font-semibold hover:text-sdg-maroon-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 8, 'slug' => 'unj-adakan-pelatihan-pemasaran-digital-umkm']) }}" class="mt-auto self-start text-sdg-maroon font-semibold hover:text-sdg-maroon-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Pusat Karir UNJ Sukses Gelar Job Fair Tahunan</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Menjembatani lulusan dengan dunia industri, UNJ Job Fair menghadirkan puluhan perusahaan ternama dan ribuan lowongan pekerjaan.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-maroon font-semibold hover:text-sdg-maroon-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 8, 'slug' => 'pusat-karir-unj-sukses-gelar-job-fair-tahunan']) }}" class="mt-auto self-start text-sdg-maroon font-semibold hover:text-sdg-maroon-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>

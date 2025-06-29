@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">UNJ Kirim Ratusan Mahasiswa Program Kampus Mengajar ke Daerah 3T</h3>
                             <p class="text-gray-600 mb-6 flex-grow">Sebagai bagian dari komitmen tridarma perguruan tinggi, UNJ secara aktif berpartisipasi dalam program Kampus Mengajar, mengirimkan mahasiswa terbaiknya untuk membantu meningkatkan kualitas literasi dan numerasi di sekolah-sekolah di daerah terdepan, terluar, dan tertinggal.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-red-edu text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-red-edu-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 4, 'slug' => 'unj-kirim-mahasiswa-kampus-mengajar-ke-daerah-3t']) }}" class="mt-auto self-start ...">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">FIP UNJ Gelar Workshop Pengembangan Kurikulum Adaptif</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Pelatihan bagi para guru untuk merancang kurikulum yang relevan dengan tantangan abad ke-21 dan kebutuhan siswa yang beragam.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-red-edu font-semibold hover:text-sdg-red-edu-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 4, 'slug' => 'fip-unj-gelar-workshop-kurikulum-adaptif']) }}" class="mt-auto self-start ...">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">UNJ Fasilitasi Beasiswa Bagi Mahasiswa Disabilitas</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">UNJ berkomitmen menciptakan lingkungan belajar yang inklusif dengan menyediakan beasiswa dan fasilitas pendukung bagi mahasiswa disabilitas.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-red-edu font-semibold hover:text-sdg-red-edu-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 4, 'slug' => 'unj-fasilitasi-beasiswa-mahasiswa-disabilitas']) }}" class="mt-auto self-start ...">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>

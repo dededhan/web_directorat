@@ -125,7 +125,7 @@
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Aksi & Inovasi UNJ</h2>
                     <p class="mt-3 text-lg text-gray-600">Berita, kegiatan, dan program yang kami lakukan untuk mendukung SDG 6.</p>
-                     <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-blue rounded-full"></div>
+                    <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-blue rounded-full"></div>
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">FT UNJ Kembangkan Teknologi Filtrasi Air Sederhana untuk Komunitas Pesisir</h3>
                             <p class="text-gray-600 mb-6 flex-grow">Tim peneliti dan mahasiswa dari Fakultas Teknik (FT) merancang dan mengimplementasikan sistem penyaringan air berbasis bahan lokal yang murah dan efektif untuk menyediakan air bersih bagi masyarakat di Marunda, Jakarta Utara.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-blue text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-blue-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 6, 'slug' => 'ft-unj-kembangkan-teknologi-filtrasi-air-sederhana']) }}" class="mt-auto self-start inline-block bg-sdg-blue text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-blue-dark transition-colors duration-300">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Kampanye "Tangan Bersih, Generasi Sehat" oleh Mahasiswa UNJ</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Mahasiswa KKN UNJ melakukan edukasi tentang pentingnya Cuci Tangan Pakai Sabun (CTPS) di puluhan sekolah dasar di sekitar Depok.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-blue font-semibold hover:text-sdg-blue-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 6, 'slug' => 'kampanye-tangan-bersih-generasi-sehat']) }}" class="mt-auto self-start text-sdg-blue font-semibold hover:text-sdg-blue-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Riset FMIPA UNJ: Pemetaan Sumber Polusi Mikroplastik di Sungai Ciliwung</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Penelitian jangka panjang ini memberikan data krusial bagi pemerintah untuk menyusun kebijakan pengendalian polusi plastik.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-blue font-semibold hover:text-sdg-blue-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 6, 'slug' => 'riset-fmipa-pemetaan-polusi-mikroplastik-ciliwung']) }}" class="mt-auto self-start text-sdg-blue font-semibold hover:text-sdg-blue-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>

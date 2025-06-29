@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">FIO UNJ Gelar "Gerak Sehat Jakarta" untuk Promosikan Gaya Hidup Aktif</h3>
                             <p class="text-gray-600 mb-6 flex-grow">Fakultas Ilmu Olahraga UNJ menginisiasi kampanye besar yang melibatkan ribuan warga dalam kegiatan senam bersama, jalan sehat, dan seminar kesehatan untuk memerangi penyakit tidak menular dan meningkatkan kebugaran masyarakat.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-green text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-green-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 3, 'slug' => 'fio-unj-gelar-gerak-sehat-jakarta']) }}" class="mt-auto self-start ...">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Riset UNJ: Hubungan Polusi Udara dan Penyakit Pernapasan</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Tim peneliti dari FMIPA UNJ mempublikasikan studi mengenai korelasi antara tingkat polusi udara di Jakarta dengan peningkatan kasus ISPA.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-green font-semibold hover:text-sdg-green-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 3, 'slug' => 'riset-unj-polusi-udara-dan-penyakit-pernapasan']) }}" class="mt-auto self-start ...">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">UNJ Luncurkan Layanan Konseling Psikologis Gratis</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Fakultas Pendidikan Psikologi membuka pusat layanan konseling yang dapat diakses gratis oleh mahasiswa dan masyarakat umum.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-green font-semibold hover:text-sdg-green-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 3, 'slug' => 'unj-luncurkan-layanan-konseling-psikologis-gratis']) }}" class="mt-auto self-start ...">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>

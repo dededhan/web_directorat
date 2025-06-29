@@ -22,6 +22,8 @@ use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\AdminMataKuliahController;
 use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\GlobalEngagementController;
+use App\Http\Controllers\BeritasdgController;
+
 
 Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
 
@@ -81,6 +83,9 @@ Route::get('/sdg/{id}', function ($id) {
     return view("subdirektorat-inovasi.sdg.sdg{$id}");
 })->where('id', '^(1[0-7]|[1-9])$')->name('sdg.show');
 
+Route::get('/sdg/{sdg_id}/berita/{slug}', [BeritasdgController::class, 'show'])
+    ->where('sdg_id', '^(1[0-7]|[1-9])$')
+    ->name('sdg.berita.show');
 // Static Pages
 Route::view('/tupoksi', 'tupoksi.tupoksi')->name('tupoksi.tupoksi');
 Route::view('/profile', 'Profile1.profile')->name('profile.profile');

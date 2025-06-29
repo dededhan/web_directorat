@@ -125,7 +125,7 @@
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Aksi & Inovasi UNJ</h2>
                     <p class="mt-3 text-lg text-gray-600">Berita, kegiatan, dan program yang kami lakukan untuk mendukung SDG 9.</p>
-                     <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-orange rounded-full"></div>
+                    <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-orange rounded-full"></div>
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">Tim Robotika UNJ Raih Juara di Kontes Robot Terbang Indonesia</h3>
                             <p class="text-gray-600 mb-6 flex-grow">Mahasiswa dari Fakultas Teknik UNJ berhasil memenangkan kategori inovasi terbaik dengan mengembangkan drone untuk pemantauan lahan pertanian. Inovasi ini menunjukkan kapasitas UNJ dalam teknologi terapan yang mendukung sektor industri.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-orange text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-orange-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 9, 'slug' => 'tim-robotika-unj-raih-juara-krsti']) }}" class="mt-auto self-start inline-block bg-sdg-orange text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-orange-dark transition-colors duration-300">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Startup Digital Binaan UNJ Dapatkan Pendanaan Awal</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Sebuah startup yang berfokus pada platform pembelajaran adaptif, yang didirikan oleh alumni UNJ, berhasil mendapatkan pendanaan dari investor.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-orange font-semibold hover:text-sdg-orange-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 9, 'slug' => 'startup-digital-binaan-unj-dapatkan-pendanaan']) }}" class="mt-auto self-start text-sdg-orange font-semibold hover:text-sdg-orange-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Kolaborasi Riset UNJ dan Industri Otomotif</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Fakultas Teknik menjalin kerja sama riset dengan perusahaan otomotif untuk mengembangkan material komposit ringan untuk bodi kendaraan.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-orange font-semibold hover:text-sdg-orange-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 9, 'slug' => 'kolaborasi-riset-unj-dan-industri-otomotif']) }}" class="mt-auto self-start text-sdg-orange font-semibold hover:text-sdg-orange-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -164,7 +164,7 @@
                 </div>
             </div>
         </section>
-        
+                
         <section id="publikasi-terkait" class="py-16 lg:py-24 bg-orange-50">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">

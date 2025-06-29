@@ -163,7 +163,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">UNJ Gelar Pelatihan Kewirausahaan untuk Masyarakat Rentan</h3>
                             <p class="text-gray-600 mb-6 flex-grow">Program pengabdian masyarakat ini membekali peserta dengan keterampilan wirausaha digital untuk meningkatkan kemandirian ekonomi, menjangkau lebih dari 200 peserta dari berbagai komunitas di sekitar Jakarta.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-red text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-red-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 1, 'slug' => 'unj-gelar-pelatihan-kewirausahaan-untuk-masyarakat-rentan']) }}" class="mt-auto self-start inline-block bg-sdg-red text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-red-dark transition-colors duration-300">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -176,7 +176,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Studi FIS UNJ: Krisis Iklim & Kemiskinan Petani</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Riset menyoroti dampak perubahan iklim pada ekonomi petani di Pantura, mendorong solusi kebijakan adaptif.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-red font-semibold hover:text-sdg-red-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 1, 'slug' => 'studi-fis-unj-krisis-iklim-dan-kemiskinan-petani']) }}" class="mt-auto self-start text-sdg-red font-semibold hover:text-sdg-red-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -187,7 +187,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Kolaborasi Program Perlindungan Sosial</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Pusat Studi SDGs UNJ bekerja sama dengan pemda untuk merancang skema jaminan sosial yang lebih efektif.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-red font-semibold hover:text-sdg-red-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 1, 'slug' => 'kolaborasi-program-perlindungan-sosial']) }}" class="mt-auto self-start text-sdg-red font-semibold hover:text-sdg-red-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>

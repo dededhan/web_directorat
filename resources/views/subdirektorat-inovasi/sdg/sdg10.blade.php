@@ -125,7 +125,7 @@
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Aksi & Inovasi UNJ</h2>
                     <p class="mt-3 text-lg text-gray-600">Berita, kegiatan, dan program yang kami lakukan untuk mendukung SDG 10.</p>
-                     <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-pink rounded-full"></div>
+                    <div class="mt-4 inline-block h-1.5 w-24 bg-sdg-pink rounded-full"></div>
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">UNJ Perkuat Komitmen Pendidikan Inklusif Melalui Pusat Layanan Disabilitas</h3>
                             <p class="text-gray-600 mb-6 flex-grow">Untuk mengurangi hambatan akses pendidikan bagi penyandang disabilitas, UNJ meresmikan Pusat Layanan Disabilitas (PLD) yang menyediakan pendampingan akademik, fasilitas aksesibel, dan teknologi asistif bagi mahasiswa berkebutuhan khusus.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-pink text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-pink-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 10, 'slug' => 'unj-perkuat-komitmen-pendidikan-inklusif-pld']) }}" class="mt-auto self-start inline-block bg-sdg-pink text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-pink-dark transition-colors duration-300">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Riset FIS UNJ: Kesenjangan Akses Digital di Kalangan Pelajar Jakarta</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Studi dari Fakultas Ilmu Sosial memetakan disparitas akses internet dan perangkat digital yang berdampak pada ketimpangan pembelajaran.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-pink font-semibold hover:text-sdg-pink-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 10, 'slug' => 'riset-fis-unj-kesenjangan-akses-digital-pelajar']) }}" class="mt-auto self-start text-sdg-pink font-semibold hover:text-sdg-pink-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Perluas Jangkauan, UNJ Tingkatkan Kuota Beasiswa Afirmasi</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">UNJ menambah alokasi beasiswa dan jalur penerimaan khusus bagi calon mahasiswa dari daerah 3T dan keluarga prasejahtera.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-pink font-semibold hover:text-sdg-pink-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 10, 'slug' => 'unj-tingkatkan-kuota-beasiswa-afirmasi']) }}" class="mt-auto self-start text-sdg-pink font-semibold hover:text-sdg-pink-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -164,7 +164,7 @@
                 </div>
             </div>
         </section>
-        
+                
         <section id="publikasi-terkait" class="py-16 lg:py-24 bg-pink-50">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">

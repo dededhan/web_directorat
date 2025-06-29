@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">UNJ Kembangkan Model Pertanian Urban untuk Ketahanan Pangan Kota</h3>
                             <p class="text-gray-600 mb-6 flex-grow">Melalui program pengabdian masyarakat, tim dari Fakultas Teknik dan MIPA UNJ mengimplementasikan sistem hidroponik dan akuaponik di lahan terbatas di area perkotaan Jakarta untuk meningkatkan ketersediaan pangan segar bagi warga.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-gold text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-gold-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 2, 'slug' => 'unj-kembangkan-model-pertanian-urban']) }}" class="mt-auto self-start inline-block bg-sdg-gold text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-gold-dark transition-colors duration-300">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Program Gizi Seimbang untuk Anak Usia Dini</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Mahasiswa UNJ mengadakan penyuluhan dan pembagian makanan bergizi di PAUD sekitar kampus untuk melawan stunting.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-gold font-semibold hover:text-sdg-gold-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 2, 'slug' => 'program-gizi-seimbang-anak-usia-dini']) }}" class="mt-auto self-start text-sdg-gold font-semibold hover:text-sdg-gold-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Kolaborasi Rantai Pasok dengan Petani Lokal</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Fakultas Ekonomi UNJ memfasilitasi kemitraan antara petani di daerah penyangga Jakarta dengan koperasi di kampus.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-gold font-semibold hover:text-sdg-gold-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 2, 'slug' => 'kolaborasi-rantai-pasok-petani-lokal']) }}" class="mt-auto self-start text-sdg-gold font-semibold hover:text-sdg-gold-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
