@@ -66,11 +66,11 @@ class AdminRespondenController extends Controller
         }
 
         // Add year filter if 'tahun' column exists and is provided in request
-        if ($request->filled('tahun') && Schema::hasColumn('respondens', 'tahun')) { // Assuming 'tahun' column
-            $query->where('tahun', $request->tahun);
-        } elseif ($request->filled('tahun')) { // Fallback to created_at if 'tahun' column doesn't exist
-            $query->whereYear('created_at', $request->tahun);
-        }
+        // if ($request->filled('tahun') && Schema::hasColumn('respondens', 'tahun')) { // Assuming 'tahun' column
+        //     $query->where('tahun', $request->tahun);
+        // } elseif ($request->filled('tahun')) { // Fallback to created_at if 'tahun' column doesn't exist
+        //     $query->whereYear('created_at', $request->tahun);
+        // }
 
 
         $query->orderBy($sort, $direction);
@@ -315,24 +315,72 @@ class AdminRespondenController extends Controller
     public function import(Request $request)
     {
         if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan'])) {
+            // Jika request adalah AJAX, kembalikan error JSON
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
+            }
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
-        $request->validate(['file' => 'required|mimes:xlsx,xls']);
+        
+        // Validasi tetap sama
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        if ($validator->fails()) {
+            $errorMessage = $validator->errors()->first();
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $errorMessage], 422); // 422 Unprocessable Entity
+            }
+            return redirect()->back()->with('error', $errorMessage);
+        }
+
         try {
-            Excel::import(new RespondenImport($request->has('skip_duplicates')), $request->file('file'));
-            return redirect()->back()->with('success', 'Data responden berhasil diimport!');
+            $userId = Auth::id();
+            $import = new RespondenImport($userId, $request->has('skip_duplicates'));
+            Excel::import($import, $request->file('file'));
+
+            
+            $importedCount = $import->getImportedCount();
+            $skippedCount = $import->getSkippedCount();
+
+            // [PENTING] Buat pesan dengan tag HTML
+            $successMessage = "Proses impor selesai. <br><br>" .
+                            "&bull; Berhasil diimpor: <strong>" . $importedCount . "</strong> baris. <br>" .
+                            "&bull; Dilewati (duplikat): <strong>" . $skippedCount . "</strong> baris.";
+
+            // Jika request adalah AJAX, kembalikan respons JSON
+            if ($request->wantsJson()) {
+                return response()->json(['success' => true, 'message' => $successMessage]);
+            }
+            
+            // Jika request biasa, lakukan redirect dengan flash message
+            return redirect()->back()->with('success', $successMessage);
+
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
             $errorMessages = [];
             foreach ($failures as $failure) {
-                $errorMessages[] = 'Row ' . $failure->row() . ': ' . implode(', ', $failure->errors());
+                $errorMessages[] = 'Baris ' . $failure->row() . ': ' . implode(', ', $failure->errors());
             }
-            return redirect()->back()->with('error', 'Error importing file: ' . implode('; ', $errorMessages));
+            $finalMessage = 'Error validasi saat impor: ' . implode('; ', $errorMessages);
+
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $finalMessage], 422);
+            }
+            return redirect()->back()->with('error', $finalMessage);
+
         } catch (\Exception $e) {
             Log::error('Import Error: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString());
-            return redirect()->back()->with('error', 'Error importing file: ' . $e->getMessage());
+            $finalMessage = 'Terjadi kesalahan pada server saat impor: ' . $e->getMessage();
+            
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $finalMessage], 500); // 500 Internal Server Error
+            }
+            return redirect()->back()->with('error', $finalMessage);
         }
     }
+
 
     public function filter(Request $request)
     {
