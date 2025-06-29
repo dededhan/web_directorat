@@ -331,11 +331,11 @@
                 <button
                     class="tab-btn active bg-unj-green text-white py-2 px-6 rounded-full font-semibold transition-all duration-300 shadow-md">Penelitian</button>
                 <button
-                    class="tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300">Pengabdian</button>
+                    class="tab-btn py-2 px-6 rounded-full font-semibold text-white-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300">Pengabdian</button>
                 <button
-                    class="tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300">Pendidikan</button>
+                    class="tab-btn py-2 px-6 rounded-full font-semibold text-white-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300">Pendidikan</button>
                 <button
-                    class="tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300">Kolaborasi</button>
+                    class="tab-btn py-2 px-6 rounded-full font-semibold text-white-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300">Kolaborasi</button>
             </div>
             <div class="program-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             </div>
@@ -367,25 +367,25 @@
                     class="course-tab-btn active bg-unj-green text-white py-2 px-6 rounded-full font-semibold transition-all duration-300 shadow-md"
                     data-faculty="FIP">FIP</button>
                 <button
-                    class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300"
+                    class="course-tab-btn py-2 px-6 rounded-full font-semibold text-white-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300"
                     data-faculty="FBS">FBS</button>
                 <button
-                    class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300"
+                    class="course-tab-btn py-2 px-6 rounded-full font-semibold text-white-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300"
                     data-faculty="FMIPA">FMIPA</button>
                 <button
-                    class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300"
+                    class="course-tab-btn py-2 px-6 rounded-full font-semibold text-white-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300"
                     data-faculty="FIS">FIS</button>
                 <button
-                    class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300"
+                    class="course-tab-btn py-2 px-6 rounded-full font-semibold text-white-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300"
                     data-faculty="FT">FT</button>
                 <button
-                    class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300"
+                    class="course-tab-btn py-2 px-6 rounded-full font-semibold text-white-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300"
                     data-faculty="FPPSI">FPPSI</button>
                 <button
-                    class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300"
+                    class="course-tab-btn py-2 px-6 rounded-full font-semibold text-white-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300"
                     data-faculty="FIK">FIK</button>
                 <button
-                    class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300"
+                    class="course-tab-btn py-2 px-6 rounded-full font-semibold text-white-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300"
                     data-faculty="FE">FE</button>
             </div>
             {{-- Grid untuk menampilkan card mata kuliah --}}
@@ -466,45 +466,45 @@
             // DUMMY DATA FOR PROGRAMS
             const dummyPrograms = {
                 penelitian: [{
-                        image: 'https://via.placeholder.com/400x300/1D796B/FFFFFF?text=Riset+Energi',
+                        image: 'https://industri.teknik.unimma.ac.id/wp-content/uploads/2025/03/Tren-Pekerjaan-Lulusan-Teknik-Industri-di-Era-AI-dan-Energi-Terbarukan.jpg',
                         title: 'Riset Energi Terbarukan di Kampus',
                         description: 'Pengembangan panel surya efisiensi tinggi untuk kebutuhan energi UNJ.',
                         date: '15 Juni 2025'
                     },
                     {
-                        image: 'https://via.placeholder.com/400x300/4C9F38/FFFFFF?text=Riset+Pangan',
+                        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQjN2clpW0ag-9hDlSne_Bf6amw3NNYcWOsA&s',
                         title: 'Studi Ketahanan Pangan Lokal',
                         description: 'Analisis potensi pangan lokal untuk mendukung SDG 2 di komunitas sekitar.',
                         date: '10 Juni 2025'
                     },
                 ],
                 pengabdian_masyarakat: [{
-                        image: 'https://via.placeholder.com/400x300/FD6925/FFFFFF?text=Pengabdian',
+                        image: 'https://www.winpay.id/wp-content/uploads/2024/02/beda-ukm-dan-umkm.png',
                         title: 'Literasi Digital untuk UMKM',
                         description: 'Pelatihan pemanfaatan teknologi untuk meningkatkan pemasaran produk UMKM.',
                         date: '20 Mei 2025'
                     },
                     {
-                        image: 'https://via.placeholder.com/400x300/0A97D9/FFFFFF?text=Bersih+Sungai',
+                        image: 'https://bisniswisata.co.id/wp-content/uploads/2021/11/IMG-20211113-WA0039.jpg',
                         title: 'Gerakan Ciliwung Bersih',
                         description: 'Kolaborasi dengan komunitas lokal dalam program pembersihan dan edukasi sungai.',
                         date: '05 Mei 2025'
                     },
                     {
-                        image: 'https://via.placeholder.com/400x300/DD1367/FFFFFF?text=Edukasi+Gender',
+                        image: 'https://assets-a1.kompasiana.com/items/album/2023/06/04/3997649-647c00d64addee630f395ef2.jpg',
                         title: 'Workshop Kesetaraan Gender',
                         description: 'Mengadakan seminar dan workshop di sekolah-sekolah untuk mempromosikan kesetaraan gender.',
                         date: '22 April 2025'
                     },
                 ],
                 pendidikan: [{
-                    image: 'https://via.placeholder.com/400x300/C5192D/FFFFFF?text=Kurikulum',
+                    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxs0SySFyoq17-xbfN2_3xvYxx7ZvHOaUlkg&s',
                     title: 'Integrasi Kurikulum SDGs',
                     description: 'Workshop pengembangan modul ajar berbasis SDGs untuk dosen di lingkungan UNJ.',
                     date: '12 April 2025'
                 }, ],
                 kolaborasi: [{
-                    image: 'https://via.placeholder.com/400x300/19486A/FFFFFF?text=Partnership',
+                    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTP3QLooFlHZHuma38Zu_Z8sJqQmgKzaT5YxA&s',
                     title: 'Kemitraan Industri Hijau',
                     description: 'Penandatanganan MoU dengan perusahaan untuk program magang dan riset bersama.',
                     date: '30 Maret 2025'
@@ -555,7 +555,7 @@
             // --- PUBLICATIONS & RESEARCH ---
             const publicationGrid = document.querySelector('.publication-grid');
             const dummyPublications = [{
-                    image: 'https://via.placeholder.com/400x300/00689D/FFFFFF?text=Publikasi+1',
+                    image: 'https://assets-a1.kompasiana.com/items/album/2018/03/28/dubai-sustainable-city-visual-aerial-5abaf2f5caf7db3778408995.jpg',
                     title: 'Model Tata Kelola Perkotaan Berkelanjutan',
                     authors: 'Dr. Budi Santoso, M.Si.',
                     description: 'Jurnal ini membahas kerangka kerja untuk kota yang inklusif dan aman, sejalan dengan SDG 11.',
@@ -563,7 +563,7 @@
                     document_url: '#'
                 },
                 {
-                    image: 'https://via.placeholder.com/400x300/BF8B2E/FFFFFF?text=Publikasi+2',
+                    image: 'https://media.licdn.com/dms/image/v2/D4D12AQGvDB-m-64V8g/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1689067488167?e=2147483647&v=beta&t=Omu3ENeK8G6z1sfpL2VtPVYoIKkciTdFdafapzxKlq4',
                     title: 'Analisis Rantai Pasok Ekonomi Sirkular',
                     authors: 'Prof. Dr. Siti Aminah, M.E.',
                     description: 'Penelitian mengenai penerapan ekonomi sirkular pada UMKM untuk mendukung SDG 12.',
@@ -571,12 +571,12 @@
                     document_url: '#'
                 },
                 {
-                    image: 'https://via.placeholder.com/400x300/3F7E44/FFFFFF?text=Publikasi+3',
+                    image: 'https://lcdi-indonesia.id/wp-content/uploads/2022/08/fishing-boat-sunset-village-traditional-boat-scaled-1300x731.jpg',
                     title: 'Dampak Perubahan Iklim Terhadap Ekosistem Pesisir',
                     authors: 'Dr. Rina Marlina, M.Sc.',
                     description: 'Studi kasus mengenai dampak kenaikan permukaan laut di pesisir utara Jakarta.',
                     has_document: false,
-                    document_url: null
+                    document_url: '#'
                 },
             ];
 
