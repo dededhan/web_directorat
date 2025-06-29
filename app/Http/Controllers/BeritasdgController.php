@@ -15,26 +15,38 @@ class BeritasdgController extends Controller
      * @return View
      */
     // Method show() yang sudah diperbaiki
-public function show(int $sdg_id, string $slug): View
-{
-    // Mengambil data SDG berdasarkan ID-nya.
-    $sdg = $this->getSdgData($sdg_id);
+    public function show(int $sdg_id, string $slug): View
+    {
+        $sdg = $this->getSdgData($sdg_id);
+        $all_berita = $this->getAllBeritaData();
 
-    // Mengambil data berita berdasarkan slug dan memastikan berita tersebut milik SDG yang benar.
-    $berita = $this->getBeritaData($slug, $sdg_id);
+        // Cari berita yang sedang dibuka berdasarkan slug-nya
+        $berita = $all_berita[$slug] ?? null;
 
-    // Jika data SDG atau Berita tidak ditemukan, tampilkan halaman 404.
-    if (!$sdg || !$berita) {
-        abort(404);
+        // Validasi: Jika SDG atau Berita tidak ditemukan, atau berita tidak cocok dengan SDG-nya, tampilkan halaman 404.
+        if (!$sdg || !$berita || $berita['sdg_id'] !== $sdg_id) {
+            abort(404, 'Berita tidak ditemukan.');
+        }
+
+
+        $related_berita = [];
+        foreach ($all_berita as $related_slug => $related_item) {
+            if ($related_item['sdg_id'] === $sdg_id && $related_slug !== $slug) {
+                // Tambahkan slug ke dalam array agar bisa digunakan di view untuk membuat URL
+                $related_item['slug'] = $related_slug;
+                $related_berita[] = $related_item;
+            }
+        }
+
+        // Mengirim semua data yang dibutuhkan ke view
+        return view('subdirektorat-inovasi.sdg.berita.detail', [
+            'sdg' => $sdg,
+            'berita' => $berita,
+            'sdg_id' => $sdg_id,
+            // Kirim 4 berita terkait pertama ke view
+            'related_berita' => array_slice($related_berita, 0, 4)
+        ]);
     }
-
-    // Mengirim data ke view
-    return view('subdirektorat-inovasi.sdg.berita.detail', [
-        'sdg' => $sdg,
-        'berita' => $berita,
-        'sdg_id' => $sdg_id // <-- PERBAIKAN: Variabel $sdg_id sekarang dikirim ke view
-    ]);
-}
 
     /**
      * Simulasi pengambilan data SDG dari database.
@@ -55,6 +67,13 @@ public function show(int $sdg_id, string $slug): View
             8 => ['title' => 'Pekerjaan Layak dan Pertumbuhan Ekonomi', 'icon' => 'https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-08.jpg', 'color' => '#A21942'],
             9 => ['title' => 'Industri, Inovasi, dan Infrastruktur', 'icon' => 'https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-09.jpg', 'color' => '#FD6925'],
             10 => ['title' => 'Berkurangnya Kesenjangan', 'icon' => 'https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-10.jpg', 'color' => '#DD1367'],
+            11 => ['title' => 'Kota dan Permukiman Berkelanjutan', 'icon' => 'https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-11.jpg', 'color' => '#FD9D24'],
+            12 => ['title' => 'Konsumsi dan Produksi Bertanggung Jawab', 'icon' => 'https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-12.jpg', 'color' => '#BF8B2E'],
+            13 => ['title' => 'Penanganan Perubahan Iklim', 'icon' => 'https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-13.jpg', 'color' => '#3F7E44'],
+            14 => ['title' => 'Ekosistem Lautan', 'icon' => 'https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-14.jpg', 'color' => '#0A97D9'],
+            15 => ['title' => 'Ekosistem Daratan', 'icon' => 'https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-15.jpg', 'color' => '#56C02B'],
+            16 => ['title' => 'Perdamaian, Keadilan, dan Kelembagaan Tangguh', 'icon' => 'https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-16.jpg', 'color' => '#00689D'],
+            17 => ['title' => 'Kemitraan untuk Mencapai Tujuan', 'icon' => 'https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-17.jpg', 'color' => '#19486A'],
         ];
 
         return $all_sdgs[$id] ?? null;
@@ -67,9 +86,9 @@ public function show(int $sdg_id, string $slug): View
      * @param int $sdg_id
      * @return array|null
      */
-    private function getBeritaData(string $slug, int $sdg_id): ?array
+    private function getAllBeritaData(): array
     {
-        $all_berita = [
+        return [
             'unj-gelar-pelatihan-kewirausahaan-untuk-masyarakat-rentan' => [
                 'sdg_id' => 1,
                 'title' => 'UNJ Gelar Pelatihan Kewirausahaan untuk Masyarakat Rentan',
@@ -86,7 +105,7 @@ public function show(int $sdg_id, string $slug): View
                 'date' => '18 Juni 2025',
                 'content' => '<p>Penelitian terbaru dari Fakultas Ilmu Sosial (FIS) Universitas Negeri Jakarta menyoroti hubungan erat antara krisis iklim dan peningkatan angka kemiskinan di kalangan petani di pesisir Pantura. Studi ini menemukan bahwa perubahan pola cuaca yang tidak menentu telah menyebabkan gagal panen dan penurunan produktivitas pertanian secara signifikan, yang secara langsung berdampak pada pendapatan rumah tangga petani.</p><p>Riset ini merekomendasikan adanya intervensi kebijakan yang bersifat adaptif, termasuk pengembangan varietas tanaman yang tahan terhadap perubahan iklim dan penguatan skema asuransi pertanian. "Solusi parsial tidak akan cukup. Diperlukan pendekatan holistik yang mengintegrasikan adaptasi iklim ke dalam strategi pengentasan kemiskinan nasional," ungkap ketua tim peneliti.</p>'
             ],
-             'kolaborasi-program-perlindungan-sosial' => [
+            'kolaborasi-program-perlindungan-sosial' => [
                 'sdg_id' => 1,
                 'title' => 'Kolaborasi Program Perlindungan Sosial',
                 'image' => 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=2070&auto=format&fit=crop',
@@ -94,7 +113,7 @@ public function show(int $sdg_id, string $slug): View
                 'date' => '12 Juni 2025',
                 'content' => '<p>Pusat Studi SDGs Universitas Negeri Jakarta (UNJ) bekerja sama dengan pemerintah daerah untuk merancang skema jaminan sosial yang lebih efektif. Kolaborasi ini bertujuan untuk memastikan bantuan sosial dapat tepat sasaran dan memberikan dampak signifikan dalam upaya pengentasan kemiskinan, sejalan dengan komitmen UNJ dalam mendukung SDG 1.</p><p>Dalam kerja sama ini, para peneliti dan ahli dari UNJ akan melakukan kajian mendalam terhadap data kemiskinan dan efektivitas program yang ada. Masukan berbasis riset ini akan digunakan untuk menyusun rekomendasi kebijakan guna menyempurnakan mekanisme penargetan dan distribusi bantuan. Diharapkan, sinergi antara dunia akademis dan pemerintah ini dapat menciptakan sebuah model jaminan sosial yang lebih adil, transparan, dan berkelanjutan untuk melindungi kelompok miskin serta rentan.</p>'
             ],
-                'unj-kembangkan-model-pertanian-urban' => [
+            'unj-kembangkan-model-pertanian-urban' => [
                 'sdg_id' => 2,
                 'title' => 'UNJ Kembangkan Model Pertanian Urban untuk Ketahanan Pangan Kota',
                 'image' => 'https://images.unsplash.com/photo-1599599810694-b5b37304c272?q=80&w=2070&auto=format&fit=crop',
@@ -118,7 +137,7 @@ public function show(int $sdg_id, string $slug): View
                 'date' => '15 Juni 2025',
                 'content' => '<p>Fakultas Ekonomi Universitas Negeri Jakarta (FE UNJ) mengambil peran strategis dalam memperpendek rantai pasok pangan. Melalui sebuah program kemitraan, FE UNJ memfasilitasi kerja sama langsung antara kelompok petani di daerah penyangga Jakarta dengan koperasi mahasiswa dan kantin di lingkungan kampus.</p><p>Kemitraan ini bertujuan untuk memastikan petani mendapatkan harga jual yang lebih adil sekaligus menyediakan produk segar berkualitas bagi civitas academica UNJ dengan harga yang lebih terjangkau. Program ini tidak hanya mendukung peningkatan pendapatan produsen makanan skala kecil sesuai target SDG 2.3, tetapi juga mempromosikan model bisnis yang berkelanjutan dan berkeadilan.</p>'
             ],
-                // === DATA BERITA SDG 3 ===
+            // === DATA BERITA SDG 3 ===
             'fio-unj-gelar-gerak-sehat-jakarta' => [
                 'sdg_id' => 3,
                 'title' => 'FIO UNJ Gelar "Gerak Sehat Jakarta" untuk Promosikan Gaya Hidup Aktif',
@@ -325,8 +344,190 @@ public function show(int $sdg_id, string $slug): View
                 'date' => '8 Agustus 2025',
                 'content' => '<p>Dalam upaya mengurangi kesenjangan kesempatan, UNJ secara resmi mengumumkan penambahan alokasi beasiswa dan kuota pada jalur penerimaan khusus (afirmasi). Kebijakan ini ditujukan bagi calon mahasiswa berprestasi yang berasal dari daerah 3T (terdepan, terluar, tertinggal) dan keluarga prasejahtera, memberikan mereka jalan untuk mengakses pendidikan tinggi berkualitas.</p>'
             ],
-    ];
-        
+            
+            // === DATA BERITA SDG 11 ===
+            'fis-unj-lakukan-pemetaan-partisipatif' => [
+                'sdg_id' => 11,
+                'title' => 'FIS UNJ Lakukan Pemetaan Partisipatif untuk Revitalisasi Ruang Publik di Jakarta',
+                'image' => 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Tim FIS UNJ',
+                'date' => '12 Agustus 2025',
+                'content' => '<p>Melibatkan warga lokal, mahasiswa dari Fakultas Ilmu Sosial (FIS) memetakan kebutuhan dan potensi ruang-ruang publik yang terbengkalai untuk diusulkan menjadi taman, area bermain, atau ruang interaksi warga yang lebih bermanfaat.</p>'
+            ],
+            'riset-ft-unj-model-integrasi-transportasi-publik' => [
+                'sdg_id' => 11,
+                'title' => 'Riset FT UNJ: Model Integrasi Transportasi Publik Jabodetabek',
+                'image' => 'https://images.unsplash.com/photo-1517488629431-1d5843433a4c?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Tim Teknik Sipil UNJ',
+                'date' => '13 Agustus 2025',
+                'content' => '<p>Tim dari Teknik Sipil merancang model untuk meningkatkan konektivitas antara berbagai moda transportasi publik guna mengurangi kemacetan.</p>'
+            ],
+            'kkn-tematik-unj-fokus-bank-sampah-digital' => [
+                'sdg_id' => 11,
+                'title' => 'KKN Tematik UNJ Fokus pada Program Bank Sampah Digital',
+                'image' => 'https://images.unsplash.com/photo-1599056262426-521639c43d81?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Mahasiswa KKN UNJ',
+                'date' => '14 Agustus 2025',
+                'content' => '<p>Mahasiswa KKN UNJ mendampingi warga di beberapa RW untuk mengimplementasikan sistem bank sampah berbasis aplikasi mobile.</p>'
+            ],
+
+            // === DATA BERITA SDG 12 ===
+            'unj-luncurkan-gerakan-zero-waste-campus' => [
+                'sdg_id' => 12,
+                'title' => 'UNJ Luncurkan Gerakan "Zero Waste Campus" dengan Pengelolaan Sampah Terpadu',
+                'image' => 'https://images.unsplash.com/photo-1604187351543-04114775c87a?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Humas UNJ',
+                'date' => '15 Agustus 2025',
+                'content' => '<p>UNJ mengimplementasikan sistem pengelolaan sampah terpadu yang mewajibkan pemilahan sampah di seluruh area kampus. Sampah organik diolah menjadi kompos, sementara sampah anorganik disalurkan ke bank sampah untuk didaur ulang.</p>'
+            ],
+            'prodi-tata-boga-ciptakan-produk-dari-sisa-pangan' => [
+                'sdg_id' => 12,
+                'title' => 'Prodi Tata Boga UNJ Ciptakan Produk dari Sisa Pangan (Food Loss)',
+                'image' => 'https://images.unsplash.com/photo-1593105544959-28c64c931a37?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Prodi Tata Boga UNJ',
+                'date' => '16 Agustus 2025',
+                'content' => '<p>Mahasiswa mengembangkan produk pangan inovatif seperti keripik dari kulit sayuran dan kaldu dari tulang sisa untuk mengurangi limbah makanan.</p>'
+            ],
+            'peragaan-busana-berkelanjutan-tata-busana-unj' => [
+                'sdg_id' => 12,
+                'title' => 'Peragaan Busana Berkelanjutan oleh Mahasiswa Tata Busana UNJ',
+                'image' => 'https://images.unsplash.com/photo-1611212879685-53535957dc5a?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Prodi Tata Busana UNJ',
+                'date' => '17 Agustus 2025',
+                'content' => '<p>Mahasiswa menampilkan koleksi busana yang dibuat dari bahan daur ulang dan limbah kain perca sebagai kampanye melawan fast fashion.</p>'
+            ],
+
+            // === DATA BERITA SDG 13 ===
+            'pusat-studi-lingkungan-rilis-peta-kerentanan' => [
+                'sdg_id' => 13,
+                'title' => 'Pusat Studi Lingkungan UNJ Rilis Peta Kerentanan Kenaikan Permukaan Laut di Pesisir Jakarta',
+                'image' => 'https://images.unsplash.com/photo-1611273635951-87a323a65213?q=80&w=1932&auto=format&fit=crop',
+                'author' => 'Pusat Studi Lingkungan UNJ',
+                'date' => '18 Agustus 2025',
+                'content' => '<p>Berdasarkan data multi-tahun, tim peneliti dari UNJ memodelkan dan memetakan area-area di pesisir Jakarta yang paling rentan terhadap dampak kenaikan permukaan laut. Hasil riset ini diserahkan kepada pemerintah sebagai dasar perencanaan adaptasi.</p>'
+            ],
+            'mahasiswa-unj-gelar-aksi-satu-pohon-satu-harapan' => [
+                'sdg_id' => 13,
+                'title' => 'Mahasiswa UNJ Gelar Aksi "Satu Pohon, Satu Harapan"',
+                'image' => 'https://images.unsplash.com/photo-1542601906-823816a75393?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Mahasiswa Pecinta Alam UNJ',
+                'date' => '19 Agustus 2025',
+                'content' => '<p>Bekerja sama dengan komunitas lokal, mahasiswa menanam ribuan pohon di area resapan air sebagai aksi nyata mitigasi perubahan iklim.</p>'
+            ],
+            'unj-kembangkan-modul-pendidikan-perubahan-iklim' => [
+                'sdg_id' => 13,
+                'title' => 'UNJ Kembangkan Modul Pendidikan Perubahan Iklim untuk Sekolah',
+                'image' => 'https://images.unsplash.com/photo-1491841550275-5b462bf48569?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Fakultas Ilmu Pendidikan UNJ',
+                'date' => '20 Agustus 2025',
+                'content' => '<p>Fakultas Ilmu Pendidikan (FIP) menyusun modul ajar interaktif untuk membantu guru menjelaskan isu perubahan iklim kepada siswa.</p>'
+            ],
+
+            // === DATA BERITA SDG 14 ===
+            'mahasiswa-biologi-tanam-mangrove-muara-gembong' => [
+                'sdg_id' => 14,
+                'title' => 'Mahasiswa Biologi UNJ dan Komunitas Lokal Tanam Ribuan Mangrove di Pesisir Muara Gembong',
+                'image' => 'https://images.unsplash.com/photo-1582202242940-27a363b7b51e?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Tim Biologi UNJ',
+                'date' => '21 Agustus 2025',
+                'content' => '<p>Sebagai bagian dari program pengabdian masyarakat, tim dari UNJ berkolaborasi dengan kelompok pemuda dan nelayan lokal untuk merehabilitasi ekosistem mangrove yang rusak akibat abrasi. Kegiatan ini bertujuan untuk melindungi garis pantai dan mengembalikan habitat biota laut.</p>'
+            ],
+            'riset-kimia-unj-deteksi-mikroplastik' => [
+                'sdg_id' => 14,
+                'title' => 'Riset Kimia UNJ: Deteksi Mikroplastik pada Ikan Konsumsi',
+                'image' => 'https://images.unsplash.com/photo-1597931333425-11b6a2431713?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Tim Kimia UNJ',
+                'date' => '22 Agustus 2025',
+                'content' => '<p>Penelitian yang dipublikasikan di jurnal internasional ini mengungkap tingkat kontaminasi mikroplastik pada ikan yang dijual di pasar-pasar Jakarta.</p>'
+            ],
+            'unj-adakan-pelatihan-transplantasi-terumbu-karang' => [
+                'sdg_id' => 14,
+                'title' => 'UNJ Adakan Pelatihan Transplantasi Terumbu Karang',
+                'image' => 'https://images.unsplash.com/photo-1564993356612-9da288b53580?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Humas UNJ',
+                'date' => '23 Agustus 2025',
+                'content' => '<p>Bekerja sama dengan Balai Taman Nasional Kepulauan Seribu, UNJ melatih pemandu wisata selam menjadi kader konservasi terumbu karang.</p>'
+            ],
+
+            // === DATA BERITA SDG 15 ===
+            'unj-resmikan-arboretum-laboratorium-hidup' => [
+                'sdg_id' => 15,
+                'title' => 'UNJ Resmikan Arboretum sebagai Laboratorium Hidup dan Paru-paru Kampus',
+                'image' => 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2071&auto=format&fit=crop',
+                'author' => 'Humas UNJ',
+                'date' => '24 Agustus 2025',
+                'content' => '<p>UNJ mendedikasikan sebagian lahan kampusnya sebagai arboretum yang menampung berbagai jenis tanaman lokal dan langka. Area ini berfungsi sebagai pusat penelitian botani, sarana edukasi lingkungan, sekaligus area resapan air untuk kampus.</p>'
+            ],
+            'riset-unj-pemetaan-koridor-satwa-liar' => [
+                'sdg_id' => 15,
+                'title' => 'Riset UNJ: Pemetaan Koridor Satwa Liar di Lanskap Perkotaan',
+                'image' => 'https://images.unsplash.com/photo-1594723453368-47253856868a?q=80&w=1964&auto=format&fit=crop',
+                'author' => 'Tim Biologi UNJ',
+                'date' => '25 Agustus 2025',
+                'content' => '<p>Tim Biologi menggunakan kamera jebak dan GPS tracking untuk memetakan pergerakan satwa liar di area hijau sekitar Jakarta sebagai dasar kebijakan konservasi.</p>'
+            ],
+            'kkn-tematik-unj-fokus-reboisasi-lahan-kritis' => [
+                'sdg_id' => 15,
+                'title' => 'KKN Tematik UNJ Fokus pada Reboisasi Lahan Kritis di Hulu Sungai',
+                'image' => 'https://images.unsplash.com/photo-1599399008985-e0b82b9846a8?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Mahasiswa KKN UNJ',
+                'date' => '26 Agustus 2025',
+                'content' => '<p>Mahasiswa melakukan penanaman pohon di lahan kritis di kawasan hulu sungai untuk mencegah erosi dan menjaga ketersediaan air tanah.</p>'
+            ],
+
+            // === DATA BERITA SDG 16 ===
+            'pusat-studi-hukum-gelar-penyuluhan-hukum-gratis' => [
+                'sdg_id' => 16,
+                'title' => 'Pusat Studi Hukum UNJ Gelar Penyuluhan Hukum Gratis dan Bantuan Hukum bagi Masyarakat',
+                'image' => 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Pusat Studi Hukum UNJ',
+                'date' => '27 Agustus 2025',
+                'content' => '<p>Dalam rangka meningkatkan akses terhadap keadilan, UNJ menyediakan layanan konsultasi dan bantuan hukum cuma-cuma bagi masyarakat kurang mampu. Program ini melibatkan dosen dan mahasiswa sebagai paralegal untuk memberikan pendampingan.</p>'
+            ],
+            'unj-deklarasikan-zona-integritas' => [
+                'sdg_id' => 16,
+                'title' => 'UNJ Deklarasikan Zona Integritas Menuju Wilayah Bebas Korupsi',
+                'image' => 'https://images.unsplash.com/photo-1600880292210-2ad6a4a13433?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Humas UNJ',
+                'date' => '28 Agustus 2025',
+                'content' => '<p>Sebagai komitmen institusional, UNJ mencanangkan pembangunan zona integritas untuk menciptakan tata kelola yang bersih dan transparan.</p>'
+            ],
+            'prodi-pkn-inisiasi-sekolah-demokrasi' => [
+                'sdg_id' => 16,
+                'title' => 'Prodi PKn UNJ Inisiasi "Sekolah Demokrasi" untuk Pelajar SMA',
+                'image' => 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Prodi PKn UNJ',
+                'date' => '29 Agustus 2025',
+                'content' => '<p>Program ini bertujuan untuk menanamkan nilai-nilai demokrasi, toleransi, dan partisipasi aktif kepada generasi muda sejak dini.</p>'
+            ],
+
+            // === DATA BERITA SDG 17 ===
+            'unj-gelar-forum-multi-pihak' => [
+                'sdg_id' => 17,
+                'title' => 'UNJ Gelar Forum Multi-Pihak, Satukan Pemerintah, Swasta, dan Komunitas untuk Aksi SDGs',
+                'image' => 'https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Humas UNJ',
+                'date' => '30 Agustus 2025',
+                'content' => '<p>Sebagai wujud nyata kemitraan, UNJ menjadi tuan rumah forum tahunan yang mempertemukan berbagai pemangku kepentingan untuk berdiskusi, berbagi praktik baik, dan merancang proyek kolaboratif guna mempercepat pencapaian Tujuan Pembangunan Berkelanjutan di Indonesia.</p>'
+            ],
+            'unj-jalin-kemitraan-riset-dengan-universitas-asean' => [
+                'sdg_id' => 17,
+                'title' => 'UNJ Jalin Kemitraan Riset dengan Universitas di ASEAN',
+                'image' => 'https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Kantor Urusan Internasional UNJ',
+                'date' => '31 Agustus 2025',
+                'content' => '<p>UNJ menandatangani MoU dengan beberapa universitas terkemuka di Asia Tenggara untuk melakukan riset bersama tentang isu-isu pembangunan berkelanjutan lintas negara.</p>'
+            ],
+            'kolaborasi-unj-dan-sektor-swasta-untuk-program-magang' => [
+                'sdg_id' => 17,
+                'title' => 'Kolaborasi UNJ dan Sektor Swasta untuk Program Magang SDGs',
+                'image' => 'https://images.unsplash.com/photo-1581092921449-41b93f2c3516?q=80&w=2070&auto=format&fit=crop',
+                'author' => 'Pusat Karir UNJ',
+                'date' => '1 September 2025',
+                'content' => '<p>Program magang baru ini menempatkan mahasiswa di perusahaan-perusahaan yang memiliki komitmen kuat pada praktik bisnis berkelanjutan.</p>'
+            ],
+        ];
+
 
         // Cek apakah berita ada dan sesuai dengan sdg_id yang diminta
         if (isset($all_berita[$slug]) && $all_berita[$slug]['sdg_id'] === $sdg_id) {

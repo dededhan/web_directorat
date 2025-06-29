@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">FIS UNJ Lakukan Pemetaan Partisipatif untuk Revitalisasi Ruang Publik di Jakarta</h3>
                             <p class="text-gray-600 mb-6 flex-grow">Melibatkan warga lokal, mahasiswa dari Fakultas Ilmu Sosial (FIS) memetakan kebutuhan dan potensi ruang-ruang publik yang terbengkalai untuk diusulkan menjadi taman, area bermain, atau ruang interaksi warga yang lebih bermanfaat.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-city-orange text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-city-orange-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 11, 'slug' => 'fis-unj-lakukan-pemetaan-partisipatif']) }}" class="mt-auto self-start inline-block bg-sdg-city-orange text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-city-orange-dark transition-colors duration-300">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Riset FT UNJ: Model Integrasi Transportasi Publik Jabodetabek</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Tim dari Teknik Sipil merancang model untuk meningkatkan konektivitas antara berbagai moda transportasi publik guna mengurangi kemacetan.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-city-orange font-semibold hover:text-sdg-city-orange-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 11, 'slug' => 'riset-ft-unj-model-integrasi-transportasi-publik']) }}" class="mt-auto self-start text-sdg-city-orange font-semibold hover:text-sdg-city-orange-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">KKN Tematik UNJ Fokus pada Program Bank Sampah Digital</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Mahasiswa KKN UNJ mendampingi warga di beberapa RW untuk mengimplementasikan sistem bank sampah berbasis aplikasi mobile.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-city-orange font-semibold hover:text-sdg-city-orange-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 11, 'slug' => 'kkn-tematik-unj-fokus-bank-sampah-digital']) }}" class="mt-auto self-start text-sdg-city-orange font-semibold hover:text-sdg-city-orange-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>

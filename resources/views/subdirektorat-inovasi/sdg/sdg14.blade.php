@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">Mahasiswa Biologi UNJ dan Komunitas Lokal Tanam Ribuan Mangrove di Pesisir Muara Gembong</h3>
                             <p class="text-gray-600 mb-6 flex-grow">Sebagai bagian dari program pengabdian masyarakat, tim dari UNJ berkolaborasi dengan kelompok pemuda dan nelayan lokal untuk merehabilitasi ekosistem mangrove yang rusak akibat abrasi. Kegiatan ini bertujuan untuk melindungi garis pantai dan mengembalikan habitat biota laut.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-ocean-blue text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-ocean-blue-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 14, 'slug' => 'mahasiswa-biologi-tanam-mangrove-muara-gembong']) }}" class="mt-auto self-start inline-block bg-sdg-ocean-blue text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-ocean-blue-dark transition-colors duration-300">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Riset Kimia UNJ: Deteksi Mikroplastik pada Ikan Konsumsi</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Penelitian yang dipublikasikan di jurnal internasional ini mengungkap tingkat kontaminasi mikroplastik pada ikan yang dijual di pasar-pasar Jakarta.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-ocean-blue font-semibold hover:text-sdg-ocean-blue-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 14, 'slug' => 'riset-kimia-unj-deteksi-mikroplastik']) }}" class="mt-auto self-start text-sdg-ocean-blue font-semibold hover:text-sdg-ocean-blue-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">UNJ Adakan Pelatihan Transplantasi Terumbu Karang</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Bekerja sama dengan Balai Taman Nasional Kepulauan Seribu, UNJ melatih pemandu wisata selam menjadi kader konservasi terumbu karang.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-ocean-blue font-semibold hover:text-sdg-ocean-blue-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 14, 'slug' => 'unj-adakan-pelatihan-transplantasi-terumbu-karang']) }}" class="mt-auto self-start text-sdg-ocean-blue font-semibold hover:text-sdg-ocean-blue-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>

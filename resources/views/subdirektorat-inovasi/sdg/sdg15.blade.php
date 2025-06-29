@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">UNJ Resmikan Arboretum sebagai Laboratorium Hidup dan Paru-paru Kampus</h3>
                             <p class="text-gray-600 mb-6 flex-grow">UNJ mendedikasikan sebagian lahan kampusnya sebagai arboretum yang menampung berbagai jenis tanaman lokal dan langka. Area ini berfungsi sebagai pusat penelitian botani, sarana edukasi lingkungan, sekaligus area resapan air untuk kampus.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-land-green text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-land-green-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 15, 'slug' => 'unj-resmikan-arboretum-laboratorium-hidup']) }}" class="mt-auto self-start inline-block bg-sdg-land-green text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-land-green-dark transition-colors duration-300">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Riset UNJ: Pemetaan Koridor Satwa Liar di Lanskap Perkotaan</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Tim Biologi menggunakan kamera jebak dan GPS tracking untuk memetakan pergerakan satwa liar di area hijau sekitar Jakarta sebagai dasar kebijakan konservasi.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-land-green font-semibold hover:text-sdg-land-green-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 15, 'slug' => 'riset-unj-pemetaan-koridor-satwa-liar']) }}" class="mt-auto self-start text-sdg-land-green font-semibold hover:text-sdg-land-green-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">KKN Tematik UNJ Fokus pada Reboisasi Lahan Kritis di Hulu Sungai</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Mahasiswa melakukan penanaman pohon di lahan kritis di kawasan hulu sungai untuk mencegah erosi dan menjaga ketersediaan air tanah.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-land-green font-semibold hover:text-sdg-land-green-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 15, 'slug' => 'kkn-tematik-unj-fokus-reboisasi-lahan-kritis']) }}" class="mt-auto self-start text-sdg-land-green font-semibold hover:text-sdg-land-green-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>

@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">Pusat Studi Hukum UNJ Gelar Penyuluhan Hukum Gratis dan Bantuan Hukum bagi Masyarakat</h3>
                             <p class="text-gray-600 mb-6 flex-grow">Dalam rangka meningkatkan akses terhadap keadilan, UNJ menyediakan layanan konsultasi dan bantuan hukum cuma-cuma bagi masyarakat kurang mampu. Program ini melibatkan dosen dan mahasiswa sebagai paralegal untuk memberikan pendampingan.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-peace-blue text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-peace-blue-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 16, 'slug' => 'pusat-studi-hukum-gelar-penyuluhan-hukum-gratis']) }}" class="mt-auto self-start inline-block bg-sdg-peace-blue text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-peace-blue-dark transition-colors duration-300">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">UNJ Deklarasikan Zona Integritas Menuju Wilayah Bebas Korupsi</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Sebagai komitmen institusional, UNJ mencanangkan pembangunan zona integritas untuk menciptakan tata kelola yang bersih dan transparan.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-peace-blue font-semibold hover:text-sdg-peace-blue-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 16, 'slug' => 'unj-deklarasikan-zona-integritas']) }}" class="mt-auto self-start text-sdg-peace-blue font-semibold hover:text-sdg-peace-blue-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Prodi PKn UNJ Inisiasi "Sekolah Demokrasi" untuk Pelajar SMA</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Program ini bertujuan untuk menanamkan nilai-nilai demokrasi, toleransi, dan partisipasi aktif kepada generasi muda sejak dini.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-peace-blue font-semibold hover:text-sdg-peace-blue-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 16, 'slug' => 'prodi-pkn-inisiasi-sekolah-demokrasi']) }}" class="mt-auto self-start text-sdg-peace-blue font-semibold hover:text-sdg-peace-blue-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>

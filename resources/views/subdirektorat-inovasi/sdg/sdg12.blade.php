@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">UNJ Luncurkan Gerakan "Zero Waste Campus" dengan Pengelolaan Sampah Terpadu</h3>
                             <p class="text-gray-600 mb-6 flex-grow">UNJ mengimplementasikan sistem pengelolaan sampah terpadu yang mewajibkan pemilahan sampah di seluruh area kampus. Sampah organik diolah menjadi kompos, sementara sampah anorganik disalurkan ke bank sampah untuk didaur ulang.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-brown text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-brown-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 12, 'slug' => 'unj-luncurkan-gerakan-zero-waste-campus']) }}" class="mt-auto self-start inline-block bg-sdg-brown text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-brown-dark transition-colors duration-300">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Prodi Tata Boga UNJ Ciptakan Produk dari Sisa Pangan (Food Loss)</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Mahasiswa mengembangkan produk pangan inovatif seperti keripik dari kulit sayuran dan kaldu dari tulang sisa untuk mengurangi limbah makanan.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-brown font-semibold hover:text-sdg-brown-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 12, 'slug' => 'prodi-tata-boga-ciptakan-produk-dari-sisa-pangan']) }}" class="mt-auto self-start text-sdg-brown font-semibold hover:text-sdg-brown-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Peragaan Busana Berkelanjutan oleh Mahasiswa Tata Busana UNJ</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Mahasiswa menampilkan koleksi busana yang dibuat dari bahan daur ulang dan limbah kain perca sebagai kampanye melawan fast fashion.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-brown font-semibold hover:text-sdg-brown-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 12, 'slug' => 'peragaan-busana-berkelanjutan-tata-busana-unj']) }}" class="mt-auto self-start text-sdg-brown font-semibold hover:text-sdg-brown-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>

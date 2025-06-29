@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">Pusat Studi Lingkungan UNJ Rilis Peta Kerentanan Kenaikan Permukaan Laut di Pesisir Jakarta</h3>
                             <p class="text-gray-600 mb-6 flex-grow">Berdasarkan data multi-tahun, tim peneliti dari UNJ memodelkan dan memetakan area-area di pesisir Jakarta yang paling rentan terhadap dampak kenaikan permukaan laut. Hasil riset ini diserahkan kepada pemerintah sebagai dasar perencanaan adaptasi.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-climate-green text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-climate-green-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 13, 'slug' => 'pusat-studi-lingkungan-rilis-peta-kerentanan']) }}" class="mt-auto self-start inline-block bg-sdg-climate-green text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-climate-green-dark transition-colors duration-300">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Mahasiswa UNJ Gelar Aksi "Satu Pohon, Satu Harapan"</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Bekerja sama dengan komunitas lokal, mahasiswa menanam ribuan pohon di area resapan air sebagai aksi nyata mitigasi perubahan iklim.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-climate-green font-semibold hover:text-sdg-climate-green-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 13, 'slug' => 'mahasiswa-unj-gelar-aksi-satu-pohon-satu-harapan']) }}" class="mt-auto self-start text-sdg-climate-green font-semibold hover:text-sdg-climate-green-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">UNJ Kembangkan Modul Pendidikan Perubahan Iklim untuk Sekolah</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Fakultas Ilmu Pendidikan (FIP) menyusun modul ajar interaktif untuk membantu guru menjelaskan isu perubahan iklim kepada siswa.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-climate-green font-semibold hover:text-sdg-climate-green-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 13, 'slug' => 'unj-kembangkan-modul-pendidikan-perubahan-iklim']) }}" class="mt-auto self-start text-sdg-climate-green font-semibold hover:text-sdg-climate-green-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>

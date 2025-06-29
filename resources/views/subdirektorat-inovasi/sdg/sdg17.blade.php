@@ -134,7 +134,7 @@
                         <div class="p-8 flex-grow flex flex-col">
                             <h3 class="font-bold text-2xl mb-3 text-gray-900">UNJ Gelar Forum Multi-Pihak, Satukan Pemerintah, Swasta, dan Komunitas untuk Aksi SDGs</h3>
                             <p class="text-gray-600 mb-6 flex-grow">Sebagai wujud nyata kemitraan, UNJ menjadi tuan rumah forum tahunan yang mempertemukan berbagai pemangku kepentingan untuk berdiskusi, berbagi praktik baik, dan merancang proyek kolaboratif guna mempercepat pencapaian Tujuan Pembangunan Berkelanjutan di Indonesia.</p>
-                            <a href="#" class="mt-auto self-start inline-block bg-sdg-partner-blue text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-partner-blue-dark transition-colors duration-300">
+                            <a href="{{ route('sdg.berita.show', ['sdg_id' => 17, 'slug' => 'unj-gelar-forum-multi-pihak']) }}" class="mt-auto self-start inline-block bg-sdg-partner-blue text-white font-semibold px-6 py-3 rounded-lg hover:bg-sdg-partner-blue-dark transition-colors duration-300">
                                 Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">UNJ Jalin Kemitraan Riset dengan Universitas di ASEAN</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">UNJ menandatangani MoU dengan beberapa universitas terkemuka di Asia Tenggara untuk melakukan riset bersama tentang isu-isu pembangunan berkelanjutan lintas negara.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-partner-blue font-semibold hover:text-sdg-partner-blue-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 17, 'slug' => 'unj-jalin-kemitraan-riset-dengan-universitas-asean']) }}" class="mt-auto self-start text-sdg-partner-blue font-semibold hover:text-sdg-partner-blue-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="p-6 flex-grow flex flex-col">
                                 <h3 class="font-bold text-xl mb-2 text-gray-900">Kolaborasi UNJ dan Sektor Swasta untuk Program Magang SDGs</h3>
                                 <p class="text-gray-600 mb-4 text-sm flex-grow">Program magang baru ini menempatkan mahasiswa di perusahaan-perusahaan yang memiliki komitmen kuat pada praktik bisnis berkelanjutan.</p>
-                                <a href="#" class="mt-auto self-start text-sdg-partner-blue font-semibold hover:text-sdg-partner-blue-dark transition-colors">
+                                <a href="{{ route('sdg.berita.show', ['sdg_id' => 17, 'slug' => 'kolaborasi-unj-dan-sektor-swasta-untuk-program-magang']) }}" class="mt-auto self-start text-sdg-partner-blue font-semibold hover:text-sdg-partner-blue-dark transition-colors">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
