@@ -261,28 +261,32 @@ class AdminSustainabilityController extends Controller
         // Define SDG options for validation
         $sdgOptions = [];
         for ($i = 1; $i <= 17; $i++) {
-            $sdgOptions[] = 'SDG ' . $i;
+            $sdgOptions[] = 'SDGs ' . $i;
         }
 
         // Basic validation, replace with UpdateSustainabilityRequest if you have one.
         $validationRules = [
             'judul_kegiatan' => 'required|string|max:255',
             'tanggal_kegiatan' => 'required|date',
-            'fakultas' => 'required|string|max:50', // Admin might change this
-            'prodi' => 'nullable|string|max:255',        // Admin might change this, or fakultas for their prodis
+            // 'fakultas' => 'required|string|max:50', // Admin might change this
+            // 'prodi' => 'nullable|string|max:255',        // Admin might change this, or fakultas for their prodis
             'link_kegiatan' => 'nullable|url|max:2048', // Increased to align with StoreRequest
             'deskripsi_kegiatan' => 'required|string',
             'foto_kegiatan.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8192', // Aligned
             'sdg_goal' => ['nullable', 'string', Rule::in($sdgOptions)],
         ];
 
+          $validatedData = $request->validate($validationRules);
+
         try {
+            // Now, add or override the faculty/prodi info based on the user's role
             if ($role === 'fakultas') {
                 $validatedData['fakultas'] = $userInfo['faculty_code'];
-                if ($request->has('prodi') && empty($validatedData['prodi'])) {
-                    $validatedData['prodi'] = null;
-                }
+                // Allow fakultas to change the prodi for an entry.
+                // Use the value from the form if it exists, otherwise it might be a faculty-level entry.
+                $validatedData['prodi'] = $request->input('prodi', null); 
             } elseif ($role === 'prodi') {
+                // For 'prodi' role, always force their own faculty and prodi.
                 $validatedData['fakultas'] = $userInfo['faculty_code'];
                 $validatedData['prodi'] = $userInfo['prodi_name'];
             }
