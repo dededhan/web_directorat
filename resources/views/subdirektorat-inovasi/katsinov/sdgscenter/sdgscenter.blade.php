@@ -330,7 +330,7 @@
                              <h3>{{ $data['title'] }}</h3>
                              <hr style="border-color: {{ $data['color'] }};">
                              <p>{{ $data['description'] }}</p>
-                             <a href="#" class="learn-more-btn" style="background-color: {{ $data['color'] }}; --shadow-color: {{ $data['color'] }}80;">
+                             <a href="{{ route('sdg.show', ['id' => $i]) }}" class="learn-more-btn" style="background-color: {{ $data['color'] }}; --shadow-color: {{ $data['color'] }}80;">
                                 Pelajari Lebih Lanjut
                              </a>
                              <div class="number-circle" style="background-color: {{ $data['color'] }};">
