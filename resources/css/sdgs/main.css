@@ -1,0 +1,152 @@
+.hero {
+    transition: background-image 1s ease-in-out;
+}
+/* Skeleton Pulse Animation */
+@keyframes pulse {
+    50% {
+        opacity: 0.5;
+    }
+}
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* === DESAIN BARU: FULLSCREEN SDG CAROUSEL === */
+.sdgs-fullscreen-section {
+    width: 100%;
+    height: 100vh; /* Mengisi seluruh tinggi layar */
+    position: relative;
+    overflow: hidden;
+    background-color: #f0f0f0; /* Warna fallback */
+}
+
+.sdgs-slider-container {
+    display: flex;
+    height: 100%;
+    transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Transisi slide yang unik */
+}
+
+.sdgs-slide {
+    min-width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 2rem;
+}
+
+/* Overlay gelap untuk kontras teks */
+.sdgs-slide::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.1));
+    z-index: 1;
+}
+
+.sdgs-slide-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 800px;
+    animation: fade-in-up 1s ease-out forwards;
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sdgs-slide-image {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 2rem;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 1.5rem;
+    padding: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+.sdgs-slide-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.sdgs-slide-info h2 {
+    font-size: 3rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.sdgs-slide-info p {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    max-width: 600px;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.sdgs-learn-more {
+    background-color: var(--sdg-color, #fff);
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+.sdgs-learn-more:hover {
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Navigasi */
+.sdgs-slider-nav {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 8px;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 8px 15px;
+    border-radius: 50px;
+}
+.sdgs-pagination-number {
+    width: 30px;
+    height: 30px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+.sdgs-pagination-number.active,
+.sdgs-pagination-number:hover {
+    opacity: 1;
+    transform: scale(1.2);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
+}
