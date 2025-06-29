@@ -32,6 +32,7 @@ Route::get('/Berita/{id}', [BeritaController::class, 'getBeritaDetail']);
 // SDG Center API routes
 Route::get('/sdgscenter/programs', [ProgramKegiatanController::class, 'getSDGCenterPrograms'])->name('api.sdgscenter.programs');
 Route::get('/sdgscenter/publications', [PublikasiRisetController::class, 'getSDGCenterPublications'])->name('api.sdgscenter.publications');
+Route::get('/public/sustainability-courses/{faculty}', [App\Http\Controllers\AdminMataKuliahController::class, 'getPublicSustainabilityCourses']);
 
 // Sustainability data routes
 Route::prefix('pemeringkatan/sustainability')->name('api.pemeringkatan.sustainability.')->group(function() {

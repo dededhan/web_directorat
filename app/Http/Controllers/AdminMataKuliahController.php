@@ -377,4 +377,31 @@ class AdminMataKuliahController extends Controller
             'facultyData' => $facultyData
         ]);
     }
+    public function getPublicSustainabilityCourses($facultyKey)
+    {
+        // Validasi kunci fakultas untuk keamanan
+        $validFacultyKeys = array_map('strtolower', array_keys($this->getFacultyProgramDataForView()));
+        if (!in_array($facultyKey, $validFacultyKeys)) {
+            return response()->json(['data' => []]); // Kembalikan data kosong jika tidak valid
+        }
+
+        // Ambil data mata kuliah dari fakultas yang dipilih dan memiliki grup SDG
+        $courses = MataKuliah::where('fakultas', $facultyKey)
+                             ->whereNotNull('sdgs_group')
+                             ->where('sdgs_group', '!=', '')
+                             ->select(
+                                 'sdgs_group',      // Kelompok Kategori
+                                 'nama_matkul',     // Nama Mata Kuliah
+                                 'semester',        // Semester
+                                 'kode_matkul',     // Kode Mata Kuliah
+                                 'fakultas',        // Fakultas
+                                 'prodi',           // Program Studi
+                                 'deskripsi',       // Deskripsi Mata Kuliah
+                                 'rps_path as rps'  // Path file RPS
+                             )
+                             ->latest()
+                             ->get();
+
+        return response()->json(['data' => $courses]);
+    }
 }

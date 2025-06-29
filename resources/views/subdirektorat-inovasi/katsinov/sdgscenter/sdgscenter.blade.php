@@ -29,32 +29,23 @@
             }
         }
     </script>
+    @include('layout.navbar_hilirisasi')
 
     <style>
         .hero {
             transition: background-image 1s ease-in-out;
         }
-        .skeleton-card {
-            background-color: #f3f4f6;
-            border-radius: 0.5rem;
-            overflow: hidden;
-        }
-        .skeleton-image {
-            height: 12rem;
-            background-color: #e5e7eb;
-        }
-        .skeleton-text {
-            height: 1rem;
-            background-color: #e5e7eb;
-            border-radius: 0.25rem;
-            margin-bottom: 0.5rem;
-        }
+        /* Skeleton Pulse Animation */
         @keyframes pulse {
             50% { opacity: .5; }
         }
         .animate-pulse {
             animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
+        .skeleton-card { background-color: #f3f4f6; border-radius: 1rem; overflow: hidden; }
+        .skeleton-image { background-color: #e5e7eb; }
+        .skeleton-text { background-color: #e5e7eb; height: 1rem; border-radius: 0.25rem; }
+
 
         /* === DESAIN SDG CAROUSEL YANG DISEMPURNAKAN === */
         #sdg-carousel-container {
@@ -141,7 +132,7 @@
             margin: 1.25rem 0;
         }
         .right-panel p {
-            color: white;
+            color: #495057; /* Darker text for better readability */
             line-height: 1.7;
             margin-bottom: 2.5rem;
             font-size: 1.1rem;
@@ -205,10 +196,8 @@
 </head>
 
 <body class="font-sans bg-gray-50 text-gray-800 antialiased">
-    
-    @include('layout.navbar_hilirisasi')
 
-    <section id="heroSection" class="hero relative h-screen bg-cover bg-center flex items-center text-white" style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzcD8s_rx58JooQqXcm41RUL34WM7aN72Hug&s');">
+    <section id="heroSection" class="hero relative h-screen bg-cover bg-center flex items-center text-white" style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/images/GEDUNG%20REKTORAT.png');">
         <div class="container mx-auto px-6 text-left z-10">
             <div class="max-w-3xl">
                 <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">Sustainable Development Goals Program UNJ</h1>
@@ -341,7 +330,7 @@
                              <h3>{{ $data['title'] }}</h3>
                              <hr style="border-color: {{ $data['color'] }};">
                              <p>{{ $data['description'] }}</p>
-                             <a href="{{ route('sdg.show', ['id' => $i]) }}" class="learn-more-btn" style="background-color: {{ $data['color'] }}; --shadow-color: {{ $data['color'] }}80;">
+                             <a href="#" class="learn-more-btn" style="background-color: {{ $data['color'] }}; --shadow-color: {{ $data['color'] }}80;">
                                 Pelajari Lebih Lanjut
                              </a>
                              <div class="number-circle" style="background-color: {{ $data['color'] }};">
@@ -389,26 +378,59 @@
         </div>
     </section>
 
-    <section id="sustainability-courses" class="py-20 bg-white">
+     <section id="sustainability-courses" class="py-20 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-12">
                 <h3 class="text-4xl font-bold text-gray-800">Matakuliah Sustainability</h3>
                 <p class="text-lg text-gray-600 mt-2">Jelajahi matakuliah yang terintegrasi dengan prinsip-prinsip SDGs di berbagai fakultas.</p>
             </div>
+            {{-- Tombol tab fakultas tidak berubah --}}
             <div class="flex justify-center gap-2 mb-8 flex-wrap">
-                <button class="course-tab-btn active bg-unj-green text-white py-2 px-6 rounded-full font-semibold transition-all duration-300 shadow-md">FIP</button>
-                <button class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300">FBS</button>
-                <button class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300">FMIPA</button>
-                <button class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300">FIS</button>
-                <button class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300">FT</button>
-                <button class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300">FPPsi</button>
+                <button class="course-tab-btn active bg-unj-green text-white py-2 px-6 rounded-full font-semibold transition-all duration-300 shadow-md" data-faculty="FIP">FIP</button>
+                <button class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300" data-faculty="FBS">FBS</button>
+                <button class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300" data-faculty="FMIPA">FMIPA</button>
+                <button class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300" data-faculty="FIS">FIS</button>
+                <button class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300" data-faculty="FT">FT</button>
+                <button class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300" data-faculty="FPPSI">FPPSI</button>
+                <button class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300" data-faculty="FIK">FIK</button>
+                <button class="course-tab-btn py-2 px-6 rounded-full font-semibold text-gray-500 hover:text-unj-green hover:bg-gray-100 transition-all duration-300" data-faculty="FE">FE</button>
             </div>
-            <div class="courses-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                </div>
+            {{-- Grid untuk menampilkan card mata kuliah --}}
+            <div class="courses-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {{-- Konten akan diisi oleh JavaScript --}}
+            </div>
         </div>
     </section>
-    
-    @include('layout.footer')
+
+    <div id="course-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden transition-opacity duration-300" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div id="course-modal-content" class="bg-white rounded-lg shadow-xl w-11/12 max-w-2xl transform transition-all duration-300 scale-95 opacity-0">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-unj-green" id="modal-title">Detail Mata Kuliah</h3>
+                <button id="close-modal-btn" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times fa-lg"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <h4 class="text-2xl font-extrabold text-gray-800 mb-2" id="modal-course-name">Nama Mata Kuliah</h4>
+                <div class="flex items-center space-x-4 text-sm text-gray-500 mb-4">
+                    <span id="modal-course-code" class="bg-gray-100 text-gray-800 px-2 py-1 rounded font-mono">KODE</span>
+                    <span id="modal-course-semester">Semester</span>
+                </div>
+                
+                <h5 class="font-bold text-gray-700 mt-6 mb-2">Deskripsi Mata Kuliah</h5>
+                <p class="text-gray-600 leading-relaxed text-base" id="modal-course-description">
+                    Deskripsi akan muncul di sini.
+                </p>
+
+                <div class="mt-6" id="modal-rps-section">
+                    <a href="#" id="modal-rps-download-btn" target="_blank" class="inline-flex items-center gap-2 bg-unj-green hover:bg-unj-teal text-white font-bold py-2 px-4 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg">
+                        <i class="fas fa-download"></i>
+                        Download RPS
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -416,15 +438,16 @@
         const heroSection = document.getElementById('heroSection');
         if (heroSection) {
             const backgroundImages = [
-                'https://cdn-web.ruangguru.com/file-uploader/de9f7350-e693-46f3-8c93-1ccc6550e0ea.jpg',
-                'https://images.unsplash.com/photo-1433086966358-54859d0ed716?q=80&w=1000',
-                'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1000',
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzcD8s_rx58JooQqXcm41RUL34WM7aN72Hug&s'
+                "/images/logos/image_corousel.jpg",
+                "/images/TERBUK TAMPAK DEPAN.png",
+                "/images/GEDUNG REKTORAT.png",
+                "/images/om.png",
             ];
             let currentImageIndex = 0;
             setInterval(() => {
                 currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
-                heroSection.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${backgroundImages[currentImageIndex]}')`;
+                const newImageUrl = backgroundImages[currentImageIndex] || '/images/GEDUNG%20REKTORAT.png';
+                heroSection.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${newImageUrl}')`;
             }, 5000);
         }
 
@@ -437,13 +460,11 @@
             let autoPlayInterval;
 
             function showSlide(index) {
-                // Deactivate current slide and dot
                 const currentSlide = sdgCarousel.querySelector(`.sdg-slide-custom.active`);
                 const currentDot = sdgCarousel.querySelector(`.dot.active`);
                 if (currentSlide) currentSlide.classList.remove('active');
                 if (currentDot) currentDot.classList.remove('active');
 
-                // Activate new slide and dot
                 currentIndex = index;
                 const newSlide = sdgCarousel.querySelector(`.sdg-slide-custom[data-slide="${currentIndex}"]`);
                 const newDot = sdgCarousel.querySelector(`.dot[data-slide-to="${currentIndex}"]`);
@@ -454,7 +475,7 @@
             function nextSlide() {
                 let nextIndex = currentIndex + 1;
                 if (nextIndex > slides.length) {
-                    nextIndex = 1;
+                    nextIndex = 1
                 }
                 showSlide(nextIndex);
             }
@@ -463,12 +484,12 @@
                 dot.addEventListener('click', () => {
                     const slideIndex = parseInt(dot.getAttribute('data-slide-to'));
                     showSlide(slideIndex);
-                    resetAutoPlay(); // Reset timer on manual click
+                    resetAutoPlay();
                 });
             });
 
             function startAutoPlay() {
-                autoPlayInterval = setInterval(nextSlide, 6000); // Change slide every 6 seconds
+                autoPlayInterval = setInterval(nextSlide, 30000);
             }
 
             function resetAutoPlay() {
@@ -480,10 +501,10 @@
         }
 
         // --- DYNAMIC CONTENT LOADER (PROGRAMS & PUBLICATIONS) ---
-        function createSkeletonCard() {
+        function createSkeletonCard(height = '12rem') {
             return `
                 <div class="skeleton-card animate-pulse">
-                    <div class="skeleton-image"></div>
+                    <div class="skeleton-image" style="height: ${height};"></div>
                     <div class="p-6">
                         <div class="skeleton-text w-1/3 mb-4"></div>
                         <div class="skeleton-text w-full"></div>
@@ -497,190 +518,263 @@
         const programTabButtons = document.querySelectorAll('#programs .tab-btn');
         const programContent = document.querySelector('.program-content');
         
-        function fetchAndRenderPrograms(category) {
-            programContent.innerHTML = Array(3).fill(createSkeletonCard()).join('');
-            
-            // Simulasi fetch data
-            setTimeout(() => {
-                const dummyData = {
-                    penelitian: [
-                        { image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=500', date: 'Juni 2025', title: 'Riset Energi Terbarukan di Pedesaan', description: 'Studi kelayakan implementasi panel surya untuk komunitas terpencil.' },
-                        { image: 'https://images.unsplash.com/photo-1579532582937-16c141df3087?w=500', date: 'Mei 2025', title: 'Analisis Ekonomi Sirkular UKM', description: 'Menganalisis potensi penerapan model ekonomi sirkular pada Usaha Kecil Menengah.' },
-                    ],
-                    pengabdian: [
-                         { image: 'https://images.unsplash.com/photo-1599059813005-11265ba4b4ce?w=500', date: 'Juli 2025', title: 'Workshop Pengelolaan Sampah', description: 'Edukasi dan pelatihan pengelolaan sampah organik dan anorganik untuk warga.' },
-                    ],
-                    pendidikan: [],
-                    kolaborasi: [
-                        { image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=500', date: 'Agustus 2025', title: 'Kemitraan dengan Industri Hijau', description: 'Kolaborasi riset dan magang dengan perusahaan yang berfokus pada sustainability.' },
-                    ]
-                };
+        function getCategoryKey(category) {
+            const categories = {
+                'Penelitian': 'penelitian',
+                'Pengabdian': 'pengabdian_masyarakat',
+                'Pendidikan': 'pendidikan',
+                'Kolaborasi': 'kolaborasi'
+            };
+            return categories[category] || 'penelitian';
+        }
+        
+        // DUMMY DATA FOR PROGRAMS
+        const dummyPrograms = {
+            penelitian: [
+                { image: 'https://via.placeholder.com/400x300/1D796B/FFFFFF?text=Riset+Energi', title: 'Riset Energi Terbarukan di Kampus', description: 'Pengembangan panel surya efisiensi tinggi untuk kebutuhan energi UNJ.', date: '15 Juni 2025' },
+                { image: 'https://via.placeholder.com/400x300/4C9F38/FFFFFF?text=Riset+Pangan', title: 'Studi Ketahanan Pangan Lokal', description: 'Analisis potensi pangan lokal untuk mendukung SDG 2 di komunitas sekitar.', date: '10 Juni 2025' },
+            ],
+            pengabdian_masyarakat: [
+                { image: 'https://via.placeholder.com/400x300/FD6925/FFFFFF?text=Pengabdian', title: 'Literasi Digital untuk UMKM', description: 'Pelatihan pemanfaatan teknologi untuk meningkatkan pemasaran produk UMKM.', date: '20 Mei 2025' },
+                { image: 'https://via.placeholder.com/400x300/0A97D9/FFFFFF?text=Bersih+Sungai', title: 'Gerakan Ciliwung Bersih', description: 'Kolaborasi dengan komunitas lokal dalam program pembersihan dan edukasi sungai.', date: '05 Mei 2025' },
+                { image: 'https://via.placeholder.com/400x300/DD1367/FFFFFF?text=Edukasi+Gender', title: 'Workshop Kesetaraan Gender', description: 'Mengadakan seminar dan workshop di sekolah-sekolah untuk mempromosikan kesetaraan gender.', date: '22 April 2025' },
+            ],
+            pendidikan: [
+                { image: 'https://via.placeholder.com/400x300/C5192D/FFFFFF?text=Kurikulum', title: 'Integrasi Kurikulum SDGs', description: 'Workshop pengembangan modul ajar berbasis SDGs untuk dosen di lingkungan UNJ.', date: '12 April 2025' },
+            ],
+            kolaborasi: [
+                { image: 'https://via.placeholder.com/400x300/19486A/FFFFFF?text=Partnership', title: 'Kemitraan Industri Hijau', description: 'Penandatanganan MoU dengan perusahaan untuk program magang dan riset bersama.', date: '30 Maret 2025' },
+            ],
+        };
 
-                const categoryKey = category.toLowerCase().replace(' ', '_');
-                const programs = dummyData[categoryKey] || [];
-                programContent.innerHTML = '';
+        function renderProgramCards(category) {
+            programContent.innerHTML = '';
+            const categoryKey = getCategoryKey(category);
+            const programs = dummyPrograms[categoryKey] || [];
 
-                if (programs.length === 0) {
-                    programContent.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">Tidak ada program untuk kategori ini.</div>';
-                    return;
-                }
+            if (programs.length === 0) {
+                programContent.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">Tidak ada program untuk kategori ini.</div>';
+                return;
+            }
 
-                programs.forEach(program => {
-                    const card = document.createElement('div');
-                    card.className = 'group bg-white rounded-xl shadow-md overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 border border-transparent hover:border-unj-green';
-                    card.innerHTML = `
-                        <div class="overflow-hidden h-48">
-                            <img src="${program.image}" alt="${program.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <div class="p-6">
-                            <span class="text-sm text-gray-500">${program.date}</span>
-                            <h4 class="text-xl font-bold text-gray-800 mt-2 mb-2 group-hover:text-unj-green transition-colors">${program.title}</h4>
-                            <p class="text-gray-600">${program.description}</p>
-                        </div>`;
-                    programContent.appendChild(card);
-                });
-
-            }, 1000);
+            programs.forEach(program => {
+                const card = document.createElement('div');
+                card.className = 'group bg-white rounded-xl shadow-md overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 border border-transparent hover:border-unj-green';
+                card.innerHTML = `
+                    <div class="overflow-hidden h-48">
+                        <img src="${program.image}" alt="${program.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-sm text-gray-500">${program.date}</span>
+                        <h4 class="text-xl font-bold text-gray-800 mt-2 mb-2 group-hover:text-unj-green transition-colors">${program.title}</h4>
+                        <p class="text-gray-600">${program.description}</p>
+                    </div>`;
+                programContent.appendChild(card);
+            });
         }
 
         if (programTabButtons.length > 0 && programContent) {
             programTabButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    programTabButtons.forEach(btn => {
-                        btn.classList.remove('active', 'bg-unj-green', 'text-white', 'shadow-md');
-                        btn.classList.add('text-gray-500', 'hover:bg-gray-100', 'hover:text-unj-green');
-                    });
+                    programTabButtons.forEach(btn => btn.classList.remove('active', 'bg-unj-green', 'text-white', 'shadow-md'));
                     this.classList.add('active', 'bg-unj-green', 'text-white', 'shadow-md');
-                    this.classList.remove('text-gray-500', 'hover:bg-gray-100');
-                    fetchAndRenderPrograms(this.textContent);
+                    renderProgramCards(this.textContent);
                 });
             });
-            fetchAndRenderPrograms('Penelitian'); // Load awal
+            // Initial load
+            renderProgramCards('Penelitian');
         }
         
         // --- PUBLICATIONS & RESEARCH ---
         const publicationGrid = document.querySelector('.publication-grid');
-        function fetchAndRenderPublications() {
-            publicationGrid.innerHTML = Array(3).fill(createSkeletonCard()).join('');
+        const dummyPublications = [
+            { image: 'https://via.placeholder.com/400x300/00689D/FFFFFF?text=Publikasi+1', title: 'Model Tata Kelola Perkotaan Berkelanjutan', authors: 'Dr. Budi Santoso, M.Si.', description: 'Jurnal ini membahas kerangka kerja untuk kota yang inklusif dan aman, sejalan dengan SDG 11.', has_document: true, document_url: '#' },
+            { image: 'https://via.placeholder.com/400x300/BF8B2E/FFFFFF?text=Publikasi+2', title: 'Analisis Rantai Pasok Ekonomi Sirkular', authors: 'Prof. Dr. Siti Aminah, M.E.', description: 'Penelitian mengenai penerapan ekonomi sirkular pada UMKM untuk mendukung SDG 12.', has_document: true, document_url: '#' },
+            { image: 'https://via.placeholder.com/400x300/3F7E44/FFFFFF?text=Publikasi+3', title: 'Dampak Perubahan Iklim Terhadap Ekosistem Pesisir', authors: 'Dr. Rina Marlina, M.Sc.', description: 'Studi kasus mengenai dampak kenaikan permukaan laut di pesisir utara Jakarta.', has_document: false, document_url: null },
+        ];
+        
+        function renderPublications() {
+            if (!publicationGrid) return;
+            publicationGrid.innerHTML = '';
             
-            // Simulasi fetch data
-            setTimeout(() => {
-                const publications = [
-                    { image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500', title: 'Implementasi SDGs di Tingkat Kota: Studi Kasus Jakarta', authors: 'Dr. Ahmad Syafii, Dr. Rina Wijaya', description: 'Penelitian ini menganalisis bagaimana kota Jakarta mengintegrasikan tujuan pembangunan berkelanjutan ke dalam perencanaan kota dan dampaknya terhadap kebijakan publik.', url: '#' },
-                    { image: 'https://images.unsplash.com/photo-1518152006812-edab29b069ac?w=500', title: 'Pendidikan untuk Pembangunan Berkelanjutan', authors: 'Prof. Budi Santoso, M.Pd.', description: 'Studi ini mengembangkan dan mengevaluasi model kurikulum yang mengintegrasikan prinsip SDGs dalam sistem pendidikan formal di Indonesia.', url: '#' },
-                    { image: 'https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?w=500', title: 'Ekonomi Sirkular sebagai Solusi Sampah', authors: 'Dr. Dian Pratiwi, M.Si.', description: 'Mempelajari penerapan prinsip ekonomi sirkular dalam manajemen sampah perkotaan dan potensinya untuk mengurangi limbah.', url: '#' },
-                ];
+            if (dummyPublications.length === 0) {
+                publicationGrid.innerHTML = '<div class="no-publications col-span-full text-center text-gray-500 py-12">Belum ada publikasi tersedia.</div>';
+                return;
+            }
+            
+            dummyPublications.forEach(pub => {
+                const card = document.createElement('div');
+                card.className = 'group bg-white rounded-xl shadow-md overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col';
                 
-                publicationGrid.innerHTML = '';
-                
-                publications.forEach(pub => {
-                    const card = document.createElement('div');
-                    card.className = 'group bg-white rounded-xl shadow-md overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col';
-                    card.innerHTML = `
-                        <div class="overflow-hidden h-48">
-                            <img src="${pub.image}" alt="${pub.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <div class="p-6 flex flex-col flex-grow">
-                            <h4 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-unj-green transition-colors">${pub.title}</h4>
-                            <p class="text-sm text-gray-500 mb-3">${pub.authors}</p>
-                            <p class="text-gray-600 text-sm leading-relaxed flex-grow">${pub.description}</p>
-                             <a href="${pub.url}" class="inline-flex items-center gap-2 text-sm font-semibold text-unj-green hover:text-unj-teal transition-colors mt-4 self-start">
-                                Baca lebih lanjut <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    `;
-                    publicationGrid.appendChild(card);
-                });
-            }, 1200);
+                let linkHtml = '';
+                if (pub.has_document && pub.document_url) {
+                    linkHtml = `<a href="${pub.document_url}" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold text-unj-green hover:text-unj-teal transition-colors mt-4 self-start">
+                        Download <i class="fas fa-download"></i>
+                    </a>`;
+                }
+
+                card.innerHTML = `
+                    <div class="overflow-hidden h-48">
+                        <img src="${pub.image}" alt="${pub.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-unj-green transition-colors">${pub.title}</h4>
+                        <p class="text-sm text-gray-500 mb-3">${pub.authors}</p>
+                        <p class="text-gray-600 text-sm leading-relaxed flex-grow">${pub.description}</p>
+                        ${linkHtml}
+                    </div>
+                `;
+                publicationGrid.appendChild(card);
+            });
         }
         if (publicationGrid) {
-            fetchAndRenderPublications();
+            renderPublications();
         }
 
-        // --- SUSTAINABILITY COURSES ---
+        // --- SUSTAINABILITY COURSES (LOGIC WITH DUMMY DATA) ---
         const courseTabButtons = document.querySelectorAll('#sustainability-courses .course-tab-btn');
         const coursesGrid = document.querySelector('.courses-grid');
+        const courseModal = document.getElementById('course-modal');
+        const courseModalContent = document.getElementById('course-modal-content');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        
+        // DUMMY DATA FOR COURSES
+        const allDummyCourses = [
+            { fakultas: 'FIP', prodi: 'Teknologi Pendidikan', sdgs_group: 'SDG 4: Quality Education', nama_matkul: 'Inovasi Pembelajaran Digital Berkelanjutan', kode_matkul: 'FIP101', semester: 4, deskripsi: 'Mata kuliah ini membahas desain dan pengembangan media pembelajaran digital yang mendukung tujuan pendidikan berkualitas, inklusif, dan merata untuk semua.', rps: '#' },
+            { fakultas: 'FIP', prodi: 'Manajemen Pendidikan', sdgs_group: 'SDG 4 & 8', nama_matkul: 'Manajemen Sekolah Berwawasan Lingkungan', kode_matkul: 'FIP102', semester: 5, deskripsi: 'Fokus pada pengelolaan institusi pendidikan yang menerapkan prinsip-prinsip keberlanjutan, efisiensi sumber daya, dan pertumbuhan yang bertanggung jawab.', rps: null },
+            { fakultas: 'FBS', prodi: 'Sastra Indonesia', sdgs_group: 'SDG 10: Reduced Inequalities', nama_matkul: 'Ekokritik dan Sastra Lingkungan', kode_matkul: 'FBS201', semester: 6, deskripsi: 'Menganalisis karya sastra dari perspektif lingkungan, mengeksplorasi isu-isu keadilan sosial dan ekologis yang terkandung di dalamnya.', rps: '#' },
+            { fakultas: 'FMIPA', prodi: 'Biologi', sdgs_group: 'SDG 15: Life on Land', nama_matkul: 'Konservasi Keanekaragaman Hayati', kode_matkul: 'MIPA301', semester: 5, deskripsi: 'Studi tentang prinsip dan praktik konservasi untuk melindungi, memulihkan, dan mempromosikan pemanfaatan ekosistem darat secara berkelanjutan.', rps: '#' },
+            { fakultas: 'FMIPA', prodi: 'Kimia', sdgs_group: 'SDG 7 & 12', nama_matkul: 'Kimia Hijau dan Berkelanjutan', kode_matkul: 'MIPA302', semester: 6, deskripsi: 'Mempelajari prinsip-prinsip kimia yang mengurangi atau menghilangkan penggunaan dan pembuatan zat berbahaya untuk produksi dan konsumsi yang bertanggung jawab.', rps: null },
+            { fakultas: 'FIS', prodi: 'Sosiologi', sdgs_group: 'SDG 11: Sustainable Cities', nama_matkul: 'Sosiologi Perkotaan dan Pembangunan Berkelanjutan', kode_matkul: 'FIS401', semester: 4, deskripsi: 'Mengkaji dinamika sosial dalam pembangunan perkotaan yang inklusif, aman, tangguh, dan berkelanjutan.', rps: '#' },
+            { fakultas: 'FT', prodi: 'Teknik Sipil', sdgs_group: 'SDG 9: Infrastructure', nama_matkul: 'Konstruksi Hijau dan Infrastruktur Tangguh', kode_matkul: 'FT501', semester: 7, deskripsi: 'Prinsip desain dan konstruksi bangunan serta infrastruktur yang ramah lingkungan, hemat energi, dan tahan terhadap perubahan iklim.', rps: '#' },
+            { fakultas: 'FE', prodi: 'Akuntansi', sdgs_group: 'SDG 8 & 12', nama_matkul: 'Akuntansi Keberlanjutan dan Pelaporan', kode_matkul: 'FE601', semester: 6, deskripsi: 'Membahas pengukuran, pengungkapan, dan penjaminan informasi dampak lingkungan dan sosial dari kegiatan perusahaan.', rps: null },
+            { fakultas: 'FE', prodi: 'Manajemen', sdgs_group: 'SDG 8: Decent Work', nama_matkul: 'Bisnis Berkelanjutan dan Etika', kode_matkul: 'FE602', semester: 5, deskripsi: 'Mengintegrasikan tujuan sosial dan lingkungan ke dalam model bisnis untuk menciptakan pertumbuhan ekonomi yang inklusif dan berkelanjutan.', rps: '#' },
+        ];
 
-        function fetchAndRenderCourses(faculty) {
+        function createCourseSkeletonCard() {
+            return `
+                <div class="bg-white rounded-lg shadow-md p-5 animate-pulse">
+                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+                    <div class="h-8 bg-gray-300 rounded w-full mb-4"></div>
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="h-4 bg-gray-200 rounded w-1/4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-1/4"></div>
+                    </div>
+                    <div class="h-4 bg-gray-200 rounded w-1/2 mb-5"></div>
+                    <div class="h-10 bg-gray-300 rounded w-full"></div>
+                </div>
+            `;
+        }
+        
+        function renderCourses(facultyKey) {
             if (!coursesGrid) return;
-            coursesGrid.innerHTML = Array(3).fill(createSkeletonCard()).join('');
+            
+            coursesGrid.innerHTML = Array(6).fill(createCourseSkeletonCard()).join('');
 
-            // Simulasi fetch data
-            setTimeout(() => {
-                const dummyCourses = {
-                    fip: [
-                        { code: 'FIP101', title: 'Pendidikan Lingkungan Hidup', description: 'Mengkaji isu-isu lingkungan global dan lokal serta peran pendidikan dalam menciptakan kesadaran ekologis.', image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=500&auto=format&fit=crop' },
-                        { code: 'FIP203', title: 'Inovasi Pembelajaran untuk SDGs', description: 'Mengembangkan model-model pembelajaran yang mengintegrasikan tujuan pembangunan berkelanjutan.', image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=500&auto=format&fit=crop' },
-                        { code: 'FIP305', title: 'Psikologi Pendidikan Inklusif', description: 'Fokus pada penciptaan lingkungan belajar yang adil dan merata untuk semua siswa, sesuai SDG 4 dan 10.', image: 'https://images.unsplash.com/photo-1573165392262-c412b43b3b55?w=500&auto=format&fit=crop' },
-                    ],
-                    fbs: [
-                        { code: 'FBS210', title: 'Sastra Hijau (Ekokritik)', description: 'Menganalisis karya sastra dari perspektif lingkungan untuk memahami hubungan manusia dan alam.', image: 'https://images.unsplash.com/photo-1455884946397-909c9535eb3d?w=500&auto=format&fit=crop' },
-                        { code: 'FBS315', title: 'Seni Rupa dan Aktivisme Sosial', description: 'Mengeksplorasi bagaimana seni dapat digunakan sebagai media untuk menyuarakan isu-isu sosial dan keberlanjutan.', image: 'https://images.unsplash.com/photo-1501426026826-31c667bdf23d?w=500&auto=format&fit=crop' },
-                    ],
-                    fmipa: [
-                        { code: 'MIPA401', title: 'Energi Terbarukan & Konservasi', description: 'Studi tentang sumber energi alternatif seperti surya, angin, dan air, serta metode konservasi energi.', image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=500&auto=format&fit=crop' },
-                        { code: 'MIPA302', title: 'Manajemen Limbah dan Toksikologi', description: 'Mempelajari pengelolaan limbah yang aman dan dampaknya terhadap ekosistem dan kesehatan manusia.', image: 'https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?w=500&auto=format&fit=crop' },
-                        { code: 'MIPA211', title: 'Kimia Hijau', description: 'Penerapan prinsip kimia untuk mengurangi atau menghilangkan penggunaan zat berbahaya dalam desain produk.', image: 'https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?w=500&auto=format&fit=crop' },
-                    ],
-                    fis: [
-                        { code: 'FIS208', title: 'Sosiologi Pembangunan Berkelanjutan', description: 'Menganalisis dimensi sosial dari pembangunan, termasuk kemiskinan, ketidaksetaraan, dan pemberdayaan masyarakat.', image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=500&auto=format&fit=crop' },
-                        { code: 'FIS310', title: 'Politik Perubahan Iklim Global', description: 'Mengkaji kebijakan internasional dan dinamika politik dalam penanganan perubahan iklim.', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&auto=format&fit=crop' },
-                    ],
-                    ft: [
-                        { code: 'FT501', title: 'Arsitektur Berkelanjutan', description: 'Desain bangunan yang ramah lingkungan dengan memperhatikan efisiensi energi, material, dan siklus hidup bangunan.', image: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=500&auto=format&fit=crop' },
-                        { code: 'FT408', title: 'Transportasi Perkotaan Berkelanjutan', description: 'Perencanaan sistem transportasi yang efisien, rendah emisi, dan dapat diakses oleh semua lapisan masyarakat.', image: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=500&auto=format&fit=crop' },
-                    ],
-                    fppsi: [
-                        { code: 'PSI333', title: 'Psikologi Lingkungan', description: 'Mempelajari interaksi timbal balik antara manusia dan lingkungannya, baik lingkungan fisik maupun sosial.', image: 'https://images.unsplash.com/photo-1591702954343-a25b8a034265?w=500&auto=format&fit=crop' },
-                    ]
-                };
-
-                const facultyKey = faculty.toLowerCase();
-                const courses = dummyCourses[facultyKey] || [];
+            setTimeout(() => { // Simulate small delay
+                const filteredCourses = allDummyCourses.filter(course => course.fakultas.toLowerCase() === facultyKey.toLowerCase());
                 coursesGrid.innerHTML = '';
 
-                if (courses.length === 0) {
-                    coursesGrid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">Tidak ada matakuliah untuk fakultas ini.</div>';
+                if (!filteredCourses || filteredCourses.length === 0) {
+                    coursesGrid.innerHTML = `
+                        <div class="col-span-full text-center text-gray-500 py-12 bg-gray-50 rounded-lg">
+                            <i class="fas fa-folder-open fa-3x mb-4 text-gray-400"></i>
+                            <h4 class="text-xl font-semibold">Belum Ada Data</h4>
+                            <p>Tidak ada data matakuliah sustainability untuk fakultas ini.</p>
+                        </div>`;
                     return;
                 }
 
-                courses.forEach(course => {
+                filteredCourses.forEach(course => {
                     const card = document.createElement('div');
-                    card.className = 'group bg-white rounded-xl shadow-md overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 border border-gray-200 hover:border-unj-green flex flex-col';
+                    card.className = 'bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col';
+                    
+                    const prodiDisplay = course.prodi ? course.prodi : 'Lintas Prodi';
+
                     card.innerHTML = `
-                        <div class="overflow-hidden h-48">
-                            <img src="${course.image}" alt="${course.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <div class="p-6 flex flex-col flex-grow">
-                            <div class="flex justify-between items-start mb-3">
-                                <span class="text-sm font-semibold text-unj-green bg-unj-green/10 py-1 px-3 rounded-full">${course.code}</span>
-                                <span class="text-sm font-bold text-gray-600">${faculty.toUpperCase()}</span>
+                        <div class="p-6 flex-grow">
+                            <span class="inline-block bg-unj-light-green text-unj-teal text-xs font-bold px-3 py-1 rounded-full mb-3">${course.sdgs_group}</span>
+                            <h4 class="text-lg font-extrabold text-gray-800 mb-2 leading-tight">${course.nama_matkul}</h4>
+                            <div class="flex justify-between items-center text-sm text-gray-500 mb-3">
+                                <span>Semester: <span class="font-semibold">${course.semester}</span></span>
+                                <span class="font-mono text-xs bg-gray-100 px-2 py-1 rounded">${course.kode_matkul}</span>
                             </div>
-                            <h4 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-unj-green transition-colors">${course.title}</h4>
-                            <p class="text-gray-600 text-sm leading-relaxed flex-grow">${course.description}</p>
-                        </div>`;
+                            <p class="text-sm text-gray-600"><span class="font-bold">${course.fakultas.toUpperCase()}</span> - ${prodiDisplay}</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-b-xl">
+                            <button 
+                                class="open-modal-btn w-full bg-unj-green hover:bg-unj-teal text-white font-bold py-2 px-4 rounded-lg transition duration-300 transform hover:scale-105"
+                                data-nama="${course.nama_matkul}"
+                                data-kode="${course.kode_matkul}"
+                                data-semester="Semester ${course.semester}"
+                                data-deskripsi="${course.deskripsi}"
+                                data-rps="${course.rps || ''}">
+                                Lihat Detail
+                            </button>
+                        </div>
+                    `;
                     coursesGrid.appendChild(card);
                 });
+            }, 300);
+        }
 
-            }, 800);
+        function openModal(button) {
+            document.getElementById('modal-course-name').textContent = button.dataset.nama;
+            document.getElementById('modal-course-code').textContent = button.dataset.kode;
+            document.getElementById('modal-course-semester').textContent = button.dataset.semester;
+            document.getElementById('modal-course-description').textContent = button.dataset.deskripsi || 'Tidak ada deskripsi.';
+
+            const rpsUrl = button.dataset.rps;
+            const rpsSection = document.getElementById('modal-rps-section');
+            const rpsDownloadBtn = document.getElementById('modal-rps-download-btn');
+
+            if (rpsUrl) {
+                rpsDownloadBtn.href = rpsUrl;
+                rpsSection.classList.remove('hidden');
+            } else {
+                rpsSection.classList.add('hidden');
+            }
+            
+            courseModal.classList.remove('hidden');
+            setTimeout(() => {
+                courseModal.classList.remove('opacity-0');
+                courseModalContent.classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        }
+
+        function closeModal() {
+            courseModalContent.classList.add('scale-95', 'opacity-0');
+            courseModal.classList.add('opacity-0');
+            setTimeout(() => courseModal.classList.add('hidden'), 300);
         }
 
         if (courseTabButtons.length > 0 && coursesGrid) {
             courseTabButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    courseTabButtons.forEach(btn => {
-                        btn.classList.remove('active', 'bg-unj-green', 'text-white', 'shadow-md');
-                        btn.classList.add('text-gray-500', 'hover:bg-gray-100', 'hover:text-unj-green');
-                    });
+                    courseTabButtons.forEach(btn => btn.classList.remove('active', 'bg-unj-green', 'text-white', 'shadow-md'));
                     this.classList.add('active', 'bg-unj-green', 'text-white', 'shadow-md');
-                    this.classList.remove('text-gray-500', 'hover:bg-gray-100');
-                    fetchAndRenderCourses(this.textContent);
+                    renderCourses(this.dataset.faculty);
                 });
             });
-            fetchAndRenderCourses('FIP');
+
+            coursesGrid.addEventListener('click', e => {
+                if (e.target && e.target.classList.contains('open-modal-btn')) {
+                    openModal(e.target);
+                }
+            });
+
+            closeModalBtn.addEventListener('click', closeModal);
+            courseModal.addEventListener('click', e => {
+                if (e.target === courseModal) closeModal();
+            });
+
+            const activeTab = document.querySelector('#sustainability-courses .course-tab-btn.active');
+            if (activeTab) {
+                renderCourses(activeTab.dataset.faculty);
+            }
         }
-        
     });
     </script>
 </body>
+    @include('layout.footer')
 </html>
