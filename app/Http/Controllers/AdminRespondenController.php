@@ -41,7 +41,7 @@ class AdminRespondenController extends Controller
     {
         $user = Auth::user();
         $role = $user->role;
-        $userInfo = $this->getUserFacultyInfo($user);
+        // $userInfo = $this->getUserFacultyInfo($user);
 
         $sort = $request->get('sort', 'fullname');
         $direction = $request->get('direction', 'asc');
@@ -55,12 +55,7 @@ class AdminRespondenController extends Controller
         $query = Responden::query();
 
         if ($role === 'fakultas' || $role === 'prodi') {
-            if ($userInfo['faculty_code']) {
-                $query->where('fakultas', $userInfo['faculty_code']);
-            } else {
-                Log::warning('Responden Index: Could not determine faculty for user.', ['user_id' => $user->id, 'role' => $role]);
-                $query->whereRaw('1 = 0');
-            }
+        $query->where('user_id', $user->id);
         }
 
         if ($request->filled('kategori')) {
@@ -83,6 +78,7 @@ class AdminRespondenController extends Controller
         // $respondens = $query->paginate(25)->appends($request->query());
         $respondens = $query->paginate(1000)->appends($request->query());
 
+        $userInfo = $this->getUserFacultyInfo($user); 
 
         $viewData = ['respondens' => $respondens, 'user_info' => $userInfo];
         $routePrefix = '';
@@ -156,6 +152,7 @@ class AdminRespondenController extends Controller
             'phone_dosen' => $respondenValidated['responden_dosen_phone'],
             'fakultas' => $respondenValidated['responden_fakultas'],
             'category' => $respondenValidated['responden_category'],
+            'user_id' => $user->id, 
             // 'user_id' => $user->id, //
             // 'tahun' => $request->input('tahun_input_field', date('Y')), // Add this if you have a dedicated 'tahun' field in the form/table
         ]);
