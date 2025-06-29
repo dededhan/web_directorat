@@ -1,13 +1,11 @@
 @extends('fakultas.index')
 
 @section('contentfakultas')
-    {{-- Awal: Perubahan untuk Vite --}}
+
     @vite([
         'resources/css/admin/matakuliah_dashboard.css',
         'resources/js/admin/matakuliah_dashboard.js'
     ])
-    {{-- Akhir: Perubahan untuk Vite --}}
-    
     <div class="head-title">
         <div class="left">
             <h1>Mata Kuliah Sustainability</h1>
@@ -23,20 +21,19 @@
         </div>
     </div>
 
-    @if (session('success'))
+    {{-- Flash Messages --}}
+    @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-
-    @if (session('error'))
+    @if(session('error'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-
     @if ($errors->any())
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>Whoops!</strong> Ada beberapa masalah dengan input Anda.<br><br>
@@ -49,311 +46,232 @@
         </div>
     @endif
 
+    {{-- Form Input Mata Kuliah --}}
     <div class="table-data">
         <div class="order">
             <div class="head">
                 <h3>Input Mata Kuliah Sustainability</h3>
-            </div>
-
-            <form id="matakuliah-form" action="{{ route('fakultas.matakuliah.store') }}" method="POST"
-                enctype="multipart/form-data">
+            </div> 
+            <form id="matakuliah-form" action="{{ route('fakultas.matakuliah.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="sdgs_group" class="form-label">Kelompok Kategori</label>
-                        <select class="form-select @error('sdgs_group') is-invalid @enderror" name="sdgs_group"
-                            id="sdgs_group">
+                        <select class="form-select @error('sdgs_group') is-invalid @enderror" name="sdgs_group" id="sdgs_group">
                             <option value="">Pilih Kelompok Kategori</option>
                             @php
-                                // Fallback if $sdgDetailsList is not passed from controller,
-                                // but passing from controller is preferred.
                                 $sdgGoalsData = $sdgDetailsList ?? [
-                                    1 => 'Tanpa Kemiskinan',
-                                    2 => 'Tanpa Kelaparan',
-                                    3 => 'Kehidupan Sehat dan Sejahtera',
-                                    4 => 'Pendidikan Berkualitas',
-                                    5 => 'Kesetaraan Gender',
-                                    6 => 'Air Bersih dan Sanitasi Layak',
-                                    7 => 'Energi Bersih dan Terjangkau',
-                                    8 => 'Pekerjaan Layak dan Pertumbuhan Ekonomi',
-                                    9 => 'Industri, Inovasi, dan Infrastruktur',
-                                    10 => 'Berkurangnya Kesenjangan',
-                                    11 => 'Kota dan Pemukiman yang Berkelanjutan',
-                                    12 => 'Konsumsi dan Produksi yang Bertanggung Jawab',
-                                    13 => 'Penanganan Perubahan Iklim',
-                                    14 => 'Ekosistem Lautan',
-                                    15 => 'Ekosistem Daratan',
-                                    16 => 'Perdamaian, Keadilan, dan Kelembagaan yang Tangguh',
-                                    17 => 'Kemitraan untuk Mencapai Tujuan',
+                                    1 => 'Tanpa Kemiskinan', 2 => 'Tanpa Kelaparan', 3 => 'Kehidupan Sehat dan Sejahtera', 4 => 'Pendidikan Berkualitas', 5 => 'Kesetaraan Gender', 6 => 'Air Bersih dan Sanitasi Layak', 7 => 'Energi Bersih dan Terjangkau', 8 => 'Pekerjaan Layak dan Pertumbuhan Ekonomi', 9 => 'Industri, Inovasi, dan Infrastruktur', 10 => 'Berkurangnya Kesenjangan', 11 => 'Kota dan Pemukiman yang Berkelanjutan', 12 => 'Konsumsi dan Produksi yang Bertanggung Jawab', 13 => 'Penanganan Perubahan Iklim', 14 => 'Ekosistem Lautan', 15 => 'Ekosistem Daratan', 16 => 'Perdamaian, Keadilan, dan Kelembagaan yang Tangguh', 17 => 'Kemitraan untuk Mencapai Tujuan',
                                 ];
                             @endphp
-
                             @foreach ($sdgGoalsData as $number => $description)
-                                @php
-                                    // Construct the value exactly as your old() condition and backend expect
-                                    // For this snippet, it's "SDGs {number}" (plural SDGs, space, number)
-$optionValue = 'SDGs ' . $number;
-                                @endphp
-                                <option value="{{ $optionValue }}"
-                                    {{ old('sdgs_group', $yourModelInstance->sdgs_group ?? '') == $optionValue ? 'selected' : '' }}>
+                                @php $optionValue = 'SDGs ' . $number; @endphp
+                                <option value="{{ $optionValue }}" {{ old('sdgs_group') == $optionValue ? 'selected' : '' }}>
                                     SDGs {{ $number }}: {{ $description }}
                                 </option>
                             @endforeach
                         </select>
-                        @error('sdgs_group')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <div class="form-text text-muted">Pilih kelompok SDGs yang relevan dengan mata kuliah ini.</div>
+                        @error('sdgs_group') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="form-text text-muted">Pilih kelompok SDGs yang relevan.</div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="nama_matkul" class="form-label">Nama Mata Kuliah</label>
-                        <input type="text" class="form-control @error('nama_matkul') is-invalid @enderror"
-                            name="nama_matkul" id="nama_matkul" value="{{ old('nama_matkul') }}">
-                        @error('nama_matkul')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <input type="text" class="form-control @error('nama_matkul') is-invalid @enderror" name="nama_matkul" id="nama_matkul" value="{{ old('nama_matkul') }}">
+                        @error('nama_matkul') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         <div class="form-text text-muted">Masukkan nama lengkap mata kuliah.</div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="semester" class="form-label">Semester</label>
-                        <input type="text" class="form-control @error('semester') is-invalid @enderror" name="semester"
-                            id="semester" value="{{ old('semester') }}">
-                        @error('semester')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <input type="text" class="form-control @error('semester') is-invalid @enderror" name="semester" id="semester" value="{{ old('semester') }}">
+                        @error('semester') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         <div class="form-text text-muted">Contoh: 1, 2, 3, dst.</div>
                     </div>
-
                     <div class="col-md-6 mb-3">
                         <label for="kode_matkul" class="form-label">Kode Mata Kuliah</label>
-                        <input type="text" class="form-control @error('kode_matkul') is-invalid @enderror"
-                            name="kode_matkul" id="kode_matkul" value="{{ old('kode_matkul') }}">
-                        @error('kode_matkul')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <input type="text" class="form-control @error('kode_matkul') is-invalid @enderror" name="kode_matkul" id="kode_matkul" value="{{ old('kode_matkul') }}">
+                        @error('kode_matkul') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         <div class="form-text text-muted">Contoh: MK001. Harus unik.</div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="fakultas" class="form-label">Fakultas</label>
-                        <select class="form-select @error('fakultas') is-invalid @enderror" name="fakultas" id="fakultas">
-                            <option value="">Pilih Fakultas</option>
-                            {{-- Loop through faculties_data if passed from controller, or use static options --}}
-                            @php
-                                $faculties = $faculties_data ?? [
-                                    // Fallback if not passed
-                                    'PASCASARJANA' => ['name' => 'Pascasarjana'],
-                                    'FIP' => ['name' => 'FIP'],
-                                    'FMIPA' => ['name' => 'FMIPA'],
-                                    'FPPSI' => ['name' => 'FPsi'],
-                                    'FBS' => ['name' => 'FBS'],
-                                    'FT' => ['name' => 'FT'],
-                                    'FIK' => ['name' => 'FIKK'],
-                                    'FIS' => ['name' => 'FISH'], // Assuming FIKK is correct, adjust if FIK
-                                    'FE' => ['name' => 'FEB'],
-                                    'PROFESI' => ['name' => 'Profesi'],
-                                ];
-                            @endphp
-                            @foreach ($faculties as $key => $faculty)
-                                <option value="{{ strtolower($key) }}"
-                                    {{ old('fakultas') == strtolower($key) ? 'selected' : '' }}>{{ $faculty['name'] }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('fakultas')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <div class="form-text text-muted">Pilih fakultas penyelenggara.</div>
+                        <label for="fakultas_display" class="form-label">Fakultas</label>
+                        <input type="text" class="form-control" id="fakultas_display" value="{{ strtoupper(Auth::user()->name) }}" disabled>
+                        <input type="hidden" name="fakultas" id="fakultas" value="{{ $user_info['faculty_code'] ?? '' }}">
+                        @error('fakultas') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                        <div class="form-text text-muted">Fakultas (otomatis terisi).</div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="prodi" class="form-label">Program Studi</label>
-                        <select class="form-select @error('prodi') is-invalid @enderror" name="prodi" id="prodi"
-                            {{ old('fakultas') ? '' : 'disabled' }}>
-                            <option value="">Pilih Program Studi</option>
-                            {{-- Options will be populated by matakuliah_dashboard.js --}}
-                            {{-- If old('prodi') exists, it means there was a validation error, try to reselect --}}
+                        <select class="form-select @error('prodi') is-invalid @enderror" name="prodi" id="prodi">
+                            <option value="">-- Level Fakultas (Tanpa Prodi) --</option>
+                            @if(isset($prodi_list_for_fakultas) && !empty($prodi_list_for_fakultas))
+                                @foreach($prodi_list_for_fakultas as $prodi_item)
+                                    <option value="{{ $prodi_item }}" {{ old('prodi') == $prodi_item ? 'selected' : '' }}>{{ $prodi_item }}</option>
+                                @endforeach
+                            @endif
                         </select>
-                        @error('prodi')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <div class="form-text text-muted">Pilih program studi (opsional jika mata kuliah level fakultas).
-                        </div>
+                        @error('prodi') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="form-text text-muted">Pilih program studi (opsional).</div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="rps" class="form-label">RPS Mata Kuliah</label>
-                        <input type="file" class="form-control @error('rps') is-invalid @enderror" name="rps"
-                            id="rps" accept=".pdf,.doc,.docx">
-                        @error('rps')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <input type="file" class="form-control @error('rps') is-invalid @enderror" name="rps" id="rps" accept=".pdf,.doc,.docx">
+                        @error('rps') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         <div class="form-text text-muted">Upload RPS (PDF, DOC, DOCX, max 10MB).</div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="deskripsi" class="form-label">Deskripsi Mata Kuliah</label>
-                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"
-                            rows="4">{{ old('deskripsi') }}</textarea>
-                        @error('deskripsi')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" rows="4">{{ old('deskripsi') }}</textarea>
+                        @error('deskripsi') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         <div class="form-text text-muted">Deskripsi lengkap (minimal 50 karakter).</div>
                     </div>
                 </div>
-
                 <div class="mb-3 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>
+    </div>
 
-        <div class="table-data mt-4">
-            <div class="order">
-                <div class="head">
-                    <h3>Daftar Mata Kuliah Sustainability</h3>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table table-striped" id="matakuliah-table">
-                        <thead>
-                            <tr>
-                                <th>kategori</th>
-                                <th>ditambahkan oleh</th>
-                                <th>Nama Mata Kuliah</th>
-                                <th>Kode</th>
-                                <th>Semester</th>
-                                <th>Fakultas</th>
-                                <th>Program Studi</th>
-                                <th>RPS</th>
-                                <th>Deskripsi</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="matakuliah-list">
-                            @forelse($matakuliahs as $matakuliah)
-                                <tr>
-                                    <td>{{ $matakuliah->sdgs_group ?? 'N/A' }}</td>
-                                    <td>{{ $matakuliah->user->name ?? 'N/A' }}</td>
-                                    <td>{{ $matakuliah->nama_matkul }}</td>
-                                    <td>{{ $matakuliah->kode_matkul }}</td>
-                                    <td>{{ $matakuliah->semester }}</td>
-                                    <td>{{ strtoupper($matakuliah->fakultas) }}</td>
-                                    <td>{{ $matakuliah->prodi ?? 'N/A (Fakultas)' }}</td>
-                                    <td>
-                                        @if ($matakuliah->rps_path)
-                                            <a href="{{ Storage::url($matakuliah->rps_path) }}" target="_blank"
-                                                class="btn btn-sm btn-info">
-                                                View RPS
-                                            </a>
-                                        @else
-                                            No RPS
-                                        @endif
-                                    </td>
-                                    <td>{{ Str::limit($matakuliah->deskripsi, 50) }}</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button class="btn btn-sm btn-warning edit-matakuliah"
-                                                data-id="{{ $matakuliah->id }}" data-bs-toggle="modal"
-                                                data-bs-target="#editMatakuliahModal">
-                                                Edit
-                                            </button>
-                                            <button class="btn btn-sm btn-danger delete-matakuliah"
-                                                data-id="{{ $matakuliah->id }}"
-                                                data-nama="{{ $matakuliah->nama_matkul }}">
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="8" class="text-center">Belum ada data mata kuliah.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                @if ($matakuliahs->hasPages())
-                    <div class="mt-3">
-                        {{ $matakuliahs->links() }}
-                    </div>
-                @endif
+    {{-- Tabel Daftar Mata Kuliah --}}
+    <div class="table-data mt-4">
+        <div class="order">
+            <div class="head">
+                <h3>Daftar Mata Kuliah Sustainability</h3>
             </div>
+            <div class="table-responsive">
+                <table class="table table-striped" id="matakuliah-table">
+                    <thead>
+                        <tr>
+                            <th>Kategori</th>
+                            <th>Nama Mata Kuliah</th>
+                            <th>Kode</th>
+                            <th>Semester</th>
+                            <th>Program Studi</th>
+                            <th>RPS</th>
+                            <th>Deskripsi</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="matakuliah-list">
+                        @forelse($matakuliahs as $matakuliah)
+                            <tr>
+                                <td>{{ $matakuliah->sdgs_group ?? 'N/A' }}</td>
+                                <td>{{ $matakuliah->nama_matkul }}</td>
+                                <td>{{ $matakuliah->kode_matkul }}</td>
+                                <td>{{ $matakuliah->semester }}</td>
+                                <td>{{ $matakuliah->prodi ?? 'N/A (Fakultas)' }}</td>
+                                <td>
+                                    @if($matakuliah->rps_path)
+                                        <a href="{{ Storage::url($matakuliah->rps_path) }}" target="_blank" class="btn btn-sm btn-info">View RPS</a>
+                                    @else
+                                        No RPS
+                                    @endif
+                                </td>
+                                <td>{{ Str::limit($matakuliah->deskripsi, 50) }}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-warning edit-matakuliah" data-id="{{ $matakuliah->id }}" data-bs-toggle="modal" data-bs-target="#editMatakuliahModal">Edit</button>
+                                        <button class="btn btn-sm btn-danger delete-matakuliah" data-id="{{ $matakuliah->id }}" data-nama="{{ $matakuliah->nama_matkul }}">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="text-center">Belum ada data mata kuliah.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            @if($matakuliahs->hasPages())
+                <div class="mt-3">
+                    {{ $matakuliahs->links() }}
+                </div>
+            @endif
         </div>
     </div>
 
-    <div class="modal fade" id="editMatakuliahModal" tabindex="-1" role="dialog"
-        aria-labelledby="editMatakuliahModalLabel" aria-hidden="true">
+    {{-- Modal Edit Mata Kuliah --}}
+    <div class="modal fade" id="editMatakuliahModal" tabindex="-1" role="dialog" aria-labelledby="editMatakuliahModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editMatakuliahModalLabel">Edit Mata Kuliah</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="edit-matakuliah-form" method="POST" enctype="multipart/form-data"> {{-- Action will be set by JS --}}
+                <form id="edit-matakuliah-form" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="matakuliah_id" id="edit_matakuliah_id">
                     <div class="modal-body">
+                        <div class="row">
+                             <div class="col-md-12 mb-3">
+                                <label for="edit_sdgs_group" class="form-label">Kelompok Kategori</label>
+                                <select class="form-select" name="sdgs_group" id="edit_sdgs_group">
+                                    <option value="">Pilih Kelompok Kategori</option>
+                                    @php
+                                    $sdgGoalsData = $sdgDetailsList ?? [
+                                        1 => 'Tanpa Kemiskinan', 2 => 'Tanpa Kelaparan', 3 => 'Kehidupan Sehat dan Sejahtera', 4 => 'Pendidikan Berkualitas', 5 => 'Kesetaraan Gender', 6 => 'Air Bersih dan Sanitasi Layak', 7 => 'Energi Bersih dan Terjangkau', 8 => 'Pekerjaan Layak dan Pertumbuhan Ekonomi', 9 => 'Industri, Inovasi, dan Infrastruktur', 10 => 'Berkurangnya Kesenjangan', 11 => 'Kota dan Pemukiman yang Berkelanjutan', 12 => 'Konsumsi dan Produksi yang Bertanggung Jawab', 13 => 'Penanganan Perubahan Iklim', 14 => 'Ekosistem Lautan', 15 => 'Ekosistem Daratan', 16 => 'Perdamaian, Keadilan, dan Kelembagaan yang Tangguh', 17 => 'Kemitraan untuk Mencapai Tujuan',
+                                    ];
+                                    @endphp
+                                    @foreach ($sdgGoalsData as $number => $description)
+                                        @php $optionValue = 'SDGs ' . $number; @endphp
+                                        <option value="{{ $optionValue }}">SDGs {{ $number }}: {{ $description }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label for="edit_nama_matkul" class="form-label">Nama Mata Kuliah</label>
                                 <input type="text" class="form-control" name="nama_matkul" id="edit_nama_matkul">
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="edit_semester" class="form-label">Semester</label>
                                 <input type="text" class="form-control" name="semester" id="edit_semester">
                             </div>
-
                             <div class="col-md-6 mb-3">
                                 <label for="edit_kode_matkul" class="form-label">Kode Mata Kuliah</label>
                                 <input type="text" class="form-control" name="kode_matkul" id="edit_kode_matkul">
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="edit_fakultas" class="form-label">Fakultas</label>
-                                <select class="form-select" name="fakultas" id="edit_fakultas">
-                                    <option value="">Pilih Fakultas</option>
-                                    @foreach ($faculties as $key => $faculty)
-                                        <option value="{{ strtolower($key) }}">{{ $faculty['name'] }}</option>
-                                    @endforeach
-                                </select>
+                                <label for="edit_fakultas_display" class="form-label">Fakultas</label>
+                                <input type="text" class="form-control" id="edit_fakultas_display" value="{{ strtoupper(Auth::user()->name) }}" disabled>
+                                <input type="hidden" name="fakultas" id="edit_fakultas" value="{{ $user_info['faculty_code'] ?? '' }}">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="edit_prodi" class="form-label">Program Studi</label>
-                                <select class="form-select" name="prodi" id="edit_prodi" disabled>
-                                    <option value="">Pilih Program Studi</option>
-                                    {{-- Populated by JS --}}
+                                <select class="form-select" name="prodi" id="edit_prodi">
+                                    <option value="">-- Level Fakultas (Tanpa Prodi) --</option>
+                                    @if(isset($prodi_list_for_fakultas) && !empty($prodi_list_for_fakultas))
+                                        @foreach($prodi_list_for_fakultas as $prodi_item)
+                                            <option value="{{ $prodi_item }}">{{ $prodi_item }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label for="edit_rps" class="form-label">RPS Mata Kuliah (Opsional)</label>
-                                <input type="file" class="form-control" name="rps" id="edit_rps"
-                                    accept=".pdf,.doc,.docx">
-                                <div class="form-text text-muted">Biarkan kosong jika tidak ingin mengubah file RPS. <span
-                                        id="current_rps_info"></span></div>
+                                <input type="file" class="form-control" name="rps" id="edit_rps" accept=".pdf,.doc,.docx">
+                                <div class="form-text text-muted">Biarkan kosong jika tidak ingin mengubah file RPS. <span id="current_rps_info_edit"></span></div>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label for="edit_deskripsi" class="form-label">Deskripsi Mata Kuliah</label>
@@ -369,173 +287,79 @@ $optionValue = 'SDGs ' . $number;
             </div>
         </div>
     </div>
-
-    {{-- Delete Form (action set by JavaScript) --}}
+    
+    {{-- Delete Form --}}
     <form id="delete-matakuliah-form" method="POST" style="display: none;">
         @csrf
         @method('DELETE')
     </form>
-
-    {{-- Assuming jQuery, Bootstrap JS, SweetAlert2 are loaded in fakultas.admin layout --}}
-    {{-- matakuliah_dashboard.js should handle the dynamic prodi dropdown --}}
-    <!-- <script src="{{ asset('resources/movejs/matakuliah_dashboard.js') }}"></script> -->
-
+    
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-            const facultiesData = @json($faculties_data ?? []); // Ensure this is passed from controller
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.edit-matakuliah').forEach(button => {
+            button.addEventListener('click', function() {
+                const matkulId = this.dataset.id;
+                const editForm = document.getElementById('edit-matakuliah-form');
+                editForm.action = `{{ url('fakultas/matakuliah') }}/${matkulId}`;
+                document.getElementById('edit_matakuliah_id').value = matkulId;
 
-            // Function to populate prodi dropdown (reusable for edit modal)
-            function populateProdiDropdown(fakultasValue, prodiSelectElement, selectedProdi = null) {
-                prodiSelectElement.innerHTML = '<option value="">Pilih Program Studi</option>';
-                prodiSelectElement.disabled = true;
-
-                if (fakultasValue && facultiesData[fakultasValue.toUpperCase()] && facultiesData[fakultasValue
-                        .toUpperCase()].programs) {
-                    prodiSelectElement.disabled = false;
-                    facultiesData[fakultasValue.toUpperCase()].programs.forEach(prodi => {
-                        const option = document.createElement('option');
-                        option.value = prodi; // Assuming prodi names are stored as is
-                        option.textContent = prodi;
-                        if (selectedProdi && prodi === selectedProdi) {
-                            option.selected = true;
-                        }
-                        prodiSelectElement.appendChild(option);
-                    });
-                }
-                // Add an option for "Fakultas Level" or "No Prodi" if prodi is nullable
-                const noProdiOption = document.createElement('option');
-                noProdiOption.value = "";
-                noProdiOption.textContent = "-- Level Fakultas (Tanpa Prodi) --";
-                if (selectedProdi === null || selectedProdi === "") {
-                    noProdiOption.selected = true;
-                }
-                prodiSelectElement.insertBefore(noProdiOption, prodiSelectElement.firstChild
-                    .nextSibling); // Insert after "Pilih Program Studi"
-            }
-
-            // Handle fakultas change for the main form
-            const mainFakultasSelect = document.getElementById('fakultas');
-            const mainProdiSelect = document.getElementById('prodi');
-            if (mainFakultasSelect) {
-                mainFakultasSelect.addEventListener('change', function() {
-                    populateProdiDropdown(this.value, mainProdiSelect);
-                });
-                // Trigger change if old fakultas value exists (e.g., after validation error)
-                if (mainFakultasSelect.value) {
-                    populateProdiDropdown(mainFakultasSelect.value, mainProdiSelect, "{{ old('prodi') }}");
-                }
-            }
-
-            // Handle fakultas change for the edit modal form
-            const editFakultasSelect = document.getElementById('edit_fakultas');
-            const editProdiSelect = document.getElementById('edit_prodi');
-            if (editFakultasSelect) {
-                editFakultasSelect.addEventListener('change', function() {
-                    populateProdiDropdown(this.value, editProdiSelect);
-                });
-            }
-
-            // Handle Edit button clicks
-            document.querySelectorAll('.edit-matakuliah').forEach(button => {
-                button.addEventListener('click', function() {
-                    const matkulId = this.dataset.id;
-                    const editForm = document.getElementById('edit-matakuliah-form');
-                    editForm.action = `{{ url('admin/matakuliah') }}/${matkulId}`;
-                    document.getElementById('edit_matakuliah_id').value = matkulId;
-
-                    // Fetch matakuliah details via AJAX
-                    // The AdminMataKuliahController@edit method returns JSON
-                    fetch(`{{ url('admin/matakuliah') }}/${matkulId}/edit`, {
-                            method: 'GET',
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'X-CSRF-TOKEN': csrfToken
-                            }
-                        })
-                        .then(response => {
-                            if (!response.ok) throw new Error(
-                                `HTTP error! status: ${response.status}`);
-                            return response.json();
-                        })
-                        .then(data => {
-                            document.getElementById('edit_nama_matkul').value = data
-                                .nama_matkul;
-                            document.getElementById('edit_semester').value = data.semester;
-                            document.getElementById('edit_kode_matkul').value = data
-                                .kode_matkul;
-
-                            const currentFakultas = data.fakultas ? data.fakultas
-                                .toLowerCase() : '';
-                            editFakultasSelect.value = currentFakultas;
-                            populateProdiDropdown(currentFakultas, editProdiSelect, data.prodi);
-
-                            document.getElementById('edit_deskripsi').value = data.deskripsi;
-
-                            const currentRpsInfo = document.getElementById('current_rps_info');
-                            if (data.rps_path) {
-                                currentRpsInfo.innerHTML =
-                                    `File saat ini: <a href="/storage/${data.rps_path}" target="_blank">${data.rps_path.split('/').pop()}</a>`;
-                            } else {
-                                currentRpsInfo.innerHTML =
-                                    '<em>Tidak ada file RPS terunggah.</em>';
-                            }
-                            document.getElementById('edit_rps').value = ''; // Clear file input
-                        })
-                        .catch(error => {
-                            console.error('Error fetching matakuliah details:', error);
-                            Swal.fire('Error', 'Gagal mengambil detail mata kuliah. ' + error
-                                .message, 'error');
-                        });
-                });
+                fetch(`{{ url('fakultas/matakuliah') }}/${matkulId}/edit`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('edit_sdgs_group').value = data.sdgs_group;
+                    document.getElementById('edit_nama_matkul').value = data.nama_matkul;
+                    document.getElementById('edit_semester').value = data.semester;
+                    document.getElementById('edit_kode_matkul').value = data.kode_matkul;
+                    const editProdiSelect = document.getElementById('edit_prodi');
+                    if (data.prodi) {
+                        editProdiSelect.value = data.prodi;
+                    } else {
+                        editProdiSelect.value = "";
+                    }
+                    document.getElementById('edit_deskripsi').value = data.deskripsi;
+                    const currentRpsInfoEdit = document.getElementById('current_rps_info_edit');
+                    if(data.rps_path){
+                        currentRpsInfoEdit.innerHTML = `File saat ini: <a href="/storage/${data.rps_path}" target="_blank">${data.rps_path.split('/').pop()}</a>`;
+                    } else {
+                        currentRpsInfoEdit.innerHTML = '<em>Tidak ada file RPS terunggah.</em>';
+                    }
+                    document.getElementById('edit_rps').value = '';
+                })
+                .catch(error => console.error('Error fetching matakuliah details:', error));
             });
-
-            // Handle Delete button clicks
-            document.querySelectorAll('.delete-matakuliah').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault(); // Prevent direct form submission if it's wrapped in a form
-                    const matkulId = this.dataset.id;
-                    const matkulNama = this.dataset.nama;
-                    const deleteForm = document.getElementById('delete-matakuliah-form');
-                    deleteForm.action = `{{ url('admin/matakuliah') }}/${matkulId}`;
-
-                    Swal.fire({
-                        title: 'Anda Yakin?',
-                        text: `Apakah Anda ingin menghapus mata kuliah "${matkulNama}"? Tindakan ini tidak dapat dibatalkan.`,
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'Ya, Hapus!',
-                        cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            deleteForm.submit();
-                        }
-                    });
-                });
-            });
-
-            // Display SweetAlert for flash messages
-            @if (session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: '{{ session('success') }}',
-                    timer: 3000,
-                    showConfirmButton: false
-                });
-            @endif
-
-            @if (session('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal!',
-                    text: '{{ session('error') }}',
-                    timer: 3000,
-                    showConfirmButton: false
-                });
-            @endif
         });
+
+        document.querySelectorAll('.delete-matakuliah').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                const matkulId = this.dataset.id;
+                const matkulNama = this.dataset.nama;
+                const deleteForm = document.getElementById('delete-matakuliah-form');
+                deleteForm.action = `{{ url('fakultas/matakuliah') }}/${matkulId}`;
+
+                Swal.fire({
+                    title: 'Anda Yakin?',
+                    text: `Apakah Anda ingin menghapus mata kuliah "${matkulNama}"? Tindakan ini tidak dapat dibatalkan.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        deleteForm.submit();
+                    }
+                });
+            });
+        });
+        
+        @if(session('success'))
+            Swal.fire({ icon: 'success', title: 'Berhasil!', text: '{{ session('success') }}', timer: 3000, showConfirmButton: false });
+        @endif
+        @if(session('error'))
+            Swal.fire({ icon: 'error', title: 'Gagal!', text: '{{ session('error') }}', timer: 3000, showConfirmButton: false });
+        @endif
+    });
     </script>
 @endsection
