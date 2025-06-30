@@ -53,11 +53,10 @@ class AdminRespondenController extends Controller
         $direction = in_array(strtolower($direction), ['asc', 'desc']) ? $direction : 'asc';
 
         $query = Responden::query();
-        if ($role === 'fakultas') {
-                $query->where('fakultas', $userInfo['faculty_code']);
-            } elseif ($role === 'prodi') {
-                $query->where('user_id', $user->id);
-            }
+          if ($role === 'fakultas' || $role === 'prodi') {
+        $query->where('user_id', $user->id);
+        }
+
 
         if ($request->filled('kategori')) {
             $query->where('category', $request->kategori);
@@ -188,17 +187,17 @@ class AdminRespondenController extends Controller
         $role = $user->role;
         $userInfo = $this->getUserFacultyInfo($user);
 
-        if ($role === 'fakultas' && $userInfo['faculty_code']) {
-            if ($responden->fakultas !== $userInfo['faculty_code']) {
-                return response()->json(['message' => 'Anda tidak diizinkan mengedit responden ini.'], 403);
+        if ($role === 'fakultas') {
+            $userInfo = $this->getUserFacultyInfo($user);
+            if (!$userInfo['faculty_code'] || $responden->fakultas !== $userInfo['faculty_code']) {
+                return response()->json(['message' => 'Akses ditolak.'], 403);
             }
         } elseif (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan'])) {
-            return response()->json(['message' => 'Anda tidak diizinkan mengedit responden ini.'], 403);
+            // Only admins can proceed if not a faculty member
+            return response()->json(['message' => 'Akses ditolak.'], 403);
         }
-
-        if (request()->ajax()) {
-            return response()->json($responden);
-        }
+        return response()->json($responden);
+        
         $viewData = ['responden' => $responden];
         //  if(Auth::user()->role === 'admin_direktorat' || Auth::user()->role === 'admin_pemeringkatan'){
         // }
@@ -212,21 +211,13 @@ class AdminRespondenController extends Controller
 
     public function update(UpdateRespondenRequest $request, $id) // UpdateRespondenRequest should have authorize() return true
     {
-        $responden = Responden::findOrFail($id);
+        // $responden = Responden::findOrFail($id);
         $user = Auth::user();
         $role = $user->role;
         $userInfo = $this->getUserFacultyInfo($user);
         $validated = $request->validated(); // Ensure UpdateRespondenRequest has rules() defined
 
-        if ($role === 'fakultas' && $userInfo['faculty_code']) {
-            if ($responden->fakultas !== $userInfo['faculty_code']) {
-                return response()->json(['message' => 'Anda tidak diizinkan memperbarui responden ini.'], 403);
-            }
-            // Ensure faculty is not changed by faculty user, or set it explicitly
-            $validated['fakultas'] = $userInfo['faculty_code'];
-        } elseif (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan'])) {
-            return response()->json(['message' => 'Anda tidak diizinkan memperbarui responden ini.'], 403);
-        }
+        return response()->json($responden);
 
         $responden->update($validated);
 

@@ -478,7 +478,8 @@
             document.querySelectorAll('.edit-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const respondenId = this.dataset.id;
-                    const url = `/${routePrefix}/responden/${respondenId}/edit`;
+                    const baseUrl = '{{ route("prodi.responden.edit", ["responden" => ":id"]) }}';
+                    const url = baseUrl.replace(':id', respondenId);
 
                     axios.get(url)
                         .then(response => {
@@ -578,35 +579,27 @@
                         cancelButtonColor: '#3085d6',
                         confirmButtonText: 'Ya, hapus!',
                         cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            axios.delete(url, {
-                                    headers: {
-                                        'X-CSRF-TOKEN': csrfToken
-                                    }
-                                })
-                                .then(response => {
-                                    Swal.fire(
-                                        'Dihapus!',
-                                        'Data responden berhasil dihapus.',
-                                        'success'
-                                    );
-                                    document.getElementById(
-                                        `responden-row-${respondenId}`).remove();
-                                })
-                                .catch(error => {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Gagal!',
-                                        text: error.response?.data?.message ||
-                                            'Terjadi kesalahan saat menghapus data.',
-                                    });
-                                    console.error('Error deleting responden:', error);
-                                });
-                        }
-                    });
-                });
+                    })
+                    .then(response => {
+            Swal.fire(
+                'Dihapus!',
+                'Data responden berhasil dihapus.',
+                'success'
+            );
+            document.getElementById(`responden-row-${respondenId}`).remove();
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: error.response?.data?.message || 'Terjadi kesalahan saat menghapus data.',
             });
+            console.error('Error deleting responden:', error);
+        });
+    }
+});
+                });
+            
 
             // Import form submission
             document.getElementById('importForm').addEventListener('submit', function(e) {
