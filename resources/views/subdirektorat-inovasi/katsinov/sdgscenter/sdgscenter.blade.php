@@ -119,21 +119,29 @@
     </section>
 
     <section id="sdgs-program" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col lg:flex-row items-center gap-12">
-                <div class="w-full lg:w-5/12">
-                    <img src="/images/unjsdg.png" alt="SDGs Logo UNJ"
-                        class="w-64 h-auto object-contain mx-auto lg:mx-0">
-                    <h2 class="text-4xl font-bold text-gray-800 mt-6">Peran UNJ dalam SDGs</h2>
-                    <p class="text-gray-600 mt-4 text-lg leading-relaxed">UNJ berkomitmen untuk menjadi agen perubahan
-                        melalui implementasi SDGs di berbagai pilar Tri Dharma Perguruan Tinggi.</p>
-                    <div class="italic text-gray-600 mt-6 border-l-4 border-unj-green pl-4">
-                        "Menjadi <span class="font-semibold text-unj-green">center of excellence</span> dan <span
-                            class="font-semibold text-unj-green">agent of change</span> dalam pembangunan global yang
-                        adil, inklusif, dan berkelanjutan."
-                    </div>
+    <div class="container mx-auto px-6">
+        <div class="flex flex-col lg:flex-row items-center gap-12">
+            {{-- This column now only contains the image --}}
+            <div class="w-full lg:w-5/12">
+                <img src="/images/unjsdg.png" alt="SDGs Logo UNJ"
+                    class="w-120 h-auto object-contain mx-auto lg:mx-0">
+            </div>
+            {{-- This column now contains the text introduction, the quote, and the program cards --}}
+            <div class="w-full lg:w-7/12">
+                {{-- Moved Section Title and Intro Text --}}
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Peran UNJ dalam SDGs</h2>
+                <p class="text-gray-600 mb-6 text-lg leading-relaxed">UNJ berkomitmen untuk menjadi agen perubahan
+                    melalui implementasi SDGs di berbagai pilar Tri Dharma Perguruan Tinggi.</p>
+
+                {{-- Moved Quote --}}
+                <div class="italic text-gray-600 border-l-4 border-unj-green pl-4 mb-6">
+                    "Menjadi <span class="font-semibold text-unj-green">center of excellence</span> dan <span
+                        class="font-semibold text-unj-green">agent of change</span> dalam pembangunan global yang
+                    adil, inklusif, dan berkelanjutan."
                 </div>
-                <div class="w-full lg:w-7/12 grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+                {{-- Original program cards, now within the same column as the moved text --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div
                         class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-lg hover:border-unj-green transition-all duration-300">
                         <h3 class="text-xl font-bold text-unj-green mb-3">Pendidikan & Kurikulum</h3>
@@ -161,7 +169,8 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <section id="goals" class="sdgs-fullscreen-section">
         @php
@@ -199,21 +208,21 @@
                     'title' => 'Kesetaraan Gender',
                     'description' =>
                         'Mencapai kesetaraan gender dan memberdayakan kaum perempuan dan anak perempuan. Menghilangkan segala bentuk diskriminasi dan kekerasan terhadap perempuan dan memastikan partisipasi penuh mereka di semua tingkatan.',
-                    'bg_image' => 'https://images.unsplash.com/photo-1556761175-59736c83c2ae?w=800&q=80',
+                    'bg_image' => 'https://lh3.googleusercontent.com/proxy/pLBbdmO2xGkmNWJv9FNoX6JC8gDqX4dwDA5D9HtuVSbe_6QOckrM88QN0U4FLGTJY60WKpU98XPL4ftCaRDpIAMLNbWmGiXJ_j3h_DtkKxo3JG1iLiLsWGVhiQ',
                 ],
                 6 => [
                     'color' => '#26BDE2',
                     'title' => 'Air Bersih dan Sanitasi Layak',
                     'description' =>
                         'Memastikan ketersediaan dan pengelolaan air bersih dan sanitasi yang berkelanjutan bagi semua. Meningkatkan kualitas air, mengurangi polusi, dan melindungi ekosistem yang berkaitan dengan air.',
-                    'bg_image' => 'https://images.unsplash.com/photo-1576053139221-88a2a95a8991?w=800&q=80',
+                    'bg_image' => 'https://fkes.unusa.ac.id/wp-content/uploads/2022/06/thumb-743x675.jpg',
                 ],
                 7 => [
                     'color' => '#FCC30B',
                     'title' => 'Energi Bersih dan Terjangkau',
                     'description' =>
                         'Memastikan akses ke energi yang terjangkau, andal, berkelanjutan, dan modern bagi semua. Meningkatkan penggunaan energi terbarukan dan efisiensi energi dalam sistem energi global.',
-                    'bg_image' => 'https://images.unsplash.com/photo-1509390232535-866b17a33194?w=800&q=80',
+                    'bg_image' => 'https://atonergi.com/wp-content/uploads/2023/04/70.jpg',
                 ],
                 8 => [
                     'color' => '#A21942',
@@ -227,7 +236,7 @@
                     'title' => 'Industri, Inovasi dan Infrastruktur',
                     'description' =>
                         'Membangun infrastruktur yang tangguh, mendorong industrialisasi yang inklusif dan berkelanjutan, serta memupuk inovasi. Meningkatkan akses ke teknologi informasi dan komunikasi.',
-                    'bg_image' => 'https://images.unsplash.com/photo-1581092921449-41b93f2c3516?w=800&q=80',
+                    'bg_image' => 'https://assets-a1.kompasiana.com/items/album/2024/04/07/screenshot-2024-04-07-093347-661206291470935ef5478b12.png',
                 ],
                 10 => [
                     'color' => '#DD1367',
@@ -248,7 +257,7 @@
                     'title' => 'Konsumsi dan Produksi Bertanggung Jawab',
                     'description' =>
                         'Memastikan pola konsumsi dan produksi yang berkelanjutan. Mengurangi limbah, mendorong daur ulang, dan mendorong praktik bisnis yang berkelanjutan.',
-                    'bg_image' => 'https://images.unsplash.com/photo-1542601906-823816a75393?w=800&q=80',
+                    'bg_image' => 'https://www.greeners.co/wp-content/uploads/2017/04/Pola-Konsumsi-dan-Produksi-Bertanggung-Jawab-Harus-Mulai-Diperhatikan.jpg',
                 ],
                 13 => [
                     'color' => '#3F7E44',

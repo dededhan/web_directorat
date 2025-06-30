@@ -1,3 +1,5 @@
+/* main.css */
+
 .hero {
     transition: background-image 1s ease-in-out;
 }
@@ -11,32 +13,43 @@
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* === DESAIN BARU: FULLSCREEN SDG CAROUSEL === */
+/* === DESAIN BARU: FULLSCREEN SDG CAROUSEL (REVISI FINAL) === */
+html, body {
+    /* Menghilangkan potensi margin/padding default yang bisa mengganggu */
+    margin: 0;
+    padding: 0;
+}
+
 .sdgs-fullscreen-section {
     width: 100%;
-    height: 100vh; /* Mengisi seluruh tinggi layar */
+    height: 100vh; /* Mengisi 100% tinggi viewport */
     position: relative;
     overflow: hidden;
-    background-color: #f0f0f0; /* Warna fallback */
+    background-color: #333; /* Warna fallback jika gambar gagal dimuat */
+    display: flex; /* Menggunakan flexbox untuk alignment */
+    flex-direction: column;
+    justify-content: center; /* Memastikan kontennya terpusat secara vertikal */
 }
 
 .sdgs-slider-container {
     display: flex;
-    height: 100%;
-    transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Transisi slide yang unik */
+    height: 100%; /* Slider container mengisi seluruh tinggi section */
+    width: 100%; /* Slider container mengisi seluruh lebar section */
+    transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 
 .sdgs-slide {
     min-width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 100%; /* Setiap slide mengisi 100% tinggi container */
+    display: flex; /* Menggunakan flexbox untuk konten di dalam slide */
+    align-items: center; /* Konten vertikal di tengah */
+    justify-content: center; /* Konten horizontal di tengah */
     position: relative;
     background-size: cover;
     background-position: center;
     color: white;
-    padding: 2rem;
+    padding: 2rem; /* Memberi ruang di sekitar konten */
+    box-sizing: border-box; /* Padding tidak akan menambah ukuran total elemen */
 }
 
 /* Overlay gelap untuk kontras teks */
@@ -47,7 +60,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.1));
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2));
     z-index: 1;
 }
 
@@ -57,31 +70,26 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
+    text-align: center; /* Ensure text alignment is centered */
     max-width: 800px;
+    width: 100%;
     animation: fade-in-up 1s ease-out forwards;
 }
 
-@keyframes fade-in-up {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+/* ... Sisa dari CSS (slide-image, slide-info, dll.) bisa tetap sama seperti revisi sebelumnya ... */
 
 .sdgs-slide-image {
-    width: 150px;
-    height: 150px;
-    margin-bottom: 2rem;
+    /* REVISION: INCREASED SIZE */
+    width: 180px; /* Increased from 130px */
+    height: 180px; /* Increased from 130px */
+    margin-bottom: 1.5rem;
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 1.5rem;
-    padding: 1rem;
+    padding: 1.5rem; /* Adjusted padding slightly */
+    box-sizing: border-box;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
+
 .sdgs-slide-image img {
     width: 100%;
     height: 100%;
@@ -89,23 +97,26 @@
 }
 
 .sdgs-slide-info h2 {
-    font-size: 3rem;
+    /* REVISION: FONT SIZE ADJUSTMENT */
+    font-size: clamp(2.5rem, 6vw, 3.5rem); /* Slightly larger for impact */
     font-weight: 900;
     margin-bottom: 1rem;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 .sdgs-slide-info p {
-    font-size: 1.25rem;
-    line-height: 1.7;
-    max-width: 600px;
-    margin-bottom: 2rem;
-    opacity: 0.9;
+    /* REVISION: FONT SIZE AND LINE HEIGHT ADJUSTMENT FOR BETTER FLOW */
+    font-size: clamp(1.1rem, 2.8vw, 1.4rem); /* Slightly larger for readability */
+    line-height: 1.7; /* Increased for better readability */
+    /* Adjust max-width to control line length for better centered appearance */
+    max-width: 600px; /* Slightly reduced from 700px to encourage more balanced lines */
+    margin: 0 auto 2rem auto; /* Center the paragraph itself, with bottom margin */
+    opacity: 0.95;
 }
 
 .sdgs-learn-more {
     background-color: var(--sdg-color, #fff);
-    color: white;
+    color: #111;
     padding: 0.8rem 2rem;
     border-radius: 50px;
     text-decoration: none;
@@ -113,12 +124,13 @@
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
+
 .sdgs-learn-more:hover {
     transform: scale(1.05) translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    color: #000;
 }
 
-/* Navigasi */
 .sdgs-slider-nav {
     position: absolute;
     bottom: 30px;
@@ -131,6 +143,7 @@
     padding: 8px 15px;
     border-radius: 50px;
 }
+
 .sdgs-pagination-number {
     width: 30px;
     height: 30px;
@@ -144,9 +157,99 @@
     transition: all 0.3s ease;
     opacity: 0.7;
 }
+
 .sdgs-pagination-number.active,
 .sdgs-pagination-number:hover {
     opacity: 1;
     transform: scale(1.2);
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* === RESPONSIF UNTUK MOBILE (REVISI FINAL) === */
+@media (max-width: 768px) {
+
+    /* Menyesuaikan konten slide untuk layar kecil */
+    .sdgs-slide {
+        padding: 1.5rem 1rem; /* Mengurangi padding horizontal */
+    }
+
+    /* Perkecil ukuran gambar ikon SDG secara signifikan */
+    .sdgs-slide-image {
+        width: 100px;  /* Adjusted for mobile */
+        height: 100px; /* Adjusted for mobile */
+        margin-bottom: 0.75rem; /* Slightly reduced margin */
+        padding: 0.5rem; /* Slightly reduced padding */
+    }
+
+    /* Perkecil ukuran font judul dan deskripsi */
+    .sdgs-slide-info h2 {
+        font-size: clamp(1.8rem, 6vw, 2.5rem); /* Adjusted for mobile */
+        margin-bottom: 0.6rem; /* Slightly reduced margin */
+    }
+
+    .sdgs-slide-info p {
+        font-size: clamp(0.9rem, 4vw, 1.1rem); /* Adjusted for mobile */
+        line-height: 1.5; /* Slightly reduced line height */
+        max-width: 90%; /* Adjust max-width for better wrapping on mobile */
+        margin: 0 auto 1rem auto; /* Center the paragraph itself, with bottom margin */
+    }
+
+    /* Sesuaikan tombol "Pelajari Lebih Lanjut" */
+    .sdgs-learn-more {
+        padding: 0.5rem 1.2rem; /* Reduced padding */
+        font-size: 0.8rem; /* Reduced font size */
+    }
+
+    /* =================================================================== */
+    /* === PERBAIKAN UTAMA: Navigasi Dot yang Bisa Digeser (Scrollable) === */
+    /* =================================================================== */
+    .sdgs-slider-nav {
+        width: 100%; /* Gunakan lebar penuh */
+        bottom: 20px;
+        left: 0; /* Mulai dari tepi kiri */
+        transform: none; /* Hapus transform translateX */
+        
+        display: flex;
+        justify-content: flex-start; /* Ratakan item dari kiri */
+        overflow-x: auto; /* Aktifkan scroll horizontal */
+        -webkit-overflow-scrolling: touch; /* Scroll lebih mulus di iOS */
+        
+        padding: 8px 10px; /* Beri padding horizontal agar tidak menempel tepi */
+        
+        /* Menghilangkan background agar tidak aneh saat di-scroll */
+        background-color: transparent; 
+
+        /* Menyembunyikan scrollbar visual di browser WebKit (Chrome, Safari) */
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        /* Menyembunyikan scrollbar di Firefox */
+        scrollbar-width: none; 
+    }
+
+    .sdgs-pagination-number {
+        /* Karena bisa di-scroll, ukurannya tidak perlu terlalu kecil agar mudah disentuh */
+        width: 26px; /* Slightly reduced */
+        height: 26px; /* Slightly reduced */
+        font-size: 0.8rem; /* Slightly reduced */
+        flex-shrink: 0; /* Mencegah dot menyusut */
+        background-color: rgba(0, 0, 0, 0.4); /* Pindahkan background ke masing-masing dot */
+        border-radius: 50%;
+    }
+
+    .sdgs-pagination-number.active {
+        /* Efek aktif tetap sama */
+        transform: scale(1.15);
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7);
+    }
 }
