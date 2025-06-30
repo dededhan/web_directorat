@@ -47,7 +47,7 @@
 <body class="bg-gray-100">
 
     <header style="background-color: {{ $sdg['color'] }};" class="text-white relative">
-        <div class="absolute top-6 left-6 z-20">
+        <!-- <div class="absolute top-6 left-6 z-20">
             <a href="{{ route('sdg.show', ['id' => $sdg_id]) }}"
                class="inline-flex items-center gap-2 px-5 py-2.5 font-semibold text-white rounded-full shadow-lg border border-white/30 bg-blue-600 hover:bg-blue-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/60"
                style="background-color: #2563eb;">
@@ -55,7 +55,7 @@
                 <span class="hidden sm:inline">Kembali ke Laman SDG {{ $sdg_id }}</span>
                 <span class="inline sm:hidden">Kembali</span>
             </a>
-        </div>
+        </div> -->
         <div class="container mx-auto px-6 py-10 flex items-center gap-6">
             <div class="bg-white p-3 rounded-lg shadow-xl w-24 h-24 md:w-32 md:h-32 flex-shrink-0">
                 <img src="{{ $sdg['icon'] }}" alt="Icon SDG {{ $sdg_id }}" class="w-full h-full object-contain">
