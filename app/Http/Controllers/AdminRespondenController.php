@@ -41,7 +41,7 @@ class AdminRespondenController extends Controller
     {
         $user = Auth::user();
         $role = $user->role;
-        // $userInfo = $this->getUserFacultyInfo($user);
+        $userInfo = $this->getUserFacultyInfo($user);
 
         $sort = $request->get('sort', 'fullname');
         $direction = $request->get('direction', 'asc');
