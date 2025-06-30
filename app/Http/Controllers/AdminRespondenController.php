@@ -53,10 +53,11 @@ class AdminRespondenController extends Controller
         $direction = in_array(strtolower($direction), ['asc', 'desc']) ? $direction : 'asc';
 
         $query = Responden::query();
-
-        if ($role === 'fakultas' || $role === 'prodi') {
-        $query->where('user_id', $user->id);
-        }
+        if ($role === 'fakultas') {
+                $query->where('fakultas', $userInfo['faculty_code']);
+            } elseif ($role === 'prodi') {
+                $query->where('user_id', $user->id);
+            }
 
         if ($request->filled('kategori')) {
             $query->where('category', $request->kategori);
@@ -125,20 +126,12 @@ class AdminRespondenController extends Controller
             return redirect()->back()->with('error', 'Anda tidak diizinkan menyimpan responden.')->withInput();
         }
 
-        if ($role === 'fakultas') {
+          if (in_array($role, ['fakultas', 'prodi'])) {
             $userInfo = $this->getUserFacultyInfo($user);
-            if ($userInfo['faculty_code']) {
-                if (isset($respondenValidated['responden_fakultas']) && $respondenValidated['responden_fakultas'] !== $userInfo['faculty_code']) {
-                    Log::warning('Fakultas user trying to store responden for different faculty.', [
-                        'user_id' => $user->id,
-                        'submitted_fakultas' => $respondenValidated['responden_fakultas'],
-                        'user_fakultas' => $userInfo['faculty_code']
-                    ]);
-                }
-                $respondenValidated['responden_fakultas'] = $userInfo['faculty_code'];
-            } else {
+            if (!$userInfo['faculty_code']) {
                 return redirect()->back()->with('error', 'Tidak dapat menentukan fakultas Anda.')->withInput();
             }
+            $respondenValidated['fakultas'] = $userInfo['faculty_code'];
         }
 
         $responden = Responden::create([
@@ -160,6 +153,8 @@ class AdminRespondenController extends Controller
         $redirectRouteName = 'admin.responden.index';
         if ($role === 'fakultas') {
             $redirectRouteName = 'fakultas.responden.index';
+        } elseif ($role === 'prodi') {
+        $redirectRouteName = 'prodi.responden.index';
         } elseif ($role === 'admin_pemeringkatan') {
             $redirectRouteName = 'admin_pemeringkatan.responden.index';
         }
@@ -274,8 +269,15 @@ class AdminRespondenController extends Controller
         $userInfo = $this->getUserFacultyInfo($user);
 
         // Authorization logic
-        if ($role === 'fakultas' && $userInfo['faculty_code']) {
+        if ($role === 'fakultas') {
             if ($responden->fakultas !== $userInfo['faculty_code']) {
+                if ($request->ajax()) {
+                    return response()->json(['message' => 'Anda tidak diizinkan menghapus responden ini.'], 403);
+                }
+                return redirect()->back()->with('error', 'Anda tidak diizinkan menghapus responden ini.');
+            }
+        } elseif ($role === 'prodi') {
+            if ($responden->user_id !== $user->id) {
                 if ($request->ajax()) {
                     return response()->json(['message' => 'Anda tidak diizinkan menghapus responden ini.'], 403);
                 }
@@ -296,8 +298,9 @@ class AdminRespondenController extends Controller
             }
 
             $redirectRouteName = 'admin.responden.index';
-            if ($role === 'fakultas') $redirectRouteName = 'fakultas.responden.index';
-            if ($role === 'admin_pemeringkatan') $redirectRouteName = 'admin_pemeringkatan.responden.index';
+             if ($role === 'fakultas') $redirectRouteName = 'fakultas.responden.index';
+            elseif ($role === 'prodi') $redirectRouteName = 'prodi.responden.index';
+            elseif ($role === 'admin_pemeringkatan') $redirectRouteName = 'admin_pemeringkatan.responden.index';
             
             return redirect()->route($redirectRouteName)->with('success', 'Responden berhasil dihapus.');
 

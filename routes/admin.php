@@ -362,14 +362,13 @@ Route::prefix('fakultas')->name('fakultas.')
         Route::resource('/sustainability', AdminSustainabilityController::class);
         Route::get('/sustainability/{id}/detail', [AdminSustainabilityController::class, 'getSustainabilityDetail'])
             ->name('sustainability.detail');
+      
+      
         Route::resource('/responden', AdminRespondenController::class)->except(['update']);
         Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
             ->name('responden.update');
-
-        // Untuk update status khusus (POST)
         Route::post('/responden/update-status/{id}', [AdminRespondenController::class, 'updateStatus'])
             ->name('responden.updateStatus');
-
         Route::post('/responden/import', [AdminRespondenController::class, 'import'])->name('responden.import');
         Route::get('/responden/filter', [AdminRespondenController::class, 'filter'])->name('responden.filter');
         Route::get('/responden/export/excel', [AdminRespondenController::class, 'export'])
