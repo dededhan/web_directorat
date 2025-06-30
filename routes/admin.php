@@ -322,6 +322,8 @@ Route::prefix('prodi')->name('prodi.')
             ->name('sustainability.detail');
 
         Route::resource('/responden', AdminRespondenController::class)->except(['update']);
+        Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
+            ->name('responden.update');
         Route::post('/responden/update-status/{id}', [AdminRespondenController::class, 'updateStatus'])
             ->name('responden.updateStatus');
         Route::post('/responden/import', [AdminRespondenController::class, 'import'])->name('responden.import');

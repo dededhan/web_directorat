@@ -121,17 +121,17 @@ class AdminRespondenController extends Controller
         $role = $user->role;
         $respondenValidated = $request->validated();
 
-        if (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas'])) {
+        if (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas','prodi'])) {
             return redirect()->back()->with('error', 'Anda tidak diizinkan menyimpan responden.')->withInput();
         }
 
-          if (in_array($role, ['fakultas', 'prodi'])) {
-            $userInfo = $this->getUserFacultyInfo($user);
-            if (!$userInfo['faculty_code']) {
-                return redirect()->back()->with('error', 'Tidak dapat menentukan fakultas Anda.')->withInput();
-            }
-            $respondenValidated['fakultas'] = $userInfo['faculty_code'];
-        }
+        //   if (in_array($role, ['fakultas', 'prodi'])) {
+        //     $userInfo = $this->getUserFacultyInfo($user);
+        //     if (!$userInfo['faculty_code']) {
+        //         return redirect()->back()->with('error', 'Tidak dapat menentukan fakultas Anda.')->withInput();
+        //     }
+        //     $respondenValidated['fakultas'] = $userInfo['faculty_code'];
+        // }
 
         $responden = Responden::create([
             'title' => $respondenValidated['responden_title'],
@@ -193,7 +193,13 @@ class AdminRespondenController extends Controller
             if (!$userInfo['faculty_code'] || $responden->fakultas !== $userInfo['faculty_code']) {
                 return response()->json(['message' => 'Akses ditolak.'], 403);
             }
-        } elseif (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan'])) {
+        } 
+        elseif ($role === 'prodi') {
+        // User prodi hanya boleh mengedit responden yang dia buat (user_id sama)
+        if ($responden->user_id !== $user->id) {
+            return response()->json(['message' => 'Akses ditolak. Anda hanya boleh mengedit data yang Anda buat.'], 403);
+        }
+    }elseif (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan'])) {
             // Only admins can proceed if not a faculty member
             return response()->json(['message' => 'Akses ditolak.'], 403);
         }
@@ -210,12 +216,18 @@ class AdminRespondenController extends Controller
     $validated = $request->validated(); // Get validated data
 
     // 3. Authorization Logic (example)
-    if ($role === 'fakultas') {
+       if ($role === 'prodi') {
+        // Pastikan user prodi hanya bisa mengupdate data miliknya sendiri
+        if ($responden->user_id !== $user->id) {
+            return response()->json(['message' => 'Akses ditolak. Anda tidak diizinkan memperbarui data ini.'], 403);
+        }
+    } elseif ($role === 'fakultas') {
         $userInfo = $this->getUserFacultyInfo($user);
         if ($responden->fakultas !== $userInfo['faculty_code']) {
             return response()->json(['message' => 'Anda tidak diizinkan memperbarui responden ini.'], 403);
         }
     }
+
 
     // 4. Update the model and save it
     $responden->update($validated);

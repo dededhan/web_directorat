@@ -23,7 +23,16 @@
             <div class="head">
                 <h3>Responden Survey Input</h3>
             </div>
-
+            @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
             <form id="survey-form" method="POST" action="{{ route('prodi.responden.store') }}">
                 @csrf
                 <div class="row">
@@ -512,7 +521,7 @@
                             row.querySelector('.responden-phone_responden').textContent = updatedData.phone_responden;
                             row.querySelector('.responden-nama_dosen_pengusul').textContent = updatedData.nama_dosen_pengusul;
                             row.querySelector('.responden-phone_dosen').textContent = updatedData.phone_dosen;
-                            row.querySelector('.responden-fakultas').textContent = updatedData.prodi.toUpperCase();
+                            row.querySelector('.responden-fakultas').textContent = updatedData.fakultas.toUpperCase();
                             row.querySelector('.responden-category').textContent = updatedData.category;
                         }
                     })
