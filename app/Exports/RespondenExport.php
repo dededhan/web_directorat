@@ -51,17 +51,17 @@ class RespondenExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
     public function headings(): array
     {
         return [
-            'Title',
-            'Nama Lengkap',
-            'Jabatan',
-            'Instansi',
-            'Email',
-            'No. Responden',
-            'Nama Dosen',
-            'No. Narahubung',
-            'Fakultas',
-            'Kategori',
-            'Status'
+            'title',
+            'fullname',
+            'jabatan',
+            'instansi',
+            'email',
+            'phone_responden',
+            'nama_dosen_pengusul',
+            'phone_dosen',
+            'fakultas',
+            'category',
+            'status'
         ];
     }
 

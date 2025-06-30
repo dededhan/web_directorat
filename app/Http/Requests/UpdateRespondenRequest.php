@@ -26,7 +26,7 @@ class UpdateRespondenRequest extends FormRequest
     {
         // 2. Get the respondent's ID from the route parameter.
         // This name ('id') must match the parameter name in your routes/web.php file.
-        $respondenId = $this->route('id');
+        $respondenId = $this->route('responden');
 
         return [
             'title' => 'required|string|max:10',

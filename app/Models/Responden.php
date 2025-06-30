@@ -21,8 +21,13 @@ class Responden extends Model
         'fakultas',
         'category',
         'status',
+         'user_id' ,
         // 'user_id', // Uncomment if you have this column and want to update it
         // 'tahun',   // Uncomment if you have this column and want to update it
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
