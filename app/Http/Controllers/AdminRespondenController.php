@@ -187,6 +187,7 @@ class AdminRespondenController extends Controller
         $role = $user->role;
         $userInfo = $this->getUserFacultyInfo($user);
 
+       // Authorization Check: Does the user have permission?
         if ($role === 'fakultas') {
             $userInfo = $this->getUserFacultyInfo($user);
             if (!$userInfo['faculty_code'] || $responden->fakultas !== $userInfo['faculty_code']) {
@@ -196,42 +197,35 @@ class AdminRespondenController extends Controller
             // Only admins can proceed if not a faculty member
             return response()->json(['message' => 'Akses ditolak.'], 403);
         }
+
+        // If authorization passes, always return JSON
         return response()->json($responden);
-        
-        $viewData = ['responden' => $responden];
-        //  if(Auth::user()->role === 'admin_direktorat' || Auth::user()->role === 'admin_pemeringkatan'){
-        // }
-        // return view('admin.responden.edit', $viewData); // Or role-specific edit views
-        // Fallback or decide on a default edit view if not AJAX
-        $editView = 'admin.responden.edit'; // Default
-        if ($role === 'fakultas') $editView = 'fakultas.responden.edit';
-        // Add other roles if they have specific edit views
-        return view($editView, $viewData);
+    }
+    
+
+    public function update(UpdateRespondenRequest $request, Responden $responden) // UpdateRespondenRequest should have authorize() return true
+    {
+            $user = Auth::user();
+    $role = $user->role;
+    $validated = $request->validated(); // Get validated data
+
+    // 3. Authorization Logic (example)
+    if ($role === 'fakultas') {
+        $userInfo = $this->getUserFacultyInfo($user);
+        if ($responden->fakultas !== $userInfo['faculty_code']) {
+            return response()->json(['message' => 'Anda tidak diizinkan memperbarui responden ini.'], 403);
+        }
     }
 
-    public function update(UpdateRespondenRequest $request, $id) // UpdateRespondenRequest should have authorize() return true
-    {
-        // $responden = Responden::findOrFail($id);
-        $user = Auth::user();
-        $role = $user->role;
-        $userInfo = $this->getUserFacultyInfo($user);
-        $validated = $request->validated(); // Ensure UpdateRespondenRequest has rules() defined
+    // 4. Update the model and save it
+    $responden->update($validated);
 
-        return response()->json($responden);
+    // 5. Return a successful JSON response
+    return response()->json([
+        'message' => 'Data berhasil diperbarui',
+        'data' => $responden->fresh() // Use fresh() to get the model with updated timestamps
+    ]);
 
-        $responden->update($validated);
-
-        if ($request->ajax()) {
-            return response()->json([
-                'message' => 'Data berhasil diperbarui',
-                'data' => $responden
-            ]);
-        }
-
-        $redirectRouteName = 'admin.responden.index';
-        if ($role === 'fakultas') $redirectRouteName = 'fakultas.responden.index';
-        if ($role === 'admin_pemeringkatan') $redirectRouteName = 'admin_pemeringkatan.responden.index';
-        return redirect()->route($redirectRouteName)->with('success', 'Data berhasil diperbarui');
     }
 
     public function updateStatus(Request $request, $id)
