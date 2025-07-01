@@ -84,6 +84,12 @@
         <div class="menu-section">
             <h3 class="section-title">Settings</h3>
             <ul class="side-menu">
+                                <li class="{{ request()->routeIs('prodi.manage.account') ? 'active' : '' }}">
+                    <a href="{{ route('prodi.manage.account') }}"> 
+                        <i class='bx bxs-user-account'></i>
+                        <span class="text">Manage Account</span>
+                    </a>
+                </li>
                 <li>
                     <form method="POST" action="{{ route('logout') }}" id="logout-form">
                         @csrf

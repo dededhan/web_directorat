@@ -338,6 +338,13 @@ Route::prefix('prodi')->name('prodi.')
         Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
         Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
+
+
+                // NEW: Manage Account Routes for Fakultas
+        Route::get('/account', function () {
+            return view('fakultas.manage_account');
+        })->name('manage.account');
+        // Route::put('/account', [UserController::class, 'updateAccount'])->name('manage.account.update');
     });
 
 Route::prefix('fakultas')->name('fakultas.')
@@ -364,8 +371,8 @@ Route::prefix('fakultas')->name('fakultas.')
         Route::resource('/sustainability', AdminSustainabilityController::class);
         Route::get('/sustainability/{id}/detail', [AdminSustainabilityController::class, 'getSustainabilityDetail'])
             ->name('sustainability.detail');
-      
-      
+
+
         Route::resource('/responden', AdminRespondenController::class)->except(['update']);
         Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
             ->name('responden.update');
@@ -384,6 +391,12 @@ Route::prefix('fakultas')->name('fakultas.')
         Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
         Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
+
+        // NEW: Manage Account Routes for Fakultas
+        Route::get('/account', function () {
+            return view('fakultas.manage_account');
+        })->name('manage.account');
+        // Route::put('/account', [UserController::class, 'updateAccount'])->name('manage.account.update');
     });
 
 
