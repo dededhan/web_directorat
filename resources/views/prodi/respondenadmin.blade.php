@@ -552,7 +552,10 @@
                         cancelButtonText: 'Batal'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            axios.delete(url, { headers: { 'X-CSRF-TOKEN': csrfToken } })
+                           axios.post(url, {
+                                    _method: 'delete', // The magic ingredient for method spoofing
+                                    _token: csrfToken // Send the CSRF token in the data
+                                })
                                 .then(response => {
                                     Swal.fire(
                                         'Dihapus!',

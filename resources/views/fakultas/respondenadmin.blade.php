@@ -1,10 +1,8 @@
 @extends('fakultas.index')
-@vite([
-        'resources/css/admin/responden_dashboard.css'
-    ])
+@vite(['resources/css/admin/responden_dashboard.css'])
 
 @section('contentfakultas')
-   <div class="head-title">
+    <div class="head-title">
         <div class="left">
             <h1>Responden</h1>
             <ul class="breadcrumb">
@@ -134,24 +132,37 @@
                                 <div class="col-auto">
                                     <select class="form-select" name="kategori" id="filterKategori">
                                         <option value="">Semua Kategori</option>
-                                        <option value="academic" {{ request('kategori') == 'academic' ? 'selected' : '' }}>Academic</option>
-                                        <option value="employer" {{ request('kategori') == 'employer' ? 'selected' : '' }}>Employer</option>
+                                        <option value="academic" {{ request('kategori') == 'academic' ? 'selected' : '' }}>
+                                            Academic</option>
+                                        <option value="employer" {{ request('kategori') == 'employer' ? 'selected' : '' }}>
+                                            Employer</option>
                                     </select>
                                 </div>
                                 <div class="col-auto">
                                     <select class="form-select" name="fakultas" id="filterFakultas">
                                         <option value="">Semua Fakultas</option>
-                                        <option value="pascasarjana" {{ request('fakultas') == 'pascasarjana' ? 'selected' : '' }}>PASCASARJANA</option>
-                                        <option value="fip" {{ request('fakultas') == 'fip' ? 'selected' : '' }}>FIP</option>
-                                        <option value="fmipa" {{ request('fakultas') == 'fmipa' ? 'selected' : '' }}>FMIPA</option>
-                                        <option value="fpsi" {{ request('fakultas') == 'fpsi' ? 'selected' : '' }}>FPsi</option>
-                                        <option value="fbs" {{ request('fakultas') == 'fbs' ? 'selected' : '' }}>FBS</option>
-                                        <option value="ft" {{ request('fakultas') == 'ft' ? 'selected' : '' }}>FT</option>
-                                        <option value="fikk" {{ strtolower(request('fakultas')) == 'fikk' ? 'selected' : '' }}>FIKK</option>
+                                        <option value="pascasarjana"
+                                            {{ request('fakultas') == 'pascasarjana' ? 'selected' : '' }}>PASCASARJANA
+                                        </option>
+                                        <option value="fip" {{ request('fakultas') == 'fip' ? 'selected' : '' }}>FIP
+                                        </option>
+                                        <option value="fmipa" {{ request('fakultas') == 'fmipa' ? 'selected' : '' }}>FMIPA
+                                        </option>
+                                        <option value="fpsi" {{ request('fakultas') == 'fpsi' ? 'selected' : '' }}>FPsi
+                                        </option>
+                                        <option value="fbs" {{ request('fakultas') == 'fbs' ? 'selected' : '' }}>FBS
+                                        </option>
+                                        <option value="ft" {{ request('fakultas') == 'ft' ? 'selected' : '' }}>FT
+                                        </option>
+                                        <option value="fikk"
+                                            {{ strtolower(request('fakultas')) == 'fikk' ? 'selected' : '' }}>FIKK</option>
 
-                                        <option value="fish" {{ request('fakultas') == 'fish' ? 'selected' : '' }}>FISH</option>
-                                        <option value="feb" {{ request('fakultas') == 'feb' ? 'selected' : '' }}>FEB</option>
-                                        <option value="profesi" {{ request('fakultas') == 'profesi' ? 'selected' : '' }}>PROFESI</option>
+                                        <option value="fish" {{ request('fakultas') == 'fish' ? 'selected' : '' }}>FISH
+                                        </option>
+                                        <option value="feb" {{ request('fakultas') == 'feb' ? 'selected' : '' }}>FEB
+                                        </option>
+                                        <option value="profesi" {{ request('fakultas') == 'profesi' ? 'selected' : '' }}>
+                                            PROFESI</option>
                                     </select>
                                 </div>
                                 <div class="col-auto">
@@ -162,10 +173,12 @@
                         </form>
                         <div class="export-buttons me-3">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importModal">
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                    data-bs-target="#importModal">
                                     <i class='bx bx-import'></i> Import Excel
                                 </button>
-                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exportFilterModal">
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                    data-bs-target="#exportFilterModal">
                                     <i class='bx bx-export'></i> Export Excel
                                 </button>
                             </div>
@@ -173,10 +186,10 @@
                         <div class="search-box">
                             <input type="text" id="searchInput" class="form-control" placeholder="Search...">
                         </div>
-                        
+
                     </div>
                 </div>
-                
+
 
                 <div class="table-responsive">
                     <table class="table table-striped" id="respondent-table">
@@ -192,17 +205,19 @@
                                 <th>Nama Dosen</th>
                                 <th>No. Narahubung</th>
                                 <th>
-                                    <a href="{{ request()->fullUrlWithQuery(['sort' => 'fakultas', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
+                                    <a
+                                        href="{{ request()->fullUrlWithQuery(['sort' => 'fakultas', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
                                         fakultas
-                                        @if(request('sort') == 'fakultas')
+                                        @if (request('sort') == 'fakultas')
                                             {!! request('direction') == 'asc' ? '↑' : '↓' !!}
                                         @endif
                                     </a>
                                 </th>
                                 <th>
-                                    <a href="{{ request()->fullUrlWithQuery(['sort' => 'category', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
+                                    <a
+                                        href="{{ request()->fullUrlWithQuery(['sort' => 'category', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
                                         category
-                                        @if(request('sort') == 'category')
+                                        @if (request('sort') == 'category')
                                             {!! request('direction') == 'asc' ? '↑' : '↓' !!}
                                         @endif
                                     </a>
@@ -243,10 +258,13 @@
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <button type="button" class="btn btn-warning btn-sm edit-btn" data-id="{{ $responden->id }}" data-bs-toggle="modal" data-bs-target="#editRespondenModal">
+                                            <button type="button" class="btn btn-warning btn-sm edit-btn"
+                                                data-id="{{ $responden->id }}" data-bs-toggle="modal"
+                                                data-bs-target="#editRespondenModal">
                                                 <i class='bx bxs-edit'></i>
                                             </button>
-                                            <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="{{ $responden->id }}">
+                                            <button type="button" class="btn btn-danger btn-sm delete-btn"
+                                                data-id="{{ $responden->id }}">
                                                 <i class='bx bxs-trash'></i>
                                             </button>
                                         </div>
@@ -262,14 +280,15 @@
                     <div class="custom-pagination d-flex justify-content-end mt-3">
                         {{ $respondens->links('pagination::bootstrap-5') }}
                     </div>
-                  
+
 
                 </div>
             </div>
         </div>
     </div>
-{{-- MODAL EDIT --}}
-    <div class="modal fade" id="editRespondenModal" tabindex="-1" aria-labelledby="editRespondenModalLabel" aria-hidden="true">
+    {{-- MODAL EDIT --}}
+    <div class="modal fade" id="editRespondenModal" tabindex="-1" aria-labelledby="editRespondenModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -313,18 +332,21 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="edit_phone_responden" class="form-label">Nomor Responden</label>
-                                <input type="text" class="form-control" name="phone_responden" id="edit_phone_responden">
+                                <input type="text" class="form-control" name="phone_responden"
+                                    id="edit_phone_responden">
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="edit_nama_dosen_pengusul" class="form-label">Nama Dosen</label>
-                                <input type="text" class="form-control" name="nama_dosen_pengusul" id="edit_nama_dosen_pengusul" required>
+                                <input type="text" class="form-control" name="nama_dosen_pengusul"
+                                    id="edit_nama_dosen_pengusul" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="edit_phone_dosen" class="form-label">Nomor Narahubung</label>
-                                <input type="text" class="form-control" name="phone_dosen" id="edit_phone_dosen" required>
+                                <input type="text" class="form-control" name="phone_dosen" id="edit_phone_dosen"
+                                    required>
                             </div>
                         </div>
 
@@ -400,8 +422,9 @@
 
 
     <!-- Export Filter Modal -->
-    <div class="modal fade pt-3" id="exportFilterModal" tabindex="-1" aria-labelledby="exportFilterModalLabel" aria-hidden="true" >
-        <div class="modal-dialog pt-3" >
+    <div class="modal fade pt-3" id="exportFilterModal" tabindex="-1" aria-labelledby="exportFilterModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog pt-3">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exportFilterModalLabel">Filter Export</h5>
@@ -444,7 +467,7 @@
 
     <script>
         // edit delete 
-    document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const routePrefix = "{{ $routePrefix ?? 'admin' }}";
 
@@ -452,29 +475,33 @@
             document.querySelectorAll('.edit-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const respondenId = this.dataset.id;
-                    const baseUrl = '{{ route("fakultas.responden.edit", ["responden" => ":id"]) }}';
+                    const baseUrl =
+                        '{{ route('fakultas.responden.edit', ['responden' => ':id']) }}';
                     const url = baseUrl.replace(':id', respondenId);
-                    
+
                     axios.get(url)
                         .then(response => {
                             const responden = response.data;
                             const form = document.getElementById('edit-survey-form');
-                            
+
                             form.action = `/${routePrefix}/responden/${respondenId}`;
-                            
+
                             form.querySelector('#edit_title').value = responden.title;
                             form.querySelector('#edit_fullname').value = responden.fullname;
                             form.querySelector('#edit_jabatan').value = responden.jabatan;
                             form.querySelector('#edit_instansi').value = responden.instansi;
                             form.querySelector('#edit_email').value = responden.email;
-                            form.querySelector('#edit_phone_responden').value = responden.phone_responden;
-                            form.querySelector('#edit_nama_dosen_pengusul').value = responden.nama_dosen_pengusul;
-                            form.querySelector('#edit_phone_dosen').value = responden.phone_dosen;
+                            form.querySelector('#edit_phone_responden').value = responden
+                                .phone_responden;
+                            form.querySelector('#edit_nama_dosen_pengusul').value = responden
+                                .nama_dosen_pengusul;
+                            form.querySelector('#edit_phone_dosen').value = responden
+                                .phone_dosen;
                             form.querySelector('#edit_fakultas').value = responden.fakultas;
                             form.querySelector('#edit_category').value = responden.category;
                         })
                         .catch(error => {
-                             Swal.fire({
+                            Swal.fire({
                                 icon: 'error',
                                 title: 'Gagal Memuat Data',
                                 text: 'Tidak dapat memuat data untuk diedit.',
@@ -493,7 +520,8 @@
 
                 axios.post(url, formData)
                     .then(response => {
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('editRespondenModal'));
+                        const modal = bootstrap.Modal.getInstance(document.getElementById(
+                            'editRespondenModal'));
                         modal.hide();
 
                         Swal.fire({
@@ -501,20 +529,25 @@
                             title: 'Berhasil!',
                             text: response.data.message,
                         });
-                        
+
                         // Update table row with new data
                         const updatedData = response.data.data;
                         const row = document.getElementById(`responden-row-${updatedData.id}`);
-                        if(row) {
-                            row.querySelector('.responden-title').textContent = updatedData.title.charAt(0).toUpperCase() + updatedData.title.slice(1);
+                        if (row) {
+                            row.querySelector('.responden-title').textContent = updatedData.title
+                                .charAt(0).toUpperCase() + updatedData.title.slice(1);
                             row.querySelector('.responden-fullname').textContent = updatedData.fullname;
                             row.querySelector('.responden-jabatan').textContent = updatedData.jabatan;
                             row.querySelector('.responden-instansi').textContent = updatedData.instansi;
                             row.querySelector('.responden-email').textContent = updatedData.email;
-                            row.querySelector('.responden-phone_responden').textContent = updatedData.phone_responden;
-                            row.querySelector('.responden-nama_dosen_pengusul').textContent = updatedData.nama_dosen_pengusul;
-                            row.querySelector('.responden-phone_dosen').textContent = updatedData.phone_dosen;
-                            row.querySelector('.responden-fakultas').textContent = updatedData.fakultas.toUpperCase();
+                            row.querySelector('.responden-phone_responden').textContent = updatedData
+                                .phone_responden;
+                            row.querySelector('.responden-nama_dosen_pengusul').textContent =
+                                updatedData.nama_dosen_pengusul;
+                            row.querySelector('.responden-phone_dosen').textContent = updatedData
+                                .phone_dosen;
+                            row.querySelector('.responden-fakultas').textContent = updatedData.fakultas
+                                .toUpperCase();
                             row.querySelector('.responden-category').textContent = updatedData.category;
                         }
                     })
@@ -522,7 +555,8 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Gagal!',
-                            text: error.response?.data?.message || 'Terjadi kesalahan saat memperbarui data.',
+                            text: error.response?.data?.message ||
+                                'Terjadi kesalahan saat memperbarui data.',
                         });
                         console.error('Error updating responden:', error);
                     });
@@ -544,89 +578,91 @@
                         confirmButtonText: 'Ya, hapus!',
                         cancelButtonText: 'Batal'
                     }).then((result) => {
-    if (result.isConfirmed) {
-        // We send a POST request, but "spoof" it as a DELETE
-        axios.post(url, {
-            _method: 'delete', // The magic ingredient for method spoofing
-            _token: csrfToken  // Send the CSRF token in the data
-        })
-        .then(response => {
-            Swal.fire(
-                'Dihapus!',
-                'Data responden berhasil dihapus.',
-                'success'
-            );
-            document.getElementById(`responden-row-${respondenId}`).remove();
-        })
-        .catch(error => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: error.response?.data?.message || 'Terjadi kesalahan saat menghapus data.',
-            });
-            console.error('Error deleting responden:', error);
-        });
-    }
-});
-                });
-            });
-
-        // Import form submission
-        document.getElementById('importForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-
-            axios.post(this.action, formData)
-                .then(response => {
-                    $('#importModal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: response.data.message || 'Data imported successfully',
-                    }).then(() => {
-                        window.location.reload();
-                    });
-                })
-                .catch(error => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Import Failed',
-                        text: error.response?.data?.message || 'Error importing file',
+                        if (result.isConfirmed) {
+                            // We send a POST request, but "spoof" it as a DELETE
+                            axios.post(url, {
+                                    _method: 'delete', // The magic ingredient for method spoofing
+                                    _token: csrfToken // Send the CSRF token in the data
+                                })
+                                .then(response => {
+                                    Swal.fire(
+                                        'Dihapus!',
+                                        'Data responden berhasil dihapus.',
+                                        'success'
+                                    );
+                                    document.getElementById(
+                                        `responden-row-${respondenId}`).remove();
+                                })
+                                .catch(error => {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Gagal!',
+                                        text: error.response?.data?.message ||
+                                            'Terjadi kesalahan saat menghapus data.',
+                                    });
+                                    console.error('Error deleting responden:', error);
+                                });
+                        }
                     });
                 });
-        });
-
-        // Filter functionality
-        document.getElementById('emailFilter').addEventListener('keyup', function() {
-            filterRespondents();
-        });
-
-        document.getElementById('phoneFilter').addEventListener('keyup', function() {
-            filterRespondents();
-        });
-
-        document.getElementById('resetFilters').addEventListener('click', function() {
-            document.getElementById('emailFilter').value = '';
-            document.getElementById('phoneFilter').value = '';
-            filterRespondents();
-        });
-
-        function filterRespondents() {
-            const email = document.getElementById('emailFilter').value.toLowerCase();
-            const phone = document.getElementById('phoneFilter').value.toLowerCase();
-            const rows = document.querySelectorAll('#respondent-table tbody tr');
-
-            rows.forEach(row => {
-                const rowEmail = row.cells[4].textContent.toLowerCase();
-                const rowPhone = row.cells[5].textContent.toLowerCase();
-
-                const emailMatch = email === '' || rowEmail.includes(email);
-                const phoneMatch = phone === '' || rowPhone.includes(phone);
-
-                row.style.display = emailMatch && phoneMatch ? '' : 'none';
             });
-        }
-    }); 
+
+            // Import form submission
+            document.getElementById('importForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+
+                axios.post(this.action, formData)
+                    .then(response => {
+                        $('#importModal').modal('hide');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: response.data.message || 'Data imported successfully',
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Import Failed',
+                            text: error.response?.data?.message || 'Error importing file',
+                        });
+                    });
+            });
+
+            // Filter functionality
+            document.getElementById('emailFilter').addEventListener('keyup', function() {
+                filterRespondents();
+            });
+
+            document.getElementById('phoneFilter').addEventListener('keyup', function() {
+                filterRespondents();
+            });
+
+            document.getElementById('resetFilters').addEventListener('click', function() {
+                document.getElementById('emailFilter').value = '';
+                document.getElementById('phoneFilter').value = '';
+                filterRespondents();
+            });
+
+            function filterRespondents() {
+                const email = document.getElementById('emailFilter').value.toLowerCase();
+                const phone = document.getElementById('phoneFilter').value.toLowerCase();
+                const rows = document.querySelectorAll('#respondent-table tbody tr');
+
+                rows.forEach(row => {
+                    const rowEmail = row.cells[4].textContent.toLowerCase();
+                    const rowPhone = row.cells[5].textContent.toLowerCase();
+
+                    const emailMatch = email === '' || rowEmail.includes(email);
+                    const phoneMatch = phone === '' || rowPhone.includes(phone);
+
+                    row.style.display = emailMatch && phoneMatch ? '' : 'none';
+                });
+            }
+        });
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -635,13 +671,13 @@
             document.getElementById('exportFilteredExcel').addEventListener('click', function() {
                 const category = document.getElementById('filterCategory').value;
                 const fakultas = document.getElementById('filterFakultas').value;
-                
-                let url = '{{ route("fakultas.responden.export") }}?';
+
+                let url = '{{ route('fakultas.responden.export') }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
                 if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
                 url += params.join('&');
-                
+
                 window.location.href = url;
             });
 
@@ -649,13 +685,13 @@
             document.getElementById('exportFilteredCSV').addEventListener('click', function() {
                 const category = document.getElementById('filterCategory').value;
                 const fakultas = document.getElementById('filterFakultas').value;
-                
-                let url = '{{ route("fakultas.responden.exportCSV") }}?';
+
+                let url = '{{ route('fakultas.responden.exportCSV') }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
                 if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
                 url += params.join('&');
-                
+
                 window.location.href = url;
             });
             document.querySelectorAll('.status-dropdown').forEach(select => {
@@ -745,6 +781,6 @@
     </script>
 
     <style>
-        
+
     </style>
 @endsection
