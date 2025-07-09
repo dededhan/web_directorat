@@ -208,7 +208,8 @@ class BeritaController extends Controller
             ]);
 
             // Security: Sanitize inputs to prevent XSS, same as in the store method.
-            $cleanJudul = Purifier::clean($validated['judul_berita']);
+
+            $cleanJudul = strip_tags($validated['judul_berita']);
             $cleanIsi = Purifier::clean($validated['isi_berita']);
 
             // Update the model's attributes
