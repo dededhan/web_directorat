@@ -3,6 +3,7 @@
 @section('form')
     <form method="POST" action="{{ route('qs-academic.store') }}">
         @csrf
+        <input type="hidden" name="token" value="{{ $token ?? '' }}">
         <div class="form-section">
             <div class="section-title">ACADEMIC Information</div>
             <div class="form-group">
@@ -88,7 +89,7 @@
             </div>
             <div class="form-group">
                 <label class="form-label">Email</label>
-                <input type="email" class="form-control" name="answer_email">
+                <input type="email" class="form-control" name="email" value="{{ $email ?? '' }}" required>
                 @error('email')
                     {{ $message }}
                 @enderror

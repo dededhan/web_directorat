@@ -167,6 +167,9 @@ Route::view('/Pemeringkatan/program/international-student-mobility', 'Pemeringka
 Route::get('/indikator', [\App\Http\Controllers\IndikatorController::class, 'showAllIndikators'])->name('Pemeringkatan.indikator.indikator');
 
 
+Route::get('/survey/thank-you', function () {
+    return view('qsrangking.thank_you');
+})->name('survey.thankyou');
 // Admin routes should be required at the end
 require __DIR__ . '/api.php';
 require __DIR__ . '/admin.php';

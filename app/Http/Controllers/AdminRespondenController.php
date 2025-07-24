@@ -5,14 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreRespondenRequest;
 use App\Http\Requests\UpdateRespondenRequest;
-use App\Models\Responden;
 use App\Models\User;
-use Illuminate\Validation\Rule;
 use App\Imports\RespondenImport;
 use App\Exports\RespondenExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RespondenInvitationMail;
+use Illuminate\Validation\Rule;
+use App\Models\Responden;
 use Illuminate\Support\Facades\DB; // Added for database queries
 
 class AdminRespondenController extends Controller
@@ -53,8 +56,8 @@ class AdminRespondenController extends Controller
         $direction = in_array(strtolower($direction), ['asc', 'desc']) ? $direction : 'asc';
 
         $query = Responden::query();
-          if ($role === 'fakultas' || $role === 'prodi') {
-        $query->where('user_id', $user->id);
+        if ($role === 'fakultas' || $role === 'prodi') {
+            $query->where('user_id', $user->id);
         }
 
 
@@ -74,11 +77,11 @@ class AdminRespondenController extends Controller
 
 
         $query->orderBy($sort, $direction);
-        
+
         // $respondens = $query->paginate(25)->appends($request->query());
         $respondens = $query->paginate(1000)->appends($request->query());
 
-        $userInfo = $this->getUserFacultyInfo($user); 
+        $userInfo = $this->getUserFacultyInfo($user);
 
         $viewData = ['respondens' => $respondens, 'user_info' => $userInfo];
         $routePrefix = '';
@@ -121,7 +124,7 @@ class AdminRespondenController extends Controller
         $role = $user->role;
         $respondenValidated = $request->validated();
 
-        if (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas','prodi'])) {
+        if (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas', 'prodi'])) {
             return redirect()->back()->with('error', 'Anda tidak diizinkan menyimpan responden.')->withInput();
         }
 
@@ -144,7 +147,7 @@ class AdminRespondenController extends Controller
             'phone_dosen' => $respondenValidated['responden_dosen_phone'],
             'fakultas' => $respondenValidated['responden_fakultas'],
             'category' => $respondenValidated['responden_category'],
-            'user_id' => $user->id, 
+            'user_id' => $user->id,
             // 'user_id' => $user->id, //
             // 'tahun' => $request->input('tahun_input_field', date('Y')), // Add this if you have a dedicated 'tahun' field in the form/table
         ]);
@@ -153,7 +156,7 @@ class AdminRespondenController extends Controller
         if ($role === 'fakultas') {
             $redirectRouteName = 'fakultas.responden.index';
         } elseif ($role === 'prodi') {
-        $redirectRouteName = 'prodi.responden.index';
+            $redirectRouteName = 'prodi.responden.index';
         } elseif ($role === 'admin_pemeringkatan') {
             $redirectRouteName = 'admin_pemeringkatan.responden.index';
         }
@@ -187,19 +190,18 @@ class AdminRespondenController extends Controller
         $role = $user->role;
         $userInfo = $this->getUserFacultyInfo($user);
 
-       // Authorization Check: Does the user have permission?
+        // Authorization Check: Does the user have permission?
         if ($role === 'fakultas') {
             $userInfo = $this->getUserFacultyInfo($user);
             if (!$userInfo['faculty_code'] || $responden->fakultas !== $userInfo['faculty_code']) {
                 return response()->json(['message' => 'Akses ditolak.'], 403);
             }
-        } 
-        elseif ($role === 'prodi') {
-        // User prodi hanya boleh mengedit responden yang dia buat (user_id sama)
-        if ($responden->user_id !== $user->id) {
-            return response()->json(['message' => 'Akses ditolak. Anda hanya boleh mengedit data yang Anda buat.'], 403);
-        }
-    }elseif (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan'])) {
+        } elseif ($role === 'prodi') {
+            // User prodi hanya boleh mengedit responden yang dia buat (user_id sama)
+            if ($responden->user_id !== $user->id) {
+                return response()->json(['message' => 'Akses ditolak. Anda hanya boleh mengedit data yang Anda buat.'], 403);
+            }
+        } elseif (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan'])) {
             // Only admins can proceed if not a faculty member
             return response()->json(['message' => 'Akses ditolak.'], 403);
         }
@@ -207,37 +209,36 @@ class AdminRespondenController extends Controller
         // If authorization passes, always return JSON
         return response()->json($responden);
     }
-    
+
 
     public function update(UpdateRespondenRequest $request, Responden $responden) // UpdateRespondenRequest should have authorize() return true
     {
-            $user = Auth::user();
-    $role = $user->role;
-    $validated = $request->validated(); // Get validated data
+        $user = Auth::user();
+        $role = $user->role;
+        $validated = $request->validated(); // Get validated data
 
-    // 3. Authorization Logic (example)
-       if ($role === 'prodi') {
-        // Pastikan user prodi hanya bisa mengupdate data miliknya sendiri
-        if ($responden->user_id !== $user->id) {
-            return response()->json(['message' => 'Akses ditolak. Anda tidak diizinkan memperbarui data ini.'], 403);
+        // 3. Authorization Logic (example)
+        if ($role === 'prodi') {
+            // Pastikan user prodi hanya bisa mengupdate data miliknya sendiri
+            if ($responden->user_id !== $user->id) {
+                return response()->json(['message' => 'Akses ditolak. Anda tidak diizinkan memperbarui data ini.'], 403);
+            }
+        } elseif ($role === 'fakultas') {
+            $userInfo = $this->getUserFacultyInfo($user);
+            if ($responden->fakultas !== $userInfo['faculty_code']) {
+                return response()->json(['message' => 'Anda tidak diizinkan memperbarui responden ini.'], 403);
+            }
         }
-    } elseif ($role === 'fakultas') {
-        $userInfo = $this->getUserFacultyInfo($user);
-        if ($responden->fakultas !== $userInfo['faculty_code']) {
-            return response()->json(['message' => 'Anda tidak diizinkan memperbarui responden ini.'], 403);
-        }
-    }
 
 
-    // 4. Update the model and save it
-    $responden->update($validated);
+        // 4. Update the model and save it
+        $responden->update($validated);
 
-    // 5. Return a successful JSON response
-    return response()->json([
-        'message' => 'Data berhasil diperbarui',
-        'data' => $responden->fresh() // Use fresh() to get the model with updated timestamps
-    ]);
-
+        // 5. Return a successful JSON response
+        return response()->json([
+            'message' => 'Data berhasil diperbarui',
+            'data' => $responden->fresh() // Use fresh() to get the model with updated timestamps
+        ]);
     }
 
     public function updateStatus(Request $request, $id)
@@ -251,12 +252,50 @@ class AdminRespondenController extends Controller
         ]);
 
         $responden = Responden::findOrFail($id);
-        $responden->update($validated);
+        $newStatus = $validated['status'];
 
-        return response()->json([
-            'message' => 'Status berhasil diperbarui',
-            'new_status' => $validated['status']
-        ]);
+        if ($newStatus === 'done' && $responden->status !== 'done') {
+            // Generate token if doesn't exist
+            $token = $responden->token ?? Str::random(40);
+
+            // Update with token and status
+            $responden->update([
+                'status' => $newStatus,
+                'token' => $token
+            ]);
+
+            try {
+                // Verify required fields
+                if (empty($responden->email)) {
+                    throw new \Exception('Email responden tidak boleh kosong');
+                }
+                if (empty($responden->fullname)) {
+                    throw new \Exception('Nama responden tidak boleh kosong');
+                }
+
+                // Send email
+                Mail::to($responden->email)->send(new RespondenInvitationMail($responden));
+
+                return response()->json([
+                    'message' => 'Status berhasil diperbarui dan email telah dikirim.',
+                    'new_status' => $newStatus
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Email error for responden ' . $responden->id . ': ' . $e->getMessage());
+
+                return response()->json([
+                    'message' => 'Status berhasil diupdate, tapi email gagal dikirim: ' . $e->getMessage(),
+                    'new_status' => $newStatus
+                ], 200);
+            }
+        } else {
+            // If status is other than 'done' (e.g., from 'done' to 'dones'), just update the status
+            $responden->update(['status' => $newStatus]);
+            return response()->json([
+                'message' => 'Status berhasil diperbarui.',
+                'new_status' => $newStatus
+            ]);
+        }
     }
 
     public function destroy(Request $request, Responden $responden)
@@ -295,15 +334,14 @@ class AdminRespondenController extends Controller
             }
 
             $redirectRouteName = 'admin.responden.index';
-             if ($role === 'fakultas') $redirectRouteName = 'fakultas.responden.index';
+            if ($role === 'fakultas') $redirectRouteName = 'fakultas.responden.index';
             elseif ($role === 'prodi') $redirectRouteName = 'prodi.responden.index';
             elseif ($role === 'admin_pemeringkatan') $redirectRouteName = 'admin_pemeringkatan.responden.index';
-            
-            return redirect()->route($redirectRouteName)->with('success', 'Responden berhasil dihapus.');
 
+            return redirect()->route($redirectRouteName)->with('success', 'Responden berhasil dihapus.');
         } catch (\Exception $e) {
             Log::error('Error deleting responden: ' . $e->getMessage());
-            
+
             if ($request->ajax()) {
                 return response()->json(['message' => 'Gagal menghapus responden.'], 500);
             }
@@ -321,7 +359,7 @@ class AdminRespondenController extends Controller
             }
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
-        
+
         // Validasi tetap sama
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'file' => 'required|mimes:xlsx,xls'
@@ -340,23 +378,22 @@ class AdminRespondenController extends Controller
             $import = new RespondenImport($userId, $request->has('skip_duplicates'));
             Excel::import($import, $request->file('file'));
 
-            
+
             $importedCount = $import->getImportedCount();
             $skippedCount = $import->getSkippedCount();
 
             // [PENTING] Buat pesan dengan tag HTML
             $successMessage = "Proses impor selesai. <br><br>" .
-                            "&bull; Berhasil diimpor: <strong>" . $importedCount . "</strong> baris. <br>" .
-                            "&bull; Dilewati (duplikat): <strong>" . $skippedCount . "</strong> baris.";
+                "&bull; Berhasil diimpor: <strong>" . $importedCount . "</strong> baris. <br>" .
+                "&bull; Dilewati (duplikat): <strong>" . $skippedCount . "</strong> baris.";
 
             // Jika request adalah AJAX, kembalikan respons JSON
             if ($request->wantsJson()) {
                 return response()->json(['success' => true, 'message' => $successMessage]);
             }
-            
+
             // Jika request biasa, lakukan redirect dengan flash message
             return redirect()->back()->with('success', $successMessage);
-
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
             $errorMessages = [];
@@ -369,11 +406,10 @@ class AdminRespondenController extends Controller
                 return response()->json(['success' => false, 'message' => $finalMessage], 422);
             }
             return redirect()->back()->with('error', $finalMessage);
-
         } catch (\Exception $e) {
             Log::error('Import Error: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString());
             $finalMessage = 'Terjadi kesalahan pada server saat impor: ' . $e->getMessage();
-            
+
             if ($request->wantsJson()) {
                 return response()->json(['success' => false, 'message' => $finalMessage], 500); // 500 Internal Server Error
             }

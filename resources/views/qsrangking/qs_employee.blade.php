@@ -39,6 +39,7 @@
 
     <form method="POST" action="{{ route('qs-employee.store') }}">
         @csrf
+        <input type="hidden" name="token" value="{{ $token ?? '' }}">
         <div class="form-section">
             <div class="section-title">Personal Information</div>
             <div class="form-group" style="flex: 0.5 1 150px;">
@@ -144,7 +145,7 @@
                 <label class="form-label">Country</label>
                 <select class="form-select" name="answer_country" required>
                     <option value="">Select Country</option>
-                    @if(isset($countries))
+                    @if (isset($countries))
                         @foreach ($countries as $code => $name)
                             <option value="{{ $name }}">{{ $name }}</option>
                         @endforeach
@@ -156,7 +157,7 @@
             </div>
             <div class="form-group">
                 <label class="form-label">Email</label>
-                <input type="email" class="form-control" name="answer_email" required>
+                <input type="email" class="form-control" name="email" value="{{ $email ?? '' }}" required>
                 @error('email')
                     {{ $message }}
                 @enderror
@@ -178,11 +179,13 @@
                 <label class="form-label">2023 Survey</label>
                 <div class="radio-group">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="answer_survey_2023" value="yes" required>
+                        <input class="form-check-input" type="radio" name="answer_survey_2023" value="yes"
+                            required>
                         <label class="form-check-label">Yes</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="answer_survey_2023" value="no" required>
+                        <input class="form-check-input" type="radio" name="answer_survey_2023" value="no"
+                            required>
                         <label class="form-check-label">No</label>
                     </div>
                     @error('answer_survey_2023')
@@ -194,11 +197,13 @@
                 <label class="form-label">2024 Survey</label>
                 <div class="radio-group">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="answer_survey_2024" value="yes" required>
+                        <input class="form-check-input" type="radio" name="answer_survey_2024" value="yes"
+                            required>
                         <label class="form-check-label">Yes</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="answer_survey_2024" value="no" required>
+                        <input class="form-check-input" type="radio" name="answer_survey_2024" value="no"
+                            required>
                         <label class="form-check-label">No</label>
                     </div>
                     @error('answer_survey_2024')

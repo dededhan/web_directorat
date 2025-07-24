@@ -472,13 +472,13 @@
         document.addEventListener('DOMContentLoaded', function() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const routePrefix = "{{ $routePrefix ?? 'admin' }}";
-            
+
 
             // Handle Edit button click
             document.querySelectorAll('.edit-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const respondenId = this.dataset.id;
-                    const baseUrl = '{{ route("admin.responden.edit", ["responden" => ":id"]) }}';
+                    const baseUrl = '{{ route('admin.responden.edit', ['responden' => ':id']) }}';
                     const url = baseUrl.replace(':id', respondenId);
 
                     axios.get(url)
@@ -571,42 +571,42 @@
                     const url = `/${routePrefix}/responden/${respondenId}`;
 
                     Swal.fire({
-                        title: 'Anda yakin?',
-                        text: "Data yang dihapus tidak dapat dikembalikan!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'Ya, hapus!',
-                        cancelButtonText: 'Batal'
-                    })
-                    .then((result) => {
-                        if (result.isConfirmed) {
-                            // We send a POST request, but "spoof" it as a DELETE
-                            axios.post(url, {
-                                    _method: 'delete', // The magic ingredient for method spoofing
-                                    _token: csrfToken // Send the CSRF token in the data
-                                })
-                                .then(response => {
-                                    Swal.fire(
-                                        'Dihapus!',
-                                        'Data responden berhasil dihapus.',
-                                        'success'
-                                    );
-                                    document.getElementById(
-                                        `responden-row-${respondenId}`).remove();
-                                })
-                                .catch(error => {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Gagal!',
-                                        text: error.response?.data?.message ||
-                                            'Terjadi kesalahan saat menghapus data.',
+                            title: 'Anda yakin?',
+                            text: "Data yang dihapus tidak dapat dikembalikan!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Ya, hapus!',
+                            cancelButtonText: 'Batal'
+                        })
+                        .then((result) => {
+                            if (result.isConfirmed) {
+                                // We send a POST request, but "spoof" it as a DELETE
+                                axios.post(url, {
+                                        _method: 'delete', // The magic ingredient for method spoofing
+                                        _token: csrfToken // Send the CSRF token in the data
+                                    })
+                                    .then(response => {
+                                        Swal.fire(
+                                            'Dihapus!',
+                                            'Data responden berhasil dihapus.',
+                                            'success'
+                                        );
+                                        document.getElementById(
+                                            `responden-row-${respondenId}`).remove();
+                                    })
+                                    .catch(error => {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Gagal!',
+                                            text: error.response?.data?.message ||
+                                                'Terjadi kesalahan saat menghapus data.',
+                                        });
+                                        console.error('Error deleting responden:', error);
                                     });
-                                    console.error('Error deleting responden:', error);
-                                });
-                        }
-                    });
+                            }
+                        });
                 });
             });
 
@@ -763,9 +763,13 @@
                             showConfirmButton: false
                         });
 
-                        const badge = selectElement.closest('tr').querySelector('.status-badge');
-                        if (badge) {
-                            badge.textContent = response.data.new_status;
+                        // Update the dropdown to reflect the new status
+                        selectElement.value = newStatus;
+                        selectElement.dataset.previousValue = newStatus;
+
+                        // If status is 'clear', disable the dropdown
+                        if (newStatus === 'clear') {
+                            selectElement.disabled = true;
                         }
                     })
                     .catch(error => {
@@ -776,9 +780,6 @@
                             title: 'Gagal!',
                             text: error.response?.data?.message || 'Terjadi kesalahan',
                         });
-                    })
-                    .finally(() => {
-                        selectElement.dataset.previousValue = newStatus;
                     });
             }
         });

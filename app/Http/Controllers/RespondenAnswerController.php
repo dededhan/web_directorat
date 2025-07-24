@@ -56,25 +56,42 @@ class RespondenAnswerController extends Controller
      * Show the form for creating a new resource.
      */
 
-    public function create()
+
+    public function create(Request $request)
     {
-        $view = request()->get('view');
+        if (!$request->has('token')) {
+            abort(404, 'Tautan tidak valid atau kedaluwarsa.');
+        }
+
+        $responden = Responden::where('token', $request->token)->first();
+
+        if (!$responden || $responden->status === 'clear') {
+            abort(404, 'Tautan tidak valid atau Anda sudah mengisi survei ini.');
+        }
+
+        // Menentukan view berdasarkan kategori responden (lebih aman)
+        $view = $responden->category === 'academic' ? 'qs_academic' : 'qs_employee';
         $countries = Countries::getList('en', 'php');
 
         return view($view, [
-            'category' => request()->get('category'),
+            'category' => $responden->category,
             'countries' => $countries,
+            'token' => $responden->token,
+            'email' => $responden->email,
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    
     public function store(StoreRespondenAnswerRequest $request)
     {
         $answerValidatedData = $request->validated();
-        // temporary insert, must be updated with create method later
+        //Validation
+        $responden = Responden::where('token', $request->token)
+            ->where('email', $answerValidatedData['email'])
+            ->first();
+
+        if (!$responden) {
+            return redirect()->back()->withErrors(['token' => 'Sesi Anda tidak valid. Silakan gunakan tautan dari email.']);
+        }
         RespondenAnswer::create([
             'title' => $answerValidatedData['answer_title'],
             'first_name' => $answerValidatedData['answer_firstname'],
@@ -91,10 +108,10 @@ class RespondenAnswerController extends Controller
         ]);
         // update status
         Responden::where('email', $answerValidatedData['email'])
-    ->orWhere('phone_responden', $answerValidatedData['phone'])
-    ->update(['status' => 'clear']);
+            ->orWhere('phone_responden', $answerValidatedData['phone'])
+            ->update(['status' => 'clear']);
 
-        return $this->create();
+        return redirect(route('home'))->with('success', 'Terima kasih, survei Anda telah berhasil dikirim!');
     }
 
     /**

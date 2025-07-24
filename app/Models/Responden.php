@@ -22,6 +22,7 @@ class Responden extends Model
         'category',
         'status',
          'user_id' ,
+         'token',
         // 'user_id', // Uncomment if you have this column and want to update it
         // 'tahun',   // Uncomment if you have this column and want to update it
     ];
