@@ -1,25 +1,44 @@
 @extends('qsrangking.qs_layout')
 
 @section('form')
-    {{-- New style block to make the layout more compact --}}
     <style>
         .form-section {
             margin-bottom: 1.5rem;
-            /* Reduced vertical space between sections */
             padding-bottom: 1.5rem;
         }
 
         .section-title {
             margin-bottom: 1rem;
-            /* Reduced space below section titles */
         }
     </style>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Script untuk menangani dropdown Industry
+            const industrySelect = document.getElementById('institution_select');
+            const otherInput = document.getElementById('institution_other_input');
+            const hiddenInput = document.getElementById('answer_institution_hidden');
 
+            function updateHiddenInput() {
+                const selectedValue = industrySelect.value;
+
+                if (selectedValue === 'other') {
+                    otherInput.style.display = 'block';
+                    hiddenInput.value = otherInput.value;
+                } else {
+                    otherInput.style.display = 'none';
+                    hiddenInput.value = selectedValue;
+                }
+            }
+
+            industrySelect.addEventListener('change', updateHiddenInput);
+            otherInput.addEventListener('input', updateHiddenInput);
+            updateHiddenInput();
+        });
+    </script>
 
     <form method="POST" action="{{ route('qs-employee.store') }}">
         @csrf
-        {{-- Personal Information Section --}}
         <div class="form-section">
             <div class="section-title">Personal Information</div>
             <div class="form-group" style="flex: 0.5 1 150px;">
@@ -48,8 +67,6 @@
                 @enderror
             </div>
         </div>
-
-        {{-- Professional Details Section --}}
         <div class="form-section">
             <div class="section-title">Professional Details</div>
             <div class="form-group">
@@ -109,7 +126,7 @@
                     placeholder="Please specify your industry">
                 <input type="hidden" name="answer_institution" id="answer_institution_hidden">
                 @error('answer_institution')
-                    {{ $message }}
+                    <div class="text-danger mt-1">{{ $message }}</div>
                 @enderror
             </div>
             <div class="form-group">
@@ -121,16 +138,17 @@
             </div>
         </div>
 
-        {{-- Contact Information Section --}}
         <div class="form-section">
             <div class="section-title">Contact Information</div>
             <div class="form-group">
                 <label class="form-label">Country</label>
                 <select class="form-select" name="answer_country" required>
                     <option value="">Select Country</option>
-                    @foreach ($countries as $code => $name)
-                        <option value="{{ $name }}">{{ $name }}</option>
-                    @endforeach
+                    @if(isset($countries))
+                        @foreach ($countries as $code => $name)
+                            <option value="{{ $name }}">{{ $name }}</option>
+                        @endforeach
+                    @endif
                 </select>
                 @error('answer_country')
                     {{ $message }}
@@ -154,23 +172,43 @@
             </div>
         </div>
 
-        <!-- === DYNAMIC SURVEY PARTICIPATION SECTION === -->
-        <div class="form-section" id="survey-participation-container">
-            {{-- This div will be populated dynamically by the script --}}
+        <div class="form-section">
+            <div class="section-title">Survey Participation</div>
+            <div class="form-group">
+                <label class="form-label">2023 Survey</label>
+                <div class="radio-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer_survey_2023" value="yes" required>
+                        <label class="form-check-label">Yes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer_survey_2023" value="no" required>
+                        <label class="form-check-label">No</label>
+                    </div>
+                    @error('answer_survey_2023')
+                        {{ $message }}
+                    @enderror
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">2024 Survey</label>
+                <div class="radio-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer_survey_2024" value="yes" required>
+                        <label class="form-check-label">Yes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer_survey_2024" value="no" required>
+                        <label class="form-check-label">No</label>
+                    </div>
+                    @error('answer_survey_2024')
+                        {{ $message }}
+                    @enderror
+                </div>
+            </div>
         </div>
-        <!-- IMPORTANT: The backend needs to be updated to handle this data.
-                 The form now sends an array named 'survey_participation', like:
-                 survey_participation[2024] = 'yes'
-                 survey_participation[2023] = 'no'
-
-                 Your 'RespondenAnswerController' and database schema must be changed.
-                 Instead of 'survey_2023' and 'survey_2024' columns, consider a single
-                 JSON or TEXT column (e.g., 'survey_data') to store the participation results.
-            -->
-        @error('survey_participation')
-            {{ $message }}
-        @enderror
 
         <button type="submit" class="btn-submit">Submit Survey</button>
     </form>
+
 @stop
