@@ -1,33 +1,6 @@
 @extends('qsrangking.qs_layout')
 
 @section('form')
-    <script>
-        // Fetch countries when the page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('https://restcountries.com/v3.1/all')
-                .then(response => response.json())
-                .then(data => {
-                    // Sort countries alphabetically by name
-                    const sortedCountries = data.sort((a, b) => {
-                        return a.name.common.localeCompare(b.name.common);
-                    });
-                    
-                    const countrySelect = document.querySelector('select[name="answer_country"]');
-                    // Clear existing options except the first one
-                    countrySelect.innerHTML = '<option value="">Select Country</option>';
-                    
-                    // Add countries to select element
-                    sortedCountries.forEach(country => {
-                        const option = document.createElement('option');
-                        option.value = country.name.common;
-                        option.textContent = country.name.common;
-                        countrySelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error fetching countries:', error));
-        });
-    </script>
-
     <form method="POST" action="{{ route('qs-academic.store') }}">
         @csrf
         <div class="form-section">
@@ -39,17 +12,23 @@
                     <option value="mr">Mr.</option>
                     <option value="ms">Ms.</option>
                 </select>
-                @error('answer_title') {{ $message }} @enderror
+                @error('answer_title')
+                    {{ $message }}
+                @enderror
             </div>
             <div class="form-group">
                 <label class="form-label">First Name</label>
                 <input type="text" class="form-control" name="answer_firstname">
-                @error('answer_firstname') {{ $message }} @enderror
+                @error('answer_firstname')
+                    {{ $message }}
+                @enderror
             </div>
             <div class="form-group">
                 <label class="form-label">Last Name</label>
                 <input type="text" class="form-control" name="answer_lastname">
-                @error('answer_lastname') {{ $message }} @enderror
+                @error('answer_lastname')
+                    {{ $message }}
+                @enderror
             </div>
         </div>
         <div class="form-section">
@@ -74,38 +53,54 @@
                     <option value="la">Librarian/Library Assistant</option>
                     <option value="other">Other</option>
                 </select>
-                @error('answer_job_title') {{ $message }} @enderror
+                @error('answer_job_title')
+                    {{ $message }}
+                @enderror
             </div>
             <div class="form-group">
                 <label class="form-label">Institution</label>
                 <input type="text" class="form-control" name="answer_institution">
-                @error('answer_instititution') {{ $message }} @enderror
+                @error('answer_instititution')
+                    {{ $message }}
+                @enderror
             </div>
             <div class="form-group">
                 <label class="form-label">Company Name</label>
                 <input type="text" class="form-control" name="answer_company">
-                @error('answer_company') {{ $message }} @enderror
+                @error('answer_company')
+                    {{ $message }}
+                @enderror
             </div>
         </div>
         <div class="form-section">
             <div class="section-title">Contact Information</div>
             <div class="form-group">
                 <label class="form-label">Country</label>
-                <select class="form-select" name="answer_country">
+                <select class="form-select" name="answer_country" required>
                     <option value="">Select Country</option>
-                    <!-- Countries will be populated by JavaScript -->
+                    @foreach ($countries as $code => $name)
+                        <option value="{{ $name }}">{{ $name }}</option>
+                    @endforeach
                 </select>
-                @error('answer_country') {{ $message }} @enderror
+                @error('answer_country')
+                    {{ $message }}
+                @enderror
             </div>
             <div class="form-group">
                 <label class="form-label">Email</label>
                 <input type="email" class="form-control" name="answer_email">
-                @error('email') {{ $message }} @enderror
+                @error('email')
+                    {{ $message }}
+                @enderror
             </div>
             <div class="form-group">
                 <label class="form-label">Phone</label>
-                <input type="tel" class="form-control" name="answer_phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" pattern="[0-9]+" title="Please enter numbers only">
-                @error('phone') {{ $message }} @enderror
+                <input type="tel" class="form-control" name="answer_phone"
+                    onkeypress="return event.charCode >= 48 && event.charCode <= 57" pattern="[0-9]+"
+                    title="Please enter numbers only">
+                @error('phone')
+                    {{ $message }}
+                @enderror
             </div>
         </div>
         <div class="form-section">
@@ -121,7 +116,9 @@
                         <input class="form-check-input" type="radio" name="answer_survey_2023" value="no">
                         <label class="form-check-label">No</label>
                     </div>
-                    @error('answer_survey_2023') {{ $message }} @enderror
+                    @error('answer_survey_2023')
+                        {{ $message }}
+                    @enderror
                 </div>
             </div>
             <div class="form-group">
@@ -135,7 +132,9 @@
                         <input class="form-check-input" type="radio" name="answer_survey_2024" value="no">
                         <label class="form-check-label">No</label>
                     </div>
-                    @error('answer_survey_2024') {{ $message }} @enderror
+                    @error('answer_survey_2024')
+                        {{ $message }}
+                    @enderror
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateRespondenAnswerRequest;
 use App\Models\Responden;
 use App\Models\RespondenAnswer;
 use Illuminate\Support\Facades\Auth;
+use Monarobase\CountryList\CountryListFacade as Countries;
 
 class RespondenAnswerController extends Controller
 {
@@ -54,11 +55,15 @@ class RespondenAnswerController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+
     public function create()
     {
         $view = request()->get('view');
+        $countries = Countries::getList('en', 'php');
+
         return view($view, [
             'category' => request()->get('category'),
+            'countries' => $countries,
         ]);
     }
 
