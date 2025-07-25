@@ -8,6 +8,8 @@ use App\Models\Responden;
 use App\Models\RespondenAnswer;
 use Illuminate\Support\Facades\Auth;
 use Monarobase\CountryList\CountryListFacade as Countries;
+use Illuminate\Http\Request;
+
 
 class RespondenAnswerController extends Controller
 {
@@ -68,9 +70,7 @@ class RespondenAnswerController extends Controller
         if (!$responden || $responden->status === 'clear') {
             abort(404, 'Tautan tidak valid atau Anda sudah mengisi survei ini.');
         }
-
-        // Menentukan view berdasarkan kategori responden (lebih aman)
-        $view = $responden->category === 'academic' ? 'qs_academic' : 'qs_employee';
+        $view = $responden->category === 'academic' ? 'qsrangking.qs_academic' : 'qsrangking.qs_employee';
         $countries = Countries::getList('en', 'php');
 
         return view($view, [
@@ -83,35 +83,25 @@ class RespondenAnswerController extends Controller
 
     public function store(StoreRespondenAnswerRequest $request)
     {
-        $answerValidatedData = $request->validated();
-        //Validation
-        $responden = Responden::where('token', $request->token)
-            ->where('email', $answerValidatedData['email'])
-            ->first();
-
-        if (!$responden) {
-            return redirect()->back()->withErrors(['token' => 'Sesi Anda tidak valid. Silakan gunakan tautan dari email.']);
-        }
+        $validatedData = $request->validated();
+        $responden = Responden::where('token', $validatedData['token'])->firstOrFail();
         RespondenAnswer::create([
-            'title' => $answerValidatedData['answer_title'],
-            'first_name' => $answerValidatedData['answer_firstname'],
-            'last_name' => $answerValidatedData['answer_lastname'],
-            'job_title' => $answerValidatedData['answer_job_title'],
-            'institution' => $answerValidatedData['answer_institution'],
-            'company_name' => $answerValidatedData['answer_company'],
-            'country' => $answerValidatedData['answer_country'],
-            'email' => $answerValidatedData['email'],
-            'phone' => $answerValidatedData['phone'],
-            'survey_2023' => $answerValidatedData['answer_survey_2023'],
-            'survey_2024' => $answerValidatedData['answer_survey_2024'],
-            'category' => request()->get('category')
+            'title' => $validatedData['answer_title'],
+            'first_name' => $validatedData['answer_firstname'],
+            'last_name' => $validatedData['answer_lastname'],
+            'job_title' => $validatedData['answer_job_title'],
+            'institution' => $validatedData['answer_institution'],
+            'company_name' => $validatedData['answer_company'],
+            'country' => $validatedData['answer_country'],
+            'email' => $validatedData['email'],
+            'phone' => $validatedData['answer_phone'],
+            'survey_2023' => $validatedData['answer_survey_2023'],
+            'survey_2024' => $validatedData['answer_survey_2024'],
+            'category' => $responden->category,
         ]);
-        // update status
-        Responden::where('email', $answerValidatedData['email'])
-            ->orWhere('phone_responden', $answerValidatedData['phone'])
-            ->update(['status' => 'clear']);
 
-        return redirect(route('home'))->with('success', 'Terima kasih, survei Anda telah berhasil dikirim!');
+        $responden->update(['status' => 'clear']);
+        return redirect(route('survey.thankyou'));
     }
 
     /**
