@@ -45,10 +45,10 @@
                         @forelse ($respondens as $responden)
                             <tr>
                                 <td>{{ $responden->title }}</td>
-                                <td>{{ $responden->firstname }}</td>
-                                <td>{{ $responden->lastname }}</td>
+                                <td>{{ $responden->first_name }}</td>
+                                <td>{{ $responden->last_name }}</td>
                                 <td>{{ $responden->institution }}</td>
-                                <td>{{ $responden->company }}</td>
+                                <td>{{ $responden->company_name}}</td>
                                 <td>{{ $responden->job_title }}</td>
                                 <td>{{ $responden->country }}</td>
                                 <td>{{ $responden->email }}</td>
