@@ -14,7 +14,8 @@
         'resources/css/admin/navbar_dashboard.css',
         'resources/css/admin/scrollbar-fix.css',
         'resources/js/app.js',  
-        'resources/js/admin/admin.js' 
+        'resources/js/admin/admin.js' ,
+        'resources/movejs/indikator.js'
     ])
     {{-- Akhir: Perubahan untuk Vite --}}
 

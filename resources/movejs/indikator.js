@@ -1,30 +1,30 @@
 document.addEventListener("DOMContentLoaded", () => {
-      // --- TOOLTIP FUNCTIONALITY ---
+    // --- TOOLTIP FUNCTIONALITY ---
     function setupTooltips() {
-        const tooltip = document.createElement('div');
-        tooltip.id = 'radio-tooltip';
+        const tooltip = document.createElement("div");
+        tooltip.id = "radio-tooltip";
         document.body.appendChild(tooltip);
 
-        const radioCells = document.querySelectorAll('td[data-description]');
+        const radioCells = document.querySelectorAll("td[data-description]");
 
-        radioCells.forEach(cell => {
-            cell.addEventListener('mouseenter', (event) => {
-                const description = cell.getAttribute('data-description');
+        radioCells.forEach((cell) => {
+            cell.addEventListener("mouseenter", (event) => {
+                const description = cell.getAttribute("data-description");
                 if (description) {
                     tooltip.textContent = description;
-                    tooltip.style.display = 'block';
+                    tooltip.style.display = "block";
                     updateTooltipPosition(event, tooltip);
                 }
             });
 
-            cell.addEventListener('mousemove', (event) => {
-                if (tooltip.style.display === 'block') {
+            cell.addEventListener("mousemove", (event) => {
+                if (tooltip.style.display === "block") {
                     updateTooltipPosition(event, tooltip);
                 }
             });
 
-            cell.addEventListener('mouseleave', () => {
-                tooltip.style.display = 'none';
+            cell.addEventListener("mouseleave", () => {
+                tooltip.style.display = "none";
             });
         });
     }
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Konfigurasi indikator
     const INDICATOR_CONFIGS = [
-         { id: 1, rows: 22, name: "Indikator KATSINOV 1" },
+        { id: 1, rows: 22, name: "Indikator KATSINOV 1" },
         { id: 2, rows: 21, name: "Indikator KATSINOV 2" },
         { id: 3, rows: 21, name: "Indikator KATSINOV 3" },
         { id: 4, rows: 22, name: "Indikator KATSINOV 4" },
@@ -53,11 +53,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         indicatorCards.forEach((indicatorCard) => {
             const indicatorNum = parseInt(indicatorCard.dataset.indicator);
-            const config = INDICATOR_CONFIGS.find(c => c.id === indicatorNum);
+            const config = INDICATOR_CONFIGS.find((c) => c.id === indicatorNum);
             if (!config) return;
 
             // Set indicator header text (if you want dynamic titles based on config)
-            const headerElement = indicatorCard.querySelector(".indicator-header");
+            const headerElement =
+                indicatorCard.querySelector(".indicator-header");
             if (headerElement) {
                 // headerElement.textContent = config.name; // Already set in Blade
             }
@@ -69,7 +70,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     const radioInputs = row.querySelectorAll(".radio-input");
                     const aspectCell = row.querySelector(".aspect-cell");
-                    const aspect = aspectCell?.textContent.trim() || `aspect${rowIndex}`;
+                    const aspect =
+                        aspectCell?.textContent.trim() || `aspect${rowIndex}`;
 
                     radioInputs.forEach((radio) => {
                         // Make name unique per row within an indicator
@@ -107,22 +109,30 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         const totalElement = card.querySelector("tr.total-row td.total-value"); // First total-value for score
-        const percentageElement = card.querySelector("tr.total-row:last-child td.total-value"); // Second total-value for percentage
-        const statusElement = card.querySelector("tr.total-row:last-child td.status-cell");
+        const percentageElement = card.querySelector(
+            "tr.total-row:last-child td.total-value"
+        ); // Second total-value for percentage
+        const statusElement = card.querySelector(
+            "tr.total-row:last-child td.status-cell"
+        );
 
         const maxPossibleScore = rows * 5;
-        const percentage = maxPossibleScore > 0 ? (totalScore / maxPossibleScore) * 100 : 0;
+        const percentage =
+            maxPossibleScore > 0 ? (totalScore / maxPossibleScore) * 100 : 0;
 
         if (totalElement) totalElement.textContent = totalScore; // Display raw score if needed, or score/2 as per your blade.
-                                                              // Your blade shows `sum('score') / 2`. If radio values are 0-5, then this sum is correct.
-                                                              // If you intend to display the sum of values 0-5, then it's just `totalScore`.
-                                                              // For this logic, the raw `totalScore` and `percentage` are what matter.
+        // Your blade shows `sum('score') / 2`. If radio values are 0-5, then this sum is correct.
+        // If you intend to display the sum of values 0-5, then it's just `totalScore`.
+        // For this logic, the raw `totalScore` and `percentage` are what matter.
 
-        if (percentageElement) percentageElement.textContent = `(${percentage.toFixed(2)}%)`; // Matched blade format
+        if (percentageElement)
+            percentageElement.textContent = `(${percentage.toFixed(2)}%)`; // Matched blade format
 
         if (statusElement) {
             statusElement.textContent =
-                percentage >= MIN_PERCENTAGE_TO_PROCEED ? "TERPENUHI" : "TIDAK TERPENUHI";
+                percentage >= MIN_PERCENTAGE_TO_PROCEED
+                    ? "TERPENUHI"
+                    : "TIDAK TERPENUHI";
         }
         return { total: totalScore, percentage: percentage };
     }
@@ -141,39 +151,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!currentIndicatorCard) continue;
 
-            if (i === 1) { // Indicator 1 is always processed for visibility check
-                currentIndicatorCard.style.display = 'block';
+            if (i === 1) {
+                // Indicator 1 is always processed for visibility check
+                currentIndicatorCard.style.display = "block";
             }
 
             // If the current indicator is supposed to be visible (either it's the first or the previous one passed)
-            if (currentIndicatorCard.style.display === 'block') {
+            if (currentIndicatorCard.style.display === "block") {
                 const result = calculateTotal(currentIndicatorCard, i); // Recalculate to be sure
                 if (result.percentage < MIN_PERCENTAGE_TO_PROCEED) {
                     previousIndicatorPassed = false;
-                     // Hide all subsequent indicators
+                    // Hide all subsequent indicators
                     for (let j = i + 1; j <= INDICATOR_CONFIGS.length; j++) {
-                        const subseqCard = document.querySelector(`.indicator-card[data-indicator="${j}"]`);
-                        if (subseqCard) subseqCard.style.display = 'none';
+                        const subseqCard = document.querySelector(
+                            `.indicator-card[data-indicator="${j}"]`
+                        );
+                        if (subseqCard) subseqCard.style.display = "none";
                     }
                 }
 
                 if (nextIndicatorCard) {
                     if (previousIndicatorPassed) {
-                        nextIndicatorCard.style.display = 'block';
+                        nextIndicatorCard.style.display = "block";
                     } else {
-                        nextIndicatorCard.style.display = 'none';
+                        nextIndicatorCard.style.display = "none";
                     }
                 }
             } else {
                 // If current card is hidden, all subsequent ones should also be hidden
                 if (nextIndicatorCard) {
-                    nextIndicatorCard.style.display = 'none';
+                    nextIndicatorCard.style.display = "none";
                 }
                 previousIndicatorPassed = false; // Ensures no further indicators are shown
             }
         }
     }
-
 
     // Fungsi update level KATSINOV
     function updateKatsinovLevel() {
@@ -203,15 +215,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function setupDropdowns() {
-        document.querySelectorAll('.katsinov-table').forEach(table => {
-            table.querySelectorAll('tr').forEach(row => {
-                const dropdown = row.querySelector('select.form-select');
+        document.querySelectorAll(".katsinov-table").forEach((table) => {
+            table.querySelectorAll("tr").forEach((row) => {
+                const dropdown = row.querySelector("select.form-select");
                 if (dropdown) {
-                    dropdown.addEventListener('change', function() {
+                    dropdown.addEventListener("change", function () {
                         // Update perhitungan jika diperlukan
-                        const indicatorContainer = table.closest('[data-indicator]');
+                        const indicatorContainer =
+                            table.closest("[data-indicator]");
                         if (indicatorContainer) {
-                            const indicatorNum = indicatorContainer.dataset.indicator;
+                            const indicatorNum =
+                                indicatorContainer.dataset.indicator;
                             calculateTotal(indicatorContainer, indicatorNum);
                             updateKatsinovLevel();
                         }
@@ -225,13 +239,45 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
+    function syncDropdownOptionHints() {
+        // Loop setiap baris tabel di semua indikator
+        document
+            .querySelectorAll(
+                ".katsinov-table tr.row-t, .katsinov-table tr.row-m, .katsinov-table tr.row-o, .katsinov-table tr.row-mf, .katsinov-table tr.row-i, .katsinov-table tr.row-p, .katsinov-table tr.row-r"
+            )
+            .forEach((row) => {
+                // 1. Buat pemetaan dari skor (0-5) ke deskripsinya untuk baris ini
+                const descriptionMap = {};
+                row.querySelectorAll("td[data-description]").forEach((cell) => {
+                    const radio = cell.querySelector("input.radio-input");
+                    if (radio) {
+                        // key = nilai radio (e.g., "0"), value = deskripsi dari data-attribute
+                        descriptionMap[radio.value] = cell.dataset.description;
+                    }
+                });
 
+                // 2. Temukan dropdown di baris yang sama
+                const dropdown = row.querySelector("select.form-select");
+                if (dropdown) {
+                    // 3. Loop setiap <option> di dalam dropdown tersebut
+                    dropdown.querySelectorAll("option").forEach((option) => {
+                        // Teks di dalam option adalah skornya (0, 1, 2, dst.)
+                        const score = option.textContent.trim();
 
+                        // Jika ada deskripsi yang cocok di map, set sebagai title
+                        if (descriptionMap[score]) {
+                            option.setAttribute("title", descriptionMap[score]);
+                        }
+                    });
+                }
+            });
+    }
 
     // Inisialisasi
     setupRadioButtons();
-    setupDropdowns(); 
-     setupTooltips();
+    setupDropdowns();
+    setupTooltips();
+    syncDropdownOptionHints();
     updateIndicatorVisibility(); // Initial check
     updateKatsinovLevel();
 
@@ -449,6 +495,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Panggil fungsi setup radio button
     setupExclusiveRadioButtons();
-
-   
 });
