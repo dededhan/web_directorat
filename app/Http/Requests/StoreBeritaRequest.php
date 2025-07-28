@@ -24,7 +24,7 @@ class StoreBeritaRequest extends FormRequest
             'tanggal' => 'required|date',
             'judul_berita' => 'required|string|max:200',
             'isi_berita' => 'required|string',
-            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:8192',
             'additional_images' => 'nullable|array|max:3',
             'additional_images.*' => 'image|mimes:jpeg,png,jpg|max:2048'
         ];
