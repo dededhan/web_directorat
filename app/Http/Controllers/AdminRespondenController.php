@@ -79,7 +79,7 @@ class AdminRespondenController extends Controller
         $query->orderBy($sort, $direction);
 
         // $respondens = $query->paginate(25)->appends($request->query());
-        $respondens = $query->paginate(1000)->appends($request->query());
+        $respondens = $query->paginate(2000)->appends($request->query());
 
         $userInfo = $this->getUserFacultyInfo($user);
 
