@@ -37,7 +37,7 @@
                 @csrf
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label for="title" class="form-label">Mr/Mrs/Ms</label>
+                        <label for="title" class="form-label">Mr/Mrs/Ms <span style="color: red;">*</span></label>
                         <select class="form-select" name="responden_title" id="title" required>
                             <option value="">Select Title</option>
                             <option value="mr">Mr.</option>
@@ -47,7 +47,7 @@
                         <div class="form-text text-muted">Pilih title/gelar yang sesuai dengan responden</div>
                     </div>
                     <div class="col-md-8 mb-3">
-                        <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
+                        <label for="nama_lengkap" class="form-label">Nama Lengkap <span style="color: red;">*</span></label>
                         <input type="text" class="form-control" name="responden_fullname" id="nama_lengkap" required>
                         <div class="form-text text-muted">Masukkan nama lengkap responden beserta gelar akademik (jika ada)
                         </div>
@@ -56,12 +56,12 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="jabatan" class="form-label">Jabatan</label>
+                        <label for="jabatan" class="form-label">Jabatan <span style="color: red;">*</span></label>
                         <input type="text" class="form-control" name="responden_jabatan" id="jabatan" required>
                         <div class="form-text text-muted">Masukkan jabatan/posisi responden di instansi tempat bekerja</div>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="instansi" class="form-label">Instansi</label>
+                        <label for="instansi" class="form-label">Instansi <span style="color: red;">*</span></label>
                         <input type="text" class="form-control" name="responden_instansi" id="instansi" required>
                         <div class="form-text text-muted">Masukkan nama instansi/perusahaan tempat responden bekerja</div>
                     </div>
@@ -69,12 +69,12 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="email" class="form-label">Email</label>
+                        <label for="email" class="form-label">Email <span style="color: red;">*</span></label>
                         <input type="email" class="form-control" name="email" id="email" required>
                         <div class="form-text text-muted">Masukkan alamat email aktif responden untuk keperluan survey</div>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="nomor_responden" class="form-label">Nomor Responden</label>
+                        <label for="nomor_responden" class="form-label">Nomor Responden (Opsional)</label>
                         <input type="text" class="form-control" name="phone_responden" id="nomor_responden">
                         <div class="form-text text-muted">Masukkan nomor telepon aktif responden (format: 08xxxx)</div>
                         @error('phone_responden')
@@ -85,12 +85,12 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="nama_dosen" class="form-label">Nama Dosen</label>
+                        <label for="nama_dosen" class="form-label">Nama Dosen <span style="color: red;">*</span></label>
                         <input type="text" class="form-control" name="responden_dosen" id="nama_dosen" required>
                         <div class="form-text text-muted">Masukkan nama lengkap dosen yang mengusulkan responden</div>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="nomor_narahubung" class="form-label">Nomor Narahubung</label>
+                        <label for="nomor_narahubung" class="form-label">Nomor Narahubung <span style="color: red;">*</span></label>
                         <input type="text" class="form-control" name="responden_dosen_phone" id="nomor_narahubung"
                             required>
                         <div class="form-text text-muted">Masukkan nomor telepon aktif dosen pengusul (format: 08xxxx)</div>
@@ -99,7 +99,7 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="fakultas_narahubung" class="form-label">Fakultas Narahubung</label>
+                        <label for="fakultas_narahubung" class="form-label">Fakultas Narahubung <span style="color: red;">*</span></label>
                         <select class="form-select" name="responden_fakultas" id="fakultas_narahubung" required>
                             <option value="">Pilih Fakultas</option>
                             <option value="pascasarjana">PASCASARJANA</option>
@@ -116,7 +116,7 @@
                         <div class="form-text text-muted">Pilih fakultas dari dosen pengusul</div>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Tipe Responden</label>
+                        <label class="form-label">Tipe Responden <span style="color: red;">*</span></label>
                         <select class="form-select" id="respondent-type" name="responden_category" style="width: auto;">
                             <option value="academic">Academic</option>
                             <option value="employer">Employer</option>
