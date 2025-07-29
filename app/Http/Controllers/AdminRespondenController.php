@@ -352,7 +352,7 @@ class AdminRespondenController extends Controller
 
     public function import(Request $request)
     {
-        if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan'])) {
+        if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan','fakultas','prodi'])) {
             // Jika request adalah AJAX, kembalikan error JSON
             if ($request->wantsJson()) {
                 return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
@@ -415,6 +415,17 @@ class AdminRespondenController extends Controller
             }
             return redirect()->back()->with('error', $finalMessage);
         }
+        $redirectRouteName = 'admin.responden.index';
+        if ($role === 'fakultas') {
+            $redirectRouteName = 'fakultas.responden.index';
+        } elseif ($role === 'prodi') {
+            $redirectRouteName = 'prodi.responden.index';
+        } elseif ($role === 'admin_pemeringkatan') {
+            $redirectRouteName = 'admin_pemeringkatan.responden.index';
+        }
+
+        return redirect(route($redirectRouteName))->with('success', 'Responden berhasil ditambahkan!');
+    
     }
 
 
@@ -459,14 +470,25 @@ class AdminRespondenController extends Controller
 
     public function export(Request $request)
     {
-        if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan'])) {
+        if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan','fakultas','prodi'])) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
         $kategori = $request->input('kategori');
         $fakultas = $request->input('fakultas');
         $tahun = $request->input('tahun'); // Added year parameter
         return Excel::download(new RespondenExport($kategori, $fakultas, $tahun), 'responden-data.xlsx');
+        $redirectRouteName = 'admin.responden.index';
+        if ($role === 'fakultas') {
+            $redirectRouteName = 'fakultas.responden.index';
+        } elseif ($role === 'prodi') {
+            $redirectRouteName = 'prodi.responden.index';
+        } elseif ($role === 'admin_pemeringkatan') {
+            $redirectRouteName = 'admin_pemeringkatan.responden.index';
+        }
+
+        return redirect(route($redirectRouteName))->with('success', 'Responden berhasil ditambahkan!');
     }
+    
 
     public function exportCSV(Request $request)
     {
@@ -477,7 +499,18 @@ class AdminRespondenController extends Controller
         $fakultas = $request->input('fakultas');
         $tahun = $request->input('tahun'); // Added year parameter
         return Excel::download(new RespondenExport($kategori, $fakultas, $tahun), 'responden-data.csv');
+        $redirectRouteName = 'admin.responden.index';
+        if ($role === 'fakultas') {
+            $redirectRouteName = 'fakultas.responden.index';
+        } elseif ($role === 'prodi') {
+            $redirectRouteName = 'prodi.responden.index';
+        } elseif ($role === 'admin_pemeringkatan') {
+            $redirectRouteName = 'admin_pemeringkatan.responden.index';
+        }
+
+        return redirect(route($redirectRouteName))->with('success', 'Responden berhasil ditambahkan!');
     }
+    
 
 
     public function getChartData(Request $request)
