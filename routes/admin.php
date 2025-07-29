@@ -342,7 +342,7 @@ Route::prefix('prodi')->name('prodi.')
 
                 // NEW: Manage Account Routes for Fakultas
         Route::get('/account', function () {
-            return view('fakultas.manage_account');
+            return view('prodi.manage_account');
         })->name('manage.account');
         // Route::put('/account', [UserController::class, 'updateAccount'])->name('manage.account.update');
     });
