@@ -215,7 +215,7 @@
                                         @endif
                                     </a>
                                 </th>
-                                <th>Status</th>
+                                {{-- <th>Status</th> --}}
                                 <th>Action</th>
 
                             </tr>
@@ -235,7 +235,7 @@
                                     <td class="responden-phone_dosen">{{ $responden->phone_dosen }}</td>
                                     <td class="responden-fakultas">{{ strtoupper($responden->fakultas) }}</td>
                                     <td class="responden-category">{{ $responden->category }}</td>
-                                    <td>
+                                    {{-- <td>
                                         <select class="form-select status-dropdown" data-id="{{ $responden->id }}"
                                             {{ $responden->status == 'dones' ? 'disabled' : '' }}>
                                             <option value="belum" {{ $responden->status == 'belum' ? 'selected' : '' }}>
@@ -248,7 +248,7 @@
                                                 <option value="clear" selected>selesai</option>
                                             @endif
                                         </select>
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-warning btn-sm edit-btn" data-id="{{ $responden->id }}" data-bs-toggle="modal" data-bs-target="#editRespondenModal">
