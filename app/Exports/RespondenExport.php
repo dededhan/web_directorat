@@ -5,6 +5,7 @@ namespace App\Exports;
 
 
 use App\Models\Responden;
+use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -16,12 +17,14 @@ use Illuminate\Support\Str;
 
 class RespondenExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize, WithStyles
 {
+    protected $user;
     protected $kategori;
     protected $fakultas;
 
 
-    public function __construct($kategori = null, $fakultas = null)
+    public function __construct(User $user ,$kategori = null, $fakultas = null)
     {
+        $this->user = $user;
         $this->kategori = $kategori;
         $this->fakultas = $fakultas;
     }
@@ -30,13 +33,20 @@ class RespondenExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
     {
         $query = Responden::query();
 
+        $role = $this->user->role;
 
+        if ($role === 'prodi') {
+            $query->where('user_id', $this->user->id);
+        } elseif ($role === 'fakultas') {
+            $facultyName = strtolower($this->user->name);
+            $query->where('fakultas', $facultyName);
+        }
         if ($this->kategori) {
             $query->where('category', $this->kategori);
         }
 
-
-        if ($this->fakultas) {
+        // Filter fakultas ini hanya berlaku jika yang ekspor adalah admin
+        if (in_array($role, ['admin_direktorat', 'admin_pemeringkatan']) && $this->fakultas) {
             $query->where('fakultas', $this->fakultas);
         }
 

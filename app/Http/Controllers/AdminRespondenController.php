@@ -468,47 +468,34 @@ class AdminRespondenController extends Controller
         return view($viewName, compact('respondens'));
     }
 
-    public function export(Request $request)
+      public function export(Request $request)
     {
-        if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan','fakultas','prodi'])) {
+        $user = Auth::user(); // 1. Ambil user yang sedang login
+        if (!in_array($user->role, ['admin_direktorat', 'admin_pemeringkatan','fakultas','prodi'])) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
-        $kategori = $request->input('kategori');
-        $fakultas = $request->input('fakultas');
-        $tahun = $request->input('tahun'); // Added year parameter
-        return Excel::download(new RespondenExport($kategori, $fakultas, $tahun), 'responden-data.xlsx');
-        $redirectRouteName = 'admin.responden.index';
-        if ($role === 'fakultas') {
-            $redirectRouteName = 'fakultas.responden.index';
-        } elseif ($role === 'prodi') {
-            $redirectRouteName = 'prodi.responden.index';
-        } elseif ($role === 'admin_pemeringkatan') {
-            $redirectRouteName = 'admin_pemeringkatan.responden.index';
-        }
 
-        return redirect(route($redirectRouteName))->with('success', 'Responden berhasil ditambahkan!');
+        // Ambil filter dari request
+        $kategori = $request->input('kategori');
+        $fakultas = $request->input('fakultas'); // Filter ini hanya digunakan oleh admin
+        
+        // 2. Kirim user dan filter ke class RespondenExport
+        return Excel::download(new RespondenExport($user, $kategori, $fakultas), 'responden-data.xlsx');
     }
     
-
     public function exportCSV(Request $request)
     {
-        if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan'])) {
+        $user = Auth::user(); // 1. Ambil user yang sedang login
+        if (!in_array($user->role, ['admin_direktorat', 'admin_pemeringkatan','fakultas','prodi'])) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
+        
+        // Ambil filter dari request
         $kategori = $request->input('kategori');
-        $fakultas = $request->input('fakultas');
-        $tahun = $request->input('tahun'); // Added year parameter
-        return Excel::download(new RespondenExport($kategori, $fakultas, $tahun), 'responden-data.csv');
-        $redirectRouteName = 'admin.responden.index';
-        if ($role === 'fakultas') {
-            $redirectRouteName = 'fakultas.responden.index';
-        } elseif ($role === 'prodi') {
-            $redirectRouteName = 'prodi.responden.index';
-        } elseif ($role === 'admin_pemeringkatan') {
-            $redirectRouteName = 'admin_pemeringkatan.responden.index';
-        }
+        $fakultas = $request->input('fakultas'); // Filter ini hanya digunakan oleh admin
 
-        return redirect(route($redirectRouteName))->with('success', 'Responden berhasil ditambahkan!');
+        // 2. Kirim user dan filter ke class RespondenExport
+        return Excel::download(new RespondenExport($user, $kategori, $fakultas), 'responden-data.csv');
     }
     
 
