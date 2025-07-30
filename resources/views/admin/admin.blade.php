@@ -13,6 +13,9 @@
         'resources/css/admin/sidebar_dashboardadmin.css',
         'resources/css/admin/navbar_dashboard.css',
         'resources/css/admin/scrollbar-fix.css',
+        'resources/css/admin/css/form.css',
+        'resources/css/admin/css/berita_acara.css',
+        'resources/css/admin/css/formberitaacara.css',
         'resources/js/app.js',  
         'resources/js/admin/admin.js' ,
         'resources/movejs/indikator.js'

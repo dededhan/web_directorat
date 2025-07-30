@@ -1,0 +1,268 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    background: #f3f4f6;
+    color: #1f2937;
+    padding: 1rem;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.header {
+    background: linear-gradient(135deg, #176369 0%, #1a7276 100%);
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    color: white;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.main-content {
+    padding: 0 2rem 2rem;
+}
+
+.form-section {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.form-section p {
+    color: #374151;
+    margin-bottom: 1rem;
+    line-height: 2;
+}
+
+.input-inline {
+    border: none;
+    border-bottom: 2px solid #176369;
+    padding: 0.25rem 0.5rem;
+    min-width: 150px;
+    text-align: center;
+    transition: all 0.2s;
+    margin: 0 0.25rem;
+}
+
+.input-inline:focus {
+    outline: none;
+    border-bottom-color: #1d4ed8;
+    background: #f0f7ff;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    padding: 1.25rem;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.label {
+    font-weight: 500;
+    color: #1f2937;
+    padding-top: 0.75rem;
+}
+
+.input-field {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 6px;
+    transition: all 0.2s;
+    font-size: 1rem;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #176369;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+textarea.input-field {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.signature-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.signature-box {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 2rem;
+}
+
+.signature-box-title {
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #1f2937;
+    font-size: 1.2rem;
+}
+
+.signature-area {
+    position: relative;
+    border: 2px dashed #176369;
+    border-radius: 8px;
+    height: 180px;
+    margin-bottom: 1rem;
+    background: #f8fafc;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: crosshair;
+}
+
+.signature-area canvas {
+    border-radius: 6px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.signature-area:hover {
+    background: #f0f7ff;
+}
+
+.signature-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.signature-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    background: #176369;
+    color: white;
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.signature-btn:hover {
+    background: #145458;
+    transform: translateY(-1px);
+}
+
+.signature-btn.hapus {
+    background: #ef4444;
+}
+
+.signature-btn.hapus:hover {
+    background: #dc2626;
+}
+
+.signature-subtitle {
+    color: #4b5563;
+    margin: 2rem 0 1rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.signature-placeholder {
+    position: absolute;
+    color: #6b7280;
+    font-size: 0.875rem;
+    text-align: center;
+    pointer-events: none;
+}
+
+.file-input {
+    display: none;
+}
+
+@media print {
+    body {
+        background: none;
+        padding: 0;
+    }
+
+    .container {
+        box-shadow: none;
+    }
+
+    .header {
+        background: none !important;
+        padding: 1rem;
+        border-bottom: 2px solid #000;
+        margin-bottom: 1rem;
+    }
+
+    .header h1 {
+        color: #000;
+    }
+
+    .signature-buttons,
+    .file-input {
+        display: none !important;
+    }
+
+    .signature-area {
+        border: 1px solid #000;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 0.5rem;
+    }
+
+    .container {
+        border-radius: 8px;
+    }
+
+    .main-content {
+        padding: 0 1rem 1rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .signature-section {
+        grid-template-columns: 1fr;
+    }
+
+    .input-inline {
+        min-width: 120px;
+    }
+}
