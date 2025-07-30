@@ -608,29 +608,39 @@
             });
 
             // Import form submission
-            document.getElementById('importForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const formData = new FormData(this);
+   document.getElementById('importForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            axios.post(this.action, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Accept': 'application/json' 
+                }
+            })
+            .then(response => {
+                const importModal = bootstrap.Modal.getInstance(document.getElementById('importModal'));
+                importModal.hide();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Import Selesai!',
+                    html: response.data.message, 
+                }).then(() => {
+                    window.location.reload();
+                });
+            })
+            .catch(error => {
+                let errorMessage = 'Terjadi kesalahan tidak diketahui.';
+                if (error.response && error.response.data && error.response.data.message) {
+                    errorMessage = error.response.data.message;
+                }
 
-                axios.post(this.action, formData)
-                    .then(response => {
-                        $('#importModal').modal('hide');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: response.data.message || 'Data imported successfully',
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                    })
-                    .catch(error => {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Import Failed',
-                            text: error.response?.data?.message || 'Error importing file',
-                        });
-                    });
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Import Gagal',
+                    html: errorMessage,
+                });
             });
+        });
 
             // Filter functionality
             document.getElementById('emailFilter').addEventListener('keyup', function() {
