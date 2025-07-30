@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\RespondenInvitationMail;
 use Illuminate\Validation\Rule;
 use App\Models\Responden;
-use Illuminate\Support\Facades\DB; // Added for database queries
+use Illuminate\Support\Facades\DB; 
 
 class AdminRespondenController extends Controller
 {
@@ -46,8 +46,17 @@ class AdminRespondenController extends Controller
         $role = $user->role;
         $userInfo = $this->getUserFacultyInfo($user);
 
+     // --- MODIFICATION START ---
+        // Get sorting parameters
         $sort = $request->get('sort', 'fullname');
         $direction = $request->get('direction', 'asc');
+
+        // Get filter for number of entries per page
+        $perPage = $request->input('per_page', 10);
+        if (!in_array($perPage, [10, 50, 100, 2000])) {
+            $perPage = 10; // Default to 10 if invalid value is passed
+        }
+        // --- MODIFICATION END ---
 
         $allowedSorts = ['title', 'fullname', 'jabatan', 'instansi', 'email', 'phone_responden', 'nama_dosen_pengusul', 'phone_dosen', 'fakultas', 'category', 'status'];
         if (!in_array($sort, $allowedSorts)) {
@@ -60,7 +69,20 @@ class AdminRespondenController extends Controller
             $query->where('user_id', $user->id);
         }
 
-
+ // --- MODIFICATION START ---
+        // Server-side search logic
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('fullname', 'like', "%{$searchTerm}%")
+                    ->orWhere('email', 'like', "%{$searchTerm}%")
+                    ->orWhere('instansi', 'like', "%{$searchTerm}%")
+                    ->orWhere('jabatan', 'like', "%{$searchTerm}%")
+                    ->orWhere('fakultas', 'like', "%{$searchTerm}%")
+                    ->orWhere('category', 'like', "%{$searchTerm}%")
+                    ->orWhere('nama_dosen_pengusul', 'like', "%{$searchTerm}%");
+            });
+        }
         if ($request->filled('kategori')) {
             $query->where('category', $request->kategori);
         }
@@ -79,8 +101,9 @@ class AdminRespondenController extends Controller
         $query->orderBy($sort, $direction);
 
         // $respondens = $query->paginate(25)->appends($request->query());
-        $respondens = $query->paginate(2000)->appends($request->query());
+        $respondens = $query->paginate($perPage)->appends($request->query());
 
+        
         $userInfo = $this->getUserFacultyInfo($user);
 
         $viewData = ['respondens' => $respondens, 'user_info' => $userInfo];

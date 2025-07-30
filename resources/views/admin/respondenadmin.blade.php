@@ -129,8 +129,13 @@
                 <div class="head">
                     <h3>Daftar Responden</h3>
                     <div class="d-flex justify-content-end align-items-center">
-                        <form method="GET" action="{{ route('admin.responden.index') }}" class="me-3">
+                         {{-- --- MODIFICATION START --- --}}
+                        <form method="GET" action="{{ route('admin.responden.index') }}" class="me-3 w-100">
                             <div class="row g-2 align-items-center">
+                                <div class="col-md-3">
+                                    <input type="text" name="search" id="searchInput" class="form-control"
+                                        placeholder="Search..." value="{{ request('search') }}">
+                                </div>
                                 <div class="col-auto">
                                     <select class="form-select" name="kategori" id="filterKategori">
                                         <option value="">Semua Kategori</option>
@@ -158,7 +163,6 @@
                                         </option>
                                         <option value="fikk"
                                             {{ strtolower(request('fakultas')) == 'fikk' ? 'selected' : '' }}>FIKK</option>
-
                                         <option value="fish" {{ request('fakultas') == 'fish' ? 'selected' : '' }}>FISH
                                         </option>
                                         <option value="feb" {{ request('fakultas') == 'feb' ? 'selected' : '' }}>FEB
@@ -168,11 +172,21 @@
                                     </select>
                                 </div>
                                 <div class="col-auto">
+                                    <label for="perPageFilter" class="form-label visually-hidden">Show</label>
+                                    <select class="form-select" name="per_page" id="perPageFilter">
+                                        <option value="10" {{ request('per_page', 10) == 10 ? 'selected' : '' }}>10</option>
+                                        <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                                        <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                                        <option value="2000" {{ request('per_page') == 2000 ? 'selected' : '' }}>All</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
                                     <button type="submit" class="btn btn-primary">Filter</button>
                                     <a href="{{ route('admin.responden.index') }}" class="btn btn-secondary">Reset</a>
                                 </div>
                             </div>
                         </form>
+                        {{-- --- MODIFICATION END --- --}}
                         <div class="export-buttons me-3">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal"
@@ -185,12 +199,11 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="search-box">
-                            <input type="text" id="searchInput" class="form-control" placeholder="Search...">
-                        </div>
+                        
 
                     </div>
                 </div>
+
 
 
                 <div class="table-responsive">
@@ -279,11 +292,33 @@
                             @endforelse
                         </tbody>
                     </table>
-                    <div class="custom-pagination d-flex justify-content-end mt-3">
-                        {{ $respondens->links('pagination::bootstrap-5') }}
+                    
+  {{-- --- MODIFICATION START --- --}}
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            @if ($respondens->total() > 0)
+                                <span class="text-muted">
+                                    Showing {{ $respondens->firstItem() }} to {{ $respondens->lastItem() }} of {{ $respondens->total() }} results
+                                </span>
+                            @else
+                                 <span class="text-muted">No results found</span>
+                            @endif
+                        </div>
+                          <div>
+                           <div class="btn-group">
+                                {{-- Previous Page Button --}}
+                                <a href="{{ $respondens->appends(request()->query())->previousPageUrl() }}" class="btn btn-outline-primary @if($respondens->onFirstPage()) disabled @endif">
+                                    &laquo; Previous
+                                </a>
+
+                                {{-- Next Page Button --}}
+                                <a href="{{ $respondens->appends(request()->query())->nextPageUrl() }}" class="btn btn-outline-primary @if(!$respondens->hasMorePages()) disabled @endif">
+                                    Next &raquo;
+                                </a>
+                            </div>
+                        </div>
                     </div>
-
-
+                    {{-- --- MODIFICATION END --- --}}
                 </div>
             </div>
         </div>
@@ -468,6 +503,17 @@
     </div>
 
     <script>
+        // --- MODIFICATION START ---
+        // Automatically submit the filter form when the 'per_page' dropdown changes.
+        document.addEventListener('DOMContentLoaded', function() {
+            const perPageFilter = document.getElementById('perPageFilter');
+            if (perPageFilter) {
+                perPageFilter.addEventListener('change', function() {
+                    this.form.submit();
+                });
+            }
+        });
+        // --- MODIFICATION END ---
         // edit delete 
         document.addEventListener('DOMContentLoaded', function() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -785,19 +831,19 @@
         });
 
 
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            const searchText = this.value.toLowerCase();
-            const table = document.getElementById('respondent-table');
-            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+        // document.getElementById('searchInput').addEventListener('keyup', function() {
+        //     const searchText = this.value.toLowerCase();
+        //     const table = document.getElementById('respondent-table');
+        //     const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
 
-            for (let row of rows) {
-                let text = '';
-                for (let cell of row.getElementsByTagName('td')) {
-                    text += cell.textContent.toLowerCase() + ' ';
-                }
-                row.style.display = text.includes(searchText) ? '' : 'none';
-            }
-        });
+        //     for (let row of rows) {
+        //         let text = '';
+        //         for (let cell of row.getElementsByTagName('td')) {
+        //             text += cell.textContent.toLowerCase() + ' ';
+        //         }
+        //         row.style.display = text.includes(searchText) ? '' : 'none';
+        //     }
+        // });
     </script>
 
     <style>
