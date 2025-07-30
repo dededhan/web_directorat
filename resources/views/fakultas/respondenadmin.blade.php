@@ -401,6 +401,15 @@
                                 accept=".xlsx,.xls" required>
                             <div class="form-text">File harus sesuai dengan format yang ditentukan</div>
                         </div>
+                          <hr> {{-- Section for DOWNLOADING the template --}}
+                        <div class="mb-2">
+                            <label class="form-label">Don't have the template?</label>
+                            <br>
+                            {{-- This is the download button --}}
+                            <a href="{{ asset('templates/template_responden.xlsx') }}" class="btn btn-sm btn-success" download>
+                                Download Format Here
+                            </a>
+                        </div>
                         {{-- <div class="mb-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="skipDuplicates"
