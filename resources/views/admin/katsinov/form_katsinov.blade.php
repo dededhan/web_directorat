@@ -3,7 +3,7 @@
 @section('contentadmin')
     <!-- CSS Files -->
     {{-- <link href="{{ asset('aspect-analysis.css') }}" rel="stylesheet"> --}}
-    <link rel="stylesheet" href="{{ asset('inovasi/dashboard/form_katsinov/css/form.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('inovasi/dashboard/form_katsinov/css/form.css') }}"> --}}
 
     <!-- Alpine.js x-cloak style -->
     <style>

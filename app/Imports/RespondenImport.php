@@ -70,7 +70,7 @@ class RespondenImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
     public function rules(): array
     {
         return [
-            'title' => 'required',
+            'title' => 'nullable',
             'email' => 'required|email',
             'fullname' => 'required',
             'jabatan' => 'required',

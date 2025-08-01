@@ -18,7 +18,7 @@
         'resources/css/admin/css/formberitaacara.css',
         'resources/js/app.js',  
         'resources/js/admin/admin.js' ,
-        'resources/movejs/indikator.js'
+        'resources/js/indikator.js'
     ])
     {{-- Akhir: Perubahan untuk Vite --}}
 
