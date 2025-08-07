@@ -17,7 +17,7 @@
         </script>
     @endif
 
-    
+
     <div class="head-title">
         <div class="left">
             <h1>Responden</h1>
@@ -225,6 +225,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>User ID</th>
                                 <th>Title</th>
                                 <th>Nama Lengkap</th>
                                 <th>Jabatan</th>
@@ -258,9 +259,9 @@
                         </thead>
                         <tbody id="respondent-list">
                             @forelse($respondens as $i => $responden)
-                                {{-- ADD THE ID TO THE TR ELEMENT AND CLASSES TO THE TD ELEMENTS --}}
                                 <tr id="responden-row-{{ $responden->id }}">
                                     <td>{{ $respondens->firstItem() + $i }}</td>
+                                    <td>{{ $responden->user_id }}</td>
                                     <td class="responden-title">{{ Str::ucfirst($responden->title) }}</td>
                                     <td class="responden-fullname">{{ $responden->fullname }}</td>
                                     <td class="responden-jabatan">{{ $responden->jabatan }}</td>
@@ -307,7 +308,7 @@
                         </tbody>
                     </table>
                     
-  {{-- --- MODIFICATION START --- --}}
+
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <div>
                             @if ($respondens->total() > 0)
@@ -320,19 +321,19 @@
                         </div>
                           <div>
                            <div class="btn-group">
-                                {{-- Previous Page Button --}}
+
                                 <a href="{{ $respondens->appends(request()->query())->previousPageUrl() }}" class="btn btn-outline-primary @if($respondens->onFirstPage()) disabled @endif">
                                     &laquo; Previous
                                 </a>
 
-                                {{-- Next Page Button --}}
+
                                 <a href="{{ $respondens->appends(request()->query())->nextPageUrl() }}" class="btn btn-outline-primary @if(!$respondens->hasMorePages()) disabled @endif">
                                     Next &raquo;
                                 </a>
                             </div>
                         </div>
                     </div>
-                    {{-- --- MODIFICATION END --- --}}
+
                 </div>
             </div>
         </div>
