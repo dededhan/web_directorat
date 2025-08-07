@@ -4,6 +4,20 @@
 @vite(['resources/css/admin/responden_dashboard.css'])
 
 @section('contentadmin')
+
+    @if ($errors->has('email'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal Menyimpan Data',
+                    text: '{{ $errors->first('email') }}',
+                });
+            });
+        </script>
+    @endif
+
+    
     <div class="head-title">
         <div class="left">
             <h1>Responden</h1>
