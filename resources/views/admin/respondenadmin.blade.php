@@ -143,7 +143,6 @@
                 <div class="head">
                     <h3>Daftar Responden</h3>
                     <div class="d-flex justify-content-end align-items-center">
-                         {{-- --- MODIFICATION START --- --}}
                         <form method="GET" action="{{ route('admin.responden.index') }}" class="me-3 w-100">
                             <div class="row g-2 align-items-center">
                                 <div class="col-md-3">
@@ -200,7 +199,6 @@
                                 </div>
                             </div>
                         </form>
-                        {{-- --- MODIFICATION END --- --}}
                         <div class="export-buttons me-3">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal"
@@ -338,6 +336,7 @@
             </div>
         </div>
     </div>
+
     {{-- MODAL EDIT --}}
     <div class="modal fade" id="editRespondenModal" tabindex="-1" aria-labelledby="editRespondenModalLabel"
         aria-hidden="true">
@@ -484,7 +483,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="filterCategory" class="form-label">Kategori</label>
+                        <label for="exportFilterCategory" class="form-label">Kategori</label>
                         <select class="form-select" id="filterCategory">
                             <option value="">Semua Kategori</option>
                             <option value="academic">Academic</option>
@@ -492,7 +491,7 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="filterFakultas" class="form-label">Fakultas</label>
+                        <label for="exportFilterFakultas" class="form-label">Fakultas</label>
                         <select class="form-select" id="filterFakultas">
                             <option value="">Semua Fakultas</option>
                             <option value="pascasarjana">PASCASARJANA</option>

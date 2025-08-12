@@ -22,13 +22,13 @@ class RespondenExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
     protected $fakultas;
 
 
-    public function __construct(User $user ,$kategori = null, $fakultas = null)
+    public function __construct(User $user, $kategori = null, $fakultas = null)
     {
         $this->user = $user;
         $this->kategori = $kategori;
         $this->fakultas = $fakultas;
     }
- 
+
     public function query()
     {
         $query = Responden::query();
@@ -45,9 +45,13 @@ class RespondenExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
             $query->where('category', $this->kategori);
         }
 
-        // Filter fakultas ini hanya berlaku jika yang ekspor adalah admin
-        if (in_array($role, ['admin_direktorat', 'admin_pemeringkatan']) && $this->fakultas) {
-            $query->where('fakultas', $this->fakultas);
+        // if (in_array($role, ['admin_direktorat', 'admin_pemeringkatan']) && $this->fakultas) {
+        //     $query->where('fakultas', $this->fakultas);
+        // }
+
+        if ($this->fakultas) {
+            // $query->where('fakultas', $this->fakultas);
+            $query->where('fakultas', strtolower($this->fakultas));
         }
 
 
@@ -93,19 +97,19 @@ class RespondenExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
             $row->phone_dosen,
             $row->fakultas,
             $row->category,
-            $this->getStatusText($row->status) // Use helper method here
+            $this->getStatusText($row->status)
         ];
     }
     private function getStatusText($status)
     {
-        $status = $status ?? 'belum'; // Default to 'belum' if status is null
+        $status = $status ?? 'belum';
         $mapping = [
             'belum' => 'Belum di-email',
             'done' => 'Sudah di-email, belum di-follow up',
             'dones' => 'Sudah di-email, sudah di-follow up',
             'clear' => 'selesai',
         ];
-        return $mapping[$status] ?? 'Belum di-email'; // Fallback if status unknown
+        return $mapping[$status] ?? 'Belum di-email';
     }
 
 
@@ -116,5 +120,3 @@ class RespondenExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
         ];
     }
 }
-
-
