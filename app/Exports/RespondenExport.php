@@ -35,11 +35,9 @@ class RespondenExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
 
         $role = $this->user->role;
 
-        if ($role === 'prodi') {
-            $query->where('user_id', $this->user->id);
-        } elseif ($role === 'fakultas') {
-            $facultyName = strtolower($this->user->name);
-            $query->where('fakultas', $facultyName);
+        if ($role === 'prodi' || $role === 'fakultas') {
+            // Di sini dia hanya akan ambil data yang ID user-nya sama dengan ID lo yang lagi login
+            $query->where('user_id', $this->user->id); 
         }
         if ($this->kategori) {
             $query->where('category', $this->kategori);
