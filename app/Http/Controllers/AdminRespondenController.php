@@ -46,19 +46,18 @@ class AdminRespondenController extends Controller
         $role = $user->role;
         $userInfo = $this->getUserFacultyInfo($user);
 
-     // --- MODIFICATION START ---
-        // Get sorting parameters
+     
         $sort = $request->get('sort', 'fullname');
         $direction = $request->get('direction', 'asc');
 
-        // Get filter for number of entries per page
+       
         $perPage = $request->input('per_page', 10);
         if (!in_array($perPage, [10, 50, 100, 2000])) {
             $perPage = 10; // Default to 10 if invalid value is passed
         }
-        // --- MODIFICATION END ---
+        
 
-        $allowedSorts = ['title', 'fullname', 'jabatan', 'instansi', 'email', 'phone_responden', 'nama_dosen_pengusul', 'phone_dosen', 'fakultas', 'category', 'status'];
+        $allowedSorts = ['title', 'fullname', 'jabatan', 'instansi', 'email', 'phone_responden', 'nama_dosen_pengusul', 'phone_dosen', 'fakultas', 'category', 'status','created_at'];
         if (!in_array($sort, $allowedSorts)) {
             $sort = 'fullname';
         }
@@ -69,8 +68,6 @@ class AdminRespondenController extends Controller
             $query->where('user_id', $user->id);
         }
 
- // --- MODIFICATION START ---
-        // Server-side search logic
         if ($request->filled('search')) {
             $searchTerm = $request->search;
             $query->where(function ($q) use ($searchTerm) {
@@ -90,17 +87,12 @@ class AdminRespondenController extends Controller
             $query->where('fakultas', $request->fakultas);
         }
 
-        // Add year filter if 'tahun' column exists and is provided in request
-        // if ($request->filled('tahun') && Schema::hasColumn('respondens', 'tahun')) { // Assuming 'tahun' column
-        //     $query->where('tahun', $request->tahun);
-        // } elseif ($request->filled('tahun')) { // Fallback to created_at if 'tahun' column doesn't exist
-        //     $query->whereYear('created_at', $request->tahun);
-        // }
-
-
+        if ($request->filled('filter_date')) {
+            $query->whereDate('created_at', $request->filter_date);
+        }
         $query->orderBy($sort, $direction);
 
-        // $respondens = $query->paginate(25)->appends($request->query());
+        
         $respondens = $query->paginate($perPage)->appends($request->query());
 
         
@@ -151,13 +143,7 @@ class AdminRespondenController extends Controller
             return redirect()->back()->with('error', 'Anda tidak diizinkan menyimpan responden.')->withInput();
         }
 
-        //   if (in_array($role, ['fakultas', 'prodi'])) {
-        //     $userInfo = $this->getUserFacultyInfo($user);
-        //     if (!$userInfo['faculty_code']) {
-        //         return redirect()->back()->with('error', 'Tidak dapat menentukan fakultas Anda.')->withInput();
-        //     }
-        //     $respondenValidated['fakultas'] = $userInfo['faculty_code'];
-        // }
+        
 
         $responden = Responden::create([
             'title' => $respondenValidated['responden_title'],
@@ -171,8 +157,7 @@ class AdminRespondenController extends Controller
             'fakultas' => $respondenValidated['responden_fakultas'],
             'category' => $respondenValidated['responden_category'],
             'user_id' => $user->id,
-            // 'user_id' => $user->id, //
-            // 'tahun' => $request->input('tahun_input_field', date('Y')), // Add this if you have a dedicated 'tahun' field in the form/table
+            
         ]);
 
         $redirectRouteName = 'admin.responden.index';
@@ -200,11 +185,8 @@ class AdminRespondenController extends Controller
         } elseif (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan'])) {
             return redirect()->route($role . '.dashboard')->with('error', 'Akses tidak sah.');
         }
-        // $viewName = 'admin.responden.show'; // Assuming you might have a show view
-        // if($role === 'fakultas') $viewName = 'fakultas.responden.show';
-        // if($role === 'prodi') $viewName = 'prodi.responden.show';
-        // return view($viewName, compact('responden'));
-        return response()->json($responden); // If primarily used for AJAX details
+        
+        return response()->json($responden); 
     }
 
     public function edit(Responden $responden)
@@ -213,7 +195,7 @@ class AdminRespondenController extends Controller
         $role = $user->role;
         $userInfo = $this->getUserFacultyInfo($user);
 
-        // Authorization Check: Does the user have permission?
+       
         if ($role === 'fakultas') {
             $userInfo = $this->getUserFacultyInfo($user);
             if (!$userInfo['faculty_code'] || $responden->fakultas !== $userInfo['faculty_code']) {
@@ -240,7 +222,7 @@ class AdminRespondenController extends Controller
         $role = $user->role;
         $validated = $request->validated(); // Get validated data
 
-        // 3. Authorization Logic (example)
+       
         if ($role === 'prodi') {
             // Pastikan user prodi hanya bisa mengupdate data miliknya sendiri
             if ($responden->user_id !== $user->id) {
@@ -254,10 +236,10 @@ class AdminRespondenController extends Controller
         }
 
 
-        // 4. Update the model and save it
+        
         $responden->update($validated);
 
-        // 5. Return a successful JSON response
+        
         return response()->json([
             'message' => 'Data berhasil diperbarui',
             'data' => $responden->fresh() // Use fresh() to get the model with updated timestamps
@@ -376,7 +358,7 @@ class AdminRespondenController extends Controller
     public function import(Request $request)
     {
         if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan','fakultas','prodi'])) {
-            // Jika request adalah AJAX, kembalikan error JSON
+            
             if ($request->wantsJson()) {
                 return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
             }
@@ -405,17 +387,17 @@ class AdminRespondenController extends Controller
             $importedCount = $import->getImportedCount();
             $skippedCount = $import->getSkippedCount();
 
-            // [PENTING] Buat pesan dengan tag HTML
+            
             $successMessage = "Proses impor selesai. <br><br>" .
                 "&bull; Berhasil diimpor: <strong>" . $importedCount . "</strong> baris. <br>" .
                 "&bull; Dilewati (duplikat): <strong>" . $skippedCount . "</strong> baris.";
 
-            // Jika request adalah AJAX, kembalikan respons JSON
+            
             if ($request->wantsJson()) {
                 return response()->json(['success' => true, 'message' => $successMessage]);
             }
 
-            // Jika request biasa, lakukan redirect dengan flash message
+            
             return redirect()->back()->with('success', $successMessage);
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
@@ -481,34 +463,34 @@ class AdminRespondenController extends Controller
 
         $respondens = $query->paginate(25)->appends($request->query());
 
-        // Determine the correct view based on role, similar to index()
+        
         $role = Auth::user()->role;
         $viewName = 'admin.respondenadmin'; // Default
         if ($role === 'admin_pemeringkatan') {
             $viewName = 'admin_pemeringkatan.respondenadmin';
-        } // Add other roles if they have specific views for filtered results
+        } 
 
         return view($viewName, compact('respondens'));
     }
 
       public function export(Request $request)
     {
-        $user = Auth::user(); // 1. Ambil user yang sedang login
+        $user = Auth::user(); 
         if (!in_array($user->role, ['admin_direktorat', 'admin_pemeringkatan','fakultas','prodi'])) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
 
-        // Ambil filter dari request
+        
         $kategori = $request->input('kategori');
         $fakultas = $request->input('fakultas'); // Filter ini hanya digunakan oleh admin
         
-        // 2. Kirim user dan filter ke class RespondenExport
+        
         return Excel::download(new RespondenExport($user, $kategori, $fakultas), 'responden-data.xlsx');
     }
     
     public function exportCSV(Request $request)
     {
-        $user = Auth::user(); // 1. Ambil user yang sedang login
+        $user = Auth::user(); 
         if (!in_array($user->role, ['admin_direktorat', 'admin_pemeringkatan','fakultas','prodi'])) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
@@ -517,7 +499,7 @@ class AdminRespondenController extends Controller
         $kategori = $request->input('kategori');
         $fakultas = $request->input('fakultas'); // Filter ini hanya digunakan oleh admin
 
-        // 2. Kirim user dan filter ke class RespondenExport
+        
         return Excel::download(new RespondenExport($user, $kategori, $fakultas), 'responden-data.csv');
     }
     

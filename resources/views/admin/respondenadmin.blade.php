@@ -194,10 +194,15 @@
                                     </select>
                                 </div>
                                 <div class="col-auto">
+                                    <input type="date" name="filter_date" class="form-control" value="{{ request('filter_date') }}">
+                                </div>
+
+                                <div class="col-auto">
                                     <button type="submit" class="btn btn-primary">Filter</button>
                                     <a href="{{ route('admin.responden.index') }}" class="btn btn-secondary">Reset</a>
                                 </div>
                             </div>
+
                         </form>
                         <div class="export-buttons me-3">
                             <div class="btn-group">
@@ -250,6 +255,14 @@
                                         @endif
                                     </a>
                                 </th>
+                                <th>
+                                    <a href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
+                                        Tanggal Dibuat
+                                        @if (request('sort') == 'created_at')
+                                            {!! request('direction') == 'asc' ? '↑' : '↓' !!}
+                                        @endif
+                                    </a>
+                                </th>
                                 <th>Status</th>
                                 <th>Action</th>
 
@@ -259,7 +272,7 @@
                             @forelse($respondens as $i => $responden)
                                 <tr id="responden-row-{{ $responden->id }}">
                                     <td>{{ $respondens->firstItem() + $i }}</td>
-                                    <td>{{ $responden->user_id }}</td>
+                                    <td>{{ $responden->user->name ?? ($activity->user_id ?? 'ADMIN') }}</td>
                                     <td class="responden-title">{{ Str::ucfirst($responden->title) }}</td>
                                     <td class="responden-fullname">{{ $responden->fullname }}</td>
                                     <td class="responden-jabatan">{{ $responden->jabatan }}</td>
@@ -270,6 +283,7 @@
                                     <td class="responden-phone_dosen">{{ $responden->phone_dosen }}</td>
                                     <td class="responden-fakultas">{{ strtoupper($responden->fakultas) }}</td>
                                     <td class="responden-category">{{ $responden->category }}</td>
+                                    <td>{{ $responden->created_at?->format('d M Y H:i') ?? 'N/A' }}</td>
                                     <td>
                                         <select class="form-select status-dropdown" data-id="{{ $responden->id }}"
                                             {{ $responden->status == 'dones' ? 'disabled' : '' }}>
