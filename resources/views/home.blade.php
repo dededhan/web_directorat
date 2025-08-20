@@ -347,6 +347,178 @@
             font-family: "Font Awesome 5 Free", "Font Awesome 5 Brands", "FontAwesome" !important;
         }
     </style>
+    <style>
+        /* CSS TAMBAHAN UNTUK PERBAIKAN CAROUSEL */
+
+/* Swiper Carousel Customization - PERBAIKAN */
+.program-carousel .swiper-button-next,
+.program-carousel .swiper-button-prev,
+.news-carousel-container .swiper-button-next,
+.news-carousel-container .swiper-button-prev {
+    color: #14B8A6; /* teal-500 */
+    background-color: white;
+    border-radius: 9999px;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    margin-top: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.program-carousel .swiper-button-next::after,
+.program-carousel .swiper-button-prev::after,
+.news-carousel-container .swiper-button-next::after,
+.news-carousel-container .swiper-button-prev::after {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.program-carousel .swiper-pagination-bullet-active,
+.news-carousel-container .swiper-pagination-bullet-active {
+    background-color: #14B8A6;
+}
+
+/* PENTING: Batasi maksimal cards yang tampil */
+.program-carousel .swiper-wrapper,
+.news-carousel .swiper-wrapper {
+    align-items: stretch;
+}
+
+.program-carousel .swiper-slide,
+.news-carousel .swiper-slide {
+    height: auto;
+    display: flex;
+}
+
+/* Responsif untuk memastikan card tidak overflow */
+@media (max-width: 767px) {
+    .program-carousel .swiper-slide,
+    .news-carousel .swiper-slide {
+        width: 100% !important;
+        margin-right: 16px !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .program-carousel .swiper-slide,
+    .news-carousel .swiper-slide {
+        width: calc(50% - 10px) !important;
+        margin-right: 20px !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    .program-carousel .swiper-slide,
+    .news-carousel .swiper-slide {
+        width: calc(33.333% - 16px) !important;
+        margin-right: 24px !important;
+    }
+}
+
+/* Pastikan card dalam carousel memiliki tinggi yang sama */
+.program-carousel .program-card,
+.news-carousel .bg-white {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.program-carousel .program-card .p-6,
+.news-carousel .p-5 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.program-carousel .program-card .mt-4,
+.news-carousel .mt-auto {
+    margin-top: auto;
+}
+
+/* Carousel Container Spacing */
+.program-carousel-container,
+.news-carousel-container {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Pagination Styling */
+.program-carousel-container .swiper-pagination,
+.news-carousel-container .swiper-pagination {
+    position: relative;
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.program-carousel-container .swiper-pagination-bullet,
+.news-carousel-container .swiper-pagination-bullet {
+    width: 12px;
+    height: 12px;
+    background-color: #d1d5db;
+    border-radius: 50%;
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.program-carousel-container .swiper-pagination-bullet-active,
+.news-carousel-container .swiper-pagination-bullet-active {
+    background-color: #14B8A6;
+    transform: scale(1.2);
+}
+
+/* Fix untuk navigation buttons */
+.program-carousel-container .swiper-button-prev {
+    left: -5px;
+}
+
+.program-carousel-container .swiper-button-next {
+    right: -5px;
+}
+
+.news-carousel-container .swiper-button-prev {
+    left: -5px;
+}
+
+.news-carousel-container .swiper-button-next {
+    right: -5px;
+}
+
+/* Hover effects untuk carousel cards */
+.program-carousel .swiper-slide:hover .program-card,
+.news-carousel .swiper-slide:hover .bg-white {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Loading state untuk carousel */
+.carousel-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    background-color: #f9fafb;
+    border-radius: 8px;
+}
+
+.carousel-loading::after {
+    content: "";
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e5e7eb;
+    border-top-color: #14B8A6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+    </style>
 
 </head>
 
@@ -646,6 +818,7 @@
     @include('layout.footer')
 {{-- Consolidated and Responsive JavaScript --}}
 <script>
+// PERBAIKAN CAROUSEL JAVASCRIPT
 document.addEventListener('DOMContentLoaded', function () {
     
     // --- Navbar Scroll Effect ---
@@ -660,7 +833,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, { passive: true });
     }
 
-    // --- Desktop Navbar Dropdown Logic (Click-based) ---
+    // --- Desktop Navbar Dropdown Logic ---
     const desktopDropdownToggles = document.querySelectorAll('.desktop-dropdown-toggle');
     desktopDropdownToggles.forEach(toggle => {
         toggle.addEventListener('click', function (e) {
@@ -683,7 +856,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
-
 
     // --- Mobile Sidebar Logic ---
     const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
@@ -728,74 +900,109 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // --- Swiper Carousel for Programs (MODIFIED) ---
-if (document.querySelector('.program-carousel')) {
-    const swiper = new Swiper('.program-carousel', {
-        loop: true,
-        slidesPerView: 1, // Tampilkan 1 kartu di layar sangat kecil
-        spaceBetween: 16,
-        autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-        },
-        pagination: {
-            el: '.program-carousel-container .swiper-pagination',
-            clickable: true,
-        },
-        navigation: {
-            nextEl: '.program-carousel-container .swiper-button-next',
-            prevEl: '.program-carousel-container .swiper-button-prev',
-        },
-        breakpoints: {
-            // Tampilkan 2 kartu untuk tablet
-            768: {
-                slidesPerView: 2,
-                spaceBetween: 24
+    // --- PERBAIKAN: Swiper Carousel untuk Program (DIPERBAIKI) ---
+    const programCarouselElement = document.querySelector('.program-carousel');
+    if (programCarouselElement) {
+        // Pastikan hanya menampilkan maksimal 3 cards sesuai konfigurasi
+        const programSwiper = new Swiper('.program-carousel', {
+            loop: true,
+            centeredSlides: false, // Jangan center slides
+            slidesPerView: 1,
+            spaceBetween: 20,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
             },
-            // Tampilkan 3 kartu untuk desktop
-            1024: {
-                slidesPerView: 3,
-                spaceBetween: 32
+            pagination: {
+                el: '.program-carousel-container .swiper-pagination',
+                clickable: true,
+                dynamicBullets: true,
             },
-        }
-    });
-}
+            navigation: {
+                nextEl: '.program-carousel-container .swiper-button-next',
+                prevEl: '.program-carousel-container .swiper-button-prev',
+            },
+            breakpoints: {
+                // Mobile: tampilkan 1 card
+                320: {
+                    slidesPerView: 1,
+                    spaceBetween: 16,
+                },
+                // Tablet: tampilkan 2 cards
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                // Desktop: tampilkan 3 cards (MAKSIMAL)
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 24,
+                },
+                // Large Desktop: tetap 3 cards
+                1200: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                }
+            },
+            // Konfigurasi tambahan untuk memastikan hanya 3 cards max
+            watchOverflow: true,
+            observer: true,
+            observeParents: true,
+        });
+    }
 
-// --- Swiper Carousel for News (MODIFIED) ---
-if (document.querySelector('.news-carousel')) {
-    const newsSwiper = new Swiper('.news-carousel', {
-        loop: true,
-        slidesPerView: 1, // Tampilkan 1 kartu di layar sangat kecil
-        spaceBetween: 16,
-        autoplay: {
-            delay: 3500,
-            disableOnInteraction: false,
-        },
-        pagination: {
-            el: '.news-carousel-container .swiper-pagination',
-            clickable: true,
-        },
-        navigation: {
-            nextEl: '.news-carousel-container .swiper-button-next',
-            prevEl: '.news-carousel-container .swiper-button-prev',
-        },
-        breakpoints: {
-            // Tampilkan 2 kartu untuk tablet
-            768: {
-                slidesPerView: 2,
-                spaceBetween: 24
+    // --- PERBAIKAN: Swiper Carousel untuk News/Berita Unggulan (DIPERBAIKI) ---
+    const newsCarouselElement = document.querySelector('.news-carousel');
+    if (newsCarouselElement) {
+        // Pastikan hanya menampilkan maksimal 3 cards sesuai konfigurasi
+        const newsSwiper = new Swiper('.news-carousel', {
+            loop: true,
+            centeredSlides: false, // Jangan center slides
+            slidesPerView: 1,
+            spaceBetween: 20,
+            autoplay: {
+                delay: 3500,
+                disableOnInteraction: false,
             },
-            // Tampilkan 3 kartu untuk desktop
-            1024: {
-                slidesPerView: 3,
-                spaceBetween: 32
+            pagination: {
+                el: '.news-carousel-container .swiper-pagination',
+                clickable: true,
+                dynamicBullets: true,
             },
-        }
-    });
+            navigation: {
+                nextEl: '.news-carousel-container .swiper-button-next',
+                prevEl: '.news-carousel-container .swiper-button-prev',
+            },
+            breakpoints: {
+                // Mobile: tampilkan 1 card
+                320: {
+                    slidesPerView: 1,
+                    spaceBetween: 16,
+                },
+                // Tablet: tampilkan 2 cards
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                // Desktop: tampilkan 3 cards (MAKSIMAL)
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 24,
+                },
+                // Large Desktop: tetap 3 cards
+                1200: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                }
+            },
+            // Konfigurasi tambahan untuk memastikan hanya 3 cards max
+            watchOverflow: true,
+            observer: true,
+            observeParents: true,
+        });
     }
 
     // --- Fetch Instagram Posts ---
-    // (Kode lainnya tetap sama)
     const instaContainer = document.getElementById('instagram-api-feed-container');
     if (instaContainer) {
         fetch('/api/instagram-posts')
@@ -829,7 +1036,6 @@ if (document.querySelector('.news-carousel')) {
     }
 
     // --- Fetch YouTube Videos ---
-    // (Kode lainnya tetap sama)
     const videoContainer = document.getElementById('dynamic-videos-container');
     if (videoContainer) {
         fetch('/api/youtube-videos')
@@ -876,7 +1082,6 @@ if (document.querySelector('.news-carousel')) {
     }
 
     // --- Header Carousel Logic ---
-    // (Kode lainnya tetap sama)
     function initHeaderCarousel(images) {
         const header = document.querySelector("header");
         if (!header || header.querySelector(".header-carousel")) return;
@@ -951,7 +1156,7 @@ if (document.querySelector('.news-carousel')) {
     }
 
     const defaultImages = [
-        "https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbGG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434",
+        "https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434",
         "https://www.unj.ac.id/wp-content/uploads/2020/02/DJI_0007-1024x576.jpg",
         "https://cdns.klimg.com/merdeka.com/i/w/news/2023/07/20/1578964/670x335/potret-gedung-baru-unj-yang-megah-dan-modern-berkonsep-green-building-dan-smart-building.jpg"
     ];
