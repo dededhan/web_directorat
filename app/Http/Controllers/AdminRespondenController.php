@@ -51,28 +51,32 @@ class AdminRespondenController extends Controller
     public function getChartSummaryData()
     {
         try {
-            $user = Auth::user();
-            $role = $user->role;
-            $userInfo = $this->getUserFacultyInfo($user);
-
-            $query = Responden::query();
-
-            if ($role === 'fakultas' || $role === 'prodi') {
-                if ($userInfo['faculty_code']) {
-                    $query->where('fakultas', $userInfo['faculty_code']);
-                }
-            }
-
-            $respondens = $query->get();
+            $respondens = Responden::query()->get();
             $byFaculty = $respondens->groupBy('fakultas')->map->count();
             $byCategory = $respondens->groupBy('category')->map->count();
             $byStatus = $respondens->groupBy('status')->map->count();
 
+            $inputterIds = Responden::query()->distinct()->pluck('user_id');
+            $inputters = User::whereIn('id', $inputterIds)->get();
+
+            $byInputterFaculty = $inputters->map(function ($user) {
+                if ($user->role === 'fakultas') {
+                    return strtolower($user->name);
+                } elseif ($user->role === 'prodi') {
+                    $parts = explode('-', $user->name, 2);
+                    return strtolower($parts[0] ?? 'unknown');
+                }
+                return 'lainnya';
+            })->countBy();
+
             return response()->json([
                 'byFaculty' => $byFaculty,
                 'byCategory' => $byCategory,
-                'byStatus' => $byStatus
+                'byStatus' => $byStatus,
+                'byInputterFaculty' => $byInputterFaculty
             ]);
+
+
         } catch (\Exception $e) {
             Log::error('Error fetching chart summary data: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to fetch chart data'], 500);
