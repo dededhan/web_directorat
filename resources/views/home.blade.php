@@ -938,232 +938,81 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // --- PERBAIKAN: Swiper Carousel untuk Program (DIPERBAIKI) ---
+    // --- Swiper Carousel untuk Program (DIPERBAIKI) ---
     const programCarouselElement = document.querySelector('.program-carousel');
     if (programCarouselElement) {
         const programSwiper = new Swiper('.program-carousel', {
             loop: true,
-            centeredSlides: false,
-            slidesPerView: 'auto', // Akan di-override oleh breakpoints
-            spaceBetween: 20,
-            
-            // KUNCI: Prevent peek dengan watchSlidesVisibility
-            watchSlidesVisibility: true,
-            watchSlidesProgress: true,
-            
-            // KUNCI: Set slide bounds
-            slidesOffsetBefore: 0,
-            slidesOffsetAfter: 0,
-            
+            spaceBetween: 24, // Spacing default
             autoplay: {
                 delay: 3000,
                 disableOnInteraction: false,
             },
-            
             pagination: {
                 el: '.program-carousel-container .swiper-pagination',
                 clickable: true,
-                dynamicBullets: true,
             },
-            
             navigation: {
                 nextEl: '.program-carousel-container .swiper-button-next',
                 prevEl: '.program-carousel-container .swiper-button-prev',
             },
-            
-            // BREAKPOINTS dengan exact slide counts
+            // Konfigurasi responsif untuk jumlah slide yang terlihat
             breakpoints: {
-                // Mobile: hanya 1 slide visible
                 320: {
                     slidesPerView: 1,
                     spaceBetween: 16,
-                    centeredSlides: false,
-                    slidesOffsetBefore: 0,
-                    slidesOffsetAfter: 0,
                 },
-                // Tablet: hanya 2 slides visible
                 768: {
                     slidesPerView: 2,
                     spaceBetween: 20,
-                    centeredSlides: false,
-                    slidesOffsetBefore: 0,
-                    slidesOffsetAfter: 0,
                 },
-                // Desktop: hanya 3 slides visible
                 1024: {
                     slidesPerView: 3,
                     spaceBetween: 24,
-                    centeredSlides: false,
-                    slidesOffsetBefore: 0,
-                    slidesOffsetAfter: 0,
                 },
             },
-            
-            // Additional settings to prevent peek
-            watchOverflow: true,
+            // Memastikan Swiper berjalan dengan baik saat ada perubahan DOM
             observer: true,
             observeParents: true,
-            roundLengths: true, // Round slide sizes
-            
-            // KUNCI: Callback untuk hide overflow slides
-            on: {
-                init: function() {
-                    this.slides.forEach((slide, index) => {
-                        if (index >= this.params.slidesPerView) {
-                            slide.style.display = 'none';
-                        }
-                    });
-                },
-                slideChange: function() {
-                    // Ensure only visible slides are shown
-                    const visibleSlides = this.params.slidesPerView;
-                    this.slides.forEach((slide, index) => {
-                        const slideIndex = index - this.loopedSlides;
-                        const activeIndex = this.activeIndex - this.loopedSlides;
-                        
-                        if (slideIndex >= activeIndex && slideIndex < activeIndex + visibleSlides) {
-                            slide.style.display = 'flex';
-                            slide.style.opacity = '1';
-                        } else if (slideIndex < activeIndex || slideIndex >= activeIndex + visibleSlides) {
-                            slide.style.opacity = '0';
-                        }
-                    });
-                }
-            }
         });
     }
 
-    // --- PERBAIKAN: Swiper Carousel untuk News/Berita Unggulan (DIPERBAIKI) ---
+    // --- Swiper Carousel untuk News/Berita Unggulan (DIPERBAIKI) ---
     const newsCarouselElement = document.querySelector('.news-carousel');
     if (newsCarouselElement) {
         const newsSwiper = new Swiper('.news-carousel', {
             loop: true,
-            centeredSlides: false,
-            slidesPerView: 'auto', // Akan di-override oleh breakpoints
-            spaceBetween: 20,
-            
-            // KUNCI: Prevent peek dengan watchSlidesVisibility
-            watchSlidesVisibility: true,
-            watchSlidesProgress: true,
-            
-            // KUNCI: Set slide bounds
-            slidesOffsetBefore: 0,
-            slidesOffsetAfter: 0,
-            
+            spaceBetween: 24, // Spacing default
             autoplay: {
                 delay: 3500,
                 disableOnInteraction: false,
             },
-            
             pagination: {
                 el: '.news-carousel-container .swiper-pagination',
                 clickable: true,
-                dynamicBullets: true,
             },
-            
             navigation: {
                 nextEl: '.news-carousel-container .swiper-button-next',
                 prevEl: '.news-carousel-container .swiper-button-prev',
             },
-            
-            // BREAKPOINTS dengan exact slide counts
+            // Konfigurasi responsif untuk jumlah slide yang terlihat
             breakpoints: {
-                // Mobile: hanya 1 slide visible
                 320: {
                     slidesPerView: 1,
                     spaceBetween: 16,
-                    centeredSlides: false,
-                    slidesOffsetBefore: 0,
-                    slidesOffsetAfter: 0,
                 },
-                // Tablet: hanya 2 slides visible
                 768: {
                     slidesPerView: 2,
                     spaceBetween: 20,
-                    centeredSlides: false,
-                    slidesOffsetBefore: 0,
-                    slidesOffsetAfter: 0,
                 },
-                // Desktop: hanya 3 slides visible
                 1024: {
                     slidesPerView: 3,
                     spaceBetween: 24,
-                    centeredSlides: false,
-                    slidesOffsetBefore: 0,
-                    slidesOffsetAfter: 0,
                 },
             },
-            
-            // Additional settings to prevent peek
-            watchOverflow: true,
+            // Memastikan Swiper berjalan dengan baik saat ada perubahan DOM
             observer: true,
             observeParents: true,
-            roundLengths: true, // Round slide sizes
-            
-            // KUNCI: Callback untuk hide overflow slides
-            on: {
-                init: function() {
-                    this.slides.forEach((slide, index) => {
-                        if (index >= this.params.slidesPerView) {
-                            slide.style.display = 'none';
-                        }
-                    });
-                },
-                slideChange: function() {
-                    // Ensure only visible slides are shown
-                    const visibleSlides = this.params.slidesPerView;
-                    this.slides.forEach((slide, index) => {
-                        const slideIndex = index - this.loopedSlides;
-                        const activeIndex = this.activeIndex - this.loopedSlides;
-                        
-                        if (slideIndex >= activeIndex && slideIndex < activeIndex + visibleSlides) {
-                            slide.style.display = 'flex';
-                            slide.style.opacity = '1';
-                        } else if (slideIndex < activeIndex || slideIndex >= activeIndex + visibleSlides) {
-                            slide.style.opacity = '0';
-                        }
-                    });
-                }
-            }
-        });
-    }
-    function addCarouselMasks() {
-        const carouselContainers = document.querySelectorAll('.program-carousel-container, .news-carousel-container');
-        
-        carouselContainers.forEach(container => {
-            // Check if masks already exist
-            if (container.querySelector('.carousel-mask-left')) return;
-            
-            // Create left mask
-            const leftMask = document.createElement('div');
-            leftMask.className = 'carousel-mask-left';
-            leftMask.style.cssText = `
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 60px;
-                height: 100%;
-                background: linear-gradient(to right, #f9fafb 0%, transparent 100%);
-                z-index: 15;
-                pointer-events: none;
-            `;
-            
-            // Create right mask  
-            const rightMask = document.createElement('div');
-            rightMask.className = 'carousel-mask-right';
-            rightMask.style.cssText = `
-                position: absolute;
-                right: 0;
-                top: 0;
-                width: 60px;
-                height: 100%;
-                background: linear-gradient(to left, #f9fafb 0%, transparent 100%);
-                z-index: 15;
-                pointer-events: none;
-            `;
-            
-            container.appendChild(leftMask);
-            container.appendChild(rightMask);
         });
     }
 
