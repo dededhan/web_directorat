@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\RespondenInvitationMail;
 use Illuminate\Validation\Rule;
 use App\Models\Responden;
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\DB;
 
 class AdminRespondenController extends Controller
 {
@@ -39,6 +39,58 @@ class AdminRespondenController extends Controller
         return ['faculty_code' => $userFaculty];
     }
 
+    public function laporan()
+    {
+        if (Auth::user()->role !== 'admin_direktorat') {
+            return redirect()->route('admin.dashboard')->with('error', 'Tidak ada akses');
+        }
+        return view('admin.responden_laporan');
+    }
+
+
+    public function getChartSummaryData()
+    {
+        try {
+            $respondens = Responden::query()->get();
+
+            $normalizedRespondens = $respondens->map(function ($responden) {
+                $responden->category = Str::lower($responden->category);
+                $responden->fakultas = Str::lower($responden->fakultas);
+                return $responden;
+            });
+            $byFaculty = $normalizedRespondens->groupBy('fakultas')->map->count();
+            $byCategory = $normalizedRespondens->groupBy('category')->map->count();
+            $byStatus = $respondens->groupBy('status')->map->count();
+            
+            $inputterIds = Responden::query()->distinct()->pluck('user_id');
+            $inputters = User::whereIn('id', $inputterIds)->get();
+
+            $byInputterFaculty = $inputters->map(function ($user) {
+                if ($user->role === 'fakultas') {
+                    return strtolower($user->name);
+                } elseif ($user->role === 'prodi') {
+                    $parts = explode('-', $user->name, 2);
+                    return strtolower($parts[0] ?? 'unknown');
+                }
+                return 'lainnya';
+            })->countBy();
+
+            return response()->json([
+                'byFaculty' => $byFaculty,
+                'byCategory' => $byCategory,
+                'byStatus' => $byStatus,
+                'byInputterFaculty' => $byInputterFaculty
+            ]);
+
+
+        } catch (\Exception $e) {
+            Log::error('Error fetching chart summary data: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to fetch chart data'], 500);
+        }
+    }
+
+
+
 
     public function index(Request $request)
     {
@@ -46,18 +98,18 @@ class AdminRespondenController extends Controller
         $role = $user->role;
         $userInfo = $this->getUserFacultyInfo($user);
 
-     
+
         $sort = $request->get('sort', 'fullname');
         $direction = $request->get('direction', 'asc');
 
-       
+
         $perPage = $request->input('per_page', 10);
         if (!in_array($perPage, [10, 50, 100, 2000])) {
-            $perPage = 10; // Default to 10 if invalid value is passed
+            $perPage = 10;
         }
-        
 
-        $allowedSorts = ['title', 'fullname', 'jabatan', 'instansi', 'email', 'phone_responden', 'nama_dosen_pengusul', 'phone_dosen', 'fakultas', 'category', 'status','created_at'];
+
+        $allowedSorts = ['title', 'fullname', 'jabatan', 'instansi', 'email', 'phone_responden', 'nama_dosen_pengusul', 'phone_dosen', 'fakultas', 'category', 'status', 'created_at'];
         if (!in_array($sort, $allowedSorts)) {
             $sort = 'fullname';
         }
@@ -92,10 +144,10 @@ class AdminRespondenController extends Controller
         }
         $query->orderBy($sort, $direction);
 
-        
+
         $respondens = $query->paginate($perPage)->appends($request->query());
 
-        
+
         $userInfo = $this->getUserFacultyInfo($user);
 
         $viewData = ['respondens' => $respondens, 'user_info' => $userInfo];
@@ -128,7 +180,6 @@ class AdminRespondenController extends Controller
         }
         $viewData = [];
         if (Auth::user()->role === 'admin_direktorat' || Auth::user()->role === 'admin_pemeringkatan') {
-            // $viewData['faculties'] = ... // Fetch faculties if admin needs to select
         }
         return view('admin.responden.create', $viewData);
     }
@@ -143,7 +194,7 @@ class AdminRespondenController extends Controller
             return redirect()->back()->with('error', 'Anda tidak diizinkan menyimpan responden.')->withInput();
         }
 
-        
+
 
         $responden = Responden::create([
             'title' => $respondenValidated['responden_title'],
@@ -157,7 +208,7 @@ class AdminRespondenController extends Controller
             'fakultas' => $respondenValidated['responden_fakultas'],
             'category' => $respondenValidated['responden_category'],
             'user_id' => $user->id,
-            
+
         ]);
 
         $redirectRouteName = 'admin.responden.index';
@@ -185,8 +236,8 @@ class AdminRespondenController extends Controller
         } elseif (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan'])) {
             return redirect()->route($role . '.dashboard')->with('error', 'Akses tidak sah.');
         }
-        
-        return response()->json($responden); 
+
+        return response()->json($responden);
     }
 
     public function edit(Responden $responden)
@@ -195,36 +246,32 @@ class AdminRespondenController extends Controller
         $role = $user->role;
         $userInfo = $this->getUserFacultyInfo($user);
 
-       
+
         if ($role === 'fakultas') {
             $userInfo = $this->getUserFacultyInfo($user);
             if (!$userInfo['faculty_code'] || $responden->fakultas !== $userInfo['faculty_code']) {
                 return response()->json(['message' => 'Akses ditolak.'], 403);
             }
         } elseif ($role === 'prodi') {
-            // User prodi hanya boleh mengedit responden yang dia buat (user_id sama)
             if ($responden->user_id !== $user->id) {
                 return response()->json(['message' => 'Akses ditolak. Anda hanya boleh mengedit data yang Anda buat.'], 403);
             }
         } elseif (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan'])) {
-            // Only admins can proceed if not a faculty member
             return response()->json(['message' => 'Akses ditolak.'], 403);
         }
 
-        // If authorization passes, always return JSON
         return response()->json($responden);
     }
 
 
-    public function update(UpdateRespondenRequest $request, Responden $responden) // UpdateRespondenRequest should have authorize() return true
+    public function update(UpdateRespondenRequest $request, Responden $responden)
     {
         $user = Auth::user();
         $role = $user->role;
-        $validated = $request->validated(); // Get validated data
+        $validated = $request->validated();
 
-       
+
         if ($role === 'prodi') {
-            // Pastikan user prodi hanya bisa mengupdate data miliknya sendiri
             if ($responden->user_id !== $user->id) {
                 return response()->json(['message' => 'Akses ditolak. Anda tidak diizinkan memperbarui data ini.'], 403);
             }
@@ -236,13 +283,13 @@ class AdminRespondenController extends Controller
         }
 
 
-        
+
         $responden->update($validated);
 
-        
+
         return response()->json([
             'message' => 'Data berhasil diperbarui',
-            'data' => $responden->fresh() // Use fresh() to get the model with updated timestamps
+            'data' => $responden->fresh()
         ]);
     }
 
@@ -294,7 +341,7 @@ class AdminRespondenController extends Controller
                 ], 200);
             }
         } else {
-            // If status is other than 'done' (e.g., from 'done' to 'dones'), just update the status
+
             $responden->update(['status' => $newStatus]);
             return response()->json([
                 'message' => 'Status berhasil diperbarui.',
@@ -357,8 +404,8 @@ class AdminRespondenController extends Controller
 
     public function import(Request $request)
     {
-        if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan','fakultas','prodi'])) {
-            
+        if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas', 'prodi'])) {
+
             if ($request->wantsJson()) {
                 return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
             }
@@ -387,17 +434,17 @@ class AdminRespondenController extends Controller
             $importedCount = $import->getImportedCount();
             $skippedCount = $import->getSkippedCount();
 
-            
+
             $successMessage = "Proses impor selesai. <br><br>" .
                 "&bull; Berhasil diimpor: <strong>" . $importedCount . "</strong> baris. <br>" .
                 "&bull; Dilewati (duplikat): <strong>" . $skippedCount . "</strong> baris.";
 
-            
+
             if ($request->wantsJson()) {
                 return response()->json(['success' => true, 'message' => $successMessage]);
             }
 
-            
+
             return redirect()->back()->with('success', $successMessage);
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
@@ -430,7 +477,6 @@ class AdminRespondenController extends Controller
         }
 
         return redirect(route($redirectRouteName))->with('success', 'Responden berhasil ditambahkan!');
-    
     }
 
 
@@ -463,46 +509,46 @@ class AdminRespondenController extends Controller
 
         $respondens = $query->paginate(25)->appends($request->query());
 
-        
+
         $role = Auth::user()->role;
         $viewName = 'admin.respondenadmin'; // Default
         if ($role === 'admin_pemeringkatan') {
             $viewName = 'admin_pemeringkatan.respondenadmin';
-        } 
+        }
 
         return view($viewName, compact('respondens'));
     }
 
-      public function export(Request $request)
+    public function export(Request $request)
     {
-        $user = Auth::user(); 
-        if (!in_array($user->role, ['admin_direktorat', 'admin_pemeringkatan','fakultas','prodi'])) {
+        $user = Auth::user();
+        if (!in_array($user->role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas', 'prodi'])) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
 
-        
+
         $kategori = $request->input('kategori');
         $fakultas = $request->input('fakultas'); // Filter ini hanya digunakan oleh admin
-        
-        
+
+
         return Excel::download(new RespondenExport($user, $kategori, $fakultas), 'responden-data.xlsx');
     }
-    
+
     public function exportCSV(Request $request)
     {
-        $user = Auth::user(); 
-        if (!in_array($user->role, ['admin_direktorat', 'admin_pemeringkatan','fakultas','prodi'])) {
+        $user = Auth::user();
+        if (!in_array($user->role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas', 'prodi'])) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
-        
+
         // Ambil filter dari request
         $kategori = $request->input('kategori');
         $fakultas = $request->input('fakultas'); // Filter ini hanya digunakan oleh admin
 
-        
+
         return Excel::download(new RespondenExport($user, $kategori, $fakultas), 'responden-data.csv');
     }
-    
+
 
 
     public function getChartData(Request $request)
@@ -514,7 +560,6 @@ class AdminRespondenController extends Controller
 
             $query = Responden::query();
 
-            // Apply role-based filtering
             if ($role === 'fakultas' || $role === 'prodi') {
                 if ($userInfo['faculty_code']) {
                     $query->where('fakultas', $userInfo['faculty_code']);
@@ -524,7 +569,6 @@ class AdminRespondenController extends Controller
                 }
             }
 
-            // Get all responden data with required fields
             $respondens = $query->select([
                 'id',
                 'fullname',
@@ -534,7 +578,6 @@ class AdminRespondenController extends Controller
                 'created_at'
             ])->get();
 
-            // Transform data for frontend
             $chartData = $respondens->map(function ($responden) {
                 return [
                     'id' => $responden->id,

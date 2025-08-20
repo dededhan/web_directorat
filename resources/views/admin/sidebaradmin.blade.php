@@ -1,6 +1,4 @@
-@vite([
-        'resources/css/admin/sidebar_dashboardadmin.css'
-    ])
+@vite(['resources/css/admin/sidebar_dashboardadmin.css'])
 <!-- SIDEBAR -->
 <section id="sidebar">
     <!-- Brand Logo -->
@@ -130,6 +128,12 @@
                     <a href="{{ route('admin.responden.index') }}">
                         <i class='bx bxs-user-voice'></i>
                         <span class="text">Responden</span>
+                    </a>
+                </li>
+                <li class="{{ request()->routeIs('admin.responden_laporan') ? 'active' : '' }}">
+                    <a href="{{ route('admin.responden_laporan') }}">
+                        <i class='bx bxs-bar-chart-alt-2'></i>
+                        <span class="text">Laporan Responden</span>
                     </a>
                 </li>
                 <li class="{{ request()->routeIs('admin.qsgeneraltable') ? 'active' : '' }}">
