@@ -345,6 +345,8 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function () {
+        
+        // --- Navbar & Mobile Sidebar Logic ---
         const navbar = document.querySelector('.navbar.hidden.md\\:block');
         if (navbar) {
             window.addEventListener('scroll', () => {
@@ -379,53 +381,55 @@
         if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
         if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // --- Smart Carousel Initializer ---
-        const initSwiper = (containerSelector, config) => {
-            const container = document.querySelector(containerSelector);
-            if (!container) return;
-            
-            const slides = container.querySelectorAll('.swiper-slide');
-            const slideCount = slides.length;
-
-            // If 3 or fewer slides, disable loop and hide navigation
-            if (slideCount <= 3) {
-                config.loop = false;
-                config.autoplay = false; // Also disable autoplay
-                const navNext = container.parentElement.querySelector('.swiper-button-next');
-                const navPrev = container.parentElement.querySelector('.swiper-button-prev');
-                if(navNext) navNext.style.display = 'none';
-                if(navPrev) navPrev.style.display = 'none';
-            }
-            
-            new Swiper(container, config);
-        };
-
         // --- Initialize Program Carousel ---
-        initSwiper('.program-carousel', {
-            loop: true,
-            autoplay: { delay: 5000, disableOnInteraction: false },
-            pagination: { el: '.program-carousel-container .swiper-pagination', clickable: true },
-            navigation: { nextEl: '.program-carousel-container .swiper-button-next', prevEl: '.program-carousel-container .swiper-button-prev' },
-            breakpoints: {
-                320: { slidesPerView: 1, spaceBetween: 16 },
-                768: { slidesPerView: 2, spaceBetween: 24 },
-                1024: { slidesPerView: 3, spaceBetween: 32 }
-            }
-        });
+        if (document.querySelector('.program-carousel')) {
+            new Swiper('.program-carousel', {
+                loop: {{ $programLayanan->skip(3)->count() > 3 ? 'true' : 'false' }}, // Loop only if more than 3 cards
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.program-carousel-container .swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.program-carousel-container .swiper-button-next',
+                    prevEl: '.program-carousel-container .swiper-button-prev',
+                },
+                breakpoints: {
+                    320: { slidesPerView: 1, spaceBetween: 16 },
+                    768: { slidesPerView: 2, spaceBetween: 24 },
+                    1024: { slidesPerView: 3, spaceBetween: 32 }
+                }
+            });
+        }
 
         // --- Initialize News Carousel ---
-        initSwiper('.news-carousel', {
-            loop: true,
-            autoplay: { delay: 5500, disableOnInteraction: false },
-            pagination: { el: '.news-carousel-container .swiper-pagination', clickable: true },
-            navigation: { nextEl: '.news-carousel-container .swiper-button-next', prevEl: '.news-carousel-container .swiper-button-prev' },
-            breakpoints: {
-                320: { slidesPerView: 1, spaceBetween: 16 },
-                768: { slidesPerView: 2, spaceBetween: 24 },
-                1024: { slidesPerView: 3, spaceBetween: 32 }
-            }
-        });
+        if (document.querySelector('.news-carousel')) {
+            new Swiper('.news-carousel', {
+                loop: {{ $featuredNews->count() > 3 ? 'true' : 'false' }}, // Loop only if more than 3 cards
+                 autoplay: {
+                    delay: 5500, // Slightly different delay
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.news-carousel-container .swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.news-carousel-container .swiper-button-next',
+                    prevEl: '.news-carousel-container .swiper-button-prev',
+                },
+                breakpoints: {
+                    320: { slidesPerView: 1, spaceBetween: 16 },
+                    768: { slidesPerView: 2, spaceBetween: 24 },
+                    1024: { slidesPerView: 3, spaceBetween: 32 }
+                }
+            });
+        }
 
+        // --- Fetch Instagram & YouTube (unchanged) ---
         const instaContainer = document.getElementById('instagram-api-feed-container');
         if (instaContainer) {
             fetch('/api/instagram-posts')
@@ -496,7 +500,8 @@
                     videoContainer.innerHTML = '<p class="col-span-full text-center text-gray-500">Gagal memuat video.</p>';
                 });
         }
-
+        
+        // --- Header Carousel Logic ---
         function initHeaderCarousel(images) {
             const header = document.querySelector("header");
             if (!header || header.querySelector(".header-carousel")) return;
@@ -581,6 +586,6 @@
                 initHeaderCarousel(defaultImages);
             });
     });
-    </script>
+</script>
 </body>
 </html>
