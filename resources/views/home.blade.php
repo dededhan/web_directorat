@@ -1127,6 +1127,45 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+    function addCarouselMasks() {
+        const carouselContainers = document.querySelectorAll('.program-carousel-container, .news-carousel-container');
+        
+        carouselContainers.forEach(container => {
+            // Check if masks already exist
+            if (container.querySelector('.carousel-mask-left')) return;
+            
+            // Create left mask
+            const leftMask = document.createElement('div');
+            leftMask.className = 'carousel-mask-left';
+            leftMask.style.cssText = `
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 60px;
+                height: 100%;
+                background: linear-gradient(to right, #f9fafb 0%, transparent 100%);
+                z-index: 15;
+                pointer-events: none;
+            `;
+            
+            // Create right mask  
+            const rightMask = document.createElement('div');
+            rightMask.className = 'carousel-mask-right';
+            rightMask.style.cssText = `
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: 60px;
+                height: 100%;
+                background: linear-gradient(to left, #f9fafb 0%, transparent 100%);
+                z-index: 15;
+                pointer-events: none;
+            `;
+            
+            container.appendChild(leftMask);
+            container.appendChild(rightMask);
+        });
+    }
 
     // --- Fetch Instagram Posts ---
     const instaContainer = document.getElementById('instagram-api-feed-container');
