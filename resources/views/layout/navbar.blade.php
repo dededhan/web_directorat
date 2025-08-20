@@ -16,28 +16,28 @@
         <ul class="flex items-center space-x-6 text-sm font-medium">
             <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400 transition-colors">Beranda</a></li>
             
-            <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400 transition-colors flex items-center">Profil <i class="fas fa-chevron-down ml-1 text-xs"></i></a>
-                <ul class="absolute hidden group-hover:block bg-white text-gray-800 py-2 mt-2 rounded-lg shadow-xl w-60">
+            <li class="relative">
+                {{-- Removed 'group', added 'desktop-dropdown-toggle' for JS targeting --}}
+                <a href="#" class="desktop-dropdown-toggle text-white hover:text-yellow-400 transition-colors flex items-center">Profil <i class="fas fa-chevron-down ml-1 text-xs"></i></a>
+                {{-- Removed 'group-hover:block', added 'desktop-dropdown-menu' --}}
+                <ul class="desktop-dropdown-menu absolute hidden bg-white text-gray-800 py-2 mt-2 rounded-lg shadow-xl w-60 z-10">
                     <li><a href="{{ route('pimpinan.pimpinan') }}" class="block px-4 py-2 hover:bg-gray-100">Pimpinan Dit. ISIP</a></li>
                     <li><a href="{{ route('profile.profile') }}" class="block px-4 py-2 hover:bg-gray-100">Tugas Pokok dan Fungsi</a></li>
                     <li><a href="{{ route('strukturorganisasi') }}" class="block px-4 py-2 hover:bg-gray-100">Struktur Organisasi</a></li>
                 </ul>
             </li>
-            <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400 transition-colors flex items-center">Sub Direktorat <i class="fas fa-chevron-down ml-1 text-xs"></i></a>
-                <ul class="absolute hidden group-hover:block bg-white text-gray-800 py-2 mt-2 rounded-lg shadow-xl w-72">
+            <li class="relative">
+                <a href="#" class="desktop-dropdown-toggle text-white hover:text-yellow-400 transition-colors flex items-center">Sub Direktorat <i class="fas fa-chevron-down ml-1 text-xs"></i></a>
+                <ul class="desktop-dropdown-menu absolute hidden bg-white text-gray-800 py-2 mt-2 rounded-lg shadow-xl w-72 z-10">
                     <li><a href="{{ route('subdirektorat-inovasi.landingpage') }}" class="block px-4 py-2 hover:bg-gray-100">Subdirektorat Inovasi dan Hilirisasi</a></li>
                     <li><a href="{{ route('pemeringkatan.landingpage') }}" class="block px-4 py-2 hover:bg-gray-100">Subdirektorat Sistem Informasi dan Pemeringkatan</a></li>
                 </ul>
             </li>
-            <li class="relative group">
-                <a href="{{ route('Berita.beritahome') }}" class="text-white hover:text-yellow-400 transition-colors">Berita</a>
-            </li>
+            <li><a href="{{ route('Berita.beritahome') }}" class="text-white hover:text-yellow-400 transition-colors">Berita</a></li>
             
-            <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400 transition-colors flex items-center">Galeri <i class="fas fa-chevron-down ml-1 text-xs"></i></a>
-                <ul class="absolute hidden group-hover:block bg-white text-gray-800 py-2 mt-2 rounded-lg shadow-xl w-60">
+            <li class="relative">
+                <a href="#" class="desktop-dropdown-toggle text-white hover:text-yellow-400 transition-colors flex items-center">Galeri <i class="fas fa-chevron-down ml-1 text-xs"></i></a>
+                <ul class="desktop-dropdown-menu absolute hidden bg-white text-gray-800 py-2 mt-2 rounded-lg shadow-xl w-60 z-10">
                     <li><a href="{{ route('alumni') }}" class="block px-4 py-2 hover:bg-gray-100">Alumni Berdampak</a></li>
                     <li><a href="{{ route('galeri.sustainability') }}" class="block px-4 py-2 hover:bg-gray-100">Sustainability</a></li>
                 </ul>

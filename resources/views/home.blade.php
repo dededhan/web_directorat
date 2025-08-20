@@ -342,6 +342,7 @@
             font-family: "Font Awesome 5 Free", "Font Awesome 5 Brands", "FontAwesome" !important;
         }
     </style>
+
 </head>
 
 <body class="font-sans bg-gray-50">
@@ -596,7 +597,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         
         // --- Navbar Scroll Effect ---
-        const navbar = document.querySelector('.navbar');
+        const navbar = document.querySelector('.navbar.hidden.md\\:block');
         if (navbar) {
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 50) {
@@ -607,12 +608,38 @@
             }, { passive: true });
         }
 
+        // --- Desktop Navbar Dropdown Logic (Click-based) ---
+        const desktopDropdownToggles = document.querySelectorAll('.desktop-dropdown-toggle');
+        desktopDropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function (e) {
+                e.preventDefault();
+                const menu = this.nextElementSibling;
+                // Close other open menus
+                document.querySelectorAll('.desktop-dropdown-menu').forEach(otherMenu => {
+                    if (otherMenu !== menu) {
+                        otherMenu.classList.add('hidden');
+                    }
+                });
+                menu.classList.toggle('hidden');
+            });
+        });
+
+        // Close desktop dropdowns when clicking outside
+        window.addEventListener('click', function(e) {
+            if (!e.target.closest('.desktop-dropdown-toggle')) {
+                document.querySelectorAll('.desktop-dropdown-menu').forEach(menu => {
+                    menu.classList.add('hidden');
+                });
+            }
+        });
+
+
         // --- Mobile Sidebar Logic ---
         const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
         const mobileSidebar = document.getElementById('mobile-sidebar');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
         const closeSidebarBtn = document.getElementById('close-sidebar');
-        const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
+        const mobileDropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
 
         const openSidebar = () => {
             if (mobileSidebar && sidebarOverlay) {
@@ -636,7 +663,7 @@
         if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
         if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
 
-        dropdownButtons.forEach(button => {
+        mobileDropdownButtons.forEach(button => {
             button.addEventListener('click', function () {
                 const dropdownMenu = this.nextElementSibling;
                 const dropdownIcon = this.querySelector('.fa-chevron-down');
@@ -650,10 +677,10 @@
             });
         });
 
-        // --- Swiper Carousel for Programs ---
+        // --- Swiper Carousel for Programs (BUG FIX APPLIED) ---
         if (document.querySelector('.program-carousel')) {
             const swiper = new Swiper('.program-carousel', {
-                loop: false,
+                loop: false, 
                 slidesPerView: 1,
                 spaceBetween: 16,
                 pagination: {
@@ -666,7 +693,11 @@
                 },
                 breakpoints: {
                     640: { slidesPerView: 2, spaceBetween: 24 },
-                    1024: { slidesPerView: 3, spaceBetween: 32 },
+                    // Correctly set slidesPerView to 3 for desktop
+                    1024: { 
+                        slidesPerView: 3, 
+                        spaceBetween: 32 
+                    },
                 }
             });
         }
@@ -727,7 +758,6 @@
                         
                         if (!videoId) return;
 
-                        const embedUrl = `https://www.youtube.com/embed/${videoId}`;
                         const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 
                         const card = `
