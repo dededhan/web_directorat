@@ -101,10 +101,13 @@ Route::prefix('admin')->name('admin.')
         Route::post('/pimpinan/upload', [PimpinanController::class, 'upload'])
             ->name('pimpinan.upload');
 
+        Route::get('/responden/laporan', [AdminRespondenController::class, 'laporan'])
+            ->name('responden_laporan');
 
         Route::resource('/responden', AdminRespondenController::class)->except(['update']);
         Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
             ->name('responden.update');
+
 
         // Untuk update status khusus (POST)
         Route::post('/responden/update-status/{id}', [AdminRespondenController::class, 'updateStatus'])

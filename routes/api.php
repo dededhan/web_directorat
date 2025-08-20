@@ -20,8 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Existing API Routes have been moved here from web.php
-Route::get('/responden-chart-data', [AdminRespondenController::class, 'getChartData'])->name('api.responden.chart-data');
+
 Route::get('/carousel-images', [GalleryController::class, 'getCarouselImages']);
 Route::get('/announcements', [PengumumanController::class, 'getActiveAnnouncements'])->name('api.announcements');
 Route::get('/youtube-videos', [YoutubeController::class, 'getFrontendVideos'])->name('api.youtube-videos');
@@ -29,12 +28,10 @@ Route::get('/instagram-posts', [InstagramApiController::class, 'getPosts']);
 Route::get('/documents', [DokumenController::class, 'apiGetDocuments'])->name('api.documents');
 Route::get('/Berita/{id}', [BeritaController::class, 'getBeritaDetail']);
 
-// SDG Center API routes
 Route::get('/sdgscenter/programs', [ProgramKegiatanController::class, 'getSDGCenterPrograms'])->name('api.sdgscenter.programs');
 Route::get('/sdgscenter/publications', [PublikasiRisetController::class, 'getSDGCenterPublications'])->name('api.sdgscenter.publications');
 Route::get('/public/sustainability-courses/{faculty}', [App\Http\Controllers\AdminMataKuliahController::class, 'getPublicSustainabilityCourses']);
 
-// Sustainability data routes
 Route::prefix('pemeringkatan/sustainability')->name('api.pemeringkatan.sustainability.')->group(function() {
     Route::get('/data', [AdminMataKuliahController::class, 'getSustainabilityData'])->name('data');
     Route::get('/kegiatan/yearly', [AdminSustainabilityController::class, 'getYearlyData'])->name('kegiatan.yearly');
@@ -43,3 +40,9 @@ Route::prefix('pemeringkatan/sustainability')->name('api.pemeringkatan.sustainab
 });
 
 Route::get('/aktivitas-dosen-asing/{id}', [InternationalFacultyStaffActivitiesController::class, 'show'])->name('api.aktivitas-dosen-asing.show');
+
+
+//Chart Responden
+// Route::get('/responden-chart-data', [AdminRespondenController::class, 'getChartData'])->name('api.responden.chart-data');
+Route::get('/responden/chart-summary', [AdminRespondenController::class, 'getChartSummaryData'])
+    ->name('api.responden.chartSummary');
