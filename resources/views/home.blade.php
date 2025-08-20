@@ -348,176 +348,214 @@
         }
     </style>
     <style>
-        /* CSS TAMBAHAN UNTUK PERBAIKAN CAROUSEL */
+        .program-carousel-container,
+        .news-carousel-container {
+            position: relative;
+            overflow: hidden; /* Kunci utama untuk menyembunyikan overflow */
+            padding: 0 60px; /* Beri ruang untuk navigation buttons */
+            margin: 0 -10px; /* Offset untuk centering */
+        }
 
-/* Swiper Carousel Customization - PERBAIKAN */
-.program-carousel .swiper-button-next,
-.program-carousel .swiper-button-prev,
-.news-carousel-container .swiper-button-next,
-.news-carousel-container .swiper-button-prev {
-    color: #14B8A6; /* teal-500 */
-    background-color: white;
-    border-radius: 9999px;
-    width: 40px;
-    height: 40px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-    margin-top: 0;
-    top: 50%;
-    transform: translateY(-50%);
-}
+        /* Container untuk carousel dengan mask/clip */
+        .program-carousel,
+        .news-carousel {
+            overflow: hidden !important; /* Force hide overflow */
+            position: relative;
+            width: 100%;
+        }
 
-.program-carousel .swiper-button-next::after,
-.program-carousel .swiper-button-prev::after,
-.news-carousel-container .swiper-button-next::after,
-.news-carousel-container .swiper-button-prev::after {
-    font-size: 18px;
-    font-weight: bold;
-}
+        .program-carousel .swiper-wrapper,
+        .news-carousel .swiper-wrapper {
+            overflow: visible; /* Allow internal movement */
+            align-items: stretch;
+            transform-style: preserve-3d; /* Better transitions */
+        }
 
-.program-carousel .swiper-pagination-bullet-active,
-.news-carousel-container .swiper-pagination-bullet-active {
-    background-color: #14B8A6;
-}
+        /* Slide styling - PREVENT PEEK */
+        .program-carousel .swiper-slide,
+        .news-carousel .swiper-slide {
+            height: auto;
+            display: flex;
+            box-sizing: border-box;
+            opacity: 1 !important; /* Ensure visible slides are fully opaque */
+        }
 
-/* PENTING: Batasi maksimal cards yang tampil */
-.program-carousel .swiper-wrapper,
-.news-carousel .swiper-wrapper {
-    align-items: stretch;
-}
+        /* Hide partial slides using clip-path method */
+        .program-carousel .swiper-wrapper::before,
+        .program-carousel .swiper-wrapper::after,
+        .news-carousel .swiper-wrapper::before,
+        .news-carousel .swiper-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 30px;
+            height: 100%;
+            background: linear-gradient(to right, white, transparent);
+            z-index: 10;
+            pointer-events: none;
+        }
 
-.program-carousel .swiper-slide,
-.news-carousel .swiper-slide {
-    height: auto;
-    display: flex;
-}
+        .program-carousel .swiper-wrapper::before,
+        .news-carousel .swiper-wrapper::before {
+            left: 0;
+            background: linear-gradient(to right, white 0%, transparent 100%);
+        }
 
-/* Responsif untuk memastikan card tidak overflow */
-@media (max-width: 767px) {
-    .program-carousel .swiper-slide,
-    .news-carousel .swiper-slide {
-        width: 100% !important;
-        margin-right: 16px !important;
-    }
-}
+        .program-carousel .swiper-wrapper::after,
+        .news-carousel .swiper-wrapper::after {
+            right: 0;
+            background: linear-gradient(to left, white 0%, transparent 100%);
+        }
 
-@media (min-width: 768px) and (max-width: 1023px) {
-    .program-carousel .swiper-slide,
-    .news-carousel .swiper-slide {
-        width: calc(50% - 10px) !important;
-        margin-right: 20px !important;
-    }
-}
+        /* Navigation Button Positioning - OUTSIDE container */
+        .program-carousel-container .swiper-button-prev,
+        .news-carousel-container .swiper-button-prev {
+            left: 10px !important;
+            z-index: 20;
+            background-color: white !important;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+        }
 
-@media (min-width: 1024px) {
-    .program-carousel .swiper-slide,
-    .news-carousel .swiper-slide {
-        width: calc(33.333% - 16px) !important;
-        margin-right: 24px !important;
-    }
-}
+        .program-carousel-container .swiper-button-next,
+        .news-carousel-container .swiper-button-next {
+            right: 10px !important;
+            z-index: 20;
+            background-color: white !important;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+        }
 
-/* Pastikan card dalam carousel memiliki tinggi yang sama */
-.program-carousel .program-card,
-.news-carousel .bg-white {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
+        /* Responsive Settings */
+        @media (max-width: 767px) {
+            .program-carousel-container,
+            .news-carousel-container {
+                padding: 0 50px; /* Smaller padding for mobile */
+            }
+            
+            /* Hide navigation on mobile if needed */
+            .program-carousel-container .swiper-button-next,
+            .program-carousel-container .swiper-button-prev,
+            .news-carousel-container .swiper-button-next,
+            .news-carousel-container .swiper-button-prev {
+                display: none; /* Hide on mobile, use swipe instead */
+            }
+            
+            .program-carousel .swiper-slide,
+            .news-carousel .swiper-slide {
+                width: 100% !important;
+                margin-right: 16px !important;
+            }
+        }
 
-.program-carousel .program-card .p-6,
-.news-carousel .p-5 {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .program-carousel .swiper-slide,
+            .news-carousel .swiper-slide {
+                width: calc(50% - 10px) !important;
+                margin-right: 20px !important;
+            }
+        }
 
-.program-carousel .program-card .mt-4,
-.news-carousel .mt-auto {
-    margin-top: auto;
-}
+        @media (min-width: 1024px) {
+            .program-carousel .swiper-slide,
+            .news-carousel .swiper-slide {
+                width: calc(33.333% - 16px) !important;
+                margin-right: 24px !important;
+            }
+        }
 
-/* Carousel Container Spacing */
-.program-carousel-container,
-.news-carousel-container {
-    position: relative;
-    overflow: hidden;
-}
+        /* Alternative method using mask (more modern browsers) */
+        @supports (mask: linear-gradient(to right, transparent, white)) {
+            .program-carousel,
+            .news-carousel {
+                mask: linear-gradient(to right, 
+                    transparent 0%, 
+                    white 5%, 
+                    white 95%, 
+                    transparent 100%
+                );
+                -webkit-mask: linear-gradient(to right, 
+                    transparent 0%, 
+                    white 5%, 
+                    white 95%, 
+                    transparent 100%
+                );
+            }
+            
+            /* Remove pseudo-elements if mask is supported */
+            .program-carousel .swiper-wrapper::before,
+            .program-carousel .swiper-wrapper::after,
+            .news-carousel .swiper-wrapper::before,
+            .news-carousel .swiper-wrapper::after {
+                display: none;
+            }
+        }
 
-/* Pagination Styling */
-.program-carousel-container .swiper-pagination,
-.news-carousel-container .swiper-pagination {
-    position: relative;
-    margin-top: 2rem;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-}
+        /* Card styling to ensure proper display */
+        .program-carousel .program-card,
+        .news-carousel .bg-white {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            box-sizing: border-box;
+        }
 
-.program-carousel-container .swiper-pagination-bullet,
-.news-carousel-container .swiper-pagination-bullet {
-    width: 12px;
-    height: 12px;
-    background-color: #d1d5db;
-    border-radius: 50%;
-    opacity: 1;
-    transition: all 0.3s ease;
-}
+        /* Ensure smooth transitions */
+        .program-carousel .swiper-wrapper,
+        .news-carousel .swiper-wrapper {
+            transition-timing-function: ease-out;
+        }
 
-.program-carousel-container .swiper-pagination-bullet-active,
-.news-carousel-container .swiper-pagination-bullet-active {
-    background-color: #14B8A6;
-    transform: scale(1.2);
-}
+        /* Fix untuk pagination */
+        .program-carousel-container .swiper-pagination,
+        .news-carousel-container .swiper-pagination {
+            position: relative;
+            margin-top: 2rem;
+            text-align: center;
+        }
 
-/* Fix untuk navigation buttons */
-.program-carousel-container .swiper-button-prev {
-    left: -5px;
-}
+        /* Loading state */
+        .carousel-loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            background-color: #f9fafb;
+            border-radius: 8px;
+            margin: 0 60px;
+        }
 
-.program-carousel-container .swiper-button-next {
-    right: -5px;
-}
+        /* Override untuk memastikan no peek pada slides */
+        .swiper-container-horizontal > .swiper-wrapper {
+            overflow: hidden !important;
+        }
 
-.news-carousel-container .swiper-button-prev {
-    left: -5px;
-}
+        /* Specific fix untuk section containers */
+        .news-carousel-section,
+        .program-section {
+            overflow: hidden;
+            position: relative;
+        }
 
-.news-carousel-container .swiper-button-next {
-    right: -5px;
-}
+        /* Gradient overlay to hide edges completely */
+        .carousel-mask-left,
+        .carousel-mask-right {
+            position: absolute;
+            top: 0;
+            width: 60px;
+            height: 100%;
+            z-index: 15;
+            pointer-events: none;
+        }
 
-/* Hover effects untuk carousel cards */
-.program-carousel .swiper-slide:hover .program-card,
-.news-carousel .swiper-slide:hover .bg-white {
-    transform: translateY(-2px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
+        .carousel-mask-left {
+            left: 0;
+            background: linear-gradient(to right, white 0%, transparent 100%);
+        }
 
-/* Loading state untuk carousel */
-.carousel-loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 300px;
-    background-color: #f9fafb;
-    border-radius: 8px;
-}
-
-.carousel-loading::after {
-    content: "";
-    width: 40px;
-    height: 40px;
-    border: 4px solid #e5e7eb;
-    border-top-color: #14B8A6;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
+        .carousel-mask-right {
+            right: 0;
+            background: linear-gradient(to left, white 0%, transparent 100%);
+        }
     </style>
 
 </head>
@@ -903,102 +941,229 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- PERBAIKAN: Swiper Carousel untuk Program (DIPERBAIKI) ---
     const programCarouselElement = document.querySelector('.program-carousel');
     if (programCarouselElement) {
-        // Pastikan hanya menampilkan maksimal 3 cards sesuai konfigurasi
         const programSwiper = new Swiper('.program-carousel', {
             loop: true,
-            centeredSlides: false, // Jangan center slides
-            slidesPerView: 1,
+            centeredSlides: false,
+            slidesPerView: 'auto', // Akan di-override oleh breakpoints
             spaceBetween: 20,
+            
+            // KUNCI: Prevent peek dengan watchSlidesVisibility
+            watchSlidesVisibility: true,
+            watchSlidesProgress: true,
+            
+            // KUNCI: Set slide bounds
+            slidesOffsetBefore: 0,
+            slidesOffsetAfter: 0,
+            
             autoplay: {
                 delay: 3000,
                 disableOnInteraction: false,
             },
+            
             pagination: {
                 el: '.program-carousel-container .swiper-pagination',
                 clickable: true,
                 dynamicBullets: true,
             },
+            
             navigation: {
                 nextEl: '.program-carousel-container .swiper-button-next',
                 prevEl: '.program-carousel-container .swiper-button-prev',
             },
+            
+            // BREAKPOINTS dengan exact slide counts
             breakpoints: {
-                // Mobile: tampilkan 1 card
+                // Mobile: hanya 1 slide visible
                 320: {
                     slidesPerView: 1,
                     spaceBetween: 16,
+                    centeredSlides: false,
+                    slidesOffsetBefore: 0,
+                    slidesOffsetAfter: 0,
                 },
-                // Tablet: tampilkan 2 cards
+                // Tablet: hanya 2 slides visible
                 768: {
                     slidesPerView: 2,
                     spaceBetween: 20,
+                    centeredSlides: false,
+                    slidesOffsetBefore: 0,
+                    slidesOffsetAfter: 0,
                 },
-                // Desktop: tampilkan 3 cards (MAKSIMAL)
+                // Desktop: hanya 3 slides visible
                 1024: {
                     slidesPerView: 3,
                     spaceBetween: 24,
+                    centeredSlides: false,
+                    slidesOffsetBefore: 0,
+                    slidesOffsetAfter: 0,
                 },
-                // Large Desktop: tetap 3 cards
-                1200: {
-                    slidesPerView: 3,
-                    spaceBetween: 30,
-                }
             },
-            // Konfigurasi tambahan untuk memastikan hanya 3 cards max
+            
+            // Additional settings to prevent peek
             watchOverflow: true,
             observer: true,
             observeParents: true,
+            roundLengths: true, // Round slide sizes
+            
+            // KUNCI: Callback untuk hide overflow slides
+            on: {
+                init: function() {
+                    this.slides.forEach((slide, index) => {
+                        if (index >= this.params.slidesPerView) {
+                            slide.style.display = 'none';
+                        }
+                    });
+                },
+                slideChange: function() {
+                    // Ensure only visible slides are shown
+                    const visibleSlides = this.params.slidesPerView;
+                    this.slides.forEach((slide, index) => {
+                        const slideIndex = index - this.loopedSlides;
+                        const activeIndex = this.activeIndex - this.loopedSlides;
+                        
+                        if (slideIndex >= activeIndex && slideIndex < activeIndex + visibleSlides) {
+                            slide.style.display = 'flex';
+                            slide.style.opacity = '1';
+                        } else if (slideIndex < activeIndex || slideIndex >= activeIndex + visibleSlides) {
+                            slide.style.opacity = '0';
+                        }
+                    });
+                }
+            }
         });
     }
 
     // --- PERBAIKAN: Swiper Carousel untuk News/Berita Unggulan (DIPERBAIKI) ---
     const newsCarouselElement = document.querySelector('.news-carousel');
     if (newsCarouselElement) {
-        // Pastikan hanya menampilkan maksimal 3 cards sesuai konfigurasi
         const newsSwiper = new Swiper('.news-carousel', {
             loop: true,
-            centeredSlides: false, // Jangan center slides
-            slidesPerView: 1,
+            centeredSlides: false,
+            slidesPerView: 'auto', // Akan di-override oleh breakpoints
             spaceBetween: 20,
+            
+            // KUNCI: Prevent peek dengan watchSlidesVisibility
+            watchSlidesVisibility: true,
+            watchSlidesProgress: true,
+            
+            // KUNCI: Set slide bounds
+            slidesOffsetBefore: 0,
+            slidesOffsetAfter: 0,
+            
             autoplay: {
                 delay: 3500,
                 disableOnInteraction: false,
             },
+            
             pagination: {
                 el: '.news-carousel-container .swiper-pagination',
                 clickable: true,
                 dynamicBullets: true,
             },
+            
             navigation: {
                 nextEl: '.news-carousel-container .swiper-button-next',
                 prevEl: '.news-carousel-container .swiper-button-prev',
             },
+            
+            // BREAKPOINTS dengan exact slide counts
             breakpoints: {
-                // Mobile: tampilkan 1 card
+                // Mobile: hanya 1 slide visible
                 320: {
                     slidesPerView: 1,
                     spaceBetween: 16,
+                    centeredSlides: false,
+                    slidesOffsetBefore: 0,
+                    slidesOffsetAfter: 0,
                 },
-                // Tablet: tampilkan 2 cards
+                // Tablet: hanya 2 slides visible
                 768: {
                     slidesPerView: 2,
                     spaceBetween: 20,
+                    centeredSlides: false,
+                    slidesOffsetBefore: 0,
+                    slidesOffsetAfter: 0,
                 },
-                // Desktop: tampilkan 3 cards (MAKSIMAL)
+                // Desktop: hanya 3 slides visible
                 1024: {
                     slidesPerView: 3,
                     spaceBetween: 24,
+                    centeredSlides: false,
+                    slidesOffsetBefore: 0,
+                    slidesOffsetAfter: 0,
                 },
-                // Large Desktop: tetap 3 cards
-                1200: {
-                    slidesPerView: 3,
-                    spaceBetween: 30,
-                }
             },
-            // Konfigurasi tambahan untuk memastikan hanya 3 cards max
+            
+            // Additional settings to prevent peek
             watchOverflow: true,
             observer: true,
             observeParents: true,
+            roundLengths: true, // Round slide sizes
+            
+            // KUNCI: Callback untuk hide overflow slides
+            on: {
+                init: function() {
+                    this.slides.forEach((slide, index) => {
+                        if (index >= this.params.slidesPerView) {
+                            slide.style.display = 'none';
+                        }
+                    });
+                },
+                slideChange: function() {
+                    // Ensure only visible slides are shown
+                    const visibleSlides = this.params.slidesPerView;
+                    this.slides.forEach((slide, index) => {
+                        const slideIndex = index - this.loopedSlides;
+                        const activeIndex = this.activeIndex - this.loopedSlides;
+                        
+                        if (slideIndex >= activeIndex && slideIndex < activeIndex + visibleSlides) {
+                            slide.style.display = 'flex';
+                            slide.style.opacity = '1';
+                        } else if (slideIndex < activeIndex || slideIndex >= activeIndex + visibleSlides) {
+                            slide.style.opacity = '0';
+                        }
+                    });
+                }
+            }
+        });
+    }
+    function addCarouselMasks() {
+        const carouselContainers = document.querySelectorAll('.program-carousel-container, .news-carousel-container');
+        
+        carouselContainers.forEach(container => {
+            // Check if masks already exist
+            if (container.querySelector('.carousel-mask-left')) return;
+            
+            // Create left mask
+            const leftMask = document.createElement('div');
+            leftMask.className = 'carousel-mask-left';
+            leftMask.style.cssText = `
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 60px;
+                height: 100%;
+                background: linear-gradient(to right, #f9fafb 0%, transparent 100%);
+                z-index: 15;
+                pointer-events: none;
+            `;
+            
+            // Create right mask  
+            const rightMask = document.createElement('div');
+            rightMask.className = 'carousel-mask-right';
+            rightMask.style.cssText = `
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: 60px;
+                height: 100%;
+                background: linear-gradient(to left, #f9fafb 0%, transparent 100%);
+                z-index: 15;
+                pointer-events: none;
+            `;
+            
+            container.appendChild(leftMask);
+            container.appendChild(rightMask);
         });
     }
 
