@@ -47,8 +47,8 @@
         }
         
         /* Swiper Carousel Customization */
-        .program-carousel .swiper-button-next,
-        .program-carousel .swiper-button-prev,
+        .program-carousel-container .swiper-button-next,
+        .program-carousel-container .swiper-button-prev,
         .news-carousel-container .swiper-button-next,
         .news-carousel-container .swiper-button-prev {
             color: #14B8A6; /* teal-500 */
