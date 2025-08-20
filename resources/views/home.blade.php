@@ -432,12 +432,14 @@
                 <h2 class="text-3xl md:text-4xl font-bold text-teal-800">Berita Unggulan</h2>
                 <p class="text-gray-600 mt-2">Sorotan berita pilihan dari kami</p>
             </div>
-        
+
             <div class="news-carousel-container relative px-10">
                 <div class="swiper-container news-carousel">
                     <div class="swiper-wrapper">
+                        {{-- Loop through featured news --}}
                         @foreach ($featuredNews as $news)
-                            <div class="swiper-slide h-auto pb-8">
+                            <div class="swiper-slide h-auto">
+                                {{-- KARTU INI SEKARANG IDENTIK DENGAN BERITA TERBARU --}}
                                 <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full">
                                     <div class="relative">
                                         <img alt="{{ $news->judul }}" class="w-full h-56 object-cover" src="{{ asset('storage/' . $news->gambar) }}" />
@@ -467,6 +469,7 @@
                         @endforeach
                     </div>
                 </div>
+                {{-- Navigation Buttons & Pagination --}}
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
                 <div class="swiper-pagination mt-8 relative"></div>
@@ -517,48 +520,46 @@
             </div>
 
             @if (count($programLayanan) > 3)
-                <div class="mt-12">
-                    <h3 class="text-2xl font-semibold text-teal-800 mb-6 text-center">Program Lainnya</h3>
-                    <div class="program-carousel-container relative px-10">
-                        <div class="swiper-container program-carousel">
-                            <div class="swiper-wrapper">
-                                @foreach ($programLayanan->skip(3) as $program)
-                                    <div class="swiper-slide h-auto">
-                                        <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full">
-                                            {{-- Card content identical to the grid above --}}
-                                            <div class="relative h-48 bg-teal-600 flex items-center justify-center">
-                                                @if ($program->image)
-                                                    <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}" class="w-full h-full object-cover">
-                                                @else
-                                                    <i class="{{ $program->icon ?? 'fas fa-cogs' }} text-5xl text-white"></i>
-                                                @endif
+            <div class="program-carousel-container relative px-10">
+                    <div class="swiper-container program-carousel">
+                        <div class="swiper-wrapper">
+                            @foreach ($programLayanan->skip(3) as $program)
+                                <div class="swiper-slide h-auto">
+                                    {{-- KARTU INI SEKARANG IDENTIK DENGAN PROGRAM & LAYANAN UTAMA --}}
+                                    <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full">
+                                        <div class="relative h-48 bg-teal-600 flex items-center justify-center">
+                                            @if ($program->image)
+                                                <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}" class="w-full h-full object-cover">
+                                            @else
+                                                <i class="{{ $program->icon ?? 'fas fa-cogs' }} text-5xl text-white"></i>
+                                            @endif
+                                        </div>
+                                        <div class="p-6 flex flex-col flex-grow">
+                                            <h3 class="font-bold text-teal-800 text-xl mb-3">{{ $program->judul }}</h3>
+                                            <div class="text-gray-600 mb-4 text-sm flex-grow min-h-[80px]">
+                                                {!! Str::limit(strip_tags($program->deskripsi), 120) !!}
                                             </div>
-                                            <div class="p-6 flex flex-col flex-grow">
-                                                <h3 class="font-bold text-teal-800 text-xl mb-3">{{ $program->judul }}</h3>
-                                                <div class="text-gray-600 mb-4 text-sm flex-grow min-h-[80px]">
-                                                    {!! Str::limit(strip_tags($program->deskripsi), 120) !!}
-                                                </div>
-                                                <div class="mt-4 pt-4 border-t border-gray-100">
-                                                    @if (!empty($program->url))
-                                                        <a href="{{ $program->url }}" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
-                                                            Akses Program
-                                                        </a>
-                                                    @else
-                                                        <button type="button" class="login w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
-                                                            Akses Program
-                                                        </button>
-                                                    @endif
-                                                </div>
+                                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                                @if (!empty($program->url))
+                                                    <a href="{{ $program->url }}" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
+                                                        Akses Program
+                                                    </a>
+                                                @else
+                                                    <button type="button" class="login w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
+                                                        Akses Program
+                                                    </button>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
-                            </div>
+                                </div>
+                            @endforeach
                         </div>
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
-                        <div class="swiper-pagination mt-8 relative"></div>
                     </div>
+                    {{-- Navigation Buttons & Pagination --}}
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination mt-8 relative"></div>
                 </div>
             @endif
         </div>
@@ -728,59 +729,69 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // --- Swiper Carousel for Programs (MODIFIED) ---
-    if (document.querySelector('.program-carousel')) {
-        const swiper = new Swiper('.program-carousel', {
-            loop: true, 
-            slidesPerView: 1,
-            spaceBetween: 16,
-            autoplay: {
-                delay: 3000, 
-                disableOnInteraction: false,
+if (document.querySelector('.program-carousel')) {
+    const swiper = new Swiper('.program-carousel', {
+        loop: true,
+        slidesPerView: 1, // Tampilkan 1 kartu di layar sangat kecil
+        spaceBetween: 16,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.program-carousel-container .swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.program-carousel-container .swiper-button-next',
+            prevEl: '.program-carousel-container .swiper-button-prev',
+        },
+        breakpoints: {
+            // Tampilkan 2 kartu untuk tablet
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 24
             },
-            pagination: {
-                el: '.program-carousel-container .swiper-pagination',
-                clickable: true,
+            // Tampilkan 3 kartu untuk desktop
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 32
             },
-            navigation: {
-                nextEl: '.program-carousel-container .swiper-button-next',
-                prevEl: '.program-carousel-container .swiper-button-prev',
-            },
-            breakpoints: {
-                640: { slidesPerView: 2, spaceBetween: 24 },
-                1024: { 
-                    slidesPerView: 3, 
-                    spaceBetween: 32 
-                },
-            }
-        });
-    }
+        }
+    });
+}
 
-    // --- Swiper Carousel for News (MODIFIED) ---
-    if (document.querySelector('.news-carousel')) {
-        const newsSwiper = new Swiper('.news-carousel', {
-            loop: true,
-            slidesPerView: 1,
-            spaceBetween: 16,
-            autoplay: {
-                delay: 3500,
-                disableOnInteraction: false,
+// --- Swiper Carousel for News (MODIFIED) ---
+if (document.querySelector('.news-carousel')) {
+    const newsSwiper = new Swiper('.news-carousel', {
+        loop: true,
+        slidesPerView: 1, // Tampilkan 1 kartu di layar sangat kecil
+        spaceBetween: 16,
+        autoplay: {
+            delay: 3500,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.news-carousel-container .swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.news-carousel-container .swiper-button-next',
+            prevEl: '.news-carousel-container .swiper-button-prev',
+        },
+        breakpoints: {
+            // Tampilkan 2 kartu untuk tablet
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 24
             },
-            pagination: {
-                el: '.news-carousel-container .swiper-pagination',
-                clickable: true,
+            // Tampilkan 3 kartu untuk desktop
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 32
             },
-            navigation: {
-                nextEl: '.news-carousel-container .swiper-button-next',
-                prevEl: '.news-carousel-container .swiper-button-prev',
-            },
-            breakpoints: {
-                640: { slidesPerView: 2, spaceBetween: 24 },
-                1024: { 
-                    slidesPerView: 3, 
-                    spaceBetween: 32 
-                },
-            }
-        });
+        }
+    });
     }
 
     // --- Fetch Instagram Posts ---
