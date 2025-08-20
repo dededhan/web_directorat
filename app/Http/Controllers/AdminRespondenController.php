@@ -52,10 +52,16 @@ class AdminRespondenController extends Controller
     {
         try {
             $respondens = Responden::query()->get();
-            $byFaculty = $respondens->groupBy('fakultas')->map->count();
-            $byCategory = $respondens->groupBy('category')->map->count();
-            $byStatus = $respondens->groupBy('status')->map->count();
 
+            $normalizedRespondens = $respondens->map(function ($responden) {
+                $responden->category = Str::lower($responden->category);
+                $responden->fakultas = Str::lower($responden->fakultas);
+                return $responden;
+            });
+            $byFaculty = $normalizedRespondens->groupBy('fakultas')->map->count();
+            $byCategory = $normalizedRespondens->groupBy('category')->map->count();
+            $byStatus = $respondens->groupBy('status')->map->count();
+            
             $inputterIds = Responden::query()->distinct()->pluck('user_id');
             $inputters = User::whereIn('id', $inputterIds)->get();
 
