@@ -385,7 +385,7 @@
     </div>
 
     <main class="container mx-auto py-12 px-6">
-        {{-- Latest News Section --}}
+        {{-- Latest News Section (Regular News) --}}
         <div class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-bold text-teal-800">Berita Terbaru</h2>
             <p class="text-gray-600 mt-2">Informasi terkini dari Universitas Negeri Jakarta</p>
@@ -425,18 +425,18 @@
             @endif
         </div>
 
-        {{-- Older News Carousel Section --}}
-        @if ($regularNews && $regularNews->count() > 3)
+        {{-- Featured News Carousel Section --}}
+        @if (isset($featuredNews) && $featuredNews->count() > 0)
         <section class="news-carousel-section mt-16">
             <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-teal-800">Berita Terdahulu</h2>
-                <p class="text-gray-600 mt-2">Jelajahi arsip berita kami</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-teal-800">Berita Unggulan</h2>
+                <p class="text-gray-600 mt-2">Sorotan berita pilihan dari kami</p>
             </div>
         
             <div class="news-carousel-container relative px-10">
                 <div class="swiper-container news-carousel">
                     <div class="swiper-wrapper">
-                        @foreach ($regularNews->sortBy('tanggal') as $news)
+                        @foreach ($featuredNews as $news)
                             <div class="swiper-slide h-auto pb-8">
                                 <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full">
                                     <div class="relative">
@@ -753,7 +753,7 @@
             });
         }
 
-        // --- Swiper Carousel for Older News ---
+        // --- Swiper Carousel for News ---
         if (document.querySelector('.news-carousel')) {
             const newsSwiper = new Swiper('.news-carousel', {
                 loop: false,
@@ -932,7 +932,7 @@
 
         // Fetch carousel images from API or use fallback
         const defaultImages = [
-            "https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434",
+            "https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbGG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434",
             "https://www.unj.ac.id/wp-content/uploads/2020/02/DJI_0007-1024x576.jpg",
             "https://cdns.klimg.com/merdeka.com/i/w/news/2023/07/20/1578964/670x335/potret-gedung-baru-unj-yang-megah-dan-modern-berkonsep-green-building-dan-smart-building.jpg"
         ];
