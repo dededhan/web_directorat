@@ -48,7 +48,9 @@
         
         /* Swiper Carousel Customization */
         .program-carousel .swiper-button-next,
-        .program-carousel .swiper-button-prev {
+        .program-carousel .swiper-button-prev,
+        .news-carousel-container .swiper-button-next,
+        .news-carousel-container .swiper-button-prev {
             color: #14B8A6; /* teal-500 */
             background-color: white;
             border-radius: 9999px;
@@ -57,11 +59,14 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
         }
         .program-carousel .swiper-button-next::after,
-        .program-carousel .swiper-button-prev::after {
+        .program-carousel .swiper-button-prev::after,
+        .news-carousel-container .swiper-button-next::after,
+        .news-carousel-container .swiper-button-prev::after {
             font-size: 18px;
             font-weight: bold;
         }
-        .program-carousel .swiper-pagination-bullet-active {
+        .program-carousel .swiper-pagination-bullet-active,
+        .news-carousel-container .swiper-pagination-bullet-active {
             background-color: #14B8A6;
         }
 
@@ -419,6 +424,55 @@
                 <p class="col-span-full text-center text-gray-500">Tidak ada berita untuk ditampilkan.</p>
             @endif
         </div>
+
+        {{-- Older News Carousel Section --}}
+        @if ($regularNews && $regularNews->count() > 3)
+        <section class="news-carousel-section mt-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-teal-800">Berita Terdahulu</h2>
+                <p class="text-gray-600 mt-2">Jelajahi arsip berita kami</p>
+            </div>
+        
+            <div class="news-carousel-container relative px-10">
+                <div class="swiper-container news-carousel">
+                    <div class="swiper-wrapper">
+                        @foreach ($regularNews->sortBy('tanggal') as $news)
+                            <div class="swiper-slide h-auto pb-8">
+                                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full">
+                                    <div class="relative">
+                                        <img alt="{{ $news->judul }}" class="w-full h-56 object-cover" src="{{ asset('storage/' . $news->gambar) }}" />
+                                        <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-xs font-semibold">
+                                            {{ ucfirst($news->kategori) }}
+                                        </div>
+                                    </div>
+                                    <div class="p-5 flex flex-col flex-grow">
+                                        <div class="flex items-center justify-between mb-3 text-gray-500 text-sm">
+                                            <span><i class="fas fa-user-circle mr-2"></i>Admin</span>
+                                            <span><i class="fas fa-calendar-alt mr-1"></i>{{ date('d M Y', strtotime($news->tanggal)) }}</span>
+                                        </div>
+                                        <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="block">
+                                            <h3 class="font-bold text-lg mb-3 text-teal-800 hover:text-yellow-600 transition-colors h-14">
+                                                {{ Str::limit($news->judul, 60) }}
+                                            </h3>
+                                        </a>
+                                        <p class="text-gray-600 mb-4 text-sm flex-grow">
+                                            {{ Str::limit(strip_tags($news->isi), 100) }}
+                                        </p>
+                                        <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="mt-auto inline-block text-teal-700 hover:text-yellow-500 font-medium text-sm">
+                                            Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination mt-8 relative"></div>
+            </div>
+        </section>
+        @endif
     </main>
 
     {{-- Programs & Services Section --}}
@@ -501,10 +555,8 @@
                                 @endforeach
                             </div>
                         </div>
-                        <!-- Swiper Navigation -->
                         <div class="swiper-button-next"></div>
                         <div class="swiper-button-prev"></div>
-                        <!-- Swiper Pagination -->
                         <div class="swiper-pagination mt-8 relative"></div>
                     </div>
                 </div>
@@ -684,16 +736,39 @@
                 slidesPerView: 1,
                 spaceBetween: 16,
                 pagination: {
-                    el: '.swiper-pagination',
+                    el: '.program-carousel-container .swiper-pagination',
                     clickable: true,
                 },
                 navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
+                    nextEl: '.program-carousel-container .swiper-button-next',
+                    prevEl: '.program-carousel-container .swiper-button-prev',
                 },
                 breakpoints: {
                     640: { slidesPerView: 2, spaceBetween: 24 },
-                    // Correctly set slidesPerView to 3 for desktop
+                    1024: { 
+                        slidesPerView: 3, 
+                        spaceBetween: 32 
+                    },
+                }
+            });
+        }
+
+        // --- Swiper Carousel for Older News ---
+        if (document.querySelector('.news-carousel')) {
+            const newsSwiper = new Swiper('.news-carousel', {
+                loop: false,
+                slidesPerView: 1,
+                spaceBetween: 16,
+                pagination: {
+                    el: '.news-carousel-container .swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.news-carousel-container .swiper-button-next',
+                    prevEl: '.news-carousel-container .swiper-button-prev',
+                },
+                breakpoints: {
+                    640: { slidesPerView: 2, spaceBetween: 24 },
                     1024: { 
                         slidesPerView: 3, 
                         spaceBetween: 32 
