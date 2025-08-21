@@ -49,6 +49,11 @@
     .menu-active {
         background-color: rgba(0, 0, 0, 0.05);
     }
+    
+    /* Tambahan untuk responsivitas sidebar */
+    #mobile-sidebar {
+        overscroll-behavior: contain; /* Mencegah body ikut scroll saat menu sidebar di-scroll sampai ujung */
+    }
 </style>
 
 @include('layout.loginpopup')
@@ -60,9 +65,10 @@
                 <img alt="University logo" class="h-12 w-12"
                     src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
             </a>
-            <h1 class="text-white text-2xl font-bold">Subdirektorat Pemeringkatan dan Sistem Informasi</h1>
+            {{-- Membuat teks lebih responsif di layar medium --}}
+            <h1 class="text-white text-xl lg:text-2xl font-bold">Subdirektorat Pemeringkatan dan Sistem Informasi</h1>
         </div>
-        <ul class="flex space-x-6">
+        <ul class="flex space-x-6 items-center">
             <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400">Beranda</a></li>
 
             <li class="relative">
@@ -78,10 +84,10 @@
             <li class="relative">
                 <a href="#" class="text-white hover:text-yellow-400 primary-dropdown-toggle" data-dropdown="program-dropdown">Program</a>
                 <ul id="program-dropdown" class="dropdown-menu primary-dropdown hidden">
-                    <li><a class="hover:text-yellow-400" href="{{ route('Pemeringkatan.program.global-engagement') }}">Global Engagement</a></li>
-                    <li><a class="hover:text-yellow-400" href="{{ route('Pemeringkatan.program.lecturer-expose') }}">Lecturer Expose</a></li>
-                    <li><a class="hover:text-yellow-400" href="{{ route('Pemeringkatan.program.international-faculty-staff') }}">International Faculty Staff</a></li>
-                    <li><a class="hover:text-yellow-400" href="{{ route('Pemeringkatan.program.international-student-mobility') }}">International Student Mobility</a></li>
+                    <li><a href="{{ route('Pemeringkatan.program.global-engagement') }}">Global Engagement</a></li>
+                    <li><a href="{{ route('Pemeringkatan.program.lecturer-expose') }}">Lecturer Expose</a></li>
+                    <li><a href="{{ route('Pemeringkatan.program.international-faculty-staff') }}">International Faculty Staff</a></li>
+                    <li><a href="{{ route('Pemeringkatan.program.international-student-mobility') }}">International Student Mobility</a></li>
                     
                     <li class="relative">
                         <a href="#" class="flex justify-between items-center secondary-dropdown-toggle" data-dropdown="sustainability-dropdown">
@@ -91,139 +97,91 @@
                         <ul id="sustainability-dropdown" class="dropdown-menu nested-menu secondary-dropdown hidden">
                             <li><a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}">Kegiatan Sustainability</a></li>
                             <li><a href="{{ route('Pemeringkatan.matakuliahsustainability.matakuliahsustainability') }}">Mata Kuliah Sustainability</a></li>
-                            
-                            <li class="relative">
-                                <a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}" class="flex justify-between items-center">
-                                    Program Sustainability UNJ
-                                </a>
-                            </li>
+                            <li><a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}">Program Sustainability UNJ</a></li>
                         </ul>
                     </li>
                     
-                    <li class="relative">
-                        <a href="{{ route('Pemeringkatan.dataresponden.dataresponden') }}" class="flex justify-between items-center">
-                            Data Responden
-                        </a>
-                    </li>
+                    <li><a href="{{ route('Pemeringkatan.dataresponden.dataresponden') }}">Data Responden</a></li>
                 </ul>
             </li>
 
-            <li class="relative">
-                <a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="text-white hover:text-yellow-400">Ranking UNJ</a>
-            </li>
-
-            <li class="relative">
-                <a href="{{ route('document.document') }}" class="text-white hover:text-yellow-400">Dokumen</a>
-            </li>
-
+            <li><a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="text-white hover:text-yellow-400">Ranking UNJ</a></li>
+            <li><a href="{{ route('document.document') }}" class="text-white hover:text-yellow-400">Dokumen</a></li>
             <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400">SSO</a></li>
-            <li><a class="login text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
+            <li><a class="login text-white cursor-pointer" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
         </ul>
     </div>
 </nav>
 
-<nav class="navbar bg-transparent md:hidden fixed top-0 w-full z-50 transition-colors duration-300" id="mobile-navbar">
-    <div class="relative">
-        <div class="flex justify-between items-center py-4 px-4">
-            <div class="flex items-center">
-                <img alt="University logo" class="h-10 w-10" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
-                <h1 class="text-white text-xl font-bold ml-2">UNJ</h1>
-            </div>
-
-            <button id="mobile-menu-toggle" class="text-white focus:outline-none">
-                <i id="menu-icon" class="fas fa-bars text-2xl"></i>
-            </button>
+<nav class="navbar bg-[#186862] md:hidden fixed top-0 w-full z-50 transition-colors duration-300" id="mobile-navbar">
+    <div class="flex justify-between items-center py-4 px-4">
+        <div class="flex items-center">
+            <img alt="University logo" class="h-10 w-10" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
+            <h1 class="text-white text-xl font-bold ml-2">UNJ</h1>
         </div>
+        <button id="mobile-menu-toggle" class="text-white focus:outline-none z-50">
+            <i id="menu-icon" class="fas fa-bars text-2xl"></i>
+        </button>
     </div>
 </nav>
 
-<div id="mobile-sidebar" class="fixed top-0 right-0 w-64 h-full bg-[#186862] z-50 transform md:translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto">
-    <div class="flex justify-between items-center p-4">
-        <div class="flex items-center">
-            <img alt="University logo" class="h-8 w-8" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
-            <h1 class="text-white text-xl font-bold ml-2">UNJ</h1>
-        </div>
+<div id="mobile-sidebar" class="fixed top-0 right-0 w-64 h-full bg-[#186862] z-50 transform translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto">
+    <div class="flex justify-between items-center p-4 border-b border-white/10">
+        <h1 class="text-white text-xl font-bold">Menu Navigasi</h1>
         <button id="close-sidebar" class="text-white">
-            <i class="fas fa-times text-xl"></i>
+            <i class="fas fa-times text-2xl"></i>
         </button>
     </div>
-
     <div class="py-4">
-        <ul class="space-y-0">
-            <li>
-                <a href="{{ route('home') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                    Beranda
-                </a>
+        <ul class="flex flex-col">
+            <li><a href="{{ route('home') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">Beranda</a></li>
+            
+            <li class="sidebar-dropdown">
+                <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                    <span>Tentang</span>
+                    <i class="fas fa-chevron-down transition-transform duration-200"></i>
+                </button>
+                <ul class="hidden bg-[#135a54] pl-4">
+                    <li><a href="{{ route('pimpinan.pimpinan') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Pimpinan Direktorat</a></li>
+                    <li><a href="{{ route('strukturorganisasipemeringkatan') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Struktur Organisasi</a></li>
+                    <li><a href="{{ route('tupoksipemeringkatan') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Tugas Pokok dan Fungsi</a></li>
+                    <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Profil</a></li>
+                </ul>
             </li>
 
-            <li>
-                <div class="sidebar-dropdown">
-                    <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                        Tentang
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <ul class="hidden bg-[#135a54]">
-                        <li><a href="{{ route('pimpinan.pimpinan') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Pimpinan Direktorat</a></li>
-                        <li><a href="{{ route('strukturorganisasipemeringkatan') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Struktur Organisasi</a></li>
-                        <li><a href="{{ route('tupoksipemeringkatan') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Tugas Pokok dan Fungsi</a></li>
-                        <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Profil</a></li>
-                    </ul>
-                </div>
+            <li class="sidebar-dropdown">
+                <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                    <span>Program</span>
+                    <i class="fas fa-chevron-down transition-transform duration-200"></i>
+                </button>
+                <ul class="hidden bg-[#135a54] pl-4">
+                    <li><a href="{{ route('Pemeringkatan.program.global-engagement') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Global Engagement</a></li>
+                    <li><a href="{{ route('Pemeringkatan.program.lecturer-expose') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Lecturer Expose</a></li>
+                    <li><a href="{{ route('Pemeringkatan.program.international-faculty-staff') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">International Faculty Staff</a></li>
+                    <li><a href="{{ route('Pemeringkatan.program.international-student-mobility') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">International Student Mobility</a></li>
+                    
+                    <li class="sidebar-dropdown">
+                        <button class="flex justify-between items-center w-full text-white py-3 px-6 hover:bg-[#0e4c46]">
+                            <span>Sustainability</span>
+                            <i class="fas fa-chevron-down transition-transform duration-200"></i>
+                        </button>
+                        <ul class="hidden bg-[#0d4540] pl-4">
+                            <li><a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">Kegiatan Sustainability</a></li>
+                            <li><a href="{{ route('Pemeringkatan.matakuliahsustainability.matakuliahsustainability') }}" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">Mata Kuliah Sustainability</a></li>
+                            <li><a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">Program Sustainability UNJ</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li><a href="{{ route('Pemeringkatan.dataresponden.dataresponden') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Data Responden</a></li>
+                </ul>
             </li>
+            
+            <li><a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">Ranking UNJ</a></li>
+            <li><a href="{{ route('document.document') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">Dokumen</a></li>
+            <li><a href="https://sso.unj.ac.id/login" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">SSO</a></li>
 
-            <li>
-                <div class="sidebar-dropdown">
-                    <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                        Program
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <ul class="hidden bg-[#135a54]">
-                        <li><a href="{{ route('Pemeringkatan.program.global-engagement') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Global Engagement</a></li>
-                        <li><a href="{{ route('Pemeringkatan.program.lecturer-expose') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Lecturer Expose</a></li>
-                        <li><a href="{{ route('Pemeringkatan.program.international-faculty-staff') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">International Faculty Staff</a></li>
-                        <li><a href="{{ route('Pemeringkatan.program.international-student-mobility') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">International Student Mobility</a></li>
-                        
-                        <li>
-                            <div class="nested-sidebar-dropdown">
-                                <button class="flex justify-between items-center w-full text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                    Sustainability
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                                <ul class="hidden bg-[#0d4540]">
-                                    <li><a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">Kegiatan Sustainability</a></li>
-                                    <li><a href="{{ route('Pemeringkatan.matakuliahsustainability.matakuliahsustainability') }}" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">Mata Kuliah Sustainability</a></li>
-                                    <li><a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">Program Sustainability UNJ</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                        
-                        <li>
-                           <a href="{{ route('Pemeringkatan.dataresponden.dataresponden') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Data Responden</a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <li>
-                <a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                    Ranking UNJ
-                </a>
-            </li>
-
-            <li>
-                <a href="{{ route('document.document') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                    Dokumen
-                </a>
-            </li>
-
-            <li>
-                <a href="https://sso.unj.ac.id/login" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                    SSO
-                </a>
-            </li>
-
-            <li class="px-6 my-6">
-                <a href="#" class="block text-center bg-white text-[#186862] py-2 rounded-sm font-medium w-20" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <li class="px-6 my-4">
+                <a href="#" class="block text-center bg-white text-[#186862] py-2 rounded-md font-medium" data-bs-toggle="modal" data-bs-target="#loginModal">
                     Masuk
                 </a>
             </li>
@@ -231,254 +189,101 @@
     </div>
 </div>
 
-<div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-0 md:hidden pointer-events-none transition-opacity duration-300 ease-in-out z-40"></div>
+<div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out"></div>
+
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Mobile sidebar functionality
-        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-        const menuIcon = document.getElementById('menu-icon');
-        const mobileSidebar = document.getElementById('mobile-sidebar');
-        const sidebarOverlay = document.getElementById('sidebar-overlay');
-        const mobileNavbar = document.getElementById('mobile-navbar');
-        const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
-        const nestedDropdownButtons = document.querySelectorAll('.nested-sidebar-dropdown button');
-        const nestedNestedDropdownButtons = document.querySelectorAll('.nested-nested-sidebar-dropdown button');
+document.addEventListener('DOMContentLoaded', function() {
 
-        // Function to handle scroll effects
-        function handleScroll() {
-            if (window.scrollY > 10) {
-                mobileNavbar.classList.remove('bg-transparent');
-                mobileNavbar.classList.add('bg-[#186862]');
-            } else {
-                mobileNavbar.classList.remove('bg-[#186862]');
-                mobileNavbar.classList.add('bg-transparent');
-            }
-        }
+    // --- LOGIKA SIDEBAR MOBILE ---
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileSidebar = document.getElementById('mobile-sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const closeSidebarBtn = document.getElementById('close-sidebar');
+    const menuIcon = document.getElementById('menu-icon');
 
-        // Add scroll event listener
-        window.addEventListener('scroll', handleScroll);
-
-        // Set initial state for mobile devices
-        function initMobileNav() {
-            if (window.innerWidth < 768) {
-                hideSidebar();
-                handleScroll();
-            }
-        }
-
-        // Function to show sidebar
-        function showSidebar() {
+    const openSidebar = () => {
+        if (mobileSidebar && sidebarOverlay) {
             mobileSidebar.classList.remove('translate-x-full');
-            sidebarOverlay.classList.remove('opacity-0', 'pointer-events-none');
-            sidebarOverlay.classList.add('opacity-50');
-            menuIcon.classList.remove('fa-bars');
-            menuIcon.classList.add('fa-times');
-            document.body.classList.add('overflow-y-hidden'); // Mencegah scroll body
+            sidebarOverlay.classList.add('opacity-100');
+            sidebarOverlay.classList.remove('pointer-events-none');
+            document.body.classList.add('overflow-y-hidden');
+            menuIcon.classList.replace('fa-bars', 'fa-times');
         }
+    };
 
-        // Function to hide sidebar
-        function hideSidebar() {
+    const closeSidebar = () => {
+        if (mobileSidebar && sidebarOverlay) {
             mobileSidebar.classList.add('translate-x-full');
-            sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
-            sidebarOverlay.classList.remove('opacity-50');
-            menuIcon.classList.remove('fa-times');
-            menuIcon.classList.add('fa-bars');
-            document.body.classList.remove('overflow-y-hidden'); // Mengizinkan scroll body kembali
+            sidebarOverlay.classList.remove('opacity-100');
+            sidebarOverlay.classList.add('pointer-events-none');
+            document.body.classList.remove('overflow-y-hidden');
+            menuIcon.classList.replace('fa-times', 'fa-bars');
         }
+    };
 
-        // Toggle sidebar visibility
-        mobileMenuToggle.addEventListener('click', function() {
-            if (mobileSidebar.classList.contains('translate-x-full')) {
-                showSidebar();
-            } else {
-                hideSidebar();
-            }
-        });
+    mobileMenuToggle.addEventListener('click', () => {
+        if (mobileSidebar.classList.contains('translate-x-full')) {
+            openSidebar();
+        } else {
+            closeSidebar();
+        }
+    });
+    closeSidebarBtn.addEventListener('click', closeSidebar);
+    sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // Close sidebar when X button is clicked
-        document.getElementById('close-sidebar').addEventListener('click', hideSidebar);
-
-        // Close sidebar when clicking overlay
-        sidebarOverlay.addEventListener('click', hideSidebar);
-
-        // Toggle mobile dropdowns
-        dropdownButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const dropdownMenu = this.nextElementSibling;
-                const icon = this.querySelector('i');
-                
-                if (dropdownMenu.classList.contains('hidden')) {
-                    dropdownMenu.classList.remove('hidden');
-                    icon.classList.remove('fa-chevron-down');
-                    icon.classList.add('fa-chevron-up');
-                } else {
-                    dropdownMenu.classList.add('hidden');
-                    icon.classList.remove('fa-chevron-up');
-                    icon.classList.add('fa-chevron-down');
-                }
-            });
-        });
-        
-        // Toggle nested mobile dropdowns
-        nestedDropdownButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const dropdownMenu = this.nextElementSibling;
-                const icon = this.querySelector('i');
-                
-                if (dropdownMenu.classList.contains('hidden')) {
-                    dropdownMenu.classList.remove('hidden');
-                    icon.classList.remove('fa-chevron-right');
-                    icon.classList.add('fa-chevron-down');
-                } else {
-                    dropdownMenu.classList.add('hidden');
-                    icon.classList.remove('fa-chevron-down');
-                    icon.classList.add('fa-chevron-right');
-                }
-            });
-        });
-        
-        // Toggle deeper nested mobile dropdowns
-        nestedNestedDropdownButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const dropdownMenu = this.nextElementSibling;
-                const icon = this.querySelector('i');
-                
-                if (dropdownMenu.classList.contains('hidden')) {
-                    dropdownMenu.classList.remove('hidden');
-                    icon.classList.remove('fa-chevron-right');
-                    icon.classList.add('fa-chevron-down');
-                } else {
-                    dropdownMenu.classList.add('hidden');
-                    icon.classList.remove('fa-chevron-down');
-                    icon.classList.add('fa-chevron-right');
-                }
-            });
-        });
-
-        // DESKTOP CLICK-BASED DROPDOWN FUNCTIONALITY
-        // Handle primary dropdown toggle
-        const primaryDropdowns = document.querySelectorAll('.primary-dropdown-toggle');
-        primaryDropdowns.forEach(toggle => {
-            toggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const targetId = this.getAttribute('data-dropdown');
-                const targetDropdown = document.getElementById(targetId);
-                
-                // Close all other primary dropdowns first
-                document.querySelectorAll('.primary-dropdown').forEach(dropdown => {
-                    if (dropdown.id !== targetId) {
-                        dropdown.classList.add('hidden');
-                    }
-                });
-                
-                // Toggle this dropdown
-                targetDropdown.classList.toggle('hidden');
-            });
-        });
-        
-        // Handle secondary dropdown toggle (hover for desktop)
-        const secondaryDropdownToggles = document.querySelectorAll('.secondary-dropdown-toggle');
-        secondaryDropdownToggles.forEach(toggle => {
-            toggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const targetId = this.getAttribute('data-dropdown');
-                const targetDropdown = document.getElementById(targetId);
-                
-                // Close any open sibling secondary dropdowns
-                const siblingButtons = Array.from(this.closest('ul').querySelectorAll('.secondary-dropdown-toggle'));
-                siblingButtons.forEach(button => {
-                    if (button !== this) {
-                        const siblingId = button.getAttribute('data-dropdown');
-                        const siblingDropdown = document.getElementById(siblingId);
-                        if (siblingDropdown) {
-                            siblingDropdown.classList.add('hidden');
-                        }
-                    }
-                });
-                
-                // Toggle this dropdown
-                targetDropdown.classList.toggle('hidden');
-            });
-        });
-        
-        // Handle tertiary dropdown toggle (hover for desktop)
-        const tertiaryDropdownToggles = document.querySelectorAll('.tertiary-dropdown-toggle');
-        tertiaryDropdownToggles.forEach(toggle => {
-            toggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const targetId = this.getAttribute('data-dropdown');
-                const targetDropdown = document.getElementById(targetId);
-                
-                // Toggle this dropdown
-                targetDropdown.classList.toggle('hidden');
-            });
-        });
-
-        // Prevent click events on dropdown menus from closing the parent dropdown
-        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-            menu.addEventListener('click', function(e) {
-                // Only stop propagation if clicking on a toggle button or non-link item
-                if (e.target.classList.contains('secondary-dropdown-toggle') || 
-                    e.target.classList.contains('tertiary-dropdown-toggle') ||
-                    e.target.tagName !== 'A' || 
-                    e.target.getAttribute('href') === '#') {
-                    e.stopPropagation();
-                }
-            });
-        });
-        
-        // Close desktop dropdowns when clicking elsewhere on the page
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.dropdown-menu') && !e.target.classList.contains('primary-dropdown-toggle')) {
-                document.querySelectorAll('.primary-dropdown').forEach(dropdown => {
-                    dropdown.classList.add('hidden');
-                });
-                
-                document.querySelectorAll('.secondary-dropdown').forEach(dropdown => {
-                    dropdown.classList.add('hidden');
-                });
-                
-                document.querySelectorAll('.tertiary-dropdown').forEach(dropdown => {
-                    dropdown.classList.add('hidden');
-                });
-            }
-        });
-
-        // Initialize mobile navigation
-        initMobileNav();
-
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 768) {
-                hideSidebar();
-            } else {
-                handleScroll();
-            }
+    // --- LOGIKA DROPDOWN SIDEBAR (BERLAKU UNTUK SEMUA LEVEL) ---
+    // Ini memperbaiki menu yang tidak bisa ditekan & dropdown kosong
+    document.querySelectorAll('.sidebar-dropdown > button').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault(); // Mencegah perilaku default jika ada
+            const dropdownMenu = this.nextElementSibling;
+            const icon = this.querySelector('i');
+            
+            dropdownMenu.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
         });
     });
-    document.addEventListener('DOMContentLoaded', function() {
-    const navbar = document.querySelector('.navbar.sticky');
-    
-    if (navbar) {
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 0) {
-                navbar.style.position = 'fixed';
-                navbar.style.top = '0';
-                navbar.style.width = '100%';
-                navbar.style.zIndex = '50';
-            } else {
-                navbar.style.position = 'static';
-            }
+
+    // --- LOGIKA DROPDOWN DESKTOP (TETAP SAMA) ---
+    const primaryToggles = document.querySelectorAll('.primary-dropdown-toggle');
+    primaryToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const targetId = this.getAttribute('data-dropdown');
+            const targetDropdown = document.getElementById(targetId);
+            document.querySelectorAll('.primary-dropdown').forEach(dropdown => {
+                if (dropdown.id !== targetId) dropdown.classList.add('hidden');
+            });
+            targetDropdown.classList.toggle('hidden');
         });
-    }
+    });
+
+    const secondaryToggles = document.querySelectorAll('.secondary-dropdown-toggle');
+    secondaryToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const targetId = this.getAttribute('data-dropdown');
+            const targetDropdown = document.getElementById(targetId);
+            this.closest('.primary-dropdown').querySelectorAll('.secondary-dropdown').forEach(dropdown => {
+                if (dropdown.id !== targetId) dropdown.classList.add('hidden');
+            });
+            targetDropdown.classList.toggle('hidden');
+        });
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.relative')) {
+            document.querySelectorAll('.primary-dropdown, .secondary-dropdown').forEach(dropdown => {
+                dropdown.classList.add('hidden');
+            });
+        }
+    });
+
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        menu.addEventListener('click', e => e.stopPropagation());
+    });
 });
 </script>
