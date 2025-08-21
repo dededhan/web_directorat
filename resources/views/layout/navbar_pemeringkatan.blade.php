@@ -151,7 +151,7 @@
     <div class="py-4">
         <ul class="space-y-0">
             <li>
-                <a href="#" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                <a href="{{ route('home') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
                     Beranda
                 </a>
             </li>
@@ -163,26 +163,10 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <ul class="hidden bg-[#135a54]">
-                        <li>
-                            <a href="{{ route('pimpinan.pimpinan') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Pimpinan Direktorat
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('strukturorganisasi') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Struktur Organisasi
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('tupoksi.tupoksi') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Tugas Pokok dan Fungsi
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Profil
-                            </a>
-                        </li>
+                        <li><a href="{{ route('pimpinan.pimpinan') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Pimpinan Direktorat</a></li>
+                        <li><a href="{{ route('strukturorganisasipemeringkatan') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Struktur Organisasi</a></li>
+                        <li><a href="{{ route('tupoksipemeringkatan') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Tugas Pokok dan Fungsi</a></li>
+                        <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Profil</a></li>
                     </ul>
                 </div>
             </li>
@@ -194,26 +178,10 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <ul class="hidden bg-[#135a54]">
-                        <li>
-                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Global Engagement
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Lecturer Expose
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                International Faculty Staff
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                International Student Mobility
-                            </a>
-                        </li>
+                        <li><a href="{{ route('Pemeringkatan.program.global-engagement') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Global Engagement</a></li>
+                        <li><a href="{{ route('Pemeringkatan.program.lecturer-expose') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Lecturer Expose</a></li>
+                        <li><a href="{{ route('Pemeringkatan.program.international-faculty-staff') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">International Faculty Staff</a></li>
+                        <li><a href="{{ route('Pemeringkatan.program.international-student-mobility') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">International Student Mobility</a></li>
                         
                         <li>
                             <div class="nested-sidebar-dropdown">
@@ -222,79 +190,30 @@
                                     <i class="fas fa-chevron-right"></i>
                                 </button>
                                 <ul class="hidden bg-[#0d4540]">
-                                    <li>
-                                        <a href="#" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">
-                                            Kegiatan Sustainability
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">
-                                            Mata Kuliah Sustainability
-                                        </a>
-                                    </li>
-                                    
-                                    </ul>
+                                    <li><a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">Kegiatan Sustainability</a></li>
+                                    <li><a href="{{ route('Pemeringkatan.matakuliahsustainability.matakuliahsustainability') }}" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">Mata Kuliah Sustainability</a></li>
+                                    <li><a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">Program Sustainability UNJ</a></li>
+                                </ul>
                             </div>
                         </li>
                         
                         <li>
-                            <div class="nested-sidebar-dropdown">
-                                <button class="flex justify-between items-center w-full text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                    Data Responden
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                                <ul class="hidden bg-[#0d4540]">
-                                    <li>
-                                        <a href="#" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">
-                                            Academic
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">
-                                            Employee
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                           <a href="{{ route('Pemeringkatan.dataresponden.dataresponden') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Data Responden</a>
                         </li>
                     </ul>
                 </div>
             </li>
 
             <li>
-                <div class="sidebar-dropdown">
-                    <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                        Sistem Pemeringkatan
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <ul class="hidden bg-[#135a54]">
-                        <li>
-                            <a href="{{ route('pemeringkatan.klaster') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                IKU
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                UI Green Metric
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Webometric
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                QS World University Ranking
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Times Higher Education
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                <a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                    Ranking UNJ
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('document.document') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                    Dokumen
+                </a>
             </li>
 
             <li>
