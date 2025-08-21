@@ -126,42 +126,6 @@
         }
     </style>
     <style>
-        /* CRITICAL MOBILE FIXES - Directly in the head for priority loading */
-        @media (max-width: 767px) {
-            html, body {
-                width: 100% !important;
-                min-width: 100% !important;
-                max-width: 100vw !important;
-                overflow-x: hidden !important;
-                -webkit-text-size-adjust: 100% !important;
-            }
-            #mobile-navbar {
-                display: block !important;
-                visibility: visible !important;
-                position: fixed !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100% !important;
-                z-index: 1000 !important;
-                background-color: #186862 !important;
-            }
-            .navbar.hidden.md\:block,
-            nav.navbar:not(#mobile-navbar) {
-                display: none !important;
-                visibility: hidden !important;
-                height: 0 !important;
-                overflow: hidden !important;
-                opacity: 0 !important;
-                pointer-events: none !important;
-            }
-            .container {
-                padding-left: 1rem !important;
-                padding-right: 1rem !important;
-                width: 100% !important;
-                max-width: 100% !important;
-            }
-        }
-
         /* General Styles from home.blade.php */
         .media-card {
             height: 100%;
@@ -555,72 +519,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }, { passive: true });
     }
-
-    // --- Desktop Navbar Dropdown Logic ---
-    const desktopDropdownToggles = document.querySelectorAll('.desktop-dropdown-toggle');
-    desktopDropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', function (e) {
-            e.preventDefault();
-            const menu = this.nextElementSibling;
-            document.querySelectorAll('.desktop-dropdown-menu').forEach(otherMenu => {
-                if (otherMenu !== menu) {
-                    otherMenu.classList.add('hidden');
-                }
-            });
-            menu.classList.toggle('hidden');
-        });
-    });
-
-    window.addEventListener('click', function(e) {
-        if (!e.target.closest('.desktop-dropdown-toggle')) {
-            document.querySelectorAll('.desktop-dropdown-menu').forEach(menu => {
-                menu.classList.add('hidden');
-            });
-        }
-    });
-
-    // --- Mobile Sidebar Logic ---
-    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-    const mobileSidebar = document.getElementById('mobile-sidebar');
-    const sidebarOverlay = document.getElementById('sidebar-overlay');
-    const closeSidebarBtn = document.getElementById('close-sidebar');
-    const mobileDropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
-
-    const openSidebar = () => {
-        if (mobileSidebar && sidebarOverlay) {
-            mobileSidebar.style.transform = 'translateX(0)';
-            sidebarOverlay.style.opacity = '1';
-            sidebarOverlay.style.pointerEvents = 'auto';
-            document.body.classList.add('sidebar-open');
-        }
-    };
-
-    const closeSidebar = () => {
-        if (mobileSidebar && sidebarOverlay) {
-            mobileSidebar.style.transform = 'translateX(100%)';
-            sidebarOverlay.style.opacity = '0';
-            sidebarOverlay.style.pointerEvents = 'none';
-            document.body.classList.remove('sidebar-open');
-        }
-    };
-
-    if (mobileMenuToggle) mobileMenuToggle.addEventListener('click', openSidebar);
-    if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
-    if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
-
-    mobileDropdownButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const dropdownMenu = this.nextElementSibling;
-            const dropdownIcon = this.querySelector('.fa-chevron-down');
-            
-            dropdownMenu.classList.toggle('hidden');
-            if (dropdownMenu.classList.contains('hidden')) {
-                dropdownIcon.style.transform = 'rotate(0deg)';
-            } else {
-                dropdownIcon.style.transform = 'rotate(180deg)';
-            }
-        });
-    });
+    
+    // --- SEMUA LOGIKA JAVASCRIPT UNTUK SIDEBAR TELAH DIHAPUS DARI SINI ---
+    // --- KARENA SUDAH ADA DI FILE navbarpemeringkatan.blade.php ---
 
     // --- Swiper Carousel for Programs ---
     const programCarouselElement = document.querySelector('.program-carousel');

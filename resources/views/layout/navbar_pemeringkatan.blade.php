@@ -1,4 +1,3 @@
-
 <style>
     /* Clean dropdown styling */
     .dropdown-menu {
@@ -54,7 +53,6 @@
 
 @include('layout.loginpopup')
 
-<!-- Desktop Navbar with Click-Based Dropdown -->
 <nav class="navbar hidden md:block sticky top-0 z-50 bg-[#277177] shadow-md">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
         <div class="flex items-center space-x-4">
@@ -77,7 +75,6 @@
                 </ul>
             </li>
 
-            <!-- Program Dropdown with Click-Based Behavior -->
             <li class="relative">
                 <a href="#" class="text-white hover:text-yellow-400 primary-dropdown-toggle" data-dropdown="program-dropdown">Program</a>
                 <ul id="program-dropdown" class="dropdown-menu primary-dropdown hidden">
@@ -125,18 +122,14 @@
     </div>
 </nav>
 
-<!-- Mobile Navigation Bar (Android) -->
-<nav class="navbar bg-transparent md:hidden fixed top-0 w-full z-20 transition-colors duration-300" id="mobile-navbar">
+<nav class="navbar bg-transparent md:hidden fixed top-0 w-full z-50 transition-colors duration-300" id="mobile-navbar">
     <div class="relative">
-        <!-- Content -->
         <div class="flex justify-between items-center py-4 px-4">
-            <!-- Logo and University Name -->
             <div class="flex items-center">
                 <img alt="University logo" class="h-10 w-10" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
                 <h1 class="text-white text-xl font-bold ml-2">UNJ</h1>
             </div>
 
-            <!-- Hamburger Menu Button -->
             <button id="mobile-menu-toggle" class="text-white focus:outline-none">
                 <i id="menu-icon" class="fas fa-bars text-2xl"></i>
             </button>
@@ -144,9 +137,7 @@
     </div>
 </nav>
 
-<!-- Mobile Sidebar -->
-<div id="mobile-sidebar" class="fixed top-0 right-0 w-64 h-full bg-[#186862] z-40 transform md:translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto">
-    <!-- Sidebar Header -->
+<div id="mobile-sidebar" class="fixed top-0 right-0 w-64 h-full bg-[#186862] z-50 transform md:translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto">
     <div class="flex justify-between items-center p-4">
         <div class="flex items-center">
             <img alt="University logo" class="h-8 w-8" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
@@ -157,7 +148,6 @@
         </button>
     </div>
 
-    <!-- Sidebar Menu -->
     <div class="py-4">
         <ul class="space-y-0">
             <li>
@@ -197,7 +187,6 @@
                 </div>
             </li>
 
-            <!-- Program Dropdown for Mobile -->
             <li>
                 <div class="sidebar-dropdown">
                     <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
@@ -226,7 +215,6 @@
                             </a>
                         </li>
                         
-                        <!-- Sustainability with nested dropdown -->
                         <li>
                             <div class="nested-sidebar-dropdown">
                                 <button class="flex justify-between items-center w-full text-white py-3 px-6 hover:bg-[#0e4c46]">
@@ -245,12 +233,10 @@
                                         </a>
                                     </li>
                                     
-                                    <!-- Program Sustainability with deeper nesting -->
-                                </ul>
+                                    </ul>
                             </div>
                         </li>
                         
-                        <!-- Data Responden with nested dropdown -->
                         <li>
                             <div class="nested-sidebar-dropdown">
                                 <button class="flex justify-between items-center w-full text-white py-3 px-6 hover:bg-[#0e4c46]">
@@ -326,10 +312,8 @@
     </div>
 </div>
 
-<!-- Overlay for sidebar - Only on mobile -->
-<div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-0 md:hidden pointer-events-none transition-opacity duration-300 ease-in-out z-30"></div>
+<div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-0 md:hidden pointer-events-none transition-opacity duration-300 ease-in-out z-40"></div>
 
-<!-- JavaScript for mobile sidebar and click-based dropdowns -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Mobile sidebar functionality
@@ -371,6 +355,7 @@
             sidebarOverlay.classList.add('opacity-50');
             menuIcon.classList.remove('fa-bars');
             menuIcon.classList.add('fa-times');
+            document.body.classList.add('overflow-y-hidden'); // Mencegah scroll body
         }
 
         // Function to hide sidebar
@@ -380,6 +365,7 @@
             sidebarOverlay.classList.remove('opacity-50');
             menuIcon.classList.remove('fa-times');
             menuIcon.classList.add('fa-bars');
+            document.body.classList.remove('overflow-y-hidden'); // Mengizinkan scroll body kembali
         }
 
         // Toggle sidebar visibility
