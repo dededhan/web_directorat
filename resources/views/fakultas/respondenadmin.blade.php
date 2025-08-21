@@ -196,6 +196,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>User ID</th>
                                 <th>Title</th>
                                 <th>Nama Lengkap</th>
                                 <th>Jabatan</th>
@@ -229,9 +230,9 @@
                         </thead>
                         <tbody id="respondent-list">
                             @forelse($respondens as $i => $responden)
-                                {{-- ADD THE ID TO THE TR ELEMENT AND CLASSES TO THE TD ELEMENTS --}}
                                 <tr id="responden-row-{{ $responden->id }}">
                                     <td>{{ $respondens->firstItem() + $i }}</td>
+                                    <td>{{ $responden->user->name ?? ($activity->user_id ?? 'ADMIN') }}</td>
                                     <td class="responden-title">{{ Str::ucfirst($responden->title) }}</td>
                                     <td class="responden-fullname">{{ $responden->fullname }}</td>
                                     <td class="responden-jabatan">{{ $responden->jabatan }}</td>

@@ -531,8 +531,6 @@
     </div>
 
     <script>
-        // --- MODIFICATION START ---
-        // Automatically submit the filter form when the 'per_page' dropdown changes.
         document.addEventListener('DOMContentLoaded', function() {
             const perPageFilter = document.getElementById('perPageFilter');
             if (perPageFilter) {
@@ -541,14 +539,12 @@
                 });
             }
         });
-        // --- MODIFICATION END ---
-        // edit delete 
+
         document.addEventListener('DOMContentLoaded', function() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const routePrefix = "{{ $routePrefix ?? 'admin' }}";
 
 
-            // Handle Edit button click
             document.querySelectorAll('.edit-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const respondenId = this.dataset.id;
@@ -587,7 +583,6 @@
                 });
             });
 
-            // Handle Edit form submission
             document.getElementById('edit-survey-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const form = e.target;
@@ -605,8 +600,6 @@
                             title: 'Berhasil!',
                             text: response.data.message,
                         });
-
-                        // Update table row with new data
                         const updatedData = response.data.data;
                         const row = document.getElementById(`responden-row-${updatedData.id}`);
                         if (row) {
@@ -638,7 +631,6 @@
                     });
             });
 
-            // Handle Delete button click
             document.querySelectorAll('.delete-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const respondenId = this.dataset.id;
@@ -656,10 +648,10 @@
                         })
                         .then((result) => {
                             if (result.isConfirmed) {
-                                // We send a POST request, but "spoof" it as a DELETE
+    
                                 axios.post(url, {
-                                        _method: 'delete', // The magic ingredient for method spoofing
-                                        _token: csrfToken // Send the CSRF token in the data
+                                        _method: 'delete',
+                                        _token: csrfToken 
                                     })
                                     .then(response => {
                                         Swal.fire(

@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreUserRequest; // Pastikan ini diperbarui atau fleksibel untuk field 'name'
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB; // Untuk transaksi DB
-use Illuminate\Validation\Rule; // Untuk validasi kondisional jika diperlukan
+use Illuminate\Support\Facades\DB; 
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    // Mendefinisikan data fakultas dan program studi (atau dapatkan dari config/service)
+
     private function getFacultiesAndProgramsData()
     {
         return [
@@ -72,7 +72,7 @@ class UserController extends Controller
                 ]
             ],
             'FPPSI' => [
-                'name' => 'FPPSI (Fakultas Psikologi)', // Disesuaikan berdasarkan prodi
+                'name' => 'FPPSI (Fakultas Psikologi)',
                 'programs' => [
                     'S1 Psikologi', 
                     'S2 Psikologi'
@@ -172,7 +172,7 @@ class UserController extends Controller
                     'S1 Pendidikan Bisnis'
                 ]
             ],
-            'PROFESI' => [ // Menggunakan singkatan kapital untuk konsistensi kunci
+            'PROFESI' => [ 
                 'name' => 'Program Profesi',
                 'programs' => [
                     'Profesi PPG'
@@ -209,18 +209,8 @@ class UserController extends Controller
                 'email' => $validated['email'],
                 'password' => bcrypt($validated['password']),
                 'role' => $validated['role'],
-                'status' => 'unactive', // Status default
+                'status' => 'unactive',
             ]);
-
-            // Logika untuk tabel spesifik peran (Dosen, Mahasiswa, Prodi, Fakultas)
-            // jika Anda memiliki tabel tersebut dan perlu membuat entri di sana.
-            // if ($user->role === 'prodi' && class_exists(\App\Models\Prodi::class)) {
-            //     \App\Models\Prodi::create(['user_id' => $user->id, 'name' => $user->name, /* field prodi lainnya */]);
-            // } else if ($user->role === 'fakultas' && class_exists(\App\Models\Fakultas::class)) {
-            //     \App\Models\Fakultas::create(['user_id' => $user->id, 'name' => $user->name, /* field fakultas lainnya */]);
-            // }
-            // UsersSeeder.php Anda mengindikasikan adanya tabel seperti itu. Pastikan logika ini konsisten.
-
 
             DB::commit();
             Log::info('User created manually', ['user_id' => $user->id, 'role' => $user->role, 'name' => $user->name]);
@@ -230,7 +220,7 @@ class UserController extends Controller
             Log::error('Failed to create user or role-specific record', [
                 'role' => $validated['role'],
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString() // Tambahkan trace untuk debug lebih detail
+                'trace' => $e->getTraceAsString() 
             ]);
             return redirect()->back()->with('error', 'Gagal membuat data user: ' . $e->getMessage());
         }
@@ -271,20 +261,7 @@ class UserController extends Controller
 
         DB::beginTransaction();
         try {
-            // $oldRole = $user->role; // Simpan role lama jika perlu logika khusus
-            // $oldName = $user->name; // Simpan nama lama jika perlu logika khusus
-
             $user->update($updateData);
-
-            // Logika pembaruan tabel spesifik peran jika peran atau nama yang relevan berubah.
-            // Bagian ini bisa kompleks jika Anda perlu menghapus dari tabel peran lama dan menambah ke yang baru.
-            // Untuk kesederhanaan, jika nama untuk prodi/fakultas berubah, Anda mungkin perlu memperbarui
-            // nama di tabel Prodi/Fakultas yang sesuai jika tabel tersebut menyimpannya.
-            // if (($oldRole !== $user->role || $oldName !== $user->name) && ($user->role === 'prodi' || $oldRole === 'prodi')) {
-            //    // Perbarui atau kelola entri tabel Prodi
-            // }
-            // Logika serupa untuk tabel Fakultas
-
             DB::commit();
             Log::info('User updated', ['user_id' => $user->id, 'new_role' => $user->role, 'new_name' => $user->name]);
             return redirect()->route('admin.manageuser.index')->with('success', 'User berhasil diperbarui: ' . $user->name);
@@ -308,18 +285,6 @@ class UserController extends Controller
         DB::beginTransaction();
         try {
             $userName = $user->name; 
-            // Sebelum menghapus user, Anda mungkin perlu menghapus record terkait
-            // di tabel Dosen, Mahasiswa, Prodi, Fakultas jika ada dan memiliki foreign key.
-            // Contoh:
-            // if (method_exists($user, 'dosen') && $user->dosen) $user->dosen->delete();
-            // if (method_exists($user, 'mahasiswa') && $user->mahasiswa) $user->mahasiswa->delete();
-            // if (method_exists($user, 'prodiRel') && $user->prodiRel) $user->prodiRel->delete(); // Asumsi 'prodiRel' adalah nama relasi
-            // if (method_exists($user, 'fakultasRel') && $user->fakultasRel) $user->fakultasRel->delete(); // Asumsi 'fakultasRel' adalah nama relasi
-
-            // Ini tergantung pada bagaimana relasi model User Anda ke model Prodi/Fakultas diatur.
-            // Jika Anda memiliki cascading deletes yang diatur di level database atau di model events,
-            // ini mungkin ditangani secara otomatis. Jika tidak, Anda perlu melakukannya secara manual.
-
             $user->delete();
             DB::commit();
     

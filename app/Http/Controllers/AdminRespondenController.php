@@ -116,10 +116,21 @@ class AdminRespondenController extends Controller
         $direction = in_array(strtolower($direction), ['asc', 'desc']) ? $direction : 'asc';
 
         $query = Responden::query();
-        if ($role === 'fakultas' || $role === 'prodi') {
+        if ($role === 'prodi') {
             $query->where('user_id', $user->id);
+        } elseif ($role === 'fakultas') {
+            $facultyCode = $userInfo['faculty_code'];
+            if ($facultyCode) {
+                $prodiUserIds = User::where('role', 'prodi')
+                                    ->where('name', 'like', $facultyCode . '-%')
+                                    ->pluck('id');
+                $allUserIds = $prodiUserIds->push($user->id)->all();
+                $query->whereIn('user_id', $allUserIds);
+            } else {
+                Log::warning('Tidak dapat menemukan kode fakultas untuk user: ' . $user->name, ['user_id' => $user->id]);
+                $query->where('user_id', $user->id);
+            }
         }
-
         if ($request->filled('search')) {
             $searchTerm = $request->search;
             $query->where(function ($q) use ($searchTerm) {
@@ -463,7 +474,7 @@ class AdminRespondenController extends Controller
             $finalMessage = 'Terjadi kesalahan pada server saat impor: ' . $e->getMessage();
 
             if ($request->wantsJson()) {
-                return response()->json(['success' => false, 'message' => $finalMessage], 500); // 500 Internal Server Error
+                return response()->json(['success' => false, 'message' => $finalMessage], 500); // 
             }
             return redirect()->back()->with('error', $finalMessage);
         }
@@ -500,7 +511,6 @@ class AdminRespondenController extends Controller
         if ($request->filled('fakultas')) {
             $query->where('fakultas', $request->fakultas);
         }
-        // Add year filter if 'tahun' column exists and is provided in request
         if ($request->filled('tahun') && \Illuminate\Support\Facades\Schema::hasColumn('respondens', 'tahun')) {
             $query->where('tahun', $request->tahun);
         } elseif ($request->filled('tahun')) {
@@ -528,7 +538,7 @@ class AdminRespondenController extends Controller
 
 
         $kategori = $request->input('kategori');
-        $fakultas = $request->input('fakultas'); // Filter ini hanya digunakan oleh admin
+        $fakultas = $request->input('fakultas');
 
 
         return Excel::download(new RespondenExport($user, $kategori, $fakultas), 'responden-data.xlsx');
@@ -543,7 +553,7 @@ class AdminRespondenController extends Controller
 
         // Ambil filter dari request
         $kategori = $request->input('kategori');
-        $fakultas = $request->input('fakultas'); // Filter ini hanya digunakan oleh admin
+        $fakultas = $request->input('fakultas');
 
 
         return Excel::download(new RespondenExport($user, $kategori, $fakultas), 'responden-data.csv');
