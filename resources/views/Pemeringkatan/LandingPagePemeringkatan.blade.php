@@ -23,12 +23,22 @@
             font-family: 'Inter', Arial, sans-serif !important;
         }
         
-        /* Navbar scroll effect */
+        /* Navbar scroll effect - FIXED untuk mempertahankan warna teal */
         .navbar.scrolled {
-            background-color: rgba(23, 99, 105, 0.9) !important;
+            background-color: rgba(39, 113, 119, 0.95) !important;
             backdrop-filter: blur(10px);
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        /* Memastikan navbar tetap teal */
+        .navbar.hidden.md\\:block {
+            background-color: #277177 !important;
+        }
+
+        .navbar:not(.scrolled) {
+            background-color: #277177 !important;
         }
 
         /* Prevent body scroll when sidebar is open */
@@ -508,7 +518,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     
-    // --- Navbar Scroll Effect ---
+    // --- Navbar Scroll Effect - IMPROVED untuk mempertahankan warna teal ---
     const navbar = document.querySelector('.navbar.hidden.md\\:block');
     if (navbar) {
         window.addEventListener('scroll', () => {
