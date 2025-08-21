@@ -54,6 +54,33 @@
     #mobile-sidebar {
         overscroll-behavior: contain; /* Mencegah body ikut scroll saat menu sidebar di-scroll sampai ujung */
     }
+
+    /* Perbaikan untuk dropdown sidebar mobile */
+    .sidebar-dropdown > button {
+        width: 100%;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .sidebar-dropdown .dropdown-content {
+        transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        overflow: hidden;
+    }
+
+    .sidebar-dropdown .dropdown-content.hidden {
+        max-height: 0;
+        opacity: 0;
+    }
+
+    .sidebar-dropdown .dropdown-content:not(.hidden) {
+        max-height: 500px;
+        opacity: 1;
+    }
 </style>
 
 @include('layout.loginpopup')
@@ -117,7 +144,7 @@
     <div class="flex justify-between items-center py-4 px-4">
         <div class="flex items-center">
             <img alt="University logo" class="h-10 w-10" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
-            <h1 class="text-white text-xl font-bold ml-2">UNJ</h1>
+            <h1 class="text-white text-sm font-bold ml-2">Subdirektorat Pemeringkatan dan Sistem Informasi</h1>
         </div>
         <button id="mobile-menu-toggle" class="text-white focus:outline-none z-50">
             <i id="menu-icon" class="fas fa-bars text-2xl"></i>
@@ -125,7 +152,7 @@
     </div>
 </nav>
 
-<div id="mobile-sidebar" class="fixed top-0 right-0 w-64 h-full bg-[#186862] z-50 transform translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto">
+<div id="mobile-sidebar" class="fixed top-0 right-0 w-80 h-full bg-[#186862] z-50 transform translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto">
     <div class="flex justify-between items-center p-4 border-b border-white/10">
         <h1 class="text-white text-xl font-bold">Menu Navigasi</h1>
         <button id="close-sidebar" class="text-white">
@@ -134,54 +161,54 @@
     </div>
     <div class="py-4">
         <ul class="flex flex-col">
-            <li><a href="{{ route('home') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">Beranda</a></li>
+            <li><a href="{{ route('home') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Beranda</a></li>
             
             <li class="sidebar-dropdown">
-                <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                <button class="sidebar-dropdown-toggle flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">
                     <span>Tentang</span>
-                    <i class="fas fa-chevron-down transition-transform duration-200"></i>
+                    <i class="fas fa-chevron-down transition-transform duration-300"></i>
                 </button>
-                <ul class="hidden bg-[#135a54] pl-4">
-                    <li><a href="{{ route('pimpinan.pimpinan') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Pimpinan Direktorat</a></li>
-                    <li><a href="{{ route('strukturorganisasipemeringkatan') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Struktur Organisasi</a></li>
-                    <li><a href="{{ route('tupoksipemeringkatan') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Tugas Pokok dan Fungsi</a></li>
-                    <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Profil</a></li>
+                <ul class="dropdown-content hidden bg-[#135a54] overflow-hidden">
+                    <li><a href="{{ route('pimpinan.pimpinan') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Pimpinan Direktorat</a></li>
+                    <li><a href="{{ route('strukturorganisasipemeringkatan') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Struktur Organisasi</a></li>
+                    <li><a href="{{ route('tupoksipemeringkatan') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Tugas Pokok dan Fungsi</a></li>
+                    <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Profil</a></li>
                 </ul>
             </li>
 
             <li class="sidebar-dropdown">
-                <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                <button class="sidebar-dropdown-toggle flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">
                     <span>Program</span>
-                    <i class="fas fa-chevron-down transition-transform duration-200"></i>
+                    <i class="fas fa-chevron-down transition-transform duration-300"></i>
                 </button>
-                <ul class="hidden bg-[#135a54] pl-4">
-                    <li><a href="{{ route('Pemeringkatan.program.global-engagement') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Global Engagement</a></li>
-                    <li><a href="{{ route('Pemeringkatan.program.lecturer-expose') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Lecturer Expose</a></li>
-                    <li><a href="{{ route('Pemeringkatan.program.international-faculty-staff') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">International Faculty Staff</a></li>
-                    <li><a href="{{ route('Pemeringkatan.program.international-student-mobility') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">International Student Mobility</a></li>
+                <ul class="dropdown-content hidden bg-[#135a54] overflow-hidden">
+                    <li><a href="{{ route('Pemeringkatan.program.global-engagement') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Global Engagement</a></li>
+                    <li><a href="{{ route('Pemeringkatan.program.lecturer-expose') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Lecturer Expose</a></li>
+                    <li><a href="{{ route('Pemeringkatan.program.international-faculty-staff') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">International Faculty Staff</a></li>
+                    <li><a href="{{ route('Pemeringkatan.program.international-student-mobility') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">International Student Mobility</a></li>
                     
-                    <li class="sidebar-dropdown">
-                        <button class="flex justify-between items-center w-full text-white py-3 px-6 hover:bg-[#0e4c46]">
+                    <li class="sidebar-dropdown nested-dropdown">
+                        <button class="sidebar-dropdown-toggle flex justify-between items-center w-full text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">
                             <span>Sustainability</span>
-                            <i class="fas fa-chevron-down transition-transform duration-200"></i>
+                            <i class="fas fa-chevron-down transition-transform duration-300"></i>
                         </button>
-                        <ul class="hidden bg-[#0d4540] pl-4">
-                            <li><a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">Kegiatan Sustainability</a></li>
-                            <li><a href="{{ route('Pemeringkatan.matakuliahsustainability.matakuliahsustainability') }}" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">Mata Kuliah Sustainability</a></li>
-                            <li><a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}" class="block text-white py-3 px-8 hover:bg-[#0a3c38]">Program Sustainability UNJ</a></li>
+                        <ul class="dropdown-content hidden bg-[#0d4540] overflow-hidden">
+                            <li><a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Kegiatan Sustainability</a></li>
+                            <li><a href="{{ route('Pemeringkatan.matakuliahsustainability.matakuliahsustainability') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Mata Kuliah Sustainability</a></li>
+                            <li><a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Program Sustainability UNJ</a></li>
                         </ul>
                     </li>
                     
-                    <li><a href="{{ route('Pemeringkatan.dataresponden.dataresponden') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">Data Responden</a></li>
+                    <li><a href="{{ route('Pemeringkatan.dataresponden.dataresponden') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Data Responden</a></li>
                 </ul>
             </li>
             
-            <li><a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">Ranking UNJ</a></li>
-            <li><a href="{{ route('document.document') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">Dokumen</a></li>
-            <li><a href="https://sso.unj.ac.id/login" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">SSO</a></li>
+            <li><a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Ranking UNJ</a></li>
+            <li><a href="{{ route('document.document') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Dokumen</a></li>
+            <li><a href="https://sso.unj.ac.id/login" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">SSO</a></li>
 
             <li class="px-6 my-4">
-                <a href="#" class="block text-center bg-white text-[#186862] py-2 rounded-md font-medium" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <a href="#" class="block text-center bg-white text-[#186862] py-2 rounded-md font-medium hover:bg-yellow-400 hover:text-[#186862] transition-colors duration-200" data-bs-toggle="modal" data-bs-target="#loginModal">
                     Masuk
                 </a>
             </li>
@@ -222,28 +249,76 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    mobileMenuToggle.addEventListener('click', () => {
-        if (mobileSidebar.classList.contains('translate-x-full')) {
-            openSidebar();
-        } else {
-            closeSidebar();
-        }
-    });
-    closeSidebarBtn.addEventListener('click', closeSidebar);
-    sidebarOverlay.addEventListener('click', closeSidebar);
-
-    // --- LOGIKA DROPDOWN SIDEBAR (BERLAKU UNTUK SEMUA LEVEL) ---
-    // Ini memperbaiki menu yang tidak bisa ditekan & dropdown kosong
-    document.querySelectorAll('.sidebar-dropdown > button').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault(); // Mencegah perilaku default jika ada
-            const dropdownMenu = this.nextElementSibling;
-            const icon = this.querySelector('i');
-            
-            dropdownMenu.classList.toggle('hidden');
-            icon.classList.toggle('rotate-180');
+    if (mobileMenuToggle) {
+        mobileMenuToggle.addEventListener('click', () => {
+            if (mobileSidebar.classList.contains('translate-x-full')) {
+                openSidebar();
+            } else {
+                closeSidebar();
+            }
         });
-    });
+    }
+
+    if (closeSidebarBtn) {
+        closeSidebarBtn.addEventListener('click', closeSidebar);
+    }
+
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebar);
+    }
+
+    // --- LOGIKA DROPDOWN SIDEBAR (IMPROVED) ---
+    // Perbaikan untuk semua dropdown termasuk nested dropdown
+    function initSidebarDropdowns() {
+        const dropdownToggles = document.querySelectorAll('.sidebar-dropdown-toggle');
+        
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const dropdownContent = this.nextElementSibling;
+                const chevronIcon = this.querySelector('i.fa-chevron-down');
+                const isCurrentlyOpen = !dropdownContent.classList.contains('hidden');
+                
+                // Tutup semua dropdown di level yang sama
+                const parentLevel = this.closest('ul');
+                const siblingDropdowns = parentLevel.querySelectorAll(':scope > .sidebar-dropdown > .dropdown-content');
+                const siblingIcons = parentLevel.querySelectorAll(':scope > .sidebar-dropdown > .sidebar-dropdown-toggle > i.fa-chevron-down');
+                
+                siblingDropdowns.forEach(dropdown => {
+                    if (dropdown !== dropdownContent) {
+                        dropdown.classList.add('hidden');
+                    }
+                });
+                
+                siblingIcons.forEach(icon => {
+                    if (icon !== chevronIcon) {
+                        icon.classList.remove('rotate-180');
+                    }
+                });
+                
+                // Toggle dropdown saat ini
+                if (isCurrentlyOpen) {
+                    dropdownContent.classList.add('hidden');
+                    chevronIcon.classList.remove('rotate-180');
+                    
+                    // Tutup semua nested dropdown jika ada
+                    const nestedDropdowns = dropdownContent.querySelectorAll('.dropdown-content');
+                    const nestedIcons = dropdownContent.querySelectorAll('.sidebar-dropdown-toggle > i.fa-chevron-down');
+                    
+                    nestedDropdowns.forEach(nested => nested.classList.add('hidden'));
+                    nestedIcons.forEach(icon => icon.classList.remove('rotate-180'));
+                } else {
+                    dropdownContent.classList.remove('hidden');
+                    chevronIcon.classList.add('rotate-180');
+                }
+            });
+        });
+    }
+
+    // Initialize dropdown functionality
+    initSidebarDropdowns();
 
     // --- LOGIKA DROPDOWN DESKTOP (TETAP SAMA) ---
     const primaryToggles = document.querySelectorAll('.primary-dropdown-toggle');
@@ -284,6 +359,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelectorAll('.dropdown-menu').forEach(menu => {
         menu.addEventListener('click', e => e.stopPropagation());
+    });
+
+    // Tutup sidebar ketika link diklik (untuk pengalaman yang lebih baik)
+    document.querySelectorAll('#mobile-sidebar a[href]:not([data-bs-toggle])').forEach(link => {
+        link.addEventListener('click', () => {
+            setTimeout(closeSidebar, 100); // Delay kecil untuk transisi yang smooth
+        });
     });
 });
 </script>
