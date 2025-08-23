@@ -38,7 +38,6 @@ class AdminRespondenController extends Controller
         }
         return ['faculty_code' => $userFaculty];
     }
-
     public function laporan()
     {
         if (Auth::user()->role !== 'admin_direktorat') {
@@ -47,6 +46,45 @@ class AdminRespondenController extends Controller
         return view('admin.responden_laporan');
     }
 
+    private function normalizeFacultyName($faculty) {
+        $faculty = strtolower(trim($faculty));
+        $map = [
+            'teknik' => 'ft',
+            'fpbs' => 'fbs',
+            'fkip' => 'fip',
+
+        ];
+
+        if (array_key_exists($faculty, $map)) {
+            return $map[$faculty];
+        }
+        
+        if (empty($faculty)) {
+            return 'tidak terdefinisi';
+        }
+
+        return $faculty;
+    }
+
+    private function normalizeCategoryName($category) {
+        $category = strtolower(trim($category));
+
+        if (Str::contains($category, ['academic', 'researcher', 'reseracher'])) {
+            return 'academic';
+        }
+        
+        if (Str::contains($category, 'employer')) {
+            return 'employer';
+        }
+
+        if (empty($category)) {
+            return 'lainnya';
+        }
+
+        return 'lainnya'; 
+    }
+
+
 
     public function getChartSummaryData()
     {
@@ -54,14 +92,14 @@ class AdminRespondenController extends Controller
             $respondens = Responden::query()->get();
 
             $normalizedRespondens = $respondens->map(function ($responden) {
-                $responden->category = Str::lower($responden->category);
-                $responden->fakultas = Str::lower($responden->fakultas);
+                $responden->fakultas = $this->normalizeFacultyName($responden->fakultas);
+                $responden->category = $this->normalizeCategoryName($responden->category);
                 return $responden;
             });
             $byFaculty = $normalizedRespondens->groupBy('fakultas')->map->count();
             $byCategory = $normalizedRespondens->groupBy('category')->map->count();
             $byStatus = $respondens->groupBy('status')->map->count();
-            
+
             $inputterIds = Responden::query()->distinct()->pluck('user_id');
             $inputters = User::whereIn('id', $inputterIds)->get();
 
@@ -81,8 +119,6 @@ class AdminRespondenController extends Controller
                 'byStatus' => $byStatus,
                 'byInputterFaculty' => $byInputterFaculty
             ]);
-
-
         } catch (\Exception $e) {
             Log::error('Error fetching chart summary data: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to fetch chart data'], 500);
@@ -122,8 +158,8 @@ class AdminRespondenController extends Controller
             $facultyCode = $userInfo['faculty_code'];
             if ($facultyCode) {
                 $prodiUserIds = User::where('role', 'prodi')
-                                    ->where('name', 'like', $facultyCode . '-%')
-                                    ->pluck('id');
+                    ->where('name', 'like', $facultyCode . '-%')
+                    ->pluck('id');
                 $allUserIds = $prodiUserIds->push($user->id)->all();
                 $query->whereIn('user_id', $allUserIds);
             } else {
