@@ -43,6 +43,7 @@ Route::get('/aktivitas-dosen-asing/{id}', [InternationalFacultyStaffActivitiesCo
 
 
 //Chart Responden
-// Route::get('/responden-chart-data', [AdminRespondenController::class, 'getChartData'])->name('api.responden.chart-data');
 Route::get('/responden/chart-summary', [AdminRespondenController::class, 'getChartSummaryData'])
     ->name('api.responden.chartSummary');
+Route::get('/responden/chart-prodi', [AdminRespondenController::class, 'getProdiChartData'])
+    ->name('api.responden.chartProdi');

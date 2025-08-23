@@ -17,6 +17,7 @@ use App\Mail\RespondenInvitationMail;
 use Illuminate\Validation\Rule;
 use App\Models\Responden;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class AdminRespondenController extends Controller
 {
@@ -43,10 +44,26 @@ class AdminRespondenController extends Controller
         if (Auth::user()->role !== 'admin_direktorat') {
             return redirect()->route('admin.dashboard')->with('error', 'Tidak ada akses');
         }
-        return view('admin.responden_laporan');
+        $faculties = Responden::query()
+            ->select('fakultas')
+            ->whereNotNull('fakultas')
+            ->where('fakultas', '!=', '')
+            ->distinct()
+            ->orderBy('fakultas')
+            ->get()
+            ->map(function ($item) {
+                $item->fakultas_cleaned = $this->normalizeFacultyName($item->fakultas);
+                return $item;
+            })
+            ->pluck('fakultas_cleaned', 'fakultas_cleaned')
+            ->sort()
+            ->unique();
+
+        return view('admin.responden_laporan', compact('faculties'));
     }
 
-    private function normalizeFacultyName($faculty) {
+    private function normalizeFacultyName($faculty)
+    {
         $faculty = strtolower(trim($faculty));
         $map = [
             'teknik' => 'ft',
@@ -58,7 +75,7 @@ class AdminRespondenController extends Controller
         if (array_key_exists($faculty, $map)) {
             return $map[$faculty];
         }
-        
+
         if (empty($faculty)) {
             return 'tidak terdefinisi';
         }
@@ -66,13 +83,14 @@ class AdminRespondenController extends Controller
         return $faculty;
     }
 
-    private function normalizeCategoryName($category) {
+    private function normalizeCategoryName($category)
+    {
         $category = strtolower(trim($category));
 
         if (Str::contains($category, ['academic', 'researcher', 'reseracher'])) {
             return 'academic';
         }
-        
+
         if (Str::contains($category, 'employer')) {
             return 'employer';
         }
@@ -81,21 +99,45 @@ class AdminRespondenController extends Controller
             return 'lainnya';
         }
 
-        return 'lainnya'; 
+        return 'lainnya';
     }
 
 
 
-    public function getChartSummaryData()
+    public function getChartSummaryData(Request $request)
     {
         try {
-            $respondens = Responden::query()->get();
+            $query = Responden::query();
 
+            //Validation anabel
+            if (
+                $request->has('start_date') && $request->filled('start_date') &&
+                $request->has('end_date') && $request->filled('end_date')
+            ) {
+
+                try {
+                    $startDate = Carbon::parse($request->start_date)->startOfDay();
+                    $endDate = Carbon::parse($request->end_date)->endOfDay();
+
+                    if ($startDate->isValid() && $endDate->isValid()) {
+                        $query->whereBetween('created_at', [$startDate, $endDate]);
+                    }
+                } catch (\Exception $e) {
+                    Log::warning('Invalid date format in chart summary request', [
+                        'start_date' => $request->start_date,
+                        'end_date' => $request->end_date,
+                        'error' => $e->getMessage()
+                    ]);
+                }
+            }
+
+            $respondens = $query->get();
             $normalizedRespondens = $respondens->map(function ($responden) {
                 $responden->fakultas = $this->normalizeFacultyName($responden->fakultas);
                 $responden->category = $this->normalizeCategoryName($responden->category);
                 return $responden;
             });
+
             $byFaculty = $normalizedRespondens->groupBy('fakultas')->map->count();
             $byCategory = $normalizedRespondens->groupBy('category')->map->count();
             $byStatus = $respondens->groupBy('status')->map->count();
@@ -105,10 +147,10 @@ class AdminRespondenController extends Controller
 
             $byInputterFaculty = $inputters->map(function ($user) {
                 if ($user->role === 'fakultas') {
-                    return strtolower($user->name);
+                    return $this->normalizeFacultyName(strtolower($user->name));
                 } elseif ($user->role === 'prodi') {
                     $parts = explode('-', $user->name, 2);
-                    return strtolower($parts[0] ?? 'unknown');
+                    return $this->normalizeFacultyName(strtolower($parts[0] ?? 'unknown'));
                 }
                 return 'lainnya';
             })->countBy();
@@ -124,6 +166,58 @@ class AdminRespondenController extends Controller
             return response()->json(['error' => 'Failed to fetch chart data'], 500);
         }
     }
+
+public function getProdiChartData(Request $request)
+{
+    $request->validate([
+        'fakultas' => 'required|string',
+        'start_date' => 'nullable|date',
+        'end_date' => 'nullable|date|after_or_equal:start_date'
+    ]);
+
+    try {
+        $facultyCode = $request->fakultas;
+
+        $query = Responden::query()
+            ->join('users', 'respondens.user_id', '=', 'users.id')
+            ->where('users.role', 'prodi')
+            ->where('users.name', 'like', $facultyCode . '-%');
+
+        // Validation ANABEL
+        if ($request->has('start_date') && $request->filled('start_date') && 
+            $request->has('end_date') && $request->filled('end_date')) {
+            
+            try {
+                $startDate = Carbon::parse($request->start_date)->startOfDay();
+                $endDate = Carbon::parse($request->end_date)->endOfDay();
+                
+                if ($startDate->isValid() && $endDate->isValid()) {
+                    $query->whereBetween('respondens.created_at', [$startDate, $endDate]);
+                }
+            } catch (\Exception $e) {
+                Log::warning('Invalid date format in prodi chart request', [
+                    'start_date' => $request->start_date,
+                    'end_date' => $request->end_date,
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
+
+        $data = $query->select('users.name as prodi_name', DB::raw('count(respondens.id) as count'))
+            ->groupBy('users.name')
+            ->get()
+            ->mapWithKeys(function ($item) {
+                $prodiName = Str::after($item->prodi_name, '-');
+                $prodiName = ucwords(trim($prodiName));
+                return [$prodiName => $item->count];
+            });
+
+        return response()->json($data);
+    } catch (\Exception $e) {
+        Log::error('Error fetching prodi chart data: ' . $e->getMessage());
+        return response()->json(['error' => 'Failed to fetch prodi chart data'], 500);
+    }
+}
 
 
 
