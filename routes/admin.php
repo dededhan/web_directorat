@@ -376,6 +376,9 @@ Route::prefix('fakultas')->name('fakultas.')
             ->name('sustainability.detail');
 
 
+        Route::get('/responden/laporan', [AdminRespondenController::class, 'laporanFakultas'])
+            ->name('responden.laporan');
+
         Route::resource('/responden', AdminRespondenController::class)->except(['update']);
         Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
             ->name('responden.update');

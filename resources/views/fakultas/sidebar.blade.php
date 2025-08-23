@@ -71,6 +71,12 @@
                         <span class="text">Responden</span>
                     </a>
                 </li>
+                <li class="{{ request()->routeIs('fakultas.responden.laporan') ? 'active' : '' }}">
+                    <a href="{{ route('fakultas.responden.laporan') }}">
+                        <i class='bx bxs-bar-chart-alt-2'></i>
+                        <span class="text">Laporan Responden</span>
+                    </a>
+                </li>
                 <li class="{{ Request::is('fakultas/qsresponden*') ? 'active' : '' }}">
                     <a href="{{ route('fakultas.qsresponden.index') }}">
                         <i class='bx bxs-spreadsheet'></i>
@@ -85,7 +91,7 @@
             <h3 class="section-title">Settings</h3>
             <ul class="side-menu">
                 <li class="{{ request()->routeIs('fakultas.manage.account') ? 'active' : '' }}">
-                    <a href="{{ route('fakultas.manage.account') }}"> 
+                    <a href="{{ route('fakultas.manage.account') }}">
                         <i class='bx bxs-user-account'></i>
                         <span class="text">Manage Account</span>
                     </a>

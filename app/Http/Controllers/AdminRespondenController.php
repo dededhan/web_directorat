@@ -62,6 +62,16 @@ class AdminRespondenController extends Controller
         return view('admin.responden_laporan', compact('faculties'));
     }
 
+    public function laporanFakultas()
+    {
+        if (Auth::user()->role !== 'fakultas') {
+            return redirect()->route('fakultas.dashboard')->with('error', 'Tidak ada akses');
+        }
+        return view('fakultas.responden_laporan');
+    }
+
+
+
     private function normalizeFacultyName($faculty)
     {
         $faculty = strtolower(trim($faculty));
@@ -167,57 +177,59 @@ class AdminRespondenController extends Controller
         }
     }
 
-public function getProdiChartData(Request $request)
-{
-    $request->validate([
-        'fakultas' => 'required|string',
-        'start_date' => 'nullable|date',
-        'end_date' => 'nullable|date|after_or_equal:start_date'
-    ]);
+    public function getProdiChartData(Request $request)
+    {
+        $user = Auth::user();
+        $role = $user->role;
 
-    try {
-        $facultyCode = $request->fakultas;
+        // validation anabel
+        $request->validate([
+            'fakultas' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date'
+        ]);
 
-        $query = Responden::query()
-            ->join('users', 'respondens.user_id', '=', 'users.id')
-            ->where('users.role', 'prodi')
-            ->where('users.name', 'like', $facultyCode . '-%');
+        try {
+            $facultyCode = null;
 
-        // Validation ANABEL
-        if ($request->has('start_date') && $request->filled('start_date') && 
-            $request->has('end_date') && $request->filled('end_date')) {
-            
-            try {
+            //fakultas anabel
+            if ($role === 'fakultas') {
+                $userInfo = $this->getUserFacultyInfo($user);
+                $facultyCode = $userInfo['faculty_code'];
+            } elseif ($request->filled('fakultas')) {
+                $facultyCode = $request->fakultas;
+            }
+
+            if (!$facultyCode) {
+                return response()->json([]);
+            }
+
+            $query = Responden::query()
+                ->join('users', 'respondens.user_id', '=', 'users.id')
+                ->where('users.role', 'prodi')
+                ->where('users.name', 'like', $facultyCode . '-%');
+
+            if ($request->filled('start_date') && $request->filled('end_date')) {
                 $startDate = Carbon::parse($request->start_date)->startOfDay();
                 $endDate = Carbon::parse($request->end_date)->endOfDay();
-                
-                if ($startDate->isValid() && $endDate->isValid()) {
-                    $query->whereBetween('respondens.created_at', [$startDate, $endDate]);
-                }
-            } catch (\Exception $e) {
-                Log::warning('Invalid date format in prodi chart request', [
-                    'start_date' => $request->start_date,
-                    'end_date' => $request->end_date,
-                    'error' => $e->getMessage()
-                ]);
+                $query->whereBetween('respondens.created_at', [$startDate, $endDate]);
             }
+
+            $data = $query->select('users.name as prodi_name', DB::raw('count(respondens.id) as count'))
+                ->groupBy('users.name')
+                ->get()
+                ->mapWithKeys(function ($item) {
+                    $prodiName = Str::after($item->prodi_name, '-');
+                    $prodiName = ucwords(trim($prodiName));
+                    return [$prodiName => $item->count];
+                });
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+            Log::error('Error fetching prodi chart data: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to fetch prodi chart data'], 500);
         }
-
-        $data = $query->select('users.name as prodi_name', DB::raw('count(respondens.id) as count'))
-            ->groupBy('users.name')
-            ->get()
-            ->mapWithKeys(function ($item) {
-                $prodiName = Str::after($item->prodi_name, '-');
-                $prodiName = ucwords(trim($prodiName));
-                return [$prodiName => $item->count];
-            });
-
-        return response()->json($data);
-    } catch (\Exception $e) {
-        Log::error('Error fetching prodi chart data: ' . $e->getMessage());
-        return response()->json(['error' => 'Failed to fetch prodi chart data'], 500);
     }
-}
 
 
 
