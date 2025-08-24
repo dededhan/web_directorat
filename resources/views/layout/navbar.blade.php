@@ -132,3 +132,111 @@
 
 <!-- Overlay for Mobile Sidebar -->
 <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-40 opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out block md:hidden"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const menuIcon = document.getElementById('menu-icon');
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const mobileNavbar = document.getElementById('mobile-navbar');
+        const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
+        
+        function handleScroll() {
+            if (window.scrollY > 10) {
+                mobileNavbar.classList.remove('bg-transparent');
+                mobileNavbar.classList.add('bg-[#186862]');
+            } else {
+                mobileNavbar.classList.remove('bg-[#186862]');
+                mobileNavbar.classList.add('bg-transparent');
+            }
+        }
+        
+        window.addEventListener('scroll', handleScroll);
+        
+        function initMobileNav() {
+            if (window.innerWidth < 768) {
+                hideSidebar();
+                handleScroll();
+            }
+        }
+        
+        function showSidebar() {
+            mobileSidebar.classList.remove('translate-x-full');
+            sidebarOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            sidebarOverlay.classList.add('opacity-50');
+            menuIcon.classList.remove('fa-bars');
+            menuIcon.classList.add('fa-times');
+        }
+        
+        function hideSidebar() {
+            mobileSidebar.classList.add('translate-x-full');
+            sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
+            sidebarOverlay.classList.remove('opacity-50');
+            menuIcon.classList.remove('fa-times');
+            menuIcon.classList.add('fa-bars');
+        }
+        
+        mobileMenuToggle.addEventListener('click', function() {
+            if (mobileSidebar.classList.contains('translate-x-full')) {
+                showSidebar();
+            } else {
+                hideSidebar();
+            }
+        });
+        
+        document.getElementById('close-sidebar').addEventListener('click', hideSidebar);
+        sidebarOverlay.addEventListener('click', hideSidebar);
+        
+        dropdownButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const dropdownMenu = this.nextElementSibling;
+                const icon = this.querySelector('i');
+                
+                dropdownButtons.forEach(otherButton => {
+                    if (otherButton !== button) {
+                        const otherMenu = otherButton.nextElementSibling;
+                        const otherIcon = otherButton.querySelector('i');
+                        if (!otherMenu.classList.contains('hidden')) {
+                            otherMenu.classList.add('hidden');
+                            otherIcon.classList.remove('fa-chevron-up');
+                            otherIcon.classList.add('fa-chevron-down');
+                        }
+                    }
+                });
+                
+                dropdownMenu.classList.toggle('hidden');
+                
+                if (dropdownMenu.classList.contains('hidden')) {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                } else {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                }
+            });
+        });
+        
+        initMobileNav();
+        
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768) {
+                hideSidebar();
+            } else {
+                handleScroll();
+            }
+        });
+        
+        document.querySelectorAll('#mobile-sidebar a[href]:not([data-bs-toggle])').forEach(link => {
+            link.addEventListener('click', () => {
+                setTimeout(hideSidebar, 100);
+            });
+        });
+        
+        document.querySelectorAll('#mobile-sidebar .login').forEach(loginBtn => {
+            loginBtn.addEventListener('click', () => {
+                setTimeout(hideSidebar, 100);
+            });
+        });
+    });
+</script>
