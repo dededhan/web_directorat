@@ -110,33 +110,28 @@
         /* --- PERBAIKAN RESPONSIVE UNTUK MOBILE --- */
         @media (max-width: 768px) {
             .modal-dialog {
-                /* Mengatur lebar pop-up agar sesuai dengan layar mobile */
                 width: 95%;
                 margin: 1rem auto;
-                /* Mencegah pop-up terlalu tinggi dan mengaktifkan scroll jika perlu */
                 max-height: 90vh;
                 overflow-y: auto;
             }
 
             .modal-container {
-                /* Mengubah tata letak menjadi vertikal (stacked) */
                 flex-direction: column;
-                min-height: auto; /* Hapus tinggi minimum */
+                min-height: auto;
             }
 
-            .left-panel, .right-panel {
-                flex: 1 1 auto;
-                /* Mengurangi padding untuk menghemat ruang */
-                padding: 25px;
-            }
-            
+            /* --- PERUBAIKAN UTAMA: Sembunyikan panel kanan di mobile --- */
             .right-panel {
-                /* Memberi tinggi minimum agar tidak terlalu pendek */
-                min-height: 250px;
+                display: none;
+            }
+
+            .left-panel {
+                flex: 1 1 auto;
+                padding: 25px;
             }
 
             .modal-content {
-                /* Memastikan konten modal dapat di-scroll jika melebihi layar */
                 max-height: 90vh;
                 display: flex;
                 flex-direction: column;
@@ -144,15 +139,11 @@
         }
 
         @media (max-width: 480px) {
-            .left-panel, .right-panel {
-                /* Mengurangi padding lebih lanjut untuk layar yang sangat kecil */
+            .left-panel {
                 padding: 20px;
             }
             .left-panel h1 {
-                font-size: 1.25rem; /* Menyesuaikan ukuran font judul */
-            }
-            .right-panel h2 {
-                font-size: 1.5rem; /* Menyesuaikan ukuran font judul */
+                font-size: 1.25rem;
             }
         }
     </style>
@@ -232,35 +223,50 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // First, make sure the modal is hidden by default
             const modal = document.getElementById('loginModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('block');
-
-            // Only show login modal when login buttons are clicked
             const loginButtons = document.querySelectorAll('.login');
+            
+            // --- PERBAIKAN: Fungsi untuk menutup sidebar ---
+            // Logika ini hanya mengatur interaksi UI dan tidak mengubah cara kerja login
+            const closeMobileSidebar = () => {
+                const mobileSidebar = document.getElementById('mobile-sidebar');
+                const sidebarOverlay = document.getElementById('sidebar-overlay');
+                
+                // Cek jika sidebar ada dan sedang terbuka
+                if (mobileSidebar && mobileSidebar.style.transform === 'translateX(0px)') {
+                    mobileSidebar.style.transform = 'translateX(100%)';
+                    if (sidebarOverlay) {
+                        sidebarOverlay.style.opacity = '0';
+                        sidebarOverlay.style.pointerEvents = 'none';
+                    }
+                    document.body.classList.remove('sidebar-open');
+                }
+            };
+
             loginButtons.forEach(button => {
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
+                    
+                    // --- PERBAIKAN: Panggil fungsi penutup sidebar sebelum menampilkan modal ---
+                    closeMobileSidebar();
+                    
+                    // Logika asli untuk menampilkan modal tetap dipertahankan
                     modal.classList.remove('hidden');
-                    modal.classList.add('block');
                 });
             });
 
-            // Add ability to close modal by clicking outside
+            // Logika asli untuk menutup modal saat klik di luar area modal
             modal.addEventListener('click', function(e) {
                 if (e.target === modal) {
                     modal.classList.add('hidden');
-                    modal.classList.remove('block');
                 }
             });
 
-            // Optional: Add close button functionality
+            // Logika asli untuk tombol close (jika ada)
             const closeModalButton = modal.querySelector('[data-dismiss="modal"]');
             if (closeModalButton) {
                 closeModalButton.addEventListener('click', function() {
                     modal.classList.add('hidden');
-                    modal.classList.remove('block');
                 });
             }
         });
