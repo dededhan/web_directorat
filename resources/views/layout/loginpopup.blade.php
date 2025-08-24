@@ -121,7 +121,6 @@
                 min-height: auto;
             }
 
-            /* --- PERUBAIKAN UTAMA: Sembunyikan panel kanan di mobile --- */
             .right-panel {
                 display: none;
             }
@@ -226,19 +225,21 @@
             const modal = document.getElementById('loginModal');
             const loginButtons = document.querySelectorAll('.login');
             
-            // --- PERBAIKAN: Fungsi untuk menutup sidebar ---
-            // Logika ini hanya mengatur interaksi UI dan tidak mengubah cara kerja login
+            // --- PERBAIKAN V2: Fungsi untuk menutup sidebar yang lebih andal ---
             const closeMobileSidebar = () => {
-                const mobileSidebar = document.getElementById('mobile-sidebar');
-                const sidebarOverlay = document.getElementById('sidebar-overlay');
-                
-                // Cek jika sidebar ada dan sedang terbuka
-                if (mobileSidebar && mobileSidebar.style.transform === 'translateX(0px)') {
-                    mobileSidebar.style.transform = 'translateX(100%)';
+                // Mengecek class 'sidebar-open' pada body adalah cara paling akurat
+                if (document.body.classList.contains('sidebar-open')) {
+                    const mobileSidebar = document.getElementById('mobile-sidebar');
+                    const sidebarOverlay = document.getElementById('sidebar-overlay');
+                    
+                    if (mobileSidebar) {
+                        mobileSidebar.style.transform = 'translateX(100%)';
+                    }
                     if (sidebarOverlay) {
                         sidebarOverlay.style.opacity = '0';
                         sidebarOverlay.style.pointerEvents = 'none';
                     }
+                    // Hapus class dari body untuk menandakan sidebar sudah tertutup
                     document.body.classList.remove('sidebar-open');
                 }
             };
@@ -247,22 +248,22 @@
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
                     
-                    // --- PERBAIKAN: Panggil fungsi penutup sidebar sebelum menampilkan modal ---
+                    // Panggil fungsi penutup sidebar sebelum menampilkan modal
                     closeMobileSidebar();
                     
-                    // Logika asli untuk menampilkan modal tetap dipertahankan
+                    // Tampilkan modal setelah memastikan sidebar tertutup
                     modal.classList.remove('hidden');
                 });
             });
 
-            // Logika asli untuk menutup modal saat klik di luar area modal
+            // Logika untuk menutup modal saat klik di luar area modal
             modal.addEventListener('click', function(e) {
                 if (e.target === modal) {
                     modal.classList.add('hidden');
                 }
             });
 
-            // Logika asli untuk tombol close (jika ada)
+            // Logika untuk tombol close (jika ada)
             const closeModalButton = modal.querySelector('[data-dismiss="modal"]');
             if (closeModalButton) {
                 closeModalButton.addEventListener('click', function() {
