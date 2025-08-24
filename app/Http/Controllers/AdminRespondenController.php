@@ -678,12 +678,13 @@ class AdminRespondenController extends Controller
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
 
-
         $kategori = $request->input('kategori');
         $fakultas = $request->input('fakultas');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
-
-        return Excel::download(new RespondenExport($user, $kategori, $fakultas), 'responden-data.xlsx');
+        $fileName = 'responden-data-' . now()->format('Ymd-His') . '.xlsx';
+        return Excel::download(new RespondenExport($user, $kategori, $fakultas, $startDate, $endDate), $fileName);
     }
 
     public function exportCSV(Request $request)
@@ -693,12 +694,13 @@ class AdminRespondenController extends Controller
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
 
-        // Ambil filter dari request
         $kategori = $request->input('kategori');
         $fakultas = $request->input('fakultas');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
-
-        return Excel::download(new RespondenExport($user, $kategori, $fakultas), 'responden-data.csv');
+        $fileName = 'responden-data-' . now()->format('Ymd-His') . '.csv';
+        return Excel::download(new RespondenExport($user, $kategori, $fakultas, $startDate, $endDate), $fileName);
     }
 
 

@@ -4,10 +4,9 @@
 @vite(['resources/css/admin/responden_dashboard.css'])
 
 @section('contentadmin')
-
     @if ($errors->has('email'))
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Gagal Menyimpan Data',
@@ -166,7 +165,8 @@
                                         </option>
                                         <option value="fip" {{ request('fakultas') == 'fip' ? 'selected' : '' }}>FIP
                                         </option>
-                                        <option value="fmipa" {{ request('fakultas') == 'fmipa' ? 'selected' : '' }}>FMIPA
+                                        <option value="fmipa" {{ request('fakultas') == 'fmipa' ? 'selected' : '' }}>
+                                            FMIPA
                                         </option>
                                         <option value="fpsi" {{ request('fakultas') == 'fpsi' ? 'selected' : '' }}>FPsi
                                         </option>
@@ -187,14 +187,19 @@
                                 <div class="col-auto">
                                     <label for="perPageFilter" class="form-label visually-hidden">Show</label>
                                     <select class="form-select" name="per_page" id="perPageFilter">
-                                        <option value="10" {{ request('per_page', 10) == 10 ? 'selected' : '' }}>10</option>
-                                        <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
-                                        <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
-                                        <option value="2000" {{ request('per_page') == 2000 ? 'selected' : '' }}>All</option>
+                                        <option value="10" {{ request('per_page', 10) == 10 ? 'selected' : '' }}>10
+                                        </option>
+                                        <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50
+                                        </option>
+                                        <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100
+                                        </option>
+                                        <option value="2000" {{ request('per_page') == 2000 ? 'selected' : '' }}>All
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="col-auto">
-                                    <input type="date" name="filter_date" class="form-control" value="{{ request('filter_date') }}">
+                                    <input type="date" name="filter_date" class="form-control"
+                                        value="{{ request('filter_date') }}">
                                 </div>
 
                                 <div class="col-auto">
@@ -216,7 +221,7 @@
                                 </button>
                             </div>
                         </div>
-                        
+
 
                     </div>
                 </div>
@@ -256,7 +261,8 @@
                                     </a>
                                 </th>
                                 <th>
-                                    <a href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
+                                    <a
+                                        href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
                                         Tanggal Dibuat
                                         @if (request('sort') == 'created_at')
                                             {!! request('direction') == 'asc' ? '↑' : '↓' !!}
@@ -319,27 +325,30 @@
                             @endforelse
                         </tbody>
                     </table>
-                    
+
 
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <div>
                             @if ($respondens->total() > 0)
                                 <span class="text-muted">
-                                    Showing {{ $respondens->firstItem() }} to {{ $respondens->lastItem() }} of {{ $respondens->total() }} results
+                                    Showing {{ $respondens->firstItem() }} to {{ $respondens->lastItem() }} of
+                                    {{ $respondens->total() }} results
                                 </span>
                             @else
-                                 <span class="text-muted">No results found</span>
+                                <span class="text-muted">No results found</span>
                             @endif
                         </div>
-                          <div>
-                           <div class="btn-group">
+                        <div>
+                            <div class="btn-group">
 
-                                <a href="{{ $respondens->appends(request()->query())->previousPageUrl() }}" class="btn btn-outline-primary @if($respondens->onFirstPage()) disabled @endif">
+                                <a href="{{ $respondens->appends(request()->query())->previousPageUrl() }}"
+                                    class="btn btn-outline-primary @if ($respondens->onFirstPage()) disabled @endif">
                                     &laquo; Previous
                                 </a>
 
 
-                                <a href="{{ $respondens->appends(request()->query())->nextPageUrl() }}" class="btn btn-outline-primary @if(!$respondens->hasMorePages()) disabled @endif">
+                                <a href="{{ $respondens->appends(request()->query())->nextPageUrl() }}"
+                                    class="btn btn-outline-primary @if (!$respondens->hasMorePages()) disabled @endif">
                                     Next &raquo;
                                 </a>
                             </div>
@@ -487,6 +496,7 @@
 
 
     <!-- Export Filter Modal -->
+    <!-- Export Filter Modal -->
     <div class="modal fade pt-3" id="exportFilterModal" tabindex="-1" aria-labelledby="exportFilterModalLabel"
         aria-hidden="true">
         <div class="modal-dialog pt-3">
@@ -496,17 +506,19 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    {{-- Filter Kategori --}}
                     <div class="mb-3">
                         <label for="exportFilterCategory" class="form-label">Kategori</label>
-                        <select class="form-select" id="filterCategory">
+                        <select class="form-select" id="exportFilterCategory">
                             <option value="">Semua Kategori</option>
                             <option value="academic">Academic</option>
                             <option value="employer">Employer</option>
                         </select>
                     </div>
+                    {{-- Filter Fakultas --}}
                     <div class="mb-3">
                         <label for="exportFilterFakultas" class="form-label">Fakultas</label>
-                        <select class="form-select" id="filterFakultas">
+                        <select class="form-select" id="exportFilterFakultas">
                             <option value="">Semua Fakultas</option>
                             <option value="pascasarjana">PASCASARJANA</option>
                             <option value="fip">FIP</option>
@@ -519,6 +531,17 @@
                             <option value="feb">FEB</option>
                             <option value="profesi">PROFESI</option>
                         </select>
+                    </div>
+                    {{-- Filter Tanggal --}}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="exportStartDate" class="form-label">Tanggal Mulai</label>
+                            <input type="date" class="form-control" id="exportStartDate">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="exportEndDate" class="form-label">Tanggal Selesai</label>
+                            <input type="date" class="form-control" id="exportEndDate">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -648,10 +671,10 @@
                         })
                         .then((result) => {
                             if (result.isConfirmed) {
-    
+
                                 axios.post(url, {
                                         _method: 'delete',
-                                        _token: csrfToken 
+                                        _token: csrfToken
                                     })
                                     .then(response => {
                                         Swal.fire(
@@ -685,33 +708,29 @@
                 axios.post(this.action, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
-                            'Accept': 'application/json' // Header ini membantu Laravel mendeteksi `wantsJson()`
+                            'Accept': 'application/json'
                         }
                     })
                     .then(response => {
                         $('#importModal').modal('hide');
 
-                        // [MODIFIKASI] Gunakan 'html' untuk merender detail dari backend
                         Swal.fire({
                             icon: 'success',
                             title: 'Import Selesai!',
-                            html: response.data.message, // Ganti 'text' menjadi 'html'
+                            html: response.data.message,
                         }).then(() => {
-                            // Reload halaman untuk menampilkan data yang baru di tabel
                             window.location.reload();
                         });
                     })
                     .catch(error => {
                         let errorMessage = 'An unknown error occurred.';
                         if (error.response && error.response.data && error.response.data.message) {
-                            // Ambil pesan error dari respons JSON backend
                             errorMessage = error.response.data.message;
                         }
 
                         Swal.fire({
                             icon: 'error',
                             title: 'Import Gagal',
-                            // Tampilkan pesan error yang lebih detail dari backend
                             html: errorMessage,
                         });
                     });
@@ -752,15 +771,19 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
             document.getElementById('exportFilteredExcel').addEventListener('click', function() {
-                const category = document.getElementById('filterCategory').value;
-                const fakultas = document.getElementById('filterFakultas').value;
+                const category = document.getElementById('exportFilterCategory').value;
+                const fakultas = document.getElementById('exportFilterFakultas').value;
+                const startDate = document.getElementById('exportStartDate').value;
+                const endDate = document.getElementById('exportEndDate').value;
 
                 let url = '{{ route('admin.responden.export') }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
                 if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
+                if (startDate) params.push(`start_date=${encodeURIComponent(startDate)}`);
+                if (endDate) params.push(`end_date=${encodeURIComponent(endDate)}`);
+
                 url += params.join('&');
 
                 window.location.href = url;
@@ -768,22 +791,25 @@
 
             // Handle CSV Export
             document.getElementById('exportFilteredCSV').addEventListener('click', function() {
-                const category = document.getElementById('filterCategory').value;
-                const fakultas = document.getElementById('filterFakultas').value;
+                const category = document.getElementById('exportFilterCategory').value;
+                const fakultas = document.getElementById('exportFilterFakultas').value;
+                const startDate = document.getElementById('exportStartDate').value;
+                const endDate = document.getElementById('exportEndDate').value;
 
                 let url = '{{ route('admin.responden.exportCSV') }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
                 if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
+                if (startDate) params.push(`start_date=${encodeURIComponent(startDate)}`);
+                if (endDate) params.push(`end_date=${encodeURIComponent(endDate)}`);
+
                 url += params.join('&');
 
                 window.location.href = url;
             });
             document.querySelectorAll('.status-dropdown').forEach(select => {
-                // Initial state check
                 const updateButton = select.closest('tr').querySelector('.update-status');
                 if (select.value === 'clear') {
-                    // Disable button when status is clear
                     updateButton.disabled = true;
                     updateButton.classList.add('btn-secondary');
                     updateButton.classList.remove('btn-warning');
@@ -794,10 +820,7 @@
                     const newStatus = this.value;
                     const updateButton = this.closest('tr').querySelector('.update-status');
 
-                    // Store previous value for rollback if needed
                     const previousValue = this.dataset.previousValue;
-
-                    // Prevent selecting 'clear' status manually
                     if (newStatus === 'clear') {
                         this.value = previousValue;
                         Swal.fire({
@@ -811,7 +834,6 @@
                     updateStatus(this, respondenId, newStatus, updateButton);
                 });
 
-                // Store initial value
                 select.dataset.previousValue = select.value;
             });
 
@@ -828,18 +850,13 @@
                             timer: 1500,
                             showConfirmButton: false
                         });
-
-                        // Update the dropdown to reflect the new status
                         selectElement.value = newStatus;
                         selectElement.dataset.previousValue = newStatus;
-
-                        // If status is 'clear', disable the dropdown
                         if (newStatus === 'clear') {
                             selectElement.disabled = true;
                         }
                     })
                     .catch(error => {
-                        // Revert to previous value on error
                         selectElement.value = selectElement.dataset.previousValue;
                         Swal.fire({
                             icon: 'error',
@@ -850,20 +867,6 @@
             }
         });
 
-
-        // document.getElementById('searchInput').addEventListener('keyup', function() {
-        //     const searchText = this.value.toLowerCase();
-        //     const table = document.getElementById('respondent-table');
-        //     const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-
-        //     for (let row of rows) {
-        //         let text = '';
-        //         for (let cell of row.getElementsByTagName('td')) {
-        //             text += cell.textContent.toLowerCase() + ' ';
-        //         }
-        //         row.style.display = text.includes(searchText) ? '' : 'none';
-        //     }
-        // });
     </script>
 
     <style>
