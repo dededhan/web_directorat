@@ -225,51 +225,45 @@
             const modal = document.getElementById('loginModal');
             const loginButtons = document.querySelectorAll('.login');
             
-            // --- PERBAIKAN V2: Fungsi untuk menutup sidebar yang lebih andal ---
+            // This function handles closing the mobile sidebar.
             const closeMobileSidebar = () => {
-                // Mengecek class 'sidebar-open' pada body adalah cara paling akurat
-                if (document.body.classList.contains('sidebar-open')) {
-                    const mobileSidebar = document.getElementById('mobile-sidebar');
-                    const sidebarOverlay = document.getElementById('sidebar-overlay');
-                    
-                    if (mobileSidebar) {
-                        mobileSidebar.style.transform = 'translateX(100%)';
-                    }
-                    if (sidebarOverlay) {
-                        sidebarOverlay.style.opacity = '0';
-                        sidebarOverlay.style.pointerEvents = 'none';
-                    }
-                    // Hapus class dari body untuk menandakan sidebar sudah tertutup
-                    document.body.classList.remove('sidebar-open');
+                const mobileSidebar = document.getElementById('mobile-sidebar');
+                const sidebarOverlay = document.getElementById('sidebar-overlay');
+                
+                // Check if the elements exist before trying to modify them.
+                if (mobileSidebar) {
+                    // Hide sidebar by moving it off-screen.
+                    mobileSidebar.style.transform = 'translateX(100%)';
                 }
+                if (sidebarOverlay) {
+                    // Hide overlay and make it non-interactive.
+                    sidebarOverlay.style.opacity = '0';
+                    sidebarOverlay.style.pointerEvents = 'none';
+                }
+                // It's also good practice to have a class on the body to track sidebar state,
+                // which should be removed here if it exists.
+                document.body.classList.remove('sidebar-open');
             };
 
             loginButtons.forEach(button => {
                 button.addEventListener('click', function(e) {
+                    // Prevent default anchor behavior
                     e.preventDefault();
                     
-                    // Panggil fungsi penutup sidebar sebelum menampilkan modal
+                    // **THE FIX**: First, call the function to close the sidebar.
                     closeMobileSidebar();
                     
-                    // Tampilkan modal setelah memastikan sidebar tertutup
+                    // Then, show the login modal.
                     modal.classList.remove('hidden');
                 });
             });
 
-            // Logika untuk menutup modal saat klik di luar area modal
+            // Logic to close the modal when clicking on the background overlay.
             modal.addEventListener('click', function(e) {
                 if (e.target === modal) {
                     modal.classList.add('hidden');
                 }
             });
-
-            // Logika untuk tombol close (jika ada)
-            const closeModalButton = modal.querySelector('[data-dismiss="modal"]');
-            if (closeModalButton) {
-                closeModalButton.addEventListener('click', function() {
-                    modal.classList.add('hidden');
-                });
-            }
         });
     </script>
 </body>
