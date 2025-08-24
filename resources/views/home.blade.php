@@ -854,9 +854,9 @@
 
     {{-- Include the responsive footer --}}
     @include('layout.footer')
+
 {{-- Consolidated and Responsive JavaScript --}}
 <script>
-// PERBAIKAN CAROUSEL JAVASCRIPT
 document.addEventListener('DOMContentLoaded', function () {
     
     // --- Navbar Scroll Effect ---
@@ -901,6 +901,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const sidebarOverlay = document.getElementById('sidebar-overlay');
     const closeSidebarBtn = document.getElementById('close-sidebar');
     const mobileDropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
+    const menuIcon = document.getElementById('menu-icon'); // Get the icon
 
     const openSidebar = () => {
         if (mobileSidebar && sidebarOverlay) {
@@ -908,6 +909,10 @@ document.addEventListener('DOMContentLoaded', function () {
             sidebarOverlay.style.opacity = '1';
             sidebarOverlay.style.pointerEvents = 'auto';
             document.body.classList.add('sidebar-open');
+            if(menuIcon) {
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-times');
+            }
         }
     };
 
@@ -917,10 +922,24 @@ document.addEventListener('DOMContentLoaded', function () {
             sidebarOverlay.style.opacity = '0';
             sidebarOverlay.style.pointerEvents = 'none';
             document.body.classList.remove('sidebar-open');
+            if(menuIcon) {
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
+            }
         }
     };
 
-    if (mobileMenuToggle) mobileMenuToggle.addEventListener('click', openSidebar);
+    // MODIFIED: Toggle sidebar on main hamburger button click
+    if (mobileMenuToggle) {
+        mobileMenuToggle.addEventListener('click', () => {
+            if (document.body.classList.contains('sidebar-open')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        });
+    }
+    
     if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
     if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
 
