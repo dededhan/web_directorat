@@ -1,7 +1,6 @@
 @include('layout.loginpopup')
 
 <!-- Desktop Navbar -->
-{{-- This navbar is hidden on small screens (mobile) and becomes visible on medium screens (md) and larger. --}}
 <nav class="navbar hidden md:block fixed top-0 w-full z-50 bg-[#186862] shadow-lg transition-all duration-300">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
         <div class="flex items-center space-x-4">
@@ -50,7 +49,6 @@
 </nav>
 
 <!-- Mobile Navbar -->
-{{-- This navbar is visible only on small screens and hidden on medium screens and larger. --}}
 <nav class="navbar block md:hidden fixed top-0 w-full z-50" id="mobile-navbar">
     <div class="bg-[#186862] shadow-lg">
         <div class="container mx-auto flex justify-between items-center py-3 px-4 h-16">
@@ -134,13 +132,19 @@
 <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-40 opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out block md:hidden"></div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    if (window.navbarScriptInitialized) {
+        console.log('Navbar script sudah diinisialisasi, melewati inisialisasi ulang');
+    } else {
+        window.navbarScriptInitialized = true;
+        console.log('Menginisialisasi navbar script');
+        
+        document.addEventListener('DOMContentLoaded', function() {
         const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
         const menuIcon = document.getElementById('menu-icon');
         const mobileSidebar = document.getElementById('mobile-sidebar');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
         const mobileNavbar = document.getElementById('mobile-navbar');
-        const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
+        let dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
         
         function handleScroll() {
             if (window.scrollY > 10) {
@@ -158,6 +162,7 @@
             if (window.innerWidth < 768) {
                 hideSidebar();
                 handleScroll();
+                initDropdowns();
             }
         }
         
@@ -177,6 +182,9 @@
             menuIcon.classList.add('fa-bars');
         }
         
+        window.showNavbarSidebar = showSidebar;
+        window.hideNavbarSidebar = hideSidebar;
+        
         mobileMenuToggle.addEventListener('click', function() {
             if (mobileSidebar.classList.contains('translate-x-full')) {
                 showSidebar();
@@ -188,32 +196,110 @@
         document.getElementById('close-sidebar').addEventListener('click', hideSidebar);
         sidebarOverlay.addEventListener('click', hideSidebar);
         
-        dropdownButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const dropdownMenu = this.nextElementSibling;
-                const icon = this.querySelector('i');
+        const styleElement = document.createElement('style');
+        styleElement.textContent = `
+            .sidebar-dropdown ul:not(.hidden) {
+                display: block !important;
+            }
+            .hidden {
+                display: none !important;
+            }
+        `;
+        document.head.appendChild(styleElement);
+        
+        function initDropdowns() {
+            dropdownButtons.forEach(button => {
+                const dropdownMenu = button.nextElementSibling;
+                const icon = button.querySelector('i');
                 
-                dropdownButtons.forEach(otherButton => {
-                    if (otherButton !== button) {
-                        const otherMenu = otherButton.nextElementSibling;
-                        const otherIcon = otherButton.querySelector('i');
-                        if (!otherMenu.classList.contains('hidden')) {
-                            otherMenu.classList.add('hidden');
-                            otherIcon.classList.remove('fa-chevron-up');
-                            otherIcon.classList.add('fa-chevron-down');
+                if (!dropdownMenu.classList.contains('hidden')) {
+                    dropdownMenu.classList.add('hidden');
+                }
+                
+                if (icon) {
+                    icon.style.transform = 'rotate(0deg)';
+                }
+            });
+        }
+        
+        initDropdowns();
+        
+        function toggleNavbarDropdown(button) {
+            console.log('toggleNavbarDropdown dipanggil', button);
+            
+            const dropdownMenu = button.nextElementSibling;
+            const icon = button.querySelector('i, .fa-chevron-down');
+            
+            console.log('Menu:', dropdownMenu);
+            console.log('Icon:', icon);
+            console.log('Hidden sebelum toggle:', dropdownMenu.classList.contains('hidden'));
+            
+            dropdownButtons.forEach(otherButton => {
+                if (otherButton !== button) {
+                    const otherMenu = otherButton.nextElementSibling;
+                    const otherIcon = otherButton.querySelector('i, .fa-chevron-down');
+                    if (!otherMenu.classList.contains('hidden')) {
+                        otherMenu.classList.add('hidden');
+                        if (otherIcon) {
+                            otherIcon.style.transform = 'rotate(0deg)';
+                        }
+                    }
+                }
+            });
+            
+            dropdownMenu.classList.toggle('hidden');
+            
+            console.log('Hidden setelah toggle:', dropdownMenu.classList.contains('hidden'));
+            
+            if (icon) {
+                if (dropdownMenu.classList.contains('hidden')) {
+                    icon.style.transform = 'rotate(0deg)';
+                    console.log('Rotasi ikon: 0deg');
+                } else {
+                    icon.style.transform = 'rotate(180deg)';
+                    console.log('Rotasi ikon: 180deg');
+                }
+            }
+        }
+        
+        window.toggleNavbarDropdown = toggleNavbarDropdown;
+        
+        const dropdownButtonsArray = Array.from(dropdownButtons);
+        dropdownButtonsArray.forEach(button => {
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+        });
+        
+        dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
+        
+        dropdownButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Dropdown button diklik (event listener baru)');
+                window.toggleNavbarDropdown(this);
+            });
+        });
+        
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.sidebar-dropdown')) {
+                dropdownButtons.forEach(button => {
+                    const dropdownMenu = button.nextElementSibling;
+                    const icon = button.querySelector('i');
+                    
+                    if (!dropdownMenu.classList.contains('hidden')) {
+                        dropdownMenu.classList.add('hidden');
+                        if (icon) {
+                            icon.style.transform = 'rotate(0deg)';
                         }
                     }
                 });
-                
-                dropdownMenu.classList.toggle('hidden');
-                
-                if (dropdownMenu.classList.contains('hidden')) {
-                    icon.classList.remove('fa-chevron-up');
-                    icon.classList.add('fa-chevron-down');
-                } else {
-                    icon.classList.remove('fa-chevron-down');
-                    icon.classList.add('fa-chevron-up');
-                }
+            }
+        });
+        
+        document.querySelectorAll('.sidebar-dropdown ul').forEach(menu => {
+            menu.addEventListener('click', function(e) {
+                e.stopPropagation();
             });
         });
         
@@ -238,5 +324,6 @@
                 setTimeout(hideSidebar, 100);
             });
         });
-    });
+    }
+});
 </script>
