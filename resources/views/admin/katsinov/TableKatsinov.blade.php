@@ -127,12 +127,16 @@
         <div class="order">
             <div class="head">
                 <h3>KATSINOV Measurement Data</h3>
-                <div class="d-flex justify-content-end">
-                    <div class="search-box">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Search...">
-                    </div>
+                <div class="d-flex align-items-center" style="gap: 10px;">
+                <a href="{{ route('admin.katsinov.settings.index') }}" class="btn btn-primary">
+                    <i class='bx bx-cog'></i> Setting Treshold
+                </a>
+                
+                <div class="search-box">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search...">
                 </div>
             </div>
+                
 
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -200,7 +204,7 @@
                                         <button class="btn btn-sm btn-danger">Delete</button>
                                     </div>
                                     <div class="btn-group-vertical mt-2">
-                                        <a href="{{ route('admin.katsinov.show', $katsinov->id) }}"
+                                        <a href="{{ route('admin.katsinov.privacy', $katsinov->id) }}"
                                             class="btn btn-success btn-sm mb-1">
                                             <i class='bx bx-refresh'></i> Penilaian
                                         </a>
