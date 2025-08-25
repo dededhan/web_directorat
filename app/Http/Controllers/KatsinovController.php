@@ -42,6 +42,7 @@ class KatsinovController extends Controller
             // For admin roles, show all katsinovs
             $katsinovs = $katsinovsQuery->latest()->paginate(100);
         }
+        
 
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov.TableKatsinov',
@@ -280,6 +281,8 @@ class KatsinovController extends Controller
             return redirect()->back()->with('error', 'Data KATSINOV tidak ditemukan');
         }
         $notes = $katsinov->notes->pluck('notes', 'indicator_number')->toArray();
+        $setting = \App\Models\Setting::where('key', 'katsinov_threshold')->first();
+        $minPercentage = $setting ? $setting->value : 80.0;
 
         $data = [
             'katsinov' => $katsinov,
@@ -289,7 +292,8 @@ class KatsinovController extends Controller
             'indicatorFour' =>  $katsinov->responses()->where('indicator_number', '=', 4)->get(),
             'indicatorFive' =>  $katsinov->responses()->where('indicator_number', '=', 5)->get(),
             'indicatorSix' =>  $katsinov->responses()->where('indicator_number', '=', 6)->get(),
-            'notes' => $notes
+            'notes' => $notes,
+            'min_percentage_js' => $minPercentage 
         ];
 
         $role = Auth::user()->role;

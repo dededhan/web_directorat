@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { id: 6, rows: 14, name: "Indikator KATSINOV 6" },
     ];
 
-    const MIN_PERCENTAGE_TO_PROCEED = 80.0;
+    const MIN_PERCENTAGE_TO_PROCEED = MIN_PERCENTAGE_FROM_SERVER;
     // Fungsi untuk menandai radio button secara unik
     function setupRadioButtons() {
         const indicatorCards = document.querySelectorAll(".indicator-card");

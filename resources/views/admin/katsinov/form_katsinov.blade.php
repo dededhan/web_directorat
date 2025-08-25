@@ -1026,4 +1026,8 @@
             }
         });
     </script>
+    <script>
+    // Membuat variabel JS dari variabel PHP
+    const MIN_PERCENTAGE_FROM_SERVER = {{ $min_percentage_js ?? 80.0 }};
+</script>
 @endsection
