@@ -161,6 +161,14 @@
                         const data = response.data;
                         destroyCharts();
 
+                        const getSortedData = (dataObject) => {
+                        const sortedLabels = Object.keys(dataObject).sort((a, b) => a.localeCompare(b));
+                        const sortedData = sortedLabels.map(label => dataObject[label]);
+                        return { sortedLabels, sortedData };
+                        };
+
+                    // Faculty Chart
+                    const facultyData = getSortedData(data.byFaculty);
                         // Faculty Chart
                         const facultyCtx = document.getElementById('facultyChart').getContext('2d');
                         charts.faculty = new Chart(facultyCtx, {
