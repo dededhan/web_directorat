@@ -76,13 +76,28 @@
                 </div>
             </div>
 
-
+            <!-- START: Perubahan Section Penginput -->
             <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
-                <h3 class="text-lg font-bold text-gray-700 mb-4">Jumlah Penginput (User) per Fakultas</h3>
-                <div class="h-80">
-                    <canvas id="inputterFacultyChart"></canvas>
+                <h3 class="text-lg font-bold text-gray-700 mb-4">Detail Penginput Data Responden</h3>
+                <div class="overflow-x-auto max-h-96"> <!-- Dibuat scrollable jika data sangat banyak -->
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50 sticky top-0">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama User</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fakultas / Role</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Input</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inputter-details-table-body" class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td colspan="3" class="px-6 py-4 text-center text-gray-500">Memuat data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+            <!-- END: Perubahan Section Penginput -->
+
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
@@ -161,33 +176,6 @@
                         const data = response.data;
                         destroyCharts();
 
-                        const getSortedData = (dataObject) => {
-                        const sortedLabels = Object.keys(dataObject).sort((a, b) => a.localeCompare(b));
-                        const sortedData = sortedLabels.map(label => dataObject[label]);
-                        return { sortedLabels, sortedData };
-                        };
-
-                    // Faculty Chart
-                   // --- AWAL PERUBAHAN: LOGIKA KHUSUS UNTUK GRAFIK FAKULTAS ---
-                    const facultyChartData = { ...data.byFaculty }; // Buat salinan data
-                    const specialKey = 'TIDAK TERDEFINISI';
-                    const specialValue = facultyChartData[specialKey];
-                    
-                    // Hapus kunci spesial dari data jika ada
-                    if (facultyChartData.hasOwnProperty(specialKey)) {
-                        delete facultyChartData[specialKey];
-                    }
-
-                    // Urutkan sisa data secara abjad
-                    let sortedFacultyLabels = Object.keys(facultyChartData).sort((a, b) => a.localeCompare(b));
-                    let sortedFacultyValues = sortedFacultyLabels.map(label => facultyChartData[label]);
-
-                    // Tambahkan kembali kunci spesial di akhir jika ada
-                    if (specialValue !== undefined) {
-                        sortedFacultyLabels.push(specialKey);
-                        sortedFacultyValues.push(specialValue);
-                    }
-                    // --- AKHIR PERUBAHAN ---
                         // Faculty Chart
                         const facultyCtx = document.getElementById('facultyChart').getContext('2d');
                         charts.faculty = new Chart(facultyCtx, {
@@ -214,37 +202,27 @@
                             }
                         });
 
-                        // Inputter Faculty Chart
-                        const inputterFacultyData = getSortedData(data.byInputterFaculty);
-                        const inputterFacultyCtx = document.getElementById('inputterFacultyChart')
-                            .getContext('2d');
-                        charts.inputter = new Chart(inputterFacultyCtx, {
-                            type: 'bar',
-                            data: {
-                                labels: Object.keys(data.byInputterFaculty).map(l => l
-                                .toUpperCase()),
-                                datasets: [{
-                                    label: 'Jumlah User Penginput',
-                                    data: Object.values(data.byInputterFaculty),
-                                    backgroundColor: 'rgba(16, 185, 129, 0.7)',
-                                }]
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                        ticks: {
-                                            precision: 0
-                                        }
-                                    }
-                                },
-                                responsive: true,
-                                maintainAspectRatio: false
-                            }
-                        });
+                        // START: Logika baru untuk mengisi tabel detail penginput
+                        const tableBody = document.getElementById('inputter-details-table-body');
+                        tableBody.innerHTML = ''; // Kosongkan tabel
+
+                        if (data.detailedInputters && data.detailedInputters.length > 0) {
+                            data.detailedInputters.forEach(user => {
+                                const row = `
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${user.name}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${user.faculty} (${user.role})</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-semibold">${user.count}</td>
+                                    </tr>
+                                `;
+                                tableBody.innerHTML += row;
+                            });
+                        } else {
+                            tableBody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-gray-500">Tidak ada data penginput untuk ditampilkan.</td></tr>';
+                        }
+                        // END: Logika baru
 
                         // Category Chart
-                        const categoryData = getSortedData(data.byCategory);
                         const categoryCtx = document.getElementById('categoryChart').getContext('2d');
                         charts.category = new Chart(categoryCtx, {
                             type: 'pie',
@@ -266,7 +244,6 @@
                         });
 
                         // Status Chart
-                        const statusData = getSortedData(data.byStatus);
                         const statusCtx = document.getElementById('statusChart').getContext('2d');
                         charts.status = new Chart(statusCtx, {
                             type: 'doughnut',
@@ -312,9 +289,6 @@
                         const data = response.data;
                         if (charts.prodi) charts.prodi.destroy();
 
-                    const prodiDataObject = response.data;
-                    const sortedProdiLabels = Object.keys(prodiDataObject).sort((a, b) => a.localeCompare(b));
-                    const sortedProdiData = sortedProdiLabels.map(label => prodiDataObject[label]);
                         const prodiCtx = document.getElementById('prodiChart').getContext('2d');
                         charts.prodi = new Chart(prodiCtx, {
                             type: 'bar',

@@ -79,8 +79,6 @@ class AdminRespondenController extends Controller
             'teknik' => 'ft',
             'fpbs' => 'fbs',
             'fkip' => 'fip',
-            'fis' => 'fish',
-            'fe'  => 'feb',
 
         ];
 
@@ -120,6 +118,8 @@ class AdminRespondenController extends Controller
     {
         try {
             $query = Responden::query();
+            $startDate = null;
+            $endDate = null;
 
             //Validation anabel
             if (
@@ -154,24 +154,41 @@ class AdminRespondenController extends Controller
             $byCategory = $normalizedRespondens->groupBy('category')->map->count();
             $byStatus = $respondens->groupBy('status')->map->count();
 
-            $inputterIds = Responden::query()->distinct()->pluck('user_id');
-            $inputters = User::whereIn('id', $inputterIds)->get();
+            // START: Perubahan untuk detail penginput
+            $inputsPerUserQuery = Responden::query()
+                ->select('user_id', DB::raw('count(*) as total'))
+                ->groupBy('user_id');
 
-            $byInputterFaculty = $inputters->map(function ($user) {
+            if ($startDate && $endDate) {
+                $inputsPerUserQuery->whereBetween('created_at', [$startDate, $endDate]);
+            }
+
+            $inputsPerUser = $inputsPerUserQuery->pluck('total', 'user_id');
+            $inputterUsers = User::whereIn('id', $inputsPerUser->keys())->get();
+
+            $detailedInputters = $inputterUsers->map(function ($user) use ($inputsPerUser) {
+                $faculty = 'Lainnya'; // Default
                 if ($user->role === 'fakultas') {
-                    return $this->normalizeFacultyName(strtolower($user->name));
+                    $faculty = $this->normalizeFacultyName(strtolower($user->name));
                 } elseif ($user->role === 'prodi') {
                     $parts = explode('-', $user->name, 2);
-                    return $this->normalizeFacultyName(strtolower($parts[0] ?? 'unknown'));
+                    $faculty = $this->normalizeFacultyName(strtolower($parts[0] ?? 'unknown'));
                 }
-                return 'lainnya';
-            })->countBy();
+
+                return [
+                    'name' => $user->name,
+                    'faculty' => strtoupper($faculty),
+                    'role' => ucwords(str_replace('_', ' ', $user->role)),
+                    'count' => $inputsPerUser[$user->id] ?? 0,
+                ];
+            })->sortByDesc('count')->values();
+            // END: Perubahan untuk detail penginput
 
             return response()->json([
                 'byFaculty' => $byFaculty,
                 'byCategory' => $byCategory,
                 'byStatus' => $byStatus,
-                'byInputterFaculty' => $byInputterFaculty
+                'detailedInputters' => $detailedInputters // Mengirim data baru ke view
             ]);
         } catch (\Exception $e) {
             Log::error('Error fetching chart summary data: ' . $e->getMessage());
@@ -343,16 +360,28 @@ class AdminRespondenController extends Controller
     {
         $user = Auth::user();
         $role = $user->role;
-        $validatedData = $request->validated();
+        $respondenValidated = $request->validated();
 
         if (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas', 'prodi'])) {
             return redirect()->back()->with('error', 'Anda tidak diizinkan menyimpan responden.')->withInput();
         }
 
-        $validatedData['user_id'] = $user->id;
 
-    
-        $responden = Responden::create($validatedData);
+
+        $responden = Responden::create([
+            'title' => $respondenValidated['responden_title'],
+            'fullname' => $respondenValidated['responden_fullname'],
+            'jabatan' => $respondenValidated['responden_jabatan'],
+            'instansi' => $respondenValidated['responden_instansi'],
+            'email' => $respondenValidated['email'],
+            'phone_responden' => $respondenValidated['phone_responden'],
+            'nama_dosen_pengusul' => $respondenValidated['responden_dosen'],
+            'phone_dosen' => $respondenValidated['responden_dosen_phone'],
+            'fakultas' => $respondenValidated['responden_fakultas'],
+            'category' => $respondenValidated['responden_category'],
+            'user_id' => $user->id,
+
+        ]);
 
         $redirectRouteName = 'admin.responden.index';
         if ($role === 'fakultas') {
