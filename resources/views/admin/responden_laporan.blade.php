@@ -196,6 +196,7 @@
                         });
 
                         // Inputter Faculty Chart
+                        const inputterFacultyData = getSortedData(data.byInputterFaculty);
                         const inputterFacultyCtx = document.getElementById('inputterFacultyChart')
                             .getContext('2d');
                         charts.inputter = new Chart(inputterFacultyCtx, {
