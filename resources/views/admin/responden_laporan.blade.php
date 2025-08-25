@@ -168,7 +168,26 @@
                         };
 
                     // Faculty Chart
-                    const facultyData = getSortedData(data.byFaculty);
+                   // --- AWAL PERUBAHAN: LOGIKA KHUSUS UNTUK GRAFIK FAKULTAS ---
+                    const facultyChartData = { ...data.byFaculty }; // Buat salinan data
+                    const specialKey = 'TIDAK TERDEFINISI';
+                    const specialValue = facultyChartData[specialKey];
+                    
+                    // Hapus kunci spesial dari data jika ada
+                    if (facultyChartData.hasOwnProperty(specialKey)) {
+                        delete facultyChartData[specialKey];
+                    }
+
+                    // Urutkan sisa data secara abjad
+                    let sortedFacultyLabels = Object.keys(facultyChartData).sort((a, b) => a.localeCompare(b));
+                    let sortedFacultyValues = sortedFacultyLabels.map(label => facultyChartData[label]);
+
+                    // Tambahkan kembali kunci spesial di akhir jika ada
+                    if (specialValue !== undefined) {
+                        sortedFacultyLabels.push(specialKey);
+                        sortedFacultyValues.push(specialValue);
+                    }
+                    // --- AKHIR PERUBAHAN ---
                         // Faculty Chart
                         const facultyCtx = document.getElementById('facultyChart').getContext('2d');
                         charts.faculty = new Chart(facultyCtx, {
