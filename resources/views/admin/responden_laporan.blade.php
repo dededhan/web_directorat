@@ -225,6 +225,7 @@
                         });
 
                         // Category Chart
+                        const categoryData = getSortedData(data.byCategory);
                         const categoryCtx = document.getElementById('categoryChart').getContext('2d');
                         charts.category = new Chart(categoryCtx, {
                             type: 'pie',
@@ -246,6 +247,7 @@
                         });
 
                         // Status Chart
+                        const statusData = getSortedData(data.byStatus);
                         const statusCtx = document.getElementById('statusChart').getContext('2d');
                         charts.status = new Chart(statusCtx, {
                             type: 'doughnut',
@@ -291,6 +293,9 @@
                         const data = response.data;
                         if (charts.prodi) charts.prodi.destroy();
 
+                    const prodiDataObject = response.data;
+                    const sortedProdiLabels = Object.keys(prodiDataObject).sort((a, b) => a.localeCompare(b));
+                    const sortedProdiData = sortedProdiLabels.map(label => prodiDataObject[label]);
                         const prodiCtx = document.getElementById('prodiChart').getContext('2d');
                         charts.prodi = new Chart(prodiCtx, {
                             type: 'bar',
