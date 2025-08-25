@@ -203,12 +203,11 @@ class AdminRespondenController extends Controller
         }
     }
 
-    public function getProdiChartData(Request $request)
+     public function getProdiChartData(Request $request)
     {
         $user = Auth::user();
         $role = $user->role;
 
-        // validation anabel
         $request->validate([
             'fakultas' => 'nullable|string',
             'start_date' => 'nullable|date',
@@ -218,7 +217,6 @@ class AdminRespondenController extends Controller
         try {
             $facultyCode = null;
 
-            //fakultas anabel
             if ($role === 'fakultas') {
                 $userInfo = $this->getUserFacultyInfo($user);
                 $facultyCode = $userInfo['faculty_code'];
@@ -230,10 +228,34 @@ class AdminRespondenController extends Controller
                 return response()->json([]);
             }
 
+            $normalizationMap = [
+                'fis' => 'fish',
+                'fe'  => 'feb',
+                'fppsi' => 'fpsi',
+            ];
+            
+            $aliases = [$facultyCode];
+            foreach ($normalizationMap as $original => $normalized) {
+                if ($normalized === $facultyCode) {
+                    $aliases[] = $original;
+                }
+            }
+            $aliases = array_unique($aliases);
+
             $query = Responden::query()
                 ->join('users', 'respondens.user_id', '=', 'users.id')
-                ->where('users.role', 'prodi')
-                ->where('users.name', 'like', $facultyCode . '-%');
+                ->where(function ($q) use ($aliases) {
+                    $q->where('users.role', 'prodi')
+                      ->where(function ($subq) use ($aliases) {
+                          foreach ($aliases as $alias) {
+                              $subq->orWhere('users.name', 'like', $alias . '-%');
+                          }
+                      });
+                    $q->orWhere(function ($subq) use ($aliases) {
+                        $subq->where('users.role', 'fakultas')
+                             ->whereIn('users.name', $aliases);
+                    });
+                });
 
             if ($request->filled('start_date') && $request->filled('end_date')) {
                 $startDate = Carbon::parse($request->start_date)->startOfDay();
@@ -241,13 +263,17 @@ class AdminRespondenController extends Controller
                 $query->whereBetween('respondens.created_at', [$startDate, $endDate]);
             }
 
-            $data = $query->select('users.name as prodi_name', DB::raw('count(respondens.id) as count'))
+            $data = $query->select('users.name as user_name', DB::raw('count(respondens.id) as count'))
                 ->groupBy('users.name')
                 ->get()
                 ->mapWithKeys(function ($item) {
-                    $prodiName = Str::after($item->prodi_name, '-');
-                    $prodiName = ucwords(trim($prodiName));
-                    return [$prodiName => $item->count];
+                    if (Str::contains($item->user_name, '-')) {
+                        $label = Str::after($item->user_name, '-');
+                        $label = ucwords(trim($label));
+                    } else {
+                        $label = 'Fakultas (' . strtoupper($item->user_name) . ')';
+                    }
+                    return [$label => $item->count];
                 });
 
             return response()->json($data);
