@@ -674,6 +674,7 @@ class AdminRespondenController extends Controller
     public function export(Request $request)
     {
         $user = Auth::user();
+        
         if (!in_array($user->role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas', 'prodi'])) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
