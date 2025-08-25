@@ -75,13 +75,21 @@ class AdminRespondenController extends Controller
     private function normalizeFacultyName($faculty)
     {
         $faculty = strtolower(trim($faculty));
+
+        if (strpos($faculty, 'fe-') === 0) {
+            return 'feb';
+        }
+
         $map = [
             'teknik' => 'ft',
             'fpbs' => 'fbs',
             'fkip' => 'fip',
-            'fis' => 'fish',
-            'fe'  => 'feb',
-
+            'fis' => 'fish', 
+            'fish' => 'fish',
+            'fe'  => 'feb', 
+            'feb' => 'feb',
+            'fppsi' => 'fpsi',
+            'fpsi' => 'fpsi',
         ];
 
         if (array_key_exists($faculty, $map)) {
@@ -94,7 +102,6 @@ class AdminRespondenController extends Controller
 
         return $faculty;
     }
-
     private function normalizeCategoryName($category)
     {
         $category = strtolower(trim($category));
@@ -116,7 +123,7 @@ class AdminRespondenController extends Controller
 
 
 
-    public function getChartSummaryData(Request $request)
+   public function getChartSummaryData(Request $request)
     {
         try {
             $query = Responden::query();
@@ -156,7 +163,6 @@ class AdminRespondenController extends Controller
             $byCategory = $normalizedRespondens->groupBy('category')->map->count();
             $byStatus = $respondens->groupBy('status')->map->count();
 
-            // START: Perubahan untuk detail penginput
             $inputsPerUserQuery = Responden::query()
                 ->select('user_id', DB::raw('count(*) as total'))
                 ->groupBy('user_id');
@@ -184,13 +190,12 @@ class AdminRespondenController extends Controller
                     'count' => $inputsPerUser[$user->id] ?? 0,
                 ];
             })->sortByDesc('count')->values();
-            // END: Perubahan untuk detail penginput
 
             return response()->json([
                 'byFaculty' => $byFaculty,
                 'byCategory' => $byCategory,
                 'byStatus' => $byStatus,
-                'detailedInputters' => $detailedInputters // Mengirim data baru ke view
+                'detailedInputters' => $detailedInputters
             ]);
         } catch (\Exception $e) {
             Log::error('Error fetching chart summary data: ' . $e->getMessage());

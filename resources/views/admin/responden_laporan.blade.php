@@ -16,7 +16,6 @@
             </button>
         </div>
 
-        <!-- Filter Section -->
         <div class="bg-white p-4 rounded-xl shadow-lg mb-6 print:hidden">
             <h3 class="text-lg font-bold text-gray-700 mb-4">Filter Laporan</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 items-end">
@@ -55,7 +54,6 @@
                 </div>
             </div>
 
-            <!-- Prodi Chart Section -->
             <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
                     <h3 class="text-lg font-bold text-gray-700">Jumlah Data Responden per Prodi</h3>
@@ -76,27 +74,36 @@
                 </div>
             </div>
 
-            <!-- START: Perubahan Section Penginput -->
             <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
-                <h3 class="text-lg font-bold text-gray-700 mb-4">Detail Penginput Data Responden</h3>
-                <div class="overflow-x-auto max-h-96"> <!-- Dibuat scrollable jika data sangat banyak -->
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50 sticky top-0">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama User</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fakultas / Role</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Input</th>
-                            </tr>
-                        </thead>
-                        <tbody id="inputter-details-table-body" class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td colspan="3" class="px-6 py-4 text-center text-gray-500">Memuat data...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <h3 class="text-lg font-bold text-gray-700 mb-4">Aktivitas Penginput Data</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-md font-semibold text-gray-600 mb-2 text-center">Grafik Jumlah Input per Fakultas</h4>
+                        <div class="h-80">
+                            <canvas id="inputterFacultyChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-md font-semibold text-gray-600 mb-2 text-center">Detail Penginput per User</h4>
+                        <div class="overflow-y-auto max-h-80 border rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50 sticky top-0">
+                                    <tr>
+                                        <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama User</th>
+                                        <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                                        <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inputter-details-table-body" class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td colspan="3" class="px-6 py-4 text-center text-gray-500">Memuat data...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <!-- END: Perubahan Section Penginput -->
 
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -176,7 +183,6 @@
                         const data = response.data;
                         destroyCharts();
 
-                        // Faculty Chart
                         const facultyCtx = document.getElementById('facultyChart').getContext('2d');
                         charts.faculty = new Chart(facultyCtx, {
                             type: 'bar',
@@ -202,25 +208,62 @@
                             }
                         });
 
-                        // START: Logika baru untuk mengisi tabel detail penginput
                         const tableBody = document.getElementById('inputter-details-table-body');
-                        tableBody.innerHTML = ''; // Kosongkan tabel
+                        tableBody.innerHTML = '';
+                        const filteredInputters = data.detailedInputters.filter(user => user.role !== 'Admin Direktorat');
 
-                        if (data.detailedInputters && data.detailedInputters.length > 0) {
-                            data.detailedInputters.forEach(user => {
+                        if (filteredInputters && filteredInputters.length > 0) {
+                            filteredInputters.forEach(user => {
                                 const row = `
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${user.name}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${user.faculty} (${user.role})</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-semibold">${user.count}</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">${user.name}</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">${user.role}</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 font-semibold text-center">${user.count}</td>
                                     </tr>
                                 `;
                                 tableBody.innerHTML += row;
                             });
                         } else {
-                            tableBody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-gray-500">Tidak ada data penginput untuk ditampilkan.</td></tr>';
+                            tableBody.innerHTML = '<tr><td colspan="3" class="px-4 py-2 text-center text-gray-500">Tidak ada data penginput.</td></tr>';
                         }
-                        // END: Logika baru
+                        
+                        // Kalkulasi ulang data chart berdasarkan data yang sudah difilter
+                        const byInputterFacultyFiltered = filteredInputters.reduce((acc, user) => {
+                            const faculty = user.faculty || 'Lainnya';
+                            if (!acc[faculty]) {
+                                acc[faculty] = 0;
+                            }
+                            acc[faculty] += user.count;
+                            return acc;
+                        }, {});
+
+
+                        // Inputter Faculty Chart
+                        const inputterFacultyCtx = document.getElementById('inputterFacultyChart').getContext('2d');
+                        charts.inputter = new Chart(inputterFacultyCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: Object.keys(byInputterFacultyFiltered),
+                                datasets: [{
+                                    label: 'Jumlah Input Data',
+                                    data: Object.values(byInputterFacultyFiltered),
+                                    backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        ticks: {
+                                            precision: 0
+                                        }
+                                    }
+                                },
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                        // END: Logika untuk Tabel dan Chart Penginput
 
                         // Category Chart
                         const categoryCtx = document.getElementById('categoryChart').getContext('2d');
