@@ -512,5 +512,5 @@
         </div>
     </div>
 </div>
-<script src="{{ asset('resource/movejs/indikator.js') }}"></script>
+
 

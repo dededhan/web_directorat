@@ -588,5 +588,5 @@
         </div>
     </div>
 </div>
-<script src="{{ asset('resources/movejs/indikator.js') }}"></script>
+
 
