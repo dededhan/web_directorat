@@ -79,6 +79,8 @@ class AdminRespondenController extends Controller
             'teknik' => 'ft',
             'fpbs' => 'fbs',
             'fkip' => 'fip',
+            'fis' => 'fish',
+            'fe'  => 'feb',
 
         ];
 
@@ -341,28 +343,16 @@ class AdminRespondenController extends Controller
     {
         $user = Auth::user();
         $role = $user->role;
-        $respondenValidated = $request->validated();
+        $validatedData = $request->validated();
 
         if (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas', 'prodi'])) {
             return redirect()->back()->with('error', 'Anda tidak diizinkan menyimpan responden.')->withInput();
         }
 
+        $validatedData['user_id'] = $user->id;
 
-
-        $responden = Responden::create([
-            'title' => $respondenValidated['responden_title'],
-            'fullname' => $respondenValidated['responden_fullname'],
-            'jabatan' => $respondenValidated['responden_jabatan'],
-            'instansi' => $respondenValidated['responden_instansi'],
-            'email' => $respondenValidated['email'],
-            'phone_responden' => $respondenValidated['phone_responden'],
-            'nama_dosen_pengusul' => $respondenValidated['responden_dosen'],
-            'phone_dosen' => $respondenValidated['responden_dosen_phone'],
-            'fakultas' => $respondenValidated['responden_fakultas'],
-            'category' => $respondenValidated['responden_category'],
-            'user_id' => $user->id,
-
-        ]);
+    
+        $responden = Responden::create($validatedData);
 
         $redirectRouteName = 'admin.responden.index';
         if ($role === 'fakultas') {
