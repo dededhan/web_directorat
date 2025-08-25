@@ -79,6 +79,8 @@ class AdminRespondenController extends Controller
             'teknik' => 'ft',
             'fpbs' => 'fbs',
             'fkip' => 'fip',
+            'fis' => 'fish',
+            'fe'  => 'feb',
 
         ];
 
