@@ -165,6 +165,7 @@
                 const labels = Object.keys(data.byFaculty);
                 const dataValues = Object.values(data.byFaculty);
                 const maxValue = dataValues.length > 0 ? Math.max(...dataValues) : 0;
+                //ini kgk keliatan kalo max
                 const yAxisMax = maxValue < 10 ? maxValue + 2 : Math.ceil(maxValue * 1.1);
 
                 charts.faculty = new Chart(facultyCtx, {
@@ -254,6 +255,11 @@
                              prodiChartTitle.textContent = `Jumlah Data Responden Fakultas per Prodi`;
                              chartLabel = `Responden di ${filters.selectedFaculty.toUpperCase()}`;
                         }
+
+                        //ini kgk keliatan kalo max
+                        const dataValues = Object.values(response.data);
+                        const maxValue = dataValues.length > 0 ? Math.max(...dataValues) : 0;
+                        const xAxisMax = maxValue < 10 ? maxValue + 2 : Math.ceil(maxValue * 1.1);
 
                         charts.prodi = new Chart(prodiCtx, {
                             type: 'bar',
