@@ -273,7 +273,13 @@
                             },
                             options: { 
                                 indexAxis: 'y', 
-                                scales: { x: { beginAtZero: true, ticks: { precision: 0 } } }, 
+                                 scales: { 
+                                    x: { 
+                                        beginAtZero: true, 
+                                        ticks: { precision: 0 },
+                                        max: xAxisMax 
+                                    } 
+                                }, 
                                 responsive: true, 
                                 maintainAspectRatio: false,
                                 plugins: {
