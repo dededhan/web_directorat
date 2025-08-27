@@ -411,7 +411,6 @@
                 }
             }
 
-            // Event listener untuk tombol filter
             filterButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     filterButtons.forEach(btn => btn.classList.remove('active'));
@@ -421,21 +420,17 @@
                 });
             });
             
-            // Event listener untuk tombol search
             searchButton.addEventListener('click', filterAndSearch);
-            
-            // Event listener untuk menekan Enter di input search
+          
             searchInput.addEventListener('keyup', function(event) {
                 if (event.key === 'Enter') {
                     filterAndSearch();
                 }
             });
 
-            // Optional: Pencarian real-time saat mengetik
             searchInput.addEventListener('input', filterAndSearch);
         });
 
-        // --- Logika Modal (tetap sama) ---
         function openProductModal(productId) {
             const produkData = @json($produkInovasi->keyBy('id'));
             const produk = produkData[productId];
@@ -513,7 +508,6 @@
             }
         });
 
-        // --- Script Tambahan (tetap sama) ---
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
