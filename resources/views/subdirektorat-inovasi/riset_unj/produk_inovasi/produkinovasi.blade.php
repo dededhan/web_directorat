@@ -15,536 +15,109 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ asset('home.css') }}">
-    <style>
-        /* ===== Root Variables - Same as Berita ===== */
-        :root {
-            --primary-color: #186569;
-            --primary-light: #2a7a7e;
-            --primary-dark: #0d4b4f;
-            --accent-color: #ffb74d;
-            --text-color: #333333;
-            --text-secondary: #555555;
-            --background-color: #f8f9fa;
-            --card-color: #ffffff;
-            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --transition-speed: 0.3s;
-            --border-radius: 12px;
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#186569',
+                            light: '#2a7a7e',
+                            dark: '#0d4b4f',
+                        },
+                        accent: '#ffb74d',
+                        textColor: '#333333',
+                        textSecondary: '#555555',
+                        backgroundColor: '#f8f9fa',
+                        cardColor: '#ffffff',
+                    },
+                    boxShadow: {
+                        card: '0 4px 12px rgba(0, 0, 0, 0.08)',
+                        hover: '0 12px 20px rgba(0, 0, 0, 0.1)',
+                        search: '0 5px 15px rgba(0, 0, 0, 0.1)',
+                    },
+                    borderRadius: {
+                        card: '12px',
+                    },
+                    transitionDuration: {
+                        DEFAULT: '300ms',
+                    },
+                },
+            },
         }
-
-        /* ===== Base Styles ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            font-size: 16px;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* ===== Hero Section ===== */
-        .hero-section {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            padding: 3rem 0;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M0,0 L100,100" stroke="rgba(255,255,255,0.05)" stroke-width="2"/></svg>');
-            opacity: 0.3;
-        }
-
-        .hero-content {
-            position: relative;
-            text-align: center;
-            color: white;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .hero-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        /* ===== Search Container ===== */
-        .search-container {
-            display: flex;
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border-radius: 50px;
-        }
-
-        .search-input {
-            flex-grow: 1;
-            padding: 1rem 1.5rem;
-            border: none;
-            border-radius: 50px 0 0 50px;
-            outline: none;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.95);
-            transition: all var(--transition-speed);
-        }
-
-        .search-input:focus {
-            box-shadow: 0 0 0 2px var(--accent-color);
-        }
-
-        .search-button {
-            background: var(--accent-color);
-            color: var(--text-color);
-            border: none;
-            padding: 0 1.8rem;
-            border-radius: 0 50px 50px 0;
-            cursor: pointer;
-            transition: all var(--transition-speed);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-
-        .search-button:hover {
-            background: #ffa726;
-            transform: translateY(-1px);
-        }
-
-        .search-text {
-            margin-left: 8px;
-        }
-
-        /* ===== Products Grid - Same as News Grid ===== */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            margin: 20px 0;
-        }
-
-        .product-card {
-            background-color: var(--card-color);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-img {
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            transition: all var(--transition-speed);
-        }
-
-        .product-card:hover .card-img {
-            height: 210px;
-        }
-
-        .card-content {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            position: relative;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin: 0 0 12px;
-            color: var(--text-color);
-            line-height: 1.4;
-        }
-
-        .card-excerpt {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-            flex-grow: 1;
-            line-height: 1.6;
-        }
-
-        /* ===== Product Meta Information ===== */
-        .card-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85rem;
-            color: #777;
-            margin-top: auto;
-            padding-top: 15px;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            color: var(--text-secondary);
-        }
-
-        .meta-item i {
-            margin-right: 5px;
-            color: var(--primary-color);
-            font-size: 0.9rem;
-        }
-
-        .innovator-tag {
-            display: inline-block;
-            background-color: rgba(22, 97, 101, 0.1);
-            color: var(--primary-color);
-            font-size: 0.8rem;
-            padding: 6px 12px;
-            border-radius: 30px;
-            margin-bottom: 15px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .patent-badge {
-            background-color: rgba(255, 183, 77, 0.1);
-            color: #e65100;
-            font-size: 0.75rem;
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-weight: 600;
-            margin-left: auto;
-        }
-
-        .read-more {
-            display: block;
-            background-color: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            text-align: center;
-            padding: 10px;
-            border-radius: var(--border-radius);
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-top: 20px;
-            transition: all var(--transition-speed);
-            cursor: pointer;
-            border: none;
-            letter-spacing: 0.5px;
-        }
-
-        .read-more:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        /* ===== No Results Style ===== */
-        .no-results {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 3rem;
-            background-color: var(--card-color);
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            border: 1px dashed rgba(0, 0, 0, 0.1);
-        }
-
-        .no-results i {
-            font-size: 3rem;
-            color: var(--primary-light);
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        /* ===== Modal Styles ===== */
-        .product-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            transition: opacity var(--transition-speed);
-            backdrop-filter: blur(5px);
-            overflow-y: auto;
-        }
-
-        .product-modal.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .modal-content {
-            width: 90%;
-            max-width: 900px;
-            max-height: 90vh;
-            background-color: white;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transform: scale(0.9);
-            transition: transform var(--transition-speed);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .product-modal.active .modal-content {
-            transform: scale(1);
-        }
-
-        .modal-header {
-            position: relative;
-            height: 300px;
-        }
-
-        .modal-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            border: none;
-            transition: background-color var(--transition-speed);
-            z-index: 10;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-close:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-            transform: scale(1.1);
-        }
-
-        .modal-body {
-            padding: 30px;
-            overflow-y: auto;
-            max-height: calc(90vh - 300px);
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .modal-title {
-            font-size: 2rem;
-            margin: 10px 0 15px;
-            color: var(--text-color);
-            line-height: 1.3;
-            font-weight: 700;
-        }
-
-        .modal-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 25px;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .modal-description {
-            line-height: 1.8;
-            color: var(--text-color);
-            font-size: 1.05rem;
-        }
-
-        .modal-description p {
-            margin-bottom: 20px;
-        }
-
-        /* Important: Add proper spacing for fixed navbar */
-        .content-wrapper {
-            padding-top: 7rem;
-            overflow-x: hidden;
-        }
-
-        @media (max-width: 768px) {
-            .content-wrapper {
-                padding-top: 6rem;
-            }
-            
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            }
-            
-            .hero-title {
-                font-size: 2rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.1rem;
-            }
-            
-            .modal-header {
-                height: 220px;
-            }
-            
-            .modal-title {
-                font-size: 1.6rem;
-            }
-            
-            .modal-body {
-                padding: 20px;
-                max-height: calc(90vh - 220px);
-            }
-            
-            .search-container {
-                max-width: 100%;
-            }
-            
-            .hero-section {
-                padding: 2rem 0;
-            }
-
-            .card-meta {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .search-text {
-                display: none;
-            }
-
-            .hero-title {
-                font-size: 1.8rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1rem;
-                margin-bottom: 1.5rem;
-            }
-        }
-    </style>
+    </script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-backgroundColor text-textColor leading-relaxed text-base font-['Segoe_UI',Tahoma,Geneva,Verdana,sans-serif]">
 @include('layout.navbar_hilirisasi')
     
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container hero-content">
-            <h1 class="hero-title">Produk Inovasi UNJ</h1>
-            <p class="hero-subtitle">Temukan berbagai inovasi dan karya terbaik dari civitas akademika Universitas Negeri Jakarta</p>
+    <section class="bg-gradient-to-br from-primary to-primary-dark py-12 mb-8 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-30" style="background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M0,0 L100,100" stroke="rgba(255,255,255,0.05)" stroke-width="2"/></svg>');"></div>
+        
+        <div class="relative text-center text-white max-w-3xl mx-auto px-4">
+            <h1 class="text-4xl font-bold mb-4 drop-shadow-md">Produk Inovasi UNJ</h1>
+            <p class="text-xl mb-8 opacity-90">Temukan berbagai inovasi dan karya terbaik dari civitas akademika Universitas Negeri Jakarta</p>
             
-            <div class="search-container">
-                <input type="text" class="search-input" placeholder="Cari produk inovasi, inovator, atau kata kunci...">
-                <button class="search-button">
+            <div class="flex w-full max-w-xl mx-auto relative shadow-search rounded-full">
+                <input type="text" class="flex-grow py-4 px-6 border-none rounded-l-full outline-none text-base bg-white/95 transition duration-300 text-textColor placeholder-textSecondary placeholder-opacity-70 focus:ring-2 focus:ring-accent" placeholder="Cari produk inovasi, inovator, atau kata kunci...">
+                <button class="bg-accent text-textColor border-none px-7 rounded-r-full cursor-pointer transition duration-300 flex items-center justify-center font-semibold hover:bg-[#ffa726] hover:-translate-y-px">
                     <i class="fa-solid fa-search"></i>
-                    <span class="search-text">Cari</span>
+                    <span class="ml-2 md:inline hidden">Cari</span>
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- Main Content with increased spacing -->
-    <div class="content-wrapper">
-        <main class="container">
+    <div class="pt-28 md:pt-24 overflow-x-hidden">
+        <main class="w-[90%] max-w-6xl mx-auto">
             <section>
-                <div class="products-grid">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 my-5">
                     @if($produkInovasi->count() > 0)
                         @foreach($produkInovasi as $produk)
-                        <div class="product-card">
+                        <div class="bg-cardColor rounded-card overflow-hidden shadow-card h-full flex flex-col transition duration-300 border border-black/5 hover:transform hover:-translate-y-2 hover:shadow-hover">
                             @if($produk->gambar)
-                            <div class="card-img" style="background-image: url('{{ asset('storage/' . $produk->gambar) }}')"></div>
+                            <div class="h-[200px] bg-cover bg-center relative transition duration-300 group-hover:h-[210px]" style="background-image: url('{{ asset('storage/' . $produk->gambar) }}')"></div>
                             @else
-                            <div class="card-img" style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-lightbulb" style="font-size: 3rem; color: white; opacity: 0.7;"></i>
+                            <div class="h-[200px] bg-gradient-to-br from-primary to-primary-light flex items-center justify-center transition duration-300 group-hover:h-[210px]">
+                                <i class="fas fa-lightbulb text-5xl text-white opacity-70"></i>
                             </div>
                             @endif
                             
-                            <div class="card-content">
-                                <span class="innovator-tag">
-                                    <i class="fas fa-user-alt"></i>
+                            <div class="p-5 flex flex-col flex-grow relative">
+                                <span class="inline-flex items-center text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full mb-3">
+                                    <i class="fas fa-user-alt mr-1.5"></i>
                                     {{ $produk->inovator }}
                                 </span>
                                 
-                                <h3 class="card-title">{{ $produk->nama_produk }}</h3>
+                                <h3 class="text-xl font-bold mb-3">{{ $produk->nama_produk }}</h3>
                                 
-                                <p class="card-excerpt">
+                                <p class="text-textSecondary text-sm mb-4 line-clamp-3">
                                     {!! Str::limit(strip_tags($produk->deskripsi), 120) !!}
                                 </p>
                                 
-                                <div class="card-meta">
-                                    <div class="meta-item">
-                                        <i class="fas fa-calendar-alt"></i>
+                                <div class="flex justify-between items-center mt-auto mb-3 md:flex-row flex-col md:items-center items-start">
+                                    <div class="flex items-center text-textSecondary text-sm">
+                                        <i class="fas fa-calendar-alt mr-1.5"></i>
                                         <span>{{ $produk->created_at->format('d M Y') }}</span>
                                     </div>
                                     
                                     @if($produk->nomor_paten)
-                                    <div class="patent-badge">
-                                        <i class="fas fa-certificate"></i>
+                                    <div class="bg-accent/20 text-accent rounded-full px-3 py-1 text-xs font-semibold flex items-center mt-2 md:mt-0">
+                                        <i class="fas fa-certificate mr-1"></i>
                                         Paten
                                     </div>
                                     @endif
                                 </div>
                                 
-                                <button class="read-more" onclick="openProductModal({{ $produk->id }})">
-                                    <i class="fas fa-eye"></i> Lihat Detail
+                                <button onclick="openProductModal({{ $produk->id }})" class="mt-2 text-primary hover:text-primary-dark transition duration-300 flex items-center text-sm font-medium">
+                                    <i class="fas fa-eye mr-1.5"></i> Lihat Detail
                                 </button>
                             </div>
                         </div>
                         @endforeach
                     @else
-                        <div class="no-results">
-                            <i class="fas fa-lightbulb"></i>
-                            <p>Belum ada produk inovasi yang tersedia.</p>
+                        <div class="col-span-full flex flex-col items-center justify-center py-16 text-center text-textSecondary">
+                            <i class="fas fa-lightbulb text-5xl mb-4 opacity-50"></i>
+                            <p class="text-lg">Belum ada produk inovasi yang tersedia.</p>
                         </div>
                     @endif
                 </div>
@@ -552,17 +125,15 @@
         </main>
     </div>
 
-    <!-- Product Detail Modal -->
-    <div class="product-modal" id="productModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <img class="modal-img" id="modalImg" src="" alt="">
-                <button class="modal-close" onclick="closeProductModal()">
+    <div id="productModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300 overflow-y-auto">
+        <div class="bg-white w-full max-w-3xl rounded-card overflow-hidden shadow-lg max-h-[90vh] flex flex-col">
+            <div class="h-[300px] md:h-[350px] relative bg-primary">
+                <img id="modalImg" src="" alt="" class="w-full h-full object-cover">
+                <button onclick="closeProductModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/30 text-white flex items-center justify-center hover:bg-black/50 transition duration-300">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="modal-body" id="modalBody">
-                <!-- Content will be loaded here -->
+            <div id="modalBody" class="p-6 md:p-8 overflow-y-auto -webkit-overflow-scrolling-touch max-h-[calc(90vh-350px)]">
             </div>
         </div>
     </div>
@@ -570,20 +141,19 @@
     @include('layout.footer')
 
     <script>
-        // Search functionality
         document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.querySelector('.search-input');
-            const searchButton = document.querySelector('.search-button');
+            const searchInput = document.querySelector('input[type="text"]');
+            const searchButton = document.querySelector('button');
             
             function performSearch() {
                 const searchTerm = searchInput.value.trim().toLowerCase();
-                const productCards = document.querySelectorAll('.product-card');
+                const productCards = document.querySelectorAll('.bg-cardColor');
                 let hasResults = false;
                 
                 productCards.forEach(card => {
-                    const title = card.querySelector('.card-title').textContent.toLowerCase();
-                    const excerpt = card.querySelector('.card-excerpt').textContent.toLowerCase();
-                    const innovator = card.querySelector('.innovator-tag').textContent.toLowerCase();
+                    const title = card.querySelector('h3').textContent.toLowerCase();
+                    const excerpt = card.querySelector('p').textContent.toLowerCase();
+                    const innovator = card.querySelector('.inline-flex').textContent.toLowerCase();
                     
                     if (title.includes(searchTerm) || excerpt.includes(searchTerm) || innovator.includes(searchTerm)) {
                         card.style.display = 'flex';
@@ -593,15 +163,14 @@
                     }
                 });
                 
-                // Show/hide no results message
-                const productsGrid = document.querySelector('.products-grid');
+                const productsGrid = document.querySelector('.grid');
                 let noResultsElement = document.querySelector('.no-search-results');
                 
                 if (!hasResults && searchTerm) {
                     if (!noResultsElement) {
                         noResultsElement = document.createElement('div');
-                        noResultsElement.className = 'no-results no-search-results';
-                        noResultsElement.innerHTML = '<i class="fas fa-search"></i><p>Tidak ada produk inovasi yang cocok dengan pencarian Anda.</p>';
+                        noResultsElement.className = 'col-span-full flex flex-col items-center justify-center py-16 text-center text-textSecondary no-search-results';
+                        noResultsElement.innerHTML = '<i class="fas fa-search text-5xl mb-4 opacity-50"></i><p class="text-lg">Tidak ada produk inovasi yang cocok dengan pencarian Anda.</p>';
                         productsGrid.appendChild(noResultsElement);
                     }
                 } else if (noResultsElement) {
@@ -617,10 +186,9 @@
                 }
             });
 
-            // Clear search when input is empty
             searchInput.addEventListener('input', function() {
                 if (this.value.trim() === '') {
-                    document.querySelectorAll('.product-card').forEach(card => {
+                    document.querySelectorAll('.bg-cardColor').forEach(card => {
                         card.style.display = 'flex';
                     });
                     const noResultsElement = document.querySelector('.no-search-results');
@@ -631,7 +199,6 @@
             });
         });
 
-        // Modal functionality
         function openProductModal(productId) {
             const produkData = @json($produkInovasi->keyBy('id'));
             const produk = produkData[productId];
@@ -642,7 +209,6 @@
             const modalImg = document.getElementById('modalImg');
             const modalBody = document.getElementById('modalBody');
             
-            // Set image
             if (produk.gambar) {
                 modalImg.src = `/storage/${produk.gambar}`;
                 modalImg.alt = produk.nama_produk;
@@ -651,44 +217,45 @@
                 modalImg.style.display = 'none';
             }
             
-            // Create modal content
             let patentInfo = '';
             if (produk.nomor_paten) {
                 patentInfo = `
-                    <div class="meta-item">
-                        <i class="fas fa-certificate"></i>
+                    <div class="flex items-center text-textSecondary text-sm">
+                        <i class="fas fa-certificate mr-1.5"></i>
                         <span>No. Paten: ${produk.nomor_paten}</span>
                     </div>
                 `;
             }
             
             const content = `
-                <span class="innovator-tag">
-                    <i class="fas fa-user-alt"></i>
+                <span class="inline-flex items-center text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full mb-3">
+                    <i class="fas fa-user-alt mr-1.5"></i>
                     ${produk.inovator}
                 </span>
-                <h2 class="modal-title">${produk.nama_produk}</h2>
-                <div class="modal-meta">
-                    <div class="meta-item">
-                        <i class="fas fa-calendar-alt"></i>
+                <h2 class="text-2xl md:text-3xl font-bold mb-4">${produk.nama_produk}</h2>
+                <div class="flex flex-col md:flex-row gap-3 mb-6 pb-4 border-b border-black/10">
+                    <div class="flex items-center text-textSecondary text-sm">
+                        <i class="fas fa-calendar-alt mr-1.5"></i>
                         <span>Ditambahkan: ${formatDate(produk.created_at)}</span>
                     </div>
                     ${patentInfo}
                 </div>
-                <div class="modal-description">
-                    <h3 style="font-weight: 600; margin-bottom: 15px; color: var(--primary-color);">Deskripsi Produk:</h3>
+                <div class="leading-7 text-textColor text-base">
+                    <h3 class="font-semibold mb-4 text-primary">Deskripsi Produk:</h3>
                     ${produk.deskripsi}
                 </div>
             `;
             
             modalBody.innerHTML = content;
-            modal.classList.add('active');
+            modal.classList.add('opacity-100');
+            modal.classList.remove('pointer-events-none');
             document.body.style.overflow = 'hidden';
         }
 
         function closeProductModal() {
             const modal = document.getElementById('productModal');
-            modal.classList.remove('active');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('pointer-events-none');
             document.body.style.overflow = 'auto';
         }
 
@@ -697,14 +264,12 @@
             return new Date(dateString).toLocaleDateString('id-ID', options);
         }
 
-        // Close modal when clicking outside content
         document.getElementById('productModal').addEventListener('click', function(event) {
             if (event.target === this) {
                 closeProductModal();
             }
         });
 
-        // Close modal with Escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeProductModal();
