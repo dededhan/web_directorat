@@ -121,7 +121,6 @@ class AdminRespondenController extends Controller
         return 'lainnya';
     }
 
-    //WARNA WARNAAAAAAAAAAAAAAAAAAAAAA
     private function getFacultyColors()
     {
         return [
@@ -136,25 +135,31 @@ class AdminRespondenController extends Controller
     public function getChartSummaryData(Request $request)
     {
         try {
-            $query = Responden::query();
+            $query = Responden::query()->join('users', 'respondens.user_id', '=', 'users.id');
             $startDate = null;
             $endDate = null;
             $category = $request->input('category');
-            $includeAdmin = $request->boolean('include_admin', false);
-
+            $dataSource = $request->input('data_source', 'non_admin'); 
+            if ($dataSource === 'non_admin') {
+                $query->where('users.role', '!=', 'admin_direktorat');
+            } elseif ($dataSource === 'admin_only') {
+                $query->where('users.role', '=', 'admin_direktorat');
+            }
             if ($request->has('start_date') && $request->filled('start_date') && $request->has('end_date') && $request->filled('end_date')) {
                 try {
                     $startDate = Carbon::parse($request->start_date)->startOfDay();
                     $endDate = Carbon::parse($request->end_date)->endOfDay();
                     if ($startDate->isValid() && $endDate->isValid()) {
-                        $query->whereBetween('created_at', [$startDate, $endDate]);
+                        $query->whereBetween('respondens.created_at', [$startDate, $endDate]);
                     }
                 } catch (\Exception $e) {
                     Log::warning('Invalid date format', ['error' => $e->getMessage()]);
                 }
             }
+            
+            $summaryQuery = clone $query;
 
-            $respondens = $query->get();
+            $respondens = $query->select('respondens.*')->get(); 
             $normalizedRespondens = $respondens->map(function ($responden) {
                 $responden->fakultas = $this->normalizeFacultyName($responden->fakultas);
                 $responden->category = $this->normalizeCategoryName($responden->category);
@@ -174,50 +179,20 @@ class AdminRespondenController extends Controller
                 $undefined = $byFacultySorted->pull('tidak terdefinisi');
                 $byFacultySorted->put('tidak terdefinisi', $undefined);
             }
+            
+            $summaryRespondens = $summaryQuery->select('respondens.*')->get();
+            $byCategory = $summaryRespondens->groupBy(function($r) { return $this->normalizeCategoryName($r->category); })->map->count();
+            $byStatus = $summaryRespondens->groupBy('status')->map->count();
 
-            $byCategory = $respondens->groupBy(function($r) { return $this->normalizeCategoryName($r->category); })->map->count();
-            $byStatus = $respondens->groupBy('status')->map->count();
-
-            $inputsPerUserQuery = Responden::query()->select('user_id', DB::raw('count(*) as total'))->groupBy('user_id');
-            if ($startDate && $endDate) {
-                $inputsPerUserQuery->whereBetween('created_at', [$startDate, $endDate]);
-            }
-            $inputsPerUser = $inputsPerUserQuery->pluck('total', 'user_id');
-
-            $inputterUsersQuery = User::whereIn('id', $inputsPerUser->keys());
-            if (!$includeAdmin) {
-                $inputterUsersQuery->where('role', '!=', 'admin_direktorat');
-            }
-            $inputterUsers = $inputterUsersQuery->get();
-
-            $detailedInputters = $inputterUsers->map(function ($user) use ($inputsPerUser) {
-                $faculty = 'Lainnya';
-                if ($user->role === 'fakultas') {
-                    $faculty = $this->normalizeFacultyName(strtolower($user->name));
-                } elseif ($user->role === 'prodi') {
-                    $parts = explode('-', $user->name, 2);
-                    $faculty = $this->normalizeFacultyName($parts[0] ?? 'unknown');
-                }
-                return [
-                    'name' => $user->name, 'faculty' => strtoupper($faculty),
-                    'role' => ucwords(str_replace('_', ' ', $user->role)),
-                    'count' => $inputsPerUser[$user->id] ?? 0,
-                ];
-            })->sortByDesc('count')->values();
-
-            $byInputterFaculty = $detailedInputters->groupBy('faculty')->map(function ($group) {
-                return $group->sum('count');
-            });
 
             return response()->json([
                 'byFaculty' => $byFacultySorted,
                 'facultyColors' => $this->getFacultyColors(),
-                'byCategory' => $byCategory, 'byStatus' => $byStatus,
-                'detailedInputters' => $detailedInputters,
-                'byInputterFaculty' => $byInputterFaculty
+                'byCategory' => $byCategory, 
+                'byStatus' => $byStatus,
             ]);
         } catch (\Exception $e) {
-            Log::error('Error fetching chart summary data: ' . $e->getMessage());
+            Log::error('Error fetching chart summary data: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine());
             return response()->json(['error' => 'Failed to fetch chart data'], 500);
         }
     }
@@ -228,15 +203,23 @@ class AdminRespondenController extends Controller
             'fakultas' => 'nullable|string',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
-            'category' => 'nullable|string|in:academic,employer'
+            'category' => 'nullable|string|in:academic,employer',
+            'data_source' => 'nullable|string|in:all,non_admin,admin_only'
         ]);
 
         try {
             $facultyCode = $request->input('fakultas');
+            $dataSource = $request->input('data_source', 'non_admin');
             $query = Responden::query()->join('users', 'respondens.user_id', '=', 'users.id');
             
             if ($request->filled('category')) {
                  $query->where('respondens.category', $this->normalizeCategoryName($request->category));
+            }
+            
+            if ($dataSource === 'non_admin') {
+                $query->where('users.role', '!=', 'admin_direktorat');
+            } elseif ($dataSource === 'admin_only') {
+                $query->where('users.role', '=', 'admin_direktorat');
             }
 
             if ($request->filled('start_date') && $request->filled('end_date')) {
@@ -244,7 +227,6 @@ class AdminRespondenController extends Controller
                 $endDate = Carbon::parse($request->end_date)->endOfDay();
                 $query->whereBetween('respondens.created_at', [$startDate, $endDate]);
             }
-
 
             if (empty($facultyCode) || $facultyCode === 'semua') {
                 $data = $query->where('users.role', 'fakultas')
@@ -255,7 +237,6 @@ class AdminRespondenController extends Controller
                         return [strtoupper($item->faculty_name) => $item->count];
                     });
             } 
-
             else {
                 $normalizationMap = ['fis' => 'fish', 'fe' => 'feb', 'fppsi' => 'fpsi'];
                 $aliases = [$facultyCode];
@@ -293,7 +274,6 @@ class AdminRespondenController extends Controller
             return response()->json(['error' => 'Failed to fetch prodi chart data'], 500);
         }
     }
-
 
 
 

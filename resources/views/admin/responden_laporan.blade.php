@@ -16,7 +16,7 @@
 
         <div class="bg-white p-4 rounded-xl shadow-lg mb-6 print:hidden">
             <h3 class="text-lg font-bold text-gray-700 mb-4">Filter Laporan</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 items-end">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 items-end">
                 <div>
                     <label for="start_date" class="block text-sm font-medium text-gray-600">Tanggal Mulai</label>
                     <input type="date" id="start_date" name="start_date"
@@ -28,7 +28,7 @@
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                 </div>
                 <div>
-                    <label for="category-filter" class="block text-sm font-medium text-gray-600">Kategori</label>
+                    <label for="category-filter" class="block text-sm font-medium text-gray-600">Kategori Narahubung</label>
                     <select id="category-filter" name="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         <option value="">Semua Kategori</option>
                         <option value="academic">Academic</option>
@@ -42,6 +42,14 @@
                         @foreach ($faculties as $faculty)
                             <option value="{{ $faculty }}">{{ strtoupper($faculty) }}</option>
                         @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label for="data-source-filter" class="block text-sm font-medium text-gray-600">Sumber Data</label>
+                    <select id="data-source-filter" name="data_source" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <option value="non_admin">Fakultas & Prodi</option>
+                        <option value="admin_only">Hanya Admin Direktorat</option>
+                        <option value="all">Semua Sumber</option>
                     </select>
                 </div>
                 <div class="col-span-1 flex gap-2">
@@ -73,42 +81,6 @@
                 </div>
             </div>
 
-            <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-                    <h3 class="text-lg font-bold text-gray-700">Aktivitas Penginput Data</h3>
-                    <div class="flex items-center mt-2 sm:mt-0">
-                        <input type="checkbox" id="include-admin-checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        <label for="include-admin-checkbox" class="ml-2 block text-sm text-gray-900">Sertakan Admin Direktorat</label>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div>
-                        <h4 class="text-md font-semibold text-gray-600 mb-2 text-center">Grafik Jumlah Input per Fakultas</h4>
-                        <div class="h-80">
-                            <canvas id="inputterFacultyChart"></canvas>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="text-md font-semibold text-gray-600 mb-2 text-center">Detail Penginput per User</h4>
-                        <div class="overflow-y-auto max-h-80 border rounded-lg">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50 sticky top-0">
-                                    <tr>
-                                        <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama User</th>
-                                        <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                                        <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="inputter-details-table-body" class="bg-white divide-y divide-gray-200">
-                                    <tr><td colspan="3" class="px-6 py-4 text-center text-gray-500">Memuat data...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
                     <h3 class="text-lg font-bold text-gray-700 mb-4">Kategori Responden (Keseluruhan)</h3>
@@ -139,10 +111,12 @@
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            Chart.register(ChartDataLabels);
+
             let charts = {};
             const destroyCharts = (chartKeys = []) => {
                 const keysToDestroy = chartKeys.length > 0 ? chartKeys : Object.keys(charts);
@@ -159,7 +133,7 @@
                 endDate: document.getElementById('end_date').value,
                 category: document.getElementById('category-filter').value,
                 selectedFaculty: document.getElementById('faculty-selector').value,
-                includeAdmin: document.getElementById('include-admin-checkbox').checked,
+                dataSource: document.getElementById('data-source-filter').value,
             });
             
             const fetchAndRenderCharts = () => {
@@ -173,13 +147,12 @@
                 if (filters.startDate) params.append('start_date', filters.startDate);
                 if (filters.endDate) params.append('end_date', filters.endDate);
                 if (filters.category) params.append('category', filters.category);
-                params.append('include_admin', filters.includeAdmin);
+                if (filters.dataSource) params.append('data_source', filters.dataSource);
                 
                 axios.get(`{{ route('api.responden.chartSummary') }}?${params.toString()}`)
                     .then(response => {
                         const data = response.data;
                         renderFacultyChart(data);
-                        renderInputterSection(data);
                         renderSummaryPies(data);
                     })
                     .catch(handleChartError);
@@ -190,50 +163,42 @@
                 const facultyCtx = document.getElementById('facultyChart').getContext('2d');
                 const facultyColors = data.facultyColors || {};
                 const labels = Object.keys(data.byFaculty);
-                
+                const dataValues = Object.values(data.byFaculty);
+                const maxValue = dataValues.length > 0 ? Math.max(...dataValues) : 0;
+                // GK KELIATAN COI MAKANYA DITAMBAH VALUE
+                const yAxisMax = maxValue < 10 ? maxValue + 2 : Math.ceil(maxValue * 1.1);
+
+
                 charts.faculty = new Chart(facultyCtx, {
                     type: 'bar',
                     data: {
                         labels: labels.map(l => l.toUpperCase()),
                         datasets: [{
                             label: 'Jumlah Responden',
-                            data: Object.values(data.byFaculty),
+                            data: dataValues,
                             backgroundColor: labels.map(label => facultyColors[label] || '#A5B4FC'),
                         }]
                     },
-                    options: { scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }, responsive: true, maintainAspectRatio: false }
-                });
-            };
-
-            const renderInputterSection = (data) => {
-                destroyCharts(['inputter']);
-                const tableBody = document.getElementById('inputter-details-table-body');
-                tableBody.innerHTML = '';
-                if (data.detailedInputters && data.detailedInputters.length > 0) {
-                    data.detailedInputters.forEach(user => {
-                        tableBody.innerHTML += `
-                            <tr>
-                                <td class="px-4 py-2 text-sm font-medium text-gray-900">${user.name}</td>
-                                <td class="px-4 py-2 text-sm text-gray-500">${user.role}</td>
-                                <td class="px-4 py-2 text-sm text-gray-500 font-semibold text-center">${user.count}</td>
-                            </tr>`;
-                    });
-                } else {
-                    tableBody.innerHTML = '<tr><td colspan="3" class="px-4 py-2 text-center text-gray-500">Tidak ada data penginput.</td></tr>';
-                }
-
-                const inputterFacultyCtx = document.getElementById('inputterFacultyChart').getContext('2d');
-                charts.inputter = new Chart(inputterFacultyCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: Object.keys(data.byInputterFaculty),
-                        datasets: [{
-                            label: 'Jumlah Input Data',
-                            data: Object.values(data.byInputterFaculty),
-                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
-                        }]
-                    },
-                    options: { scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }, responsive: true, maintainAspectRatio: false }
+                    options: { 
+                        scales: { 
+                            y: { 
+                                beginAtZero: true, 
+                                ticks: { precision: 0 },
+                                max: yAxisMax 
+                            } 
+                        }, 
+                        responsive: true, 
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'top',
+                                color: '#374151',
+                                font: { weight: 'bold' }
+                            }
+                        }
+                    }
                 });
             };
 
@@ -275,6 +240,7 @@
                 if (filters.startDate) params.append('start_date', filters.startDate);
                 if (filters.endDate) params.append('end_date', filters.endDate);
                 if (filters.category) params.append('category', filters.category);
+                if (filters.dataSource) params.append('data_source', filters.dataSource);
 
                 axios.get(`{{ route('api.responden.chartProdi') }}?${params.toString()}`)
                     .then(response => {
@@ -301,7 +267,22 @@
                                     backgroundColor: 'rgba(217, 119, 6, 0.7)',
                                 }]
                             },
-                            options: { indexAxis: 'y', scales: { x: { beginAtZero: true, ticks: { precision: 0 } } }, responsive: true, maintainAspectRatio: false }
+                            options: { 
+                                indexAxis: 'y', 
+                                scales: { x: { beginAtZero: true, ticks: { precision: 0 } } }, 
+                                responsive: true, 
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: { display: false },
+                                    datalabels: {
+                                        anchor: 'end',
+                                        align: 'right',
+                                        color: '#374151',
+                                        font: { weight: 'bold' },
+                                        formatter: (value) => value > 0 ? value : ''
+                                    }
+                                }
+                            }
                         });
                     })
                     .catch(handleChartError);
@@ -311,8 +292,7 @@
                 console.error("Gagal mengambil data chart:", error);
                 alert('Gagal memuat data laporan. Cek console untuk detail.');
             };
-
-            const allFilters = ['start_date', 'end_date', 'category-filter', 'faculty-selector'];
+            const allFilters = ['start_date', 'end_date', 'category-filter', 'faculty-selector', 'data-source-filter'];
             allFilters.forEach(id => {
                 document.getElementById(id).addEventListener('change', fetchAndRenderCharts);
             });
@@ -322,13 +302,13 @@
                 document.getElementById('end_date').value = '';
                 document.getElementById('category-filter').value = '';
                 document.getElementById('faculty-selector').value = 'semua';
-                document.getElementById('include-admin-checkbox').checked = false;
+                document.getElementById('data-source-filter').value = 'non_admin';
                 fetchAndRenderCharts();
             });
             
-            document.getElementById('include-admin-checkbox').addEventListener('change', () => fetchSummaryData(getCurrentFilters()));
             document.getElementById('print-button').addEventListener('click', () => window.print());
 
+            // Initial Load
             fetchAndRenderCharts();
         });
     </script>
