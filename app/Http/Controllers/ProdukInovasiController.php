@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Berita; 
+use App\Models\Video;
 
 class ProdukInovasiController extends Controller
 {
@@ -40,7 +41,7 @@ class ProdukInovasiController extends Controller
     }
 
    
-    public function publicIndex()
+   public function publicIndex()
     {
         $produkInovasi = ProdukInovasi::latest()->get();
 
@@ -48,8 +49,12 @@ class ProdukInovasiController extends Controller
                                 ->latest()
                                 ->take(4)
                                 ->get();
+        
+        // 2. Tambahkan baris ini untuk mengambil data video
+        $video = Video::first();
 
-        return view('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi', compact('produkInovasi', 'beritaInovasi'));
+        // 3. Tambahkan 'video' ke dalam compact()
+        return view('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi', compact('produkInovasi', 'beritaInovasi', 'video'));
     }
 
    

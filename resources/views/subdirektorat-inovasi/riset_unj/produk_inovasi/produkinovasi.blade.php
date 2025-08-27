@@ -60,24 +60,60 @@
     <div class="pt-12 md:pt-16 overflow-x-hidden">
         <main class="w-[90%] max-w-6xl mx-auto">
             
+             @if($video)
             <section class="mb-16">
-                <div class="text-center mb-8">
+                <div class="text-center py-12">
                     <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Sambutan Pimpinan</h2>
-                    <p class="text-textSecondary text-lg max-w-2xl mx-auto">Sambutan dari Ibu Dr. RA Murti Kusuma W.S.IP, M.Si. selaku Direktur Inovasi, Sistem Informasi dan Pemeringkatan Universitas Negeri Jakarta mengenai...</p>
+                    <p class="text-textSecondary text-lg max-w-2xl mx-auto">Sambutan dari Ibu Dr. RA Murti Kusuma W.S.IP, M.Si. selaku Direktur Inovasi, Sistem Informasi dan Pemeringkatan Universitas Negeri Jakarta</p>
                 </div>
-                <div class="bg-cardColor rounded-card shadow-card overflow-hidden">
-                    <div class="aspect-video relative">
-                        <div class="w-full h-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center">
-                            <div class="text-center text-white">
-                                <i class="fas fa-play-circle text-6xl mb-4 opacity-80"></i>
-                                <p class="text-xl">Video Sambutan Pimpinan UNJ</p>
-                                <p class="text-sm opacity-80 mt-2">Tentang Visi dan Misi Inovasi UNJ</p>
+                
+                
+               <div id="video-container" class="bg-black rounded-card shadow-card overflow-hidden aspect-video relative">
+
+                    @if($video && $video->type == 'youtube')
+
+                        <div id="video-placeholder" 
+                            class="w-full h-full bg-cover bg-center cursor-pointer relative"
+                            style="background-image: url('https://img.youtube.com/vi/{{ $video->path }}/maxresdefault.jpg');"
+                            data-video-type="{{ $video->type }}" 
+                            data-video-path="{{ $video->path }}">
+                            
+                            <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center text-white p-4 transition-colors duration-300 hover:bg-black/20">
+                                
+                                <svg class="w-16 h-16 md:w-20 md:h-20 mb-4 text-white/80" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zM10.622 8.415a.4.4 0 0 0-.622.35v6.47a.4.4 0 0 0 .622.35l4.853-3.235a.4.4 0 0 0 0-.7L10.622 8.415z"></path></svg>
+                                
+                                <h3 class="text-xl md:text-2xl font-bold tracking-wide">{{ $video->title }}</h3>
+
                             </div>
                         </div>
-                    </div>
+
+                    @elseif($video && $video->type == 'mp4')
+
+                        <div id="video-placeholder" class="w-full h-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center cursor-pointer"
+                            data-video-type="{{ $video->type }}" 
+                            data-video-path="{{ asset('storage/' . $video->path) }}">
+                            
+                            <div class="text-center text-white">
+                                <i class="fas fa-play-circle text-6xl mb-4 opacity-80"></i>
+                                <p class="text-xl">{{ $video->title }}</p>
+                            </div>
+                        </div>
+
+                    @endif
                 </div>
             </section>
 
+            
+
+            @else
+            <section class="mb-16">
+                <div class="text-center py-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Sambutan Pimpinan</h2>
+                    <p class="text-textSecondary text-lg max-w-2xl mx-auto">Video sambutan pimpinan belum tersedia saat ini.</p>
+                </div>
+            </section>
+            @endif
+            
             <section class="mb-16">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Tentang Inovasi UNJ</h2>
@@ -226,7 +262,7 @@
                                         <i class="fas fa-certificate mr-1"></i>
                                         {{ $produk->kategori }}
                                     </div>
-                                    @endif
+                                 
                                 </div>
                                 
                                 @if ($produk->link_ebook)
@@ -344,6 +380,32 @@
     </div>
     
     @include('layout.footer')
+   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const placeholder = document.getElementById('video-placeholder');
+        const videoContainer = document.getElementById('video-container');
+
+        if (placeholder) {
+            placeholder.addEventListener('click', function () {
+                const type = this.dataset.videoType;
+                const path = this.dataset.videoPath;
+                let playerHtml = '';
+
+                if (type === 'youtube') {
+                    // Menambahkan ?autoplay=1&mute=1. Mute diperlukan agar autoplay berfungsi di browser modern.
+                    playerHtml = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${path}?autoplay=1&mute=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+                } else if (type === 'mp4') {
+                    playerHtml = `<video class="w-full h-full" controls autoplay muted><source src="${path}" type="video/mp4">Browser Anda tidak mendukung tag video.</video>`;
+                }
+
+                // Ini adalah bagian kuncinya: Ganti isi dari container dengan video player
+                if (playerHtml) {
+                    videoContainer.innerHTML = playerHtml;
+                }
+            });
+        }
+    });
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -352,6 +414,7 @@
             const filterButtons = document.querySelectorAll('.filter-btn');
             const productCards = document.querySelectorAll('.product-card');
             const noResultsMessage = document.getElementById('noResultsMessage');
+            
 
             let currentFilter = 'all';
 
