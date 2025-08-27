@@ -71,7 +71,6 @@ class AdminRespondenController extends Controller
     }
 
 
-
     private function normalizeFacultyName($faculty)
     {
         $faculty = strtolower(trim($faculty));
@@ -84,9 +83,9 @@ class AdminRespondenController extends Controller
             'teknik' => 'ft',
             'fpbs' => 'fbs',
             'fkip' => 'fip',
-            'fis' => 'fish', 
+            'fis' => 'fish',
             'fish' => 'fish',
-            'fe'  => 'feb', 
+            'fe'  => 'feb',
             'feb' => 'feb',
             'fppsi' => 'fpsi',
             'fpsi' => 'fpsi',
@@ -102,6 +101,7 @@ class AdminRespondenController extends Controller
 
         return $faculty;
     }
+
     private function normalizeCategoryName($category)
     {
         $category = strtolower(trim($category));
@@ -121,34 +121,36 @@ class AdminRespondenController extends Controller
         return 'lainnya';
     }
 
+    //WARNA WARNAAAAAAAAAAAAAAAAAAAAAA
+    private function getFacultyColors()
+    {
+        return [
+            'fbs' => '#3B82F6', 'feb' => '#10B981', 'fip' => '#F59E0B',
+            'fish' => '#8B5CF6', 'fik' => '#EF4444', 'fmipa' => '#14B8A6',
+            'fpsi' => '#EC4899', 'ft' => '#6366F1', 'pascasarjana' => '#6B7280',
+            'tidak terdefinisi' => '#9CA3AF',
+        ];
+    }
 
 
-   public function getChartSummaryData(Request $request)
+    public function getChartSummaryData(Request $request)
     {
         try {
             $query = Responden::query();
             $startDate = null;
             $endDate = null;
+            $category = $request->input('category');
+            $includeAdmin = $request->boolean('include_admin', false);
 
-            //Validation anabel
-            if (
-                $request->has('start_date') && $request->filled('start_date') &&
-                $request->has('end_date') && $request->filled('end_date')
-            ) {
-
+            if ($request->has('start_date') && $request->filled('start_date') && $request->has('end_date') && $request->filled('end_date')) {
                 try {
                     $startDate = Carbon::parse($request->start_date)->startOfDay();
                     $endDate = Carbon::parse($request->end_date)->endOfDay();
-
                     if ($startDate->isValid() && $endDate->isValid()) {
                         $query->whereBetween('created_at', [$startDate, $endDate]);
                     }
                 } catch (\Exception $e) {
-                    Log::warning('Invalid date format in chart summary request', [
-                        'start_date' => $request->start_date,
-                        'end_date' => $request->end_date,
-                        'error' => $e->getMessage()
-                    ]);
+                    Log::warning('Invalid date format', ['error' => $e->getMessage()]);
                 }
             }
 
@@ -158,44 +160,61 @@ class AdminRespondenController extends Controller
                 $responden->category = $this->normalizeCategoryName($responden->category);
                 return $responden;
             });
+            
+            if ($category && in_array($category, ['academic', 'employer'])) {
+                $normalizedRespondens = $normalizedRespondens->where('category', $category);
+            }
 
             $byFaculty = $normalizedRespondens->groupBy('fakultas')->map->count();
-            $byCategory = $normalizedRespondens->groupBy('category')->map->count();
+            
+            $byFacultySorted = $byFaculty->sortBy(function ($value, $key) {
+                return $key;
+            });
+            if ($byFacultySorted->has('tidak terdefinisi')) {
+                $undefined = $byFacultySorted->pull('tidak terdefinisi');
+                $byFacultySorted->put('tidak terdefinisi', $undefined);
+            }
+
+            $byCategory = $respondens->groupBy(function($r) { return $this->normalizeCategoryName($r->category); })->map->count();
             $byStatus = $respondens->groupBy('status')->map->count();
 
-            $inputsPerUserQuery = Responden::query()
-                ->select('user_id', DB::raw('count(*) as total'))
-                ->groupBy('user_id');
-
+            $inputsPerUserQuery = Responden::query()->select('user_id', DB::raw('count(*) as total'))->groupBy('user_id');
             if ($startDate && $endDate) {
                 $inputsPerUserQuery->whereBetween('created_at', [$startDate, $endDate]);
             }
-
             $inputsPerUser = $inputsPerUserQuery->pluck('total', 'user_id');
-            $inputterUsers = User::whereIn('id', $inputsPerUser->keys())->get();
+
+            $inputterUsersQuery = User::whereIn('id', $inputsPerUser->keys());
+            if (!$includeAdmin) {
+                $inputterUsersQuery->where('role', '!=', 'admin_direktorat');
+            }
+            $inputterUsers = $inputterUsersQuery->get();
 
             $detailedInputters = $inputterUsers->map(function ($user) use ($inputsPerUser) {
-                $faculty = 'Lainnya'; // Default
+                $faculty = 'Lainnya';
                 if ($user->role === 'fakultas') {
                     $faculty = $this->normalizeFacultyName(strtolower($user->name));
                 } elseif ($user->role === 'prodi') {
                     $parts = explode('-', $user->name, 2);
-                    $faculty = $this->normalizeFacultyName(strtolower($parts[0] ?? 'unknown'));
+                    $faculty = $this->normalizeFacultyName($parts[0] ?? 'unknown');
                 }
-
                 return [
-                    'name' => $user->name,
-                    'faculty' => strtoupper($faculty),
+                    'name' => $user->name, 'faculty' => strtoupper($faculty),
                     'role' => ucwords(str_replace('_', ' ', $user->role)),
                     'count' => $inputsPerUser[$user->id] ?? 0,
                 ];
             })->sortByDesc('count')->values();
 
+            $byInputterFaculty = $detailedInputters->groupBy('faculty')->map(function ($group) {
+                return $group->sum('count');
+            });
+
             return response()->json([
-                'byFaculty' => $byFaculty,
-                'byCategory' => $byCategory,
-                'byStatus' => $byStatus,
-                'detailedInputters' => $detailedInputters
+                'byFaculty' => $byFacultySorted,
+                'facultyColors' => $this->getFacultyColors(),
+                'byCategory' => $byCategory, 'byStatus' => $byStatus,
+                'detailedInputters' => $detailedInputters,
+                'byInputterFaculty' => $byInputterFaculty
             ]);
         } catch (\Exception $e) {
             Log::error('Error fetching chart summary data: ' . $e->getMessage());
@@ -203,59 +222,22 @@ class AdminRespondenController extends Controller
         }
     }
 
-     public function getProdiChartData(Request $request)
+    public function getProdiChartData(Request $request)
     {
-        $user = Auth::user();
-        $role = $user->role;
-
         $request->validate([
             'fakultas' => 'nullable|string',
             'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date'
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'category' => 'nullable|string|in:academic,employer'
         ]);
 
         try {
-            $facultyCode = null;
-
-            if ($role === 'fakultas') {
-                $userInfo = $this->getUserFacultyInfo($user);
-                $facultyCode = $userInfo['faculty_code'];
-            } elseif ($request->filled('fakultas')) {
-                $facultyCode = $request->fakultas;
-            }
-
-            if (!$facultyCode) {
-                return response()->json([]);
-            }
-
-            $normalizationMap = [
-                'fis' => 'fish',
-                'fe'  => 'feb',
-                'fppsi' => 'fpsi',
-            ];
+            $facultyCode = $request->input('fakultas');
+            $query = Responden::query()->join('users', 'respondens.user_id', '=', 'users.id');
             
-            $aliases = [$facultyCode];
-            foreach ($normalizationMap as $original => $normalized) {
-                if ($normalized === $facultyCode) {
-                    $aliases[] = $original;
-                }
+            if ($request->filled('category')) {
+                 $query->where('respondens.category', $this->normalizeCategoryName($request->category));
             }
-            $aliases = array_unique($aliases);
-
-            $query = Responden::query()
-                ->join('users', 'respondens.user_id', '=', 'users.id')
-                ->where(function ($q) use ($aliases) {
-                    $q->where('users.role', 'prodi')
-                      ->where(function ($subq) use ($aliases) {
-                          foreach ($aliases as $alias) {
-                              $subq->orWhere('users.name', 'like', $alias . '-%');
-                          }
-                      });
-                    $q->orWhere(function ($subq) use ($aliases) {
-                        $subq->where('users.role', 'fakultas')
-                             ->whereIn('users.name', $aliases);
-                    });
-                });
 
             if ($request->filled('start_date') && $request->filled('end_date')) {
                 $startDate = Carbon::parse($request->start_date)->startOfDay();
@@ -263,18 +245,47 @@ class AdminRespondenController extends Controller
                 $query->whereBetween('respondens.created_at', [$startDate, $endDate]);
             }
 
-            $data = $query->select('users.name as user_name', DB::raw('count(respondens.id) as count'))
-                ->groupBy('users.name')
-                ->get()
-                ->mapWithKeys(function ($item) {
-                    if (Str::contains($item->user_name, '-')) {
-                        $label = Str::after($item->user_name, '-');
-                        $label = ucwords(trim($label));
-                    } else {
-                        $label = 'Fakultas (' . strtoupper($item->user_name) . ')';
-                    }
-                    return [$label => $item->count];
+
+            if (empty($facultyCode) || $facultyCode === 'semua') {
+                $data = $query->where('users.role', 'fakultas')
+                    ->select('users.name as faculty_name', DB::raw('count(respondens.id) as count'))
+                    ->groupBy('users.name')
+                    ->get()
+                    ->mapWithKeys(function ($item) {
+                        return [strtoupper($item->faculty_name) => $item->count];
+                    });
+            } 
+
+            else {
+                $normalizationMap = ['fis' => 'fish', 'fe' => 'feb', 'fppsi' => 'fpsi'];
+                $aliases = [$facultyCode];
+                foreach ($normalizationMap as $original => $normalized) {
+                    if ($normalized === $facultyCode) $aliases[] = $original;
+                }
+                $aliases = array_unique($aliases);
+
+                $query->where(function ($q) use ($aliases) {
+                    $q->where('users.role', 'prodi')
+                      ->where(function ($subq) use ($aliases) {
+                          foreach ($aliases as $alias) {
+                              $subq->orWhere('users.name', 'like', $alias . '-%');
+                          }
+                      });
+                    $q->orWhere(function ($subq) use ($aliases) {
+                        $subq->where('users.role', 'fakultas')->whereIn('users.name', $aliases);
+                    });
                 });
+
+                $data = $query->select('users.name as user_name', DB::raw('count(respondens.id) as count'))
+                    ->groupBy('users.name')
+                    ->get()
+                    ->mapWithKeys(function ($item) {
+                        $label = Str::contains($item->user_name, '-')
+                            ? ucwords(trim(Str::after($item->user_name, '-')))
+                            : 'Input Fakultas (' . strtoupper($item->user_name) . ')';
+                        return [$label => $item->count];
+                    });
+            }
 
             return response()->json($data);
         } catch (\Exception $e) {
@@ -512,17 +523,16 @@ class AdminRespondenController extends Controller
         $newStatus = $validated['status'];
 
         if ($newStatus === 'done' && $responden->status !== 'done') {
-            // Generate token if doesn't exist
+            // buat token BANG
             $token = $responden->token ?? Str::random(40);
 
-            // Update with token and status
+            // update
             $responden->update([
                 'status' => $newStatus,
                 'token' => $token
             ]);
 
             try {
-                // Verify required fields
                 if (empty($responden->email)) {
                     throw new \Exception('Email responden tidak boleh kosong');
                 }
@@ -530,7 +540,6 @@ class AdminRespondenController extends Controller
                     throw new \Exception('Nama responden tidak boleh kosong');
                 }
 
-                // Send email
                 Mail::to($responden->email)->send(new RespondenInvitationMail($responden));
 
                 return response()->json([
@@ -561,7 +570,6 @@ class AdminRespondenController extends Controller
         $role = $user->role;
         $userInfo = $this->getUserFacultyInfo($user);
 
-        // Authorization logic
         if ($role === 'fakultas') {
             if ($responden->fakultas !== $userInfo['faculty_code']) {
                 if ($request->ajax()) {
@@ -617,7 +625,6 @@ class AdminRespondenController extends Controller
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
 
-        // Validasi tetap sama
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'file' => 'required|mimes:xlsx,xls'
         ]);
