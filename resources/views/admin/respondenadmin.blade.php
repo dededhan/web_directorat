@@ -292,16 +292,15 @@
                                     <td>{{ $responden->created_at?->format('d M Y H:i') ?? 'N/A' }}</td>
                                     <td>
                                         <select class="form-select status-dropdown" data-id="{{ $responden->id }}"
-                                            {{ $responden->status == 'dones' ? 'disabled' : '' }}>
+                                            {{ $responden->status == 'clear' ? 'disabled' : '' }}>
                                             <option value="belum" {{ $responden->status == 'belum' ? 'selected' : '' }}>
                                                 Belum di-email</option>
                                             <option value="done" {{ $responden->status == 'done' ? 'selected' : '' }}>
                                                 Sudah di-email, belum di-follow up</option>
                                             <option value="dones" {{ $responden->status == 'dones' ? 'selected' : '' }}>
                                                 Sudah di-email, sudah di-follow up</option>
-                                            @if ($responden->status == 'clear')
-                                                <option value="clear" selected>selesai</option>
-                                            @endif
+                                            <option value="clear" {{ $responden->status == 'clear' ? 'selected' : '' }}>
+                                                Selesai</option>
                                         </select>
                                     </td>
                                     <td>
@@ -699,7 +698,6 @@
             });
 
 
-            // Import form submission
             document.getElementById('importForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const formData = new FormData(this);
@@ -788,7 +786,6 @@
                 window.location.href = url;
             });
 
-            // Handle CSV Export
             document.getElementById('exportFilteredCSV').addEventListener('click', function() {
                 const category = document.getElementById('exportFilterCategory').value;
                 const fakultas = document.getElementById('exportFilterFakultas').value;
@@ -807,36 +804,19 @@
                 window.location.href = url;
             });
             document.querySelectorAll('.status-dropdown').forEach(select => {
-                const updateButton = select.closest('tr').querySelector('.update-status');
-                if (select.value === 'clear') {
-                    updateButton.disabled = true;
-                    updateButton.classList.add('btn-secondary');
-                    updateButton.classList.remove('btn-warning');
-                }
-
                 select.addEventListener('change', function() {
                     const respondenId = this.dataset.id;
                     const newStatus = this.value;
-                    const updateButton = this.closest('tr').querySelector('.update-status');
+                    
+                    this.dataset.previousValue = this.value;
 
-                    const previousValue = this.dataset.previousValue;
-                    if (newStatus === 'clear') {
-                        this.value = previousValue;
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Invalid Action',
-                            text: 'Status "selesai" cannot be set manually',
-                        });
-                        return;
-                    }
-
-                    updateStatus(this, respondenId, newStatus, updateButton);
+                    updateStatus(this, respondenId, newStatus);
                 });
 
                 select.dataset.previousValue = select.value;
             });
 
-            function updateStatus(selectElement, respondenId, newStatus, updateButton) {
+            function updateStatus(selectElement, respondenId, newStatus) {
                 axios.post(`/admin/responden/update-status/${respondenId}`, {
                         status: newStatus,
                         _token: csrfToken
@@ -849,13 +829,14 @@
                             timer: 1500,
                             showConfirmButton: false
                         });
-                        selectElement.value = newStatus;
+                        
                         selectElement.dataset.previousValue = newStatus;
                         if (newStatus === 'clear') {
                             selectElement.disabled = true;
                         }
                     })
                     .catch(error => {
+
                         selectElement.value = selectElement.dataset.previousValue;
                         Swal.fire({
                             icon: 'error',
