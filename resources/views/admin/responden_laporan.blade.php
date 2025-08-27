@@ -76,7 +76,7 @@
                 <div id="prodiChartContainer" class="h-80">
                     <canvas id="prodiChart"></canvas>
                     <p id="prodiChartPlaceholder" class="text-center text-gray-500 flex items-center justify-center h-full">
-                        Memuat data...
+                        Loading...
                     </p>
                 </div>
             </div>
@@ -165,9 +165,7 @@
                 const labels = Object.keys(data.byFaculty);
                 const dataValues = Object.values(data.byFaculty);
                 const maxValue = dataValues.length > 0 ? Math.max(...dataValues) : 0;
-                // GK KELIATAN COI MAKANYA DITAMBAH VALUE
                 const yAxisMax = maxValue < 10 ? maxValue + 2 : Math.ceil(maxValue * 1.1);
-
 
                 charts.faculty = new Chart(facultyCtx, {
                     type: 'bar',
@@ -184,7 +182,7 @@
                             y: { 
                                 beginAtZero: true, 
                                 ticks: { precision: 0 },
-                                max: yAxisMax 
+                                max: yAxisMax
                             } 
                         }, 
                         responsive: true, 
@@ -292,6 +290,7 @@
                 console.error("Gagal mengambil data chart:", error);
                 alert('Gagal memuat data laporan. Cek console untuk detail.');
             };
+
             const allFilters = ['start_date', 'end_date', 'category-filter', 'faculty-selector', 'data-source-filter'];
             allFilters.forEach(id => {
                 document.getElementById(id).addEventListener('change', fetchAndRenderCharts);
@@ -308,7 +307,6 @@
             
             document.getElementById('print-button').addEventListener('click', () => window.print());
 
-            // Initial Load
             fetchAndRenderCharts();
         });
     </script>

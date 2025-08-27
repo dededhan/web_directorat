@@ -121,6 +121,7 @@ class AdminRespondenController extends Controller
         return 'lainnya';
     }
 
+    //WARNAAAAAAAAAAAAAAAAAAA
     private function getFacultyColors()
     {
         return [
@@ -139,12 +140,14 @@ class AdminRespondenController extends Controller
             $startDate = null;
             $endDate = null;
             $category = $request->input('category');
-            $dataSource = $request->input('data_source', 'non_admin'); 
+            $dataSource = $request->input('data_source', 'non_admin'); // default 'non_admin'
+
             if ($dataSource === 'non_admin') {
                 $query->where('users.role', '!=', 'admin_direktorat');
             } elseif ($dataSource === 'admin_only') {
                 $query->where('users.role', '=', 'admin_direktorat');
             }
+
             if ($request->has('start_date') && $request->filled('start_date') && $request->has('end_date') && $request->filled('end_date')) {
                 try {
                     $startDate = Carbon::parse($request->start_date)->startOfDay();
@@ -157,9 +160,10 @@ class AdminRespondenController extends Controller
                 }
             }
             
+            // Clone BUAT NARAHUBUNGGGGGGGGGGGGGGGG
             $summaryQuery = clone $query;
 
-            $respondens = $query->select('respondens.*')->get(); 
+            $respondens = $query->select('respondens.*')->get();
             $normalizedRespondens = $respondens->map(function ($responden) {
                 $responden->fakultas = $this->normalizeFacultyName($responden->fakultas);
                 $responden->category = $this->normalizeCategoryName($responden->category);
@@ -229,21 +233,58 @@ class AdminRespondenController extends Controller
             }
 
             if (empty($facultyCode) || $facultyCode === 'semua') {
-                $data = $query->where('users.role', 'fakultas')
-                    ->select('users.name as faculty_name', DB::raw('count(respondens.id) as count'))
+                $allFaculties = User::where('role', 'fakultas')->pluck('name')->map(function($name){
+                    return $this->normalizeFacultyName($name);
+                })->unique();
+                $facultyTotals = $allFaculties->flip()->map(function() { return 0; })->toArray();
+                $allInputs = $query->whereIn('users.role', ['fakultas', 'prodi'])
+                    ->select('users.name as user_name', DB::raw('count(respondens.id) as count'))
                     ->groupBy('users.name')
-                    ->get()
-                    ->mapWithKeys(function ($item) {
-                        return [strtoupper($item->faculty_name) => $item->count];
-                    });
-            } 
-            else {
+                    ->get();
+
+                foreach ($allInputs as $input) {
+                    $facultyName = $input->user_name;
+                    if (Str::contains($facultyName, '-')) {
+                        $facultyName = Str::before($facultyName, '-');
+                    }
+                    $normalizedFaculty = $this->normalizeFacultyName($facultyName);
+                    
+                    if (isset($facultyTotals[$normalizedFaculty])) {
+                        $facultyTotals[$normalizedFaculty] += $input->count;
+                    }
+                }
+    
+                $data = collect($facultyTotals)->mapWithKeys(function ($count, $faculty) {
+                    return [strtoupper($faculty) => $count];
+                })->sortKeys();
+
+            } else {
                 $normalizationMap = ['fis' => 'fish', 'fe' => 'feb', 'fppsi' => 'fpsi'];
                 $aliases = [$facultyCode];
                 foreach ($normalizationMap as $original => $normalized) {
                     if ($normalized === $facultyCode) $aliases[] = $original;
                 }
                 $aliases = array_unique($aliases);
+
+                $baseUsers = User::where(function($q) use ($aliases) {
+                    $q->where('role', 'fakultas')->whereIn('name', $aliases);
+                })->orWhere(function($q) use ($aliases) {
+                    $q->where('role', 'prodi')->where(function($subq) use ($aliases) {
+                        foreach ($aliases as $alias) {
+                            $subq->orWhere('name', 'like', $alias.'-%');
+                        }
+                    });
+                })->get();
+
+
+                $prodiTotals = [];
+                foreach($baseUsers as $user) {
+                     $label = Str::contains($user->name, '-')
+                            ? ucwords(trim(Str::after($user->name, '-')))
+                            : 'Input Fakultas (' . strtoupper($user->name) . ')';
+                    $prodiTotals[$label] = 0;
+                }
+
 
                 $query->where(function ($q) use ($aliases) {
                     $q->where('users.role', 'prodi')
@@ -257,15 +298,19 @@ class AdminRespondenController extends Controller
                     });
                 });
 
-                $data = $query->select('users.name as user_name', DB::raw('count(respondens.id) as count'))
+                $actualInputs = $query->select('users.name as user_name', DB::raw('count(respondens.id) as count'))
                     ->groupBy('users.name')
-                    ->get()
-                    ->mapWithKeys(function ($item) {
-                        $label = Str::contains($item->user_name, '-')
-                            ? ucwords(trim(Str::after($item->user_name, '-')))
-                            : 'Input Fakultas (' . strtoupper($item->user_name) . ')';
-                        return [$label => $item->count];
-                    });
+                    ->get();
+                
+                foreach($actualInputs as $input) {
+                    $label = Str::contains($input->user_name, '-')
+                            ? ucwords(trim(Str::after($input->user_name, '-')))
+                            : 'Input Fakultas (' . strtoupper($input->user_name) . ')';
+                    if(isset($prodiTotals[$label])) {
+                        $prodiTotals[$label] = $input->count;
+                    }
+                }
+                $data = collect($prodiTotals)->sortKeys();
             }
 
             return response()->json($data);
