@@ -440,8 +440,22 @@
                             <option value="employer">Employer</option>
                         </select>
                     </div>
-
-                    
+                    <div class="mb-3">
+                        <label for="exportFilterFakultas" class="form-label">Fakultas</label>
+                        <select class="form-select" id="exportFilterFakultas">
+                            <option value="">Semua Fakultas</option>
+                            <option value="pascasarjana">PASCASARJANA</option>
+                            <option value="fip">FIP</option>
+                            <option value="fmipa">FMIPA</option>
+                            <option value="fpsi">FPsi</option>
+                            <option value="fbs">FBS</option>
+                            <option value="ft">FT</option>
+                            <option value="fikk">FIKK</option>
+                            <option value="fish">FISH</option>
+                            <option value="feb">FEB</option>
+                            <option value="profesi">PROFESI</option>
+                        </select>
+                    </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="exportStartDate" class="form-label">Tanggal Mulai</label>
@@ -537,12 +551,14 @@
             });
             document.getElementById('exportFilteredExcel').addEventListener('click', function() {
                 const category = document.getElementById('exportFilterCategory').value;
+                 const fakultas = document.getElementById('exportFilterFakultas').value;
                 const startDate = document.getElementById('exportStartDate').value;
                 const endDate = document.getElementById('exportEndDate').value;
 
                 let url = '{{ route("fakultas.responden.export") }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
+                if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
                 if (startDate) params.push(`start_date=${encodeURIComponent(startDate)}`);
                 if (endDate) params.push(`end_date=${encodeURIComponent(endDate)}`);
                 
@@ -552,12 +568,14 @@
 
             document.getElementById('exportFilteredCSV').addEventListener('click', function() {
                 const category = document.getElementById('exportFilterCategory').value;
+                const fakultas = document.getElementById('exportFilterFakultas').value;
                 const startDate = document.getElementById('exportStartDate').value;
                 const endDate = document.getElementById('exportEndDate').value;
 
                 let url = '{{ route("fakultas.responden.exportCSV") }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
+                if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`); 
                 if (startDate) params.push(`start_date=${encodeURIComponent(startDate)}`);
                 if (endDate) params.push(`end_date=${encodeURIComponent(endDate)}`);
 

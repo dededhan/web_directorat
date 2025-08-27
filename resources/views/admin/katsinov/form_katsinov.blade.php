@@ -1026,4 +1026,22 @@
             }
         });
     </script>
+   
 @endsection
+@push('scripts')
+    {{-- 
+      LANGKAH 1: "Jembatan" dari PHP ke JavaScript.
+      Code ini mengambil variabel $min_percentage_js dari controller 
+      dan membuatnya menjadi variabel JavaScript.
+    --}}
+    <script>
+        const MIN_PERCENTAGE_FROM_SERVER = {{ $min_percentage_js ?? 80.0 }};
+    </script>
+
+    {{-- 
+      LANGKAH 2: Panggil file indikator.js.
+      Karena baris ini ada SETELAH "jembatan" di atas, 
+      indikator.js dijamin bisa menemukan variabel MIN_PERCENTAGE_FROM_SERVER.
+    --}}
+    <script src="{{ asset('resources/movejs/indikator.js') }}"></script>
+@endpush

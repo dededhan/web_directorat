@@ -496,7 +496,6 @@
 
 
     <!-- Export Filter Modal -->
-    <!-- Export Filter Modal -->
     <div class="modal fade pt-3" id="exportFilterModal" tabindex="-1" aria-labelledby="exportFilterModalLabel"
         aria-hidden="true">
         <div class="modal-dialog pt-3">

@@ -27,6 +27,7 @@ use App\Http\Controllers\SejarahContentController;
 use App\Http\Controllers\PimpinanController;
 use App\Http\Controllers\RankingController;
 use App\Http\Controllers\GlobalEngagementController;
+use App\Http\Controllers\SettingController;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\GalleryController;
@@ -234,12 +235,16 @@ Route::prefix('admin')->name('admin.')
                 Route::post('/update-user', [KatsinovController::class, 'updateUser'])->name('update-user');
                 Route::get('/form', [KatsinovController::class, 'create'])->name('form');
                 Route::get('/show/{id}', [KatsinovController::class, 'show'])->name('show');
+                Route::get('/katsinov/{katsinov}/privacy', [KatsinovController::class, 'showPrivacyPage'])->name('privacy');
                 Route::post('/store', [KatsinovController::class, 'store'])->name('store');
                 Route::get('/download-pdf', [KatsinovController::class, 'downloadPDF'])->name('download-pdf');
                 Route::get('/katsinov/latest', [KatsinovController::class, 'latest']);
                 Route::get('/documents/{id}', [KatsinovController::class, 'viewDocument'])
                     ->name('document.view');
                 Route::delete('/document/{id}', [KatsinovController::class, 'destroyDocument'])->name('document.delete');
+
+                Route::get('/settings/katsinov', [SettingController::class, 'index'])->name('settings.index');
+                Route::post('/settings/katsinov', [SettingController::class, 'update'])->name('settings.update');
 
                 // Route::get('/print_katsinov/{id}', [KatsinovController::class, 'downloadDetailPDF'])->name('print_katsinov');
                 Route::get('/print/{id}', [KatsinovController::class, 'printForm'])->name('print');

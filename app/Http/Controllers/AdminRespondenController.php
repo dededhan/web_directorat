@@ -75,11 +75,21 @@ class AdminRespondenController extends Controller
     private function normalizeFacultyName($faculty)
     {
         $faculty = strtolower(trim($faculty));
+
+        if (strpos($faculty, 'fe-') === 0) {
+            return 'feb';
+        }
+
         $map = [
             'teknik' => 'ft',
             'fpbs' => 'fbs',
             'fkip' => 'fip',
-
+            'fis' => 'fish', 
+            'fish' => 'fish',
+            'fe'  => 'feb', 
+            'feb' => 'feb',
+            'fppsi' => 'fpsi',
+            'fpsi' => 'fpsi',
         ];
 
         if (array_key_exists($faculty, $map)) {
@@ -92,7 +102,6 @@ class AdminRespondenController extends Controller
 
         return $faculty;
     }
-
     private function normalizeCategoryName($category)
     {
         $category = strtolower(trim($category));
@@ -114,10 +123,12 @@ class AdminRespondenController extends Controller
 
 
 
-    public function getChartSummaryData(Request $request)
+   public function getChartSummaryData(Request $request)
     {
         try {
             $query = Responden::query();
+            $startDate = null;
+            $endDate = null;
 
             //Validation anabel
             if (
@@ -152,24 +163,39 @@ class AdminRespondenController extends Controller
             $byCategory = $normalizedRespondens->groupBy('category')->map->count();
             $byStatus = $respondens->groupBy('status')->map->count();
 
-            $inputterIds = Responden::query()->distinct()->pluck('user_id');
-            $inputters = User::whereIn('id', $inputterIds)->get();
+            $inputsPerUserQuery = Responden::query()
+                ->select('user_id', DB::raw('count(*) as total'))
+                ->groupBy('user_id');
 
-            $byInputterFaculty = $inputters->map(function ($user) {
+            if ($startDate && $endDate) {
+                $inputsPerUserQuery->whereBetween('created_at', [$startDate, $endDate]);
+            }
+
+            $inputsPerUser = $inputsPerUserQuery->pluck('total', 'user_id');
+            $inputterUsers = User::whereIn('id', $inputsPerUser->keys())->get();
+
+            $detailedInputters = $inputterUsers->map(function ($user) use ($inputsPerUser) {
+                $faculty = 'Lainnya'; // Default
                 if ($user->role === 'fakultas') {
-                    return $this->normalizeFacultyName(strtolower($user->name));
+                    $faculty = $this->normalizeFacultyName(strtolower($user->name));
                 } elseif ($user->role === 'prodi') {
                     $parts = explode('-', $user->name, 2);
-                    return $this->normalizeFacultyName(strtolower($parts[0] ?? 'unknown'));
+                    $faculty = $this->normalizeFacultyName(strtolower($parts[0] ?? 'unknown'));
                 }
-                return 'lainnya';
-            })->countBy();
+
+                return [
+                    'name' => $user->name,
+                    'faculty' => strtoupper($faculty),
+                    'role' => ucwords(str_replace('_', ' ', $user->role)),
+                    'count' => $inputsPerUser[$user->id] ?? 0,
+                ];
+            })->sortByDesc('count')->values();
 
             return response()->json([
                 'byFaculty' => $byFaculty,
                 'byCategory' => $byCategory,
                 'byStatus' => $byStatus,
-                'byInputterFaculty' => $byInputterFaculty
+                'detailedInputters' => $detailedInputters
             ]);
         } catch (\Exception $e) {
             Log::error('Error fetching chart summary data: ' . $e->getMessage());
@@ -177,12 +203,11 @@ class AdminRespondenController extends Controller
         }
     }
 
-    public function getProdiChartData(Request $request)
+     public function getProdiChartData(Request $request)
     {
         $user = Auth::user();
         $role = $user->role;
 
-        // validation anabel
         $request->validate([
             'fakultas' => 'nullable|string',
             'start_date' => 'nullable|date',
@@ -192,7 +217,6 @@ class AdminRespondenController extends Controller
         try {
             $facultyCode = null;
 
-            //fakultas anabel
             if ($role === 'fakultas') {
                 $userInfo = $this->getUserFacultyInfo($user);
                 $facultyCode = $userInfo['faculty_code'];
@@ -204,10 +228,34 @@ class AdminRespondenController extends Controller
                 return response()->json([]);
             }
 
+            $normalizationMap = [
+                'fis' => 'fish',
+                'fe'  => 'feb',
+                'fppsi' => 'fpsi',
+            ];
+            
+            $aliases = [$facultyCode];
+            foreach ($normalizationMap as $original => $normalized) {
+                if ($normalized === $facultyCode) {
+                    $aliases[] = $original;
+                }
+            }
+            $aliases = array_unique($aliases);
+
             $query = Responden::query()
                 ->join('users', 'respondens.user_id', '=', 'users.id')
-                ->where('users.role', 'prodi')
-                ->where('users.name', 'like', $facultyCode . '-%');
+                ->where(function ($q) use ($aliases) {
+                    $q->where('users.role', 'prodi')
+                      ->where(function ($subq) use ($aliases) {
+                          foreach ($aliases as $alias) {
+                              $subq->orWhere('users.name', 'like', $alias . '-%');
+                          }
+                      });
+                    $q->orWhere(function ($subq) use ($aliases) {
+                        $subq->where('users.role', 'fakultas')
+                             ->whereIn('users.name', $aliases);
+                    });
+                });
 
             if ($request->filled('start_date') && $request->filled('end_date')) {
                 $startDate = Carbon::parse($request->start_date)->startOfDay();
@@ -215,13 +263,17 @@ class AdminRespondenController extends Controller
                 $query->whereBetween('respondens.created_at', [$startDate, $endDate]);
             }
 
-            $data = $query->select('users.name as prodi_name', DB::raw('count(respondens.id) as count'))
+            $data = $query->select('users.name as user_name', DB::raw('count(respondens.id) as count'))
                 ->groupBy('users.name')
                 ->get()
                 ->mapWithKeys(function ($item) {
-                    $prodiName = Str::after($item->prodi_name, '-');
-                    $prodiName = ucwords(trim($prodiName));
-                    return [$prodiName => $item->count];
+                    if (Str::contains($item->user_name, '-')) {
+                        $label = Str::after($item->user_name, '-');
+                        $label = ucwords(trim($label));
+                    } else {
+                        $label = 'Fakultas (' . strtoupper($item->user_name) . ')';
+                    }
+                    return [$label => $item->count];
                 });
 
             return response()->json($data);
@@ -674,6 +726,7 @@ class AdminRespondenController extends Controller
     public function export(Request $request)
     {
         $user = Auth::user();
+        
         if (!in_array($user->role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas', 'prodi'])) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
