@@ -193,7 +193,8 @@
                         @foreach($produkInovasi as $produk)
                         {{-- Menambahkan data-category untuk filtering --}}
                         <div class="product-card bg-cardColor rounded-card overflow-hidden shadow-card h-full flex flex-col transition duration-300 border border-black/5 hover:transform hover:-translate-y-2 hover:shadow-hover" 
-                             data-category="{{ $produk->nomor_paten ? 'paten' : 'hki' }}">
+                           data-category="{{ strtolower($produk->kategori) }}">
+
                             
                             @if($produk->gambar)
                             <div class="h-[200px] bg-cover bg-center relative" style="background-image: url('{{ asset('storage/'. $produk->gambar) }}')"></div>
@@ -221,17 +222,24 @@
                                         <span>{{ $produk->created_at->format('d M Y') }}</span>
                                     </div>
                                     
-                                    @if($produk->nomor_paten)
                                     <div class="bg-accent/20 text-accent rounded-full px-3 py-1 text-xs font-semibold flex items-center mt-2 md:mt-0">
                                         <i class="fas fa-certificate mr-1"></i>
-                                        Paten
+                                        {{ $produk->kategori }}
                                     </div>
                                     @endif
                                 </div>
                                 
-                                <button onclick="openProductModal({{ $produk->id }})" class="w-full mt-2 bg-primary hover:bg-primary-dark text-white transition duration-300 flex items-center justify-center text-sm font-medium py-2.5 px-3 rounded">
-                                    Baca Selengkapnya
-                                </button>
+                                @if ($produk->link_ebook)
+                                    {{-- Jika ada link e-book, tampilkan link ini --}}
+                                    <a href="{{ $produk->link_ebook }}" target="_blank" class="w-full mt-2 bg-green-600 hover:bg-green-700 text-white transition duration-300 flex items-center justify-center text-sm font-medium py-2.5 px-3 rounded">
+                                        <i class="fas fa-book-open mr-2"></i> Baca Selengkapnya
+                                    </a>
+                                @else
+                                    {{-- Jika tidak ada, tampilkan tombol modal seperti biasa --}}
+                                    <button onclick="openProductModal({{ $produk->id }})" class="w-full mt-2 bg-primary hover:bg-primary-dark text-white transition duration-300 flex items-center justify-center text-sm font-medium py-2.5 px-3 rounded">
+                                        Baca Selengkapnya
+                                    </button>
+                                @endif
                             </div>
                         </div>
                         @endforeach

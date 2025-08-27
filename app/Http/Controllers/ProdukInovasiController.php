@@ -11,9 +11,7 @@ use App\Models\Berita;
 
 class ProdukInovasiController extends Controller
 {
-    /**
-     * Get the correct route name prefix based on authenticated user role
-     */
+    
     private function getRoutePrefix()
     {
         if (auth()->user()->hasRole('admin_direktorat')) {
@@ -22,12 +20,10 @@ class ProdukInovasiController extends Controller
             return 'subdirektorat-inovasi.admin_hilirisasi';
         }
         
-        return 'admin'; // Default fallback
+        return 'admin'; 
     }
 
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index()
     {
         $produkInovasi = ProdukInovasi::all();
@@ -39,13 +35,11 @@ class ProdukInovasiController extends Controller
             return view('subdirektorat-inovasi.admin_hilirisasi.produk_inovasi', compact('produkInovasi', 'routePrefix'));
         }
         
-        // Default fallback view
+        
         return view('admin.produk_inovasi', compact('produkInovasi', 'routePrefix'));
     }
 
-    /**
-     * Display a listing of the resource for public view.
-     */
+   
     public function publicIndex()
     {
         $produkInovasi = ProdukInovasi::latest()->get();
@@ -58,9 +52,7 @@ class ProdukInovasiController extends Controller
         return view('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi', compact('produkInovasi', 'beritaInovasi'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+   
     public function store(Request $request)
     {
         $request->validate([
@@ -69,12 +61,13 @@ class ProdukInovasiController extends Controller
             'nomor_paten' => 'nullable|string|max:255',
             'deskripsi' => 'required|string',
             'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'kategori' => 'required|in:HKI,PATEN',
+            'link_ebook' => 'nullable|url|max:255',
         ]);
 
         try {
             $data = $request->all();
 
-            // Handle image upload
             if ($request->hasFile('gambar')) {
                 $file = $request->file('gambar');
                 $fileName = time() . '_' . $file->getClientOriginalName();
@@ -108,18 +101,14 @@ class ProdukInovasiController extends Controller
         }
     }
 
-    /**
-     * Get the detail of a product for AJAX request.
-     */
+  
     public function getProdukDetail($id)
     {
         $produk = ProdukInovasi::findOrFail($id);
         return response()->json($produk);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+   
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -128,6 +117,8 @@ class ProdukInovasiController extends Controller
             'nomor_paten' => 'nullable|string|max:255',
             'deskripsi' => 'required|string',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'kategori' => 'required|in:HKI,PATEN',
+            'link_ebook' => 'nullable|url|max:255',
         ]);
 
         try {
