@@ -56,14 +56,6 @@
 </head>
 <body class="bg-backgroundColor text-textColor leading-relaxed text-base font-['Segoe_UI',Tahoma,Geneva,Verdana,sans-serif]">
 @include('layout.navbar_hilirisasi')
-    
-    <section class="bg-gradient-to-br from-primary to-primary-dark py-20 mb-8 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-30" style="background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M0,0 L100,100" stroke="rgba(255,255,255,0.05)" stroke-width="2"/></svg>');"></div>
-        <div class="relative text-center text-white max-w-3xl mx-auto px-4">
-            <h1 class="text-4xl font-bold mb-4 drop-shadow-md">Produk Inovasi UNJ</h1>
-            <p class="text-xl opacity-90">Temukan berbagai inovasi dan karya terbaik dari civitas akademika Universitas Negeri Jakarta</p>
-        </div>
-    </section>
 
     <div class="pt-12 md:pt-16 overflow-x-hidden">
         <main class="w-[90%] max-w-6xl mx-auto">
@@ -71,7 +63,7 @@
             <section class="mb-16">
                 <div class="text-center mb-8">
                     <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Sambutan Pimpinan</h2>
-                    <p class="text-textSecondary text-lg max-w-2xl mx-auto">Sambutan dari Ibu Prof. Dr. Komarudin, M.Si. selaku Rektor Universitas Negeri Jakarta mengenai pentingnya inovasi dalam dunia pendidikan</p>
+                    <p class="text-textSecondary text-lg max-w-2xl mx-auto">Sambutan dari Ibu Dr. RA Murti Kusuma W.S.IP, M.Si. selaku Direktur Inovasi, Sistem Informasi dan Pemeringkatan Universitas Negeri Jakarta mengenai...</p>
                 </div>
                 <div class="bg-cardColor rounded-card shadow-card overflow-hidden">
                     <div class="aspect-video relative">
