@@ -108,8 +108,8 @@
                                     @endif
                                 </div>
                                 
-                                <button onclick="openProductModal({{ $produk->id }})" class="mt-2 text-primary hover:text-primary-dark transition duration-300 flex items-center text-sm font-medium">
-                                    <i class="fas fa-eye mr-1.5"></i> Lihat Detail
+                                <button onclick="openProductModal({{ $produk->id }})" class="w-full mt-2 bg-primary hover:bg-primary-dark text-white transition duration-300 flex items-center justify-center text-sm font-medium py-2.5 px-3 rounded">
+                                    Baca Selengkapnya
                                 </button>
                             </div>
                         </div>
