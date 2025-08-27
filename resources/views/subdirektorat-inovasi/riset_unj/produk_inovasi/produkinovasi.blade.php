@@ -262,95 +262,69 @@
                     <p class="text-textSecondary text-lg">Update terbaru seputar perkembangan inovasi di UNJ</p>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="md:col-span-2 lg:col-span-3 bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-hover transition-all duration-300">
-                        <div class="md:flex">
-                            <div class="md:w-2/3">
-                                <div class="h-64 md:h-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center">
-                                    <div class="text-center text-white p-6">
-                                        <i class="fas fa-newspaper text-4xl mb-4 opacity-80"></i>
-                                        <h3 class="text-xl font-bold">Berita Utama Inovasi UNJ</h3>
+                @if(isset($beritaInovasi) && $beritaInovasi->count() > 0)
+                    {{-- Ambil berita pertama sebagai berita utama --}}
+                    @php $beritaUtama = $beritaInovasi->first(); @endphp
+                    @php $beritaLainnya = $beritaInovasi->slice(1); @endphp
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="md:col-span-2 lg:col-span-3 bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-hover transition-all duration-300">
+                            <div class="md:flex">
+                                <div class="md:w-2/3">
+                                    <div class="h-64 md:h-full bg-cover bg-center" style="background-image: url('{{ asset('storage/' . $beritaUtama->gambar) }}')">
                                     </div>
                                 </div>
+                                <div class="md:w-1/3 p-6 md:p-8 flex flex-col">
+                                    <div class="flex items-center text-xs text-textSecondary mb-3">
+                                        <i class="fas fa-calendar mr-2"></i>
+                                        <span>{{ $beritaUtama->created_at->format('d F Y') }}</span>
+                                    </div>
+                                    <h3 class="text-xl font-bold mb-4">{{ $beritaUtama->judul }}</h3>
+                                    <p class="text-textSecondary text-sm leading-relaxed mb-4 flex-grow">
+                                        {{ Str::limit(strip_tags($beritaUtama->isi), 150) }}
+                                    </p>
+                                    {{-- Tombol diubah menjadi link (tag <a>) dengan route yang benar --}}
+                                    <a href="{{ route('Berita.show', ['slug' => $beritaUtama->slug]) }}" class="text-primary font-semibold hover:text-primary-dark transition-colors duration-300 self-start">
+                                        Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                                    </a>
+                                </div>
                             </div>
-                            <div class="md:w-1/3 p-6 md:p-8">
+                        </div>
+
+                        @foreach($beritaLainnya as $berita)
+                        <div class="bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-hover transition-all duration-300 flex flex-col">
+                            <div class="h-48 bg-cover bg-center" style="background-image: url('{{ asset('storage/' . $berita->gambar) }}')">
+                            </div>
+                            <div class="p-6 flex flex-col flex-grow">
                                 <div class="flex items-center text-xs text-textSecondary mb-3">
                                     <i class="fas fa-calendar mr-2"></i>
-                                    <span>15 Januari 2025</span>
+                                    <span>{{ $berita->created_at->format('d F Y') }}</span>
                                 </div>
-                                <h3 class="text-xl font-bold mb-4">UNJ Raih Penghargaan Inovasi Terbaik Nasional 2025</h3>
-                                <p class="text-textSecondary text-sm leading-relaxed mb-4">
-                                    Universitas Negeri Jakarta berhasil meraih penghargaan sebagai perguruan tinggi dengan inovasi terbaik di Indonesia untuk kategori teknologi pendidikan.
+                                <h3 class="font-bold mb-3">{{ $berita->judul }}</h3>
+                                <p class="text-textSecondary text-sm mb-4 flex-grow">
+                                    {{ Str::limit(strip_tags($berita->isi), 100) }}
                                 </p>
-                                <button class="text-primary font-semibold hover:text-primary-dark transition-colors duration-300">
+                                {{-- Tombol diubah menjadi link (tag <a>) dengan route yang benar --}}
+                                <a href="{{ route('Berita.show', ['slug' => $berita->slug]) }}" class="text-primary font-semibold hover:text-primary-dark transition-colors duration-300 text-sm mt-auto self-start">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                                </button>
+                                </a>
                             </div>
                         </div>
+                        @endforeach
                     </div>
-
-                    <div class="bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-hover transition-all duration-300">
-                        <div class="h-48 bg-gradient-to-br from-accent/80 to-accent flex items-center justify-center">
-                            <i class="fas fa-trophy text-3xl text-white opacity-80"></i>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center text-xs text-textSecondary mb-3">
-                                <i class="fas fa-calendar mr-2"></i>
-                                <span>12 Januari 2025</span>
-                            </div>
-                            <h3 class="font-bold mb-3">Mahasiswa UNJ Ciptakan Aplikasi Pembelajaran AI</h3>
-                            <p class="text-textSecondary text-sm mb-4">
-                                Tim mahasiswa Teknik Informatika berhasil mengembangkan aplikasi pembelajaran berbasis kecerdasan buatan...
-                            </p>
-                            <button class="text-primary font-semibold hover:text-primary-dark transition-colors duration-300 text-sm">
-                                Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                            </button>
-                        </div>
+                @else
+                    {{-- Tampilan jika tidak ada berita inovasi --}}
+                    <div class="col-span-full flex flex-col items-center justify-center py-16 text-center text-textSecondary bg-cardColor rounded-card shadow-card">
+                        <i class="fas fa-newspaper text-5xl mb-4 opacity-50"></i>
+                        <p class="text-lg">Belum ada berita inovasi yang tersedia.</p>
                     </div>
-
-                    <div class="bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-hover transition-all duration-300">
-                        <div class="h-48 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
-                            <i class="fas fa-leaf text-3xl text-white opacity-80"></i>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center text-xs text-textSecondary mb-3">
-                                <i class="fas fa-calendar mr-2"></i>
-                                <span>10 Januari 2025</span>
-                            </div>
-                            <h3 class="font-bold mb-3">Inovasi Ramah Lingkungan untuk Pertanian</h3>
-                            <p class="text-textSecondary text-sm mb-4">
-                                Dosen Fakultas Pertanian mengembangkan pupuk organik inovatif yang ramah lingkungan...
-                            </p>
-                            <button class="text-primary font-semibold hover:text-primary-dark transition-colors duration-300 text-sm">
-                                Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-hover transition-all duration-300">
-                        <div class="h-48 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
-                            <i class="fas fa-microscope text-3xl text-white opacity-80"></i>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center text-xs text-textSecondary mb-3">
-                                <i class="fas fa-calendar mr-2"></i>
-                                <span>8 Januari 2025</span>
-                            </div>
-                            <h3 class="font-bold mb-3">Penelitian Breakthrough di Bidang Kesehatan</h3>
-                            <p class="text-textSecondary text-sm mb-4">
-                                Tim peneliti UNJ menemukan metode baru untuk diagnosis dini penyakit kronis...
-                            </p>
-                            <button class="text-primary font-semibold hover:text-primary-dark transition-colors duration-300 text-sm">
-                                Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                @endif
                 
                 <div class="text-center mt-8">
-                    <button class="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:transform hover:scale-105">
+                    {{-- Tombol "Lihat Semua Berita" diubah menjadi link ke halaman kategori inovasi --}}
+                    <a href="{{ route('berita.kategori', 'inovasi') }}" class="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:transform hover:scale-105">
                         Lihat Semua Berita
-                    </button>
+                    </a>
                 </div>
             </section>
         </main>

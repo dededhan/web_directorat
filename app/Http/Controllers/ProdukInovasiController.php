@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Berita; 
 
 class ProdukInovasiController extends Controller
 {
@@ -47,10 +48,14 @@ class ProdukInovasiController extends Controller
      */
     public function publicIndex()
     {
-        // Get all products ordered by most recent first
         $produkInovasi = ProdukInovasi::latest()->get();
 
-        return view('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi', compact('produkInovasi'));
+        $beritaInovasi = Berita::where('kategori', 'inovasi')
+                                ->latest()
+                                ->take(4)
+                                ->get();
+
+        return view('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi', compact('produkInovasi', 'beritaInovasi'));
     }
 
     /**
