@@ -103,8 +103,6 @@
                 </div>
             </section>
 
-            
-
             @else
             <section class="mb-16">
                 <div class="text-center py-12">
@@ -265,17 +263,12 @@
                                  
                                 </div>
                                 
-                                @if ($produk->link_ebook)
-                                    {{-- Jika ada link e-book, tampilkan link ini --}}
-                                    <a href="{{ $produk->link_ebook }}" target="_blank" class="w-full mt-2 bg-green-600 hover:bg-green-700 text-white transition duration-300 flex items-center justify-center text-sm font-medium py-2.5 px-3 rounded">
-                                        <i class="fas fa-book-open mr-2"></i> Baca Selengkapnya
-                                    </a>
-                                @else
-                                    {{-- Jika tidak ada, tampilkan tombol modal seperti biasa --}}
-                                    <button onclick="openProductModal({{ $produk->id }})" class="w-full mt-2 bg-primary hover:bg-primary-dark text-white transition duration-300 flex items-center justify-center text-sm font-medium py-2.5 px-3 rounded">
-                                        Baca Selengkapnya
-                                    </button>
-                                @endif
+                                {{-- PERUBAHAN DI SINI: Tombol diubah menjadi link ke halaman detail --}}
+                                <a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.show', $produk->id) }}" class="w-full mt-2 bg-primary hover:bg-primary-dark text-white transition duration-300 flex items-center justify-center text-sm font-medium py-2.5 px-3 rounded">
+                                    Baca Selengkapnya
+                                </a>
+                                {{-- AKHIR PERUBAHAN --}}
+
                             </div>
                         </div>
                         @endforeach
@@ -365,21 +358,9 @@
             </section>
         </main>
     </div>
-
-    <div id="productModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300 overflow-y-auto">
-        <div class="bg-white w-full max-w-3xl rounded-card overflow-hidden shadow-lg max-h-[90vh] flex flex-col">
-            <div class="h-[300px] md:h-[350px] relative bg-primary">
-                <img id="modalImg" src="" alt="" class="w-full h-full object-cover">
-                <button onclick="closeProductModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/30 text-white flex items-center justify-center hover:bg-black/50 transition duration-300">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div id="modalBody" class="p-6 md:p-8 overflow-y-auto -webkit-overflow-scrolling-touch max-h-[calc(90vh-350px)]">
-            </div>
-        </div>
-    </div>
     
     @include('layout.footer')
+
    <script>
     document.addEventListener('DOMContentLoaded', function () {
         const placeholder = document.getElementById('video-placeholder');
@@ -466,83 +447,6 @@
             });
 
             searchInput.addEventListener('input', filterAndSearch);
-        });
-
-        function openProductModal(productId) {
-            const produkData = @json($produkInovasi->keyBy('id'));
-            const produk = produkData[productId];
-            
-            if (!produk) return;
-            
-            const modal = document.getElementById('productModal');
-            const modalImg = document.getElementById('modalImg');
-            const modalBody = document.getElementById('modalBody');
-            
-            if (produk.gambar) {
-                modalImg.src = `/storage/${produk.gambar}`;
-                modalImg.alt = produk.nama_produk;
-                modalImg.style.display = 'block';
-            } else {
-                modalImg.style.display = 'none';
-            }
-            
-            let patentInfo = '';
-            if (produk.nomor_paten) {
-                patentInfo = `
-                    <div class="flex items-center text-textSecondary text-sm">
-                        <i class="fas fa-certificate mr-1.5"></i>
-                        <span>No. Paten: ${produk.nomor_paten}</span>
-                    </div>
-                `;
-            }
-            
-            const content = `
-                <span class="inline-flex items-center text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full mb-3">
-                    <i class="fas fa-user-alt mr-1.5"></i>
-                    ${produk.inovator}
-                </span>
-                <h2 class="text-2xl md:text-3xl font-bold mb-4">${produk.nama_produk}</h2>
-                <div class="flex flex-col md:flex-row gap-3 mb-6 pb-4 border-b border-black/10">
-                    <div class="flex items-center text-textSecondary text-sm">
-                        <i class="fas fa-calendar-alt mr-1.5"></i>
-                        <span>Ditambahkan: ${formatDate(produk.created_at)}</span>
-                    </div>
-                    ${patentInfo}
-                </div>
-                <div class="leading-7 text-textColor text-base">
-                    <h3 class="font-semibold mb-4 text-primary">Deskripsi Produk:</h3>
-                    ${produk.deskripsi}
-                </div>
-            `;
-            
-            modalBody.innerHTML = content;
-            modal.classList.add('opacity-100');
-            modal.classList.remove('pointer-events-none');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeProductModal() {
-            const modal = document.getElementById('productModal');
-            modal.classList.remove('opacity-100');
-            modal.classList.add('pointer-events-none');
-            document.body.style.overflow = 'auto';
-        }
-
-        function formatDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Date(dateString).toLocaleDateDateString('id-ID', options);
-        }
-
-        document.getElementById('productModal').addEventListener('click', function(event) {
-            if (event.target === this) {
-                closeProductModal();
-            }
-        });
-
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeProductModal();
-            }
         });
 
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

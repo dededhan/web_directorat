@@ -117,6 +117,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')->group(fu
     Route::view('/inkubator/ekosisteminovasi', 'subdirektorat-inovasi.inkubator.ekosisteminovasi')->name('inkubator.ekosisteminovasi');
     Route::view('/inkubator/inovasiaward', 'subdirektorat-inovasi.inkubator.inovasiaward')->name('inkubator.inovasiaward');
     Route::get('/risetunj/produk_inovasi', [ProdukInovasiController::class, 'publicIndex'])->name('riset_unj.produk_inovasi.produkinovasi');
+    Route::get('/risetunj/produk_inovasi/{produk}', [ProdukInovasiController::class, 'show'])->name('riset_unj.produk_inovasi.show');
     Route::get('/landingpage', [BeritaController::class, 'landingPageInovasi'])->name('landingpage');
 });
 
