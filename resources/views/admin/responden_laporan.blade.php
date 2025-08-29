@@ -132,6 +132,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js">
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -168,6 +169,9 @@
                 if (filters.endDate) params.append('end_date', filters.endDate);
                 if (filters.category) params.append('category', filters.category);
                 if (filters.dataSource) params.append('data_source', filters.dataSource);
+                if (filters.selectedFaculty && filters.selectedFaculty !== 'semua') {
+                    params.append('fakultas', filters.selectedFaculty);
+                }
 
                 axios.get(`{{ route('api.responden.chartSummary') }}?${params.toString()}`)
                     .then(response => {
@@ -237,14 +241,26 @@
                             .slice(1)),
                         datasets: [{
                             data: Object.values(data.byCategory),
-                            backgroundColor: ['rgba(37, 99, 235, 0.7)',
-                                'rgba(239, 68, 68, 0.7)', 'rgba(245, 158, 11, 0.7)'
-                            ],
+                            backgroundColor: ['#3B82F6', '#EF4444', '#F59E0B'],
                         }]
                     },
                     options: {
                         responsive: true,
-                        maintainAspectRatio: false
+                        maintainAspectRatio: false,
+                         plugins: {
+                            datalabels: {
+                                 formatter: (value, ctx) => {
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(data => {
+                                        sum += data;
+                                    });
+                                    let percentage = (value*100 / sum).toFixed(2)+"%";
+                                    return `${value} (${percentage})`;
+                                },
+                                color: '#fff',
+                            }
+                        }
                     }
                 });
 
@@ -261,7 +277,21 @@
                     },
                     options: {
                         responsive: true,
-                        maintainAspectRatio: false
+                        maintainAspectRatio: false,
+                        plugins: {
+                             datalabels: {
+                                formatter: (value, ctx) => {
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(data => {
+                                        sum += data;
+                                    });
+                                    let percentage = (value*100 / sum).toFixed(2)+"%";
+                                    return `${value} (${percentage})`;
+                                },
+                                color: '#fff',
+                            }
+                        }
                     }
                 });
             };
@@ -276,10 +306,7 @@
                 if (filters.endDate) params.append('end_date', filters.endDate);
                 if (filters.category) params.append('category', filters.category);
                 if (filters.dataSource) params.append('data_source', filters.dataSource);
-                if (filters.selectedFaculty && filters.selectedFaculty !== 'semua') {
-                    params.append('fakultas', filters.selectedFaculty);
-                }
-
+                
                 axios.get(`{{ route('api.responden.chartProdi') }}?${params.toString()}`)
                     .then(response => {
                         destroyCharts(['prodi']);
@@ -291,8 +318,8 @@
                             prodiChartTitle.textContent = 'Jumlah Data per Akun Fakultas';
                             chartLabel = 'Jumlah Input Fakultas';
                         } else {
-                            prodiChartTitle.textContent = `Jumlah Data Responden Fakultas per Prodi`;
-                            chartLabel = `Responden di ${filters.selectedFaculty.toUpperCase()}`;
+                            prodiChartTitle.textContent = `Jumlah Data Responden Fakultas per Prodi (${filters.selectedFaculty.toUpperCase()})`;
+                            chartLabel = `Responden`;
                         }
 
                         const dataValues = Object.values(response.data);

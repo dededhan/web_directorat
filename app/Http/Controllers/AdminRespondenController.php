@@ -143,9 +143,6 @@ class AdminRespondenController extends Controller
         ];
     }
 
-
-    // AdminRespondenController.php
-
     public function getChartSummaryData(Request $request)
     {
         try {
@@ -160,22 +157,15 @@ class AdminRespondenController extends Controller
                     Log::warning('Invalid date format for chart summary', ['error' => $e->getMessage()]);
                 }
             }
-
-            // --- BARIS BARU DITAMBAHKAN DI SINI ---
-            // Terima dan proses filter fakultas dari request
-            if ($request->filled('fakultas') && $request->fakultas !== 'semua') {
-                $query->where('fakultas', $request->fakultas);
-            }
-            // --- AKHIR DARI BARIS BARU ---
-
+            
             $allRespondens = $query->get();
 
             $dataSource = $request->input('data_source', 'non_admin');
             $category = $request->input('category');
-
+            
             $filteredRespondens = $allRespondens->filter(function ($responden) use ($dataSource) {
                 if (!$responden->user) {
-                    return $dataSource === 'non_admin' || $dataSource === 'all';
+                    return false; 
                 }
                 if ($dataSource === 'non_admin') {
                     return $responden->user->role !== 'admin_direktorat';
@@ -185,6 +175,13 @@ class AdminRespondenController extends Controller
                 }
                 return true;
             });
+
+            if ($request->filled('fakultas') && $request->fakultas !== 'semua') {
+                $selectedFaculty = $request->fakultas;
+                $filteredRespondens = $filteredRespondens->filter(function ($responden) use ($selectedFaculty) {
+                    return $this->normalizeFacultyName($responden->fakultas) === $selectedFaculty;
+                });
+            }
 
             $forFacultyCalculation = $filteredRespondens;
             $forSummaryCalculation = $filteredRespondens;
