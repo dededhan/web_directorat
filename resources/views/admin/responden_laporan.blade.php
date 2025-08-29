@@ -76,7 +76,7 @@
                 <div id="prodiChartContainer" class="h-80">
                     <canvas id="prodiChart"></canvas>
                     <p id="prodiChartPlaceholder" class="text-center text-gray-500 flex items-center justify-center h-full">
-                        Loading...
+                        Memuat data...
                     </p>
                 </div>
             </div>
@@ -165,7 +165,6 @@
                 const labels = Object.keys(data.byFaculty);
                 const dataValues = Object.values(data.byFaculty);
                 const maxValue = dataValues.length > 0 ? Math.max(...dataValues) : 0;
-                //ini kgk keliatan kalo max
                 const yAxisMax = maxValue < 10 ? maxValue + 2 : Math.ceil(maxValue * 1.1);
 
                 charts.faculty = new Chart(facultyCtx, {
@@ -256,7 +255,6 @@
                              chartLabel = `Responden di ${filters.selectedFaculty.toUpperCase()}`;
                         }
 
-                        //ini kgk keliatan kalo max
                         const dataValues = Object.values(response.data);
                         const maxValue = dataValues.length > 0 ? Math.max(...dataValues) : 0;
                         const xAxisMax = maxValue < 10 ? maxValue + 2 : Math.ceil(maxValue * 1.1);
@@ -267,13 +265,13 @@
                                 labels: Object.keys(response.data),
                                 datasets: [{
                                     label: chartLabel,
-                                    data: Object.values(response.data),
+                                    data: dataValues,
                                     backgroundColor: 'rgba(217, 119, 6, 0.7)',
                                 }]
                             },
                             options: { 
                                 indexAxis: 'y', 
-                                 scales: { 
+                                scales: { 
                                     x: { 
                                         beginAtZero: true, 
                                         ticks: { precision: 0 },

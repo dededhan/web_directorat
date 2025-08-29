@@ -106,12 +106,19 @@ class AdminRespondenController extends Controller
     {
         $category = strtolower(trim($category));
 
-        if (Str::contains($category, ['academic', 'researcher', 'reseracher'])) {
-            return 'academic';
+        $academicKeywords = ['academic', 'researcher', 'reseracher'];
+        $employerKeywords = ['employer', 'employeer', 'industri'];
+
+        foreach ($academicKeywords as $keyword) {
+            if (Str::contains($category, $keyword)) {
+                return 'academic';
+            }
         }
 
-        if (Str::contains($category, 'employer')) {
-            return 'employer';
+        foreach ($employerKeywords as $keyword) {
+            if (Str::contains($category, $keyword)) {
+                return 'employer';
+            }
         }
 
         if (empty($category)) {
@@ -133,37 +140,40 @@ class AdminRespondenController extends Controller
     }
 
 
-    public function getChartSummaryData(Request $request)
+        public function getChartSummaryData(Request $request)
     {
         try {
-            $query = Responden::query()->join('users', 'respondens.user_id', '=', 'users.id');
+            $userQuery = User::query();
+            $dataSource = $request->input('data_source', 'non_admin');
+
+            if ($dataSource === 'non_admin') {
+                $userQuery->where('role', '!=', 'admin_direktorat');
+            } elseif ($dataSource === 'admin_only') {
+                $userQuery->where('role', '=', 'admin_direktorat');
+            }
+            $validUserIds = $userQuery->pluck('id');
+
+            $query = Responden::query()->whereIn('user_id', $validUserIds);
+
             $startDate = null;
             $endDate = null;
             $category = $request->input('category');
-            $dataSource = $request->input('data_source', 'non_admin'); // default 'non_admin'
-
-            if ($dataSource === 'non_admin') {
-                $query->where('users.role', '!=', 'admin_direktorat');
-            } elseif ($dataSource === 'admin_only') {
-                $query->where('users.role', '=', 'admin_direktorat');
-            }
 
             if ($request->has('start_date') && $request->filled('start_date') && $request->has('end_date') && $request->filled('end_date')) {
                 try {
                     $startDate = Carbon::parse($request->start_date)->startOfDay();
                     $endDate = Carbon::parse($request->end_date)->endOfDay();
                     if ($startDate->isValid() && $endDate->isValid()) {
-                        $query->whereBetween('respondens.created_at', [$startDate, $endDate]);
+                        $query->whereBetween('created_at', [$startDate, $endDate]);
                     }
                 } catch (\Exception $e) {
                     Log::warning('Invalid date format', ['error' => $e->getMessage()]);
                 }
             }
             
-            // Clone BUAT NARAHUBUNGGGGGGGGGGGGGGGG
             $summaryQuery = clone $query;
 
-            $respondens = $query->select('respondens.*')->get();
+            $respondens = $query->get();
             $normalizedRespondens = $respondens->map(function ($responden) {
                 $responden->fakultas = $this->normalizeFacultyName($responden->fakultas);
                 $responden->category = $this->normalizeCategoryName($responden->category);
@@ -184,7 +194,7 @@ class AdminRespondenController extends Controller
                 $byFacultySorted->put('tidak terdefinisi', $undefined);
             }
             
-            $summaryRespondens = $summaryQuery->select('respondens.*')->get();
+            $summaryRespondens = $summaryQuery->get();
             $byCategory = $summaryRespondens->groupBy(function($r) { return $this->normalizeCategoryName($r->category); })->map->count();
             $byStatus = $summaryRespondens->groupBy('status')->map->count();
 
@@ -214,16 +224,19 @@ class AdminRespondenController extends Controller
         try {
             $facultyCode = $request->input('fakultas');
             $dataSource = $request->input('data_source', 'non_admin');
-            $query = Responden::query()->join('users', 'respondens.user_id', '=', 'users.id');
+
+            $userQuery = User::query();
+            if ($dataSource === 'non_admin') {
+                $userQuery->where('role', '!=', 'admin_direktorat');
+            } elseif ($dataSource === 'admin_only') {
+                $userQuery->where('role', '=', 'admin_direktorat');
+            }
+            $validUserIds = $userQuery->pluck('id');
+
+            $query = Responden::query()->whereIn('user_id', $validUserIds)->join('users', 'respondens.user_id', '=', 'users.id');
             
             if ($request->filled('category')) {
                  $query->where('respondens.category', $this->normalizeCategoryName($request->category));
-            }
-            
-            if ($dataSource === 'non_admin') {
-                $query->where('users.role', '!=', 'admin_direktorat');
-            } elseif ($dataSource === 'admin_only') {
-                $query->where('users.role', '=', 'admin_direktorat');
             }
 
             if ($request->filled('start_date') && $request->filled('end_date')) {
@@ -237,6 +250,7 @@ class AdminRespondenController extends Controller
                     return $this->normalizeFacultyName($name);
                 })->unique();
                 $facultyTotals = $allFaculties->flip()->map(function() { return 0; })->toArray();
+                
                 $allInputs = $query->whereIn('users.role', ['fakultas', 'prodi'])
                     ->select('users.name as user_name', DB::raw('count(respondens.id) as count'))
                     ->groupBy('users.name')
@@ -266,7 +280,7 @@ class AdminRespondenController extends Controller
                 }
                 $aliases = array_unique($aliases);
 
-                $baseUsers = User::where(function($q) use ($aliases) {
+                $baseUsers = User::whereIn('id', $validUserIds)->where(function($q) use ($aliases) {
                     $q->where('role', 'fakultas')->whereIn('name', $aliases);
                 })->orWhere(function($q) use ($aliases) {
                     $q->where('role', 'prodi')->where(function($subq) use ($aliases) {
@@ -284,7 +298,6 @@ class AdminRespondenController extends Controller
                             : 'Input Fakultas (' . strtoupper($user->name) . ')';
                     $prodiTotals[$label] = 0;
                 }
-
 
                 $query->where(function ($q) use ($aliases) {
                     $q->where('users.role', 'prodi')
