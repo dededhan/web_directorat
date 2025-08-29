@@ -233,7 +233,7 @@
 
     @include('layout.navbarpemeringkatan')
 
-    <div class="h-16"></div>
+    <div class="h-16 md:hidden"></div>
     <header class="relative h-[50vh] md:h-[60vh] lg:h-screen bg-gray-800">
         <div class="absolute inset-0 bg-teal-900/60 flex flex-col justify-center items-start p-6 md:p-12 z-[5]">
         </div>

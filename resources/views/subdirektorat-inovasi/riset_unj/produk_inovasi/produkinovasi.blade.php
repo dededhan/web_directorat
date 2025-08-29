@@ -55,11 +55,40 @@
     </style>
 </head>
 <body class="bg-backgroundColor text-textColor leading-relaxed text-base font-['Segoe_UI',Tahoma,Geneva,Verdana,sans-serif]">
+    
 @include('layout.navbar_hilirisasi')
 
     <div class="pt-12 md:pt-16 overflow-x-hidden">
-        <main class="w-[90%] max-w-6xl mx-auto">
-            
+        <main class="w-[90%] max-w-7xl mx-auto">
+            <section class="mb-16 pt-12 md:pt-16">
+                <div class="container mx-auto">
+                    <div class="flex flex-wrap items-center">
+                        <div class="w-full md:w-5/12 px-4 mb-8 md:mb-0">
+                            <div class="relative mx-auto max-w-[450px]">
+                                <img 
+                                    src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                                    alt="Mahasiswa UNJ" 
+                                    class="w-full rounded-lg shadow-card"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="w-full md:w-7/12 px-4">
+                            <div class="text-center md:text-left">
+                                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-primary leading-tight mb-4">
+                                    Selamat Datang di Portal Inovasi UNJ
+                                </h1>
+                                <p class="text-lg text-textSecondary mb-8 leading-relaxed">
+                                    Temukan berbagai karya, riset, dan produk inovatif yang lahir dari kreativitas civitas akademika Universitas Negeri Jakarta untuk kemajuan bangsa.
+                                </p>
+                                <a href="#katalog" class="inline-block bg-primary hover:bg-primary-dark text-white font-bold text-base py-3 px-8 rounded-full transition duration-300 ease-in-out hover:shadow-lg transform hover:-translate-y-1">
+                                    Jelajahi Inovasi
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
              @if($video)
             <section class="mb-16">
                 <div class="text-center py-12">
@@ -167,36 +196,35 @@
                         </p>
                     </div>
                 </div>
-
                 <div class="bg-gradient-to-r from-primary/5 to-accent/5 rounded-card p-8">
                     <div class="text-center mb-8">
                         <h3 class="text-2xl font-bold text-primary mb-4">Mitra Kolaborasi</h3>
-                        <p class="text-textSecondary">Bersama membangun ekosistem inovasi yang berkelanjutan</p>
+                        <p class="text-textSecondary">Bersama membangun ekosistem inovasi yang berkelanjutan.</p>
                     </div>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                         <div class="flex flex-col items-center">
                             <div class="w-16 h-16 bg-white rounded-full shadow-md flex items-center justify-center mb-3">
-                                <i class="fas fa-industry text-primary text-2xl"></i>
+                                <i class="fas fa-graduation-cap text-primary text-2xl"></i>
                             </div>
-                            <span class="text-sm font-medium">Industri</span>
+                            <span class="text-sm font-medium">Pendidikan</span>
                         </div>
                         <div class="flex flex-col items-center">
                             <div class="w-16 h-16 bg-white rounded-full shadow-md flex items-center justify-center mb-3">
-                                <i class="fas fa-university text-primary text-2xl"></i>
+                                <i class="fas fa-flask text-primary text-2xl"></i>
                             </div>
-                            <span class="text-sm font-medium">Perguruan Tinggi</span>
+                            <span class="text-sm font-medium">Sains & Teknologi</span>
                         </div>
                         <div class="flex flex-col items-center">
                             <div class="w-16 h-16 bg-white rounded-full shadow-md flex items-center justify-center mb-3">
-                                <i class="fas fa-building text-primary text-2xl"></i>
+                                <i class="fas fa-palette text-primary text-2xl"></i>
                             </div>
-                            <span class="text-sm font-medium">Pemerintah</span>
+                            <span class="text-sm font-medium">Sosial Humaniora & Seni</span>
                         </div>
                         <div class="flex flex-col items-center">
                             <div class="w-16 h-16 bg-white rounded-full shadow-md flex items-center justify-center mb-3">
-                                <i class="fas fa-handshake text-primary text-2xl"></i>
+                                <i class="fas fa-heartbeat text-primary text-2xl"></i>
                             </div>
-                            <span class="text-sm font-medium">Komunitas</span>
+                            <span class="text-sm font-medium">Kesehatan & Psikologi</span>
                         </div>
                     </div>
                 </div>
