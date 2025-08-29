@@ -105,7 +105,6 @@ class AdminRespondenController extends Controller
     private function normalizeCategoryName($category)
     {
         $category = strtolower(trim($category));
-
         $academicKeywords = ['academic', 'researcher', 'reseracher'];
         $employerKeywords = ['employer', 'employeer', 'industri'];
 
@@ -128,81 +127,86 @@ class AdminRespondenController extends Controller
         return 'lainnya';
     }
 
-    //WARNAAAAAAAAAAAAAAAAAAA
     private function getFacultyColors()
     {
         return [
-            'fbs' => '#3B82F6', 'feb' => '#10B981', 'fip' => '#F59E0B',
-            'fish' => '#8B5CF6', 'fik' => '#EF4444', 'fmipa' => '#14B8A6',
-            'fpsi' => '#EC4899', 'ft' => '#6366F1', 'pascasarjana' => '#6B7280',
+            'fbs' => '#3B82F6',
+            'feb' => '#10B981',
+            'fip' => '#F59E0B',
+            'fish' => '#8B5CF6',
+            'fik' => '#EF4444',
+            'fmipa' => '#14B8A6',
+            'fpsi' => '#EC4899',
+            'ft' => '#6366F1',
+            'pascasarjana' => '#6B7280',
             'tidak terdefinisi' => '#9CA3AF',
         ];
     }
 
 
-        public function getChartSummaryData(Request $request)
+    // AdminRespondenController.php
+
+    public function getChartSummaryData(Request $request)
     {
         try {
-            $userQuery = User::query();
-            $dataSource = $request->input('data_source', 'non_admin');
-
-            if ($dataSource === 'non_admin') {
-                $userQuery->where('role', '!=', 'admin_direktorat');
-            } elseif ($dataSource === 'admin_only') {
-                $userQuery->where('role', '=', 'admin_direktorat');
-            }
-            $validUserIds = $userQuery->pluck('id');
-
-            $query = Responden::query()->whereIn('user_id', $validUserIds);
-
-            $startDate = null;
-            $endDate = null;
-            $category = $request->input('category');
-
-            if ($request->has('start_date') && $request->filled('start_date') && $request->has('end_date') && $request->filled('end_date')) {
+            $query = Responden::with('user');
+            if ($request->filled('start_date') && $request->filled('end_date')) {
                 try {
                     $startDate = Carbon::parse($request->start_date)->startOfDay();
                     $endDate = Carbon::parse($request->end_date)->endOfDay();
-                    if ($startDate->isValid() && $endDate->isValid()) {
-                        $query->whereBetween('created_at', [$startDate, $endDate]);
-                    }
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
                 } catch (\Exception $e) {
-                    Log::warning('Invalid date format', ['error' => $e->getMessage()]);
+                    Log::warning('Invalid date format for chart summary', ['error' => $e->getMessage()]);
                 }
             }
-            
-            $summaryQuery = clone $query;
 
-            $respondens = $query->get();
-            $normalizedRespondens = $respondens->map(function ($responden) {
-                $responden->fakultas = $this->normalizeFacultyName($responden->fakultas);
-                $responden->category = $this->normalizeCategoryName($responden->category);
-                return $responden;
+            //GET ALLLLLLLLLLLLL
+            $allRespondens = $query->get();
+            $dataSource = $request->input('data_source', 'non_admin');
+            $category = $request->input('category');
+
+            $filteredRespondens = $allRespondens->filter(function ($responden) use ($dataSource) {
+                if (!$responden->user) {
+                    return $dataSource === 'non_admin' || $dataSource === 'all';
+                }
+                if ($dataSource === 'non_admin') {
+                    return $responden->user->role !== 'admin_direktorat';
+                }
+                if ($dataSource === 'admin_only') {
+                    return $responden->user->role === 'admin_direktorat';
+                }
+                return true;
             });
-            
+
+            $forFacultyCalculation = $filteredRespondens;
+            $forSummaryCalculation = $filteredRespondens;
+
             if ($category && in_array($category, ['academic', 'employer'])) {
-                $normalizedRespondens = $normalizedRespondens->where('category', $category);
+                $forFacultyCalculation = $forFacultyCalculation->filter(function ($responden) use ($category) {
+                    return $this->normalizeCategoryName($responden->category) === $category;
+                });
             }
 
-            $byFaculty = $normalizedRespondens->groupBy('fakultas')->map->count();
-            
-            $byFacultySorted = $byFaculty->sortBy(function ($value, $key) {
-                return $key;
-            });
+            $byFaculty = $forFacultyCalculation->groupBy(function ($responden) {
+                return $this->normalizeFacultyName($responden->fakultas);
+            })->map->count();
+
+            $byFacultySorted = $byFaculty->sortKeys();
             if ($byFacultySorted->has('tidak terdefinisi')) {
                 $undefined = $byFacultySorted->pull('tidak terdefinisi');
                 $byFacultySorted->put('tidak terdefinisi', $undefined);
             }
-            
-            $summaryRespondens = $summaryQuery->get();
-            $byCategory = $summaryRespondens->groupBy(function($r) { return $this->normalizeCategoryName($r->category); })->map->count();
-            $byStatus = $summaryRespondens->groupBy('status')->map->count();
 
+            $byCategory = $forSummaryCalculation->groupBy(function ($r) {
+                return $this->normalizeCategoryName($r->category);
+            })->map->count();
+
+            $byStatus = $forSummaryCalculation->groupBy('status')->map->count();
 
             return response()->json([
                 'byFaculty' => $byFacultySorted,
                 'facultyColors' => $this->getFacultyColors(),
-                'byCategory' => $byCategory, 
+                'byCategory' => $byCategory,
                 'byStatus' => $byStatus,
             ]);
         } catch (\Exception $e) {
@@ -234,9 +238,9 @@ class AdminRespondenController extends Controller
             $validUserIds = $userQuery->pluck('id');
 
             $query = Responden::query()->whereIn('user_id', $validUserIds)->join('users', 'respondens.user_id', '=', 'users.id');
-            
+
             if ($request->filled('category')) {
-                 $query->where('respondens.category', $this->normalizeCategoryName($request->category));
+                $query->where('respondens.category', $this->normalizeCategoryName($request->category));
             }
 
             if ($request->filled('start_date') && $request->filled('end_date')) {
@@ -246,11 +250,13 @@ class AdminRespondenController extends Controller
             }
 
             if (empty($facultyCode) || $facultyCode === 'semua') {
-                $allFaculties = User::where('role', 'fakultas')->pluck('name')->map(function($name){
+                $allFaculties = User::where('role', 'fakultas')->pluck('name')->map(function ($name) {
                     return $this->normalizeFacultyName($name);
                 })->unique();
-                $facultyTotals = $allFaculties->flip()->map(function() { return 0; })->toArray();
-                
+                $facultyTotals = $allFaculties->flip()->map(function () {
+                    return 0;
+                })->toArray();
+
                 $allInputs = $query->whereIn('users.role', ['fakultas', 'prodi'])
                     ->select('users.name as user_name', DB::raw('count(respondens.id) as count'))
                     ->groupBy('users.name')
@@ -262,16 +268,15 @@ class AdminRespondenController extends Controller
                         $facultyName = Str::before($facultyName, '-');
                     }
                     $normalizedFaculty = $this->normalizeFacultyName($facultyName);
-                    
+
                     if (isset($facultyTotals[$normalizedFaculty])) {
                         $facultyTotals[$normalizedFaculty] += $input->count;
                     }
                 }
-    
+
                 $data = collect($facultyTotals)->mapWithKeys(function ($count, $faculty) {
                     return [strtoupper($faculty) => $count];
                 })->sortKeys();
-
             } else {
                 $normalizationMap = ['fis' => 'fish', 'fe' => 'feb', 'fppsi' => 'fpsi'];
                 $aliases = [$facultyCode];
@@ -280,32 +285,32 @@ class AdminRespondenController extends Controller
                 }
                 $aliases = array_unique($aliases);
 
-                $baseUsers = User::whereIn('id', $validUserIds)->where(function($q) use ($aliases) {
+                $baseUsers = User::whereIn('id', $validUserIds)->where(function ($q) use ($aliases) {
                     $q->where('role', 'fakultas')->whereIn('name', $aliases);
-                })->orWhere(function($q) use ($aliases) {
-                    $q->where('role', 'prodi')->where(function($subq) use ($aliases) {
+                })->orWhere(function ($q) use ($aliases) {
+                    $q->where('role', 'prodi')->where(function ($subq) use ($aliases) {
                         foreach ($aliases as $alias) {
-                            $subq->orWhere('name', 'like', $alias.'-%');
+                            $subq->orWhere('name', 'like', $alias . '-%');
                         }
                     });
                 })->get();
 
 
                 $prodiTotals = [];
-                foreach($baseUsers as $user) {
-                     $label = Str::contains($user->name, '-')
-                            ? ucwords(trim(Str::after($user->name, '-')))
-                            : 'Input Fakultas (' . strtoupper($user->name) . ')';
+                foreach ($baseUsers as $user) {
+                    $label = Str::contains($user->name, '-')
+                        ? ucwords(trim(Str::after($user->name, '-')))
+                        : 'Input Fakultas (' . strtoupper($user->name) . ')';
                     $prodiTotals[$label] = 0;
                 }
 
                 $query->where(function ($q) use ($aliases) {
                     $q->where('users.role', 'prodi')
-                      ->where(function ($subq) use ($aliases) {
-                          foreach ($aliases as $alias) {
-                              $subq->orWhere('users.name', 'like', $alias . '-%');
-                          }
-                      });
+                        ->where(function ($subq) use ($aliases) {
+                            foreach ($aliases as $alias) {
+                                $subq->orWhere('users.name', 'like', $alias . '-%');
+                            }
+                        });
                     $q->orWhere(function ($subq) use ($aliases) {
                         $subq->where('users.role', 'fakultas')->whereIn('users.name', $aliases);
                     });
@@ -314,12 +319,12 @@ class AdminRespondenController extends Controller
                 $actualInputs = $query->select('users.name as user_name', DB::raw('count(respondens.id) as count'))
                     ->groupBy('users.name')
                     ->get();
-                
-                foreach($actualInputs as $input) {
+
+                foreach ($actualInputs as $input) {
                     $label = Str::contains($input->user_name, '-')
-                            ? ucwords(trim(Str::after($input->user_name, '-')))
-                            : 'Input Fakultas (' . strtoupper($input->user_name) . ')';
-                    if(isset($prodiTotals[$label])) {
+                        ? ucwords(trim(Str::after($input->user_name, '-')))
+                        : 'Input Fakultas (' . strtoupper($input->user_name) . ')';
+                    if (isset($prodiTotals[$label])) {
                         $prodiTotals[$label] = $input->count;
                     }
                 }
@@ -332,8 +337,6 @@ class AdminRespondenController extends Controller
             return response()->json(['error' => 'Failed to fetch prodi chart data'], 500);
         }
     }
-
-
 
     public function index(Request $request)
     {
@@ -561,10 +564,8 @@ class AdminRespondenController extends Controller
         $newStatus = $validated['status'];
 
         if ($newStatus === 'done' && $responden->status !== 'done') {
-            // buat token BANG
             $token = $responden->token ?? Str::random(40);
 
-            // update
             $responden->update([
                 'status' => $newStatus,
                 'token' => $token
@@ -578,6 +579,7 @@ class AdminRespondenController extends Controller
                     throw new \Exception('Nama responden tidak boleh kosong');
                 }
 
+                // Send email
                 Mail::to($responden->email)->send(new RespondenInvitationMail($responden));
 
                 return response()->json([
@@ -608,6 +610,7 @@ class AdminRespondenController extends Controller
         $role = $user->role;
         $userInfo = $this->getUserFacultyInfo($user);
 
+        // Authorization logic
         if ($role === 'fakultas') {
             if ($responden->fakultas !== $userInfo['faculty_code']) {
                 if ($request->ajax()) {
@@ -663,6 +666,7 @@ class AdminRespondenController extends Controller
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
 
+        // Validasi tetap sama
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'file' => 'required|mimes:xlsx,xls'
         ]);
@@ -771,7 +775,7 @@ class AdminRespondenController extends Controller
     public function export(Request $request)
     {
         $user = Auth::user();
-        
+
         if (!in_array($user->role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas', 'prodi'])) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
@@ -812,6 +816,8 @@ class AdminRespondenController extends Controller
 
             $query = Responden::query();
 
+
+
             if ($role === 'fakultas' || $role === 'prodi') {
                 if ($userInfo['faculty_code']) {
                     $query->where('fakultas', $userInfo['faculty_code']);
@@ -820,6 +826,8 @@ class AdminRespondenController extends Controller
                     return response()->json([]);
                 }
             }
+
+
 
             $respondens = $query->select([
                 'id',
