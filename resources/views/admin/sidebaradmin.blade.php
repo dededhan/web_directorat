@@ -232,12 +232,19 @@
                         <span class="text">Form Katsinov</span>
                     </a>
                 </li>
+                <li class="{{ request()->routeIs('admin.video.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.video.index') }}">
+                        <i class='bx bxs-video'></i>
+                        <span class="text">Video Pimpinan</span>
+                    </a>
+                </li>
                 <li class="{{ request()->routeIs('admin.produk_inovasi') ? 'active' : '' }}">
                     <a href="{{ route('admin.produk_inovasi') }}">
                         <i class='bx bxs-file-plus'></i>
                         <span class="text">Produk Inovasi</span>
                     </a>
                 </li>
+                
             </ul>
         </div>
 

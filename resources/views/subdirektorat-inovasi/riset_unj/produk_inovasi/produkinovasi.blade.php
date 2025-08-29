@@ -56,36 +56,62 @@
 </head>
 <body class="bg-backgroundColor text-textColor leading-relaxed text-base font-['Segoe_UI',Tahoma,Geneva,Verdana,sans-serif]">
 @include('layout.navbar_hilirisasi')
-    
-    <section class="bg-gradient-to-br from-primary to-primary-dark py-20 mb-8 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-30" style="background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M0,0 L100,100" stroke="rgba(255,255,255,0.05)" stroke-width="2"/></svg>');"></div>
-        <div class="relative text-center text-white max-w-3xl mx-auto px-4">
-            <h1 class="text-4xl font-bold mb-4 drop-shadow-md">Produk Inovasi UNJ</h1>
-            <p class="text-xl opacity-90">Temukan berbagai inovasi dan karya terbaik dari civitas akademika Universitas Negeri Jakarta</p>
-        </div>
-    </section>
 
     <div class="pt-12 md:pt-16 overflow-x-hidden">
         <main class="w-[90%] max-w-6xl mx-auto">
             
+             @if($video)
             <section class="mb-16">
-                <div class="text-center mb-8">
+                <div class="text-center py-12">
                     <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Sambutan Pimpinan</h2>
-                    <p class="text-textSecondary text-lg max-w-2xl mx-auto">Sambutan dari Ibu Prof. Dr. Komarudin, M.Si. selaku Rektor Universitas Negeri Jakarta mengenai pentingnya inovasi dalam dunia pendidikan</p>
+                    <p class="text-textSecondary text-lg max-w-2xl mx-auto">Sambutan dari Ibu Dr. RA Murti Kusuma W.S.IP, M.Si. selaku Direktur Inovasi, Sistem Informasi dan Pemeringkatan Universitas Negeri Jakarta</p>
                 </div>
-                <div class="bg-cardColor rounded-card shadow-card overflow-hidden">
-                    <div class="aspect-video relative">
-                        <div class="w-full h-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center">
-                            <div class="text-center text-white">
-                                <i class="fas fa-play-circle text-6xl mb-4 opacity-80"></i>
-                                <p class="text-xl">Video Sambutan Pimpinan UNJ</p>
-                                <p class="text-sm opacity-80 mt-2">Tentang Visi dan Misi Inovasi UNJ</p>
+                
+                
+               <div id="video-container" class="bg-black rounded-card shadow-card overflow-hidden aspect-video relative">
+
+                    @if($video && $video->type == 'youtube')
+
+                        <div id="video-placeholder" 
+                            class="w-full h-full bg-cover bg-center cursor-pointer relative"
+                            style="background-image: url('https://img.youtube.com/vi/{{ $video->path }}/maxresdefault.jpg');"
+                            data-video-type="{{ $video->type }}" 
+                            data-video-path="{{ $video->path }}">
+                            
+                            <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center text-white p-4 transition-colors duration-300 hover:bg-black/20">
+                                
+                                <svg class="w-16 h-16 md:w-20 md:h-20 mb-4 text-white/80" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zM10.622 8.415a.4.4 0 0 0-.622.35v6.47a.4.4 0 0 0 .622.35l4.853-3.235a.4.4 0 0 0 0-.7L10.622 8.415z"></path></svg>
+                                
+                                <h3 class="text-xl md:text-2xl font-bold tracking-wide">{{ $video->title }}</h3>
+
                             </div>
                         </div>
-                    </div>
+
+                    @elseif($video && $video->type == 'mp4')
+
+                        <div id="video-placeholder" class="w-full h-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center cursor-pointer"
+                            data-video-type="{{ $video->type }}" 
+                            data-video-path="{{ asset('storage/' . $video->path) }}">
+                            
+                            <div class="text-center text-white">
+                                <i class="fas fa-play-circle text-6xl mb-4 opacity-80"></i>
+                                <p class="text-xl">{{ $video->title }}</p>
+                            </div>
+                        </div>
+
+                    @endif
                 </div>
             </section>
 
+            @else
+            <section class="mb-16">
+                <div class="text-center py-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Sambutan Pimpinan</h2>
+                    <p class="text-textSecondary text-lg max-w-2xl mx-auto">Video sambutan pimpinan belum tersedia saat ini.</p>
+                </div>
+            </section>
+            @endif
+            
             <section class="mb-16">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Tentang Inovasi UNJ</h2>
@@ -201,7 +227,8 @@
                         @foreach($produkInovasi as $produk)
                         {{-- Menambahkan data-category untuk filtering --}}
                         <div class="product-card bg-cardColor rounded-card overflow-hidden shadow-card h-full flex flex-col transition duration-300 border border-black/5 hover:transform hover:-translate-y-2 hover:shadow-hover" 
-                             data-category="{{ $produk->nomor_paten ? 'paten' : 'hki' }}">
+                           data-category="{{ strtolower($produk->kategori) }}">
+
                             
                             @if($produk->gambar)
                             <div class="h-[200px] bg-cover bg-center relative" style="background-image: url('{{ asset('storage/'. $produk->gambar) }}')"></div>
@@ -229,17 +256,19 @@
                                         <span>{{ $produk->created_at->format('d M Y') }}</span>
                                     </div>
                                     
-                                    @if($produk->nomor_paten)
                                     <div class="bg-accent/20 text-accent rounded-full px-3 py-1 text-xs font-semibold flex items-center mt-2 md:mt-0">
                                         <i class="fas fa-certificate mr-1"></i>
-                                        Paten
+                                        {{ $produk->kategori }}
                                     </div>
-                                    @endif
+                                 
                                 </div>
                                 
-                                <button onclick="openProductModal({{ $produk->id }})" class="w-full mt-2 bg-primary hover:bg-primary-dark text-white transition duration-300 flex items-center justify-center text-sm font-medium py-2.5 px-3 rounded">
+                                {{-- PERUBAHAN DI SINI: Tombol diubah menjadi link ke halaman detail --}}
+                                <a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.show', $produk->id) }}" class="w-full mt-2 bg-primary hover:bg-primary-dark text-white transition duration-300 flex items-center justify-center text-sm font-medium py-2.5 px-3 rounded">
                                     Baca Selengkapnya
-                                </button>
+                                </a>
+                                {{-- AKHIR PERUBAHAN --}}
+
                             </div>
                         </div>
                         @endforeach
@@ -262,114 +291,102 @@
                     <p class="text-textSecondary text-lg">Update terbaru seputar perkembangan inovasi di UNJ</p>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="md:col-span-2 lg:col-span-3 bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-hover transition-all duration-300">
-                        <div class="md:flex">
-                            <div class="md:w-2/3">
-                                <div class="h-64 md:h-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center">
-                                    <div class="text-center text-white p-6">
-                                        <i class="fas fa-newspaper text-4xl mb-4 opacity-80"></i>
-                                        <h3 class="text-xl font-bold">Berita Utama Inovasi UNJ</h3>
+                @if(isset($beritaInovasi) && $beritaInovasi->count() > 0)
+                    {{-- Ambil berita pertama sebagai berita utama --}}
+                    @php $beritaUtama = $beritaInovasi->first(); @endphp
+                    @php $beritaLainnya = $beritaInovasi->slice(1); @endphp
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="md:col-span-2 lg:col-span-3 bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-hover transition-all duration-300">
+                            <div class="md:flex">
+                                <div class="md:w-2/3">
+                                    <div class="h-64 md:h-full bg-cover bg-center" style="background-image: url('{{ asset('storage/' . $beritaUtama->gambar) }}')">
                                     </div>
                                 </div>
+                                <div class="md:w-1/3 p-6 md:p-8 flex flex-col">
+                                    <div class="flex items-center text-xs text-textSecondary mb-3">
+                                        <i class="fas fa-calendar mr-2"></i>
+                                        <span>{{ $beritaUtama->created_at->format('d F Y') }}</span>
+                                    </div>
+                                    <h3 class="text-xl font-bold mb-4">{{ $beritaUtama->judul }}</h3>
+                                    <p class="text-textSecondary text-sm leading-relaxed mb-4 flex-grow">
+                                        {{ Str::limit(strip_tags($beritaUtama->isi), 150) }}
+                                    </p>
+                                    {{-- Tombol diubah menjadi link (tag <a>) dengan route yang benar --}}
+                                    <a href="{{ route('Berita.show', ['slug' => $beritaUtama->slug]) }}" class="text-primary font-semibold hover:text-primary-dark transition-colors duration-300 self-start">
+                                        Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                                    </a>
+                                </div>
                             </div>
-                            <div class="md:w-1/3 p-6 md:p-8">
+                        </div>
+
+                        @foreach($beritaLainnya as $berita)
+                        <div class="bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-hover transition-all duration-300 flex flex-col">
+                            <div class="h-48 bg-cover bg-center" style="background-image: url('{{ asset('storage/' . $berita->gambar) }}')">
+                            </div>
+                            <div class="p-6 flex flex-col flex-grow">
                                 <div class="flex items-center text-xs text-textSecondary mb-3">
                                     <i class="fas fa-calendar mr-2"></i>
-                                    <span>15 Januari 2025</span>
+                                    <span>{{ $berita->created_at->format('d F Y') }}</span>
                                 </div>
-                                <h3 class="text-xl font-bold mb-4">UNJ Raih Penghargaan Inovasi Terbaik Nasional 2025</h3>
-                                <p class="text-textSecondary text-sm leading-relaxed mb-4">
-                                    Universitas Negeri Jakarta berhasil meraih penghargaan sebagai perguruan tinggi dengan inovasi terbaik di Indonesia untuk kategori teknologi pendidikan.
+                                <h3 class="font-bold mb-3">{{ $berita->judul }}</h3>
+                                <p class="text-textSecondary text-sm mb-4 flex-grow">
+                                    {{ Str::limit(strip_tags($berita->isi), 100) }}
                                 </p>
-                                <button class="text-primary font-semibold hover:text-primary-dark transition-colors duration-300">
+                                {{-- Tombol diubah menjadi link (tag <a>) dengan route yang benar --}}
+                                <a href="{{ route('Berita.show', ['slug' => $berita->slug]) }}" class="text-primary font-semibold hover:text-primary-dark transition-colors duration-300 text-sm mt-auto self-start">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                                </button>
+                                </a>
                             </div>
                         </div>
+                        @endforeach
                     </div>
-
-                    <div class="bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-hover transition-all duration-300">
-                        <div class="h-48 bg-gradient-to-br from-accent/80 to-accent flex items-center justify-center">
-                            <i class="fas fa-trophy text-3xl text-white opacity-80"></i>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center text-xs text-textSecondary mb-3">
-                                <i class="fas fa-calendar mr-2"></i>
-                                <span>12 Januari 2025</span>
-                            </div>
-                            <h3 class="font-bold mb-3">Mahasiswa UNJ Ciptakan Aplikasi Pembelajaran AI</h3>
-                            <p class="text-textSecondary text-sm mb-4">
-                                Tim mahasiswa Teknik Informatika berhasil mengembangkan aplikasi pembelajaran berbasis kecerdasan buatan...
-                            </p>
-                            <button class="text-primary font-semibold hover:text-primary-dark transition-colors duration-300 text-sm">
-                                Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                            </button>
-                        </div>
+                @else
+                    {{-- Tampilan jika tidak ada berita inovasi --}}
+                    <div class="col-span-full flex flex-col items-center justify-center py-16 text-center text-textSecondary bg-cardColor rounded-card shadow-card">
+                        <i class="fas fa-newspaper text-5xl mb-4 opacity-50"></i>
+                        <p class="text-lg">Belum ada berita inovasi yang tersedia.</p>
                     </div>
-
-                    <div class="bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-hover transition-all duration-300">
-                        <div class="h-48 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
-                            <i class="fas fa-leaf text-3xl text-white opacity-80"></i>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center text-xs text-textSecondary mb-3">
-                                <i class="fas fa-calendar mr-2"></i>
-                                <span>10 Januari 2025</span>
-                            </div>
-                            <h3 class="font-bold mb-3">Inovasi Ramah Lingkungan untuk Pertanian</h3>
-                            <p class="text-textSecondary text-sm mb-4">
-                                Dosen Fakultas Pertanian mengembangkan pupuk organik inovatif yang ramah lingkungan...
-                            </p>
-                            <button class="text-primary font-semibold hover:text-primary-dark transition-colors duration-300 text-sm">
-                                Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-hover transition-all duration-300">
-                        <div class="h-48 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
-                            <i class="fas fa-microscope text-3xl text-white opacity-80"></i>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center text-xs text-textSecondary mb-3">
-                                <i class="fas fa-calendar mr-2"></i>
-                                <span>8 Januari 2025</span>
-                            </div>
-                            <h3 class="font-bold mb-3">Penelitian Breakthrough di Bidang Kesehatan</h3>
-                            <p class="text-textSecondary text-sm mb-4">
-                                Tim peneliti UNJ menemukan metode baru untuk diagnosis dini penyakit kronis...
-                            </p>
-                            <button class="text-primary font-semibold hover:text-primary-dark transition-colors duration-300 text-sm">
-                                Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                @endif
                 
                 <div class="text-center mt-8">
-                    <button class="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:transform hover:scale-105">
+                    {{-- Tombol "Lihat Semua Berita" diubah menjadi link ke halaman kategori inovasi --}}
+                    <a href="{{ route('berita.kategori', 'inovasi') }}" class="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:transform hover:scale-105">
                         Lihat Semua Berita
-                    </button>
+                    </a>
                 </div>
             </section>
         </main>
     </div>
-
-    <div id="productModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300 overflow-y-auto">
-        <div class="bg-white w-full max-w-3xl rounded-card overflow-hidden shadow-lg max-h-[90vh] flex flex-col">
-            <div class="h-[300px] md:h-[350px] relative bg-primary">
-                <img id="modalImg" src="" alt="" class="w-full h-full object-cover">
-                <button onclick="closeProductModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/30 text-white flex items-center justify-center hover:bg-black/50 transition duration-300">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div id="modalBody" class="p-6 md:p-8 overflow-y-auto -webkit-overflow-scrolling-touch max-h-[calc(90vh-350px)]">
-            </div>
-        </div>
-    </div>
     
     @include('layout.footer')
+
+   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const placeholder = document.getElementById('video-placeholder');
+        const videoContainer = document.getElementById('video-container');
+
+        if (placeholder) {
+            placeholder.addEventListener('click', function () {
+                const type = this.dataset.videoType;
+                const path = this.dataset.videoPath;
+                let playerHtml = '';
+
+                if (type === 'youtube') {
+                    // Menambahkan ?autoplay=1&mute=1. Mute diperlukan agar autoplay berfungsi di browser modern.
+                    playerHtml = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${path}?autoplay=1&mute=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+                } else if (type === 'mp4') {
+                    playerHtml = `<video class="w-full h-full" controls autoplay muted><source src="${path}" type="video/mp4">Browser Anda tidak mendukung tag video.</video>`;
+                }
+
+                // Ini adalah bagian kuncinya: Ganti isi dari container dengan video player
+                if (playerHtml) {
+                    videoContainer.innerHTML = playerHtml;
+                }
+            });
+        }
+    });
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -378,6 +395,7 @@
             const filterButtons = document.querySelectorAll('.filter-btn');
             const productCards = document.querySelectorAll('.product-card');
             const noResultsMessage = document.getElementById('noResultsMessage');
+            
 
             let currentFilter = 'all';
 
@@ -429,83 +447,6 @@
             });
 
             searchInput.addEventListener('input', filterAndSearch);
-        });
-
-        function openProductModal(productId) {
-            const produkData = @json($produkInovasi->keyBy('id'));
-            const produk = produkData[productId];
-            
-            if (!produk) return;
-            
-            const modal = document.getElementById('productModal');
-            const modalImg = document.getElementById('modalImg');
-            const modalBody = document.getElementById('modalBody');
-            
-            if (produk.gambar) {
-                modalImg.src = `/storage/${produk.gambar}`;
-                modalImg.alt = produk.nama_produk;
-                modalImg.style.display = 'block';
-            } else {
-                modalImg.style.display = 'none';
-            }
-            
-            let patentInfo = '';
-            if (produk.nomor_paten) {
-                patentInfo = `
-                    <div class="flex items-center text-textSecondary text-sm">
-                        <i class="fas fa-certificate mr-1.5"></i>
-                        <span>No. Paten: ${produk.nomor_paten}</span>
-                    </div>
-                `;
-            }
-            
-            const content = `
-                <span class="inline-flex items-center text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full mb-3">
-                    <i class="fas fa-user-alt mr-1.5"></i>
-                    ${produk.inovator}
-                </span>
-                <h2 class="text-2xl md:text-3xl font-bold mb-4">${produk.nama_produk}</h2>
-                <div class="flex flex-col md:flex-row gap-3 mb-6 pb-4 border-b border-black/10">
-                    <div class="flex items-center text-textSecondary text-sm">
-                        <i class="fas fa-calendar-alt mr-1.5"></i>
-                        <span>Ditambahkan: ${formatDate(produk.created_at)}</span>
-                    </div>
-                    ${patentInfo}
-                </div>
-                <div class="leading-7 text-textColor text-base">
-                    <h3 class="font-semibold mb-4 text-primary">Deskripsi Produk:</h3>
-                    ${produk.deskripsi}
-                </div>
-            `;
-            
-            modalBody.innerHTML = content;
-            modal.classList.add('opacity-100');
-            modal.classList.remove('pointer-events-none');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeProductModal() {
-            const modal = document.getElementById('productModal');
-            modal.classList.remove('opacity-100');
-            modal.classList.add('pointer-events-none');
-            document.body.style.overflow = 'auto';
-        }
-
-        function formatDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Date(dateString).toLocaleDateDateString('id-ID', options);
-        }
-
-        document.getElementById('productModal').addEventListener('click', function(event) {
-            if (event.target === this) {
-                closeProductModal();
-            }
-        });
-
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeProductModal();
-            }
         });
 
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

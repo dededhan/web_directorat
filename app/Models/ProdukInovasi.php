@@ -27,5 +27,7 @@ class ProdukInovasi extends Model
         'deskripsi',
         'nomor_paten',
         'gambar',
+        'kategori',     
+        'link_ebook',  
     ];
 }

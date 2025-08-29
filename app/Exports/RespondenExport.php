@@ -98,8 +98,8 @@ class RespondenExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
     public function map($row): array
     {
         return [
-            $row->user->name ?? 'N/A',
-            $row->created_at ? $row->created_at->format('d-m-Y H:i:s') : 'N/A',
+            $row->user->name ?? 'Direktorat',
+            $row->created_at ? $row->created_at->format('d-m-Y H:i:s') : '03-03-2025 10:00:11',
             Str::ucfirst($row->title),
             $row->fullname,
             $row->jabatan,

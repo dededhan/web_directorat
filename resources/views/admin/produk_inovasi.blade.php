@@ -2,7 +2,7 @@
 
 <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/produk_inovasi.css') }}"> -->
+
 
 @section('contentadmin')
  @vite([
@@ -67,6 +67,28 @@
                         <div class="form-text text-muted">Masukkan nomor paten (opsional)</div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="kategori" class="form-label">Kategori</label>
+                        <select class="form-control @error('kategori') is-invalid @enderror" name="kategori" id="kategori">
+                            <option value="HKI" {{ old('kategori') == 'HKI' ? 'selected' : '' }}>HKI</option>
+                            <option value="PATEN" {{ old('kategori') == 'PATEN' ? 'selected' : '' }}>PATEN</option>
+                        </select>
+                        @error('kategori')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <div class="form-text text-muted">Pilih kategori produk</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="link_ebook" class="form-label">Link E-Book</label>
+                        <input type="url" class="form-control @error('link_ebook') is-invalid @enderror"
+                            name="link_ebook" id="link_ebook" value="{{ old('link_ebook') }}">
+                        @error('link_ebook')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <div class="form-text text-muted">Masukkan URL e-book (opsional)</div>
+                    </div>
+                </div>
 
                 <div class="row">
                     <div class="col-md-12 mb-3">
@@ -112,6 +134,8 @@
                                 <th>Nama Produk</th>
                                 <th>Inovator</th>
                                 <th>Nomor Paten</th>
+                                <th>Kategori</th>   
+                                <th>Link E-Book</th>
                                 <th>Deskripsi</th>
                                 <th>Gambar</th>
                                 <th>Actions</th>
@@ -124,6 +148,14 @@
                                     <td>{{ $produk->nama_produk }}</td>
                                     <td>{{ $produk->inovator }}</td>
                                     <td>{{ $produk->nomor_paten ?? '-' }}</td>
+                                    <td>{{ $produk->kategori ?? '-' }}</td>
+                                    <td>
+                                        @if ($produk->link_ebook)
+                                            <a href="{{ $produk->link_ebook }}" target="_blank" class="btn btn-sm btn-primary">Lihat E-Book</a>
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
                                     <td>{{ Str::limit(strip_tags($produk->deskripsi), 50) }}</td>
                                     <td>
                                         <button class="btn btn-sm btn-info view-image"
@@ -199,6 +231,19 @@
                             <div class="col-md-12 mb-3">
                                 <label for="edit_nomor_paten" class="form-label">Nomor Paten</label>
                                 <input type="text" class="form-control" name="nomor_paten" id="edit_nomor_paten">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_kategori" class="form-label">Kategori</label>
+                                <select class="form-control" name="kategori" id="edit_kategori">
+                                    <option value="HKI">HKI</option>
+                                    <option value="PATEN">PATEN</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_link_ebook" class="form-label">Link E-Book</label>
+                                <input type="url" class="form-control" name="link_ebook" id="edit_link_ebook">
                             </div>
                         </div>
                         <div class="row">
@@ -427,6 +472,8 @@
                             document.getElementById('edit_inovator').value = data.inovator;
                             document.getElementById('edit_nomor_paten').value = data
                                 .nomor_paten || '';
+                            document.getElementById('edit_kategori').value = data.kategori || 'HKI';
+                            document.getElementById('edit_link_ebook').value = data.link_ebook || '';
 
                             // Set content to the CKEditor
                             if (editDeskripsiEditor) {

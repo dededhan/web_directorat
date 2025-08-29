@@ -28,6 +28,7 @@ use App\Http\Controllers\PimpinanController;
 use App\Http\Controllers\RankingController;
 use App\Http\Controllers\GlobalEngagementController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\VideoinovasiController;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\GalleryController;
@@ -227,6 +228,9 @@ Route::prefix('admin')->name('admin.')
         Route::put('/produk_inovasi/{id}', [ProdukInovasiController::class, 'update'])->name('produk_inovasi.update');
         Route::delete('/produk_inovasi/{id}', [ProdukInovasiController::class, 'destroy'])->name('produk_inovasi.destroy');
         Route::post('/produk_inovasi/upload', [ProdukInovasiController::class, 'upload'])->name('produk_inovasi.upload');
+        Route::get('/video', [VideoinovasiController::class, 'index'])->name('video.index');
+        Route::post('/video', [VideoinovasiController::class, 'storeOrUpdate'])->name('video.storeOrUpdate');
+        Route::delete('/video', [VideoinovasiController::class, 'destroy'])->name('video.destroy');
 
 
         Route::prefix('katsinov')->name('katsinov.')
