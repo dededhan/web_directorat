@@ -149,6 +149,7 @@
                             <li><a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}">Kegiatan Sustainability</a></li>
                             <li><a href="{{ route('Pemeringkatan.matakuliahsustainability.matakuliahsustainability') }}">Mata Kuliah Sustainability</a></li>
                             <li><a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}">Program Sustainability UNJ</a></li>
+                            <li><a href="{{ route('Pemeringkatan.sulitest.index') }}">UNJ Sustainability Literacy Test</a></li>
                         </ul>
                     </li>
                     
@@ -220,6 +221,7 @@
                             <li><a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Kegiatan Sustainability</a></li>
                             <li><a href="{{ route('Pemeringkatan.matakuliahsustainability.matakuliahsustainability') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Mata Kuliah Sustainability</a></li>
                             <li><a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Program Sustainability UNJ</a></li>
+                            <li><a href="{{ route('Pemeringkatan.sulitest.index') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Sulitest</a></li>
                         </ul>
                     </li>
                     
@@ -245,8 +247,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-
-    // --- LOGIKA SIDEBAR MOBILE ---
     const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
     const mobileSidebar = document.getElementById('mobile-sidebar');
     const sidebarOverlay = document.getElementById('sidebar-overlay');
@@ -291,8 +291,6 @@ document.addEventListener('DOMContentLoaded', function() {
         sidebarOverlay.addEventListener('click', closeSidebar);
     }
 
-    // --- LOGIKA DROPDOWN SIDEBAR (IMPROVED) ---
-    // Perbaikan untuk semua dropdown termasuk nested dropdown
     function initSidebarDropdowns() {
         const dropdownToggles = document.querySelectorAll('.sidebar-dropdown-toggle');
         
@@ -305,7 +303,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const chevronIcon = this.querySelector('i.fa-chevron-down');
                 const isCurrentlyOpen = !dropdownContent.classList.contains('hidden');
                 
-                // Tutup semua dropdown di level yang sama
                 const parentLevel = this.closest('ul');
                 const siblingDropdowns = parentLevel.querySelectorAll(':scope > .sidebar-dropdown > .dropdown-content');
                 const siblingIcons = parentLevel.querySelectorAll(':scope > .sidebar-dropdown > .sidebar-dropdown-toggle > i.fa-chevron-down');
@@ -322,12 +319,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
                 
-                // Toggle dropdown saat ini
                 if (isCurrentlyOpen) {
                     dropdownContent.classList.add('hidden');
                     chevronIcon.classList.remove('rotate-180');
                     
-                    // Tutup semua nested dropdown jika ada
                     const nestedDropdowns = dropdownContent.querySelectorAll('.dropdown-content');
                     const nestedIcons = dropdownContent.querySelectorAll('.sidebar-dropdown-toggle > i.fa-chevron-down');
                     
@@ -341,10 +336,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Initialize dropdown functionality
     initSidebarDropdowns();
 
-    // --- LOGIKA DROPDOWN DESKTOP (TETAP SAMA) ---
     const primaryToggles = document.querySelectorAll('.primary-dropdown-toggle');
     primaryToggles.forEach(toggle => {
         toggle.addEventListener('click', function(e) {
@@ -385,14 +378,12 @@ document.addEventListener('DOMContentLoaded', function() {
         menu.addEventListener('click', e => e.stopPropagation());
     });
 
-    // Tutup sidebar ketika link diklik (untuk pengalaman yang lebih baik)
     document.querySelectorAll('#mobile-sidebar a[href]:not([data-bs-toggle])').forEach(link => {
         link.addEventListener('click', () => {
-            setTimeout(closeSidebar, 100); // Delay kecil untuk transisi yang smooth
+            setTimeout(closeSidebar, 100);
         });
     });
 
-    // Tutup sidebar ketika tombol login diklik
     document.querySelectorAll('#mobile-sidebar .login').forEach(loginBtn => {
         loginBtn.addEventListener('click', () => {
             setTimeout(closeSidebar, 100);

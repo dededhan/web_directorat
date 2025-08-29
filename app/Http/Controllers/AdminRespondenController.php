@@ -150,6 +150,7 @@ class AdminRespondenController extends Controller
     {
         try {
             $query = Responden::with('user');
+
             if ($request->filled('start_date') && $request->filled('end_date')) {
                 try {
                     $startDate = Carbon::parse($request->start_date)->startOfDay();
@@ -160,8 +161,15 @@ class AdminRespondenController extends Controller
                 }
             }
 
-            //GET ALLLLLLLLLLLLL
+            // --- BARIS BARU DITAMBAHKAN DI SINI ---
+            // Terima dan proses filter fakultas dari request
+            if ($request->filled('fakultas') && $request->fakultas !== 'semua') {
+                $query->where('fakultas', $request->fakultas);
+            }
+            // --- AKHIR DARI BARIS BARU ---
+
             $allRespondens = $query->get();
+
             $dataSource = $request->input('data_source', 'non_admin');
             $category = $request->input('category');
 
