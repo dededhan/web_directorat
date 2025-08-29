@@ -111,14 +111,15 @@
 
 <nav class="navbar hidden md:block sticky top-0 z-50 bg-[#277177] shadow-md">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
-        <div class="flex items-center space-x-4">
-            <a href="{{ route('home') }}">
-                <img alt="University logo" class="h-12 w-12"
-                    src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
-            </a>
-            {{-- Membuat teks lebih responsif di layar medium --}}
+        <div class="flex items-center">
+            <a href="{{ route('home') }}" class="flex items-center">
+            <img alt="University logo" class="h-12 w-12"
+                src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
+            <img alt="DITISIP Logo" class="h-12 w-auto mx-2"
+                src="{{ asset('images/logoditisip.png') }}"/>
             <h1 class="text-white text-xl lg:text-2xl font-bold">Subdirektorat Pemeringkatan dan Sistem Informasi</h1>
-        </div>
+        </a>
+    </div>
         <ul class="flex space-x-6 items-center">
             <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400 transition-colors duration-200">Beranda</a></li>
 
@@ -167,10 +168,12 @@
 
 <nav class="navbar bg-[#186862] md:hidden fixed top-0 w-full z-50 transition-colors duration-300" id="mobile-navbar">
     <div class="flex justify-between items-center py-4 px-4">
-        <div class="flex items-center">
+        <a href="{{ route('home') }}" class="flex items-center">
             <img alt="University logo" class="h-10 w-10" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
-            <h1 class="text-white text-xs sm:text-sm font-bold ml-2 leading-tight">Subdirektorat Sistem Informasi dan Pemeringkatan</h1>
-        </div>
+            <img alt="DITISIP Logo" class="h-10 w-auto mx-2"
+                src="{{ asset('images/logoditisip.png') }}"/>
+            <h1 class="text-white text-xs sm:text-sm font-bold leading-tight">Subdirektorat Sistem Informasi dan Pemeringkatan</h1>
+        </a>
         <button id="mobile-menu-toggle" class="text-white focus:outline-none z-50">
             <i id="menu-icon" class="fas fa-bars text-2xl"></i>
         </button>
