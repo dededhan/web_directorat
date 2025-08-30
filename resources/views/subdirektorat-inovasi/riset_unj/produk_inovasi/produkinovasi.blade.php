@@ -136,7 +136,7 @@
                         <p class="text-textSecondary text-lg max-w-3xl mx-auto">Sambutan dari Ibu Dr. RA Murti Kusuma W.S.IP, M.Si. selaku Direktur Inovasi, Sistem Informasi dan Pemeringkatan Universitas Negeri Jakarta.</p>
                     </div>
                     
-                    <div id="video-container" class="max-w-4xl mx-auto bg-black rounded-card shadow-card overflow-hidden aspect-video relative">
+                    <div id="video-container" class="max-w-5xl mx-auto bg-black rounded-card shadow-card overflow-hidden aspect-video relative">
                         @if($video->type == 'youtube')
                             <div id="video-placeholder" class="w-full h-full bg-cover bg-center cursor-pointer relative group"
                                 style="background-image: url('https://img.youtube.com/vi/{{ $video->path }}/maxresdefault.jpg');"
