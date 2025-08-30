@@ -1,387 +1,385 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produk Inovasi UNJ</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="{{ asset('home.css') }}">
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
                     colors: {
                         primary: {
                             DEFAULT: '#186569',
                             light: '#2a7a7e',
                             dark: '#0d4b4f',
                         },
+                        secondary: '#F1F8F8',
                         accent: '#ffb74d',
-                        textColor: '#333333',
-                        textSecondary: '#555555',
-                        backgroundColor: '#f8f9fa',
-                        cardColor: '#ffffff',
+                        textColor: '#1A202C',
+                        textSecondary: '#4A5568',
+                        backgroundColor: '#FFFFFF',
+                        cardColor: '#FFFFFF',
                     },
                     boxShadow: {
-                        card: '0 4px 12px rgba(0, 0, 0, 0.08)',
-                        hover: '0 12px 20px rgba(0, 0, 0, 0.1)',
-                        search: '0 5px 15px rgba(0, 0, 0, 0.1)',
+                        card: '0 4px 12px rgba(0, 0, 0, 0.05)',
+                        'card-hover': '0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
+                        'search': '0 5px 20px rgba(24, 101, 105, 0.1)',
                     },
                     borderRadius: {
-                        card: '12px',
+                        card: '1rem',
+                        'button': '0.5rem',
                     },
-                    transitionDuration: {
-                        DEFAULT: '300ms',
+                    transitionTimingFunction: {
+                        'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
                     },
                 },
             },
         }
     </script>
+
     <style>
+        /* Ensure FontAwesome icons load properly */
+        .fa, .fas, .far, .fal, .fab {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "Font Awesome 6 Brands" !important;
+        }
+        
         .filter-btn.active {
-            background-color: #186569; /* primary color */
+            background-color: #186569;
             color: white;
-            font-weight: 600;
+            font-weight: 700;
+            box-shadow: 0 4px 14px rgba(24, 101, 105, 0.25);
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #F1F8F8 0%, #FFFFFF 100%);
+        }
+        
+        .section-bg {
+            background-color: #F7FAFC;
+        }
+        
+        .hero-bg-pattern {
+            background-image: radial-gradient(#1865691a 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .line-clamp-3 {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+        }
+        
+        /* Fallback for icons if FontAwesome fails to load */
+        .icon-fallback::before {
+            content: "•";
+            margin-right: 0.5rem;
         }
     </style>
 </head>
-<body class="bg-backgroundColor text-textColor leading-relaxed text-base font-['Segoe_UI',Tahoma,Geneva,Verdana,sans-serif]">
+<body class="bg-backgroundColor text-textColor font-sans antialiased">
     
-@include('layout.navbar_hilirisasi')
+    <header class="fixed top-0 left-0 w-full z-50">
+        @include('layout.navbar_hilirisasi')
+    </header>
 
     <div class="pt-12 md:pt-16 overflow-x-hidden">
-        <main class="w-[90%] max-w-7xl mx-auto">
-            <section class="mb-16 pt-12 md:pt-16">
-                <div class="container mx-auto">
-                    <div class="flex flex-wrap items-center">
-                        <div class="w-full md:w-5/12 px-4 mb-8 md:mb-0">
-                            <div class="relative mx-auto max-w-[450px]">
+        <main>
+            <section class="hero-gradient pt-20 md:pt-28 pb-24 relative">
+                <div class="absolute inset-0 hero-bg-pattern -z-10"></div>
+                <div class="container mx-auto px-6 lg:px-8 max-w-screen-2xl">
+                    <div class="flex flex-col lg:flex-row items-center gap-12">
+                        <div class="w-full lg:w-6/12 text-center lg:text-left">
+                            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-primary leading-tight mb-6">
+                                Portal Inovasi Universitas Negeri Jakarta
+                            </h1>
+                            <p class="text-lg text-textSecondary mb-10 max-w-xl mx-auto lg:mx-0">
+                                Jelajahi berbagai karya, riset, dan produk inovatif dari civitas akademika UNJ yang berkontribusi untuk kemajuan bangsa.
+                            </p>
+                            <a href="#katalog" class="inline-block bg-primary hover:bg-primary-dark text-white font-bold text-lg py-4 px-10 rounded-button transition-all duration-300 ease-out-expo hover:shadow-lg transform hover:-translate-y-1">
+                                Jelajahi Katalog
+                            </a>
+                        </div>
+                        <div class="w-full lg:w-6/12">
+                            <div class="relative mx-auto max-w-lg lg:max-w-none">
+                                <div class="absolute inset-0 bg-primary/10 rounded-full blur-3xl -z-10 -translate-x-10 translate-y-10 scale-125"></div>
                                 <img 
                                     src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                                    alt="Mahasiswa UNJ" 
-                                    class="w-full rounded-lg shadow-card"
+                                    alt="Mahasiswa UNJ berinovasi" 
+                                    class="w-full rounded-card shadow-card"
                                 />
-                            </div>
-                        </div>
-
-                        <div class="w-full md:w-7/12 px-4">
-                            <div class="text-center md:text-left">
-                                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-primary leading-tight mb-4">
-                                    Selamat Datang di Portal Inovasi UNJ
-                                </h1>
-                                <p class="text-lg text-textSecondary mb-8 leading-relaxed">
-                                    Temukan berbagai karya, riset, dan produk inovatif yang lahir dari kreativitas civitas akademika Universitas Negeri Jakarta untuk kemajuan bangsa.
-                                </p>
-                                <a href="#katalog" class="inline-block bg-primary hover:bg-primary-dark text-white font-bold text-base py-3 px-8 rounded-full transition duration-300 ease-in-out hover:shadow-lg transform hover:-translate-y-1">
-                                    Jelajahi Inovasi
-                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-             @if($video)
-            <section class="mb-16">
-                <div class="text-center py-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Sambutan Pimpinan</h2>
-                    <p class="text-textSecondary text-lg max-w-2xl mx-auto">Sambutan dari Ibu Dr. RA Murti Kusuma W.S.IP, M.Si. selaku Direktur Inovasi, Sistem Informasi dan Pemeringkatan Universitas Negeri Jakarta</p>
-                </div>
-                
-                
-               <div id="video-container" class="bg-black rounded-card shadow-card overflow-hidden aspect-video relative">
-
-                    @if($video && $video->type == 'youtube')
-
-                        <div id="video-placeholder" 
-                            class="w-full h-full bg-cover bg-center cursor-pointer relative"
-                            style="background-image: url('https://img.youtube.com/vi/{{ $video->path }}/maxresdefault.jpg');"
-                            data-video-type="{{ $video->type }}" 
-                            data-video-path="{{ $video->path }}">
-                            
-                            <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center text-white p-4 transition-colors duration-300 hover:bg-black/20">
-                                
-                                <svg class="w-16 h-16 md:w-20 md:h-20 mb-4 text-white/80" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zM10.622 8.415a.4.4 0 0 0-.622.35v6.47a.4.4 0 0 0 .622.35l4.853-3.235a.4.4 0 0 0 0-.7L10.622 8.415z"></path></svg>
-                                
-                                <h3 class="text-xl md:text-2xl font-bold tracking-wide">{{ $video->title }}</h3>
-
+             
+            @if($video)
+            <section class="py-20 md:py-28 section-bg">
+                <div class="container mx-auto px-6 lg:px-8 max-w-screen-2xl">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Sambutan Pimpinan</h2>
+                        <p class="text-textSecondary text-lg max-w-3xl mx-auto">Sambutan dari Ibu Dr. RA Murti Kusuma W.S.IP, M.Si. selaku Direktur Inovasi, Sistem Informasi dan Pemeringkatan Universitas Negeri Jakarta.</p>
+                    </div>
+                    
+                    <div id="video-container" class="max-w-4xl mx-auto bg-black rounded-card shadow-card overflow-hidden aspect-video relative">
+                        @if($video->type == 'youtube')
+                            <div id="video-placeholder" class="w-full h-full bg-cover bg-center cursor-pointer relative group"
+                                style="background-image: url('https://img.youtube.com/vi/{{ $video->path }}/maxresdefault.jpg');"
+                                data-video-type="{{ $video->type }}" data-video-path="{{ $video->path }}">
+                                <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center text-white p-4 transition-colors duration-300 group-hover:bg-black/20">
+                                    <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 ease-out-expo">
+                                        <i class="fa-solid fa-play text-white text-3xl ml-1"></i>
+                                    </div>
+                                    <h3 class="text-xl md:text-2xl font-bold tracking-wide mt-6">{{ $video->title }}</h3>
+                                </div>
                             </div>
-                        </div>
-
-                    @elseif($video && $video->type == 'mp4')
-
-                        <div id="video-placeholder" class="w-full h-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center cursor-pointer"
-                            data-video-type="{{ $video->type }}" 
-                            data-video-path="{{ asset('storage/' . $video->path) }}">
-                            
-                            <div class="text-center text-white">
-                                <i class="fas fa-play-circle text-6xl mb-4 opacity-80"></i>
-                                <p class="text-xl">{{ $video->title }}</p>
+                        @elseif($video->type == 'mp4')
+                            <div id="video-placeholder" class="w-full h-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center cursor-pointer group"
+                                data-video-type="{{ $video->type }}" data-video-path="{{ asset('storage/' . $video->path) }}">
+                                <div class="text-center text-white">
+                                    <i class="fas fa-play-circle text-6xl mb-4 opacity-80 transform group-hover:scale-110 transition-transform duration-300 ease-out-expo"></i>
+                                    <p class="text-xl">{{ $video->title }}</p>
+                                </div>
                             </div>
-                        </div>
-
-                    @endif
-                </div>
-            </section>
-
-            @else
-            <section class="mb-16">
-                <div class="text-center py-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Sambutan Pimpinan</h2>
-                    <p class="text-textSecondary text-lg max-w-2xl mx-auto">Video sambutan pimpinan belum tersedia saat ini.</p>
+                        @endif
+                    </div>
                 </div>
             </section>
             @endif
             
-            <section class="mb-16">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Tentang Inovasi UNJ</h2>
-                    <p class="text-textSecondary text-lg max-w-2xl mx-auto">Membangun ekosistem inovasi yang berkelanjutan untuk kemajuan bangsa</p>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-                    <div class="bg-cardColor rounded-card p-8 shadow-card hover:shadow-hover transition-all duration-300">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4">
-                                <i class="fas fa-lightbulb text-primary text-xl"></i>
-                            </div>
-                            <h3 class="text-xl font-bold">Mengapa Inovasi UNJ?</h3>
-                        </div>
-                        <p class="text-textSecondary leading-relaxed">
-                            Unit Inovasi UNJ dibentuk untuk menjembatani hasil penelitian dan pengembangan civitas akademika menuju produk yang berdampak nyata bagi masyarakat. Kami berkomitmen menghasilkan solusi inovatif untuk tantangan masa depan.
-                        </p>
+            <section class="py-20 md:py-28">
+                <div class="container mx-auto px-6 lg:px-8 max-w-screen-2xl">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Tentang Inovasi UNJ</h2>
+                        <p class="text-textSecondary text-lg max-w-3xl mx-auto">Kami berkomitmen untuk menjembatani hasil riset dan pengembangan menjadi produk yang berdampak nyata bagi masyarakat dan industri.</p>
                     </div>
 
-                    <div class="bg-cardColor rounded-card p-8 shadow-card hover:shadow-hover transition-all duration-300">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center mr-4">
-                                <i class="fas fa-rocket text-accent text-xl"></i>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        @php
+                            $infoCards = [
+                                ['icon' => 'fa-lightbulb', 'color' => 'accent', 'title' => 'Mengapa Inovasi UNJ?', 'text' => 'Unit Inovasi UNJ dibentuk untuk menjembatani hasil penelitian dan pengembangan civitas akademika menuju produk yang berdampak nyata bagi masyarakat.'],
+                                ['icon' => 'fa-rocket', 'color' => 'primary', 'title' => 'Inovasi Dihasilkan', 'text' => 'Hingga kini UNJ telah menghasilkan lebih dari 150 produk inovasi di berbagai bidang, mulai dari pendidikan, teknologi, kesehatan, hingga industri kreatif.'],
+                                ['icon' => 'fa-seedling', 'color' => 'green', 'title' => 'Harapan ke Depan', 'text' => 'Menjadi pusat inovasi terdepan di Asia Tenggara yang menghasilkan solusi berkelanjutan, dengan target 500 produk inovasi berdampak pada tahun 2030.'],
+                                ['icon' => 'fa-users', 'color' => 'blue', 'title' => 'Dampak Masyarakat', 'text' => 'Produk inovasi UNJ telah menjangkau lebih dari 1 juta masyarakat, meningkatkan kualitas hidup, dan mendorong pertumbuhan ekonomi berkelanjutan.']
+                            ];
+                        @endphp
+                        @foreach ($infoCards as $card)
+                        <div class="bg-cardColor rounded-card p-8 shadow-card hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-2 group">
+                            @php
+                                $iconBgClass = '';
+                                $iconTextClass = '';
+                                switch ($card['color']) {
+                                    case 'accent':
+                                        $iconBgClass = 'bg-yellow-500/10';
+                                        $iconTextClass = 'text-yellow-600';
+                                        break;
+                                    case 'primary':
+                                        $iconBgClass = 'bg-primary/10';
+                                        $iconTextClass = 'text-primary';
+                                        break;
+                                    case 'green':
+                                        $iconBgClass = 'bg-green-500/10';
+                                        $iconTextClass = 'text-green-600';
+                                        break;
+                                    case 'blue':
+                                        $iconBgClass = 'bg-blue-500/10';
+                                        $iconTextClass = 'text-blue-600';
+                                        break;
+                                }
+                            @endphp
+                            <div class="w-16 h-16 {{ $iconBgClass }} {{ $iconTextClass }} rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110">
+                                <i class="fas {{ $card['icon'] }} text-3xl"></i>
                             </div>
-                            <h3 class="text-xl font-bold">Inovasi yang Dihasilkan</h3>
+                            <h3 class="text-xl font-bold mb-3">{{ $card['title'] }}</h3>
+                            <p class="text-textSecondary leading-relaxed">{{ $card['text'] }}</p>
                         </div>
-                        <p class="text-textSecondary leading-relaxed">
-                            Hingga kini UNJ telah menghasilkan lebih dari 150 produk inovasi di berbagai bidang, mulai dari pendidikan, teknologi, kesehatan, hingga industri kreatif yang telah memberikan kontribusi positif bagi masyarakat.
-                        </p>
-                    </div>
-
-                    <div class="bg-cardColor rounded-card p-8 shadow-card hover:shadow-hover transition-all duration-300">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
-                                <i class="fas fa-seedling text-green-600 text-xl"></i>
-                            </div>
-                            <h3 class="text-xl font-bold">Harapan ke Depan</h3>
-                        </div>
-                        <p class="text-textSecondary leading-relaxed">
-                            Menjadi pusat inovasi terdepan di Asia Tenggara yang menghasilkan solusi berkelanjutan untuk permasalahan global, dengan target 500 produk inovasi yang berdampak pada tahun 2030.
-                        </p>
-                    </div>
-
-                    <div class="bg-cardColor rounded-card p-8 shadow-card hover:shadow-hover transition-all duration-300">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                                <i class="fas fa-users text-blue-600 text-xl"></i>
-                            </div>
-                            <h3 class="text-xl font-bold">Dampak untuk Masyarakat</h3>
-                        </div>
-                        <p class="text-textSecondary leading-relaxed">
-                            Produk inovasi UNJ telah menjangkau lebih dari 1 juta masyarakat Indonesia, meningkatkan kualitas hidup, menciptakan lapangan kerja baru, dan mendorong pertumbuhan ekonomi berkelanjutan.
-                        </p>
+                        @endforeach
                     </div>
                 </div>
-                <div class="bg-gradient-to-r from-primary/5 to-accent/5 rounded-card p-8">
-                    <div class="text-center mb-8">
-                        <h3 class="text-2xl font-bold text-primary mb-4">Mitra Kolaborasi</h3>
-                        <p class="text-textSecondary">Bersama membangun ekosistem inovasi yang berkelanjutan.</p>
+            </section>
+            
+            <section class="py-20 md:py-28 section-bg">
+                <div class="container mx-auto px-6 lg:px-8 max-w-screen-2xl">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Mitra Kolaborasi</h2>
+                        <p class="text-textSecondary text-lg max-w-3xl mx-auto">Bersama membangun ekosistem inovasi yang berkelanjutan.</p>
                     </div>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                        <div class="flex flex-col items-center">
-                            <div class="w-16 h-16 bg-white rounded-full shadow-md flex items-center justify-center mb-3">
-                                <i class="fas fa-graduation-cap text-primary text-2xl"></i>
+
+                    @php
+                        $mitraList = [
+                            ['icon' => 'fa-school', 'title' => 'Pendidikan', 'description' => 'Kolaborasi dengan institusi pendidikan untuk meningkatkan mutu pembelajaran dan teknologi edukasi.'],
+                            ['icon' => 'fa-flask', 'title' => 'Sains & Teknologi', 'description' => 'Bermitra dengan industri teknologi dan lembaga riset untuk menciptakan solusi masa depan.'],
+                            ['icon' => 'fa-palette', 'title' => 'Sosial Humaniora & Seni', 'description' => 'Mengembangkan inovasi sosial dan budaya yang memperkaya kehidupan masyarakat.'],
+                            ['icon' => 'fa-heart-pulse', 'title' => 'Kesehatan & Psikologi', 'description' => 'Bekerja sama untuk meningkatkan kesejahteraan fisik dan mental melalui inovasi terapan.']
+                        ];
+                    @endphp
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        @foreach($mitraList as $mitra)
+                        <div class="group bg-cardColor rounded-card p-8 text-center shadow-card transition-all duration-300 ease-out-expo transform hover:-translate-y-2 hover:shadow-card-hover hover:bg-primary">
+                            <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:bg-white/20 group-hover:scale-110">
+                                <i class="fas {{ $mitra['icon'] }} text-4xl text-primary transition-colors duration-300 group-hover:text-white"></i>
                             </div>
-                            <span class="text-sm font-medium">Pendidikan</span>
+                            <h3 class="text-xl font-bold text-textColor mb-3 transition-colors duration-300 group-hover:text-white">{{ $mitra['title'] }}</h3>
+                            <p class="text-textSecondary leading-relaxed transition-colors duration-300 group-hover:text-gray-200">{{ $mitra['description'] }}</p>
                         </div>
-                        <div class="flex flex-col items-center">
-                            <div class="w-16 h-16 bg-white rounded-full shadow-md flex items-center justify-center mb-3">
-                                <i class="fas fa-flask text-primary text-2xl"></i>
-                            </div>
-                            <span class="text-sm font-medium">Sains & Teknologi</span>
-                        </div>
-                        <div class="flex flex-col items-center">
-                            <div class="w-16 h-16 bg-white rounded-full shadow-md flex items-center justify-center mb-3">
-                                <i class="fas fa-palette text-primary text-2xl"></i>
-                            </div>
-                            <span class="text-sm font-medium">Sosial Humaniora & Seni</span>
-                        </div>
-                        <div class="flex flex-col items-center">
-                            <div class="w-16 h-16 bg-white rounded-full shadow-md flex items-center justify-center mb-3">
-                                <i class="fas fa-heartbeat text-primary text-2xl"></i>
-                            </div>
-                            <span class="text-sm font-medium">Kesehatan & Psikologi</span>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </section>
 
-            <section id="katalog" class="mb-16">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Katalog Produk Inovasi UNJ</h2>
-                    <p class="text-textSecondary text-lg max-w-2xl mx-auto">Temukan berbagai inovasi dan karya terbaik dari civitas akademika Universitas Negeri Jakarta.</p>
-                </div>
+            <section id="katalog" class="py-20 md:py-28">
+                <div class="container mx-auto px-6 lg:px-8 max-w-screen-2xl">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Katalog Produk Inovasi</h2>
+                        <p class="text-textSecondary text-lg max-w-3xl mx-auto">Temukan berbagai inovasi dan karya terbaik dari civitas akademika Universitas Negeri Jakarta.</p>
+                    </div>
                 
-                <div class="flex w-full max-w-xl mx-auto relative shadow-search rounded-full mb-10">
-                    <input type="text" id="searchInput" class="flex-grow py-4 px-6 border-none rounded-l-full outline-none text-base bg-white/95 transition duration-300 text-textColor placeholder-textSecondary placeholder-opacity-70 focus:ring-2 focus:ring-accent" placeholder="Cari produk inovasi, inovator, atau kata kunci...">
-                    <button id="searchButton" class="bg-accent text-textColor border-none px-7 rounded-r-full cursor-pointer transition duration-300 flex items-center justify-center font-semibold hover:bg-[#ffa726] hover:-translate-y-px">
-                        <i class="fa-solid fa-search"></i>
-                        <span class="ml-2 md:inline hidden">Cari</span>
-                    </button>
-                </div>
-
-                <div class="flex justify-center items-center gap-2 sm:gap-4 mb-10 p-2 bg-primary/5 rounded-full max-w-sm mx-auto">
-                    <button class="filter-btn active flex-1 text-center px-4 py-2 rounded-full transition-colors duration-300" data-filter="all">Semua</button>
-                    <button class="filter-btn flex-1 text-center px-4 py-2 rounded-full transition-colors duration-300" data-filter="paten">Paten</button>
-                    <button class="filter-btn flex-1 text-center px-4 py-2 rounded-full transition-colors duration-300" data-filter="hki">HKI</button>
-                </div>
-                
-                <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 my-5">
-                    @if($produkInovasi->count() > 0)
-                        @foreach($produkInovasi as $produk)
-                        {{-- Menambahkan data-category untuk filtering --}}
-                        <div class="product-card bg-cardColor rounded-card overflow-hidden shadow-card h-full flex flex-col transition duration-300 border border-black/5 hover:transform hover:-translate-y-2 hover:shadow-hover" 
-                           data-category="{{ strtolower($produk->kategori) }}">
-
-                            
-                            @if($produk->gambar)
-                            <div class="h-[200px] bg-cover bg-center relative" style="background-image: url('{{ asset('storage/'. $produk->gambar) }}')"></div>
-                            @else
-                            <div class="h-[200px] bg-gradient-to-br from-primary to-primary-light flex items-center justify-center">
-                                <i class="fas fa-lightbulb text-5xl text-white opacity-70"></i>
+                    <div class="w-full max-w-2xl mx-auto mb-12">
+                        <div class="relative shadow-search rounded-full">
+                            <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                                <i class="fa-solid fa-search text-gray-400"></i>
                             </div>
-                            @endif
+                            <input type="text" id="searchInput" class="w-full py-4 pl-14 pr-6 border-transparent rounded-full outline-none text-base bg-white transition duration-300 text-textColor placeholder-textSecondary placeholder-opacity-70 focus:ring-2 focus:ring-primary/50" placeholder="Cari produk, inovator, atau kata kunci...">
+                        </div>
+
+                        <div class="flex justify-center items-center gap-2 sm:gap-4 mt-8 p-1.5 bg-primary/5 rounded-full max-w-sm mx-auto">
+                            <button class="filter-btn active flex-1 text-center px-4 py-2.5 rounded-full transition-all duration-300 ease-out-expo text-sm font-semibold" data-filter="all">Semua</button>
+                            <button class="filter-btn flex-1 text-center px-4 py-2.5 rounded-full transition-all duration-300 ease-out-expo text-sm font-semibold" data-filter="paten">Paten</button>
+                            <button class="filter-btn flex-1 text-center px-4 py-2.5 rounded-full transition-all duration-300 ease-out-expo text-sm font-semibold" data-filter="hki">HKI</button>
+                        </div>
+                    </div>
+                
+                    <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        @forelse($produkInovasi as $produk)
+                        <div class="product-card bg-cardColor rounded-card overflow-hidden h-full flex flex-col transition-all duration-300 group border border-gray-200/50 hover:shadow-card-hover hover:-translate-y-2" data-category="{{ strtolower($produk->kategori) }}">
                             
-                            <div class="p-5 flex flex-col flex-grow relative">
-                                <span class="innovator-info inline-flex items-center text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full mb-3">
-                                    <i class="fas fa-user-alt mr-1.5"></i>
-                                    {{ $produk->inovator }}
-                                </span>
+                            <a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.show', $produk->id) }}" class="block overflow-hidden">
+                                @if($produk->gambar)
+                                <div class="h-52 bg-cover bg-center transition-transform duration-300 ease-out-expo group-hover:scale-105" style="background-image: url('{{ asset('storage/'. $produk->gambar) }}')"></div>
+                                @else
+                                <div class="h-52 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center transition-transform duration-300 ease-out-expo group-hover:scale-105">
+                                    <i class="fas fa-lightbulb text-5xl text-white"></i>
+                                </div>
+                                @endif
+                            </a>
+                            
+                            <div class="p-6 flex flex-col flex-grow">
+                                <div class="flex justify-between items-start mb-3">
+                                    <span class="innovator-info inline-flex items-center text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full">
+                                        <i class="fas fa-user-alt mr-1.5"></i>
+                                        {{ $produk->inovator }}
+                                    </span>
+                                    <div class="bg-accent/20 text-accent rounded-full px-3 py-1 text-xs font-semibold">
+                                        {{ $produk->kategori }}
+                                    </div>
+                                </div>
                                 
-                                <h3 class="product-name text-xl font-bold mb-3">{{ $produk->nama_produk }}</h3>
+                                <h3 class="product-name text-xl font-bold mb-2 text-textColor group-hover:text-primary transition-colors duration-300">
+                                    <a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.show', $produk->id) }}">
+                                        {{ $produk->nama_produk }}
+                                    </a>
+                                </h3>
                                 
-                                <p class="product-description text-textSecondary text-sm mb-4 line-clamp-3">
+                                <p class="product-description text-textSecondary text-sm mb-5 line-clamp-3">
                                     {!! Str::limit(strip_tags($produk->deskripsi), 120) !!}
                                 </p>
                                 
-                                <div class="flex justify-between items-center mt-auto mb-3 md:flex-row flex-col md:items-center items-start">
-                                    <div class="flex items-center text-textSecondary text-sm">
-                                        <i class="fas fa-calendar-alt mr-1.5"></i>
-                                        <span>{{ $produk->created_at->format('d M Y') }}</span>
-                                    </div>
-                                    
-                                    <div class="bg-accent/20 text-accent rounded-full px-3 py-1 text-xs font-semibold flex items-center mt-2 md:mt-0">
-                                        <i class="fas fa-certificate mr-1"></i>
-                                        {{ $produk->kategori }}
-                                    </div>
-                                 
-                                </div>
-                                
-                                {{-- PERUBAHAN DI SINI: Tombol diubah menjadi link ke halaman detail --}}
-                                <a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.show', $produk->id) }}" class="w-full mt-2 bg-primary hover:bg-primary-dark text-white transition duration-300 flex items-center justify-center text-sm font-medium py-2.5 px-3 rounded">
-                                    Baca Selengkapnya
-                                </a>
-                                {{-- AKHIR PERUBAHAN --}}
-
-                            </div>
-                        </div>
-                        @endforeach
-                    @else
-                        <div class="col-span-full flex flex-col items-center justify-center py-16 text-center text-textSecondary">
-                            <i class="fas fa-lightbulb text-5xl mb-4 opacity-50"></i>
-                            <p class="text-lg">Belum ada produk inovasi yang tersedia.</p>
-                        </div>
-                    @endif
-                     <div id="noResultsMessage" class="hidden col-span-full flex-col items-center justify-center py-16 text-center text-textSecondary">
-                        <i class="fas fa-search text-5xl mb-4 opacity-50"></i>
-                        <p class="text-lg">Produk inovasi tidak ditemukan.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="mb-16">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Berita Inovasi Terkini</h2>
-                    <p class="text-textSecondary text-lg">Update terbaru seputar perkembangan inovasi di UNJ</p>
-                </div>
-                
-                @if(isset($beritaInovasi) && $beritaInovasi->count() > 0)
-                    {{-- Ambil berita pertama sebagai berita utama --}}
-                    @php $beritaUtama = $beritaInovasi->first(); @endphp
-                    @php $beritaLainnya = $beritaInovasi->slice(1); @endphp
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="md:col-span-2 lg:col-span-3 bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-hover transition-all duration-300">
-                            <div class="md:flex">
-                                <div class="md:w-2/3">
-                                    <div class="h-64 md:h-full bg-cover bg-center" style="background-image: url('{{ asset('storage/' . $beritaUtama->gambar) }}')">
-                                    </div>
-                                </div>
-                                <div class="md:w-1/3 p-6 md:p-8 flex flex-col">
-                                    <div class="flex items-center text-xs text-textSecondary mb-3">
-                                        <i class="fas fa-calendar mr-2"></i>
-                                        <span>{{ $beritaUtama->created_at->format('d F Y') }}</span>
-                                    </div>
-                                    <h3 class="text-xl font-bold mb-4">{{ $beritaUtama->judul }}</h3>
-                                    <p class="text-textSecondary text-sm leading-relaxed mb-4 flex-grow">
-                                        {{ Str::limit(strip_tags($beritaUtama->isi), 150) }}
-                                    </p>
-                                    {{-- Tombol diubah menjadi link (tag <a>) dengan route yang benar --}}
-                                    <a href="{{ route('Berita.show', ['slug' => $beritaUtama->slug]) }}" class="text-primary font-semibold hover:text-primary-dark transition-colors duration-300 self-start">
-                                        Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                                <div class="mt-auto pt-4 border-t border-gray-200/80">
+                                    <a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.show', $produk->id) }}" class="w-full bg-primary/5 text-primary hover:bg-primary hover:text-white transition-all duration-300 flex items-center justify-center text-sm font-semibold py-3 px-4 rounded-button">
+                                        <span>Lihat Detail</span>
+                                        <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
                                     </a>
                                 </div>
                             </div>
                         </div>
+                        @empty
+                        <div class="col-span-full flex flex-col items-center justify-center py-16 text-center text-textSecondary">
+                            <i class="fas fa-box-open text-6xl mb-4 text-gray-300"></i>
+                            <p class="text-xl font-semibold">Produk Inovasi Belum Tersedia</p>
+                            <p>Silakan kembali lagi nanti untuk melihat karya-karya terbaru.</p>
+                        </div>
+                        @endforelse
+                        
+                        <div id="noResultsMessage" class="hidden col-span-full flex-col items-center justify-center py-16 text-center text-textSecondary">
+                            <i class="fas fa-search-minus text-6xl mb-4 text-gray-300"></i>
+                            <p class="text-xl font-semibold">Hasil Tidak Ditemukan</p>
+                            <p>Coba gunakan kata kunci atau filter yang berbeda.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-                        @foreach($beritaLainnya as $berita)
-                        <div class="bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-hover transition-all duration-300 flex flex-col">
-                            <div class="h-48 bg-cover bg-center" style="background-image: url('{{ asset('storage/' . $berita->gambar) }}')">
-                            </div>
-                            <div class="p-6 flex flex-col flex-grow">
-                                <div class="flex items-center text-xs text-textSecondary mb-3">
-                                    <i class="fas fa-calendar mr-2"></i>
-                                    <span>{{ $berita->created_at->format('d F Y') }}</span>
+            <section class="py-20 md:py-28 section-bg">
+                <div class="container mx-auto px-6 lg:px-8 max-w-screen-2xl">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Berita Inovasi Terkini</h2>
+                        <p class="text-textSecondary text-lg max-w-3xl mx-auto">Ikuti perkembangan terbaru seputar inovasi, riset, dan prestasi di lingkungan Universitas Negeri Jakarta.</p>
+                    </div>
+                
+                    @if(isset($beritaInovasi) && $beritaInovasi->count() > 0)
+                        @php $beritaUtama = $beritaInovasi->first(); @endphp
+                        @php $beritaLainnya = $beritaInovasi->slice(1, 2); @endphp
+
+                        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-8">
+                            <a href="{{ route('Berita.show', ['slug' => $beritaUtama->slug]) }}" class="group block lg:col-span-3 bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-2">
+                                <div class="flex flex-col md:flex-row h-full">
+                                    <div class="w-full md:w-6/12 h-64 md:h-full bg-cover bg-center transition-transform duration-300 ease-out-expo group-hover:scale-105" style="background-image: url('{{ asset('storage/' . $beritaUtama->gambar) }}')"></div>
+                                    <div class="w-full md:w-6/12 p-6 md:p-8 flex flex-col justify-center">
+                                        <p class="text-sm text-textSecondary mb-2">{{ $beritaUtama->created_at->format('d F Y') }}</p>
+                                        <h3 class="text-2xl font-bold mb-3 text-textColor group-hover:text-primary transition-colors duration-300">{{ $beritaUtama->judul }}</h3>
+                                        <p class="text-textSecondary text-sm leading-relaxed mb-4 line-clamp-3">
+                                            {{ Str::limit(strip_tags($beritaUtama->isi), 150) }}
+                                        </p>
+                                        <span class="text-primary font-bold mt-auto self-start">
+                                            Baca Selengkapnya <i class="fas fa-arrow-right ml-1 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                                        </span>
+                                    </div>
                                 </div>
-                                <h3 class="font-bold mb-3">{{ $berita->judul }}</h3>
-                                <p class="text-textSecondary text-sm mb-4 flex-grow">
-                                    {{ Str::limit(strip_tags($berita->isi), 100) }}
-                                </p>
-                                {{-- Tombol diubah menjadi link (tag <a>) dengan route yang benar --}}
-                                <a href="{{ route('Berita.show', ['slug' => $berita->slug]) }}" class="text-primary font-semibold hover:text-primary-dark transition-colors duration-300 text-sm mt-auto self-start">
-                                    Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                            <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-8">
+                                @foreach($beritaLainnya as $berita)
+                                <a href="{{ route('Berita.show', ['slug' => $berita->slug]) }}" class="group block bg-cardColor rounded-card overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
+                                    <div class="h-40 bg-cover bg-center transition-transform duration-300 ease-out-expo group-hover:scale-105" style="background-image: url('{{ asset('storage/' . $berita->gambar) }}')"></div>
+                                    <div class="p-5 flex flex-col flex-grow">
+                                        <p class="text-xs text-textSecondary mb-2">{{ $berita->created_at->format('d F Y') }}</p>
+                                        <h3 class="font-bold text-textColor group-hover:text-primary transition-colors duration-300 mb-2 flex-grow">{{ $berita->judul }}</h3>
+                                        <span class="text-primary font-semibold text-sm mt-auto self-start">
+                                            Baca Selengkapnya <i class="fas fa-arrow-right ml-1 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                                        </span>
+                                    </div>
                                 </a>
+                                @endforeach
                             </div>
                         </div>
-                        @endforeach
-                    </div>
-                @else
-                    {{-- Tampilan jika tidak ada berita inovasi --}}
-                    <div class="col-span-full flex flex-col items-center justify-center py-16 text-center text-textSecondary bg-cardColor rounded-card shadow-card">
-                        <i class="fas fa-newspaper text-5xl mb-4 opacity-50"></i>
-                        <p class="text-lg">Belum ada berita inovasi yang tersedia.</p>
-                    </div>
-                @endif
-                
-                <div class="text-center mt-8">
-                    {{-- Tombol "Lihat Semua Berita" diubah menjadi link ke halaman kategori inovasi --}}
-                    <a href="{{ route('berita.kategori', 'inovasi') }}" class="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:transform hover:scale-105">
-                        Lihat Semua Berita
-                    </a>
+
+                        <div class="text-center mt-12">
+                            <a href="{{ route('berita.kategori', 'inovasi') }}" class="inline-block bg-primary hover:bg-primary-dark text-white font-bold text-base py-3 px-8 rounded-button transition-all duration-300 ease-out-expo hover:shadow-lg transform hover:-translate-y-1">
+                                Lihat Semua Berita
+                            </a>
+                        </div>
+                    @else
+                        <div class="col-span-full flex flex-col items-center justify-center py-16 text-center text-textSecondary bg-gray-50 rounded-card">
+                            <i class="fas fa-newspaper text-6xl mb-4 text-gray-300"></i>
+                            <p class="text-xl font-semibold">Belum Ada Berita Inovasi</p>
+                            <p>Nantikan update terbaru dari kami segera.</p>
+                        </div>
+                    @endif
                 </div>
             </section>
         </main>
@@ -390,6 +388,7 @@
     @include('layout.footer')
 
    <script>
+    // Script untuk memutar video saat placeholder diklik
     document.addEventListener('DOMContentLoaded', function () {
         const placeholder = document.getElementById('video-placeholder');
         const videoContainer = document.getElementById('video-container');
@@ -401,129 +400,81 @@
                 let playerHtml = '';
 
                 if (type === 'youtube') {
-                    // Menambahkan ?autoplay=1&mute=1. Mute diperlukan agar autoplay berfungsi di browser modern.
                     playerHtml = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${path}?autoplay=1&mute=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
                 } else if (type === 'mp4') {
                     playerHtml = `<video class="w-full h-full" controls autoplay muted><source src="${path}" type="video/mp4">Browser Anda tidak mendukung tag video.</video>`;
                 }
 
-                // Ini adalah bagian kuncinya: Ganti isi dari container dengan video player
                 if (playerHtml) {
                     videoContainer.innerHTML = playerHtml;
                 }
             });
         }
     });
-    </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchInput');
-            const searchButton = document.getElementById('searchButton');
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            const productCards = document.querySelectorAll('.product-card');
-            const noResultsMessage = document.getElementById('noResultsMessage');
-            
+    // Script untuk filter dan search
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const productCards = document.querySelectorAll('.product-card');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+        let currentFilter = 'all';
 
-            let currentFilter = 'all';
+        function filterAndSearch() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            let hasResults = false;
 
-            function filterAndSearch() {
-                const searchTerm = searchInput.value.trim().toLowerCase();
-                let hasResults = false;
+            productCards.forEach(card => {
+                const title = card.querySelector('.product-name')?.textContent.toLowerCase() || '';
+                const innovator = card.querySelector('.innovator-info')?.textContent.toLowerCase() || '';
+                const description = card.querySelector('.product-description')?.textContent.toLowerCase() || '';
+                const category = card.dataset.category || '';
 
-                productCards.forEach(card => {
-                    const title = card.querySelector('.product-name').textContent.toLowerCase();
-                    const innovator = card.querySelector('.innovator-info').textContent.toLowerCase();
-                    const description = card.querySelector('.product-description').textContent.toLowerCase();
-                    const category = card.dataset.category;
+                const matchesSearch = title.includes(searchTerm) || innovator.includes(searchTerm) || description.includes(searchTerm);
+                const matchesFilter = (currentFilter === 'all') || (category === currentFilter);
 
-                    const matchesSearch = title.includes(searchTerm) || innovator.includes(searchTerm) || description.includes(searchTerm);
-                    const matchesFilter = (currentFilter === 'all') || (category === currentFilter);
-
-                    if (matchesSearch && matchesFilter) {
-                        card.style.display = 'flex';
-                        hasResults = true;
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-
-                if (hasResults) {
-                    noResultsMessage.classList.add('hidden');
-                    noResultsMessage.classList.remove('flex');
+                if (matchesSearch && matchesFilter) {
+                    card.style.display = 'flex';
+                    hasResults = true;
                 } else {
-                    noResultsMessage.classList.remove('hidden');
-                    noResultsMessage.classList.add('flex');
+                    card.style.display = 'none';
                 }
-            }
+            });
 
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    currentFilter = button.dataset.filter;
-                    filterAndSearch();
+            if (hasResults) {
+                noResultsMessage.classList.add('hidden');
+                noResultsMessage.classList.remove('flex');
+            } else {
+                noResultsMessage.classList.remove('hidden');
+                noResultsMessage.classList.add('flex');
+            }
+        }
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                currentFilter = button.dataset.filter;
+                filterAndSearch();
+            });
+        });
+        
+        searchInput.addEventListener('keyup', filterAndSearch);
+    });
+
+    // Script untuk smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
                 });
-            });
-            
-            searchButton.addEventListener('click', filterAndSearch);
-          
-            searchInput.addEventListener('keyup', function(event) {
-                if (event.key === 'Enter') {
-                    filterAndSearch();
-                }
-            });
-
-            searchInput.addEventListener('input', filterAndSearch);
-        });
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fade-in');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('section').forEach(section => {
-            observer.observe(section);
-        });
-
-        const style = document.createElement('style');
-        style.textContent = `
-            .animate-fade-in {
-                animation: fadeInUp 0.6s ease-out forwards;
             }
-            @keyframes fadeInUp {
-                from { opacity: 0; transform: translateY(30px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            .line-clamp-3 {
-                overflow: hidden;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 3;
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
+        });
+    });
+   </script>
 </body>
 </html>
