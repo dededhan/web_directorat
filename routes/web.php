@@ -153,6 +153,10 @@ Route::get('/tupoksipemeringkatan', function () {
     return view('Pemeringkatan.tupoksipemeringkatan.tupoksi');
 })->name('tupoksipemeringkatan');
 
+Route::get('/subdirektorat-inovasi/riset-unj/produk-inovasi/mitra-kolaborasi', function () {
+    return view('subdirektorat-inovasi.riset_unj.produk_inovasi.mitra-kolaborasi');
+})->name('subdirektorat-inovasi.riset_unj.produk_inovasi.mitra-kolaborasi');
+
 Route::get('/strukturorganisasipemeringkatan', function () {
     return view('Pemeringkatan.struktur organisasi.strukturorganisasi');
 })->name('strukturorganisasipemeringkatan');

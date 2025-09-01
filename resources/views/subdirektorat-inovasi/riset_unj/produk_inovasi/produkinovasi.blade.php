@@ -222,22 +222,22 @@
 
                     @php
                         $mitraList = [
-                            ['icon' => 'fa-school', 'title' => 'Pendidikan', 'description' => 'Kolaborasi dengan institusi pendidikan untuk meningkatkan mutu pembelajaran dan teknologi edukasi.'],
-                            ['icon' => 'fa-flask', 'title' => 'Sains & Teknologi', 'description' => 'Bermitra dengan industri teknologi dan lembaga riset untuk menciptakan solusi masa depan.'],
-                            ['icon' => 'fa-palette', 'title' => 'Sosial Humaniora & Seni', 'description' => 'Mengembangkan inovasi sosial dan budaya yang memperkaya kehidupan masyarakat.'],
-                            ['icon' => 'fa-heart-pulse', 'title' => 'Kesehatan & Psikologi', 'description' => 'Bekerja sama untuk meningkatkan kesejahteraan fisik dan mental melalui inovasi terapan.']
+                            ['slug' => 'pendidikan', 'icon' => 'fa-school', 'title' => 'Pendidikan', 'description' => 'Kolaborasi dengan institusi pendidikan untuk meningkatkan mutu pembelajaran dan teknologi edukasi.'],
+                            ['slug' => 'sains-teknologi', 'icon' => 'fa-flask', 'title' => 'Sains & Teknologi', 'description' => 'Bermitra dengan industri teknologi dan lembaga riset untuk menciptakan solusi masa depan.'],
+                            ['slug' => 'sosial-humaniora-seni', 'icon' => 'fa-palette', 'title' => 'Sosial Humaniora & Seni', 'description' => 'Mengembangkan inovasi sosial dan budaya yang memperkaya kehidupan masyarakat.'],
+                            ['slug' => 'kesehatan-psikologi', 'icon' => 'fa-heart-pulse', 'title' => 'Kesehatan & Psikologi', 'description' => 'Bekerja sama untuk meningkatkan kesejahteraan fisik dan mental melalui inovasi terapan.']
                         ];
                     @endphp
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         @foreach($mitraList as $mitra)
-                        <div class="group bg-cardColor rounded-card p-8 text-center shadow-card transition-all duration-300 ease-out-expo transform hover:-translate-y-2 hover:shadow-card-hover hover:bg-primary">
+                        <a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.mitra-kolaborasi') }}?kategori={{ $mitra['slug'] }}" class="group block bg-cardColor rounded-card p-8 text-center shadow-card transition-all duration-300 ease-out-expo transform hover:-translate-y-2 hover:shadow-card-hover hover:bg-primary">
                             <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:bg-white/20 group-hover:scale-110">
                                 <i class="fas {{ $mitra['icon'] }} text-4xl text-primary transition-colors duration-300 group-hover:text-white"></i>
                             </div>
                             <h3 class="text-xl font-bold text-textColor mb-3 transition-colors duration-300 group-hover:text-white">{{ $mitra['title'] }}</h3>
                             <p class="text-textSecondary leading-relaxed transition-colors duration-300 group-hover:text-gray-200">{{ $mitra['description'] }}</p>
-                        </div>
+                        </a>
                         @endforeach
                     </div>
                 </div>
