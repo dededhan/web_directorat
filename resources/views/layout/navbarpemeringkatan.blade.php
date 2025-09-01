@@ -150,7 +150,7 @@
                             <li><a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}">Kegiatan Sustainability</a></li>
                             <li><a href="{{ route('Pemeringkatan.matakuliahsustainability.matakuliahsustainability') }}">Mata Kuliah Sustainability</a></li>
                             <li><a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}">Program Sustainability UNJ</a></li>
-                            <li><a href="{{ route('Pemeringkatan.sulitest.index') }}">UNJ Sustainability Literacy Test</a></li>
+                            <li><a href="{{ route('sulitest.login') }}">UNJ Sustainability Literacy Test</a></li>
                         </ul>
                     </li>
                     

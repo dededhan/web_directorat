@@ -415,69 +415,69 @@ Route::prefix('fakultas')->name('fakultas.')
     });
 
 
-Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
-    ->middleware(['checked', 'role:admin_pemeringkatan'])
-    ->group(function () {
-        Route::get('/', function () {
-            return redirect(route('admin_pemeringkatan.dashboard'));
-        });
-        // Dashboard
-        Route::get('/dashboard', function () {
-            return view('admin_pemeringkatan.dashboard');
-        })->name('dashboard');
+// Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
+//     ->middleware(['checked', 'role:admin_pemeringkatan'])
+//     ->group(function () {
+//         Route::get('/', function () {
+//             return redirect(route('admin_pemeringkatan.dashboard'));
+//         });
+//         // Dashboard
+//         Route::get('/dashboard', function () {
+//             return view('admin_pemeringkatan.dashboard');
+//         })->name('dashboard');
 
-        // News
-        Route::resource('/news', BeritaController::class)
-            ->except(['show', 'edit', 'update']);
-        Route::get('/berita/{id}/detail', [BeritaController::class, 'getBeritaDetail'])
-            ->name('news.detail');
-        Route::put('/berita/{id}', [BeritaController::class, 'update'])
-            ->name('news.update');
-        Route::post('/berita/upload', [BeritaController::class, 'upload'])->name('news.upload');
+//         // News
+//         Route::resource('/news', BeritaController::class)
+//             ->except(['show', 'edit', 'update']);
+//         Route::get('/berita/{id}/detail', [BeritaController::class, 'getBeritaDetail'])
+//             ->name('news.detail');
+//         Route::put('/berita/{id}', [BeritaController::class, 'update'])
+//             ->name('news.update');
+//         Route::post('/berita/upload', [BeritaController::class, 'upload'])->name('news.upload');
 
-        Route::resource('/news-scroll', PengumumanController::class);
-        Route::get('/pengumuman/{id}/detail', [PengumumanController::class, 'getPengumumanDetail'])
-            ->name('news-scroll.detail');
+//         Route::resource('/news-scroll', PengumumanController::class);
+//         Route::get('/pengumuman/{id}/detail', [PengumumanController::class, 'getPengumumanDetail'])
+//             ->name('news-scroll.detail');
 
-        Route::resource('/program-layanan', ProgramLayananController::class);
-        Route::get('/program-layanan/{id}/detail', [ProgramLayananController::class, 'getProgramDetail'])
-            ->name('program-layanan.detail');
-        Route::put('program-layanan/{programLayanan}', [ProgramLayananController::class, 'update'])->name('program-layanan.update');
-        //Youtube
-        Route::resource('/youtube', YoutubeController::class)
-            ->except(['show', 'edit']);
-        Route::get('/youtube/{id}/detail', [YoutubeController::class, 'getVideoDetail'])
-            ->name('youtube.detail');
-        Route::get('/youtube/{id}/preview', [YoutubeController::class, 'preview'])
-            ->name('youtube.preview');
+//         Route::resource('/program-layanan', ProgramLayananController::class);
+//         Route::get('/program-layanan/{id}/detail', [ProgramLayananController::class, 'getProgramDetail'])
+//             ->name('program-layanan.detail');
+//         Route::put('program-layanan/{programLayanan}', [ProgramLayananController::class, 'update'])->name('program-layanan.update');
+//         //Youtube
+//         Route::resource('/youtube', YoutubeController::class)
+//             ->except(['show', 'edit']);
+//         Route::get('/youtube/{id}/detail', [YoutubeController::class, 'getVideoDetail'])
+//             ->name('youtube.detail');
+//         Route::get('/youtube/{id}/preview', [YoutubeController::class, 'preview'])
+//             ->name('youtube.preview');
 
-        // Instagram
-        Route::resource('/instagram', InstagramController::class)
-            ->except(['show', 'edit', 'update']);
+//         // Instagram
+//         Route::resource('/instagram', InstagramController::class)
+//             ->except(['show', 'edit', 'update']);
 
-        Route::get('/instagram/{id}/preview', [InstagramController::class, 'preview'])
-            ->name('instagram.preview');
+//         Route::get('/instagram/{id}/preview', [InstagramController::class, 'preview'])
+//             ->name('instagram.preview');
 
-        Route::resource('/document', DokumenController::class);
-        Route::get('document/{dokumen}/download', [DokumenController::class, 'download'])
-            ->name('document.download');
+//         Route::resource('/document', DokumenController::class);
+//         Route::get('document/{dokumen}/download', [DokumenController::class, 'download'])
+//             ->name('document.download');
 
-        //sejarah
-        Route::resource('/sejarah', SejarahContentController::class);
+//         //sejarah
+//         Route::resource('/sejarah', SejarahContentController::class);
 
-        Route::resource('/sustainability', AdminSustainabilityController::class);
+//         Route::resource('/sustainability', AdminSustainabilityController::class);
 
-        //Mata Kuliah
-        Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
-        Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
+//         //Mata Kuliah
+//         Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
+//         Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
 
-        //Alumni
-        Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
-        Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
+//         //Alumni
+//         Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
+//         Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
 
-        //responden
-        Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
-    });
+//         //responden
+//         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
+//     });
 
 Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
     ->group(function () {

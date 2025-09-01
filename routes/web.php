@@ -23,6 +23,7 @@ use App\Http\Controllers\AdminMataKuliahController;
 use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\GlobalEngagementController;
 use App\Http\Controllers\BeritasdgController;
+use App\Http\Controllers\Auth\SulitestLoginController;
 
 
 Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
@@ -172,6 +173,10 @@ Route::view('/Pemeringkatan/sulitest', 'Pemeringkatan.sulitest.index')->name('Pe
 Route::get('/survey/thank-you', function () {
     return view('qsrangking.thank_you');
 })->name('survey.thankyou');
-// Admin routes should be required at the end
+
+
+
+
 require __DIR__ . '/api.php';
 require __DIR__ . '/admin.php';
+require __DIR__ . '/pemeringkatan.php';
