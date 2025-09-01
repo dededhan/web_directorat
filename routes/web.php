@@ -117,6 +117,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')->group(fu
     Route::view('/inkubator/ekosisteminovasi', 'subdirektorat-inovasi.inkubator.ekosisteminovasi')->name('inkubator.ekosisteminovasi');
     Route::view('/inkubator/inovasiaward', 'subdirektorat-inovasi.inkubator.inovasiaward')->name('inkubator.inovasiaward');
     Route::get('/risetunj/produk_inovasi', [ProdukInovasiController::class, 'publicIndex'])->name('riset_unj.produk_inovasi.produkinovasi');
+    Route::get('/risetunj/produk_inovasi/{produk}', [ProdukInovasiController::class, 'show'])->name('riset_unj.produk_inovasi.show');
     Route::get('/landingpage', [BeritaController::class, 'landingPageInovasi'])->name('landingpage');
 });
 
@@ -165,6 +166,7 @@ Route::view('/Pemeringkatans/program/lecturer-expose', 'Pemeringkatan.program.le
 Route::get('/Pemeringkatans/program/international-faculty-staff', [InternationalFacultyStaffController::class, 'publicIndex'])->name('Pemeringkatan.program.international-faculty-staff');
 Route::view('/Pemeringkatan/program/international-student-mobility', 'Pemeringkatan.program.international-student-mobility')->name('Pemeringkatan.program.international-student-mobility');
 Route::get('/indikator', [\App\Http\Controllers\IndikatorController::class, 'showAllIndikators'])->name('Pemeringkatan.indikator.indikator');
+Route::view('/Pemeringkatan/sulitest', 'Pemeringkatan.sulitest.index')->name('Pemeringkatan.sulitest.index');
 
 
 Route::get('/survey/thank-you', function () {

@@ -231,15 +231,10 @@
 
 <body class="font-sans bg-gray-50">
 
-    {{-- Include the responsive navbar for Pemeringkatan --}}
     @include('layout.navbarpemeringkatan')
 
-    {{-- A spacer div to push content below the fixed navbar --}}
-    <div class="h-16"></div>
-
-    {{-- Header Section with Dynamic Carousel --}}
+    <div class="h-16 md:hidden"></div>
     <header class="relative h-[50vh] md:h-[60vh] lg:h-screen bg-gray-800">
-        {{-- The carousel will be injected here by JavaScript --}}
         <div class="absolute inset-0 bg-teal-900/60 flex flex-col justify-center items-start p-6 md:p-12 z-[5]">
         </div>
     </header>

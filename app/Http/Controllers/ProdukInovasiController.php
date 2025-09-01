@@ -40,7 +40,11 @@ class ProdukInovasiController extends Controller
         return view('admin.produk_inovasi', compact('produkInovasi', 'routePrefix'));
     }
 
-   
+    public function show(ProdukInovasi $produk)
+    {
+        return view('subdirektorat-inovasi.riset_unj.produk_inovasi.show', compact('produk'));
+    }
+
    public function publicIndex()
     {
         $produkInovasi = ProdukInovasi::latest()->get();
@@ -55,6 +59,7 @@ class ProdukInovasiController extends Controller
 
         // 3. Tambahkan 'video' ke dalam compact()
         return view('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi', compact('produkInovasi', 'beritaInovasi', 'video'));
+
     }
 
    

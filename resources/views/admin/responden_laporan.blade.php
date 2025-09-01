@@ -29,7 +29,8 @@
                 </div>
                 <div>
                     <label for="category-filter" class="block text-sm font-medium text-gray-600">Kategori Narahubung</label>
-                    <select id="category-filter" name="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <select id="category-filter" name="category"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         <option value="">Semua Kategori</option>
                         <option value="academic">Academic</option>
                         <option value="employer">Employer</option>
@@ -37,7 +38,8 @@
                 </div>
                 <div>
                     <label for="faculty-selector" class="block text-sm font-medium text-gray-600">Fakultas</label>
-                    <select id="faculty-selector" name="fakultas" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <select id="faculty-selector" name="fakultas"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         <option value="semua">Semua Fakultas</option>
                         @foreach ($faculties as $faculty)
                             <option value="{{ $faculty }}">{{ strtoupper($faculty) }}</option>
@@ -46,7 +48,8 @@
                 </div>
                 <div>
                     <label for="data-source-filter" class="block text-sm font-medium text-gray-600">Sumber Data</label>
-                    <select id="data-source-filter" name="data_source" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <select id="data-source-filter" name="data_source"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         <option value="non_admin">Fakultas & Prodi</option>
                         <option value="admin_only">Hanya Admin Direktorat</option>
                         <option value="all">Semua Sumber</option>
@@ -76,7 +79,7 @@
                 <div id="prodiChartContainer" class="h-80">
                     <canvas id="prodiChart"></canvas>
                     <p id="prodiChartPlaceholder" class="text-center text-gray-500 flex items-center justify-center h-full">
-                        Loading...
+                        Memuat data...
                     </p>
                 </div>
             </div>
@@ -102,16 +105,34 @@
 
     <style>
         @media print {
-            body { background-color: white !important; }
-            .p-4, .p-6 { padding: 0 !important; }
-            .shadow-lg { box-shadow: none !important; border: 1px solid #e2e8f0; }
-            .print\:hidden { display: none !important; }
-            .bg-white { page-break-inside: avoid; }
+            body {
+                background-color: white !important;
+            }
+
+            .p-4,
+            .p-6 {
+                padding: 0 !important;
+            }
+
+            .shadow-lg {
+                box-shadow: none !important;
+                border: 1px solid #e2e8f0;
+            }
+
+            .print\:hidden {
+                display: none !important;
+            }
+
+            .bg-white {
+                page-break-inside: avoid;
+            }
         }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -135,7 +156,7 @@
                 selectedFaculty: document.getElementById('faculty-selector').value,
                 dataSource: document.getElementById('data-source-filter').value,
             });
-            
+
             const fetchAndRenderCharts = () => {
                 const filters = getCurrentFilters();
                 fetchSummaryData(filters);
@@ -148,7 +169,10 @@
                 if (filters.endDate) params.append('end_date', filters.endDate);
                 if (filters.category) params.append('category', filters.category);
                 if (filters.dataSource) params.append('data_source', filters.dataSource);
-                
+                if (filters.selectedFaculty && filters.selectedFaculty !== 'semua') {
+                    params.append('fakultas', filters.selectedFaculty);
+                }
+
                 axios.get(`{{ route('api.responden.chartSummary') }}?${params.toString()}`)
                     .then(response => {
                         const data = response.data;
@@ -157,7 +181,7 @@
                     })
                     .catch(handleChartError);
             };
-            
+
             const renderFacultyChart = (data) => {
                 destroyCharts(['faculty']);
                 const facultyCtx = document.getElementById('facultyChart').getContext('2d');
@@ -165,7 +189,6 @@
                 const labels = Object.keys(data.byFaculty);
                 const dataValues = Object.values(data.byFaculty);
                 const maxValue = dataValues.length > 0 ? Math.max(...dataValues) : 0;
-                //ini kgk keliatan kalo max
                 const yAxisMax = maxValue < 10 ? maxValue + 2 : Math.ceil(maxValue * 1.1);
 
                 charts.faculty = new Chart(facultyCtx, {
@@ -175,26 +198,33 @@
                         datasets: [{
                             label: 'Jumlah Responden',
                             data: dataValues,
-                            backgroundColor: labels.map(label => facultyColors[label] || '#A5B4FC'),
+                            backgroundColor: labels.map(label => facultyColors[label] ||
+                                '#A5B4FC'),
                         }]
                     },
-                    options: { 
-                        scales: { 
-                            y: { 
-                                beginAtZero: true, 
-                                ticks: { precision: 0 },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                },
                                 max: yAxisMax
-                            } 
-                        }, 
-                        responsive: true, 
+                            }
+                        },
+                        responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { display: false },
+                            legend: {
+                                display: false
+                            },
                             datalabels: {
                                 anchor: 'end',
                                 align: 'top',
                                 color: '#374151',
-                                font: { weight: 'bold' }
+                                font: {
+                                    weight: 'bold'
+                                }
                             }
                         }
                     }
@@ -207,29 +237,65 @@
                 charts.category = new Chart(categoryCtx, {
                     type: 'pie',
                     data: {
-                        labels: Object.keys(data.byCategory).map(l => l.charAt(0).toUpperCase() + l.slice(1)),
+                        labels: Object.keys(data.byCategory).map(l => l.charAt(0).toUpperCase() + l
+                            .slice(1)),
                         datasets: [{
                             data: Object.values(data.byCategory),
-                            backgroundColor: ['rgba(37, 99, 235, 0.7)', 'rgba(239, 68, 68, 0.7)', 'rgba(245, 158, 11, 0.7)'],
+                            backgroundColor: ['#3B82F6', '#EF4444', '#F59E0B'],
                         }]
                     },
-                    options: { responsive: true, maintainAspectRatio: false }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                         plugins: {
+                            datalabels: {
+                                 formatter: (value, ctx) => {
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(data => {
+                                        sum += data;
+                                    });
+                                    let percentage = (value*100 / sum).toFixed(2)+"%";
+                                    return `${value} (${percentage})`;
+                                },
+                                color: '#fff',
+                            }
+                        }
+                    }
                 });
 
                 const statusCtx = document.getElementById('statusChart').getContext('2d');
                 charts.status = new Chart(statusCtx, {
                     type: 'doughnut',
                     data: {
-                        labels: Object.keys(data.byStatus).map(l => l.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())),
+                        labels: Object.keys(data.byStatus).map(l => l.replace(/_/g, ' ').replace(
+                            /\b\w/g, c => c.toUpperCase())),
                         datasets: [{
                             data: Object.values(data.byStatus),
                             backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444'],
                         }]
                     },
-                    options: { responsive: true, maintainAspectRatio: false }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                             datalabels: {
+                                formatter: (value, ctx) => {
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(data => {
+                                        sum += data;
+                                    });
+                                    let percentage = (value*100 / sum).toFixed(2)+"%";
+                                    return `${value} (${percentage})`;
+                                },
+                                color: '#fff',
+                            }
+                        }
+                    }
                 });
             };
-            
+
             const fetchProdiData = (filters) => {
                 document.getElementById('prodiChart').style.display = 'block';
                 document.getElementById('prodiChartPlaceholder').style.display = 'none';
@@ -240,23 +306,22 @@
                 if (filters.endDate) params.append('end_date', filters.endDate);
                 if (filters.category) params.append('category', filters.category);
                 if (filters.dataSource) params.append('data_source', filters.dataSource);
-
+                
                 axios.get(`{{ route('api.responden.chartProdi') }}?${params.toString()}`)
                     .then(response => {
                         destroyCharts(['prodi']);
                         const prodiCtx = document.getElementById('prodiChart').getContext('2d');
-                        
+
                         const prodiChartTitle = document.getElementById('prodi-chart-title');
                         let chartLabel = '';
-                        if(filters.selectedFaculty === 'semua' || filters.selectedFaculty === ''){
-                             prodiChartTitle.textContent = 'Jumlah Data per Akun Fakultas';
-                             chartLabel = 'Jumlah Input Fakultas';
+                        if (filters.selectedFaculty === 'semua' || filters.selectedFaculty === '') {
+                            prodiChartTitle.textContent = 'Jumlah Data per Akun Fakultas';
+                            chartLabel = 'Jumlah Input Fakultas';
                         } else {
-                             prodiChartTitle.textContent = `Jumlah Data Responden Fakultas per Prodi`;
-                             chartLabel = `Responden di ${filters.selectedFaculty.toUpperCase()}`;
+                            prodiChartTitle.textContent = `Jumlah Data Responden Fakultas per Prodi (${filters.selectedFaculty.toUpperCase()})`;
+                            chartLabel = `Responden`;
                         }
 
-                        //ini kgk keliatan kalo max
                         const dataValues = Object.values(response.data);
                         const maxValue = dataValues.length > 0 ? Math.max(...dataValues) : 0;
                         const xAxisMax = maxValue < 10 ? maxValue + 2 : Math.ceil(maxValue * 1.1);
@@ -267,28 +332,34 @@
                                 labels: Object.keys(response.data),
                                 datasets: [{
                                     label: chartLabel,
-                                    data: Object.values(response.data),
+                                    data: dataValues,
                                     backgroundColor: 'rgba(217, 119, 6, 0.7)',
                                 }]
                             },
-                            options: { 
-                                indexAxis: 'y', 
-                                 scales: { 
-                                    x: { 
-                                        beginAtZero: true, 
-                                        ticks: { precision: 0 },
-                                        max: xAxisMax 
-                                    } 
-                                }, 
-                                responsive: true, 
+                            options: {
+                                indexAxis: 'y',
+                                scales: {
+                                    x: {
+                                        beginAtZero: true,
+                                        ticks: {
+                                            precision: 0
+                                        },
+                                        max: xAxisMax
+                                    }
+                                },
+                                responsive: true,
                                 maintainAspectRatio: false,
                                 plugins: {
-                                    legend: { display: false },
+                                    legend: {
+                                        display: false
+                                    },
                                     datalabels: {
                                         anchor: 'end',
                                         align: 'right',
                                         color: '#374151',
-                                        font: { weight: 'bold' },
+                                        font: {
+                                            weight: 'bold'
+                                        },
                                         formatter: (value) => value > 0 ? value : ''
                                     }
                                 }
@@ -303,11 +374,13 @@
                 alert('Gagal memuat data laporan. Cek console untuk detail.');
             };
 
-            const allFilters = ['start_date', 'end_date', 'category-filter', 'faculty-selector', 'data-source-filter'];
+            const allFilters = ['start_date', 'end_date', 'category-filter', 'faculty-selector',
+                'data-source-filter'
+            ];
             allFilters.forEach(id => {
                 document.getElementById(id).addEventListener('change', fetchAndRenderCharts);
             });
-            
+
             document.getElementById('reset-filter-button').addEventListener('click', () => {
                 document.getElementById('start_date').value = '';
                 document.getElementById('end_date').value = '';
@@ -316,7 +389,7 @@
                 document.getElementById('data-source-filter').value = 'non_admin';
                 fetchAndRenderCharts();
             });
-            
+
             document.getElementById('print-button').addEventListener('click', () => window.print());
 
             fetchAndRenderCharts();
