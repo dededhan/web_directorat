@@ -26,7 +26,7 @@ return new class extends Migration
             'mahasiswa',
             'validator',
             'registered_user',
-            'sulitest_user' // <-- Add the new value here
+            'sulitest_user' 
         ])->change();
     });
 }
