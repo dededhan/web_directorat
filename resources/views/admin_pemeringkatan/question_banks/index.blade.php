@@ -29,16 +29,10 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
-                            @php
-                                $dummyBanks = [
-                                    (object)['id' => 1, 'name' => 'Soal Logika Penalaran 2024', 'questions_count' => 50, 'created_at' => now()->subDays(5)],
-                                    (object)['id' => 2, 'name' => 'Soal Pengetahuan Umum Batch 1', 'questions_count' => 120, 'created_at' => now()->subDays(10)],
-                                ];
-                            @endphp
-                            @forelse($dummyBanks as $bank)
+                            @forelse($questionBanks as $bank)
                             <tr>
                                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $bank->name }}</td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $bank->questions_count }}</td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $bank->questions_count }} Soal</td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $bank->created_at->format('d M Y') }}</td>
                                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                     <a href="{{ route('admin_pemeringkatan.question_banks.show', $bank->id) }}" class="text-teal-600 hover:text-teal-900">Kelola<span class="sr-only">, {{ $bank->name }}</span></a>
@@ -47,7 +41,7 @@
                             @empty
                             <tr>
                                 <td colspan="4" class="text-center py-10 text-sm text-gray-500">
-                                    <i class="fas fa-box-open fa-2x mb-2"></i>
+                                    <i class="fas fa-box-open fa-2x mb-2 text-gray-400"></i>
                                     <p>Belum ada bank soal yang dibuat.</p>
                                 </td>
                             </tr>
@@ -59,33 +53,31 @@
         </div>
     </div>
 
-</div>
-
-<div x-show="isModalOpen" x-transition.opacity class="fixed inset-0 bg-black bg-opacity-50 z-40" x-cloak></div>
-<div x-show="isModalOpen" x-transition
-     class="fixed inset-0 z-50 flex items-center justify-center p-4" x-cloak>
-    <div @click.away="isModalOpen = false" class="bg-white rounded-lg shadow-xl w-full max-w-lg">
-        <div class="px-6 py-4 border-b">
-            <h3 class="text-lg font-medium text-gray-900">Buat Bank Soal Baru</h3>
+    <div x-show="isModalOpen" x-transition.opacity class="fixed inset-0 bg-black bg-opacity-50 z-40" x-cloak></div>
+    <div x-show="isModalOpen" x-transition
+        class="fixed inset-0 z-50 flex items-center justify-center p-4" x-cloak>
+        <div @click.away="isModalOpen = false" class="bg-white rounded-lg shadow-xl w-full max-w-lg">
+            <div class="px-6 py-4 border-b">
+                <h3 class="text-lg font-medium text-gray-900">Buat Bank Soal Baru</h3>
+            </div>
+            <form action="{{ route('admin_pemeringkatan.question_banks.store') }}" method="POST">
+                @csrf
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700">Nama Bank Soal</label>
+                        <input type="text" name="name" id="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm" placeholder="Contoh: Soal Psikotes Batch 1">
+                    </div>
+                    <div>
+                        <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi (Opsional)</label>
+                        <textarea name="description" id="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm" placeholder="Deskripsi singkat mengenai bank soal ini..."></textarea>
+                    </div>
+                </div>
+                <div class="px-6 py-3 bg-gray-50 flex justify-end space-x-3">
+                    <button type="button" @click="isModalOpen = false" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Batal</button>
+                    <button type="submit" class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-700">Simpan</button>
+                </div>
+            </form>
         </div>
-        <form action="#" method="POST">
-            @csrf
-            <div class="p-6 space-y-4">
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700">Nama Bank Soal</label>
-                    <input type="text" name="name" id="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
-                </div>
-                <div>
-                    <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi (Opsional)</label>
-                    <textarea name="description" id="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm"></textarea>
-                </div>
-            </div>
-            <div class="px-6 py-3 bg-gray-50 flex justify-end space-x-3">
-                <button type="button" @click="isModalOpen = false" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Batal</button>
-                <button type="submit" class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-700">Simpan</button>
-            </div>
-        </form>
     </div>
 </div>
 @endsection
-

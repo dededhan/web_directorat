@@ -20,9 +20,15 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             Route::get('/', [SulitestBankController::class, 'index'])->name('index');
             Route::post('/', [SulitestBankController::class, 'store'])->name('store');
             Route::get('/{questionBank}', [SulitestBankController::class, 'show'])->name('show');
+            
+            // Routes for Questions CRUD
             Route::post('/{questionBank}/questions', [SulitestBankController::class, 'storeQuestion'])->name('questions.store');
+            Route::get('/questions/{question}/edit', [SulitestBankController::class, 'editQuestion'])->name('questions.edit');
+            Route::put('/questions/{question}', [SulitestBankController::class, 'updateQuestion'])->name('questions.update');
+            Route::delete('/questions/{question}', [SulitestBankController::class, 'destroyQuestion'])->name('questions.destroy');
         });
 });
+
 
 
 Route::prefix('sulitest')->name('sulitest.')->group(function () {
