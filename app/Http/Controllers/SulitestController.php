@@ -3,14 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class SulitestController extends Controller
 {
-    /**
-     * Memulai sesi tes baru.
-     * Ini adalah langkah backend setelah pengguna mengklik "Mulai Tes".
-     */
+    public function dashboard()
+    {
+        $user = Auth::user();
+
+
+        $exams = $user->exams()
+                      ->where('exams.end_time', '>', now())
+                      ->get();
+
+        return view('sulitest.dashboard', ['exams' => $exams]);
+    }
+
     public function startTest(Request $request, $testId)
     {
         // TODO: Ganti dengan logika database asli.
@@ -18,7 +27,7 @@ class SulitestController extends Controller
         // 2. Ambil soal secara acak dari database berdasarkan testId.
         // 3. Simpan ID soal-soal tersebut ke dalam sesi tes.
 
-        $sessionId = Str::uuid(); 
+        $sessionId = Str::uuid();
 
         $dummyQuestions = [
             ['id' => 1, 'question' => 'Apa ibu kota Indonesia?', 'options' => ['Jakarta', 'Bandung', 'Surabaya', 'Medan'], 'correct_answer' => 'Jakarta'],
@@ -28,8 +37,8 @@ class SulitestController extends Controller
 
         $testSessionData = [
             'test_id' => $testId,
-            'test_title' => 'Uji Coba Pengetahuan Umum', 
-            'duration' => 10, 
+            'test_title' => 'Uji Coba Pengetahuan Umum',
+            'duration' => 10,
             'questions' => $dummyQuestions,
             'user_answers' => [],
             'current_question_index' => 0,
@@ -47,7 +56,7 @@ class SulitestController extends Controller
         if (!$sessionData) {
             return redirect()->route('sulitest.dashboard')->with('error', 'Sesi tes tidak valid atau telah berakhir.');
         }
-        
+
         $currentQuestion = $sessionData['questions'][$sessionData['current_question_index']];
 
         return view('sulitest.test', [
@@ -72,7 +81,7 @@ class SulitestController extends Controller
         $sessionData['user_answers'][$currentQuestionIndex] = $request->input('answer');
 
         $sessionData['current_question_index']++;
-        
+
 
         $request->session()->put('test_session_' . $sessionId, $sessionData);
 
@@ -80,7 +89,6 @@ class SulitestController extends Controller
         if ($sessionData['current_question_index'] < count($sessionData['questions'])) {
             return redirect()->route('sulitest.test.show', ['session' => $sessionId]);
         } else {
-            // Jika soal sudah habis, hitung skor dan selesaikan tes
             return $this->finishTest($request, $sessionId);
         }
     }
@@ -103,7 +111,7 @@ class SulitestController extends Controller
         $finalScore = ($score / $totalQuestions) * 100;
 
         // TODO: skor akhir belum ada database
-        
+
         $request->session()->put('test_results_' . $sessionId, [
             'score' => round($finalScore),
             'correct_answers' => $score,
@@ -131,4 +139,3 @@ class SulitestController extends Controller
         ]);
     }
 }
-

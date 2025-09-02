@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\SulitestLoginController;
 use App\Http\Controllers\SulitestController;
 use App\Http\Controllers\SulitestBankController;
+use App\Http\Controllers\SulitestExamController;
+
 
 
 Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
@@ -20,12 +22,24 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             Route::get('/', [SulitestBankController::class, 'index'])->name('index');
             Route::post('/', [SulitestBankController::class, 'store'])->name('store');
             Route::get('/{questionBank}', [SulitestBankController::class, 'show'])->name('show');
-            
-            // Routes for Questions CRUD
+            // CRUD ENJENRIN
             Route::post('/{questionBank}/questions', [SulitestBankController::class, 'storeQuestion'])->name('questions.store');
             Route::get('/questions/{question}/edit', [SulitestBankController::class, 'editQuestion'])->name('questions.edit');
             Route::put('/questions/{question}', [SulitestBankController::class, 'updateQuestion'])->name('questions.update');
             Route::delete('/questions/{question}', [SulitestBankController::class, 'destroyQuestion'])->name('questions.destroy');
+        });
+
+        Route::prefix('sulitest-exams')->name('sulitest_exams.')->group(function () {
+            Route::get('/', [SulitestExamController::class, 'index'])->name('index');
+            Route::get('/create', [SulitestExamController::class, 'create'])->name('create');
+            Route::post('/', [SulitestExamController::class, 'store'])->name('store');
+            Route::get('/{exam}', [SulitestExamController::class, 'show'])->name('show');
+            Route::get('/{exam}/edit', [SulitestExamController::class, 'edit'])->name('edit');
+            Route::put('/{exam}', [SulitestExamController::class, 'update'])->name('update');
+            Route::delete('/{exam}', [SulitestExamController::class, 'destroy'])->name('destroy');
+
+            Route::post('/{exam}/assign', [SulitestExamController::class, 'assignParticipants'])->name('participants.assign');
+            Route::delete('/{exam}/remove/{user}', [SulitestExamController::class, 'removeParticipant'])->name('participants.remove');
         });
 });
 
@@ -41,25 +55,7 @@ Route::prefix('sulitest')->name('sulitest.')->group(function () {
 
     Route::middleware(['auth', 'role:sulitest_user'])->group(function () {
         
-        Route::get('/dashboard', function () {
-            $dummyTests = [
-                (object)[
-                    'id' => 1,
-                    'title' => 'Uji Coba Pengetahuan Umum',
-                    'description' => 'Tes ini mengukur pengetahuan umum Anda tentang berbagai topik.',
-                    'duration' => 10,
-                    'question_count' => 3
-                ],
-                (object)[
-                    'id' => 2,
-                    'title' => 'Tes Logika Dasar',
-                    'description' => 'Tes ini berisi soal-soal untuk menguji kemampuan logika dasar.',
-                    'duration' => 15,
-                    'question_count' => 5
-                ]
-            ];
-            return view('sulitest.dashboard', ['tests' => $dummyTests]);
-        })->name('dashboard');
+        Route::get('/dashboard', [SulitestController::class, 'dashboard'])->name('dashboard');
 
         Route::post('/logout', [SulitestLoginController::class, 'logout'])->name('logout');
 
