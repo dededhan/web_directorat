@@ -17,7 +17,7 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
         Route::get('/dashboard', function () {
             return view('admin_pemeringkatan.dashboard');
         })->name('dashboard');
-        
+
         Route::prefix('question-banks')->name('question_banks.')->group(function () {
             Route::get('/', [SulitestBankController::class, 'index'])->name('index');
             Route::post('/', [SulitestBankController::class, 'store'])->name('store');
@@ -41,7 +41,7 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             Route::post('/{exam}/assign', [SulitestExamController::class, 'assignParticipants'])->name('participants.assign');
             Route::delete('/{exam}/remove/{user}', [SulitestExamController::class, 'removeParticipant'])->name('participants.remove');
         });
-});
+    });
 
 
 
@@ -54,15 +54,13 @@ Route::prefix('sulitest')->name('sulitest.')->group(function () {
 
 
     Route::middleware(['auth', 'role:sulitest_user'])->group(function () {
-        
         Route::get('/dashboard', [SulitestController::class, 'dashboard'])->name('dashboard');
-
         Route::post('/logout', [SulitestLoginController::class, 'logout'])->name('logout');
-
-        Route::post('/test/{test}/start', [SulitestController::class, 'startTest'])->name('test.start');
-        Route::get('/test-session/{session}', [SulitestController::class, 'showTest'])->name('test.show');
+        Route::post('/test/{exam}/start', [SulitestController::class, 'startTest'])->name('test.start');
+        Route::get('/test-session/{session}/{questionNumber?}', [SulitestController::class, 'showTest'])->name('test.show');
         Route::post('/test-session/{session}/submit', [SulitestController::class, 'submitAnswer'])->name('test.submit');
+        Route::post('/test-session/{session}/autosave', [SulitestController::class, 'autosaveAnswer'])->name('test.autosave');
+
         Route::get('/results/{session}', [SulitestController::class, 'showResults'])->name('results.show');
     });
 });
-

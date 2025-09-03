@@ -2,140 +2,177 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Exam;
+use App\Models\ExamSession;
+use App\Models\ExamSessionAnswer;
+use App\Models\Question;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use App\Models\Option;
 
 class SulitestController extends Controller
 {
     public function dashboard()
     {
         $user = Auth::user();
-
-
         $exams = $user->exams()
                       ->where('exams.end_time', '>', now())
+                      ->whereDoesntHave('examSessions', function ($query) use ($user) {
+                          $query->where('user_id', $user->id)->where('status', 'completed');
+                      })
                       ->get();
 
         return view('sulitest.dashboard', ['exams' => $exams]);
     }
 
-    public function startTest(Request $request, $testId)
+    public function startTest(Request $request, Exam $exam)
     {
-        // TODO: Ganti dengan logika database asli.
-        // 1. Buat record baru di tabel 'test_sessions'.
-        // 2. Ambil soal secara acak dari database berdasarkan testId.
-        // 3. Simpan ID soal-soal tersebut ke dalam sesi tes.
+        $user = Auth::user();
 
-        $sessionId = Str::uuid();
+        $existingSession = ExamSession::where('user_id', $user->id)
+            ->where('exam_id', $exam->id)
+            ->where('status', 'ongoing')
+            ->first();
 
-        $dummyQuestions = [
-            ['id' => 1, 'question' => 'Apa ibu kota Indonesia?', 'options' => ['Jakarta', 'Bandung', 'Surabaya', 'Medan'], 'correct_answer' => 'Jakarta'],
-            ['id' => 2, 'question' => 'Siapakah presiden pertama Indonesia?', 'options' => ['Soekarno', 'Soeharto', 'Habibie', 'Gus Dur'], 'correct_answer' => 'Soekarno'],
-            ['id' => 3, 'question' => 'Berapa hasil dari 5 + 5 * 2?', 'options' => ['20', '15', '25', '10'], 'correct_answer' => '15'],
-        ];
-
-        $testSessionData = [
-            'test_id' => $testId,
-            'test_title' => 'Uji Coba Pengetahuan Umum',
-            'duration' => 10,
-            'questions' => $dummyQuestions,
-            'user_answers' => [],
-            'current_question_index' => 0,
-        ];
-
-        $request->session()->put('test_session_' . $sessionId, $testSessionData);
-        return redirect()->route('sulitest.test.show', ['session' => $sessionId]);
-    }
-
-
-    public function showTest(Request $request, $sessionId)
-    {
-        $sessionData = $request->session()->get('test_session_' . $sessionId);
-
-        if (!$sessionData) {
-            return redirect()->route('sulitest.dashboard')->with('error', 'Sesi tes tidak valid atau telah berakhir.');
+        if ($existingSession) {
+            return redirect()->route('sulitest.test.show', $existingSession->id);
         }
 
-        $currentQuestion = $sessionData['questions'][$sessionData['current_question_index']];
+        DB::beginTransaction();
+        try {
+            $questionIds = $exam->questionBank->questions()
+                ->inRandomOrder()
+                ->limit($exam->number_of_questions)
+                ->pluck('id')
+                ->toArray();
+            
+            if (count($questionIds) < $exam->number_of_questions) {
+                return redirect()->route('sulitest.dashboard')->with('error', 'Jumlah soal di bank soal tidak mencukupi.');
+            }
+
+            $now = Carbon::now();
+            $session = ExamSession::create([
+                'user_id' => $user->id,
+                'exam_id' => $exam->id,
+                'start_time' => $now,
+                'end_time' => $now->clone()->addMinutes($exam->duration),
+                'question_ids' => $questionIds,
+                'status' => 'ongoing',
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('sulitest.test.show', $session->id);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // \Log::error($e->getMessage());
+            return redirect()->route('sulitest.dashboard')->with('error', 'Gagal memulai ujian. Silakan coba lagi.');
+        }
+    }
+
+    public function showTest(Request $request, ExamSession $session, $questionNumber = 1)
+    {
+        if ($session->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak diizinkan mengakses sesi ini.');
+        }
+
+        if ($session->status !== 'ongoing' || Carbon::now()->isAfter($session->end_time)) {
+            if ($session->status === 'ongoing') {
+                $this->finishTest($session);
+            }
+            return redirect()->route('sulitest.results.show', $session->id);
+        }
+
+        $allQuestionIds = $session->question_ids;
+        $totalQuestions = count($allQuestionIds);
+
+        $questionNumber = (int)$questionNumber;
+        if ($questionNumber < 1 || $questionNumber > $totalQuestions) {
+            $questionNumber = 1;
+        }
+
+        $currentQuestionId = $allQuestionIds[$questionNumber - 1];
+        $question = Question::with('options')->find($currentQuestionId);
+
+        $userAnswers = $session->answers()->get()->keyBy('question_id');
+        $currentAnswerId = $userAnswers[$currentQuestionId]->option_id ?? null;
 
         return view('sulitest.test', [
-            'session_id' => $sessionId,
-            'test_title' => $sessionData['test_title'],
-            'duration' => $sessionData['duration'],
-            'question' => $currentQuestion,
-            'total_questions' => count($sessionData['questions']),
-            'current_question_number' => $sessionData['current_question_index'] + 1,
-        ]);
-    }
-    public function submitAnswer(Request $request, $sessionId)
-    {
-        $request->validate(['answer' => 'required']);
-        $sessionData = $request->session()->get('test_session_' . $sessionId);
-
-        if (!$sessionData) {
-            return redirect()->route('sulitest.dashboard')->with('error', 'Sesi tes tidak valid.');
-        }
-
-        $currentQuestionIndex = $sessionData['current_question_index'];
-        $sessionData['user_answers'][$currentQuestionIndex] = $request->input('answer');
-
-        $sessionData['current_question_index']++;
-
-
-        $request->session()->put('test_session_' . $sessionId, $sessionData);
-
-
-        if ($sessionData['current_question_index'] < count($sessionData['questions'])) {
-            return redirect()->route('sulitest.test.show', ['session' => $sessionId]);
-        } else {
-            return $this->finishTest($request, $sessionId);
-        }
-    }
-
-    private function finishTest(Request $request, $sessionId)
-    {
-        $sessionData = $request->session()->get('test_session_' . $sessionId);
-
-        if (!$sessionData) {
-            return redirect()->route('sulitest.dashboard')->with('error', 'Sesi tes tidak valid.');
-        }
-
-        $score = 0;
-        foreach ($sessionData['questions'] as $index => $question) {
-            if (isset($sessionData['user_answers'][$index]) && $sessionData['user_answers'][$index] === $question['correct_answer']) {
-                $score++;
-            }
-        }
-        $totalQuestions = count($sessionData['questions']);
-        $finalScore = ($score / $totalQuestions) * 100;
-
-        // TODO: skor akhir belum ada database
-
-        $request->session()->put('test_results_' . $sessionId, [
-            'score' => round($finalScore),
-            'correct_answers' => $score,
+            'examSession' => $session,
+            'question' => $question,
             'total_questions' => $totalQuestions,
-            'test_title' => $sessionData['test_title'],
+            'current_question_number' => $questionNumber,
+            'all_question_ids' => $allQuestionIds,
+            'user_answers' => $userAnswers,
+            'current_answer_id' => $currentAnswerId,
         ]);
-
-        $request->session()->forget('test_session_' . $sessionId);
-
-        return redirect()->route('sulitest.results.show', ['session' => $sessionId]);
     }
 
-    public function showResults(Request $request, $sessionId)
+    public function autosaveAnswer(Request $request, ExamSession $session)
     {
-        $results = $request->session()->get('test_results_' . $sessionId);
+        $request->validate([
+            'question_id' => 'required|exists:questions,id',
+            'option_id' => 'required|exists:options,id'
+        ]);
 
-        if (!$results) {
-            return redirect()->route('sulitest.dashboard.index')->with('error', 'Hasil tes tidak ditemukan.');
+        if ($session->user_id !== Auth::id() || $session->status !== 'ongoing' || Carbon::now()->isAfter($session->end_time)) {
+            return response()->json(['status' => 'error', 'message' => 'Sesi tidak valid.'], 403);
         }
 
-        $request->session()->forget('test_results_' . $sessionId);
+        $option = Option::find($request->option_id);
+        if ($option->question_id != $request->question_id) {
+             return response()->json(['status' => 'error', 'message' => 'Jawaban tidak cocok.'], 422);
+        }
 
-        return view('sulitest.results', [
-            'results' => $results,
+        $session->answers()->updateOrCreate(
+            ['question_id' => $request->question_id],
+            ['option_id' => $request->option_id, 'points' => $option->points]
+        );
+
+        return response()->json(['status' => 'success']);
+    }
+
+    public function submitAnswer(Request $request, ExamSession $session)
+    {
+        if ($session->user_id !== Auth::id() || $session->status !== 'ongoing') {
+            abort(403);
+        }
+
+        $this->finishTest($session);
+        return redirect()->route('sulitest.results.show', $session->id);
+    }
+
+    private function finishTest(ExamSession $session)
+    {
+        if ($session->status !== 'ongoing') {
+            return;
+        }
+
+        $totalScore = $session->answers()->sum('points');
+        
+        $session->update([
+            'status' => 'completed',
+            'score' => $totalScore
         ]);
+    }
+
+    public function showResults(Request $request, ExamSession $session)
+    {
+        if ($session->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if ($session->status === 'ongoing') {
+             return redirect()->route('sulitest.test.show', $session->id);
+        }
+
+        $totalQuestions = count($session->question_ids);
+        $correctAnswers = $session->answers()->where('points', '>', 0)->count();
+
+        return view('sulitest.results', compact('session', 'totalQuestions', 'correctAnswers'));
     }
 }
+

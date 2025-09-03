@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -43,8 +44,13 @@ class User extends Authenticatable
     public function exams(): BelongsToMany
     {
         return $this->belongsToMany(Exam::class, 'exam_user')
-                    ->withPivot('start_time', 'end_time', 'status')
-                    ->withTimestamps();
+            ->withPivot('start_time', 'end_time', 'status')
+            ->withTimestamps();
+    }
+
+    public function examSessions(): HasMany
+    {
+        return $this->hasMany(ExamSession::class);
     }
 
     public function katsinovs()
@@ -52,4 +58,3 @@ class User extends Authenticatable
         return $this->hasMany(Katsinov::class, 'user_id');
     }
 }
-

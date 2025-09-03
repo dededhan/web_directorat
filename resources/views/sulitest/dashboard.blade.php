@@ -38,7 +38,7 @@
                                         Jumlah Soal: <strong>{{ $exam->number_of_questions }} Soal</strong>
                                     </div>
                                 </div>
-                                <form action="{{ route('sulitest.test.start', $exam->id) }}" method="POST">
+                                <form action="{{ route('sulitest.test.start', $exam) }}" method="POST">
                                     @csrf
                                     <button type="submit"
                                         class="rounded-md bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
