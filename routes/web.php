@@ -24,6 +24,7 @@ use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\GlobalEngagementController;
 use App\Http\Controllers\BeritasdgController;
 use App\Http\Controllers\Auth\SulitestLoginController;
+use App\Http\Controllers\RisetController;
 
 
 Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
@@ -101,7 +102,7 @@ Route::get('/sdgscenter', function () {
 
 // Inovasi Routes
 Route::prefix('inovasi')->group(function () {
-    Route::view('/risetunj', 'Inovasi.riset_unj.risetunj')->name('riset.unj');
+    Route::get('/riset-unj', [RisetController::class, 'index'])->name('riset.unj');
     Route::view('/katsinov/forminformasidasar', 'inovasi.katsinov.forminformasidasar')->name('katsinov.informasidasar');
     Route::view('/katsinov/formberitaacara', 'inovasi.katsinov.formberitaacara')->name('katsinov.formberitaacara');
     Route::view('/katsinov/formjudul', 'inovasi.katsinov.formjudul')->name('katsinov.formjudul');
@@ -120,6 +121,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')->group(fu
     Route::get('/risetunj/produk_inovasi', [ProdukInovasiController::class, 'publicIndex'])->name('riset_unj.produk_inovasi.produkinovasi');
     Route::get('/risetunj/produk_inovasi/{produk}', [ProdukInovasiController::class, 'show'])->name('riset_unj.produk_inovasi.show');
     Route::get('/landingpage', [BeritaController::class, 'landingPageInovasi'])->name('landingpage');
+    Route::get('/subdirektorat-inovasi/riset-unj', [RisetController::class, 'index'])->name('riset.unj');
 });
 
 
