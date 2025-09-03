@@ -29,6 +29,9 @@ use App\Http\Controllers\RankingController;
 use App\Http\Controllers\GlobalEngagementController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VideoinovasiController;
+use App\Http\Controllers\MitraKolaborasiController;
+
+
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\GalleryController;
@@ -37,6 +40,7 @@ use App\Http\Controllers\InternationalFacultyStaffActivitiesController;
 // Ganti route yang ada dengan:
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\IndikatorController;
+
 
 
 
@@ -165,22 +169,35 @@ Route::prefix('admin')->name('admin.')
         Route::get('/mahasiswainternational/{id}/detail', [InternationalStudentController::class, 'getStudentDetail'])
             ->name('mahasiswainternational.detail');
 
-        Route::resource('/dataakreditasi', AkreditasiController::class);
+            Route::resource('/dataakreditasi', AkreditasiController::class);
         Route::get('/dataakreditasi/{id}/detail', [AkreditasiController::class, 'getAkreditasiDetail'])
             ->name('dataakreditasi.detail');
-
-        Route::resource('/internationallecture', DosenInternasionalController::class);
-        Route::get('/internationallecture/{id}/detail', [DosenInternasionalController::class, 'getDosenDetail'])
+            
+            Route::resource('/internationallecture', DosenInternasionalController::class);
+            Route::get('/internationallecture/{id}/detail', [DosenInternasionalController::class, 'getDosenDetail'])
             ->name('internationallecture.detail');
-
-        //ranking
-        Route::resource('/ranking', RankingController::class)
+            
+            //ranking
+            Route::resource('/ranking', RankingController::class)
             ->except(['show']);
-        Route::get('/ranking/{ranking}/edit', [RankingController::class, 'edit'])->name('ranking.edit'); // Explicit edit route
-        Route::get('/ranking/{id}/detail', [RankingController::class, 'getRankingDetail'])
+            Route::get('/ranking/{ranking}/edit', [RankingController::class, 'edit'])->name('ranking.edit'); // Explicit edit route
+            Route::get('/ranking/{id}/detail', [RankingController::class, 'getRankingDetail'])
             ->name('ranking.detail'); // This can be kept if used elsewhere, or removed if only for the old modal
-        Route::post('/ranking/upload', [RankingController::class, 'upload'])
+            Route::post('/ranking/upload', [RankingController::class, 'upload'])
             ->name('ranking.upload');
+            
+            //inovasi
+            Route::get('/produk_inovasi', [ProdukInovasiController::class, 'index'])->name('produk_inovasi');
+            Route::post('/produk_inovasi', [ProdukInovasiController::class, 'store'])->name('produk_inovasi.store');
+            Route::get('/produk_inovasi/{id}/detail', [ProdukInovasiController::class, 'getProdukDetail'])->name('produk_inovasi.detail');
+            Route::put('/produk_inovasi/{id}', [ProdukInovasiController::class, 'update'])->name('produk_inovasi.update');
+            Route::delete('/produk_inovasi/{id}', [ProdukInovasiController::class, 'destroy'])->name('produk_inovasi.destroy');
+            Route::post('/produk_inovasi/upload', [ProdukInovasiController::class, 'upload'])->name('produk_inovasi.upload');
+            Route::get('/video', [VideoinovasiController::class, 'index'])->name('video.index');
+            Route::post('/video', [VideoinovasiController::class, 'storeOrUpdate'])->name('video.storeOrUpdate');
+            Route::delete('/video', [VideoinovasiController::class, 'destroy'])->name('video.destroy');
+            Route::resource('/mitra-kolaborasi', MitraKolaborasiController::class);
+
 
 
         Route::prefix('global')->name('global.')->middleware(['checked', 'role:admin_direktorat'])->group(function () {
@@ -221,16 +238,6 @@ Route::prefix('admin')->name('admin.')
 
 
 
-        //inovasi
-        Route::get('/produk_inovasi', [ProdukInovasiController::class, 'index'])->name('produk_inovasi');
-        Route::post('/produk_inovasi', [ProdukInovasiController::class, 'store'])->name('produk_inovasi.store');
-        Route::get('/produk_inovasi/{id}/detail', [ProdukInovasiController::class, 'getProdukDetail'])->name('produk_inovasi.detail');
-        Route::put('/produk_inovasi/{id}', [ProdukInovasiController::class, 'update'])->name('produk_inovasi.update');
-        Route::delete('/produk_inovasi/{id}', [ProdukInovasiController::class, 'destroy'])->name('produk_inovasi.destroy');
-        Route::post('/produk_inovasi/upload', [ProdukInovasiController::class, 'upload'])->name('produk_inovasi.upload');
-        Route::get('/video', [VideoinovasiController::class, 'index'])->name('video.index');
-        Route::post('/video', [VideoinovasiController::class, 'storeOrUpdate'])->name('video.storeOrUpdate');
-        Route::delete('/video', [VideoinovasiController::class, 'destroy'])->name('video.destroy');
 
 
         Route::prefix('katsinov')->name('katsinov.')
