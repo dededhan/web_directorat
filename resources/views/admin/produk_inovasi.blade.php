@@ -34,91 +34,103 @@
             </div>
 
             <form method="POST" action="{{ route($routePrefix . '.produk_inovasi.store') }}" enctype="multipart/form-data">
-                @csrf
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="nama_produk" class="form-label">Nama Produk</label>
-                        <input type="text" class="form-control @error('nama_produk') is-invalid @enderror"
-                            name="nama_produk" id="nama_produk" value="{{ old('nama_produk') }}">
-                        @error('nama_produk')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <div class="form-text text-muted">Masukkan nama produk inovasi</div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="inovator" class="form-label">Inovator</label>
-                        <input type="text" class="form-control @error('inovator') is-invalid @enderror" name="inovator"
-                            id="inovator" value="{{ old('inovator') }}">
-                        @error('inovator')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <div class="form-text text-muted">Masukkan nama inovator/penemu</div>
-                    </div>
-                </div>
+               @csrf
+            {{-- Nama Produk --}}
+            <div class="mb-3">
+                <label for="nama_produk" class="form-label">Nama Produk</label>
+                <input type="text" class="form-control @error('nama_produk') is-invalid @enderror" name="nama_produk" id="nama_produk" value="{{ old('nama_produk') }}" required>
+                @error('nama_produk')<div class="invalid-feedback">{{ $message }}</div>@enderror
+            </div>
 
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <label for="nomor_paten" class="form-label">Nomor Paten</label>
-                        <input type="text" class="form-control @error('nomor_paten') is-invalid @enderror"
-                            name="nomor_paten" id="nomor_paten" value="{{ old('nomor_paten') }}">
-                        @error('nomor_paten')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <div class="form-text text-muted">Masukkan nomor paten (opsional)</div>
-                    </div>
+            {{-- Inovator (Multiple) --}}
+            <div id="inovator-container" class="mb-3">
+                <label class="form-label">Inovator</label>
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control @error('inovator.0') is-invalid @enderror" name="inovator[]" required>
+                    <button type="button" class="btn btn-success" id="add-inovator-btn">+</button>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="kategori" class="form-label">Kategori</label>
-                        <select class="form-control @error('kategori') is-invalid @enderror" name="kategori" id="kategori">
-                            <option value="HKI" {{ old('kategori') == 'HKI' ? 'selected' : '' }}>HKI</option>
-                            <option value="PATEN" {{ old('kategori') == 'PATEN' ? 'selected' : '' }}>PATEN</option>
-                        </select>
-                        @error('kategori')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <div class="form-text text-muted">Pilih kategori produk</div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="link_ebook" class="form-label">Link E-Book</label>
-                        <input type="url" class="form-control @error('link_ebook') is-invalid @enderror"
-                            name="link_ebook" id="link_ebook" value="{{ old('link_ebook') }}">
-                        @error('link_ebook')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <div class="form-text text-muted">Masukkan URL e-book (opsional)</div>
-                    </div>
+                @error('inovator.*')<div class="text-danger mt-1">{{ $message }}</div>@enderror
+            </div>
+            
+            <div class="row">
+                {{-- Nomor Paten --}}
+                <div class="col-md-6 mb-3">
+                    <label for="nomor_paten" class="form-label">Nomor Paten (Opsional)</label>
+                    <input type="text" class="form-control @error('nomor_paten') is-invalid @enderror" name="nomor_paten" id="nomor_paten" value="{{ old('nomor_paten') }}">
+                    @error('nomor_paten')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
+                {{-- Kategori --}}
+                <div class="col-md-6 mb-3">
+                    <label for="kategori" class="form-label">Kategori</label>
+                    <select class="form-control @error('kategori') is-invalid @enderror" name="kategori" id="kategori" required>
+                        <option value="HKI" {{ old('kategori') == 'HKI' ? 'selected' : '' }}>HKI</option>
+                        <option value="PATEN" {{ old('kategori') == 'PATEN' ? 'selected' : '' }}>PATEN</option>
+                    </select>
+                    @error('kategori')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+            </div>
 
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <label for="deskripsi" class="form-label">Deskripsi Produk</label>
-                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" rows="8">{{ old('deskripsi') }}</textarea>
-                        @error('deskripsi')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <div class="form-text text-muted">Tuliskan deskripsi produk secara lengkap dan detail</div>
-                    </div>
-                </div>
+            {{-- Deskripsi --}}
+            <div class="mb-3">
+                <label for="deskripsi" class="form-label">Deskripsi Produk</label>
+                <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" rows="8">{{ old('deskripsi') }}</textarea>
+                @error('deskripsi')<div class="invalid-feedback">{{ $message }}</div>@enderror
+            </div>
 
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <label for="gambar" class="form-label">Gambar Produk</label>
-                        <input type="file" class="form-control @error('gambar') is-invalid @enderror" name="gambar"
-                            id="gambar" accept="image/*">
-                        @error('gambar')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <div class="form-text text-muted">Upload gambar produk (format: JPG, PNG, atau JPEG, max 2MB)
-                        </div>
-                    </div>
+            <div class="row">
+                {{-- Gambar Produk --}}
+                <div class="col-md-6 mb-3">
+                    <label for="gambar" class="form-label">Gambar Produk (Thumbnail)</label>
+                    <input type="file" class="form-control @error('gambar') is-invalid @enderror" name="gambar" id="gambar" accept="image/*" required>
+                    @error('gambar')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
+                {{-- Foto Poster --}}
+                <div class="col-md-6 mb-3">
+                    <label for="foto_poster" class="form-label">Foto Poster (Opsional)</label>
+                    <input type="file" class="form-control @error('foto_poster') is-invalid @enderror" name="foto_poster" id="foto_poster" accept="image/*">
+                    @error('foto_poster')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+            </div>
+             <div class="row">
+                {{-- Link Ebook --}}
+                 <div class="col-md-12 mb-3">
+                    <label for="link_ebook" class="form-label">Link E-Book (Opsional)</label>
+                    <input type="url" class="form-control @error('link_ebook') is-invalid @enderror" name="link_ebook" id="link_ebook" value="{{ old('link_ebook') }}">
+                    @error('link_ebook')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+            </div>
 
-                <div class="mb-3 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary">Simpan Produk</button>
-                </div>
-            </form>
-        </div>
+            {{-- Video Section --}}
+            <div class="mb-3">
+                <label class="form-label">Video (Opsional)</label>
+                <select class="form-control" name="video_type" id="video_type">
+                    <option value="">-- Pilih Tipe Video --</option>
+                    <option value="youtube" {{ old('video_type') == 'youtube' ? 'selected' : '' }}>YouTube</option>
+                    <option value="mp4" {{ old('video_type') == 'mp4' ? 'selected' : '' }}>Upload MP4</option>
+                </select>
+            </div>
+            
+            {{-- YouTube Input --}}
+            <div id="youtube-input" class="mb-3" style="display:{{ old('video_type') == 'youtube' ? 'block' : 'none' }};">
+                <label for="video_path_youtube" class="form-label">Link Video YouTube</label>
+                <input type="url" class="form-control @error('video_path_youtube') is-invalid @enderror" name="video_path_youtube" value="{{ old('video_path_youtube') }}">
+                 @error('video_path_youtube')<div class="invalid-feedback">{{ $message }}</div>@enderror
+            </div>
+
+            {{-- MP4 Input --}}
+            <div id="mp4-input" class="mb-3" style="display:{{ old('video_type') == 'mp4' ? 'block' : 'none' }};">
+                <label for="video_path_mp4" class="form-label">Upload File MP4</label>
+                <input type="file" class="form-control @error('video_path_mp4') is-invalid @enderror" name="video_path_mp4" accept="video/mp4">
+                 @error('video_path_mp4')<div class="invalid-feedback">{{ $message }}</div>@enderror
+            </div>
+
+
+            <div class="mb-3 d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">Simpan Produk</button>
+            </div>
+        </form>
+    </div>
+</div>
 
         <div class="table-data mt-4">
             <div class="order">
@@ -128,61 +140,49 @@
 
                 <div class="table-responsive">
                     <table class="table table-striped" id="produk-table">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama Produk</th>
-                                <th>Inovator</th>
-                                <th>Nomor Paten</th>
-                                <th>Kategori</th>   
-                                <th>Link E-Book</th>
-                                <th>Deskripsi</th>
-                                <th>Gambar</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($produkInovasi as $index => $produk)
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $produk->nama_produk }}</td>
-                                    <td>{{ $produk->inovator }}</td>
-                                    <td>{{ $produk->nomor_paten ?? '-' }}</td>
-                                    <td>{{ $produk->kategori ?? '-' }}</td>
-                                    <td>
-                                        @if ($produk->link_ebook)
-                                            <a href="{{ $produk->link_ebook }}" target="_blank" class="btn btn-sm btn-primary">Lihat E-Book</a>
-                                        @else
-                                            -
-                                        @endif
-                                    </td>
-                                    <td>{{ Str::limit(strip_tags($produk->deskripsi), 50) }}</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-info view-image"
-                                            data-image="{{ asset('storage/' . $produk->gambar) }}"
-                                            data-title="{{ $produk->nama_produk }}">
-                                            Lihat Gambar
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-warning edit-produk"
-                                                data-id="{{ $produk->id }}">
-                                                Edit
-                                            </button>
-                                            <form method="POST"
-                                                action="{{ route($routePrefix . '.produk_inovasi.destroy', $produk->id) }}"
-                                                class="delete-form">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button"
-                                                    class="btn btn-sm btn-danger delete-btn">Delete</button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
+                       <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Produk</th>
+                        <th>Inovator</th>
+                        <th>Kategori</th>
+                        <th>Gambar</th>
+                        <th>Poster</th>
+                        <th>Video</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($produkInovasi as $index => $produk)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $produk->nama_produk }}</td>
+                       <td>{{ $produk->inovator }}</td> 
+                        <td>{{ $produk->kategori }}</td>
+                        <td><button class="btn btn-sm btn-info view-image" data-image="{{ asset('storage/' . $produk->gambar) }}">Lihat</button></td>
+                        <td>
+                            @if($produk->foto_poster)
+                            <button class="btn btn-sm btn-info view-image" data-image="{{ asset('storage/' . $produk->foto_poster) }}">Lihat</button>
+                            @else - @endif
+                        </td>
+                         <td>
+                            @if($produk->video_path)
+                            <button class="btn btn-sm btn-info">Lihat</button>
+                             @else - @endif
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-warning edit-produk" data-id="{{ $produk->id }}">Edit</button>
+                                <form method="POST" action="{{ route($routePrefix . '.produk_inovasi.destroy', $produk->id) }}" class="delete-form">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn btn-sm btn-danger delete-btn">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
                     </table>
                 </div>
             </div>
@@ -403,6 +403,41 @@
                     });
                 });
             }
+            // Menambah Inovator
+    document.getElementById('add-inovator-btn').addEventListener('click', function() {
+        const container = document.getElementById('inovator-container');
+        const newInputGroup = document.createElement('div');
+        newInputGroup.className = 'input-group mb-2';
+        newInputGroup.innerHTML = `
+            <input type="text" class="form-control" name="inovator[]" required>
+            <button type="button" class="btn btn-danger remove-inovator-btn">-</button>
+        `;
+        container.appendChild(newInputGroup);
+    });
+
+    // Menghapus Inovator
+    document.getElementById('inovator-container').addEventListener('click', function(e) {
+        if (e.target && e.target.classList.contains('remove-inovator-btn')) {
+            e.target.closest('.input-group').remove();
+        }
+    });
+
+    // Toggle Video Input
+    document.getElementById('video_type').addEventListener('change', function() {
+        const youtubeInput = document.getElementById('youtube-input');
+        const mp4Input = document.getElementById('mp4-input');
+        if (this.value === 'youtube') {
+            youtubeInput.style.display = 'block';
+            mp4Input.style.display = 'none';
+        } else if (this.value === 'mp4') {
+            youtubeInput.style.display = 'none';
+            mp4Input.style.display = 'block';
+        } else {
+            youtubeInput.style.display = 'none';
+            mp4Input.style.display = 'none';
+        }
+    });
+
 
             // Handle delete button clicks
             document.querySelectorAll('.delete-btn').forEach(button => {

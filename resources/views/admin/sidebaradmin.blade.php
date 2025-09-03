@@ -244,7 +244,12 @@
                         <span class="text">Produk Inovasi</span>
                     </a>
                 </li>
-                
+              <li class="{{ request()->routeIs('admin.mitra-kolaborasi.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.mitra-kolaborasi.index') }}">
+                        <i class='bx bxs-group'></i>
+                        <span class="text">Mitra Kolaborasi</span>
+                    </a>
+                </li>
             </ul>
         </div>
 
