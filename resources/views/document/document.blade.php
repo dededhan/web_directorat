@@ -39,7 +39,6 @@
     <button class="navbar-toggle" id="navbarToggle">
         <i class="fas fa-bars"></i>
     </button>
-    <!-- Search Overlay -->
     <div class="search-overlay" id="searchOverlay">
         <button class="close-search" id="closeSearch">&times;</button>
         <div class="search-box">
@@ -50,9 +49,7 @@
         </div>
     </div>
 
-    <!-- Content Wrapper -->
     <div class="content-wrapper">
-        <!-- Document Repository Section -->
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Repositori Dokumen</h2>
@@ -65,24 +62,24 @@
                     <input type="text" class="search-input" id="searchInput" placeholder="Search for documents..."
                         oninput="searchDocuments()">
                 </div>
-                <div class="document-categories">
-                    <button class="category-btn active" data-category="all">
+
+                <div class="document-categories grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:gap-4">
+                    <button class="category-btn active w-full sm:w-auto" data-category="all">
                         <i class="fas fa-folder"></i> Semua Dokumen
                     </button>
-                    <button class="category-btn" data-category="umum">
+                    <button class="category-btn w-full sm:w-auto" data-category="umum">
                         <i class="fas fa-file-pdf"></i> Umum
                     </button>
-                    <button class="category-btn" data-category="pemeringkatan">
+                    <button class="category-btn w-full sm:w-auto" data-category="pemeringkatan">
                         <i class="fas fa-file-pdf"></i> Pemeringkatan
                     </button>
-                    <button class="category-btn" data-category="inovasi">
+                    <button class="category-btn w-full sm:w-auto" data-category="inovasi">
                         <i class="fas fa-file-pdf"></i> Inovasi
                     </button>
                 </div>
 
                 <div id="documentGrid" class="document-grid">
-                    <!-- Documents will be dynamically populated here -->
-                </div>
+                    </div>
             </div>
         </div>
     </div>

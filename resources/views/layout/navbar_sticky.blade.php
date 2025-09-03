@@ -1,321 +1,244 @@
 @include('layout.loginpopup')
-<!-- Desktop Navbar - Sticky -->
-<nav class="navbar fixed top-0 left-0 w-full z-50 bg-[#277177] shadow-md hidden md:block">
-    <div class="container mx-auto flex items-center py-2 px-6">
-        <!-- Existing navbar content remains the same -->
-        <a href="{{ route('home') }}" class="flex items-center">
-            <img alt="University logo" class="h-10 w-10"
-                src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
-            <div class="ml-4">
-                <h1 class="text-2xl font-bold  tracking-wide text-white">Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan</h1>
-            </div>
-        </a>
-        
-        <!-- Existing navigation items -->
-        <ul class="flex space-x-6 ml-auto">
-            <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400 text-sm">Beranda</a></li>
 
-            <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400 text-sm">Profil</a>
-                <ul
-                    class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('pimpinan.pimpinan') }}" class="hover:text-yellow-400">Pimpinan Direktorat</a></li>
-                    <li><a href="{{ route('profile.profile') }}" class="text-black hover:text-yellow-400 text-sm">Tugas Pokok dan Fungsi</a></li>
-                    <li><a href="{{ route('strukturorganisasi') }}" class="text-black hover:text-yellow-400 text-sm">Struktur Organisasi</a></li>
+{{-- Navbar Desktop --}}
+<nav class="navbar hidden md:block fixed top-0 w-full z-50 bg-[#186862] shadow-lg transition-all duration-300">
+    <div class="container mx-auto flex justify-between items-center py-4 px-6">
+        <div class="flex items-center">
+            <a href="{{ route('home') }}" class="flex items-center">
+                <img alt="University logo" class="h-12 w-12" 
+                    src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png"/>
+                <img alt="DITISIP Logo" class="h-12 w-auto mx-2" 
+                    src="{{ asset('images/logoditisip.png') }}"/>
+                <div>
+                    <h1 class="text-white text-lg font-bold uppercase leading-tight">
+                        Direktorat Inovasi dan Hilirisasi,
+                        <span class="block">Sistem Informasi dan Pemeringkatan</span>
+                    </h1>
+                </div>
+            </a>
+        </div>
+        <ul class="flex items-center space-x-6 text-sm font-medium">
+            <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400 transition-colors">Beranda</a></li>
+            
+            <li class="relative">
+                <a href="#" class="desktop-dropdown-toggle text-white hover:text-yellow-400 transition-colors flex items-center">Profil <i class="fas fa-chevron-down ml-1 text-xs"></i></a>
+                <ul class="desktop-dropdown-menu absolute hidden bg-white text-gray-800 py-2 mt-2 rounded-lg shadow-xl w-60 z-10">
+                    <li><a href="{{ route('pimpinan.pimpinan') }}" class="block px-4 py-2 hover:bg-gray-100">Pimpinan Dit. ISIP</a></li>
+                    <li><a href="{{ route('profile.profile') }}" class="block px-4 py-2 hover:bg-gray-100">Tugas Pokok dan Fungsi</a></li>
+                    <li><a href="{{ route('strukturorganisasi') }}" class="block px-4 py-2 hover:bg-gray-100">Struktur Organisasi</a></li>
                 </ul>
             </li>
-
-            <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400 text-sm">Sub Direktorat</a>
-                <ul
-                    class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('subdirektorat-inovasi.landingpage') }}" class="text-black hover:text-yellow-400 text-sm">Subdirektorat Inovasi dan Hilirisasi</a></li>
-                    <li><a href="{{ route('pemeringkatan.landingpage') }}" class="text-black hover:text-yellow-400 text-sm">Subdirektorat Sistem Informasi dan Pemeringkatan </a></li>
+            <li class="relative">
+                <a href="#" class="desktop-dropdown-toggle text-white hover:text-yellow-400 transition-colors flex items-center">Sub Direktorat <i class="fas fa-chevron-down ml-1 text-xs"></i></a>
+                <ul class="desktop-dropdown-menu absolute hidden bg-white text-gray-800 py-2 mt-2 rounded-lg shadow-xl w-72 z-10">
+                    <li><a href="{{ route('subdirektorat-inovasi.landingpage') }}" class="block px-4 py-2 hover:bg-gray-100">Subdirektorat Inovasi dan Hilirisasi</a></li>
+                    <li><a href="{{ route('pemeringkatan.landingpage') }}" class="block px-4 py-2 hover:bg-gray-100">Subdirektorat Sistem Informasi dan Pemeringkatan</a></li>
                 </ul>
             </li>
-
-            <li><a href="{{ route('Berita.beritahome') }}" class="text-white hover:text-yellow-400 text-sm">Berita</a></li>
-
-            <li class="relative group">
-                <a href="#" class="text-white hover:text-yellow-400 text-sm">Galeri</a>
-                <ul
-                    class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('alumni') }}" class="text-black hover:text-yellow-400 text-sm">Alumni Berdampak</a></li>
-                    <li><a href="{{ route('galeri.sustainability') }}" class="text-black hover:text-yellow-400 text-sm">Sustainability</a></li>
+            <li><a href="{{ route('Berita.beritahome') }}" class="text-white hover:text-yellow-400 transition-colors">Berita</a></li>
+            
+            <li class="relative">
+                <a href="#" class="desktop-dropdown-toggle text-white hover:text-yellow-400 transition-colors flex items-center">Galeri <i class="fas fa-chevron-down ml-1 text-xs"></i></a>
+                <ul class="desktop-dropdown-menu absolute hidden bg-white text-gray-800 py-2 mt-2 rounded-lg shadow-xl w-60 z-10">
+                    <li><a href="{{ route('alumni') }}" class="block px-4 py-2 hover:bg-gray-100">Alumni Berdampak</a></li>
+                    <li><a href="{{ route('galeri.sustainability') }}" class="block px-4 py-2 hover:bg-gray-100">Sustainability</a></li>
                 </ul>
             </li>
-
-            <li><a href="{{ route('document.document') }}" class="text-white hover:text-yellow-400 text-sm">Dokumen</a></li>
-            <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400 text-sm">SSO</a></li>
-            <li><a class="login text-white text-sm" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
+            <li><a href="{{ route('document.document') }}" class="text-white hover:text-yellow-400 transition-colors">Dokumen</a></li>
+            <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400 transition-colors">SSO</a></li>
+            <li><a class="login text-white bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded-full transition-colors" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
         </ul>
     </div>
 </nav>
 
-<!-- Mobile Navigation Bar - Sticky -->
-<nav class="navbar md:hidden fixed top-0 w-full z-20 bg-[#186862] shadow-md" id="mobile-navbar">
-    <div class="relative">
-        <!-- Content -->
-        <div class="flex justify-between items-center py-4 px-4">
-            <!-- Logo and University Name -->
-            <div class="flex items-center">
-                <img alt="University logo" class="h-10 w-10"
-                    src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
-                <h1 class="text-white text-xl font-bold ml-2">UNJ</h1>
-            </div>
-
-            <!-- Hamburger Menu Button -->
-            <button id="mobile-menu-toggle" class="text-white focus:outline-none">
-                <i id="menu-icon" class="fas fa-bars text-2xl"></i>
+{{-- Navbar Mobile --}}
+<nav class="navbar block md:hidden fixed top-0 w-full z-50" id="mobile-navbar">
+    <div class="bg-[#186862] shadow-lg">
+        <div class="container mx-auto flex justify-between items-center py-3 px-4 h-16">
+            <a href="{{ route('home') }}" class="flex items-center">
+                <img alt="UNJ Logo" class="h-10 w-10" 
+                    src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png"/>
+                <img alt="DITISIP Logo" class="h-10 w-auto mx-2" 
+                    src="{{ asset('images/logoditisip.png') }}"/>
+                <div class="text-white">
+                    <h1 class="text-base font-bold leading-tight">DITISIP UNJ</h1>
+                </div>
+            </a>
+            <button id="mobile-menu-toggle" class="text-white p-2 hover:bg-white/10 rounded-lg transition-colors focus:outline-none">
+                <i id="menu-icon" class="fas fa-bars text-xl"></i>
             </button>
         </div>
     </div>
 </nav>
 
-<!-- Mobile Sidebar -->
-<div id="mobile-sidebar"
-    class="fixed top-0 right-0 w-64 h-full bg-[#186862] z-40 transform translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto">
-    <!-- Sidebar Header -->
-    <div class="flex justify-between items-center p-4">
-        <div class="flex items-center">
-            <img alt="University logo" class="h-8 w-8"
-                src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
-            <h1 class="text-white text-xl font-bold ml-2">UNJ</h1>
-        </div>
-        <button id="close-sidebar" class="text-white">
+{{-- Sidebar Mobile --}}
+<div id="mobile-sidebar" class="fixed top-0 right-0 w-72 h-full bg-[#186862] z-[100] transform translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto block md:hidden">
+    <div class="flex items-center justify-between p-4 border-b border-white/10 h-16">
+        <span class="text-white font-bold text-lg">Menu</span>
+        <button id="close-sidebar" class="p-2 text-white hover:bg-white/10 rounded-full transition-colors focus:outline-none">
             <i class="fas fa-times text-xl"></i>
         </button>
     </div>
-
-    <!-- Sidebar Menu -->
-    <div class="py-4">
-        <ul class="space-y-0">
-            <li>
-                <a href="{{ route('home') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                    Beranda
-                </a>
+    
+    <div class="py-2">
+        <ul class="flex flex-col space-y-1">
+            <li><a href="{{ route('home') }}" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2"><i class="fas fa-home w-6 mr-2"></i><span>Beranda</span></a></li>
+            
+            <li class="sidebar-dropdown px-2">
+                <button class="flex items-center justify-between w-full text-white py-3 px-2 hover:bg-white/10 rounded-md">
+                    <div class="flex items-center"><i class="fas fa-user-tie w-6 mr-2"></i><span>Profil</span></div>
+                    <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
+                </button>
+                <ul class="hidden bg-white/5 mt-1 rounded-md overflow-hidden">
+                    <li><a href="{{ route('pimpinan.pimpinan') }}" class="block text-white py-2.5 px-4 pl-12 hover:bg-white/10">Pimpinan DITISIP</a></li>
+                    <li><a href="{{ route('profile.profile') }}" class="block text-white py-2.5 px-4 pl-12 hover:bg-white/10">Tugas Pokok dan Fungsi</a></li>
+                    <li><a href="{{ route('strukturorganisasi') }}" class="block text-white py-2.5 px-4 pl-12 hover:bg-white/10">Struktur Organisasi</a></li>
+                </ul>
             </li>
 
-            <li>
-                <div class="sidebar-dropdown">
-                    <button
-                        class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                        Sub Direktorat
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <ul class="hidden bg-[#135a54]">
-                        <li>
-                            <a href="{{ route('subdirektorat-inovasi.landingpage') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Subdirektorat Inovasi dan Hilirisasi
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('pemeringkatan.landingpage') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Subdirektorat Pemeringkatan dan Sistem Informasi
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+            <li class="sidebar-dropdown px-2">
+                <button class="flex items-center justify-between w-full text-white py-3 px-2 hover:bg-white/10 rounded-md">
+                    <div class="flex items-center"><i class="fas fa-sitemap w-6 mr-2"></i><span>Sub Direktorat</span></div>
+                    <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
+                </button>
+                <ul class="hidden bg-white/5 mt-1 rounded-md overflow-hidden">
+                    <li><a href="{{ route('subdirektorat-inovasi.landingpage') }}" class="block text-white py-2.5 px-4 pl-12 hover:bg-white/10">Inovasi dan Hilirisasi</a></li>
+                    <li><a href="{{ route('pemeringkatan.landingpage') }}" class="block text-white py-2.5 px-4 pl-12 hover:bg-white/10">Pemeringkatan dan SI</a></li>
+                </ul>
             </li>
 
-            <li>
-                <div class="sidebar-dropdown">
-                    <button
-                        class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                        Profil
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <ul class="hidden bg-[#135a54]">
-                        <li>
-                            <a href="{{ route('strukturorganisasi') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Struktur Organisasi
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('profile.profile') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Tugas Pokok dan Fungsi
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+            <li><a href="{{ route('Berita.beritahome') }}" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2"><i class="fas fa-newspaper w-6 mr-2"></i><span>Berita</span></a></li>
+
+            <li class="sidebar-dropdown px-2">
+                <button class="flex items-center justify-between w-full text-white py-3 px-2 hover:bg-white/10 rounded-md">
+                    <div class="flex items-center"><i class="fas fa-images w-6 mr-2"></i><span>Galeri</span></div>
+                    <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
+                </button>
+                <ul class="hidden bg-white/5 mt-1 rounded-md overflow-hidden">
+                    <li><a href="{{ route('alumni') }}" class="block text-white py-2.5 px-4 pl-12 hover:bg-white/10">Alumni Berdampak</a></li>
+                    <li><a href="{{ route('galeri.sustainability') }}" class="block text-white py-2.5 px-4 pl-12 hover:bg-white/10">Sustainability</a></li>
+                </ul>
             </li>
 
-            <li>
-                <a href="{{ route('Berita.beritahome') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                    Berita
-                </a>
-            </li>
-
-            <li>
-                <div class="sidebar-dropdown">
-                    <button
-                        class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                        Galeri
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <ul class="hidden bg-[#135a54]">
-                        <li>
-                            <a href="{{ route('alumni') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Alumni Berdampak
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('galeri.sustainability') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Sustainability
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <li>
-                <a href="{{ route('document.document') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                    Dokumen
-                </a>
-            </li>
-
-            <li>
-                <a href="https://sso.unj.ac.id/login" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
-                    SSO
-                </a>
-            </li>
-
-            <li class="px-6 my-6">
-                <a href="#" class="block text-center bg-white text-[#186862] py-2 rounded-sm font-medium w-20"
-                    data-bs-toggle="modal" data-bs-target="#loginModal">
-                    Masuk
-                </a>
-            </li>
+            <li><a href="{{ route('document.document') }}" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2"><i class="fas fa-file-alt w-6 mr-2"></i><span>Dokumen</span></a></li>
+            <li><a href="https://sso.unj.ac.id/login" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2"><i class="fas fa-key w-6 mr-2"></i><span>SSO</span></a></li>
+            <li><a href="#" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2 login" data-bs-toggle="modal" data-bs-target="#loginModal"><i class="fas fa-sign-in-alt w-6 mr-2"></i><span>Masuk</span></a></li>
         </ul>
     </div>
 </div>
 
-<!-- Overlay for sidebar - Only on mobile -->
-<div id="sidebar-overlay"
-    class="fixed inset-0 bg-black opacity-0 md:hidden pointer-events-none transition-opacity duration-300 ease-in-out z-30">
-</div>
+{{-- Overlay untuk Sidebar --}}
+<div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-40 opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out block md:hidden"></div>
+
+{{-- CSS untuk konten di bawah navbar --}}
 <style>
-    /* Ensure content isn't hidden behind fixed navbar */
     body {
-        padding-top: 70px; /* Adjust based on your navbar height */
+        padding-top: 80px; /* Sesuaikan dengan tinggi navbar desktop */
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         body {
-            padding-top: 60px; /* Different height for mobile */
+            padding-top: 64px; /* Sesuaikan dengan tinggi navbar mobile */
         }
     }
 </style>
-<!-- JavaScript for mobile sidebar -->
+
+{{-- JavaScript untuk Interaktivitas Navbar dan Sidebar --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-        const menuIcon = document.getElementById('menu-icon');
-        const mobileSidebar = document.getElementById('mobile-sidebar');
-        const sidebarOverlay = document.getElementById('sidebar-overlay');
-        const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
+    if (!window.navbarScriptInitialized) {
+        window.navbarScriptInitialized = true;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const menuIcon = document.getElementById('menu-icon');
+            const mobileSidebar = document.getElementById('mobile-sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const dropdownButtons = document.querySelectorAll('.sidebar-dropdown > button');
 
-        // Function to show sidebar
-        function showSidebar() {
-            mobileSidebar.classList.remove('translate-x-full');
-            sidebarOverlay.classList.remove('opacity-0', 'pointer-events-none');
-            sidebarOverlay.classList.add('opacity-50');
-            menuIcon.classList.remove('fa-bars');
-            menuIcon.classList.add('fa-times');
-        }
-
-        // Function to hide sidebar
-        function hideSidebar() {
-            mobileSidebar.classList.add('translate-x-full');
-            sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
-            sidebarOverlay.classList.remove('opacity-50');
-            menuIcon.classList.remove('fa-times');
-            menuIcon.classList.add('fa-bars');
-        }
-
-        // Toggle sidebar visibility
-        mobileMenuToggle.addEventListener('click', function() {
-            if (mobileSidebar.classList.contains('translate-x-full')) {
-                showSidebar();
-            } else {
-                hideSidebar();
+            function showSidebar() {
+                mobileSidebar.classList.remove('translate-x-full');
+                sidebarOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                sidebarOverlay.classList.add('opacity-100');
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-times');
             }
-        });
 
-        // Close sidebar when X button is clicked
-        document.getElementById('close-sidebar').addEventListener('click', hideSidebar);
+            function hideSidebar() {
+                mobileSidebar.classList.add('translate-x-full');
+                sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
+                sidebarOverlay.classList.remove('opacity-100');
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
+            }
 
-        // Close sidebar when clicking overlay
-        sidebarOverlay.addEventListener('click', hideSidebar);
+            mobileMenuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (mobileSidebar.classList.contains('translate-x-full')) {
+                    showSidebar();
+                } else {
+                    hideSidebar();
+                }
+            });
 
-        // Toggle dropdowns in sidebar
-        dropdownButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const dropdownMenu = this.nextElementSibling;
-                const icon = this.querySelector('i');
-                
-                // Close all other dropdowns first
-                dropdownButtons.forEach(otherButton => {
-                    if (otherButton !== button) {
-                        const otherMenu = otherButton.nextElementSibling;
-                        const otherIcon = otherButton.querySelector('i');
-                        if (!otherMenu.classList.contains('hidden')) {
-                            otherMenu.classList.add('hidden');
-                            otherIcon.classList.remove('fa-chevron-up');
-                            otherIcon.classList.add('fa-chevron-down');
+            closeSidebarBtn.addEventListener('click', hideSidebar);
+            sidebarOverlay.addEventListener('click', hideSidebar);
+
+            dropdownButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dropdownMenu = this.nextElementSibling;
+                    const icon = this.querySelector('.fa-chevron-down');
+
+                    // Tutup dropdown lain yang terbuka
+                    dropdownButtons.forEach(otherButton => {
+                        if (otherButton !== this) {
+                            otherButton.nextElementSibling.classList.add('hidden');
+                            otherButton.querySelector('.fa-chevron-down').style.transform = 'rotate(0deg)';
                         }
+                    });
+
+                    // Toggle dropdown saat ini
+                    dropdownMenu.classList.toggle('hidden');
+                    if (dropdownMenu.classList.contains('hidden')) {
+                        icon.style.transform = 'rotate(0deg)';
+                    } else {
+                        icon.style.transform = 'rotate(180deg)';
                     }
                 });
+            });
 
-                // Toggle current dropdown
-                if (dropdownMenu.classList.contains('hidden')) {
-                    dropdownMenu.classList.remove('hidden');
-                    icon.classList.remove('fa-chevron-down');
-                    icon.classList.add('fa-chevron-up');
-                } else {
-                    dropdownMenu.classList.add('hidden');
-                    icon.classList.remove('fa-chevron-up');
-                    icon.classList.add('fa-chevron-down');
+            // Tutup semua dropdown jika klik di luar area sidebar
+            document.addEventListener('click', function(e) {
+                if (!mobileSidebar.contains(e.target) && !e.target.isEqualNode(mobileMenuToggle) && !mobileMenuToggle.contains(e.target)) {
+                    hideSidebar();
+                }
+            });
+            
+            // Logika untuk dropdown desktop
+            const desktopDropdownToggles = document.querySelectorAll('.desktop-dropdown-toggle');
+            desktopDropdownToggles.forEach(toggle => {
+                const menu = toggle.nextElementSibling;
+                toggle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Sembunyikan menu lain yang mungkin terbuka
+                    document.querySelectorAll('.desktop-dropdown-menu').forEach(m => {
+                        if (m !== menu) {
+                            m.classList.add('hidden');
+                        }
+                    });
+                    menu.classList.toggle('hidden');
+                });
+            });
+
+            // Sembunyikan dropdown desktop jika klik di luar
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.relative')) {
+                    document.querySelectorAll('.desktop-dropdown-menu').forEach(menu => {
+                        menu.classList.add('hidden');
+                    });
                 }
             });
         });
-
-        // Set the active menu item based on current URL
-        function setActiveMenuItem() {
-            // For desktop menu
-            const navLinks = document.querySelectorAll('nav ul li a');
-            const currentPath = window.location.pathname;
-
-            navLinks.forEach(link => {
-                const href = link.getAttribute('href');
-                if (href && currentPath.includes(href) && href !== '#') {
-                    link.classList.add('text-yellow-400');
-                    link.classList.add('font-bold');
-                }
-            });
-
-            // For mobile menu
-            const mobileLinks = document.querySelectorAll('#mobile-sidebar a');
-            mobileLinks.forEach(link => {
-                const href = link.getAttribute('href');
-                if (href && currentPath.includes(href) && href !== '#') {
-                    link.classList.add('text-yellow-400');
-                    link.classList.add('font-bold');
-                }
-            });
-        }
-
-        // Call functions on page load
-        hideSidebar();
-        setActiveMenuItem();
-
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 768) {
-                // Desktop view - hide mobile elements
-                hideSidebar();
-            }
-        });
-    });
-    
+    }
 </script>

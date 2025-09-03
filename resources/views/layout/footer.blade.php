@@ -5,14 +5,14 @@
             <div class="flex flex-col items-center md:items-start">
                 <div class="flex items-center space-x-4 mb-6">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" alt="UNJ Logo" class="h-16 w-16 flex-shrink-0" />
+                    <img alt="DITISIP Logo" class="h-12 w-auto" src="{{ asset('images/logoditisip.png') }}"/>
                     <div>
-                        <h3 class="text-lg font-bold uppercase leading-tight">
-                           Direktorat Inovasi dan Hilirisasi,
-                           <span class="block">Sistem Informasi dan Pemeringkatan</span>
-                        </h3>
+                        <h1 class="text-white text-lg font-bold uppercase leading-tight">
+                            Direktorat Inovasi dan Hilirisasi, Sistem Informasi dan Pemeringkatan
+                        </h1>
                     </div>
                 </div>
-                
+                    
                 <div class="flex space-x-5 text-2xl">
                     <a href="https://www.facebook.com/people/Direktorat-Isip-Unj/pfbid05sxgwir3WJi1yZirTaAdvbs3nQ2jypLKp349jsk6BmzxJqZaKvyYHPGUiVQr1Zu8l/" class="text-gray-300 hover:text-yellow-400 transition-colors">
                         <i class="fab fa-facebook-f"></i>
