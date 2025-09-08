@@ -47,3 +47,8 @@ Route::get('/responden/chart-summary', [AdminRespondenController::class, 'getCha
     ->name('api.responden.chartSummary');
 Route::get('/responden/chart-prodi', [AdminRespondenController::class, 'getProdiChartData'])
     ->name('api.responden.chartProdi');
+
+
+Route::get('/fakultas/report-data', [AdminRespondenController::class, 'getFacultyReportData'])
+    ->name('api.fakultas.reportData')
+    ->middleware('auth');

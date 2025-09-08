@@ -60,6 +60,87 @@ class AdminRespondenController extends Controller
         return view('admin.responden_laporan', compact('faculties'));
     }
 
+    public function laporanFakultas()
+    {
+        if (Auth::user()->role !== 'fakultas') {
+            return redirect()->back()->with('error', 'Tidak ada akses');
+        }
+        return view('fakultas.responden_laporan');
+    }
+
+    // test new using api
+    public function getFacultyReportData(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            if ($user->role !== 'fakultas') {
+                return response()->json(['error' => 'Akses ditolak'], 403);
+            }
+
+            $userInfo = $this->getUserFacultyInfo($user);
+            $facultyCode = $userInfo['faculty_code'];
+            if (!$facultyCode) {
+                 return response()->json(['error' => 'Kode fakultas tidak ditemukan'], 400);
+            }
+
+            $facultyUserIds = User::where('name', $facultyCode)
+                                  ->orWhere('name', 'like', $facultyCode . '-%')
+                                  ->pluck('id');
+
+            $query = Responden::whereIn('user_id', $facultyUserIds);
+
+            if ($request->filled('start_date') && $request->filled('end_date')) {
+                $startDate = Carbon::parse($request->start_date)->startOfDay();
+                $endDate = Carbon::parse($request->end_date)->endOfDay();
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            }
+
+            if ($request->filled('category') && in_array($request->category, ['academic', 'employer'])) {
+                $query->whereRaw('LOWER(category) LIKE ?', ['%' . strtolower($request->category) . '%']);
+            }
+
+            $respondens = $query->with('user')->get();
+
+            $baseUsers = User::whereIn('id', $facultyUserIds)->get();
+            $getLabel = function($userName) {
+                if (Str::contains($userName, '-')) {
+                    $prodiName = trim(Str::after($userName, '-'));
+                    return empty($prodiName) ? 'Prodi Tanpa Nama (' . $userName . ')' : ucwords($prodiName);
+                }
+                return 'Input Fakultas (' . strtoupper($userName) . ')';
+            };
+
+            $prodiTotals = [];
+            foreach ($baseUsers as $baseUser) {
+                $prodiTotals[$getLabel($baseUser->name)] = 0;
+            }
+
+            foreach ($respondens as $responden) {
+                if ($responden->user) {
+                    $label = $getLabel($responden->user->name);
+                    if (isset($prodiTotals[$label])) {
+                        $prodiTotals[$label]++;
+                    }
+                }
+            }
+
+            $categoryTotals = $respondens->groupBy(function ($r) {
+                return $this->normalizeCategoryName($r->category);
+            })->map->count();
+
+
+            return response()->json([
+                'byProdi' => collect($prodiTotals)->sortKeys(),
+                'byCategory' => $categoryTotals,
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error fetching faculty report data: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString());
+            return response()->json(['error' => 'Gagal mengambil data laporan fakultas'], 500);
+        }
+    }
+
+
     private function normalizeFacultyName($faculty)
     {
         $faculty = strtolower(trim($faculty));
@@ -174,6 +255,13 @@ class AdminRespondenController extends Controller
         ]);
         try {
             $facultyCode = $request->input('fakultas');
+            $user = Auth::user();
+
+            if (empty($facultyCode) && $user->role === 'fakultas') {
+                $userInfo = $this->getUserFacultyInfo($user);
+                $facultyCode = $userInfo['faculty_code'];
+            }
+
             $dataSource = $request->input('data_source', 'non_admin');
 
             $query = Responden::with('user');
@@ -222,32 +310,49 @@ class AdminRespondenController extends Controller
                 $normalizationMap = ['fis' => 'fish', 'fe' => 'feb', 'fppsi' => 'fpsi'];
                 $aliases = array_unique(array_merge([$facultyCode], array_keys($normalizationMap, $facultyCode, true)));
 
-                $respondensInFaculty = $filteredRespondens->filter(function ($responden) use ($aliases) {
-                    return in_array($this->normalizeFacultyName($responden->fakultas), $aliases);
-                });
-
                 $baseUsers = User::where(function ($q) use ($aliases) {
                     $q->where('role', 'fakultas')->whereIn('name', $aliases);
                 })->orWhere(function ($q) use ($aliases) {
                     $q->where('role', 'prodi')->where(function ($subq) use ($aliases) {
-                        foreach ($aliases as $alias) $subq->orWhere('name', 'like', $alias . '-%');
+                        foreach ($aliases as $alias) {
+                            $subq->orWhere('name', 'like', $alias . '-%');
+                        }
                     });
                 })->get();
+                
+                $getLabel = function($userName) {
+                    if (Str::contains($userName, '-')) {
+                        $prodiName = trim(Str::after($userName, '-'));
+                        if (empty($prodiName)) {
+                            return 'Prodi Tanpa Nama (' . $userName . ')';
+                        }
+                        return ucwords($prodiName);
+                    }
+                    return 'Input Fakultas (' . strtoupper($userName) . ')';
+                };
 
                 $prodiTotals = [];
                 foreach ($baseUsers as $user) {
-                    $label = Str::contains($user->name, '-') ? ucwords(trim(Str::after($user->name, '-'))) : 'Input Fakultas (' . strtoupper($user->name) . ')';
+                    $label = $getLabel($user->name);
                     $prodiTotals[$label] = 0;
                 }
 
+                $respondensInFaculty = $filteredRespondens->filter(function ($responden) use ($aliases) {
+                    if (!optional($responden->user)->name) {
+                        return false;
+                    }
+                    $userName = strtolower($responden->user->name);
+                    $userFacultyCode = Str::contains($userName, '-') ? Str::before($userName, '-') : $userName;
+                    return in_array($this->normalizeFacultyName($userFacultyCode), $aliases);
+                });
+
                 foreach ($respondensInFaculty as $responden) {
-                    if ($responden->user) {
-                        $label = Str::contains($responden->user->name, '-') ? ucwords(trim(Str::after($responden->user->name, '-'))) : 'Input Fakultas (' . strtoupper($responden->user->name) . ')';
-                        if (isset($prodiTotals[$label])) {
-                            $prodiTotals[$label]++;
-                        }
+                    $label = $getLabel($responden->user->name);
+                    if (isset($prodiTotals[$label])) {
+                        $prodiTotals[$label]++;
                     }
                 }
+                
                 $data = collect($prodiTotals)->sortKeys();
             }
 
@@ -776,3 +881,4 @@ class AdminRespondenController extends Controller
         }
     }
 }
+
