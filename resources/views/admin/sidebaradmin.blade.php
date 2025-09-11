@@ -250,6 +250,12 @@
                         <span class="text">Mitra Kolaborasi</span>
                     </a>
                 </li>
+                   <li class="{{ request()->routeIs('admin.risetdataunj.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.risetdataunj.index') }}">
+                        <i class='bx bxs-group'></i>
+                        <span class="text">Riset UNJ</span>
+                    </a>
+                </li>
             </ul>
         </div>
 

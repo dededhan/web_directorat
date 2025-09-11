@@ -149,7 +149,7 @@
             <li class="relative group">
                 <a href="#" class="text-white hover:text-yellow-400">Inovasi UNJ</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="{{ route('subdirektorat-inovasi.riset.unj') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Riset UNJ</a></li>
+                    <a href="{{ route('subdirektorat-inovasi.riset.unj') }}" class="hover:text-yellow-400">Riset UNJ</a>
                     <a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}" class="hover:text-yellow-400">Produk Inovasi UNJ</a>                </ul>
             </li>
             

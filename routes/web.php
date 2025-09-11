@@ -24,8 +24,7 @@ use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\GlobalEngagementController;
 use App\Http\Controllers\BeritasdgController;
 use App\Http\Controllers\Auth\SulitestLoginController;
-use App\Http\Controllers\RisetController;
-
+use App\Http\Controllers\RisetUnjController;
 
 Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
 
@@ -114,14 +113,14 @@ Route::prefix('inovasi')->group(function () {
 
 // Subdirektorat Inovasi Routes
 Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')->group(function () {
-    Route::view('/risetunj', 'subdirektorat-inovasi.riset_unj.risetunj')->name('riset.unj');
+    Route::get('/risetunj', [RisetUnjController::class, 'publicIndex'])->name('riset.unj');
     Route::view('/inkubator/inkubator_bisnis_pendidikan', 'subdirektorat-inovasi.inkubator.inkubator_bisnis_pendidikan')->name('inkubator.inkubator_bisnis_pendidikan');
     Route::view('/inkubator/ekosisteminovasi', 'subdirektorat-inovasi.inkubator.ekosisteminovasi')->name('inkubator.ekosisteminovasi');
     Route::view('/inkubator/inovasiaward', 'subdirektorat-inovasi.inkubator.inovasiaward')->name('inkubator.inovasiaward');
     Route::get('/risetunj/produk_inovasi', [ProdukInovasiController::class, 'publicIndex'])->name('riset_unj.produk_inovasi.produkinovasi');
     Route::get('/risetunj/produk_inovasi/{produk}', [ProdukInovasiController::class, 'show'])->name('riset_unj.produk_inovasi.show');
     Route::get('/landingpage', [BeritaController::class, 'landingPageInovasi'])->name('landingpage');
-    Route::get('/subdirektorat-inovasi/riset-unj', [RisetController::class, 'index'])->name('riset.unj');
+    
 });
 
 
