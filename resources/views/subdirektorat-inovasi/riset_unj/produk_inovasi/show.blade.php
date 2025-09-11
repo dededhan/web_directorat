@@ -40,6 +40,9 @@
             </a>
             <h1 class="text-3xl md:text-4xl font-bold text-primary mt-4">{{ $produk->nama_produk }}</h1>
             <p class="text-textSecondary mt-2">Oleh: {{ $produk->inovator }}</p>
+             <div class="bg-accent/20 text-accent rounded-full px-3 py-1 text-xs font-semibold">
+                                        {{ $produk->kategori }}
+            </div>
         </div>
 
         <div class="bg-cardColor rounded-card shadow-lg p-6 md:p-8">
@@ -99,7 +102,7 @@
 
                 {{-- Kolom Kanan: Thumbnail & Barcode --}}
                 <div>
-                    <h2 class="text-xl font-bold text-primary mb-4 border-b pb-2">Thumbnail</h2>
+                    <h2 class="text-xl font-bold text-primary mb-4 border-b pb-2">Foto Alat</h2>
                     @if($produk->gambar)
                         <img src="{{ asset('storage/' . $produk->gambar) }}" alt="{{ $produk->nama_produk }}" class="w-full h-auto object-cover rounded-lg shadow-md mb-8">
                     @else
@@ -108,11 +111,7 @@
                         </div>
                     @endif
                     
-                    <h2 class="text-xl font-bold text-primary mb-4 border-b pb-2">Barcode</h2>
-                    <div class="flex flex-col items-center justify-center bg-gray-50 p-4 rounded-lg">
-                        <div id="qrcode" class="p-2 bg-white rounded-md shadow-inner"></div>
-                        <p class="text-sm text-textSecondary mt-3 text-center">Pindai untuk membuka halaman ini di perangkat lain.</p>
-                    </div>
+                    
                 </div>
             </div>
 
