@@ -100,34 +100,7 @@
 
         @elseif($responden->category == 'employer')
 
-            {{-- lodnong --}}
-            <p>Dear {{ $responden->title }}. {{ $responden->fullname }},</p>
-            <p>
-                We are writing to you as an important stakeholder of our university. We value our ongoing engagement with you and would like to be certain that we are not using your information for any purpose that you would prefer us not to. For the purposes of an important global survey of employer opinion, we would like to seek your permission to pass on your contact details (name, job title, institution and email address) to the QS. We feel that your impartial responses would contribute to the insight and precision of the survey’s outcomes.
-            </p>
-            <p>
-                If you agree, you should be contacted by QS in the next few months with an invitation to participate in the annual <strong>QS Global Employer Survey</strong>, along with a maximum of three reminders. Their email will come from <strong>rankings@qs.com</strong>; please add to your safe senders and check your spam.
-            </p>
-            <p>
-                The resulting data will be used in aggregate form only. QS will not contact you for any other reason, or for more than two editions of their annual survey, without supplementary or separate consent. Your responses will be combined with those of many others around the world to form employer reputation indicators used in the QS World University Rankings at global, regional, subject and program levels where relevant.
-            </p>
-            <p>
-                To participate in the survey, please click the button below:
-            </p>
-            <a href="{{ $surveyLink }}" class="button">Click here to fill out the survey</a>
-            <p>
-                Many thanks in advance for your cooperation.
-            </p>
-             <div class="footer">
-                Kind regards,<br>
-                <strong>Dr. RA Murti Kusuma W. S.IP, M.Si</strong><br>
-                Director of Innovation, Downstreaming, Information System, and Rankings<br>
-                Universitas Negeri Jakarta, Indonesia
-            </div>
-
-            <hr>
-
-            {{-- indo --}}
+            {{-- Indo --}}
             <p>Kepada Yth. Bapak/Ibu {{ $responden->fullname }},</p>
             <p>
                 Kami menghubungi Anda sebagai salah satu pemangku kepentingan penting di universitas kami. Kami sangat menghargai hubungan baik yang telah terjalin dan ingin memastikan bahwa informasi Anda hanya digunakan dengan izin Anda.
@@ -152,6 +125,33 @@
                 Hormat kami,<br>
                 <strong>Dr. RA Murti Kusuma W. S.IP, M.Si</strong><br>
                 Direktur Inovasi, Hilirisasi, Sistem Informasi, dan Pemeringkatan<br>
+                Universitas Negeri Jakarta, Indonesia
+            </div>
+
+            <hr>
+
+            {{-- enggres --}}
+            <p>Dear {{ $responden->title }}. {{ $responden->fullname }},</p>
+            <p>
+                We are writing to you as an important stakeholder of our university. We value our ongoing engagement with you and would like to be certain that we are not using your information for any purpose that you would prefer us not to. For the purposes of an important global survey of employer opinion, we would like to seek your permission to pass on your contact details (name, job title, institution and email address) to the QS. We feel that your impartial responses would contribute to the insight and precision of the survey’s outcomes.
+            </p>
+            <p>
+                If you agree, you should be contacted by QS in the next few months with an invitation to participate in the annual <strong>QS Global Employer Survey</strong>, along with a maximum of three reminders. Their email will come from <strong>rankings@qs.com</strong>; please add to your safe senders and check your spam.
+            </p>
+            <p>
+                The resulting data will be used in aggregate form only. QS will not contact you for any other reason, or for more than two editions of their annual survey, without supplementary or separate consent. Your responses will be combined with those of many others around the world to form employer reputation indicators used in the QS World University Rankings at global, regional, subject and program levels where relevant.
+            </p>
+            <p>
+                To participate in the survey, please click the button below:
+            </p>
+            <a href="{{ $surveyLink }}" class="button">Click here to fill out the survey</a>
+            <p>
+                Many thanks in advance for your cooperation.
+            </p>
+             <div class="footer">
+                Kind regards,<br>
+                <strong>Dr. RA Murti Kusuma W. S.IP, M.Si</strong><br>
+                Director of Innovation, Downstreaming, Information System, and Rankings<br>
                 Universitas Negeri Jakarta, Indonesia
             </div>
 
