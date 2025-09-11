@@ -30,6 +30,10 @@ use App\Http\Controllers\GlobalEngagementController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VideoinovasiController;
 use App\Http\Controllers\MitraKolaborasiController;
+use App\Http\Controllers\RisetUnjController;
+
+
+
 
 
 
@@ -162,8 +166,8 @@ Route::prefix('admin')->name('admin.')
 
         Route::get('/qsgeneraltable', [QuesionerGeneralController::class, 'index'])->name('qsgeneraltable');
 
-        // Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
-Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store', 'show']);
+       Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store', 'show']);
+
         // mahasiswa
         Route::resource('/mahasiswainternational', InternationalStudentController::class);
         Route::get('/mahasiswainternational/{id}/detail', [InternationalStudentController::class, 'getStudentDetail'])
@@ -197,6 +201,11 @@ Route::resource('/qsresponden', RespondenAnswerController::class)->except(['crea
             Route::post('/video', [VideoinovasiController::class, 'storeOrUpdate'])->name('video.storeOrUpdate');
             Route::delete('/video', [VideoinovasiController::class, 'destroy'])->name('video.destroy');
             Route::resource('/mitra-kolaborasi', MitraKolaborasiController::class);
+            Route::get('/risetdataexcelunj', [RisetUnjController::class, 'index'])->name('risetdataunj.index');
+            Route::get('/risetdataexcelunj/template', [RisetUnjController::class, 'downloadTemplate'])->name('risetdataunj.template');
+            Route::post('/risetdataexcelunj/import', [RisetUnjController::class, 'import'])->name('risetdataunj.import');
+            Route::get('/risetdataexcelunj/export', [RisetUnjController::class, 'export'])->name('risetdataunj.export');
+            Route::delete('/risetdataexcelunj/{risetdataunj}', [RisetUnjController::class, 'destroy'])->name('risetdataunj.destroy');
 
 
 

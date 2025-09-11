@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universitas Negeri Jakarta - Direktorat Pemeringkatan</title>
+    <title>Universitas Negeri Jakarta - Direktorat inovasi dan hilirisasi</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     
     {{-- Tailwind CSS --}}
