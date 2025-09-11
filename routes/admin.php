@@ -162,8 +162,8 @@ Route::prefix('admin')->name('admin.')
 
         Route::get('/qsgeneraltable', [QuesionerGeneralController::class, 'index'])->name('qsgeneraltable');
 
-        Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
-
+        // Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
+Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store', 'show']);
         // mahasiswa
         Route::resource('/mahasiswainternational', InternationalStudentController::class);
         Route::get('/mahasiswainternational/{id}/detail', [InternationalStudentController::class, 'getStudentDetail'])
