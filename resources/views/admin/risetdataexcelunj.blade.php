@@ -3,7 +3,7 @@
 @section('contentadmin')
 <div class="head-title">
     <div class="left">
-        <h1>Manajemen Data Riset UNJ</h1>
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Manajemen Data Riset UNJ</h1>
         <ul class="breadcrumb">
             <li><a href="#">Dashboard</a></li>
             <li><i class='bx bx-chevron-right'></i></li>
@@ -12,148 +12,170 @@
     </div>
 </div>
 
+{{-- Script Notifikasi Swal --}}
 @if (session('success'))
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        Swal.fire('Sukses!', '{{ session('success') }}', 'success');
+        Swal.fire({ icon: 'success', title: 'Sukses!', text: '{{ session('success') }}' });
     });
 </script>
 @endif
 @if (session('error'))
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        Swal.fire('Gagal!', '{{ session('error') }}', 'error');
+        Swal.fire({ icon: 'error', title: 'Gagal!', text: '{{ session('error') }}' });
     });
 </script>
 @endif
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+{{-- Grid Kartu Aksi --}}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+
     {{-- Card 1: Unduh Template --}}
-    <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-gray-400">
-        <div class="flex items-center mb-3">
-            <div class="bg-gray-100 p-3 rounded-full mr-4">
-                <i class='bx bxs-download text-2xl text-gray-600'></i>
+    <div class="bg-white p-6 rounded-lg border border-gray-200 flex flex-col">
+        <div class="flex-grow">
+            <div class="flex items-start gap-4">
+                <div class="flex-shrink-0 bg-gray-100 p-3 rounded-full">
+                    {{-- SVG Icon Download --}}
+                    <svg class="w-6 h-6 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-800">1. Unduh Template</h4>
+                    <p class="text-sm text-gray-500 mt-1">Gunakan template ini sebagai panduan untuk memastikan format data yang Anda unggah sudah benar.</p>
+                </div>
             </div>
-            <h4 class="text-lg font-bold">1. Unduh Template</h4>
         </div>
-        <p class="text-sm text-gray-600 mb-4">
-            Gunakan template ini sebagai panduan untuk memastikan format data yang Anda unggah sudah benar.
-        </p>
-        <a href="{{ route('admin.risetdataunj.template') }}" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full inline-flex items-center w-full justify-center">
-            <i class='bx bxs-file-blank'></i> &nbsp; Unduh Template.xlsx
-        </a>
+        <div class="mt-6">
+            <a href="{{ route('admin.risetdataunj.template') }}" class="bg-gray-500 text-white font-semibold py-2.5 px-4 rounded-lg inline-flex items-center w-full justify-center hover:bg-gray-600 transition-colors text-sm">
+                Unduh Template.xlsx
+            </a>
+        </div>
     </div>
 
-    {{-- Card 2: Tombol Trigger Import Modal --}}
-    <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
-        <div class="flex items-center mb-3">
-            <div class="bg-blue-100 p-3 rounded-full mr-4">
-                <i class='bx bxs-file-import text-2xl text-blue-600'></i>
+    {{-- Card 2: Import Data --}}
+    <div class="bg-white p-6 rounded-lg border border-gray-200 flex flex-col">
+        <div class="flex-grow">
+            <div class="flex items-start gap-4">
+                <div class="flex-shrink-0 bg-blue-100 p-3 rounded-full">
+                     {{-- SVG Icon Import --}}
+                    <svg class="w-6 h-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-800">2. Import Data</h4>
+                    <p class="text-sm text-gray-500 mt-1">Pilih file .xlsx yang sudah diisi. <strong>Perhatikan Data sesuai dengan format xlsx/excel</strong>.</p>
+                </div>
             </div>
-            <h4 class="text-lg font-bold">2. Import Data</h4>
         </div>
-        <p class="text-sm text-gray-600 mb-4">
-           Pilih file .xlsx yang sudah diisi. <strong>Perhatikan Data sesuai dengan format xlsx/excel</strong>.
-        </p>
-        <button id="import-modal-btn" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-full inline-flex items-center w-full justify-center">
-            <i class='bx bx-upload'></i> &nbsp;  Import Data Riset
-        </button>
+        <div class="mt-6">
+            <button id="import-modal-btn" class="bg-blue-500 text-white font-semibold py-2.5 px-4 rounded-lg inline-flex items-center w-full justify-center hover:bg-blue-600 transition-colors text-sm">
+                Import Data Riset
+            </button>
+        </div>
     </div>
 
     {{-- Card 3: Export Data --}}
-    <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
-        <div class="flex items-center mb-3">
-            <div class="bg-green-100 p-3 rounded-full mr-4">
-                <i class='bx bxs-file-export text-2xl text-green-600'></i>
+    <div class="bg-white p-6 rounded-lg border border-gray-200 flex flex-col">
+        <div class="flex-grow">
+            <div class="flex items-start gap-4">
+                <div class="flex-shrink-0 bg-green-100 p-3 rounded-full">
+                    {{-- SVG Icon Export --}}
+                    <svg class="w-6 h-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-800">3. Export Data</h4>
+                    <p class="text-sm text-gray-500 mt-1">Unduh semua data riset yang saat ini ada di database ke dalam satu file Excel.</p>
+                </div>
             </div>
-            <h4 class="text-lg font-bold">3. Export Data</h4>
         </div>
-        <p class="text-sm text-gray-600 mb-4">
-            Unduh semua data riset yang saat ini ada di database ke dalam satu file Excel.
-        </p>
-        <button id="export-btn" data-url="{{ route('admin.risetdataunj.export') }}" class="bg-green-500 text-white font-bold py-2 px-4 rounded-full inline-flex items-center w-full justify-center transition-opacity duration-200">
-            <span class="button-content">
-                <i class='bx bxs-file-export'></i> &nbsp; Export ke Excel
-            </span>
-        </button>
+        <div class="mt-6">
+            <button id="export-btn" data-url="{{ route('admin.risetdataunj.export') }}" class="bg-green-500 text-white font-semibold py-2.5 px-4 rounded-lg inline-flex items-center w-full justify-center hover:bg-green-600 transition-colors text-sm">
+                <span class="button-content">Export ke Excel</span>
+            </button>
+        </div>
     </div>
 </div>
 
 {{-- Modal untuk Import Data --}}
 <div id="import-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
-    <div class="bg-white rounded-lg shadow-xl w-full max-w-md transform transition-all">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
         <div class="flex justify-between items-center p-4 border-b">
             <h3 class="text-xl font-semibold text-gray-800">Import Data Riset</h3>
-            <button id="close-modal-btn" class="text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            <button id="close-modal-btn" class="text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
         </div>
-        <div class="p-6">
-            <form action="{{ route('admin.risetdataunj.import') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <p class="text-sm text-gray-600 mb-4">
-                  Pilih file .xlsx yang sudah diisi. <strong>Perhatikan Data sesuai dengan format xlsx/excel</strong>
-                </p>
-                <label for="file-upload-modal" class="cursor-pointer bg-blue-500 text-white font-bold py-2 px-4 rounded-full inline-flex items-center w-full justify-center">
-                    <i class='bx bx-file'></i> &nbsp; Pilih File...
-                </label>
-                <input id="file-upload-modal" name="file" type="file" class="hidden" required>
-                <p id="file-name-modal" class="text-sm text-gray-500 mt-2 text-center truncate">Tidak ada file yang dipilih</p>
-                <div class="mt-6 pt-4 border-t flex justify-end">
-                    <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center">
-                        <i class='bx bx-upload'></i> &nbsp; Import Sekarang
-                    </button>
-                </div>
-            </form>
-        </div>
+        <form action="{{ route('admin.risetdataunj.import') }}" method="POST" enctype="multipart/form-data" class="p-6">
+            @csrf
+            <label for="file-upload-modal" class="cursor-pointer border-2 border-dashed border-gray-300 rounded-lg p-8 w-full flex flex-col items-center justify-center text-center hover:border-blue-500 hover:bg-gray-50 transition-colors">
+                <svg class="w-12 h-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" /></svg>
+                <span class="mt-4 text-sm font-semibold text-gray-600">Klik untuk memilih file</span>
+                <span id="file-name-modal" class="text-xs text-gray-500 mt-1 truncate">Tidak ada file yang dipilih</span>
+            </label>
+            <input id="file-upload-modal" name="file" type="file" class="hidden" required accept=".xlsx,.xls">
+            <div class="mt-6 pt-4 border-t flex justify-end">
+                <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-5 rounded-lg inline-flex items-center hover:bg-blue-600">
+                    Import
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
 {{-- Tabel Data Riset --}}
-<div class="table-data">
+<div class="bg-white rounded-lg border border-gray-200">
     <div class="order">
-        <div class="head">
-            <h3>Data Riset Saat Ini ({{ $allRiset->total() }} data)</h3>
+        <div class="head p-4 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-800">Data Riset Saat Ini ({{ $allRiset->total() }} data)</h3>
         </div>
         <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead>
+            <table class="w-full min-w-[800px]">
+                <thead class="bg-gray-50">
                     <tr>
-                        <th>No</th>
-                        <th>Judul</th>
-                        <th>Ketua Peneliti</th>
-                        <th>Fakultas</th>
-                        <th>Tahun</th>
-                        <th>Dana</th>
-                        <th>Aksi</th>
+                        <th class="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">No</th>
+                        <th class="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Judul</th>
+                        <th class="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Ketua Peneliti</th>
+                        <th class="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Fakultas</th>
+                        <th class="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tahun</th>
+                        <th class="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Dana</th>
+                        <th class="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-200">
                     @forelse ($allRiset as $riset)
                     <tr>
-                        <td>{{ $loop->iteration + $allRiset->firstItem() - 1 }}</td>
-                        <td title="{{ $riset->judul }}">{{ \Illuminate\Support\Str::limit($riset->judul, 60) }}</td>
-                        <td>{{ $riset->ketua_peneliti }}</td>
-                        <td><span class="status completed">{{ $riset->fakultas }}</span></td>
-                        <td>{{ $riset->tahun }}</td>
-                        <td>Rp {{ number_format($riset->dana, 0, ',', '.') }}</td>
-                        <td>
+                        <td class="p-4 text-sm text-gray-700">{{ $loop->iteration + $allRiset->firstItem() - 1 }}</td>
+                        <td class="p-4 text-sm text-gray-700" title="{{ $riset->judul }}">{{ \Illuminate\Support\Str::limit($riset->judul, 50) }}</td>
+                        <td class="p-4 text-sm text-gray-700">{{ $riset->ketua_peneliti }}</td>
+                        <td class="p-4 text-sm text-gray-700"><span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full">{{ $riset->fakultas }}</span></td>
+                        <td class="p-4 text-sm text-gray-700">{{ $riset->tahun }}</td>
+                        <td class="p-4 text-sm text-gray-700">Rp {{ number_format($riset->dana, 0, ',', '.') }}</td>
+                        <td class="p-4 text-sm">
                             <form action="{{ route('admin.risetdataunj.destroy', $riset->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700">Hapus</button>
+                                <button type="submit" class="text-red-600 hover:text-red-800 font-semibold">Hapus</button>
                             </form>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="text-center p-4">Tidak ada data. Silakan import file Excel terlebih dahulu.</td>
+                        <td colspan="7" class="text-center p-8 text-gray-500">
+                            Tidak ada data. Silakan import file Excel terlebih dahulu.
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        <div class="mt-6 p-4">
-            {{ $allRiset->links() }}
-        </div>
+        @if ($allRiset->hasPages())
+            <div class="p-4 border-t border-gray-200">
+                {{ $allRiset->links() }}
+            </div>
+        @endif
     </div>
 </div>
 
@@ -165,11 +187,19 @@
                 const url = this.dataset.url;
                 const buttonContent = this.querySelector('.button-content');
                 this.disabled = true;
-                buttonContent.innerHTML = `<i class='bx bx-loader-alt animate-spin'></i> &nbsp; Mengekspor...`;
+                const originalText = buttonContent.innerHTML;
+                buttonContent.innerHTML = `Mengekspor...`;
+
+                const spinner = document.createElement('span');
+                spinner.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
+                this.prepend(spinner);
+
                 window.location.href = url;
+
                 setTimeout(() => {
                     this.disabled = false;
-                    buttonContent.innerHTML = `<i class='bx bxs-file-export'></i> &nbsp; Export ke Excel`;
+                    this.removeChild(spinner);
+                    buttonContent.innerHTML = originalText;
                 }, 2000);
             });
         }
@@ -186,16 +216,20 @@
             });
         }
 
+        const hideModal = () => {
+            importModal.classList.add('hidden');
+            fileUploadModal.value = ''; // Reset file input
+            fileNameDisplayModal.textContent = 'Tidak ada file yang dipilih';
+        };
+
         if (closeModalBtn) {
-            closeModalBtn.addEventListener('click', () => {
-                importModal.classList.add('hidden');
-            });
+            closeModalBtn.addEventListener('click', hideModal);
         }
         
         if (importModal) {
             importModal.addEventListener('click', (e) => {
                 if (e.target === importModal) {
-                    importModal.classList.add('hidden');
+                    hideModal();
                 }
             });
         }
