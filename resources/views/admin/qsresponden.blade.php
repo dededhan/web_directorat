@@ -16,12 +16,23 @@
         </div>
     </div>
 
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+     @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="table-data">
         <div class="order">
             <div class="head">
                 <h3>QS Respondent Data</h3>
             </div>
-            
+
             <div class="table-responsive">
                 <table class="table table-striped" id="respondent-table">
                     <thead>
@@ -38,7 +49,7 @@
                             <th>2023 Survey</th>
                             <th>2024 Survey</th>
                             <th>Category</th>
-                            <th>Tanggal</th>
+                            <th>Tanggal Dibuat</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -57,8 +68,24 @@
                                 <td>{{ $responden->survey_2023 }}</td>
                                 <td>{{ $responden->survey_2024 }}</td>
                                 <td>{{ $responden->category }}</td>
-                                <td>{{ $responden->created_at ? $responden->created_at->format('d M Y, H:i') : 'N/A' }}</td>
+                                <td>{{ $responden->created_at ? $responden->created_at->format('d M Y, H:i') : 'N/A' }}
+                                </td>
                                 <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ route('admin.qsresponden.edit', $responden->id) }}"
+                                            class="btn btn-warning btn-sm">
+                                            <i class='bx bxs-edit'></i>
+                                        </a>
+                                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="{{ $responden->id }}">
+                                            <i class='bx bxs-trash'></i>
+                                        </button>
+                                        <form id="delete-form-{{ $responden->id }}"
+                                            action="{{ route('admin.qsresponden.destroy', $responden->id) }}" method="POST"
+                                            style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -68,15 +95,43 @@
                         @endforelse
                     </tbody>
                 </table>
+                 <div class="d-flex justify-content-end mt-4">
+                    {{ $respondens->links() }}
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const respondenId = this.dataset.id;
+                Swal.fire({
+                    title: 'Anda yakin?',
+                    text: "Data yang dihapus tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById(`delete-form-${respondenId}`).submit();
+                    }
+                });
+            });
+        });
+    });
+    </script>
 
     <style>
         .table-data {
             margin-top: 24px;
         }
-        
+
         .order {
             background: #fff;
             padding: 24px;
@@ -117,7 +172,7 @@
             .table-responsive {
                 font-size: 14px;
             }
-            
+
             .btn-sm {
                 padding: 0.25rem 0.5rem;
                 font-size: 12px;
@@ -125,3 +180,4 @@
         }
     </style>
 @endsection
+

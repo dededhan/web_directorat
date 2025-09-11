@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreRespondenAnswerRequest;
-use App\Http\Requests\UpdateRespondenAnswerRequest;
 use App\Models\Responden;
 use App\Models\RespondenAnswer;
 use Illuminate\Support\Facades\Auth;
@@ -18,47 +17,27 @@ class RespondenAnswerController extends Controller
      */
     public function index()
     {
-        // return view('admin.qsresponden', [
-        //     'respondens' => RespondenAnswer::all()
-        // ]);
-        // $respondenAnswers = RespondenAnswer::all();
-        // if (Auth::user()->role === 'admin_direktorat') {
-        //         return view('admin.respondenanswer', compact('respondenAnswers'));
-        //     } else if (Auth::user()->role === 'admin_pemeringkatan') {
-        //         return view('pemeringkatan.respondenanswer', compact('respondenAnswers'));
-        //     } else if (Auth::user()->role === 'prodi') {
-        //         return view('prodi.qsresponden', compact('respondenAnswers'));
-        //     } else if (Auth::user()->role === 'fakultas') {
-        //         return view('fakultas.respondenanswer', compact('respondenAnswers'));
-        //     }
-        // }
 
-        if (Auth::user()->role === 'admin_direktorat') {
-            return view('admin.qsresponden', [
-                'respondens' => RespondenAnswer::all()
-            ]);
-        } else if (Auth::user()->role === 'prodi') {
-            return view('prodi.qsresponden', [
-                'respondens' => RespondenAnswer::all()
-            ]);
-        } else if (Auth::user()->role === 'fakultas') {
-            return view('fakultas.qsresponden', [
-                'respondens' => RespondenAnswer::all()
-            ]);
-        } else if (Auth::user()->role === 'admin_pemeringkatan') {
-            return view('admin_pemeringkatan.qsresponden', [
-                'respondens' => RespondenAnswer::all()
-            ]);
+        $respondens = RespondenAnswer::latest()->paginate(500);
+        $userRole = Auth::user()->role;
+
+        $viewMap = [
+            'admin_direktorat' => 'admin.qsresponden',
+            'prodi' => 'prodi.qsresponden',
+            'fakultas' => 'fakultas.qsresponden',
+            'admin_pemeringkatan' => 'admin_pemeringkatan.qsresponden',
+        ];
+
+        if (array_key_exists($userRole, $viewMap)) {
+            return view($viewMap[$userRole], compact('respondens'));
         }
+
+        return redirect('/')->with('error', 'Anda tidak memiliki akses.');
     }
-
-
 
     /**
      * Show the form for creating a new resource.
      */
-
-
     public function create(Request $request)
     {
         if (!$request->has('token')) {
@@ -109,30 +88,54 @@ class RespondenAnswerController extends Controller
      */
     public function show(RespondenAnswer $respondenAnswer)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(RespondenAnswer $respondenAnswer)
+    public function edit(RespondenAnswer $qsresponden)
     {
-        //
+        // Memanggil view dari lokasi yang benar: admin/qsresponden/edit.blade.php
+        return view('admin.qsresponden.edit', ['responden' => $qsresponden]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(RespondenAnswer $respondenAnswer)
+    public function update(Request $request, RespondenAnswer $qsresponden)
     {
-        //
+        // Validasi data dari form edit
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:20',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'institution' => 'nullable|string|max:255',
+            'company_name' => 'nullable|string|max:255',
+            'job_title' => 'nullable|string|max:255',
+            'country' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:50',
+            'survey_2023' => 'nullable|string|max:255',
+            'survey_2024' => 'nullable|string|max:255',
+            'category' => 'required|string|max:100',
+        ]);
+
+        $qsresponden->update($validatedData);
+
+        return redirect()->route('admin.qsresponden.index')->with('success', 'Data responden berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(RespondenAnswer $respondenAnswer)
+    public function destroy(RespondenAnswer $qsresponden)
     {
-        //
+        try {
+            $qsresponden->delete();
+            return redirect()->route('admin.qsresponden.index')->with('success', 'Data responden berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.qsresponden.index')->with('error', 'Gagal menghapus data.');
+        }
     }
 }
+
