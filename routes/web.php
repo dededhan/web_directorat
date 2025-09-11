@@ -121,7 +121,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')->group(fu
     Route::get('/risetunj/produk_inovasi', [ProdukInovasiController::class, 'publicIndex'])->name('riset_unj.produk_inovasi.produkinovasi');
     Route::get('/risetunj/produk_inovasi/{produk}', [ProdukInovasiController::class, 'show'])->name('riset_unj.produk_inovasi.show');
     Route::get('/landingpage', [BeritaController::class, 'landingPageInovasi'])->name('landingpage');
-    Route::get('/subdirektorat-inovasi/riset-unj', [RisetController::class, 'index'])->name('riset.unj');
+    
 });
 
 
