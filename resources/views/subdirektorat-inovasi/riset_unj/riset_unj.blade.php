@@ -24,13 +24,19 @@
 
     @include('layout.navbar_hilirisasi')
 
-    <main class="py-10 pt-28">
-        <div class="container mx-auto px-4 lg:px-8">
+<main class="py-10 pt-28">
+    <div class="container mx-auto px-4 lg:px-8">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Riset Unggulan UNJ</h1>
+            <p class="mt-2 text-gray-600">Jelajahi inovasi dan penelitian terkini dari para akademisi UNJ.</p>
 
-            <div class="text-center mb-8">
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Riset Unggulan UNJ</h1>
-                <p class="mt-2 text-gray-600">Jelajahi inovasi dan penelitian terkini dari para akademisi UNJ.</p>
+            <div class="mt-5">
+                <a href="{{ route('subdirektorat-inovasi.riset.graph') }}" class="inline-block bg-[#186862] text-white px-5 py-2 rounded-lg hover:bg-opacity-90 transition duration-300">
+                    <i class="fa-solid fa-chart-line mr-2"></i>Lihat Grafik Riset
+                </a>
             </div>
+            </div>
+
 
       
            @php

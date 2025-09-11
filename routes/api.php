@@ -14,6 +14,7 @@ use App\Http\Controllers\PublikasiRisetController;
 use App\Http\Controllers\AdminMataKuliahController;
 use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\InternationalFacultyStaffActivitiesController;
+use App\Http\Controllers\RisetUnjController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -40,6 +41,8 @@ Route::prefix('pemeringkatan/sustainability')->name('api.pemeringkatan.sustainab
 });
 
 Route::get('/aktivitas-dosen-asing/{id}', [InternationalFacultyStaffActivitiesController::class, 'show'])->name('api.aktivitas-dosen-asing.show');
+
+Route::get('/riset-unj/graph-data', [RisetUnjController::class, 'getGraphData'])->name('api.riset-unj.graph-data');
 
 
 //Chart Responden
