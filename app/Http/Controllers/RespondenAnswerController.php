@@ -64,6 +64,9 @@ class RespondenAnswerController extends Controller
     {
         $validatedData = $request->validated();
         $responden = Responden::where('token', $validatedData['token'])->firstOrFail();
+        //TYPO KUDU DI BENERIN
+        $normalizedCategory = $responden->category === 'employer' ? 'employee' : $responden->category;
+
         RespondenAnswer::create([
             'title' => $validatedData['answer_title'],
             'first_name' => $validatedData['answer_firstname'],
@@ -76,7 +79,7 @@ class RespondenAnswerController extends Controller
             'phone' => $validatedData['answer_phone'],
             'survey_2023' => $validatedData['answer_survey_2023'],
             'survey_2024' => $validatedData['answer_survey_2024'],
-            'category' => $responden->category,
+            'category' => $normalizedCategory,
         ]);
 
         $responden->update(['status' => 'clear']);
