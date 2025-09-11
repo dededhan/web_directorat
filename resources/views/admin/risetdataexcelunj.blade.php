@@ -56,9 +56,9 @@
         <form action="{{ route('admin.risetdataunj.import') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="file" name="file" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-3" required>
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full inline-flex items-center w-full justify-center">
-                <i class='bx bx-upload'></i> &nbsp; Import File
-            </button>
+            <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-full inline-flex items-center w-full justify-center">
+    <i class='bx bx-upload'></i> &nbsp; Import File
+</button>
         </form>
     </div>
 
@@ -72,9 +72,9 @@
         <p class="text-sm text-gray-600 mb-4">
             Unduh semua data riset yang saat ini ada di database ke dalam satu file Excel.
         </p>
-        <a href="{{ route('admin.risetdataunj.export') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full inline-flex items-center w-full justify-center">
-            <i class='bx bxs-file-export'></i> &nbsp; Export ke Excel
-        </a>
+        <a href="{{ route('admin.risetdataunj.export') }}" class="bg-green-500 text-white font-bold py-2 px-4 rounded-full inline-flex items-center w-full justify-center">
+    <i class='bx bxs-file-export'></i> &nbsp; Export ke Excel
+</a>
     </div>
 </div>
 
