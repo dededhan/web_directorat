@@ -55,7 +55,7 @@
             <div class="row">
                 {{-- Nomor Paten --}}
                 <div class="col-md-6 mb-3">
-                    <label for="nomor_paten" class="form-label">Nomor Paten (Opsional)</label>
+                    <label for="nomor_paten" class="form-label">Nomor Sertifikasi (Opsional)</label>
                     <input type="text" class="form-control @error('nomor_paten') is-invalid @enderror" name="nomor_paten" id="nomor_paten" value="{{ old('nomor_paten') }}">
                     @error('nomor_paten')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
@@ -248,7 +248,7 @@
                         <div class="row">
                             {{-- Nomor Paten --}}
                             <div class="col-md-6 mb-3">
-                                <label for="edit_nomor_paten" class="form-label">Nomor Paten (Opsional)</label>
+                                <label for="edit_nomor_paten" class="form-label">Nomor Sertifikasi (Opsional)</label>
                                 <input type="text" class="form-control" name="nomor_paten" id="edit_nomor_paten">
                             </div>
                             {{-- Kategori --}}

@@ -286,7 +286,7 @@
                                         {{ $produk->inovator }}
                                     </span>
                                     <div class="bg-accent/20 text-accent rounded-full px-3 py-1 text-xs font-semibold">
-                                        {{ $produk->kategori }}
+                                       {{ $produk->kategori }}
                                     </div>
                                 </div>
                                 
