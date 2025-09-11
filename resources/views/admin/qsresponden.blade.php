@@ -38,6 +38,7 @@
                             <th>2023 Survey</th>
                             <th>2024 Survey</th>
                             <th>Category</th>
+                            <th>Tanggal</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -56,10 +57,13 @@
                                 <td>{{ $responden->survey_2023 }}</td>
                                 <td>{{ $responden->survey_2024 }}</td>
                                 <td>{{ $responden->category }}</td>
+                                <td>{{ $responden->created_at ? $responden->created_at->format('d M Y, H:i') : 'N/A' }}</td>
+                                <td>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td>Tidak ada data</td>
+                                <td colspan="14" class="text-center">Tidak ada data</td>
                             </tr>
                         @endforelse
                     </tbody>
