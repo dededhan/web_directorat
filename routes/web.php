@@ -121,9 +121,15 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')->group(fu
     Route::view('/inkubator/inovasiaward', 'subdirektorat-inovasi.inkubator.inovasiaward')->name('inkubator.inovasiaward');
     Route::get('/risetunj/produk_inovasi', [ProdukInovasiController::class, 'publicIndex'])->name('riset_unj.produk_inovasi.produkinovasi');
     Route::get('/risetunj/produk_inovasi/{produk}', [ProdukInovasiController::class, 'show'])->name('riset_unj.produk_inovasi.show');
-    Route::get('/landingpage', [BeritaController::class, 'landingPageInovasi'])->name('landingpage');    
-});
+    Route::get('/landingpage', [BeritaController::class, 'landingPageInovasi'])->name('landingpage');  
 
+});
+ Route::get('/riset/download', [RisetUnjController::class, 'showDownloadForm'])
+     ->name('riset.public.download');
+
+// 2. Route untuk MEMPROSES password dan memulai download
+Route::post('/riset/verify-download', [RisetUnjController::class, 'verifyAndDownload'])
+     ->name('riset.public.verify_and_download');
 
 Route::get('/pimpinan', [PimpinanController::class, 'showPublic'])->name('pimpinan.pimpinan');
 

@@ -17,7 +17,7 @@ class RisetUnjExport implements FromCollection, WithHeadings
     return [
         'Judul Riset',
         'Nama Ketua Peneliti',
-        'Tahun Riset',
+        'Tahun Riset',w
         'Fakultas Peneliti',
         'Skema',
         'Bidang Ilmu',

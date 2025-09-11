@@ -8,7 +8,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\RisetUnjImport;       
 use App\Exports\RisetUnjExport; 
 use App\Exports\RisetUnjTemplateExport;
-use Illuminate\Support\Facades\DB; // <-- **PENTING: Tambahkan baris ini**
+use Illuminate\Support\Facades\DB; 
+use App\Exports\RisetSearchResultExport; 
 
 class RisetUnjController extends Controller
 {
@@ -16,6 +17,32 @@ class RisetUnjController extends Controller
     {
         $allData = RisetUnj::latest()->get(); 
         return view('subdirektorat-inovasi.riset_unj.riset_unj', compact('allData'));
+    }
+  
+     public function showDownloadForm(Request $request)
+    {
+        // Cukup tampilkan view, data pencarian akan diambil dari URL
+        return view('password-download');
+    }
+
+    // METHOD BARU 2: Memverifikasi password dan mengunduh file
+    public function verifyAndDownload(Request $request)
+    {
+        // 1. Validasi password
+        if ($request->input('password') !== 'risetdataunj') {
+            // Jika salah, kembalikan ke halaman sebelumnya dengan pesan error
+            return back()->with('error', 'Kata sandi yang Anda masukkan salah.');
+        }
+
+        // 2. Jika password benar, ambil parameter pencarian dari hidden field
+        $search = $request->input('search');
+        $fakultas = $request->input('fakultas');
+        $tahun = $request->input('tahun');
+
+        $fileName = 'hasil-pencarian-riset-unj-' . date('Y-m-d') . '.xlsx';
+
+        // 3. Mulai proses export dan unduh
+        return Excel::download(new RisetSearchResultExport($search, $fakultas, $tahun), $fileName);
     }
 
     // **METHOD BARU DITAMBAHKAN DI SINI**

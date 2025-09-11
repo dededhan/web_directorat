@@ -72,6 +72,13 @@
             </div>
             
             <div id="results-info" class="text-sm text-gray-600 mb-4"></div>
+            <div class="mb-4">
+    <a href="#" id="download-btn" class="hidden bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors duration-200">
+        <i class="fa-solid fa-download mr-2"></i>
+        Unduh Hasil Pencarian
+    </a>
+</div>
+
             <div id="loading-indicator" class="hidden justify-center items-center py-20"><div class="loader"></div></div>
             
             <div id="no-results" class="hidden text-center py-20">
@@ -126,6 +133,33 @@
         const facultyFilter = document.getElementById('facultyFilter');
         const yearFilter = document.getElementById('yearFilter');
         const resetButton = document.getElementById('resetButton');
+
+
+         const downloadBtn = document.getElementById('download-btn');
+
+    // Fungsi baru untuk memperbarui link download
+    function updateDownloadLink() {
+        const searchTerm = searchInput.value;
+        const selectedFaculty = facultyFilter.value;
+        const selectedYear = yearFilter.value;
+
+        // Buat URL dengan query parameter
+        const query = new URLSearchParams({
+            search: searchTerm,
+            fakultas: selectedFaculty,
+            tahun: selectedYear
+        }).toString();
+        
+        // Tetapkan URL ke tombol
+        downloadBtn.href = `{{ route('riset.public.download') }}?${query}`;
+
+        // Tampilkan tombol hanya jika ada hasil
+        if (currentFilteredData.length > 0) {
+            downloadBtn.classList.remove('hidden');
+        } else {
+            downloadBtn.classList.add('hidden');
+        }
+    }
 
         const modal = document.getElementById('detail-modal');
         const modalContent = modal.querySelector('.modal-content');
@@ -186,6 +220,7 @@
                 noResultsMessage.classList.remove('hidden');
             }
             setupPagination();
+            updateDownloadLink(); 
         }
 
         function setupPagination() {
