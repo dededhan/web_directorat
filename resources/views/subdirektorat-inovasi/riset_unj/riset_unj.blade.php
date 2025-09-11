@@ -73,10 +73,14 @@
             
             <div id="results-info" class="text-sm text-gray-600 mb-4"></div>
             <div class="mb-4">
-    <a href="#" id="download-btn" class="hidden bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center transition-colors duration-200">
-        <i class="fa-solid fa-download mr-2"></i>
-        Unduh Hasil Pencarian
-    </a>
+<a href="#" id="download-btn" class="hidden bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-lg inline-flex items-center transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+    {{-- Ikon SVG untuk "Download" --}}
+    <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.905 3.129V2.75z" />
+        <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" />
+    </svg>
+    <span>Unduh Hasil Pencarian</span>
+</a>
 </div>
 
             <div id="loading-indicator" class="hidden justify-center items-center py-20"><div class="loader"></div></div>
