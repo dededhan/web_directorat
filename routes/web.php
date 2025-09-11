@@ -25,6 +25,7 @@ use App\Http\Controllers\GlobalEngagementController;
 use App\Http\Controllers\BeritasdgController;
 use App\Http\Controllers\Auth\SulitestLoginController;
 use App\Http\Controllers\RisetUnjController;
+use App\Http\Controllers\MitraKolaborasiController;
 
 Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
 
@@ -154,10 +155,8 @@ Route::get('/tupoksipemeringkatan', function () {
     return view('Pemeringkatan.tupoksipemeringkatan.tupoksi');
 })->name('tupoksipemeringkatan');
 
-Route::get('/subdirektorat-inovasi/riset-unj/produk-inovasi/mitra-kolaborasi', function () {
-    return view('subdirektorat-inovasi.riset_unj.produk_inovasi.mitra-kolaborasi');
-})->name('subdirektorat-inovasi.riset_unj.produk_inovasi.mitra-kolaborasi');
-
+Route::get('/subdirektorat-inovasi/riset-unj/produk-inovasi/mitra-kolaborasi', [MitraKolaborasiController::class, 'showPublicByCategory'])
+     ->name('subdirektorat-inovasi.riset_unj.produk_inovasi.mitra-kolaborasi');
 Route::get('/strukturorganisasipemeringkatan', function () {
     return view('Pemeringkatan.struktur organisasi.strukturorganisasi');
 })->name('strukturorganisasipemeringkatan');
