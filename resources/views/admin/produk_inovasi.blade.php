@@ -167,7 +167,7 @@
                         </td>
                          <td>
                             @if($produk->video_path)
-                            <button class="btn btn-sm btn-info">Lihat</button>
+                            <button class="btn btn-sm btn-info view-video" data-type="{{$produk->video_type}}" data-path="{{ $produk->video_type === 'mp4' ? asset('storage/' . $produk->video_path) : $produk->video_path }}">Lihat</button>
                              @else - @endif
                         </td>
                         <td>
@@ -194,19 +194,34 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="imageModalLabel">Gambar Produk</h5>
+                    <h5 class="modal-title" id="imageModalLabel">Gambar</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <img id="modalImage" src="" class="img-fluid" alt="Gambar Produk">
+                    <img id="modalImage" src="" class="img-fluid" alt="Gambar">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal untuk menampilkan video -->
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="videoModalLabel">Video</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" id="video-container">
+                    {{-- Video will be inserted here by JS --}}
                 </div>
             </div>
         </div>
     </div>
 
+
     <!-- Modal untuk mengedit produk -->
-    <div class="modal fade" id="editProdukModal" tabindex="-1" aria-labelledby="editProdukModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="editProdukModal" tabindex="-1" aria-labelledby="editProdukModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -217,53 +232,91 @@
                     <form id="editProdukForm" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="edit_nama_produk" class="form-label">Nama Produk</label>
-                                <input type="text" class="form-control" name="nama_produk" id="edit_nama_produk">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="edit_inovator" class="form-label">Inovator</label>
-                                <input type="text" class="form-control" name="inovator" id="edit_inovator">
-                            </div>
+                        {{-- Nama Produk --}}
+                        <div class="mb-3">
+                            <label for="edit_nama_produk" class="form-label">Nama Produk</label>
+                            <input type="text" class="form-control" name="nama_produk" id="edit_nama_produk" required>
                         </div>
+    
+                        {{-- Inovator (Multiple) --}}
+                        <div id="edit-inovator-container" class="mb-3">
+                            <label class="form-label">Inovator</label>
+                            {{-- Inovator fields will be added here by JS --}}
+                        </div>
+                        <button type="button" class="btn btn-sm btn-success mb-3" id="edit-add-inovator-btn">+</button>
+    
                         <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="edit_nomor_paten" class="form-label">Nomor Paten</label>
+                            {{-- Nomor Paten --}}
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_nomor_paten" class="form-label">Nomor Paten (Opsional)</label>
                                 <input type="text" class="form-control" name="nomor_paten" id="edit_nomor_paten">
                             </div>
-                        </div>
-                        <div class="row">
+                            {{-- Kategori --}}
                             <div class="col-md-6 mb-3">
                                 <label for="edit_kategori" class="form-label">Kategori</label>
-                                <select class="form-control" name="kategori" id="edit_kategori">
+                                <select class="form-control" name="kategori" id="edit_kategori" required>
                                     <option value="HKI">HKI</option>
                                     <option value="PATEN">PATEN</option>
                                 </select>
                             </div>
+                        </div>
+    
+                        {{-- Deskripsi --}}
+                        <div class="mb-3">
+                            <label for="edit_deskripsi" class="form-label">Deskripsi Produk</label>
+                            <textarea class="form-control" name="deskripsi" id="edit_deskripsi" rows="8"></textarea>
+                        </div>
+    
+                        <div class="row">
+                            {{-- Gambar Produk --}}
                             <div class="col-md-6 mb-3">
-                                <label for="edit_link_ebook" class="form-label">Link E-Book</label>
-                                <input type="url" class="form-control" name="link_ebook" id="edit_link_ebook">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="edit_deskripsi" class="form-label">Deskripsi Produk</label>
-                                <textarea class="form-control" name="deskripsi" id="edit_deskripsi" rows="8"></textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="edit_gambar" class="form-label">Gambar Baru (opsional)</label>
-                                <input type="file" class="form-control" name="gambar" id="edit_gambar"
-                                    accept="image/*">
+                                <label for="edit_gambar" class="form-label">Gambar Baru (Opsional)</label>
+                                <input type="file" class="form-control" name="gambar" id="edit_gambar" accept="image/*">
                                 <div class="mt-2">
                                     <p>Gambar saat ini:</p>
-                                    <img id="current_image" src="" class="img-fluid mt-2"
-                                        style="max-height: 200px;" alt="Current Image">
+                                    <img id="current_gambar" src="" class="img-fluid mt-2" style="max-height: 150px; display: none;" alt="Current Gambar">
+                                </div>
+                            </div>
+                            {{-- Foto Poster --}}
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_foto_poster" class="form-label">Foto Poster Baru (Opsional)</label>
+                                <input type="file" class="form-control" name="foto_poster" id="edit_foto_poster" accept="image/*">
+                                <div class="mt-2">
+                                    <p>Poster saat ini:</p>
+                                    <img id="current_foto_poster" src="" class="img-fluid mt-2" style="max-height: 150px; display: none;" alt="Current Poster">
                                 </div>
                             </div>
                         </div>
+    
+                         {{-- Link Ebook --}}
+                        <div class="mb-3">
+                            <label for="edit_link_ebook" class="form-label">Link E-Book (Opsional)</label>
+                            <input type="url" class="form-control" name="link_ebook" id="edit_link_ebook">
+                        </div>
+    
+                        {{-- Video Section --}}
+                        <div class="mb-3">
+                            <label class="form-label">Video (Opsional)</label>
+                            <select class="form-control" name="video_type" id="edit_video_type">
+                                <option value="">-- Hapus Video --</option>
+                                <option value="youtube">YouTube</option>
+                                <option value="mp4">Upload MP4</option>
+                            </select>
+                        </div>
+                        
+                        {{-- YouTube Input --}}
+                        <div id="edit-youtube-input" class="mb-3" style="display:none;">
+                            <label for="edit_video_path_youtube" class="form-label">Link Video YouTube</label>
+                            <input type="url" class="form-control" name="video_path_youtube" id="edit_video_path_youtube">
+                        </div>
+    
+                        {{-- MP4 Input --}}
+                        <div id="edit-mp4-input" class="mb-3" style="display:none;">
+                            <label for="edit_video_path_mp4" class="form-label">Upload File MP4 Baru</label>
+                            <input type="file" class="form-control" name="video_path_mp4" id="edit_video_path_mp4" accept="video/mp4">
+                            <div id="current_video_mp4_info" class="mt-2"></div>
+                        </div>
+    
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -273,6 +326,7 @@
             </div>
         </div>
     </div>
+    
 
     <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -370,177 +424,153 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Create Form Submission with SweetAlert
-            const createForm = document.querySelector('form[action*="produk_inovasi.store"]');
-            if (createForm) {
-                createForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
+            // =================================================================
+            // SCRIPTS FOR CREATE FORM
+            // =================================================================
 
-                    Swal.fire({
-                        title: 'Konfirmasi',
-                        text: 'Apakah Anda yakin ingin menyimpan produk inovasi ini?',
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3498db',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, Simpan!',
-                        cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Show loading state
-                            Swal.fire({
-                                title: 'Menyimpan...',
-                                text: 'Mohon tunggu sebentar',
-                                allowOutsideClick: false,
-                                didOpen: () => {
-                                    Swal.showLoading();
-                                }
-                            });
-
-                            // Submit the form
-                            this.submit();
-                        }
-                    });
-                });
-            }
-            // Menambah Inovator
-    document.getElementById('add-inovator-btn').addEventListener('click', function() {
-        const container = document.getElementById('inovator-container');
-        const newInputGroup = document.createElement('div');
-        newInputGroup.className = 'input-group mb-2';
-        newInputGroup.innerHTML = `
-            <input type="text" class="form-control" name="inovator[]" required>
-            <button type="button" class="btn btn-danger remove-inovator-btn">-</button>
-        `;
-        container.appendChild(newInputGroup);
-    });
-
-    // Menghapus Inovator
-    document.getElementById('inovator-container').addEventListener('click', function(e) {
-        if (e.target && e.target.classList.contains('remove-inovator-btn')) {
-            e.target.closest('.input-group').remove();
-        }
-    });
-
-    // Toggle Video Input
-    document.getElementById('video_type').addEventListener('change', function() {
-        const youtubeInput = document.getElementById('youtube-input');
-        const mp4Input = document.getElementById('mp4-input');
-        if (this.value === 'youtube') {
-            youtubeInput.style.display = 'block';
-            mp4Input.style.display = 'none';
-        } else if (this.value === 'mp4') {
-            youtubeInput.style.display = 'none';
-            mp4Input.style.display = 'block';
-        } else {
-            youtubeInput.style.display = 'none';
-            mp4Input.style.display = 'none';
-        }
-    });
-
-
-            // Handle delete button clicks
-            document.querySelectorAll('.delete-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const form = this.closest('form');
-
-                    Swal.fire({
-                        title: 'Konfirmasi Penghapusan',
-                        text: 'Apakah Anda yakin ingin menghapus produk ini? Tindakan ini tidak dapat dibatalkan.',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#3498db',
-                        confirmButtonText: 'Ya, Hapus!',
-                        cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Show loading state
-                            Swal.fire({
-                                title: 'Menghapus...',
-                                text: 'Mohon tunggu sebentar',
-                                allowOutsideClick: false,
-                                didOpen: () => {
-                                    Swal.showLoading();
-                                }
-                            });
-
-                            form.submit();
-                        }
-                    });
-                });
+            // Add Inovator in Create Form
+            document.getElementById('add-inovator-btn').addEventListener('click', function() {
+                const container = document.getElementById('inovator-container');
+                const newInputGroup = document.createElement('div');
+                newInputGroup.className = 'input-group mb-2';
+                newInputGroup.innerHTML = `
+                    <input type="text" class="form-control" name="inovator[]" required>
+                    <button type="button" class="btn btn-danger remove-inovator-btn">-</button>
+                `;
+                container.appendChild(newInputGroup);
             });
+
+            // Remove Inovator in Create Form
+            document.getElementById('inovator-container').addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('remove-inovator-btn')) {
+                    e.target.closest('.input-group').remove();
+                }
+            });
+
+            // Toggle Video Input in Create Form
+            document.getElementById('video_type').addEventListener('change', function() {
+                document.getElementById('youtube-input').style.display = (this.value === 'youtube') ? 'block' : 'none';
+                document.getElementById('mp4-input').style.display = (this.value === 'mp4') ? 'block' : 'none';
+            });
+
+            // =================================================================
+            // SCRIPTS FOR EDIT MODAL
+            // =================================================================
+             function addEditInovatorField(value = '') {
+                const container = document.getElementById('edit-inovator-container');
+                const newInputGroup = document.createElement('div');
+                newInputGroup.className = 'input-group mb-2';
+                newInputGroup.innerHTML = `
+                    <input type="text" class="form-control" name="inovator[]" value="${value}" required>
+                    <button type="button" class="btn btn-danger remove-inovator-btn">-</button>
+                `;
+                container.appendChild(newInputGroup);
+            }
+
+            // Add Inovator in Edit Modal
+            document.getElementById('edit-add-inovator-btn').addEventListener('click', function() {
+                addEditInovatorField();
+            });
+
+            // Remove Inovator in Edit Modal
+            document.getElementById('edit-inovator-container').addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('remove-inovator-btn')) {
+                    // Prevent removing the last innovator
+                    if (document.querySelectorAll('#edit-inovator-container .input-group').length > 1) {
+                        e.target.closest('.input-group').remove();
+                    } else {
+                        Swal.fire('Info', 'Minimal harus ada satu inovator.', 'info');
+                    }
+                }
+            });
+             
+            // Toggle Video Input in Edit Modal
+            document.getElementById('edit_video_type').addEventListener('change', function() {
+                document.getElementById('edit-youtube-input').style.display = (this.value === 'youtube') ? 'block' : 'none';
+                document.getElementById('edit-mp4-input').style.display = (this.value === 'mp4') ? 'block' : 'none';
+            });
+
+
+            // =================================================================
+            // GENERAL & EVENT LISTENERS
+            // =================================================================
 
             // Handle edit button clicks
             document.querySelectorAll('.edit-produk').forEach(button => {
                 button.addEventListener('click', function() {
                     const produkId = this.dataset.id;
                     const routePrefix = '{{ $routePrefix }}';
-
-                    // Convert route prefix with dots to path with slashes
                     const routePath = routePrefix.replace(/\./g, '/');
 
-                    // Show loading state
-                    Swal.fire({
-                        title: 'Memuat Data...',
-                        text: 'Mohon tunggu sebentar',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
+                    Swal.fire({ title: 'Memuat Data...', text: 'Mohon tunggu', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
-                    // Fetch produk details via AJAX
                     fetch(`/${routePath}/produk_inovasi/${produkId}/detail`)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
+                        .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
                         .then(data => {
-                            Swal.close(); // Close loading dialog
-
-                            // Populate the edit form
-                            document.getElementById('edit_nama_produk').value = data
-                            .nama_produk;
-                            document.getElementById('edit_inovator').value = data.inovator;
-                            document.getElementById('edit_nomor_paten').value = data
-                                .nomor_paten || '';
-                            document.getElementById('edit_kategori').value = data.kategori || 'HKI';
-                            document.getElementById('edit_link_ebook').value = data.link_ebook || '';
-
-                            // Set content to the CKEditor
-                            if (editDeskripsiEditor) {
-                                editDeskripsiEditor.setData(data.deskripsi);
-                            }
-
-                            // Set the current image
-                            const currentImage = document.getElementById('current_image');
-                            if (data.gambar) {
-                                currentImage.src = `/storage/${data.gambar}`;
-                                currentImage.style.display = 'block';
-                            } else {
-                                currentImage.style.display = 'none';
-                            }
-
-                            // Set the form action
+                            Swal.close();
                             const form = document.getElementById('editProdukForm');
                             form.action = `/${routePath}/produk_inovasi/${produkId}`;
 
-                            // Show the modal
-                            const editModal = new bootstrap.Modal(document.getElementById(
-                                'editProdukModal'));
-                            editModal.show();
+                            // Populate fields
+                            document.getElementById('edit_nama_produk').value = data.nama_produk;
+                            document.getElementById('edit_nomor_paten').value = data.nomor_paten || '';
+                            document.getElementById('edit_kategori').value = data.kategori || 'HKI';
+                            document.getElementById('edit_link_ebook').value = data.link_ebook || '';
+
+                            // Populate Inovators
+                            const inovatorContainer = document.getElementById('edit-inovator-container');
+                            inovatorContainer.innerHTML = ''; // Clear previous
+                            const inovators = data.inovator ? data.inovator.split(', ') : [''];
+                            inovators.forEach(inovator => addEditInovatorField(inovator));
+
+                            // Set CKEditor content
+                            editDeskripsiEditor?.setData(data.deskripsi || '');
+
+                            // Handle images
+                            const currentGambar = document.getElementById('current_gambar');
+                            if (data.gambar) {
+                                currentGambar.src = `/storage/${data.gambar}`;
+                                currentGambar.style.display = 'block';
+                            } else {
+                                currentGambar.style.display = 'none';
+                            }
+                            
+                            const currentPoster = document.getElementById('current_foto_poster');
+                            if (data.foto_poster) {
+                                currentPoster.src = `/storage/${data.foto_poster}`;
+                                currentPoster.style.display = 'block';
+                            } else {
+                                currentPoster.style.display = 'none';
+                            }
+
+                            // Handle video
+                            const videoTypeSelect = document.getElementById('edit_video_type');
+                            const youtubeInput = document.getElementById('edit-youtube-input');
+                            const mp4Input = document.getElementById('edit-mp4-input');
+                            const youtubePath = document.getElementById('edit_video_path_youtube');
+                            const currentMp4Info = document.getElementById('current_video_mp4_info');
+
+                            videoTypeSelect.value = data.video_type || '';
+                            youtubeInput.style.display = 'none';
+                            mp4Input.style.display = 'none';
+                            youtubePath.value = '';
+                            currentMp4Info.innerHTML = '';
+
+                            if (data.video_type === 'youtube') {
+                                youtubeInput.style.display = 'block';
+                                youtubePath.value = data.video_path || '';
+                            } else if (data.video_type === 'mp4') {
+                                mp4Input.style.display = 'block';
+                                if(data.video_path) {
+                                    currentMp4Info.innerHTML = `<p>Video saat ini: <a href="/storage/${data.video_path}" target="_blank">Lihat Video</a></p>`;
+                                }
+                            }
+                            
+                            new bootstrap.Modal(document.getElementById('editProdukModal')).show();
                         })
                         .catch(error => {
                             console.error('Error fetching produk details:', error);
-                            Swal.fire({
-                                title: 'Error!',
-                                text: 'Gagal mengambil data produk.',
-                                icon: 'error',
-                                confirmButtonColor: '#3498db'
-                            });
+                            Swal.fire('Error!', 'Gagal mengambil data produk.', 'error');
                         });
                 });
             });
@@ -554,116 +584,114 @@
                     showCancelButton: true,
                     confirmButtonColor: '#3498db',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, Simpan Perubahan!',
+                    confirmButtonText: 'Ya, Simpan!',
                     cancelButtonText: 'Batal'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Get the data from CKEditor and set it to the textarea
-                        const editorData = editDeskripsiEditor.getData();
-
-                        // Update textarea with editor content
-                        document.getElementById('edit_deskripsi').value = editorData;
-
+                        document.getElementById('edit_deskripsi').value = editDeskripsiEditor.getData();
                         const form = document.getElementById('editProdukForm');
                         const formData = new FormData(form);
 
-                        // Show loading state
-                        Swal.fire({
-                            title: 'Menyimpan Perubahan...',
-                            text: 'Mohon tunggu sebentar',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
+                        Swal.fire({ title: 'Menyimpan...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
                         fetch(form.action, {
                                 method: 'POST',
                                 body: formData,
                                 headers: {
                                     'X-Requested-With': 'XMLHttpRequest',
-                                    'X-CSRF-TOKEN': document.querySelector(
-                                        'meta[name="csrf-token"]').getAttribute('content')
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                                 }
                             })
                             .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
-                                    // Close the modal
-                                    const modalElement = document.getElementById(
-                                        'editProdukModal');
-                                    const modal = bootstrap.Modal.getInstance(modalElement);
-                                    modal.hide();
-
-                                    // Show success message
-                                    Swal.fire({
-                                        title: 'Berhasil!',
-                                        text: data.message ||
-                                            'Produk berhasil diperbarui!',
-                                        icon: 'success',
-                                        confirmButtonColor: '#3498db'
-                                    }).then(() => {
-                                        // Reload the page
-                                        window.location.reload();
-                                    });
+                                    bootstrap.Modal.getInstance(document.getElementById('editProdukModal')).hide();
+                                    Swal.fire('Berhasil!', data.message || 'Produk berhasil diperbarui!', 'success')
+                                    .then(() => window.location.reload());
                                 } else {
-                                    Swal.fire({
-                                        title: 'Gagal!',
-                                        text: data.message ||
-                                            'Gagal menyimpan perubahan.',
-                                        icon: 'error',
-                                        confirmButtonColor: '#3498db'
-                                    });
+                                    Swal.fire('Gagal!', data.message || 'Gagal menyimpan perubahan.', 'error');
                                 }
                             })
                             .catch(error => {
                                 console.error('Error saving produk:', error);
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: 'Gagal menyimpan perubahan.',
-                                    icon: 'error',
-                                    confirmButtonColor: '#3498db'
-                                });
+                                Swal.fire('Error!', 'Terjadi kesalahan saat menyimpan.', 'error');
                             });
                     }
                 });
             });
 
-            // Handle view image
+             // Shared SweetAlert for form submission (Create and Delete)
+            function setupFormSubmission(formSelector, confirmation) {
+                 document.querySelectorAll(formSelector).forEach(form => {
+                    form.addEventListener('submit', function (e) {
+                         e.preventDefault();
+                        Swal.fire(confirmation).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({ title: 'Memproses...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                                this.submit();
+                            }
+                        });
+                    });
+                });
+                 // Special handling for delete button
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const form = this.closest('form');
+                         Swal.fire(confirmation).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({ title: 'Memproses...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                                form.submit();
+                            }
+                        });
+                    });
+                });
+            }
+
+            setupFormSubmission('form[action*="produk_inovasi.store"]', {
+                title: 'Konfirmasi', text: 'Simpan produk inovasi baru?', icon: 'question', showCancelButton: true, confirmButtonText: 'Ya, Simpan!', cancelButtonText: 'Batal'
+            });
+            setupFormSubmission('.delete-form', {
+                title: 'Konfirmasi Hapus', text: 'Anda yakin ingin menghapus produk ini?', icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus!', cancelButtonText: 'Batal', confirmButtonColor: '#d33'
+            });
+
+
+            // Handle view image & video
             document.querySelectorAll('.view-image').forEach(button => {
                 button.addEventListener('click', function() {
-                    const imageUrl = this.dataset.image;
-                    const title = this.dataset.title;
+                    document.getElementById('modalImage').src = this.dataset.image;
+                    new bootstrap.Modal(document.getElementById('imageModal')).show();
+                });
+            });
+             document.querySelectorAll('.view-video').forEach(button => {
+                button.addEventListener('click', function() {
+                    const type = this.dataset.type;
+                    const path = this.dataset.path;
+                    const container = document.getElementById('video-container');
+                    
+                    if (type === 'youtube') {
+                        const videoId = new URL(path).searchParams.get('v');
+                        container.innerHTML = `<iframe width="100%" height="400" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+                    } else {
+                        container.innerHTML = `<video width="100%" controls><source src="${path}" type="video/mp4">Your browser does not support the video tag.</video>`;
+                    }
+                    const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
+                    videoModal.show();
 
-                    document.getElementById('imageModalLabel').textContent = title;
-                    document.getElementById('modalImage').src = imageUrl;
-
-                    const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
-                    imageModal.show();
+                    // Stop video when modal is closed
+                     document.getElementById('videoModal').addEventListener('hidden.bs.modal', function () {
+                        container.innerHTML = '';
+                    });
                 });
             });
 
+
             // Flash message handling
-            const flashSuccess = "{{ session('success') }}";
-            const flashError = "{{ session('error') }}";
-
-            if (flashSuccess) {
-                Swal.fire({
-                    title: 'Berhasil!',
-                    text: flashSuccess,
-                    icon: 'success',
-                    confirmButtonColor: '#3498db'
-                });
-            }
-
-            if (flashError) {
-                Swal.fire({
-                    title: 'Error!',
-                    text: flashError,
-                    icon: 'error',
-                    confirmButtonColor: '#3498db'
-                });
-            }
+            @if(session('success'))
+                Swal.fire('Berhasil!', "{{ session('success') }}", 'success');
+            @endif
+            @if(session('error'))
+                Swal.fire('Error!', "{{ session('error') }}", 'error');
+            @endif
         });
     </script>
 @endsection
