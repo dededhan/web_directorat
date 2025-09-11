@@ -43,9 +43,9 @@ class RisetUnjController extends Controller
         ]);
 
         try {
-            RisetUnj::truncate();
+            
             Excel::import(new RisetUnjImport, $request->file('file'));
-            return back()->with('success', 'Data riset berhasil diimpor!');
+            return back()->with('success', 'Data riset berhasil ditambahkan!');
         } catch (\Exception $e) {
             return back()->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
         }
