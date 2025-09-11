@@ -40,6 +40,9 @@
             </a>
             <h1 class="text-3xl md:text-4xl font-bold text-primary mt-4">{{ $produk->nama_produk }}</h1>
             <p class="text-textSecondary mt-2">Oleh: {{ $produk->inovator }}</p>
+             <div class="bg-accent/20 text-accent rounded-full px-3 py-1 text-xs font-semibold">
+                                        {{ $produk->kategori }}
+            </div>
         </div>
 
         <div class="bg-cardColor rounded-card shadow-lg p-6 md:p-8">
