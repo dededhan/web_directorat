@@ -64,7 +64,7 @@
                     @endphp
 
                     @if($produk->video_type == 'youtube' && $youtubeId)
-                        <div id="video-placeholder" class="w-full h-full bg-cover bg-center cursor-pointer relative group"
+                        <div class="video-placeholder w-full h-full bg-cover bg-center cursor-pointer relative group"
                              style="background-image: url('https://img.youtube.com/vi/{{ $youtubeId }}/maxresdefault.jpg');"
                              data-video-type="{{ $produk->video_type }}" data-video-path="{{ $youtubeId }}">
                             <div class="absolute inset-0 bg-black/40 flex items-center justify-center text-center text-white p-4 transition-colors duration-300 group-hover:bg-black/20">
@@ -74,7 +74,7 @@
                             </div>
                         </div>
                     @elseif($produk->video_type == 'mp4')
-                        <div id="video-placeholder" class="w-full h-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center cursor-pointer group"
+                        <div class="video-placeholder w-full h-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center cursor-pointer group"
                              data-video-type="{{ $produk->video_type }}" data-video-path="{{ asset('storage/' . $produk->video_path) }}">
                             <div class="text-center text-white">
                                 <i class="fas fa-play-circle text-6xl mb-4 opacity-80 transform group-hover:scale-110 transition-transform duration-300 ease-out-expo"></i>
@@ -137,6 +137,8 @@
     </main>
 </div>
 
+<div id="qrcode" style="display:none"></div>
+
 {{-- Scripts --}}
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 <script type="text/javascript">
@@ -150,28 +152,25 @@
         correctLevel : QRCode.CorrectLevel.H
     });
 
-    // Video Player Script
     document.addEventListener('DOMContentLoaded', function () {
-        const placeholder = document.getElementById('video-placeholder');
         const videoContainer = document.getElementById('video-container');
+        videoContainer.addEventListener('click', function (e) {
+            const placeholder = e.target.closest('.video-placeholder');
+            if (!placeholder) return;
+            const type = placeholder.dataset.videoType;
+            const path = placeholder.dataset.videoPath;
+            let playerHtml = '';
 
-        if (placeholder) {
-            placeholder.addEventListener('click', function () {
-                const type = this.dataset.videoType;
-                const path = this.dataset.videoPath;
-                let playerHtml = '';
+            if (type === 'youtube') {
+                playerHtml = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${path}?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+            } else if (type === 'mp4') {
+                playerHtml = `<video class="w-full h-full" controls autoplay><source src="${path}" type="video/mp4">Browser Anda tidak mendukung tag video.</video>`;
+            }
 
-                if (type === 'youtube') {
-                    playerHtml = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${path}?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
-                } else if (type === 'mp4') {
-                    playerHtml = `<video class="w-full h-full" controls autoplay><source src="${path}" type="video/mp4">Browser Anda tidak mendukung tag video.</video>`;
-                }
-
-                if (playerHtml) {
-                    videoContainer.innerHTML = playerHtml;
-                }
-            });
-        }
+            if (playerHtml) {
+                videoContainer.innerHTML = playerHtml;
+            }
+        });
     });
 </script>
 
