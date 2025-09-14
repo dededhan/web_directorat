@@ -86,7 +86,7 @@
                         <td data-label="Periode Submit" class="block md:table-cell px-6 py-4">15 Sep 2025 - 15 Okt 2025</td>
                         <td data-label="Anggota" class="block md:table-cell px-6 py-4">1 - 4 Orang</td>
                         <td data-label="Aksi" class="block md:table-cell px-6 py-4 text-center">
-                             <a href="#" class="inline-block bg-teal-500 text-white font-bold py-2 px-4 rounded-lg text-xs hover:bg-teal-600 transition duration-300">
+                             <a href="{{ route('subdirektorat-inovasi.dosen.equity.usulkan-proposal.form') }}" class="inline-block bg-teal-500 text-white font-bold py-2 px-4 rounded-lg text-xs hover:bg-teal-600 transition duration-300">
                                 Usulkan
                             </a>
                         </td>
