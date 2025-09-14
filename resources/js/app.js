@@ -1,3 +1,4 @@
-import "./bootstrap";
-import "./proposal-form.js";
-let test = "";
+import './bootstrap';
+
+let test = '';
+

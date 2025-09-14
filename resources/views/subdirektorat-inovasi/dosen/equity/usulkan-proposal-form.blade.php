@@ -1,7 +1,64 @@
 @extends('subdirektorat-inovasi.dosen.index')
 
 @section('content')
-<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="proposalFormData()">
+
+{{-- 
+    SOLUSI FINAL:
+    Seluruh logika JavaScript (data, regions, functions) dimasukkan langsung ke dalam x-data.
+    Ini menghilangkan semua masalah timing dan dependensi eksternal.
+--}}
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8" 
+     x-data="{
+        ketua: { provinsi: '', kota: '', kecamatan: '', kelurahan: '' },
+        anggota: [],
+        regions: {
+            'Banten': {
+                'Kota Serang': { 'Serang': ['Cipare', 'Cimuncang', 'Lopang'], 'Taktakan': ['Taktakan', 'Pancur', 'Sayar'] },
+                'Kota Tangerang': { 'Cipondoh': ['Cipondoh', 'Poris Plawad', 'Kenanga'], 'Karawaci': ['Karawaci', 'Nambo Jaya', 'Pabuaran'] },
+                'Kota Tangerang Selatan': { 'Ciputat': ['Cipayung', 'Ciputat', 'Sawah Baru'], 'Serpong': ['Serpong', 'Rawabuntu', 'Ciater'] },
+                'Kabupaten Lebak': { 'Rangkasbitung': ['Cijoro Lebak', 'Muara Ciujung Timur', 'Rangkasbitung Barat'], 'Maja': ['Maja', 'Gubugan Cibeureum', 'Sindangmulya'] }
+            },
+            'DKI Jakarta': {
+                'Jakarta Pusat': { 'Gambir': ['Gambir', 'Cideng', 'Petojo Selatan'], 'Tanah Abang': ['Bendungan Hilir', 'Karet Tengsin', 'Kebon Melati'] },
+                'Jakarta Timur': { 'Cakung': ['Cakung Barat', 'Cakung Timur', 'Rawa Terate'], 'Jatinegara': ['Bali Mester', 'Kampung Melayu', 'Bidara Cina'] },
+                'Jakarta Selatan': { 'Kebayoran Baru': ['Selong', 'Gunung', 'Kramat Pela'], 'Tebet': ['Tebet Barat', 'Tebet Timur', 'Kebon Baru'] },
+                'Jakarta Barat': { 'Grogol Petamburan': ['Tomang', 'Grogol', 'Jelambar'], 'Kembangan': ['Kembangan Selatan', 'Kembangan Utara', 'Meruya Utara'] },
+                'Jakarta Utara': { 'Penjaringan': ['Penjaringan', 'Pluit', 'Kapuk Muara'], 'Tanjung Priok': ['Tanjung Priok', 'Kebon Bawang', 'Sunter Agung'] }
+            },
+            'Jawa Barat': {
+                'Kota Bandung': { 'Coblong': ['Dago', 'Sekeloa', 'Cipaganti'], 'Sukasari': ['Gegerkalong', 'Sarijadi', 'Isola'] },
+                'Kota Bogor': { 'Bogor Tengah': ['Pabaton', 'Sempur', 'Cibogor'], 'Bogor Timur': ['Baranangsiang', 'Katulampa', 'Sukasari'] },
+                'Kota Bekasi': { 'Bekasi Timur': ['Aren Jaya', 'Bekasi Jaya', 'Duren Jaya'], 'Bekasi Barat': ['Bintara', 'Kranji', 'Jakasampurna'] },
+                'Kabupaten Bandung': { 'Cileunyi': ['Cileunyi Kulon', 'Cileunyi Wetan', 'Cinunuk'], 'Dayeuhkolot': ['Citeureup', 'Dayeuhkolot', 'Pasawahan'] }
+            },
+            'Jawa Tengah': {
+                'Kota Semarang': { 'Semarang Tengah': ['Miroto', 'Pendrikan Kidul', 'Sekayu'], 'Banyumanik': ['Banyumanik', 'Gedawang', 'Pudakpayung'] },
+                'Kota Surakarta (Solo)': { 'Laweyan': ['Bumi', 'Laweyan', 'Penumping'], 'Pasar Kliwon': ['Baluwarti', 'Gajahan', 'Kampung Baru'] },
+                'Kabupaten Magelang': { 'Mungkid': ['Mendut', 'Mungkid', 'Sawitan'], 'Borobudur': ['Borobudur', 'Candirejo', 'Wanurejo'] }
+            },
+            'DI Yogyakarta': {
+                'Kota Yogyakarta': { 'Gondokusuman': ['Demangan', 'Klitren', 'Terban'], 'Kotagede': ['Prenggan', 'Rejowinangun', 'Purbayan'] },
+                'Kabupaten Sleman': { 'Depok': ['Condongcatur', 'Caturtunggal', 'Maguwoharjo'], 'Mlati': ['Sinduadi', 'Tirtoadi', 'Tlogoadi'] },
+                'Kabupaten Bantul': { 'Bantul': ['Bantul', 'Palbapang', 'Trirenggo'], 'Kasihan': ['Bangunjiwo', 'Ngestiharjo', 'Tirtonirmolo'] }
+            },
+            'Jawa Timur': {
+                'Kota Surabaya': { 'Gubeng': ['Airlangga', 'Gubeng', 'Kertajaya'], 'Wonokromo': ['Darmo', 'Jagir', 'Wonokromo'] },
+                'Kota Malang': { 'Klojen': ['Klojen', 'Rampal Celaket', 'Samaan'], 'Lowokwaru': ['Jatimulyo', 'Lowokwaru', 'Tulusrejo'] },
+                'Kabupaten Sidoarjo': { 'Sidoarjo': ['Celep', 'Magersari', 'Sidokumpul'], 'Waru': ['Bungurasih', 'Waru', 'Medaeng'] }
+            }
+        },
+        addAnggota() {
+            this.anggota.push({
+                provinsi: '',
+                kota: '',
+                kecamatan: '',
+                kelurahan: ''
+            });
+        },
+        removeAnggota(index) {
+            this.anggota.splice(index, 1);
+        }
+    }">
 
     {{-- Header --}}
     <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
@@ -33,7 +90,7 @@
                     <p class="text-gray-500 mt-1">Detail informasi ketua tim.</p>
                 </div>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-600 mb-1">Nama Lengkap</label><input type="text" class="w-full bg-white border border-gray-300 rounded-lg shadow-sm py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" placeholder="Masukkan Nama Lengkap"></div>
                 <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-600 mb-1">NIK / NIM / NIP</label><input type="text" class="w-full bg-white border border-gray-300 rounded-lg shadow-sm py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" placeholder="Masukkan NIK, NIM, atau NIP"></div>
@@ -117,7 +174,7 @@
                      {{-- Dropdown Alamat Anggota --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-600 mb-1">Provinsi</label>
-                        <select x-model="anggotaItem.provinsi" @change="anggotaItem.kota = ''; anggotaItem.kecamatan = ''; anggotaItem.kelurahan = ''" class="w-full bg-white border border-gray-300 rounded-lg shadow-sm py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all disabled:bg-gray-100 disabled:cursor-not-allowed">
+                        <select x-model="anggotaItem.provinsi" @change="anggotaItem.kota = ''; anggotaItem.kecamatan = ''; anggotaItem.kelurahan = ''" class="w-full bg-white border border-gray-300 rounded-lg shadow-sm py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
                             <option value="">Pilih Provinsi</option>
                             <template x-for="prov in Object.keys(regions)" :key="prov"><option :value="prov" x-text="prov"></option></template>
                         </select>
@@ -158,8 +215,6 @@
     </div>
 </div>
 
-{{-- Memuat skrip langsung di sini untuk memastikan semuanya berjalan --}}
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
+{{-- TIDAK ADA <script> di sini lagi --}}
 @endsection
 
