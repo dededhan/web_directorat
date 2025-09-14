@@ -15,10 +15,12 @@
                 </ol>
             </nav>
         </div>
+        
         <button @click="showForm = !showForm" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg shadow-sm hover:bg-gray-50 transition-colors duration-200">
             <i class='bx' :class="showForm ? 'bx-arrow-back' : 'bx-plus'"></i>
             <span class="ml-2" x-text="showForm ? 'Kembali' : 'Tambah Logbook Kegiatan'"></span>
         </button>
+       
     </div>
 
     <!-- Tampilan Tabel Logbook -->
@@ -89,8 +91,73 @@
         </div>
     </div>
     
-   
-       
+    
+        <div x-show="showForm" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" style="display: none;">
+        <div class="bg-gradient-to-br from-gray-50 to-slate-100 rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+            <div class="p-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Form Logbook Kegiatan</h2>
+                    <p class="text-gray-500 mt-1">Isi semua form di bawah dengan benar</p>
+                </div>
+
+                <form class="space-y-6">
+                    <!-- Field: Judul (Readonly) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Judul</label>
+                        <p class="w-full bg-gray-200 rounded-lg p-3 text-sm text-gray-800 font-semibold">Pengembangan Finite Automata Simulator Berbasis Web</p>
+                    </div>
+
+                    <!-- Field: Tanggal Kegiatan -->
+                    <div>
+                        <label for="tanggal" class="block text-sm font-medium text-gray-600 mb-1">Tanggal Kegiatan</label>
+                        <div class="relative">
+                            <i class='bx bxs-calendar absolute left-3 top-1/2 -translate-y-1/2 text-gray-400'></i>
+                            <input type="date" id="tanggal" class="w-full md:w-1/2 bg-white border border-gray-300 rounded-lg shadow-sm py-2 pl-10 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                        </div>
+                    </div>
+
+                    <!-- Field: Catatan -->
+                    <div>
+                        <label for="catatan" class="block text-sm font-medium text-gray-600 mb-1">Catatan</label>
+                        <textarea id="catatan" rows="4" class="w-full bg-white border border-gray-300 rounded-lg shadow-sm py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"></textarea>
+                    </div>
+
+                    <!-- Field: File Lampiran (Custom styled) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">File Lampiran <span class="text-gray-400">(Opsional)</span></label>
+                        <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg">
+                            <div class="space-y-1 text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="file-upload" class="relative cursor-pointer bg-transparent rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                        <span>Upload file</span>
+                                        <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                                    </label>
+                                    <p class="pl-1">atau drag and drop</p>
+                                </div>
+                                <p class="text-xs text-gray-500">PDF, DOCX, XLSX, PNG, JPG hingga 2MB</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Field: Persentase Capaian Fisik -->
+                    <div>
+                        <label for="persentase" class="block text-sm font-medium text-gray-600 mb-1">Persentase Capaian Fisik</label>
+                        <div class="relative w-full md:w-1/2">
+                            <input type="number" id="persentase" placeholder="0" class="w-full bg-white border border-gray-300 rounded-lg shadow-sm py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                            <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-gray-500">%</span>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Buttons -->
+                <div class="mt-8 pt-6 border-t border-slate-200 flex items-center justify-end gap-3">
+                    <button @click="showForm = false" type="button" class="px-5 py-2 bg-white border border-gray-300 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-100 transition-all shadow-sm">Cancel</button>
+                    <button type="button" class="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 @endsection
