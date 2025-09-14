@@ -525,6 +525,9 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::get('/equity/tahap-penilaian', function () {
                     return view('subdirektorat-inovasi.dosen.equity.tahap-penilaian');
                 })->name('equity.tahap-penilaian');
+                 Route::get('/equity/tahapan-proposal', function () {
+                    return view('subdirektorat-inovasi.dosen.equity.tahapan-proposal');
+                })->name('equity.tahapan-proposal');
 
                 // Tabel Katsinov
                 Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekatsinov');

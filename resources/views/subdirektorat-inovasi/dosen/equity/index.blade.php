@@ -70,7 +70,9 @@
                                      x-transition
                                      class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-10">
                                     <div class="py-1">
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Tahap Penelitian</a>
+                                        <a href="{{ route('subdirektorat-inovasi.dosen.equity.tahapan-proposal') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            Tahapan Proposal
+                                        </a>
                                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Input Logbook</a>
                                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Detail</a>
                                     </div>
