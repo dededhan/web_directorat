@@ -73,7 +73,9 @@
                                         <a href="{{ route('subdirektorat-inovasi.dosen.equity.tahapan-proposal') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             Tahapan Proposal
                                         </a>
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Input Logbook</a>
+                                        <a href="{{ route('subdirektorat-inovasi.dosen.equity.logbook') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            Input Logbook
+                                        </a>
                                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Detail</a>
                                     </div>
                                 </div>
