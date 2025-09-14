@@ -44,6 +44,9 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
     });
 
 
+Route::get('/sulitest-unj', function () {
+    return view('sulitest.page.index');
+})->name('sulitest.page.index');
 
 Route::prefix('sulitest')->name('sulitest.')->group(function () {
 
@@ -64,3 +67,4 @@ Route::prefix('sulitest')->name('sulitest.')->group(function () {
         Route::get('/results/{session}', [SulitestController::class, 'showResults'])->name('results.show');
     });
 });
+
