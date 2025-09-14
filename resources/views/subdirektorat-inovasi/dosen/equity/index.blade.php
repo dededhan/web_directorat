@@ -1,213 +1,207 @@
+{{-- index.blade.php --}}
 @extends('subdirektorat-inovasi.dosen.index')
 
 @section('content')
-<!-- Breadcrumbs -->
-<div class="mb-4">
-    <nav class="text-sm text-gray-500">
+<div class="bg-gray-50 min-h-screen p-4 sm:p-6 lg:p-8">
+
+    <nav class="text-sm text-gray-500 mb-4">
         <span>Home</span>
-        <span class="mx-2">></span>
-        <span class="text-gray-700">Manajemen Proposal</span>
+        <span class="mx-2">&gt;</span>
+        <span class="font-medium text-gray-700">Manajemen Proposal</span>
     </nav>
-</div>
 
-<!-- Page Title -->
-<div class="mb-6">
-    <h1 class="text-3xl font-bold text-blue-600">Proposal Penelitian Pengabdian</h1>
-</div>
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Proposal Penelitian Pengabdian</h1>
 
-<!-- Main Content Card -->
-<div class="bg-white rounded-lg shadow-md p-6">
-    <!-- Card Header -->
-    <div class="mb-6">
-        <h2 class="text-xl font-bold text-gray-800 mb-2">Manajemen Data Proposal Penelitian Pengabdian</h2>
-        <p class="text-gray-600">Tabel Proposal Penelitian Pengabdian</p>
-    </div>
-
-    <!-- Table Controls -->
-    <div class="flex justify-between items-center mb-4">
-        <div class="flex items-center space-x-2">
-            <span class="text-gray-600">Tampilkan</span>
-            <select class="bg-blue-600 text-white px-3 py-1 rounded-md border-0 focus:ring-2 focus:ring-blue-500">
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-            </select>
-            <span class="text-gray-600">Data</span>
+    <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+        <div class="mb-6">
+            <h2 class="text-xl font-bold text-gray-800">Manajemen Data Proposal</h2>
+            <p class="text-gray-500 text-sm mt-1">Tabel Proposal Penelitian Pengabdian yang telah diajukan.</p>
         </div>
-        
-        <div class="flex items-center space-x-2">
-            <div class="relative">
-                <input type="text" placeholder="Search" 
-                       class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                <i class='bx bx-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400'></i>
+
+        <div class="flex flex-col md:flex-row justify-between items-center mb-4 space-y-3 md:space-y-0">
+            <div class="flex items-center space-x-2 text-sm">
+                <span class="text-gray-600">Tampilkan</span>
+                <select class="border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 text-sm">
+                    <option>10</option> <option>25</option> <option>50</option>
+                </select>
+                <span class="text-gray-600">Data</span>
             </div>
-            <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
-                <i class='bx bx-search'></i>
-            </button>
+            
+            <div class="relative">
+                <i class='bx bx-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400'></i>
+                <input type="text" placeholder="Search proposal..." class="pl-10 pr-4 py-2 w-full md:w-64 border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500">
+            </div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">Judul Proposal / Usulan</th>
+                        <th scope="col" class="px-6 py-3 hidden lg:table-cell">Waktu</th>
+                        <th scope="col" class="px-6 py-3 hidden md:table-cell">Nominal Usulan</th>
+                        <th scope="col" class="px-6 py-3 hidden md:table-cell">Nominal Disetujui</th>
+                        <th scope="col" class="px-6 py-3">Opsi</th>
+                        <th scope="col" class="px-6 py-3 text-center hidden lg:table-cell">Submit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{-- Data Dummy 1 --}}
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4">
+                            <div class="font-semibold text-gray-800">Pengembangan Sistem Monitoring Kualitas Air</div>
+                            <div class="text-xs text-gray-500">(Penelitian Terapan (FMIPA) 2025)</div>
+                            <dl class="lg:hidden mt-2">
+                                <dt class="font-medium text-gray-600">Waktu</dt>
+                                <dd class="text-gray-800">12 bulan</dd>
+                                <dt class="font-medium text-gray-600 mt-1 md:hidden">Nominal</dt>
+                                <dd class="text-gray-800 md:hidden">Usulan: 45jt / Disetujui: 40jt</dd>
+                            </dl>
+                        </td>
+                        <td class="px-6 py-4 hidden lg:table-cell">12 bulan</td>
+                        <td class="px-6 py-4 hidden md:table-cell">Rp 45.000.000</td>
+                        <td class="px-6 py-4 hidden md:table-cell">Rp 40.000.000</td>
+                        <td class="px-6 py-4">
+                            <div x-data="{ open: false }" class="relative">
+                                <button @click="open = !open" class="inline-flex items-center px-3 py-2 bg-teal-500 text-white text-xs font-medium rounded-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                                    Opsi <i class='bx bx-chevron-down ml-1'></i>
+                                </button>
+                                <div x-show="open" @click.away="open = false" 
+                                     x-transition
+                                     class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-10">
+                                    <div class="py-1">
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Tahap Penelitian</a>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Input Logbook</a>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Detail</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-center hidden lg:table-cell">
+                            <i class='bx bxs-check-circle text-green-500 text-xl' title="Submitted"></i>
+                        </td>
+                    </tr>
+                    {{-- Data Dummy 2 --}}
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4">
+                            <div class="font-semibold text-gray-800">Pemberdayaan Masyarakat Desa Melalui Kewirausahaan Digital</div>
+                            <div class="text-xs text-gray-500">(Pengabdian Masyarakat (FEB) 2025)</div>
+                            <dl class="lg:hidden mt-2">
+                                <dt class="font-medium text-gray-600">Waktu</dt>
+                                <dd class="text-gray-800">6 bulan</dd>
+                                <dt class="font-medium text-gray-600 mt-1 md:hidden">Nominal</dt>
+                                <dd class="text-gray-800 md:hidden">Usulan: 25jt / Disetujui: 25jt</dd>
+                            </dl>
+                        </td>
+                        <td class="px-6 py-4 hidden lg:table-cell">6 bulan</td>
+                        <td class="px-6 py-4 hidden md:table-cell">Rp 25.000.000</td>
+                        <td class="px-6 py-4 hidden md:table-cell">Rp 25.000.000</td>
+                        <td class="px-6 py-4">
+                            <div x-data="{ open: false }" class="relative">
+                                <button @click="open = !open" class="inline-flex items-center px-3 py-2 bg-teal-500 text-white text-xs font-medium rounded-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                                    Opsi <i class='bx bx-chevron-down ml-1'></i>
+                                </button>
+                                <div x-show="open" @click.away="open = false" 
+                                     x-transition
+                                     class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-10">
+                                    <div class="py-1">
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Tahap Penelitian</a>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Input Logbook</a>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Detail</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-center hidden lg:table-cell">
+                            <i class='bx bxs-check-circle text-green-500 text-xl' title="Submitted"></i>
+                        </td>
+                    </tr>
+                    {{-- Data Dummy 3 --}}
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4">
+                            <div class="font-semibold text-gray-800">Analisis Big Data untuk Prediksi Tren Pasar Saham</div>
+                            <div class="text-xs text-gray-500">(Penelitian Dasar (FASILKOM) 2024)</div>
+                            <dl class="lg:hidden mt-2">
+                                <dt class="font-medium text-gray-600">Waktu</dt>
+                                <dd class="text-gray-800">18 bulan</dd>
+                                <dt class="font-medium text-gray-600 mt-1 md:hidden">Nominal</dt>
+                                <dd class="text-gray-800 md:hidden">Usulan: 70jt / Disetujui: 60jt</dd>
+                            </dl>
+                        </td>
+                        <td class="px-6 py-4 hidden lg:table-cell">18 bulan</td>
+                        <td class="px-6 py-4 hidden md:table-cell">Rp 70.000.000</td>
+                        <td class="px-6 py-4 hidden md:table-cell">Rp 60.000.000</td>
+                        <td class="px-6 py-4">
+                            <div x-data="{ open: false }" class="relative">
+                                <button @click="open = !open" class="inline-flex items-center px-3 py-2 bg-teal-500 text-white text-xs font-medium rounded-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                                    Opsi <i class='bx bx-chevron-down ml-1'></i>
+                                </button>
+                                <div x-show="open" @click.away="open = false" 
+                                     x-transition
+                                     class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-10">
+                                    <div class="py-1">
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Tahap Penelitian</a>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Input Logbook</a>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Detail</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-center hidden lg:table-cell">
+                            <i class='bx bxs-time-five text-yellow-500 text-xl' title="Draft"></i>
+                        </td>
+                    </tr>
+                    {{-- Data Dummy 4 --}}
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4">
+                            <div class="font-semibold text-gray-800">Pengembangan Model Pembelajaran Adaptif Berbasis AI</div>
+                            <div class="text-xs text-gray-500">(Penelitian Pengembangan (FKIP) 2024)</div>
+                            <dl class="lg:hidden mt-2">
+                                <dt class="font-medium text-gray-600">Waktu</dt>
+                                <dd class="text-gray-800">24 bulan</dd>
+                                <dt class="font-medium text-gray-600 mt-1 md:hidden">Nominal</dt>
+                                <dd class="text-gray-800 md:hidden">Usulan: 150jt / Disetujui: 135jt</dd>
+                            </dl>
+                        </td>
+                        <td class="px-6 py-4 hidden lg:table-cell">24 bulan</td>
+                        <td class="px-6 py-4 hidden md:table-cell">Rp 150.000.000</td>
+                        <td class="px-6 py-4 hidden md:table-cell">Rp 135.000.000</td>
+                        <td class="px-6 py-4">
+                            <div x-data="{ open: false }" class="relative">
+                                <button @click="open = !open" class="inline-flex items-center px-3 py-2 bg-teal-500 text-white text-xs font-medium rounded-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                                    Opsi <i class='bx bx-chevron-down ml-1'></i>
+                                </button>
+                                <div x-show="open" @click.away="open = false" 
+                                     x-transition
+                                     class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-10">
+                                    <div class="py-1">
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Tahap Penelitian</a>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Input Logbook</a>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Detail</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-center hidden lg:table-cell">
+                            <i class='bx bxs-check-circle text-green-500 text-xl' title="Submitted"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-6 flex flex-col md:flex-row justify-between items-center text-sm">
+            <div class="text-gray-600 mb-2 md:mb-0">
+                Menampilkan 1 sampai 4 dari 25 data
+            </div>
+            <div class="inline-flex -space-x-px">
+                <button class="px-3 py-1 border border-gray-300 rounded-l-md hover:bg-gray-100 disabled:opacity-50" disabled>&laquo;</button>
+                <button class="px-3 py-1 border border-gray-300 bg-teal-50 text-teal-600">1</button>
+                <button class="px-3 py-1 border border-gray-300 hover:bg-gray-100">2</button>
+                <button class="px-3 py-1 border border-gray-300 hover:bg-gray-100">3</button>
+                <button class="px-3 py-1 border border-gray-300 rounded-r-md hover:bg-gray-100">&raquo;</button>
+            </div>
         </div>
     </div>
-
-    <!-- Data Table -->
-    <div class="overflow-x-auto">
-        <table class="w-full border-collapse">
-            <thead>
-                <tr class="bg-gray-50">
-                    <th class="border border-gray-200 px-4 py-3 text-left font-semibold text-gray-700">Judul Proposal / Usulan</th>
-                    <th class="border border-gray-200 px-4 py-3 text-left font-semibold text-gray-700">Waktu</th>
-                    <th class="border border-gray-200 px-4 py-3 text-left font-semibold text-gray-700">Nominal Usulan</th>
-                    <th class="border border-gray-200 px-4 py-3 text-left font-semibold text-gray-700">Nominal Disetujui</th>
-                    <th class="border border-gray-200 px-4 py-3 text-left font-semibold text-gray-700">Opsi</th>
-                    <th class="border border-gray-200 px-4 py-3 text-left font-semibold text-gray-700">Submit Proposal</th>
-                    <th class="border border-gray-200 px-4 py-3 text-left font-semibold text-gray-700">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="hover:bg-gray-50">
-                    <td class="border border-gray-200 px-4 py-3">
-                        <div>
-                            <div class="font-medium text-gray-900">Pengembangan Sistem Monitoring Kualitas Air Berbasis IoT untuk Wilayah Pesisir</div>
-                            <div class="text-sm text-gray-500">(Penelitian Terapan (FMIPA) 2025)</div>
-                        </div>
-                    </td>
-                    <td class="border border-gray-200 px-4 py-3 text-gray-700">12 bulan</td>
-                    <td class="border border-gray-200 px-4 py-3 text-gray-700">Rp 45.000.000</td>
-                    <td class="border border-gray-200 px-4 py-3 text-gray-700">Rp 40.000.000</td>
-                    <td class="border border-gray-200 px-4 py-3">
-                        <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
-                            Opsi <i class='bx bx-chevron-down'></i>
-                        </button>
-                    </td>
-                    <td class="border border-gray-200 px-4 py-3 text-center">
-                        <i class='bx bx-check text-green-600 text-xl'></i>
-                    </td>
-                    <td class="border border-gray-200 px-4 py-3">
-                        <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-md hover:bg-gray-300 focus:ring-2 focus:ring-gray-500">
-                            Detail
-                        </button>
-                    </td>
-                </tr>
-                <tr class="hover:bg-gray-50 bg-gray-50">
-                    <td class="border border-gray-200 px-4 py-3">
-                        <div>
-                            <div class="font-medium text-gray-900">Pemberdayaan Masyarakat Desa Melalui Program Literasi Digital</div>
-                            <div class="text-sm text-gray-500">(Pengabdian Masyarakat (FIP) 2025)</div>
-                        </div>
-                    </td>
-                    <td class="border border-gray-200 px-4 py-3 text-gray-700">10 bulan</td>
-                    <td class="border border-gray-200 px-4 py-3 text-gray-700">Rp 30.000.000</td>
-                    <td class="border border-gray-200 px-4 py-3 text-gray-700">Rp 25.000.000</td>
-                    <td class="border border-gray-200 px-4 py-3">
-                        <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
-                            Opsi <i class='bx bx-chevron-down'></i>
-                        </button>
-                    </td>
-                    <td class="border border-gray-200 px-4 py-3 text-center">
-                        <i class='bx bx-check text-green-600 text-xl'></i>
-                    </td>
-                    <td class="border border-gray-200 px-4 py-3">
-                        <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-md hover:bg-gray-300 focus:ring-2 focus:ring-gray-500">
-                            Detail
-                        </button>
-                    </td>
-                </tr>
-                <tr class="hover:bg-gray-50">
-                    <td class="border border-gray-200 px-4 py-3">
-                        <div>
-                            <div class="font-medium text-gray-900">Analisis Dampak Pembelajaran Daring Terhadap Prestasi Akademik Mahasiswa</div>
-                            <div class="text-sm text-gray-500">(Penelitian Dasar (FE) 2025)</div>
-                        </div>
-                    </td>
-                    <td class="border border-gray-200 px-4 py-3 text-gray-700">8 bulan</td>
-                    <td class="border border-gray-200 px-4 py-3 text-gray-700">Rp 20.000.000</td>
-                    <td class="border border-gray-200 px-4 py-3 text-gray-700">Rp 18.000.000</td>
-                    <td class="border border-gray-200 px-4 py-3">
-                        <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
-                            Opsi <i class='bx bx-chevron-down'></i>
-                        </button>
-                    </td>
-                    <td class="border border-gray-200 px-4 py-3 text-center">
-                        <i class='bx bx-check text-green-600 text-xl'></i>
-                    </td>
-                    <td class="border border-gray-200 px-4 py-3">
-                        <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-md hover:bg-gray-300 focus:ring-2 focus:ring-gray-500">
-                            Detail
-                        </button>
-                    </td>
-                </tr>
-                <tr class="hover:bg-gray-50 bg-gray-50">
-                    <td class="border border-gray-200 px-4 py-3">
-                        <div>
-                            <div class="font-medium text-gray-900">Implementasi Teknologi Blockchain untuk Transparansi Keuangan Desa</div>
-                            <div class="text-sm text-gray-500">(Penelitian Terapan (FT) 2025)</div>
-                        </div>
-                    </td>
-                    <td class="border border-gray-200 px-4 py-3 text-gray-700">15 bulan</td>
-                    <td class="border border-gray-200 px-4 py-3 text-gray-700">Rp 60.000.000</td>
-                    <td class="border border-gray-200 px-4 py-3 text-gray-700">Rp 55.000.000</td>
-                    <td class="border border-gray-200 px-4 py-3">
-                        <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
-                            Opsi <i class='bx bx-chevron-down'></i>
-                        </button>
-                    </td>
-                    <td class="border border-gray-200 px-4 py-3 text-center">
-                        <i class='bx bx-check text-green-600 text-xl'></i>
-                    </td>
-                    <td class="border border-gray-200 px-4 py-3">
-                        <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-md hover:bg-gray-300 focus:ring-2 focus:ring-gray-500">
-                            Detail
-                        </button>
-                    </td>
-                </tr>
-                <tr class="hover:bg-gray-50">
-                    <td class="border border-gray-200 px-4 py-3">
-                        <div>
-                            <div class="font-medium text-gray-900">Pengembangan Model Pembelajaran Berbasis Proyek untuk Meningkatkan Kreativitas Siswa</div>
-                            <div class="text-sm text-gray-500">(Penelitian Dasar (FIP) 2025)</div>
-                        </div>
-                    </td>
-                    <td class="border border-gray-200 px-4 py-3 text-gray-700">12 bulan</td>
-                    <td class="border border-gray-200 px-4 py-3 text-gray-700">Rp 35.000.000</td>
-                    <td class="border border-gray-200 px-4 py-3 text-gray-700">Rp 32.000.000</td>
-                    <td class="border border-gray-200 px-4 py-3">
-                        <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
-                            Opsi <i class='bx bx-chevron-down'></i>
-                        </button>
-                    </td>
-                    <td class="border border-gray-200 px-4 py-3 text-center">
-                        <i class='bx bx-check text-green-600 text-xl'></i>
-                    </td>
-                    <td class="border border-gray-200 px-4 py-3">
-                        <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-md hover:bg-gray-300 focus:ring-2 focus:ring-gray-500">
-                            Detail
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Pagination -->
-    <div class="mt-6 flex justify-between items-center">
-        <div class="text-sm text-gray-600">
-            Menampilkan 1 sampai 5 dari 25 data
-        </div>
-        <div class="flex space-x-2">
-            <button class="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50" disabled>
-                <i class='bx bx-chevron-left'></i>
-            </button>
-            <button class="px-3 py-1 bg-blue-600 text-white rounded-md">1</button>
-            <button class="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50">2</button>
-            <button class="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50">3</button>
-            <button class="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50">
-                <i class='bx bx-chevron-right'></i>
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Footer -->
-<div class="mt-8 text-center text-sm text-gray-500">
-    © 2025 SIPP
 </div>
 @endsection

@@ -67,11 +67,11 @@
                     <i class='bx bxs-file-doc text-xl'></i>
                     <span x-show="open">Manajemen Proposal</span>
                 </a>
-                <a href="#"
-                   class="flex items-center p-2 space-x-3 rounded-md hover:bg-gray-700">
-                    <i class='bx bx-check-square text-xl'></i>
-                    <span x-show="open">Usulkan Proposal</span>
-                </a>
+                <a href="{{ route('subdirektorat-inovasi.dosen.equity.usulkan-proposal') }}"
+                    class="flex items-center p-2 space-x-3 rounded-md hover:bg-gray-700 {{ request()->routeIs('subdirektorat-inovasi.dosen.equity.usulkan-proposal') ? 'bg-gray-900' : '' }}">
+                        <i class='bx bx-check-square text-xl'></i>
+                        <span x-show="open">Usulkan Proposal</span>
+                    </a>
                 <a href="#"
                    class="flex items-center p-2 space-x-3 rounded-md hover:bg-gray-700">
                     <i class='bx bxs-briefcase text-xl'></i>

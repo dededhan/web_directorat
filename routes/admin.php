@@ -510,6 +510,11 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                     return view('subdirektorat-inovasi.dosen.equity.index');
                 })->name('equity.index');
 
+                 Route::get('/equity/usulkan-proposal', function () {
+                    return view('subdirektorat-inovasi.dosen.equity.usulkan-proposal');
+                })->name('equity.usulkan-proposal'); 
+
+
 
                 // Tabel Katsinov
                 Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekatsinov');
