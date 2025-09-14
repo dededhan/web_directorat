@@ -72,13 +72,13 @@
                         <i class='bx bx-check-square text-xl'></i>
                         <span x-show="open">Usulkan Proposal</span>
                     </a>
-                <a href="#"
-                   class="flex items-center p-2 space-x-3 rounded-md hover:bg-gray-700">
+                <a href="{{ route('subdirektorat-inovasi.dosen.equity.portofolio') }}"
+                    class="flex items-center p-2 space-x-3 rounded-md hover:bg-gray-700 {{ request()->routeIs('subdirektorat-inovasi.dosen.equity.portofolio') ? 'bg-gray-900' : '' }}">
                     <i class='bx bxs-briefcase text-xl'></i>
                     <span x-show="open">Portofolio</span>
                 </a>
-                <a href="#"
-                   class="flex items-center p-2 space-x-3 rounded-md hover:bg-gray-700">
+                <a href="{{ route('subdirektorat-inovasi.dosen.equity.mendaftar-reviewer') }}"
+                    class="flex items-center p-2 space-x-3 rounded-md hover:bg-gray-700 {{ request()->routeIs('subdirektorat-inovasi.dosen.equity.mendaftar-reviewer') ? 'bg-gray-900' : '' }}">
                     <i class='bx bxs-group text-xl'></i>
                     <span x-show="open">Mendaftar Reviewer</span>
                 </a>

@@ -514,7 +514,13 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                     return view('subdirektorat-inovasi.dosen.equity.usulkan-proposal');
                 })->name('equity.usulkan-proposal'); 
 
+                Route::get('/equity/portofolio', function () {
+                    return view('subdirektorat-inovasi.dosen.equity.portofolio');
+                })->name('equity.portofolio');
 
+                Route::get('/equity/mendaftar-reviewer', function () {
+                    return view('subdirektorat-inovasi.dosen.equity.mendaftar-reviewer');
+                })->name('equity.mendaftar-reviewer');
 
                 // Tabel Katsinov
                 Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekatsinov');
