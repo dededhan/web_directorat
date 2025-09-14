@@ -522,6 +522,10 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                     return view('subdirektorat-inovasi.dosen.equity.mendaftar-reviewer');
                 })->name('equity.mendaftar-reviewer');
 
+                Route::get('/equity/tahap-penilaian', function () {
+                    return view('subdirektorat-inovasi.dosen.equity.tahap-penilaian');
+                })->name('equity.tahap-penilaian');
+
                 // Tabel Katsinov
                 Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekatsinov');
                 Route::get('/form', [KatsinovController::class, 'create'])->name('form');
