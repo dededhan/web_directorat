@@ -11,7 +11,15 @@ class StoreBeritaRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        // Auth
+        return auth()->check() && in_array(auth()->user()->role, [
+            'admin_direktorat',
+            'admin_hilirisasi', 
+            'admin_inovasi',
+            'admin_pemeringkatan',
+            'fakultas',
+            'prodi'
+        ]);
     }
 
     /**

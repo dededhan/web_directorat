@@ -403,7 +403,7 @@
             
             <div class="article-content">
                 <div class="ck-content">
-                    {!! $berita->isi !!}
+                    {!! Purifier::clean($berita->isi) !!}
                 </div>
                 <div class="article-share">
                     <span>Bagikan:</span>

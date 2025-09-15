@@ -13,6 +13,7 @@ use App\Models\Instagram;
 use Illuminate\Support\Facades\Auth;
 use Mews\Purifier\Facades\Purifier;
 use Illuminate\Support\Str; // Import the Str class for slug generation
+use Illuminate\Support\Facades\Gate;
 
 class BeritaController extends Controller
 {
@@ -43,6 +44,11 @@ class BeritaController extends Controller
      */
     public function index()
     {
+        // Security: Check if user can view berita
+        if (!Gate::allows('viewAny', Berita::class)) {
+            abort(403, 'Unauthorized access');
+        }
+        
         $beritas = Berita::with('user')->latest()->get();
         $routePrefix = $this->getRoutePrefix();
         $viewName = 'admin.newsadmin';
@@ -73,8 +79,25 @@ class BeritaController extends Controller
         try {
             // The StoreBeritaRequest already validates the input, which is the first line of defense.
             if ($request->hasFile('gambar')) {
-                $namaFile = time() . '_' . uniqid() . '.' . $request->file('gambar')->getClientOriginalExtension();
-                $gambarPath = $request->file('gambar')->storeAs(
+                $file = $request->file('gambar');
+                
+                // Security: Additional file validation
+                $allowedMimes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+                if (!in_array($file->getMimeType(), $allowedMimes)) {
+                    return redirect()->back()
+                        ->with('error', 'Format file tidak diizinkan. Hanya JPG, PNG, dan GIF yang diperbolehkan.')
+                        ->withInput();
+                }
+                
+                // Security: Check file size (2MB max)
+                if ($file->getSize() > 2048 * 1024) {
+                    return redirect()->back()
+                        ->with('error', 'Ukuran file terlalu besar. Maksimal 2MB.')
+                        ->withInput();
+                }
+                
+                $namaFile = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $gambarPath = $file->storeAs(
                     'berita-images',
                     $namaFile,
                     'public'
@@ -197,6 +220,12 @@ class BeritaController extends Controller
     {
         try {
             $berita = Berita::findOrFail($id);
+            
+            // Security: Verify user can only edit their own berita or is admin
+            if (auth()->user()->role !== 'admin_direktorat' && $berita->user_id !== auth()->id()) {
+                return redirect()->back()
+                    ->with('error', 'Anda tidak memiliki izin untuk mengedit berita ini.');
+            }
 
             // Security: Validate all incoming data.
             $validated = $request->validate([
@@ -271,6 +300,12 @@ class BeritaController extends Controller
     {
         try {
             $berita = Berita::findOrFail($id);
+            
+            // Security: Verify user can only delete their own berita or is admin
+            if (auth()->user()->role !== 'admin_direktorat' && $berita->user_id !== auth()->id()) {
+                return redirect()->back()
+                    ->with('error', 'Anda tidak memiliki izin untuk menghapus berita ini.');
+            }
 
             // Delete the image file from storage
             if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
