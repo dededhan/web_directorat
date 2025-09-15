@@ -206,7 +206,10 @@ Route::prefix('admin')->name('admin.')
             Route::post('/risetdataexcelunj/import', [RisetUnjController::class, 'import'])->name('risetdataunj.import');
             Route::get('/risetdataexcelunj/export', [RisetUnjController::class, 'export'])->name('risetdataunj.export');
             Route::delete('/risetdataexcelunj/{risetdataunj}', [RisetUnjController::class, 'destroy'])->name('risetdataunj.destroy');
+            Route::put('/risetdataexcelunj/{risetdataunj}', [RisetUnjController::class, 'update'])->name('risetdataunj.update');
 
+    // Rute Baru untuk Hapus Semua
+    Route::delete('/risetdataexcelunj/destroy-all', [RisetUnjController::class, 'destroyAll'])->name('risetdataunj.destroyAll');
 
 
         Route::prefix('global')->name('global.')->middleware(['checked', 'role:admin_direktorat'])->group(function () {

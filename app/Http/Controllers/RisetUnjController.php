@@ -131,9 +131,40 @@ class RisetUnjController extends Controller
     }
 
     public function index()
-    {
-        $allRiset = RisetUnj::latest()->paginate(15);
+ {
+        $query = RisetUnj::query();
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', '%' . $search . '%')
+                  ->orWhere('ketua_peneliti', 'like', '%' . $search . '%')
+                  ->orWhere('fakultas', 'like', '%' . $search . '%')
+                  ->orWhere('tahun', 'like', '%' . $search . '%');
+            });
+        }
+
+        $allRiset = $query->latest()->paginate(15)->appends($request->all());
+
         return view('admin.risetdataexcelunj', compact('allRiset'));
+    }
+
+    public function update(Request $request, RisetUnj $risetdataunj)
+    {
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'ketua_peneliti' => 'required|string|max:255',
+            'fakultas' => 'required|string|max:100',
+            'tahun' => 'required|integer|min:1900|max:' . (date('Y') + 1),
+            'dana' => 'required|numeric|min:0',
+        ]);
+
+        try {
+            $risetdataunj->update($request->all());
+            return redirect()->route('admin.risetdataunj.index')->with('success', 'Data riset berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memperbarui data: ' . $e->getMessage());
+        }
     }
 
     public function downloadTemplate()
@@ -165,5 +196,14 @@ class RisetUnjController extends Controller
         $risetdataunj->delete();
         return redirect()->route('admin.risetdataunj.index')
                         ->with('success', 'Data riset berhasil dihapus.');
+    }
+    public function destroyAll()
+    {
+        try {
+            RisetUnj::truncate(); // Menghapus semua data dan mereset auto-increment ID
+            return redirect()->route('admin.risetdataunj.index')->with('success', 'Semua data riset berhasil dihapus.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menghapus semua data: ' . $e->getMessage());
+        }
     }
 }
