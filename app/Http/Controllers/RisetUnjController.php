@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
+
 class RisetUnjController extends Controller
 {
     public function publicIndex()
@@ -130,7 +131,7 @@ class RisetUnjController extends Controller
         ]);
     }
 
-    public function index()
+    public function index(Request $request)
  {
         $query = RisetUnj::query();
 

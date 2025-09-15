@@ -191,45 +191,112 @@
 </div>
 
 {{-- Modal untuk Edit Data --}}
-<div id="edit-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
-    <div class="bg-white rounded-lg shadow-xl w-full max-w-lg">
-        <div class="flex justify-between items-center p-4 border-b">
-            <h3 class="text-xl font-semibold text-gray-800">Edit Data Riset</h3>
-            <button class="close-modal-btn text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
+<div id="edit-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
+    {{-- Animasi saat modal muncul --}}
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl transform transition-all duration-300 ease-in-out scale-95">
+        
+        {{-- Header Modal --}}
+        <div class="flex justify-between items-center p-5 border-b border-gray-200 bg-gray-50 rounded-t-xl">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-100 p-2 rounded-full">
+                    <i class='bx bxs-edit-alt text-blue-600 text-xl'></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">Edit Data Riset</h3>
+            </div>
+            <button class="close-modal-btn text-gray-400 hover:text-red-500 text-3xl transition-colors">&times;</button>
         </div>
-        <form id="edit-form" method="POST" class="p-6 space-y-4">
+
+        {{-- Form Content --}}
+        <form id="edit-form" method="POST" class="p-6 space-y-6">
             @csrf
             @method('PUT')
+            
+            {{-- Field Judul --}}
             <div>
-                <label for="edit_judul" class="block text-sm font-medium text-gray-700">Judul</label>
-                <textarea id="edit_judul" name="judul" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required></textarea>
+                <label for="edit_judul" class="block text-sm font-semibold text-gray-600 mb-1">Judul</label>
+                <textarea id="edit_judul" name="judul" rows="3" class="mt-1 block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow" placeholder="Contoh: Pengembangan Aplikasi Mobile Edukasi" required></textarea>
             </div>
+            
+            {{-- Field Ketua Peneliti --}}
             <div>
-                <label for="edit_ketua_peneliti" class="block text-sm font-medium text-gray-700">Ketua Peneliti</label>
-                <input type="text" id="edit_ketua_peneliti" name="ketua_peneliti" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                <label for="edit_ketua_peneliti" class="block text-sm font-semibold text-gray-600 mb-1">Ketua Peneliti</label>
+                <input type="text" id="edit_ketua_peneliti" name="ketua_peneliti" class="mt-1 block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow" placeholder="Contoh: Prof. Dr. Nama Dosen, M.Kom." required>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+            {{-- Grid untuk Fakultas, Tahun, Dana --}}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                    <label for="edit_fakultas" class="block text-sm font-medium text-gray-700">Fakultas</label>
-                    <input type="text" id="edit_fakultas" name="fakultas" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                    <label for="edit_fakultas" class="block text-sm font-semibold text-gray-600 mb-1">Fakultas</label>
+                    <input type="text" id="edit_fakultas" name="fakultas" class="mt-1 block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow" placeholder="Contoh: FT" required>
                 </div>
                  <div>
-                    <label for="edit_tahun" class="block text-sm font-medium text-gray-700">Tahun</label>
-                    <input type="number" id="edit_tahun" name="tahun" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                    <label for="edit_tahun" class="block text-sm font-semibold text-gray-600 mb-1">Tahun</label>
+                    <input type="number" id="edit_tahun" name="tahun" class="mt-1 block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow" placeholder="Contoh: 2025" required>
                 </div>
                 <div>
-                    <label for="edit_dana" class="block text-sm font-medium text-gray-700">Dana (Rp)</label>
-                    <input type="number" id="edit_dana" name="dana" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                    <label for="edit_dana" class="block text-sm font-semibold text-gray-600 mb-1">Dana (Rp)</label>
+                    <input type="number" id="edit_dana" name="dana" class="mt-1 block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow" placeholder="Contoh: 50000000" required>
                 </div>
             </div>
-            <div class="mt-6 pt-4 border-t flex justify-end">
-                <button type="submit" class="bg-yellow-500 text-white font-bold py-2 px-5 rounded-lg inline-flex items-center hover:bg-yellow-600">Simpan Perubahan</button>
+
+            {{-- Footer Tombol Aksi --}}
+            <div class="mt-8 pt-6 border-t border-gray-200 flex justify-end">
+                <button type="submit" class="inline-flex items-center justify-center gap-2 px-6 py-3 font-bold text-white bg-gradient-to-r from-amber-500 to-orange-500 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all duration-300 ease-in-out">
+                    <i class='bx bx-save text-xl'></i>
+                    <span>Simpan Perubahan</span>
+                </button>
             </div>
         </form>
     </div>
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const editModal = document.getElementById('edit-modal');
+    const modalContent = editModal.querySelector('.transform');
 
+    // Modifikasi fungsi showModal yang sudah ada
+    const originalShowModal = (modal) => {
+        if (modal.id === 'edit-modal') {
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95');
+            }, 10); // small delay to ensure transition triggers
+        } else {
+            modal.classList.remove('hidden');
+        }
+    };
+    
+    // Modifikasi fungsi hideModal
+    const originalHideModal = (modal) => {
+        if (modal.id === 'edit-modal') {
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300); // Wait for animation to finish
+        } else {
+            modal.classList.add('hidden');
+        }
+    };
+
+    // ... (sisa dari JavaScript Anda untuk event listener)
+    // Pastikan Anda mengganti pemanggilan showModal dan hideModal dengan versi baru ini
+    // Contoh:
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            // ... (kode Anda untuk mengisi data form)
+            originalShowModal(editModal);
+        });
+    });
+
+    document.querySelectorAll('.close-modal-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+             const modal = btn.closest('#edit-modal, #import-modal');
+             if(modal) originalHideModal(modal);
+        });
+    });
+});
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     // === Logic untuk Modal (Import & Edit) ===
