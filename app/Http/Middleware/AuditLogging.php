@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
+use App\Models\SecurityAuditLog;
 
 class AuditLogging
 {
@@ -64,10 +65,26 @@ class AuditLogging
             'request_data' => $this->sanitizeRequestData($request->all()),
         ];
         
+        // Log to both file and database
         if ($response->getStatusCode() >= 400) {
             Log::warning('Security Event - Error Response', $logData);
         } else {
             Log::info('Security Event - Success', $logData);
+        }
+        
+        // Store in database
+        try {
+            SecurityAuditLog::create([
+                'user_id' => auth()->id(),
+                'action' => $request->route()?->getName() ?? $request->path(),
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'request_data' => $this->sanitizeRequestData($request->all()),
+                'response_status' => $response->getStatusCode(),
+                'duration_ms' => $duration
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to create security audit log: ' . $e->getMessage());
         }
     }
     
