@@ -516,6 +516,9 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                  Route::get('/equity/usulkan-proposal', function () {
                     return view('subdirektorat-inovasi.dosen.equity.usulkan-proposal');
                 })->name('equity.usulkan-proposal'); 
+                      Route::get('/equity/usulkan-proposal/form', function () {
+                    return view('subdirektorat-inovasi.dosen.equity.usulkan-proposal-form');
+                })->name('equity.usulkan-proposal.form'); 
 
                 Route::get('/equity/portofolio', function () {
                     return view('subdirektorat-inovasi.dosen.equity.portofolio');
@@ -534,6 +537,10 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                  Route::get('/equity/logbook', function () {
                     return view('subdirektorat-inovasi.dosen.equity.logbook');
                 })->name('equity.logbook');
+                Route::get('/equity/detail-proposal', function () {
+                    return view('subdirektorat-inovasi.dosen.equity.detail-proposal');
+                })->name('equity.detail-proposal');
+
 
                 // Tabel Katsinov
                 Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekatsinov');
