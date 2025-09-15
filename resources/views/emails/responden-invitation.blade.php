@@ -56,7 +56,7 @@
             <p>
                 To participate in the survey, please click the button below:
             </p>
-            <a href="{{ $surveyLink }}" class="button">Click here to fill out the survey</a>
+            <a href="{{ $surveyLink }}" class="button">Click here to fill out the concent letter</a>
             <p>
                 Many thanks in advance for your cooperation.
             </p>
@@ -86,7 +86,7 @@
             <p>
                 Untuk berpartisipasi dalam survei, silakan klik tombol di bawah ini:
             </p>
-            <a href="{{ $surveyLink }}" class="button">Klik di sini untuk mengisi survei</a>
+            <a href="{{ $surveyLink }}" class="button">Klik disini untuk mengisi consent letter</a>
             <p>
                 Terima kasih atas kerja sama Anda.
             </p>
@@ -117,7 +117,7 @@
             <p>
                 Untuk berpartisipasi dalam survei, silakan klik tombol di bawah ini:
             </p>
-            <a href="{{ $surveyLink }}" class="button">Klik di sini untuk mengisi survei</a>
+            <a href="{{ $surveyLink }}" class="button">Klik disini untuk mengisi consent letter</a>
             <p>
                 Terima kasih atas kerja sama Anda.
             </p>
@@ -144,7 +144,7 @@
             <p>
                 To participate in the survey, please click the button below:
             </p>
-            <a href="{{ $surveyLink }}" class="button">Click here to fill out the survey</a>
+            <a href="{{ $surveyLink }}" class="button">Click here to fill out the concent letter</a>
             <p>
                 Many thanks in advance for your cooperation.
             </p>
