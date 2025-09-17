@@ -102,7 +102,6 @@ Route::get('/sdgscenter', function () {
 
 // Inovasi Routes
 Route::prefix('inovasi')->group(function () {
-    Route::get('/riset-unj', [RisetController::class, 'index'])->name('riset.unj');
     Route::view('/katsinov/forminformasidasar', 'inovasi.katsinov.forminformasidasar')->name('katsinov.informasidasar');
     Route::view('/katsinov/formberitaacara', 'inovasi.katsinov.formberitaacara')->name('katsinov.formberitaacara');
     Route::view('/katsinov/formjudul', 'inovasi.katsinov.formjudul')->name('katsinov.formjudul');

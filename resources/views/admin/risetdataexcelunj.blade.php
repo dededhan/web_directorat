@@ -94,15 +94,17 @@
                     </div>
                 </form>
                 {{-- Tombol Hapus Semua --}}
-                 @if($allRiset->total() > 0)
-                <form action="{{ route('admin.risetdataunj.destroyAll') }}" method="POST" id="delete-all-form">
+              
+                <form action="{{ route('admin.risetdataunj.destroyAll') }}" method="POST" >
                     @csrf
-                    @method('DELETE')
+                   
                     <button type="submit" class="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors" title="Hapus Semua Data">
                         <i class='bx bx-trash-alt text-lg'></i>
                     </button>
                 </form>
-                @endif
+                
+               
+                
             </div>
         </div>
         <div class="overflow-x-auto">
