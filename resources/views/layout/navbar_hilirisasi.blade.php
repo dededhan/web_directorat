@@ -309,7 +309,7 @@
                     </button>
                     <ul class="hidden bg-[#135a54]">
                         <li>
-                            <a href="{{ route('riset.unj') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                            <a href="{{ route('subdirektorat-inovasi.riset.unj') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 Riset UNJ
                             </a>
                         </li>
