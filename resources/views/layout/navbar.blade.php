@@ -44,6 +44,7 @@
                 </ul>
             </li>
             <li><a href="{{ route('document.document') }}" class="text-white hover:text-yellow-400 transition-colors">Dokumen</a></li>
+            <li><a href="{{ route('equity') }}" class="text-white hover:text-yellow-400 transition-colors">Equity</a></li>
             <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400 transition-colors">SSO</a></li>
             <li><a class="login text-white bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded-full transition-colors" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
         </ul>

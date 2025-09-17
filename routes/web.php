@@ -94,6 +94,10 @@ Route::view('/profile', 'Profile1.profile')->name('profile.profile');
 Route::view('/strukturorganisasi', 'struktur organisasi.strukturorganisasi')->name('strukturorganisasi');
 Route::view('/daptarcalonadjunct', 'daptarcalonadjunct.daptarcalonadjunct')->name('daptar.calonadjunct');
 Route::view('/register', 'register')->name('register');
+
+// RUTE BARU UNTUK HALAMAN EQUITY
+Route::view('/equity', 'equity.equity')->name('equity');
+
 // FIX: Added route for sdgscenter and corrected view path.
 // Route::view('/sdgscenter', 'subdirektorat-inovasi.sdgscenter')->name('sdgscenter');
 Route::get('/sdgscenter', function () {
@@ -189,3 +193,4 @@ Route::get('/survey/thank-you', function () {
 require __DIR__ . '/api.php';
 require __DIR__ . '/admin.php';
 require __DIR__ . '/pemeringkatan.php';
+
