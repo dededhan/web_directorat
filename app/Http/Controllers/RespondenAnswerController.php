@@ -15,10 +15,57 @@ class RespondenAnswerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query = RespondenAnswer::query()->latest();
 
-        $respondens = RespondenAnswer::latest()->paginate(500);
+        // 
+        if ($request->filled('q')) {
+            $search = trim($request->get('q'));
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('institution', 'like', "%{$search}%")
+                    ->orWhere('company_name', 'like', "%{$search}%")
+                    ->orWhere('country', 'like', "%{$search}%")
+                    ->orWhere('job_title', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('category')) {
+            $category = $request->get('category');
+            if ($category === 'employee' || $category === 'employer') {
+                // NORMALIZE
+                $query->whereIn('category', ['employee', 'employer']);
+            } else {
+                $query->where('category', $category);
+            }
+        }
+
+        if ($request->filled('country')) {
+            $country = trim($request->get('country'));
+            $query->where('country', 'like', "%{$country}%");
+        }
+
+        if ($request->filled('survey_2023')) {
+            $query->where('survey_2023', $request->get('survey_2023'));
+        }
+
+        if ($request->filled('survey_2024')) {
+            $query->where('survey_2024', $request->get('survey_2024'));
+        }
+
+        if ($request->filled('job_title')) {
+            $query->where('job_title', $request->get('job_title'));
+        }
+
+        $perPage = (int) $request->get('per_page', 50);
+        if (! in_array($perPage, [25, 50, 100, 200])) {
+            $perPage = 50;
+        }
+
+        $respondens = $query->paginate($perPage)->appends($request->query());
         $userRole = Auth::user()->role;
 
         $viewMap = [
@@ -98,7 +145,6 @@ class RespondenAnswerController extends Controller
      */
     public function edit(RespondenAnswer $qsresponden)
     {
-        // Memanggil view dari lokasi yang benar: admin/qsresponden/edit.blade.php
         return view('admin.qsresponden.edit', ['responden' => $qsresponden]);
     }
 

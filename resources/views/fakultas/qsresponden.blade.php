@@ -57,6 +57,73 @@
                 <h3>QS Respondent Data</h3>
             </div>
 
+            <form method="GET" action="{{ route('fakultas.qsresponden.index') }}" class="mb-3">
+                <div class="filter-card p-3 mb-3">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-lg-4">
+                            <label class="form-label">Search</label>
+                            <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Name, email, institution, company, country, job title">
+                        </div>
+                        <div class="col-lg-2 col-md-4">
+                            <label class="form-label">Category</label>
+                            <select name="category" class="form-select">
+                                <option value="">All</option>
+                                <option value="academic" {{ request('category')==='academic' ? 'selected' : '' }}>Academic</option>
+                                <option value="employee" {{ request('category')==='employee' || request('category')==='employer' ? 'selected' : '' }}>Employee</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-4">
+                            <label class="form-label">Country</label>
+                            <input type="text" name="country" value="{{ request('country') }}" class="form-control" placeholder="e.g. Indonesia">
+                        </div>
+                        <div class="col-lg-4 col-md-8">
+                            <label class="form-label">Job Title</label>
+                            <select name="job_title" class="form-select">
+                                <option value="">All Job Titles</option>
+                                <optgroup label="Academic">
+                                    @foreach($academicJobTitles as $key=>$label)
+                                        <option value="{{ $key }}" {{ request('job_title')===$key ? 'selected' : '' }}>{{ $label }}</option>
+                                    @endforeach
+                                </optgroup>
+                                <optgroup label="Employee">
+                                    @foreach($employeeJobTitles as $key=>$label)
+                                        <option value="{{ $key }}" {{ request('job_title')===$key ? 'selected' : '' }}>{{ $label }}</option>
+                                    @endforeach
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-4">
+                            <label class="form-label">Rows</label>
+                            <select name="per_page" class="form-select">
+                                @foreach([25,50,100,200] as $n)
+                                    <option value="{{ $n }}" {{ (int)request('per_page',50)===$n ? 'selected' : '' }}>{{ $n }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-4">
+                            <label class="form-label">Survey 2023</label>
+                            <select name="survey_2023" class="form-select">
+                                <option value="">All</option>
+                                <option value="yes" {{ request('survey_2023')==='yes' ? 'selected' : '' }}>Yes</option>
+                                <option value="no" {{ request('survey_2023')==='no' ? 'selected' : '' }}>No</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-4">
+                            <label class="form-label">Survey 2024</label>
+                            <select name="survey_2024" class="form-select">
+                                <option value="">All</option>
+                                <option value="yes" {{ request('survey_2024')==='yes' ? 'selected' : '' }}>Yes</option>
+                                <option value="no" {{ request('survey_2024')==='no' ? 'selected' : '' }}>No</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 d-flex gap-2">
+                            <button type="submit" class="btn btn-primary flex-fill">Apply</button>
+                            <a href="{{ route('fakultas.qsresponden.index') }}" class="btn btn-outline-secondary">Reset</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
             <div class="table-responsive">
                 <table class="table table-striped table-hover" id="respondent-table">
                     <thead>
@@ -101,7 +168,7 @@
                                 <td>{{ $responden->phone }}</td>
                                 <td>{{ Str::ucfirst($responden->survey_2023) }}</td>
                                 <td>{{ Str::ucfirst($responden->survey_2024) }}</td>
-                                <td>{{ Str::ucfirst($responden->category) }}</td>
+                                <td>{{ $responden->category === 'employer' ? 'Employee' : Str::ucfirst($responden->category) }}</td>
                             </tr>
                         @empty
                             <tr>
@@ -118,6 +185,11 @@
     </div>
 
     <style>
+        .filter-card {
+            background: #f8f9fb;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+        }
         .table-data {
             margin-top: 24px;
         }
