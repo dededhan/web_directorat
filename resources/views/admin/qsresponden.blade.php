@@ -1,6 +1,42 @@
 @extends('admin.admin')
 
 @section('contentadmin')
+    @php
+        // mapping 1
+        $employeeJobTitles = [
+            'ceo' => 'CEO/President/Managing Director',
+            'coo' => 'COO/CFO/CTO/CIO/CMO',
+            'vp' => 'Director/Partner/Vice President',
+            'shr' => 'Senior Human Resources/Recruitment',
+            'ohr' => 'Other Human Resources/Recruitment',
+            'exe' => 'Manager/Executive',
+            'cons' => 'Consultant/Advisor',
+            'coor' => 'Coordinator/Officer',
+            'ana' => 'Analyst/Specialist',
+            'ass' => 'Assistant/Administrator',
+            'other' => 'Other',
+        ];
+
+        // mapping 2
+        $academicJobTitles = [
+            'vc' => 'President/Vice-Chancellor',
+            'vp' => 'Vice-President/Deputy Vice-Chancellor',
+            'sa' => 'Senior Administrator',
+            'hod' => 'Head of Department',
+            'ass' => 'Professor/Associate Professor',
+            'ap' => 'Assistant Professor',
+            'sl' => 'Senior Lecturer',
+            'lec' => 'Lecturer',
+            'rs' => 'Research Specialist',
+            'fm' => 'Administrator/Functional Manager',
+            'ra' => 'Research Assistant',
+            'ta' => 'Teaching Assistant',
+            'ao' => 'Admissions Officer',
+            'la' => 'Librarian/Library Assistant',
+            'other' => 'Other',
+        ];
+    @endphp
+
     <div class="head-title">
         <div class="left">
             <h1>QS Responden Table</h1>
@@ -21,7 +57,7 @@
             {{ session('success') }}
         </div>
     @endif
-     @if (session('error'))
+    @if (session('error'))
         <div class="alert alert-danger">
             {{ session('error') }}
         </div>
@@ -34,13 +70,13 @@
             </div>
 
             <div class="table-responsive">
-                <table class="table table-striped" id="respondent-table">
+                <table class="table table-striped table-hover" id="respondent-table">
                     <thead>
                         <tr>
                             <th>Title</th>
                             <th>First Name</th>
                             <th>Last Name</th>
-                            <th>Institution</th>
+                            <th>Institution / Industry</th>
                             <th>Company Name</th>
                             <th>Job Title</th>
                             <th>Country</th>
@@ -56,18 +92,30 @@
                     <tbody>
                         @forelse ($respondens as $responden)
                             <tr>
-                                <td>{{ $responden->title }}</td>
-                                <td>{{ $responden->first_name }}</td>
-                                <td>{{ $responden->last_name }}</td>
-                                <td>{{ $responden->institution }}</td>
+                                <td>{{ Str::ucfirst($responden->title) }}</td>
+                                <td>{{ Str::title($responden->first_name) }}</td>
+                                <td>{{ Str::title($responden->last_name) }}</td>
+                                <td>{{ Str::title($responden->institution) }}</td>
                                 <td>{{ $responden->company_name }}</td>
-                                <td>{{ $responden->job_title }}</td>
-                                <td>{{ $responden->country }}</td>
+                                <td>
+                                    @php
+                                        $jobTitleKey = $responden->job_title;
+                                        $jobTitleDisplay = Str::title(str_replace('_', ' ', $jobTitleKey));
+
+                                        if ($responden->category === 'academic') {
+                                            $jobTitleDisplay = $academicJobTitles[$jobTitleKey] ?? $jobTitleDisplay;
+                                        } elseif ($responden->category === 'employee' || $responden->category === 'employer') {
+                                            $jobTitleDisplay = $employeeJobTitles[$jobTitleKey] ?? $jobTitleDisplay;
+                                        }
+                                    @endphp
+                                    {{ $jobTitleDisplay }}
+                                </td>
+                                <td>{{ Str::title($responden->country) }}</td>
                                 <td>{{ $responden->email }}</td>
                                 <td>{{ $responden->phone }}</td>
-                                <td>{{ $responden->survey_2023 }}</td>
-                                <td>{{ $responden->survey_2024 }}</td>
-                                <td>{{ $responden->category }}</td>
+                                <td>{{ Str::ucfirst($responden->survey_2023) }}</td>
+                                <td>{{ Str::ucfirst($responden->survey_2024) }}</td>
+                                <td>{{ Str::ucfirst($responden->category) }}</td>
                                 <td>{{ $responden->created_at ? $responden->created_at->format('d M Y, H:i') : 'N/A' }}
                                 </td>
                                 <td>
@@ -76,7 +124,8 @@
                                             class="btn btn-warning btn-sm">
                                             <i class='bx bxs-edit'></i>
                                         </a>
-                                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="{{ $responden->id }}">
+                                        <button type="button" class="btn btn-danger btn-sm delete-btn"
+                                            data-id="{{ $responden->id }}">
                                             <i class='bx bxs-trash'></i>
                                         </button>
                                         <form id="delete-form-{{ $responden->id }}"
@@ -95,7 +144,7 @@
                         @endforelse
                     </tbody>
                 </table>
-                 <div class="d-flex justify-content-end mt-4">
+                <div class="d-flex justify-content-end mt-4">
                     {{ $respondens->links() }}
                 </div>
             </div>
@@ -103,28 +152,28 @@
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const deleteButtons = document.querySelectorAll('.delete-btn');
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const respondenId = this.dataset.id;
-                Swal.fire({
-                    title: 'Anda yakin?',
-                    text: "Data yang dihapus tidak dapat dikembalikan!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Ya, hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById(`delete-form-${respondenId}`).submit();
-                    }
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const respondenId = this.dataset.id;
+                    Swal.fire({
+                        title: 'Anda yakin?',
+                        text: "Data yang dihapus tidak dapat dikembalikan!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById(`delete-form-${respondenId}`).submit();
+                        }
+                    });
                 });
             });
         });
-    });
     </script>
 
     <style>
@@ -148,15 +197,23 @@
             gap: 5px;
         }
 
-        .table th {
+        .table thead th {
             background-color: #f8f9fa;
             color: #333;
             font-weight: 600;
             white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 14px;
         }
 
         .table td {
             vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f5f5f5;
         }
 
         .head {
@@ -180,4 +237,3 @@
         }
     </style>
 @endsection
-
