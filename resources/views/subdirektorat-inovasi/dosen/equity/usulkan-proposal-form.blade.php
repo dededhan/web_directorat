@@ -209,9 +209,9 @@
     {{-- Tombol Aksi --}}
      <div class="mt-8 pt-6 border-t border-slate-200 flex items-center justify-end gap-3">
         <button type="button" class="px-5 py-2 bg-white border border-gray-300 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-100 transition-all shadow-sm">Batal</button>
-        <button type="button" class="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Simpan dan Lanjutkan
-        </button>
+<a href="{{ route('subdirektorat-inovasi.dosen.equity.usulkan-proposal.pengajuan') }}" class="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold rounded-lg ...">
+    Simpan dan Lanjutkan
+</a>
     </div>
 </div>
 
