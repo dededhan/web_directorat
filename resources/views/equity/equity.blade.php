@@ -3,23 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Membangun Ekosistem Riset Berkeadilan</title>
+    <title>Program EQUITY THE Impact Ranking - UNJ</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@500;600;700&display=swap" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
-        .glassmorphism-card {
+        .equity-page .glassmorphism-card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        @keyframes fadeInUp {
+        .equity-page .fade-in-up {
+            animation: equityFadeInUp 0.8s ease-out forwards;
+        }
+
+        @keyframes equityFadeInUp {
             from {
                 opacity: 0;
                 transform: translateY(30px);
@@ -29,9 +33,6 @@
                 transform: translateY(0);
             }
         }
-        .fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
 
         @property --num {
           syntax: '<integer>';
@@ -39,8 +40,87 @@
           inherits: false;
         }
 
-        .counter-animation {
+        .equity-page .counter-animation {
             transition: --num 3s;
+        }
+
+        .equity-page .animate-blob {
+            animation: equityBlob 7s infinite;
+        }
+
+        .equity-page .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+
+        .equity-page .animation-delay-4000 {
+            animation-delay: 4s;
+        }
+
+        @keyframes equityBlob {
+            0% {
+                transform: translate(0px, 0px) scale(1);
+            }
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+            100% {
+                transform: translate(0px, 0px) scale(1);
+            }
+        }
+
+        .equity-page .fas,
+        .equity-page .fab {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+            font-weight: 900 !important;
+        }
+
+        .section-fullscreen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            width: 100%;
+            padding: 2rem 0;
+        }
+
+        .compact-grid {
+            gap: 1rem;
+        }
+
+        .compact-card {
+            padding: 1rem;
+        }
+
+        .compact-text {
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+
+        .compact-heading {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-compact {
+            grid-template-rows: repeat(2, 1fr);
+            max-height: 60vh;
+        }
+
+        .targets-compact {
+            gap: 2rem;
+        }
+
+        .target-item {
+            padding: 1rem;
+        }
+
+        .testimonial-compact {
+            padding: 1.5rem;
         }
     </style>
 
@@ -56,7 +136,7 @@
                         'brand': {
                             'dark': '#1A1A1A',
                             'light': '#F9F9F9',
-                            'accent': '#B8860B', // DarkGoldenRod
+                            'accent': '#B8860B',
                             'accent-light': '#D4AC0D',
                         }
                     }
@@ -65,12 +145,10 @@
         }
     </script>
 </head>
-<body class="bg-white font-sans text-brand-dark antialiased">
-
-   
+<body class="equity-page bg-white font-sans text-brand-dark antialiased">
     @include('layout.navbar')
-
-    <main>
+    <main class="pt-16">
+        <!-- Hero Section -->
         <section class="relative h-screen flex items-center justify-center text-white overflow-hidden">
             <video autoplay loop muted playsinline class="absolute z-0 w-auto min-w-full min-h-full max-w-none">
                 <source src="https://assets.mixkit.co/videos/preview/mixkit-scientists-working-in-a-dark-lab-3272-large.mp4" type="video/mp4">
@@ -79,139 +157,200 @@
             <div class="absolute inset-0 bg-black/60 z-10"></div>
             
             <div class="relative z-20 max-w-4xl mx-auto text-center px-6" x-data="{ visible: false }" x-init="setTimeout(() => { visible = true }, 500)">
-                <p class="text-brand-accent-light font-semibold tracking-widest uppercase transition-all duration-700" :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">Program Equity Kami</p>
-                <h1 class="mt-4 text-5xl md:text-7xl font-serif font-bold tracking-tight transition-all duration-1000" :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
-                    Menciptakan Ekosistem Riset yang Adil & Berdampak.
+                <p class="text-brand-accent-light font-semibold tracking-widest uppercase transition-all duration-700" :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">Program EQUITY UNJ</p>
+                <h1 class="mt-4 text-4xl md:text-6xl font-serif font-bold tracking-tight transition-all duration-1000" :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
+                    Enhancing Quality Education for International University Impacts and Recognition
                 </h1>
-                <p class="mt-8 text-lg text-gray-300 transition-all duration-1000 delay-300" :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
-                    Sebuah inisiatif untuk meruntuhkan hambatan, membuka akses, dan membangun jembatan pengetahuan bagi para peneliti di seluruh dunia.
+                <p class="mt-6 text-lg text-gray-300 transition-all duration-1000 delay-300" :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
+                    Program strategis untuk mendorong UNJ meraih pengakuan global melalui THE Impact Ranking dengan fokus pencapaian Sustainable Development Goals (SDGs).
                 </p>
-                <div class="mt-10 transition-all duration-1000 delay-500" :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
-                    <a href="#program" class="bg-brand-accent hover:bg-brand-accent-light text-white font-bold py-4 px-10 rounded-full transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg">
-                        Jelajahi Program Kami
+                <div class="mt-8 transition-all duration-1000 delay-500" :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
+                    <a href="#program" class="bg-brand-accent hover:bg-brand-accent-light text-white font-bold py-3 px-8 rounded-full transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg">
+                        Jelajahi Program EQUITY
                     </a>
                 </div>
             </div>
         </section>
 
-        <section id="tentang" class="bg-brand-light py-24 sm:py-32">
-            <div class="container mx-auto px-6 lg:px-8">
-                <div class="grid lg:grid-cols-5 gap-16 items-center">
+        <section id="tentang" class="section-fullscreen bg-brand-light">
+            <div class="section-content container mx-auto px-6 lg:px-8">
+                <div class="grid lg:grid-cols-5 gap-8 items-center h-full">
                     <div class="lg:col-span-3">
-                        <p class="font-semibold text-brand-accent">Prinsip Utama Kami</p>
-                        <h2 class="mt-2 text-4xl font-serif font-bold text-brand-dark">Memahami Konsep <span class="text-brand-accent">Equity</span> dalam Riset</h2>
-                        <p class="mt-6 text-lg text-gray-600">
-                            <strong>Equity (keadilan)</strong> bukan hanya tentang memberi kesempatan yang sama, tetapi juga menyediakan dukungan yang diperlukan agar setiap peneliti, dari latar belakang apa pun, dapat mencapai potensi terbaiknya.
+                        <p class="font-semibold text-brand-accent">Latar Belakang Program</p>
+                        <h2 class="mt-2 text-3xl font-serif font-bold text-brand-dark">Program <span class="text-brand-accent">EQUITY</span> THE Impact Ranking</h2>
+                        <p class="mt-4 text-base text-gray-600">
+                            Program <strong>EQUITY (Enhancing Quality Education for International University Impacts and Recognition)</strong> merupakan program strategis Kementerian Pendidikan Tinggi, Sains, dan Teknologi yang dimulai sejak 2023, khusus dirancang untuk memfasilitasi 16 PTNBH dalam meningkatkan kualitas dan mencapai pengakuan global melalui THE Impact Ranking.
+                        </p>
+                        <p class="mt-3 text-base text-gray-600">
+                            UNJ sebagai salah satu dari 16 PTNBH sasaran program ini berkomitmen untuk mencapai target peringkat <strong>Top 600</strong> THE Impact Ranking tahun 2030 melalui implementasi program-program berkelanjutan yang berfokus pada pencapaian Sustainable Development Goals (SDGs).
                         </p>
                         
-                        <div class="mt-10 grid sm:grid-cols-2 gap-8">
-                            <div class="flex items-start gap-4">
-                                <div class="flex-shrink-0 bg-brand-accent/10 p-3 rounded-full mt-1">
-                                    <i class="fas fa-key text-brand-accent text-xl fa-fw"></i>
+                        <div class="mt-6 grid sm:grid-cols-2 gap-4">
+                            <div class="flex items-start gap-3">
+                                <div class="flex-shrink-0 bg-brand-accent/10 p-2 rounded-full mt-1">
+                                    <i class="fas fa-graduation-cap text-brand-accent text-lg fa-fw"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-lg text-brand-dark">Akses Terbuka</h4>
-                                    <p class="mt-1 text-gray-600">Menghilangkan hambatan finansial dan geografis.</p>
+                                    <h4 class="font-bold text-base text-brand-dark">Pendanaan DAPT</h4>
+                                    <p class="mt-1 text-sm text-gray-600">Program didanai melalui Dana Abadi Perguruan Tinggi (DAPT) dari LPDP.</p>
                                 </div>
                             </div>
-                            <div class="flex items-start gap-4">
-                                <div class="flex-shrink-0 bg-brand-accent/10 p-3 rounded-full mt-1">
-                                    <i class="fas fa-users-gear text-brand-accent text-xl fa-fw"></i>
+                            <div class="flex items-start gap-3">
+                                <div class="flex-shrink-0 bg-brand-accent/10 p-2 rounded-full mt-1">
+                                    <i class="fas fa-globe text-brand-accent text-lg fa-fw"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-lg text-brand-dark">Representasi Inklusif</h4>
-                                    <p class="mt-1 text-gray-600">Mendorong partisipasi beragam perspektif.</p>
+                                    <h4 class="font-bold text-base text-brand-dark">Pencapaian SDGs</h4>
+                                    <p class="mt-1 text-sm text-gray-600">Berkontribusi dalam pencapaian 17 tujuan pembangunan berkelanjutan.</p>
                                 </div>
                             </div>
-                            <div class="flex items-start gap-4 col-span-full">
-                                <div class="flex-shrink-0 bg-brand-accent/10 p-3 rounded-full mt-1">
-                                    <i class="fas fa-hand-holding-dollar text-brand-accent text-xl fa-fw"></i>
+                            <div class="flex items-start gap-3 col-span-full">
+                                <div class="flex-shrink-0 bg-brand-accent/10 p-2 rounded-full mt-1">
+                                    <i class="fas fa-chart-line text-brand-accent text-lg fa-fw"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-lg text-brand-dark">Sumber Daya Berkeadilan</h4>
-                                    <p class="mt-1 text-gray-600">Mengalokasikan pendanaan dan mentorship untuk mendukung mereka yang paling membutuhkan.</p>
+                                    <h4 class="font-bold text-base text-brand-dark">Target 2025-2030</h4>
+                                    <p class="mt-1 text-sm text-gray-600">Program multi-years dengan target UNJ masuk Top 600 THE Impact Ranking 2030.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="lg:col-span-2 hidden lg:block">
-                        <div class="relative h-[500px]">
-                            <img src="https://www.discovery.org/m/sites/71/2021/07/equity-stockpack-adobe-stock-scaled.jpg" alt="Kolaborasi tim" class="rounded-xl shadow-2xl w-full h-full object-cover absolute top-0 left-0">
-                            </div>
+                        <div class="relative h-80">
+                            <img src="https://www.discovery.org/m/sites/71/2021/07/equity-stockpack-adobe-stock-scaled.jpg" alt="Program EQUITY" class="rounded-xl shadow-2xl w-full h-full object-cover absolute top-0 left-0">
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="program" class="py-24 sm:py-32 relative overflow-hidden bg-gray-100">
-             <div class="absolute top-0 left-0 w-96 h-96 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <section id="program" class="section-fullscreen relative overflow-hidden bg-gray-100">
+            <div class="absolute top-0 left-0 w-96 h-96 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
             <div class="absolute top-0 right-0 w-96 h-96 bg-amber-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
             <div class="absolute bottom-0 left-1/2 w-96 h-96 bg-orange-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
 
-            <div class="container mx-auto px-6 lg:px-8 relative z-10">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl font-serif font-bold text-brand-dark">Program Unggulan Kami</h2>
-                    <p class="mt-3 text-gray-600 max-w-2xl mx-auto">Tiga pilar utama yang menopang visi kami untuk riset berkeadilan.</p>
+            <div class="section-content container mx-auto px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-serif font-bold text-brand-dark">Komponen Program EQUITY UNJ</h2>
+                    <p class="mt-2 text-gray-600 max-w-2xl mx-auto">Enam pilar strategis yang menopang pencapaian THE Impact Ranking melalui kontribusi nyata terhadap SDGs.</p>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    
-                    <div class="glassmorphism-card p-8 rounded-2xl space-y-6">
-                        <div class="flex items-center space-x-4">
-                            <i class="fas fa-users text-4xl text-brand-dark"></i>
-                            <h3 class="text-2xl font-serif font-bold text-brand-dark">Dampak Komunitas</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 compact-grid max-h-[70vh] overflow-hidden">
+                    <!-- Penguatan Kelembagaan -->
+                    <div class="glassmorphism-card compact-card rounded-2xl space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-building text-2xl text-brand-dark"></i>
+                            <h3 class="text-lg font-serif font-bold text-brand-dark">Penguatan Kelembagaan</h3>
                         </div>
-                        <div class="space-y-4">
+                        <div class="space-y-2">
                             <div class="group">
-                                <h4 class="font-bold text-brand-dark">Community Development</h4>
-                                <p class="text-gray-700 text-sm">Program pemberdayaan masyarakat terkait target SDGs, berkolaborasi dengan universitas luar negeri.</p>
+                                <h4 class="compact-heading font-bold text-brand-dark">Pengelolaan Jurnal Terindeks Scopus/WOS</h4>
+                                <p class="text-gray-700 compact-text">Peningkatan kuartil jurnal dan persiapan indeksasi Scopus.</p>
+                            </div>
+                            <div class="group">
+                                <h4 class="compact-heading font-bold text-brand-dark">SDGs Center</h4>
+                                <p class="text-gray-700 compact-text">Penguatan pusat koordinasi dan pengelolaan program SDGs.</p>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="glassmorphism-card p-8 rounded-2xl space-y-6">
-                        <div class="flex items-center space-x-4">
-                            <i class="fas fa-book-open text-4xl text-brand-dark"></i>
-                            <h3 class="text-2xl font-serif font-bold text-brand-dark">Akses Pengetahuan</h3>
+                    <div class="glassmorphism-card compact-card rounded-2xl space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-microscope text-2xl text-brand-dark"></i>
+                            <h3 class="text-lg font-serif font-bold text-brand-dark">Penelitian & Inovasi</h3>
                         </div>
-                        <div class="space-y-4">
+                        <div class="space-y-2">
                             <div class="group">
-                                <h4 class="font-bold text-brand-dark">Article Processing Cost (APC)</h4>
-                                <p class="text-gray-700 text-sm">Dukungan pendanaan hingga 50jt untuk publikasi di Jurnal Q1 (Scopus).</p>
-                            </div>
-                             <div class="group">
-                                <h4 class="font-bold text-brand-dark">Presentasi Konferensi SDGs</h4>
-                                <p class="text-gray-700 text-sm">Mendukung presentasi paper dalam konferensi internasional yang fokus pada SDGs.</p>
+                                <h4 class="compact-heading font-bold text-brand-dark">Research Grants</h4>
+                                <p class="text-gray-700 compact-text">Hibah penelitian dengan target publikasi Q1 melibatkan mahasiswa pascasarjana.</p>
                             </div>
                             <div class="group">
-                                <h4 class="font-bold text-brand-dark">Insentif Reviewer & Board</h4>
-                                <p class="text-gray-700 text-sm">Insentif bagi dewan editorial di jurnal terindeks Scopus/WOS.</p>
+                                <h4 class="compact-heading font-bold text-brand-dark">Kolaborasi Penelitian</h4>
+                                <p class="text-gray-700 compact-text">Kerjasama dengan PTNBH lain dan negara berpenghasilan rendah-menengah.</p>
+                            </div>
+                            <div class="group">
+                                <h4 class="compact-heading font-bold text-brand-dark">Article Processing Cost (APC)</h4>
+                                <p class="text-gray-700 compact-text">Dukungan biaya publikasi jurnal Q1 terindeks Scopus hingga 50 juta.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="glassmorphism-card p-8 rounded-2xl space-y-6">
-                        <div class="flex items-center space-x-4">
-                            <i class="fas fa-handshake-angle text-4xl text-brand-dark"></i>
-                            <h3 class="text-2xl font-serif font-bold text-brand-dark">Kolaborasi & Kapasitas</h3>
+                    <div class="glassmorphism-card compact-card rounded-2xl space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-user-graduate text-2xl text-brand-dark"></i>
+                            <h3 class="text-lg font-serif font-bold text-brand-dark">Pengembangan SDM</h3>
                         </div>
-                        <div class="space-y-4">
+                        <div class="space-y-2">
                             <div class="group">
-                                <h4 class="font-bold text-brand-dark">Matchmaking Riset Global</h4>
-                                <p class="text-gray-700 text-sm">Menyusun proposal riset bersama peneliti internasional bereputasi tinggi.</p>
-                            </div>
-                             <div class="group">
-                                <h4 class="font-bold text-brand-dark">Mengundang Profesor Ahli</h4>
-                                <p class="text-gray-700 text-sm">Workshop riset dengan target luaran Jurnal Q1.</p>
+                                <h4 class="compact-heading font-bold text-brand-dark">Sabbatical Leave</h4>
+                                <p class="text-gray-700 compact-text">Program pengembangan dosen di perguruan tinggi Top 500 dunia.</p>
                             </div>
                             <div class="group">
-                                <h4 class="font-bold text-brand-dark">Joint Supervision</h4>
-                                <p class="text-gray-700 text-sm">Bimbingan bersama mahasiswa pascasarjana dengan ahli global.</p>
+                                <h4 class="compact-heading font-bold text-brand-dark">Konferensi Internasional SDGs</h4>
+                                <p class="text-gray-700 compact-text">Presentasi paper dalam konferensi internasional bertema SDGs.</p>
                             </div>
-                             <div class="group">
-                                <h4 class="font-bold text-brand-dark">Hibah Modul Inovatif</h4>
-                                <p class="text-gray-700 text-sm">Pengembangan modul untuk program internasional.</p>
+                            <div class="group">
+                                <h4 class="compact-heading font-bold text-brand-dark">Visiting Professors</h4>
+                                <p class="text-gray-700 compact-text">Mengundang profesor ahli untuk workshop dan joint supervision.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glassmorphism-card compact-card rounded-2xl space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-globe-americas text-2xl text-brand-dark"></i>
+                            <h3 class="text-lg font-serif font-bold text-brand-dark">Kerjasama Internasional</h3>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="group">
+                                <h4 class="compact-heading font-bold text-brand-dark">Student Exchange</h4>
+                                <p class="text-gray-700 compact-text">Pertukaran mahasiswa inbound dan outbound dengan mitra global.</p>
+                            </div>
+                            <div class="group">
+                                <h4 class="compact-heading font-bold text-brand-dark">Summer Course SDGs</h4>
+                                <p class="text-gray-700 compact-text">Penyelenggaraan kursus musim panas dengan fokus SDGs.</p>
+                            </div>
+                            <div class="group">
+                                <h4 class="compact-heading font-bold text-brand-dark">Community Development</h4>
+                                <p class="text-gray-700 compact-text">Program pemberdayaan masyarakat bersama universitas luar negeri.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glassmorphism-card compact-card rounded-2xl space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-bullhorn text-2xl text-brand-dark"></i>
+                            <h3 class="text-lg font-serif font-bold text-brand-dark">Promosi Global</h3>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="group">
+                                <h4 class="compact-heading font-bold text-brand-dark">Education Exhibitions</h4>
+                                <p class="text-gray-700 compact-text">Partisipasi dalam pameran pendidikan internasional QS dan THE.</p>
+                            </div>
+                            <div class="group">
+                                <h4 class="compact-heading font-bold text-brand-dark">Konferensi Internasional</h4>
+                                <p class="text-gray-700 compact-text">Penyelenggaraan konferensi/workshop dengan prosiding terindeks Scopus.</p>
+                            </div>
+                            <div class="group">
+                                <h4 class="compact-heading font-bold text-brand-dark">Employer Meeting</h4>
+                                <p class="text-gray-700 compact-text">Workshop dengan pengguna lulusan untuk meningkatkan reputasi.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glassmorphism-card compact-card rounded-2xl space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-cogs text-2xl text-brand-dark"></i>
+                            <h3 class="text-lg font-serif font-bold text-brand-dark">Pengelolaan Program</h3>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="group">
+                                <h4 class="compact-heading font-bold text-brand-dark">Tim Pengelola EQUITY</h4>
+                                <p class="text-gray-700 compact-text">Manajemen profesional program dengan maksimal 3% dari total anggaran.</p>
+                            </div>
+                            <div class="group">
+                                <h4 class="compact-heading font-bold text-brand-dark">Monitoring & Evaluasi</h4>
+                                <p class="text-gray-700 compact-text">Sistem pemantauan berkelanjutan untuk memastikan pencapaian target.</p>
                             </div>
                         </div>
                     </div>
@@ -219,153 +358,185 @@
             </div>
         </section>
 
-        <section id="galeri" class="bg-white py-24 sm:py-32">
-            <div class="container mx-auto px-6 lg:px-8">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl font-serif font-bold text-brand-dark">Galeri Kegiatan</h2>
-                    <p class="mt-3 text-gray-500 max-w-2xl mx-auto">Momen kolaborasi, inovasi, dan pemberdayaan dalam ekosistem riset kami.</p>
+        <section id="galeri" class="section-fullscreen bg-white">
+            <div class="section-content container mx-auto px-6 lg:px-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-serif font-bold text-brand-dark">Galeri Kegiatan Program EQUITY</h2>
+                    <p class="mt-2 text-gray-500 max-w-2xl mx-auto">Dokumentasi implementasi program EQUITY UNJ dalam mendukung pencapaian SDGs dan peningkatan reputasi global.</p>
                 </div>
                 
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[250px]">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 gallery-compact auto-rows-fr">
                     <div class="relative group overflow-hidden rounded-lg shadow-lg md:col-span-2 md:row-span-2">
-                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop" alt="Kegiatan Workshop" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop" alt="Penelitian Kolaboratif" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="absolute bottom-4 left-4 text-white font-bold">Kegiatan Workshop</p>
+                            <p class="absolute bottom-4 left-4 text-white font-bold">Penelitian Kolaboratif</p>
                         </div>
                     </div>
                     <div class="relative group overflow-hidden rounded-lg shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1932&auto=format&fit=crop" alt="Kolaborasi Internasional" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1932&auto=format&fit=crop" alt="Kerjasama Internasional" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="absolute bottom-4 left-4 text-white font-bold">Kolaborasi Internasional</p>
+                            <p class="absolute bottom-4 left-4 text-white font-bold">Kerjasama Internasional</p>
                         </div>
                     </div>
                     <div class="relative group overflow-hidden rounded-lg shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop" alt="Diskusi Kelompok" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop" alt="SDGs Workshop" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="absolute bottom-4 left-4 text-white font-bold">Diskusi Kelompok</p>
+                            <p class="absolute bottom-4 left-4 text-white font-bold">SDGs Workshop</p>
                         </div>
                     </div>
                     <div class="relative group overflow-hidden rounded-lg shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2012&auto=format&fit=crop" alt="Seminar Internasional" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2012&auto=format&fit=crop" alt="Konferensi Internasional" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="absolute bottom-4 left-4 text-white font-bold">Seminar Internasional</p>
+                            <p class="absolute bottom-4 left-4 text-white font-bold">Konferensi Internasional</p>
                         </div>
                     </div>
                     <div class="relative group overflow-hidden rounded-lg shadow-lg md:col-span-2">
-                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop" alt="Presentasi" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop" alt="Community Development" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="absolute bottom-4 left-4 text-white font-bold">Sesi Presentasi</p>
+                            <p class="absolute bottom-4 left-4 text-white font-bold">Community Development</p>
                         </div>
                     </div>
                     <div class="relative group overflow-hidden rounded-lg shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=2069&auto=format&fit=crop" alt="Mentoring" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=2069&auto=format&fit=crop" alt="Visiting Professor" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="absolute bottom-4 left-4 text-white font-bold">Mentoring</p>
+                            <p class="absolute bottom-4 left-4 text-white font-bold">Visiting Professor</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section id="dampak" class="py-24 sm:py-32 bg-brand-dark text-white">
-            <div class="container mx-auto px-6 lg:px-8">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl font-serif font-bold">Dampak Nyata Program Kami</h2>
-                    <p class="mt-3 text-gray-400 max-w-2xl mx-auto">Angka berbicara. Kami bangga dengan pencapaian komunitas peneliti kami.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center" x-data="counter()" x-intersect="start()">
-                    <div class="fade-in-up">
-                        <i class="fas fa-globe-asia text-5xl text-brand-accent mb-4"></i>
-                        <h3 class="text-6xl font-bold counter-animation" style="--num: 25">
-                            <span x-text="Math.round(num1)">0</span>+
-                        </h3>
-                        <p class="mt-2 text-gray-300 text-lg">Negara Terlibat</p>
-                    </div>
-                    <div class="fade-in-up" style="animation-delay: 200ms;">
-                        <i class="fas fa-file-alt text-5xl text-brand-accent mb-4"></i>
-                        <h3 class="text-6xl font-bold counter-animation" style="--num: 150">
-                            <span x-text="Math.round(num2)">0</span>+
-                        </h3>
-                        <p class="mt-2 text-gray-300 text-lg">Publikasi Q1 Terbit</p>
-                    </div>
-                    <div class="fade-in-up" style="animation-delay: 400ms;">
-                        <i class="fas fa-handshake-angle text-5xl text-brand-accent mb-4"></i>
-                        <h3 class="text-6xl font-bold counter-animation" style="--num: 50">
-                             <span x-text="Math.round(num3)">0</span>+
-                        </h3>
-                        <p class="mt-2 text-gray-300 text-lg">Kolaborasi Riset Global</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="testimoni" class="bg-brand-light py-24 sm:py-32">
-            <div class="container mx-auto px-6 lg:px-8">
-                 <div class="text-center mb-16">
-                    <h2 class="text-4xl font-serif font-bold text-brand-dark">Apa Kata Mereka</h2>
-                    <p class="mt-3 text-gray-500 max-w-2xl mx-auto">Pengalaman nyata dari para peneliti yang telah bergabung dengan program kami.</p>
+        <section id="dampak" class="section-fullscreen bg-brand-dark text-white">
+            <div class="section-content container mx-auto px-6 lg:px-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-serif font-bold">Target Pencapaian Program EQUITY</h2>
+                    <p class="mt-2 text-gray-400 max-w-2xl mx-auto">Target strategis UNJ dalam Program EQUITY THE Impact Ranking 2025-2030.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="bg-white p-8 rounded-lg shadow-lg">
-                        <i class="fas fa-quote-left text-brand-accent text-3xl mb-4"></i>
-                        <p class="text-gray-600 mb-6">"Program Matchmaking Riset Global membuka pintu kolaborasi yang tidak pernah saya bayangkan sebelumnya. Sangat berdampak bagi karir saya."</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 targets-compact text-center mb-8" x-data="equityCounter()" x-intersect="start()">
+                    <div class="fade-in-up target-item">
+                        <i class="fas fa-trophy text-4xl text-brand-accent mb-3"></i>
+                        <h3 class="text-4xl font-bold counter-animation" style="--num: 600">
+                            <span x-text="Math.round(num1)">0</span>
+                        </h3>
+                        <p class="mt-1 text-gray-300 text-base">Target Peringkat THE Impact 2030</p>
+                        <p class="text-xs text-gray-400">Top 600 Global Ranking</p>
+                    </div>
+                    <div class="fade-in-up target-item" style="animation-delay: 200ms;">
+                        <i class="fas fa-calendar-alt text-4xl text-brand-accent mb-3"></i>
+                        <h3 class="text-4xl font-bold counter-animation" style="--num: 5">
+                            <span x-text="Math.round(num2)">0</span>
+                        </h3>
+                        <p class="mt-1 text-gray-300 text-base">Tahun Program</p>
+                        <p class="text-xs text-gray-400">2025-2030</p>
+                    </div>
+                    <div class="fade-in-up target-item" style="animation-delay: 400ms;">
+                        <i class="fas fa-bullseye text-4xl text-brand-accent mb-3"></i>
+                        <h3 class="text-4xl font-bold counter-animation" style="--num: 17">
+                             <span x-text="Math.round(num3)">0</span>
+                        </h3>
+                        <p class="mt-1 text-gray-300 text-base">Sustainable Development Goals</p>
+                        <p class="text-xs text-gray-400">Kontribusi pada semua SDGs</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+                    <h3 class="text-xl font-bold text-center mb-6">Roadmap Pencapaian UNJ</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-center">
+                        <div class="bg-white/5 rounded-lg p-3">
+                            <div class="text-xl font-bold text-brand-accent">2026</div>
+                            <div class="text-sm">601-700</div>
+                        </div>
+                        <div class="bg-white/5 rounded-lg p-3">
+                            <div class="text-xl font-bold text-brand-accent">2027</div>
+                            <div class="text-sm">601-700</div>
+                        </div>
+                        <div class="bg-white/5 rounded-lg p-3">
+                            <div class="text-xl font-bold text-brand-accent">2028</div>
+                            <div class="text-sm">501-600</div>
+                        </div>
+                        <div class="bg-white/5 rounded-lg p-3">
+                            <div class="text-xl font-bold text-brand-accent">2029</div>
+                            <div class="text-sm">501-600</div>
+                        </div>
+                        <div class="bg-white/10 rounded-lg p-3 border-2 border-brand-accent">
+                            <div class="text-xl font-bold text-brand-accent">2030</div>
+                            <div class="text-sm font-bold">501-600</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimoni" class="section-fullscreen bg-brand-light">
+            <div class="section-content container mx-auto px-6 lg:px-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-serif font-bold text-brand-dark">Komitmen UNJ untuk Program EQUITY</h2>
+                    <p class="mt-2 text-gray-500 max-w-2xl mx-auto">Dukungan penuh sivitas akademika UNJ dalam mencapai target THE Impact Ranking melalui kontribusi nyata pada SDGs.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 compact-grid">
+                    <div class="bg-white testimonial-compact rounded-lg shadow-lg">
+                        <i class="fas fa-quote-left text-brand-accent text-2xl mb-3"></i>
+                        <p class="text-gray-600 mb-4 compact-text">"Program EQUITY memberikan kesempatan luar biasa bagi UNJ untuk berkontribusi langsung pada pencapaian SDGs sekaligus meningkatkan reputasi global universitas."</p>
                         <div class="flex items-center">
-                            <img class="w-12 h-12 rounded-full mr-4" src="https://i.pravatar.cc/150?img=1" alt="Avatar of person">
+                            <img class="w-10 h-10 rounded-full mr-3" src="https://i.pravatar.cc/150?img=1" alt="Avatar of person">
                             <div>
-                                <h4 class="font-bold text-brand-dark">Dr. Anisa Putri</h4>
-                                <p class="text-sm text-gray-500">Universitas Gadjah Mada</p>
+                                <h4 class="font-bold text-brand-dark text-sm">Prof. Dr. </h4>
+                                <p class="text-xs text-gray-500">R Negeri Jakarta</p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white p-8 rounded-lg shadow-lg">
-                        <i class="fas fa-quote-left text-brand-accent text-3xl mb-4"></i>
-                        <p class="text-gray-600 mb-6">"Dukungan pendanaan APC sangat membantu kami untuk mempublikasikan hasil riset di jurnal internasional bereputasi tinggi. Terima kasih!"</p>
+                    <div class="bg-white testimonial-compact rounded-lg shadow-lg">
+                        <i class="fas fa-quote-left text-brand-accent text-2xl mb-3"></i>
+                        <p class="text-gray-600 mb-4 compact-text">"Melalui pendanaan DAPT dari LPDP, kami dapat mengimplementasikan program-program berkelanjutan yang berdampak nyata bagi masyarakat dan lingkungan."</p>
                         <div class="flex items-center">
-                            <img class="w-12 h-12 rounded-full mr-4" src="https://i.pravatar.cc/150?img=2" alt="Avatar of person">
+                            <img class="w-10 h-10 rounded-full mr-3" src="https://i.pravatar.cc/150?img=2" alt="Avatar of person">
                             <div>
-                                <h4 class="font-bold text-brand-dark">Budi Santoso, Ph.D.</h4>
-                                <p class="text-sm text-gray-500">Institut Teknologi Bandung</p>
+                                <h4 class="font-bold text-brand-dark text-sm">Dr. M.Si.</h4>
+                                <p class="text-xs text-gray-500">Direktur /p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white p-8 rounded-lg shadow-lg">
-                        <i class="fas fa-quote-left text-brand-accent text-3xl mb-4"></i>
-                        <p class="text-gray-600 mb-6">"Workshop dengan profesor ahli dari luar negeri memberikan wawasan baru dan meningkatkan kualitas riset tim kami secara signifikan."</p>
+                    <div class="bg-white testimonial-compact rounded-lg shadow-lg">
+                        <i class="fas fa-quote-left text-brand-accent text-2xl mb-3"></i>
+                        <p class="text-gray-600 mb-4 compact-text">"Kolaborasi riset internasional dalam Program EQUITY membuka peluang kerjasama dengan negara berkembang untuk saling memperkuat kapasitas penelitian."</p>
                         <div class="flex items-center">
-                            <img class="w-12 h-12 rounded-full mr-4" src="https://i.pravatar.cc/150?img=3" alt="Avatar of person">
+                            <img class="w-10 h-10 rounded-full mr-3" src="https://i.pravatar.cc/150?img=3" alt="Avatar of person">
                             <div>
-                                <h4 class="font-bold text-brand-dark">Rina Wijaya, M.Sc.</h4>
-                                <p class="text-sm text-gray-500">Universitas Indonesia</p>
+                                <h4 class="font-bold text-brand-dark text-sm">Prof. Dr.  M.Pd.</h4>
+                                <p class="text-xs text-gray-500">Wakil /p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+    @include('layout.footer')
 
     </main>
 
- 
-    @include('layout.footer') 
     <script>
-        function counter() {
+        function equityCounter() {
             return {
                 num1: 0,
                 num2: 0,
                 num3: 0,
                 start() {
-                    const animate = (target, el) => {
+                    const animate = (targetNum, propName) => {
+                        const el = document.querySelector(`[style*="--num: ${targetNum}"]`);
+                        if (!el) return;
+                        
                         const observer = new IntersectionObserver((entries) => {
                             if (entries[0].isIntersecting) {
                                 let start = 0;
-                                const end = parseInt(el.style.getPropertyValue('--num'));
+                                const end = targetNum;
                                 const duration = 2000;
+                                
                                 const step = (timestamp) => {
                                     if (!start) start = timestamp;
                                     const progress = timestamp - start;
-                                    target = Math.min(Math.floor(progress / duration * end), end);
-                                    if(target === this.num1) this.num1 = target;
-                                    if(target === this.num2) this.num2 = target;
-                                    if(target === this.num3) this.num3 = target;
+                                    const current = Math.min(Math.floor(progress / duration * end), end);
+                                    this[propName] = current;
+                                    
                                     if (progress < duration) {
                                         window.requestAnimationFrame(step);
                                     }
@@ -373,21 +544,42 @@
                                 window.requestAnimationFrame(step);
                                 observer.unobserve(el);
                             }
-                        });
+                        }, { threshold: 0.1 });
+                        
                         observer.observe(el);
-                    }
+                    };
                     
-                    const el1 = this.$el.children[0].children[1];
-                    const el2 = this.$el.children[1].children[1];
-                    const el3 = this.$el.children[2].children[1];
-                    
-                    this.num1 = parseInt(el1.style.getPropertyValue('--num'));
-                    this.num2 = parseInt(el2.style.getPropertyValue('--num'));
-                    this.num3 = parseInt(el3.style.getPropertyValue('--num'));
+                    animate(600, 'num1');
+                    animate(5, 'num2');
+                    animate(17, 'num3');
                 }
             }
         }
-    </script>
 
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add body class untuk styling scoped
+            document.body.classList.add('has-navbar');
+            
+            // Prevent any icon conflicts
+            const equityIcons = document.querySelectorAll('.equity-page .fas, .equity-page .fab');
+            equityIcons.forEach(icon => {
+                icon.style.fontFamily = '"Font Awesome 6 Free", "Font Awesome 6 Brands"';
+                icon.style.fontWeight = '900';
+            });
+        });
+    </script>
 </body>
 </html>
