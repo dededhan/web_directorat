@@ -33,7 +33,7 @@
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         <option value="">Semua Kategori</option>
                         <option value="academic">Academic</option>
-                        <option value="employer">Employer</option>
+                        <option value="employee">Employee</option>
                     </select>
                 </div>
                 <div>
@@ -76,7 +76,7 @@
 
             <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
                 <h3 id="prodi-chart-title" class="text-lg font-bold text-gray-700 mb-4">Jumlah Data per Akun Fakultas</h3>
-                <div id="prodiChartContainer" class="h-80">
+                <div id="prodiChartContainer">
                     <canvas id="prodiChart"></canvas>
                     <p id="prodiChartPlaceholder" class="text-center text-gray-500 flex items-center justify-center h-full">
                         Memuat data...
@@ -185,26 +185,67 @@
             const renderFacultyChart = (data) => {
                 destroyCharts(['faculty']);
                 const facultyCtx = document.getElementById('facultyChart').getContext('2d');
-                const facultyColors = data.facultyColors || {};
+                
                 const labels = Object.keys(data.byFaculty);
-                const dataValues = Object.values(data.byFaculty);
-                const maxValue = dataValues.length > 0 ? Math.max(...dataValues) : 0;
-                const yAxisMax = maxValue < 10 ? maxValue + 2 : Math.ceil(maxValue * 1.1);
+                const academicData = labels.map(faculty => data.byFaculty[faculty].academic || 0);
+                const employeeData = labels.map(faculty => data.byFaculty[faculty].employee || 0);
+                const totalData = labels.map((_, index) => academicData[index] + employeeData[index]);
+
+                const yAxisMax = totalData.length > 0 ? Math.ceil(Math.max(...totalData) * 1.30) : 10;
+
+    
+                const totalLabelsPlugin = {
+                    id: 'totalLabels',
+                    afterDatasetsDraw(chart) {
+                        const { ctx, data } = chart;
+                        ctx.save();
+                        ctx.font = 'bold 12px sans-serif';
+                        ctx.fillStyle = '#4B5563'; // gray-600
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'bottom';
+
+                        const lastVisibleDatasetIndex = data.datasets.map((ds, i) => chart.isDatasetVisible(i)).lastIndexOf(true);
+                        if (lastVisibleDatasetIndex === -1) return;
+
+                        const meta = chart.getDatasetMeta(lastVisibleDatasetIndex);
+
+                        meta.data.forEach((bar, index) => {
+                            let total = 0;
+                            for (let i = 0; i <= lastVisibleDatasetIndex; i++) {
+                                if (chart.isDatasetVisible(i)) {
+                                    total += Number(data.datasets[i].data[index]) || 0;
+                                }
+                            }
+
+                            if (total > 0) {
+                                ctx.fillText(total, bar.x, bar.y - 5);
+                            }
+                        });
+                        ctx.restore();
+                    }
+                };
 
                 charts.faculty = new Chart(facultyCtx, {
                     type: 'bar',
                     data: {
                         labels: labels.map(l => l.toUpperCase()),
                         datasets: [{
-                            label: 'Jumlah Responden',
-                            data: dataValues,
-                            backgroundColor: labels.map(label => facultyColors[label] ||
-                                '#A5B4FC'),
+                            label: 'Academic',
+                            data: academicData,
+                            backgroundColor: '#3B82F6', // Blue
+                        }, {
+                            label: 'Employee',
+                            data: employeeData,
+                            backgroundColor: '#10B981', // Green
                         }]
                     },
                     options: {
                         scales: {
+                            x: {
+                                stacked: true,
+                            },
                             y: {
+                                stacked: true,
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0
@@ -216,20 +257,26 @@
                         maintainAspectRatio: false,
                         plugins: {
                             legend: {
-                                display: false
+                                display: true,
+                                position: 'top',
                             },
                             datalabels: {
-                                anchor: 'end',
-                                align: 'top',
-                                color: '#374151',
+                                anchor: 'center',
+                                align: 'center',
+                                color: '#ffffff',
                                 font: {
                                     weight: 'bold'
+                                },
+                                formatter: (value) => {
+                                    return value > 0 ? value : '';
                                 }
                             }
                         }
-                    }
+                    },
+                    plugins: [totalLabelsPlugin]
                 });
             };
+
 
             const renderSummaryPies = (data) => {
                 destroyCharts(['category', 'status']);
@@ -255,6 +302,7 @@
                                     dataArr.map(data => {
                                         sum += data;
                                     });
+                                    if (sum === 0) return '0 (0.00%)';
                                     let percentage = (value*100 / sum).toFixed(2)+"%";
                                     return `${value} (${percentage})`;
                                 },
@@ -286,6 +334,7 @@
                                     dataArr.map(data => {
                                         sum += data;
                                     });
+                                     if (sum === 0) return '0 (0.00%)';
                                     let percentage = (value*100 / sum).toFixed(2)+"%";
                                     return `${value} (${percentage})`;
                                 },
@@ -323,13 +372,19 @@
                         }
 
                         const dataValues = Object.values(response.data);
+                        const prodiLabels = Object.keys(response.data);
+
+                        const prodiChartContainer = document.getElementById('prodiChartContainer');
+                        const newHeight = Math.max(320, prodiLabels.length * 40); 
+                        prodiChartContainer.style.height = `${newHeight}px`;
+                        
                         const maxValue = dataValues.length > 0 ? Math.max(...dataValues) : 0;
                         const xAxisMax = maxValue < 10 ? maxValue + 2 : Math.ceil(maxValue * 1.1);
 
                         charts.prodi = new Chart(prodiCtx, {
                             type: 'bar',
                             data: {
-                                labels: Object.keys(response.data),
+                                labels: prodiLabels,
                                 datasets: [{
                                     label: chartLabel,
                                     data: dataValues,
@@ -360,7 +415,7 @@
                                         font: {
                                             weight: 'bold'
                                         },
-                                        formatter: (value) => value > 0 ? value : ''
+                                        formatter: (value) => value
                                     }
                                 }
                             }
@@ -396,3 +451,4 @@
         });
     </script>
 @endsection
+

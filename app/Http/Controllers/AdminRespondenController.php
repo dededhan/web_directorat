@@ -233,7 +233,6 @@ class AdminRespondenController extends Controller
                         return $this->normalizeCategoryName($r->category);
                     })->map->count();
                     
-                    // Ensure both academic and employee keys exist for consistent data structure
                     return [
                         'academic' => $categoryCounts->get('academic', 0),
                         'employee' => $categoryCounts->get('employee', 0),
@@ -360,20 +359,21 @@ class AdminRespondenController extends Controller
                     $label = $getLabel($user->name);
                     $prodiTotals[$label] = 0;
                 }
+                
+                $userIdToLabelMap = [];
+                foreach($baseUsers as $user) {
+                    $userIdToLabelMap[$user->id] = $getLabel($user->name);
+                }
 
-                $respondensInFaculty = $filteredRespondens->filter(function ($responden) use ($aliases) {
-                    if (!optional($responden->user)->name) {
-                        return false;
-                    }
-                    $userName = strtolower($responden->user->name);
-                    $userFacultyCode = Str::contains($userName, '-') ? Str::before($userName, '-') : $userName;
-                    return in_array($this->normalizeFacultyName($userFacultyCode), $aliases);
-                });
+                $facultyUserIds = $baseUsers->pluck('id');
+                $respondensInFaculty = $filteredRespondens->whereIn('user_id', $facultyUserIds);
+                
+                $countsByUserId = $respondensInFaculty->groupBy('user_id')->map->count();
 
-                foreach ($respondensInFaculty as $responden) {
-                    $label = $getLabel($responden->user->name);
-                    if (isset($prodiTotals[$label])) {
-                        $prodiTotals[$label]++;
+                foreach ($countsByUserId as $userId => $count) {
+                    if (isset($userIdToLabelMap[$userId])) {
+                        $label = $userIdToLabelMap[$userId];
+                        $prodiTotals[$label] = $count;
                     }
                 }
                 
@@ -627,8 +627,6 @@ class AdminRespondenController extends Controller
                 if (empty($responden->fullname)) {
                     throw new \Exception('Nama responden tidak boleh kosong');
                 }
-
-                // Send email
                 Mail::to($responden->email)->send(new RespondenInvitationMail($responden));
 
                 return response()->json([
@@ -659,7 +657,6 @@ class AdminRespondenController extends Controller
         $role = $user->role;
         $userInfo = $this->getUserFacultyInfo($user);
 
-        // Authorization logic
         if ($role === 'fakultas') {
             if ($responden->fakultas !== $userInfo['faculty_code']) {
                 if ($request->ajax()) {
@@ -723,7 +720,7 @@ class AdminRespondenController extends Controller
         if ($validator->fails()) {
             $errorMessage = $validator->errors()->first();
             if ($request->wantsJson()) {
-                return response()->json(['success' => false, 'message' => $errorMessage], 422); // 422 Unprocessable Entity
+                return response()->json(['success' => false, 'message' => $errorMessage], 422); // 
             }
             return redirect()->back()->with('error', $errorMessage);
         }
