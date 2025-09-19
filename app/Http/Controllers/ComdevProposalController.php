@@ -3,27 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\ProposalSession;
+use App\Models\ComdevProposal; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class ProposalSessionController extends Controller
+class ComdevProposalController extends Controller 
 {
-    
-    // Menampilkan daftar semua sesi proposal
     public function index()
     {
-        $sessions = ProposalSession::latest()->paginate(10);
+        // DIUBAH: Menggunakan model baru
+        $sessions = ComdevProposal::latest()->paginate(10);
         return view('admin.comdev.index', compact('sessions'));
     }
 
-    // Menampilkan form untuk membuat sesi baru
-    public function create()
+    public function getDetail(ComdevProposal $proposalSession) 
     {
-        return view('admin.comdev.create');
+        return response()->json($proposalSession);
     }
-
-    // Menyimpan data dari form create ke database
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -36,26 +33,13 @@ class ProposalSessionController extends Controller
             'max_anggota' => 'required|integer|gte:min_anggota',
         ]);
 
-        ProposalSession::create($request->all());
+        ComdevProposal::create($request->all()); 
 
-        // DIUBAH: Mengarah ke halaman index dengan nama route yang benar
         return redirect()->route('admin.proposal-sessions.index')
                          ->with('success', 'Sesi proposal berhasil dibuat.');
     }
-    public function getDetail(ProposalSession $proposalSession)
-    {
-        return response()->json($proposalSession);
-    }
 
-
-    // Menampilkan form untuk mengedit sesi
-    public function edit(ProposalSession $proposalSession)
-    {
-        return view('admin.comdev.edit', ['session' => $proposalSession]);
-    }
-
-    // Mengupdate data di database
-    public function update(Request $request, ProposalSession $proposalSession)
+    public function update(Request $request, ComdevProposal $proposalSession) 
     {
         $validatedData = $request->validate([
             'nama_sesi' => 'required|string|max:255',
@@ -69,16 +53,13 @@ class ProposalSessionController extends Controller
 
         $proposalSession->update($validatedData);
 
-        // DIUBAH: Mengarah ke halaman index dengan nama route yang benar
         return redirect()->route('admin.proposal-sessions.index')
                          ->with('success', 'Sesi proposal berhasil diperbarui.');
     }
 
-    // Menghapus data dari database
-    public function destroy(ProposalSession $proposalSession)
+    public function destroy(ComdevProposal $proposalSession) 
     {
         $proposalSession->delete();
-        // DIUBAH: Mengarah ke halaman index dengan nama route yang benar
         return redirect()->route('admin.proposal-sessions.index')
                          ->with('success', 'Sesi proposal berhasil dihapus.');
     }

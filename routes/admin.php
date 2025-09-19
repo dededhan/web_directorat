@@ -31,7 +31,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VideoinovasiController;
 use App\Http\Controllers\MitraKolaborasiController;
 use App\Http\Controllers\RisetUnjController;
-use App\Http\Controllers\ProposalSessionController;
+use App\Http\Controllers\ComdevProposalController;
 
 
 
@@ -136,8 +136,8 @@ Route::prefix('admin')->name('admin.')
         // EQUITY ADMIN
         // EQUITY ADMIN
         // EQUITY ADMIN
-         Route::resource('/proposal-sessions', ProposalSessionController::class);
-         Route::get('proposal-sessions/{proposalSession}/detail', [ProposalSessionController::class, 'getDetail'])->name('proposal-sessions.detail');
+         Route::resource('/proposal-sessions', ComdevProposalController::class);
+         Route::get('proposal-sessions/{proposalSession}/detail', [ComdevProposalController::class, 'getDetail'])->name('proposal-sessions.detail');
     
 
 

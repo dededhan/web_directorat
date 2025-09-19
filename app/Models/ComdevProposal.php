@@ -5,15 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProposalSession extends Model
+class ComdevProposal extends Model
 {
     use HasFactory;
+    
+    // Jika nama tabel Anda adalah 'proposal_sessions' (jamak), tambahkan baris ini.
+    // Jika nama tabel Anda 'comdev_proposals', baris ini tidak perlu.
+    protected $table = 'proposal_sessions';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'nama_sesi',
         'deskripsi',
