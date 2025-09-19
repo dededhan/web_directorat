@@ -20,7 +20,11 @@ class RespondenInvitationMail extends Mailable
     }
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'Undangan Pengisian Survei QS');
+        $normalizedCategory = $this->normalizeCategory($this->responden->category);
+        $categoryName = ucfirst($normalizedCategory);
+        $subject = "Consent Letter for {$categoryName} Respondent Universitas Negeri Jakarta QS World University Ranking";
+
+        return new Envelope(subject: $subject);
     }
 
     public function content(): Content
