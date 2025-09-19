@@ -34,21 +34,55 @@ class RespondenInvitationMail extends Mailable
             throw new \RuntimeException('Token is required');
         }
 
+        $normalizedCategory = $this->normalizeCategory($this->responden->category);
+        $displayTitle = $this->normalizeTitle($this->responden->title);
+
         return new Content(
             view: 'emails.responden-invitation',
             with: [
                 'responden' => $this->responden,
-                'surveyLink' => $this->generateSurveyLink()
+                'surveyLink' => $this->generateSurveyLink($normalizedCategory),
+                'normalizedCategory' => $normalizedCategory,
+                'displayTitle' => $displayTitle,
             ]
         );
     }
 
-protected function generateSurveyLink(): string
-{
-    $routeName = $this->responden->category === 'academic'
-        ? 'qs-academic.index'
-        : 'qs-employee.index';
+    protected function generateSurveyLink(string $normalizedCategory): string
+    {
+        $routeName = $normalizedCategory === 'academic'
+            ? 'qs-academic.index'
+            : 'qs-employee.index';
 
-    return route($routeName, ['token' => $this->responden->token]);
-}
+        return route($routeName, ['token' => $this->responden->token]);
+    }
+
+    private function normalizeCategory(?string $category): string
+    {
+        $value = strtolower(trim((string) $category));
+        if ($value === '') {
+            return 'employee';
+        }
+        $academic = ['academic', 'researcher', 'reseracher'];
+        $employer = ['employer', 'employeer', 'industri', 'employee'];
+        foreach ($academic as $k) {
+            if (str_contains($value, $k)) return 'academic';
+        }
+        foreach ($employer as $k) {
+            if (str_contains($value, $k)) return 'employee';
+        }
+        return 'employee';
+    }
+
+    private function normalizeTitle(?string $title): string
+    {
+        $value = strtolower(trim((string) $title));
+        $value = rtrim($value, '.');
+        $map = [
+            'mr' => 'Mr.',
+            'mrs' => 'Mrs.',
+            'ms' => 'Ms.',
+        ];
+        return $map[$value] ?? ucwords($value);
+    }
 }

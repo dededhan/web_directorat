@@ -573,6 +573,36 @@
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const routePrefix = "{{ $routePrefix ?? 'admin' }}";
 
+            function normalizeTitleValue(raw) {
+                const v = String(raw || '').toLowerCase().trim().replace(/\.$/, '');
+                if (v === 'mr') return 'mr';
+                if (v === 'mrs') return 'mrs';
+                if (v === 'ms') return 'ms';
+                return v || 'mr';
+            }
+
+            function displayTitle(raw) {
+                const v = normalizeTitleValue(raw);
+                if (v === 'mr') return 'Mr.';
+                if (v === 'mrs') return 'Mrs.';
+                if (v === 'ms') return 'Ms.';
+                return v.charAt(0).toUpperCase() + v.slice(1);
+            }
+
+            function normalizeCategoryValue(raw) {
+                const v = String(raw || '').toLowerCase().trim();
+                const academic = ['academic', 'researcher', 'reseracher'];
+                const employee = ['employer', 'employeer', 'industri', 'employee'];
+                if (academic.some(k => v.includes(k))) return 'academic';
+                if (employee.some(k => v.includes(k))) return 'employee';
+                return 'employee';
+            }
+
+            function displayCategory(raw) {
+                const v = normalizeCategoryValue(raw);
+                return v === 'academic' ? 'Academic' : 'Employee';
+            }
+
 
             document.querySelectorAll('.edit-btn').forEach(button => {
                 button.addEventListener('click', function() {
@@ -587,7 +617,7 @@
 
                             form.action = `/${routePrefix}/responden/${respondenId}`;
 
-                            form.querySelector('#edit_title').value = responden.title;
+                            form.querySelector('#edit_title').value = normalizeTitleValue(responden.title);
                             form.querySelector('#edit_fullname').value = responden.fullname;
                             form.querySelector('#edit_jabatan').value = responden.jabatan;
                             form.querySelector('#edit_instansi').value = responden.instansi;
@@ -602,12 +632,7 @@
                             // 
                             form.querySelector('#edit_fakultas').value = responden.fakultas ? responden.fakultas.toLowerCase() : '';
 
-                            let category = responden.category ? responden.category.toLowerCase() : '';
-                            const employeeKeywords = ['employer', 'employeer', 'industri', 'employee'];
-                            if (employeeKeywords.includes(category)) {
-                                category = 'employee';
-                            }
-                            form.querySelector('#edit_category').value = category;
+                            form.querySelector('#edit_category').value = normalizeCategoryValue(responden.category);
                         })
                         .catch(error => {
                             Swal.fire({
@@ -640,8 +665,7 @@
                         const updatedData = response.data.data;
                         const row = document.getElementById(`responden-row-${updatedData.id}`);
                         if (row) {
-                            row.querySelector('.responden-title').textContent = updatedData.title
-                                .charAt(0).toUpperCase() + updatedData.title.slice(1);
+                            row.querySelector('.responden-title').textContent = displayTitle(updatedData.title);
                             row.querySelector('.responden-fullname').textContent = updatedData.fullname;
                             row.querySelector('.responden-jabatan').textContent = updatedData.jabatan;
                             row.querySelector('.responden-instansi').textContent = updatedData.instansi;
@@ -654,7 +678,7 @@
                                 .phone_dosen;
                             row.querySelector('.responden-fakultas').textContent = updatedData.fakultas
                                 .toUpperCase();
-                            row.querySelector('.responden-category').textContent = updatedData.category;
+                            row.querySelector('.responden-category').textContent = displayCategory(updatedData.category);
                         }
                     })
                     .catch(error => {

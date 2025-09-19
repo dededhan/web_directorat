@@ -40,10 +40,10 @@
 <body>
     <div class="container">
 
-        @if(strtolower($responden->category) == 'academic')
+        @if($normalizedCategory == 'academic')
 
             {{-- london--}}
-            <p>Dear {{ $responden->title }}. {{ $responden->fullname }},</p>
+            <p>Dear {{ $displayTitle }} {{ $responden->fullname }},</p>
             <p>
                 We are writing to you as an important stakeholder of our university. We value our ongoing engagement with you and would like to be certain that we are not using your information for any purpose that you would prefer us not to. For the purposes of an important global survey of academic opinion, we would like to seek your permission to pass on your contact details (name, job title, institution and email address) to QS. We feel that your impartial responses would contribute to the insight and precision of the survey’s outcomes.
             </p>
@@ -100,7 +100,7 @@
             </div>
 
 
-        @elseif(in_array(strtolower($responden->category), ['employer', 'employee']))
+        @elseif($normalizedCategory == 'employee')
 
             {{-- indo --}}
             <p>Kepada Yth. Bapak/Ibu {{ $responden->fullname }},</p>
@@ -134,7 +134,7 @@
             <hr>
 
             {{-- london --}}
-            <p>Dear {{ $responden->title }}. {{ $responden->fullname }},</p>
+            <p>Dear {{ $displayTitle }} {{ $responden->fullname }},</p>
             <p>
                 We are writing to you as an important stakeholder of our university. We value our ongoing engagement with you and would like to be certain that we are not using your information for any purpose that you would prefer us not to. For the purposes of an important global survey of employer opinion, we would like to seek your permission to pass on your contact details (name, job title, institution and email address) to the QS. We feel that your impartial responses would contribute to the insight and precision of the survey’s outcomes.
             </p>
