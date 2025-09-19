@@ -24,8 +24,7 @@ class UpdateRespondenRequest extends FormRequest
      */
     public function rules()
     {
-        // 2. Get the respondent's ID from the route parameter.
-        // This name ('id') must match the parameter name in your routes/web.php file.
+
         $respondenId = $this->route('responden')->id;
 
         return [
@@ -34,14 +33,12 @@ class UpdateRespondenRequest extends FormRequest
             'jabatan' => 'required|string|max:255',
             'instansi' => 'required|string|max:255',
 
-            // 3. Update the email validation rule
             'email' => [
                 'required',
                 'email',
                 Rule::unique('respondens')->ignore($respondenId),
             ],
 
-            // 4. Update the phone_responden validation rule
             'phone_responden' => [
                 'nullable',
                 'string',

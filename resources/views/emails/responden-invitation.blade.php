@@ -40,7 +40,7 @@
 <body>
     <div class="container">
 
-        @if($responden->category == 'academic')
+        @if(strtolower($responden->category) == 'academic')
 
             {{-- london--}}
             <p>Dear {{ $responden->title }}. {{ $responden->fullname }},</p>
@@ -100,7 +100,7 @@
             </div>
 
 
-        @elseif($responden->category == 'employer')
+        @elseif(in_array(strtolower($responden->category), ['employer', 'employee']))
 
             {{-- indo --}}
             <p>Kepada Yth. Bapak/Ibu {{ $responden->fullname }},</p>

@@ -124,10 +124,10 @@
                         <label class="form-label">Tipe Responden</label>
                         <select class="form-select" id="respondent-type" name="responden_category" style="width: auto;">
                             <option value="academic">Academic</option>
-                            <option value="employer">Employer</option>
+                            <option value="employee">Employee</option>
                         </select>
                         <div class="form-text text-muted">Pilih kategori responden: Academic (dari institusi pendidikan)
-                            atau Employer (dari dunia kerja/industri)</div>
+                            atau Employee (dari dunia kerja/industri)</div>
                     </div>
                 </div>
 
@@ -153,8 +153,8 @@
                                         <option value="">Semua Kategori</option>
                                         <option value="academic" {{ request('kategori') == 'academic' ? 'selected' : '' }}>
                                             Academic</option>
-                                        <option value="employer" {{ request('kategori') == 'employer' ? 'selected' : '' }}>
-                                            Employer</option>
+                                        <option value="employee" {{ in_array(request('kategori'), ['employer', 'employee']) ? 'selected' : '' }}>
+                                            Employee</option>
                                     </select>
                                 </div>
                                 <div class="col-auto">
@@ -288,7 +288,15 @@
                                     <td class="responden-nama_dosen_pengusul">{{ $responden->nama_dosen_pengusul }}</td>
                                     <td class="responden-phone_dosen">{{ $responden->phone_dosen }}</td>
                                     <td class="responden-fakultas">{{ strtoupper($responden->fakultas) }}</td>
-                                    <td class="responden-category">{{ $responden->category }}</td>
+                                    <td class="responden-category">
+                                        @if(in_array(strtolower($responden->category), ['employee', 'employer', 'employeer', 'industri']))
+                                            Employee
+                                        @elseif(in_array(strtolower($responden->category), ['academic', 'researcher', 'reseracher']))
+                                            Academic
+                                        @else
+                                            {{ Str::ucfirst($responden->category) }}
+                                        @endif
+                                    </td>
                                     <td>{{ $responden->created_at?->format('d M Y H:i') ?? 'N/A' }}</td>
                                     <td>
                                         <select class="form-select status-dropdown" data-id="{{ $responden->id }}"
@@ -443,7 +451,7 @@
                                 <label for="edit_category" class="form-label">Tipe Responden</label>
                                 <select class="form-select" name="category" id="edit_category" required>
                                     <option value="academic">Academic</option>
-                                    <option value="employer">Employer</option>
+                                    <option value="employee">Employee</option>
                                 </select>
                             </div>
                         </div>
@@ -510,7 +518,7 @@
                         <select class="form-select" id="exportFilterCategory">
                             <option value="">Semua Kategori</option>
                             <option value="academic">Academic</option>
-                            <option value="employer">Employer</option>
+                            <option value="employee">Employee</option>
                         </select>
                     </div>
                     {{-- Filter Fakultas --}}
@@ -590,8 +598,16 @@
                                 .nama_dosen_pengusul;
                             form.querySelector('#edit_phone_dosen').value = responden
                                 .phone_dosen;
-                            form.querySelector('#edit_fakultas').value = responden.fakultas;
-                            form.querySelector('#edit_category').value = responden.category;
+                            
+                            // 
+                            form.querySelector('#edit_fakultas').value = responden.fakultas ? responden.fakultas.toLowerCase() : '';
+
+                            let category = responden.category ? responden.category.toLowerCase() : '';
+                            const employeeKeywords = ['employer', 'employeer', 'industri', 'employee'];
+                            if (employeeKeywords.includes(category)) {
+                                category = 'employee';
+                            }
+                            form.querySelector('#edit_category').value = category;
                         })
                         .catch(error => {
                             Swal.fire({
@@ -642,11 +658,18 @@
                         }
                     })
                     .catch(error => {
+                        let errorMessage = 'Terjadi kesalahan saat memperbarui data.';
+                        if (error.response && error.response.data && error.response.data.errors) {
+                           const errors = Object.values(error.response.data.errors).flat();
+                           errorMessage = errors.join('\n');
+                        } else if (error.response && error.response.data && error.response.data.message) {
+                            errorMessage = error.response.data.message;
+                        }
+
                         Swal.fire({
                             icon: 'error',
                             title: 'Gagal!',
-                            text: error.response?.data?.message ||
-                                'Terjadi kesalahan saat memperbarui data.',
+                            text: errorMessage,
                         });
                         console.error('Error updating responden:', error);
                     });

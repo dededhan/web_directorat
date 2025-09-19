@@ -95,8 +95,13 @@ class AdminRespondenController extends Controller
                 $query->whereBetween('created_at', [$startDate, $endDate]);
             }
 
-            if ($request->filled('category') && in_array($request->category, ['academic', 'employer'])) {
-                $query->whereRaw('LOWER(category) LIKE ?', ['%' . strtolower($request->category) . '%']);
+            if ($request->filled('category') && in_array($request->category, ['academic', 'employer', 'employee'])) {
+                $normalizedCategory = $this->normalizeCategoryName($request->category);
+                if ($normalizedCategory === 'academic') {
+                    $query->whereIn('category', ['academic', 'researcher', 'reseracher']);
+                } else {
+                    $query->whereIn('category', ['employer', 'employeer', 'industri', 'employee']);
+                }
             }
 
             $respondens = $query->with('user')->get();
@@ -155,12 +160,12 @@ class AdminRespondenController extends Controller
     {
         $category = strtolower(trim($category));
         $academicKeywords = ['academic', 'researcher', 'reseracher'];
-        $employerKeywords = ['employer', 'employeer', 'industri'];
+        $employerKeywords = ['employer', 'employeer', 'industri', 'employee'];
         foreach ($academicKeywords as $keyword) {
             if (Str::contains($category, $keyword)) return 'academic';
         }
         foreach ($employerKeywords as $keyword) {
-            if (Str::contains($category, $keyword)) return 'employer';
+            if (Str::contains($category, $keyword)) return 'employee';
         }
         if (empty($category)) return 'lainnya';
         return 'lainnya';
@@ -212,15 +217,29 @@ class AdminRespondenController extends Controller
             $forFacultyCalculation = $filteredRespondens;
             $forSummaryCalculation = $filteredRespondens;
 
-            if ($category && in_array($category, ['academic', 'employer'])) {
-                $forFacultyCalculation = $forFacultyCalculation->filter(function ($responden) use ($category) {
-                    return $this->normalizeCategoryName($responden->category) === $category;
+            if ($category && in_array($category, ['academic', 'employer', 'employee'])) {
+                $normalizedCategory = $this->normalizeCategoryName($category);
+                $forFacultyCalculation = $forFacultyCalculation->filter(function ($responden) use ($normalizedCategory) {
+                    return $this->normalizeCategoryName($responden->category) === $normalizedCategory;
                 });
             }
 
-            $byFaculty = $forFacultyCalculation->groupBy(function ($responden) {
-                return $this->normalizeFacultyName($responden->fakultas);
-            })->map->count();
+            $byFaculty = $forFacultyCalculation
+                ->groupBy(function ($responden) {
+                    return $this->normalizeFacultyName($responden->fakultas);
+                })
+                ->map(function ($respondensInFaculty) {
+                    $categoryCounts = $respondensInFaculty->groupBy(function ($r) {
+                        return $this->normalizeCategoryName($r->category);
+                    })->map->count();
+                    
+                    // Ensure both academic and employee keys exist for consistent data structure
+                    return [
+                        'academic' => $categoryCounts->get('academic', 0),
+                        'employee' => $categoryCounts->get('employee', 0),
+                    ];
+                });
+
 
             $byFacultySorted = $byFaculty->sortKeys();
             if ($byFacultySorted->has('tidak terdefinisi')) {
@@ -250,7 +269,7 @@ class AdminRespondenController extends Controller
             'fakultas' => 'nullable|string',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
-            'category' => 'nullable|string|in:academic,employer',
+            'category' => 'nullable|string|in:academic,employer,employee',
             'data_source' => 'nullable|string|in:all,non_admin,admin_only'
         ]);
         try {
@@ -267,7 +286,12 @@ class AdminRespondenController extends Controller
             $query = Responden::with('user');
 
             if ($request->filled('category')) {
-                $query->where('category', $request->category);
+                $normalizedCategory = $this->normalizeCategoryName($request->category);
+                if ($normalizedCategory === 'academic') {
+                    $query->whereIn('category', ['academic', 'researcher', 'reseracher']);
+                } else {
+                    $query->whereIn('category', ['employer', 'employeer', 'industri', 'employee']);
+                }
             }
             if ($request->filled('start_date') && $request->filled('end_date')) {
                 $startDate = Carbon::parse($request->start_date)->startOfDay();
