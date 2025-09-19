@@ -46,6 +46,10 @@
                             <option value="dosen">Dosen</option>
                             <option value="mahasiswa">Mahasiswa</option>
                             <option value="validator">Penilai</option>
+                            {{-- ADDED --}}
+                            <option value="admin_equity">Admin Equity</option>
+                            <option value="reviewer_equity">Reviewer Equity</option>
+                            {{-- END ADDED --}}
                             <option value="registered_user">Pengguna Terdaftar</option>
                         </select>
                     </div>
@@ -382,6 +386,10 @@
                                 <option value="dosen">Dosen</option>
                                 <option value="mahasiswa">Mahasiswa</option>
                                 <option value="validator">Penilai</option>
+                                {{-- ADDED --}}
+                                <option value="admin_equity">Admin Equity</option>
+                                <option value="reviewer_equity">Reviewer Equity</option>
+                                {{-- END ADDED --}}
                                 <option value="registered_user">Pengguna Terdaftar</option>
                             </select>
                         </div>
