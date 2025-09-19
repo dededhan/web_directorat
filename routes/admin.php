@@ -507,6 +507,52 @@ Route::prefix('fakultas')->name('fakultas.')
 //         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
 //     });
 
+
+// Admin Equity Routes
+Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->group(function () {
+                Route::get('/dashboard', function () {
+                    return view('admin_equity.dashboard');
+                })->name('dashboard');
+
+                Route::get('/comdev', function () {
+                    return view('admin_equity.comdev.index');
+                })->name('comdev.index');
+
+
+                Route::get('/apc', function () {
+                    return view('admin_equity.apc.index');
+                })->name('apc.index');
+
+                // 3. Insentif reviewer dan editorial board
+                Route::get('/incentive', function () {
+                    return view('admin_equity.incentive.index');
+                })->name('incentive.index');
+
+                // 4. Jurnal terindex Scopus/WOS
+                Route::get('/scopus', function () {
+                    return view('admin_equity.scopus.index');
+                })->name('scopus.index');
+                
+                // 5. Presenting at international scientific conferences & Match making
+                Route::get('/conference', function () {
+                    return view('admin_equity.conference.index');
+                })->name('conference.index');
+
+                // 6. Visiting (inviting) Top Professors
+                Route::get('/visiting', function () {
+                    return view('admin_equity.visiting.index');
+                })->name('visiting.index');
+
+                // 7. Joint Supervision
+                Route::get('/supervision', function () {
+                    return view('admin_equity.supervision.index');
+                })->name('supervision.index');
+
+                // Note: You may want to move the existing proposal-sessions route inside this group too.
+                // For example:
+                // Route::resource('/proposal-sessions', ComdevProposalController::class)->names('proposal-sessions');
+});
+
 Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
     ->group(function () {
         Route::prefix('dosen')->name('dosen.')
