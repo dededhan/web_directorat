@@ -128,9 +128,12 @@
                                 <option value="no" {{ request('survey_2024')==='no' ? 'selected' : '' }}>No</option>
                             </select>
                         </div>
-                        <div class="col-lg-2 d-flex gap-2">
+                        <div class="col-lg-3 d-flex gap-2">
                             <button type="submit" class="btn btn-primary flex-fill">Apply</button>
                             <a href="{{ route('admin.qsresponden.index') }}" class="btn btn-outline-secondary">Reset</a>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exportModal">
+                                Export
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -308,4 +311,54 @@
             }
         }
     </style>
+
+    <!-- Export Modal -->
+    <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exportModalLabel">Export QS Respondens</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="exportForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Start date</label>
+                                <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">End date</label>
+                                <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
+                            </div>
+                        </div>
+                        <div class="mb-2 mt-2 text-muted">
+                            Export will use the current filters. Adjust filters above and click Export.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnDoExport" class="btn btn-success">Download</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const exportBtn = document.getElementById('btnDoExport');
+            exportBtn.addEventListener('click', function () {
+                const params = new URLSearchParams(window.location.search);
+                const startDate = document.querySelector('#exportForm input[name="start_date"]').value;
+                const endDate = document.querySelector('#exportForm input[name="end_date"]').value;
+                if (startDate) params.set('start_date', startDate);
+                else params.delete('start_date');
+                if (endDate) params.set('end_date', endDate);
+                else params.delete('end_date');
+                const url = `{{ route('admin.qsresponden.export') }}` + '?' + params.toString();
+                window.location.href = url;
+            });
+        });
+    </script>
 @endsection

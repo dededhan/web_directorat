@@ -8,6 +8,8 @@ use App\Models\RespondenAnswer;
 use Illuminate\Support\Facades\Auth;
 use Monarobase\CountryList\CountryListFacade as Countries;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RespondenAnswerExport;
 
 
 class RespondenAnswerController extends Controller
@@ -120,7 +122,7 @@ class RespondenAnswerController extends Controller
             'last_name' => $validatedData['answer_lastname'],
             'job_title' => $validatedData['answer_job_title'],
             'institution' => $validatedData['answer_institution'],
-            'company_name' => $validatedData['answer_company'],
+            'company_name' => $validatedData['answer_company'] ?? null,
             'country' => $validatedData['answer_country'],
             'email' => $validatedData['email'],
             'phone' => $validatedData['answer_phone'],
@@ -185,6 +187,17 @@ class RespondenAnswerController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('admin.qsresponden.index')->with('error', 'Gagal menghapus data.');
         }
+    }
+
+    /**
+     * Export filtered data.
+     */
+    public function export(Request $request)
+    {
+        $filters = $request->only(['q', 'category', 'country', 'survey_2023', 'survey_2024', 'job_title', 'start_date', 'end_date']);
+        $fileName = 'qs-respondens-' . now()->format('Ymd-His') . '.xlsx';
+        $export = new RespondenAnswerExport($filters);
+        return Excel::download($export, $fileName);
     }
 }
 

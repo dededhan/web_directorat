@@ -167,6 +167,7 @@ Route::prefix('admin')->name('admin.')
         Route::get('/qsgeneraltable', [QuesionerGeneralController::class, 'index'])->name('qsgeneraltable');
 
        Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store', 'show']);
+       Route::get('/qsresponden-export', [RespondenAnswerController::class, 'export'])->name('qsresponden.export');
 
         // mahasiswa
         Route::resource('/mahasiswainternational', InternationalStudentController::class);
@@ -539,6 +540,9 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::get('/equity/detail-proposal', function () {
                     return view('subdirektorat-inovasi.dosen.equity.detail-proposal');
                 })->name('equity.detail-proposal');
+                Route::get('/equity/usulkan-proposal/pengajuan', function () {
+                    return view('subdirektorat-inovasi.dosen.equity.pengajuan-proposal-form');
+                })->name('equity.usulkan-proposal.pengajuan'); 
 
 
                 // Tabel Katsinov

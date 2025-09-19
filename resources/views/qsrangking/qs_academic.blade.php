@@ -65,13 +65,6 @@
                     {{ $message }}
                 @enderror
             </div>
-            <div class="form-group">
-                <label class="form-label">Company Name</label>
-                <input type="text" class="form-control" name="answer_company">
-                @error('answer_company')
-                    {{ $message }}
-                @enderror
-            </div>
         </div>
         <div class="form-section">
             <div class="section-title">Contact Information</div>

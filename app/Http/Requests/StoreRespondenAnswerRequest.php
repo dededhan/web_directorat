@@ -21,6 +21,9 @@ class StoreRespondenAnswerRequest extends FormRequest
      */
     public function rules(): array
     {
+        // Get the responden category to determine validation rules
+        $responden = \App\Models\Responden::where('token', $this->input('token'))->first();
+        $isAcademic = $responden && $responden->category === 'academic';
 
         return [
             'answer_title' => ['required', 'string', 'max:10'],
@@ -28,7 +31,7 @@ class StoreRespondenAnswerRequest extends FormRequest
             'answer_lastname' => ['required', 'string', 'max:255'],
             'answer_job_title' => ['required', 'string', 'max:255'],
             'answer_institution' => ['required', 'string', 'max:255'],
-            'answer_company' => ['required', 'string', 'max:255'],
+            'answer_company' => $isAcademic ? ['nullable', 'string', 'max:255'] : ['required', 'string', 'max:255'],
             'answer_country' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email:rfc,dns', 'unique:responden_answers,email'],
             'answer_phone' => ['required', 'string', 'unique:responden_answers,phone'],
