@@ -31,6 +31,8 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VideoinovasiController;
 use App\Http\Controllers\MitraKolaborasiController;
 use App\Http\Controllers\RisetUnjController;
+use App\Http\Controllers\ProposalSessionController;
+
 
 
 
@@ -131,15 +133,22 @@ Route::prefix('admin')->name('admin.')
             ->name('responden.exportCSV');
 
 
-        // Route::resource('/manageuser', UserController::class);
-        // Route::put('/manageuser/{user}', [UserController::class, 'update'])
-        //     ->name('manageuser.update');
+        // EQUITY ADMIN
+        // EQUITY ADMIN
+        // EQUITY ADMIN
+         Route::resource('/proposal-sessions', ProposalSessionController::class);
+         Route::get('proposal-sessions/{proposalSession}/detail', [ProposalSessionController::class, 'getDetail'])->name('proposal-sessions.detail');
+    
 
-        // Route::delete('/manageuser/{user}', [UserController::class, 'destroy'])
-        //     ->name('manageuser.destroy');
 
-        // Route::put('/manageuser/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('manageuser.toggleStatus');
 
+
+
+
+
+
+
+        
         Route::resource('/manageuser', UserController::class)->parameters([
             'manageuser' => 'user'
         ]);
