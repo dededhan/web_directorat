@@ -19,9 +19,28 @@ class RespondenAnswerController extends Controller
      */
     public function index(Request $request)
     {
+        $user = Auth::user();
+        $userRole = $user->role;
+        
         $query = RespondenAnswer::query()->with(['responden.user'])->latest();
 
-        // 
+        //filter gimmick
+        if ($userRole === 'prodi') {
+            $query->whereHas('responden.user', function ($q) use ($user) {
+                $q->where('id', $user->id);
+            });
+        } elseif ($userRole === 'fakultas') {
+            $facultyCode = strtolower($user->name);
+            $query->whereHas('responden.user', function ($q) use ($user, $facultyCode) {
+                $q->where('id', $user->id) 
+                  ->orWhere(function ($subQ) use ($facultyCode) {
+                      $subQ->where('role', 'prodi')
+                           ->where('name', 'like', $facultyCode . '-%');
+                  });
+            });
+        }
+
+        // Apply search filters
         if ($request->filled('q')) {
             $search = trim($request->get('q'));
             $query->where(function ($q) use ($search) {
@@ -68,7 +87,6 @@ class RespondenAnswerController extends Controller
         }
 
         $respondens = $query->paginate($perPage)->appends($request->query());
-        $userRole = Auth::user()->role;
 
         $viewMap = [
             'admin_direktorat' => 'admin.qsresponden',
