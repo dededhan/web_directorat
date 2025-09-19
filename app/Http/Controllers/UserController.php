@@ -198,7 +198,7 @@ class UserController extends Controller
             'role' => ['required', 'string', Rule::in([
                 'admin_direktorat', 'kepala_direktorat', 'admin_pemeringkatan', 
                 'fakultas', 'prodi', 'admin_hilirisasi', 'kepala_sub_direktorat', 
-                'wr3', 'dosen', 'mahasiswa', 'validator', 'registered_user','sulitest_user'
+                'wr3', 'dosen', 'mahasiswa', 'validator', 'registered_user','sulitest_user','admin_equity', 'reviewer_equity'
             ])],
         ]);
         
@@ -243,7 +243,7 @@ class UserController extends Controller
             'role' => ['required', 'string', Rule::in([
                 'admin_direktorat', 'kepala_direktorat', 'admin_pemeringkatan', 
                 'fakultas', 'prodi', 'admin_hilirisasi', 'kepala_sub_direktorat', 
-                'wr3', 'dosen', 'mahasiswa', 'validator', 'registered_user','sulitest_user'
+                'wr3', 'dosen', 'mahasiswa', 'validator', 'registered_user','sulitest_user','admin_equity', 'reviewer_equity'
             ])],
             'status' => ['required', 'string', Rule::in(['active', 'unactive'])],
         ]);
