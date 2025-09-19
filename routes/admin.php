@@ -32,6 +32,7 @@ use App\Http\Controllers\VideoinovasiController;
 use App\Http\Controllers\MitraKolaborasiController;
 use App\Http\Controllers\RisetUnjController;
 use App\Http\Controllers\ComdevProposalController;
+use App\Http\Controllers\ComdevViewSesiController;
 
 
 
@@ -559,10 +560,10 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                     return view('subdirektorat-inovasi.dosen.equity.index');
                 })->name('equity.index');
 
-                 Route::get('/equity/usulkan-proposal', function () {
-                    return view('subdirektorat-inovasi.dosen.equity.usulkan-proposal');
-                })->name('equity.usulkan-proposal'); 
-                      Route::get('/equity/usulkan-proposal/form', function () {
+                Route::get('/usulkan-proposal', [ComdevViewSesiController::class, 'index'])
+                    ->name('equity.usulkan-proposal.index');
+
+                Route::get('/usulkan-proposal/form', function () {
                     return view('subdirektorat-inovasi.dosen.equity.usulkan-proposal-form');
                 })->name('equity.usulkan-proposal.form'); 
 

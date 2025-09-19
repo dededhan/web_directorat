@@ -78,7 +78,7 @@
                         <i class='bx bxs-folder-open text-lg'></i>
                         <span x-show="open">Manajemen Proposal</span>
                     </a>
-                    <a href="{{ route('subdirektorat-inovasi.dosen.equity.usulkan-proposal') }}"
+                    <a href="{{ route('subdirektorat-inovasi.dosen.equity.usulkan-proposal.index') }}"
                        class="flex items-center space-x-3 rounded-md p-2 text-sm transition-colors duration-200 {{ request()->routeIs('subdirektorat-inovasi.dosen.equity.usulkan-proposal') ? 'bg-[#0D9488] font-semibold text-white' : 'hover:bg-gray-700' }}">
                         <i class='bx bxs-file-plus text-lg'></i>
                         <span x-show="open">Usulkan Proposal</span>
