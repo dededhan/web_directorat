@@ -74,32 +74,41 @@
                     <div class="row g-3 align-items-end">
                         <div class="col-lg-4">
                             <label class="form-label">Search</label>
-                            <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Name, email, institution, company, country, job title">
+                            <input type="text" name="q" value="{{ request('q') }}" class="form-control"
+                                placeholder="Name, email, institution, company, country, job title">
                         </div>
                         <div class="col-lg-2 col-md-4">
                             <label class="form-label">Category</label>
                             <select name="category" class="form-select">
                                 <option value="">All</option>
-                                <option value="academic" {{ request('category')==='academic' ? 'selected' : '' }}>Academic</option>
-                                <option value="employee" {{ request('category')==='employee' || request('category')==='employer' ? 'selected' : '' }}>Employee</option>
+                                <option value="academic" {{ request('category') === 'academic' ? 'selected' : '' }}>Academic
+                                </option>
+                                <option value="employee"
+                                    {{ request('category') === 'employee' || request('category') === 'employer' ? 'selected' : '' }}>
+                                    Employee</option>
                             </select>
                         </div>
                         <div class="col-lg-2 col-md-4">
                             <label class="form-label">Country</label>
-                            <input type="text" name="country" value="{{ request('country') }}" class="form-control" placeholder="e.g. Indonesia">
+                            <input type="text" name="country" value="{{ request('country') }}" class="form-control"
+                                placeholder="e.g. Indonesia">
                         </div>
                         <div class="col-lg-4 col-md-8">
                             <label class="form-label">Job Title</label>
                             <select name="job_title" class="form-select">
                                 <option value="">All Job Titles</option>
                                 <optgroup label="Academic">
-                                    @foreach($academicJobTitles as $key=>$label)
-                                        <option value="{{ $key }}" {{ request('job_title')===$key ? 'selected' : '' }}>{{ $label }}</option>
+                                    @foreach ($academicJobTitles as $key => $label)
+                                        <option value="{{ $key }}"
+                                            {{ request('job_title') === $key ? 'selected' : '' }}>{{ $label }}
+                                        </option>
                                     @endforeach
                                 </optgroup>
                                 <optgroup label="Employee">
-                                    @foreach($employeeJobTitles as $key=>$label)
-                                        <option value="{{ $key }}" {{ request('job_title')===$key ? 'selected' : '' }}>{{ $label }}</option>
+                                    @foreach ($employeeJobTitles as $key => $label)
+                                        <option value="{{ $key }}"
+                                            {{ request('job_title') === $key ? 'selected' : '' }}>{{ $label }}
+                                        </option>
                                     @endforeach
                                 </optgroup>
                             </select>
@@ -107,8 +116,10 @@
                         <div class="col-lg-2 col-md-4">
                             <label class="form-label">Rows</label>
                             <select name="per_page" class="form-select">
-                                @foreach([25,50,100,200] as $n)
-                                    <option value="{{ $n }}" {{ (int)request('per_page',50)===$n ? 'selected' : '' }}>{{ $n }}</option>
+                                @foreach ([25, 50, 100, 200] as $n)
+                                    <option value="{{ $n }}"
+                                        {{ (int) request('per_page', 50) === $n ? 'selected' : '' }}>{{ $n }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -116,22 +127,23 @@
                             <label class="form-label">Survey 2023</label>
                             <select name="survey_2023" class="form-select">
                                 <option value="">All</option>
-                                <option value="yes" {{ request('survey_2023')==='yes' ? 'selected' : '' }}>Yes</option>
-                                <option value="no" {{ request('survey_2023')==='no' ? 'selected' : '' }}>No</option>
+                                <option value="yes" {{ request('survey_2023') === 'yes' ? 'selected' : '' }}>Yes</option>
+                                <option value="no" {{ request('survey_2023') === 'no' ? 'selected' : '' }}>No</option>
                             </select>
                         </div>
                         <div class="col-lg-2 col-md-4">
                             <label class="form-label">Survey 2024</label>
                             <select name="survey_2024" class="form-select">
                                 <option value="">All</option>
-                                <option value="yes" {{ request('survey_2024')==='yes' ? 'selected' : '' }}>Yes</option>
-                                <option value="no" {{ request('survey_2024')==='no' ? 'selected' : '' }}>No</option>
+                                <option value="yes" {{ request('survey_2024') === 'yes' ? 'selected' : '' }}>Yes</option>
+                                <option value="no" {{ request('survey_2024') === 'no' ? 'selected' : '' }}>No</option>
                             </select>
                         </div>
                         <div class="col-lg-3 d-flex gap-2">
                             <button type="submit" class="btn btn-primary flex-fill">Apply</button>
                             <a href="{{ route('admin.qsresponden.index') }}" class="btn btn-outline-secondary">Reset</a>
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exportModal">
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                data-bs-target="#exportModal">
                                 Export
                             </button>
                         </div>
@@ -163,30 +175,33 @@
                     <tbody>
                         @forelse ($respondens as $responden)
                             <tr>
-                                                                <td>
-                                    @if($responden->responden && $responden->responden->user)
-                                        @php
+                             <td>
+                                    @php
+    
+                                        $displayText = 'Unknown';
+                                        if ($responden->responden && $responden->responden->user) {
                                             $user = $responden->responden->user;
                                             $role = $user->role;
                                             $name = $user->name;
-                                            
+
                                             if ($role === 'admin_direktorat') {
                                                 $displayText = 'Direktorat';
                                             } elseif ($role === 'fakultas') {
                                                 $displayText = 'Fakultas (' . strtoupper($name) . ')';
                                             } elseif ($role === 'prodi') {
-                                                $parts = explode('-', $name, 2);
-                                                $facultyCode = $parts[0] ?? '';
-                                                $prodiName = $parts[1] ?? 'Unknown';
-                                                $displayText = 'Prodi (' . strtoupper($facultyCode) . ' - ' . ucwords($prodiName) . ')';
+                                                if (Str::contains($name, '-')) {
+                                                    $prodiName = trim(Str::after($name, '-'));
+                                                    $fakultasName = trim(Str::before($name, '-'));
+                                                    $displayText = 'Prodi (' . strtoupper($fakultasName) . ' - ' . ucwords(strtolower($prodiName)) . ')';
+                                                } else {
+                                                    $displayText = 'Prodi (' . ucwords(strtolower($name)) . ')';
+                                                }
                                             } else {
-                                                $displayText = ucfirst($role) . ' (' . $name . ')';
+                                                $displayText = ucfirst($role) . ($name ? ' (' . $name . ')' : '');
                                             }
-                                        @endphp
-                                        {{ $displayText }}
-                                    @else
-                                        Unknown
-                                    @endif
+                                        }
+                                    @endphp
+                                    {{ $displayText }}
                                 </td>
                                 <td>{{ Str::ucfirst($responden->title) }}</td>
                                 <td>{{ Str::title($responden->first_name) }}</td>
@@ -200,7 +215,10 @@
 
                                         if ($responden->category === 'academic') {
                                             $jobTitleDisplay = $academicJobTitles[$jobTitleKey] ?? $jobTitleDisplay;
-                                        } elseif ($responden->category === 'employee' || $responden->category === 'employer') {
+                                        } elseif (
+                                            $responden->category === 'employee' ||
+                                            $responden->category === 'employer'
+                                        ) {
                                             $jobTitleDisplay = $employeeJobTitles[$jobTitleKey] ?? $jobTitleDisplay;
                                         }
                                     @endphp
@@ -211,7 +229,8 @@
                                 <td>{{ $responden->phone }}</td>
                                 <td>{{ Str::ucfirst($responden->survey_2023) }}</td>
                                 <td>{{ Str::ucfirst($responden->survey_2024) }}</td>
-                                <td>{{ $responden->category === 'employer' ? 'Employee' : Str::ucfirst($responden->category) }}</td>
+                                <td>{{ $responden->category === 'employer' ? 'Employee' : Str::ucfirst($responden->category) }}
+                                </td>
 
                                 <td>{{ $responden->created_at ? $responden->created_at->format('d M Y, H:i') : 'N/A' }}
                                 </td>
@@ -226,8 +245,8 @@
                                             <i class='bx bxs-trash'></i>
                                         </button>
                                         <form id="delete-form-{{ $responden->id }}"
-                                            action="{{ route('admin.qsresponden.destroy', $responden->id) }}" method="POST"
-                                            style="display: none;">
+                                            action="{{ route('admin.qsresponden.destroy', $responden->id) }}"
+                                            method="POST" style="display: none;">
                                             @csrf
                                             @method('DELETE')
                                         </form>
@@ -300,6 +319,7 @@
             border: 1px solid #e9ecef;
             border-radius: 12px;
         }
+
         .table-data {
             margin-top: 24px;
         }
@@ -373,11 +393,13 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Start date</label>
-                                <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}">
+                                <input type="date" name="start_date" class="form-control"
+                                    value="{{ request('start_date') }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">End date</label>
-                                <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
+                                <input type="date" name="end_date" class="form-control"
+                                    value="{{ request('end_date') }}">
                             </div>
                         </div>
                         <div class="mb-2 mt-2 text-muted">
@@ -394,9 +416,9 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const exportBtn = document.getElementById('btnDoExport');
-            exportBtn.addEventListener('click', function () {
+            exportBtn.addEventListener('click', function() {
                 const params = new URLSearchParams(window.location.search);
                 const startDate = document.querySelector('#exportForm input[name="start_date"]').value;
                 const endDate = document.querySelector('#exportForm input[name="end_date"]').value;

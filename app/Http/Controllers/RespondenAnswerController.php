@@ -23,6 +23,7 @@ class RespondenAnswerController extends Controller
         $userRole = $user->role;
         
         $query = RespondenAnswer::query()->with(['responden.user'])->latest();
+        
 
         //filter gimmick
         if ($userRole === 'prodi') {
@@ -135,6 +136,7 @@ class RespondenAnswerController extends Controller
         $normalizedCategory = $responden->category === 'employer' ? 'employee' : $responden->category;
 
         RespondenAnswer::create([
+            'responden_id' => $responden->id, //matching data plz
             'title' => $validatedData['answer_title'],
             'first_name' => $validatedData['answer_firstname'],
             'last_name' => $validatedData['answer_lastname'],
