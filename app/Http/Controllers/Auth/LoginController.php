@@ -36,6 +36,7 @@ class LoginController extends Controller
                 'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.dashboard',
                 // 'kepala_sub_direktorat' => 'inovasi.admin_hilirisasi.dashboard',
                 'validator' => 'subdirektorat-inovasi.validator.dashboard',
+                'admin_equity' => 'admin_equity.dashboard',
             };
 
             return redirect(route($next));
