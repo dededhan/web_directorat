@@ -19,7 +19,7 @@ class RespondenAnswerController extends Controller
      */
     public function index(Request $request)
     {
-        $query = RespondenAnswer::query()->latest();
+        $query = RespondenAnswer::query()->with(['responden.user'])->latest();
 
         // 
         if ($request->filled('q')) {

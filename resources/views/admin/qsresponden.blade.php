@@ -143,6 +143,7 @@
                 <table class="table table-striped table-hover" id="respondent-table">
                     <thead>
                         <tr>
+                            <th>Input Source</th>
                             <th>Title</th>
                             <th>First Name</th>
                             <th>Last Name</th>
@@ -162,6 +163,31 @@
                     <tbody>
                         @forelse ($respondens as $responden)
                             <tr>
+                                                                <td>
+                                    @if($responden->responden && $responden->responden->user)
+                                        @php
+                                            $user = $responden->responden->user;
+                                            $role = $user->role;
+                                            $name = $user->name;
+                                            
+                                            if ($role === 'admin_direktorat') {
+                                                $displayText = 'Direktorat';
+                                            } elseif ($role === 'fakultas') {
+                                                $displayText = 'Fakultas (' . strtoupper($name) . ')';
+                                            } elseif ($role === 'prodi') {
+                                                $parts = explode('-', $name, 2);
+                                                $facultyCode = $parts[0] ?? '';
+                                                $prodiName = $parts[1] ?? 'Unknown';
+                                                $displayText = 'Prodi (' . strtoupper($facultyCode) . ' - ' . ucwords($prodiName) . ')';
+                                            } else {
+                                                $displayText = ucfirst($role) . ' (' . $name . ')';
+                                            }
+                                        @endphp
+                                        {{ $displayText }}
+                                    @else
+                                        Unknown
+                                    @endif
+                                </td>
                                 <td>{{ Str::ucfirst($responden->title) }}</td>
                                 <td>{{ Str::title($responden->first_name) }}</td>
                                 <td>{{ Str::title($responden->last_name) }}</td>
@@ -186,6 +212,7 @@
                                 <td>{{ Str::ucfirst($responden->survey_2023) }}</td>
                                 <td>{{ Str::ucfirst($responden->survey_2024) }}</td>
                                 <td>{{ $responden->category === 'employer' ? 'Employee' : Str::ucfirst($responden->category) }}</td>
+
                                 <td>{{ $responden->created_at ? $responden->created_at->format('d M Y, H:i') : 'N/A' }}
                                 </td>
                                 <td>
@@ -209,7 +236,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="14" class="text-center">Tidak ada data</td>
+                                <td colspan="15" class="text-center">Tidak ada data</td>
                             </tr>
                         @endforelse
                     </tbody>
