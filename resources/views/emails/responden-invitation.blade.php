@@ -42,10 +42,10 @@
 
         @if($responden->category == 'academic')
 
-            {{-- londong --}}
+            {{-- london--}}
             <p>Dear {{ $responden->title }}. {{ $responden->fullname }},</p>
             <p>
-                We are writing to you as an important stakeholder of our university. We value our ongoing engagement with you and would like to be certain that we are not using your information for any purpose that you would prefer us not to. For the purposes of an important global survey of academic opinion, we would like to seek your permission to pass on your contact details (name, job title, institution and email address) to the QS. We feel that your impartial responses would contribute to the insight and precision of the survey’s outcomes.
+                We are writing to you as an important stakeholder of our university. We value our ongoing engagement with you and would like to be certain that we are not using your information for any purpose that you would prefer us not to. For the purposes of an important global survey of academic opinion, we would like to seek your permission to pass on your contact details (name, job title, institution and email address) to QS. We feel that your impartial responses would contribute to the insight and precision of the survey’s outcomes.
             </p>
             <p>
                 If you agree, you should be contacted by QS in the next few months with an invitation to participate in the annual <strong>QS Global Academic Survey</strong>, along with a maximum of three reminders. Their email will come from <strong>rankings@qs.com</strong>; please add to your safe senders and check your spam.
@@ -53,6 +53,7 @@
             <p>
                 The resulting data will be used in aggregate form only. QS will not contact you for any other reason, or for more than two editions of their annual survey, without supplementary or separate consent. Your responses will be combined with those of many others around the world to form academic reputation indicators used in the QS World University Rankings at global, regional, subject and program levels where relevant.
             </p>
+            <p>If we do not receive a response from you by September 30, 2025, we will assume that consent is not given for your contact details to be shared.</p>
             <p>
                 To participate in the survey, please click the button below:
             </p>
@@ -83,6 +84,7 @@
              <p>
                 Data Anda hanya akan digunakan secara agregat dan tidak akan digunakan untuk keperluan lain tanpa persetujuan tambahan. Hasil survei akan digunakan untuk menyusun indikator reputasi akademik dalam QS World University Rankings di tingkat global, regional, subjek, dan program.
             </p>
+            <p>Apabila kami tidak menerima tanggapan dari Anda sebelum 30 September 2025, kami akan menganggap Anda tidak memberikan persetujuan untuk membagikan data kontak Anda.</p>
             <p>
                 Untuk berpartisipasi dalam survei, silakan klik tombol di bawah ini:
             </p>
@@ -100,7 +102,7 @@
 
         @elseif($responden->category == 'employer')
 
-            {{-- Indo --}}
+            {{-- indo --}}
             <p>Kepada Yth. Bapak/Ibu {{ $responden->fullname }},</p>
             <p>
                 Kami menghubungi Anda sebagai salah satu pemangku kepentingan penting di universitas kami. Kami sangat menghargai hubungan baik yang telah terjalin dan ingin memastikan bahwa informasi Anda hanya digunakan dengan izin Anda.
@@ -114,6 +116,7 @@
             <p>
                 Data Anda hanya akan digunakan secara agregat dan tidak akan digunakan untuk keperluan lain tanpa persetujuan tambahan. Hasil survei akan digunakan untuk menyusun indikator reputasi pemberi kerja dalam QS World University Rankings di tingkat global, regional, subjek, dan program.
             </p>
+            <p>Apabila kami tidak menerima tanggapan dari Anda sebelum 30 September 2025, kami akan menganggap Anda tidak memberikan persetujuan untuk membagikan data kontak Anda.</p>
             <p>
                 Untuk berpartisipasi dalam survei, silakan klik tombol di bawah ini:
             </p>
@@ -130,7 +133,7 @@
 
             <hr>
 
-            {{-- enggres --}}
+            {{-- london --}}
             <p>Dear {{ $responden->title }}. {{ $responden->fullname }},</p>
             <p>
                 We are writing to you as an important stakeholder of our university. We value our ongoing engagement with you and would like to be certain that we are not using your information for any purpose that you would prefer us not to. For the purposes of an important global survey of employer opinion, we would like to seek your permission to pass on your contact details (name, job title, institution and email address) to the QS. We feel that your impartial responses would contribute to the insight and precision of the survey’s outcomes.
@@ -141,6 +144,7 @@
             <p>
                 The resulting data will be used in aggregate form only. QS will not contact you for any other reason, or for more than two editions of their annual survey, without supplementary or separate consent. Your responses will be combined with those of many others around the world to form employer reputation indicators used in the QS World University Rankings at global, regional, subject and program levels where relevant.
             </p>
+            <p>If we do not receive a response from you by September 30, 2025, we will assume that consent is not given for your contact details to be shared.</p>
             <p>
                 To participate in the survey, please click the button below:
             </p>
