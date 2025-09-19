@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ComdevProposal; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class ComdevProposalController extends Controller 
 {
@@ -13,12 +14,12 @@ class ComdevProposalController extends Controller
     {
         // DIUBAH: Menggunakan model baru
         $sessions = ComdevProposal::latest()->paginate(10);
-        return view('admin.comdev.index', compact('sessions'));
+        return view('admin_equity.comdev.index', compact('sessions'));
     }
 
-    public function getDetail(ComdevProposal $proposalSession) 
+    public function getDetail(ComdevProposal $comdevproposal) 
     {
-        return response()->json($proposalSession);
+        return response()->json($comdevproposal);
     }
     
     public function store(Request $request)
@@ -35,15 +36,16 @@ class ComdevProposalController extends Controller
 
         ComdevProposal::create($request->all()); 
 
-        return redirect()->route('admin.proposal-sessions.index')
+        return redirect()->route('admin_equity.comdevproposal.index')
                          ->with('success', 'Sesi proposal berhasil dibuat.');
     }
 
-    public function update(Request $request, ComdevProposal $proposalSession) 
+    public function update(Request $request, ComdevProposal $comdevproposal) 
     {
+        try {
         $validatedData = $request->validate([
             'nama_sesi' => 'required|string|max:255',
-            'deskripsi' => 'required|string',
+            'deskripsi' => 'nullable|string', 
             'dana_maksimal' => 'required|numeric',
             'periode_awal' => 'required|date',
             'periode_akhir' => 'required|date|after_or_equal:periode_awal',
@@ -51,16 +53,31 @@ class ComdevProposalController extends Controller
             'max_anggota' => 'required|integer|gte:min_anggota',
         ]);
 
-        $proposalSession->update($validatedData);
+        $comdevproposal->update($validatedData);
 
-        return redirect()->route('admin.proposal-sessions.index')
-                         ->with('success', 'Sesi proposal berhasil diperbarui.');
+      
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Sesi proposal berhasil diperbarui.']);
+        }
+
+            
+            return redirect()->route('admin_equity.comdevproposal.index')
+                            ->with('success', 'Sesi proposal berhasil diperbarui.');
+
+        } catch (ValidationException $e) {
+            
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $e->validator->errors()->first()], 422);
+            }
+            return redirect()->back()->withErrors($e->validator)->withInput();
+        }
     }
+    
 
-    public function destroy(ComdevProposal $proposalSession) 
+    public function destroy(ComdevProposal $comdevproposal) 
     {
-        $proposalSession->delete();
-        return redirect()->route('admin.proposal-sessions.index')
+        $comdevproposal->delete();
+        return redirect()->route('admin_equity.comdevproposal.index')
                          ->with('success', 'Sesi proposal berhasil dihapus.');
     }
 }

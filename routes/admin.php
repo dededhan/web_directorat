@@ -133,11 +133,7 @@ Route::prefix('admin')->name('admin.')
             ->name('responden.exportCSV');
 
 
-        // EQUITY ADMIN
-        // EQUITY ADMIN
-        // EQUITY ADMIN
-         Route::resource('/proposal-sessions', ComdevProposalController::class);
-         Route::get('proposal-sessions/{proposalSession}/detail', [ComdevProposalController::class, 'getDetail'])->name('proposal-sessions.detail');
+        
     
 
 
@@ -514,10 +510,8 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
                     return view('admin_equity.dashboard');
                 })->name('dashboard');
 
-                Route::get('/comdev', function () {
-                    return view('admin_equity.comdev.index');
-                })->name('comdev.index');
-
+                Route::resource('/comdevproposal', \App\Http\Controllers\ComdevProposalController::class);
+                Route::get('/comdevproposal/{comdevproposal}/detail', [\App\Http\Controllers\ComdevProposalController::class, 'getDetail'])->name('comdev.detail');
 
                 Route::get('/apc', function () {
                     return view('admin_equity.apc.index');
@@ -548,9 +542,6 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
                     return view('admin_equity.supervision.index');
                 })->name('supervision.index');
 
-                // Note: You may want to move the existing proposal-sessions route inside this group too.
-                // For example:
-                // Route::resource('/proposal-sessions', ComdevProposalController::class)->names('proposal-sessions');
 });
 
 Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
