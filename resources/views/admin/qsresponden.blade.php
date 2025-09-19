@@ -241,8 +241,29 @@
                         @endforelse
                     </tbody>
                 </table>
-                <div class="d-flex justify-content-end mt-4">
-                    {{ $respondens->links() }}
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div>
+                        @if ($respondens->total() > 0)
+                            <span class="text-muted">
+                                Showing {{ $respondens->firstItem() }} to {{ $respondens->lastItem() }} of
+                                {{ $respondens->total() }} results
+                            </span>
+                        @else
+                            <span class="text-muted">No results found</span>
+                        @endif
+                    </div>
+                    <div>
+                        <div class="btn-group">
+                            <a href="{{ $respondens->appends(request()->query())->previousPageUrl() }}"
+                                class="btn btn-outline-primary @if ($respondens->onFirstPage()) disabled @endif">
+                                &laquo; Previous
+                            </a>
+                            <a href="{{ $respondens->appends(request()->query())->nextPageUrl() }}"
+                                class="btn btn-outline-primary @if (!$respondens->hasMorePages()) disabled @endif">
+                                Next &raquo;
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
