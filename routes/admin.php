@@ -511,8 +511,8 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
                     return view('admin_equity.dashboard');
                 })->name('dashboard');
 
-                Route::resource('/comdevproposal', \App\Http\Controllers\ComdevProposalController::class);
-                Route::get('/comdevproposal/{comdevproposal}/detail', [\App\Http\Controllers\ComdevProposalController::class, 'getDetail'])->name('comdev.detail');
+                // 
+                Route::resource('/comdev', \App\Http\Controllers\ComdevProposalController::class);
 
                 Route::get('/apc', function () {
                     return view('admin_equity.apc.index');

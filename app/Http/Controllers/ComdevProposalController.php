@@ -5,28 +5,37 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\ComdevProposal; 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class ComdevProposalController extends Controller 
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        // DIUBAH: Menggunakan model baru
         $sessions = ComdevProposal::latest()->paginate(10);
+        // PASTIKAN PATH VIEW SUDAH BENAR
         return view('admin_equity.comdev.index', compact('sessions'));
     }
 
-    public function getDetail(ComdevProposal $comdevproposal) 
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
     {
-        return response()->json($comdevproposal);
+        // Menampilkan view untuk membuat sesi baru
+        return view('admin_equity.comdev.create');
     }
-    
+
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         $request->validate([
             'nama_sesi' => 'required|string|max:255',
-            'deskripsi' => 'required|string',
+            'deskripsi' => 'nullable|string',
             'dana_maksimal' => 'required|numeric',
             'periode_awal' => 'required|date',
             'periode_akhir' => 'required|date|after_or_equal:periode_awal',
@@ -36,13 +45,33 @@ class ComdevProposalController extends Controller
 
         ComdevProposal::create($request->all()); 
 
-        return redirect()->route('admin_equity.comdevproposal.index')
+        return redirect()->route('admin_equity.comdev.index')
                          ->with('success', 'Sesi proposal berhasil dibuat.');
     }
 
+    /**
+     * Display the specified resource.
+     */
+    public function show(ComdevProposal $comdevproposal)
+    {
+        // Menampilkan detail satu sesi
+        return view('admin_equity.comdev.show', ['session' => $comdevproposal]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(ComdevProposal $comdevproposal)
+    {
+        // Menampilkan view untuk mengedit sesi
+        return view('admin_equity.comdev.edit', ['session' => $comdevproposal]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, ComdevProposal $comdevproposal) 
     {
-        try {
         $validatedData = $request->validate([
             'nama_sesi' => 'required|string|max:255',
             'deskripsi' => 'nullable|string', 
@@ -54,30 +83,18 @@ class ComdevProposalController extends Controller
         ]);
 
         $comdevproposal->update($validatedData);
-
-      
-        if ($request->ajax()) {
-            return response()->json(['success' => true, 'message' => 'Sesi proposal berhasil diperbarui.']);
-        }
-
             
-            return redirect()->route('admin_equity.comdevproposal.index')
-                            ->with('success', 'Sesi proposal berhasil diperbarui.');
-
-        } catch (ValidationException $e) {
-            
-            if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => $e->validator->errors()->first()], 422);
-            }
-            return redirect()->back()->withErrors($e->validator)->withInput();
-        }
+        return redirect()->route('admin_equity.comdev.index')
+                        ->with('success', 'Sesi proposal berhasil diperbarui.');
     }
     
-
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(ComdevProposal $comdevproposal) 
     {
         $comdevproposal->delete();
-        return redirect()->route('admin_equity.comdevproposal.index')
+        return redirect()->route('admin_equity.comdev.index')
                          ->with('success', 'Sesi proposal berhasil dihapus.');
     }
 }

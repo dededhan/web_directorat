@@ -47,7 +47,7 @@
                         <i x-show="open" class='bx bx-chevron-down transition-transform duration-300' :class="{'rotate-180': dropdownOpen}"></i>
                     </button>
                     <div x-show="dropdownOpen" x-collapse class="pt-1 pl-5">
-                        <a href="{{ route('admin_equity.comdevproposal.index') }}" class="flex items-center space-x-3 rounded-md p-2 text-sm transition-colors duration-200 {{ request()->routeIs('admin_equity.comdev.index') ? 'bg-[#0D9488] font-semibold text-white' : 'hover:bg-gray-700' }}">
+                        <a href="{{ route('admin_equity.comdev.index') }}" class="flex items-center space-x-3 rounded-md p-2 text-sm transition-colors duration-200 {{ request()->routeIs('admin_equity.comdev.index') ? 'bg-[#0D9488] font-semibold text-white' : 'hover:bg-gray-700' }}">
                             <i class='bx bx-list-ul text-lg'></i><span x-show="open">Daftar</span>
                         </a>
                         <a href="#" class="flex items-center space-x-3 rounded-md p-2 text-sm transition-colors duration-200 hover:bg-gray-700">
