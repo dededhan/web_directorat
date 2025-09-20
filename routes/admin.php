@@ -31,7 +31,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VideoinovasiController;
 use App\Http\Controllers\MitraKolaborasiController;
 use App\Http\Controllers\RisetUnjController;
-use App\Http\Controllers\ComdevProposalController;
+use App\Http\Controllers\ComdevController;
 use App\Http\Controllers\ComdevViewSesiController;
 
 
@@ -511,8 +511,8 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
                     return view('admin_equity.dashboard');
                 })->name('dashboard');
 
-                // 
-                Route::resource('/comdev', \App\Http\Controllers\ComdevProposalController::class);
+                // PERUBAHAN: Menghapus .parameters() karena controller sudah disesuaikan
+                Route::resource('/comdev', \App\Http\Controllers\ComdevController::class);
 
                 Route::get('/apc', function () {
                     return view('admin_equity.apc.index');
