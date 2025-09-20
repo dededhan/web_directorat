@@ -61,6 +61,7 @@
                                     <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-10 text-left" style="display: none;">
                                         <div class="py-1">
                                             @if ($submission->status == 'draft')
+                                            {{-- MENGGUNAKAN NAMA ROUTE BARU --}}
                                             <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.createPengajuan', $submission->id) }}" class="menu-item">
                                                 <i class='bx bx-edit-alt mr-2'></i> Lanjutkan Pengisian
                                             </a>
@@ -71,6 +72,7 @@
                                             
                                             @if ($submission->status == 'draft')
                                             <div class="border-t my-1"></div>
+                                            {{-- MENGGUNAKAN NAMA ROUTE BARU --}}
                                             <form action="{{ route('subdirektorat-inovasi.dosen.equity.proposal.destroyDraft', $submission->id) }}" method="POST"
                                                   @submit.prevent="
                                                     Swal.fire({

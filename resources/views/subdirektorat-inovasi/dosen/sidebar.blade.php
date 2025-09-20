@@ -73,7 +73,7 @@
                     <i x-show="open" class='bx bx-chevron-down transition-transform duration-300' :class="{'rotate-180': equityOpen}"></i>
                 </button>
                 <div x-show="equityOpen" x-collapse class="pt-1 pl-5" style="display: none;">
-                    <a href="{{ route('subdirektorat-inovasi.dosen.equity.index') }}"
+                    <a href="{{ route('subdirektorat-inovasi.dosen.equity.manajement.index') }}"
                        class="flex items-center space-x-3 rounded-md p-2 text-sm transition-colors duration-200 {{ request()->routeIs('subdirektorat-inovasi.dosen.equity.index') ? 'bg-[#0D9488] font-semibold text-white' : 'hover:bg-gray-700' }}">
                         <i class='bx bxs-folder-open text-lg'></i>
                         <span x-show="open">Manajemen Proposal</span>
@@ -83,31 +83,11 @@
                         <i class='bx bxs-file-plus text-lg'></i>
                         <span x-show="open">Usulkan Proposal</span>
                     </a>
-                    <a href="{{ route('subdirektorat-inovasi.dosen.equity.portofolio') }}"
-                       class="flex items-center space-x-3 rounded-md p-2 text-sm transition-colors duration-200 {{ request()->routeIs('subdirektorat-inovasi.dosen.equity.portofolio') ? 'bg-[#0D9488] font-semibold text-white' : 'hover:bg-gray-700' }}">
-                        <i class='bx bxs-collection text-lg'></i>
-                        <span x-show="open">Portofolio</span>
-                    </a>
-                    <a href="{{ route('subdirektorat-inovasi.dosen.equity.mendaftar-reviewer') }}"
-                       class="flex items-center space-x-3 rounded-md p-2 text-sm transition-colors duration-200 {{ request()->routeIs('subdirektorat-inovasi.dosen.equity.mendaftar-reviewer') ? 'bg-[#0D9488] font-semibold text-white' : 'hover:bg-gray-700' }}">
-                        <i class='bx bxs-user-check text-lg'></i>
-                        <span x-show="open">Mendaftar Reviewer</span>
-                    </a>
-                    <a href="{{ route('subdirektorat-inovasi.dosen.equity.tahap-penilaian') }}"
-                       class="flex items-center space-x-3 rounded-md p-2 text-sm transition-colors duration-200 {{ request()->routeIs('subdirektorat-inovasi.dosen.equity.tahap-penilaian') ? 'bg-[#0D9488] font-semibold text-white' : 'hover:bg-gray-700' }}">
-                        <i class='bx bxs-flask text-lg'></i>
-                        <span x-show="open">Tahap Penelitian</span>
-                    </a>
+                    
                 </div>
             </div>
 
-            <div class="pt-2">
-                <h3 x-show="open" class="px-3 pb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">Data Pendukung</h3>
-                <a href="#" class="flex items-center space-x-3 rounded-md p-2 transition-colors duration-200 hover:bg-gray-700">
-                    <i class='bx bxs-megaphone text-xl'></i>
-                    <span x-show="open" class="whitespace-nowrap">Pengumuman</span>
-                </a>
-            </div>
+            
 
         </nav>
 

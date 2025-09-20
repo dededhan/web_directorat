@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ComdevProposal; // Model yang sama dari admin
+use App\Models\ComdevProposal; // Model untuk sesi proposal
+use App\Models\ComdevSubmission; // Model untuk data proposal yang diusulkan dosen
+use Illuminate\Support\Facades\Auth; // Untuk mendapatkan data user yang login
 use Carbon\Carbon;
 
 class ComdevViewSesiController extends Controller
@@ -13,13 +15,20 @@ class ComdevViewSesiController extends Controller
      */
     public function index()
     {
-        // Logika ini tetap sama: mengambil data dari model ComdevProposal.
-        // Di masa depan, Anda bisa menambahkan model lain di sini.
+        // Mengambil semua sesi proposal yang tersedia
         $sesiTersedia = ComdevProposal::latest()->get();
 
-        // Mengirim data ke view yang sama.
+        // Mengambil semua proposal (submission) yang dimiliki oleh user yang sedang login,
+        // lalu dikelompokkan berdasarkan ID sesi proposalnya.
+        // Ini penting agar kita bisa menampilkan status untuk setiap sesi.
+        $userSubmissions = ComdevSubmission::where('user_id', Auth::id())
+            ->get()
+            ->groupBy('comdev_proposal_id');
+
+        // Mengirim data sesi dan data proposal user ke view.
         return view('subdirektorat-inovasi.dosen.equity.usulkan-proposal', [
-            'sesiTersedia' => $sesiTersedia
+            'sesiTersedia' => $sesiTersedia,
+            'userSubmissions' => $userSubmissions // Data baru yang dikirim ke view
         ]);
     }
 

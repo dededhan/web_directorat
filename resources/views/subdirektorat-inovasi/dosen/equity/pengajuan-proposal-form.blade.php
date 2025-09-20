@@ -1,262 +1,166 @@
 @extends('subdirektorat-inovasi.dosen.index')
 
+@push('styles')
+{{-- CDN untuk Tagify (plugin untuk input tag) --}}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
+<style>
+    .tagify {
+        --tags-border-color: #d1d5db;
+        --tag-bg: #e0f2f1; /* bg-teal-50 */
+        --tag-text-color: #0f766e; /* text-teal-800 */
+        border-radius: 0.5rem;
+    }
+    .tagify:hover { --tags-border-color: #0d9488; }
+    .tagify.tagify--focus { --tags-border-color: #0d9488; }
+    .form-label { @apply block text-sm font-medium text-gray-700 mb-1; }
+    .form-input { @apply w-full bg-gray-50 border border-gray-300 rounded-lg shadow-sm py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all; }
+    .form-error { @apply text-red-500 text-xs mt-1; }
+    .btn-primary { @apply inline-flex items-center px-5 py-2.5 bg-sky-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-sky-700 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500; }
+    .btn-secondary { @apply px-5 py-2.5 bg-white border border-gray-300 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-100 transition-all shadow-sm; }
+</style>
+@endpush
+
 @section('content')
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8" 
      x-data="{
-        // Data untuk Kata Kunci
-        keywords: [''],
-        maxKeywords: 5,
-        addKeyword() {
-            if (this.keywords.length < this.maxKeywords) {
-                this.keywords.push('');
-            }
-        },
-        removeKeyword(index) {
-            this.keywords.splice(index, 1);
-        },
-
-        // Data untuk SDGs
-        sdgOptions: [
-            'SDG 1: Tanpa Kemiskinan', 
-            'SDG 2: Tanpa Kelaparan', 
-            'SDG 3: Kehidupan Sehat dan Sejahtera',
-            'SDG 4: Pendidikan Berkualitas', 
-            'SDG 5: Kesetaraan Gender', 
-            'SDG 6: Air Bersih dan Sanitasi Layak',
-            'SDG 7: Energi Bersih dan Terjangkau', 
-            'SDG 8: Pekerjaan Layak dan Pertumbuhan Ekonomi',
-            'SDG 9: Industri, Inovasi, dan Infrastruktur', 
-            'SDG 10: Berkurangnya Kesenjangan',
-            'SDG 11: Kota dan Pemukiman yang Berkelanjutan', 
-            'SDG 12: Konsumsi dan Produksi yang Bertanggung Jawab',
-            'SDG 13: Penanganan Perubahan Iklim', 
-            'SDG 14: Ekosistem Lautan', 
-            'SDG 15: Ekosistem Daratan',
-            'SDG 16: Perdamaian, Keadilan, dan Kelembagaan yang Tangguh', 
-            'SDG 17: Kemitraan untuk Mencapai Tujuan'
-        ],
-        selectedSdgs: [],
+        sdgOptions: ['SDG 1: Tanpa Kemiskinan', 'SDG 2: Tanpa Kelaparan', 'SDG 3: Kehidupan Sehat dan Sejahtera', 'SDG 4: Pendidikan Berkualitas', 'SDG 5: Kesetaraan Gender', 'SDG 6: Air Bersih dan Sanitasi Layak', 'SDG 7: Energi Bersih dan Terjangkau', 'SDG 8: Pekerjaan Layak dan Pertumbuhan Ekonomi', 'SDG 9: Industri, Inovasi, dan Infrastruktur', 'SDG 10: Berkurangnya Kesenjangan', 'SDG 11: Kota dan Pemukiman yang Berkelanjutan', 'SDG 12: Konsumsi dan Produksi yang Bertanggung Jawab', 'SDG 13: Penanganan Perubahan Iklim', 'SDG 14: Ekosistem Lautan', 'SDG 15: Ekosistem Daratan', 'SDG 16: Perdamaian, Keadilan, dan Kelembagaan yang Tangguh', 'SDG 17: Kemitraan untuk Mencapai Tujuan'],
+        selectedSdgs: {{ json_encode(old('sdgs', $submission->sdgs ?? [])) }},
         sdgDropdownOpen: false,
-        get availableSdgs() {
-            return this.sdgOptions.filter(opt => !this.selectedSdgs.includes(opt));
-        },
-        selectSdg(sdg) {
-            if (!this.selectedSdgs.includes(sdg)) {
-                this.selectedSdgs.push(sdg);
-            }
-            this.sdgDropdownOpen = false;
-        },
-        removeSdg(index) {
-            this.selectedSdgs.splice(index, 1);
-        },
-
-        // Data untuk Mitra Nasional
-        mitraNasional: [''],
-        addMitraNasional() {
-            this.mitraNasional.push('');
-        },
-        removeMitraNasional(index) {
-            this.mitraNasional.splice(index, 1);
-        },
-        
-        // Data untuk Mitra Internasional
-        mitraInternasional: [''],
-        addMitraInternasional() {
-            this.mitraInternasional.push('');
-        },
-        removeMitraInternasional(index) {
-            this.mitraInternasional.splice(index, 1);
-        },
-
-        // Helper untuk format nominal
+        get availableSdgs() { return this.sdgOptions.filter(opt => !this.selectedSdgs.includes(opt)); },
+        selectSdg(sdg) { if (!this.selectedSdgs.includes(sdg)) this.selectedSdgs.push(sdg); this.sdgDropdownOpen = false; },
+        removeSdg(index) { this.selectedSdgs.splice(index, 1); },
         formatNominal(event) {
             let value = event.target.value.replace(/[^,\d]/g, '').toString();
             let split = value.split(',');
             let sisa = split[0].length % 3;
             let rupiah = split[0].substr(0, sisa);
             let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
             if (ribuan) {
                 let separator = sisa ? '.' : '';
                 rupiah += separator + ribuan.join('.');
             }
-
             rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
             event.target.value = rupiah;
         }
-    }">
+    }" x-init="
+        new Tagify($refs.keywords, { maxTags: 5, whitelist: [], originalInputValueFormat: valuesArr => JSON.stringify(valuesArr.map(item => item.value)) });
+        new Tagify($refs.mitra_nasional, { whitelist: [], originalInputValueFormat: valuesArr => JSON.stringify(valuesArr.map(item => item.value)) });
+        new Tagify($refs.mitra_internasional, { whitelist: [], originalInputValueFormat: valuesArr => JSON.stringify(valuesArr.map(item => item.value)) });
+    ">
 
     {{-- Header dan Breadcrumb --}}
-    <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-800">Formulir Pengajuan Proposal</h1>
-            <nav class="text-sm" aria-label="Breadcrumb">
-                <ol class="list-none p-0 inline-flex space-x-2 text-gray-500">
-                    <li class="flex items-center"><a href="#" class="hover:text-gray-700">Home</a><i class='bx bx-chevron-right text-gray-400 mx-2'></i></li>
-                    <li class="flex items-center"><a href="#" class="hover:text-gray-700">Usulkan Proposal</a><i class='bx bx-chevron-right text-gray-400 mx-2'></i></li>
-                    <li class="flex items-center"><span class="font-medium text-gray-700">Detail Proposal</span></li>
-                </ol>
-            </nav>
-        </div>
-        <a href="#" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg shadow-sm hover:bg-gray-50 transition-colors duration-200">
-            <i class='bx bx-arrow-back mr-2'></i>
-            <span>Kembali ke Identitas</span>
-        </a>
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Formulir Usulan: Detail Proposal</h1>
+        <p class="text-gray-600 mt-1">Lengkapi informasi detail untuk proposal Anda.</p>
     </div>
 
-    {{-- Form Utama --}}
-    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
-        <form class="p-6 md:p-8" action="#" method="POST">
-            <div class="flex items-start gap-4 border-b border-slate-200 pb-4 mb-6">
-                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
-                    <i class='bx bxs-file-plus text-2xl'></i>
-                </div>
-                <div>
-                    <h2 class="text-xl font-bold text-gray-800">Detail Usulan Proposal</h2>
-                    <p class="text-gray-500 mt-1">Lengkapi semua informasi yang diperlukan untuk proposal Anda.</p>
-                </div>
-            </div>
+    {{-- Menampilkan pesan error validasi --}}
+    @if ($errors->any())
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-md" role="alert">
+            <p class="font-bold">Terjadi Kesalahan</p>
+            <ul class="mt-2 list-disc list-inside text-sm">
+                @foreach ($errors->all() as $error) <li>{{ $error }}</li> @endforeach
+            </ul>
+        </div>
+    @endif
 
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+        <form class="p-6 md:p-8" method="POST" action="{{ route('subdirektorat-inovasi.dosen.equity.proposal.storePengajuan', $submission->id) }}">
+            @csrf
+            @method('PUT')
+
+            <h2 class="text-xl font-bold text-gray-800 mb-6 border-b pb-4">Detail Usulan Proposal</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
                 
                 {{-- Judul --}}
                 <div class="md:col-span-2">
-                    <label for="judul" class="block text-sm font-medium text-gray-600 mb-1">Judul Proposal</label>
-                    <input type="text" id="judul" class="form-input" placeholder="Masukkan judul proposal Anda">
+                    <label for="judul" class="form-label">Judul Proposal</label>
+                    <input type="text" id="judul" name="judul" value="{{ old('judul', $submission->judul) }}" class="form-input @error('judul') border-red-500 @enderror" placeholder="Masukkan judul proposal Anda">
+                    @error('judul') <span class="form-error">{{ $message }}</span> @enderror
                 </div>
 
-                {{-- Tahun --}}
+                {{-- Tahun & Tempat --}}
                 <div>
-                    <label for="tahun" class="block text-sm font-medium text-gray-600 mb-1">Tahun Usulan</label>
-                    <input type="number" id="tahun" class="form-input" placeholder="Contoh: {{ date('Y') }}" value="{{ date('Y') }}">
+                    <label for="tahun" class="form-label">Tahun Usulan</label>
+                    <input type="number" id="tahun" name="tahun_usulan" value="{{ old('tahun_usulan', $submission->tahun_usulan ?? date('Y')) }}" class="form-input @error('tahun_usulan') border-red-500 @enderror" placeholder="Contoh: {{ date('Y') }}">
+                    @error('tahun_usulan') <span class="form-error">{{ $message }}</span> @enderror
                 </div>
-
-                {{-- Tempat Pelaksanaan --}}
                 <div>
-                    <label for="tempat" class="block text-sm font-medium text-gray-600 mb-1">Tempat Pelaksanaan</label>
-                    <input type="text" id="tempat" class="form-input" placeholder="Contoh: Jakarta, Indonesia">
+                    <label for="tempat" class="form-label">Tempat Pelaksanaan</label>
+                    <input type="text" id="tempat" name="tempat_pelaksanaan" value="{{ old('tempat_pelaksanaan', $submission->tempat_pelaksanaan) }}" class="form-input @error('tempat_pelaksanaan') border-red-500 @enderror" placeholder="Contoh: Jakarta, Indonesia">
+                     @error('tempat_pelaksanaan') <span class="form-error">{{ $message }}</span> @enderror
                 </div>
 
                 {{-- Abstrak --}}
                 <div class="md:col-span-2">
-                    <label for="abstrak" class="block text-sm font-medium text-gray-600 mb-1">Abstrak</label>
-                    <textarea id="abstrak" rows="5" class="form-input" placeholder="Tuliskan abstrak proposal Anda di sini..."></textarea>
+                    <label for="abstrak" class="form-label">Abstrak (Min. 50 kata)</label>
+                    <textarea id="abstrak" name="abstrak" rows="5" class="form-input @error('abstrak') border-red-500 @enderror" placeholder="Tuliskan abstrak proposal Anda di sini...">{{ old('abstrak', $submission->abstrak) }}</textarea>
+                    @error('abstrak') <span class="form-error">{{ $message }}</span> @enderror
                 </div>
 
-                {{-- Kata Kunci --}}
-                <div class="md:col-span-2 space-y-2">
-                    <label class="block text-sm font-medium text-gray-600">Kata Kunci (Maksimal 5)</label>
-                    <template x-for="(keyword, index) in keywords" :key="index">
-                        <div class="flex items-center gap-2">
-                            <input type="text" :name="'keywords['+index+']'" x-model="keywords[index]" class="form-input flex-grow" placeholder="Contoh: Teknologi, Pendidikan">
-                            <button type="button" @click="removeKeyword(index)" x-show="keywords.length > 1" class="text-gray-400 hover:text-red-500 transition">
-                                <i class='bx bx-trash text-xl'></i>
-                            </button>
-                        </div>
-                    </template>
-                    <button type="button" @click="addKeyword" x-show="keywords.length < maxKeywords" class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition-colors text-sm font-medium">
-                        <i class='bx bx-plus mr-1'></i>
-                        Tambah Kata Kunci
-                    </button>
+                {{-- Kata Kunci (dengan Tagify) --}}
+                <div class="md:col-span-2">
+                    <label for="kata_kunci" class="form-label">Kata Kunci (Maksimal 5)</label>
+                    <input type="text" id="kata_kunci" name="kata_kunci" x-ref="keywords" value="{{ json_encode(old('kata_kunci', $submission->kata_kunci ?? [])) }}" class="form-input">
+                    @error('kata_kunci') <span class="form-error">{{ $message }}</span> @enderror
                 </div>
                 
                 {{-- SDGs --}}
                 <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-600 mb-2">Tujuan Pembangunan Berkelanjutan (SDGs)</label>
+                    <label class="form-label mb-2">Tujuan Pembangunan Berkelanjutan (SDGs)</label>
+                    <input type="hidden" name="sdgs" :value="JSON.stringify(selectedSdgs)">
                     <div class="relative">
-                        <div class="w-full border border-gray-300 rounded-lg p-2 min-h-[42px] flex flex-wrap gap-2 items-center cursor-pointer" @click="sdgDropdownOpen = !sdgDropdownOpen">
-                            <template x-for="(sdg, index) in selectedSdgs" :key="index">
-                                <span class="flex items-center gap-1.5 bg-teal-100 text-teal-800 text-xs font-medium px-2 py-1 rounded-full">
-                                    <span x-text="sdg"></span>
-                                    <button type="button" @click.stop="removeSdg(index)" class="text-teal-600 hover:text-teal-800">&times;</button>
-                                </span>
-                            </template>
+                        <div class="w-full border border-gray-300 rounded-lg p-2 min-h-[42px] flex flex-wrap gap-2 items-center cursor-pointer @error('sdgs') border-red-500 @enderror" @click="sdgDropdownOpen = !sdgDropdownOpen">
+                            <template x-for="(sdg, index) in selectedSdgs" :key="index"><span class="flex items-center gap-1.5 bg-teal-100 text-teal-800 text-xs font-medium px-2 py-1 rounded-full"><span x-text="sdg"></span><button type="button" @click.stop="removeSdg(index)" class="text-teal-600 hover:text-teal-800">&times;</button></span></template>
                             <span x-show="selectedSdgs.length === 0" class="text-gray-400 text-sm">Pilih satu atau lebih SDGs...</span>
                         </div>
                         <div x-show="sdgDropdownOpen" @click.away="sdgDropdownOpen = false" x-transition class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm" style="display: none;">
-                            <template x-for="sdg in availableSdgs" :key="sdg">
-                                <a href="#" @click.prevent="selectSdg(sdg)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" x-text="sdg"></a>
-                            </template>
+                            <template x-for="sdg in availableSdgs" :key="sdg"><a href="#" @click.prevent="selectSdg(sdg)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" x-text="sdg"></a></template>
                              <div x-show="availableSdgs.length === 0" class="px-4 py-2 text-sm text-gray-500">Semua SDGs telah dipilih.</div>
                         </div>
                     </div>
+                    @error('sdgs') <span class="form-error">{{ $message }}</span> @enderror
                 </div>
 
-                {{-- Mitra Nasional --}}
-                <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-600">Mitra Nasional (Opsional)</label>
-                    <template x-for="(mitra, index) in mitraNasional" :key="index">
-                        <div class="flex items-center gap-2">
-                            <input type="text" :name="'mitra_nasional['+index+']'" x-model="mitraNasional[index]" class="form-input flex-grow" placeholder="Nama instansi/mitra nasional">
-                             <button type="button" @click="removeMitraNasional(index)" x-show="mitraNasional.length > 1" class="text-gray-400 hover:text-red-500 transition">
-                                <i class='bx bx-trash text-xl'></i>
-                            </button>
-                        </div>
-                    </template>
-                    <button type="button" @click="addMitraNasional" class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition-colors text-sm font-medium">
-                        <i class='bx bx-plus mr-1'></i>
-                        Tambah Mitra
-                    </button>
+                {{-- Mitra Nasional (dengan Tagify) --}}
+                <div class="md:col-span-1">
+                    <label for="mitra_nasional" class="form-label">Mitra Nasional (Opsional)</label>
+                    <input type="text" id="mitra_nasional" name="mitra_nasional" x-ref="mitra_nasional" value="{{ json_encode(old('mitra_nasional', $submission->mitra_nasional ?? [])) }}" class="form-input" placeholder="Ketik nama mitra lalu tekan Enter">
                 </div>
-                
-                {{-- Mitra Internasional --}}
-                <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-600">Mitra Internasional (Opsional)</label>
-                    <template x-for="(mitra, index) in mitraInternasional" :key="index">
-                        <div class="flex items-center gap-2">
-                            <input type="text" :name="'mitra_internasional['+index+']'" x-model="mitraInternasional[index]" class="form-input flex-grow" placeholder="Nama instansi/mitra internasional">
-                            <button type="button" @click="removeMitraInternasional(index)" x-show="mitraInternasional.length > 1" class="text-gray-400 hover:text-red-500 transition">
-                                <i class='bx bx-trash text-xl'></i>
-                            </button>
-                        </div>
-                    </template>
-                    <button type="button" @click="addMitraInternasional" class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition-colors text-sm font-medium">
-                        <i class='bx bx-plus mr-1'></i>
-                        Tambah Mitra
-                    </button>
+
+                {{-- Mitra Internasional (dengan Tagify) --}}
+                 <div class="md:col-span-1">
+                    <label for="mitra_internasional" class="form-label">Mitra Internasional (Opsional)</label>
+                    <input type="text" id="mitra_internasional" name="mitra_internasional" x-ref="mitra_internasional" value="{{ json_encode(old('mitra_internasional', $submission->mitra_internasional ?? [])) }}" class="form-input" placeholder="Ketik nama mitra lalu tekan Enter">
                 </div>
                 
                 {{-- Nominal Usulan --}}
                 <div class="md:col-span-2">
-                    <label for="nominal" class="block text-sm font-medium text-gray-600 mb-1">Nominal Usulan</label>
+                    <label for="nominal" class="form-label">Nominal Usulan</label>
                     <div class="relative">
-                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                            <span class="text-gray-500 sm:text-sm">Rp</span>
-                        </div>
-                        <input type="text" name="nominal" id="nominal" @input="formatNominal($event)" class="form-input pl-8" placeholder="0">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"><span class="text-gray-500 sm:text-sm">Rp</span></div>
+                        <input type="text" name="nominal_usulan" id="nominal" @input="formatNominal($event)" value="{{ old('nominal_usulan', number_format($submission->nominal_usulan ?? 0, 0, ',', '.')) }}" class="form-input pl-8 @error('nominal_usulan') border-red-500 @enderror" placeholder="0">
                     </div>
+                    @error('nominal_usulan') <span class="form-error">{{ $message }}</span> @enderror
                 </div>
             </div>
 
             {{-- Tombol Aksi --}}
             <div class="mt-8 pt-6 border-t border-slate-200 flex items-center justify-end gap-3">
-                <button type="button" class="px-5 py-2 bg-white border border-gray-300 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-100 transition-all shadow-sm">Kembali</button>
-                <button type="submit" class="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Ajukan Proposal
+                <a href="{{ route('subdirektorat-inovasi.dosen.equity.usulkan-proposal.index') }}" class="btn-secondary">Kembali ke Daftar Skema</a>
+                <button type="submit" class="btn-primary">
+                    <i class='bx bxs-send mr-2'></i> Ajukan Proposal
                 </button>
             </div>
         </form>
     </div>
 </div>
-@endsection
 
-@push('styles')
-<style>
-    .form-input {
-        width: 100%;
-        background-color: white;
-        border: 1px solid #d1d5db; /* border-gray-300 */
-        border-radius: 0.5rem; /* rounded-lg */
-        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
-        padding: 0.5rem 0.75rem; /* py-2 px-3 */
-        font-size: 0.875rem; /* text-sm */
-        transition: all 0.2s ease-in-out;
-    }
-    .form-input:focus {
-        outline: none;
-        box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #3b82f6; /* focus:ring-2 focus:ring-blue-500 */
-        border-color: #3b82f6; /* focus:border-blue-500 */
-    }
-</style>
+@push('scripts')
+{{-- CDN untuk Tagify --}}
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
 @endpush
+
+{{-- PERBAIKAN: Ganti @endpush menjadi @endsection --}}
+@endsection
 

@@ -31,8 +31,13 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VideoinovasiController;
 use App\Http\Controllers\MitraKolaborasiController;
 use App\Http\Controllers\RisetUnjController;
+
+//comdev
 use App\Http\Controllers\ComdevController;
 use App\Http\Controllers\ComdevViewSesiController;
+use App\Http\Controllers\Dosen\ComdevSubmisDosenController;
+use App\Http\Controllers\Dosen\ComdevPropViewController;
+use App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController;
 
 
 
@@ -513,6 +518,10 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
 
                 // PERUBAHAN: Menghapus .parameters() karena controller sudah disesuaikan
                 Route::resource('/comdev', \App\Http\Controllers\ComdevController::class);
+                Route::prefix('comdev/{comdev}/submissions')->name('comdev.submissions.')->group(function () {
+                Route::get('/', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'index'])->name('index');
+                Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'show'])->name('show');
+                Route::post('/{submission}/assign-reviewer', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'assignReviewer'])->name('assignReviewer');});
 
                 Route::get('/apc', function () {
                     return view('admin_equity.apc.index');
@@ -556,28 +565,15 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 })->name('dashboard');
 
                 // Equity - Proposal Management
-                Route::get('/equity', function () {
-                    return view('subdirektorat-inovasi.dosen.equity.index');
-                })->name('equity.index');
+                Route::get('/equity/manajement', [ComdevPropViewController::class, 'index'])
+                    ->name('equity.manajement.index'); 
 
                 Route::get('/usulkan-proposal', [ComdevViewSesiController::class, 'index'])
                     ->name('equity.usulkan-proposal.index');
 
-                Route::get('/usulkan-proposal/form', function () {
-                    return view('subdirektorat-inovasi.dosen.equity.usulkan-proposal-form');
-                })->name('equity.usulkan-proposal.form'); 
+               
 
-                Route::get('/equity/portofolio', function () {
-                    return view('subdirektorat-inovasi.dosen.equity.portofolio');
-                })->name('equity.portofolio');
-
-                Route::get('/equity/mendaftar-reviewer', function () {
-                    return view('subdirektorat-inovasi.dosen.equity.mendaftar-reviewer');
-                })->name('equity.mendaftar-reviewer');
-
-                Route::get('/equity/tahap-penilaian', function () {
-                    return view('subdirektorat-inovasi.dosen.equity.tahap-penilaian');
-                })->name('equity.tahap-penilaian');
+             
                  Route::get('/equity/tahapan-proposal', function () {
                     return view('subdirektorat-inovasi.dosen.equity.tahapan-proposal');
                 })->name('equity.tahapan-proposal');
@@ -587,9 +583,24 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::get('/equity/detail-proposal', function () {
                     return view('subdirektorat-inovasi.dosen.equity.detail-proposal');
                 })->name('equity.detail-proposal');
-                Route::get('/equity/usulkan-proposal/pengajuan', function () {
-                    return view('subdirektorat-inovasi.dosen.equity.pengajuan-proposal-form');
-                })->name('equity.usulkan-proposal.pengajuan'); 
+               Route::get('/equity/proposal/{sesi}/create-identitas', [ComdevSubmisDosenController::class, 'createIdentitas'])
+                    ->name('equity.proposal.createIdentitas');
+
+                // TAHAP 1: Menyimpan data identitas tim
+                Route::post('/equity/proposal/{sesi}/store-identitas', [ComdevSubmisDosenController::class, 'storeIdentitas'])
+                    ->name('equity.proposal.storeIdentitas');
+
+                // TAHAP 2: Menampilkan form detail proposal (melanjutkan draft)
+                Route::get('/equity/proposal/{submission}/create-pengajuan', [ComdevSubmisDosenController::class, 'createPengajuan'])
+                    ->name('equity.proposal.createPengajuan'); // <-- NAMA INI YANG MEMPERBAIKI ERROR
+
+                // TAHAP 2: Menyimpan/mengajukan detail proposal
+                Route::put('/equity/proposal/{submission}/store-pengajuan', [ComdevSubmisDosenController::class, 'storePengajuan'])
+                    ->name('equity.proposal.storePengajuan');
+                
+                // AKSI: Menghapus proposal yang masih berstatus draft
+                Route::delete('/equity/proposal/{submission}/destroy-draft', [ComdevSubmisDosenController::class, 'destroyDraft'])
+                    ->name('equity.proposal.destroyDraft');
 
 
                 // Tabel Katsinov

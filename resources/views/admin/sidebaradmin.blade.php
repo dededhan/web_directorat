@@ -20,12 +20,7 @@
         <div class="menu-section">
             <h3 class="section-title">Main Menu</h3>
             <ul class="side-menu">
-                <li class="{{ request()->routeIs('admin.proposal-sessions.*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.proposal-sessions.index') }}">
-                        <i class='bx bxs-file-plus'></i>
-                        <span class="text">Sesi Proposal</span>
-                    </a>
-                </li>
+              
                 <li class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <a href="{{ route('admin.dashboard') }}">
                         <i class='bx bxs-dashboard'></i>

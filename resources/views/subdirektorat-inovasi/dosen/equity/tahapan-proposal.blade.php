@@ -20,7 +20,7 @@
                     </ol>
                 </nav>
             </div>
-            <a href="{{ route('subdirektorat-inovasi.dosen.equity.index') }}"
+            <a href="{{ route('subdirektorat-inovasi.dosen.equity.manajement.index') }}"
                 class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg shadow-sm hover:bg-gray-50 transition-colors duration-200">
                 <i class='bx bx-arrow-back mr-2'></i>
                 <span>Kembali</span>

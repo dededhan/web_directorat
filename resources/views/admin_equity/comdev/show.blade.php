@@ -61,6 +61,15 @@
             <a href="{{ route('admin_equity.comdev.edit', $session->id) }}" class="inline-flex items-center px-4 py-2 bg-yellow-500 border border-transparent rounded-md font-semibold text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                 <i class='bx bxs-edit text-lg mr-2'></i> Edit Sesi
             </a>
+
+            {{-- ========================================================== --}}
+            {{-- BAGIAN BARU YANG DITAMBAHKAN --}}
+            {{-- Tombol ini akan mengarahkan ke halaman daftar proposal (submissions) untuk sesi ini --}}
+            <a href="{{ route('admin_equity.comdev.submissions.index', $session->id) }}" class="inline-flex items-center px-4 py-2 bg-sky-600 border border-transparent rounded-md font-semibold text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                <i class='bx bx-file-find text-lg mr-2'></i> Lihat Proposal Masuk
+            </a>
+            {{-- ========================================================== --}}
+
         </div>
     </div>
 </div>

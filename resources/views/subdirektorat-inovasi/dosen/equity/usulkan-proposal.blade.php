@@ -21,10 +21,6 @@
             <p class="text-gray-500 text-sm mt-1">Daftar skema penelitian dan pengabdian yang tersedia.</p>
         </div>
 
-        <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-3">
-            {{-- Fitur Search & Filter bisa diimplementasikan nanti --}}
-        </div>
-
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-100 hidden md:table-header-group">
@@ -49,20 +45,32 @@
                             <td data-label="Periode Submit" class="block md:table-cell px-6 py-4">{{ \Carbon\Carbon::parse($sesi->periode_awal)->isoFormat('D MMM Y') }} - {{ \Carbon\Carbon::parse($sesi->periode_akhir)->isoFormat('D MMM Y') }}</td>
                             <td data-label="Anggota" class="block md:table-cell px-6 py-4">{{ $sesi->min_anggota }} - {{ $sesi->max_anggota }} Orang</td>
                             <td data-label="Aksi" class="block md:table-cell px-6 py-4 text-center">
-                                
-                                {{-- LOGIKA UTAMA: Cek tanggal periode akhir --}}
+                                @php
+                                    // Mengambil data proposal yang terkait dengan sesi ini untuk user yang sedang login
+                                    $submissionsForThisSession = $userSubmissions->get($sesi->id);
+                                    $draftCount = $submissionsForThisSession ? $submissionsForThisSession->where('status', 'draft')->count() : 0;
+                                    $submittedCount = $submissionsForThisSession ? $submissionsForThisSession->where('status', '!=', 'draft')->count() : 0;
+                                @endphp
+
                                 @if (\Carbon\Carbon::now()->isAfter(\Carbon\Carbon::parse($sesi->periode_akhir)->endOfDay()))
-                                    {{-- JIKA SUDAH LEWAT TANGGAL --}}
                                     <button class="bg-gray-400 text-white font-bold py-2 px-4 rounded-lg text-xs cursor-not-allowed" disabled>
                                         Sudah Ditutup
                                     </button>
                                 @else
-                                    {{-- JIKA MASIH BUKA --}}
-                                    <a href="{{ route('subdirektorat-inovasi.dosen.equity.usulkan-proposal.form', $sesi->id) }}" class="inline-block bg-teal-500 text-white font-bold py-2 px-4 rounded-lg text-xs hover:bg-teal-600 transition duration-300">
-                                        Usulkan
-                                    </a>
-                                @endif
+                                    <div class="flex flex-col items-center gap-2">
+                                        {{-- Tombol untuk membuat usulan baru, disesuaikan dengan route baru --}}
+                                        <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.createIdentitas', $sesi->id) }}" class="inline-block w-full bg-teal-500 text-white font-bold py-2 px-4 rounded-lg text-xs hover:bg-teal-600 transition duration-300">
+                                            + Usulkan Baru
+                                        </a>
 
+                                        {{-- Menampilkan link ke halaman manajemen jika sudah ada proposal --}}
+                                        @if ($draftCount > 0 || $submittedCount > 0)
+                                            <a href="{{ route('subdirektorat-inovasi.dosen.equity.manajement.index') }}?sesi_id={{ $sesi->id }}" class="text-xs text-sky-600 hover:underline">
+                                                Lihat Proposal Saya ({{ $draftCount }} Draft, {{ $submittedCount }} Diajukan)
+                                            </a>
+                                        @endif
+                                    </div>
+                                @endif
                             </td>
                         </tr>
                     @empty
@@ -76,20 +84,7 @@
                 </tbody>
             </table>
         </div>
-
-        {{-- TODO: Implementasi pagination jika diperlukan --}}
-        <div class="mt-6 flex flex-col md:flex-row justify-between items-center text-sm">
-            {{-- ... Kode pagination statis ... --}}
-        </div>
     </div>
 </div>
 @endsection
 
-@push('styles')
-{{-- CSS Anda untuk mobile sudah bagus dan tidak perlu diubah --}}
-<style>
-    @media (max-width: 767px) {
-        /* ... (CSS Anda di sini) ... */
-    }
-</style>
-@endpush
