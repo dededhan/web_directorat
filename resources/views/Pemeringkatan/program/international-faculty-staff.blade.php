@@ -12,18 +12,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
    @vite([
-        'resources/css/fitur/international-faculty-staff.css'
-        'resources/js/fitur/international-faculty-staff.js' {{-- Path disesuaikan untuk Vite dan typo diperbaiki --}}
+        'resources/css/fitur/international-faculty-staff.css',
+        'resources/js/fitur/international-faculty-staff.js'
     ])
     @include('layout.navbarpemeringkatan')
 </head>
 
 <body class="min-h-screen">
-    <!-- Navigation placeholder -->
 
 
-    <div class="pt-16"> <!-- Padding for fixed navbar -->
-        <!-- Hero Section -->
+
+    <div class="pt-16">
+
         <section class="faculty-hero flex items-center justify-center text-center text-white">
             <div class="container mx-auto px-6 py-20">
                 <div>
