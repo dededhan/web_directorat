@@ -21,6 +21,75 @@ class ComdevModuleController extends Controller
     }
 
     /**
+     * [NEW] Creates a standard set of modules and sub-chapters from a predefined template.
+     */
+    public function storeTemplate(Request $request, ComdevProposal $sesi)
+    {
+        // Security check: Only allow template creation if no modules exist, to prevent duplication.
+        if ($sesi->modules()->exists()) {
+            return back()->with('error', 'Modul standar hanya dapat dibuat jika sesi belum memiliki modul.');
+        }
+
+        // Predefined template structure based on 'tahapan(modules format).blade.php'
+        $template = [
+            [
+                'urutan' => 1, 'nama_modul' => 'Desk Evaluasi Proposal', 'deskripsi' => 'Tahap awal evaluasi proposal yang diajukan.',
+                'sub_chapters' => [
+                    ['urutan' => 1, 'nama_sub_bab' => 'Proposal Kegiatan'],
+                ]
+            ],
+            [
+                'urutan' => 2, 'nama_modul' => 'Perbaikan Proposal', 'deskripsi' => 'Tahap untuk melakukan perbaikan proposal berdasarkan hasil evaluasi.',
+                'sub_chapters' => [
+                    ['urutan' => 1, 'nama_sub_bab' => 'Proposal Perbaikan'],
+                ]
+            ],
+            [
+                'urutan' => 3, 'nama_modul' => 'Monitoring Evaluasi', 'deskripsi' => 'Tahap monitoring dan evaluasi kemajuan kegiatan.',
+                'sub_chapters' => [
+                    ['urutan' => 1, 'nama_sub_bab' => 'Laporan Kemajuan Kegiatan'],
+                    ['urutan' => 2, 'nama_sub_bab' => 'SPTB Penelitian 70%'],
+                    ['urutan' => 3, 'nama_sub_bab' => 'Daftar Peserta'],
+                ]
+            ],
+            [
+                'urutan' => 4, 'nama_modul' => 'Laporan Akhir', 'deskripsi' => 'Tahap pengumpulan laporan akhir dari seluruh kegiatan.',
+                'sub_chapters' => [
+                    ['urutan' => 1, 'nama_sub_bab' => 'Laporan Akhir Kegiatan'],
+                    ['urutan' => 2, 'nama_sub_bab' => 'Laporan Keuangan 100%'],
+                    ['urutan' => 3, 'nama_sub_bab' => 'SPTB Kegiatan 100%'],
+                    ['urutan' => 4, 'nama_sub_bab' => 'Link Berita Kegiatan'],
+                ]
+            ],
+            [
+                'urutan' => 5, 'nama_modul' => 'Seminar Hasil/Penilaian Luaran', 'deskripsi' => 'Tahap akhir untuk presentasi hasil dan penilaian luaran.',
+                'sub_chapters' => [] // No default sub-chapters for this module
+            ],
+        ];
+
+        // Loop through the template and create database records
+        foreach ($template as $moduleData) {
+            $newModule = $sesi->modules()->create([
+                'urutan' => $moduleData['urutan'],
+                'nama_modul' => $moduleData['nama_modul'],
+                'deskripsi' => $moduleData['deskripsi'],
+            ]);
+
+            if (!empty($moduleData['sub_chapters'])) {
+                foreach ($moduleData['sub_chapters'] as $subChapterData) {
+                    $newModule->subChapters()->create([
+                        'urutan' => $subChapterData['urutan'],
+                        'nama_sub_bab' => $subChapterData['nama_sub_bab'],
+                    ]);
+                }
+            }
+        }
+
+        return back()->with('success', 'Modul standar berhasil dibuat.');
+    }
+
+
+    /**
      * Menyimpan modul baru.
      */
     public function storeModule(Request $request, ComdevProposal $sesi)

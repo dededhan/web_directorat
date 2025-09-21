@@ -1,14 +1,3 @@
-{{-- 
-    =================================================================
-    File: index.blade.php (Manajemen Modul)
-    Deskripsi: Halaman untuk mengelola modul dan sub-bab dalam sesi.
-    Versi Desain: Final v2 - Konsisten
-    Pembaruan: Menerapkan desain profesional pada kartu, form, 
-               dan tombol, sambil mempertahankan semua logika Alpine.js.
-    Skema Warna: Dominan #11A697 (Teal).
-    =================================================================
---}}
-
 @extends('admin_equity.index')
 
 @section('content')
@@ -112,17 +101,29 @@
                 </div>
             </div>
         @empty
-            <div class="text-center bg-white border border-dashed rounded-lg py-12">
-                <p class="text-gray-500">Belum ada modul yang dibuat untuk sesi ini.</p>
-                <p class="text-sm text-gray-400 mt-1">Klik tombol di bawah untuk memulai.</p>
+            <div class="text-center bg-white border border-dashed rounded-lg py-12 px-6">
+                <i class='bx bx-info-circle text-5xl text-gray-400'></i>
+                <p class="mt-4 text-gray-600 font-semibold">Belum ada modul yang dibuat untuk sesi ini.</p>
+                <p class="text-sm text-gray-500 mt-1">Anda dapat membuat modul secara manual atau menggunakan template standar.</p>
+                
+                {{-- [NEW] Form for Template Creation Button --}}
+                <div class="mt-6">
+                    <form action="{{ route('admin_equity.comdev.modules.storeTemplate', $sesi->id) }}" method="POST" onsubmit="return confirm('Ini akan membuat set modul standar. Lanjutkan?');">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center px-5 py-2.5 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 shadow-sm transition">
+                            <i class='bx bxs-file-plus text-lg mr-2'></i> Buat Modul Standar
+                        </button>
+                    </form>
+                </div>
+
             </div>
         @endforelse
     </div>
 
-    {{-- Tombol & Form Tambah Modul --}}
+    {{-- Tombol & Form Tambah Modul (Manual) --}}
     <div class="mt-8">
         <button @click="openModuleForm = !openModuleForm" class="inline-flex items-center px-5 py-2.5 bg-[#11A697] text-white rounded-lg font-semibold hover:bg-[#0e8a7c] shadow-sm transition">
-            <i class='bx bxs-add-to-queue text-lg mr-2'></i> Buat Modul Baru
+            <i class='bx bxs-add-to-queue text-lg mr-2'></i> Buat Modul Baru (Manual)
         </button>
         <div x-show="openModuleForm" x-cloak x-transition class="mt-4">
              <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
