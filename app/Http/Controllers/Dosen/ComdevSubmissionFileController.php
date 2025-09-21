@@ -9,6 +9,7 @@ use App\Models\ComdevSubmissionFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Enums\ComdevStatusEnum;
 
 class ComdevSubmissionFileController extends Controller
 {
@@ -29,7 +30,7 @@ class ComdevSubmissionFileController extends Controller
 
         $file = $request->file('file_dokumen');
         $originalName = $file->getClientOriginalName();
-        
+
         // Buat path penyimpanan yang unik: comdev_files/{id_submission}/{id_sub_chapter}/nama_file.pdf
         $path = $file->storeAs(
             'comdev_files/' . $submission->id . '/' . $subChapter->id,
@@ -60,12 +61,31 @@ class ComdevSubmissionFileController extends Controller
                 'original_filename' => $originalName,
             ]
         );
-        $moduleStatus = $submission->moduleStatuses()
-        ->where('comdev_module_id', $subChapter->comdev_module_id)
-        ->first();
 
+        $activeModuleStatus = $submission->activeModuleStatus;
+        if ($activeModuleStatus) {
+            $activeModule = $activeModuleStatus->module;
+
+            // 1. Hitung jumlah sub-bab yang wajib di modul ini
+            $requiredSubChaptersCount = $activeModule->subChapters()->count();
+
+            // 2. Hitung jumlah file yang sudah diunggah untuk sub-bab di modul ini
+            $uploadedFilesCount = ComdevSubmissionFile::where('comdev_submission_id', $submission->id)
+                ->whereIn('comdev_sub_chapter_id', $activeModule->subChapters()->pluck('id'))
+                ->count();
+
+            // 3. Jika jumlahnya sama, berarti semua file modul ini sudah lengkap
+            if ($requiredSubChaptersCount > 0 && $requiredSubChaptersCount === $uploadedFilesCount) {
+                $submission->update(['status' => ComdevStatusEnum::MENUNGGU_DIREVIEW]);
+            }
+        }
+
+        // Kode lama Anda untuk mengubah status modul juga bisa dipertahankan jika perlu
+        $moduleStatus = $submission->moduleStatuses()
+            ->where('comdev_module_id', $subChapter->comdev_module_id)
+            ->first();
         if ($moduleStatus && $moduleStatus->status === 'menunggu_unggahan') {
-            $moduleStatus->update(['status' => 'menunggu_Direview']);
+            $moduleStatus->update(['status' => 'sedang_diproses']); // Misal, status modulnya
         }
 
         return back()->with('success', 'Dokumen berhasil diunggah.');
@@ -103,7 +123,7 @@ class ComdevSubmissionFileController extends Controller
         if (Storage::disk('public')->exists($file->file_path)) {
             Storage::disk('public')->delete($file->file_path);
         }
-        
+
         // Hapus data dari database
         $file->delete();
 

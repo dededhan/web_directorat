@@ -149,30 +149,40 @@
                             </div>
                             {{-- TAB PENILAIAN & KOMENTAR REVIEWER --}}
                             <div x-show="tab === 'penilaian'" x-transition style="display: none;">
-                                <div class="overflow-x-auto">
-                                    <table class="w-full text-sm text-left text-gray-500">
-                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                            <tr>
-                                                <th scope="col" class="px-6 py-3">Dokumen Terkait</th>
-                                                <th scope="col" class="px-6 py-3">Reviewer</th>
-                                                <th scope="col" class="px-6 py-3">Catatan</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @php $reviewsForModule = $reviewsBySubChapter->whereIn('comdev_sub_chapter_id', $module->subChapters->pluck('id'))->flatten(); @endphp
-                                            @forelse($reviewsForModule as $review)
-                                                <tr class="bg-white border-b">
-                                                    <td class="px-6 py-4 italic text-gray-500">{{ $review->subChapter->nama_sub_bab }}</td>
-                                                    <td class="px-6 py-4 font-medium text-gray-900">{{ $review->reviewer->name }}</td>
-                                                    <td class="px-6 py-4">{{ $review->komentar }}</td>
-                                                </tr>
-                                            @empty
-                                                <tr><td colspan="3" class="text-center py-4 text-gray-500">Belum ada penilaian untuk tahap ini.</td></tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3">Dokumen Terkait</th>
+                    <th scope="col" class="px-6 py-3">Reviewer</th>
+                    <th scope="col" class="px-6 py-3">Catatan</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{-- Loop langsung dari koleksi reviews dari submission --}}
+                @forelse($submission->reviews as $review)
+                    <tr class="bg-white border-b">
+                        {{-- Memastikan subChapter ada sebelum diakses --}}
+                        <td class="px-6 py-4 italic text-gray-500">
+                            {{ optional($review->subChapter)->nama_sub_bab }}
+                        </td>
+                        {{-- Memastikan reviewer ada sebelum diakses --}}
+                        <td class="px-6 py-4 font-medium text-gray-900">
+                            {{ optional($review->reviewer)->name }}
+                        </td>
+                        <td class="px-6 py-4">{{ $review->komentar }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="3" class="text-center py-4 text-gray-500">
+                            Belum ada penilaian untuk submission ini.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>

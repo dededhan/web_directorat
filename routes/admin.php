@@ -41,6 +41,8 @@ use App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController;
 use App\Http\Controllers\AdminEquity\ComdevModuleController;
 use App\Http\Controllers\Dosen\ComdevSubmissionFileController;
 use App\Models\ComdevSubmission;
+use App\Http\Controllers\ReviewerEquity\ComdevReviewerController;
+
 
 
 
@@ -55,6 +57,7 @@ use App\Http\Controllers\InternationalFacultyStaffActivitiesController;
 // Ganti route yang ada dengan:
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\IndikatorController;
+
 
 
 
@@ -576,9 +579,9 @@ Route::prefix('reviewer_equity')->name('reviewer_equity.')->middleware(['auth', 
         return view('reviewer_equity.dashboard');
     })->name('dashboard');
 
-    Route::get('/comdev/manajemen-proposal', function () {
-        return view('reviewer_equity.comdev.index');
-    })->name('comdev.manajemen.index');
+    Route::get('/comdev/assignments', [ComdevReviewerController::class, 'index'])->name('comdev.assignments.index');
+    Route::get('/comdev/assignments/{submission}', [ComdevReviewerController::class, 'show'])->name('comdev.assignments.show');
+    Route::post('/comdev/assignments/{submission}/subchapter/{subChapter}/review', [ComdevReviewerController::class, 'storeReview'])->name('comdev.assignments.storeReview');
 
     // Route::get('/proposals', [ReviewerController::class, 'index'])->name('proposals.index');
     // Route::get('/proposals/{proposal}', [ReviewerController::class, 'show'])->name('proposals.show');

@@ -57,4 +57,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Katsinov::class, 'user_id');
     }
+    public function submissionsToReview()
+{
+    return $this->belongsToMany(ComdevSubmission::class, 'comdev_submission_reviewer', 'reviewer_id', 'comdev_submission_id');
+}
 }

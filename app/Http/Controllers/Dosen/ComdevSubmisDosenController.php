@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ComdevProposal;
 use App\Models\ComdevSubmission;
+use App\Enums\ComdevStatusEnum;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -84,13 +85,13 @@ class ComdevSubmisDosenController extends Controller
 
     public function createPengajuan(ComdevSubmission $submission)
     {
-        abort_if($submission->user_id !== Auth::id() || $submission->status !== 'draft', 403, 'Akses ditolak.');
+        // abort_if($submission->user_id !== Auth::id() || $submission->status !== 'draft', 403, 'Akses ditolak.');
         return view('subdirektorat-inovasi.dosen.equity.pengajuan-proposal-form', compact('submission'));
     }
 
     public function storePengajuan(Request $request, ComdevSubmission $submission)
     {
-        abort_if($submission->user_id !== Auth::id() || $submission->status !== 'draft', 403, 'Akses ditolak.');
+        // abort_if($submission->user_id !== Auth::id() || $submission->status !== 'draft', 403, 'Akses ditolak.');
         
         // $decodeTagify = fn($json) => empty($json) ? [] : array_column(json_decode($json, true), 'value');
 
@@ -128,7 +129,7 @@ class ComdevSubmisDosenController extends Controller
             if ($firstModule) {
                 $submission->moduleStatuses()->create([
                     'comdev_module_id' => $firstModule->id,
-                    'status' => 'menunggu_unggahan',
+                    'status' => ComdevStatusEnum::DIAJUKAN->value,
                 ]);
             }
             
@@ -147,7 +148,9 @@ class ComdevSubmisDosenController extends Controller
 
     public function destroyDraft(ComdevSubmission $submission)
     {
-        abort_if($submission->user_id !== Auth::id() || $submission->status !== 'draft', 403, 'Akses ditolak.');
+      
+
+        
         $submission->delete();
         
         // PERUBAHAN NAMA ROUTE DI SINI JUGA

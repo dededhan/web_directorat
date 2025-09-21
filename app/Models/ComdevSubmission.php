@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\ComdevStatusEnum;
 
 class ComdevSubmission extends Model
 {
@@ -12,6 +13,7 @@ class ComdevSubmission extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
+        'status' => ComdevStatusEnum::class,
         'kata_kunci' => 'array',
         'sdgs' => 'array',
         'mitra_nasional' => 'array',

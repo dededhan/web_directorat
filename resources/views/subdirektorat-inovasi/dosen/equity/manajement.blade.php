@@ -136,6 +136,7 @@
                                                     <i class='bx bxs-check-circle mr-1 text-xs'></i> Diajukan
                                                 </span>
                                             @elseif ($submission->status == 'draft')
+                                        
                                                 <span
                                                     class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border-2 border-amber-200">
                                                     <i class='bx bxs-time-five mr-1 text-xs'></i> Draft
@@ -143,7 +144,7 @@
                                             @else
                                                 <span
                                                     class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-800 border-2 border-gray-200">
-                                                    {{ ucfirst(str_replace('_', ' ', $submission->status)) }}
+                                                    {{ ucfirst(str_replace('_', ' ', $submission->status->value)) }}
                                                 </span>
                                             @endif
                                         </td>
@@ -163,7 +164,7 @@
                                                     class="origin-top-right absolute right-0 mt-2 w-56 rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 overflow-hidden border-2 border-gray-100"
                                                     style="display: none;">
                                                     <div class="py-1" role="menu" aria-orientation="vertical">
-                                                        @if ($submission->status == 'draft')
+                                                        @if ($submission->status->value == 'draft')
                                                             <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.createPengajuan', $submission->id) }}"
                                                                 class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-700 transition-colors"
                                                                 role="menuitem">
@@ -188,7 +189,7 @@
                                                                 class='bx bx-line-chart mr-3 text-lg text-purple-500'></i>Tahapan
                                                             Proposal
                                                         </a>
-                                                        @if ($submission->status == 'draft')
+                                                        @if ($submission->status->value  == 'draft')
                                                             <div class="border-t my-1 border-gray-100"></div>
                                                             <form
                                                                 action="{{ route('subdirektorat-inovasi.dosen.equity.proposal.destroyDraft', $submission->id) }}"
@@ -280,7 +281,7 @@
                                             class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
                                             <i class='bx bxs-check-circle mr-1 text-xs'></i> Diajukan
                                         </span>
-                                    @elseif ($submission->status == 'draft')
+                                    @elseif ($submission->status->value  == 'draft')
                                         <span
                                             class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200">
                                             <i class='bx bxs-time-five mr-1 text-xs'></i> Draft
@@ -288,7 +289,7 @@
                                     @else
                                         <span
                                             class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">
-                                            {{ ucfirst(str_replace('_', ' ', $submission->status)) }}
+                                            {{ ucfirst(str_replace('_', ' ', $submission->status->value)) }}
                                         </span>
                                     @endif
                                 </div>
@@ -332,7 +333,7 @@
                                     class="mt-2 w-full rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 overflow-hidden border-2 border-gray-100"
                                     style="display: none;">
                                     <div class="py-1">
-                                        @if ($submission->status == 'draft')
+                                        @if ($submission->status->value  == 'draft')
                                             <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.createPengajuan', $submission->id) }}"
                                                 class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-700 transition-colors">
                                                 <i class='bx bx-edit-alt mr-3 text-lg text-teal-600'></i> Lanjutkan
@@ -351,7 +352,7 @@
                                             class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                                             <i class='bx bx-line-chart mr-3 text-lg text-purple-500'></i>Tahapan Proposal
                                         </a>
-                                        @if ($submission->status == 'draft')
+                                        @if ($submission->status->value == 'draft')
                                             <div class="border-t my-1 border-gray-100"></div>
                                             <form
                                                 action="{{ route('subdirektorat-inovasi.dosen.equity.proposal.destroyDraft', $submission->id) }}"

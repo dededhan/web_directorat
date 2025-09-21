@@ -65,9 +65,10 @@
                                                 <i class='bx bx-edit-alt mr-2'></i> Lanjutkan Pengisian
                                             </a>
                                             @endif
-                                            <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.detail', $submission) }}" class="menu-item"><i class='bx bx-show mr-2'></i>Lihat Detail</a>
-                                            <a href="#" class="menu-item"><i class='bx bx-list-ul mr-2'></i>Logbook</a>
                                             <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.tahapan', $submission->id) }}" class="menu-item"><i class='bx bx-line-chart mr-2'></i>Tahapan Proposal</a>
+                                            <a href="#" class="menu-item"><i class='bx bx-list-ul mr-2'></i>Logbook</a>
+                                            <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.detail', $submission) }}" class="menu-item"><i class='bx bx-show mr-2'></i>Lihat Detail</a>
+                                            
                                             
                                             @if ($submission->status == 'draft')
                                             <div class="border-t my-1"></div>

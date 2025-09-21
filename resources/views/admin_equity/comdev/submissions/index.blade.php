@@ -65,8 +65,10 @@
                                         class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                                         Tanggal Diajukan</th>
                                     <th scope="col"
-                                        class="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
-                                        Status</th>
+                                        class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Status
+                                    </th>
+
                                     <th scope="col"
                                         class="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
                                         Aksi</th>
@@ -85,18 +87,15 @@
                                         <td class="px-6 py-5 text-sm text-gray-600">{{ $submission->user->name }}</td>
                                         <td class="px-6 py-5 text-sm text-gray-600">
                                             {{ $submission->updated_at->isoFormat('D MMMM YYYY, HH:mm') }}</td>
-                                        <td>
-                                            @php
-                                                // Anda perlu membuat relasi atau helper untuk ini
-                                                $activeModule = $submission->getActiveModule();
-                                            @endphp
-                                            @if ($activeModule)
-                                                <span class="font-semibold">{{ $activeModule->nama_modul }}</span>
-                                                <br>
-                                                <span
-                                                    class="text-xs text-gray-500">{{ $activeModule->status_details->status }}</span>
+                                        <td class="px-6 py-5 text-s text-center text-gray-600">
+                                            {{-- Cek apakah status submission ada --}}
+                                            @if ($submission->status)
+                                                <span class="font-semibold">
+                                                    {{ str_replace('_', ' ', Str::title($submission->status->value)) }}
+                                                </span>
                                             @else
-                                                -
+                                                {{-- Tampilkan strip jika karena suatu hal status tidak ada --}}
+                                                <span class="text-gray-400 italic">-</span>
                                             @endif
                                         </td>
                                         <td class="px-6 py-5 text-center">
@@ -133,18 +132,29 @@
                             <div class="flex items-start justify-between mb-3">
                                 <h3 class="font-semibold text-gray-900 text-sm leading-snug flex-1 mr-3">
                                     {{ $submission->judul }}</h3>
-                                @if ($submission->status == 'diajukan')
+                                @if ($submission->status->value == 'diajukan')
                                     <span
-                                        class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">Diajukan</span>
-                                @elseif($submission->status == 'sedang review')
+                                        class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                                        Diajukan
+                                    </span>
+                                @elseif($submission->status->value == 'sedang_direview')
+                                    {{-- Sesuaikan dengan value enum Anda --}}
                                     <span
-                                        class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">Review</span>
-                                @elseif($submission->status == 'lolos')
+                                        class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">
+                                        Review
+                                    </span>
+                                @elseif($submission->status->value == 'selesai')
+                                    {{-- Sesuaikan dengan value enum Anda --}}
                                     <span
-                                        class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">Lolos</span>
+                                        class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                                        Selesai
+                                    </span>
                                 @else
                                     <span
-                                        class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">{{ ucfirst($submission->status) }}</span>
+                                        class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">
+                                        {{-- Gunakan ->value di sini juga --}}
+                                        {{ str_replace('_', ' ', Str::title($submission->status->value)) }}
+                                    </span>
                                 @endif
                             </div>
                             <div class="space-y-2 text-xs text-gray-600 mb-4">

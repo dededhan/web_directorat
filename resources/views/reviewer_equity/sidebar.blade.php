@@ -49,10 +49,10 @@
                     <i x-show="open" class='bx bx-chevron-down transition-transform duration-300' :class="{'rotate-180': equityOpen}"></i>
                 </button>
                 <div x-show="equityOpen" x-collapse class="pt-1 pl-5" style="display: none;">
-                    <a href="{{ route('reviewer_equity.comdev.manajemen.index') }}"
+                    <a href="{{ route('reviewer_equity.comdev.assignments.index') }}"
                        class="flex items-center space-x-3 rounded-md p-2 text-sm transition-colors duration-200 {{ request()->routeIs('reviewer_equity.comdev.index') ? 'bg-[#0D9488] font-semibold text-white' : 'hover:bg-gray-700' }}">
                         <i class='bx bxs-folder-open text-lg'></i>
-                        <span x-show="open">Manajemen Proposal</span>
+                        <span x-show="open">Manajement Proposal</span>
                     </a>
                 </div>
             </div>
