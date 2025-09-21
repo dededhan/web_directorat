@@ -118,32 +118,35 @@
                             </ul>
 
                             {{-- Form untuk Ubah Status --}}
-                            <form
-                                action="{{ route('admin_equity.comdev.submissions.updateModuleStatus', ['submission' => $submission->id, 'module' => $module->id]) }}"
-                                method="POST" class="mt-4 space-y-3">
-                                @csrf
-                                @method('PUT')
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Ubah Status</label>
-                                    <select name="status"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
-                                        <option value="proses"
-                                            {{ $currentStatus && $currentStatus->status == 'proses' ? 'selected' : '' }}>
-                                            Proses</option>
-                                        <option value="tidaklolos"
-                                            {{ $currentStatus && $currentStatus->status == 'tidaklolos' ? 'selected' : '' }}>
-                                            Tidak Lolos</option>
-                                        <option value="lolos"
-                                            {{ $currentStatus && $currentStatus->status == 'lolos' ? 'selected' : '' }}>
-                                            Lolos</option>
-                                    </select>
-                                </div>
-                                <div class="text-right">
-                                    <button type="submit"
-                                        class="inline-flex items-center px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 text-sm font-medium">Simpan
-                                        Status</button>
-                                </div>
-                            </form>
+                               <form action="{{ route('admin_equity.comdev.submissions.updateModuleStatus', ['submission' => $submission->id, 'module' => $module->id]) }}" method="POST" class="mt-4 space-y-3" x-data="{ status: '{{ $currentStatus->status ?? 'proses' }}' }">
+                        @csrf
+                        @method('PUT')
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Ubah Status</label>
+                                <select name="status" x-model="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
+                                    <option value="proses">Proses</option>
+                                    <option value="tidaklolos">Tidak Lolos</option>
+                                    <option value="lolos">Lolos</option>
+                                </select>
+                            </div>
+                            
+                            {{-- Input Nominal yang hanya muncul jika status 'lolos' --}}
+                            <div x-show="status === 'lolos'" x-transition>
+                                <label class="block text-sm font-medium text-gray-700">Nominal Evaluasi (jika lolos)</label>
+                                <input type="number" name="nominal_evaluasi" value="{{ $currentStatus->nominal_evaluasi ?? '' }}" placeholder="Contoh: 15000000" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Catatan Admin (Opsional)</label>
+                            <textarea name="catatan_admin" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">{{ $currentStatus->catatan_admin ?? '' }}</textarea>
+                        </div>
+                        
+                        <div class="text-right">
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 text-sm font-medium">Simpan Status</button>
+                        </div>
+                    </form>
                         </div>
                     </div>
                     @endforeach
