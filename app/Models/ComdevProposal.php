@@ -22,4 +22,9 @@ class ComdevProposal extends Model
         'min_anggota',
         'max_anggota',
     ];
+    public function modules()
+    {
+        // 'comdev_proposal_id' adalah nama foreign key di tabel 'comdev_modules'
+        return $this->hasMany(ComdevModule::class, 'comdev_proposal_id');
+    }
 }

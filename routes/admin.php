@@ -38,6 +38,7 @@ use App\Http\Controllers\ComdevViewSesiController;
 use App\Http\Controllers\Dosen\ComdevSubmisDosenController;
 use App\Http\Controllers\Dosen\ComdevPropViewController;
 use App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController;
+use App\Http\Controllers\AdminEquity\ComdevModuleController;
 
 
 
@@ -522,6 +523,8 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
                 Route::get('/', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'index'])->name('index');
                 Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'show'])->name('show');
                 Route::post('/{submission}/assign-reviewer', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'assignReviewer'])->name('assignReviewer');});
+                Route::get('/comdev/{sesi}/modules', [ComdevModuleController::class, 'index'])->name('comdev.modules.index');
+                Route::post('/comdev/{sesi}/modules/store', [ComdevModuleController::class, 'storeModule'])->name('comdev.modules.storeModule');
 
                 Route::get('/apc', function () {
                     return view('admin_equity.apc.index');
