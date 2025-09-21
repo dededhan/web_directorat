@@ -54,8 +54,9 @@
                     <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4">
                         <p class="text-sm font-medium text-gray-600 md:col-span-1">Kata Kunci</p>
                         <div class="text-sm text-gray-800 md:col-span-3">
-                            @if(!empty($submission->kata_kunci))
-                                @foreach(explode(',', $submission->kata_kunci) as $keyword)
+                            {{-- I've updated this section to correctly loop through the keyword array --}}
+                            @if(!empty($submission->kata_kunci) && is_array($submission->kata_kunci))
+                                @foreach($submission->kata_kunci as $keyword)
                                     <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-md text-xs inline-block mb-1">{{ trim($keyword) }}</span>
                                 @endforeach
                             @else
@@ -67,7 +68,7 @@
                     <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4"><p class="text-sm font-medium text-gray-600 md:col-span-1">Bidang Fokus Riset Unggulan</p><p class="text-sm text-gray-800 md:col-span-3">{{ $submission->bidang_fokus ?? '-' }}</p></div>
                     <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4"><p class="text-sm font-medium text-gray-600 md:col-span-1">Bidang Fokus (RIRN)</p><p class="text-sm text-gray-800 md:col-span-3">{{ $submission->bidang_rirn ?? '-' }}</p></div>
                     <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4"><p class="text-sm font-medium text-gray-600 md:col-span-1">Tingkat Kesiapan Teknologi (TKT)</p><p class="text-sm text-gray-800 md:col-span-3">{{ $submission->tkt ?? '-' }}</p></div>
-                    <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4"><p class="text-sm font-medium text-gray-600 md:col-span-1">Tujuan SGDs</p><p class="text-sm text-gray-800 md:col-span-3">{{ $submission->sdgs ?? '-' }}</p></div>
+                    <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4"><p class="text-sm font-medium text-gray-600 md:col-span-1">Tujuan SGDs</p><p class="text-sm text-gray-800 md:col-span-3">{{-- I've fixed this line to properly display the SDGs array as a string --}}{{ is_array($submission->sdgs) ? implode(', ', $submission->sdgs) : ($submission->sdgs ?? '-') }}</p></div>
                     <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4"><p class="text-sm font-medium text-gray-600 md:col-span-1">Jangka Waktu</p><p class="text-sm text-gray-800 md:col-span-3">{{ $submission->jangka_waktu ?? '-' }} bulan</p></div>
                     <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4"><p class="text-sm font-medium text-gray-600 md:col-span-1">Nominal Usulan</p><p class="text-sm text-gray-800 md:col-span-3 font-bold">Rp {{ number_format($submission->nominal_usulan ?? 0, 0, ',', '.') }}</p></div>
                     <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4"><p class="text-sm font-medium text-gray-600 md:col-span-1">Nominal Disetujui</p><p class="text-sm text-green-600 md:col-span-3 font-bold">{{ $submission->nominal_disetujui ? 'Rp ' . number_format($submission->nominal_disetujui, 0, ',', '.') : '-' }}</p></div>
@@ -97,3 +98,4 @@
     </div>
 </div>
 @endsection
+
