@@ -527,6 +527,8 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
                 Route::get('/comdev/{sesi}/modules', [ComdevModuleController::class, 'index'])->name('comdev.modules.index');
                 Route::post('/comdev/{sesi}/modules/store', [ComdevModuleController::class, 'storeModule'])->name('comdev.modules.storeModule');
                 Route::put('/submissions/{submission}/modules/{module}/status', [ComdevSubmissionAdminController::class, 'updateModuleStatus'])->name('comdev.submissions.updateModuleStatus');
+                Route::put('/comdev/{comdev}/submissions/{submission}/status', [ComdevSubmissionAdminController::class, 'updateStatus'])
+                    ->name('comdev.submissions.updateStatus');
                 
                 Route::prefix('modules/{module}/subchapters')->name('comdev.subchapters.')->group(function () {
                 Route::post('/store', [ComdevModuleController::class, 'storeSubChapter'])->name('store');

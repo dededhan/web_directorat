@@ -60,6 +60,13 @@ class ComdevSubmissionFileController extends Controller
                 'original_filename' => $originalName,
             ]
         );
+        $moduleStatus = $submission->moduleStatuses()
+        ->where('comdev_module_id', $subChapter->comdev_module_id)
+        ->first();
+
+        if ($moduleStatus && $moduleStatus->status === 'menunggu_unggahan') {
+            $moduleStatus->update(['status' => 'menunggu_Direview']);
+        }
 
         return back()->with('success', 'Dokumen berhasil diunggah.');
     }

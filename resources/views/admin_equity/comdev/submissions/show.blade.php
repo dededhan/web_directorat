@@ -154,7 +154,7 @@
                     </div>
                 </div>
                 
-                {{-- Card Tahapan Proposal & Review --}}
+                {{-- Card Reviewer --}}
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
                     <div class="p-5 border-b bg-[#11A697] text-white">
                         <h2 class="text-xl font-semibold flex items-center">
@@ -197,22 +197,39 @@
                 {{-- Card Aksi Administrator --}}
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
                     <div class="p-5 border-b bg-[#11A697] text-white">
-                        <h2 class="text-xl font-semibold">Aksi</h2>
+                        <h2 class="text-xl font-semibold">Aksi Administrator</h2>
                     </div>
                     <div class="p-6 space-y-3">
-                        <p class="text-sm text-gray-600">Ubah status proposal ini. Status saat ini: <span class="font-bold text-[#11A697]">{{ ucfirst($submission->status) }}</span></p>
-                        <form action="#" method="POST">
-                            @csrf @method('PUT')
-                            <select name="status" class="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50">
-                                <option value="sedang review">Setujui untuk Direview</option>
-                                <option value="lolos">Loloskan Proposal</option>
-                                <option value="revisi">Minta Revisi</option>
-                                <option value="ditolak">Tolak Proposal</option>
+                        <p class="text-sm text-gray-600">Ubah status proposal. Status saat ini: <span class="font-bold text-[#11A697]">{{ str_replace('_', ' ', Str::title($submission->status)) }}</span></p>
+                        
+                        {{-- Form untuk update status manual --}}
+                        <form action="{{ route('admin_equity.comdev.submissions.updateStatus', ['comdev' => $comdev->id, 'submission' => $submission->id]) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <label for="status" class="block text-sm font-medium text-gray-700">Ubah Status Manual</label>
+                            <select name="status" id="status" class="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50">
+                                @php
+                                    $statuses = [
+                                        'diajukan' => 'Diajukan',
+                                        'sedang_direview' => 'Sedang Direview',
+                                        'menunggu_verifikasi_admin' => 'Menunggu Verifikasi Admin',
+                                        'perbaikan_diperlukan' => 'Perbaikan Diperlukan',
+                                        'proses_tahap_selanjutnya' => 'Proses Tahap Selanjutnya',
+                                        'selesai' => 'Selesai',
+                                        'ditolak' => 'Ditolak'
+                                    ];
+                                @endphp
+                                @foreach ($statuses as $value => $label)
+                                    <option value="{{ $value }}" {{ $submission->status == $value ? 'selected' : '' }}>
+                                        {{ $label }}
+                                    </option>
+                                @endforeach
                             </select>
                             <button type="submit" class="w-full mt-3 inline-flex items-center justify-center px-4 py-2 bg-[#11A697] text-white rounded-md font-semibold hover:bg-[#0e8a7c] transition">
                                 Update Status
                             </button>
                         </form>
+                        <p class="text-xs text-gray-500 mt-1">Gunakan dengan hati-hati. Perubahan manual akan mengabaikan alur otomatis.</p>
                     </div>
                 </div>
 

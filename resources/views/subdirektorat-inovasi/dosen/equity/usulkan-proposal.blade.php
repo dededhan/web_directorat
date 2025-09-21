@@ -138,13 +138,7 @@
                                                     Usulkan Baru
                                                 </a>
 
-                                                @if ($draftCount > 0 || $submittedCount > 0)
-                                                    <a href="{{ route('subdirektorat-inovasi.dosen.equity.manajement.index') }}?sesi_id={{ $sesi->id }}" 
-                                                       class="text-xs text-sky-600 hover:text-sky-800 hover:underline transition-colors duration-200">
-                                                        <i class='bx bx-file-find mr-1'></i>
-                                                        Lihat Proposal Saya ({{ $draftCount }} Draft, {{ $submittedCount }} Diajukan)
-                                                    </a>
-                                                @endif
+                                             
                                             </div>
                                         @endif
                                     </td>

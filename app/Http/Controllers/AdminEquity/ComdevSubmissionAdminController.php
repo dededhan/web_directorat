@@ -41,8 +41,14 @@ class ComdevSubmissionAdminController extends Controller
         // Sync akan menghapus yang lama dan memasukkan yang baru. Simpel dan efektif.
         $submission->reviewers()->sync($request->reviewers);
 
-        return back()->with('success', 'Reviewer berhasil diperbarui.');
+         if ($submission->status === 'diajukan') {
+        $submission->update(['status' => 'sedang_direview']);
     }
+
+    return back()->with('success', 'Reviewer berhasil diperbarui.');
+    }
+   
+   
     public function updateModuleStatus(Request $request, ComdevSubmission $submission, ComdevModule $module)
     {
         $request->validate([
@@ -62,7 +68,54 @@ class ComdevSubmissionAdminController extends Controller
                 'catatan_admin' => $request->catatan_admin,
             ]
         );
+        if ($request->status == 'lolos') {
+        // Cari modul selanjutnya
+        $nextModule = $submission->sesi->modules()
+            ->where('urutan', '>', $module->urutan)
+            ->orderBy('urutan')
+            ->first();
+
+        if ($nextModule) {
+            // Buka modul selanjutnya
+            $submission->moduleStatuses()->updateOrCreate(
+                ['comdev_module_id' => $nextModule->id],
+                ['status' => 'menunggu_unggahan']
+            );
+            $submission->update(['status' => 'proses_tahap_selanjutnya']);
+        } else {
+            // Tidak ada modul lagi, berarti Selesai
+            $submission->update(['status' => 'selesai']);
+        }
+    } elseif ($request->status == 'tidaklolos') { // atau 'revisi'
+        $submission->update(['status' => 'perbaikan_diperlukan']);
+    }
+
+    return back()->with('success', 'Status Modul berhasil diperbarui.');
 
         return back()->with('success', 'Status Modul berhasil diperbarui.');
+    }
+    public function updateStatus(Request $request, ComdevProposal $comdev, ComdevSubmission $submission)
+    {
+        // Pastikan submission ini milik sesi ($comdev) yang benar
+        abort_if($submission->comdev_proposal_id !== $comdev->id, 404);
+
+        // Daftar status yang valid untuk diubah secara manual
+        $validStatuses = [
+            'diajukan', 
+            'sedang_direview', 
+            'menunggu_verifikasi_admin', 
+            'perbaikan_diperlukan', 
+            'proses_tahap_selanjutnya', 
+            'selesai',
+            'ditolak'
+        ];
+
+        $request->validate([
+            'status' => ['required', Rule::in($validStatuses)],
+        ]);
+
+        $submission->update(['status' => $request->status]);
+
+        return back()->with('success', 'Status proposal berhasil diperbarui secara manual.');
     }
 }

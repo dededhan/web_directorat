@@ -92,7 +92,7 @@ class ComdevSubmisDosenController extends Controller
     {
         abort_if($submission->user_id !== Auth::id() || $submission->status !== 'draft', 403, 'Akses ditolak.');
         
-        $decodeTagify = fn($json) => empty($json) ? [] : array_column(json_decode($json, true), 'value');
+        // $decodeTagify = fn($json) => empty($json) ? [] : array_column(json_decode($json, true), 'value');
 
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
@@ -105,26 +105,44 @@ class ComdevSubmisDosenController extends Controller
             'mitra_internasional' => 'nullable|json',
             'nominal_usulan' => 'required|string|max:20',
         ]);
-        
-        $nominal = (int) preg_replace('/[^0-9]/', '', $validated['nominal_usulan']);
-        
-        $submission->update([
-            'judul' => $validated['judul'],
-            'tahun_usulan' => $validated['tahun_usulan'],
-            'tempat_pelaksanaan' => $validated['tempat_pelaksanaan'],
-            'abstrak' => $validated['abstrak'],
-            'nominal_usulan' => $nominal,
-            'kata_kunci' => $decodeTagify($validated['kata_kunci']),
-            'sdgs' => json_decode($validated['sdgs'], true),
-            'mitra_nasional' => $decodeTagify($validated['mitra_nasional']),
-            'mitra_internasional' => $decodeTagify($validated['mitra_internasional']),
-            'status' => 'diajukan',
-        ]);
+        DB::beginTransaction();
+        try {
+            $decodeTagify = fn($json) => empty($json) ? [] : array_column(json_decode($json, true), 'value');
+            $nominal = (int) preg_replace('/[^0-9]/', '', $validated['nominal_usulan']);
+            
+            $submission->update([
+                'judul' => $validated['judul'],
+                'tahun_usulan' => $validated['tahun_usulan'],
+                'tempat_pelaksanaan' => $validated['tempat_pelaksanaan'],
+                'abstrak' => $validated['abstrak'],
+                'nominal_usulan' => $nominal,
+                'kata_kunci' => $decodeTagify($validated['kata_kunci']),
+                'sdgs' => json_decode($validated['sdgs'], true),
+                'mitra_nasional' => $decodeTagify($validated['mitra_nasional']),
+                'mitra_internasional' => $decodeTagify($validated['mitra_internasional']),
+                'status' => 'diajukan', // Memastikan status diubah
+            ]);
 
-        // PERUBAHAN NAMA ROUTE DI SINI
-        return redirect()
-            ->route('subdirektorat-inovasi.dosen.equity.manajement.index')
-            ->with('success', 'Selamat! Proposal Anda telah berhasil diajukan.');
+            // Secara otomatis membuat status untuk modul pertama sebagai 'menunggu_unggahan'
+            $firstModule = $submission->sesi->modules()->orderBy('urutan')->first();
+            if ($firstModule) {
+                $submission->moduleStatuses()->create([
+                    'comdev_module_id' => $firstModule->id,
+                    'status' => 'menunggu_unggahan',
+                ]);
+            }
+            
+            DB::commit();
+
+            return redirect()
+                ->route('subdirektorat-inovasi.dosen.equity.manajement.index')
+                ->with('success', 'Selamat! Proposal Anda telah berhasil diajukan.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Gagal mengajukan proposal: ' . $e->getMessage()); // Log error untuk debug
+            return back()->with('error', 'Terjadi kesalahan saat mengajukan proposal. Silakan coba lagi.')->withInput();
+        }
     }
 
     public function destroyDraft(ComdevSubmission $submission)
