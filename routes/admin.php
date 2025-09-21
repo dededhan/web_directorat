@@ -527,7 +527,9 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
                 Route::post('/{submission}/assign-reviewer', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'assignReviewer'])->name('assignReviewer');});
                 Route::get('/comdev/{sesi}/modules', [ComdevModuleController::class, 'index'])->name('comdev.modules.index');
                 Route::post('/comdev/{sesi}/modules/store', [ComdevModuleController::class, 'storeModule'])->name('comdev.modules.storeModule');
+                Route::post('/comdev/{sesi}/modules/store-template', [ComdevModuleController::class, 'storeTemplate'])->name('comdev.modules.storeTemplate');
                 Route::put('/submissions/{submission}/modules/{module}/status', [ComdevSubmissionAdminController::class, 'updateModuleStatus'])->name('comdev.submissions.updateModuleStatus');
+                Route::put('/subchapters/{subChapter}', [ComdevModuleController::class, 'updateSubChapter'])->name('comdev.subchapters.update');
                 Route::put('/comdev/{comdev}/submissions/{submission}/status', [ComdevSubmissionAdminController::class, 'updateStatus'])
                     ->name('comdev.submissions.updateStatus');
                 
@@ -537,6 +539,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
 
             Route::delete('/modules/{module}', [ComdevModuleController::class, 'destroyModule'])->name('comdev.modules.destroy');
             Route::delete('/subchapters/{subChapter}', [ComdevModuleController::class, 'destroySubChapter'])->name('comdev.subchapters.destroy');
+
                 Route::get('/apc', function () {
                     return view('admin_equity.apc.index');
                 })->name('apc.index');

@@ -1,7 +1,7 @@
 @extends('admin_equity.index')
 
 @section('content')
-<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ openModuleForm: false, openSubChapterForm: null }">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ openModuleForm: false, openSubChapterForm: null, editingSubChapterId: null }">
     {{-- Header dan Breadcrumbs --}}
     <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-800">Manajemen Modul: {{ $sesi->nama_sesi }}</h1>
@@ -38,20 +38,62 @@
                 <div class="p-6">
                     <ul class="space-y-3">
                         @forelse($module->subChapters as $subChapter)
-                            <li class="p-4 bg-gray-50 border border-gray-200 rounded-lg flex justify-between items-center">
-                                <div>
-                                    <p class="font-semibold text-gray-800">{{ $subChapter->urutan }}. {{ $subChapter->nama_sub_bab }}</p>
-                                    <p class="text-xs text-gray-500 mt-1">
-                                        Periode: 
-                                        {{ $subChapter->periode_awal ? \Carbon\Carbon::parse($subChapter->periode_awal)->isoFormat('D MMM YYYY, HH:mm') : 'N/A' }} - 
-                                        {{ $subChapter->periode_akhir ? \Carbon\Carbon::parse($subChapter->periode_akhir)->isoFormat('D MMM YYYY, HH:mm') : 'N/A' }}
-                                    </p>
+                            <li class="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <p class="font-semibold text-gray-800">{{ $subChapter->urutan }}. {{ $subChapter->nama_sub_bab }}</p>
+                                        <p class="text-xs text-gray-500 mt-1">
+                                            Periode: 
+                                            {{ $subChapter->periode_awal ? \Carbon\Carbon::parse($subChapter->periode_awal)->isoFormat('D MMM YYYY, HH:mm') : 'N/A' }} - 
+                                            {{ $subChapter->periode_akhir ? \Carbon\Carbon::parse($subChapter->periode_akhir)->isoFormat('D MMM YYYY, HH:mm') : 'N/A' }}
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button @click="editingSubChapterId = {{ $subChapter->id }}" class="text-blue-500 hover:text-blue-700 transition" title="Edit Sub-Bab"><i class='bx bxs-edit text-lg'></i></button>
+                                        <form action="{{ route('admin_equity.comdev.subchapters.destroy', $subChapter->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin menghapus sub-bab ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:text-red-700 transition" title="Hapus Sub-Bab"><i class='bx bx-trash text-lg'></i></button>
+                                        </form>
+                                    </div>
                                 </div>
-                                <form action="{{ route('admin_equity.comdev.subchapters.destroy', $subChapter->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin menghapus sub-bab ini?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-500 hover:text-red-700 transition" title="Hapus Sub-Bab"><i class='bx bx-trash text-lg'></i></button>
-                                </form>
+
+                                {{-- [NEW] Edit Sub-Bab Form --}}
+                                <div x-show="editingSubChapterId === {{ $subChapter->id }}" x-cloak x-transition class="mt-4 pt-4 border-t border-gray-200">
+                                    <form action="{{ route('admin_equity.comdev.subchapters.update', $subChapter->id) }}" method="POST" class="space-y-4">
+                                        @csrf
+                                        @method('PUT')
+                                        <h4 class="font-semibold text-gray-700">Edit Sub-Bab</h4>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label for="edit_sub_urutan_{{ $subChapter->id }}" class="block text-sm font-medium text-gray-700 mb-1">Urutan</label>
+                                                <input type="number" id="edit_sub_urutan_{{ $subChapter->id }}" name="urutan" value="{{ $subChapter->urutan }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" required>
+                                            </div>
+                                            <div>
+                                                <label for="edit_sub_nama_{{ $subChapter->id }}" class="block text-sm font-medium text-gray-700 mb-1">Nama Sub-Bab</label>
+                                                <input type="text" id="edit_sub_nama_{{ $subChapter->id }}" name="nama_sub_bab" value="{{ $subChapter->nama_sub_bab }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" required>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label for="edit_sub_deskripsi_{{ $subChapter->id }}" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi/Instruksi (Opsional)</label>
+                                            <textarea id="edit_sub_deskripsi_{{ $subChapter->id }}" name="deskripsi_instruksi" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" rows="3">{{ $subChapter->deskripsi_instruksi }}</textarea>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label for="edit_sub_periode_awal_{{ $subChapter->id }}" class="block text-sm font-medium text-gray-700 mb-1">Periode Awal</label>
+                                                <input type="datetime-local" id="edit_sub_periode_awal_{{ $subChapter->id }}" name="periode_awal" value="{{ $subChapter->periode_awal ? \Carbon\Carbon::parse($subChapter->periode_awal)->format('Y-m-d\TH:i') : '' }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50">
+                                            </div>
+                                            <div>
+                                                <label for="edit_sub_periode_akhir_{{ $subChapter->id }}" class="block text-sm font-medium text-gray-700 mb-1">Periode Akhir</label>
+                                                <input type="datetime-local" id="edit_sub_periode_akhir_{{ $subChapter->id }}" name="periode_akhir" value="{{ $subChapter->periode_akhir ? \Carbon\Carbon::parse($subChapter->periode_akhir)->format('Y-m-d\TH:i') : '' }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50">
+                                            </div>
+                                        </div>
+                                        <div class="flex justify-end space-x-2 pt-2">
+                                            <button type="button" @click="editingSubChapterId = null" class="px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition">Batal</button>
+                                            <button type="submit" class="px-4 py-2 text-sm bg-[#11A697] text-white rounded-md hover:bg-[#0e8a7c] transition">Update</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </li>
                         @empty
                             <p class="text-sm text-center text-gray-500 py-4">Belum ada sub-bab untuk modul ini.</p>
@@ -106,7 +148,6 @@
                 <p class="mt-4 text-gray-600 font-semibold">Belum ada modul yang dibuat untuk sesi ini.</p>
                 <p class="text-sm text-gray-500 mt-1">Anda dapat membuat modul secara manual atau menggunakan template standar.</p>
                 
-                {{-- [NEW] Form for Template Creation Button --}}
                 <div class="mt-6">
                     <form action="{{ route('admin_equity.comdev.modules.storeTemplate', $sesi->id) }}" method="POST" onsubmit="return confirm('Ini akan membuat set modul standar. Lanjutkan?');">
                         @csrf
@@ -156,3 +197,4 @@
     </div>
 </div>
 @endsection
+
