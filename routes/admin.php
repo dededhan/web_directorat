@@ -39,6 +39,7 @@ use App\Http\Controllers\Dosen\ComdevSubmisDosenController;
 use App\Http\Controllers\Dosen\ComdevPropViewController;
 use App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController;
 use App\Http\Controllers\AdminEquity\ComdevModuleController;
+use App\Http\Controllers\Dosen\ComdevSubmissionFileController;
 
 
 
@@ -525,7 +526,14 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
                 Route::post('/{submission}/assign-reviewer', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'assignReviewer'])->name('assignReviewer');});
                 Route::get('/comdev/{sesi}/modules', [ComdevModuleController::class, 'index'])->name('comdev.modules.index');
                 Route::post('/comdev/{sesi}/modules/store', [ComdevModuleController::class, 'storeModule'])->name('comdev.modules.storeModule');
+                Route::put('/submissions/{submission}/modules/{module}/status', [ComdevSubmissionAdminController::class, 'updateModuleStatus'])->name('comdev.submissions.updateModuleStatus');
+                
+                Route::prefix('modules/{module}/subchapters')->name('comdev.subchapters.')->group(function () {
+                Route::post('/store', [ComdevModuleController::class, 'storeSubChapter'])->name('store');
+                });
 
+            Route::delete('/modules/{module}', [ComdevModuleController::class, 'destroyModule'])->name('comdev.modules.destroy');
+            Route::delete('/subchapters/{subChapter}', [ComdevModuleController::class, 'destroySubChapter'])->name('comdev.subchapters.destroy');
                 Route::get('/apc', function () {
                     return view('admin_equity.apc.index');
                 })->name('apc.index');
@@ -570,6 +578,8 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 // Equity - Proposal Management
                 Route::get('/equity/manajement', [ComdevPropViewController::class, 'index'])
                     ->name('equity.manajement.index'); 
+                
+                Route::get('/equity/proposal/{submission}/tahapan', [ComdevPropViewController::class, 'showTahapan'])->name('equity.proposal.tahapan');
 
                 Route::get('/usulkan-proposal', [ComdevViewSesiController::class, 'index'])
                     ->name('equity.usulkan-proposal.index');
@@ -577,9 +587,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                
 
              
-                 Route::get('/equity/tahapan-proposal', function () {
-                    return view('subdirektorat-inovasi.dosen.equity.tahapan-proposal');
-                })->name('equity.tahapan-proposal');
+                 
                  Route::get('/equity/logbook', function () {
                     return view('subdirektorat-inovasi.dosen.equity.logbook');
                 })->name('equity.logbook');
@@ -604,6 +612,14 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 // AKSI: Menghapus proposal yang masih berstatus draft
                 Route::delete('/equity/proposal/{submission}/destroy-draft', [ComdevSubmisDosenController::class, 'destroyDraft'])
                     ->name('equity.proposal.destroyDraft');
+                
+                    
+                // UPLOAD FILE UNGGAH
+                Route::post('/equity/proposal/{submission}/subchapter/{subChapter}/files', [ComdevSubmissionFileController::class, 'store'])->name('equity.files.store');
+                Route::get('/equity/files/{file}/download', [ComdevSubmissionFileController::class, 'download'])->name('equity.files.download');
+                Route::delete('/equity/files/{file}', [ComdevSubmissionFileController::class, 'destroy'])->name('equity.files.destroy');
+                Route::get('/equity/templates/{templateName}/download', [ComdevSubmissionFileController::class, 'downloadTemplate'])->name('equity.templates.download');
+
 
 
                 // Tabel Katsinov

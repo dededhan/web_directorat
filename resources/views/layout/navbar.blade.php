@@ -43,7 +43,7 @@
                     <li><a href="{{ route('galeri.sustainability') }}" class="block px-4 py-2 hover:bg-gray-100">Sustainability</a></li>
                 </ul>
             </li>
-            <li><a href="{{ route('document.document') }}" class="text-white hover:text-yellow-400 transition-colors">Dokumen</a></li>
+            <li><a href="{{ route('documents.public.index') }}" class="text-white hover:text-yellow-400 transition-colors">Dokumen</a></li>
             <li><a href="{{ route('equity') }}" class="text-white hover:text-yellow-400 transition-colors">Equity</a></li>
             <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400 transition-colors">SSO</a></li>
             <li><a class="login text-white bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded-full transition-colors" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
@@ -119,7 +119,7 @@
                 </ul>
             </li>
 
-            <li><a href="{{ route('document.document') }}" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2"><i class="fas fa-file-alt w-6 mr-2"></i><span>Dokumen</span></a></li>
+            <li><a href="{{ route('documents.public.index') }}" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2"><i class="fas fa-file-alt w-6 mr-2"></i><span>Dokumen</span></a></li>
             <li><a href="https://sso.unj.ac.id/login" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2"><i class="fas fa-key w-6 mr-2"></i><span>SSO</span></a></li>
             <li><a href="#" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2 login" data-bs-toggle="modal" data-bs-target="#loginModal"><i class="fas fa-sign-in-alt w-6 mr-2"></i><span>Masuk</span></a></li>
         </ul>

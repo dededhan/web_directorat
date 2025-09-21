@@ -6,6 +6,7 @@ use App\Models\ComdevProposal;      // Model Sesi
 use App\Models\ComdevSubmission;   // Model Proposal Dosen
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\ComdevModule;
 
 class ComdevSubmissionAdminController extends Controller
 {
@@ -23,6 +24,7 @@ class ComdevSubmissionAdminController extends Controller
     {
         // Pastikan submission ini milik sesi ($comdev) yang benar
         abort_if($submission->comdev_proposal_id !== $comdev->id, 404);
+        $submission->load('files');
 
         $reviewers = User::where('role', 'reviewer_equity')->get(); // Ambil semua user reviewer
         
@@ -40,5 +42,27 @@ class ComdevSubmissionAdminController extends Controller
         $submission->reviewers()->sync($request->reviewers);
 
         return back()->with('success', 'Reviewer berhasil diperbarui.');
+    }
+    public function updateModuleStatus(Request $request, ComdevSubmission $submission, ComdevModule $module)
+    {
+        $request->validate([
+            'status' => 'required|in:proses,lolos,tidaklolos',
+            'nominal_evaluasi' => 'nullable|numeric',
+            'catatan_admin' => 'nullable|string',
+        ]);
+
+        // Gunakan updateOrCreate untuk membuat atau memperbarui status
+        $submission->moduleStatuses()->updateOrCreate(
+            [
+                'comdev_module_id' => $module->id,
+            ],
+            [
+                'status' => $request->status,
+                'nominal_evaluasi' => $request->nominal_evaluasi,
+                'catatan_admin' => $request->catatan_admin,
+            ]
+        );
+
+        return back()->with('success', 'Status Modul berhasil diperbarui.');
     }
 }

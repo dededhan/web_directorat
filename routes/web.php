@@ -63,7 +63,7 @@ Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store']
 Route::get('/galeri/alumni', [AlumniController::class, 'index'])->name('alumni');
 
 // Document routes
-Route::get('/document', [DokumenController::class, 'publicIndex'])->name('document.document');
+Route::get('/document', [DokumenController::class, 'publicIndex'])->name('documents.public.index');
 Route::get('/documents/preview/{id}', [DokumenController::class, 'preview'])->name('documents.preview');
 Route::get('/documents/download/{id}', [DokumenController::class, 'download'])->name('documents.download');
 
