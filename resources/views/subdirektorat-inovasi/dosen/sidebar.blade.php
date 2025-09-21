@@ -68,7 +68,7 @@
                 <button @click="equityOpen = !equityOpen" class="flex w-full items-center justify-between space-x-3 rounded-md p-2 transition-colors duration-200 hover:bg-gray-700">
                     <div class="flex items-center space-x-3">
                         <i class='bx bxs-briefcase-alt-2 text-xl'></i>
-                        <span x-show="open" class="whitespace-nowrap">Equity</span>
+                        <span x-show="open" class="whitespace-nowrap">Community Development</span>
                     </div>
                     <i x-show="open" class='bx bx-chevron-down transition-transform duration-300' :class="{'rotate-180': equityOpen}"></i>
                 </button>
