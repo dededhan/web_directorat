@@ -8,7 +8,7 @@ use App\Models\ComdevProposal;
 use App\Models\ComdevSubmission;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Helpers\Wilayah; // Panggil Helper di sini
+
 
 class ComdevSubmisDosenController extends Controller
 {
@@ -53,19 +53,19 @@ class ComdevSubmisDosenController extends Controller
             
             $ketuaData = $request->ketua;
             $ketuaData['peran'] = 'Ketua';
-            $ketuaData['provinsi'] = Wilayah::getNamaProvinsi($ketuaData['provinsi']);
-            $ketuaData['kota_kabupaten'] = Wilayah::getNamaKota($ketuaData['kota_kabupaten']);
-            $ketuaData['kecamatan'] = Wilayah::getNamaKecamatan($ketuaData['kecamatan']);
-            $ketuaData['kelurahan'] = Wilayah::getNamaKelurahan($ketuaData['kelurahan']);
+            // $ketuaData['provinsi'] = Wilayah::getNamaProvinsi($ketuaData['provinsi']);
+            // $ketuaData['kota_kabupaten'] = Wilayah::getNamaKota($ketuaData['kota_kabupaten']);
+            // $ketuaData['kecamatan'] = Wilayah::getNamaKecamatan($ketuaData['kecamatan']);
+            // $ketuaData['kelurahan'] = Wilayah::getNamaKelurahan($ketuaData['kelurahan']);
             $submission->members()->create($ketuaData);
 
             if ($request->filled('anggota')) {
                 foreach ($request->anggota as $dataAnggota) {
                     $dataAnggota['peran'] = 'Anggota';
-                    $dataAnggota['provinsi'] = Wilayah::getNamaProvinsi($dataAnggota['provinsi']);
-                    $dataAnggota['kota_kabupaten'] = Wilayah::getNamaKota($dataAnggota['kota_kabupaten']);
-                    $dataAnggota['kecamatan'] = Wilayah::getNamaKecamatan($dataAnggota['kecamatan']);
-                    $dataAnggota['kelurahan'] = Wilayah::getNamaKelurahan($dataAnggota['kelurahan']);
+                    // $dataAnggota['provinsi'] = Wilayah::getNamaProvinsi($dataAnggota['provinsi']);
+                    // $dataAnggota['kota_kabupaten'] = Wilayah::getNamaKota($dataAnggota['kota_kabupaten']);
+                    // $dataAnggota['kecamatan'] = Wilayah::getNamaKecamatan($dataAnggota['kecamatan']);
+                    // $dataAnggota['kelurahan'] = Wilayah::getNamaKelurahan($dataAnggota['kelurahan']);
                     $submission->members()->create($dataAnggota);
                 }
             }
