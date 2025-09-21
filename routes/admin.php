@@ -40,6 +40,7 @@ use App\Http\Controllers\Dosen\ComdevPropViewController;
 use App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController;
 use App\Http\Controllers\AdminEquity\ComdevModuleController;
 use App\Http\Controllers\Dosen\ComdevSubmissionFileController;
+use App\Models\ComdevSubmission;
 
 
 
@@ -606,9 +607,28 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                  Route::get('/equity/logbook', function () {
                     return view('subdirektorat-inovasi.dosen.equity.logbook');
                 })->name('equity.logbook');
-                Route::get('/equity/detail-proposal', function () {
-                    return view('subdirektorat-inovasi.dosen.equity.detail-proposal');
-                })->name('equity.detail-proposal');
+
+
+
+                                // I've replaced the old static route with this new dynamic one.
+                Route::get('/equity/proposal/{submission}/detail', function (ComdevSubmission $submission) {
+                    // Security check: ensure the user owns this submission
+                    if ($submission->user_id !== auth()->id()) {
+                        abort(403, 'Akses Ditolak');
+                    }
+                    
+                    // FIX: Changed ->get() to ->paginate() to return a Paginator instance
+                    // that the view's layout can use to render pagination links.
+                    $submissions = ComdevSubmission::where('user_id', auth()->id())->latest()->paginate(10);
+
+                    return view('subdirektorat-inovasi.dosen.equity.detail-proposal', [
+                        'submission' => $submission,  // The specific proposal for the detail view content
+                        'submissions' => $submissions, // The paginated collection for the layout
+                    ]);
+                })->name('equity.proposal.detail');
+
+
+                
                Route::get('/equity/proposal/{sesi}/create-identitas', [ComdevSubmisDosenController::class, 'createIdentitas'])
                     ->name('equity.proposal.createIdentitas');
 
