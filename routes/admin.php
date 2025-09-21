@@ -565,6 +565,19 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
 
 });
 
+Route::prefix('reviewer_equity')->name('reviewer_equity.')->middleware(['auth', 'role:reviewer_equity'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('reviewer_equity.dashboard');
+    })->name('dashboard');
+
+    Route::get('/comdev/manajemen-proposal', function () {
+        return view('reviewer_equity.comdev.index');
+    })->name('comdev.manajemen.index');
+
+    // Route::get('/proposals', [ReviewerController::class, 'index'])->name('proposals.index');
+    // Route::get('/proposals/{proposal}', [ReviewerController::class, 'show'])->name('proposals.show');
+});
+
 Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
     ->group(function () {
         Route::prefix('dosen')->name('dosen.')
