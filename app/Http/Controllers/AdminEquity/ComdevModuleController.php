@@ -132,6 +132,21 @@ class ComdevModuleController extends Controller
         return back()->with('success', 'Sub-bab baru berhasil ditambahkan.');
     }
 
+        public function updateSubChapter(Request $request, ComdevSubChapter $subChapter)
+    {
+        $request->validate([
+            'nama_sub_bab' => 'required|string|max:255',
+            'deskripsi_instruksi' => 'nullable|string',
+            'urutan' => 'required|integer',
+            'periode_awal' => 'nullable|date',
+            'periode_akhir' => 'nullable|date|after_or_equal:periode_awal',
+        ]);
+
+        $subChapter->update($request->all());
+
+        return back()->with('success', 'Sub-bab berhasil diperbarui.');
+    }
+
     /**
      * Menghapus sub-bab.
      */
