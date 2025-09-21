@@ -50,7 +50,7 @@
                                 @elseif ($submission->status == 'draft')
                                     <span class="status-badge bg-yellow-100 text-yellow-800"><i class='bx bxs-time-five mr-1'></i> Draft</span>
                                 @else
-                                    <span class="status-badge bg-gray-100 text-gray-800">{{ ucfirst(str_replace('_', ' ', $submission->status)) }}</span>
+                                    <span class="status-badge bg-gray-100 text-gray-800">{{ ucfirst(str_replace('_', ' ', $submission->status->value)) }}</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-center align-middle">

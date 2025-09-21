@@ -172,16 +172,6 @@
                                                                 Lanjutkan Pengisian
                                                             </a>
                                                         @endif
-                                                        <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.detail', $submission) }}"
-                                                            class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                                            role="menuitem">
-                                                            <i class='bx bx-show mr-3 text-lg text-blue-500'></i>Lihat Detail
-                                                        </a>
-                                                        <a href="{{ route('subdirektorat-inovasi.dosen.equity.logbook') }}"
-                                                            class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                                            role="menuitem">
-                                                            <i class='bx bx-list-ul mr-3 text-lg text-green-300'></i>Logbook 
-                                                        </a>
                                                         <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.tahapan', $submission->id) }}"
                                                             class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                                                             role="menuitem">
@@ -189,6 +179,18 @@
                                                                 class='bx bx-line-chart mr-3 text-lg text-purple-500'></i>Tahapan
                                                             Proposal
                                                         </a>
+                                                        
+                                                         <a href="{{ route('subdirektorat-inovasi.dosen.equity.logbook', ['submission' => $submission->id]) }}" 
+                                                            class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                                            role="menuitem">
+                                                            <i class='bx bx-list-ul mr-3 text-lg text-green-300'></i>Logbook 
+                                                        </a>
+                                                        <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.detail', $submission) }}"
+                                                            class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                                            role="menuitem">
+                                                            <i class='bx bx-show mr-3 text-lg text-blue-500'></i>Lihat Detail
+                                                        </a>
+                                                        
                                                         @if ($submission->status->value  == 'draft')
                                                             <div class="border-t my-1 border-gray-100"></div>
                                                             <form

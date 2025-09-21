@@ -42,6 +42,7 @@ use App\Http\Controllers\AdminEquity\ComdevModuleController;
 use App\Http\Controllers\Dosen\ComdevSubmissionFileController;
 use App\Models\ComdevSubmission;
 use App\Http\Controllers\ReviewerEquity\ComdevReviewerController;
+use App\Http\Controllers\Dosen\ComdevLogbookController;
 
 
 
@@ -610,9 +611,12 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
              
                  
-                 Route::get('/equity/logbook', function () {
-                    return view('subdirektorat-inovasi.dosen.equity.logbook');
-                })->name('equity.logbook');
+                Route::get('/equity/logbook/{submission}', [ComdevLogbookController::class, 'index'])
+                    ->name('equity.logbook');
+
+                // Route untuk menyimpan data logbook dari form (method POST)
+                Route::post('/equity/logbook/{submission}', [ComdevLogbookController::class, 'store'])
+                    ->name('logbook.store');
 
 
 
