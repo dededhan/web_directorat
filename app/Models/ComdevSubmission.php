@@ -53,5 +53,12 @@ class ComdevSubmission extends Model
     {
         return $this->hasMany(ComdevSubmissionModuleStatus::class, 'comdev_submission_id');
     }
+    public function activeModuleStatus()
+    {
+        return $this->hasOne(ComdevSubmissionModuleStatus::class, 'comdev_submission_id')
+            ->join('comdev_modules', 'comdev_submission_module_statuses.comdev_module_id', '=', 'comdev_modules.id')
+            ->where('comdev_submission_module_statuses.status', '!=', 'lolos')
+            ->orderBy('comdev_modules.urutan', 'asc');
+    }
 
 }
