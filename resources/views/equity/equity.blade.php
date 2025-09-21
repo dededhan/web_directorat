@@ -72,8 +72,14 @@
             }
         }
 
-        .equity-page .fas,
-        .equity-page .fab {
+        .equity-page .fas:not(.navbar .fas),
+        .equity-page .fab:not(.navbar .fab) {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+            font-weight: 900 !important;
+        }
+
+        .navbar .fas,
+        .navbar .fab {
             font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
             font-weight: 900 !important;
         }
@@ -123,6 +129,15 @@
         .testimonial-compact {
             padding: 1.5rem;
         }
+
+        .navbar {
+            position: relative;
+            z-index: 9999 !important;
+        }
+
+        .desktop-dropdown-menu {
+            z-index: 10000 !important;
+        }
     </style>
 
     <script>
@@ -148,6 +163,7 @@
 </head>
 <body class="equity-page bg-white font-sans text-brand-dark antialiased">
     @include('layout.navbar')
+    
     <main class="pt-16">
         <section class="relative h-screen flex items-center justify-center text-white overflow-hidden">
             <img src="https://images.shiksha.com/mediadata/ugcDocuments/images/wordpressImages/2022_07_What-is-Equity-2.jpg" alt="Equity in Education" class="absolute z-0 w-full h-full object-cover">
@@ -477,8 +493,8 @@
                         <div class="flex items-center">
                             <img class="w-10 h-10 rounded-full mr-3" src="https://i.pravatar.cc/150?img=1" alt="Avatar of person">
                             <div>
-                                <h4 class="font-bold text-brand-dark text-sm">Prof. Dr. </h4>
-                                <p class="text-xs text-gray-500">R Negeri Jakarta</p>
+                                <h4 class="font-bold text-brand-dark text-sm">Prof. Dr.</h4>
+                                <p class="text-xs text-gray-500">Universitas Negeri Jakarta</p>
                             </div>
                         </div>
                     </div>
@@ -489,7 +505,7 @@
                             <img class="w-10 h-10 rounded-full mr-3" src="https://i.pravatar.cc/150?img=2" alt="Avatar of person">
                             <div>
                                 <h4 class="font-bold text-brand-dark text-sm">Dr. M.Si.</h4>
-                                <p class="text-xs text-gray-500">Direktur /p>
+                                <p class="text-xs text-gray-500">Direktur Program</p>
                             </div>
                         </div>
                     </div>
@@ -499,17 +515,17 @@
                         <div class="flex items-center">
                             <img class="w-10 h-10 rounded-full mr-3" src="https://i.pravatar.cc/150?img=3" alt="Avatar of person">
                             <div>
-                                <h4 class="font-bold text-brand-dark text-sm">Prof. Dr.  M.Pd.</h4>
-                                <p class="text-xs text-gray-500">Wakil /p>
+                                <h4 class="font-bold text-brand-dark text-sm">Prof. Dr. M.Pd.</h4>
+                                <p class="text-xs text-gray-500">Wakil Rektor</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-    @include('layout.footer')
-
     </main>
+    
+    @include('layout.footer')
 
     <script>
         function equityCounter() {
@@ -570,12 +586,56 @@
             // Add body class untuk styling scoped
             document.body.classList.add('has-navbar');
             
-            // Prevent any icon conflicts
-            const equityIcons = document.querySelectorAll('.equity-page .fas, .equity-page .fab');
-            equityIcons.forEach(icon => {
-                icon.style.fontFamily = '"Font Awesome 6 Free", "Font Awesome 6 Brands"';
-                icon.style.fontWeight = '900';
+            // FIXED: Only apply Font Awesome styling to page icons, not navbar icons
+            const equityPageIcons = document.querySelectorAll('.equity-page .fas:not(.navbar .fas), .equity-page .fab:not(.navbar .fab)');
+            equityPageIcons.forEach(icon => {
+                if (!icon.closest('.navbar')) {
+                    icon.style.fontFamily = '"Font Awesome 6 Free", "Font Awesome 6 Brands"';
+                    icon.style.fontWeight = '900';
+                }
             });
+            if (!window.desktopDropdownInitialized) {
+                window.desktopDropdownInitialized = true;
+                
+                const desktopDropdownToggles = document.querySelectorAll('.desktop-dropdown-toggle');
+                const desktopDropdownMenus = document.querySelectorAll('.desktop-dropdown-menu');
+
+                desktopDropdownToggles.forEach((toggle, index) => {
+                    const menu = desktopDropdownMenus[index];
+                    if (!menu) return;
+                    
+                    toggle.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        // Close other dropdowns
+                        desktopDropdownMenus.forEach((otherMenu, otherIndex) => {
+                            if (otherIndex !== index && otherMenu) {
+                                otherMenu.classList.add('hidden');
+                            }
+                        });
+                        
+                        // Toggle current dropdown
+                        menu.classList.toggle('hidden');
+                    });
+                });
+
+                document.addEventListener('click', function(e) {
+                    if (!e.target.closest('.desktop-dropdown-toggle') && !e.target.closest('.desktop-dropdown-menu')) {
+                        desktopDropdownMenus.forEach(menu => {
+                            if (menu) menu.classList.add('hidden');
+                        });
+                    }
+                });
+
+                desktopDropdownMenus.forEach(menu => {
+                    if (menu) {
+                        menu.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                        });
+                    }
+                });
+            }
         });
     </script>
 </body>
