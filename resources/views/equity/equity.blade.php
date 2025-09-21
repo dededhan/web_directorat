@@ -148,12 +148,8 @@
 <body class="equity-page bg-white font-sans text-brand-dark antialiased">
     @include('layout.navbar')
     <main class="pt-16">
-        <!-- Hero Section -->
         <section class="relative h-screen flex items-center justify-center text-white overflow-hidden">
-            <video autoplay loop muted playsinline class="absolute z-0 w-auto min-w-full min-h-full max-w-none">
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-scientists-working-in-a-dark-lab-3272-large.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+            <img src="https://images.shiksha.com/mediadata/ugcDocuments/images/wordpressImages/2022_07_What-is-Equity-2.jpg" alt="Equity in Education" class="absolute z-0 w-full h-full object-cover">
             <div class="absolute inset-0 bg-black/60 z-10"></div>
             
             <div class="relative z-20 max-w-4xl mx-auto text-center px-6" x-data="{ visible: false }" x-init="setTimeout(() => { visible = true }, 500)">

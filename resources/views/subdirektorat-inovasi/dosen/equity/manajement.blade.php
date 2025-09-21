@@ -43,176 +43,178 @@
             </div>
 
             {{-- Desktop Table View --}}
-            <div class="hidden lg:block overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
-                                <div class="flex items-center space-x-1">
-                                    <i class='bx bx-file-blank text-base text-blue-500'></i>
-                                    <span>Proposal & Skema</span>
-                                </div>
-                            </th>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
-                                <div class="flex items-center space-x-1">
-                                    <i class='bx bx-calendar text-base text-orange-500'></i>
-                                    <span>Tahun</span>
-                                </div>
-                            </th>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
-                                <div class="flex items-center space-x-1">
-                                    <i class='bx bx-money text-base text-red-500'></i>
-                                    <span>Nominal Usulan</span>
-                                </div>
-                            </th>
-                            <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
-                                <div class="flex items-center justify-center space-x-1">
-                                    <i class='bx bx-info-circle text-base text-indigo-500'></i>
-                                    <span>Status</span>
-                                </div>
-                            </th>
-                            <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
-                                <div class="flex items-center justify-center space-x-1">
-                                    <i class='bx bx-cog text-base text-teal-600'></i>
-                                    <span>Aksi</span>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse ($submissions as $submission)
-                            <tr class="hover:bg-gray-50 transition-colors duration-150">
-                                <td class="px-6 py-5">
-                                    <div class="flex items-start space-x-3">
-                                        <div class="flex-shrink-0">
-                                            <div class="w-10 h-10 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
-                                                <i class='bx bx-file-blank text-blue-500 text-xl'></i>
-                                            </div>
-                                        </div>
-                                        <div class="min-w-0 flex-1">
-                                            <p class="font-semibold text-gray-900 text-base leading-snug">
-                                                {{ $submission->judul ?? 'Belum ada judul (Draft)' }}
-                                            </p>
-                                            <p class="text-sm text-gray-500 mt-1 flex items-center">
-                                                <i class='bx bx-tag text-xs mr-1'></i>
-                                                {{ $submission->sesi->nama_sesi ?? 'Sesi tidak ditemukan' }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 text-sm text-gray-900">
-                                    <div class="flex items-center">
-                                        <i class='bx bx-time text-orange-500 mr-2'></i>
-                                        {{ $submission->tahun_usulan ?? '-' }}
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 text-sm text-gray-900">
-                                    <div class="flex items-center">
-                                        <i class='bx bx-wallet text-red-500 mr-2'></i>
-                                        @if($submission->nominal_usulan)
-                                            <span class="font-semibold">Rp {{ number_format($submission->nominal_usulan, 0, ',', '.') }}</span>
-                                        @else
-                                            <span class="text-gray-400">-</span>
-                                        @endif
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 text-center">
-                                    @if ($submission->status == 'diajukan')
-                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 border-2 border-green-200">
-                                            <i class='bx bxs-check-circle mr-1.5 text-sm'></i> Diajukan
-                                        </span>
-                                    @elseif ($submission->status == 'draft')
-                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border-2 border-amber-200">
-                                            <i class='bx bxs-time-five mr-1.5 text-sm'></i> Draft
-                                        </span>
-                                    @else
-                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800 border-2 border-gray-200">
-                                            {{ ucfirst(str_replace('_', ' ', $submission->status)) }}
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-5 text-center">
-                                    <div x-data="{ open: false }" class="relative inline-block text-left">
-                                        <button @click="open = !open" class="inline-flex items-center justify-center px-4 py-2 bg-white border-2 border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-200 shadow-sm hover:shadow-md">
-                                            <i class='bx bx-dots-horizontal-rounded text-lg'></i>
-                                        </button>
-                                        <div x-show="open"
-                                             @click.away="open = false"
-                                             x-transition:enter="transition ease-out duration-100"
-                                             x-transition:enter-start="transform opacity-0 scale-95"
-                                             x-transition:enter-end="transform opacity-100 scale-100"
-                                             x-transition:leave="transition ease-in duration-75"
-                                             x-transition:leave-start="transform opacity-100 scale-100"
-                                             x-transition:leave-end="transform opacity-0 scale-95"
-                                             class="origin-top-right absolute right-0 mt-2 w-56 rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 overflow-hidden border-2 border-gray-100"
-                                             style="display: none;">
-                                            <div class="py-1" role="menu" aria-orientation="vertical">
-                                                @if ($submission->status == 'draft')
-                                                <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.createPengajuan', $submission->id) }}" class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-700 transition-colors" role="menuitem">
-                                                    <i class='bx bx-edit-alt mr-3 text-lg text-teal-600'></i> Lanjutkan Pengisian
-                                                </a>
-                                                @endif
-                                                <a href="#" class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors" role="menuitem">
-                                                    <i class='bx bx-show mr-3 text-lg text-blue-500'></i>Lihat Detail
-                                                </a>
-                                                <a href="#" class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors" role="menuitem">
-                                                    <i class='bx bx-list-ul mr-3 text-lg text-green-500'></i>Logbook
-                                                </a>
-                                                <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.tahapan', $submission->id) }}" class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors" role="menuitem">
-                                                    <i class='bx bx-line-chart mr-3 text-lg text-purple-500'></i>Tahapan Proposal
-                                                </a>
-                                                @if ($submission->status == 'draft')
-                                                <div class="border-t my-1 border-gray-100"></div>
-                                                <form action="{{ route('subdirektorat-inovasi.dosen.equity.proposal.destroyDraft', $submission->id) }}" method="POST"
-                                                      @submit.prevent="
-                                                        Swal.fire({
-                                                            title: 'Hapus Draft?',
-                                                            text: 'Anda yakin ingin menghapus draft proposal ini? Tindakan ini tidak dapat dibatalkan.',
-                                                            icon: 'warning',
-                                                            showCancelButton: true,
-                                                            confirmButtonColor: '#dc2626',
-                                                            cancelButtonColor: '#6b7280',
-                                                            confirmButtonText: 'Ya, Hapus Saja!',
-                                                            cancelButtonText: 'Batal'
-                                                        }).then((result) => {
-                                                            if (result.isConfirmed) {
-                                                                $event.target.submit();
-                                                            }
-                                                        })
-                                                      ">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors" role="menuitem">
-                                                       <i class='bx bx-trash mr-3 text-lg'></i> Hapus Draft
-                                                    </button>
-                                                </form>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
+            <div class="hidden lg:block overflow-visible">
+                <div class="w-full overflow-visible">
+                    <table class="w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
                             <tr>
-                                <td colspan="5">
-                                    <div class="text-center py-20 px-6">
-                                        <div class="flex flex-col items-center">
-                                            <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mb-6">
-                                                <i class='bx bx-data text-4xl text-gray-400'></i>
-                                            </div>
-                                            <h3 class="font-bold text-xl text-gray-800 mb-2">Anda Belum Memiliki Proposal</h3>
-                                            <p class="text-gray-500 mb-8 max-w-md">Mulailah dengan mengajukan proposal penelitian atau pengabdian baru untuk memulai perjalanan akademik Anda.</p>
-                                            <a href="{{ route('subdirektorat-inovasi.dosen.equity.usulkan-proposal.index') }}" class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
-                                                <i class='bx bx-plus-circle mr-2 text-lg'></i>
-                                                Usulkan Proposal Baru
-                                            </a>
-                                        </div>
+                                <th scope="col" class="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-5/12">
+                                    <div class="flex items-center space-x-1">
+                                        <i class='bx bx-file-blank text-base text-blue-500'></i>
+                                        <span>Proposal & Skema</span>
                                     </div>
-                                </td>
+                                </th>
+                                <th scope="col" class="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-1/12">
+                                    <div class="flex items-center space-x-1">
+                                        <i class='bx bx-calendar text-base text-orange-500'></i>
+                                        <span>Tahun</span>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-2/12">
+                                    <div class="flex items-center space-x-1">
+                                        <i class='bx bx-money text-base text-red-500'></i>
+                                        <span>Nominal</span>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-4 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-2/12">
+                                    <div class="flex items-center justify-center space-x-1">
+                                        <i class='bx bx-info-circle text-base text-indigo-500'></i>
+                                        <span>Status</span>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-4 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-2/12">
+                                    <div class="flex items-center justify-center space-x-1">
+                                        <i class='bx bx-cog text-base text-teal-600'></i>
+                                        <span>Aksi</span>
+                                    </div>
+                                </th>
                             </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse ($submissions as $submission)
+                                <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                    <td class="px-4 py-5">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-10 h-10 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
+                                                    <i class='bx bx-file-blank text-blue-500 text-xl'></i>
+                                                </div>
+                                            </div>
+                                            <div class="min-w-0 flex-1">
+                                                <p class="font-semibold text-gray-900 text-sm lg:text-base leading-relaxed break-words">
+                                                    {{ $submission->judul ?? 'Belum ada judul (Draft)' }}
+                                                </p>
+                                                <p class="text-xs lg:text-sm text-gray-500 mt-1 flex items-center">
+                                                    <i class='bx bx-tag text-xs mr-1'></i>
+                                                    <span class="truncate">{{ $submission->sesi->nama_sesi ?? 'Sesi tidak ditemukan' }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-5 text-sm text-gray-900">
+                                        <div class="flex items-center">
+                                            <i class='bx bx-time text-orange-500 mr-2'></i>
+                                            {{ $submission->tahun_usulan ?? '-' }}
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-5 text-sm text-gray-900">
+                                        <div class="flex items-center">
+                                            <i class='bx bx-wallet text-red-500 mr-2'></i>
+                                            @if($submission->nominal_usulan)
+                                                <span class="font-semibold text-xs lg:text-sm">Rp {{ number_format($submission->nominal_usulan, 0, ',', '.') }}</span>
+                                            @else
+                                                <span class="text-gray-400">-</span>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-5 text-center">
+                                        @if ($submission->status == 'diajukan')
+                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800 border-2 border-green-200">
+                                                <i class='bx bxs-check-circle mr-1 text-xs'></i> Diajukan
+                                            </span>
+                                        @elseif ($submission->status == 'draft')
+                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border-2 border-amber-200">
+                                                <i class='bx bxs-time-five mr-1 text-xs'></i> Draft
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-800 border-2 border-gray-200">
+                                                {{ ucfirst(str_replace('_', ' ', $submission->status)) }}
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-5 text-center">
+                                        <div x-data="{ open: false }" class="relative inline-block text-left">
+                                            <button @click="open = !open" class="inline-flex items-center justify-center p-2 bg-white border-2 border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                                <i class='bx bx-dots-horizontal-rounded text-lg'></i>
+                                            </button>
+                                            <div x-show="open"
+                                                 @click.away="open = false"
+                                                 x-transition:enter="transition ease-out duration-100"
+                                                 x-transition:enter-start="transform opacity-0 scale-95"
+                                                 x-transition:enter-end="transform opacity-100 scale-100"
+                                                 x-transition:leave="transition ease-in duration-75"
+                                                 x-transition:leave-start="transform opacity-100 scale-100"
+                                                 x-transition:leave-end="transform opacity-0 scale-95"
+                                                 class="origin-top-right absolute right-0 mt-2 w-56 rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 overflow-hidden border-2 border-gray-100"
+                                                 style="display: none;">
+                                                <div class="py-1" role="menu" aria-orientation="vertical">
+                                                    @if ($submission->status == 'draft')
+                                                    <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.createPengajuan', $submission->id) }}" class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-700 transition-colors" role="menuitem">
+                                                        <i class='bx bx-edit-alt mr-3 text-lg text-teal-600'></i> Lanjutkan Pengisian
+                                                    </a>
+                                                    @endif
+                                                    <a href="#" class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors" role="menuitem">
+                                                        <i class='bx bx-show mr-3 text-lg text-blue-500'></i>Lihat Detail
+                                                    </a>
+                                                    <a href="#" class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors" role="menuitem">
+                                                        <i class='bx bx-list-ul mr-3 text-lg text-green-500'></i>Logbook
+                                                    </a>
+                                                    <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.tahapan', $submission->id) }}" class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors" role="menuitem">
+                                                        <i class='bx bx-line-chart mr-3 text-lg text-purple-500'></i>Tahapan Proposal
+                                                    </a>
+                                                    @if ($submission->status == 'draft')
+                                                    <div class="border-t my-1 border-gray-100"></div>
+                                                    <form action="{{ route('subdirektorat-inovasi.dosen.equity.proposal.destroyDraft', $submission->id) }}" method="POST"
+                                                          @submit.prevent="
+                                                            Swal.fire({
+                                                                title: 'Hapus Draft?',
+                                                                text: 'Anda yakin ingin menghapus draft proposal ini? Tindakan ini tidak dapat dibatalkan.',
+                                                                icon: 'warning',
+                                                                showCancelButton: true,
+                                                                confirmButtonColor: '#dc2626',
+                                                                cancelButtonColor: '#6b7280',
+                                                                confirmButtonText: 'Ya, Hapus Saja!',
+                                                                cancelButtonText: 'Batal'
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    $event.target.submit();
+                                                                }
+                                                            })
+                                                          ">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors" role="menuitem">
+                                                           <i class='bx bx-trash mr-3 text-lg'></i> Hapus Draft
+                                                        </button>
+                                                    </form>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="text-center py-20 px-6">
+                                            <div class="flex flex-col items-center">
+                                                <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mb-6">
+                                                    <i class='bx bx-data text-4xl text-gray-400'></i>
+                                                </div>
+                                                <h3 class="font-bold text-xl text-gray-800 mb-2">Anda Belum Memiliki Proposal</h3>
+                                                <p class="text-gray-500 mb-8 max-w-md">Mulailah dengan mengajukan proposal penelitian atau pengabdian baru untuk memulai perjalanan akademik Anda.</p>
+                                                <a href="{{ route('subdirektorat-inovasi.dosen.equity.usulkan-proposal.index') }}" class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
+                                                    <i class='bx bx-plus-circle mr-2 text-lg'></i>
+                                                    Usulkan Proposal Baru
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {{-- Mobile Card View --}}
@@ -263,7 +265,7 @@
                             </div>
                             <div>
                                 <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nominal</span>
-                                <p class="text-gray-900 font-medium flex items-center">
+                                <p class="text-gray-900 font-medium flex items-center text-xs">
                                     <i class='bx bx-wallet text-red-500 text-xs mr-1'></i>
                                     @if($submission->nominal_usulan)
                                         Rp {{ number_format($submission->nominal_usulan, 0, ',', '.') }}
@@ -379,6 +381,39 @@
     
     .bg-white:hover {
         box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
+    }
+
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Prevent horizontal scroll and ensure proper text wrapping */
+    .w-full {
+        width: 100%;
+    }
+    
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .break-words {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+
+    /* Fix dropdown overflow issues */
+    .bg-white.rounded-2xl {
+        overflow: visible;
+    }
+
+    /* Ensure dropdown appears above other elements */
+    [x-show="open"] {
+        z-index: 9999 !important;
     }
     
     @media (max-width: 640px) {
