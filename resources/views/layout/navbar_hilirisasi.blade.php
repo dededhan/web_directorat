@@ -150,7 +150,7 @@
                 </ul>
             </li>
 
-            <li><a href="{{ route('document.document') }}" class="text-white hover:text-yellow-400">Dokumen</a></li>
+            <li><a href="{{ route('documents.public.index') }}" class="text-white hover:text-yellow-400">Dokumen</a></li>
 
             <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400">SSO</a></li>
             <li><a class="login text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
@@ -323,7 +323,7 @@
             </li>
             
             <li>
-                <a href="{{ route('document.document') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                <a href="{{ route('documents.public.index') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
                     Dokumen
                 </a>
             </li>

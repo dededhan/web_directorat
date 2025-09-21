@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{ asset('home.css') }}">
     @vite([
         'resources/css/fitur/international-student-mobility.css',
-        'resources/js/fitur/international-student-mobility.js' {{-- Path disesuaikan untuk Vite dan typo diperbaiki --}}
+        'resources/js/fitur/international-student-mobility.js'
     ])
 </head>
 <body>

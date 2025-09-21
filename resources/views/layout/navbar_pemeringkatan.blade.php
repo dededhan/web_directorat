@@ -133,7 +133,7 @@
             </li>
 
             <li><a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="text-white hover:text-yellow-400">Ranking UNJ</a></li>
-            <li><a href="{{ route('document.document') }}" class="text-white hover:text-yellow-400">Dokumen</a></li>
+            <li><a href="{{ route('documents.public.index') }}" class="text-white hover:text-yellow-400">Dokumen</a></li>
             <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400">SSO</a></li>
             <li><a class="login text-white cursor-pointer" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
         </ul>
@@ -205,7 +205,7 @@
             </li>
             
             <li><a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Ranking UNJ</a></li>
-            <li><a href="{{ route('document.document') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Dokumen</a></li>
+            <li><a href="{{ route('documents.public.index') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Dokumen</a></li>
             <li><a href="https://sso.unj.ac.id/login" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">SSO</a></li>
 
             <li class="px-6 my-4">

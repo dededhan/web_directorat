@@ -10,8 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     @vite([
-        'resources/css/fitur/kegiatansustainability.css'
-        'resources/js/fitur/kegiatansustainability.js' {{-- Path disesuaikan untuk Vite dan typo diperbaiki --}}
+        'resources/css/fitur/kegiatansustainability.css',
+        'resources/js/fitur/kegiatansustainability.js'
     ])
 </head>
 <body>

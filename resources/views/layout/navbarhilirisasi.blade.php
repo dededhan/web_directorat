@@ -154,7 +154,7 @@
             </li>
             
             <li class="relative group">
-                <a href="{{ route('document.document') }}" class="text-white hover:text-yellow-400">Dokumen</a>
+                <a href="{{ route('documents.public.index') }}" class="text-white hover:text-yellow-400">Dokumen</a>
             </li>
             
             <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400">SSO</a></li>
@@ -240,7 +240,7 @@
                 </ul>
             </li>
             
-            <li><a href="{{ route('document.document') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Dokumen</a></li>
+            <li><a href="{{ route('documents.public.index') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Dokumen</a></li>
             <li><a href="https://sso.unj.ac.id/login" target="_blank" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">SSO</a></li>
 
             <li class="px-6 my-4">
