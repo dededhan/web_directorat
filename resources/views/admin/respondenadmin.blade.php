@@ -124,7 +124,7 @@
                         <label class="form-label">Tipe Responden</label>
                         <select class="form-select" id="respondent-type" name="responden_category" style="width: auto;">
                             <option value="academic">Academic</option>
-                            <option value="employee">Employee</option>
+                            <option value="employer">Employee</option>
                         </select>
                         <div class="form-text text-muted">Pilih kategori responden: Academic (dari institusi pendidikan)
                             atau Employee (dari dunia kerja/industri)</div>
@@ -153,7 +153,7 @@
                                         <option value="">Semua Kategori</option>
                                         <option value="academic" {{ request('kategori') == 'academic' ? 'selected' : '' }}>
                                             Academic</option>
-                                        <option value="employee" {{ in_array(request('kategori'), ['employer', 'employee']) ? 'selected' : '' }}>
+                                        <option value="employer" {{ in_array(request('kategori'), ['employer', 'employee']) ? 'selected' : '' }}>
                                             Employee</option>
                                     </select>
                                 </div>
@@ -451,7 +451,7 @@
                                 <label for="edit_category" class="form-label">Tipe Responden</label>
                                 <select class="form-select" name="category" id="edit_category" required>
                                     <option value="academic">Academic</option>
-                                    <option value="employee">Employee</option>
+                                    <option value="employer">Employee</option>
                                 </select>
                             </div>
                         </div>
@@ -518,7 +518,7 @@
                         <select class="form-select" id="exportFilterCategory">
                             <option value="">Semua Kategori</option>
                             <option value="academic">Academic</option>
-                            <option value="employee">Employee</option>
+                            <option value="employer">Employee</option>
                         </select>
                     </div>
                     {{-- Filter Fakultas --}}
@@ -594,8 +594,8 @@
                 const academic = ['academic', 'researcher', 'reseracher'];
                 const employee = ['employer', 'employeer', 'industri', 'employee'];
                 if (academic.some(k => v.includes(k))) return 'academic';
-                if (employee.some(k => v.includes(k))) return 'employee';
-                return 'employee';
+                if (employee.some(k => v.includes(k))) return 'employer';
+                return 'employer';
             }
 
             function displayCategory(raw) {

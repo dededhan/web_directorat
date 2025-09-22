@@ -14,9 +14,6 @@ use App\Exports\RespondenAnswerExport;
 
 class RespondenAnswerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $user = Auth::user();
@@ -24,7 +21,6 @@ class RespondenAnswerController extends Controller
         
         $query = RespondenAnswer::query()->with(['responden.user'])->latest();
         
-
         //filter gimmick
         if ($userRole === 'prodi') {
             $query->whereHas('responden.user', function ($q) use ($user) {
@@ -40,8 +36,6 @@ class RespondenAnswerController extends Controller
                   });
             });
         }
-
-        // Apply search filters
         if ($request->filled('q')) {
             $search = trim($request->get('q'));
             $query->where(function ($q) use ($search) {
@@ -58,7 +52,6 @@ class RespondenAnswerController extends Controller
         if ($request->filled('category')) {
             $category = $request->get('category');
             if ($category === 'employee' || $category === 'employer') {
-                // NORMALIZE
                 $query->whereIn('category', ['employee', 'employer']);
             } else {
                 $query->where('category', $category);
@@ -103,9 +96,7 @@ class RespondenAnswerController extends Controller
         return redirect('/')->with('error', 'Anda tidak memiliki akses.');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create(Request $request)
     {
         if (!$request->has('token')) {
@@ -114,9 +105,16 @@ class RespondenAnswerController extends Controller
 
         $responden = Responden::where('token', $request->token)->first();
 
-        if (!$responden || $responden->status === 'clear') {
-            abort(404, 'Tautan tidak valid atau Anda sudah mengisi survei ini.');
+        if (!$responden) {
+            abort(404, 'Tautan tidak valid atau kedaluwarsa.');
         }
+        
+        $existingAnswer = RespondenAnswer::where('responden_id', $responden->id)->exists();
+
+        if ($existingAnswer || $responden->status === 'clear') {
+            return redirect()->route('survey.already_submitted');
+        }
+
         $view = $responden->category === 'academic' ? 'qsrangking.qs_academic' : 'qsrangking.qs_employee';
         $countries = Countries::getList('en', 'php');
 
@@ -132,11 +130,15 @@ class RespondenAnswerController extends Controller
     {
         $validatedData = $request->validated();
         $responden = Responden::where('token', $validatedData['token'])->firstOrFail();
-        //TYPO KUDU DI BENERIN
+        
+        if (RespondenAnswer::where('responden_id', $responden->id)->exists()) {
+            return redirect()->route('survey.already_submitted');
+        }
+
         $normalizedCategory = $responden->category === 'employer' ? 'employee' : $responden->category;
 
         RespondenAnswer::create([
-            'responden_id' => $responden->id, //matching data plz
+            'responden_id' => $responden->id,
             'title' => $validatedData['answer_title'],
             'first_name' => $validatedData['answer_firstname'],
             'last_name' => $validatedData['answer_lastname'],
@@ -151,31 +153,27 @@ class RespondenAnswerController extends Controller
             'category' => $normalizedCategory,
         ]);
 
-        $responden->update(['status' => 'clear']);
+        //ini update token biar kgk keliatan
+        $responden->update([
+            'status' => 'clear',
+            'token' => null
+        ]);
+        
         return redirect(route('survey.thankyou'));
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(RespondenAnswer $respondenAnswer)
     {
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(RespondenAnswer $qsresponden)
     {
         return view('admin.qsresponden.edit', ['responden' => $qsresponden]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, RespondenAnswer $qsresponden)
     {
-        // Validasi data dari form edit
+
         $validatedData = $request->validate([
             'title' => 'required|string|max:20',
             'first_name' => 'required|string|max:255',
@@ -196,9 +194,6 @@ class RespondenAnswerController extends Controller
         return redirect()->route('admin.qsresponden.index')->with('success', 'Data responden berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(RespondenAnswer $qsresponden)
     {
         try {
@@ -209,9 +204,6 @@ class RespondenAnswerController extends Controller
         }
     }
 
-    /**
-     * Export filtered data.
-     */
     public function export(Request $request)
     {
         $filters = $request->only(['q', 'category', 'country', 'survey_2023', 'survey_2024', 'job_title', 'start_date', 'end_date']);

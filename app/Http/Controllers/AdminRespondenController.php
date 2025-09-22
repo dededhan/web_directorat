@@ -438,9 +438,16 @@ class AdminRespondenController extends Controller
                     ->orWhere('nama_dosen_pengusul', 'like', "%{$searchTerm}%");
             });
         }
+        
         if ($request->filled('kategori')) {
-            $query->where('category', $request->kategori);
+            $category = $request->kategori;
+            if ($category === 'employer' || $category === 'employee') {
+                $query->whereIn('category', ['employee', 'employer', 'employeer', 'industri']);
+            } else {
+                $query->where('category', $category);
+            }
         }
+
         if (in_array($role, ['admin_direktorat', 'admin_pemeringkatan']) && $request->filled('fakultas')) {
             $query->where('fakultas', $request->fakultas);
         }
@@ -873,8 +880,6 @@ class AdminRespondenController extends Controller
                 }
             }
 
-
-
             $respondens = $query->select([
                 'id',
                 'fullname',
@@ -902,4 +907,3 @@ class AdminRespondenController extends Controller
         }
     }
 }
-

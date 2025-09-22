@@ -27,6 +27,7 @@ use App\Http\Controllers\Auth\SulitestLoginController;
 use App\Http\Controllers\RisetUnjController;
 use App\Http\Controllers\MitraKolaborasiController;
 
+
 Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
 
 Route::get('/kebijakan-privasi', function () {
@@ -55,6 +56,14 @@ Route::prefix('qsranking')->group(function () {
     Route::post('/qs-employee', [RespondenAnswerController::class, 'store'])->name('qs-employee.store')->middleware(HandleRespondenForm::class);
     Route::get('/qs-academic', [RespondenAnswerController::class, 'create'])->name('qs-academic.index')->middleware(HandleRespondenForm::class);
     Route::post('/qs-academic', [RespondenAnswerController::class, 'store'])->name('qs-academic.store')->middleware(HandleRespondenForm::class);
+
+    Route::get('/thank-you', function () {
+        return view('qsrangking.thank_you');
+    })->name('survey.thankyou');
+
+    Route::get('/already-submitted', function () {
+        return view('qsrangking.already_submitted');
+    })->name('survey.already_submitted');
 });
 
 //Alumni
@@ -189,11 +198,8 @@ Route::get('/survey/thank-you', function () {
 
 
 
-
-
-
 require __DIR__ . '/api.php';
 require __DIR__ . '/admin.php';
 require __DIR__ . '/pemeringkatan.php';
-require __DIR__ . '/equity.php';
+// require __DIR__ . '/equity.php';
 
