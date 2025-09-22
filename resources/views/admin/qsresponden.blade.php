@@ -177,27 +177,31 @@
                             <tr>
                              <td>
                                     @php
-    
-                                        $displayText = 'Unknown';
-                                        if ($responden->responden && $responden->responden->user) {
-                                            $user = $responden->responden->user;
-                                            $role = $user->role;
-                                            $name = $user->name;
+                                        $displayText = 'Unknown (No responden relation)'; 
+                                        
+                                        if ($responden->responden) {
+                                            if ($responden->responden->user) {
+                                                $user = $responden->responden->user;
+                                                $role = $user->role;
+                                                $name = $user->name;
 
-                                            if ($role === 'admin_direktorat') {
-                                                $displayText = 'Direktorat';
-                                            } elseif ($role === 'fakultas') {
-                                                $displayText = 'Fakultas (' . strtoupper($name) . ')';
-                                            } elseif ($role === 'prodi') {
-                                                if (Str::contains($name, '-')) {
-                                                    $prodiName = trim(Str::after($name, '-'));
-                                                    $fakultasName = trim(Str::before($name, '-'));
-                                                    $displayText = 'Prodi (' . strtoupper($fakultasName) . ' - ' . ucwords(strtolower($prodiName)) . ')';
+                                                if ($role === 'admin_direktorat') {
+                                                    $displayText = 'Direktorat';
+                                                } elseif ($role === 'fakultas') {
+                                                    $displayText = 'Fakultas (' . strtoupper($name) . ')';
+                                                } elseif ($role === 'prodi') {
+                                                    if (Str::contains($name, '-')) {
+                                                        $prodiName = trim(Str::after($name, '-'));
+                                                        $fakultasName = trim(Str::before($name, '-'));
+                                                        $displayText = 'Prodi (' . strtoupper($fakultasName) . ' - ' . ucwords(strtolower($prodiName)) . ')';
+                                                    } else {
+                                                        $displayText = 'Prodi (' . ucwords(strtolower($name)) . ')';
+                                                    }
                                                 } else {
-                                                    $displayText = 'Prodi (' . ucwords(strtolower($name)) . ')';
+                                                    $displayText = ucfirst($role) . ($name ? ' (' . $name . ')' : '');
                                                 }
                                             } else {
-                                                $displayText = ucfirst($role) . ($name ? ' (' . $name . ')' : '');
+                                                $displayText = 'Unknown (User Missing)';
                                             }
                                         }
                                     @endphp
