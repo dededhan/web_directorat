@@ -5,35 +5,37 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Models\Responden;
+use App\Models\RespondenAnswer;
 
 class HandleRespondenForm
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
+
     public function handle(Request $request, Closure $next): Response
     {
-        $url = explode('/', $request->uri()->path())[1];
-        // dd($url, $request->uri()->path());
-        $request->method();
-        switch($url){
-            case 'qs-employee':
-                $request->attributes->add([
-                    'category' => 'employee',
-                    'view' => 'qsrangking.qs_employee',
-                ]);
-                redirect(route('qs-employee.index'));
-                break;
-            case 'qs-academic':
-                $request->attributes->add([
-                    'category' => 'academic',
-                    'view' => 'qsrangking.qs_academic',
-                ]);
-                redirect(route('qs-academic.index'));
-                break;
-            }
+        if (!$request->has('token')) {
+            abort(404, 'Tautan tidak valid atau kedaluwarsa.');
+        }
+
+        $token = $request->get('token');
+        $responden = Responden::where('token', $token)->first();
+
+        if (!$responden) {
+            return redirect()->route('survey.already_submitted');
+        }
+
+        $existingAnswer = RespondenAnswer::where('responden_id', $responden->id)->exists();
+        if ($existingAnswer || $responden->status === 'clear') {
+            return redirect()->route('survey.already_submitted');
+        }
+        $view = $responden->category === 'academic' ? 'qsrangking.qs_academic' : 'qsrangking.qs_employee';
+        
+        $request->attributes->add([
+            'category' => $responden->category,
+            'view' => $view,
+            'responden' => $responden,
+        ]);
+
         return $next($request);
     }
 }

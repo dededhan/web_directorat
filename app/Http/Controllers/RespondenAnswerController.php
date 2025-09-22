@@ -18,9 +18,9 @@ class RespondenAnswerController extends Controller
     {
         $user = Auth::user();
         $userRole = $user->role;
-        
+
         $query = RespondenAnswer::query()->with(['responden.user'])->latest();
-        
+
         //filter gimmick
         if ($userRole === 'prodi') {
             $query->whereHas('responden.user', function ($q) use ($user) {
@@ -29,11 +29,11 @@ class RespondenAnswerController extends Controller
         } elseif ($userRole === 'fakultas') {
             $facultyCode = strtolower($user->name);
             $query->whereHas('responden.user', function ($q) use ($user, $facultyCode) {
-                $q->where('id', $user->id) 
-                  ->orWhere(function ($subQ) use ($facultyCode) {
-                      $subQ->where('role', 'prodi')
-                           ->where('name', 'like', $facultyCode . '-%');
-                  });
+                $q->where('id', $user->id)
+                    ->orWhere(function ($subQ) use ($facultyCode) {
+                        $subQ->where('role', 'prodi')
+                            ->where('name', 'like', $facultyCode . '-%');
+                    });
             });
         }
         if ($request->filled('q')) {
@@ -96,30 +96,21 @@ class RespondenAnswerController extends Controller
         return redirect('/')->with('error', 'Anda tidak memiliki akses.');
     }
 
-
     public function create(Request $request)
     {
-        if (!$request->has('token')) {
-            abort(404, 'Tautan tidak valid atau kedaluwarsa.');
-        }
-
-        $responden = Responden::where('token', $request->token)->first();
+        //dibikin simple pake middleware gan
+        $responden = $request->attributes->get('responden');
+        $view = $request->attributes->get('view');
+        $category = $request->attributes->get('category');
 
         if (!$responden) {
-            abort(404, 'Tautan tidak valid atau kedaluwarsa.');
-        }
-        
-        $existingAnswer = RespondenAnswer::where('responden_id', $responden->id)->exists();
-
-        if ($existingAnswer || $responden->status === 'clear') {
             return redirect()->route('survey.already_submitted');
         }
 
-        $view = $responden->category === 'academic' ? 'qsrangking.qs_academic' : 'qsrangking.qs_employee';
         $countries = Countries::getList('en', 'php');
 
         return view($view, [
-            'category' => $responden->category,
+            'category' => $category,
             'countries' => $countries,
             'token' => $responden->token,
             'email' => $responden->email,
@@ -130,8 +121,8 @@ class RespondenAnswerController extends Controller
     {
         $validatedData = $request->validated();
         $responden = Responden::where('token', $validatedData['token'])->firstOrFail();
-        
-        if (RespondenAnswer::where('responden_id', $responden->id)->exists()) {
+
+        if (RespondenAnswer::where('responden_id', $responden->id)->exists() || $responden->status === 'clear') {
             return redirect()->route('survey.already_submitted');
         }
 
@@ -153,18 +144,15 @@ class RespondenAnswerController extends Controller
             'category' => $normalizedCategory,
         ]);
 
-        //ini update token biar kgk keliatan
         $responden->update([
             'status' => 'clear',
             'token' => null
         ]);
-        
+
         return redirect(route('survey.thankyou'));
     }
 
-    public function show(RespondenAnswer $respondenAnswer)
-    {
-    }
+    public function show(RespondenAnswer $respondenAnswer) {}
 
     public function edit(RespondenAnswer $qsresponden)
     {
@@ -212,4 +200,3 @@ class RespondenAnswerController extends Controller
         return Excel::download($export, $fileName);
     }
 }
-

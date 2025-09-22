@@ -66,6 +66,26 @@ Route::prefix('qsranking')->group(function () {
     })->name('survey.already_submitted');
 });
 
+
+
+Route::prefix('qsranking')->group(function () {
+    Route::get('/qs-general', [QuesionerGeneralController::class, 'create'])->name('qs_general.index');
+    Route::post('/qs-general', [QuesionerGeneralController::class, 'store'])->name('qs_general.store');
+    Route::get('/qs-employee', [RespondenAnswerController::class, 'create'])->name('qs-employee.index')->middleware(HandleRespondenForm::class);
+    Route::post('/qs-employee', [RespondenAnswerController::class, 'store'])->name('qs-employee.store')->middleware(HandleRespondenForm::class);
+    Route::get('/qs-academic', [RespondenAnswerController::class, 'create'])->name('qs-academic.index')->middleware(HandleRespondenForm::class);
+    Route::post('/qs-academic', [RespondenAnswerController::class, 'store'])->name('qs-academic.store')->middleware(HandleRespondenForm::class);
+
+    Route::get('/thank-you', function () {
+        return view('qsrangking.thank_you');
+    })->name('survey.thankyou');
+
+    Route::get('/already-submitted', function () {
+        return view('qsrangking.already_submitted');
+    })->name('survey.already_submitted');
+});
+
+
 //Alumni
 Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
 Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
@@ -166,9 +186,6 @@ Route::get('/ranking_unj', [RankingController::class, 'showAllRankings'])->name(
 Route::get('/ranking_unj/{slug}', [RankingController::class, 'show'])->name('ranking.show');
 
 // Pemeringkatan Routes
-// FIX: Restored original inconsistent route prefixes ('/Pemeringkatans' and '/Pemeringkatan') to prevent "404 Not Found" errors.
-// A future refactor to a single, lowercase prefix (e.g., 'pemeringkatan') is recommended for consistency.
-
 Route::get('/tupoksipemeringkatan', function () {
     return view('Pemeringkatan.tupoksipemeringkatan.tupoksi');
 })->name('tupoksipemeringkatan');
