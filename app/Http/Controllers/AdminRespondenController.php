@@ -442,14 +442,32 @@ class AdminRespondenController extends Controller
         if ($request->filled('kategori')) {
             $category = $request->kategori;
             if ($category === 'employer' || $category === 'employee') {
-                $query->whereIn('category', ['employee', 'employer', 'employeer', 'industri']);
+                $query->whereIn(DB::raw('LOWER(category)'), ['employee', 'employer', 'employeer', 'industri']);
             } else {
                 $query->where('category', $category);
             }
         }
 
+
+        //nambah normalize, gk tau dah orang ngapa nulis TEKNIK
         if (in_array($role, ['admin_direktorat', 'admin_pemeringkatan']) && $request->filled('fakultas')) {
-            $query->where('fakultas', $request->fakultas);
+            $selectedFakultas = strtolower($request->fakultas);
+            
+            $normalizationMap = [
+                'teknik' => 'ft',
+                'fpbs' => 'fbs',
+                'fkip' => 'fip',
+                'fis' => 'fish',
+                'fe' => 'feb',
+                'fppsi' => 'fpsi'
+            ];
+    
+
+            $aliases = array_keys($normalizationMap, $selectedFakultas);
+            
+            $searchTerms = array_merge($aliases, [$selectedFakultas]);
+    
+            $query->whereIn(DB::raw('LOWER(fakultas)'), array_unique($searchTerms));
         }
 
         if ($request->filled('filter_date')) {

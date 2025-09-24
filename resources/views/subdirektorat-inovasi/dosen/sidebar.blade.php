@@ -2,7 +2,8 @@
         open: true,
         mobileOpen: false,
         inovasiOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.tablekatsinov') || request()->routeIs('subdirektorat-inovasi.dosen.form') ? 'true' : 'false' }},
-        equityOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.equity.*') ? 'true' : 'false' }}
+        equityOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.equity.*') ? 'true' : 'false' }},
+        pengaturanOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.manageprofile.*') ? 'true' : 'false' }}
      }"
      @window.toggle-sidebar.document="mobileOpen = !mobileOpen">
 
@@ -37,6 +38,16 @@
                    class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('subdirektorat-inovasi.dosen.dashboard') ? 'bg-[#0D9488] font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}">
                     <i class='bx bxs-dashboard text-2xl'></i>
                     <span x-show="open" class="font-medium">Dashboard</span>
+                </a>
+            </div>
+            
+            {{-- NEW SECTION FOR PROFILE MANAGEMENT --}}
+            <div class="pt-3">
+                <h3 x-show="open" class="px-3 pb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Pengaturan Akun</h3>
+                 <a href="{{ route('subdirektorat-inovasi.dosen.manageprofile.edit') }}"
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('subdirektorat-inovasi.dosen.manageprofile.edit') ? 'bg-[#0D9488] font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}">
+                    <i class='bx bxs-user-circle text-2xl'></i>
+                    <span x-show="open" class="font-medium">Manajemen Profil</span>
                 </a>
             </div>
 

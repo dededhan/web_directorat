@@ -111,208 +111,70 @@
                     </div>
                 </div>
 
-                <!-- 2. APC Dropdown -->
-                <div x-data="{ dropdownOpen: {{ request()->routeIs('admin_equity.apc.*') ? 'true' : 'false' }} }">
-                    <button @click="dropdownOpen = !dropdownOpen" 
-                            class="flex w-full items-center justify-between space-x-3 rounded-xl p-3 transition-all duration-200 hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20 group">
-                        <div class="flex items-center space-x-3">
-                            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-600 group-hover:bg-gray-500 transition-colors duration-200">
-                                <i class='bx bxs-file-doc text-lg text-gray-300'></i>
-                            </div>
-                            <span x-show="open" class="whitespace-nowrap font-medium">Article Processing Cost</span>
-                        </div>
-                        <div x-show="open" class="flex items-center justify-center w-6">
-                            <i class='bx bx-chevron-down text-lg transition-transform duration-300' :class="{'rotate-180': dropdownOpen}"></i>
-                        </div>
-                    </button>
-                    <div x-show="dropdownOpen" x-collapse class="pt-2 space-y-1">
-                        <a href="{{ route('admin_equity.apc.index') }}" 
-                           class="flex items-center space-x-3 rounded-lg p-2 ml-4 text-sm transition-all duration-200 {{ request()->routeIs('admin_equity.apc.index') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700' }}">
-                            <div class="flex h-6 w-6 items-center justify-center rounded {{ request()->routeIs('admin_equity.apc.index') ? 'bg-white/20' : 'bg-gray-600' }}">
-                                <i class='bx bx-list-ul text-sm {{ request()->routeIs('admin_equity.apc.index') ? 'text-white' : 'text-gray-300' }}'></i>
-                            </div>
-                            <span x-show="open">Daftar</span>
-                        </a>
-                        <a href="#" 
-                           class="flex items-center space-x-3 rounded-lg p-2 ml-4 text-sm transition-all duration-200 hover:bg-gray-700">
-                            <div class="flex h-6 w-6 items-center justify-center rounded bg-gray-600">
-                                <i class='bx bxs-file-plus text-sm text-gray-300'></i>
-                            </div>
-                            <span x-show="open">Tambah Baru</span>
-                        </a>
+                <!-- 2. APC -->
+                <a href="{{ route('admin_equity.apc.index') }}"
+                   class="flex items-center space-x-3 rounded-xl p-3 transition-all duration-200 group {{ request()->routeIs('admin_equity.apc.*') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20' }}">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-lg {{ request()->routeIs('admin_equity.apc.*') ? 'bg-white/20' : 'bg-gray-600 group-hover:bg-gray-500' }} transition-colors duration-200">
+                        <i class='bx bxs-file-doc text-lg {{ request()->routeIs('admin_equity.apc.*') ? 'text-white' : 'text-gray-300' }}'></i>
                     </div>
-                </div>
+                    <span x-show="open" class="whitespace-nowrap font-medium">Article Processing Cost</span>
+                </a>
 
-                <!-- 3. Incentive Dropdown -->
-                <div x-data="{ dropdownOpen: {{ request()->routeIs('admin_equity.incentive.*') ? 'true' : 'false' }} }">
-                    <button @click="dropdownOpen = !dropdownOpen" 
-                            class="flex w-full items-center justify-between space-x-3 rounded-xl p-3 transition-all duration-200 hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20 group">
-                        <div class="flex items-center space-x-3">
-                            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-600 group-hover:bg-gray-500 transition-colors duration-200">
-                                <i class='bx bxs-award text-lg text-gray-300'></i>
-                            </div>
-                            <span x-show="open" class="whitespace-nowrap font-medium">Insentif Reviewer</span>
-                        </div>
-                        <div x-show="open" class="flex items-center justify-center w-6">
-                            <i class='bx bx-chevron-down text-lg transition-transform duration-300' :class="{'rotate-180': dropdownOpen}"></i>
-                        </div>
-                    </button>
-                    <div x-show="dropdownOpen" x-collapse class="pt-2 space-y-1">
-                        <a href="{{ route('admin_equity.incentive.index') }}" 
-                           class="flex items-center space-x-3 rounded-lg p-2 ml-4 text-sm transition-all duration-200 {{ request()->routeIs('admin_equity.incentive.index') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700' }}">
-                            <div class="flex h-6 w-6 items-center justify-center rounded {{ request()->routeIs('admin_equity.incentive.index') ? 'bg-white/20' : 'bg-gray-600' }}">
-                                <i class='bx bx-list-ul text-sm {{ request()->routeIs('admin_equity.incentive.index') ? 'text-white' : 'text-gray-300' }}'></i>
-                            </div>
-                            <span x-show="open">Daftar</span>
-                        </a>
-                        <a href="#" 
-                           class="flex items-center space-x-3 rounded-lg p-2 ml-4 text-sm transition-all duration-200 hover:bg-gray-700">
-                            <div class="flex h-6 w-6 items-center justify-center rounded bg-gray-600">
-                                <i class='bx bxs-file-plus text-sm text-gray-300'></i>
-                            </div>
-                            <span x-show="open">Tambah Baru</span>
-                        </a>
+                <!-- 3. Incentive -->
+                 <a href="{{ route('admin_equity.incentive.index') }}"
+                   class="flex items-center space-x-3 rounded-xl p-3 transition-all duration-200 group {{ request()->routeIs('admin_equity.incentive.*') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20' }}">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-lg {{ request()->routeIs('admin_equity.incentive.*') ? 'bg-white/20' : 'bg-gray-600 group-hover:bg-gray-500' }} transition-colors duration-200">
+                        <i class='bx bxs-award text-lg {{ request()->routeIs('admin_equity.incentive.*') ? 'text-white' : 'text-gray-300' }}'></i>
                     </div>
-                </div>
+                    <span x-show="open" class="whitespace-nowrap font-medium">Insentif Reviewer</span>
+                </a>
 
-                <!-- 4. Scopus/WOS Dropdown -->
-                <div x-data="{ dropdownOpen: {{ request()->routeIs('admin_equity.scopus.*') ? 'true' : 'false' }} }">
-                    <button @click="dropdownOpen = !dropdownOpen" 
-                            class="flex w-full items-center justify-between space-x-3 rounded-xl p-3 transition-all duration-200 hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20 group">
-                        <div class="flex items-center space-x-3">
-                            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-600 group-hover:bg-gray-500 transition-colors duration-200">
-                                <i class='bx bxs-badge-check text-lg text-gray-300'></i>
-                            </div>
-                            <span x-show="open" class="whitespace-nowrap font-medium">Jurnal Scopus/WOS</span>
-                        </div>
-                        <div x-show="open" class="flex items-center justify-center w-6">
-                            <i class='bx bx-chevron-down text-lg transition-transform duration-300' :class="{'rotate-180': dropdownOpen}"></i>
-                        </div>
-                    </button>
-                    <div x-show="dropdownOpen" x-collapse class="pt-2 space-y-1">
-                        <a href="{{ route('admin_equity.scopus.index') }}" 
-                           class="flex items-center space-x-3 rounded-lg p-2 ml-4 text-sm transition-all duration-200 {{ request()->routeIs('admin_equity.scopus.index') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700' }}">
-                            <div class="flex h-6 w-6 items-center justify-center rounded {{ request()->routeIs('admin_equity.scopus.index') ? 'bg-white/20' : 'bg-gray-600' }}">
-                                <i class='bx bx-list-ul text-sm {{ request()->routeIs('admin_equity.scopus.index') ? 'text-white' : 'text-gray-300' }}'></i>
-                            </div>
-                            <span x-show="open">Daftar</span>
-                        </a>
-                        <a href="#" 
-                           class="flex items-center space-x-3 rounded-lg p-2 ml-4 text-sm transition-all duration-200 hover:bg-gray-700">
-                            <div class="flex h-6 w-6 items-center justify-center rounded bg-gray-600">
-                                <i class='bx bxs-file-plus text-sm text-gray-300'></i>
-                            </div>
-                            <span x-show="open">Tambah Baru</span>
-                        </a>
+                <!-- 4. Scopus/WOS -->
+                <a href="{{ route('admin_equity.scopus.index') }}"
+                   class="flex items-center space-x-3 rounded-xl p-3 transition-all duration-200 group {{ request()->routeIs('admin_equity.scopus.*') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20' }}">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-lg {{ request()->routeIs('admin_equity.scopus.*') ? 'bg-white/20' : 'bg-gray-600 group-hover:bg-gray-500' }} transition-colors duration-200">
+                        <i class='bx bxs-badge-check text-lg {{ request()->routeIs('admin_equity.scopus.*') ? 'text-white' : 'text-gray-300' }}'></i>
                     </div>
-                </div>
+                    <span x-show="open" class="whitespace-nowrap font-medium">Jurnal Scopus/WOS</span>
+                </a>
 
-                <!-- 5. Conference & Match Making Dropdown -->
-                <div x-data="{ dropdownOpen: {{ request()->routeIs('admin_equity.conference.*') ? 'true' : 'false' }} }">
-                    <button @click="dropdownOpen = !dropdownOpen" 
-                            class="flex w-full items-center justify-between space-x-3 rounded-xl p-3 transition-all duration-200 hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20 group">
-                        <div class="flex items-center space-x-3">
-                            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-600 group-hover:bg-gray-500 transition-colors duration-200">
-                                <i class='bx bx-globe text-lg text-gray-300'></i>
-                            </div>
-                            <span x-show="open" class="whitespace-nowrap font-medium">Konf & Match Making</span>
-                        </div>
-                        <div x-show="open" class="flex items-center justify-center w-6">
-                            <i class='bx bx-chevron-down text-lg transition-transform duration-300' :class="{'rotate-180': dropdownOpen}"></i>
-                        </div>
-                    </button>
-                    <div x-show="dropdownOpen" x-collapse class="pt-2 space-y-1">
-                        <a href="{{ route('admin_equity.conference.index') }}" 
-                           class="flex items-center space-x-3 rounded-lg p-2 ml-4 text-sm transition-all duration-200 {{ request()->routeIs('admin_equity.conference.index') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700' }}">
-                            <div class="flex h-6 w-6 items-center justify-center rounded {{ request()->routeIs('admin_equity.conference.index') ? 'bg-white/20' : 'bg-gray-600' }}">
-                                <i class='bx bx-list-ul text-sm {{ request()->routeIs('admin_equity.conference.index') ? 'text-white' : 'text-gray-300' }}'></i>
-                            </div>
-                            <span x-show="open">Daftar</span>
-                        </a>
-                        <a href="#" 
-                           class="flex items-center space-x-3 rounded-lg p-2 ml-4 text-sm transition-all duration-200 hover:bg-gray-700">
-                            <div class="flex h-6 w-6 items-center justify-center rounded bg-gray-600">
-                                <i class='bx bxs-file-plus text-sm text-gray-300'></i>
-                            </div>
-                            <span x-show="open">Tambah Baru</span>
-                        </a>
+                <!-- 5. Conference & Match Making -->
+                <a href="{{ route('admin_equity.conference.index') }}"
+                   class="flex items-center space-x-3 rounded-xl p-3 transition-all duration-200 group {{ request()->routeIs('admin_equity.conference.*') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20' }}">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-lg {{ request()->routeIs('admin_equity.conference.*') ? 'bg-white/20' : 'bg-gray-600 group-hover:bg-gray-500' }} transition-colors duration-200">
+                        <i class='bx bx-globe text-lg {{ request()->routeIs('admin_equity.conference.*') ? 'text-white' : 'text-gray-300' }}'></i>
                     </div>
-                </div>
+                    <span x-show="open" class="whitespace-nowrap font-medium">Konf & Match Making</span>
+                </a>
 
-                <!-- 6. Visiting Professors Dropdown -->
-                <div x-data="{ dropdownOpen: {{ request()->routeIs('admin_equity.visiting.*') ? 'true' : 'false' }} }">
-                    <button @click="dropdownOpen = !dropdownOpen" 
-                            class="flex w-full items-center justify-between space-x-3 rounded-xl p-3 transition-all duration-200 hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20 group">
-                        <div class="flex items-center space-x-3">
-                            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-600 group-hover:bg-gray-500 transition-colors duration-200">
-                                <i class='bx bxs-user-voice text-lg text-gray-300'></i>
-                            </div>
-                            <span x-show="open" class="whitespace-nowrap font-medium">Visiting Professors</span>
-                        </div>
-                        <div x-show="open" class="flex items-center justify-center w-6">
-                            <i class='bx bx-chevron-down text-lg transition-transform duration-300' :class="{'rotate-180': dropdownOpen}"></i>
-                        </div>
-                    </button>
-                    <div x-show="dropdownOpen" x-collapse class="pt-2 space-y-1">
-                        <a href="{{ route('admin_equity.visiting.index') }}" 
-                           class="flex items-center space-x-3 rounded-lg p-2 ml-4 text-sm transition-all duration-200 {{ request()->routeIs('admin_equity.visiting.index') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700' }}">
-                            <div class="flex h-6 w-6 items-center justify-center rounded {{ request()->routeIs('admin_equity.visiting.index') ? 'bg-white/20' : 'bg-gray-600' }}">
-                                <i class='bx bx-list-ul text-sm {{ request()->routeIs('admin_equity.visiting.index') ? 'text-white' : 'text-gray-300' }}'></i>
-                            </div>
-                            <span x-show="open">Daftar</span>
-                        </a>
-                        <a href="#" 
-                           class="flex items-center space-x-3 rounded-lg p-2 ml-4 text-sm transition-all duration-200 hover:bg-gray-700">
-                            <div class="flex h-6 w-6 items-center justify-center rounded bg-gray-600">
-                                <i class='bx bxs-file-plus text-sm text-gray-300'></i>
-                            </div>
-                            <span x-show="open">Tambah Baru</span>
-                        </a>
+                <!-- 6. Visiting Professors -->
+                <a href="{{ route('admin_equity.visiting.index') }}"
+                   class="flex items-center space-x-3 rounded-xl p-3 transition-all duration-200 group {{ request()->routeIs('admin_equity.visiting.*') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20' }}">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-lg {{ request()->routeIs('admin_equity.visiting.*') ? 'bg-white/20' : 'bg-gray-600 group-hover:bg-gray-500' }} transition-colors duration-200">
+                        <i class='bx bxs-user-voice text-lg {{ request()->routeIs('admin_equity.visiting.*') ? 'text-white' : 'text-gray-300' }}'></i>
                     </div>
-                </div>
+                    <span x-show="open" class="whitespace-nowrap font-medium">Visiting Professors</span>
+                </a>
                 
-                <!-- 7. Joint Supervision Dropdown -->
-                <div x-data="{ dropdownOpen: {{ request()->routeIs('admin_equity.supervision.*') ? 'true' : 'false' }} }">
-                    <button @click="dropdownOpen = !dropdownOpen" 
-                            class="flex w-full items-center justify-between space-x-3 rounded-xl p-3 transition-all duration-200 hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20 group">
-                        <div class="flex items-center space-x-3">
-                            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-600 group-hover:bg-gray-500 transition-colors duration-200">
-                                <i class='bx bxs-graduation text-lg text-gray-300'></i>
-                            </div>
-                            <span x-show="open" class="whitespace-nowrap font-medium">Joint Supervision</span>
-                        </div>
-                        <div x-show="open" class="flex items-center justify-center w-6">
-                            <i class='bx bx-chevron-down text-lg transition-transform duration-300' :class="{'rotate-180': dropdownOpen}"></i>
-                        </div>
-                    </button>
-                    <div x-show="dropdownOpen" x-collapse class="pt-2 space-y-1">
-                        <a href="{{ route('admin_equity.supervision.index') }}" 
-                           class="flex items-center space-x-3 rounded-lg p-2 ml-4 text-sm transition-all duration-200 {{ request()->routeIs('admin_equity.supervision.index') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700' }}">
-                            <div class="flex h-6 w-6 items-center justify-center rounded {{ request()->routeIs('admin_equity.supervision.index') ? 'bg-white/20' : 'bg-gray-600' }}">
-                                <i class='bx bx-list-ul text-sm {{ request()->routeIs('admin_equity.supervision.index') ? 'text-white' : 'text-gray-300' }}'></i>
-                            </div>
-                            <span x-show="open">Daftar</span>
-                        </a>
-                        <a href="#" 
-                           class="flex items-center space-x-3 rounded-lg p-2 ml-4 text-sm transition-all duration-200 hover:bg-gray-700">
-                            <div class="flex h-6 w-6 items-center justify-center rounded bg-gray-600">
-                                <i class='bx bxs-file-plus text-sm text-gray-300'></i>
-                            </div>
-                            <span x-show="open">Tambah Baru</span>
-                        </a>
+                <!-- 7. Joint Supervision -->
+                <a href="{{ route('admin_equity.supervision.index') }}"
+                   class="flex items-center space-x-3 rounded-xl p-3 transition-all duration-200 group {{ request()->routeIs('admin_equity.supervision.*') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20' }}">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-lg {{ request()->routeIs('admin_equity.supervision.*') ? 'bg-white/20' : 'bg-gray-600 group-hover:bg-gray-500' }} transition-colors duration-200">
+                        <i class='bx bxs-graduation text-lg {{ request()->routeIs('admin_equity.supervision.*') ? 'text-white' : 'text-gray-300' }}'></i>
                     </div>
-                </div>
+                    <span x-show="open" class="whitespace-nowrap font-medium">Joint Supervision</span>
+                </a>
             </div>
 
-            <!-- Reports Section -->
+            <!-- Settings Section -->
             <div class="pt-4 space-y-1">
-                <h3 x-show="open" class="px-3 pb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">Laporan</h3>
-                <a href="#" 
-                   class="flex items-center space-x-3 rounded-xl p-3 transition-all duration-200 hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20 group">
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-600 group-hover:bg-gray-500 transition-colors duration-200">
-                        <i class='bx bxs-report text-lg text-gray-300'></i>
+                <h3 x-show="open" class="px-3 pb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">Pengaturan</h3>
+                <a href="{{ route('admin_equity.manageuser.index') }}" 
+                   class="flex items-center space-x-3 rounded-xl p-3 transition-all duration-200 group {{ request()->routeIs('admin_equity.manageuser.*') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20' }}">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-lg {{ request()->routeIs('admin_equity.manageuser.*') ? 'bg-white/20' : 'bg-gray-600 group-hover:bg-gray-500' }} transition-colors duration-200">
+                        <i class='bx bxs-user-account text-lg {{ request()->routeIs('admin_equity.manageuser.*') ? 'text-white' : 'text-gray-300' }}'></i>
                     </div>
-                    <span x-show="open" class="whitespace-nowrap font-medium">Laporan</span>
+                    <span x-show="open" class="whitespace-nowrap font-medium">Manajemen Pengguna</span>
                 </a>
             </div>
 

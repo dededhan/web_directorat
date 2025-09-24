@@ -43,6 +43,8 @@ use App\Http\Controllers\Dosen\ComdevSubmissionFileController;
 use App\Models\ComdevSubmission;
 use App\Http\Controllers\ReviewerEquity\ComdevReviewerController;
 use App\Http\Controllers\Dosen\ComdevLogbookController;
+use App\Http\Controllers\AdminEquity\AdminEquityUserController;
+use App\Http\Controllers\Dosen\DosenProfileController;
 
 
 
@@ -146,8 +148,6 @@ Route::prefix('admin')->name('admin.')
             ->name('responden.exportCSV');
 
 
-        
-    
 
 
 
@@ -157,7 +157,9 @@ Route::prefix('admin')->name('admin.')
 
 
 
-        
+
+
+
         Route::resource('/manageuser', UserController::class)->parameters([
             'manageuser' => 'user'
         ]);
@@ -184,50 +186,50 @@ Route::prefix('admin')->name('admin.')
 
         Route::get('/qsgeneraltable', [QuesionerGeneralController::class, 'index'])->name('qsgeneraltable');
 
-       Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store', 'show']);
-       Route::get('/qsresponden-export', [RespondenAnswerController::class, 'export'])->name('qsresponden.export');
+        Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store', 'show']);
+        Route::get('/qsresponden-export', [RespondenAnswerController::class, 'export'])->name('qsresponden.export');
 
         // mahasiswa
         Route::resource('/mahasiswainternational', InternationalStudentController::class);
         Route::get('/mahasiswainternational/{id}/detail', [InternationalStudentController::class, 'getStudentDetail'])
             ->name('mahasiswainternational.detail');
 
-            Route::resource('/dataakreditasi', AkreditasiController::class);
+        Route::resource('/dataakreditasi', AkreditasiController::class);
         Route::get('/dataakreditasi/{id}/detail', [AkreditasiController::class, 'getAkreditasiDetail'])
             ->name('dataakreditasi.detail');
-            
-            Route::resource('/internationallecture', DosenInternasionalController::class);
-            Route::get('/internationallecture/{id}/detail', [DosenInternasionalController::class, 'getDosenDetail'])
+
+        Route::resource('/internationallecture', DosenInternasionalController::class);
+        Route::get('/internationallecture/{id}/detail', [DosenInternasionalController::class, 'getDosenDetail'])
             ->name('internationallecture.detail');
-            
-            //ranking
-            Route::resource('/ranking', RankingController::class)
+
+        //ranking
+        Route::resource('/ranking', RankingController::class)
             ->except(['show']);
-            Route::get('/ranking/{ranking}/edit', [RankingController::class, 'edit'])->name('ranking.edit'); // Explicit edit route
-            Route::get('/ranking/{id}/detail', [RankingController::class, 'getRankingDetail'])
+        Route::get('/ranking/{ranking}/edit', [RankingController::class, 'edit'])->name('ranking.edit'); // Explicit edit route
+        Route::get('/ranking/{id}/detail', [RankingController::class, 'getRankingDetail'])
             ->name('ranking.detail'); // This can be kept if used elsewhere, or removed if only for the old modal
-            Route::post('/ranking/upload', [RankingController::class, 'upload'])
+        Route::post('/ranking/upload', [RankingController::class, 'upload'])
             ->name('ranking.upload');
-            
-            //inovasi
-            Route::get('/produk_inovasi', [ProdukInovasiController::class, 'index'])->name('produk_inovasi');
-            Route::post('/produk_inovasi', [ProdukInovasiController::class, 'store'])->name('produk_inovasi.store');
-            Route::get('/produk_inovasi/{id}/detail', [ProdukInovasiController::class, 'getProdukDetail'])->name('produk_inovasi.detail');
-            Route::put('/produk_inovasi/{id}', [ProdukInovasiController::class, 'update'])->name('produk_inovasi.update');
-            Route::delete('/produk_inovasi/{id}', [ProdukInovasiController::class, 'destroy'])->name('produk_inovasi.destroy');
-            Route::post('/produk_inovasi/upload', [ProdukInovasiController::class, 'upload'])->name('produk_inovasi.upload');
-            Route::get('/video', [VideoinovasiController::class, 'index'])->name('video.index');
-            Route::post('/video', [VideoinovasiController::class, 'storeOrUpdate'])->name('video.storeOrUpdate');
-            Route::delete('/video', [VideoinovasiController::class, 'destroy'])->name('video.destroy');
-            Route::resource('/mitra-kolaborasi', MitraKolaborasiController::class);
-            Route::get('/risetdataexcelunj', [RisetUnjController::class, 'index'])->name('risetdataunj.index');
-            Route::get('/risetdataexcelunj/template', [RisetUnjController::class, 'downloadTemplate'])->name('risetdataunj.template');
-            Route::post('/risetdataexcelunj/import', [RisetUnjController::class, 'import'])->name('risetdataunj.import');
-            Route::get('/risetdataexcelunj/export', [RisetUnjController::class, 'export'])->name('risetdataunj.export');
-            Route::delete('/risetdataexcelunj/{risetdataunj}', [RisetUnjController::class, 'destroy'])->name('risetdataunj.destroy');
-            Route::put('/risetdataexcelunj/{risetdataunj}', [RisetUnjController::class, 'update'])->name('risetdataunj.update');
-            // Route::delete('/risetdataexcelunj/destroy-all', [RisetUnjController::class, 'destroyAll'])->name('risetdataunj.destroyAll');
-            Route::post('/risetdataexcelunj/destroy-all', [RisetUnjController::class, 'destroyAll'])->name('risetdataunj.destroyAll');
+
+        //inovasi
+        Route::get('/produk_inovasi', [ProdukInovasiController::class, 'index'])->name('produk_inovasi');
+        Route::post('/produk_inovasi', [ProdukInovasiController::class, 'store'])->name('produk_inovasi.store');
+        Route::get('/produk_inovasi/{id}/detail', [ProdukInovasiController::class, 'getProdukDetail'])->name('produk_inovasi.detail');
+        Route::put('/produk_inovasi/{id}', [ProdukInovasiController::class, 'update'])->name('produk_inovasi.update');
+        Route::delete('/produk_inovasi/{id}', [ProdukInovasiController::class, 'destroy'])->name('produk_inovasi.destroy');
+        Route::post('/produk_inovasi/upload', [ProdukInovasiController::class, 'upload'])->name('produk_inovasi.upload');
+        Route::get('/video', [VideoinovasiController::class, 'index'])->name('video.index');
+        Route::post('/video', [VideoinovasiController::class, 'storeOrUpdate'])->name('video.storeOrUpdate');
+        Route::delete('/video', [VideoinovasiController::class, 'destroy'])->name('video.destroy');
+        Route::resource('/mitra-kolaborasi', MitraKolaborasiController::class);
+        Route::get('/risetdataexcelunj', [RisetUnjController::class, 'index'])->name('risetdataunj.index');
+        Route::get('/risetdataexcelunj/template', [RisetUnjController::class, 'downloadTemplate'])->name('risetdataunj.template');
+        Route::post('/risetdataexcelunj/import', [RisetUnjController::class, 'import'])->name('risetdataunj.import');
+        Route::get('/risetdataexcelunj/export', [RisetUnjController::class, 'export'])->name('risetdataunj.export');
+        Route::delete('/risetdataexcelunj/{risetdataunj}', [RisetUnjController::class, 'destroy'])->name('risetdataunj.destroy');
+        Route::put('/risetdataexcelunj/{risetdataunj}', [RisetUnjController::class, 'update'])->name('risetdataunj.update');
+        // Route::delete('/risetdataexcelunj/destroy-all', [RisetUnjController::class, 'destroyAll'])->name('risetdataunj.destroyAll');
+        Route::post('/risetdataexcelunj/destroy-all', [RisetUnjController::class, 'destroyAll'])->name('risetdataunj.destroyAll');
 
 
         Route::prefix('global')->name('global.')->middleware(['checked', 'role:admin_direktorat'])->group(function () {
@@ -389,7 +391,7 @@ Route::prefix('prodi')->name('prodi.')
         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
 
 
-                // NEW: Manage Account Routes for Fakultas
+        // NEW: Manage Account Routes for Fakultas
         Route::get('/account', function () {
             return view('prodi.manage_account');
         })->name('manage.account');
@@ -519,66 +521,72 @@ Route::prefix('fakultas')->name('fakultas.')
 
 // Admin Equity Routes
 Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->group(function () {
-                Route::get('/dashboard', function () {
-                    return view('admin_equity.dashboard');
-                })->name('dashboard');
+    Route::get('/dashboard', function () {
+        return view('admin_equity.dashboard');
+    })->name('dashboard');
 
-                // PERUBAHAN: Menghapus .parameters() karena controller sudah disesuaikan
-                Route::resource('/comdev', \App\Http\Controllers\ComdevController::class);
-                Route::prefix('comdev/{comdev}/submissions')->name('comdev.submissions.')->group(function () {
-                Route::get('/', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'index'])->name('index');
-                Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'show'])->name('show');
-                Route::post('/{submission}/assign-reviewer', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'assignReviewer'])->name('assignReviewer');});
-                Route::get('/comdev/{sesi}/modules', [ComdevModuleController::class, 'index'])->name('comdev.modules.index');
-                Route::post('/comdev/{sesi}/modules/store', [ComdevModuleController::class, 'storeModule'])->name('comdev.modules.storeModule');
-                Route::post('/comdev/{sesi}/modules/store-template', [ComdevModuleController::class, 'storeTemplate'])->name('comdev.modules.storeTemplate');
-                Route::put('/submissions/{submission}/modules/{module}/status', [ComdevSubmissionAdminController::class, 'updateModuleStatus'])->name('comdev.submissions.updateModuleStatus');
-                Route::put('/subchapters/{subChapter}', [ComdevModuleController::class, 'updateSubChapter'])->name('comdev.subchapters.update');
-                Route::put('/comdev/{comdev}/submissions/{submission}/status', [ComdevSubmissionAdminController::class, 'updateStatus'])
-                    ->name('comdev.submissions.updateStatus');
-                
-                Route::prefix('modules/{module}/subchapters')->name('comdev.subchapters.')->group(function () {
-                Route::post('/store', [ComdevModuleController::class, 'storeSubChapter'])->name('store');
-                });
+    Route::resource('manageuser', AdminEquityUserController::class)
+        ->parameters(['manageuser' => 'user']);
 
-            Route::delete('/modules/{module}', [ComdevModuleController::class, 'destroyModule'])->name('comdev.modules.destroy');
-            Route::delete('/subchapters/{subChapter}', [ComdevModuleController::class, 'destroySubChapter'])->name('comdev.subchapters.destroy');
 
-                Route::get('/apc', function () {
-                    return view('admin_equity.apc.index');
-                })->name('apc.index');
+    Route::resource('/comdev', \App\Http\Controllers\ComdevController::class);
+    Route::prefix('comdev/{comdev}/submissions')->name('comdev.submissions.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'index'])->name('index');
+        Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'show'])->name('show');
+        Route::post('/{submission}/assign-reviewer', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'assignReviewer'])->name('assignReviewer');
+    });
+    Route::get('/comdev/{sesi}/modules', [ComdevModuleController::class, 'index'])->name('comdev.modules.index');
+    Route::post('/comdev/{sesi}/modules/store', [ComdevModuleController::class, 'storeModule'])->name('comdev.modules.storeModule');
+    Route::post('/comdev/{sesi}/modules/store-template', [ComdevModuleController::class, 'storeTemplate'])->name('comdev.modules.storeTemplate');
+    Route::put('/submissions/{submission}/modules/{module}/status', [ComdevSubmissionAdminController::class, 'updateModuleStatus'])->name('comdev.submissions.updateModuleStatus');
+    Route::put('/subchapters/{subChapter}', [ComdevModuleController::class, 'updateSubChapter'])->name('comdev.subchapters.update');
+    Route::put('/comdev/{comdev}/submissions/{submission}/status', [ComdevSubmissionAdminController::class, 'updateStatus'])
+        ->name('comdev.submissions.updateStatus');
 
-                // 3. Insentif reviewer dan editorial board
-                Route::get('/incentive', function () {
-                    return view('admin_equity.incentive.index');
-                })->name('incentive.index');
+    Route::prefix('modules/{module}/subchapters')->name('comdev.subchapters.')->group(function () {
+        Route::post('/store', [ComdevModuleController::class, 'storeSubChapter'])->name('store');
+    });
 
-                // 4. Jurnal terindex Scopus/WOS
-                Route::get('/scopus', function () {
-                    return view('admin_equity.scopus.index');
-                })->name('scopus.index');
-                
-                // 5. Presenting at international scientific conferences & Match making
-                Route::get('/conference', function () {
-                    return view('admin_equity.conference.index');
-                })->name('conference.index');
+    Route::delete('/modules/{module}', [ComdevModuleController::class, 'destroyModule'])->name('comdev.modules.destroy');
+    Route::delete('/subchapters/{subChapter}', [ComdevModuleController::class, 'destroySubChapter'])->name('comdev.subchapters.destroy');
 
-                // 6. Visiting (inviting) Top Professors
-                Route::get('/visiting', function () {
-                    return view('admin_equity.visiting.index');
-                })->name('visiting.index');
+    Route::get('/apc', function () {
+        return view('admin_equity.apc.index');
+    })->name('apc.index');
 
-                // 7. Joint Supervision
-                Route::get('/supervision', function () {
-                    return view('admin_equity.supervision.index');
-                })->name('supervision.index');
+    // 3. Insentif reviewer dan editorial board
+    Route::get('/incentive', function () {
+        return view('admin_equity.incentive.index');
+    })->name('incentive.index');
 
+    // 4. Jurnal terindex Scopus/WOS
+    Route::get('/scopus', function () {
+        return view('admin_equity.scopus.index');
+    })->name('scopus.index');
+
+    // 5. Presenting at international scientific conferences & Match making
+    Route::get('/conference', function () {
+        return view('admin_equity.conference.index');
+    })->name('conference.index');
+
+    // 6. Visiting (inviting) Top Professors
+    Route::get('/visiting', function () {
+        return view('admin_equity.visiting.index');
+    })->name('visiting.index');
+
+    // 7. Joint Supervision
+    Route::get('/supervision', function () {
+        return view('admin_equity.supervision.index');
+    })->name('supervision.index');
 });
 
 Route::prefix('reviewer_equity')->name('reviewer_equity.')->middleware(['auth', 'role:reviewer_equity'])->group(function () {
     Route::get('/dashboard', function () {
         return view('reviewer_equity.dashboard');
     })->name('dashboard');
+
+    Route::get('manageprofile', [App\Http\Controllers\Dosen\DosenProfileController::class, 'edit'])->name('manageprofile.edit');
+    Route::put('manageprofile', [App\Http\Controllers\Dosen\DosenProfileController::class, 'update'])->name('manageprofile.update');
 
     Route::get('/comdev/assignments', [ComdevReviewerController::class, 'index'])->name('comdev.assignments.index');
     Route::get('/comdev/assignments/{submission}', [ComdevReviewerController::class, 'show'])->name('comdev.assignments.show');
@@ -598,19 +606,23 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                     return view('subdirektorat-inovasi.dosen.dashboard');
                 })->name('dashboard');
 
+
+                Route::get('manageprofile', [DosenProfileController::class, 'edit'])->name('manageprofile.edit');
+                Route::put('manageprofile', [DosenProfileController::class, 'update'])->name('manageprofile.update');
+
                 // Equity - Proposal Management
                 Route::get('/equity/manajement', [ComdevPropViewController::class, 'index'])
-                    ->name('equity.manajement.index'); 
-                
+                    ->name('equity.manajement.index');
+
                 Route::get('/equity/proposal/{submission}/tahapan', [ComdevPropViewController::class, 'showTahapan'])->name('equity.proposal.tahapan');
 
                 Route::get('/usulkan-proposal', [ComdevViewSesiController::class, 'index'])
                     ->name('equity.usulkan-proposal.index');
 
-               
 
-             
-                 
+
+
+
                 Route::get('/equity/logbook/{submission}', [ComdevLogbookController::class, 'index'])
                     ->name('equity.logbook');
 
@@ -620,13 +632,13 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
 
 
-                                // I've replaced the old static route with this new dynamic one.
+                // I've replaced the old static route with this new dynamic one.
                 Route::get('/equity/proposal/{submission}/detail', function (ComdevSubmission $submission) {
                     // Security check: ensure the user owns this submission
                     if ($submission->user_id !== auth()->id()) {
                         abort(403, 'Akses Ditolak');
                     }
-                    
+
                     // FIX: Changed ->get() to ->paginate() to return a Paginator instance
                     // that the view's layout can use to render pagination links.
                     $submissions = ComdevSubmission::where('user_id', auth()->id())->latest()->paginate(10);
@@ -638,8 +650,8 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 })->name('equity.proposal.detail');
 
 
-                
-               Route::get('/equity/proposal/{sesi}/create-identitas', [ComdevSubmisDosenController::class, 'createIdentitas'])
+
+                Route::get('/equity/proposal/{sesi}/create-identitas', [ComdevSubmisDosenController::class, 'createIdentitas'])
                     ->name('equity.proposal.createIdentitas');
 
                 // TAHAP 1: Menyimpan data identitas tim
@@ -653,12 +665,12 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 // TAHAP 2: Menyimpan/mengajukan detail proposal
                 Route::put('/equity/proposal/{submission}/store-pengajuan', [ComdevSubmisDosenController::class, 'storePengajuan'])
                     ->name('equity.proposal.storePengajuan');
-                
+
                 // AKSI: Menghapus proposal yang masih berstatus draft
                 Route::delete('/equity/proposal/{submission}/destroy-draft', [ComdevSubmisDosenController::class, 'destroyDraft'])
                     ->name('equity.proposal.destroyDraft');
-                
-                    
+
+
                 // UPLOAD FILE UNGGAH
                 Route::post('/equity/proposal/{submission}/subchapter/{subChapter}/files', [ComdevSubmissionFileController::class, 'store'])->name('equity.files.store');
                 Route::get('/equity/files/{file}/download', [ComdevSubmissionFileController::class, 'download'])->name('equity.files.download');

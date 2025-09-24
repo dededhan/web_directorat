@@ -15,6 +15,7 @@ use App\Http\Controllers\AdminMataKuliahController;
 use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\InternationalFacultyStaffActivitiesController;
 use App\Http\Controllers\RisetUnjController;
+use App\Models\Prodi; 
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -33,7 +34,7 @@ Route::get('/sdgscenter/programs', [ProgramKegiatanController::class, 'getSDGCen
 Route::get('/sdgscenter/publications', [PublikasiRisetController::class, 'getSDGCenterPublications'])->name('api.sdgscenter.publications');
 Route::get('/public/sustainability-courses/{faculty}', [App\Http\Controllers\AdminMataKuliahController::class, 'getPublicSustainabilityCourses']);
 
-Route::prefix('pemeringkatan/sustainability')->name('api.pemeringkatan.sustainability.')->group(function() {
+Route::prefix('pemeringkatan/sustainability')->name('api.pemeringkatan.sustainability.')->group(function () {
     Route::get('/data', [AdminMataKuliahController::class, 'getSustainabilityData'])->name('data');
     Route::get('/kegiatan/yearly', [AdminSustainabilityController::class, 'getYearlyData'])->name('kegiatan.yearly');
     Route::get('/kegiatan/faculty', [AdminSustainabilityController::class, 'getFacultyData'])->name('kegiatan.faculty');
@@ -51,7 +52,14 @@ Route::get('/responden/chart-summary', [AdminRespondenController::class, 'getCha
 Route::get('/responden/chart-prodi', [AdminRespondenController::class, 'getProdiChartData'])
     ->name('api.responden.chartProdi');
 
+Route::get('/api/responden-chart-data', [AdminRespondenController::class, 'getChartData'])->name('api.responden.chart-data');
+
 
 Route::get('/fakultas/report-data', [AdminRespondenController::class, 'getFacultyReportData'])
     ->name('api.fakultas.reportData')
     ->middleware('auth');
+
+//equity
+Route::get('/prodi/{fakultas_id}', function ($fakultas_id) {
+    return Prodi::where('fakultas_id', $fakultas_id)->orderBy('name')->get();
+});

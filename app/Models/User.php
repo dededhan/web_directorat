@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -58,7 +59,13 @@ class User extends Authenticatable
         return $this->hasMany(Katsinov::class, 'user_id');
     }
     public function submissionsToReview()
-{
-    return $this->belongsToMany(ComdevSubmission::class, 'comdev_submission_reviewer', 'reviewer_id', 'comdev_submission_id');
-}
+    {
+        return $this->belongsToMany(ComdevSubmission::class, 'comdev_submission_reviewer', 'reviewer_id', 'comdev_submission_id');
+    }
+
+
+        public function profile(): HasOne
+    {
+        return $this->hasOne(UserProfile::class, 'user_id');
+    }
 }
