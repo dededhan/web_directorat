@@ -64,10 +64,8 @@
             </div>
         </div>
 
-        {{-- Main Content Card --}}
         <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
             
-            {{-- Card Header --}}
             <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-8">
                 <div class="text-center lg:text-left">
                     <h2 class="text-2xl font-bold text-white mb-2">Informasi Profil</h2>
@@ -77,7 +75,6 @@
                 </div>
             </div>
 
-            {{-- Form Section --}}
             <div class="p-6 lg:p-8">
                 <form action="{{ route('subdirektorat-inovasi.dosen.manageprofile.update') }}" method="POST" class="space-y-8">
                     @csrf
@@ -96,29 +93,42 @@
                         
                         <div class="p-6 space-y-6">
                             <div class="hidden lg:grid lg:grid-cols-2 lg:gap-6">
-                                <div>
-                                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                                <div class="mb-6">
+                                    <label for="name" class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                                        <i class='bx bx-user text-blue-500 mr-2'></i>
                                         Nama Lengkap <span class="text-red-500">*</span>
                                     </label>
-                                    <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}"
-                                           class="form-input @error('name') border-red-500 @enderror"
-                                           placeholder="Masukkan nama lengkap Anda" required>
+                                    <div class="relative group">
+                                        <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}"
+                                               class="block w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 text-gray-900 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 @error('name') border-red-500 bg-red-50 @enderror"
+                                               placeholder="Masukkan nama lengkap Anda" required>
+                                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('name') text-red-500 @enderror">
+                                            <i class='bx bx-user'></i>
+                                        </div>
+                                    </div>
                                     @error('name')
-                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <p class="mt-2 text-sm text-red-600 flex items-center font-medium">
                                             <i class='bx bx-error-circle mr-1'></i>
                                             {{ $message }}
                                         </p>
                                     @enderror
                                 </div>
-                                <div>
-                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+
+                                <div class="mb-6">
+                                    <label for="email" class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                                        <i class='bx bx-envelope text-blue-500 mr-2'></i>
                                         Alamat Email <span class="text-red-500">*</span>
                                     </label>
-                                    <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}"
-                                           class="form-input @error('email') border-red-500 @enderror"
-                                           placeholder="contoh@unj.ac.id" required>
+                                    <div class="relative group">
+                                        <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}"
+                                               class="block w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 text-gray-900 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 @error('email') border-red-500 bg-red-50 @enderror"
+                                               placeholder="contoh@unj.ac.id" required>
+                                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('email') text-red-500 @enderror">
+                                            <i class='bx bx-envelope'></i>
+                                        </div>
+                                    </div>
                                     @error('email')
-                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <p class="mt-2 text-sm text-red-600 flex items-center font-medium">
                                             <i class='bx bx-error-circle mr-1'></i>
                                             {{ $message }}
                                         </p>
@@ -127,29 +137,42 @@
                             </div>
 
                             <div class="lg:hidden space-y-6">
-                                <div>
-                                    <label for="name_mobile" class="block text-sm font-medium text-gray-700 mb-2">
+                                <div class="mb-6">
+                                    <label for="name_mobile" class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                                        <i class='bx bx-user text-blue-500 mr-2'></i>
                                         Nama Lengkap <span class="text-red-500">*</span>
                                     </label>
-                                    <input type="text" id="name_mobile" name="name" value="{{ old('name', $user->name) }}"
-                                           class="form-input @error('name') border-red-500 @enderror"
-                                           placeholder="Masukkan nama lengkap Anda" required>
+                                    <div class="relative group">
+                                        <input type="text" id="name_mobile" name="name" value="{{ old('name', $user->name) }}"
+                                               class="block w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 text-gray-900 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 @error('name') border-red-500 bg-red-50 @enderror"
+                                               placeholder="Masukkan nama lengkap Anda" required>
+                                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('name') text-red-500 @enderror">
+                                            <i class='bx bx-user'></i>
+                                        </div>
+                                    </div>
                                     @error('name')
-                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <p class="mt-2 text-sm text-red-600 flex items-center font-medium">
                                             <i class='bx bx-error-circle mr-1'></i>
                                             {{ $message }}
                                         </p>
                                     @enderror
                                 </div>
-                                <div>
-                                    <label for="email_mobile" class="block text-sm font-medium text-gray-700 mb-2">
+
+                                <div class="mb-6">
+                                    <label for="email_mobile" class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                                        <i class='bx bx-envelope text-blue-500 mr-2'></i>
                                         Alamat Email <span class="text-red-500">*</span>
                                     </label>
-                                    <input type="email" id="email_mobile" name="email" value="{{ old('email', $user->email) }}"
-                                           class="form-input @error('email') border-red-500 @enderror"
-                                           placeholder="contoh@unj.ac.id" required>
+                                    <div class="relative group">
+                                        <input type="email" id="email_mobile" name="email" value="{{ old('email', $user->email) }}"
+                                               class="block w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 text-gray-900 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 @error('email') border-red-500 bg-red-50 @enderror"
+                                               placeholder="contoh@unj.ac.id" required>
+                                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('email') text-red-500 @enderror">
+                                            <i class='bx bx-envelope'></i>
+                                        </div>
+                                    </div>
                                     @error('email')
-                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <p class="mt-2 text-sm text-red-600 flex items-center font-medium">
                                             <i class='bx bx-error-circle mr-1'></i>
                                             {{ $message }}
                                         </p>
@@ -171,56 +194,83 @@
                         </div>
                         
                         <div class="p-6 space-y-6">
-                            {{-- Desktop Layout --}}
                             <div class="hidden lg:grid lg:grid-cols-2 lg:gap-6">
-                                <div class="lg:col-span-2">
-                                    <label for="identifier_number" class="block text-sm font-medium text-gray-700 mb-2">
-                                        NIP / NIDN <span class="text-red-500"></span>
+                                <div class="lg:col-span-2 mb-6">
+                                    <label for="identifier_number" class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                                        <i class='bx bx-id-card text-purple-500 mr-2'></i>
+                                        NIP / NIDN <span class="text-red-500">*</span>
                                     </label>
-                                    <input type="text" id="identifier_number" name="identifier_number" 
-                                           value="{{ old('identifier_number', $user->profile?->identifier_number) }}"
-                                           class="form-input @error('identifier_number') border-red-500 @enderror"
-                                           placeholder="Masukkan NIP atau NIDN" required>
+                                    <div class="relative group">
+                                        <input type="text" id="identifier_number" name="identifier_number" 
+                                               value="{{ old('identifier_number', $user->profile?->identifier_number) }}"
+                                               class="block w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 text-gray-900 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 @error('identifier_number') border-red-500 bg-red-50 @enderror"
+                                               placeholder="Masukkan NIP atau NIDN" required>
+                                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('identifier_number') text-red-500 @enderror">
+                                            <i class='bx bx-id-card'></i>
+                                        </div>
+                                    </div>
                                     @error('identifier_number')
-                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <p class="mt-2 text-sm text-red-600 flex items-center font-medium">
                                             <i class='bx bx-error-circle mr-1'></i>
                                             {{ $message }}
                                         </p>
                                     @enderror
                                 </div>
-                                <div>
-                                    <label for="fakultas" class="block text-sm font-medium text-gray-700 mb-2">
+
+                                <div class="mb-6">
+                                    <label for="fakultas" class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                                        <i class='bx bx-buildings text-purple-500 mr-2'></i>
                                         Fakultas <span class="text-red-500">*</span>
                                     </label>
-                                    <select id="fakultas" name="fakultas_id" class="form-select @error('fakultas_id') border-red-500 @enderror" 
-                                            @change="fetchProdi($event.target.value)" required>
-                                        <option value="">Pilih Fakultas</option>
-                                        @foreach ($fakultas as $item)
-                                            <option value="{{ $item->id }}" {{ $selectedFakultasId == $item->id ? 'selected' : '' }}>
-                                                {{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    <div class="relative group">
+                                        <select id="fakultas" name="fakultas_id" class="block w-full pl-12 pr-12 py-4 bg-white border border-gray-300 rounded-xl shadow-sm text-gray-900 text-sm appearance-none hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 cursor-pointer @error('fakultas_id') border-red-500 bg-red-50 @enderror" 
+                                                @change="fetchProdi($event.target.value)" required>
+                                            <option value="">Pilih Fakultas</option>
+                                            @foreach ($fakultas as $item)
+                                                <option value="{{ $item->id }}" {{ $selectedFakultasId == $item->id ? 'selected' : '' }}>
+                                                    {{ $item->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('fakultas_id') text-red-500 @enderror">
+                                            <i class='bx bx-buildings'></i>
+                                        </div>
+                                        <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('fakultas_id') text-red-500 @enderror">
+                                            <i class='bx bx-chevron-down'></i>
+                                        </div>
+                                    </div>
                                     @error('fakultas_id')
-                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <p class="mt-2 text-sm text-red-600 flex items-center font-medium">
                                             <i class='bx bx-error-circle mr-1'></i>
                                             {{ $message }}
                                         </p>
                                     @enderror
                                 </div>
-                                <div>
-                                    <label for="prodi" class="block text-sm font-medium text-gray-700 mb-2">
+
+                                <div class="mb-6">
+                                    <label for="prodi" class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                                        <i class='bx bx-book text-purple-500 mr-2'></i>
                                         Program Studi <span class="text-red-500">*</span>
                                     </label>
-                                    <select id="prodi" name="prodi_id" class="form-select @error('prodi_id') border-red-500 @enderror" 
-                                            :disabled="loading" required>
-                                        <option x-text="loading ? 'Memuat...' : (prodiOptions.length === 0 ? 'Pilih fakultas terlebih dahulu' : 'Pilih Program Studi')"></option>
-                                        <template x-for="p in prodiOptions" :key="p.id">
-                                            <option :value="p.id" :selected="p.id == selectedProdiId" x-text="p.name"></option>
-                                        </template>
-                                    </select>
+                                    <div class="relative group">
+                                        <select id="prodi" name="prodi_id" class="block w-full pl-12 pr-12 py-4 bg-white border border-gray-300 rounded-xl shadow-sm text-gray-900 text-sm appearance-none hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 cursor-pointer disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60 disabled:text-gray-500 @error('prodi_id') border-red-500 bg-red-50 @enderror" 
+                                                :disabled="loading" required>
+                                            <option x-text="loading ? 'Memuat...' : (prodiOptions.length === 0 ? 'Pilih fakultas terlebih dahulu' : 'Pilih Program Studi')"></option>
+                                            <template x-for="p in prodiOptions" :key="p.id">
+                                                <option :value="p.id" :selected="p.id == selectedProdiId" x-text="p.name"></option>
+                                            </template>
+                                        </select>
+                                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('prodi_id') text-red-500 @enderror"
+                                             :class="loading ? 'text-gray-300' : ''">
+                                            <i class='bx bx-book'></i>
+                                        </div>
+                                        <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('prodi_id') text-red-500 @enderror"
+                                             :class="loading ? 'text-gray-300' : ''">
+                                            <i class='bx bx-chevron-down'></i>
+                                        </div>
+                                    </div>
                                     @error('prodi_id')
-                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <p class="mt-2 text-sm text-red-600 flex items-center font-medium">
                                             <i class='bx bx-error-circle mr-1'></i>
                                             {{ $message }}
                                         </p>
@@ -229,54 +279,82 @@
                             </div>
 
                             <div class="lg:hidden space-y-6">
-                                <div>
-                                    <label for="identifier_number_mobile" class="block text-sm font-medium text-gray-700 mb-2">
+                                <div class="mb-6">
+                                    <label for="identifier_number_mobile" class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                                        <i class='bx bx-id-card text-purple-500 mr-2'></i>
                                         NIP / NIDN <span class="text-red-500">*</span>
                                     </label>
-                                    <input type="text" id="identifier_number_mobile" name="identifier_number" 
-                                           value="{{ old('identifier_number', $user->profile?->identifier_number) }}"
-                                           class="form-input @error('identifier_number') border-red-500 @enderror"
-                                           placeholder="Masukkan NIP atau NIDN" required>
+                                    <div class="relative group">
+                                        <input type="text" id="identifier_number_mobile" name="identifier_number" 
+                                               value="{{ old('identifier_number', $user->profile?->identifier_number) }}"
+                                               class="block w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 text-gray-900 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 @error('identifier_number') border-red-500 bg-red-50 @enderror"
+                                               placeholder="Masukkan NIP atau NIDN" required>
+                                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('identifier_number') text-red-500 @enderror">
+                                            <i class='bx bx-id-card'></i>
+                                        </div>
+                                    </div>
                                     @error('identifier_number')
-                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <p class="mt-2 text-sm text-red-600 flex items-center font-medium">
                                             <i class='bx bx-error-circle mr-1'></i>
                                             {{ $message }}
                                         </p>
                                     @enderror
                                 </div>
-                                <div>
-                                    <label for="fakultas_mobile" class="block text-sm font-medium text-gray-700 mb-2">
+
+                                <div class="mb-6">
+                                    <label for="fakultas_mobile" class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                                        <i class='bx bx-buildings text-purple-500 mr-2'></i>
                                         Fakultas <span class="text-red-500">*</span>
                                     </label>
-                                    <select id="fakultas_mobile" name="fakultas_id" class="form-select @error('fakultas_id') border-red-500 @enderror" 
-                                            @change="fetchProdi($event.target.value)" required>
-                                        <option value="">Pilih Fakultas</option>
-                                        @foreach ($fakultas as $item)
-                                            <option value="{{ $item->id }}" {{ $selectedFakultasId == $item->id ? 'selected' : '' }}>
-                                                {{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    <div class="relative group">
+                                        <select id="fakultas_mobile" name="fakultas_id" class="block w-full pl-12 pr-12 py-4 bg-white border border-gray-300 rounded-xl shadow-sm text-gray-900 text-sm appearance-none hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 cursor-pointer @error('fakultas_id') border-red-500 bg-red-50 @enderror" 
+                                                @change="fetchProdi($event.target.value)" required>
+                                            <option value="">Pilih Fakultas</option>
+                                            @foreach ($fakultas as $item)
+                                                <option value="{{ $item->id }}" {{ $selectedFakultasId == $item->id ? 'selected' : '' }}>
+                                                    {{ $item->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('fakultas_id') text-red-500 @enderror">
+                                            <i class='bx bx-buildings'></i>
+                                        </div>
+                                        <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('fakultas_id') text-red-500 @enderror">
+                                            <i class='bx bx-chevron-down'></i>
+                                        </div>
+                                    </div>
                                     @error('fakultas_id')
-                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <p class="mt-2 text-sm text-red-600 flex items-center font-medium">
                                             <i class='bx bx-error-circle mr-1'></i>
                                             {{ $message }}
                                         </p>
                                     @enderror
                                 </div>
-                                <div>
-                                    <label for="prodi_mobile" class="block text-sm font-medium text-gray-700 mb-2">
+
+                                <div class="mb-6">
+                                    <label for="prodi_mobile" class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                                        <i class='bx bx-book text-purple-500 mr-2'></i>
                                         Program Studi <span class="text-red-500">*</span>
                                     </label>
-                                    <select id="prodi_mobile" name="prodi_id" class="form-select @error('prodi_id') border-red-500 @enderror" 
-                                            :disabled="loading" required>
-                                        <option x-text="loading ? 'Memuat...' : (prodiOptions.length === 0 ? 'Pilih fakultas terlebih dahulu' : 'Pilih Program Studi')"></option>
-                                        <template x-for="p in prodiOptions" :key="p.id">
-                                            <option :value="p.id" :selected="p.id == selectedProdiId" x-text="p.name"></option>
-                                        </template>
-                                    </select>
+                                    <div class="relative group">
+                                        <select id="prodi_mobile" name="prodi_id" class="block w-full pl-12 pr-12 py-4 bg-white border border-gray-300 rounded-xl shadow-sm text-gray-900 text-sm appearance-none hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 cursor-pointer disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60 disabled:text-gray-500 @error('prodi_id') border-red-500 bg-red-50 @enderror" 
+                                                :disabled="loading" required>
+                                            <option x-text="loading ? 'Memuat...' : (prodiOptions.length === 0 ? 'Pilih fakultas terlebih dahulu' : 'Pilih Program Studi')"></option>
+                                            <template x-for="p in prodiOptions" :key="p.id">
+                                                <option :value="p.id" :selected="p.id == selectedProdiId" x-text="p.name"></option>
+                                            </template>
+                                        </select>
+                                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('prodi_id') text-red-500 @enderror"
+                                             :class="loading ? 'text-gray-300' : ''">
+                                            <i class='bx bx-book'></i>
+                                        </div>
+                                        <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('prodi_id') text-red-500 @enderror"
+                                             :class="loading ? 'text-gray-300' : ''">
+                                            <i class='bx bx-chevron-down'></i>
+                                        </div>
+                                    </div>
                                     @error('prodi_id')
-                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <p class="mt-2 text-sm text-red-600 flex items-center font-medium">
                                             <i class='bx bx-error-circle mr-1'></i>
                                             {{ $message }}
                                         </p>
@@ -298,53 +376,91 @@
                         </div>
                         
                         <div class="p-6 space-y-6">
-                            {{-- Desktop Layout --}}
                             <div class="hidden lg:grid lg:grid-cols-2 lg:gap-6">
-                                <div>
-                                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                                <div class="mb-6" x-data="{ showPassword: false }">
+                                    <label for="password" class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                                        <i class='bx bx-lock text-orange-500 mr-2'></i>
                                         Password Baru
                                     </label>
-                                    <input type="password" id="password" name="password"
-                                           class="form-input @error('password') border-red-500 @enderror"
-                                           placeholder="Masukkan password baru">
+                                    <div class="relative group">
+                                        <input :type="showPassword ? 'text' : 'password'" id="password" name="password"
+                                               class="block w-full pl-12 pr-12 py-4 bg-white border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 text-gray-900 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 @error('password') border-red-500 bg-red-50 @enderror"
+                                               placeholder="Masukkan password baru">
+                                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('password') text-red-500 @enderror">
+                                            <i class='bx bx-lock'></i>
+                                        </div>
+                                        <button type="button" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:text-teal-500 p-1 hover:bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50" @click="showPassword = !showPassword">
+                                            <i :class="showPassword ? 'bx bx-hide' : 'bx bx-show'"></i>
+                                        </button>
+                                    </div>
                                     @error('password')
-                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <p class="mt-2 text-sm text-red-600 flex items-center font-medium">
                                             <i class='bx bx-error-circle mr-1'></i>
                                             {{ $message }}
                                         </p>
                                     @enderror
                                 </div>
-                                <div>
-                                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">
+
+                                <div class="mb-6" x-data="{ showPassword: false }">
+                                    <label for="password_confirmation" class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                                        <i class='bx bx-lock-alt text-orange-500 mr-2'></i>
                                         Konfirmasi Password Baru
                                     </label>
-                                    <input type="password" id="password_confirmation" name="password_confirmation" 
-                                           class="form-input" placeholder="Ketik ulang password baru">
+                                    <div class="relative group">
+                                        <input :type="showPassword ? 'text' : 'password'" id="password_confirmation" name="password_confirmation" 
+                                               class="block w-full pl-12 pr-12 py-4 bg-white border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 text-gray-900 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                                               placeholder="Ketik ulang password baru">
+                                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none">
+                                            <i class='bx bx-lock-alt'></i>
+                                        </div>
+                                        <button type="button" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:text-teal-500 p-1 hover:bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50" @click="showPassword = !showPassword">
+                                            <i :class="showPassword ? 'bx bx-hide' : 'bx bx-show'"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
-                            {{-- Mobile Layout --}}
                             <div class="lg:hidden space-y-6">
-                                <div>
-                                    <label for="password_mobile" class="block text-sm font-medium text-gray-700 mb-2">
+                                <div class="mb-6" x-data="{ showPassword: false }">
+                                    <label for="password_mobile" class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                                        <i class='bx bx-lock text-orange-500 mr-2'></i>
                                         Password Baru
                                     </label>
-                                    <input type="password" id="password_mobile" name="password"
-                                           class="form-input @error('password') border-red-500 @enderror"
-                                           placeholder="Masukkan password baru">
+                                    <div class="relative group">
+                                        <input :type="showPassword ? 'text' : 'password'" id="password_mobile" name="password"
+                                               class="block w-full pl-12 pr-12 py-4 bg-white border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 text-gray-900 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 @error('password') border-red-500 bg-red-50 @enderror"
+                                               placeholder="Masukkan password baru">
+                                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none @error('password') text-red-500 @enderror">
+                                            <i class='bx bx-lock'></i>
+                                        </div>
+                                        <button type="button" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:text-teal-500 p-1 hover:bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50" @click="showPassword = !showPassword">
+                                            <i :class="showPassword ? 'bx bx-hide' : 'bx bx-show'"></i>
+                                        </button>
+                                    </div>
                                     @error('password')
-                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <p class="mt-2 text-sm text-red-600 flex items-center font-medium">
                                             <i class='bx bx-error-circle mr-1'></i>
                                             {{ $message }}
                                         </p>
                                     @enderror
                                 </div>
-                                <div>
-                                    <label for="password_confirmation_mobile" class="block text-sm font-medium text-gray-700 mb-2">
+
+                                <div class="mb-6" x-data="{ showPassword: false }">
+                                    <label for="password_confirmation_mobile" class="flex items-center text-sm font-semibold text-gray-700 mb-3">
+                                        <i class='bx bx-lock-alt text-orange-500 mr-2'></i>
                                         Konfirmasi Password Baru
                                     </label>
-                                    <input type="password" id="password_confirmation_mobile" name="password_confirmation" 
-                                           class="form-input" placeholder="Ketik ulang password baru">
+                                    <div class="relative group">
+                                        <input :type="showPassword ? 'text' : 'password'" id="password_confirmation_mobile" name="password_confirmation" 
+                                               class="block w-full pl-12 pr-12 py-4 bg-white border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 text-gray-900 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                                               placeholder="Ketik ulang password baru">
+                                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg pointer-events-none">
+                                            <i class='bx bx-lock-alt'></i>
+                                        </div>
+                                        <button type="button" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:text-teal-500 p-1 hover:bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50" @click="showPassword = !showPassword">
+                                            <i :class="showPassword ? 'bx bx-hide' : 'bx bx-show'"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -358,7 +474,7 @@
                                 </p>
                             </div>
                             <button type="submit"
-                                    class="inline-flex justify-center items-center py-3 px-8 border border-transparent shadow-lg text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transform hover:scale-105 transition-all duration-200 w-full sm:w-auto">
+                                    class="inline-flex justify-center items-center py-4 px-8 border border-transparent shadow-lg text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 hover:shadow-xl w-full sm:w-auto">
                                 <i class='bx bx-save mr-2 text-lg'></i>
                                 Simpan Perubahan
                             </button>
@@ -370,23 +486,6 @@
     </div>
 </div>
 @endsection
-
-@push('styles')
-<style>
-    .form-input, .form-select {
-        @apply block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 sm:text-sm transition-all duration-200 hover:border-gray-400;
-    }
-    .form-input:focus, .form-select:focus {
-        @apply ring-2 ring-teal-500 border-teal-500 shadow-md;
-    }
-    .form-select:disabled {
-        @apply bg-gray-200 cursor-not-allowed opacity-60;
-    }
-    .border-red-500 {
-        @apply border-red-500 focus:ring-red-500 focus:border-red-500;
-    }
-</style>
-@endpush
 
 @push('scripts')
 <script>
