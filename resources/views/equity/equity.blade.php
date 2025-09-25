@@ -81,7 +81,7 @@
 
         .navbar .fas,
         .navbar .fab {
-            font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !importan\t;
             font-weight: 900 !important;
         }
 
@@ -162,97 +162,104 @@
         }
     </script>
 </head>
+@include('layout.loginpopup')
 <body class="equity-page bg-white font-sans text-brand-dark antialiased">
     @include('layout.navbar')
 
     <main class="pt-16">
-    {{-- Ganti 'h-screen' dengan 'h-[calc(100vh-4rem)]' --}}
-    <section class="relative flex flex-col items-center text-white overflow-hidden px-6 h-[calc(100vh-4rem)]">
-
+    <section class="relative flex items-center justify-center text-white overflow-hidden px-6 h-screen">
         <img src="https://media.istockphoto.com/id/508544168/id/foto/latar-belakang-langit-biru-jernih.jpg?s=170667a&w=0&k=20&c=GHzqHdsJE_sIPV_I4v2vcfGjwBV0Y_gYBC1NTVBkbTQ=" alt="Equity in Education" class="absolute inset-0 w-full h-full object-cover">
         <div class="absolute inset-0 bg-black/30"></div>
 
-        <div class="relative w-full max-w-8xl mx-auto pt-12 pb-4">
-            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" alt="Logo UNJ" class="h-16 md:h-20 object-contain">
-                <img src="https://pnn.ac.id/media/2025/05/Logo-Tersier-Diktisaintek-Berdampak-1-1024x1024.png" alt="Logo Kemendiksaintek" class="h-16 md:h-20 object-contain">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/250px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" alt="Logo Tut Wuri Handayani" class="h-16 md:h-20 object-contain">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Logo_resmi_LPDP.png" alt="Logo LPDP" class="h-16 md:h-20 object-contain">
+        <div class="relative w-full max-w-6xl mx-auto">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" alt="Logo UNJ" class="h-32 md:h-48 object-contain">
+                <img src="https://pnn.ac.id/media/2025/05/Logo-Tersier-Diktisaintek-Berdampak-1-1024x1024.png" alt="Logo Kemendiksaintek" class="h-32 md:h-48 object-contain">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/250px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" alt="Logo Tut Wuri Handayani" class="h-32 md:h-48 object-contain">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Logo_resmi_LPDP.png" alt="Logo LPDP" class="h-32 md:h-48 object-contain">
             </div>
         </div>
+    </section>
 
-        <div class="relative w-full max-w-4xl mx-auto text-center flex-grow flex flex-col justify-center">
-            
-            <div>
-                <p class="text-brand-accent-light font-semibold tracking-widest uppercase">Program EQUITY UNJ</p>
-                <h1 class="mt-4 text-4xl md:text-6xl font-serif font-bold tracking-tight">
-                    Enhancing Quality Education for International University Impacts and Recognition
-                </h1>
-                <p class="mt-6 text-lg text-gray-200">
-                    Program strategis untuk mendorong UNJ meraih pengakuan global melalui THE Impact Ranking dengan fokus pencapaian Sustainable Development Goals (SDGs).
-                </p>
-                
-                <div class="mt-8">
-                    <a href="#program" class="bg-brand-accent text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:brightness-90 active:scale-100 active:brightness-75">
+    <section id="tentang" class="h-screen flex items-center bg-brand-light">
+        <div class="container mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <img src="https://www.discovery.org/m/sites/71/2021/07/equity-stockpack-adobe-stock-scaled.jpg" 
+                         alt="Program EQUITY" 
+                         class="rounded-xl shadow-2xl w-full h-[500px] object-cover">
+                </div>
+                <div>
+                    <p class="text-brand-accent-light font-semibold tracking-widest uppercase">Program EQUITY UNJ</p>
+                    <h1 class="mt-4 text-4xl md:text-5xl font-serif font-bold tracking-tight text-brand-dark">
+                        Enhancing Quality Education for International University Impacts and Recognition
+                    </h1>
+                    <p class="mt-6 text-lg text-gray-700">
+                        Program strategis untuk mendorong UNJ meraih pengakuan global melalui THE Impact Ranking dengan fokus pencapaian Sustainable Development Goals (SDGs).
+                    </p>
+                    <div class="mt-8">
+                        <a href="#" class="login bg-brand-accent text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:brightness-90 active:scale-100 active:brightness-75" data-bs-toggle="modal" data-bs-target="#loginModal">
                         Jelajahi Program EQUITY
-                    </a>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-        
 
-        <section id="tentang" class="section-fullscreen bg-brand-light">
-            <div class="section-content container mx-auto px-6 lg:px-8">
-                <div class="grid lg:grid-cols-5 gap-8 items-center h-full">
-                    <div class="lg:col-span-3">
-                        <p class="font-semibold text-brand-accent">Latar Belakang Program</p>
-                        <h2 class="mt-2 text-3xl font-serif font-bold text-brand-dark">Program <span class="text-brand-accent">EQUITY</span> THE Impact Ranking</h2>
-                        <p class="mt-4 text-base text-gray-600">
-                            Program <strong>EQUITY (Enhancing Quality Education for International University Impacts and Recognition)</strong> merupakan program strategis Kementerian Pendidikan Tinggi, Sains, dan Teknologi yang dimulai sejak 2023, khusus dirancang untuk memfasilitasi 16 PTNBH dalam meningkatkan kualitas dan mencapai pengakuan global melalui THE Impact Ranking.
-                        </p>
-                        <p class="mt-3 text-base text-gray-600">
-                            UNJ sebagai salah satu dari 16 PTNBH sasaran program ini berkomitmen untuk mencapai target peringkat <strong>Top 600</strong> THE Impact Ranking tahun 2030 melalui implementasi program-program berkelanjutan yang berfokus pada pencapaian Sustainable Development Goals (SDGs).
-                        </p>
-                        
-                        <div class="mt-6 grid sm:grid-cols-2 gap-4">
-                            <div class="flex items-start gap-3">
-                                <div class="flex-shrink-0 bg-brand-accent/10 p-2 rounded-full mt-1">
-                                    <i class="fas fa-graduation-cap text-brand-accent text-lg fa-fw"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-base text-brand-dark">Pendanaan DAPT</h4>
-                                    <p class="mt-1 text-sm text-gray-600">Program didanai melalui Dana Abadi Perguruan Tinggi (DAPT) dari LPDP.</p>
-                                </div>
+            <section class="min-h-screen flex items-center bg-white py-12">
+                <div class="container mx-auto px-6 lg:px-8">
+                    <div class="grid lg:grid-cols-2 gap-8 items-center">
+                        <div class="space-y-4">
+                            <div>
+                                <p class="font-semibold text-brand-accent tracking-wide uppercase">Latar Belakang Program</p>
+                                <h2 class="mt-2 text-3xl font-serif font-bold text-brand-dark leading-tight">
+                                    Program <span class="text-brand-accent">EQUITY</span> THE Impact Ranking
+                                </h2>
                             </div>
-                            <div class="flex items-start gap-3">
-                                <div class="flex-shrink-0 bg-brand-accent/10 p-2 rounded-full mt-1">
-                                    <i class="fas fa-globe text-brand-accent text-lg fa-fw"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-base text-brand-dark">Pencapaian SDGs</h4>
-                                    <p class="mt-1 text-sm text-gray-600">Berkontribusi dalam pencapaian 17 tujuan pembangunan berkelanjutan.</p>
-                                </div>
+
+                            <div class="space-y-3">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Program <strong>EQUITY (Enhancing Quality Education for International University Impacts and Recognition)</strong> 
+                                    merupakan program strategis Kementerian Pendidikan Tinggi, Sains, dan Teknologi yang dimulai sejak 2023, 
+                                    khusus dirancang untuk memfasilitasi 16 PTNBH dalam meningkatkan kualitas dan mencapai pengakuan global 
+                                    melalui THE Impact Ranking.
+                                </p>
+                                <p class="text-gray-700 leading-relaxed">
+                                    UNJ sebagai salah satu dari 16 PTNBH sasaran program ini berkomitmen untuk mencapai target peringkat 
+                                    <strong>Top 600</strong> THE Impact Ranking tahun 2030.
+                                </p>
                             </div>
-                            <div class="flex items-start gap-3 col-span-full">
-                                <div class="flex-shrink-0 bg-brand-accent/10 p-2 rounded-full mt-1">
-                                    <i class="fas fa-chart-line text-brand-accent text-lg fa-fw"></i>
+                            
+                            <div class="grid sm:grid-cols-2 gap-6">
+                                <div class="flex items-start gap-3 group">
+                                    <div class="flex-shrink-0 bg-brand-accent/10 p-2 rounded-xl group-hover:bg-brand-accent/20 transition-colors">
+                                        <i class="fas fa-graduation-cap text-lg text-brand-accent"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-brand-dark">Pendanaan DAPT</h4>
+                                        <p class="text-sm text-gray-600">Program didanai melalui Dana Abadi Perguruan Tinggi (DAPT) dari LPDP.</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 class="font-bold text-base text-brand-dark">Target 2025-2030</h4>
-                                    <p class="mt-1 text-sm text-gray-600">Program multi-years dengan target UNJ masuk Top 600 THE Impact Ranking 2030.</p>
+                                <div class="flex items-start gap-3 group">
+                                    <div class="flex-shrink-0 bg-brand-accent/10 p-2 rounded-xl group-hover:bg-brand-accent/20 transition-colors">
+                                        <i class="fas fa-globe text-lg text-brand-accent"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-brand-dark">Pencapaian SDGs</h4>
+                                        <p class="text-sm text-gray-600">Berkontribusi dalam pencapaian 17 tujuan pembangunan berkelanjutan.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="lg:col-span-2 hidden lg:block">
-                        <div class="relative h-80">
-                            <img src="https://www.discovery.org/m/sites/71/2021/07/equity-stockpack-adobe-stock-scaled.jpg" alt="Program EQUITY" class="rounded-xl shadow-2xl w-full h-full object-cover absolute top-0 left-0">
+                        <div>
+                            <img src="https://ditisip.unj.ac.id/storage/ranking-images/1746516869_6819bb859000b.png" 
+                                 alt="Latar Belakang Program EQUITY" 
+                                 class="rounded-2xl shadow-2xl w-full h-[400px] object-cover hover:scale-[1.02] transition-transform duration-300">
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
         <section id="program" class="section-fullscreen relative overflow-hidden bg-gray-100">
             <div class="absolute top-0 left-0 w-96 h-96 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
