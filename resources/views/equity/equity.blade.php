@@ -172,6 +172,15 @@
         <img src="https://media.istockphoto.com/id/508544168/id/foto/latar-belakang-langit-biru-jernih.jpg?s=170667a&w=0&k=20&c=GHzqHdsJE_sIPV_I4v2vcfGjwBV0Y_gYBC1NTVBkbTQ=" alt="Equity in Education" class="absolute inset-0 w-full h-full object-cover">
         <div class="absolute inset-0 bg-black/30"></div>
 
+        <div class="relative w-full max-w-8xl mx-auto pt-12 pb-4">
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" alt="Logo UNJ" class="h-16 md:h-20 object-contain">
+                <img src="https://pnn.ac.id/media/2025/05/Logo-Tersier-Diktisaintek-Berdampak-1-1024x1024.png" alt="Logo Kemendiksaintek" class="h-16 md:h-20 object-contain">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/250px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" alt="Logo Tut Wuri Handayani" class="h-16 md:h-20 object-contain">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Logo_resmi_LPDP.png" alt="Logo LPDP" class="h-16 md:h-20 object-contain">
+            </div>
+        </div>
+
         <div class="relative w-full max-w-4xl mx-auto text-center flex-grow flex flex-col justify-center">
             
             <div>
@@ -188,17 +197,6 @@
                         Jelajahi Program EQUITY
                     </a>
                 </div>
-            </div>
-        </div>
-
-        {{-- Padding bawah disesuaikan di sini --}}
-        <div class="relative w-full max-w-6xl mx-auto pt-4 pb-8">
-            <p class="text-center text-sm text-gray-300 mb-4">Didukung Oleh:</p>
-            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" alt="Logo UNJ" class="h-16 md:h-20 object-contain">
-                <img src="https://pnn.ac.id/media/2025/05/Logo-Tersier-Diktisaintek-Berdampak-1-1024x1024.png" alt="Logo Kemendiksaintek" class="h-16 md:h-20 object-contain">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/250px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" alt="Logo Tut Wuri Handayani" class="h-16 md:h-20 object-contain">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Logo_resmi_LPDP.png" alt="Logo LPDP" class="h-16 md:h-20 object-contain">
             </div>
         </div>
     </section>
@@ -268,7 +266,6 @@
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 compact-grid max-h-[70vh] overflow-hidden">
-                    <!-- Penguatan Kelembagaan -->
                     <div class="glassmorphism-card compact-card rounded-2xl space-y-3">
                         <div class="flex items-center space-x-3">
                             <i class="fas fa-building text-2xl text-brand-dark"></i>
@@ -390,54 +387,6 @@
             </div>
         </section>
 
-        <section id="galeri" class="section-fullscreen bg-white">
-            <div class="section-content container mx-auto px-6 lg:px-8">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-serif font-bold text-brand-dark">Galeri Kegiatan Program EQUITY</h2>
-                    <p class="mt-2 text-gray-500 max-w-2xl mx-auto">Dokumentasi implementasi program EQUITY UNJ dalam mendukung pencapaian SDGs dan peningkatan reputasi global.</p>
-                </div>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 gallery-compact auto-rows-fr">
-                    <div class="relative group overflow-hidden rounded-lg shadow-lg md:col-span-2 md:row-span-2">
-                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop" alt="Penelitian Kolaboratif" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="absolute bottom-4 left-4 text-white font-bold">Penelitian Kolaboratif</p>
-                        </div>
-                    </div>
-                    <div class="relative group overflow-hidden rounded-lg shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1932&auto=format&fit=crop" alt="Kerjasama Internasional" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="absolute bottom-4 left-4 text-white font-bold">Kerjasama Internasional</p>
-                        </div>
-                    </div>
-                    <div class="relative group overflow-hidden rounded-lg shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop" alt="SDGs Workshop" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="absolute bottom-4 left-4 text-white font-bold">SDGs Workshop</p>
-                        </div>
-                    </div>
-                    <div class="relative group overflow-hidden rounded-lg shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2012&auto=format&fit=crop" alt="Konferensi Internasional" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="absolute bottom-4 left-4 text-white font-bold">Konferensi Internasional</p>
-                        </div>
-                    </div>
-                    <div class="relative group overflow-hidden rounded-lg shadow-lg md:col-span-2">
-                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop" alt="Community Development" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="absolute bottom-4 left-4 text-white font-bold">Community Development</p>
-                        </div>
-                    </div>
-                    <div class="relative group overflow-hidden rounded-lg shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=2069&auto=format&fit=crop" alt="Visiting Professor" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="absolute bottom-4 left-4 text-white font-bold">Visiting Professor</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <section id="dampak" class="section-fullscreen bg-brand-dark text-white">
             <div class="section-content container mx-auto px-6 lg:px-8">
                 <div class="text-center mb-8">
@@ -493,50 +442,6 @@
                         <div class="bg-white/10 rounded-lg p-3 border-2 border-brand-accent">
                             <div class="text-xl font-bold text-brand-accent">2030</div>
                             <div class="text-sm font-bold">501-600</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="testimoni" class="section-fullscreen bg-brand-light">
-            <div class="section-content container mx-auto px-6 lg:px-8">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-serif font-bold text-brand-dark">Komitmen UNJ untuk Program EQUITY</h2>
-                    <p class="mt-2 text-gray-500 max-w-2xl mx-auto">Dukungan penuh sivitas akademika UNJ dalam mencapai target THE Impact Ranking melalui kontribusi nyata pada SDGs.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 compact-grid">
-                    <div class="bg-white testimonial-compact rounded-lg shadow-lg">
-                        <i class="fas fa-quote-left text-brand-accent text-2xl mb-3"></i>
-                        <p class="text-gray-600 mb-4 compact-text">"Program EQUITY memberikan kesempatan luar biasa bagi UNJ untuk berkontribusi langsung pada pencapaian SDGs sekaligus meningkatkan reputasi global universitas."</p>
-                        <div class="flex items-center">
-                            <img class="w-10 h-10 rounded-full mr-3" src="https://i.pravatar.cc/150?img=1" alt="Avatar of person">
-                            <div>
-                                <h4 class="font-bold text-brand-dark text-sm">Prof. Dr.</h4>
-                                <p class="text-xs text-gray-500">Universitas Negeri Jakarta</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white testimonial-compact rounded-lg shadow-lg">
-                        <i class="fas fa-quote-left text-brand-accent text-2xl mb-3"></i>
-                        <p class="text-gray-600 mb-4 compact-text">"Melalui pendanaan DAPT dari LPDP, kami dapat mengimplementasikan program-program berkelanjutan yang berdampak nyata bagi masyarakat dan lingkungan."</p>
-                        <div class="flex items-center">
-                            <img class="w-10 h-10 rounded-full mr-3" src="https://i.pravatar.cc/150?img=2" alt="Avatar of person">
-                            <div>
-                                <h4 class="font-bold text-brand-dark text-sm">Dr. M.Si.</h4>
-                                <p class="text-xs text-gray-500">Direktur Program</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white testimonial-compact rounded-lg shadow-lg">
-                        <i class="fas fa-quote-left text-brand-accent text-2xl mb-3"></i>
-                        <p class="text-gray-600 mb-4 compact-text">"Kolaborasi riset internasional dalam Program EQUITY membuka peluang kerjasama dengan negara berkembang untuk saling memperkuat kapasitas penelitian."</p>
-                        <div class="flex items-center">
-                            <img class="w-10 h-10 rounded-full mr-3" src="https://i.pravatar.cc/150?img=3" alt="Avatar of person">
-                            <div>
-                                <h4 class="font-bold text-brand-dark text-sm">Prof. Dr. M.Pd.</h4>
-                                <p class="text-xs text-gray-500">Wakil Rektor</p>
-                            </div>
                         </div>
                     </div>
                 </div>
