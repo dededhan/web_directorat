@@ -1,7 +1,14 @@
 @extends('admin_equity.index')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" x-data="manageUser">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" x-data="manageUser({
+    fakultas: {{ json_encode($fakultas) }},
+    prodi: {{ json_encode($prodi) }},
+    initial: {
+        fakultas_id: '{{ request('fakultas_id') }}',
+        prodi_id: '{{ request('prodi_id') }}'
+    }
+})">
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
@@ -27,6 +34,50 @@
                 </div>
             </div>
         </header>
+
+        <!-- Search and Filter Form -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 mb-8 p-6">
+            <form action="{{ route('admin_equity.manageuser.index') }}" method="GET">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+                    <!-- Search Input -->
+                    <div class="md:col-span-2">
+                        <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Cari Nama atau Email</label>
+                        <input type="text" name="search" id="search" value="{{ request('search') }}" placeholder="Masukkan nama atau email..." class="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                    </div>
+
+                    <!-- Fakultas Filter -->
+                    <div>
+                        <label for="fakultas_id" class="block text-sm font-medium text-gray-700 mb-1">Fakultas</label>
+                        <select name="fakultas_id" id="fakultas_id" x-model="selectedFakultas" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <option value="">Semua Fakultas</option>
+                             <template x-for="fak in fakultas" :key="fak.id">
+                                <option :value="fak.id" x-text="fak.name"></option>
+                            </template>
+                        </select>
+                    </div>
+
+                    <!-- Prodi Filter -->
+                    <div>
+                        <label for="prodi_id" class="block text-sm font-medium text-gray-700 mb-1">Program Studi</label>
+                        <select name="prodi_id" id="prodi_id" x-model="selectedProdi" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500" :disabled="!selectedFakultas">
+                             <template x-if="!selectedFakultas"><option value="">Pilih Fakultas Dulu</option></template>
+                             <template x-if="selectedFakultas && loadingProdi"><option>Memuat...</option></template>
+                             <template x-if="selectedFakultas && !loadingProdi"><option value="">Semua Prodi</option></template>
+                             <template x-for="prod in prodi" :key="prod.id">
+                                <option :value="prod.id" x-text="prod.name"></option>
+                            </template>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex items-center justify-end mt-6 space-x-3">
+                    <a href="{{ route('admin_equity.manageuser.index') }}" class="px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 text-sm">Reset</a>
+                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700 text-sm">
+                        <i class='bx bx-search-alt-2 mr-2'></i> Terapkan Filter
+                    </button>
+                </div>
+            </form>
+        </div>
+
 
         {{-- Main Content - User List --}}
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
@@ -68,7 +119,7 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-5 whitespace-nowrap text-sm text-gray-600">
-                                    @if($user->role == 'dosen' && $user->profile)
+                                    @if($user->role == 'dosen' && $user->profile?->prodi)
                                         <div>{{ $user->profile->prodi->fakultas->abbreviation ?? 'N/A' }}</div>
                                         <div class="text-xs text-gray-500">{{ $user->profile->prodi->name ?? 'N/A' }}</div>
                                     @else
@@ -97,8 +148,9 @@
                             <tr>
                                 <td colspan="5">
                                     <div class="text-center py-20 px-6">
-                                        <h3 class="font-bold text-xl text-gray-800 mb-2">Belum Ada Pengguna</h3>
-                                        <p class="text-gray-500">Mulai dengan menambahkan pengguna baru.</p>
+                                        <i class='bx bx-user-x text-6xl text-gray-400'></i>
+                                        <h3 class="font-bold text-xl text-gray-800 mt-4 mb-2">Pengguna Tidak Ditemukan</h3>
+                                        <p class="text-gray-500">Tidak ada pengguna yang cocok dengan kriteria filter Anda. Coba reset filter.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -119,11 +171,44 @@
 
 <script>
 document.addEventListener('alpine:init', () => {
-    Alpine.data('manageUser', () => ({
+    Alpine.data('manageUser', (initialData) => ({
+        fakultas: initialData.fakultas || [],
+        prodi: initialData.prodi || [],
+        selectedFakultas: initialData.initial.fakultas_id || '',
+        selectedProdi: initialData.initial.prodi_id || '',
+        loadingProdi: false,
+
+        init() {
+            this.$watch('selectedFakultas', (newValue, oldValue) => {
+                if (newValue !== oldValue) {
+                    this.selectedProdi = '';
+                    this.fetchProdi();
+                }
+            });
+        },
+
+        fetchProdi() {
+            if (!this.selectedFakultas) {
+                this.prodi = [];
+                return;
+            }
+            this.loadingProdi = true;
+            fetch(`/api/prodi/${this.selectedFakultas}`)
+                .then(response => response.json())
+                .then(data => {
+                    this.prodi = data;
+                    this.loadingProdi = false;
+                })
+                .catch(() => {
+                    this.prodi = [];
+                    this.loadingProdi = false;
+                });
+        },
+
         confirmDelete(userId) {
             Swal.fire({
                 title: 'Apakah Anda yakin?',
-                text: "Tindakan ini tidak dapat dibatalkan!",
+                text: "Pengguna akan dihapus secara permanen!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -140,4 +225,3 @@ document.addEventListener('alpine:init', () => {
 });
 </script>
 @endsection
-
