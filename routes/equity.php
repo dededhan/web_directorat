@@ -53,14 +53,13 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
     })->name('apc.index');
 
     // 3. Insentif reviewer dan editorial board
-    Route::get('/incentive', function () {
-        return view('admin_equity.incentive.index');
-    })->name('incentive.index');
+    Route::get('/incentive-reviewer', function () {
+        return view('admin_equity.incentivereviewer.index');
+    })->name('incentivereviewer.index');
 
-    // 4. Jurnal terindex Scopus/WOS
-    Route::get('/scopus', function () {
-        return view('admin_equity.scopus.index');
-    })->name('scopus.index');
+    Route::get('/incentive-editor', function () {
+        return view('admin_equity.incentiveeditor.index');
+    })->name('incentiveeditor.index');
 
     // 5. Presenting at international scientific conferences & Match making
     Route::get('/conference', function () {
@@ -68,14 +67,11 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
     })->name('conference.index');
 
     // 6. Visiting (inviting) Top Professors
-    Route::get('/visiting', function () {
-        return view('admin_equity.visiting.index');
-    })->name('visiting.index');
+    Route::get('/match-research', function () {
+        return view('admin_equity.matchresearch.index');
+    })->name('matchresearch.index');
 
-    // 7. Joint Supervision
-    Route::get('/supervision', function () {
-        return view('admin_equity.supervision.index');
-    })->name('supervision.index');
+
 });
 
 Route::prefix('reviewer_equity')->name('reviewer_equity.')->middleware(['auth', 'role:reviewer_equity'])->group(function () {

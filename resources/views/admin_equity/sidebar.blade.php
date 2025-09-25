@@ -121,7 +121,7 @@
                 </a>
 
                 <!-- 3. Incentive -->
-                 <a href="{{ route('admin_equity.incentive.index') }}"
+                 <a href="{{ route('admin_equity.incentivereviewer.index') }}"
                    class="flex items-center space-x-3 rounded-xl p-3 transition-all duration-200 group {{ request()->routeIs('admin_equity.incentive.*') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20' }}">
                     <div class="flex h-8 w-8 items-center justify-center rounded-lg {{ request()->routeIs('admin_equity.incentive.*') ? 'bg-white/20' : 'bg-gray-600 group-hover:bg-gray-500' }} transition-colors duration-200">
                         <i class='bx bxs-award text-lg {{ request()->routeIs('admin_equity.incentive.*') ? 'text-white' : 'text-gray-300' }}'></i>
@@ -129,13 +129,12 @@
                     <span x-show="open" class="whitespace-nowrap font-medium">Insentif Reviewer</span>
                 </a>
 
-                <!-- 4. Scopus/WOS -->
-                <a href="{{ route('admin_equity.scopus.index') }}"
+                <a href="{{ route('admin_equity.incentiveeditor.index') }}"
                    class="flex items-center space-x-3 rounded-xl p-3 transition-all duration-200 group {{ request()->routeIs('admin_equity.scopus.*') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20' }}">
                     <div class="flex h-8 w-8 items-center justify-center rounded-lg {{ request()->routeIs('admin_equity.scopus.*') ? 'bg-white/20' : 'bg-gray-600 group-hover:bg-gray-500' }} transition-colors duration-200">
                         <i class='bx bxs-badge-check text-lg {{ request()->routeIs('admin_equity.scopus.*') ? 'text-white' : 'text-gray-300' }}'></i>
                     </div>
-                    <span x-show="open" class="whitespace-nowrap font-medium">Jurnal Scopus/WOS</span>
+                    <span x-show="open" class="whitespace-nowrap font-medium">Insentif Editorial Board</span>
                 </a>
 
                 <!-- 5. Conference & Match Making -->
@@ -144,26 +143,18 @@
                     <div class="flex h-8 w-8 items-center justify-center rounded-lg {{ request()->routeIs('admin_equity.conference.*') ? 'bg-white/20' : 'bg-gray-600 group-hover:bg-gray-500' }} transition-colors duration-200">
                         <i class='bx bx-globe text-lg {{ request()->routeIs('admin_equity.conference.*') ? 'text-white' : 'text-gray-300' }}'></i>
                     </div>
-                    <span x-show="open" class="whitespace-nowrap font-medium">Konf & Match Making</span>
+                    <span x-show="open" class="whitespace-nowrap font-medium">Presenting at international conferences</span>
                 </a>
 
                 <!-- 6. Visiting Professors -->
-                <a href="{{ route('admin_equity.visiting.index') }}"
+                <a href="{{ route('admin_equity.matchresearch.index') }}"
                    class="flex items-center space-x-3 rounded-xl p-3 transition-all duration-200 group {{ request()->routeIs('admin_equity.visiting.*') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20' }}">
                     <div class="flex h-8 w-8 items-center justify-center rounded-lg {{ request()->routeIs('admin_equity.visiting.*') ? 'bg-white/20' : 'bg-gray-600 group-hover:bg-gray-500' }} transition-colors duration-200">
                         <i class='bx bxs-user-voice text-lg {{ request()->routeIs('admin_equity.visiting.*') ? 'text-white' : 'text-gray-300' }}'></i>
                     </div>
-                    <span x-show="open" class="whitespace-nowrap font-medium">Visiting Professors</span>
+                    <span x-show="open" class="whitespace-nowrap font-medium">Match research interest</span>
                 </a>
-                
-                <!-- 7. Joint Supervision -->
-                <a href="{{ route('admin_equity.supervision.index') }}"
-                   class="flex items-center space-x-3 rounded-xl p-3 transition-all duration-200 group {{ request()->routeIs('admin_equity.supervision.*') ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25' : 'hover:bg-gray-700 hover:shadow-lg hover:shadow-gray-900/20' }}">
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg {{ request()->routeIs('admin_equity.supervision.*') ? 'bg-white/20' : 'bg-gray-600 group-hover:bg-gray-500' }} transition-colors duration-200">
-                        <i class='bx bxs-graduation text-lg {{ request()->routeIs('admin_equity.supervision.*') ? 'text-white' : 'text-gray-300' }}'></i>
-                    </div>
-                    <span x-show="open" class="whitespace-nowrap font-medium">Joint Supervision</span>
-                </a>
+            
             </div>
 
             <!-- Settings Section -->
