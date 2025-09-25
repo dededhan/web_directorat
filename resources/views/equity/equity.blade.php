@@ -164,27 +164,45 @@
 </head>
 <body class="equity-page bg-white font-sans text-brand-dark antialiased">
     @include('layout.navbar')
-    
+
     <main class="pt-16">
-        <section class="relative h-screen flex items-center justify-center text-white overflow-hidden">
-            <img src="https://images.shiksha.com/mediadata/ugcDocuments/images/wordpressImages/2022_07_What-is-Equity-2.jpg" alt="Equity in Education" class="absolute z-0 w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/60 z-10"></div>
+    {{-- Ganti 'h-screen' dengan 'h-[calc(100vh-4rem)]' --}}
+    <section class="relative flex flex-col items-center text-white overflow-hidden px-6 h-[calc(100vh-4rem)]">
+
+        <img src="https://media.istockphoto.com/id/508544168/id/foto/latar-belakang-langit-biru-jernih.jpg?s=170667a&w=0&k=20&c=GHzqHdsJE_sIPV_I4v2vcfGjwBV0Y_gYBC1NTVBkbTQ=" alt="Equity in Education" class="absolute inset-0 w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/30"></div>
+
+        <div class="relative w-full max-w-4xl mx-auto text-center flex-grow flex flex-col justify-center">
             
-            <div class="relative z-20 max-w-4xl mx-auto text-center px-6" x-data="{ visible: false }" x-init="setTimeout(() => { visible = true }, 500)">
-                <p class="text-brand-accent-light font-semibold tracking-widest uppercase transition-all duration-700" :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">Program EQUITY UNJ</p>
-                <h1 class="mt-4 text-4xl md:text-6xl font-serif font-bold tracking-tight transition-all duration-1000" :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
+            <div>
+                <p class="text-brand-accent-light font-semibold tracking-widest uppercase">Program EQUITY UNJ</p>
+                <h1 class="mt-4 text-4xl md:text-6xl font-serif font-bold tracking-tight">
                     Enhancing Quality Education for International University Impacts and Recognition
                 </h1>
-                <p class="mt-6 text-lg text-gray-300 transition-all duration-1000 delay-300" :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
+                <p class="mt-6 text-lg text-gray-200">
                     Program strategis untuk mendorong UNJ meraih pengakuan global melalui THE Impact Ranking dengan fokus pencapaian Sustainable Development Goals (SDGs).
                 </p>
-                <div class="mt-8 transition-all duration-1000 delay-500" :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
-                    <a href="#program" class="bg-brand-accent hover:bg-brand-accent-light text-white font-bold py-3 px-8 rounded-full transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg">
+                
+                <div class="mt-8">
+                    <a href="#program" class="bg-brand-accent text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:brightness-90 active:scale-100 active:brightness-75">
                         Jelajahi Program EQUITY
                     </a>
                 </div>
             </div>
-        </section>
+        </div>
+
+        {{-- Padding bawah disesuaikan di sini --}}
+        <div class="relative w-full max-w-6xl mx-auto pt-4 pb-8">
+            <p class="text-center text-sm text-gray-300 mb-4">Didukung Oleh:</p>
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" alt="Logo UNJ" class="h-16 md:h-20 object-contain">
+                <img src="https://pnn.ac.id/media/2025/05/Logo-Tersier-Diktisaintek-Berdampak-1-1024x1024.png" alt="Logo Kemendiksaintek" class="h-16 md:h-20 object-contain">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/250px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" alt="Logo Tut Wuri Handayani" class="h-16 md:h-20 object-contain">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Logo_resmi_LPDP.png" alt="Logo LPDP" class="h-16 md:h-20 object-contain">
+            </div>
+        </div>
+    </section>
+        
 
         <section id="tentang" class="section-fullscreen bg-brand-light">
             <div class="section-content container mx-auto px-6 lg:px-8">
