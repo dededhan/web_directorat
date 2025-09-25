@@ -313,9 +313,7 @@ document.addEventListener('alpine:init', () => {
 });
 </script>
 
-@push('scripts')
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-@endpush
+@stack('scripts')
 
 @push('styles')
 <style>

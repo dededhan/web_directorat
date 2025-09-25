@@ -55,14 +55,21 @@
 
                         {{-- Right Column --}}
                         <div class="space-y-6">
+                            {{-- === PERUBAHAN DI SINI === --}}
                             <div>
-                                <label for="dana_maksimal" class="block text-sm font-medium text-gray-700 mb-2">Dana Maksimal</label>
+                                <label for="dana_maksimal_display" class="block text-sm font-medium text-gray-700 mb-2">Dana Maksimal</label>
                                 <div class="relative">
                                     <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
-                                    <input type="number" name="dana_maksimal" id="dana_maksimal" class="pl-9 pr-4 py-3 w-full text-gray-800 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition" value="{{ old('dana_maksimal', $session->dana_maksimal) }}" required>
+                                    {{-- 1. Input yang dilihat pengguna --}}
+                                    <input type="text" id="dana_maksimal_display" class="pl-9 pr-4 py-3 w-full text-gray-800 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition" value="{{ old('dana_maksimal', number_format($session->dana_maksimal, 0, ',', '.')) }}" required>
+
+                                    {{-- 2. Input tersembunyi yang dikirim ke server --}}
+                                    <input type="hidden" name="dana_maksimal" id="dana_maksimal" value="{{ old('dana_maksimal', $session->dana_maksimal) }}">
                                 </div>
                                 @error('dana_maksimal')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                             </div>
+                            {{-- === AKHIR PERUBAHAN === --}}
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Periode Submit</label>
                                 <div class="grid grid-cols-2 gap-4">
@@ -111,3 +118,38 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const displayInput = document.getElementById('dana_maksimal_display');
+    const hiddenInput = document.getElementById('dana_maksimal');
+    if (displayInput && hiddenInput) {
+        function formatNumber(value) {
+            let numberString = String(value).replace(/[^,\d]/g, '').toString();
+            numberString = numberString.replace(/\./g, '');
+            
+            const number = parseInt(numberString, 10);
+            if (isNaN(number)) {
+                return '';
+            }
+            return number.toLocaleString('id-ID');
+        }
+
+        function unformatNumber(value) {
+            return String(value).replace(/\./g, '');
+        }
+
+        displayInput.addEventListener('input', function(e) {
+            const formattedValue = formatNumber(e.target.value);
+            e.target.value = formattedValue;
+            hiddenInput.value = unformatNumber(formattedValue);
+        });
+
+        if (displayInput.value) {
+            displayInput.value = formatNumber(displayInput.value);
+        }
+    }
+});
+</script>
+@endpush
