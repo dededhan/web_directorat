@@ -20,14 +20,18 @@ class RespondenExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
     protected $fakultas;
     protected $startDate;
     protected $endDate;
+    protected $status;
+    protected $sumber_data;
 
-    public function __construct(User $user, $kategori = null, $fakultas = null, $startDate = null, $endDate = null)
+    public function __construct(User $user, $kategori = null, $fakultas = null, $startDate = null, $endDate = null, $status = null, $sumber_data = null)
     {
         $this->user = $user;
         $this->kategori = $kategori;
         $this->fakultas = $fakultas;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
+        $this->status = $status;
+        $this->sumber_data = $sumber_data;
     }
 
     public function query()
@@ -52,6 +56,24 @@ class RespondenExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
 
         if ($this->fakultas) {
             $query->whereRaw('LOWER(TRIM(fakultas)) = ?', [strtolower(trim($this->fakultas))]);
+        }
+
+        if ($this->status) {
+            $query->where('status', $this->status);
+        }
+        
+        if ($this->sumber_data && in_array($this->user->role, ['admin_direktorat', 'admin_pemeringkatan'])) {
+            if ($this->sumber_data === 'admin_only') {
+                $adminUserIds = User::whereIn('role', ['admin_direktorat', 'admin_pemeringkatan'])->pluck('id');
+                $query->where(function ($q) use ($adminUserIds) {
+                    $q->whereIn('user_id', $adminUserIds)
+                      ->orWhereNull('user_id');
+                });
+            } elseif ($this->sumber_data === 'non_admin') {
+                $query->whereHas('user', function ($q) {
+                    $q->whereIn('role', ['fakultas', 'prodi']);
+                });
+            }
         }
 
         if ($this->startDate && $this->endDate) {

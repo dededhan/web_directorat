@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminRespondenController;
+use App\Http\Controllers\AdminRespondenReportController;
+use App\Http\Controllers\AdminRespondenExportController;
+
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\YoutubeController;
@@ -47,15 +50,15 @@ Route::get('/riset-unj/graph-data', [RisetUnjController::class, 'getGraphData'])
 
 
 //Chart Responden
-Route::get('/responden/chart-summary', [AdminRespondenController::class, 'getChartSummaryData'])
+Route::get('/responden/chart-summary', [AdminRespondenReportController::class, 'getChartSummaryData'])
     ->name('api.responden.chartSummary');
-Route::get('/responden/chart-prodi', [AdminRespondenController::class, 'getProdiChartData'])
+Route::get('/responden/chart-prodi', [AdminRespondenReportController::class, 'getProdiChartData'])
     ->name('api.responden.chartProdi');
 
-Route::get('/api/responden-chart-data', [AdminRespondenController::class, 'getChartData'])->name('api.responden.chart-data');
+Route::get('/api/responden-chart-data', [AdminRespondenReportController::class, 'getChartData'])->name('api.responden.chart-data');
 
 
-Route::get('/fakultas/report-data', [AdminRespondenController::class, 'getFacultyReportData'])
+Route::get('/fakultas/report-data', [AdminRespondenReportController::class, 'getFacultyReportData'])
     ->name('api.fakultas.reportData')
     ->middleware('auth');
 

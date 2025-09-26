@@ -5,6 +5,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\KatsinovController;
 use App\Http\Controllers\AkreditasiController;
 use App\Http\Controllers\AdminRespondenController;
+use App\Http\Controllers\AdminRespondenReportController;
+use App\Http\Controllers\AdminRespondenExportController;
 use App\Http\Controllers\AdminMataKuliahController;
 use App\Http\Controllers\RespondenAnswerController;
 use App\Http\Controllers\QuesionerGeneralController;
@@ -110,7 +112,7 @@ Route::prefix('admin')->name('admin.')
         Route::post('/pimpinan/upload', [PimpinanController::class, 'upload'])
             ->name('pimpinan.upload');
 
-        Route::get('/responden/laporan', [AdminRespondenController::class, 'laporan'])
+        Route::get('/responden/laporan', [AdminRespondenReportController::class, 'laporan'])
             ->name('responden_laporan');
 
         Route::resource('/responden', AdminRespondenController::class)->except(['update']);
@@ -124,22 +126,10 @@ Route::prefix('admin')->name('admin.')
 
         Route::post('/responden/import', [AdminRespondenController::class, 'import'])->name('responden.import');
         Route::get('/responden/filter', [AdminRespondenController::class, 'filter'])->name('responden.filter');
-        Route::get('/responden/export/excel', [AdminRespondenController::class, 'export'])
+        Route::get('/responden/export/excel', [AdminRespondenExportController::class, 'export'])
             ->name('responden.export');
-        Route::get('/responden/export/csv', [AdminRespondenController::class, 'exportCSV'])
+        Route::get('/responden/export/csv', [AdminRespondenExportController::class, 'exportCSV'])
             ->name('responden.exportCSV');
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         Route::resource('/manageuser', UserController::class)->parameters([
