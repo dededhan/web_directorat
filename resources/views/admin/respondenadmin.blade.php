@@ -287,7 +287,25 @@
                                     <td class="responden-phone_responden">{{ $responden->phone_responden }}</td>
                                     <td class="responden-nama_dosen_pengusul">{{ $responden->nama_dosen_pengusul }}</td>
                                     <td class="responden-phone_dosen">{{ $responden->phone_dosen }}</td>
-                                    <td class="responden-fakultas">{{ strtoupper($responden->fakultas) }}</td>
+                                    <td class="responden-fakultas">
+                                        @php
+                                            $fakultasValue = strtolower(trim($responden->fakultas));
+                                            $displayFakultas = $fakultasValue;
+                                            $normalizationMap = [
+                                                'teknik' => 'ft',
+                                                'fpbs' => 'fbs',
+                                                'fkip' => 'fip',
+                                                'fis' => 'fish',
+                                                'fe' => 'feb',
+                                                'fppsi' => 'fpsi',
+                                            ];
+                                
+                                            if (isset($normalizationMap[$fakultasValue])) {
+                                                $displayFakultas = $normalizationMap[$fakultasValue];
+                                            }
+                                        @endphp
+                                        {{ strtoupper($displayFakultas) }}
+                                    </td>
                                     <td class="responden-category">
                                         @if(in_array(strtolower($responden->category), ['employee', 'employer', 'employeer', 'industri']))
                                             Employee
@@ -603,6 +621,19 @@
                 return v === 'academic' ? 'Academic' : 'Employee';
             }
 
+            function normalizeFakultasValue(raw) {
+                const v = String(raw || '').toLowerCase().trim();
+                const map = {
+                    'teknik': 'ft',
+                    'fpbs': 'fbs',
+                    'fkip': 'fip',
+                    'fis': 'fish',
+                    'fe': 'feb',
+                    'fppsi': 'fpsi'
+                };
+                return map[v] || v;
+            }
+
 
             document.querySelectorAll('.edit-btn').forEach(button => {
                 button.addEventListener('click', function() {
@@ -629,8 +660,7 @@
                             form.querySelector('#edit_phone_dosen').value = responden
                                 .phone_dosen;
                             
-                            // 
-                            form.querySelector('#edit_fakultas').value = responden.fakultas ? responden.fakultas.toLowerCase() : '';
+                            form.querySelector('#edit_fakultas').value = normalizeFakultasValue(responden.fakultas);
 
                             form.querySelector('#edit_category').value = normalizeCategoryValue(responden.category);
                         })
@@ -676,7 +706,7 @@
                                 updatedData.nama_dosen_pengusul;
                             row.querySelector('.responden-phone_dosen').textContent = updatedData
                                 .phone_dosen;
-                            row.querySelector('.responden-fakultas').textContent = updatedData.fakultas
+                            row.querySelector('.responden-fakultas').textContent = normalizeFakultasValue(updatedData.fakultas)
                                 .toUpperCase();
                             row.querySelector('.responden-category').textContent = displayCategory(updatedData.category);
                         }
