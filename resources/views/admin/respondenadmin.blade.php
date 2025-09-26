@@ -6,7 +6,7 @@
 @section('contentadmin')
     @if ($errors->has('email'))
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            document->addEventListener('DOMContentLoaded', function() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Gagal Menyimpan Data',
@@ -182,6 +182,15 @@
                                         </option>
                                         <option value="profesi" {{ request('fakultas') == 'profesi' ? 'selected' : '' }}>
                                             PROFESI</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <select class="form-select" name="sumber_data" id="filterSumberData">
+                                        <option value="">Semua Sumber Data</option>
+                                        <option value="admin_only" {{ request('sumber_data') == 'admin_only' ? 'selected' : '' }}>
+                                            Admin Direktorat</option>
+                                        <option value="non_admin" {{ request('sumber_data') == 'non_admin' ? 'selected' : '' }}>
+                                            Fakultas & Prodi</option>
                                     </select>
                                 </div>
                                 <div class="col-auto">
@@ -556,6 +565,26 @@
                             <option value="profesi">PROFESI</option>
                         </select>
                     </div>
+                    {{-- Filter Status --}}
+                    <div class="mb-3">
+                        <label for="exportFilterStatus" class="form-label">Status</label>
+                        <select class="form-select" id="exportFilterStatus">
+                            <option value="">Semua Status</option>
+                            <option value="belum">Belum di-email</option>
+                            <option value="done">Sudah di-email, belum di-follow up</option>
+                            <option value="dones">Sudah di-email, sudah di-follow up</option>
+                            <option value="clear">Selesai</option>
+                        </select>
+                    </div>
+                    {{-- Filter Sumber Data --}}
+                    <div class="mb-3">
+                        <label for="exportFilterSumberData" class="form-label">Sumber Data</label>
+                        <select class="form-select" id="exportFilterSumberData">
+                            <option value="">Semua Sumber</option>
+                            <option value="admin_only">Admin Direktorat</option>
+                            <option value="non_admin">Fakultas & Prodi</option>
+                        </select>
+                    </div>
                     {{-- Filter Tanggal --}}
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -848,13 +877,17 @@
             document.getElementById('exportFilteredExcel').addEventListener('click', function() {
                 const category = document.getElementById('exportFilterCategory').value;
                 const fakultas = document.getElementById('exportFilterFakultas').value;
+                const status = document.getElementById('exportFilterStatus').value;
+                const sumberData = document.getElementById('exportFilterSumberData').value;
                 const startDate = document.getElementById('exportStartDate').value;
                 const endDate = document.getElementById('exportEndDate').value;
 
-                let url = '{{ route('admin.responden.export') }}?';
+                let url = '{{ route('admin.responden.export.excel') }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
                 if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
+                if (status) params.push(`status=${encodeURIComponent(status)}`);
+                if (sumberData) params.push(`sumber_data=${encodeURIComponent(sumberData)}`);
                 if (startDate) params.push(`start_date=${encodeURIComponent(startDate)}`);
                 if (endDate) params.push(`end_date=${encodeURIComponent(endDate)}`);
 
@@ -866,13 +899,17 @@
             document.getElementById('exportFilteredCSV').addEventListener('click', function() {
                 const category = document.getElementById('exportFilterCategory').value;
                 const fakultas = document.getElementById('exportFilterFakultas').value;
+                const status = document.getElementById('exportFilterStatus').value;
+                const sumberData = document.getElementById('exportFilterSumberData').value;
                 const startDate = document.getElementById('exportStartDate').value;
                 const endDate = document.getElementById('exportEndDate').value;
 
-                let url = '{{ route('admin.responden.exportCSV') }}?';
+                let url = '{{ route('admin.responden.export.csv') }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
                 if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
+                if (status) params.push(`status=${encodeURIComponent(status)}`);
+                if (sumberData) params.push(`sumber_data=${encodeURIComponent(sumberData)}`);
                 if (startDate) params.push(`start_date=${encodeURIComponent(startDate)}`);
                 if (endDate) params.push(`end_date=${encodeURIComponent(endDate)}`);
 
@@ -930,3 +967,4 @@
 
     </style>
 @endsection
+
