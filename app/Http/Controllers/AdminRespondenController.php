@@ -134,6 +134,10 @@ class AdminRespondenController extends Controller
             }
         }
 
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
         if ($request->filled('filter_date')) {
             $query->whereDate('created_at', $request->filter_date);
         }
@@ -494,4 +498,3 @@ class AdminRespondenController extends Controller
         return view($viewName, compact('respondens'));
     }
 }
-

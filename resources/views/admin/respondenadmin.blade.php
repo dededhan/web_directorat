@@ -194,6 +194,15 @@
                                     </select>
                                 </div>
                                 <div class="col-auto">
+                                    <select class="form-select" name="status" id="filterStatus">
+                                        <option value="">Semua Status</option>
+                                        <option value="belum" {{ request('status') == 'belum' ? 'selected' : '' }}>Belum di-email</option>
+                                        <option value="done" {{ request('status') == 'done' ? 'selected' : '' }}>Sudah di-email, belum di-follow up</option>
+                                        <option value="dones" {{ request('status') == 'dones' ? 'selected' : '' }}>Sudah di-email, sudah di-follow up</option>
+                                        <option value="clear" {{ request('status') == 'clear' ? 'selected' : '' }}>Selesai</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
                                     <label for="perPageFilter" class="form-label visually-hidden">Show</label>
                                     <select class="form-select" name="per_page" id="perPageFilter">
                                         <option value="10" {{ request('per_page', 10) == 10 ? 'selected' : '' }}>10
@@ -967,4 +976,3 @@
 
     </style>
 @endsection
-
