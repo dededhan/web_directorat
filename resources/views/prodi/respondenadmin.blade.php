@@ -149,31 +149,43 @@
                 <div class="head">
                     <h3>Daftar Responden</h3>
                     <div class="d-flex justify-content-end align-items-center">
-                        <form method="GET" action="{{ route('prodi.responden.index') }}" class="me-3">
-                            <div class="row g-2 align-items-center">
+                        <form method="GET" action="{{ route('prodi.responden.index') }}" class="me-3 w-100">
+                             <div class="row g-2 align-items-center">
+                                <div class="col-md-3">
+                                    <input type="text" name="search" id="searchInput" class="form-control"
+                                        placeholder="Search..." value="{{ request('search') }}">
+                                </div>
                                 <div class="col-auto">
                                     <select class="form-select" name="kategori" id="filterKategori">
                                         <option value="">Semua Kategori</option>
-                                        <option value="academic" {{ request('kategori') == 'academic' ? 'selected' : '' }}>Academic</option>
-                                        <option value="employer" {{ request('kategori') == 'employer' ? 'selected' : '' }}>Employer</option>
+                                        <option value="academic" {{ request('kategori') == 'academic' ? 'selected' : '' }}>
+                                            Academic</option>
+                                        <option value="employer" {{ in_array(request('kategori'), ['employer', 'employee']) ? 'selected' : '' }}>
+                                            Employer</option>
                                     </select>
                                 </div>
                                 <div class="col-auto">
-                                    <select class="form-select" name="fakultas" id="filterFakultas">
-                                        <option value="">Semua Fakultas</option>
-                                        <option value="pascasarjana" {{ request('fakultas') == 'pascasarjana' ? 'selected' : '' }}>PASCASARJANA</option>
-                                        <option value="fip" {{ request('fakultas') == 'fip' ? 'selected' : '' }}>FIP</option>
-                                        <option value="fmipa" {{ request('fakultas') == 'fmipa' ? 'selected' : '' }}>FMIPA</option>
-                                        <option value="fpsi" {{ request('fakultas') == 'fpsi' ? 'selected' : '' }}>FPsi</option>
-                                        <option value="fbs" {{ request('fakultas') == 'fbs' ? 'selected' : '' }}>FBS</option>
-                                        <option value="ft" {{ request('fakultas') == 'ft' ? 'selected' : '' }}>FT</option>
-                                        <option value="fikk" {{ strtolower(request('fakultas')) == 'fikk' ? 'selected' : '' }}>FIKK</option>
-
-                                        <option value="fish" {{ request('fakultas') == 'fish' ? 'selected' : '' }}>FISH</option>
-                                        <option value="feb" {{ request('fakultas') == 'feb' ? 'selected' : '' }}>FEB</option>
-                                        <option value="profesi" {{ request('fakultas') == 'profesi' ? 'selected' : '' }}>PROFESI</option>
+                                    <select class="form-select" name="status" id="filterStatus">
+                                        <option value="">Semua Status</option>
+                                        <option value="belum" {{ request('status') == 'belum' ? 'selected' : '' }}>Belum di-email</option>
+                                        <option value="done" {{ request('status') == 'done' ? 'selected' : '' }}>Sudah di-email, belum di-follow up</option>
+                                        <option value="dones" {{ request('status') == 'dones' ? 'selected' : '' }}>Sudah di-email, sudah di-follow up</option>
+                                        <option value="clear" {{ request('status') == 'clear' ? 'selected' : '' }}>Selesai</option>
                                     </select>
                                 </div>
+                                <div class="col-auto">
+                                    <label for="perPageFilter" class="form-label visually-hidden">Show</label>
+                                    <select class="form-select" name="per_page" id="perPageFilter">
+                                        <option value="10" {{ request('per_page', 10) == 10 ? 'selected' : '' }}>10</option>
+                                        <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                                        <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                                        <option value="2000" {{ request('per_page') == 2000 ? 'selected' : '' }}>All</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="date" name="filter_date" class="form-control" value="{{ request('filter_date') }}">
+                                </div>
+
                                 <div class="col-auto">
                                     <button type="submit" class="btn btn-primary">Filter</button>
                                     <a href="{{ route('prodi.responden.index') }}" class="btn btn-secondary">Reset</a>
@@ -190,10 +202,6 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="search-box">
-                            <input type="text" id="searchInput" class="form-control" placeholder="Search...">
-                        </div>
-                        
                     </div>
                 </div>
                 
@@ -227,7 +235,7 @@
                                         @endif
                                     </a>
                                 </th>
-                                {{-- <th>Status</th> --}}
+                                 <th>Status</th>
                                 <th>Action</th>
 
                             </tr>
@@ -247,20 +255,9 @@
                                     <td class="responden-phone_dosen">{{ $responden->phone_dosen }}</td>
                                     <td class="responden-fakultas">{{ strtoupper($responden->fakultas) }}</td>
                                     <td class="responden-category">{{ $responden->category }}</td>
-                                    {{-- <td>
-                                        <select class="form-select status-dropdown" data-id="{{ $responden->id }}"
-                                            {{ $responden->status == 'dones' ? 'disabled' : '' }}>
-                                            <option value="belum" {{ $responden->status == 'belum' ? 'selected' : '' }}>
-                                                Belum di-email</option>
-                                            <option value="done" {{ $responden->status == 'done' ? 'selected' : '' }}>
-                                                Sudah di-email, belum di-follow up</option>
-                                            <option value="dones" {{ $responden->status == 'dones' ? 'selected' : '' }}>
-                                                Sudah di-email, sudah di-follow up</option>
-                                            @if ($responden->status == 'clear')
-                                                <option value="clear" selected>selesai</option>
-                                            @endif
-                                        </select>
-                                    </td> --}}
+                                     <td>
+                                        <span class="status {{ strtolower($responden->status) }}">{{ $responden->status }}</span>
+                                    </td>
                                     <td>
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-warning btn-sm edit-btn" data-id="{{ $responden->id }}" data-bs-toggle="modal" data-bs-target="#editRespondenModal">
@@ -438,16 +435,16 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="filterCategory" class="form-label">Kategori</label>
-                        <select class="form-select" id="filterCategory">
+                        <label for="exportFilterCategory" class="form-label">Kategori</label>
+                        <select class="form-select" id="exportFilterCategory">
                             <option value="">Semua Kategori</option>
                             <option value="academic">Academic</option>
                             <option value="employer">Employer</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="filterFakultas" class="form-label">Fakultas</label>
-                        <select class="form-select" id="filterFakultas">
+                        <label for="exportFilterFakultas" class="form-label">Fakultas</label>
+                        <select class="form-select" id="exportFilterFakultas">
                             <option value="">Semua Fakultas</option>
                             <option value="pascasarjana">PASCASARJANA</option>
                             <option value="fip">FIP</option>
@@ -460,6 +457,26 @@
                             <option value="feb">FEB</option>
                             <option value="profesi">PROFESI</option>
                         </select>
+                    </div>
+                     <div class="mb-3">
+                        <label for="exportFilterStatus" class="form-label">Status</label>
+                        <select class="form-select" id="exportFilterStatus">
+                            <option value="">Semua Status</option>
+                            <option value="belum">Belum di-email</option>
+                            <option value="done">Sudah di-email, belum di-follow up</option>
+                            <option value="dones">Sudah di-email, sudah di-follow up</option>
+                            <option value="clear">Selesai</option>
+                        </select>
+                    </div>
+                     <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="exportStartDate" class="form-label">Tanggal Mulai</label>
+                            <input type="date" class="form-control" id="exportStartDate">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="exportEndDate" class="form-label">Tanggal Selesai</label>
+                            <input type="date" class="form-control" id="exportEndDate">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -475,7 +492,7 @@
         // edit delete 
     document.addEventListener('DOMContentLoaded', function() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const routePrefix = "{{ $routePrefix ?? 'admin' }}";
+            const routePrefix = "{{ $routePrefix ?? 'prodi' }}";
 
             // Handle Edit button click
             document.querySelectorAll('.edit-btn').forEach(button => {
@@ -633,36 +650,6 @@
             });
         });
 
-        // Filter functionality
-        document.getElementById('emailFilter').addEventListener('keyup', function() {
-            filterRespondents();
-        });
-
-        document.getElementById('phoneFilter').addEventListener('keyup', function() {
-            filterRespondents();
-        });
-
-        document.getElementById('resetFilters').addEventListener('click', function() {
-            document.getElementById('emailFilter').value = '';
-            document.getElementById('phoneFilter').value = '';
-            filterRespondents();
-        });
-
-        function filterRespondents() {
-            const email = document.getElementById('emailFilter').value.toLowerCase();
-            const phone = document.getElementById('phoneFilter').value.toLowerCase();
-            const rows = document.querySelectorAll('#respondent-table tbody tr');
-
-            rows.forEach(row => {
-                const rowEmail = row.cells[4].textContent.toLowerCase();
-                const rowPhone = row.cells[5].textContent.toLowerCase();
-
-                const emailMatch = email === '' || rowEmail.includes(email);
-                const phoneMatch = phone === '' || rowPhone.includes(phone);
-
-                row.style.display = emailMatch && phoneMatch ? '' : 'none';
-            });
-        }
     }); 
     </script>
     <script>
@@ -670,13 +657,19 @@
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             document.getElementById('exportFilteredExcel').addEventListener('click', function() {
-                const category = document.getElementById('filterCategory').value;
-                const fakultas = document.getElementById('filterFakultas').value;
+                const category = document.getElementById('exportFilterCategory').value;
+                const fakultas = document.getElementById('exportFilterFakultas').value;
+                const status = document.getElementById('exportFilterStatus').value;
+                const startDate = document.getElementById('exportStartDate').value;
+                const endDate = document.getElementById('exportEndDate').value;
                 
-                let url = '{{ route("prodi.responden.export") }}?';
+                let url = '{{ route("prodi.responden.export.excel") }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
                 if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
+                if (status) params.push(`status=${encodeURIComponent(status)}`);
+                if (startDate) params.push(`start_date=${encodeURIComponent(startDate)}`);
+                if (endDate) params.push(`end_date=${encodeURIComponent(endDate)}`);
                 url += params.join('&');
                 
                 window.location.href = url;
@@ -684,100 +677,23 @@
 
             // Handle CSV Export
             document.getElementById('exportFilteredCSV').addEventListener('click', function() {
-                const category = document.getElementById('filterCategory').value;
-                const fakultas = document.getElementById('filterFakultas').value;
+                const category = document.getElementById('exportFilterCategory').value;
+                const fakultas = document.getElementById('exportFilterFakultas').value;
+                const status = document.getElementById('exportFilterStatus').value;
+                const startDate = document.getElementById('exportStartDate').value;
+                const endDate = document.getElementById('exportEndDate').value;
                 
-                let url = '{{ route("prodi.responden.exportCSV") }}?';
+                let url = '{{ route("prodi.responden.export.csv") }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
                 if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
+                if (status) params.push(`status=${encodeURIComponent(status)}`);
+                if (startDate) params.push(`start_date=${encodeURIComponent(startDate)}`);
+                if (endDate) params.push(`end_date=${encodeURIComponent(endDate)}`);
                 url += params.join('&');
                 
                 window.location.href = url;
             });
-            document.querySelectorAll('.status-dropdown').forEach(select => {
-                // Initial state check
-                const updateButton = select.closest('tr').querySelector('.update-status');
-                if (select.value === 'clear') {
-                    // Disable button when status is clear
-                    updateButton.disabled = true;
-                    updateButton.classList.add('btn-secondary');
-                    updateButton.classList.remove('btn-warning');
-                }
-
-                select.addEventListener('change', function() {
-                    const respondenId = this.dataset.id;
-                    const newStatus = this.value;
-                    const updateButton = this.closest('tr').querySelector('.update-status');
-
-                    // Store previous value for rollback if needed
-                    const previousValue = this.dataset.previousValue;
-
-                    // Prevent selecting 'clear' status manually
-                    if (newStatus === 'clear') {
-                        this.value = previousValue;
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Invalid Action',
-                            text: 'Status "selesai" cannot be set manually',
-                        });
-                        return;
-                    }
-
-                    updateStatus(this, respondenId, newStatus, updateButton);
-                });
-
-                // Store initial value
-                select.dataset.previousValue = select.value;
-            });
-
-            function updateStatus(selectElement, respondenId, newStatus, updateButton) {
-                axios.post(`/admin/responden/update-status/${respondenId}`, {
-                        status: newStatus,
-                        _token: csrfToken
-                    })
-                    .then(response => {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil!',
-                            text: response.data.message,
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
-
-                        const badge = selectElement.closest('tr').querySelector('.status-badge');
-                        if (badge) {
-                            badge.textContent = response.data.new_status;
-                        }
-                    })
-                    .catch(error => {
-                        // Revert to previous value on error
-                        selectElement.value = selectElement.dataset.previousValue;
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Gagal!',
-                            text: error.response?.data?.message || 'Terjadi kesalahan',
-                        });
-                    })
-                    .finally(() => {
-                        selectElement.dataset.previousValue = newStatus;
-                    });
-            }
-        });
-
-
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            const searchText = this.value.toLowerCase();
-            const table = document.getElementById('respondent-table');
-            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-
-            for (let row of rows) {
-                let text = '';
-                for (let cell of row.getElementsByTagName('td')) {
-                    text += cell.textContent.toLowerCase() + ' ';
-                }
-                row.style.display = text.includes(searchText) ? '' : 'none';
-            }
         });
     </script>
 

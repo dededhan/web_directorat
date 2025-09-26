@@ -150,8 +150,17 @@
                                         <option value="">Semua Kategori</option>
                                         <option value="academic" {{ request('kategori') == 'academic' ? 'selected' : '' }}>
                                             Academic</option>
-                                        <option value="employer" {{ request('kategori') == 'employer' ? 'selected' : '' }}>
+                                        <option value="employer" {{ in_array(request('kategori'), ['employer', 'employee']) ? 'selected' : '' }}>
                                             Employer</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <select class="form-select" name="status" id="filterStatus">
+                                        <option value="">Semua Status</option>
+                                        <option value="belum" {{ request('status') == 'belum' ? 'selected' : '' }}>Belum di-email</option>
+                                        <option value="done" {{ request('status') == 'done' ? 'selected' : '' }}>Sudah di-email, belum di-follow up</option>
+                                        <option value="dones" {{ request('status') == 'dones' ? 'selected' : '' }}>Sudah di-email, sudah di-follow up</option>
+                                        <option value="clear" {{ request('status') == 'clear' ? 'selected' : '' }}>Selesai</option>
                                     </select>
                                 </div>
                                 <div class="col-auto">
@@ -456,6 +465,16 @@
                             <option value="profesi">PROFESI</option>
                         </select>
                     </div>
+                     <div class="mb-3">
+                        <label for="exportFilterStatus" class="form-label">Status</label>
+                        <select class="form-select" id="exportFilterStatus">
+                            <option value="">Semua Status</option>
+                            <option value="belum">Belum di-email</option>
+                            <option value="done">Sudah di-email, belum di-follow up</option>
+                            <option value="dones">Sudah di-email, sudah di-follow up</option>
+                            <option value="clear">Selesai</option>
+                        </select>
+                    </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="exportStartDate" class="form-label">Tanggal Mulai</label>
@@ -552,13 +571,15 @@
             document.getElementById('exportFilteredExcel').addEventListener('click', function() {
                 const category = document.getElementById('exportFilterCategory').value;
                  const fakultas = document.getElementById('exportFilterFakultas').value;
+                const status = document.getElementById('exportFilterStatus').value;
                 const startDate = document.getElementById('exportStartDate').value;
                 const endDate = document.getElementById('exportEndDate').value;
 
-                let url = '{{ route("fakultas.responden.export") }}?';
+                let url = '{{ route("fakultas.responden.export.excel") }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
                 if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
+                if (status) params.push(`status=${encodeURIComponent(status)}`);
                 if (startDate) params.push(`start_date=${encodeURIComponent(startDate)}`);
                 if (endDate) params.push(`end_date=${encodeURIComponent(endDate)}`);
                 
@@ -569,13 +590,15 @@
             document.getElementById('exportFilteredCSV').addEventListener('click', function() {
                 const category = document.getElementById('exportFilterCategory').value;
                 const fakultas = document.getElementById('exportFilterFakultas').value;
+                const status = document.getElementById('exportFilterStatus').value;
                 const startDate = document.getElementById('exportStartDate').value;
                 const endDate = document.getElementById('exportEndDate').value;
 
-                let url = '{{ route("fakultas.responden.exportCSV") }}?';
+                let url = '{{ route("fakultas.responden.export.csv") }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
-                if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`); 
+                if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
+                if (status) params.push(`status=${encodeURIComponent(status)}`);
                 if (startDate) params.push(`start_date=${encodeURIComponent(startDate)}`);
                 if (endDate) params.push(`end_date=${encodeURIComponent(endDate)}`);
 

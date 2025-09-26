@@ -127,7 +127,7 @@ Route::prefix('admin')->name('admin.')
         Route::post('/responden/import', [AdminRespondenController::class, 'import'])->name('responden.import');
         Route::get('/responden/filter', [AdminRespondenController::class, 'filter'])->name('responden.filter');
 
-        Route::get('/responden/export/excel', [AdminRespondenExportController::class, 'export'])
+        Route::get('/responden/export/excel', [AdminRespondenExportController::class, 'exportExcel'])
             ->name('responden.export.excel');
         Route::get('/responden/export/csv', [AdminRespondenExportController::class, 'exportCSV'])
             ->name('responden.export.csv');
@@ -351,10 +351,11 @@ Route::prefix('prodi')->name('prodi.')
             ->name('responden.updateStatus');
         Route::post('/responden/import', [AdminRespondenController::class, 'import'])->name('responden.import');
         Route::get('/responden/filter', [AdminRespondenController::class, 'filter'])->name('responden.filter');
-        Route::get('/responden/export/excel', [AdminRespondenController::class, 'export'])
-            ->name('responden.export');
-        Route::get('/responden/export/csv', [AdminRespondenController::class, 'exportCSV'])
-            ->name('responden.exportCSV');
+        Route::get('/responden/export/excel', [AdminRespondenExportController::class, 'exportExcel'])
+            ->name('responden.export.excel');
+        Route::get('/responden/export/csv', [AdminRespondenExportController::class, 'exportCSV'])
+            ->name('responden.export.csv');
+
         Route::resource('/matakuliah', AdminMataKuliahController::class);
         Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
         Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
@@ -395,8 +396,7 @@ Route::prefix('fakultas')->name('fakultas.')
         Route::get('/sustainability/{id}/detail', [AdminSustainabilityController::class, 'getSustainabilityDetail'])
             ->name('sustainability.detail');
 
-
-        Route::get('/responden/laporan', [AdminRespondenController::class, 'laporanFakultas'])
+        Route::get('/responden/laporan', [AdminRespondenReportController::class, 'laporanFakultas'])
             ->name('responden.laporan');
 
         Route::resource('/responden', AdminRespondenController::class)->except(['update']);
@@ -406,10 +406,10 @@ Route::prefix('fakultas')->name('fakultas.')
             ->name('responden.updateStatus');
         Route::post('/responden/import', [AdminRespondenController::class, 'import'])->name('responden.import');
         Route::get('/responden/filter', [AdminRespondenController::class, 'filter'])->name('responden.filter');
-        Route::get('/responden/export/excel', [AdminRespondenController::class, 'export'])
-            ->name('responden.export');
-        Route::get('/responden/export/csv', [AdminRespondenController::class, 'exportCSV'])
-            ->name('responden.exportCSV');
+        Route::get('/responden/export/excel', [AdminRespondenExportController::class, 'exportExcel'])
+            ->name('responden.export.excel');
+        Route::get('/responden/export/csv', [AdminRespondenExportController::class, 'exportCSV'])
+            ->name('responden.export.csv');
 
         Route::resource('/matakuliah', AdminMataKuliahController::class);
         Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
@@ -418,11 +418,9 @@ Route::prefix('fakultas')->name('fakultas.')
         Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
 
-        // NEW: Manage Account Routes for Fakultas
         Route::get('/account', function () {
             return view('fakultas.manage_account');
         })->name('manage.account');
-        // Route::put('/account', [UserController::class, 'updateAccount'])->name('manage.account.update');
     });
 
 
