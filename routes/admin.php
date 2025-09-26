@@ -126,11 +126,11 @@ Route::prefix('admin')->name('admin.')
 
         Route::post('/responden/import', [AdminRespondenController::class, 'import'])->name('responden.import');
         Route::get('/responden/filter', [AdminRespondenController::class, 'filter'])->name('responden.filter');
-        Route::get('/responden/export/excel', [AdminRespondenExportController::class, 'export'])
-            ->name('responden.export');
-        Route::get('/responden/export/csv', [AdminRespondenExportController::class, 'exportCSV'])
-            ->name('responden.exportCSV');
 
+        Route::get('/responden/export/excel', [AdminRespondenExportController::class, 'export'])
+            ->name('responden.export.excel');
+        Route::get('/responden/export/csv', [AdminRespondenExportController::class, 'exportCSV'])
+            ->name('responden.export.csv');
 
         Route::resource('/manageuser', UserController::class)->parameters([
             'manageuser' => 'user'
