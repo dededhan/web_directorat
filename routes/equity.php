@@ -15,6 +15,10 @@ use App\Http\Controllers\ReviewerEquity\ComdevReviewerController;
 use App\Http\Controllers\Dosen\ComdevLogbookController;
 use App\Http\Controllers\AdminEquity\AdminEquityUserController;
 use App\Http\Controllers\Dosen\DosenProfileController;
+use App\Http\Controllers\AdminEquity\ApcSessionController;
+use App\Http\Controllers\AdminEquity\ApcSubmissionAdminController;
+use App\Http\Controllers\Dosen\ApcDosenController;
+use App\Http\Controllers\Dosen\ApcSubmissionController;
 
 
 // Admin Equity Routes
@@ -48,9 +52,23 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
     Route::delete('/modules/{module}', [ComdevModuleController::class, 'destroyModule'])->name('comdev.modules.destroy');
     Route::delete('/subchapters/{subChapter}', [ComdevModuleController::class, 'destroySubChapter'])->name('comdev.subchapters.destroy');
 
-    Route::get('/apc', function () {
-        return view('admin_equity.apc.index');
-    })->name('apc.index');
+    //APC
+    Route::prefix('apc')->name('apc.')->group(function () {
+        Route::get('/', [ApcSessionController::class, 'index'])->name('index');
+        Route::get('/create', [ApcSessionController::class, 'create'])->name('create');
+        Route::post('/', [ApcSessionController::class, 'store'])->name('store');
+        Route::get('/{apc}', [ApcSessionController::class, 'show'])->name('show');
+        Route::get('/{apc}/edit', [ApcSessionController::class, 'edit'])->name('edit');
+        Route::put('/{apc}', [ApcSessionController::class, 'update'])->name('update');
+        Route::delete('/{apc}', [ApcSessionController::class, 'destroy'])->name('destroy');
+
+    });
+
+        Route::prefix('apc-submission')->name('apc.submission.')->group(function() {
+        Route::get('/{submission}', [ApcSubmissionAdminController::class, 'show'])->name('show');
+        Route::post('/{submission}/status', [ApcSubmissionAdminController::class, 'updateStatus'])->name('updateStatus');
+    });
+    //
 
     // 3. Insentif reviewer dan editorial board
     Route::get('/incentive-reviewer', function () {
@@ -70,8 +88,6 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
     Route::get('/match-research', function () {
         return view('admin_equity.matchresearch.index');
     })->name('matchresearch.index');
-
-
 });
 
 Route::prefix('reviewer_equity')->name('reviewer_equity.')->middleware(['auth', 'role:reviewer_equity'])->group(function () {
@@ -167,5 +183,20 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::get('/equity/files/{file}/download', [ComdevSubmissionFileController::class, 'download'])->name('equity.files.download');
                 Route::delete('/equity/files/{file}', [ComdevSubmissionFileController::class, 'destroy'])->name('equity.files.destroy');
                 Route::get('/equity/templates/{templateName}/download', [ComdevSubmissionFileController::class, 'downloadTemplate'])->name('equity.templates.download');
+
+
+                //apc
+                Route::prefix('apc')->name('apc.')->group(function () {
+                    Route::get('/list-sesi', [ApcDosenController::class, 'listSessions'])->name('list-sesi');
+                    Route::get('/manajemen', [ApcDosenController::class, 'manageSubmissions'])->name('manajemen');
+                    
+                    // Create
+                    Route::get('/{sessionId}/form', [ApcDosenController::class, 'createSubmissionForm'])->name('form');
+                    Route::post('/{sessionId}/store', [ApcSubmissionController::class, 'store'])->name('store');
+
+                    Route::get('/submission/{submission}/edit', [ApcSubmissionController::class, 'edit'])->name('edit');
+                    Route::put('/submission/{submission}', [ApcSubmissionController::class, 'update'])->name('update');
+                    Route::delete('/submission/{submission}', [ApcSubmissionController::class, 'destroy'])->name('destroy');
+                });
             });
     });
