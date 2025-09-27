@@ -155,12 +155,12 @@
                     <span x-show="open || mobileOpen" class="font-medium">Jurnal Scopus/WOS</span>
                 </a>
 
-                <!-- 5. Conference & Match Making -->
-                <a href="#"
-                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700"
+                <!-- 5. Matchmaking Riset-->
+                <a href="{{ route('admin_equity.matchresearch.index') }}"
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.matchresearch.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
                    :class="{'justify-center': !open && !mobileOpen}">
-                    <i class='bx bx-globe text-2xl flex-shrink-0'></i>
-                    <span x-show="open || mobileOpen" class="font-medium">Konf & Match Making</span>
+                    <i class='bx bx-user-voice text-2xl flex-shrink-0'></i>
+                    <span x-show="open || mobileOpen" class="font-medium">Matchmaking Riset</span>
                 </a>
 
                 <!-- 6. Visiting Professors -->

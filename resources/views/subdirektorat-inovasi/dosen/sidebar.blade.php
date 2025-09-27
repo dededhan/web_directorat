@@ -3,7 +3,8 @@
         mobileOpen: false,
         inovasiOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.tablekatsinov') || request()->routeIs('subdirektorat-inovasi.dosen.form') ? 'true' : 'false' }},
         equityOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.equity.*') ? 'true' : 'false' }},
-        apcOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.apc.*') ? 'true' : 'false' }}, // Ditambahkan
+        apcOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.apc.*') ? 'true' : 'false' }},
+        matchmakingOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.matchresearch.*') ? 'true' : 'false' }},
         pengaturanOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.manageprofile.*') ? 'true' : 'false' }},
         init() {
             this.$watch('mobileOpen', value => {
@@ -181,6 +182,32 @@
                 </div>
                 <!-- AKHIR DARI BAGIAN APC YANG BARU -->
 
+
+                                <button @click="matchmakingOpen = !matchmakingOpen"
+                        class="flex w-full items-center rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700 group mt-2"
+                        :class="open || mobileOpen ? 'justify-between' : 'justify-center'">
+                    <div class="flex items-center space-x-4">
+                        <i class='bx bx-user-voice text-2xl flex-shrink-0'></i>
+                        <span x-show="open || mobileOpen" class="font-medium">Matchmaking Riset</span>
+                    </div>
+                    <div x-show="open || mobileOpen" class="flex items-center">
+                        <i class='bx bx-chevron-down text-2xl transition-transform duration-300'
+                           :class="{'rotate-180': matchmakingOpen}"></i>
+                    </div>
+                </button>
+                
+                <div x-show="matchmakingOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
+                    <a href="{{ route('subdirektorat-inovasi.dosen.matchresearch.manajemen') }}"
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('subdirektorat-inovasi.dosen.matchresearch.manajemen') ? 'bg-teal-600 font-semibold text-white' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-folder-open text-2xl flex-shrink-0'></i>
+                        <span>Manajemen Proposal</span>
+                    </a>
+                    <a href="{{ route('subdirektorat-inovasi.dosen.matchresearch.list-sesi') }}"
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('subdirektorat-inovasi.dosen.matchresearch.list-sesi') || request()->routeIs('subdirektorat-inovasi.dosen.matchresearch.form') ? 'bg-teal-600 font-semibold text-white' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-file-plus text-2xl flex-shrink-0'></i>
+                        <span>Usulkan Proposal</span>
+                    </a>
+                </div>
             </div>
 
         </nav>

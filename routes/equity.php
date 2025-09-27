@@ -19,6 +19,11 @@ use App\Http\Controllers\AdminEquity\ApcSessionController;
 use App\Http\Controllers\AdminEquity\ApcSubmissionAdminController;
 use App\Http\Controllers\Dosen\ApcDosenController;
 use App\Http\Controllers\Dosen\ApcSubmissionController;
+use App\Http\Controllers\AdminEquity\MatchresearchController;
+use App\Http\Controllers\Dosen\MatchmakingDosenController; 
+use App\Http\Controllers\Dosen\DosenSearchController;
+use App\Http\Controllers\Dosen\MatchmakingDosenSubmissionController; 
+use App\Http\Controllers\Dosen\MatchmakingDosenReportController;
 
 
 // Admin Equity Routes
@@ -61,10 +66,9 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
         Route::get('/{apc}/edit', [ApcSessionController::class, 'edit'])->name('edit');
         Route::put('/{apc}', [ApcSessionController::class, 'update'])->name('update');
         Route::delete('/{apc}', [ApcSessionController::class, 'destroy'])->name('destroy');
-
     });
 
-        Route::prefix('apc-submission')->name('apc.submission.')->group(function() {
+    Route::prefix('apc-submission')->name('apc.submission.')->group(function () {
         Route::get('/{submission}', [ApcSubmissionAdminController::class, 'show'])->name('show');
         Route::post('/{submission}/status', [ApcSubmissionAdminController::class, 'updateStatus'])->name('updateStatus');
     });
@@ -88,6 +92,26 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
     Route::get('/match-research', function () {
         return view('admin_equity.matchresearch.index');
     })->name('matchresearch.index');
+
+
+    // matchmaking
+    Route::prefix('matchresearch')->name('matchresearch.')->group(function () {
+        Route::get('/', [MatchresearchController::class, 'index'])->name('index');
+        Route::get('/create', [MatchresearchController::class, 'create'])->name('create');
+        Route::post('/', [MatchresearchController::class, 'store'])->name('store');
+        Route::get('/{id}', [MatchresearchController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [MatchresearchController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [MatchresearchController::class, 'update'])->name('update');
+        Route::delete('/{id}', [MatchresearchController::class, 'destroy'])->name('destroy');
+
+        // submission
+        Route::get('/submissions/{submission}', [MatchresearchController::class, 'showSubmission'])->name('submission.show');
+        Route::post('/submissions/{submission}/status', [MatchresearchController::class, 'updateSubmissionStatus'])->name('submission.updateStatus');
+        Route::get('/submissions/{submission}/report', [MatchresearchController::class, 'showFullReport'])->name('submission.report.show');
+        // report
+        Route::post('/submissions/{submission}/report/status', [MatchresearchController::class, 'updateReportStatus'])->name('submission.report.updateStatus');
+
+    });
 });
 
 Route::prefix('reviewer_equity')->name('reviewer_equity.')->middleware(['auth', 'role:reviewer_equity'])->group(function () {
@@ -189,7 +213,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::prefix('apc')->name('apc.')->group(function () {
                     Route::get('/list-sesi', [ApcDosenController::class, 'listSessions'])->name('list-sesi');
                     Route::get('/manajemen', [ApcDosenController::class, 'manageSubmissions'])->name('manajemen');
-                    
+
                     // Create
                     Route::get('/{sessionId}/form', [ApcDosenController::class, 'createSubmissionForm'])->name('form');
                     Route::post('/{sessionId}/store', [ApcSubmissionController::class, 'store'])->name('store');
@@ -198,5 +222,28 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                     Route::put('/submission/{submission}', [ApcSubmissionController::class, 'update'])->name('update');
                     Route::delete('/submission/{submission}', [ApcSubmissionController::class, 'destroy'])->name('destroy');
                 });
+
+                // matchmaking
+                Route::prefix('matchresearch')->name('matchresearch.')->group(function () {
+                    // Tahap 1
+                    Route::get('/list-sesi', [MatchmakingDosenController::class, 'listSessions'])->name('list-sesi');
+                    Route::get('/manajemen', [MatchmakingDosenController::class, 'manageSubmissions'])->name('manajemen');
+                    Route::get('/{sessionId}/form', [MatchmakingDosenController::class, 'createSubmissionForm'])->name('form');
+                    Route::post('/{sessionId}/store', [MatchmakingDosenSubmissionController::class, 'store'])->name('store');
+
+                    // Route untuk Edit dan Update
+                    Route::get('/submission/{submission}/edit', [MatchmakingDosenSubmissionController::class, 'edit'])->name('edit');
+                    Route::put('/submission/{submission}', [MatchmakingDosenSubmissionController::class, 'update'])->name('update');
+
+                    // Tahap 2
+                    Route::prefix('report')->name('report.')->group(function() {
+                        Route::get('/{submissionId}/form', [MatchmakingDosenReportController::class, 'show'])->name('form');
+                        Route::post('/{submissionId}/store', [MatchmakingDosenReportController::class, 'storeOrUpdate'])->name('store');
+                    });
+
+
+                });
+                    // API
+                    Route::get('/search-dosen', [DosenSearchController::class, 'search'])->name('search-dosen');
             });
     });

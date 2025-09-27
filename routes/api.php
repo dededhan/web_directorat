@@ -18,6 +18,7 @@ use App\Http\Controllers\AdminMataKuliahController;
 use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\InternationalFacultyStaffActivitiesController;
 use App\Http\Controllers\RisetUnjController;
+use App\Http\Controllers\Api\CountryController;
 use App\Models\Prodi; 
 
 
@@ -66,3 +67,5 @@ Route::get('/fakultas/report-data', [AdminRespondenReportController::class, 'get
 Route::get('/prodi/{fakultas_id}', function ($fakultas_id) {
     return Prodi::where('fakultas_id', $fakultas_id)->orderBy('name')->get();
 });
+
+Route::get('/countries', [CountryController::class, 'index'])->name('api.countries.index');
