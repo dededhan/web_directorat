@@ -1,90 +1,266 @@
 @extends('admin_equity.index')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
-    <div class="max-w-4xl mx-auto">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        {{-- Header --}}
-        <header class="mb-8">
-             <nav class="text-sm text-gray-500 mb-3" aria-label="Breadcrumb">
+        {{-- Breadcrumb dan Header --}}
+        <header class="mb-10">
+            <nav class="text-sm text-gray-500 mb-3" aria-label="Breadcrumb">
                 <ol class="list-none p-0 inline-flex items-center space-x-2">
-                    <li><a href="{{ route('admin_equity.dashboard') }}" class="hover:text-teal-600">Dashboard</a></li>
+                    <li><a href="{{ route('admin_equity.dashboard') }}" 
+                           class="hover:text-slate-600 transition-colors duration-200">Dashboard</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
-                    <li><a href="{{ route('admin_equity.apc.index') }}" class="hover:text-teal-600">Manajemen Sesi APC</a></li>
+                    <li><a href="{{ route('admin_equity.apc.index') }}" 
+                           class="hover:text-slate-600 transition-colors duration-200">Manajemen Sesi APC</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
-                    <li><a href="{{ route('admin_equity.apc.show', $submission->session_id) }}" class="hover:text-teal-600">Detail Sesi</a></li>
-                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
+                    <li><a href="{{ route('admin_equity.apc.show', $submission->session_id) }}" 
+                           class="hover:text-slate-600 transition-colors duration-200">Detail Sesi</a></li>
+                    <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                     <li class="font-medium text-gray-800">Detail Pengajuan</li>
                 </ol>
             </nav>
-            <h1 class="text-3xl font-bold text-gray-800">Detail Pengajuan Jurnal</h1>
-            <p class="mt-2 text-gray-600">Verifikasi kelengkapan data dan dokumen pengajuan.</p>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl lg:text-3xl font-semibold text-gray-800">Detail Pengajuan Jurnal</h1>
+                    <p class="mt-2 text-gray-600 text-base">Verifikasi kelengkapan data dan dokumen pengajuan.</p>
+                </div>
+                <div class="flex-shrink-0">
+                    <div class="bg-slate-100 px-4 py-2 rounded-lg border border-slate-200">
+                        <p class="text-xs font-medium text-slate-600 uppercase tracking-wide">Status Saat Ini</p>
+                        <p class="text-sm font-medium text-slate-700 capitalize">{{ $submission->status ?? 'Diajukan' }}</p>
+                    </div>
+                </div>
+            </div>
         </header>
 
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-            <div class="p-8 space-y-6">
-                {{-- Detail Info --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+        {{-- Main Content --}}
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            
+            {{-- Header Card --}}
+            <div class="bg-slate-100 px-6 lg:px-8 py-6 border-b border-slate-200">
+                <div class="flex items-center">
+                    <i class='bx bx-file-blank text-2xl mr-3 text-slate-600'></i>
+                    <h2 class="text-xl lg:text-2xl font-semibold text-slate-800">Informasi Pengajuan</h2>
+                </div>
+            </div>
+
+            <div class="p-6 lg:p-8 space-y-8">
+                
+                {{-- Basic Information --}}
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="lg:col-span-2">
+                        <label class="block text-xs font-medium uppercase text-gray-500 mb-2 flex items-center">
+                            <i class='bx bx-file-blank text-green-500 mr-2'></i>
+                            Judul Artikel
+                        </label>
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 font-medium leading-relaxed">{{ $submission->judul_artikel }}</p>
+                        </div>
+                    </div>
+
                     <div>
-                        <h3 class="text-xs font-bold uppercase text-gray-500">Judul Artikel</h3>
-                        <p class="mt-1 text-gray-800 font-semibold">{{ $submission->judul_artikel }}</p>
+                        <label class="block text-xs font-medium uppercase text-gray-500 mb-2 flex items-center">
+                            <i class='bx bx-book-content text-blue-500 mr-2'></i>
+                            Nama Jurnal (Q1)
+                        </label>
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 font-medium">{{ $submission->nama_jurnal }}</p>
+                        </div>
                     </div>
-                     <div>
-                        <h3 class="text-xs font-bold uppercase text-gray-500">Nama Jurnal (Q1)</h3>
-                        <p class="mt-1 text-gray-800">{{ $submission->nama_jurnal }}</p>
-                    </div>
+
                     <div>
-                        <h3 class="text-xs font-bold uppercase text-gray-500">Link ScimagoJR</h3>
-                        <a href="{{$submission->link_scimagojr}}" target="_blank" class="mt-1 text-teal-600 hover:underline break-all">{{ $submission->link_scimagojr }}</a>
+                        <label class="block text-xs font-medium uppercase text-gray-500 mb-2 flex items-center">
+                            <i class='bx bx-user text-indigo-500 mr-2'></i>
+                            Penulis
+                        </label>
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 font-medium">{{ $submission->nama_penulis }}</p>
+                        </div>
                     </div>
-                     <div>
-                        <h3 class="text-xs font-bold uppercase text-gray-500">Penulis</h3>
-                        <p class="mt-1 text-gray-800">{{ $submission->nama_penulis }}</p>
+
+                    <div class="lg:col-span-2">
+                        <label class="block text-xs font-medium uppercase text-gray-500 mb-2 flex items-center">
+                            <i class='bx bx-link text-purple-500 mr-2'></i>
+                            Link ScimagoJR
+                        </label>
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <a href="{{ $submission->link_scimagojr }}" 
+                               target="_blank" 
+                               class="text-blue-600 hover:text-blue-800 hover:underline break-all font-medium">
+                                {{ $submission->link_scimagojr }}
+                            </a>
+                        </div>
                     </div>
+
                     <div>
-                        <h3 class="text-xs font-bold uppercase text-gray-500">Volume & Issue</h3>
-                        <p class="mt-1 text-gray-800">Volume {{ $submission->volume }}, Issue {{ $submission->issue }}</p>
+                        <label class="block text-xs font-medium uppercase text-gray-500 mb-2 flex items-center">
+                            <i class='bx bx-bookmark text-orange-500 mr-2'></i>
+                            Volume & Issue
+                        </label>
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 font-medium">Volume {{ $submission->volume }}, Issue {{ $submission->issue }}</p>
+                        </div>
                     </div>
-                     <div>
-                        <h3 class="text-xs font-bold uppercase text-gray-500">Biaya Publikasi Diajukan</h3>
-                        <p class="mt-1 text-lg font-bold text-red-600">Rp {{ number_format($submission->biaya_publikasi, 0, ',', '.') }}</p>
+
+                    <div>
+                        <label class="block text-xs font-medium uppercase text-gray-500 mb-2 flex items-center">
+                            <i class='bx bx-money text-green-500 mr-2'></i>
+                            Biaya Publikasi Diajukan
+                        </label>
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+                            <p class="text-lg font-semibold text-emerald-700">
+                                Rp {{ number_format($submission->biaya_publikasi, 0, ',', '.') }}
+                            </p>
+                        </div>
                     </div>
                 </div>
 
-                {{-- Dokumen --}}
-                <div>
-                    <h3 class="text-xs font-bold uppercase text-gray-500 mb-2">Dokumen Pendukung</h3>
+                {{-- Documents Section --}}
+                <div class="border-t border-gray-200 pt-8">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-6 flex items-center">
+                        <i class='bx bx-cloud-download text-blue-500 mr-3 text-xl'></i>
+                        Dokumen Pendukung
+                    </h3>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <a href="#" class="flex items-center p-3 text-sm text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
-                            <i class='bx bxs-file-pdf text-red-500 text-xl mr-3'></i>
-                            <span class="font-medium">Artikel.pdf</span>
+                        <a href="#" 
+                           class="flex items-center p-4 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition-colors group">
+                            <div class="flex-shrink-0 mr-3">
+                                <i class='bx bx-file-pdf text-red-500 text-2xl group-hover:scale-110 transition-transform'></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="font-medium text-gray-800 text-sm">Artikel</p>
+                                <p class="text-xs text-gray-500 truncate">Artikel.pdf</p>
+                            </div>
                         </a>
-                        <a href="#" class="flex items-center p-3 text-sm text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
-                            <i class='bx bxs-file-jpg text-yellow-500 text-xl mr-3'></i>
-                            <span class="font-medium">Bukti_Invoice.jpg</span>
+                        
+                        <a href="#" 
+                           class="flex items-center p-4 bg-yellow-50 border border-yellow-200 rounded-lg hover:bg-yellow-100 transition-colors group">
+                            <div class="flex-shrink-0 mr-3">
+                                <i class='bx bx-receipt text-yellow-600 text-2xl group-hover:scale-110 transition-transform'></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="font-medium text-gray-800 text-sm">Bukti Invoice</p>
+                                <p class="text-xs text-gray-500 truncate">Bukti_Invoice.jpg</p>
+                            </div>
                         </a>
-                         <a href="#" class="flex items-center p-3 text-sm text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
-                            <i class='bx bxs-file-pdf text-red-500 text-xl mr-3'></i>
-                            <span class="font-medium">Submission_Proses.pdf</span>
+                        
+                        <a href="#" 
+                           class="flex items-center p-4 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors group">
+                            <div class="flex-shrink-0 mr-3">
+                                <i class='bx bx-check-shield text-blue-500 text-2xl group-hover:scale-110 transition-transform'></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="font-medium text-gray-800 text-sm">Bukti Proses</p>
+                                <p class="text-xs text-gray-500 truncate">Submission_Proses.pdf</p>
+                            </div>
                         </a>
+                    </div>
+                </div>
+
+                {{-- Additional Info Section --}}
+                <div class="border-t border-gray-200 pt-8">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-6 flex items-center">
+                        <i class='bx bx-info-circle text-slate-500 mr-3 text-xl'></i>
+                        Informasi Tambahan
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                            <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Tanggal Pengajuan</p>
+                            <p class="text-gray-800 font-medium">{{ $submission->created_at ? $submission->created_at->format('d M Y, H:i') : 'Tidak tersedia' }}</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                            <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Terakhir Diubah</p>
+                            <p class="text-gray-800 font-medium">{{ $submission->updated_at ? $submission->updated_at->format('d M Y, H:i') : 'Tidak tersedia' }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {{-- Aksi Admin --}}
-            <div class="bg-gray-50 px-8 py-4 flex flex-col sm:flex-row justify-end items-center gap-4 border-t">
-                 <form action="#" method="POST">
-                     @csrf
-                     <input type="hidden" name="status" value="verifikasi">
-                     <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition-colors">Ubah Status ke Verifikasi</button>
-                 </form>
-                 <form action="#" method="POST">
-                     @csrf
-                     <input type="hidden" name="status" value="disetujui">
-                     <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700 transition-colors">Setujui Pengajuan</button>
-                 </form>
+            {{-- Action Buttons --}}
+            <div class="bg-gray-50 px-6 lg:px-8 py-6 border-t border-gray-200">
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="text-sm text-gray-600">
+                        <i class='bx bx-info-circle mr-1'></i>
+                        Pilih aksi yang sesuai berdasarkan verifikasi dokumen dan data pengajuan
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                        <form action="#" method="POST" class="flex-1 sm:flex-none">
+                            @csrf
+                            <input type="hidden" name="status" value="verifikasi">
+                            <button type="submit" 
+                                    class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-amber-500 text-white font-medium rounded-lg hover:bg-amber-600 focus:ring-2 focus:ring-amber-300 transition-all duration-200">
+                                <i class='bx bx-search-alt mr-2'></i>
+                                Ubah ke Verifikasi
+                            </button>
+                        </form>
+                        <form action="#" method="POST" class="flex-1 sm:flex-none">
+                            @csrf
+                            <input type="hidden" name="status" value="disetujui">
+                            <button type="submit" 
+                                    class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 focus:ring-2 focus:ring-emerald-300 transition-all duration-200">
+                                <i class='bx bx-check-circle mr-2'></i>
+                                Setujui Pengajuan
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('styles')
+<style>
+    input:focus,
+    select:focus,
+    button:focus {
+        box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.1);
+    }
+
+    .bg-white:hover {
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
+    }
+
+    * {
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .group:hover i {
+        animation: gentle-bounce 0.6s ease-in-out;
+    }
+
+    @keyframes gentle-bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0) scale(1);
+        }
+        40% {
+            transform: translateY(-3px) scale(1.05);
+        }
+        60% {
+            transform: translateY(-1px) scale(1.02);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .container {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        .grid-cols-1.sm\\:grid-cols-3 {
+            grid-template-columns: 1fr;
+        }
+        
+        .grid-cols-1.sm\\:grid-cols-2 {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .break-all {
+        word-break: break-all;
+        overflow-wrap: anywhere;
+    }
+</style>
+@endpush
