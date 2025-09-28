@@ -40,7 +40,7 @@ class ComdevLogbookController extends Controller
         // Validasi input dari form
         $validated = $request->validate([
             'activity_date' => 'required|date',
-            'notes' => 'required|string|min:10',
+            'notes' => 'required|string|min:1',
             // Aturan validasi: persen harus lebih besar atau sama dengan persen terakhir
             'progress_percentage' => "required|integer|min:{$latestPercentage}|max:100",
             'attachment' => 'nullable|file|mimes:pdf,docx,xlsx,png,jpg|max:2048', // max 2MB

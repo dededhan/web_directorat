@@ -136,7 +136,6 @@
                                                     <i class='bx bxs-check-circle mr-1 text-xs'></i> Diajukan
                                                 </span>
                                             @elseif ($submission->status == 'draft')
-                                        
                                                 <span
                                                     class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border-2 border-amber-200">
                                                     <i class='bx bxs-time-five mr-1 text-xs'></i> Draft
@@ -164,60 +163,74 @@
                                                     class="origin-top-right absolute right-0 mt-2 w-56 rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 overflow-hidden border-2 border-gray-100"
                                                     style="display: none;">
                                                     <div class="py-1" role="menu" aria-orientation="vertical">
-                                                        @if ($submission->status->value == 'draft')
+                                                        @php
+                                                            // Definisikan status apa saja yang boleh diedit dan dihapus
+                                                            $editableStatuses = ['draft', 'diajukan'];
+                                                        @endphp
+
+                                                        @if (in_array($submission->status->value, $editableStatuses))
+                                                            {{-- Tombol Edit/Lanjutkan --}}
                                                             <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.createPengajuan', $submission->id) }}"
                                                                 class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-700 transition-colors"
                                                                 role="menuitem">
                                                                 <i class='bx bx-edit-alt mr-3 text-lg text-teal-600'></i>
-                                                                Lanjutkan Pengisian
+                                                                {{-- Ganti teks tombol berdasarkan status --}}
+                                                                @if ($submission->status->value == 'draft')
+                                                                    Lanjutkan Pengisian
+                                                                @else
+                                                                    Edit Proposal
+                                                                @endif
                                                             </a>
-                                                        @endif
-                                                        <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.tahapan', $submission->id) }}"
-                                                            class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                                            role="menuitem">
-                                                            <i
-                                                                class='bx bx-line-chart mr-3 text-lg text-purple-500'></i>Tahapan
-                                                            Proposal
-                                                        </a>
-                                                        
-                                                         <a href="{{ route('subdirektorat-inovasi.dosen.equity.logbook', ['submission' => $submission->id]) }}" 
-                                                            class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                                            role="menuitem">
-                                                            <i class='bx bx-list-ul mr-3 text-lg text-green-300'></i>Logbook 
-                                                        </a>
-                                                        <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.detail', $submission) }}"
-                                                            class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                                            role="menuitem">
-                                                            <i class='bx bx-show mr-3 text-lg text-blue-500'></i>Lihat Detail
-                                                        </a>
-                                                        
-                                                        @if ($submission->status->value  == 'draft')
+
+                                                            <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.tahapan', $submission->id) }}"
+                                                                class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                                                role="menuitem">
+                                                                <i
+                                                                    class='bx bx-line-chart mr-3 text-lg text-purple-500'></i>Tahapan
+                                                                Proposal
+                                                            </a>
+
+                                                            <a href="{{ route('subdirektorat-inovasi.dosen.equity.logbook', ['submission' => $submission->id]) }}"
+                                                                class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                                                role="menuitem">
+                                                                <i
+                                                                    class='bx bx-list-ul mr-3 text-lg text-green-300'></i>Logbook
+                                                            </a>
+                                                            <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.detail', $submission) }}"
+                                                                class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                                                role="menuitem">
+                                                                <i class='bx bx-show mr-3 text-lg text-blue-500'></i>Lihat
+                                                                Detail
+                                                            </a>
+
                                                             <div class="border-t my-1 border-gray-100"></div>
                                                             <form
                                                                 action="{{ route('subdirektorat-inovasi.dosen.equity.proposal.destroyDraft', $submission->id) }}"
                                                                 method="POST"
                                                                 @submit.prevent="
-                                                            Swal.fire({
-                                                                title: 'Hapus Draft?',
-                                                                text: 'Anda yakin ingin menghapus draft proposal ini? Tindakan ini tidak dapat dibatalkan.',
-                                                                icon: 'warning',
-                                                                showCancelButton: true,
-                                                                confirmButtonColor: '#dc2626',
-                                                                cancelButtonColor: '#6b7280',
-                                                                confirmButtonText: 'Ya, Hapus Saja!',
-                                                                cancelButtonText: 'Batal'
-                                                            }).then((result) => {
-                                                                if (result.isConfirmed) {
-                                                                    $event.target.submit();
-                                                                }
-                                                            })
-                                                          ">
+                                                                    Swal.fire({
+                                                                        {{-- Ganti pesan konfirmasi berdasarkan status --}}
+                                                                        title: 'Hapus Proposal?',
+                                                                        text: `Anda yakin ingin menghapus proposal ini? Tindakan ini tidak dapat dibatalkan.`,
+                                                                        icon: 'warning',
+                                                                        showCancelButton: true,
+                                                                        confirmButtonColor: '#dc2626',
+                                                                        cancelButtonColor: '#6b7280',
+                                                                        confirmButtonText: 'Ya, Hapus Saja!',
+                                                                        cancelButtonText: 'Batal'
+                                                                    }).then((result) => {
+                                                                        if (result.isConfirmed) {
+                                                                            $event.target.submit();
+                                                                        }
+                                                                    })
+                                                                ">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit"
                                                                     class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
                                                                     role="menuitem">
-                                                                    <i class='bx bx-trash mr-3 text-lg'></i> Hapus Draft
+                                                                    <i class='bx bx-trash mr-3 text-lg'></i>
+                                                                    Hapus Proposal
                                                                 </button>
                                                             </form>
                                                         @endif
@@ -283,7 +296,7 @@
                                             class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
                                             <i class='bx bxs-check-circle mr-1 text-xs'></i> Diajukan
                                         </span>
-                                    @elseif ($submission->status->value  == 'draft')
+                                    @elseif ($submission->status->value == 'draft')
                                         <span
                                             class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200">
                                             <i class='bx bxs-time-five mr-1 text-xs'></i> Draft
@@ -335,7 +348,7 @@
                                     class="mt-2 w-full rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 overflow-hidden border-2 border-gray-100"
                                     style="display: none;">
                                     <div class="py-1">
-                                        @if ($submission->status->value  == 'draft')
+                                        @if ($submission->status->value == 'draft')
                                             <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.createPengajuan', $submission->id) }}"
                                                 class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-700 transition-colors">
                                                 <i class='bx bx-edit-alt mr-3 text-lg text-teal-600'></i> Lanjutkan

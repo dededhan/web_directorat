@@ -18,6 +18,8 @@ class ComdevSubmission extends Model
         'sdgs' => 'array',
         'mitra_nasional' => 'array',
         'mitra_internasional' => 'array',
+        'luaran_wajib' => 'array',       // <-- Tambahkan ini
+    'luaran_opsional' => 'array',
     ];
 
     public function user()

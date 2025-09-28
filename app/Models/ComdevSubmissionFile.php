@@ -18,8 +18,10 @@ class ComdevSubmissionFile extends Model
         'comdev_submission_id',
         'comdev_sub_chapter_id',
         'user_id',
+        'type', 
         'file_path',
         'original_filename',
+        'url',
     ];
 
     /**

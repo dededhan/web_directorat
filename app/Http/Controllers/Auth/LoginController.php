@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Rules\Recaptcha; 
+use App\Models\User;
+
 
 class LoginController extends Controller
 {
@@ -19,15 +21,19 @@ class LoginController extends Controller
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'g-recaptcha-response' => ['nullable', new Recaptcha()] // <-- Add this line
+            'g-recaptcha-response' => ['nullable', new Recaptcha()]
         ]);
 
         $authCredentials = $request->only('email', 'password');
 
         if (Auth::attempt($authCredentials)) {
             $request->session()->regenerate();
+            
+            // PERBAIKAN: Ambil objek user yang sedang login dan simpan ke variabel $user
+            $user = Auth::user(); 
+            
             // much clean, me like :D
-            $next = match (Auth::user()->role) {
+            $next = match ($user->role) {
                 'admin_direktorat' => 'admin.dashboard',
                 'prodi' =>  'prodi.dashboard',
                 'fakultas' =>'fakultas.dashboard',
@@ -39,6 +45,16 @@ class LoginController extends Controller
                 'admin_equity' => 'admin_equity.dashboard',
                 'reviewer_equity' => 'reviewer_equity.dashboard',
             };
+            
+            // *** NEW LOGIC FOR DOSEN ***
+            if ($user->role === 'dosen') {
+                $user->load('profile');
+                // Check if profile is incomplete (e.g., missing profile record or prodi_id)
+                if (empty($user->profile) || empty($user->profile->prodi_id)) {
+                    return redirect(route('subdirektorat-inovasi.dosen.manageprofile.edit'))
+                        ->with('info', 'Silakan lengkapi profil Anda sebelum melanjutkan.');
+                }
+            }
 
             return redirect(route($next));
         }
@@ -57,6 +73,3 @@ class LoginController extends Controller
     }
     
 }
-
-
-
