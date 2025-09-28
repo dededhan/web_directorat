@@ -140,8 +140,8 @@
                 </a>
 
                 <!-- 3. Incentive -->
-                <a href="#"
-                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700"
+                <a href="{{ route('admin_equity.incentivereviewer.index') }}"
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.incentivereviewer.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
                    :class="{'justify-center': !open && !mobileOpen}">
                     <i class='bx bxs-award text-2xl flex-shrink-0'></i>
                     <span x-show="open || mobileOpen" class="font-medium">Insentif Reviewer</span>

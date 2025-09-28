@@ -25,6 +25,7 @@ use App\Http\Controllers\Dosen\DosenSearchController;
 use App\Http\Controllers\Dosen\MatchmakingDosenSubmissionController; 
 use App\Http\Controllers\Dosen\MatchmakingDosenReportController;
 use App\Http\Controllers\AdminEquity\MatchmakingSubmissionController;
+use App\Http\Controllers\AdminEquity\IncentiveReviewerController;
 
 
 // Admin Equity Routes
@@ -76,9 +77,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
     //
 
     // 3. Insentif reviewer dan editorial board
-    Route::get('/incentive-reviewer', function () {
-        return view('admin_equity.incentivereviewer.index');
-    })->name('incentivereviewer.index');
+    Route::resource('incentive-reviewer', IncentiveReviewerController::class)->names('incentivereviewer');
 
     Route::get('/incentive-editor', function () {
         return view('admin_equity.incentiveeditor.index');
@@ -112,6 +111,9 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
         Route::get('/submissions/{submission}/report', [MatchmakingSubmissionController::class, 'showReport'])->name('submission.report.show');
         Route::post('/submissions/{submission}/report/status', [MatchmakingSubmissionController::class, 'updateReportStatus'])->name('submission.report.updateStatus');
     });
+
+
+    Route::resource('incentive-reviewer', IncentiveReviewerController::class)->names('incentivereviewer');
 });
 
 Route::prefix('reviewer_equity')->name('reviewer_equity.')->middleware(['auth', 'role:reviewer_equity'])->group(function () {
