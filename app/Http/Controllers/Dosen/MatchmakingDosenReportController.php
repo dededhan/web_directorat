@@ -30,8 +30,13 @@ class MatchmakingDosenReportController extends Controller
 
         $report = $submission->report ?? new MatchmakingReport();
         
-        $respondents = is_array($report->qs_respondents) && count($report->qs_respondents) > 0 ? $report->qs_respondents : [['name' => ''], ['name' => '']];
-
+        $respondents = [['name' => ''], ['name' => '']];
+        if (!empty($report->qs_respondents)) {
+            $respondents = array_map(function($respondent) {
+                return is_array($respondent) ? $respondent : ['name' => $respondent];
+            }, $report->qs_respondents);
+        }
+        
         return view('subdirektorat-inovasi.dosen.matchresearch.form-proposal', compact('submission', 'report', 'respondents'));
     }
 
@@ -78,12 +83,21 @@ class MatchmakingDosenReportController extends Controller
 
         $report = MatchmakingReport::firstOrNew(['matchmaking_submission_id' => $submission->id]);
         
-        $dataToUpdate = [
-            'journal_q1_name' => $validated['journal_q1_name'] ?? null,
-            'scimagojr_link' => $validated['scimagojr_link'] ?? null,
-            'visit_days' => $validated['visit_days'] ?? null,
+        $respondentsData = [];
+        if ($request->has('respondens')) {
+            foreach ($request->respondens as $respondent) {
+                if (!empty($respondent['name'])) {
 
-            'qs_respondents' => (isset($validated['respondens']) && is_array($validated['respondens'])) ? array_filter(array_column($validated['respondens'], 'name')) : [],
+                    $respondentsData[] = $respondent['name'];
+                }
+            }
+        }
+
+        $dataToUpdate = [
+            'journal_q1_name' => $request->journal_q1_name,
+            'scimagojr_link' => $request->scimagojr_link,
+            'visit_days' => $request->visit_days,
+            'qs_respondents' => $respondentsData,
         ];
 
         $fileFields = [

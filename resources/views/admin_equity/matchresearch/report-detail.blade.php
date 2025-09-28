@@ -61,11 +61,13 @@
                     
                     @include('admin_equity.matchresearch._report_file_item', ['label' => 'Bukti Perjalanan (Tiket, Visa, dll.)', 'path' => $report->travel_proof_path])
 
+
                     <div class="pt-4 border-t border-gray-200">
                         <h3 class="text-sm font-medium text-gray-700 mb-3">Responden QS</h3>
                         <ul class="list-disc list-inside space-y-2 text-gray-800">
                             @forelse($report->qs_respondents as $respondent)
-                                <li>{{ $respondent['name'] }}</li>
+
+                                <li>{{ $respondent }}</li>
                             @empty
                                 <li>Tidak ada data responden.</li>
                             @endforelse
