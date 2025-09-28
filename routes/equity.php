@@ -24,6 +24,7 @@ use App\Http\Controllers\Dosen\MatchmakingDosenController;
 use App\Http\Controllers\Dosen\DosenSearchController;
 use App\Http\Controllers\Dosen\MatchmakingDosenSubmissionController; 
 use App\Http\Controllers\Dosen\MatchmakingDosenReportController;
+use App\Http\Controllers\AdminEquity\MatchmakingSubmissionController;
 
 
 // Admin Equity Routes
@@ -96,6 +97,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
 
     // matchmaking
     Route::prefix('matchresearch')->name('matchresearch.')->group(function () {
+        //session
         Route::get('/', [MatchresearchController::class, 'index'])->name('index');
         Route::get('/create', [MatchresearchController::class, 'create'])->name('create');
         Route::post('/', [MatchresearchController::class, 'store'])->name('store');
@@ -104,13 +106,11 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
         Route::put('/{id}', [MatchresearchController::class, 'update'])->name('update');
         Route::delete('/{id}', [MatchresearchController::class, 'destroy'])->name('destroy');
 
-        // submission
-        Route::get('/submissions/{submission}', [MatchresearchController::class, 'showSubmission'])->name('submission.show');
-        Route::post('/submissions/{submission}/status', [MatchresearchController::class, 'updateSubmissionStatus'])->name('submission.updateStatus');
-        Route::get('/submissions/{submission}/report', [MatchresearchController::class, 'showFullReport'])->name('submission.report.show');
-        // report
-        Route::post('/submissions/{submission}/report/status', [MatchresearchController::class, 'updateReportStatus'])->name('submission.report.updateStatus');
-
+        //submission
+        Route::get('/submissions/{submission}', [MatchmakingSubmissionController::class, 'show'])->name('submission.show');
+        Route::post('/submissions/{submission}/status', [MatchmakingSubmissionController::class, 'updateStatus'])->name('submission.updateStatus');
+        Route::get('/submissions/{submission}/report', [MatchmakingSubmissionController::class, 'showReport'])->name('submission.report.show');
+        Route::post('/submissions/{submission}/report/status', [MatchmakingSubmissionController::class, 'updateReportStatus'])->name('submission.report.updateStatus');
     });
 });
 

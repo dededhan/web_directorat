@@ -26,6 +26,7 @@ if (!function_exists('getSubmissionStatusColor')) {
         }
     }
 }
+$statuses = ['diajukan', 'diterima', 'ditolak_awal', 'draft_laporan', 'menunggu_penilaian', 'lolos', 'revisi', 'tolak'];
 @endphp
 
 @section('content')
@@ -49,6 +50,62 @@ if (!function_exists('getSubmissionStatusColor')) {
             </div>
         </header>
 
+        <!-- Form Filter -->
+        <div class="mb-6 bg-white p-4 rounded-xl shadow-md border border-gray-100">
+            <form action="{{ route('admin_equity.matchresearch.show', $session->id) }}" method="GET">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Search Input -->
+                    <div>
+                        <label for="search" class="text-sm font-medium text-gray-700">Cari Judul/Pengusul</label>
+                        <input type="text" name="search" id="search" placeholder="Masukkan kata kunci..." value="{{ $request['search'] ?? '' }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                    </div>
+
+                    <!-- Filter Status -->
+                    <div>
+                        <label for="status" class="text-sm font-medium text-gray-700">Status</label>
+                        <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                            <option value="">Semua Status</option>
+                            @foreach ($statuses as $status)
+                                <option value="{{ $status }}" {{ ($request['status'] ?? '') == $status ? 'selected' : '' }}>
+                                    {{ ucwords(str_replace('_', ' ', $status)) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Filter Fakultas -->
+                    <div>
+                        <label for="fakultas_id" class="text-sm font-medium text-gray-700">Fakultas</label>
+                        <select name="fakultas_id" id="fakultas_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                            <option value="">Semua Fakultas</option>
+                            @foreach ($fakultas as $fak)
+                                <option value="{{ $fak->id }}" {{ ($request['fakultas_id'] ?? '') == $fak->id ? 'selected' : '' }}>
+                                    {{ $fak->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Filter Prodi -->
+                    <div>
+                        <label for="prodi_id" class="text-sm font-medium text-gray-700">Program Studi</label>
+                        <select name="prodi_id" id="prodi_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm" {{ !isset($request['fakultas_id']) ? 'disabled' : '' }}>
+                            <option value="">Pilih Fakultas Dulu</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center justify-end space-x-3">
+                    <a href="{{ route('admin_equity.matchresearch.show', $session->id) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        Reset
+                    </a>
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                        <i class='bx bx-filter-alt mr-2'></i>
+                        Filter
+                    </button>
+                </div>
+            </form>
+        </div>
+
 
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
             <div class="p-6 bg-gray-50 border-b">
@@ -69,7 +126,7 @@ if (!function_exists('getSubmissionStatusColor')) {
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse ($session->submissions as $submission)
+                        @forelse ($submissions as $submission)
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 font-medium text-gray-900">{{ $submission->user->name ?? 'N/A' }}</td>
                             <td class="px-6 py-4 text-gray-800">{{ $submission->judul_proposal }}</td>
@@ -80,7 +137,6 @@ if (!function_exists('getSubmissionStatusColor')) {
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <a href="{{ route('admin_equity.matchresearch.submission.show', $submission->id) }}" class="text-teal-600 hover:text-teal-800 font-semibold">
-      
                                     @if($submission->status == 'diajukan')
                                         Verifikasi
                                     @else
@@ -93,9 +149,9 @@ if (!function_exists('getSubmissionStatusColor')) {
                         <tr>
                             <td colspan="4" class="text-center py-16 text-gray-500">
                                 <div class="flex flex-col items-center">
-                                    <i class='bx bx-folder-open text-6xl text-gray-300'></i>
-                                    <h3 class="font-semibold text-lg text-gray-700 mt-4">Belum Ada Proposal</h3>
-                                    <p class="text-sm">Belum ada proposal yang diajukan untuk sesi ini.</p>
+                                    <i class='bx bx-search-alt text-6xl text-gray-300'></i>
+                                    <h3 class="font-semibold text-lg text-gray-700 mt-4">Tidak Ada Proposal Ditemukan</h3>
+                                    <p class="text-sm">Tidak ada data proposal yang cocok dengan kriteria filter Anda.</p>
                                 </div>
                             </td>
                         </tr>
@@ -103,8 +159,61 @@ if (!function_exists('getSubmissionStatusColor')) {
                     </tbody>
                 </table>
             </div>
+
+            @if ($submissions->hasPages())
+            <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                {{ $submissions->links() }}
+            </div>
+            @endif
         </div>
     </div>
 </div>
-@endsection
 
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const fakultasSelect = document.getElementById('fakultas_id');
+    const prodiSelect = document.getElementById('prodi_id');
+
+    const selectedProdiId = '{{ $request['prodi_id'] ?? '' }}';
+
+    function fetchProdi(fakultasId, selectedId = null) {
+        if (!fakultasId) {
+            prodiSelect.innerHTML = '<option value="">Pilih Fakultas Dulu</option>';
+            prodiSelect.disabled = true;
+            return;
+        }
+
+        fetch(`/api/prodi/${fakultasId}`)
+            .then(response => response.json())
+            .then(data => {
+                prodiSelect.innerHTML = '<option value="">Semua Prodi</option>';
+                data.forEach(prodi => {
+                    const option = new Option(prodi.name, prodi.id);
+
+                    if (selectedId && prodi.id == selectedId) {
+                        option.selected = true;
+                    }
+                    prodiSelect.add(option);
+                });
+                prodiSelect.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error fetching prodi:', error);
+                prodiSelect.innerHTML = '<option value="">Gagal memuat prodi</option>';
+                prodiSelect.disabled = true;
+            });
+    }
+
+    fakultasSelect.addEventListener('change', function () {
+        fetchProdi(this.value);
+    });
+
+
+    if (fakultasSelect.value) {
+        fetchProdi(fakultasSelect.value, selectedProdiId);
+    }
+});
+</script>
+@endpush
+@endsection

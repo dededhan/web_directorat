@@ -25,12 +25,14 @@ class MatchmakingDosenController extends Controller
 
     public function manageSubmissions()
     {
+    
         $submissions = MatchmakingSubmission::where('user_id', Auth::id())
             ->with('session')
             ->latest()
-            ->paginate(10);
+            ->get();
+        $groupedSubmissions = $submissions->groupBy('session.nama_sesi');
 
-        return view('subdirektorat-inovasi.dosen.matchresearch.manajemen', compact('submissions'));
+        return view('subdirektorat-inovasi.dosen.matchresearch.manajemen', compact('groupedSubmissions'));
     }
 
     public function createSubmissionForm($sessionId)
@@ -52,3 +54,4 @@ class MatchmakingDosenController extends Controller
 
 
 }
+

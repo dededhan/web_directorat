@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Monarobase\CountryList\CountryListFacade as Countries;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class MatchmakingDosenSubmissionController extends Controller
 {
@@ -22,6 +24,7 @@ class MatchmakingDosenSubmissionController extends Controller
             'judul_proposal' => 'required|string|max:255',
             'members' => 'required|array|min:1',
             'members.*.type' => 'required|in:unj,international',
+
         ]);
 
         $session = MatchmakingSession::findOrFail($sessionId);
@@ -57,7 +60,7 @@ class MatchmakingDosenSubmissionController extends Controller
         }
 
 
-        if ($submission->status !== 'diajukan') {
+        if ($submission->status !== 'diajukan' && $submission->status !== 'revisi' ) { // Memungkinkan edit saat revisi
             return redirect()->route('subdirektorat-inovasi.dosen.matchresearch.manajemen')
                              ->with('error', 'Proposal tidak dapat diedit lagi.');
         }
@@ -79,7 +82,7 @@ class MatchmakingDosenSubmissionController extends Controller
     public function update(Request $request, MatchmakingSubmission $submission)
     {
 
-        if ($submission->user_id !== Auth::id() || $submission->status !== 'diajukan') {
+        if ($submission->user_id !== Auth::id() || !in_array($submission->status, ['diajukan', 'revisi'])) {
              return redirect()->route('subdirektorat-inovasi.dosen.matchresearch.manajemen')
                              ->with('error', 'Proposal tidak dapat diedit.');
         }
@@ -88,22 +91,36 @@ class MatchmakingDosenSubmissionController extends Controller
             'judul_proposal' => 'required|string|max:255',
             'members' => 'required|array|min:1',
             'members.*.type' => 'required|in:unj,international',
+  
         ]);
         
         DB::beginTransaction();
         try {
-            $submission->update(['judul_proposal' => $validated['judul_proposal']]);
+
+            $newStatus = $submission->status === 'revisi' ? 'diajukan' : $submission->status;
+            $submission->update([
+                'judul_proposal' => $validated['judul_proposal'],
+                'status' => $newStatus,
+            ]);
 
 
-            foreach ($submission->members as $member) {
-                if ($member->type === 'international' && !empty($member->details['membership_proof'])) {
-                    Storage::disk('public')->delete($member->details['membership_proof']);
+            $existingMemberIds = [];
+            foreach($request->input('members', []) as $memberData) {
+                if(!empty($memberData['id'])) {
+                    $existingMemberIds[] = $memberData['id'];
                 }
             }
-            $submission->members()->delete();
 
 
-            $this->syncMembers($request, $submission);
+            $membersToDelete = $submission->members()->whereNotIn('id', $existingMemberIds)->get();
+            foreach($membersToDelete as $member) {
+                 if ($member->type === 'international' && !empty($member->details['membership_proof'])) {
+                    Storage::disk('public')->delete($member->details['membership_proof']);
+                }
+                $member->delete();
+            }
+
+            $this->syncMembers($request, $submission, true);
 
             DB::commit();
 
@@ -118,36 +135,72 @@ class MatchmakingDosenSubmissionController extends Controller
     }
 
 
-    private function syncMembers(Request $request, MatchmakingSubmission $submission)
+    private function syncMembers(Request $request, MatchmakingSubmission $submission, $isUpdate = false)
     {
+        $proposerName = Str::slug(Auth::user()->name, '_');
+        $date = Carbon::now()->format('Ymd');
+
         foreach ($request->input('members', []) as $index => $memberData) {
+            $memberId = $memberData['id'] ?? null;
+            $member = null;
+
+
+            if ($isUpdate && $memberId) {
+                $member = MatchmakingMember::find($memberId);
+            }
+
             if ($memberData['type'] === 'unj') {
-                MatchmakingMember::create([
+                $data = [
                     'matchmaking_submission_id' => $submission->id,
                     'type' => 'unj',
                     'user_id' => $memberData['user_id'] ?? null,
-                ]);
+                    'details' => null 
+                ];
+                 if ($member) $member->update($data);
+                 else MatchmakingMember::create($data);
+
             } elseif ($memberData['type'] === 'international') {
-                $details = $memberData[$memberData['international_type']] ?? [];
+                $internationalType = $memberData['international_type'] ?? null;
+                
+     
+                $details = $internationalType ? ($memberData[$internationalType] ?? []) : [];
+                $details['international_type'] = $internationalType; 
                 
                 $fileFields = ['fellow' => 'membership_proof', 'academy' => 'membership_proof'];
-                if (isset($fileFields[$memberData['international_type']])) {
-                    $fileField = $fileFields[$memberData['international_type']];
-                    $fileInputName = "members.{$index}.{$memberData['international_type']}.{$fileField}";
+
+                if ($internationalType && isset($fileFields[$internationalType])) {
+                    $fileField = $fileFields[$internationalType];
+                    $fileInputName = "members.{$index}.{$internationalType}.{$fileField}";
+                    
+                    $oldFilePath = $member ? ($member->details[$fileField] ?? null) : null;
 
                     if ($request->hasFile($fileInputName)) {
-                        $path = $request->file($fileInputName)->store('matchmaking_proofs', 'public');
+                        if ($oldFilePath && Storage::disk('public')->exists($oldFilePath)) {
+                            Storage::disk('public')->delete($oldFilePath);
+                        }
+                        
+                        $file = $request->file($fileInputName);
+                        $extension = $file->getClientOriginalExtension();
+                        $filename = "{$proposerName}_{$internationalType}_{$date}.{$extension}";
+                        $path = $file->storeAs("matchmaking_proofs/{$submission->id}", $filename, 'public');
                         $details[$fileField] = $path;
+                    } else {
+
+                        $details[$fileField] = $oldFilePath;
                     }
                 }
-
-                MatchmakingMember::create([
+                
+                $data = [
                     'matchmaking_submission_id' => $submission->id,
                     'type' => 'international',
                     'user_id' => null,
                     'details' => $details,
-                ]);
+                ];
+                
+                if ($member) $member->update($data);
+                else MatchmakingMember::create($data);
             }
         }
     }
 }
+

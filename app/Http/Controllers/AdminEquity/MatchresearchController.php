@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\AdminEquity;
 
 use App\Http\Controllers\Controller;
+use App\Models\Fakultas;
 use App\Models\MatchmakingSession;
-use App\Models\MatchmakingSubmission;
 use Illuminate\Http\Request;
 
 class MatchresearchController extends Controller
@@ -40,10 +40,50 @@ class MatchresearchController extends Controller
     }
 
 
-    public function show($id)
+
+    public function show($id, Request $request)
     {
-        $session = MatchmakingSession::with('submissions.user')->findOrFail($id);
-        return view('admin_equity.matchresearch.show', compact('session'));
+        $session = MatchmakingSession::findOrFail($id);
+        $fakultas = Fakultas::orderBy('name')->get();
+        $query = $session->submissions()->with('user.profile.prodi.fakultas');
+
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('judul_proposal', 'like', "%{$searchTerm}%")
+                  ->orWhereHas('user', function ($userQuery) use ($searchTerm) {
+                      $userQuery->where('name', 'like', "%{$searchTerm}%");
+                  });
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        if ($request->filled('prodi_id')) {
+            $query->whereHas('user', function ($userQuery) use ($request) {
+                $userQuery->whereHas('profile', function ($profileQuery) use ($request) {
+                    $profileQuery->where('prodi_id', $request->prodi_id);
+                });
+            });
+        }
+
+        elseif ($request->filled('fakultas_id')) {
+            $query->whereHas('user', function ($userQuery) use ($request) {
+                $userQuery->whereHas('profile.prodi', function ($prodiQuery) use ($request) {
+                    $prodiQuery->where('fakultas_id', $request->fakultas_id);
+                });
+            });
+        }
+
+        $submissions = $query->latest()->paginate(10)->withQueryString();
+
+        return view('admin_equity.matchresearch.show', [
+            'session' => $session,
+            'submissions' => $submissions,
+            'fakultas' => $fakultas,
+            'request' => $request->all(),
+        ]);
     }
 
 
@@ -79,70 +119,6 @@ class MatchresearchController extends Controller
 
         return redirect()->route('admin_equity.matchresearch.index')
                          ->with('success', 'Sesi Matchmaking berhasil dihapus!');
-    }
-
- 
-    public function showSubmission(MatchmakingSubmission $submission)
-    {
-        // Eager load relasi yang dibutuhkan
-        $submission->load('user', 'session', 'members.user');
-        return view('admin_equity.matchresearch.submission-detail', compact('submission'));
-    }
-    
-
-    public function showFullReport(MatchmakingSubmission $submission)
-    {
-        $submission->load('user', 'session', 'report');
-
-        if (!$submission->report) {
-            return redirect()->route('admin_equity.matchresearch.submission.show', $submission->id)
-                             ->with('error', 'Laporan untuk proposal ini belum diisi.');
-        }
-
-        return view('admin_equity.matchresearch.report-detail', compact('submission'));
-    }
-
-
-
-    public function updateSubmissionStatus(Request $request, MatchmakingSubmission $submission)
-    {
-        $validated = $request->validate([
-            'status' => 'required|in:diterima,ditolak_awal',
-            'rejection_note' => 'required_if:status,ditolak_awal|nullable|string',
-        ]);
-
-        $submission->status = $validated['status'];
-        if ($validated['status'] === 'ditolak_awal') {
-            $submission->rejection_note = $validated['rejection_note'];
-        } else {
-            $submission->rejection_note = null; 
-        }
-
-        $submission->save();
-
-        return redirect()->route('admin_equity.matchresearch.show', $submission->matchmaking_session_id)
-                         ->with('success', 'Status proposal berhasil diperbarui!');
-    }
-
-
-    public function updateReportStatus(Request $request, MatchmakingSubmission $submission)
-    {
-        $validated = $request->validate([
-            'status' => 'required|in:lolos,revisi,tolak',
-            'rejection_note' => 'required_if:status,revisi,tolak|nullable|string',
-        ]);
-
-        $submission->status = $validated['status'];
-        if (in_array($validated['status'], ['revisi', 'tolak'])) {
-            $submission->rejection_note = $validated['rejection_note'];
-        } else {
-            $submission->rejection_note = null;
-        }
-
-        $submission->save();
-
-        return redirect()->route('admin_equity.matchresearch.show', $submission->matchmaking_session_id)
-                         ->with('success', 'Hasil penilaian laporan berhasil disimpan!');
     }
 }
 

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Carbon\Carbon; 
+use Carbon\Carbon;
 
 class MatchmakingDosenReportController extends Controller
 {
@@ -19,59 +19,71 @@ class MatchmakingDosenReportController extends Controller
     {
         $submission = MatchmakingSubmission::with('report')->findOrFail($submissionId);
 
-
         if ($submission->user_id !== Auth::id()) {
             abort(403, 'AKSES DITOLAK');
         }
-
 
         if (!in_array($submission->status, ['diterima', 'draft_laporan'])) {
             return redirect()->route('subdirektorat-inovasi.dosen.matchresearch.manajemen')
                              ->with('error', 'Laporan tidak bisa diisi atau sudah dikirim.');
         }
 
-
         $report = $submission->report ?? new MatchmakingReport();
         
-
-        $respondents = is_array($report->qs_respondents) ? $report->qs_respondents : [['name' => ''], ['name' => '']];
-
+        $respondents = is_array($report->qs_respondents) && count($report->qs_respondents) > 0 ? $report->qs_respondents : [['name' => ''], ['name' => '']];
 
         return view('subdirektorat-inovasi.dosen.matchresearch.form-proposal', compact('submission', 'report', 'respondents'));
     }
-
 
     public function storeOrUpdate(Request $request, $submissionId)
     {
         $submission = MatchmakingSubmission::with('user')->findOrFail($submissionId);
 
-
         if ($submission->user_id !== Auth::id()) {
             abort(403, 'AKSES DITOLAK');
         }
         
+        $isSubmittingFinal = $request->input('action') === 'submit_final';
+        
 
-        $validated = $request->validate([
+        $rules = [
             'proposal_path' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
             'article_path' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
-            'journal_q1_name' => 'required|string|max:255',
-            'scimagojr_link' => 'required|url|max:255',
             'submit_proof_path' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
             'review_proof_path' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
             'travel_proof_path' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
-            'visit_days' => 'required|integer|min:1',
-            'respondens' => 'required|array|min:2',
-            'respondens.*.name' => 'required|string|max:255',
             'action' => 'required|in:save_draft,submit_final'
-        ]);
+        ];
+        
+        $textAndUrlRules = [
+            'journal_q1_name' => 'string|max:255',
+            'scimagojr_link' => 'url|max:255',
+            'visit_days' => 'integer|min:1',
+            'respondens' => 'array|min:2',
+            'respondens.*.name' => 'string|max:255',
+        ];
+
+
+        if ($isSubmittingFinal) {
+            foreach ($textAndUrlRules as $field => $rule) {
+                $rules[$field] = 'required|' . $rule;
+            }
+        } else { 
+            foreach ($textAndUrlRules as $field => $rule) {
+                $rules[$field] = 'nullable|' . $rule;
+            }
+        }
+        
+        $validated = $request->validate($rules);
 
         $report = MatchmakingReport::firstOrNew(['matchmaking_submission_id' => $submission->id]);
         
         $dataToUpdate = [
-            'journal_q1_name' => $validated['journal_q1_name'],
-            'scimagojr_link' => $validated['scimagojr_link'],
-            'visit_days' => $validated['visit_days'],
-            'qs_respondents' => $validated['respondens'],
+            'journal_q1_name' => $validated['journal_q1_name'] ?? null,
+            'scimagojr_link' => $validated['scimagojr_link'] ?? null,
+            'visit_days' => $validated['visit_days'] ?? null,
+
+            'qs_respondents' => (isset($validated['respondens']) && is_array($validated['respondens'])) ? array_filter(array_column($validated['respondens'], 'name')) : [],
         ];
 
         $fileFields = [
@@ -102,7 +114,7 @@ class MatchmakingDosenReportController extends Controller
         
         $report->fill($dataToUpdate)->save();
 
-        if ($validated['action'] === 'submit_final') {
+        if ($isSubmittingFinal) {
             $submission->status = 'menunggu_penilaian';
             $message = 'Laporan berhasil dikirim dan akan segera dinilai.';
         } else {
