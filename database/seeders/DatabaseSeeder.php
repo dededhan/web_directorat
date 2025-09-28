@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
             RespondenSeeder::class,
             RolesAndPermissionsSeeder::class,
             PesertaSeeder::class,
+            FakultasSeeder::class, 
+             ProdiSeeder::class,
         ]);
     }
 }
