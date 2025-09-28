@@ -320,14 +320,15 @@ Route::prefix('admin')->name('admin.')
             });
     });
 
-Route::prefix('prodi')->name('prodi.')
+Route::prefix('prodis')->name('prodis.')
     ->middleware(['checked', 'role:prodi'])
     ->group(function () {
         Route::get('/', function () {
-            return redirect(route('prodi.dashboard'));
+            return redirect(route('prodis.dashboard'));
         });
+        
         Route::get('/dashboard', function () {
-            return view('prodi.dashboard');
+            return view('prodis.dashboard');
         })->name('dashboard');
 
         // News
@@ -366,9 +367,8 @@ Route::prefix('prodi')->name('prodi.')
 
         // NEW: Manage Account Routes for Fakultas
         Route::get('/account', function () {
-            return view('prodi.manage_account');
+            return view('prodis.manage_account');
         })->name('manage.account');
-        // Route::put('/account', [UserController::class, 'updateAccount'])->name('manage.account.update');
     });
 
 Route::prefix('fakultas')->name('fakultas.')

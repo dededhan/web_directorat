@@ -1,6 +1,6 @@
-@extends('prodi.index')
+@extends('prodis.index')
 
-@section('contentprodi')
+@section('contentprodis')
 
 <div class="head-title">
     <div class="left">

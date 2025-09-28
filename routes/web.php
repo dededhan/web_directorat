@@ -213,6 +213,11 @@ Route::get('/survey/thank-you', function () {
     return view('qsrangking.thank_you');
 })->name('survey.thankyou');
 
+Route::get('/maintenance', function () {
+    return view('maintenance.index');
+})->name('maintenance.page');
+
+
 
 
 require __DIR__ . '/api.php';

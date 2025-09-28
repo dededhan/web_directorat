@@ -19,60 +19,60 @@
         <div class="menu-section">
             <h3 class="section-title">Main Menu</h3>
             <ul class="side-menu">
-                <li class="{{ request()->routeIs('prodi.dashboard') ? 'active' : '' }}">
-                    <a href="{{ route('prodi.dashboard') }}">
+                <li class="{{ request()->routeIs('prodis.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('prodis.dashboard') }}">
                         <i class='bx bxs-dashboard'></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
 
-                <li class="{{ request()->routeIs('prodi.news.index') ? 'active' : '' }}">
-                    <a href="{{ route('prodi.news.index') }}">
+                {{-- <li class="{{ request()->routeIs('prodis.news.index') ? 'active' : '' }}">
+                    <a href="{{ route('prodis.news.index') }}">
                         <i class='bx bxs-news'></i>
                         <span class="text">Berita</span>
                     </a>
                 </li>
-            </ul>
+            </ul> --}}
         </div>
 
         <!-- Sustainability Section -->
-        <div class="menu-section">
+        {{-- <div class="menu-section">
             <h3 class="section-title">Sustainability</h3>
             <ul class="side-menu">
-                <li class="{{ request()->routeIs('prodi.sustainability.index') ? 'active' : '' }}">
-                    <a href="{{ route('prodi.sustainability.index') }}">
+                <li class="{{ request()->routeIs('prodis.sustainability.index') ? 'active' : '' }}">
+                    <a href="{{ route('prodis.sustainability.index') }}">
                         <i class='bx bxs-spreadsheet'></i>
                         <span class="text">Sustainability</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('prodi.matakuliah.index') ? 'active' : '' }}">
-                    <a href="{{ route('prodi.matakuliah.index') }}">
+                <li class="{{ request()->routeIs('prodis.matakuliah.index') ? 'active' : '' }}">
+                    <a href="{{ route('prodis.matakuliah.index') }}">
                         <i class='bx bxs-book'></i>
                         <span class="text">MatKul Sustainability</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('prodi.alumniberdampak.index') ? 'active' : '' }}">
-                    <a href="{{ route('prodi.alumniberdampak.index') }}">
+                <li class="{{ request()->routeIs('prodis.alumniberdampak.index') ? 'active' : '' }}">
+                    <a href="{{ route('prodis.alumniberdampak.index') }}">
                         <i class='bx bxs-group'></i>
                         <span class="text">Alumni Berdampak</span>
                     </a>
                 </li>
             </ul>
-        </div>
+        </div> --}}
 
         <!-- Data Tables Section -->
         <div class="menu-section">
             <h3 class="section-title">Data Tables</h3>
             <ul class="side-menu">
 
-                <li class="{{ request()->routeIs('prodi.responden.index') ? 'active' : '' }}">
-                    <a href="{{ route('prodi.responden.index') }}">
+                <li class="{{ request()->routeIs('prodis.responden.index') ? 'active' : '' }}">
+                    <a href="{{ route('prodis.responden.index') }}">
                         <i class='bx bxs-user-voice'></i>
                         <span class="text">Responden</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('prodi.qsresponden.index') ? 'active' : '' }}">
-                    <a href="{{ route('prodi.qsresponden.index') }}">
+                <li class="{{ request()->routeIs('prodis.qsresponden.index') ? 'active' : '' }}">
+                    <a href="{{ route('prodis.qsresponden.index') }}">
                         <i class='bx bxs-spreadsheet'></i>
                         <span class="text">Tabel Responden</span>
                     </a>
@@ -84,8 +84,8 @@
         <div class="menu-section">
             <h3 class="section-title">Settings</h3>
             <ul class="side-menu">
-                                <li class="{{ request()->routeIs('prodi.manage.account') ? 'active' : '' }}">
-                    <a href="{{ route('prodi.manage.account') }}"> 
+                                <li class="{{ request()->routeIs('prodis.manage.account') ? 'active' : '' }}">
+                    <a href="{{ route('prodis.manage.account') }}"> 
                         <i class='bx bxs-user-account'></i>
                         <span class="text">Manage Account</span>
                     </a>

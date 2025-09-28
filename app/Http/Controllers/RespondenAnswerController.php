@@ -84,7 +84,7 @@ class RespondenAnswerController extends Controller
 
         $viewMap = [
             'admin_direktorat' => 'admin.qsresponden',
-            'prodi' => 'prodi.qsresponden',
+            'prodi' => 'prodis.qsresponden',
             'fakultas' => 'fakultas.qsresponden',
             'admin_pemeringkatan' => 'admin_pemeringkatan.qsresponden',
         ];

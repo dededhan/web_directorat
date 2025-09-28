@@ -1,6 +1,6 @@
-@extends('prodi.index')
+@extends('prodis.index')
 
-@section('contentprodi')
+@section('contentprodis')
     @php
         // mapping 1
         $employeeJobTitles = [
@@ -41,7 +41,7 @@
             <h1>QS Responden Table</h1>
             <ul class="breadcrumb">
                 <li>
-                    <a href="{{ route('prodi.dashboard') }}">Dashboard</a>
+                    <a href="{{ route('prodis.dashboard') }}">Dashboard</a>
                 </li>
                 <li><i class='bx bx-chevron-right'></i></li>
                 <li>
@@ -57,7 +57,7 @@
                 <h3>QS Respondent Data</h3>
             </div>
 
-            <form method="GET" action="{{ route('prodi.qsresponden.index') }}" class="mb-3">
+            <form method="GET" action="{{ route('prodis.qsresponden.index') }}" class="mb-3">
                 <div class="filter-card p-3 mb-3">
                     <div class="row g-3 align-items-end">
                         <div class="col-lg-4">
@@ -118,7 +118,7 @@
                         </div>
                         <div class="col-lg-2 d-flex gap-2">
                             <button type="submit" class="btn btn-primary flex-fill">Apply</button>
-                            <a href="{{ route('prodi.qsresponden.index') }}" class="btn btn-outline-secondary">Reset</a>
+                            <a href="{{ route('prodis.qsresponden.index') }}" class="btn btn-outline-secondary">Reset</a>
                         </div>
                     </div>
                 </div>
@@ -203,29 +203,8 @@
                         @endforelse
                     </tbody>
                 </table>
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    <div>
-                        @if ($respondens->total() > 0)
-                            <span class="text-muted">
-                                Showing {{ $respondens->firstItem() }} to {{ $respondens->lastItem() }} of
-                                {{ $respondens->total() }} results
-                            </span>
-                        @else
-                            <span class="text-muted">No results found</span>
-                        @endif
-                    </div>
-                    <div>
-                        <div class="btn-group">
-                            <a href="{{ $respondens->appends(request()->query())->previousPageUrl() }}"
-                                class="btn btn-outline-primary @if ($respondens->onFirstPage()) disabled @endif">
-                                &laquo; Previous
-                            </a>
-                            <a href="{{ $respondens->appends(request()->query())->nextPageUrl() }}"
-                                class="btn btn-outline-primary @if (!$respondens->hasMorePages()) disabled @endif">
-                                Next &raquo;
-                            </a>
-                        </div>
-                    </div>
+                <div class="d-flex justify-content-end mt-4">
+                    {{ $respondens->links() }}
                 </div>
             </div>
         </div>
