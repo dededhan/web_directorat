@@ -163,8 +163,8 @@ class AdminRespondenController extends Controller
                 $routePrefix = 'fakultas';
                 return view('fakultas.respondenadmin', $viewData + ['routePrefix' => $routePrefix]);
             case 'prodi':
-                $routePrefix = 'prodi';
-                return view('prodi.respondenadmin', $viewData + ['routePrefix' => $routePrefix]);
+                $routePrefix = 'prodis';
+                return view('prodis.respondenadmin', $viewData + ['routePrefix' => $routePrefix]);
             default:
                 Log::error('Responden Index: Unhandled role.', ['user_id' => $user->id, 'role' => $role]);
                 return redirect('/')->with('error', 'Akses tidak sah.');
@@ -214,7 +214,7 @@ class AdminRespondenController extends Controller
         if ($role === 'fakultas') {
             $redirectRouteName = 'fakultas.responden.index';
         } elseif ($role === 'prodi') {
-            $redirectRouteName = 'prodi.responden.index';
+            $redirectRouteName = 'prodis.responden.index';
         } elseif ($role === 'admin_pemeringkatan') {
             $redirectRouteName = 'admin_pemeringkatan.responden.index';
         }
@@ -380,7 +380,7 @@ class AdminRespondenController extends Controller
 
             $redirectRouteName = 'admin.responden.index';
             if ($role === 'fakultas') $redirectRouteName = 'fakultas.responden.index';
-            elseif ($role === 'prodi') $redirectRouteName = 'prodi.responden.index';
+            elseif ($role === 'prodi') $redirectRouteName = 'prodis.responden.index';
             elseif ($role === 'admin_pemeringkatan') $redirectRouteName = 'admin_pemeringkatan.responden.index';
 
             return redirect()->route($redirectRouteName)->with('success', 'Responden berhasil dihapus.');

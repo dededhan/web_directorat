@@ -1,8 +1,8 @@
-@extends('prodi.index')
+@extends('prodis.index')
 @vite([
         'resources/css/admin/responden_dashboard.css'
     ])
-@section('contentprodi')
+@section('contentprodis')
 
     @if ($errors->has('email'))
         <script>
@@ -20,7 +20,7 @@
             <h1>Responden</h1>
             <ul class="breadcrumb">
                 <li>
-                    <a href="{{ route('prodi.dashboard') }}">Dashboard</a>
+                    <a href="{{ route('prodis.dashboard') }}">Dashboard</a>
                 </li>
                 <li><i class='bx bx-chevron-right'></i></li>
                 <li>
@@ -45,7 +45,7 @@
                             {{ session('error') }}
                         </div>
                     @endif
-            <form id="survey-form" method="POST" action="{{ route('prodi.responden.store') }}">
+            <form id="survey-form" method="POST" action="{{ route('prodis.responden.store') }}">
                 @csrf
                 <div class="row">
                     <div class="col-md-4 mb-3">
@@ -149,7 +149,7 @@
                 <div class="head">
                     <h3>Daftar Responden</h3>
                     <div class="d-flex justify-content-end align-items-center">
-                        <form method="GET" action="{{ route('prodi.responden.index') }}" class="me-3 w-100">
+                        <form method="GET" action="{{ route('prodis.responden.index') }}" class="me-3 w-100">
                              <div class="row g-2 align-items-center">
                                 <div class="col-md-3">
                                     <input type="text" name="search" id="searchInput" class="form-control"
@@ -188,7 +188,7 @@
 
                                 <div class="col-auto">
                                     <button type="submit" class="btn btn-primary">Filter</button>
-                                    <a href="{{ route('prodi.responden.index') }}" class="btn btn-secondary">Reset</a>
+                                    <a href="{{ route('prodis.responden.index') }}" class="btn btn-secondary">Reset</a>
                                 </div>
                             </div>
                         </form>
@@ -242,7 +242,6 @@
                         </thead>
                         <tbody id="respondent-list">
                             @forelse($respondens as $i => $responden)
-                                {{-- ADD THE ID TO THE TR ELEMENT AND CLASSES TO THE TD ELEMENTS --}}
                                 <tr id="responden-row-{{ $responden->id }}">
                                     <td>{{ $respondens->firstItem() + $i }}</td>
                                     <td class="responden-title">{{ Str::ucfirst($responden->title) }}</td>
@@ -386,7 +385,7 @@
                     <h5 class="modal-title" id="importModalLabel">Import Responden from Excel</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="importForm" action="{{ route('prodi.responden.import') }}" method="POST"
+                <form id="importForm" action="{{ route('prodis.responden.import') }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
@@ -492,7 +491,7 @@
         // edit delete 
     document.addEventListener('DOMContentLoaded', function() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const routePrefix = "{{ $routePrefix ?? 'prodi' }}";
+            const routePrefix = "{{ $routePrefix ?? 'prodis' }}";
 
             // Handle Edit button click
             document.querySelectorAll('.edit-btn').forEach(button => {
@@ -663,7 +662,7 @@
                 const startDate = document.getElementById('exportStartDate').value;
                 const endDate = document.getElementById('exportEndDate').value;
                 
-                let url = '{{ route("prodi.responden.export.excel") }}?';
+                let url = '{{ route("prodis.responden.export.excel") }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
                 if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);
@@ -683,7 +682,7 @@
                 const startDate = document.getElementById('exportStartDate').value;
                 const endDate = document.getElementById('exportEndDate').value;
                 
-                let url = '{{ route("prodi.responden.export.csv") }}?';
+                let url = '{{ route("prodis.responden.export.csv") }}?';
                 const params = [];
                 if (category) params.push(`kategori=${encodeURIComponent(category)}`);
                 if (fakultas) params.push(`fakultas=${encodeURIComponent(fakultas)}`);

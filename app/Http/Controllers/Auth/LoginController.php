@@ -35,7 +35,8 @@ class LoginController extends Controller
             // much clean, me like :D
             $next = match ($user->role) {
                 'admin_direktorat' => 'admin.dashboard',
-                'prodi' =>  'prodi.dashboard',
+                'prodi' =>  'prodis.manage.account',
+                    //    'prodi' => 'maintenance.page',
                 'fakultas' =>'fakultas.dashboard',
                 'admin_pemeringkatan' => 'admin_pemeringkatan.dashboard',
                 'dosen' => 'subdirektorat-inovasi.dosen.dashboard',
