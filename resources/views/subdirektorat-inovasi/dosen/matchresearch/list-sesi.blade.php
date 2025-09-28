@@ -89,14 +89,14 @@
                                 </div>
                             </div>
 
-                            <!-- Duration Info -->
+                            <!-- Session Status -->
                             <div class="space-y-2">
                                 <div class="flex items-center text-xs sm:text-sm text-gray-500 font-semibold uppercase tracking-wider">
-                                    <i class='bx bx-time mr-2 text-teal-500'></i>
-                                    Durasi
+                                    <i class='bx bx-check-circle mr-2 text-teal-500'></i>
+                                    Status
                                 </div>
                                 <div class="text-sm sm:text-base font-semibold text-gray-800">
-                                    {{ \Carbon\Carbon::parse($session->tanggal_mulai)->diffInDays(\Carbon\Carbon::parse($session->tanggal_selesai)) + 1 }} Hari
+                                    Aktif
                                 </div>
                             </div>
                         </div>
