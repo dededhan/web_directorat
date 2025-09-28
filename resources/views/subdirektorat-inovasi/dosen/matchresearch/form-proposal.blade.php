@@ -123,21 +123,29 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 document.getElementById('submitFinalBtn').addEventListener('click', function(event) {
-    event.preventDefault(); // Mencegah form submit secara langsung
+    event.preventDefault(); 
     
     Swal.fire({
         title: 'Apakah Anda yakin?',
         text: "Laporan akan dikirim untuk dinilai dan tidak dapat diubah lagi.",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#14b8a6', // teal-600
+        confirmButtonColor: '#14b8a6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Ya, Kirim Laporan!',
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Jika dikonfirmasi, submit form
-            document.getElementById('reportForm').submit();
+
+            const form = document.getElementById('reportForm');
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'action';
+            hiddenInput.value = 'submit_final';
+            form.appendChild(hiddenInput);
+            
+
+            form.submit();
         }
     });
 });
@@ -163,4 +171,3 @@ function logbookForm(initialData) {
 }
 </script>
 @endsection
-
