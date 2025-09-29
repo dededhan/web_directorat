@@ -27,10 +27,10 @@
         <div class="mb-8">
             <div class="text-center lg:text-left">
                 <h1 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-3">
-                    Usulkan Proposal Penelitian/Pengabdian
+                    Usulkan Proposal Community Development
                 </h1>
                 <p class="text-gray-600 text-lg max-w-2xl mx-auto lg:mx-0">
-                    Pilih skema penelitian atau pengabdian yang sesuai dengan minat dan keahlian Anda
+                    Pilih Sesi Community Development yang tersedia
                 </p>
             </div>
         </div>
@@ -41,10 +41,8 @@
             {{-- Card Header --}}
             <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-8">
                 <div class="text-center lg:text-left">
-                    <h2 class="text-2xl font-bold text-white mb-2">Skema Proposal Tersedia</h2>
-                    <p class="text-teal-100 text-sm">
-                        Daftar skema penelitian dan pengabdian yang dapat Anda ajukan
-                    </p>
+                    <h2 class="text-2xl font-bold text-white mb-2">Sesi Proposal Community Development yang Tersedia</h2>
+                    
                 </div>
             </div>
 
@@ -57,7 +55,7 @@
                         <thead>
                             <tr class="bg-gray-50 border-b border-gray-200">
                                 <th class="text-left py-4 px-6 font-semibold text-gray-700 rounded-tl-lg">
-                                    Skema & Deskripsi
+                                    Sesi & Deskripsi
                                 </th>
                                 <th class="text-left py-4 px-6 font-semibold text-gray-700">
                                     Dana Maksimal

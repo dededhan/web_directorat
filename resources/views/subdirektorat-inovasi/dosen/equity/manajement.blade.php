@@ -18,7 +18,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
                         <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Portofolio Proposal Anda</h1>
-                        <p class="mt-2 text-gray-600 text-base">Semua proposal penelitian & pengabdian yang telah Anda buat
+                        <p class="mt-2 text-gray-600 text-base">Semua proposal Community Development yang telah Anda buat
                             atau ajukan.</p>
                     </div>
                     <div class="flex-shrink-0">
@@ -55,7 +55,7 @@
                                         class="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-5/12">
                                         <div class="flex items-center space-x-1">
                                             <i class='bx bx-file-blank text-base text-blue-500'></i>
-                                            <span>Proposal & Skema</span>
+                                            <span>Proposal & Sesi</span>
                                         </div>
                                     </th>
                                     <th scope="col"
@@ -409,7 +409,7 @@
                                 </div>
                                 <h3 class="font-bold text-lg text-gray-800 mb-2">Anda Belum Memiliki Proposal</h3>
                                 <p class="text-gray-500 text-sm mb-6 text-center max-w-xs">Mulailah dengan mengajukan
-                                    proposal penelitian atau pengabdian baru.</p>
+                                    proposal Community Development baru.</p>
                                 <a href="{{ route('subdirektorat-inovasi.dosen.equity.usulkan-proposal.index') }}"
                                     class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
                                     <i class='bx bx-plus-circle mr-2 text-lg'></i>

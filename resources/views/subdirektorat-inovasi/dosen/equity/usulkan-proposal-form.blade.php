@@ -87,7 +87,7 @@
                                 NIP <span class="text-red-500">*</span>
                             </label>
                             <input id="ketua_nip" name="ketua[nik_nim_nip]" 
-                                   value="{{ old('ketua.nik_nim_nip', $currentUser->nip ?? '') }}" 
+                                   value="{{ old('ketua.nik_nim_nip', $currentUser->profile?->identifier_number ?? '') }}" 
                                    class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 @error('ketua.nik_nim_nip') border-red-500 focus:border-red-500 focus:ring-red-500 @enderror" 
                                    placeholder="Masukkan NIP Anda" type="text">
                             @error('ketua.nik_nim_nip') 
@@ -102,7 +102,7 @@
                         <div class="lg:col-span-2">
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
                                 <i class='bx bx-map mr-1 text-purple-500'></i>
-                                Alamat Jalan <span class="text-red-500">*</span>
+                                Alamat Rumah <span class="text-red-500">*</span>
                             </label>
                             <input name="ketua[alamat_jalan]" 
                                    value="{{ old('ketua.alamat_jalan') }}" 
@@ -226,58 +226,7 @@
                                         <label class="block text-sm font-semibold text-gray-700 mb-2">NIK/NIM/NIP <span class="text-red-500">*</span></label>
                                         <input type="text" :name="`anggota[${index}][nik_nim_nip]`" x-model="item.nik_nim_nip" class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
                                     </div>
-                                    <div class="lg:col-span-2">
-                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Alamat Jalan <span class="text-red-500">*</span></label>
-                                        <input type="text" :name="`anggota[${index}][alamat_jalan]`" x-model="item.alamat_jalan" class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
-                                    </div>
-
-                                    {{-- Location Selects untuk Anggota --}}
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:col-span-2">
-                                        <div>
-                                            <label class="block text-sm font-semibold text-gray-700 mb-2">Provinsi</label>
-                                            <input type="hidden" :name="`anggota[${index}][provinsi]`" :value="item.provinsiName">
-                                            <select x-model="item.provinsiId" @change="handleProvinsiChange(item, $event.target.value)" class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
-                                                <option value="">Pilih Provinsi</option>
-                                                <template x-for="prov in provinces" :key="prov.id">
-                                                    <option :value="prov.id" x-text="prov.name"></option>
-                                                </template>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-semibold text-gray-700 mb-2">Kota/Kabupaten</label>
-                                            <input type="hidden" :name="`anggota[${index}][kota_kabupaten]`" :value="item.kotaName">
-                                            <select x-model="item.kotaId" @change="handleKotaChange(item, $event.target.value)" :disabled="!item.provinsiId || item.loadingKota" class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
-                                                <option x-text="item.loadingKota ? 'Memuat...' : 'Pilih Kota/Kab'" value=""></option>
-                                                <template x-for="kota in item.listKota" :key="kota.id">
-                                                    <option :value="kota.id" x-text="kota.name"></option>
-                                                </template>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-semibold text-gray-700 mb-2">Kecamatan</label>
-                                            <input type="hidden" :name="`anggota[${index}][kecamatan]`" :value="item.kecamatanName">
-                                            <select x-model="item.kecamatanId" @change="handleKecamatanChange(item, $event.target.value)" :disabled="!item.kotaId || item.loadingKecamatan" class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
-                                                <option x-text="item.loadingKecamatan ? 'Memuat...' : 'Pilih Kecamatan'" value=""></option>
-                                                <template x-for="kec in item.listKecamatan" :key="kec.id">
-                                                    <option :value="kec.id" x-text="kec.name"></option>
-                                                </template>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-semibold text-gray-700 mb-2">Kelurahan</label>
-                                            <input type="hidden" :name="`anggota[${index}][kelurahan]`" :value="item.kelurahanName">
-                                            <select x-model="item.kelurahanId" @change="item.kelurahanName = $event.target.options[$event.target.selectedIndex].text" :disabled="!item.kecamatanId || item.loadingKelurahan" class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
-                                                <option x-text="item.loadingKelurahan ? 'Memuat...' : 'Pilih Kelurahan'" value=""></option>
-                                                <template x-for="kel in item.listKelurahan" :key="kel.id">
-                                                    <option :value="kel.id" x-text="kel.name"></option>
-                                                </template>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Kode Pos</label>
-                                        <input type="text" :name="`anggota[${index}][kode_pos]`" x-model="item.kode_pos" class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
