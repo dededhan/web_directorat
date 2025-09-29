@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRespondenAnswerRequest;
 use App\Models\Responden;
 use App\Models\RespondenAnswer;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Monarobase\CountryList\CountryListFacade as Countries;
 use Illuminate\Http\Request;
@@ -23,19 +24,52 @@ class RespondenAnswerController extends Controller
 
         //filter gimmick
         if ($userRole === 'prodi') {
-            $query->whereHas('responden.user', function ($q) use ($user) {
-                $q->where('id', $user->id);
+            $userRespondents = Responden::where('user_id', $user->id)->get();
+            $userEmails = $userRespondents->pluck('email')->filter()->unique();
+            $userPhones = $userRespondents->pluck('phone_responden')->filter()->unique();
+
+            $query->where(function ($q) use ($user, $userEmails, $userPhones) {
+                //nerapin sama kek admin di model gan
+                $q->whereHas('responden', function ($subQ) use ($user) {
+                    $subQ->where('user_id', $user->id);
+                });
+
+                if ($userEmails->isNotEmpty()) {
+                    $q->orWhereIn('email', $userEmails);
+                }
+                if ($userPhones->isNotEmpty()) {
+                    $q->orWhereIn('phone', $userPhones);
+                }
             });
         } elseif ($userRole === 'fakultas') {
             $facultyCode = strtolower($user->name);
-            $query->whereHas('responden.user', function ($q) use ($user, $facultyCode) {
-                $q->where('id', $user->id)
-                    ->orWhere(function ($subQ) use ($facultyCode) {
-                        $subQ->where('role', 'prodi')
-                            ->where('name', 'like', $facultyCode . '-%');
-                    });
+
+            $userIds = User::where('id', $user->id)
+                ->orWhere(function ($q) use ($facultyCode) {
+                    $q->where('role', 'prodi')
+                      ->where('name', 'like', $facultyCode . '-%');
+                })->pluck('id');
+            
+
+            $userRespondents = Responden::whereIn('user_id', $userIds)->get();
+            $userEmails = $userRespondents->pluck('email')->filter()->unique();
+            $userPhones = $userRespondents->pluck('phone_responden')->filter()->unique();
+
+            $query->where(function ($q) use ($userIds, $userEmails, $userPhones) {
+                //nerapin sama kek admin di model gan
+                $q->whereHas('responden', function ($subQ) use ($userIds) {
+                    $subQ->whereIn('user_id', $userIds);
+                });
+
+                if ($userEmails->isNotEmpty()) {
+                    $q->orWhereIn('email', $userEmails);
+                }
+                if ($userPhones->isNotEmpty()) {
+                    $q->orWhereIn('phone', $userPhones);
+                }
             });
         }
+
         if ($request->filled('q')) {
             $search = trim($request->get('q'));
             $query->where(function ($q) use ($search) {

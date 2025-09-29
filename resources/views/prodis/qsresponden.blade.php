@@ -147,29 +147,37 @@
                         @forelse ($respondens as $responden)
                             <tr>
                                 <td>
-                                    @if($responden->responden && $responden->responden->user)
-                                        @php
-                                            $user = $responden->responden->user;
-                                            $role = $user->role;
-                                            $name = $user->name;
-                                            
-                                            if ($role === 'admin_direktorat') {
-                                                $displayText = 'Direktorat';
-                                            } elseif ($role === 'fakultas') {
-                                                $displayText = 'Fakultas (' . strtoupper($name) . ')';
-                                            } elseif ($role === 'prodi') {
-                                                $parts = explode('-', $name, 2);
-                                                $facultyCode = $parts[0] ?? '';
-                                                $prodiName = $parts[1] ?? 'Unknown';
-                                                $displayText = 'Prodi (' . strtoupper($facultyCode) . ' - ' . ucwords($prodiName) . ')';
+                                    @php
+                                        
+                                        $displayText = 'Unknown (No responden relation)'; 
+                                        
+                                        if ($responden->responden) {
+                                            if ($responden->responden->user) {
+                                                $user = $responden->responden->user;
+                                                $role = $user->role;
+                                                $name = $user->name;
+
+                                                if ($role === 'admin_direktorat') {
+                                                    $displayText = 'Direktorat';
+                                                } elseif ($role === 'fakultas') {
+                                                    $displayText = 'Fakultas (' . strtoupper($name) . ')';
+                                                } elseif ($role === 'prodi') {
+                                                    if (Str::contains($name, '-')) {
+                                                        $prodiName = trim(Str::after($name, '-'));
+                                                        $fakultasName = trim(Str::before($name, '-'));
+                                                        $displayText = 'Prodi (' . strtoupper($fakultasName) . ' - ' . ucwords(strtolower($prodiName)) . ')';
+                                                    } else {
+                                                        $displayText = 'Prodi (' . ucwords(strtolower($name)) . ')';
+                                                    }
+                                                } else {
+                                                    $displayText = ucfirst($role) . ($name ? ' (' . $name . ')' : '');
+                                                }
                                             } else {
-                                                $displayText = ucfirst($role) . ' (' . $name . ')';
+                                                $displayText = 'Unknown (User Missing)';
                                             }
-                                        @endphp
-                                        {{ $displayText }}
-                                    @else
-                                        Unknown
-                                    @endif
+                                        }
+                                    @endphp
+                                    {{ $displayText }}
                                 </td>
                                 <td>{{ Str::ucfirst($responden->title) }}</td>
                                 <td>{{ Str::title($responden->first_name) }}</td>
