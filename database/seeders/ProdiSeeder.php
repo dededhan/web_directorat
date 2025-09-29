@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Schema;
 
 class ProdiSeeder extends Seeder
 {
@@ -15,9 +16,18 @@ class ProdiSeeder extends Seeder
      */
     public function run()
     {
+        Schema::disableForeignKeyConstraints();
+
+           // Kosongkan tabel secara paksa
+        DB::table('equity_prodi')->truncate();
+
+        // Nyalakan kembali pengecekan foreign key
+        Schema::enableForeignKeyConstraints();
+
+        
         $now = Carbon::now();
 
-        DB::table('equity_prodi')->insert([
+       DB::table('equity_prodi')->insert([
             // Pascasarjana (ID: 9)
             ['fakultas_id' => 9, 'name' => 'S3 Penelitian Dan Evaluasi Pendidikan', 'created_at' => $now, 'updated_at' => $now],
             ['fakultas_id' => 9, 'name' => 'S2 Penelitian Dan Evaluasi Pendidikan', 'created_at' => $now, 'updated_at' => $now],
@@ -132,6 +142,8 @@ class ProdiSeeder extends Seeder
             ['fakultas_id' => 4, 'name' => 'S1 Geografi', 'created_at' => $now, 'updated_at' => $now],
             ['fakultas_id' => 4, 'name' => 'S2 Pendidikan Geografi', 'created_at' => $now, 'updated_at' => $now],
             ['fakultas_id' => 4, 'name' => 'S2 Pendidikan Pancasila Dan Kewarganegaraan', 'created_at' => $now, 'updated_at' => $now],
+            ['fakultas_id' => 4, 'name' => 'S1 Ilmu Hukum', 'created_at' => $now, 'updated_at' => $now],
+            
 
             // FE (ID: 7)
             ['fakultas_id' => 7, 'name' => 'D4 Akuntansi Sektor Publik', 'created_at' => $now, 'updated_at' => $now],
@@ -151,6 +163,7 @@ class ProdiSeeder extends Seeder
             // Profesi (ID: 10)
             ['fakultas_id' => 10, 'name' => 'Profesi PPG', 'created_at' => $now, 'updated_at' => $now],
 
-        ]);
+        ]
+        );
     }
 }
