@@ -160,7 +160,11 @@ class RespondenAnswerController extends Controller
             return redirect()->route('survey.already_submitted');
         }
 
-        $normalizedCategory = $responden->category === 'employer' ? 'employee' : $responden->category;
+        $cleanedCategory = strtolower(trim($responden->category));
+        $normalizedCategory = match ($cleanedCategory) {
+            'employer', 'employee' => 'employee',
+            'academic' => 'academic',
+        };
 
         RespondenAnswer::create([
             'responden_id' => $responden->id,
