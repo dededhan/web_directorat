@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class MatchmakingSubmission extends Model
 {
@@ -16,8 +17,32 @@ class MatchmakingSubmission extends Model
         'user_id',
         'judul_proposal',
         'status',
-        'rejection_note', // Tambahkan kolom baru
+        'rejection_note',
+        'status_history',
     ];
+
+
+    protected $casts = [
+        'status_history' => 'array',
+    ];
+
+    public function addStatusLog(string $newStatus, ?string $notes = null): void
+    {
+        $history = $this->status_history ?? [];
+        
+        $logEntry = [
+            'status' => $newStatus,
+            'timestamp' => Carbon::now()->toIso8601String(),
+            'notes' => $notes,
+            'changed_by' => auth()->check() ? auth()->id() : null,
+        ];
+
+        $history[] = $logEntry;
+
+        $this->attributes['status_history'] = json_encode($history);
+        $this->save();
+    }
+
 
     /**
      * Relasi many-to-one: Satu submission dimiliki oleh satu session.

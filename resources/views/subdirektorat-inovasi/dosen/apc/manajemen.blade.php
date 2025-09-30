@@ -10,7 +10,6 @@
                     return ['color' => 'blue', 'icon' => 'bx-info-circle', 'text' => 'Diajukan'];
                 case 'verifikasi':
                     return ['color' => 'yellow', 'icon' => 'bx-search-alt', 'text' => 'Verifikasi'];
-
                 case 'verifikasi pembayaran':
                     return ['color' => 'purple', 'icon' => 'bx-credit-card', 'text' => 'Verifikasi Pembayaran'];
                 case 'revisi':
@@ -19,7 +18,8 @@
                     return ['color' => 'green', 'icon' => 'bx-check-circle', 'text' => 'Disetujui'];
                 case 'ditolak':
                     return ['color' => 'red', 'icon' => 'bx-x-circle', 'text' => 'Ditolak'];
-                 case 'selesai': return ['color' => 'teal', 'icon' => 'bx-award', 'text' => 'Selesai'];
+                case 'selesai':
+                    return ['color' => 'teal', 'icon' => 'bx-award', 'text' => 'Selesai'];
                 default:
                     return ['color' => 'gray', 'icon' => 'bx-question-mark', 'text' => 'Unknown'];
             }
@@ -168,14 +168,36 @@
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
                                         @foreach ($submissions as $submission)
-                                            <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                            {{-- PERUBAHAN: Menambahkan highlight pada baris jika status 'disetujui' --}}
+                                            <tr class="@if($submission->status == 'disetujui') bg-teal-50 border-l-4 border-teal-400 hover:bg-teal-100 @else hover:bg-gray-50 @endif transition-colors duration-150">
                                                 <td class="px-6 py-5">
-                                                        @if ($submission->status == 'revisi' && !empty($submission->catatan_revisi))
+                                                    {{-- PERUBAHAN: Menambahkan notifikasi untuk upload bukti bayar --}}
+                                                    @if ($submission->status == 'disetujui')
+                                                        <div class="mb-3 p-3 bg-white border-2 border-dashed border-teal-300 rounded-xl shadow-sm">
+                                                            <div class="flex items-center">
+                                                                <div class="flex-shrink-0">
+                                                                    <i class='bx bxs-check-circle text-teal-500 text-3xl mr-3'></i>
+                                                                </div>
+                                                                <div class="flex-1">
+                                                                    <p class="text-sm font-bold text-teal-900">Proposal Disetujui</p>
+                                                                    <p class="text-xs text-gray-600 mt-1">
+                                                                        Langkah selanjutnya adalah mengunggah bukti pembayaran melalui menu <strong class="font-semibold text-gray-800">Aksi</strong> di sebelah kanan.
+                                                                    </p>
+                                                                </div>
+                                                                <div class="ml-3 flex-shrink-0">
+                                                                    <i class='bx bx-chevrons-right text-teal-400 text-4xl animate-pulse'></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+
+                                                    @if ($submission->status == 'revisi' && !empty($submission->catatan_revisi))
                                                         <div class="mb-2 p-3 bg-orange-50 border-l-4 border-orange-400 rounded-r-lg">
                                                             <p class="text-xs font-bold text-orange-800">Catatan Revisi dari Admin:</p>
                                                             <p class="text-xs text-orange-700 mt-1 whitespace-pre-wrap">{{ $submission->catatan_revisi }}</p>
                                                         </div>
                                                     @endif
+
                                                     <div class="flex items-start space-x-3">
                                                         <div class="flex-shrink-0">
                                                             <div
@@ -255,8 +277,8 @@
                         {{-- Mobile Card View --}}
                         <div class="lg:hidden">
                             @foreach ($submissions as $submission)
-                                <div
-                                    class="border-b border-gray-100 last:border-b-0 p-4 hover:bg-gray-50 transition-colors">
+                                {{-- PERUBAHAN: Menambahkan highlight pada card jika status 'disetujui' --}}
+                                <div class="border-b border-gray-100 last:border-b-0 p-4 @if($submission->status == 'disetujui') bg-teal-50 hover:bg-teal-100 @else hover:bg-gray-50 @endif transition-colors">
                                     <div class="flex items-start justify-between mb-3">
                                         <div class="flex items-start space-x-3 flex-1 min-w-0">
                                             <div class="flex-shrink-0">
@@ -298,16 +320,40 @@
                                             Rp {{ number_format($submission->biaya_publikasi, 0, ',', '.') }}
                                         </p>
                                     </div>
+                                    
+                                    {{-- PERUBAHAN: Menambahkan notifikasi untuk upload bukti bayar di mobile --}}
+                                    @if ($submission->status == 'disetujui')
+                                        <div class="mt-4 mb-3 p-3 bg-white border-2 border-dashed border-teal-300 rounded-xl">
+                                            <div class="flex items-center">
+                                                <div class="flex-shrink-0">
+                                                    <i class='bx bxs-check-circle text-teal-500 text-2xl mr-3'></i>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <p class="text-sm font-bold text-teal-900">Proposal Disetujui</p>
+                                                    <p class="text-xs text-gray-600 mt-1">
+                                                        Silakan unggah bukti pembayaran melalui tombol di bawah ini.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
 
                                     {{-- Actions for mobile --}}
                                     <div class="flex flex-col gap-2">
                                         <a href="{{ route('subdirektorat-inovasi.dosen.apc.details', $submission->id) }}" class="flex items-center justify-center w-full px-4 py-2 bg-teal-50 border-2 border-teal-200 rounded-xl text-sm font-medium text-teal-700 hover:bg-teal-100 hover:border-teal-300 transition-all">
                                             <i class='bx bx-show-alt mr-2'></i> Lihat Detail
                                         </a>
+                                        {{-- PERUBAHAN: Tombol upload dibuat lebih menonjol untuk status 'disetujui' --}}
                                         @if (in_array($submission->status, ['disetujui', 'revisi']))
                                             <button @click="showUploadModal = true; uploadSubmission = {{ $submission->toJson() }}"
-                                                class="flex items-center justify-center w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-xl text-sm font-medium text-purple-700 hover:bg-purple-100 hover:border-purple-300 transition-all">
-                                                <i class='bx bx-cloud-upload mr-2'></i> Upload Bukti Bayar
+                                                class="flex items-center justify-center w-full px-4 py-2.5 rounded-xl text-sm font-medium transition-all transform hover:scale-[1.02]
+                                                @if($submission->status == 'disetujui')
+                                                    bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg animate-pulse hover:shadow-xl
+                                                @else
+                                                    bg-purple-50 border-2 border-purple-200 text-purple-700 hover:bg-purple-100 hover:border-purple-300
+                                                @endif
+                                                ">
+                                                <i class='bx bx-cloud-upload mr-2 text-base'></i> Upload Bukti Bayar
                                             </button>
                                         @endif
                                         @if ($isSessionOpen && in_array($submission->status, ['disetujui', 'revisi']))
@@ -455,19 +501,11 @@
             transform: translateY(-1px);
         }
 
-        .bg-white:hover {
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
-        }
-
         .line-clamp-2 {
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-        }
-
-        .w-full {
-            width: 100%;
         }
 
         table {
@@ -481,46 +519,8 @@
             word-break: break-word;
         }
 
-        .bg-white.rounded-2xl {
-            overflow: visible;
-        }
-
-        [x-show="open"] {
-            z-index: 9999 !important;
-        }
-
         [x-cloak] {
             display: none !important;
-        }
-
-        .group:hover i {
-            animation: bounce 0.6s ease-in-out;
-        }
-
-        @keyframes bounce {
-
-            0%,
-            20%,
-            50%,
-            80%,
-            100% {
-                transform: translateY(0);
-            }
-
-            40% {
-                transform: translateY(-5px);
-            }
-
-            60% {
-                transform: translateY(-2px);
-            }
-        }
-
-        @media (max-width: 640px) {
-            .container {
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
         }
     </style>
 @endpush

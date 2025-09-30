@@ -132,7 +132,7 @@
                                     @forelse($report->qs_respondents as $respondent)
                                         <li class="flex items-center text-gray-800">
                                             <i class='bx bx-user-circle text-amber-600 mr-2 text-sm'></i>
-                                            {{ $respondent }}
+{{ $respondent['name'] ?? 'Nama tidak valid' }}
                                         </li>
                                     @empty
                                         <li class="flex items-center text-gray-500">

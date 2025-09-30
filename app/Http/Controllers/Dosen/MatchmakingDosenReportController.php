@@ -22,13 +22,11 @@ class MatchmakingDosenReportController extends Controller
     {
         $submission = MatchmakingSubmission::with('report')->findOrFail($submissionId);
 
-        // Otorisasi: Pastikan pengguna yang login adalah pemilik submission
         if ($submission->user_id !== Auth::id()) {
             abort(403, 'AKSES DITOLAK');
         }
 
-        // Kondisi: Hanya bisa diisi jika status diterima atau draft laporan
-        if (!in_array($submission->status, ['diterima', 'draft_laporan'])) {
+        if (!in_array($submission->status, ['diterima', 'draft_laporan', 'revisi'])) {
             return redirect()->route('subdirektorat-inovasi.dosen.matchresearch.manajemen')
                 ->with('error', 'Laporan tidak dapat diisi atau diubah saat ini.');
         }
@@ -46,7 +44,7 @@ class MatchmakingDosenReportController extends Controller
     {
         $submission = MatchmakingSubmission::findOrFail($submissionId);
 
-        // Otorisasi
+
         if ($submission->user_id !== Auth::id()) {
             abort(403, 'AKSES DITOLAK');
         }
@@ -59,7 +57,7 @@ class MatchmakingDosenReportController extends Controller
             'submit_proof_path' => 'sometimes|nullable|file|mimes:pdf,jpg,png,jpeg|max:5120',
             'review_proof_path' => 'sometimes|nullable|file|mimes:pdf,jpg,png,jpeg|max:5120',
             'travel_proof_path' => 'sometimes|nullable|file|mimes:pdf,jpg,png,jpeg|max:5120',
-            'setneg_approval_path' => 'sometimes|nullable|file|mimes:pdf|max:5120', // Validasi untuk field baru
+            'setneg_approval_path' => 'sometimes|nullable|file|mimes:pdf|max:5120',
             'visit_days' => 'nullable|integer|min:1|max:5',
             'respondens' => 'nullable|array',
             'respondens.*.name' => 'nullable|string|max:255',
@@ -71,43 +69,57 @@ class MatchmakingDosenReportController extends Controller
             $report = MatchmakingReport::firstOrNew(['matchmaking_submission_id' => $submissionId]);
 
             $data = $request->except(['_token', '_method', 'action', 'respondens']);
-            
-            // Filter responden yang kosong
+
+
             $qsRespondents = collect($request->input('respondens', []))
                 ->filter(fn($resp) => !empty($resp['name']))
                 ->values()
                 ->all();
             $data['qs_respondents'] = $qsRespondents;
-            
-            // Handle file uploads
+
             $fileFields = ['proposal_path', 'article_path', 'submit_proof_path', 'review_proof_path', 'travel_proof_path', 'setneg_approval_path'];
+            $userName = Str::slug($submission->user->name, '_');
+
             foreach ($fileFields as $field) {
                 if ($request->hasFile($field)) {
-                    // Hapus file lama jika ada
+
                     if ($report->{$field} && Storage::disk('public')->exists($report->{$field})) {
                         Storage::disk('public')->delete($report->{$field});
                     }
-                    $path = $request->file($field)->store("matchmaking_reports/{$submissionId}", 'public');
+                    
+
+                    $file = $request->file($field);
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = "{$userName}_{$field}.{$extension}";
+                    $path = $file->storeAs("matchmaking_reports/{$submissionId}", $filename, 'public');
+
+
                     $data[$field] = $path;
                 }
             }
-            
+
             $report->fill($data);
             $report->save();
-
-            // Update status submission berdasarkan aksi
-            if ($validated['action'] === 'submit_final') {
-                $submission->status = 'menunggu_penilaian';
-            } else {
-                $submission->status = 'draft_laporan';
+            
+            $oldStatus = $submission->status;
+            $newStatus = ($validated['action'] === 'submit_final') ? 'menunggu_penilaian' : 'draft_laporan';
+            
+            if ($oldStatus !== $newStatus) {
+                $submission->status = $newStatus;
+                
+                $logNotes = ($newStatus === 'menunggu_penilaian') 
+                    ? 'Dosen mengirimkan laporan akhir untuk dinilai.' 
+                    : 'Dosen menyimpan draf laporan.';
+                
+                $submission->addStatusLog($newStatus, $logNotes);
             }
+    
             $submission->save();
 
             DB::commit();
 
             return redirect()->route('subdirektorat-inovasi.dosen.matchresearch.manajemen')
                 ->with('success', 'Laporan berhasil disimpan!');
-
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Gagal menyimpan laporan matchmaking: ' . $e->getMessage());
@@ -115,3 +127,4 @@ class MatchmakingDosenReportController extends Controller
         }
     }
 }
+

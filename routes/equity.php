@@ -259,6 +259,9 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                         Route::get('/{submissionId}/form', [MatchmakingDosenReportController::class, 'show'])->name('form');
                         Route::post('/{submissionId}/store', [MatchmakingDosenReportController::class, 'storeOrUpdate'])->name('store');
                     });
+
+
+                    Route::get('/logbook/{submission}', [\App\Http\Controllers\Dosen\MatchmakingLogbookController::class, 'show'])->name('logbook');
                 });
                 // API
                 Route::get('/search-dosen', [DosenSearchController::class, 'search'])->name('search-dosen');

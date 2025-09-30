@@ -38,6 +38,8 @@ class MatchmakingDosenSubmissionController extends Controller
                 'status' => 'diajukan',
             ]);
 
+                        $submission->addStatusLog('diajukan', 'Proposal berhasil dibuat dan diajukan oleh dosen.');
+
             $this->syncMembers($request, $submission);
 
             DB::commit();
@@ -60,7 +62,7 @@ class MatchmakingDosenSubmissionController extends Controller
         }
 
 
-        if ($submission->status !== 'diajukan' && $submission->status !== 'revisi' ) { // Memungkinkan edit saat revisi
+        if ($submission->status !== 'diajukan' && $submission->status !== 'revisi' ) { 
             return redirect()->route('subdirektorat-inovasi.dosen.matchresearch.manajemen')
                              ->with('error', 'Proposal tidak dapat diedit lagi.');
         }
@@ -141,7 +143,6 @@ class MatchmakingDosenSubmissionController extends Controller
     private function syncMembers(Request $request, MatchmakingSubmission $submission, $isUpdate = false)
     {
         $proposerName = Str::slug(Auth::user()->name, '_');
-        $date = Carbon::now()->format('Ymd');
 
         foreach ($request->input('members', []) as $index => $memberData) {
             $memberId = $memberData['id'] ?? null;
@@ -202,11 +203,16 @@ class MatchmakingDosenSubmissionController extends Controller
                             
                             $file = $request->file($fileInputName);
                             $extension = $file->getClientOriginalExtension();
-                            $filename = "{$proposerName}_{$internationalType}_{$fileField}_{$date}_{$index}.{$extension}";
+
+                            $filename = "{$proposerName}_{$fileField}.{$extension}";
+
                             $path = $file->storeAs("matchmaking_proofs/{$submission->id}", $filename, 'public');
                             $details[$fileField] = $path;
                         } else {
-                            $details[$fileField] = $oldFilePath;
+    
+                             if (isset($member->details[$fileField])) {
+                                $details[$fileField] = $member->details[$fileField];
+                            }
                         }
                     }
                 }
@@ -224,4 +230,3 @@ class MatchmakingDosenSubmissionController extends Controller
         }
     }
 }
-

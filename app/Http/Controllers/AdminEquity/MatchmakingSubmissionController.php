@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminEquity;
 use App\Http\Controllers\Controller;
 use App\Models\MatchmakingSubmission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 
 class MatchmakingSubmissionController extends Controller
@@ -33,10 +34,18 @@ class MatchmakingSubmissionController extends Controller
 
     public function updateStatus(Request $request, MatchmakingSubmission $submission)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'status' => 'required|in:diterima,ditolak_awal',
             'rejection_note' => 'required_if:status,ditolak_awal|nullable|string',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $validated = $validator->validated();
 
         $submission->status = $validated['status'];
         if ($validated['status'] === 'ditolak_awal') {
@@ -47,6 +56,8 @@ class MatchmakingSubmissionController extends Controller
 
         $submission->save();
 
+        $submission->addStatusLog($validated['status'], $validated['rejection_note'] ?? null);
+
         return redirect()->route('admin_equity.matchresearch.show', $submission->matchmaking_session_id)
                          ->with('success', 'Status proposal berhasil diperbarui!');
     }
@@ -54,10 +65,18 @@ class MatchmakingSubmissionController extends Controller
  
     public function updateReportStatus(Request $request, MatchmakingSubmission $submission)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'status' => 'required|in:lolos,revisi,tolak',
             'rejection_note' => 'required_if:status,revisi,tolak|nullable|string',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        
+        $validated = $validator->validated();
 
         $submission->status = $validated['status'];
         if (in_array($validated['status'], ['revisi', 'tolak'])) {
@@ -68,7 +87,10 @@ class MatchmakingSubmissionController extends Controller
 
         $submission->save();
 
+        $submission->addStatusLog($validated['status'], $validated['rejection_note'] ?? null);
+
         return redirect()->route('admin_equity.matchresearch.show', $submission->matchmaking_session_id)
                          ->with('success', 'Hasil penilaian laporan berhasil disimpan!');
     }
 }
+
