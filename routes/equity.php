@@ -77,8 +77,14 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
     });
     //
 
-    // 3. Insentif reviewer dan editorial board
+    // 3. Insentif reviewer dan editorial board (ROUTE LAMA)
     Route::resource('incentive-reviewer', IncentiveReviewerController::class)->names('incentivereviewer');
+
+    // 3. Fee Reviewer (FEEREVI - ROUTE BARU DUMMY)
+    Route::get('/feerevi', function () {
+        return view('admin_equity.feerevi.index'); // Mengarah ke folder dan file baru
+    })->name('feerevi.index');
+
 
     Route::get('/incentive-editor', function () {
         return view('admin_equity.incentiveeditor.index');

@@ -147,9 +147,9 @@
 
             <div class="relative w-full max-w-7xl mx-auto">
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 items-center justify-items-center">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" alt="Logo UNJ" class="h-20 sm:h-32 lg:h-48 object-contain">
-                    <img src="https://pnn.ac.id/media/2025/05/Logo-Tersier-Diktisaintek-Berdampak-1-1024x1024.png" alt="Logo Kemendiksaintek" class="h-20 sm:h-32 lg:h-48 object-contain">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/250px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" alt="Logo Tut Wuri Handayani" class="h-20 sm:h-32 lg:h-48 object-contain">
+                    <img src="https://pnn.ac.id/media/2025/05/Logo-Tersier-Diktisaintek-Berdampak-1-1024x1024.png" alt="Logo Kemendiksaintek" class="h-20 sm:h-32 lg:h-48 object-contain">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" alt="Logo UNJ" class="h-20 sm:h-32 lg:h-48 object-contain">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Logo_resmi_LPDP.png" alt="Logo LPDP" class="h-20 sm:h-32 lg:h-48 object-contain">
                 </div>
             </div>
