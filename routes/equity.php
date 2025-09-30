@@ -26,6 +26,7 @@ use App\Http\Controllers\Dosen\MatchmakingDosenSubmissionController;
 use App\Http\Controllers\Dosen\MatchmakingDosenReportController;
 use App\Http\Controllers\AdminEquity\MatchmakingSubmissionController;
 use App\Http\Controllers\AdminEquity\IncentiveReviewerController;
+use App\Http\Controllers\EquityFakultas\EquityFakultasController;
 
 
 // Admin Equity Routes
@@ -114,6 +115,16 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
 
 
     Route::resource('incentive-reviewer', IncentiveReviewerController::class)->names('incentivereviewer');
+});
+
+
+Route::prefix('equity_fakultas')
+    ->name('equity_fakultas.')
+    // ->middleware(['auth'])
+    ->group(function () 
+    {
+
+        Route::get('/dashboard', [EquityFakultasController::class, 'index'])->name('dashboard');
 });
 
 Route::prefix('reviewer_equity')->name('reviewer_equity.')->middleware(['auth', 'role:reviewer_equity'])->group(function () {
@@ -220,7 +231,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                     Route::get('/{sessionId}/form', [ApcDosenController::class, 'createSubmissionForm'])->name('form');
                     Route::post('/{sessionId}/store', [ApcSubmissionController::class, 'store'])->name('store');
 
-                      // Details Page (NEW)
+                    // Details Page (NEW)
                     Route::get('/submission/{submission}/details', [ApcDosenController::class, 'showDetails'])->name('details');
 
                     Route::get('/submission/{submission}/edit', [ApcSubmissionController::class, 'edit'])->name('edit');
