@@ -6,7 +6,10 @@ if (!function_exists('getStatusInfoAdmin')) {
         switch ($status) {
             case 'diajukan': return ['color' => 'blue', 'icon' => 'bx-info-circle', 'text' => 'Diajukan'];
             case 'verifikasi': return ['color' => 'yellow', 'icon' => 'bx-search-alt', 'text' => 'Verifikasi'];
+            case 'verifikasi pembayaran': return ['color' => 'purple', 'icon' => 'bx-credit-card', 'text' => 'Verifikasi Pembayaran'];
+            case 'revisi': return ['color' => 'orange', 'icon' => 'bx-edit', 'text' => 'Revisi'];
             case 'disetujui': return ['color' => 'green', 'icon' => 'bx-check-circle', 'text' => 'Disetujui'];
+            case 'selesai': return ['color' => 'teal', 'icon' => 'bx-award', 'text' => 'Selesai'];
             case 'ditolak': return ['color' => 'red', 'icon' => 'bx-x-circle', 'text' => 'Ditolak'];
             default: return ['color' => 'gray', 'icon' => 'bx-question-mark', 'text' => 'Unknown'];
         }
@@ -107,6 +110,21 @@ if (!function_exists('getStatusInfoAdmin')) {
 
             {{-- Content --}}
             <div class="p-6 lg:p-8 space-y-8">
+
+                {{-- Revision Notes --}}
+    @if ($submission->status == 'revisi' && !empty($submission->catatan_revisi))
+    <div class="bg-orange-50 border-l-4 border-orange-400 p-4 rounded-lg shadow-sm" role="alert">
+        <div class="flex items-start">
+            <div class="flex-shrink-0">
+                <i class='bx bx-edit text-orange-400 text-xl'></i>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-bold text-orange-800">Catatan Revisi dari Admin</h3>
+                <p class="text-sm text-orange-700 mt-1 whitespace-pre-wrap">{{ $submission->catatan_revisi }}</p>
+            </div>
+        </div>
+    </div>
+    @endif
                 
                 {{-- Basic Information --}}
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-sm">
@@ -167,7 +185,7 @@ if (!function_exists('getStatusInfoAdmin')) {
                         <i class='bx bx-cloud-download text-blue-500 mr-2'></i>
                         Dokumen Pendukung
                     </h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <a href="{{ Storage::url($submission->artikel_path) }}" 
                            target="_blank"
                            class="flex items-center p-4 bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-xl hover:from-red-100 hover:to-red-200 transition-all duration-200 group">
@@ -195,6 +213,17 @@ if (!function_exists('getStatusInfoAdmin')) {
                                 <p class="text-xs text-gray-500">Submission</p>
                             </div>
                         </a>
+                        @if ($submission->bukti_pembayaran_path)
+                        <a href="{{ Storage::url($submission->bukti_pembayaran_path) }}" 
+                           target="_blank"
+                           class="flex items-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-200 rounded-xl hover:from-purple-100 hover:to-purple-200 transition-all duration-200 group">
+                            <i class='bx bx-credit-card text-purple-500 text-2xl mr-3 group-hover:scale-110 transition-transform'></i>
+                            <div>
+                                <p class="font-semibold text-gray-800 text-sm">Bukti Bayar</p>
+                                <p class="text-xs text-gray-500">Lihat Dokumen</p>
+                            </div>
+                        </a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -206,6 +235,7 @@ if (!function_exists('getStatusInfoAdmin')) {
              @keydown.escape.window="showStatusModal = false"
              class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div @click.away="showStatusModal = false" 
+                 x-data="{ selectedStatus: '{{ $submission->status }}' }"
                  class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200">
                 
                 {{-- Modal Header --}}
@@ -227,22 +257,32 @@ if (!function_exists('getStatusInfoAdmin')) {
                         <div>
                             <label for="status" class="block text-xs font-bold uppercase text-gray-500 mb-2">Pilih Status Baru</label>
                             <select name="status" id="status" 
+                                    @change="selectedStatus = $event.target.value"
                                     class="w-full rounded-xl border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm">
-                                <option value="diajukan" @if($submission->status == 'diajukan') selected @endif>
-                                    <i class='bx bx-info-circle mr-1'></i> Diajukan
-                                </option>
-                                <option value="verifikasi" @if($submission->status == 'verifikasi') selected @endif>
-                                    <i class='bx bx-search-alt mr-1'></i> Verifikasi
-                                </option>
-                                <option value="disetujui" @if($submission->status == 'disetujui') selected @endif>
-                                    <i class='bx bx-check-circle mr-1'></i> Disetujui
-                                </option>
-                                <option value="ditolak" @if($submission->status == 'ditolak') selected @endif>
-                                    <i class='bx bx-x-circle mr-1'></i> Ditolak
-                                </option>
+                                <option value="diajukan" @if($submission->status == 'diajukan') selected @endif>Diajukan</option>
+                                <option value="verifikasi" @if($submission->status == 'verifikasi') selected @endif>Verifikasi</option>
+
+                                <option value="revisi" @if($submission->status == 'revisi') selected @endif>Revisi</option>
+                                <option value="disetujui" @if($submission->status == 'disetujui') selected @endif>Disetujui</option>
+                                                                <option value="verifikasi pembayaran" @if($submission->status == 'verifikasi pembayaran') selected @endif>Verifikasi Pembayaran</option>
+                                <option value="selesai" @if($submission->status == 'selesai') selected @endif>Selesai</option>
+                                <option value="ditolak" @if($submission->status == 'ditolak') selected @endif>Ditolak</option>
                             </select>
                         </div>
                         
+                        {{-- Conditional Revision Notes Textarea --}}
+        <div x-show="selectedStatus === 'revisi'" 
+             x-transition
+             style="display: none;">
+            <label for="catatan_revisi" class="block text-xs font-bold uppercase text-gray-500 mb-2">Catatan Revisi (Wajib diisi)</label>
+            <textarea name="catatan_revisi" id="catatan_revisi" rows="4" 
+                      class="w-full rounded-xl border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm" 
+                      placeholder="Jelaskan detail revisi yang diperlukan...">{{ old('catatan_revisi', $submission->catatan_revisi) }}</textarea>
+            @error('catatan_revisi')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
                         <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
                             <div class="flex items-start">
                                 <i class='bx bx-info-circle text-yellow-600 text-xl mr-3 flex-shrink-0 mt-0.5'></i>
@@ -295,6 +335,10 @@ if (!function_exists('getStatusInfoAdmin')) {
 
     .group:hover i {
         animation: bounce 0.6s ease-in-out;
+    }
+    
+    .whitespace-pre-wrap {
+        white-space: pre-wrap;
     }
 
     @keyframes bounce {

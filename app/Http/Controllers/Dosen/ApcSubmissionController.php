@@ -149,8 +149,7 @@ class ApcSubmissionController extends Controller
                     $prefix = strtoupper($requestKey);
                     $fileName = "{$prefix}_{$userName}_{$timestamp}." . $file->getClientOriginalExtension();
                     $dataToUpdate[$dbColumn] = $file->storeAs("apc/submissions/{$userId}", $fileName, 'public');
-                }
-                elseif ($request->input("delete_{$requestKey}") == '1') {
+                } elseif ($request->input("delete_{$requestKey}") == '1') {
                     if ($submission->$dbColumn) {
                         Storage::disk('public')->delete($submission->$dbColumn);
                     }
@@ -196,6 +195,64 @@ class ApcSubmissionController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('subdirektorat-inovasi.dosen.apc.manajemen')->with('error', 'Gagal menghapus proposal.');
+        }
+    }
+
+
+    public function uploadPaymentProof(Request $request, ApcSubmission $submission)
+    {
+        // 1. Otorisasi: Pastikan dosen adalah pemilik proposal
+        if ($submission->user_id !== Auth::id()) {
+            abort(403, 'AKSES DITOLAK');
+        }
+
+        // 2. Validasi Status: Hanya boleh upload jika status 'diajukan' atau 'revisi'
+        if (!in_array($submission->status, ['diajukan', 'revisi'])) {
+            return back()->with('error', 'Tidak dapat mengunggah bukti bayar untuk proposal dengan status saat ini.');
+        }
+
+        // 3. Validasi File
+        $validated = $request->validate([
+            'bukti_pembayaran' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120', // max 5MB
+        ], [
+            'bukti_pembayaran.required' => 'Anda harus memilih file bukti pembayaran.',
+            'bukti_pembayaran.mimes' => 'Format file harus PDF, JPG, JPEG, atau PNG.',
+            'bukti_pembayaran.max' => 'Ukuran file tidak boleh lebih dari 5 MB.',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $userId = Auth::id();
+            $userName = Str::slug(Auth::user()->name, '_');
+            $timestamp = time();
+
+            $file = $request->file('bukti_pembayaran');
+            $fileName = "PAYMENT_{$userName}_{$timestamp}." . $file->getClientOriginalExtension();
+
+            // Hapus file lama jika ada
+            if ($submission->bukti_pembayaran_path && Storage::disk('public')->exists($submission->bukti_pembayaran_path)) {
+                Storage::disk('public')->delete($submission->bukti_pembayaran_path);
+            }
+
+            // Simpan file baru
+            $filePath = $file->storeAs("apc/payments/{$userId}", $fileName, 'public');
+
+            // 4. Update status dan path file di database
+            $submission->update([
+                'status' => 'verifikasi pembayaran',
+                'bukti_pembayaran_path' => $filePath,
+            ]);
+
+            // 5. Tambahkan log status
+            $submission->addStatusLog('verifikasi pembayaran', 'Dosen telah mengunggah bukti pembayaran.');
+
+            DB::commit();
+
+            return redirect()->route('subdirektorat-inovasi.dosen.apc.manajemen')->with('success', 'Bukti pembayaran berhasil diunggah. Proposal sedang dalam tahap verifikasi oleh admin.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan saat mengunggah file: ' . $e->getMessage());
         }
     }
 

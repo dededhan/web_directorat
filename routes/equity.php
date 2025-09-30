@@ -20,9 +20,9 @@ use App\Http\Controllers\AdminEquity\ApcSubmissionAdminController;
 use App\Http\Controllers\Dosen\ApcDosenController;
 use App\Http\Controllers\Dosen\ApcSubmissionController;
 use App\Http\Controllers\AdminEquity\MatchresearchController;
-use App\Http\Controllers\Dosen\MatchmakingDosenController; 
+use App\Http\Controllers\Dosen\MatchmakingDosenController;
 use App\Http\Controllers\Dosen\DosenSearchController;
-use App\Http\Controllers\Dosen\MatchmakingDosenSubmissionController; 
+use App\Http\Controllers\Dosen\MatchmakingDosenSubmissionController;
 use App\Http\Controllers\Dosen\MatchmakingDosenReportController;
 use App\Http\Controllers\AdminEquity\MatchmakingSubmissionController;
 use App\Http\Controllers\AdminEquity\IncentiveReviewerController;
@@ -220,10 +220,16 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                     Route::get('/{sessionId}/form', [ApcDosenController::class, 'createSubmissionForm'])->name('form');
                     Route::post('/{sessionId}/store', [ApcSubmissionController::class, 'store'])->name('store');
 
+                      // Details Page (NEW)
+                    Route::get('/submission/{submission}/details', [ApcDosenController::class, 'showDetails'])->name('details');
+
                     Route::get('/submission/{submission}/edit', [ApcSubmissionController::class, 'edit'])->name('edit');
                     Route::put('/submission/{submission}', [ApcSubmissionController::class, 'update'])->name('update');
                     Route::delete('/submission/{submission}', [ApcSubmissionController::class, 'destroy'])->name('destroy');
+
+                    Route::post('/submission/{submission}/upload-payment', [ApcSubmissionController::class, 'uploadPaymentProof'])->name('upload-payment');
                 });
+
 
                 // matchmaking
                 Route::prefix('matchresearch')->name('matchresearch.')->group(function () {
@@ -238,14 +244,12 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                     Route::put('/submission/{submission}', [MatchmakingDosenSubmissionController::class, 'update'])->name('update');
 
                     // Tahap 2
-                    Route::prefix('report')->name('report.')->group(function() {
+                    Route::prefix('report')->name('report.')->group(function () {
                         Route::get('/{submissionId}/form', [MatchmakingDosenReportController::class, 'show'])->name('form');
                         Route::post('/{submissionId}/store', [MatchmakingDosenReportController::class, 'storeOrUpdate'])->name('store');
                     });
-
-
                 });
-                    // API
-                    Route::get('/search-dosen', [DosenSearchController::class, 'search'])->name('search-dosen');
+                // API
+                Route::get('/search-dosen', [DosenSearchController::class, 'search'])->name('search-dosen');
             });
     });

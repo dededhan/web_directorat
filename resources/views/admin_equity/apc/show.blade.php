@@ -6,7 +6,10 @@ if (!function_exists('getStatusInfoAdmin')) {
         switch ($status) {
             case 'diajukan': return ['color' => 'blue', 'icon' => 'bx-info-circle', 'text' => 'Diajukan'];
             case 'verifikasi': return ['color' => 'yellow', 'icon' => 'bx-search-alt', 'text' => 'Verifikasi'];
+            case 'verifikasi pembayaran': return ['color' => 'purple', 'icon' => 'bx-credit-card', 'text' => 'Verifikasi Pembayaran'];
+            case 'revisi': return ['color' => 'orange', 'icon' => 'bx-edit', 'text' => 'Revisi'];
             case 'disetujui': return ['color' => 'green', 'icon' => 'bx-check-circle', 'text' => 'Disetujui'];
+            case 'selesai': return ['color' => 'teal', 'icon' => 'bx-award', 'text' => 'Selesai'];
             case 'ditolak': return ['color' => 'red', 'icon' => 'bx-x-circle', 'text' => 'Ditolak'];
             default: return ['color' => 'gray', 'icon' => 'bx-question-mark', 'text' => 'Unknown'];
         }
@@ -76,7 +79,12 @@ if (!function_exists('getStatusInfoAdmin')) {
                                     <option value="">Semua Status</option>
                                     <option value="diajukan" @if(request('status') == 'diajukan') selected @endif>Diajukan</option>
                                     <option value="verifikasi" @if(request('status') == 'verifikasi') selected @endif>Verifikasi</option>
+
+  <option value="verifikasi pembayaran" @if(request('status') == 'verifikasi pembayaran') selected @endif>Verifikasi Pembayaran</option>
+    <option value="revisi" @if(request('status') == 'revisi') selected @endif>Revisi</option>
                                     <option value="disetujui" @if(request('status') == 'disetujui') selected @endif>Disetujui</option>
+                                                                        <option value="verifikasi pembayaran" @if(request('status') == 'verifikasi pembayaran') selected @endif>Verifikasi Pembayaran</option>
+                                    <option value="selesai" @if(request('status') == 'selesai') selected @endif>Selesai</option>
                                     <option value="ditolak" @if(request('status') == 'ditolak') selected @endif>Ditolak</option>
                                 </select>
                             </div>

@@ -26,6 +26,8 @@ class ApcSubmission extends Model
         'submission_process_path',
         'status',
         'status_history',
+        'bukti_pembayaran_path',
+        'catatan_revisi',
     ];
 
 

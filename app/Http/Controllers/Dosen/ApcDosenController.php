@@ -46,5 +46,18 @@ class ApcDosenController extends Controller
         
         return view('subdirektorat-inovasi.dosen.apc.form-pengajuan', compact('session'));
     }
+
+        public function showDetails(ApcSubmission $submission)
+    {
+        // Authorization: Ensure the logged-in user owns this submission
+        if ($submission->user_id !== Auth::id()) {
+            abort(403, 'AKSES DITOLAK');
+        }
+
+        // Eager load relationships for efficiency
+        $submission->load('authors', 'session');
+
+        return view('subdirektorat-inovasi.dosen.apc.details-proposal', compact('submission'));
+    }
 }
 
