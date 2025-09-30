@@ -20,6 +20,7 @@ class MatchmakingReport extends Model
         'submit_proof_path',
         'review_proof_path',
         'travel_proof_path',
+                'setneg_approval_path',
         'visit_days',
         'qs_respondents',
     ];
