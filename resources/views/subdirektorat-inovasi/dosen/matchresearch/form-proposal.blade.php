@@ -12,12 +12,12 @@
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                     <li><a href="{{ route('subdirektorat-inovasi.dosen.matchresearch.manajemen') }}" class="hover:text-teal-600 transition-colors duration-200">Manajemen Proposal</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
-                    <li class="font-medium text-gray-800">Logbook Pelaporan</li>
+                    <li class="font-medium text-gray-800">Pengajuan</li>
                 </ol>
             </nav>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Logbook & Pelaporan Kemajuan</h1>
+                    <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Laporan Kemajuan</h1>
                     <p class="mt-2 text-gray-600 text-base">Judul Proposal: <strong class="text-teal-700">{{ $submission->judul_proposal }}</strong></p>
                 </div>
                 <div class="flex-shrink-0">
@@ -76,7 +76,7 @@
                                         <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
                                             <div class="flex items-center space-x-2">
                                                 <i class='bx bx-file-blank text-base text-teal-500'></i>
-                                                <span>Proposal Final</span>
+                                                <span>Proposal Kegiatan</span>
                                             </div>
                                             <span class="text-xs text-gray-500 sm:ml-auto">(PDF/JPG/PNG, maks 5MB)</span>
                                         </div>
@@ -105,7 +105,7 @@
                                 <div class="flex-1 min-w-0">
                                     <label for="article_path" class="block text-sm font-bold text-gray-700 mb-3">
                                         <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                                            <span>Artikel</span>
+                                            <span>Artikel Penelitian</span>
                                             <span class="text-xs text-gray-500 sm:ml-auto">(PDF/JPG/PNG, maks 5MB)</span>
                                         </div>
                                     </label>
@@ -248,8 +248,10 @@
                                            name="visit_days" 
                                            id="visit_days" 
                                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all" 
-                                           placeholder="Contoh: 14" 
-                                           value="{{ old('visit_days', $report->visit_days) }}">
+                                           placeholder="Contoh: 5" 
+                                           value="{{ old('visit_days', $report->visit_days) }}"
+                                           max="5"
+                                           min="1">
                                 </div>
                                 <div>
                                     <label for="travel_proof_path" class="block text-sm font-medium text-gray-700 mb-2">
@@ -392,6 +394,18 @@ function logbookForm(initialData) {
         }
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const visitDaysInput = document.getElementById('visit_days');
+    if (visitDaysInput) {
+        visitDaysInput.addEventListener('input', function() {
+            const max = parseInt(this.getAttribute('max'), 10);
+            if (parseInt(this.value, 10) > max) {
+                this.value = max;
+            }
+        });
+    }
+});
 </script>
 
 @push('styles')
@@ -412,3 +426,4 @@ function logbookForm(initialData) {
     </style>
 @endpush
 @endsection
+

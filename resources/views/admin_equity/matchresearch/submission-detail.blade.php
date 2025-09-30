@@ -50,6 +50,18 @@ if (!function_exists('getStatusIcon')) {
         }
     }
 }
+
+if (!function_exists('getPartnerTypeLabel')) {
+    function getPartnerTypeLabel($type) {
+        $types = [
+            'h_index' => 'H-Index Researcher',
+            'editor' => 'Editor Top Tier Journal',
+            'fellow' => 'Fellow Organization Profession',
+            'academy' => 'National Academy Member',
+        ];
+        return $types[$type] ?? 'Tipe Mitra Tidak Diketahui';
+    }
+}
 @endphp
 
 @section('content')
@@ -191,7 +203,13 @@ if (!function_exists('getStatusIcon')) {
                                                         {{ $details['country'] ?? 'International' }}
                                                     </span>
                                                 </div>
-                                                <p class="text-sm text-gray-600 mb-3">{{ $details['institution'] ?? '' }}</p>
+                                                <p class="text-sm text-gray-600">{{ $details['institution'] ?? '' }}</p>
+                                                <div class="mt-2 mb-3">
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">
+                                                        <i class='bx bx-purchase-tag-alt mr-1'></i>
+                                                        {{ getPartnerTypeLabel($details['international_type'] ?? '') }}
+                                                    </span>
+                                                </div>
                                                 
                                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                                                     @if(isset($details['expertise']))
@@ -200,13 +218,23 @@ if (!function_exists('getStatusIcon')) {
                                                             <p class="text-gray-800 font-semibold">{{ $details['expertise'] }}</p>
                                                         </div>
                                                     @endif
+
+                                                    @if(isset($details['partner_availability_letter']))
+                                                    <div class="p-2 bg-teal-50 rounded-lg">
+                                                        <span class="text-teal-700 font-medium">Surat Ketersediaan Mitra:</span>
+                                                        <a href="{{ Storage::url($details['partner_availability_letter']) }}" target="_blank" 
+                                                            class="text-teal-600 hover:text-teal-800 hover:underline font-semibold inline-flex items-center">
+                                                            Unduh Surat <i class='bx bx-download ml-1 text-xs'></i>
+                                                        </a>
+                                                    </div>
+                                                    @endif
                                                     
                                                     @if(isset($details['scopus_link']))
                                                         <div class="p-2 bg-teal-50 rounded-lg">
                                                             <span class="text-teal-700 font-medium">Scopus:</span>
                                                             <a href="{{ $details['scopus_link'] }}" target="_blank" 
                                                                 class="text-teal-600 hover:text-teal-800 hover:underline font-semibold inline-flex items-center">
-                                                                Lihat Profil <i class='bx bx-external-link ml-1 text-xs'></i>
+                                                                Lihat Profil <i class='bx bx-link-external ml-1 text-xs'></i>
                                                             </a>
                                                         </div>
                                                     @endif
@@ -223,7 +251,7 @@ if (!function_exists('getStatusIcon')) {
                                                             <span class="text-teal-700 font-medium">Scimago:</span>
                                                             <a href="{{ $details['scimago_link'] }}" target="_blank" 
                                                                 class="text-teal-600 hover:text-teal-800 hover:underline font-semibold inline-flex items-center">
-                                                                Lihat Jurnal <i class='bx bx-external-link ml-1 text-xs'></i>
+                                                                Lihat Jurnal <i class='bx bx-link-external ml-1 text-xs'></i>
                                                             </a>
                                                         </div>
                                                     @endif
@@ -240,7 +268,7 @@ if (!function_exists('getStatusIcon')) {
                                                             <span class="text-teal-700 font-medium">Link Organisasi:</span>
                                                             <a href="{{ $details['organization_link'] }}" target="_blank" 
                                                                 class="text-teal-600 hover:text-teal-800 hover:underline font-semibold inline-flex items-center">
-                                                                Lihat Organisasi <i class='bx bx-external-link ml-1 text-xs'></i>
+                                                                Lihat Organisasi <i class='bx bx-link-external ml-1 text-xs'></i>
                                                             </a>
                                                         </div>
                                                     @endif
@@ -259,10 +287,10 @@ if (!function_exists('getStatusIcon')) {
                                                         </div>
                                                     @endif
                                                     
-                                                    @if(isset($details['membership_year']))
+                                                    @if(isset($details['membership_year_range']))
                                                         <div class="p-2 bg-teal-50 rounded-lg">
                                                             <span class="text-teal-700 font-medium">Tahun Keanggotaan:</span>
-                                                            <p class="text-gray-800 font-semibold">{{ $details['membership_year'] }}</p>
+                                                            <p class="text-gray-800 font-semibold">{{ $details['membership_year_range'] }}</p>
                                                         </div>
                                                     @endif
                                                     
@@ -472,3 +500,4 @@ document.addEventListener('alpine:init', () => {
     }
 </style>
 @endpush
+

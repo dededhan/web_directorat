@@ -117,6 +117,9 @@ class MatchmakingDosenSubmissionController extends Controller
                  if ($member->type === 'international' && !empty($member->details['membership_proof'])) {
                     Storage::disk('public')->delete($member->details['membership_proof']);
                 }
+                if ($member->type === 'international' && !empty($member->details['partner_availability_letter'])) {
+                    Storage::disk('public')->delete($member->details['partner_availability_letter']);
+                }
                 $member->delete();
             }
 
@@ -166,27 +169,45 @@ class MatchmakingDosenSubmissionController extends Controller
                 $details = $internationalType ? ($memberData[$internationalType] ?? []) : [];
                 $details['international_type'] = $internationalType; 
                 
-                $fileFields = ['fellow' => 'membership_proof', 'academy' => 'membership_proof'];
+                if ($internationalType === 'academy') {
+                    $yearStart = $details['membership_year_start'] ?? null;
+                    $yearEnd = $details['membership_year_end'] ?? null;
 
-                if ($internationalType && isset($fileFields[$internationalType])) {
-                    $fileField = $fileFields[$internationalType];
-                    $fileInputName = "members.{$index}.{$internationalType}.{$fileField}";
+                    if ($yearStart && $yearEnd) {
+                        $details['membership_year_range'] = "{$yearStart} - {$yearEnd}";
+                    }
                     
-                    $oldFilePath = $member ? ($member->details[$fileField] ?? null) : null;
+                    unset($details['membership_year_start'], $details['membership_year_end']);
+                }
 
-                    if ($request->hasFile($fileInputName)) {
-                        if ($oldFilePath && Storage::disk('public')->exists($oldFilePath)) {
-                            Storage::disk('public')->delete($oldFilePath);
-                        }
+                $fileFieldsConfig = [
+                    'fellow' => ['membership_proof', 'partner_availability_letter'],
+                    'academy' => ['membership_proof', 'partner_availability_letter'],
+                    'h_index' => ['partner_availability_letter'],
+                    'editor' => ['partner_availability_letter'],
+                ];
+
+                if ($internationalType && isset($fileFieldsConfig[$internationalType])) {
+                    $fileFields = $fileFieldsConfig[$internationalType];
+
+                    foreach($fileFields as $fileField) {
+                        $fileInputName = "members.{$index}.{$internationalType}.{$fileField}";
                         
-                        $file = $request->file($fileInputName);
-                        $extension = $file->getClientOriginalExtension();
-                        $filename = "{$proposerName}_{$internationalType}_{$date}.{$extension}";
-                        $path = $file->storeAs("matchmaking_proofs/{$submission->id}", $filename, 'public');
-                        $details[$fileField] = $path;
-                    } else {
+                        $oldFilePath = $member ? ($member->details[$fileField] ?? null) : null;
 
-                        $details[$fileField] = $oldFilePath;
+                        if ($request->hasFile($fileInputName)) {
+                            if ($oldFilePath && Storage::disk('public')->exists($oldFilePath)) {
+                                Storage::disk('public')->delete($oldFilePath);
+                            }
+                            
+                            $file = $request->file($fileInputName);
+                            $extension = $file->getClientOriginalExtension();
+                            $filename = "{$proposerName}_{$internationalType}_{$fileField}_{$date}_{$index}.{$extension}";
+                            $path = $file->storeAs("matchmaking_proofs/{$submission->id}", $filename, 'public');
+                            $details[$fileField] = $path;
+                        } else {
+                            $details[$fileField] = $oldFilePath;
+                        }
                     }
                 }
                 

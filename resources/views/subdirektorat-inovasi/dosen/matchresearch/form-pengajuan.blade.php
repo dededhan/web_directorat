@@ -67,7 +67,7 @@
                         <div class="flex items-center text-white">
                             <h2 class="text-xl lg:text-2xl font-bold flex items-center">
                                 <i class='bx bx-text mr-3 text-2xl'></i>
-                                1. Judul Penelitian
+                                1. Judul 
                             </h2>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                                 <label for="judul_proposal" class="block text-sm font-bold text-gray-700 mb-3">
                                     <div class="flex items-center space-x-2">
                                         <i class='bx bx-file-blank text-base text-teal-500'></i>
-                                        <span>Judul Proposal</span>
+                                        <span>Judul Kegiatan</span>
                                         <span class="text-red-500">*</span>
                                     </div>
                                 </label>
@@ -87,7 +87,7 @@
                                        id="judul_proposal" 
                                        value="{{ old('judul_proposal') }}" 
                                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200"
-                                       placeholder="Masukkan judul penelitian matchmaking"
+                                       placeholder="Masukkan judul kegiatan"
                                        required>
                                 @error('judul_proposal') 
                                     <p class="text-red-500 text-sm mt-2 flex items-center">
@@ -277,6 +277,26 @@
                                                                 <option value="Social Sciences and Humanities">Social Sciences and Humanities</option>
                                                             </select>
                                                         </div>
+                                                        <div class="md:col-span-2">
+                                                            <label class="block text-sm font-medium text-gray-700 mb-2">Surat Ketersediaan Mitra</label>
+                                                            <div class="p-4 bg-gray-50 rounded-lg border-2 border-dashed" x-data="{ fileName: '' }">
+                                                                <div class="flex items-center justify-center w-full">
+                                                                    <label :for="`dropzone-file-${index}-${member.international_type}-letter`" class="flex flex-col items-center justify-center w-full h-32 rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200 transition-colors">
+                                                                        <div class="flex flex-col items-center justify-center pt-5 pb-6" x-show="!fileName">
+                                                                            <i class='bx bxs-cloud-upload text-4xl text-gray-400'></i>
+                                                                            <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Klik untuk mengunggah</span></p>
+                                                                            <p class="text-xs text-gray-500">PDF (MAX. 5MB)</p>
+                                                                        </div>
+                                                                        <div class="flex flex-col items-center justify-center text-center p-4" x-show="fileName">
+                                                                            <i class='bx bxs-file-pdf text-4xl text-teal-500 mb-2'></i>
+                                                                            <p class="text-sm font-semibold text-gray-700 truncate" x-text="fileName"></p>
+                                                                            <p class="text-xs text-gray-500 mt-1">Klik untuk mengganti file</p>
+                                                                        </div>
+                                                                        <input :id="`dropzone-file-${index}-${member.international_type}-letter`" type="file" class="hidden" :name="`members[${index}][${member.international_type}][partner_availability_letter]`" accept=".pdf" @change="fileName = $event.target.files.length > 0 ? $event.target.files[0].name : ''" />
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -285,7 +305,7 @@
                                                     <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl p-6 border border-yellow-200">
                                                         <h5 class="font-semibold text-gray-800 mb-4 flex items-center">
                                                             <i class='bx bx-trending-up text-yellow-600 mr-2'></i>
-                                                            H-Index Details
+                                                            Link ID Scopus
                                                         </h5>
                                                         <input type="url" 
                                                                :name="`members[${index}][h_index][scopus_link]`" 
@@ -337,9 +357,23 @@
                                                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all mb-4">
                                                                 <div>
                                                                     <label class="block text-sm font-medium text-gray-700 mb-2">Bukti Keanggotaan</label>
-                                                                    <input type="file" 
-                                                                           :name="`members[${index}][fellow][membership_proof]`" 
-                                                                           class="file-input-style">
+                                                                    <div class="p-4 bg-gray-50 rounded-lg border-2 border-dashed" x-data="{ fileName: '' }">
+                                                                        <div class="flex items-center justify-center w-full">
+                                                                            <label :for="`dropzone-file-${index}-fellow-proof`" class="flex flex-col items-center justify-center w-full h-32 rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200 transition-colors">
+                                                                                <div class="flex flex-col items-center justify-center pt-5 pb-6" x-show="!fileName">
+                                                                                    <i class='bx bxs-cloud-upload text-4xl text-gray-400'></i>
+                                                                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Klik untuk mengunggah</span></p>
+                                                                                    <p class="text-xs text-gray-500">PDF (MAX. 5MB)</p>
+                                                                                </div>
+                                                                                <div class="flex flex-col items-center justify-center text-center p-4" x-show="fileName">
+                                                                                     <i class='bx bxs-file-pdf text-4xl text-teal-500 mb-2'></i>
+                                                                                     <p class="text-sm font-semibold text-gray-700 truncate" x-text="fileName"></p>
+                                                                                     <p class="text-xs text-gray-500 mt-1">Klik untuk mengganti file</p>
+                                                                                </div>
+                                                                                <input :id="`dropzone-file-${index}-fellow-proof`" type="file" class="hidden" :name="`members[${index}][fellow][membership_proof]`" accept=".pdf" @change="fileName = $event.target.files.length > 0 ? $event.target.files[0].name : ''"/>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -358,15 +392,41 @@
                                                                    :name="`members[${index}][academy][academy_name]`" 
                                                                    placeholder="Nama National Academy" 
                                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all">
-                                                            <input type="text" 
-                                                                   :name="`members[${index}][academy][membership_year]`" 
-                                                                   placeholder="Tahun Keanggotaan" 
-                                                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all">
+                                                            <div>
+                                                                <label class="block text-sm font-medium text-gray-700 mb-2">Rentang Tahun Keanggotaan</label>
+                                                                <div class="flex items-center space-x-2">
+                                                                    <input type="number" 
+                                                                           :name="`members[${index}][academy][membership_year_start]`" 
+                                                                           placeholder="Tahun Mulai" 
+                                                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all"
+                                                                           min="1900" max="{{ date('Y') + 5 }}">
+                                                                    <span class="text-gray-500 font-semibold">-</span>
+                                                                    <input type="number" 
+                                                                           :name="`members[${index}][academy][membership_year_end]`" 
+                                                                           placeholder="Tahun Selesai" 
+                                                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all"
+                                                                           min="1900" max="{{ date('Y') + 10 }}">
+                                                                </div>
+                                                            </div>
                                                             <div class="md:col-span-2">
                                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Bukti Keanggotaan</label>
-                                                                <input type="file" 
-                                                                       :name="`members[${index}][academy][membership_proof]`" 
-                                                                       class="file-input-style">
+                                                                <div class="p-4 bg-gray-50 rounded-lg border-2 border-dashed" x-data="{ fileName: '' }">
+                                                                    <div class="flex items-center justify-center w-full">
+                                                                        <label :for="`dropzone-file-${index}-academy-proof`" class="flex flex-col items-center justify-center w-full h-32 rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200 transition-colors">
+                                                                            <div class="flex flex-col items-center justify-center pt-5 pb-6" x-show="!fileName">
+                                                                                <i class='bx bxs-cloud-upload text-4xl text-gray-400'></i>
+                                                                                <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Klik untuk mengunggah</span></p>
+                                                                                <p class="text-xs text-gray-500">PDF (MAX. 5MB)</p>
+                                                                            </div>
+                                                                            <div class="flex flex-col items-center justify-center text-center p-4" x-show="fileName">
+                                                                                 <i class='bx bxs-file-pdf text-4xl text-teal-500 mb-2'></i>
+                                                                                 <p class="text-sm font-semibold text-gray-700 truncate" x-text="fileName"></p>
+                                                                                 <p class="text-xs text-gray-500 mt-1">Klik untuk mengganti file</p>
+                                                                            </div>
+                                                                            <input :id="`dropzone-file-${index}-academy-proof`" type="file" class="hidden" :name="`members[${index}][academy][membership_proof]`" accept=".pdf" @change="fileName = $event.target.files.length > 0 ? $event.target.files[0].name : ''" />
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -496,3 +556,4 @@
         }
     </script>
 @endsection
+
