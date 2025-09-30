@@ -149,6 +149,13 @@
                         <span class="text">Tabel Responden</span>
                     </a>
                 </li>
+
+                                <li class="{{ request()->routeIs('admin.responden_graph') ? 'active' : '' }}">
+                    <a href="{{ route('admin.responden_graph') }}">
+                        <i class='bx bxs-bar-chart-square' ></i>
+                        <span class="text">Grafik Jawaban</span>
+                    </a>
+                </li>
             </ul>
         </div>
 

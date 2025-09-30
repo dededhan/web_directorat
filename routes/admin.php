@@ -33,6 +33,8 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VideoinovasiController;
 use App\Http\Controllers\MitraKolaborasiController;
 use App\Http\Controllers\RisetUnjController;
+use App\Http\Controllers\RespondenAnswerGraphController; 
+
 
 
 
@@ -114,6 +116,9 @@ Route::prefix('admin')->name('admin.')
 
         Route::get('/responden/laporan', [AdminRespondenReportController::class, 'laporan'])
             ->name('responden_laporan');
+
+                    Route::get('/responden/graph', [RespondenAnswerGraphController::class, 'index'])
+            ->name('responden_graph');
 
         Route::resource('/responden', AdminRespondenController::class)->except(['update']);
         Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
