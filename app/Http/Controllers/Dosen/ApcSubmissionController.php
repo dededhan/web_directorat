@@ -201,17 +201,17 @@ class ApcSubmissionController extends Controller
 
     public function uploadPaymentProof(Request $request, ApcSubmission $submission)
     {
-        // 1. Otorisasi: Pastikan dosen adalah pemilik proposal
+
         if ($submission->user_id !== Auth::id()) {
             abort(403, 'AKSES DITOLAK');
         }
 
-        // 2. Validasi Status: Hanya boleh upload jika status 'diajukan' atau 'revisi'
-        if (!in_array($submission->status, ['diajukan', 'revisi'])) {
+
+        if (!in_array($submission->status, ['disetujui', 'revisi'])) {
             return back()->with('error', 'Tidak dapat mengunggah bukti bayar untuk proposal dengan status saat ini.');
         }
 
-        // 3. Validasi File
+
         $validated = $request->validate([
             'bukti_pembayaran' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120', // max 5MB
         ], [

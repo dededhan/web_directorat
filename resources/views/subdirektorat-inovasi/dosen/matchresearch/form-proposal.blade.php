@@ -273,6 +273,28 @@
                                         </a> 
                                     @endif
                                 </div>
+                                {{-- Input baru ditambahkan di sini --}}
+                                <div class="md:col-span-2">
+                                    <label for="setneg_approval_path" class="block text-sm font-medium text-gray-700 mb-2">
+                                        <div class="flex items-center space-x-2">
+                                            <span>Surat Persetujuan Sekretariat Negara</span>
+                                            <span class="text-xs text-gray-500">(PDF, maks 5MB)</span>
+                                        </div>
+                                    </label>
+                                    <input type="file" 
+                                           name="setneg_approval_path" 
+                                           id="setneg_approval_path" 
+                                           accept=".pdf"
+                                           class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 transition-all">
+                                    @if($report->setneg_approval_path) 
+                                        <a href="{{ Storage::url($report->setneg_approval_path) }}" 
+                                           target="_blank" 
+                                           class="inline-flex items-center text-sm text-sky-600 hover:text-sky-800 hover:underline mt-2 transition-colors">
+                                            <i class='bx bx-link-external mr-1'></i>
+                                            Lihat file saat ini
+                                        </a> 
+                                    @endif
+                                </div>
                             </div>
                         </div>
                         
@@ -426,4 +448,3 @@ document.addEventListener('DOMContentLoaded', function() {
     </style>
 @endpush
 @endsection
-

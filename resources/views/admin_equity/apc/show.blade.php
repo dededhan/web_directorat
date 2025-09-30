@@ -37,7 +37,7 @@ if (!function_exists('getStatusInfoAdmin')) {
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">{{ $session->nama_sesi }}</h1>
-                    <p class="mt-2 text-gray-600 text-base">Kelola semua pengajuan jurnal yang masuk dalam sesi ini.</p>
+                    <p class="mt-2 text-gray-600 text-base">Kelola semua apc Dalam Sesi ini</p>
                 </div>
                 <div class="flex-shrink-0">
                     <div class="bg-teal-100 text-teal-800 px-4 py-2.5 rounded-xl border-2 border-teal-200">
@@ -57,7 +57,7 @@ if (!function_exists('getStatusInfoAdmin')) {
                     <div>
                         <h2 class="text-xl lg:text-2xl font-bold flex items-center">
                             <i class='bx bx-file-blank mr-3 text-2xl'></i>
-                            Daftar Pengajuan Jurnal
+                            Daftar Pengajuan
                         </h2>
                         <p class="mt-2 text-teal-100">Filter dan kelola semua proposal yang masuk</p>
                     </div>
@@ -69,7 +69,7 @@ if (!function_exists('getStatusInfoAdmin')) {
                                 <label for="search" class="block text-xs font-bold uppercase text-teal-100 mb-2">Cari Pengajuan</label>
                                 <input type="text" name="search" id="search" 
                                        class="w-full rounded-xl border-0 bg-white bg-opacity-90 backdrop-blur-sm text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-white focus:bg-white px-4 py-2.5" 
-                                       placeholder="Nama dosen, judul artikel, nama jurnal..." 
+                                       placeholder="Nama dosen, judul artikel, nama pengajuan..." 
                                        value="{{ request('search') }}">
                             </div>
                             <div class="lg:col-span-3">

@@ -40,7 +40,7 @@ if (!function_exists('getStatusInfoAdmin')) {
             </nav>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Detail Pengajuan Jurnal</h1>
+                    <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Detail Pengajuan</h1>
                     <p class="mt-2 text-gray-600 text-base">Verifikasi kelengkapan data dan dokumen pengajuan dari <strong class="text-gray-800">{{ $submission->user->name }}</strong>.</p>
                 </div>
                 <div class="flex-shrink-0">
