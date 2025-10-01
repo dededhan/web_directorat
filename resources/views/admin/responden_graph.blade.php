@@ -3,111 +3,366 @@
 @section('contentadmin')
     <div class="p-4 sm:p-6 bg-gray-50 min-h-full font-sans">
 
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-            <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Responden Jawaban - Grafik</h1>
-                <p class="text-sm text-gray-600 mt-1">Visualisasi data dari jawaban responden.</p>
+        <div class="head-title">
+            <div class="left">
+                <h1>Laporan Grafik Responden</h1>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+                    </li>
+                    <li><i class='bx bx-chevron-right'></i></li>
+                    <li>
+                        <a class="active" href="#">Grafik Responden</a>
+                    </li>
+                </ul>
             </div>
-            <button id="print-button"
-                class="mt-4 sm:mt-0 flex items-center gap-2 bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
-                <i class='bx bxs-printer text-xl'></i>
-                <span>Cetak Laporan</span>
-            </button>
+            {{-- Tombol Print di-nonaktifkan untuk sementara --}}
+            {{-- <button id="print-button" class="btn-download">
+                <i class='bx bxs-printer'></i>
+                <span class="text">Cetak Laporan</span>
+            </button> --}}
         </div>
+
 
         {{-- Filter Section --}}
         <div class="bg-white p-4 rounded-xl shadow-lg mb-6">
             <h3 class="text-lg font-bold text-gray-700 mb-4">Filter Data</h3>
-            <p class="text-center text-gray-500">Filter controls will be placed here.</p>
-
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label for="start_date" class="block text-sm font-medium text-gray-700">Tanggal Mulai</label>
+                    <input type="date" id="start_date" name="start_date"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <div>
+                    <label for="end_date" class="block text-sm font-medium text-gray-700">Tanggal Selesai</label>
+                    <input type="date" id="end_date" name="end_date"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <div class="self-end">
+                    <button id="filter-btn"
+                        class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
+                        Terapkan Filter
+                    </button>
+                </div>
+            </div>
         </div>
 
         {{-- Chart Section --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
-                <h3 class="text-lg font-bold text-gray-700 mb-4">Grafik Contoh 1</h3>
-                <div class="h-80">
-                    <canvas id="myChart1"></canvas>
+        <div id="report-content">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                {{-- Grafik Sumber Input --}}
+                <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
+                    <h3 class="text-lg font-bold text-gray-700 mb-4 text-center">Jumlah Responden Berdasarkan Sumber Input
+                    </h3>
+                    <div class="h-80 w-full flex justify-center items-center">
+                        <canvas id="sumberDataChart"></canvas>
+                    </div>
+                </div>
+
+                {{-- Grafik Kategori --}}
+                <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
+                    <h3 class="text-lg font-bold text-gray-700 mb-4 text-center">Jumlah Responden Berdasarkan Kategori
+                    </h3>
+                    <div class="h-80 w-full flex justify-center items-center">
+                        <canvas id="kategoriChart"></canvas>
+                    </div>
                 </div>
             </div>
-            <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
-                <h3 class="text-lg font-bold text-gray-700 mb-4">Grafik Contoh 2</h3>
-                <div class="h-80">
-                    <canvas id="myChart2"></canvas>
+
+            <div class="grid grid-cols-1 gap-6">
+                {{-- Grafik Detail Per Fakultas --}}
+                <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
+                    <h3 class="text-lg font-bold text-gray-700 mb-4">Total Input per Fakultas & Prodi</h3>
+                    <div class="h-96">
+                        <canvas id="detailFakultasChart"></canvas>
+                    </div>
+                </div>
+                {{-- Grafik Tren Bulanan --}}
+                <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
+                    <h3 class="text-lg font-bold text-gray-700 mb-4">Tren Pengisian Responden per Bulan</h3>
+                    <div class="h-96">
+                        <canvas id="trenChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
+    <style>
+        .head-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            grid-gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .head-title .left h1 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #342E37;
+        }
+
+        .head-title .left .breadcrumb {
+            display: flex;
+            align-items: center;
+            grid-gap: 16px;
+        }
+
+        .head-title .left .breadcrumb li {
+            color: #342E37;
+        }
+
+        .head-title .left .breadcrumb li a {
+            color: #A0AEC0;
+            pointer-events: none;
+        }
+
+        .head-title .left .breadcrumb li a.active {
+            color: #3C91E6;
+            pointer-events: unset;
+        }
+
+        .head-title .btn-download {
+            height: 36px;
+            padding: 0 16px;
+            border-radius: 36px;
+            background: #3C91E6;
+            color: #F9F9F9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            grid-gap: 10px;
+            font-weight: 500;
+        }
+    </style>
 
     {{-- Include Chart.js --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Example Chart 1
-            const ctx1 = document.getElementById('myChart1').getContext('2d');
-            const myChart1 = new Chart(ctx1, {
-                type: 'bar',
-                data: {
-                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                    datasets: [{
-                        label: '# of Votes',
-                        data: [12, 19, 3, 5, 2, 3],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(255, 159, 64, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+            // Daftarkan plugin datalabels secara global
+            Chart.register(ChartDataLabels);
+
+            let sumberDataChart, kategoriChart, trenChart, detailFakultasChart;
+
+            const chartColors = {
+                blue: 'rgba(54, 162, 235, 0.8)',
+                red: 'rgba(255, 99, 132, 0.8)',
+                yellow: 'rgba(255, 206, 86, 0.8)',
+                green: 'rgba(75, 192, 192, 0.8)',
+                purple: 'rgba(153, 102, 255, 0.8)',
+                orange: 'rgba(255, 159, 64, 0.8)',
+                teal: 'rgba(0, 128, 128, 0.8)',
+                pink: 'rgba(255, 192, 203, 0.8)',
+                grey: 'rgba(201, 203, 207, 0.8)'
+            };
+
+            const colorPalette = Object.values(chartColors);
+
+            async function fetchDataAndRenderCharts() {
+                const startDate = document.getElementById('start_date').value;
+                const endDate = document.getElementById('end_date').value;
+                let url = `{{ route('api.responden.graph-data') }}`;
+
+                const params = new URLSearchParams();
+                if (startDate) params.append('start_date', startDate);
+                if (endDate) params.append('end_date', endDate);
+
+                if (params.toString()) {
+                    url += `?${params.toString()}`;
+                }
+
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+
+                    renderSumberDataChart(data.sumberInput);
+                    renderKategoriChart(data.kategori);
+                    renderTrenChart(data.tren);
+                    renderDetailFakultasChart(data.perFakultas);
+
+                } catch (error) {
+                    console.error('Error fetching chart data:', error);
+                }
+            }
+
+            function renderChart(chartInstance, canvasId, config) {
+                const ctx = document.getElementById(canvasId).getContext('2d');
+                if (chartInstance) {
+                    chartInstance.destroy();
+                }
+                return new Chart(ctx, config);
+            }
+
+            // 1. Render Sumber Data Chart
+            function renderSumberDataChart(data) {
+                const labels = Object.keys(data);
+                const values = Object.values(data);
+                sumberDataChart = renderChart(sumberDataChart, 'sumberDataChart', {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: values,
+                            backgroundColor: [chartColors.blue, chartColors.green],
+                            borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
                     },
-                    responsive: true,
-                    maintainAspectRatio: false,
-                }
-            });
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            datalabels: {
+                                color: '#fff',
+                                font: {
+                                    weight: 'bold'
+                                },
+                                formatter: (value, ctx) => {
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(d => sum += d);
+                                    if (sum === 0) return '0 (0.0%)';
+                                    let percentage = (value * 100 / sum).toFixed(1) + '%';
+                                    return `${value}\n(${percentage})`;
+                                },
+                            }
+                        }
+                    }
+                });
+            }
 
-            // Example Chart 2
-            const ctx2 = document.getElementById('myChart2').getContext('2d');
-            const myChart2 = new Chart(ctx2, {
-                type: 'pie',
-                data: {
-                    labels: ['Data A', 'Data B', 'Data C'],
-                    datasets: [{
-                        label: 'Dataset 2',
-                        data: [300, 50, 100],
-                        backgroundColor: [
-                            'rgb(255, 99, 132)',
-                            'rgb(54, 162, 235)',
-                            'rgb(255, 205, 86)'
-                        ],
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                }
-            });
+            // 2. Render Kategori Chart
+            function renderKategoriChart(data) {
+                const labels = Object.keys(data);
+                const values = Object.values(data);
+                kategoriChart = renderChart(kategoriChart, 'kategoriChart', {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: values,
+                            backgroundColor: [chartColors.purple, chartColors.orange],
+                             borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                           datalabels: {
+                                color: '#fff',
+                                font: {
+                                    weight: 'bold'
+                                },
+                                formatter: (value, ctx) => {
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(d => sum += d);
+                                     if (sum === 0) return '0 (0.0%)';
+                                    let percentage = (value * 100 / sum).toFixed(1) + '%';
+                                    return `${value}\n(${percentage})`;
+                                },
+                            }
+                        }
+                    }
+                });
+            }
 
-            // Print button functionality
-            document.getElementById('print-button').addEventListener('click', () => window.print());
+            // 3. Render Tren Chart
+            function renderTrenChart(data) {
+                const labels = Object.keys(data);
+                const values = Object.values(data);
+                trenChart = renderChart(trenChart, 'trenChart', {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Jumlah Responden',
+                            data: values,
+                            fill: true,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: chartColors.blue,
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            datalabels: {
+                               display: false
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 4. Render Detail Fakultas Chart
+            function renderDetailFakultasChart(data) {
+                const labels = Object.keys(data);
+                const values = Object.values(data);
+                detailFakultasChart = renderChart(detailFakultasChart, 'detailFakultasChart', {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Total Input',
+                            data: values,
+                            backgroundColor: colorPalette,
+                            borderColor: colorPalette,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                             datalabels: {
+                                anchor: 'end',
+                                align: 'end',
+                                color: '#555',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Event Listeners
+            document.getElementById('filter-btn').addEventListener('click', fetchDataAndRenderCharts);
+
+            // Initial data load
+            fetchDataAndRenderCharts();
         });
     </script>
 @endsection
+

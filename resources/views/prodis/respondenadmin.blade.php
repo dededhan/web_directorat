@@ -254,8 +254,33 @@
                                     <td class="responden-phone_dosen">{{ $responden->phone_dosen }}</td>
                                     <td class="responden-fakultas">{{ strtoupper($responden->fakultas) }}</td>
                                     <td class="responden-category">{{ $responden->category }}</td>
-                                     <td>
-                                        <span class="status {{ strtolower($responden->status) }}">{{ $responden->status }}</span>
+                                    <td>
+                                        @switch(strtolower($responden->status))
+                                            @case('belum')
+                                                <span class="badge-status pending">
+                                                    <i class='bx bx-time-five'></i> Belum di-email
+                                                </span>
+                                                @break
+                                            @case('done')
+                                                <span class="badge-status emailed">
+                                                    <i class='bx bxs-paper-plane'></i> Sudah di-email
+                                                </span>
+                                                @break
+                                            @case('dones')
+                                                <span class="badge-status followed-up">
+                                                    <i class='bx bx-check-double'></i> Di-follow up
+                                                </span>
+                                                @break
+                                            @case('clear')
+                                                <span class="badge-status completed">
+                                                    <i class='bx bxs-check-circle'></i> Selesai
+                                                </span>
+                                                @break
+                                            @default
+                                                <span class="badge-status default">
+                                                    {{ $responden->status }}
+                                                </span>
+                                        @endswitch
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
@@ -275,11 +300,30 @@
                             @endforelse
                         </tbody>
                     </table>
-                    <div class="custom-pagination d-flex justify-content-end mt-3">
-                        {{ $respondens->links('pagination::bootstrap-5') }}
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            @if ($respondens->total() > 0)
+                                <span class="text-muted">
+                                    Showing {{ $respondens->firstItem() }} to {{ $respondens->lastItem() }} of
+                                    {{ $respondens->total() }} results
+                                </span>
+                            @else
+                                <span class="text-muted">No results found</span>
+                            @endif
+                        </div>
+                        <div>
+                            <div class="btn-group">
+                                <a href="{{ $respondens->appends(request()->query())->previousPageUrl() }}"
+                                   class="btn btn-outline-primary @if ($respondens->onFirstPage()) disabled @endif">
+                                    &laquo; Previous
+                                </a>
+                                <a href="{{ $respondens->appends(request()->query())->nextPageUrl() }}"
+                                   class="btn btn-outline-primary @if (!$respondens->hasMorePages()) disabled @endif">
+                                    Next &raquo;
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                  
-
                 </div>
             </div>
         </div>
@@ -697,6 +741,46 @@
     </script>
 
     <style>
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.3em 0.6em;
+            font-size: 0.85em;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            white-space: nowrap;
+        }
+
+        .badge-status i {
+            margin-right: 5px;
+            font-size: 1.1em;
+            vertical-align: middle;
+        }
+
+        .badge-status.pending {
+            background-color: #ffc107; /* Warning yellow */
+            color: #000;
+        }
+
+        .badge-status.emailed {
+            background-color: #0d6efd; /* Primary blue */
+            color: #fff;
+        }
+
+        .badge-status.followed-up {
+            background-color: #0dcaf0; /* Info cyan */
+            color: #000;
+        }
+
+        .badge-status.completed {
+            background-color: #198754; /* Success green */
+            color: #fff;
+        }
         
+        .badge-status.default {
+            background-color: #6c757d; /* Secondary gray */
+            color: #fff;
+        }
     </style>
 @endsection
+
