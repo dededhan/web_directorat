@@ -38,13 +38,9 @@ class ComdevSubmisDosenController extends Controller
             'anggota'                   => ['nullable', 'array', "min:$minAnggota", "max:$maxAnggota"],
             'anggota.*.nama_lengkap'    => 'required_with:anggota|string|max:255',
             'anggota.*.nik_nim_nip'     => 'required_with:anggota|string|max:50',
-            'anggota.*.alamat_jalan'    => 'required_with:anggota|string|max:255',
-            'anggota.*.provinsi'        => 'required_with:anggota|string',
-            'anggota.*.kota_kabupaten'  => 'required_with:anggota|string',
-            'anggota.*.kecamatan'       => 'required_with:anggota|string',
-            'anggota.*.kelurahan'       => 'required_with:anggota|string',
-            'anggota.*.kode_pos'        => 'nullable|string|max:10',
+            
         ]);
+        
 
         DB::beginTransaction();
         try {
