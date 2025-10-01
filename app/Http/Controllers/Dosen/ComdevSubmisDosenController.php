@@ -94,25 +94,11 @@ class ComdevSubmisDosenController extends Controller
             'mitra_nasional' => 'required|json',
             'mitra_internasional' => 'required|json',
             'nominal_usulan' => 'required|string|max:20',
-            'luaran_wajib' => 'nullable|array',
-            'luaran_opsional' => 'nullable|array',
+           
         ];
 
         // ... (Blok validasi luaran Anda sudah benar, tidak perlu diubah) ...
-        if ($request->has('luaran_wajib')) {
-            foreach ($request->get('luaran_wajib') as $key => $val) {
-                if (!empty($val['value'])) { // Hanya validasi jika ada value (link atau file)
-                    $rules['luaran_wajib.' . $key . '.type'] = 'required|in:link,file';
-                    if (isset($val['type']) && $val['type'] == 'link') {
-                        $rules['luaran_wajib.' . $key . '.value'] = 'required|url';
-                    }
-                }
-                if ($request->hasFile('luaran_wajib.' . $key . '.value')) {
-                    $rules['luaran_wajib.' . $key . '.value'] = 'required|file|mimes:pdf|max:2048';
-                }
-            }
-        }
-
+       
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -122,55 +108,7 @@ class ComdevSubmisDosenController extends Controller
 
         DB::beginTransaction();
         try {
-            // --- PROSES FILE LAMA & BARU ---
-            $luaranWajibData = $request->input('luaran_wajib', []);
-            $originalLuaranWajib = $submission->luaran_wajib ?? [];
 
-            foreach ($luaranWajibData as $index => $item) {
-                if (isset($item['deleted']) && $item['deleted'] == 'true' && isset($originalLuaranWajib[$index])) {
-                    $fileToDelete = $originalLuaranWajib[$index]['value'] ?? null;
-                    if ($fileToDelete) {
-                        $pathToDelete = str_replace(Storage::url(''), 'public/', $fileToDelete);
-                        if (Storage::exists($pathToDelete)) {
-                            Storage::delete($pathToDelete);
-                        }
-                    }
-                }
-            }
-
-            $processLuaran = function ($luaranItems, $luaranFiles) {
-                // ... (Fungsi processLuaran Anda sudah benar, tidak perlu diubah) ...
-                $processed = [];
-                if (empty($luaranItems)) return $processed;
-
-                foreach ($luaranItems as $index => $item) {
-                    if (isset($item['deleted']) && $item['deleted'] == 'true') {
-                        continue;
-                    }
-                    if ($item['type'] === 'file') {
-                        if (isset($luaranFiles[$index]['value'])) {
-                            $file = $luaranFiles[$index]['value'];
-                            $item['nama_file'] = $file->getClientOriginalName();
-                            $path = $file->store('public/luaran_dosen');
-                            $item['value'] = Storage::url($path);
-                        } elseif (isset($item['value']) && !empty($item['value'])) {
-                            $item['nama_file'] = $item['nama_file'] ?? 'file_lama.pdf';
-                        } else {
-                            continue;
-                        }
-                    } elseif ($item['type'] === 'link') {
-                        if (empty($item['value'])) continue;
-                    }
-                    unset($item['deleted']);
-                    $processed[] = $item;
-                }
-                return $processed;
-            };
-
-            $luaranWajibProcessed = $processLuaran(
-                $request->input('luaran_wajib', []),
-                $request->file('luaran_wajib', [])
-            );
 
             // --- FUNGSI DECODE TAGIFY ---
             $decodeTagify = function ($jsonString) {
@@ -203,7 +141,7 @@ class ComdevSubmisDosenController extends Controller
                 // Data sdgs sudah dalam format array yang benar dari frontend
                 'sdgs' => json_decode($validated['sdgs'], true),
 
-                'luaran_wajib' => $luaranWajibProcessed,
+                
             ]);
 
             $firstModule = $submission->sesi->modules()->orderBy('urutan')->first();
