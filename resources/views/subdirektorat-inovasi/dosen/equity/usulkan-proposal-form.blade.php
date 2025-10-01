@@ -201,7 +201,7 @@
 
                     <div class="space-y-6">
                         <template x-for="(item, index) in anggota" :key="item.id">
-                            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 relative animate-fade-in">
+                            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 relative animate-fade-in z-10">
                                 <button type="button" @click="removeAnggota(index)" x-show="anggota.length > minAnggota"
                                     class="absolute top-4 right-4 z-10 w-10 h-10 bg-red-50 text-red-500 rounded-xl hover:bg-red-100 hover:text-red-600 flex items-center justify-center group">
                                     <i class='bx bx-trash text-xl'></i>
@@ -313,6 +313,7 @@
             .ts-dropdown .option {
                 padding: 0.5rem 1rem;
             }
+            
         </style>
     @endpush
 
