@@ -24,6 +24,7 @@ return new class extends Migration
         $table->string('bukti_pengiriman_tepat_waktu_path')->nullable();
         $table->string('bukti_lain_path')->nullable();
         $table->string('surat_pernyataan_path');
+        $table->string('status')->default('diajukan');
         $table->timestamps();
     });
 }
