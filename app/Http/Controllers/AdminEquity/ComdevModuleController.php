@@ -36,6 +36,9 @@ class ComdevModuleController extends Controller
                 'urutan' => 1, 'nama_modul' => 'Desk Evaluasi Proposal', 'deskripsi' => 'Tahap awal evaluasi proposal yang diajukan.',
                 'sub_chapters' => [
                     ['urutan' => 1, 'nama_sub_bab' => 'Proposal Kegiatan'],
+                    ['urutan' => 2, 'nama_sub_bab' => 'Surat Kesediaan Mitra Nasional'],
+                    ['urutan' => 3, 'nama_sub_bab' => 'Surat Kesediaan Mitra Internasional'],
+                    ['urutan' => 4, 'nama_sub_bab' => 'Surat Kesediaan Memenuhi Luaran Wajib'],
                 ]
             ],
             [

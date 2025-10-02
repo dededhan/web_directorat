@@ -19,13 +19,23 @@ class ComdevSubmissionFileController extends Controller
      */
     public function store(Request $request, ComdevSubmission $submission, ComdevSubChapter $subChapter)
     {
-        // 1. Validasi dinamis berdasarkan tipe input
-        $rules = [
-            'type' => 'required|in:file,link',
-        ];
+        
+         $rules = [
+        'type' => 'required|in:file,link',
+        'judul_luaran' => 'required|string|max:255',
+        'status_luaran' => 'required|string|max:100', // Sesuaikan max length jika perlu
+    ];
+
 
         if ($request->input('type') === 'file') {
-            $rules['file_dokumen'] = 'required|file|mimes:pdf|max:5120';
+        // Jika file sudah ada, validasi tidak wajib. Jika belum ada, wajib.
+        $existingFile = ComdevSubmissionFile::where([
+            'comdev_submission_id' => $submission->id,
+            'comdev_sub_chapter_id' => $subChapter->id,
+        ])->first();
+        
+        $rules['file_dokumen'] = ($existingFile && $existingFile->file_path) ? 'nullable' : 'required';
+        $rules['file_dokumen'] .= '|file|mimes:pdf|max:5120';
         } else {
             $rules['url'] = 'required|url|max:2048';
         }
@@ -47,11 +57,16 @@ class ComdevSubmissionFileController extends Controller
             ->first();
 
         $dataToUpdate = [
-            'type' => $validated['type'],
-        ];
+        'type' => $validated['type'],
+        'judul_luaran' => $validated['judul_luaran'],
+        'status_luaran' => $validated['status_luaran'],
+    ];
+
 
         // 2. Logika kondisional untuk file atau link
-        if ($validated['type'] === 'file') {
+       if ($validated['type'] === 'file') {
+        // Hanya proses upload jika file baru diunggah
+        if ($request->hasFile('file_dokumen')) {
             // Jika ada file lama, hapus dari storage
             if ($existingRecord && $existingRecord->type === 'file' && Storage::disk('public')->exists($existingRecord->file_path)) {
                 Storage::disk('public')->delete($existingRecord->file_path);
@@ -63,18 +78,19 @@ class ComdevSubmissionFileController extends Controller
 
             $dataToUpdate['file_path'] = $path;
             $dataToUpdate['original_filename'] = $originalName;
-            $dataToUpdate['url'] = null; // Kosongkan URL
-
-        } else { // Jika tipenya 'link'
-            // Jika data lama adalah file, hapus file fisiknya
-            if ($existingRecord && $existingRecord->type === 'file' && Storage::disk('public')->exists($existingRecord->file_path)) {
-                Storage::disk('public')->delete($existingRecord->file_path);
-            }
-
-            $dataToUpdate['url'] = $validated['url'];
-            $dataToUpdate['file_path'] = null; // Kosongkan path file
-            $dataToUpdate['original_filename'] = null; // Kosongkan nama file
         }
+        $dataToUpdate['url'] = null; // Kosongkan URL
+
+    } else { // Jika tipenya 'link'
+        if ($existingRecord && $existingRecord->type === 'file' && Storage::disk('public')->exists($existingRecord->file_path)) {
+            Storage::disk('public')->delete($existingRecord->file_path);
+        }
+
+        $dataToUpdate['url'] = $validated['url'];
+        $dataToUpdate['file_path'] = null;
+        $dataToUpdate['original_filename'] = null;
+    }
+
 
         // 3. Gunakan updateOrCreate
         ComdevSubmissionFile::updateOrCreate(

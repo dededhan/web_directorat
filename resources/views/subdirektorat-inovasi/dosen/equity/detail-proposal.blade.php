@@ -95,6 +95,18 @@
                                 {{-- I've fixed this line to properly display the SDGs array as a string --}}{{ is_array($submission->sdgs) ? implode(', ', $submission->sdgs) : $submission->sdgs ?? '-' }}
                             </p>
                         </div>
+                         <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <p class="text-sm font-medium text-gray-600 md:col-span-1">Mitra Nasional</p>
+                            <p class="text-sm text-gray-800 md:col-span-3">
+                                {{-- I've fixed this line to properly display the SDGs array as a string --}}{{ is_array($submission->mitra_nasional) ? implode(', ', $submission->mitra_nasional) : $submission->mitra_nasional ?? '-' }}
+                            </p>
+                        </div>
+                        <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <p class="text-sm font-medium text-gray-600 md:col-span-1">Mitra Internsional</p>
+                            <p class="text-sm text-gray-800 md:col-span-3">
+                                {{-- I've fixed this line to properly display the SDGs array as a string --}}{{ is_array($submission->mitra_internasional) ? implode(', ', $submission->mitra_internasional) : $submission->mitra_internasional ?? '-' }}
+                            </p>
+                        </div>
 
                         <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4">
                             <p class="text-sm font-medium text-gray-600 md:col-span-1">Nominal Usulan</p>
@@ -176,31 +188,7 @@
                                                     <p class="text-gray-800">{{ $item->nik_nim_nip }}</p>
                                                 </div>
 
-                                                {{-- Alamat dipecah --}}
-                                                <div class="mt-2">
-                                                    <p class="font-medium text-gray-500">Alamat Jalan</p>
-                                                    <p class="text-gray-800">{{ $item->alamat_jalan }}</p>
-                                                </div>
-                                                <div class="mt-2">
-                                                    <p class="font-medium text-gray-500">Kelurahan</p>
-                                                    <p class="text-gray-800">{{ $item->kelurahan }}</p>
-                                                </div>
-                                                <div class="mt-2">
-                                                    <p class="font-medium text-gray-500">Kecamatan</p>
-                                                    <p class="text-gray-800">{{ $item->kecamatan }}</p>
-                                                </div>
-                                                <div class="mt-2">
-                                                    <p class="font-medium text-gray-500">Kota/Kabupaten</p>
-                                                    <p class="text-gray-800">{{ $item->kota_kabupaten }}</p>
-                                                </div>
-                                                <div class="mt-2">
-                                                    <p class="font-medium text-gray-500">Provinsi</p>
-                                                    <p class="text-gray-800">{{ $item->provinsi }}</p>
-                                                </div>
-                                                <div class="mt-2">
-                                                    <p class="font-medium text-gray-500">Kode Pos</p>
-                                                    <p class="text-gray-800">{{ $item->kode_pos }}</p>
-                                                </div>
+                                                
                                             </div>
                                         </div>
                                     @endforeach

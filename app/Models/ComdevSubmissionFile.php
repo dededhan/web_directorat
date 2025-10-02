@@ -19,6 +19,8 @@ class ComdevSubmissionFile extends Model
         'comdev_sub_chapter_id',
         'user_id',
         'type', 
+        'judul_luaran',
+        'status_luaran',   
         'file_path',
         'original_filename',
         'url',

@@ -72,11 +72,18 @@
                                 <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" class="block w-full py-4 border-gray-300 rounded-xl shadow-sm @error('name') border-red-500 @enderror" required>
                                 @error('name')<p class="mt-2 text-sm text-red-600">{{ $message }}</p>@enderror
                             </div>
-                            <div>
-                                <label for="email" class="flex items-center text-sm font-semibold text-gray-700 mb-3">Alamat Email <span class="text-red-500 ml-1">*</span></label>
-                                <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" class="block w-full py-4 border-gray-300 rounded-xl shadow-sm @error('email') border-red-500 @enderror" required>
-                                @error('email')<p class="mt-2 text-sm text-red-600">{{ $message }}</p>@enderror
-                            </div>
+                           <div>
+    <label for="email" class="flex items-center text-sm font-semibold text-gray-700 mb-3">Alamat Email</label>
+    <div class="relative">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+            <i class='bx bxs-lock-alt text-gray-400 text-lg'></i>
+        </div>
+        <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}"
+               class="block w-full py-4 pl-12 border-gray-300 rounded-xl shadow-sm bg-gray-100 cursor-not-allowed"
+               readonly>
+    </div>
+    <p class="mt-2 text-xs text-gray-500">Email tidak dapat diubah.</p>
+</div>
                         </div>
                     </div>
 

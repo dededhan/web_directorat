@@ -20,6 +20,7 @@ use App\Http\Controllers\InternationalFacultyStaffActivitiesController;
 use App\Http\Controllers\RisetUnjController;
 use App\Http\Controllers\Api\CountryController;
 use App\Models\Prodi; 
+use App\Http\Controllers\RespondenAnswerGraphController; 
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -55,13 +56,14 @@ Route::get('/responden/chart-summary', [AdminRespondenReportController::class, '
     ->name('api.responden.chartSummary');
 Route::get('/responden/chart-prodi', [AdminRespondenReportController::class, 'getProdiChartData'])
     ->name('api.responden.chartProdi');
-
 Route::get('/api/responden-chart-data', [AdminRespondenReportController::class, 'getChartData'])->name('api.responden.chart-data');
-
-
 Route::get('/fakultas/report-data', [AdminRespondenReportController::class, 'getFacultyReportData'])
     ->name('api.fakultas.reportData')
     ->middleware('auth');
+
+//Chart Responden Answer
+//Chart Responden
+Route::get('/responden-graph-data', [RespondenAnswerGraphController::class, 'getGraphData'])->name('api.responden.graph-data');
 
 //equity
 Route::get('/prodi/{fakultas_id}', function ($fakultas_id) {
