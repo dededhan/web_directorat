@@ -3,6 +3,9 @@ namespace Database\Seeders;
 
 use App\Models\Responden;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
 
 class RespondenSeeder extends Seeder
 {
@@ -11,9 +14,10 @@ class RespondenSeeder extends Seeder
      */
     public function run(): void
     {
-        Responden::insert(
+        
+       $respondents = [
 
-            [
+            
                 [
                     'title'               => 'mrs',
                     'fullname'            => 'fauziah maryani',
@@ -1418,8 +1422,13 @@ class RespondenSeeder extends Seeder
                     'fakultas'            => 'feb',
                     'category'            => 'academic',
                 ],
-            ]
-
-        );
+            ];
+ foreach ($respondents as $responden) {
+            // Panggil updateOrCreate untuk setiap responden
+            Responden::updateOrCreate(
+                ['email' => $responden['email']], // <-- Kunci unik untuk mencari record
+                $responden  // <-- Data lengkap untuk di-update atau dibuat baru
+            );
+        }
     }
 }
