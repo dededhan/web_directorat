@@ -45,6 +45,7 @@ class LoginController extends Controller
                 'validator' => 'subdirektorat-inovasi.validator.dashboard',
                 'admin_equity' => 'admin_equity.dashboard',
                 'reviewer_equity' => 'reviewer_equity.dashboard',
+                'equity_fakultas' => 'equity_fakultas.dashboard',
             };
             
             // *** NEW LOGIC FOR DOSEN ***

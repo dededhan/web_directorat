@@ -126,7 +126,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
 
 Route::prefix('equity_fakultas')
     ->name('equity_fakultas.')
-    // ->middleware(['auth'])
+   ->middleware(['checked', 'role:equity_fakultas'])
     ->group(function () 
     {
 
