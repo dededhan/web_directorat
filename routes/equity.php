@@ -112,6 +112,22 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
         Route::post('/{report}/status', [App\Http\Controllers\AdminEquity\FeeEditorReportAdminController::class, 'updateStatus'])->name('updateStatus');
     });
 
+    // Presenting
+    Route::prefix('presenting')->name('presenting.')->group(function () {
+        Route::get('/', [App\Http\Controllers\AdminEquity\PresentingSessionController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\AdminEquity\PresentingSessionController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\AdminEquity\PresentingSessionController::class, 'store'])->name('store');
+        Route::get('/{id}', [App\Http\Controllers\AdminEquity\PresentingSessionController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [App\Http\Controllers\AdminEquity\PresentingSessionController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [App\Http\Controllers\AdminEquity\PresentingSessionController::class, 'update'])->name('update');
+        Route::delete('/{id}', [App\Http\Controllers\AdminEquity\PresentingSessionController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('presenting-report')->name('presenting.report.')->group(function () {
+        Route::get('/{report}', [App\Http\Controllers\AdminEquity\PresentingReportAdminController::class, 'show'])->name('show');
+        Route::post('/{report}/status', [App\Http\Controllers\AdminEquity\PresentingReportAdminController::class, 'updateStatus'])->name('updateStatus');
+    });
+
     Route::get('/incentive-editor', function () {
         return view('admin_equity.incentiveeditor.index');
     })->name('incentiveeditor.index');
@@ -323,6 +339,25 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                     Route::get('/report/{report}/edit', [\App\Http\Controllers\Dosen\FeeEditorReportController::class, 'edit'])->name('edit');
                     Route::put('/report/{report}', [\App\Http\Controllers\Dosen\FeeEditorReportController::class, 'update'])->name('update');
                     Route::delete('/report/{report}', [\App\Http\Controllers\Dosen\FeeEditorReportController::class, 'destroy'])->name('destroy');
+                });
+
+                // Presenting
+                Route::prefix('presenting')->name('presenting.')->group(function () {
+                    Route::get('/list-sesi', [\App\Http\Controllers\Dosen\PresentingDosenController::class, 'listSessions'])->name('list-sesi');
+                    Route::get('/manajemen', [\App\Http\Controllers\Dosen\PresentingDosenController::class, 'manageReports'])->name('manajemen');
+
+                    Route::get('/{sessionId}/form', [\App\Http\Controllers\Dosen\PresentingDosenController::class, 'createReportForm'])->name('form');
+                    Route::post('/{sessionId}/store', [\App\Http\Controllers\Dosen\PresentingReportController::class, 'store'])->name('store');
+
+                    Route::get('/report/{report}/details', [\App\Http\Controllers\Dosen\PresentingDosenController::class, 'showDetails'])->name('details');
+
+                    Route::get('/report/{report}/edit', [\App\Http\Controllers\Dosen\PresentingReportController::class, 'edit'])->name('edit');
+                    Route::put('/report/{report}', [\App\Http\Controllers\Dosen\PresentingReportController::class, 'update'])->name('update');
+                    Route::delete('/report/{report}', [\App\Http\Controllers\Dosen\PresentingReportController::class, 'destroy'])->name('destroy');
+
+                    Route::get('/report/{report}/laporan-akhir', [\App\Http\Controllers\Dosen\PresentingSubmissionController::class, 'createForm'])->name('submission.form');
+                    Route::post('/report/{report}/laporan-akhir', [\App\Http\Controllers\Dosen\PresentingSubmissionController::class, 'store'])->name('submission.store');
+                    Route::put('/report/{report}/laporan-akhir', [\App\Http\Controllers\Dosen\PresentingSubmissionController::class, 'update'])->name('submission.update');
                 });
 
                 // API

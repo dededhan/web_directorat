@@ -29,6 +29,18 @@ class PresentingReport extends Model
         'status',
     ];
 
+    protected $casts = [
+        'waktu_pelaksanaan_awal' => 'date',
+        'waktu_pelaksanaan_akhir' => 'date',
+    ];
+
+    protected $appends = ['computed_status'];
+
+    public function getComputedStatusAttribute()
+    {
+        return $this->status;
+    }
+
     // Satu Laporan MILIK SATU Sesi
     public function session()
     {
