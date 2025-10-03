@@ -42,7 +42,7 @@
                                 Manajemen Pengguna
                             </h1>
                             <p class="text-gray-600 text-base lg:text-lg">
-                                Kelola akun untuk Dosen dan Reviewer Equity
+                                Kelola akun untuk Dosen, Reviewer Equity, dan Equity Fakultas
                             </p>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
                     <div class="lg:col-span-4">
                         <label for="prodi_id" class="block text-sm font-semibold text-gray-700 mb-3">
                             <i class='bx bx-book text-teal-600 mr-2 text-base'></i>
-                            Program Studi
+                            Program Studi (Khusus Dosen)
                         </label>
                         <select name="prodi_id" id="prodi_id" x-model="selectedProdi" 
                                 class="block w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 shadow-sm focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 text-base transition-all duration-200 hover:border-gray-300 appearance-none bg-white" 
@@ -172,12 +172,6 @@
                             </th>
                             <th scope="col" class="px-8 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                                 <div class="flex items-center">
-                                    <i class='bx bx-envelope mr-2 text-emerald-600'></i>
-                                    Kontak
-                                </div>
-                            </th>
-                            <th scope="col" class="px-8 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
-                                <div class="flex items-center">
                                     <i class='bx bx-shield mr-2 text-emerald-600'></i>
                                     Role
                                 </div>
@@ -185,7 +179,7 @@
                             <th scope="col" class="px-8 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                                 <div class="flex items-center">
                                     <i class='bx bx-building mr-2 text-emerald-600'></i>
-                                    Detail Dosen
+                                    Detail Profil
                                 </div>
                             </th>
                             <th scope="col" class="px-8 py-5 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
@@ -208,14 +202,8 @@
                                         </div>
                                         <div class="ml-4">
                                             <div class="text-base font-semibold text-gray-900">{{ $user->name }}</div>
-                                            <div class="text-sm text-gray-500">ID: {{ $user->id }}</div>
+                                            <div class="text-sm text-gray-500">{{ $user->email }}</div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-6 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900 flex items-center">
-                                        <i class='bx bx-envelope mr-2 text-gray-400'></i>
-                                        {{ $user->email }}
                                     </div>
                                 </td>
                                 <td class="px-8 py-6 whitespace-nowrap">
@@ -229,13 +217,22 @@
                                             <i class='bx bx-user-check mr-1'></i>
                                             Reviewer
                                         </span>
+                                    @elseif($user->role == 'equity_fakultas')
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                                            <i class='bx bxs-bank mr-1'></i>
+                                            Equity Fakultas
+                                        </span>
                                     @endif
                                 </td>
                                 <td class="px-8 py-6 whitespace-nowrap">
                                     @if($user->role == 'dosen' && $user->profile?->prodi)
                                         <div class="text-sm">
-                                            <div class="font-medium text-gray-900">{{ $user->profile->prodi->fakultas->abbreviation ?? 'N/A' }}</div>
+                                            <div class="font-medium text-gray-900">{{ $user->profile->prodi->fakultas->name ?? 'N/A' }}</div>
                                             <div class="text-gray-500">{{ $user->profile->prodi->name ?? 'N/A' }}</div>
+                                        </div>
+                                    @elseif($user->role == 'equity_fakultas' && $user->profile?->fakultas)
+                                        <div class="text-sm">
+                                            <div class="font-medium text-gray-900">{{ $user->profile->fakultas->name ?? 'N/A' }}</div>
                                         </div>
                                     @else
                                         <span class="text-gray-400 text-sm">-</span>
@@ -269,7 +266,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5">
+                                <td colspan="4">
                                     <div class="text-center py-16 px-6">
                                         <div class="mx-auto h-24 w-24 rounded-full bg-gray-100 flex items-center justify-center mb-4">
                                             <i class='bx bx-user-x text-4xl text-gray-400'></i>
@@ -302,7 +299,7 @@
                                     </div>
                                     <div>
                                         <h3 class="text-base font-semibold text-gray-900">{{ $user->name }}</h3>
-                                        <p class="text-sm text-gray-500">ID: {{ $user->id }}</p>
+                                        <p class="text-sm text-gray-500">{{ $user->email }}</p>
                                     </div>
                                 </div>
                                 <div class="flex-shrink-0">
@@ -316,22 +313,30 @@
                                             <i class='bx bx-user-check mr-1'></i>
                                             Reviewer
                                         </span>
+                                    @elseif($user->role == 'equity_fakultas')
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                                            <i class='bx bxs-bank mr-1'></i>
+                                            E. Fakultas
+                                        </span>
                                     @endif
                                 </div>
                             </div>
 
                             <!-- User Details -->
                             <div class="space-y-3 mb-4">
-                                <div class="flex items-center text-sm">
-                                    <i class='bx bx-envelope mr-2 text-gray-400'></i>
-                                    <span class="text-gray-700">{{ $user->email }}</span>
-                                </div>
                                 @if($user->role == 'dosen' && $user->profile?->prodi)
                                     <div class="flex items-start text-sm">
                                         <i class='bx bx-building mr-2 text-gray-400 mt-0.5'></i>
                                         <div>
-                                            <div class="font-medium text-gray-900">{{ $user->profile->prodi->fakultas->abbreviation ?? 'N/A' }}</div>
+                                            <div class="font-medium text-gray-900">{{ $user->profile->prodi->fakultas->name ?? 'N/A' }}</div>
                                             <div class="text-gray-500">{{ $user->profile->prodi->name ?? 'N/A' }}</div>
+                                        </div>
+                                    </div>
+                                @elseif($user->role == 'equity_fakultas' && $user->profile?->fakultas)
+                                     <div class="flex items-start text-sm">
+                                        <i class='bx bx-building mr-2 text-gray-400 mt-0.5'></i>
+                                        <div>
+                                            <div class="font-medium text-gray-900">{{ $user->profile->fakultas->name ?? 'N/A' }}</div>
                                         </div>
                                     </div>
                                 @endif
@@ -382,71 +387,7 @@
             {{-- Enhanced Pagination --}}
             @if ($users->hasPages())
                 <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-8 py-6 border-t border-gray-200">
-                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                        <!-- Left side - Results info -->
-                        <div class="flex items-center space-x-4">
-                            <div class="text-sm text-gray-600 bg-white px-4 py-2.5 rounded-lg border border-gray-200 shadow-sm">
-                                <span class="font-medium text-gray-900">Menampilkan {{ $users->firstItem() }} - {{ $users->lastItem() }}</span> 
-                                <span class="text-gray-500">dari</span> 
-                                <span class="font-bold text-teal-600">{{ $users->total() }} pengguna</span>
-                            </div>
-                            
-                            <!-- Results per page info -->
-                            <div class="text-xs text-gray-500 bg-white px-3 py-2 rounded-lg border border-gray-200">
-                                Showing {{ $users->count() }} entries
-                            </div>
-                        </div>
-
-                        <!-- Right side - Pagination -->
-                        <div class="flex justify-center lg:justify-end">
-                            <nav class="relative z-0 inline-flex rounded-xl shadow-sm border border-gray-200 bg-white" aria-label="Pagination">
-                                {{-- Previous Page Link --}}
-                                @if ($users->onFirstPage())
-                                    <span class="relative inline-flex items-center px-3 py-2.5 rounded-l-xl border-r border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed">
-                                        <i class='bx bx-chevron-left text-lg'></i>
-                                    </span>
-                                @else
-                                    <a href="{{ $users->previousPageUrl() }}" class="relative inline-flex items-center px-3 py-2.5 rounded-l-xl border-r border-gray-200 bg-white text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-all duration-200">
-                                        <i class='bx bx-chevron-left text-lg'></i>
-                                    </a>
-                                @endif
-
-                                {{-- Page Number Links --}}
-                                @foreach ($users->getUrlRange(max(1, $users->currentPage() - 2), min($users->lastPage(), $users->currentPage() + 2)) as $page => $url)
-                                    @if ($page == $users->currentPage())
-                                        <span class="relative inline-flex items-center px-4 py-2.5 border-r border-gray-200 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold text-sm">
-                                            {{ $page }}
-                                        </span>
-                                    @else
-                                        <a href="{{ $url }}" class="relative inline-flex items-center px-4 py-2.5 border-r border-gray-200 bg-white text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-all duration-200 font-medium text-sm">
-                                            {{ $page }}
-                                        </a>
-                                    @endif
-                                @endforeach
-
-                                {{-- Show dots if there are more pages --}}
-                                @if ($users->currentPage() < $users->lastPage() - 3)
-                                    <span class="relative inline-flex items-center px-3 py-2.5 border-r border-gray-200 bg-white text-gray-400 text-sm">
-                                        ...
-                                    </span>
-                                    <a href="{{ $users->url($users->lastPage()) }}" class="relative inline-flex items-center px-4 py-2.5 border-r border-gray-200 bg-white text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-all duration-200 font-medium text-sm">
-                                        {{ $users->lastPage() }}
-                                    </a>
-                                @endif
-
-                                {{-- Next Page Link --}}
-                                @if ($users->hasMorePages())
-                                    <a href="{{ $users->nextPageUrl() }}" class="relative inline-flex items-center px-3 py-2.5 rounded-r-xl bg-white text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-all duration-200">
-                                        <i class='bx bx-chevron-right text-lg'></i>
-                                    </a>
-                                @else
-                                    <span class="relative inline-flex items-center px-3 py-2.5 rounded-r-xl bg-gray-50 text-gray-400 cursor-not-allowed">
-                                        <i class='bx bx-chevron-right text-lg'></i>
-                                    </span>
-                                @endif
-                            </nav>
-                        </div>
-                    </div>
+                   {{ $users->links() }}
                 </div>
             @endif
         </div>
@@ -469,6 +410,10 @@ document.addEventListener('alpine:init', () => {
                     this.fetchProdi();
                 }
             });
+
+            if (this.selectedFakultas) {
+                this.fetchProdi();
+            }
         },
 
         fetchProdi() {
@@ -481,6 +426,10 @@ document.addEventListener('alpine:init', () => {
                 .then(response => response.json())
                 .then(data => {
                     this.prodi = data;
+                     // Set the selected prodi after the prodi list is loaded
+                    this.$nextTick(() => {
+                        this.selectedProdi = initialData.initial.prodi_id || '';
+                    });
                     this.loadingProdi = false;
                 })
                 .catch(() => {

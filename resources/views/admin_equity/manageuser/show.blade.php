@@ -44,8 +44,10 @@
                     <dd class="mt-1 text-lg font-semibold text-gray-900">
                          @if($user->role == 'dosen')
                             <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Dosen</span>
-                        @else
-                            <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-green-100 text-green-800">Reviewer Equity</span>
+                        @elseif($user->role == 'reviewer_equity')
+                            <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-teal-100 text-teal-800">Reviewer Equity</span>
+                        @elseif($user->role == 'equity_fakultas')
+                            <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">Equity Fakultas</span>
                         @endif
                     </dd>
                 </div>
@@ -72,6 +74,16 @@
                         </div>
                      </dl>
                 </div>
+                @elseif($user->role == 'equity_fakultas' && $user->profile?->fakultas)
+                 <div class="md:col-span-2 pt-6 border-t mt-2">
+                     <h3 class="text-lg font-medium text-gray-900 mb-4">Detail Profil Fakultas</h3>
+                     <dl class="grid grid-cols-1">
+                        <div class="border-b pb-4">
+                             <dt class="text-sm font-medium text-gray-500">Fakultas</dt>
+                             <dd class="mt-1 text-lg font-semibold text-gray-900">{{ $user->profile->fakultas->name ?? '-' }}</dd>
+                        </div>
+                     </dl>
+                </div>
                 @endif
             </dl>
         </div>
@@ -88,4 +100,3 @@
     </div>
 </div>
 @endsection
-

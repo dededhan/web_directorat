@@ -39,7 +39,7 @@
                             Tambah Pengguna Baru
                         </h1>
                         <p class="text-gray-600 text-base lg:text-lg">
-                            Isi formulir untuk menambahkan akun Dosen atau Reviewer Equity
+                            Isi formulir untuk menambahkan akun Dosen, Reviewer, atau Equity Fakultas
                         </p>
                     </div>
                 </div>
@@ -160,6 +160,7 @@
                                 <option value="">Pilih Role Pengguna</option>
                                 <option value="dosen">Dosen</option>
                                 <option value="reviewer_equity">Reviewer Equity</option>
+                                <option value="equity_fakultas">Equity Fakultas</option>
                             </select>
                             @error('role')
                                 <p class="text-red-500 text-sm mt-2 flex items-center">
@@ -201,11 +202,11 @@
                                 
                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                     <div>
-                                        <label for="fakultas_id" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <label for="fakultas_id_dosen" class="block text-sm font-semibold text-gray-700 mb-2">
                                             <i class='bx bx-buildings text-teal-600 mr-1'></i>
                                             Fakultas
                                         </label>
-                                        <select id="fakultas_id" x-model="selectedFakultas" @change="fetchProdi" 
+                                        <select id="fakultas_id_dosen" x-model="selectedFakultas" @change="fetchProdi" 
                                                 class="block w-full px-4 py-3 rounded-xl border-2 border-gray-200 shadow-sm focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 text-base transition-all duration-200 hover:border-gray-300 appearance-none bg-white">
                                             <option value="">Pilih Fakultas</option>
                                             <template x-for="fak in fakultas" :key="fak.id">
@@ -221,8 +222,8 @@
                                         </label>
                                         <select id="prodi_id" name="prodi_id" 
                                                 class="block w-full px-4 py-3 rounded-xl border-2 border-gray-200 shadow-sm focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 text-base transition-all duration-200 hover:border-gray-300 appearance-none bg-white" 
-                                                :disabled="loadingProdi"
-                                                :class="{'opacity-60 cursor-not-allowed': loadingProdi}">
+                                                :disabled="loadingProdi || !selectedFakultas"
+                                                :class="{'opacity-60 cursor-not-allowed': loadingProdi || !selectedFakultas}">
                                             <template x-if="loadingProdi">
                                                 <option>Memuat program studi...</option>
                                             </template>
@@ -247,6 +248,42 @@
                             </div>
                         </div>
                     </div>
+
+                    {{-- Equity Fakultas Specific Fields Section --}}
+                    <div x-show="selectedRole === 'equity_fakultas'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform -translate-y-4" x-transition:enter-end="opacity-100 transform translate-y-0" class="space-y-6">
+                        <div class="flex items-center space-x-3 pb-4 border-b border-gray-200">
+                            <div class="p-2 bg-purple-100 rounded-lg">
+                                <i class='bx bxs-bank text-purple-600 text-lg'></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900">Detail Profil Fakultas</h3>
+                            <span class="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full font-medium">Khusus Equity Fakultas</span>
+                        </div>
+                        
+                        <div class="bg-purple-50 rounded-xl p-6 border border-purple-200">
+                            <div class="space-y-6">
+                                <div>
+                                    <label for="fakultas_id" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class='bx bx-buildings text-purple-600 mr-1'></i>
+                                        Fakultas
+                                    </label>
+                                    <select id="fakultas_id" name="fakultas_id"
+                                            class="block w-full px-4 py-3 rounded-xl border-2 border-gray-200 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-base transition-all duration-200 hover:border-gray-300 appearance-none bg-white">
+                                        <option value="">Pilih Fakultas</option>
+                                        @foreach($fakultas as $fak)
+                                            <option value="{{ $fak->id }}" @if(old('fakultas_id') == $fak->id) selected @endif>{{ $fak->name }}</option>
+                                        @endforeach
+                                    </select>
+                                     @error('fakultas_id')
+                                        <p class="text-red-500 text-sm mt-2 flex items-center">
+                                            <i class='bx bx-error-circle mr-1'></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 {{-- Enhanced Form Actions --}}
@@ -275,7 +312,7 @@ document.addEventListener('alpine:init', () => {
         fakultas: initialData.fakultas || [],
         prodi: [],
         selectedRole: '{{ old("role") }}' || '',
-        selectedFakultas: '{{ old("fakultas_id") }}' || '',
+        selectedFakultas: '{{ old("fakultas_id_dosen") }}' || '',
         loadingProdi: false,
         
         fetchProdi() {
@@ -297,6 +334,12 @@ document.addEventListener('alpine:init', () => {
         },
         
         init() {
+            this.$watch('selectedRole', (newRole) => {
+                if (newRole !== 'dosen') {
+                    this.selectedFakultas = '';
+                    this.prodi = [];
+                }
+            });
             if (this.selectedFakultas) {
                 this.fetchProdi();
             }

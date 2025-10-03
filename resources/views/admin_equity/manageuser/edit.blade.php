@@ -6,8 +6,9 @@
     prodi: {{ json_encode($prodi) }},
     initial: {
         role: '{{ old('role', $user->role) }}',
-        fakultas_id: '{{ old('fakultas_id', $user->profile?->prodi?->fakultas_id) }}',
-        prodi_id: '{{ old('prodi_id', $user->profile?->prodi_id) }}'
+        fakultas_id_dosen: '{{ old('fakultas_id', $user->profile?->prodi?->fakultas_id) }}',
+        prodi_id: '{{ old('prodi_id', $user->profile?->prodi_id) }}',
+        fakultas_id_fakultas: '{{ old('fakultas_id', $user->profile?->fakultas_id) }}'
     } 
 })" x-init="init()">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
@@ -51,15 +52,20 @@
                         </p>
                         <!-- User Info Badge -->
                         <div class="flex items-center mt-3 space-x-3">
-                            @if($user->role == 'dosen')
+                             @if($user->role == 'dosen')
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                                     <i class='bx bx-user-voice mr-1'></i>
                                     Dosen
                                 </span>
                             @elseif($user->role == 'reviewer_equity')
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-teal-100 text-teal-800">
                                     <i class='bx bx-user-check mr-1'></i>
                                     Reviewer
+                                </span>
+                            @elseif($user->role == 'equity_fakultas')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                                    <i class='bx bxs-bank mr-1'></i>
+                                    Equity Fakultas
                                 </span>
                             @endif
                         </div>
@@ -191,6 +197,7 @@
                                 <option value="">Pilih Role Pengguna</option>
                                 <option value="dosen">Dosen</option>
                                 <option value="reviewer_equity">Reviewer Equity</option>
+                                <option value="equity_fakultas">Equity Fakultas</option>
                             </select>
                             @error('role')
                                 <p class="text-red-500 text-sm mt-2 flex items-center">
@@ -232,11 +239,11 @@
                                 
                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                     <div>
-                                        <label for="fakultas_id" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <label for="fakultas_id_dosen" class="block text-sm font-semibold text-gray-700 mb-2">
                                             <i class='bx bx-buildings text-teal-600 mr-1'></i>
                                             Fakultas
                                         </label>
-                                        <select id="fakultas_id" x-model="selectedFakultas" 
+                                        <select id="fakultas_id_dosen" x-model="selectedFakultas" 
                                                 class="block w-full px-4 py-3 rounded-xl border-2 border-gray-200 shadow-sm focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 text-base transition-all duration-200 hover:border-gray-300 appearance-none bg-white">
                                             <option value="">Pilih Fakultas</option>
                                             <template x-for="fak in fakultas" :key="fak.id">
@@ -278,6 +285,40 @@
                             </div>
                         </div>
                     </div>
+                     {{-- Equity Fakultas Specific Fields Section --}}
+                    <div x-show="selectedRole === 'equity_fakultas'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform -translate-y-4" x-transition:enter-end="opacity-100 transform translate-y-0" class="space-y-6">
+                        <div class="flex items-center space-x-3 pb-4 border-b border-gray-200">
+                            <div class="p-2 bg-purple-100 rounded-lg">
+                                <i class='bx bxs-bank text-purple-600 text-lg'></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900">Detail Profil Fakultas</h3>
+                            <span class="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full font-medium">Khusus Equity Fakultas</span>
+                        </div>
+                        
+                        <div class="bg-purple-50 rounded-xl p-6 border border-purple-200">
+                            <div class="space-y-6">
+                                <div>
+                                    <label for="fakultas_id" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class='bx bx-buildings text-purple-600 mr-1'></i>
+                                        Fakultas
+                                    </label>
+                                    <select id="fakultas_id" name="fakultas_id" x-model="selectedFakultasFakultas"
+                                            class="block w-full px-4 py-3 rounded-xl border-2 border-gray-200 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-base transition-all duration-200 hover:border-gray-300 appearance-none bg-white">
+                                        <option value="">Pilih Fakultas</option>
+                                         <template x-for="fak in fakultas" :key="fak.id">
+                                            <option :value="fak.id" x-text="fak.name"></option>
+                                        </template>
+                                    </select>
+                                     @error('fakultas_id')
+                                        <p class="text-red-500 text-sm mt-2 flex items-center">
+                                            <i class='bx bx-error-circle mr-1'></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {{-- Enhanced Form Actions --}}
@@ -306,17 +347,23 @@ document.addEventListener('alpine:init', () => {
         fakultas: initialData.fakultas || [],
         prodi: initialData.prodi || [],
         selectedRole: initialData.initial.role || '',
-        selectedFakultas: initialData.initial.fakultas_id || '',
+        selectedFakultas: initialData.initial.fakultas_id_dosen || '',
         selectedProdi: initialData.initial.prodi_id || '',
+        selectedFakultasFakultas: initialData.initial.fakultas_id_fakultas || '',
         loadingProdi: false,
         
         init() {
             this.$watch('selectedFakultas', (newValue, oldValue) => {
                 if (newValue !== oldValue) {
                     this.selectedProdi = '';
-                    this.fetchProdi();
+                    if(this.selectedRole === 'dosen') {
+                        this.fetchProdi();
+                    }
                 }
             });
+            if (this.selectedRole === 'dosen' && this.selectedFakultas) {
+                this.fetchProdi();
+            }
         },
 
         fetchProdi() {
@@ -329,6 +376,10 @@ document.addEventListener('alpine:init', () => {
                 .then(response => response.json())
                 .then(data => {
                     this.prodi = data;
+                    // Make sure the initial prodi is still selected after fetching
+                    this.$nextTick(() => {
+                        this.selectedProdi = initialData.initial.prodi_id || '';
+                    });
                     this.loadingProdi = false;
                 })
                 .catch(() => {
