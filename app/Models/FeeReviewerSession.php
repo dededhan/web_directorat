@@ -23,4 +23,16 @@ class FeeReviewerSession extends Model
     {
         return $this->hasMany(FeeReviewerReport::class);
     }
+
+    public function getComputedStatusAttribute()
+    {
+        $now = \Carbon\Carbon::now();
+        $periodeAkhir = \Carbon\Carbon::parse($this->periode_akhir);
+
+        if ($this->status === 'Tutup' || $now->gt($periodeAkhir)) {
+            return 'Tutup';
+        }
+
+        return 'Buka';
+    }
 }

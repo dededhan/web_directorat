@@ -25,6 +25,7 @@ return new class extends Migration
         $table->string('bukti_lain_path')->nullable();
         $table->string('surat_pernyataan_path');
         $table->string('status')->default('diajukan');
+        $table->text('catatan_admin')->nullable();
         $table->timestamps();
     });
 }

@@ -80,10 +80,21 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
     // 3. Insentif reviewer dan editorial board (ROUTE LAMA)
     Route::resource('incentive-reviewer', IncentiveReviewerController::class)->names('incentivereviewer');
 
-    // 3. Fee Reviewer (FEEREVI - ROUTE BARU DUMMY)
-    Route::get('/feerevi', function () {
-        return view('admin_equity.feerevi.index'); // Mengarah ke folder dan file baru
-    })->name('feerevi.index');
+    // Fee Reviewer
+    Route::prefix('fee-reviewer')->name('fee_reviewer.')->group(function () {
+        Route::get('/', [App\Http\Controllers\AdminEquity\FeeReviewerSessionController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\AdminEquity\FeeReviewerSessionController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\AdminEquity\FeeReviewerSessionController::class, 'store'])->name('store');
+        Route::get('/{id}', [App\Http\Controllers\AdminEquity\FeeReviewerSessionController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [App\Http\Controllers\AdminEquity\FeeReviewerSessionController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [App\Http\Controllers\AdminEquity\FeeReviewerSessionController::class, 'update'])->name('update');
+        Route::delete('/{id}', [App\Http\Controllers\AdminEquity\FeeReviewerSessionController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('fee-reviewer-report')->name('fee_reviewer.report.')->group(function () {
+        Route::get('/{report}', [App\Http\Controllers\AdminEquity\FeeReviewerReportAdminController::class, 'show'])->name('show');
+        Route::post('/{report}/status', [App\Http\Controllers\AdminEquity\FeeReviewerReportAdminController::class, 'updateStatus'])->name('updateStatus');
+    });
 
 
     Route::get('/incentive-editor', function () {
@@ -269,6 +280,21 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
                     Route::get('/logbook/{submission}', [\App\Http\Controllers\Dosen\MatchmakingLogbookController::class, 'show'])->name('logbook');
                 });
+                // Fee Reviewer
+                Route::prefix('fee-reviewer')->name('fee_reviewer.')->group(function () {
+                    Route::get('/list-sesi', [\App\Http\Controllers\Dosen\FeeReviewerDosenController::class, 'listSessions'])->name('list-sesi');
+                    Route::get('/manajemen', [\App\Http\Controllers\Dosen\FeeReviewerDosenController::class, 'manageReports'])->name('manajemen');
+
+                    Route::get('/{sessionId}/form', [\App\Http\Controllers\Dosen\FeeReviewerDosenController::class, 'createReportForm'])->name('form');
+                    Route::post('/{sessionId}/store', [\App\Http\Controllers\Dosen\FeeReviewerReportController::class, 'store'])->name('store');
+
+                    Route::get('/report/{report}/details', [\App\Http\Controllers\Dosen\FeeReviewerDosenController::class, 'showDetails'])->name('details');
+
+                    Route::get('/report/{report}/edit', [\App\Http\Controllers\Dosen\FeeReviewerReportController::class, 'edit'])->name('edit');
+                    Route::put('/report/{report}', [\App\Http\Controllers\Dosen\FeeReviewerReportController::class, 'update'])->name('update');
+                    Route::delete('/report/{report}', [\App\Http\Controllers\Dosen\FeeReviewerReportController::class, 'destroy'])->name('destroy');
+                });
+
                 // API
                 Route::get('/search-dosen', [DosenSearchController::class, 'search'])->name('search-dosen');
             });

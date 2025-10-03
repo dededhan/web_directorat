@@ -23,6 +23,7 @@ class FeeReviewerReport extends Model
         'bukti_lain_path',
         'surat_pernyataan_path',
         'status',
+        'catatan_admin',
     ];
 
     // Definisikan relasi: Satu Laporan MILIK SATU Sesi
