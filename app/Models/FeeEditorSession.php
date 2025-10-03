@@ -17,9 +17,20 @@ class FeeEditorSession extends Model
         'status',
     ];
 
-    // Relasi: Satu Sesi Editor punya BANYAK Laporan Editor
     public function reports()
     {
         return $this->hasMany(FeeEditorReport::class);
+    }
+
+    public function getComputedStatusAttribute()
+    {
+        $now = \Carbon\Carbon::now();
+        $periodeAkhir = \Carbon\Carbon::parse($this->periode_akhir);
+
+        if ($this->status === 'Tutup' || $now->gt($periodeAkhir)) {
+            return 'Tutup';
+        }
+
+        return 'Buka';
     }
 }

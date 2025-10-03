@@ -20,8 +20,8 @@ return new class extends Migration
         $table->string('nama_jurnal'); // Poin 1
         $table->string('link_scimagojr')->nullable(); // Poin 2
         $table->string('peran'); // Poin 3: Editor-in-Chief, etc.
-        $table->date('penugasan_awal'); // Poin 4 (awal)
-        $table->date('penugasan_akhir'); // Poin 4 (akhir)
+        $table->year('penugasan_awal'); // Poin 4 (awal)
+        $table->year('penugasan_akhir'); // Poin 4 (akhir)
         $table->string('bukti_undangan_path'); // Poin 5 (path file)
         $table->string('link_laman_resmi'); // Poin 6
         $table->string('bukti_aktivitas_path')->nullable(); // Poin 7 (path file), boleh kosong

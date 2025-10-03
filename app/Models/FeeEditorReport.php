@@ -9,7 +9,6 @@ class FeeEditorReport extends Model
 {
     use HasFactory;
 
-    // Sesuaikan fillable dengan kolom di tabel fee_editor_reports
     protected $fillable = [
         'fee_editor_session_id',
         'user_id',
@@ -22,6 +21,7 @@ class FeeEditorReport extends Model
         'link_laman_resmi',
         'bukti_aktivitas_path',
         'status',
+        'catatan_admin',
     ];
 
     // Relasi: Satu Laporan Editor MILIK SATU Sesi Editor
