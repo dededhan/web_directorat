@@ -22,8 +22,8 @@ class AdminEquityUserController extends Controller
         $fakultasId = $request->input('fakultas_id');
         $prodiId = $request->input('prodi_id');
 
-        $query = User::whereIn('role', ['dosen', 'reviewer_equity'])
-            ->with('profile.prodi.fakultas');
+        $query = User::whereIn('role', ['dosen', 'reviewer_equity', 'equity_fakultas'])
+            ->with('profile.prodi.fakultas', 'profile.fakultas');
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
@@ -37,11 +37,15 @@ class AdminEquityUserController extends Controller
             });
         } 
         elseif ($fakultasId) {
-            $query->whereHas('profile.prodi', function ($q) use ($fakultasId) {
-                $q->where('fakultas_id', $fakultasId);
+            $query->where(function($q) use ($fakultasId) {
+                $q->whereHas('profile.prodi', function ($sub) use ($fakultasId) {
+                    $sub->where('fakultas_id', $fakultasId);
+                })->orWhereHas('profile', function ($sub) use ($fakultasId) {
+                    $sub->where('fakultas_id', $fakultasId);
+                });
             });
         }
-//ez querry
+
         $users = $query->latest()->paginate(10)->appends($request->query());
         
         $fakultas = Fakultas::orderBy('name')->get();
@@ -49,7 +53,6 @@ class AdminEquityUserController extends Controller
 
         return view('admin_equity.manageuser.index', compact('users', 'fakultas', 'prodi'));
     }
-
 
     public function create()
     {
@@ -64,9 +67,15 @@ class AdminEquityUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required', Rule::in(['dosen', 'reviewer_equity'])],
+            'role' => ['required', Rule::in(['dosen', 'reviewer_equity', 'equity_fakultas'])],
             'identifier_number' => 'nullable|string|max:255|unique:equity_user_profiles,identifier_number',
             'prodi_id' => 'nullable|required_if:role,dosen|exists:equity_prodi,id',
+            'fakultas_id' => [
+                'nullable',
+                'required_if:role,equity_fakultas',
+                'exists:equity_fakultas,id',
+                Rule::unique('equity_user_profiles', 'fakultas_id')
+            ],
         ]);
 
         DB::beginTransaction();
@@ -86,6 +95,11 @@ class AdminEquityUserController extends Controller
                     'identifier_number' => $validated['identifier_number'] ?? null,
                     'prodi_id' => $validated['prodi_id'],
                 ]);
+            } elseif ($validated['role'] === 'equity_fakultas') {
+                UserProfile::create([
+                    'user_id' => $user->id,
+                    'fakultas_id' => $validated['fakultas_id'],
+                ]);
             }
             
             DB::commit();
@@ -100,22 +114,22 @@ class AdminEquityUserController extends Controller
 
     public function show(User $user)
     {
-
-        if (!in_array($user->role, ['dosen', 'reviewer_equity'])) {
+        if (!in_array($user->role, ['dosen', 'reviewer_equity', 'equity_fakultas'])) {
             abort(404);
         }
-        $user->load('profile.prodi.fakultas');
+        $user->load('profile.prodi.fakultas', 'profile.fakultas');
         return view('admin_equity.manageuser.show', compact('user'));
     }
 
 
     public function edit(User $user)
     {
-         if (!in_array($user->role, ['dosen', 'reviewer_equity'])) {
+         if (!in_array($user->role, ['dosen', 'reviewer_equity', 'equity_fakultas'])) {
             abort(404);
         }
-        $user->load('profile.prodi.fakultas');
+        $user->load('profile.prodi.fakultas', 'profile.fakultas');
         $fakultas = Fakultas::orderBy('name')->get();
+        
         $fakultasIdForProdi = old('fakultas_id', $user->profile?->prodi?->fakultas_id);
         
         $prodi = $fakultasIdForProdi 
@@ -131,9 +145,15 @@ class AdminEquityUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required', Rule::in(['dosen', 'reviewer_equity'])],
+            'role' => ['required', Rule::in(['dosen', 'reviewer_equity', 'equity_fakultas'])],
             'identifier_number' => ['nullable', 'string', 'max:255', Rule::unique('equity_user_profiles', 'identifier_number')->ignore($user->profile->id ?? null)],
             'prodi_id' => 'nullable|required_if:role,dosen|exists:equity_prodi,id',
+            'fakultas_id' => [
+                'nullable',
+                'required_if:role,equity_fakultas',
+                'exists:equity_fakultas,id',
+                Rule::unique('equity_user_profiles', 'fakultas_id')->ignore($user->profile->id ?? null)
+            ],
         ]);
 
         DB::beginTransaction();
@@ -157,6 +177,16 @@ class AdminEquityUserController extends Controller
                     [
                         'identifier_number' => $validated['identifier_number'] ?? null,
                         'prodi_id' => $validated['prodi_id'],
+                        'fakultas_id' => null,
+                    ]
+                );
+            } elseif ($validated['role'] === 'equity_fakultas') {
+                $user->profile()->updateOrCreate(
+                    ['user_id' => $user->id],
+                    [
+                        'fakultas_id' => $validated['fakultas_id'],
+                        'prodi_id' => null,
+                        'identifier_number' => null,
                     ]
                 );
             } else {
@@ -177,13 +207,12 @@ class AdminEquityUserController extends Controller
 
     public function destroy(User $user)
     {
-        if (!in_array($user->role, ['dosen', 'reviewer_equity'])) {
+        if (!in_array($user->role, ['dosen', 'reviewer_equity', 'equity_fakultas'])) {
             abort(404);
         }
 
         DB::beginTransaction();
         try {
-            $user->profile()->delete();
             $user->delete();
             DB::commit();
             return redirect()->route('admin_equity.manageuser.index')->with('success', 'User berhasil dihapus.');
@@ -193,3 +222,4 @@ class AdminEquityUserController extends Controller
         }
     }
 }
+
