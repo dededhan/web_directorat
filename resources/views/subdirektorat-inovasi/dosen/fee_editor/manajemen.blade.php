@@ -202,42 +202,37 @@
                                                              x-transition:leave="transition ease-in duration-75"
                                                              x-transition:leave-start="transform opacity-100 scale-100"
                                                              x-transition:leave-end="transform opacity-0 scale-95"
-                                                             class="fixed bg-white rounded-xl shadow-2xl ring-1 ring-black ring-opacity-5 overflow-hidden border-2 border-gray-100 w-56"
-                                                             style="display: none; z-index: 9999;"
+                                                             x-ref="dropdown"
+                                                             class="fixed bg-white rounded-xl shadow-2xl ring-1 ring-black ring-opacity-5 border-2 border-gray-100 w-56 z-[9999]"
+                                                             style="display: none;"
+                                                             @click="open = false"
                                                              x-init="
                                                                  $watch('open', value => {
                                                                      if (value) {
                                                                          $nextTick(() => {
-                                                                             const rect = $refs.button.getBoundingClientRect();
-                                                                             const dropdownWidth = $el.offsetWidth;
-                                                                             const dropdownHeight = $el.offsetHeight;
+                                                                             const button = $refs.button;
+                                                                             const dropdown = $refs.dropdown;
+                                                                             const rect = button.getBoundingClientRect();
+                                                                             const dropdownHeight = dropdown.offsetHeight;
+                                                                             const dropdownWidth = dropdown.offsetWidth;
                                                                              const viewportWidth = window.innerWidth;
                                                                              const viewportHeight = window.innerHeight;
+                                                                             const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+                                                                             const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
                                                                              
-                                                                             // Calculate top position
-                                                                             let top = rect.bottom + window.scrollY + 8;
+                                                                             let top = rect.bottom + scrollY + 8;
+                                                                             let left = rect.right + scrollX - dropdownWidth;
                                                                              
-                                                                             // Check if dropdown goes beyond bottom of viewport
-                                                                             if (rect.bottom + dropdownHeight + 8 > viewportHeight) {
-                                                                                 // Open upwards
-                                                                                 top = rect.top + window.scrollY - dropdownHeight - 8;
+                                                                             if (top + dropdownHeight > viewportHeight + scrollY) {
+                                                                                 top = rect.top + scrollY - dropdownHeight - 8;
                                                                              }
                                                                              
-                                                                             // Calculate left position
-                                                                             let left = rect.right + window.scrollX - dropdownWidth;
-                                                                             
-                                                                             // Check if dropdown goes beyond left edge
-                                                                             if (left < 0) {
-                                                                                 left = rect.left + window.scrollX;
+                                                                             if (left < scrollX) {
+                                                                                 left = rect.left + scrollX;
                                                                              }
                                                                              
-                                                                             // Check if dropdown goes beyond right edge
-                                                                             if (rect.right + dropdownWidth > viewportWidth) {
-                                                                                 left = rect.right + window.scrollX - dropdownWidth;
-                                                                             }
-                                                                             
-                                                                             $el.style.top = top + 'px';
-                                                                             $el.style.left = left + 'px';
+                                                                             dropdown.style.top = top + 'px';
+                                                                             dropdown.style.left = left + 'px';
                                                                          });
                                                                      }
                                                                  })
@@ -247,7 +242,7 @@
                                                                 @if ($isSessionOpen && in_array($report->status, ['diajukan', 'ditolak']))
                                                                     <a href="{{ route('subdirektorat-inovasi.dosen.fee_editor.edit', $report) }}" class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-yellow-50 hover:text-yellow-700 transition-colors"><i class='bx bx-edit-alt mr-3 text-lg text-yellow-600'></i>Edit Laporan</a>
                                                                     <div class="border-t my-1 border-gray-100"></div>
-                                                                    <button @click="showDeleteModal = true; deleteUrl = '{{ route('subdirektorat-inovasi.dosen.fee_editor.destroy', $report) }}'; open = false" class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"><i class='bx bx-trash mr-3 text-lg'></i>Hapus Laporan</button>
+                                                                    <button type="button" @click.stop="showDeleteModal = true; deleteUrl = '{{ route('subdirektorat-inovasi.dosen.fee_editor.destroy', $report) }}'; open = false" class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors text-left"><i class='bx bx-trash mr-3 text-lg'></i>Hapus Laporan</button>
                                                                 @elseif (!$isSessionOpen)
                                                                     <div class="flex items-center w-full px-4 py-3 text-sm text-gray-400 cursor-not-allowed"><i class='bx bx-lock mr-3 text-lg'></i>Sesi Ditutup</div>
                                                                 @elseif (in_array($report->status, ['diverifikasi', 'disetujui']))
@@ -421,36 +416,8 @@
             display: none !important;
         }
 
-        /* Fix dropdown positioning */
-        .bg-white.rounded-2xl {
-            overflow: visible !important;
-        }
-
-        .bg-white.rounded-2xl .overflow-visible {
-            overflow: visible !important;
-        }
-
-        .bg-white.rounded-2xl table {
-            overflow: visible !important;
-        }
-
-        .fixed[x-show="open"] {
-            position: fixed !important;
-            z-index: 9999 !important;
-        }
-
-        [x-show="open"].fixed {
-            top: auto !important;
-            left: auto !important;
-            transform: none !important;
-        }
-
-        .relative {
-            position: relative;
-            z-index: 1;
-        }
-
-        .relative .fixed[x-show="open"] {
+        /* Ensure dropdown is on top of everything */
+        .z-\[9999\] {
             z-index: 9999 !important;
         }
     </style>
