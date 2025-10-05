@@ -121,6 +121,12 @@
                                                         class="text-[#11A697] hover:underline ml-2">
                                                         <i class='bx bxs-download'></i> {{ $file->original_filename }}
                                                     </a>
+                                                    @if ($file->status_luaran)
+                                                        <div class="text-xs text-gray-500 pl-4 mt-1">
+                                                            Status Luaran: <strong
+                                                                class="font-medium">{{ $file->status_luaran }}</strong>
+                                                        </div>
+                                                    @endif
                                                 @else
                                                     <span class="text-gray-400 italic ml-2">Belum diunggah</span>
                                                 @endif
@@ -143,7 +149,7 @@
                                                     <option value="lolos">Lolos</option>
                                                 </select>
                                             </div>
-                                            <div x-show="status === 'lolos'" x-transition>
+                                           <div x-show="status === 'lolos' && {{ $loop->first ? 'true' : 'false' }}" x-transition>
                                                 <label class="block text-sm font-medium text-gray-700">Nominal Evaluasi
                                                     (jika lolos)
                                                 </label>
@@ -190,7 +196,8 @@
                                 <div class="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden mb-4 last:mb-0"
                                     x-data="{ open: true }">
                                     {{-- Header Modul yang bisa di-klik --}}
-                                    <div class="p-4 cursor-pointer flex justify-between items-center" @click="open = !open">
+                                    <div class="p-4 cursor-pointer flex justify-between items-center"
+                                        @click="open = !open">
                                         <h3 class="font-bold text-gray-800 text-lg">{{ $module->urutan }}.
                                             {{ $module->nama_modul }}</h3>
                                         <i class='bx bxs-chevron-down text-xl text-gray-500 transition-transform'
@@ -266,7 +273,7 @@
         </div>
 
         {{-- Kolom Kanan: Aksi & Penugasan --}}
-     <div class="lg:col-span-1 space-y-8">
+        <div class="lg:col-span-1 space-y-8">
             {{-- Card Aksi Administrator --}}
             <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
                 <div class="p-5 border-b bg-[#11A697] text-white">
@@ -281,7 +288,7 @@
                     </p>
 
                     {{-- Form untuk update status manual --}}
-                    
+
                 </div>
             </div>
 
@@ -330,6 +337,22 @@
 
         form.addEventListener('submit', function(event) {
             event.preventDefault(); // Hentikan submit form sementara
+            Swal.fire({
+                title: 'Simpan Penugasan?',
+                text: "Apakah Anda yakin ingin menyimpan perubahan pada penugasan reviewer?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#11A697', // Warna tombol konfirmasi
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Simpan!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                // Jika pengguna menekan tombol "Ya, Simpan!"
+                if (result.isConfirmed) {
+                    // Lanjutkan proses submit form secara manual
+                    form.submit();
+                }
+            });
 
             const selectedOptions = document.getElementById('reviewers').selectedOptions;
             const newlyAssignedIds = Array.from(selectedOptions).map(el => parseInt(el.value));
