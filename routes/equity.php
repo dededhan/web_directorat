@@ -163,6 +163,25 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
 
 
     Route::resource('incentive-reviewer', IncentiveReviewerController::class)->names('incentivereviewer');
+
+    Route::prefix('visiting-professors')->name('visiting-professors.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\AdminEquity\VisitingProfessorManagementController::class, 'index'])->name('index');
+            Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\VisitingProfessorManagementController::class, 'show'])->name('show');
+            Route::patch('/{submission}/status', [\App\Http\Controllers\AdminEquity\VisitingProfessorManagementController::class, 'updateStatus'])->name('updateStatus');
+        });
+
+        // Lakukan hal yang sama untuk Joint Supervision dan Employer Meeting
+    Route::prefix('joint-supervision')->name('joint-supervision.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\AdminEquity\JointSupervisionManagementController::class, 'index'])->name('index');
+            Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\JointSupervisionManagementController::class, 'show'])->name('show');
+            Route::patch('/{submission}/status', [\App\Http\Controllers\AdminEquity\JointSupervisionManagementController::class, 'updateStatus'])->name('updateStatus');
+        });
+        
+    Route::prefix('employer-meetings')->name('employer-meetings.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\AdminEquity\EmployerMeetingManagementController::class, 'index'])->name('index');
+            Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\EmployerMeetingManagementController::class, 'show'])->name('show');
+            Route::patch('/{submission}/status', [\App\Http\Controllers\AdminEquity\EmployerMeetingManagementController::class, 'updateStatus'])->name('updateStatus');
+        });
 });
 
 
@@ -173,6 +192,10 @@ Route::prefix('equity_fakultas')
     {
 
         Route::get('/dashboard', [EquityFakultasController::class, 'index'])->name('dashboard');
+
+        Route::resource('visiting-professors', \App\Http\Controllers\EquityFakultas\VisitingProfessorController::class);
+        Route::resource('joint-supervision', \App\Http\Controllers\EquityFakultas\JointSupervisionController::class);
+        Route::resource('employer-meetings', \App\Http\Controllers\EquityFakultas\EmployerMeetingController::class);
 });
 
 Route::prefix('reviewer_equity')->name('reviewer_equity.')->middleware(['auth', 'role:reviewer_equity'])->group(function () {

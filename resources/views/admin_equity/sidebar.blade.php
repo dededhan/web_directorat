@@ -185,19 +185,27 @@
                 </a>
 
                 <!-- 6. Visiting Professors -->
-                <a href="#"
-                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700"
+                <a href="{{ route('admin_equity.visiting-professors.index') }}"
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.visiting-professors.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
                    :class="{'justify-center': !open && !mobileOpen}">
                     <i class='bx bxs-user-voice text-2xl flex-shrink-0'></i>
                     <span x-show="open || mobileOpen" class="font-medium">Visiting Professors</span>
                 </a>
                 
                 <!-- 7. Joint Supervision -->
-                <a href="#"
-                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700"
+                <a href="{{ route('admin_equity.joint-supervision.index') }}"
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.joint-supervision.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
                    :class="{'justify-center': !open && !mobileOpen}">
                     <i class='bx bxs-graduation text-2xl flex-shrink-0'></i>
                     <span x-show="open || mobileOpen" class="font-medium">Joint Supervision</span>
+                </a>
+
+                {{-- 8 employer meeting --}}
+                <a href="{{ route('admin_equity.employer-meetings.index') }}"
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.employer-meetings.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
+                   :class="{'justify-center': !open && !mobileOpen}">
+                    <i class='bx bx-briefcase-alt text-2xl flex-shrink-0'></i>
+                    <span x-show="open || mobileOpen" class="font-medium">Employer Meetings</span>
                 </a>
             </div>
 
