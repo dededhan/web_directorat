@@ -16,6 +16,7 @@ class UserProfile extends Model
         'user_id',
         'identifier_number',
         'prodi_id',
+        'fakultas_id',
     ];
 
 

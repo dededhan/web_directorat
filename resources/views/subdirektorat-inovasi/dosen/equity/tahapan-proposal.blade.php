@@ -85,6 +85,54 @@
                             <div class="p-6">
                                 <h3 class="text-lg font-bold text-gray-800">{{ $module->nama_modul }}</h3>
                                 <p class="text-sm text-gray-500 mt-1">{{ $module->deskripsi }}</p>
+                                 @php
+            $statusInfo = $moduleStatuses->get($module->id);
+        @endphp
+
+        @if($statusInfo)
+    <div class="mt-4 p-3 rounded-lg flex items-start
+        @if($statusInfo->status == 'lolos') bg-green-50 border border-green-200
+        @elseif($statusInfo->status == 'tidaklolos') bg-red-50 border border-red-200
+        @else bg-yellow-50 border border-yellow-200 @endif
+    ">
+        <div class="flex-shrink-0 pt-0.5">
+            @if($statusInfo->status == 'lolos')
+                <i class='bx bxs-check-circle text-2xl text-green-500'></i>
+            @elseif($statusInfo->status == 'tidaklolos')
+                <i class='bx bxs-x-circle text-2xl text-red-500'></i>
+            @else
+                <i class='bx bxs-info-circle text-2xl text-yellow-500'></i>
+            @endif
+        </div>
+        <div class="ml-3 flex-grow">
+            <p class="text-sm font-semibold 
+                @if($statusInfo->status == 'lolos') text-green-800
+                @elseif($statusInfo->status == 'tidaklolos') text-red-800
+                @else text-yellow-800 @endif
+            ">
+                Status Tahap: 
+                 @if($statusInfo->status == 'tidaklolos')
+        Tidak Lolos
+    @else{{ ucfirst($statusInfo->status) }}
+    @endif
+            </p>
+            
+           
+            @if($statusInfo->status == 'lolos' && $loop->first && $statusInfo->nominal_evaluasi > 0)
+                <div class="mt-2 pt-2 border-t border-green-200">
+                    <p class="text-xs text-gray-600">Nominal Disetujui:</p>
+                    <p class="text-md font-bold text-green-900">
+                        Rp {{ number_format($statusInfo->nominal_evaluasi, 0, ',', '.') }}
+                    </p>
+                </div>
+            @endif
+
+            @if($statusInfo->catatan_admin)
+                <p class="text-xs text-gray-600 mt-2">Catatan dari Admin: {{ $statusInfo->catatan_admin }}</p>
+            @endif
+        </div>
+    </div>
+@endif
                             </div>
                             <div class="border-b border-gray-200">
                                 <nav class="-mb-px flex px-6">
@@ -231,8 +279,65 @@
                                     </div>
                                 </div>
                                 <div x-show="tab === 'penilaian'" x-transition style="display: none;">
-                                    {{-- Konten Tab Penilaian --}}
+    <div class="space-y-6">
+        {{-- Cek dulu apakah ada review untuk seluruh proposal ini --}}
+        @if($submission->reviews->isNotEmpty())
+
+            {{-- Loop untuk setiap sub-bab dalam modul ini --}}
+            @foreach($module->subChapters as $subChapter)
+                @php
+                    // Ambil review yang spesifik hanya untuk sub-bab ini
+                    $reviewsForSubChapter = $submission->reviews->where('comdev_sub_chapter_id', $subChapter->id);
+                @endphp
+
+                {{-- Tampilkan hanya jika ada review untuk sub-bab ini --}}
+                @if($reviewsForSubChapter->isNotEmpty())
+                    <div>
+                        {{-- Judul Sub-Bab --}}
+                        <h4 class="font-semibold text-gray-700 text-md flex items-center mb-3">
+                            <i class='bx bx-subdirectory-right mr-2 text-gray-400'></i>
+                            {{ $subChapter->nama_sub_bab }}
+                        </h4>
+
+                        {{-- Area Komentar --}}
+                        <div class="pl-6 space-y-4">
+                            @foreach ($reviewsForSubChapter as $review)
+                                <div class="flex items-start space-x-3">
+                                    {{-- Ikon Avatar Reviewer --}}
+                                    <div class="flex-shrink-0">
+                                        <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-teal-100 text-teal-700">
+                                            <i class='bx bxs-user'></i>
+                                        </span>
+                                    </div>
+                                    {{-- Bubble Komentar --}}
+                                    <div class="flex-1">
+                                        <div class="flex items-baseline space-x-2">
+                                            <p class="text-sm font-semibold text-gray-900">
+                                                {{ $review->reviewer->name ?? 'Reviewer' }}
+                                            </p>
+                                            <p class="text-xs text-gray-400" title="{{ $review->created_at->format('d M Y, H:i:s') }}">
+                                                {{ $review->created_at->diffForHumans() }}
+                                            </p>
+                                        </div>
+                                        <div class="mt-1 bg-gray-50 p-3 rounded-lg rounded-tl-none border border-gray-200">
+                                            <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ $review->komentar }}</p>
+                                        </div>
+                                    </div>
                                 </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            @endforeach
+        @else
+            {{-- Pesan jika tidak ada komentar sama sekali --}}
+            <div class="text-center py-10 text-gray-500">
+                <i class='bx bx-comment-x text-4xl mb-2'></i>
+                <p>Belum ada penilaian atau komentar dari reviewer untuk tahap ini.</p>
+            </div>
+        @endif
+    </div>
+</div>
                             </div>
                         </div>
                     </div>

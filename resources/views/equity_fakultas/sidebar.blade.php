@@ -80,14 +80,14 @@
                     </div>
                 </button>
                 <div x-show="visitingProfessorOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
-                    <a href="#" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors hover:bg-gray-700 ml-4">
-                        <i class='bx bxs-folder-open text-2xl flex-shrink-0'></i>
-                        <span>Manajemen</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors hover:bg-gray-700 ml-4">
-                        <i class='bx bxs-file-plus text-2xl flex-shrink-0'></i>
-                        <span>Pengusulan</span>
-                    </a>
+                    <a href="{{ route('equity_fakultas.visiting-professors.index') }}" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors hover:bg-gray-700 ml-4">
+    <i class='bx bxs-folder-open text-2xl flex-shrink-0'></i>
+    <span>Manajemen</span>
+</a>
+<a href="{{ route('equity_fakultas.visiting-professors.create') }}" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors hover:bg-gray-700 ml-4">
+    <i class='bx bxs-file-plus text-2xl flex-shrink-0'></i>
+    <span>Pengusulan</span>
+</a>
                 </div>
 
                 {{-- Menu 2: Joint Supervision --}}
@@ -103,14 +103,15 @@
                     </div>
                 </button>
                 <div x-show="jointSupervisionOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
-                    <a href="#" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors hover:bg-gray-700 ml-4">
-                        <i class='bx bxs-folder-open text-2xl flex-shrink-0'></i>
-                        <span>Manajemen</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors hover:bg-gray-700 ml-4">
-                        <i class='bx bxs-file-plus text-2xl flex-shrink-0'></i>
-                        <span>Pengusulan</span>
-                    </a>
+                      <a href="{{ route('equity_fakultas.joint-supervision.index') }}" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors hover:bg-gray-700 ml-4">
+        <i class='bx bxs-folder-open text-2xl flex-shrink-0'></i>
+        <span>Manajemen</span>
+    </a>
+    {{-- GANTI INI --}}
+    <a href="{{ route('equity_fakultas.joint-supervision.create') }}" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors hover:bg-gray-700 ml-4">
+        <i class='bx bxs-file-plus text-2xl flex-shrink-0'></i>
+        <span>Pengusulan</span>
+    </a>
                 </div>
 
                 {{-- Menu 3: Employer Meeting --}}
@@ -126,14 +127,14 @@
                     </div>
                 </button>
                 <div x-show="employerMeetingOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
-                    <a href="#" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors hover:bg-gray-700 ml-4">
-                        <i class='bx bxs-folder-open text-2xl flex-shrink-0'></i>
-                        <span>Manajemen</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors hover:bg-gray-700 ml-4">
-                        <i class='bx bxs-file-plus text-2xl flex-shrink-0'></i>
-                        <span>Pengusulan</span>
-                    </a>
+                    <a href="{{ route('equity_fakultas.employer-meetings.index') }}" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors hover:bg-gray-700 ml-4">
+        <i class='bx bxs-folder-open text-2xl flex-shrink-0'></i>
+        <span>Manajemen</span>
+    </a>
+    {{-- GANTI INI --}}
+    <a href="{{ route('equity_fakultas.employer-meetings.create') }}" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors hover:bg-gray-700 ml-4">
+        <i class='bx bxs-file-plus text-2xl flex-shrink-0'></i>
+        <span>Pengusulan</span>
                 </div>
             </div>
             

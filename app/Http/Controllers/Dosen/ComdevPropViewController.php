@@ -83,6 +83,7 @@ class ComdevPropViewController extends Controller
         return view('subdirektorat-inovasi.dosen.equity.tahapan-proposal', [
             'submission' => $submission->load('reviews.reviewer', 'reviews.subChapter'),
             'modules' => $unlockedModules, // Kirim HANYA modul yang sudah terbuka
+            'moduleStatuses' => $statuses 
         ]);
     }
 }
