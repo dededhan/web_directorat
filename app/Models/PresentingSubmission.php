@@ -16,7 +16,11 @@ class PresentingSubmission extends Model
         'ppt_path',
         'bukti_partner_riset_path',
         'sp_setneg_path',
-        'responden_internasional_qs_path',
+        'responden_internasional_qs',
+    ];
+
+    protected $casts = [
+        'responden_internasional_qs' => 'array',
     ];
 
     // Satu Submission MILIK SATU Laporan

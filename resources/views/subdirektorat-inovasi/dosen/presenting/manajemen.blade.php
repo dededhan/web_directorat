@@ -156,10 +156,17 @@
                                         @foreach ($reports as $report)
                                             <tr class="hover:bg-gray-50 transition-colors duration-150">
                                                 <td class="px-6 py-5">
-                                                    @if ($report->status == 'revisi' && !empty($report->catatan_revisi))
-                                                        <div class="mb-2 p-3 bg-orange-50 border-l-4 border-orange-400 rounded-r-lg">
-                                                            <p class="text-xs font-bold text-orange-800">Catatan Revisi dari Admin:</p>
-                                                            <p class="text-xs text-orange-700 mt-1 whitespace-pre-wrap">{{ $report->catatan_revisi }}</p>
+                                                    @if (!empty($report->status_note))
+                                                        @php
+                                                            $noteColor = match ($report->status) {
+                                                                'ditolak' => 'red',
+                                                                'disetujui' => 'green',
+                                                                default => 'blue',
+                                                            };
+                                                        @endphp
+                                                        <div class="mb-3 p-3 bg-{{ $noteColor }}-50 border-l-4 border-{{ $noteColor }}-400 rounded-r-lg">
+                                                            <p class="text-xs font-bold text-{{ $noteColor }}-900">Catatan Admin:</p>
+                                                            <p class="text-xs text-{{ $noteColor }}-700 mt-1 whitespace-pre-wrap">{{ $report->status_note }}</p>
                                                         </div>
                                                     @endif
 
@@ -298,6 +305,20 @@
 
 
                                     
+                                    @if (!empty($report->status_note))
+                                        @php
+                                            $noteColor = match ($report->status) {
+                                                'ditolak' => 'red',
+                                                'disetujui' => 'green',
+                                                default => 'blue',
+                                            };
+                                        @endphp
+                                        <div class="mb-3 p-3 bg-{{ $noteColor }}-50 border-l-4 border-{{ $noteColor }}-400 rounded-r-lg">
+                                            <p class="text-xs font-bold text-{{ $noteColor }}-900">Catatan Admin:</p>
+                                            <p class="text-xs text-{{ $noteColor }}-700 mt-1 whitespace-pre-wrap">{{ $report->status_note }}</p>
+                                        </div>
+                                    @endif
+
                                     {{-- Actions for mobile --}}
                                     <div class="flex flex-col gap-2">
                                         <a href="{{ route('subdirektorat-inovasi.dosen.presenting.details', $report) }}" class="flex items-center justify-center w-full px-4 py-2 bg-teal-50 border-2 border-teal-200 rounded-xl text-sm font-medium text-teal-700 hover:bg-teal-100 hover:border-teal-300 transition-all">

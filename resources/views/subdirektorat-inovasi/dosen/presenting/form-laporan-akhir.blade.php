@@ -193,23 +193,41 @@
                         @error('sp_setneg')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                     </div>
 
-                    <div>
-                        <label for="responden_internasional_qs" class="block text-sm font-bold text-gray-700 mb-2 flex items-center">
-                            <i class='bx bx-world text-indigo-500 mr-2'></i>
-                            Responden Internasional QS <span class="text-xs text-gray-500 ml-1">(Opsional)</span>
-                        </label>
-                        @if($submission && $submission->responden_internasional_qs_path)
-                            <div class="mb-2 p-2 bg-green-50 border border-green-200 rounded-lg text-sm">
-                                <a href="{{ asset('storage/' . $submission->responden_internasional_qs_path) }}" target="_blank" class="text-green-700 hover:underline flex items-center">
-                                    <i class='bx bx-file-blank mr-2'></i>
-                                    Lihat file yang sudah diunggah
-                                </a>
+                    <div x-data="qsRespondents()" x-init="init()" class="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 lg:p-6">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+                            <div class="flex items-center text-sm font-bold text-gray-700">
+                                <i class='bx bx-world text-indigo-500 mr-2 text-base'></i>
+                                Responden Internasional QS
+                                <span class="text-xs text-gray-500 ml-2">(Minimal 1)</span>
                             </div>
-                        @endif
-                        <input type="file" name="responden_internasional_qs" id="responden_internasional_qs" accept=".pdf"
-                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200 text-gray-900 shadow-sm">
-                        <p class="text-xs text-gray-500 mt-1">Format: PDF (Max: 10MB)</p>
-                        @error('responden_internasional_qs')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                            <button type="button" @click="addRespondent()"
+                                    class="inline-flex items-center px-4 py-2 bg-amber-500 text-white text-xs font-semibold rounded-xl hover:bg-amber-600 transition-all duration-200 shadow">
+                                <i class='bx bx-plus-circle mr-2 text-sm'></i>
+                                Tambah Responden
+                            </button>
+                        </div>
+
+                        <div class="space-y-3">
+                            <template x-for="(respondent, index) in respondents" :key="index">
+                                <div class="flex items-center gap-3 bg-white border border-yellow-200 rounded-xl px-4 py-3">
+                                    <div class="flex items-center text-amber-500">
+                                        <i class='bx bx-user-circle text-xl'></i>
+                                    </div>
+                                    <input type="text" name="responden_internasional_qs[]"
+                                           x-model="respondents[index]"
+                                           class="flex-1 border-0 focus:ring-0 text-sm text-gray-800 placeholder-gray-400"
+                                           placeholder="Nama Lengkap Responden" autocomplete="off">
+                                    <button type="button" @click="removeRespondent(index)"
+                                            :class="respondents.length > 1 ? 'text-red-500 hover:text-red-600' : 'text-gray-300 cursor-not-allowed'"
+                                            :disabled="respondents.length <= 1">
+                                        <i class='bx bx-trash text-lg'></i>
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
+
+                        <p class="text-xs text-gray-500 mt-3">Masukkan nama lengkap minimal satu responden QS internasional.</p>
+                        @error('responden_internasional_qs')<p class="text-red-500 text-xs mt-2">{{ $message }}</p>@enderror
                     </div>
                 </div>
             </div>
@@ -227,4 +245,31 @@
         </form>
     </div>
 </div>
+
+<script>
+    function qsRespondents() {
+        return {
+            respondents: @json(old('responden_internasional_qs', $submission ? $submission->responden_internasional_qs ?? [] : [])),
+            init() {
+                if (!Array.isArray(this.respondents)) {
+                    this.respondents = [];
+                }
+
+                this.respondents = this.respondents.map(value => value ?? '').filter(value => value !== '');
+
+                if (this.respondents.length === 0) {
+                    this.respondents = [''];
+                }
+            },
+            addRespondent() {
+                this.respondents.push('');
+            },
+            removeRespondent(index) {
+                if (this.respondents.length > 1) {
+                    this.respondents.splice(index, 1);
+                }
+            }
+        };
+    }
+</script>
 @endsection

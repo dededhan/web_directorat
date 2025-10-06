@@ -93,6 +93,18 @@ if (!function_exists('getStatusInfoDosen')) {
                             <i class='bx {{ $statusInfo['icon'] }} mr-2'></i>
                             {{ $statusInfo['text'] }}
                         </span>
+                        @if (!empty($report->status_note))
+                            @php
+                                $noteColor = match ($report->status) {
+                                    'ditolak' => 'red',
+                                    'disetujui' => 'green',
+                                    default => 'blue',
+                                };
+                            @endphp
+                            <p class="mt-3 text-xs text-{{ $noteColor }}-800 bg-{{ $noteColor }}-50 border border-{{ $noteColor }}-200 rounded-lg px-3 py-2">
+                                {{ $report->status_note }}
+                            </p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -265,14 +277,24 @@ if (!function_exists('getStatusInfoDosen')) {
                         </a>
                         @endif
 
-                        @if($report->submission->responden_internasional_qs_path)
-                        <a href="{{ asset('storage/' . $report->submission->responden_internasional_qs_path) }}" target="_blank" class="flex items-center p-4 bg-gradient-to-br from-indigo-50 to-indigo-100 border-2 border-indigo-200 rounded-xl hover:from-indigo-100 hover:to-indigo-200 transition-all duration-200 group">
-                            <i class='bx bx-world text-indigo-500 text-2xl mr-3 group-hover:scale-110 transition-transform'></i>
-                            <div>
-                                <p class="font-semibold text-gray-800 text-sm">Responden QS</p>
-                                <p class="text-xs text-gray-500">Internasional</p>
+                        @if(!empty($report->submission->responden_internasional_qs))
+                        <div class="p-4 bg-gradient-to-br from-indigo-50 to-indigo-100 border-2 border-indigo-200 rounded-xl">
+                            <div class="flex items-center mb-3">
+                                <i class='bx bx-world text-indigo-500 text-2xl mr-3'></i>
+                                <div>
+                                    <p class="font-semibold text-gray-800 text-sm">Responden QS</p>
+                                    <p class="text-xs text-gray-500">Internasional</p>
+                                </div>
                             </div>
-                        </a>
+                            <ul class="space-y-2">
+                                @foreach($report->submission->responden_internasional_qs as $respondent)
+                                    <li class="flex items-center text-sm text-gray-700 bg-white border border-indigo-100 rounded-lg px-3 py-2">
+                                        <i class='bx bx-user mr-3 text-indigo-400'></i>
+                                        <span class="flex-1">{{ $respondent }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
                         @endif
                     </div>
                 </div>

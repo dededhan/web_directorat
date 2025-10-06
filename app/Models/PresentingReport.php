@@ -27,6 +27,7 @@ class PresentingReport extends Model
         'bukti_loa_path',
         'rencana_anggaran',
         'status',
+        'status_note',
     ];
 
     protected $casts = [

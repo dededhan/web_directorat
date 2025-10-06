@@ -100,6 +100,11 @@ if (!function_exists('getStatusInfoAdmin')) {
                                 <i class='bx {{$statusInfo['icon']}} mr-1'></i>
                                 {{ $statusInfo['text'] }}
                             </p>
+                            @if(!empty($report->status_note))
+                                <p class="mt-3 text-xs text-gray-700 bg-white bg-opacity-80 border border-{{$statusInfo['color']}}-200 rounded-lg px-3 py-2">
+                                    {{ $report->status_note }}
+                                </p>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -182,16 +187,46 @@ if (!function_exists('getStatusInfoAdmin')) {
                         </div>
                         <div>
                             <label class="block text-xs font-bold uppercase text-gray-500 mb-2">Keywords SDG</label>
-                            <div class="flex flex-wrap gap-2">
-                                @php
-                                    $keywords = is_string($report->keywords_sdg) ? json_decode($report->keywords_sdg, true) : $report->keywords_sdg;
-                                @endphp
-                                @foreach($keywords as $keyword)
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs bg-orange-100 text-orange-800 border border-orange-200">
-                                        {{ $keyword }}
-                                    </span>
-                                @endforeach
-                            </div>
+                            @php
+                                $keywordsRaw = is_string($report->keywords_sdg) ? json_decode($report->keywords_sdg, true) : $report->keywords_sdg;
+                                $sdgKeywordConfig = config('sdg.keywords', []);
+                                $groupedKeywords = [];
+
+                                if (is_array($keywordsRaw)) {
+                                    foreach ($keywordsRaw as $keyword) {
+                                        $assigned = false;
+                                        foreach ($sdgKeywordConfig as $sdg => $keywordList) {
+                                            if (in_array($keyword, $keywordList, true)) {
+                                                $groupedKeywords[$sdg][] = $keyword;
+                                                $assigned = true;
+                                                break;
+                                            }
+                                        }
+                                        if (! $assigned) {
+                                            $groupedKeywords['Lainnya'][] = $keyword;
+                                        }
+                                    }
+                                }
+                            @endphp
+
+                            @if(empty($groupedKeywords))
+                                <p class="text-sm text-gray-500">-</p>
+                            @else
+                                <div class="space-y-3">
+                                    @foreach($groupedKeywords as $sdg => $sdgKeywords)
+                                        <div>
+                                            <h5 class="text-xs font-semibold text-teal-700 mb-2">{{ $sdg }}</h5>
+                                            <div class="flex flex-wrap gap-2">
+                                                @foreach($sdgKeywords as $keyword)
+                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs bg-orange-100 text-orange-800 border border-orange-200">
+                                                        {{ $keyword }}
+                                                    </span>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -301,16 +336,24 @@ if (!function_exists('getStatusInfoAdmin')) {
                         </a>
                         @endif
 
-                        @if($report->submission->responden_internasional_qs_path)
-                        <a href="{{ asset('storage/' . $report->submission->responden_internasional_qs_path) }}" 
-                           target="_blank"
-                           class="flex items-center p-4 bg-gradient-to-br from-indigo-50 to-indigo-100 border-2 border-indigo-200 rounded-xl hover:from-indigo-100 hover:to-indigo-200 transition-all duration-200 group">
-                            <i class='bx bx-world text-indigo-500 text-2xl mr-3 group-hover:scale-110 transition-transform'></i>
-                            <div>
-                                <p class="font-semibold text-gray-800 text-sm">Responden QS</p>
-                                <p class="text-xs text-gray-500">Internasional</p>
+                        @if(!empty($report->submission->responden_internasional_qs))
+                        <div class="p-4 bg-gradient-to-br from-indigo-50 to-indigo-100 border-2 border-indigo-200 rounded-xl">
+                            <div class="flex items-center mb-3">
+                                <i class='bx bx-world text-indigo-500 text-2xl mr-3'></i>
+                                <div>
+                                    <p class="font-semibold text-gray-800 text-sm">Responden QS</p>
+                                    <p class="text-xs text-gray-500">Internasional</p>
+                                </div>
                             </div>
-                        </a>
+                            <ul class="space-y-2">
+                                @foreach($report->submission->responden_internasional_qs as $respondent)
+                                    <li class="flex items-center text-sm text-gray-700 bg-white border border-indigo-100 rounded-lg px-3 py-2">
+                                        <i class='bx bx-user mr-3 text-indigo-400'></i>
+                                        <span class="flex-1">{{ $respondent }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
                         @endif
                     </div>
                 </div>
@@ -363,7 +406,7 @@ if (!function_exists('getStatusInfoAdmin')) {
                                     <label for="catatan" class="block text-sm font-medium text-gray-700 mb-2">Catatan (Opsional)</label>
                                     <textarea name="catatan" id="catatan" rows="3"
                                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all"
-                                              placeholder="Tambahkan catatan jika diperlukan..."></textarea>
+                                              placeholder="Tambahkan catatan jika diperlukan...">{{ old('catatan', $report->status_note) }}</textarea>
                                 </div>
                             </div>
                         </div>

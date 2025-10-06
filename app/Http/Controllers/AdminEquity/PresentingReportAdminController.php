@@ -23,6 +23,7 @@ class PresentingReportAdminController extends Controller
 
         $report->update([
             'status' => $validated['status'],
+            'status_note' => $validated['catatan'] ?? null,
         ]);
 
         return redirect()->back()->with('success', 'Status laporan berhasil diperbarui!');

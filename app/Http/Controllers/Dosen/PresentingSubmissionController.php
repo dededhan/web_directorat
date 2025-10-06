@@ -44,10 +44,21 @@ class PresentingSubmissionController extends Controller
             'ppt' => 'required|file|mimes:pdf,ppt,pptx|max:20480',
             'bukti_partner_riset' => 'nullable|file|mimes:pdf|max:10240',
             'sp_setneg' => 'nullable|file|mimes:pdf|max:10240',
-            'responden_internasional_qs' => 'nullable|file|mimes:pdf|max:10240',
+            'responden_internasional_qs' => 'nullable|array',
+            'responden_internasional_qs.*' => 'nullable|string|max:255',
         ]);
 
         $data = ['presenting_report_id' => $report->id];
+
+        $responden = collect($request->input('responden_internasional_qs', []))
+            ->map(fn ($value) => trim($value))
+            ->filter(fn ($value) => $value !== '');
+
+        if ($responden->isNotEmpty() && $responden->count() < 1) {
+            return back()->withErrors([
+                'responden_internasional_qs' => 'Minimal 1 responden QS ketika diisi.',
+            ])->withInput();
+        }
 
         if ($request->hasFile('bukti_perjalanan')) {
             $data['bukti_perjalanan_path'] = $request->file('bukti_perjalanan')->store('presenting/bukti_perjalanan', 'public');
@@ -69,9 +80,7 @@ class PresentingSubmissionController extends Controller
             $data['sp_setneg_path'] = $request->file('sp_setneg')->store('presenting/sp_setneg', 'public');
         }
 
-        if ($request->hasFile('responden_internasional_qs')) {
-            $data['responden_internasional_qs_path'] = $request->file('responden_internasional_qs')->store('presenting/responden_qs', 'public');
-        }
+        $data['responden_internasional_qs'] = $responden->isNotEmpty() ? $responden->values()->all() : null;
 
         PresentingSubmission::create($data);
 
@@ -101,10 +110,21 @@ class PresentingSubmissionController extends Controller
             'ppt' => 'nullable|file|mimes:pdf,ppt,pptx|max:20480',
             'bukti_partner_riset' => 'nullable|file|mimes:pdf|max:10240',
             'sp_setneg' => 'nullable|file|mimes:pdf|max:10240',
-            'responden_internasional_qs' => 'nullable|file|mimes:pdf|max:10240',
+            'responden_internasional_qs' => 'nullable|array',
+            'responden_internasional_qs.*' => 'nullable|string|max:255',
         ]);
 
         $data = [];
+
+        $responden = collect($request->input('responden_internasional_qs', []))
+            ->map(fn ($value) => trim($value))
+            ->filter(fn ($value) => $value !== '');
+
+        if ($responden->isNotEmpty() && $responden->count() < 1) {
+            return back()->withErrors([
+                'responden_internasional_qs' => 'Minimal 1 responden QS ketika diisi.',
+            ])->withInput();
+        }
 
         if ($request->hasFile('bukti_perjalanan')) {
             if ($submission->bukti_perjalanan_path) {
@@ -141,12 +161,7 @@ class PresentingSubmissionController extends Controller
             $data['sp_setneg_path'] = $request->file('sp_setneg')->store('presenting/sp_setneg', 'public');
         }
 
-        if ($request->hasFile('responden_internasional_qs')) {
-            if ($submission->responden_internasional_qs_path) {
-                Storage::disk('public')->delete($submission->responden_internasional_qs_path);
-            }
-            $data['responden_internasional_qs_path'] = $request->file('responden_internasional_qs')->store('presenting/responden_qs', 'public');
-        }
+        $data['responden_internasional_qs'] = $responden->isNotEmpty() ? $responden->values()->all() : null;
 
         $submission->update($data);
 
