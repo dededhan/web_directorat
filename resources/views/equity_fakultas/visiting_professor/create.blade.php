@@ -28,7 +28,7 @@
                        id="nama_pengunggah" 
                        name="nama_pengunggah"
                        type="text" 
-                       value="{{ old('nama_pengunggah', Auth::user()->name) }}">
+                       value="{{ old('nama_pengunggah') }}">
                 @error('nama_pengunggah')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror

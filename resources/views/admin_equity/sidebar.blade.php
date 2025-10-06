@@ -143,38 +143,26 @@
                    class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.fee_reviewer.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
                    :class="{'justify-center': !open && !mobileOpen}">
                     <i class='bx bxs-award text-2xl flex-shrink-0'></i>
-                    <span x-show="open || mobileOpen" class="font-medium">Fee Reviewer</span>
+                    <span x-show="open || mobileOpen" class="font-medium">Insentif Reviewer</span>
                 </a>
 
                 <a href="{{ route('admin_equity.fee_editor.index') }}"
                    class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.fee_editor.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
                    :class="{'justify-center': !open && !mobileOpen}">
                     <i class='bx bxs-edit text-2xl flex-shrink-0'></i>
-                    <span x-show="open || mobileOpen" class="font-medium">Fee Editor</span>
+                    <span x-show="open || mobileOpen" class="font-medium">Insentif Editor</span>
                 </a>
 
                 <a href="{{ route('admin_equity.presenting.index') }}"
                    class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.presenting.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
                    :class="{'justify-center': !open && !mobileOpen}">
                     <i class='bx bxs-slideshow text-2xl flex-shrink-0'></i>
-                    <span x-show="open || mobileOpen" class="font-medium">Presenting</span>
+                    <span x-show="open || mobileOpen" class="font-medium">Bantuan Presentasi</span>
                 </a>
 
                 <!-- 3. Incentive -->
-                <a href="{{ route('admin_equity.incentivereviewer.index') }}"
-                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.incentivereviewer.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
-                   :class="{'justify-center': !open && !mobileOpen}">
-                    <i class='bx bxs-award text-2xl flex-shrink-0'></i>
-                    <span x-show="open || mobileOpen" class="font-medium">Insentif Reviewer</span>
-                </a>
-
-                <!-- 4. Scopus/WOS -->
-                <a href="#"
-                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700"
-                   :class="{'justify-center': !open && !mobileOpen}">
-                    <i class='bx bxs-badge-check text-2xl flex-shrink-0'></i>
-                    <span x-show="open || mobileOpen" class="font-medium">Jurnal Scopus/WOS</span>
-                </a>
+                
+            
 
                 <!-- 5. Matchmaking Riset-->
                 <a href="{{ route('admin_equity.matchresearch.index') }}"

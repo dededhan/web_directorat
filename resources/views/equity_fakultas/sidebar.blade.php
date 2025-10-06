@@ -73,7 +73,7 @@
                         :class="open || mobileOpen ? 'justify-between' : 'justify-center'">
                     <div class="flex items-center space-x-4">
                         <i class='bx bxs-user-voice text-2xl flex-shrink-0'></i>
-                        <span x-show="open || mobileOpen" class="font-medium">Visiting Proffesor</span>
+                        <span x-show="open || mobileOpen" class="font-medium">Visiting Professor</span>
                     </div>
                     <div x-show="open || mobileOpen" class="flex items-center">
                         <i class='bx bx-chevron-down text-2xl transition-transform' :class="{'rotate-180': visitingProfessorOpen}"></i>
