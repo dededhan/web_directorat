@@ -13,53 +13,60 @@ class RespondenAnswerGraphController extends Controller
 
     public function index()
     {
-        // Mengambil tahun unik untuk filter
+        //filter map
         $years = RespondenAnswer::select(DB::raw('YEAR(created_at) as year'))
             ->distinct()
             ->orderBy('year', 'desc')
             ->pluck('year');
 
-        // Mengambil daftar fakultas unik dari user yang menginput
+        // send help i study mapping for this
         $faculties = \App\Models\User::where('role', 'fakultas')
             ->select('name')
             ->distinct()
             ->pluck('name')
             ->map(function ($name) {
-                return strtoupper($name);
+                $facultyCode = Str::before($name, '-');
+                return strtoupper($facultyCode);
             })
+            ->unique()
             ->sort()
             ->values();
+
 
         return view('admin.responden_graph', compact('years', 'faculties'));
     }
 
-    /**
-     * Mengambil dan memformat data untuk ditampilkan di grafik.
-     */
+
     public function getGraphData(Request $request)
     {
         $query = RespondenAnswer::with('responden.user');
 
-        // Terapkan filter tanggal jika ada
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $startDate = Carbon::parse($request->start_date)->startOfDay();
             $endDate = Carbon::parse($request->end_date)->endOfDay();
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }
+        
+
+        if ($request->filled('fakultas')) {
+             $selectedFakultas = $request->fakultas;
+             $query->whereHas('responden.user', function ($q) use ($selectedFakultas) {
+                 $q->where('name', 'LIKE', $selectedFakultas . '%');
+             });
+        }
 
         $data = $query->get();
 
-        // 1. Data Per Sumber Input (Admin vs Fakultas/Prodi)
         $sumberInput = $data->groupBy(function ($item) {
             if (optional(optional($item->responden)->user)->role === 'admin_direktorat') {
                 return 'Direktorat';
             }
-            // Semua selain admin_direktorat dianggap dari Fakultas/Prodi
+
             return 'Fakultas & Prodi';
         })->map->count();
 
 
-        // 2. Data Per Kategori (Academic vs Employee)
+
         $kategori = $data->groupBy(function ($item) {
             $category = strtolower($item->category);
             if (in_array($category, ['employer', 'employee'])) {
@@ -69,19 +76,17 @@ class RespondenAnswerGraphController extends Controller
         })->map->count();
 
 
-        // 3. Data Tren Bulanan (Saran)
         $tren = $data->groupBy(function ($item) {
             return Carbon::parse($item->created_at)->format('Y-m');
         })->map(function ($group) {
             return $group->count();
         })->sortKeys();
 
-        // 4. Data per Fakultas (Detail)
         $perFakultas = $data->filter(function ($item) {
-            // Hanya ambil data yang diinput oleh fakultas atau prodi
-            return optional(optional($item->responden)->user)->role === 'fakultas' || optional(optional($item->responden)->user)->role === 'prodi';
+
+            return in_array(optional(optional($item->responden)->user)->role, ['fakultas', 'prodi']);
         })->groupBy(function ($item) {
-            // Ambil kode fakultas dari nama user
+
             $userName = optional(optional($item->responden)->user)->name;
             if (Str::contains($userName, '-')) {
                 return strtoupper(Str::before($userName, '-'));
@@ -89,12 +94,41 @@ class RespondenAnswerGraphController extends Controller
             return strtoupper($userName);
         })->map->count()->sortKeys();
 
+        // typo, ini gegara datanya kgk jelas jink
+        $renamedPerFakultas = $perFakultas->mapWithKeys(function ($value, $key) {
+            $replacements = [
+                'FE' => 'FEB',
+                'FPPSI' => 'FPSI',
+                'FIS' => 'FISH',
+            ];
+            return [data_get($replacements, $key, $key) => $value];
+        });
+
+
+        $perProdi = collect();
+        if ($request->filled('fakultas')) {
+            $selectedFakultas = $request->fakultas;
+
+            $perProdi = $data->filter(function ($item) use ($selectedFakultas) {
+                $user = optional($item->responden)->user;
+                if (!$user || $user->role !== 'prodi') { 
+                    return false;
+                }
+                $userName = $user->name;
+                return Str::startsWith(strtoupper($userName), strtoupper($selectedFakultas) . '-');
+            })->groupBy(function ($item) {
+                $userName = optional(optional($item->responden)->user)->name;
+                return strtoupper(Str::after($userName, '-'));
+            })->map->count()->sortKeys();
+        }
+
 
         return response()->json([
             'sumberInput' => $sumberInput,
             'kategori' => $kategori,
             'tren' => $tren,
-            'perFakultas' => $perFakultas,
+            'perFakultas' => $renamedPerFakultas,
+            'perProdi' => $perProdi,
         ]);
     }
 }

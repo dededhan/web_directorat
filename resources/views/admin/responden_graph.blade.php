@@ -16,18 +16,12 @@
                     </li>
                 </ul>
             </div>
-            {{-- Tombol Print di-nonaktifkan untuk sementara --}}
-            {{-- <button id="print-button" class="btn-download">
-                <i class='bx bxs-printer'></i>
-                <span class="text">Cetak Laporan</span>
-            </button> --}}
         </div>
 
 
-        {{-- Filter Section --}}
         <div class="bg-white p-4 rounded-xl shadow-lg mb-6">
             <h3 class="text-lg font-bold text-gray-700 mb-4">Filter Data</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                     <label for="start_date" class="block text-sm font-medium text-gray-700">Tanggal Mulai</label>
                     <input type="date" id="start_date" name="start_date"
@@ -38,6 +32,17 @@
                     <input type="date" id="end_date" name="end_date"
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                 </div>
+
+                <div>
+                    <label for="fakultas" class="block text-sm font-medium text-gray-700">Fakultas</label>
+                    <select id="fakultas" name="fakultas"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <option value="">Semua Fakultas</option>
+                        @foreach($faculties as $faculty)
+                            <option value="{{ $faculty }}">{{ $faculty }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="self-end">
                     <button id="filter-btn"
                         class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
@@ -47,10 +52,9 @@
             </div>
         </div>
 
-        {{-- Chart Section --}}
         <div id="report-content">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                {{-- Grafik Sumber Input --}}
+
                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
                     <h3 class="text-lg font-bold text-gray-700 mb-4 text-center">Jumlah Responden Berdasarkan Sumber Input
                     </h3>
@@ -59,7 +63,7 @@
                     </div>
                 </div>
 
-                {{-- Grafik Kategori --}}
+
                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
                     <h3 class="text-lg font-bold text-gray-700 mb-4 text-center">Jumlah Responden Berdasarkan Kategori
                     </h3>
@@ -70,19 +74,27 @@
             </div>
 
             <div class="grid grid-cols-1 gap-6">
-                {{-- Grafik Detail Per Fakultas --}}
+
                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
                     <h3 class="text-lg font-bold text-gray-700 mb-4">Total Input per Fakultas & Prodi</h3>
                     <div class="h-96">
                         <canvas id="detailFakultasChart"></canvas>
                     </div>
                 </div>
-                {{-- Grafik Tren Bulanan --}}
+
                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
                     <h3 class="text-lg font-bold text-gray-700 mb-4">Tren Pengisian Responden per Bulan</h3>
                     <div class="h-96">
                         <canvas id="trenChart"></canvas>
                     </div>
+                </div>
+            </div>
+            
+
+            <div id="prodi-chart-container" class="bg-white p-4 sm:p-6 rounded-xl shadow-lg mt-6" style="display: none;">
+                <h3 id="prodi-chart-title" class="text-lg font-bold text-gray-700 mb-4"></h3>
+                <div class="h-96">
+                    <canvas id="detailProdiChart"></canvas>
                 </div>
             </div>
         </div>
@@ -137,15 +149,14 @@
         }
     </style>
 
-    {{-- Include Chart.js --}}
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Daftarkan plugin datalabels secara global
             Chart.register(ChartDataLabels);
 
-            let sumberDataChart, kategoriChart, trenChart, detailFakultasChart;
+            let sumberDataChart, kategoriChart, trenChart, detailFakultasChart, detailProdiChart; // wakoawkoawkwaok ngasal coi
 
             const chartColors = {
                 blue: 'rgba(54, 162, 235, 0.8)',
@@ -158,17 +169,18 @@
                 pink: 'rgba(255, 192, 203, 0.8)',
                 grey: 'rgba(201, 203, 207, 0.8)'
             };
-
             const colorPalette = Object.values(chartColors);
 
             async function fetchDataAndRenderCharts() {
                 const startDate = document.getElementById('start_date').value;
                 const endDate = document.getElementById('end_date').value;
+                const selectedFakultas = document.getElementById('fakultas').value; 
                 let url = `{{ route('api.responden.graph-data') }}`;
 
                 const params = new URLSearchParams();
                 if (startDate) params.append('start_date', startDate);
                 if (endDate) params.append('end_date', endDate);
+                if (selectedFakultas) params.append('fakultas', selectedFakultas); 
 
                 if (params.toString()) {
                     url += `?${params.toString()}`;
@@ -186,6 +198,20 @@
                     renderTrenChart(data.tren);
                     renderDetailFakultasChart(data.perFakultas);
 
+                    const prodiContainer = document.getElementById('prodi-chart-container');
+                    const prodiTitle = document.getElementById('prodi-chart-title');
+                    
+
+                    if (selectedFakultas && data.perProdi && Object.keys(data.perProdi).length > 0) {
+                        const renamedFakultas = { "FE": "FEB", "FPPSI": "FPSI", "FIS": "FISH" };
+                        const displayFakultas = renamedFakultas[selectedFakultas] || selectedFakultas;
+                        prodiTitle.innerText = `Total Input per Prodi di Fakultas ${displayFakultas}`;
+                        prodiContainer.style.display = 'block';
+                        renderDetailProdiChart(data.perProdi);
+                    } else {
+                        prodiContainer.style.display = 'none';
+                    }
+
                 } catch (error) {
                     console.error('Error fetching chart data:', error);
                 }
@@ -199,7 +225,7 @@
                 return new Chart(ctx, config);
             }
 
-            // 1. Render Sumber Data Chart
+
             function renderSumberDataChart(data) {
                 const labels = Object.keys(data);
                 const values = Object.values(data);
@@ -218,20 +244,14 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: {
-                                position: 'top',
-                            },
+                            legend: { position: 'top' },
                             datalabels: {
                                 color: '#fff',
-                                font: {
-                                    weight: 'bold'
-                                },
+                                font: { weight: 'bold' },
                                 formatter: (value, ctx) => {
-                                    let sum = 0;
-                                    let dataArr = ctx.chart.data.datasets[0].data;
-                                    dataArr.map(d => sum += d);
+                                    const sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
                                     if (sum === 0) return '0 (0.0%)';
-                                    let percentage = (value * 100 / sum).toFixed(1) + '%';
+                                    const percentage = (value * 100 / sum).toFixed(1) + '%';
                                     return `${value}\n(${percentage})`;
                                 },
                             }
@@ -240,7 +260,7 @@
                 });
             }
 
-            // 2. Render Kategori Chart
+
             function renderKategoriChart(data) {
                 const labels = Object.keys(data);
                 const values = Object.values(data);
@@ -251,7 +271,7 @@
                         datasets: [{
                             data: values,
                             backgroundColor: [chartColors.purple, chartColors.orange],
-                             borderColor: '#ffffff',
+                            borderColor: '#ffffff',
                             borderWidth: 2
                         }]
                     },
@@ -259,20 +279,14 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: {
-                                position: 'top',
-                            },
+                            legend: { position: 'top' },
                            datalabels: {
                                 color: '#fff',
-                                font: {
-                                    weight: 'bold'
-                                },
+                                font: { weight: 'bold' },
                                 formatter: (value, ctx) => {
-                                    let sum = 0;
-                                    let dataArr = ctx.chart.data.datasets[0].data;
-                                    dataArr.map(d => sum += d);
-                                     if (sum === 0) return '0 (0.0%)';
-                                    let percentage = (value * 100 / sum).toFixed(1) + '%';
+                                    const sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                    if (sum === 0) return '0 (0.0%)';
+                                    const percentage = (value * 100 / sum).toFixed(1) + '%';
                                     return `${value}\n(${percentage})`;
                                 },
                             }
@@ -281,7 +295,6 @@
                 });
             }
 
-            // 3. Render Tren Chart
             function renderTrenChart(data) {
                 const labels = Object.keys(data);
                 const values = Object.values(data);
@@ -301,21 +314,13 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        },
-                        plugins: {
-                            datalabels: {
-                               display: false
-                            }
-                        }
+                        scales: { y: { beginAtZero: true } },
+                        plugins: { datalabels: { display: false } }
                     }
                 });
             }
 
-            // 4. Render Detail Fakultas Chart
+            
             function renderDetailFakultasChart(data) {
                 const labels = Object.keys(data);
                 const values = Object.values(data);
@@ -335,27 +340,54 @@
                         indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
-                        scales: {
-                            x: {
-                                beginAtZero: true
-                            }
-                        },
+                        scales: { x: { beginAtZero: true } },
                         plugins: {
-                            legend: {
-                                display: false
-                            },
-                             datalabels: {
+                            legend: { display: false },
+                            datalabels: {
                                 anchor: 'end',
                                 align: 'end',
                                 color: '#555',
-                                font: {
-                                    weight: 'bold'
-                                }
+                                font: { weight: 'bold' }
                             }
                         }
                     }
                 });
             }
+            
+            //Grafik prodi
+            function renderDetailProdiChart(data) {
+                const labels = Object.keys(data);
+                const values = Object.values(data);
+                detailProdiChart = renderChart(detailProdiChart, 'detailProdiChart', {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Total Input',
+                            data: values,
+                            backgroundColor: colorPalette,
+                            borderColor: colorPalette,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { x: { beginAtZero: true } },
+                        plugins: {
+                            legend: { display: false },
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end',
+                                color: '#555',
+                                font: { weight: 'bold' }
+                            }
+                        }
+                    }
+                });
+            }
+
 
             // Event Listeners
             document.getElementById('filter-btn').addEventListener('click', fetchDataAndRenderCharts);
@@ -365,4 +397,3 @@
         });
     </script>
 @endsection
-
