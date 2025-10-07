@@ -147,20 +147,64 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-5 text-center">
-                                    <div class="flex items-center justify-center space-x-2">
-                                        <a href="{{ route('admin_equity.comdev.show', $session->id) }}" class="p-2 text-blue-600 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors" title="Lihat Detail">
-                                            <i class='bx bx-show text-lg'></i>
-                                        </a>
-                                        <a href="{{ route('admin_equity.comdev.edit', $session->id) }}" class="p-2 text-yellow-600 bg-yellow-100 rounded-lg hover:bg-yellow-200 transition-colors" title="Edit Sesi">
-                                            <i class='bx bxs-edit text-lg'></i>
-                                        </a>
-                                        <form method="POST" action="{{ route('admin_equity.comdev.destroy', $session->id) }}" x-ref="deleteForm{{$session->id}}" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" @click="confirmDelete({{ $session->id }})" class="p-2 text-red-600 bg-red-100 rounded-lg hover:bg-red-200 transition-colors" title="Hapus Sesi">
-                                               <i class='bx bxs-trash text-lg'></i>
-                                            </button>
-                                        </form>
+                                    <div x-data="{ open: false }" class="relative inline-block text-left">
+                                        <button @click="open = !open" x-ref="button"
+                                            class="inline-flex items-center justify-center p-2 bg-white border-2 border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                            <i class='bx bx-dots-horizontal-rounded text-lg'></i>
+                                        </button>
+                                        
+                                        <!-- Dropdown positioned outside card -->
+                                        <div x-show="open" @click.away="open = false"
+                                            x-transition:enter="transition ease-out duration-100"
+                                            x-transition:enter-start="transform opacity-0 scale-95"
+                                            x-transition:enter-end="transform opacity-100 scale-100"
+                                            x-transition:leave="transition ease-in duration-75"
+                                            x-transition:leave-start="transform opacity-100 scale-100"
+                                            x-transition:leave-end="transform opacity-0 scale-95"
+                                            class="fixed bg-white rounded-xl shadow-2xl ring-1 ring-black ring-opacity-5 overflow-hidden border-2 border-gray-100 w-56"
+                                            style="display: none; z-index: 9999;"
+                                            x-init="
+                                                $watch('open', value => {
+                                                    if (value) {
+                                                        $nextTick(() => {
+                                                            const rect = $refs.button.getBoundingClientRect();
+                                                            $el.style.top = (rect.bottom + window.scrollY + 8) + 'px';
+                                                            $el.style.left = (rect.right + window.scrollX - $el.offsetWidth) + 'px';
+                                                        });
+                                                    }
+                                                })
+                                            ">
+                                            <div class="py-1" role="menu" aria-orientation="vertical">
+                                                <a href="{{ route('admin_equity.comdev.show', $session->id) }}"
+                                                    class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                                                    role="menuitem">
+                                                    <i class='bx bx-show mr-3 text-lg text-blue-500'></i>
+                                                    Lihat Pengajuan
+                                                </a>
+                                                <a href="{{ route('admin_equity.comdev.modules.index', $session->id) }}"
+                                                    class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
+                                                    role="menuitem">
+                                                    <i class='bx bx-cog mr-3 text-lg text-purple-500'></i>
+                                                    Manajemen Modul
+                                                </a>
+                                                <a href="{{ route('admin_equity.comdev.edit', $session->id) }}"
+                                                    class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-yellow-50 hover:text-yellow-700 transition-colors"
+                                                    role="menuitem">
+                                                    <i class='bx bxs-edit mr-3 text-lg text-yellow-500'></i>
+                                                    Edit Sesi
+                                                </a>
+                                                <form method="POST" action="{{ route('admin_equity.comdev.destroy', $session->id) }}" x-ref="deleteForm{{$session->id}}" class="block">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" @click="confirmDelete({{ $session->id }})"
+                                                        class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors text-left"
+                                                        role="menuitem">
+                                                        <i class='bx bxs-trash mr-3 text-lg'></i>
+                                                        Hapus Sesi
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -246,20 +290,65 @@
                             </p>
                         </div>
 
-                        <div class="flex items-center justify-end space-x-2">
-                            <a href="{{ route('admin_equity.comdev.show', $session->id) }}" class="flex-1 text-center px-4 py-2 bg-blue-50 border-2 border-blue-200 rounded-xl text-sm font-medium text-blue-700 hover:bg-blue-100 hover:border-blue-300 transition-all">
-                                Detail
-                            </a>
-                            <a href="{{ route('admin_equity.comdev.edit', $session->id) }}" class="flex-1 text-center px-4 py-2 bg-yellow-50 border-2 border-yellow-200 rounded-xl text-sm font-medium text-yellow-700 hover:bg-yellow-100 hover:border-yellow-300 transition-all">
-                                Edit
-                            </a>
-                            <form method="POST" action="{{ route('admin_equity.comdev.destroy', $session->id) }}" x-ref="deleteForm{{$session->id}}" class="flex-1">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" @click="confirmDelete({{ $session->id }})" class="w-full text-center px-4 py-2 bg-red-50 border-2 border-red-200 rounded-xl text-sm font-medium text-red-700 hover:bg-red-100 hover:border-red-300 transition-all">
-                                   Hapus
-                                </button>
-                            </form>
+                        <div x-data="{ open: false }" class="relative inline-block text-left w-full">
+                            <button @click="open = !open" x-ref="buttonMobile{{$session->id}}"
+                                class="w-full flex items-center justify-center px-4 py-2 bg-white border-2 border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                <i class='bx bx-dots-horizontal-rounded text-xl mr-2'></i>
+                                <span>Aksi</span>
+                            </button>
+                            
+                            <!-- Dropdown positioned outside card -->
+                            <div x-show="open" @click.away="open = false"
+                                x-transition:enter="transition ease-out duration-100"
+                                x-transition:enter-start="transform opacity-0 scale-95"
+                                x-transition:enter-end="transform opacity-100 scale-100"
+                                x-transition:leave="transition ease-in duration-75"
+                                x-transition:leave-start="transform opacity-100 scale-100"
+                                x-transition:leave-end="transform opacity-0 scale-95"
+                                class="fixed bg-white rounded-xl shadow-2xl ring-1 ring-black ring-opacity-5 overflow-hidden border-2 border-gray-100 w-56"
+                                style="display: none; z-index: 9999;"
+                                x-init="
+                                    $watch('open', value => {
+                                        if (value) {
+                                            $nextTick(() => {
+                                                const rect = $refs.buttonMobile{{$session->id}}.getBoundingClientRect();
+                                                $el.style.top = (rect.bottom + window.scrollY + 8) + 'px';
+                                                $el.style.left = (rect.left + window.scrollX) + 'px';
+                                            });
+                                        }
+                                    })
+                                ">
+                                <div class="py-1" role="menu" aria-orientation="vertical">
+                                    <a href="{{ route('admin_equity.comdev.show', $session->id) }}"
+                                        class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                                        role="menuitem">
+                                        <i class='bx bx-show mr-3 text-lg text-blue-500'></i>
+                                        Lihat Pengajuan
+                                    </a>
+                                    <a href="{{ route('admin_equity.comdev.modules.index', $session->id) }}"
+                                        class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
+                                        role="menuitem">
+                                        <i class='bx bx-cog mr-3 text-lg text-purple-500'></i>
+                                        Manajemen Modul
+                                    </a>
+                                    <a href="{{ route('admin_equity.comdev.edit', $session->id) }}"
+                                        class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-yellow-50 hover:text-yellow-700 transition-colors"
+                                        role="menuitem">
+                                        <i class='bx bxs-edit mr-3 text-lg text-yellow-500'></i>
+                                        Edit Sesi
+                                    </a>
+                                    <form method="POST" action="{{ route('admin_equity.comdev.destroy', $session->id) }}" x-ref="deleteForm{{$session->id}}" class="block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" @click="confirmDelete({{ $session->id }})"
+                                            class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors text-left"
+                                            role="menuitem">
+                                            <i class='bx bxs-trash mr-3 text-lg'></i>
+                                            Hapus Sesi
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @empty

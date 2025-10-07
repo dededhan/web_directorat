@@ -117,18 +117,6 @@
                         <i class='bx bxs-file-plus text-2xl flex-shrink-0'></i>
                         <span>Laporan</span>
                     </a>
-                    @if(request()->routeIs('admin_equity.comdev.show') || request()->routeIs('admin_equity.comdev.submissions.*') || request()->routeIs('admin_equity.comdev.modules.*'))
-                        @php
-                            $currentSesi = request()->route('comdev');
-                        @endphp
-                        @if($currentSesi)
-                            <a href="{{ route('admin_equity.comdev.modules.index', $currentSesi->id) }}" 
-                               class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin_equity.comdev.modules.index') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
-                                <i class='bx bx-cog text-2xl flex-shrink-0'></i>
-                                <span>Manajemen Modul</span>
-                            </a>
-                        @endif
-                    @endif
                 </div>
 
                 <!-- 2. APC -->
