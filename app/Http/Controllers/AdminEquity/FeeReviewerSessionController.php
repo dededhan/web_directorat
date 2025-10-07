@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\AdminEquity;
 
 use App\Http\Controllers\Controller;
+use App\Models\Fakultas;
 use App\Models\FeeReviewerSession;
 use App\Models\FeeReviewerReport;
 use Illuminate\Http\Request;
@@ -38,8 +39,9 @@ class FeeReviewerSessionController extends Controller
     public function show(Request $request, $id)
     {
         $session = FeeReviewerSession::findOrFail($id);
+        $fakultas = Fakultas::orderBy('name')->get();
 
-        $query = FeeReviewerReport::with('user')
+        $query = FeeReviewerReport::with('user.profile.prodi.fakultas')
             ->where('fee_reviewer_session_id', $id);
 
         if ($request->filled('search')) {
@@ -57,9 +59,26 @@ class FeeReviewerSessionController extends Controller
             $query->where('status', $request->input('status'));
         }
 
+        if ($request->filled('prodi_id')) {
+            $query->whereHas('user.profile', function ($profileQuery) use ($request) {
+                $profileQuery->where('prodi_id', $request->prodi_id);
+            });
+        }
+        elseif ($request->filled('fakultas_id')) {
+            $query->whereHas('user.profile.prodi', function ($prodiQuery) use ($request) {
+                $prodiQuery->where('fakultas_id', $request->fakultas_id);
+            });
+        }
+
+
         $reports = $query->latest()->paginate(10)->withQueryString();
 
-        return view('admin_equity.fee_reviewer.show', compact('session', 'reports'));
+        return view('admin_equity.fee_reviewer.show', [
+            'session' => $session,
+            'reports' => $reports,
+            'fakultas' => $fakultas,
+            'request' => $request->all(),
+        ]);
     }
 
     public function edit($id)

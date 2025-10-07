@@ -1,5 +1,9 @@
 @extends('admin_equity.index')
 
+@php
+    $statuses = \App\Enums\ComdevStatusEnum::cases();
+@endphp
+
 @section('content')
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -32,6 +36,77 @@
                 </div>
             </header>
 
+            {{-- Filter Section --}}
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-8">
+                <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-4">
+                    <h2 class="text-lg font-bold text-white flex items-center">
+                        <i class='bx bx-filter-alt text-xl mr-3'></i>
+                        Filter & Pencarian
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <form action="{{ route('admin_equity.comdev.submissions.index', $comdev->id) }}" method="GET">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="lg:col-span-3">
+                                <label for="search" class="text-sm font-bold text-gray-700 block mb-2">Cari Judul /
+                                    Pengusul</label>
+                                <input type="text" name="search" id="search" placeholder="Masukkan kata kunci..."
+                                    value="{{ $request['search'] ?? '' }}"
+                                    class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-teal-500 focus:ring-teal-500 transition">
+                            </div>
+
+                            <div>
+                                <label for="status" class="text-sm font-bold text-gray-700 block mb-2">Status
+                                    Proposal</label>
+                                <select name="status" id="status"
+                                    class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-teal-500 focus:ring-teal-500 transition">
+                                    <option value="">-- Semua Status --</option>
+                                    @foreach ($statuses as $status)
+                                        <option value="{{ $status->value }}"
+                                            {{ ($request['status'] ?? '') == $status->value ? 'selected' : '' }}>
+                                            {{ str_replace('_', ' ', Str::title($status->value)) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="fakultas_id" class="text-sm font-bold text-gray-700 block mb-2">Fakultas</label>
+                                <select name="fakultas_id" id="fakultas_id"
+                                    class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-teal-500 focus:ring-teal-500 transition">
+                                    <option value="">-- Semua Fakultas --</option>
+                                    @foreach ($fakultas as $fak)
+                                        <option value="{{ $fak->id }}"
+                                            {{ ($request['fakultas_id'] ?? '') == $fak->id ? 'selected' : '' }}>
+                                            {{ $fak->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="prodi_id" class="text-sm font-bold text-gray-700 block mb-2">Program
+                                    Studi</label>
+                                <select name="prodi_id" id="prodi_id"
+                                    class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-teal-500 focus:ring-teal-500 transition disabled:bg-gray-100"
+                                    {{ !isset($request['fakultas_id']) || empty($request['fakultas_id']) ? 'disabled' : '' }}>
+                                    <option value="">-- Pilih Fakultas Dulu --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex justify-end gap-x-4">
+                            <a href="{{ route('admin_equity.comdev.submissions.index', $comdev->id) }}"
+                                class="px-6 py-3 border-2 border-gray-300 text-sm font-semibold rounded-xl text-gray-700 hover:bg-gray-50 transition">
+                                Reset Filter
+                            </a>
+                            <button type="submit"
+                                class="px-8 py-3 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition">
+                                Terapkan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
             {{-- Daftar Proposal --}}
             <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
                 <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 lg:px-8 py-5">
@@ -60,6 +135,9 @@
                                         Judul Proposal</th>
                                     <th scope="col"
                                         class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                                        Fakultas</th>
+                                    <th scope="col"
+                                        class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                                         Ketua Pengusul</th>
                                     <th scope="col"
                                         class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
@@ -84,17 +162,21 @@
                                             title="{{ $submission->judul }}">
                                             <p class="truncate">{{ $submission->judul }}</p>
                                         </td>
-                                        <td class="px-6 py-5 text-sm text-gray-600">{{ $submission->user->name }}</td>
+                                        <td class="px-6 py-5 text-sm text-gray-600">
+                                            {{ $submission->user->profile?->prodi?->fakultas?->name ?? 'N/A' }}
+                                        </td>
+                                        <td class="px-6 py-5 text-sm text-gray-600">
+                                            <p class="font-semibold">{{ $submission->user->name }}</p>
+                                            <p class="text-xs text-gray-500">{{ $submission->user->profile?->prodi?->name ?? '' }}</p>
+                                        </td>
                                         <td class="px-6 py-5 text-sm text-gray-600">
                                             {{ $submission->updated_at->isoFormat('D MMMM YYYY, HH:mm') }}</td>
                                         <td class="px-6 py-5 text-s text-center text-gray-600">
-                                            {{-- Cek apakah status submission ada --}}
                                             @if ($submission->status)
                                                 <span class="font-semibold">
                                                     {{ str_replace('_', ' ', Str::title($submission->status->value)) }}
                                                 </span>
                                             @else
-                                                {{-- Tampilkan strip jika karena suatu hal status tidak ada --}}
                                                 <span class="text-gray-400 italic">-</span>
                                             @endif
                                         </td>
@@ -107,15 +189,14 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center py-20 px-6">
+                                        <td colspan="7" class="text-center py-20 px-6">
                                             <div class="flex flex-col items-center">
                                                 <div
                                                     class="w-24 h-24 bg-gray-100 rounded-2xl flex items-center justify-center mb-6">
                                                     <i class='bx bx-data text-4xl text-gray-400'></i>
                                                 </div>
-                                                <h3 class="font-bold text-xl text-gray-800 mb-2">Belum Ada Proposal</h3>
-                                                <p class="text-gray-500">Saat ini belum ada proposal yang diajukan untuk
-                                                    sesi ini.</p>
+                                                <h3 class="font-bold text-xl text-gray-800 mb-2">Data Tidak Ditemukan</h3>
+                                                <p class="text-gray-500 max-w-md">Tidak ada proposal yang cocok dengan kriteria filter Anda. Silakan coba reset filter.</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -132,34 +213,20 @@
                             <div class="flex items-start justify-between mb-3">
                                 <h3 class="font-semibold text-gray-900 text-sm leading-snug flex-1 mr-3">
                                     {{ $submission->judul }}</h3>
-                                @if ($submission->status->value == 'diajukan')
+                                @if ($submission->status)
                                     <span
                                         class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
-                                        Diajukan
-                                    </span>
-                                @elseif($submission->status->value == 'sedang_direview')
-                                    {{-- Sesuaikan dengan value enum Anda --}}
-                                    <span
-                                        class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">
-                                        Review
-                                    </span>
-                                @elseif($submission->status->value == 'selesai')
-                                    {{-- Sesuaikan dengan value enum Anda --}}
-                                    <span
-                                        class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
-                                        Selesai
-                                    </span>
-                                @else
-                                    <span
-                                        class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">
-                                        {{-- Gunakan ->value di sini juga --}}
                                         {{ str_replace('_', ' ', Str::title($submission->status->value)) }}
                                     </span>
                                 @endif
                             </div>
                             <div class="space-y-2 text-xs text-gray-600 mb-4">
                                 <p class="flex items-center"><i
-                                        class='bx bxs-user-circle mr-2 text-gray-400'></i>{{ $submission->user->name }}</p>
+                                        class='bx bxs-user-circle mr-2 text-gray-400'></i>{{ $submission->user->name }}
+                                </p>
+                                <p class="flex items-center"><i
+                                        class='bx bxs-buildings mr-2 text-gray-400'></i>{{ $submission->user->profile?->prodi?->fakultas?->name ?? 'N/A' }}
+                                </p>
                                 <p class="flex items-center"><i
                                         class='bx bxs-calendar mr-2 text-gray-400'></i>{{ $submission->updated_at->isoFormat('D MMMM YYYY, HH:mm') }}
                                 </p>
@@ -171,13 +238,12 @@
                         </div>
                     @empty
                         <div class="text-center py-16 px-4">
-                            <div class="flex flex-col items-center">
-                                <div class="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mb-4">
-                                    <i class='bx bx-data text-3xl text-gray-400'></i>
+                             <div class="flex flex-col items-center">
+                                <div class="w-24 h-24 bg-gray-100 rounded-2xl flex items-center justify-center mb-6">
+                                    <i class='bx bx-data text-4xl text-gray-400'></i>
                                 </div>
-                                <h3 class="font-bold text-lg text-gray-800 mb-2">Belum Ada Proposal</h3>
-                                <p class="text-gray-500 text-sm text-center max-w-xs">Saat ini belum ada proposal yang
-                                    diajukan untuk sesi ini.</p>
+                                <h3 class="font-bold text-xl text-gray-800 mb-2">Data Tidak Ditemukan</h3>
+                                <p class="text-gray-500 max-w-md text-center">Tidak ada proposal yang cocok dengan kriteria filter Anda. Silakan coba reset filter.</p>
                             </div>
                         </div>
                     @endforelse
@@ -194,3 +260,50 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const fakultasSelect = document.getElementById('fakultas_id');
+    const prodiSelect = document.getElementById('prodi_id');
+
+    const selectedProdiId = '{{ $request['prodi_id'] ?? '' }}';
+
+    function fetchProdi(fakultasId, selectedId = null) {
+        if (!fakultasId) {
+            prodiSelect.innerHTML = '<option value="">-- Pilih Fakultas Terlebih Dahulu --</option>';
+            prodiSelect.disabled = true;
+            return;
+        }
+
+        fetch(`/api/prodi/${fakultasId}`)
+            .then(response => response.json())
+            .then(data => {
+                prodiSelect.innerHTML = '<option value="">Semua Prodi</option>';
+                data.forEach(prodi => {
+                    const option = new Option(prodi.name, prodi.id);
+                    if (selectedId && prodi.id == selectedId) {
+                        option.selected = true;
+                    }
+                    prodiSelect.add(option);
+                });
+                prodiSelect.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error fetching prodi:', error);
+                prodiSelect.innerHTML = '<option value="">Gagal memuat prodi</option>';
+                prodiSelect.disabled = true;
+            });
+    }
+
+    fakultasSelect.addEventListener('change', function () {
+        fetchProdi(this.value);
+    });
+
+    if (fakultasSelect.value) {
+        fetchProdi(fakultasSelect.value, selectedProdiId);
+    }
+});
+</script>
+@endpush
+

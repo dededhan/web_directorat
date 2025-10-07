@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\AdminEquity;
 
 use App\Http\Controllers\Controller;
+use App\Models\Fakultas;
 use App\Models\PresentingSession;
 use App\Models\PresentingReport;
 use Illuminate\Http\Request;
@@ -38,8 +39,9 @@ class PresentingSessionController extends Controller
     public function show(Request $request, $id)
     {
         $session = PresentingSession::findOrFail($id);
+        $fakultas = Fakultas::orderBy('name')->get();
 
-        $query = PresentingReport::with('user')
+        $query = PresentingReport::with('user.profile.prodi.fakultas')
             ->where('presenting_session_id', $id);
 
         if ($request->filled('search')) {
@@ -57,9 +59,25 @@ class PresentingSessionController extends Controller
             $query->where('status', $request->input('status'));
         }
 
+        if ($request->filled('prodi_id')) {
+            $query->whereHas('user.profile', function ($profileQuery) use ($request) {
+                $profileQuery->where('prodi_id', $request->prodi_id);
+            });
+        }
+        elseif ($request->filled('fakultas_id')) {
+            $query->whereHas('user.profile.prodi', function ($prodiQuery) use ($request) {
+                $prodiQuery->where('fakultas_id', $request->fakultas_id);
+            });
+        }
+
         $reports = $query->latest()->paginate(10)->withQueryString();
 
-        return view('admin_equity.presenting.show', compact('session', 'reports'));
+        return view('admin_equity.presenting.show', [
+            'session' => $session,
+            'reports' => $reports,
+            'fakultas' => $fakultas,
+            'request' => $request->all(),
+        ]);
     }
 
     public function edit($id)

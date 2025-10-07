@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\AdminEquity;
 
 use App\Http\Controllers\Controller;
+use App\Models\Fakultas;
 use App\Models\FeeEditorSession;
 use App\Models\FeeEditorReport;
 use Illuminate\Http\Request;
@@ -38,8 +39,9 @@ class FeeEditorSessionController extends Controller
     public function show(Request $request, $id)
     {
         $session = FeeEditorSession::findOrFail($id);
+        $fakultas = Fakultas::orderBy('name')->get();
 
-        $query = FeeEditorReport::with('user')
+        $query = FeeEditorReport::with('user.profile.prodi.fakultas')
             ->where('fee_editor_session_id', $id);
 
         if ($request->filled('search')) {
@@ -57,9 +59,25 @@ class FeeEditorSessionController extends Controller
             $query->where('status', $request->input('status'));
         }
 
+        if ($request->filled('prodi_id')) {
+            $query->whereHas('user.profile', function ($profileQuery) use ($request) {
+                $profileQuery->where('prodi_id', $request->prodi_id);
+            });
+        }
+        elseif ($request->filled('fakultas_id')) {
+            $query->whereHas('user.profile.prodi', function ($prodiQuery) use ($request) {
+                $prodiQuery->where('fakultas_id', $request->fakultas_id);
+            });
+        }
+
         $reports = $query->latest()->paginate(10)->withQueryString();
 
-        return view('admin_equity.fee_editor.show', compact('session', 'reports'));
+        return view('admin_equity.fee_editor.show', [
+            'session' => $session,
+            'reports' => $reports,
+            'fakultas' => $fakultas,
+            'request' => $request->all(),
+        ]);
     }
 
     public function edit($id)

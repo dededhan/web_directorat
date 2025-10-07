@@ -215,6 +215,13 @@ $statuses = ['diajukan', 'diterima', 'ditolak_awal', 'draft_laporan', 'menunggu_
                                     </div>
                                 </th>
                                 <th scope="col"
+                                    class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-2/12">
+                                    <div class="flex items-center space-x-1">
+                                        <i class='bx bx-building-house text-base text-gray-500'></i>
+                                        <span>Fakultas</span>
+                                    </div>
+                                </th>
+                                <th scope="col"
                                     class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-3/12">
                                     <div class="flex items-center space-x-1">
                                         <i class='bx bx-user text-base text-blue-500'></i>
@@ -222,7 +229,7 @@ $statuses = ['diajukan', 'diterima', 'ditolak_awal', 'draft_laporan', 'menunggu_
                                     </div>
                                 </th>
                                 <th scope="col"
-                                    class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-4/12">
+                                    class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-3/12">
                                     <div class="flex items-center space-x-1">
                                         <i class='bx bx-file-blank text-base text-purple-500'></i>
                                         <span>Judul Proposal</span>
@@ -236,7 +243,7 @@ $statuses = ['diajukan', 'diterima', 'ditolak_awal', 'draft_laporan', 'menunggu_
                                     </div>
                                 </th>
                                 <th scope="col"
-                                    class="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-2/12">
+                                    class="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-1/12">
                                     <div class="flex items-center justify-center space-x-1">
                                         <i class='bx bx-cog text-base text-teal-600'></i>
                                         <span>Aksi</span>
@@ -253,6 +260,11 @@ $statuses = ['diajukan', 'diterima', 'ditolak_awal', 'draft_laporan', 'menunggu_
                                         </div>
                                     </td>
                                     <td class="px-6 py-5">
+                                        <p class="text-sm text-gray-900 break-words">
+                                            {{ $submission->user->profile?->prodi?->fakultas?->name ?? 'N/A' }}
+                                        </p>
+                                    </td>
+                                    <td class="px-6 py-5">
                                         <div class="flex items-start space-x-3">
                                             <div class="flex-shrink-0">
                                                 <div class="w-10 h-10 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
@@ -264,7 +276,7 @@ $statuses = ['diajukan', 'diterima', 'ditolak_awal', 'draft_laporan', 'menunggu_
                                                     {{ $submission->user->name ?? 'N/A' }}
                                                 </p>
                                                 <p class="text-xs lg:text-sm text-gray-500 mt-1">
-                                                    {{ $submission->user->fakultas ?? 'Fakultas tidak diketahui' }}
+                                                    {{ $submission->user->profile?->prodi?->name ?? 'Prodi tidak diketahui' }}
                                                 </p>
                                             </div>
                                         </div>
@@ -300,7 +312,7 @@ $statuses = ['diajukan', 'diterima', 'ditolak_awal', 'draft_laporan', 'menunggu_
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center py-20">
+                                    <td colspan="6" class="text-center py-20">
                                         <div class="flex flex-col items-center">
                                             <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mb-6">
                                                 <i class='bx bx-search-alt text-4xl text-gray-400'></i>
@@ -337,7 +349,7 @@ $statuses = ['diajukan', 'diterima', 'ditolak_awal', 'draft_laporan', 'menunggu_
                                         {{ $submission->user->name ?? 'N/A' }}
                                     </h3>
                                     <p class="text-xs text-gray-500">
-                                        {{ $submission->user->fakultas ?? 'Fakultas tidak diketahui' }}
+                                        {{ $submission->user->profile?->prodi?->fakultas?->name ?? 'Fakultas tidak diketahui' }}
                                     </p>
                                 </div>
                             </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminEquity;
 use App\Http\Controllers\Controller;
 use App\Models\ComdevProposal;      // Model Sesi
 use App\Models\ComdevSubmission;   // Model Proposal Dosen
+use App\Models\Fakultas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\ComdevModule;
@@ -15,12 +16,46 @@ use Illuminate\Validation\Rule;
 class ComdevSubmissionAdminController extends Controller
 {
     // Menampilkan daftar proposal yang masuk untuk sesi tertentu
-    public function index(ComdevProposal $comdev)
+    public function index(Request $request, ComdevProposal $comdev)
     {
-        $submissions = ComdevSubmission::where('comdev_proposal_id', $comdev->id)
-            ->with('user') // Eager load user (dosen)
-            ->paginate(10);
-        return view('admin_equity.comdev.submissions.index', compact('comdev', 'submissions'));
+        $fakultas = Fakultas::orderBy('name')->get();
+        $query = ComdevSubmission::where('comdev_proposal_id', $comdev->id)
+            ->with('user.profile.prodi.fakultas');
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                  ->orWhereHas('user', function ($userQuery) use ($search) {
+                      $userQuery->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+        
+        if ($request->filled('prodi_id')) {
+            $query->whereHas('user.profile', function ($profileQuery) use ($request) {
+                $profileQuery->where('prodi_id', $request->prodi_id);
+            });
+        }
+        elseif ($request->filled('fakultas_id')) {
+            $query->whereHas('user.profile.prodi', function ($prodiQuery) use ($request) {
+                $prodiQuery->where('fakultas_id', $request->fakultas_id);
+            });
+        }
+
+
+        $submissions = $query->latest()->paginate(10)->withQueryString();
+
+        return view('admin_equity.comdev.submissions.index', [
+            'comdev' => $comdev,
+            'submissions' => $submissions,
+            'fakultas' => $fakultas,
+            'request' => $request->all(),
+        ]);
     }
 
     // Menampilkan detail satu proposal untuk di-manage (assign reviewer, dll)
