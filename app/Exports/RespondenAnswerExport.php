@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Illuminate\Support\Str;
 
 class RespondenAnswerExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
 {
@@ -25,7 +26,8 @@ class RespondenAnswerExport implements FromQuery, WithHeadings, WithMapping, Sho
 
     public function query()
     {
-        $query = RespondenAnswer::query()->latest();
+        //EFISIENSIIIIIIIIIIIIIIIIIIIII
+        $query = RespondenAnswer::query()->with('responden.user')->latest();
 
         $q = trim((string)($this->filters['q'] ?? ''));
         if ($q !== '') {
@@ -66,14 +68,13 @@ class RespondenAnswerExport implements FromQuery, WithHeadings, WithMapping, Sho
             $query->where('job_title', $this->filters['job_title']);
         }
 
-        // Date range
+        //i need more robust system for this
         $start = $this->filters['start_date'] ?? null;
         $end = $this->filters['end_date'] ?? null;
         if (!empty($start) && !empty($end)) {
             try {
                 $query->whereBetween('created_at', [\Carbon\Carbon::parse($start)->startOfDay(), \Carbon\Carbon::parse($end)->endOfDay()]);
             } catch (\Exception $e) {
-                // Ignore invalid date inputs
             }
         } elseif (!empty($start)) {
             try {
@@ -91,6 +92,7 @@ class RespondenAnswerExport implements FromQuery, WithHeadings, WithMapping, Sho
     public function headings(): array
     {
         return [
+            'Input Source',
             'Title',
             'First Name',
             'Last Name',
@@ -109,6 +111,34 @@ class RespondenAnswerExport implements FromQuery, WithHeadings, WithMapping, Sho
 
     public function map($row): array
     {
+        // send help bro
+        $displayText = 'Unknown (No responden relation)';
+        if ($row->responden) {
+            if ($row->responden->user) {
+                $user = $row->responden->user;
+                $role = $user->role;
+                $name = $user->name;
+
+                if ($role === 'admin_direktorat') {
+                    $displayText = 'Direktorat';
+                } elseif ($role === 'fakultas') {
+                    $displayText = 'Fakultas (' . strtoupper($name) . ')';
+                } elseif ($role === 'prodi') {
+                    if (Str::contains($name, '-')) {
+                        $prodiName = trim(Str::after($name, '-'));
+                        $fakultasName = trim(Str::before($name, '-'));
+                        $displayText = 'Prodi (' . strtoupper($fakultasName) . ' - ' . ucwords(strtolower($prodiName)) . ')';
+                    } else {
+                        $displayText = 'Prodi (' . ucwords(strtolower($name)) . ')';
+                    }
+                } else {
+                    $displayText = ucfirst($role) . ($name ? ' (' . $name . ')' : '');
+                }
+            } else {
+                $displayText = 'Unknown (User Missing)';
+            }
+        }
+
         $employeeJobTitles = [
             'ceo' => 'CEO/President/Managing Director',
             'coo' => 'COO/CFO/CTO/CIO/CMO',
@@ -152,6 +182,7 @@ class RespondenAnswerExport implements FromQuery, WithHeadings, WithMapping, Sho
         $categoryLabel = $row->category === 'employer' ? 'Employee' : ucfirst((string)$row->category);
 
         return [
+            $displayText,
             ucfirst((string)$row->title),
             ucfirst((string)$row->first_name),
             ucfirst((string)$row->last_name),
@@ -168,5 +199,3 @@ class RespondenAnswerExport implements FromQuery, WithHeadings, WithMapping, Sho
         ];
     }
 }
-
-
