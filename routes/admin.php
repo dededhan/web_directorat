@@ -34,6 +34,7 @@ use App\Http\Controllers\VideoinovasiController;
 use App\Http\Controllers\MitraKolaborasiController;
 use App\Http\Controllers\RisetUnjController;
 use App\Http\Controllers\RespondenAnswerGraphController; 
+use App\Http\Controllers\Dosen\DashboardController as DosenDashboardController;
 
 
 
@@ -501,9 +502,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
             ->middleware(['checked', 'role:dosen'])
             ->group(function () {
                 // Dashboard
-                Route::get('/dashboard', function () {
-                    return view('subdirektorat-inovasi.dosen.dashboard');
-                })->name('dashboard');
+                Route::get('/dashboard', [DosenDashboardController::class, 'index'])->name('dashboard');
 
                 // Tabel Katsinov
                 Route::get('/tablekatsinov', [KatsinovController::class, 'index'])->name('tablekatsinov');
