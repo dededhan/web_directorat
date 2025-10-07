@@ -33,15 +33,15 @@
                                 class="hover:text-teal-600 transition-colors duration-200">Home</a></li>
                         <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                         <li><a href="{{ route('subdirektorat-inovasi.dosen.fee_reviewer.list-sesi') }}"
-                                class="hover:text-teal-600 transition-colors duration-200">Fee Reviewer</a></li>
+                                class="hover:text-teal-600 transition-colors duration-200">Insentif Reviewer</a></li>
                         <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                         <li class="font-medium text-gray-800">Manajemen Laporan</li>
                     </ol>
                 </nav>
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                        <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Manajemen Laporan Fee Reviewer</h1>
-                        <p class="mt-2 text-gray-600 text-base">Semua laporan Fee Reviewer yang telah Anda
+                        <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Manajemen Laporan Insentif Reviewer</h1>
+                        <p class="mt-2 text-gray-600 text-base">Semua laporan Insentif Reviewer yang telah Anda
                             ajukan.</p>
                     </div>
                     <div class="flex-shrink-0">
@@ -329,7 +329,7 @@
                                     class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mb-6">
                                     <i class='bx bx-data text-4xl text-gray-400'></i>
                                 </div>
-                                <h3 class="font-bold text-xl text-gray-800 mb-2">Anda Belum Memiliki Laporan Fee Reviewer</h3>
+                                <h3 class="font-bold text-xl text-gray-800 mb-2">Anda Belum Memiliki Laporan Insentif Reviewer</h3>
                                 <p class="text-gray-500 mb-8 max-w-md">Mulailah dengan mengajukan laporan Article
                                     Processing Cost untuk publikasi jurnal internasional Anda.</p>
                                 <a href="{{ route('subdirektorat-inovasi.dosen.fee_reviewer.list-sesi') }}"

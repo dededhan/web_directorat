@@ -11,13 +11,13 @@
                     <li><a href="{{ route('admin_equity.dashboard') }}"
                             class="hover:text-teal-600 transition-colors duration-200">Dashboard</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
-                    <li class="font-medium text-gray-800">Fee Editor</li>
+                    <li class="font-medium text-gray-800">Insentif Editor</li>
                 </ol>
             </nav>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Manajemen Sesi Fee Editor</h1>
-                    <p class="mt-2 text-gray-600 text-base">Kelola semua sesi program Fee Editor yang tersedia.</p>
+                    <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Manajemen Sesi Insentif Editor</h1>
+                    <p class="mt-2 text-gray-600 text-base">Kelola semua sesi program Insentif Editor yang tersedia.</p>
                 </div>
                 <div class="flex-shrink-0">
                     <a href="{{ route('admin_equity.fee_editor.create') }}"
@@ -38,9 +38,9 @@
                     <div>
                         <h2 class="text-xl lg:text-2xl font-bold flex items-center">
                             <i class='bx bx-calendar-event mr-3 text-2xl'></i>
-                            Daftar Sesi Fee Editor
+                            Daftar Sesi Insentif Editor
                         </h2>
-                        <p class="mt-2 text-teal-100">Kelola dan monitor semua sesi program Fee Editor</p>
+                        <p class="mt-2 text-teal-100">Kelola dan monitor semua sesi program Insentif Editor</p>
                     </div>
                     <div class="flex-shrink-0">
                         <div class="bg-white bg-opacity-20 backdrop-blur-sm px-4 py-2.5 rounded-xl border-2 border-white border-opacity-30">
@@ -121,7 +121,7 @@
                                                     {{ $session->nama_sesi }}
                                                 </p>
                                                 <p class="text-xs lg:text-sm text-gray-500 mt-1">
-                                                    Sesi Program Fee Editor
+                                                    Sesi Program Insentif Editor
                                                 </p>
                                             </div>
                                         </div>
@@ -225,7 +225,7 @@
                                             <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mb-6">
                                                 <i class='bx bx-calendar-plus text-4xl text-gray-400'></i>
                                             </div>
-                                            <h3 class="font-bold text-xl text-gray-800 mb-2">Belum Ada Sesi Fee Editor</h3>
+                                            <h3 class="font-bold text-xl text-gray-800 mb-2">Belum Ada Sesi Insentif Editor</h3>
                                             <p class="text-gray-500 mb-8 max-w-md">Buat sesi baru untuk memulai program penlaporanan Article Processing Cost.</p>
                                             <a href="{{ route('admin_equity.fee_editor.create') }}"
                                                 class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
@@ -340,7 +340,7 @@
                             <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mb-6">
                                 <i class='bx bx-calendar-plus text-4xl text-gray-400'></i>
                             </div>
-                            <h3 class="font-bold text-xl text-gray-800 mb-2">Belum Ada Sesi Fee Editor</h3>
+                            <h3 class="font-bold text-xl text-gray-800 mb-2">Belum Ada Sesi Insentif Editor</h3>
                             <p class="text-gray-500 max-w-md">Buat sesi baru untuk memulai program penlaporanan Article Processing Cost.</p>
                         </div>
                     </div>

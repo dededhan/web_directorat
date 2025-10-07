@@ -11,12 +11,12 @@
                     <li><a href="{{ route('subdirektorat-inovasi.dosen.dashboard') }}"
                             class="hover:text-teal-600 transition-colors duration-200">Home</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
-                    <li class="font-medium text-gray-800">Pilih Sesi Presenting</li>
+                    <li class="font-medium text-gray-800">Pilih Sesi Bantuan Presentasi</li>
                 </ol>
             </nav>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Usulkan Laporan Presenting</h1>
+                    <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Usulkan Laporan Bantuan Presentasi</h1>
                     <p class="mt-2 text-gray-600 text-base">Pilih salah satu sesi yang tersedia untuk mengajukan laporan Anda.</p>
                 </div>
             </div>
@@ -96,7 +96,7 @@
                                 <i class='bx bx-folder-open text-4xl text-gray-400'></i>
                             </div>
                             <h3 class="font-bold text-xl text-gray-800 mb-2">Tidak Ada Sesi Tersedia</h3>
-                            <p class="text-gray-500 max-w-md">Saat ini belum ada sesi Presenting yang dibuka. Silakan periksa kembali nanti.</p>
+                            <p class="text-gray-500 max-w-md">Saat ini belum ada sesi Bantuan Presentasi yang dibuka. Silakan periksa kembali nanti.</p>
                         </div>
                     </div>
                 </div>

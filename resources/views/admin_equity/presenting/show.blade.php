@@ -30,7 +30,7 @@ $statuses = ['diajukan', 'verifikasi', 'disetujui', 'ditolak', 'revisi', 'verifi
                             class="hover:text-teal-600 transition-colors duration-200">Dashboard</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                     <li><a href="{{ route('admin_equity.presenting.index') }}"
-                            class="hover:text-teal-600 transition-colors duration-200">Manajemen Sesi Presenting</a></li>
+                            class="hover:text-teal-600 transition-colors duration-200">Manajemen Sesi Bantuan Presentasi</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                     <li class="font-medium text-gray-800">Detail Sesi</li>
                 </ol>
@@ -38,7 +38,7 @@ $statuses = ['diajukan', 'verifikasi', 'disetujui', 'ditolak', 'revisi', 'verifi
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">{{ $session->nama_sesi }}</h1>
-                    <p class="mt-2 text-gray-600 text-base">Kelola semua laporan Presenting dalam sesi ini.</p>
+                    <p class="mt-2 text-gray-600 text-base">Kelola semua laporan Bantuan Presentasi dalam sesi ini.</p>
                 </div>
                  <div class="flex items-center space-x-4 flex-shrink-0">
                     <a href="{{ route('admin_equity.presenting.index') }}" 

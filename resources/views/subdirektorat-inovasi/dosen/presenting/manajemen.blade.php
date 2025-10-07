@@ -33,15 +33,15 @@
                                 class="hover:text-teal-600 transition-colors duration-200">Home</a></li>
                         <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                         <li><a href="{{ route('subdirektorat-inovasi.dosen.presenting.list-sesi') }}"
-                                class="hover:text-teal-600 transition-colors duration-200">Presenting</a></li>
+                                class="hover:text-teal-600 transition-colors duration-200">Bantuan Presentasi</a></li>
                         <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                         <li class="font-medium text-gray-800">Manajemen Laporan</li>
                     </ol>
                 </nav>
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                        <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Manajemen Laporan Presenting</h1>
-                        <p class="mt-2 text-gray-600 text-base">Semua laporan Presenting yang telah Anda
+                        <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Manajemen Laporan Bantuan Presentasi</h1>
+                        <p class="mt-2 text-gray-600 text-base">Semua laporan Bantuan Presentasi yang telah Anda
                             ajukan.</p>
                     </div>
                     <div class="flex-shrink-0">
@@ -350,7 +350,7 @@
                                     class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mb-6">
                                     <i class='bx bx-data text-4xl text-gray-400'></i>
                                 </div>
-                                <h3 class="font-bold text-xl text-gray-800 mb-2">Anda Belum Memiliki Laporan Presenting</h3>
+                                <h3 class="font-bold text-xl text-gray-800 mb-2">Anda Belum Memiliki Laporan Bantuan Presentasi</h3>
                                 <p class="text-gray-500 mb-8 max-w-md">Mulailah dengan mengajukan laporan presenting untuk conference internasional Anda.</p>
                                 <a href="{{ route('subdirektorat-inovasi.dosen.presenting.list-sesi') }}"
                                     class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">

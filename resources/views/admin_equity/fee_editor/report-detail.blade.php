@@ -27,7 +27,7 @@ if (!function_exists('getStatusInfoAdmin')) {
                             class="hover:text-teal-600 transition-colors duration-200">Dashboard</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                     <li><a href="{{ route('admin_equity.fee_editor.index') }}"
-                            class="hover:text-teal-600 transition-colors duration-200">Manajemen Sesi Fee Editor</a></li>
+                            class="hover:text-teal-600 transition-colors duration-200">Manajemen Sesi Insentif Editor</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                     <li><a href="{{ route('admin_equity.fee_editor.show', $report->session->id) }}"
                             class="hover:text-teal-600 transition-colors duration-200">Detail Sesi</a></li>
@@ -88,9 +88,9 @@ if (!function_exists('getStatusInfoAdmin')) {
                     <div>
                         <h2 class="text-xl lg:text-2xl font-bold flex items-center">
                             <i class='bx bx-file-blank mr-3 text-2xl'></i>
-                            Detail Laporan Fee Editor
+                            Detail Laporan Insentif Editor
                         </h2>
-                        <p class="mt-2 text-teal-100">Informasi lengkap laporan fee editor</p>
+                        <p class="mt-2 text-teal-100">Informasi lengkap laporan Insentif Editor</p>
                     </div>
                     <div class="flex-shrink-0">
                         @php $statusInfo = getStatusInfoAdmin($report->status); @endphp

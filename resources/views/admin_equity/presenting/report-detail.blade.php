@@ -27,7 +27,7 @@ if (!function_exists('getStatusInfoAdmin')) {
                             class="hover:text-teal-600 transition-colors duration-200">Dashboard</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                     <li><a href="{{ route('admin_equity.presenting.index') }}"
-                            class="hover:text-teal-600 transition-colors duration-200">Manajemen Sesi Presenting</a></li>
+                            class="hover:text-teal-600 transition-colors duration-200">Manajemen Sesi Bantuan Presentasi</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                     <li><a href="{{ route('admin_equity.presenting.show', $report->session->id) }}"
                             class="hover:text-teal-600 transition-colors duration-200">Detail Sesi</a></li>
@@ -37,7 +37,7 @@ if (!function_exists('getStatusInfoAdmin')) {
             </nav>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Detail Laporan Presenting</h1>
+                    <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Detail Laporan Bantuan Presentasi</h1>
                     <p class="mt-2 text-gray-600 text-base">Verifikasi kelengkapan data dan dokumen laporan dari <strong class="text-gray-800">{{ $report->user->name }}</strong>.</p>
                 </div>
                 <div class="flex-shrink-0">
@@ -88,9 +88,9 @@ if (!function_exists('getStatusInfoAdmin')) {
                     <div>
                         <h2 class="text-xl lg:text-2xl font-bold flex items-center">
                             <i class='bx bx-slideshow mr-3 text-2xl'></i>
-                            Detail Laporan Presenting
+                            Detail Laporan Bantuan Presentasi
                         </h2>
-                        <p class="mt-2 text-teal-100">Informasi lengkap laporan presenting conference</p>
+                        <p class="mt-2 text-teal-100">Informasi lengkap laporan Bantuan Presentasi conference</p>
                     </div>
                     <div class="flex-shrink-0">
                         @php $statusInfo = getStatusInfoAdmin($report->status); @endphp

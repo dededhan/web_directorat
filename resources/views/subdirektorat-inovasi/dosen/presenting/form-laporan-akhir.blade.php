@@ -11,7 +11,7 @@
                             class="hover:text-teal-600 transition-colors duration-200">Home</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                     <li><a href="{{ route('subdirektorat-inovasi.dosen.presenting.manajemen') }}"
-                            class="hover:text-teal-600 transition-colors duration-200">Presenting</a></li>
+                            class="hover:text-teal-600 transition-colors duration-200">Bantuan Presentasi</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                     <li class="font-medium text-gray-800">Formulir Laporan Akhir</li>
                 </ol>

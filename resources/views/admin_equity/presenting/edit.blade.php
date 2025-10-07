@@ -10,14 +10,14 @@
                 <ol class="list-none p-0 inline-flex items-center space-x-2">
                     <li><a href="{{ route('admin_equity.dashboard') }}" class="hover:text-teal-600 transition-colors duration-200">Dashboard</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
-                    <li><a href="{{ route('admin_equity.presenting.index') }}" class="hover:text-teal-600 transition-colors duration-200">Manajemen Sesi Presenting</a></li>
+                    <li><a href="{{ route('admin_equity.presenting.index') }}" class="hover:text-teal-600 transition-colors duration-200">Manajemen Sesi Bantuan Presentasi</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                     <li class="font-medium text-gray-800" aria-current="page">Edit Sesi</li>
                 </ol>
             </nav>
             <div>
-                <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Edit Sesi Presenting</h1>
-                <p class="mt-2 text-gray-600 text-base">Lakukan perubahan pada detail sesi Presenting di bawah ini.</p>
+                <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Edit Sesi Bantuan Presentasi</h1>
+                <p class="mt-2 text-gray-600 text-base">Lakukan perubahan pada detail sesi Bantuan Presentasi di bawah ini.</p>
             </div>
         </header>
 

@@ -11,14 +11,14 @@
                             class="hover:text-teal-600 transition-colors duration-200">Home</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                     <li><a href="{{ route('subdirektorat-inovasi.dosen.presenting.list-sesi') }}"
-                            class="hover:text-teal-600 transition-colors duration-200">Presenting</a></li>
+                            class="hover:text-teal-600 transition-colors duration-200">Bantuan Presentasi</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                     <li class="font-medium text-gray-800">Formulir Pengajuan</li>
                 </ol>
             </nav>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Formulir Pengajuan Presenting</h1>
+                    <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Formulir Pengajuan Bantuan Presentasi</h1>
                     <p class="mt-2 text-gray-600 text-base">Anda mengajukan untuk sesi: <strong class="text-teal-700">{{ $session->nama_sesi }}</strong></p>
                 </div>
             </div>

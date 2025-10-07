@@ -10,14 +10,14 @@
                 <ol class="list-none p-0 inline-flex items-center space-x-2">
                     <li><a href="{{ route('admin_equity.dashboard') }}" class="hover:text-teal-600 transition-colors duration-200">Dashboard</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
-                    <li><a href="{{ route('admin_equity.presenting.index') }}" class="hover:text-teal-600 transition-colors duration-200">Manajemen Sesi Presenting</a></li>
+                    <li><a href="{{ route('admin_equity.presenting.index') }}" class="hover:text-teal-600 transition-colors duration-200">Manajemen Sesi Bantuan Presentasi</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
                     <li class="font-medium text-gray-800" aria-current="page">Buat Sesi Baru</li>
                 </ol>
             </nav>
             <div>
-                <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Buat Sesi Presenting Baru</h1>
-                <p class="mt-2 text-gray-600 text-base">Isi formulir di bawah ini untuk menambahkan sesi program Presenting baru.</p>
+                <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Buat Sesi Bantuan Presentasi Baru</h1>
+                <p class="mt-2 text-gray-600 text-base">Isi formulir di bawah ini untuk menambahkan sesi program Bantuan Presentasi baru.</p>
             </div>
         </header>
 
@@ -26,7 +26,7 @@
             <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 sm:px-8 py-5">
                 <h2 class="text-xl font-bold text-white flex items-center">
                     <i class='bx bxs-add-to-queue text-2xl mr-3'></i>
-                    Formulir Sesi Presenting Baru
+                    Formulir Sesi Bantuan Presentasi Baru
                 </h2>
             </div>
 
@@ -41,7 +41,7 @@
                                 <label for="nama_sesi" class="block text-sm font-medium text-gray-700 mb-2">Nama Sesi</label>
                                 <div class="relative">
                                     <i class='bx bx-file-blank absolute left-3 top-1/2 -translate-y-1/2 text-gray-400'></i>
-                                    <input type="text" name="nama_sesi" id="nama_sesi" class="pl-10 pr-4 py-3 w-full text-gray-800 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition" placeholder="Contoh: Presenting Gelombang 1 2025" value="{{ old('nama_sesi') }}" required>
+                                    <input type="text" name="nama_sesi" id="nama_sesi" class="pl-10 pr-4 py-3 w-full text-gray-800 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition" placeholder="Contoh: Bantuan Presentasi Gelombang 1 2025" value="{{ old('nama_sesi') }}" required>
                                 </div>
                                 @error('nama_sesi')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                             </div>

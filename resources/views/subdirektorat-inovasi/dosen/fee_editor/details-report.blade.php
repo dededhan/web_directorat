@@ -32,7 +32,7 @@ if (!function_exists('getStatusInfoDosen')) {
             <div class="flex items-center justify-between">
                 <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 flex items-center">
                     <i class='bx bx-file-blank text-teal-500 mr-3 text-3xl'></i>
-                    Detail Laporan Fee Editor
+                    Detail Laporan Insentif Editor
                 </h1>
                 <a href="{{ route('subdirektorat-inovasi.dosen.fee_editor.manajemen') }}" class="inline-flex items-center px-4 py-2 bg-white border-2 border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-all shadow-sm">
                     <i class='bx bx-arrow-back mr-2'></i>
