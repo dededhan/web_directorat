@@ -159,6 +159,7 @@
             </li>
 
             <li><a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="text-white hover:text-yellow-400 transition-colors duration-200">Ranking UNJ</a></li>
+            <li><a href="{{ route('Pemeringkatan.the_ir_initiatives') }}" class="text-white hover:text-yellow-400 transition-colors duration-200">THE IR</a></li>
             <li><a href="{{ route('documents.public.index') }}" class="text-white hover:text-yellow-400 transition-colors duration-200">Dokumen</a></li>
             <li><a href="https://sso.unj.ac.id/login" target="_blank" class="text-white hover:text-yellow-400 transition-colors duration-200">SSO</a></li>
             <li><a class="login text-white cursor-pointer hover:text-yellow-400 transition-colors duration-200" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
@@ -233,6 +234,7 @@
             </li>
             
             <li><a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Ranking UNJ</a></li>
+            <li><a href="{{ route('Pemeringkatan.the_ir_initiatives') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">THE IR</a></li>
             <li><a href="{{ route('documents.public.index') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Dokumen</a></li>
             
             <li><a href="https://sso.unj.ac.id/login" target="_blank" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">SSO</a></li>

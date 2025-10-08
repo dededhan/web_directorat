@@ -150,9 +150,9 @@
 </head>
 
 <body class="bg-gray-100">
-    <div class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="loginModal">
-        <div class="modal-dialog w-full max-w-4xl mx-auto">
-            <div class="modal-content bg-white rounded-3xl overflow-hidden shadow-2xl">
+    <div class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden" id="loginModal" style="z-index: 99999; position: fixed; top: 0; left: 0; right: 0; bottom: 0;">
+        <div class="modal-dialog w-full max-w-4xl mx-auto my-8">
+            <div class="modal-content bg-white rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
                 <div class="modal-container">
                     <div class="left-panel">
                         <img src="https://spm.unj.ac.id/wp-content/uploads/2024/08/cropped-Logo-UNJ-PTNBH-RGB_Logo_Motto_Transparan.png"
