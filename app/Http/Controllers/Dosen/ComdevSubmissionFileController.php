@@ -103,7 +103,13 @@ class ComdevSubmissionFileController extends Controller
         );
         
         // Update status proposal berdasarkan kelengkapan sub-bab wajib
-        $activeModuleStatus = $submission->activeModuleStatus;
+        // Cari modul yang sedang aktif (status proses, diajukan, atau menunggu_direview)
+        $activeModuleStatus = $submission->moduleStatuses()
+            ->whereIn('status', ['proses', 'diajukan', 'menunggu_direview'])
+            ->join('comdev_modules', 'comdev_submission_module_statuses.comdev_module_id', '=', 'comdev_modules.id')
+            ->orderBy('comdev_modules.urutan', 'asc')
+            ->select('comdev_submission_module_statuses.*')
+            ->first();
         
         file_put_contents(storage_path('logs/file_upload_debug.txt'), 
             date('Y-m-d H:i:s') . " - File uploaded for submission {$submission->id}\n", 
@@ -123,23 +129,31 @@ class ComdevSubmissionFileController extends Controller
             // Debug log ke file
             file_put_contents(storage_path('logs/file_upload_debug.txt'), 
                 "Module: {$activeModule->nama_modul}\n" .
+                "Module Status: {$activeModuleStatus->status}\n" .
                 "Required sub-chapters (wajib): {$requiredSubChaptersCount}\n" .
                 "Required IDs: " . json_encode($requiredSubChapterIds->toArray()) . "\n" .
                 "Uploaded files count: {$uploadedFilesCount}\n" .
-                "Current status: {$activeModuleStatus->status}\n", 
+                "Submission status: {$submission->status->value}\n", 
                 FILE_APPEND);
 
             if ($requiredSubChaptersCount > 0 && $requiredSubChaptersCount === $uploadedFilesCount) {
                 // Ubah status jadi MENUNGGU_DIREVIEW jika semua sub-bab wajib di modul aktif sudah terisi
-                $activeModuleStatus->update(['status' => ComdevStatusEnum::MENUNGGU_DIREVIEW->value]);
+                $activeModuleStatus->update(['status' => 'menunggu_direview']);
+                $submission->update(['status' => ComdevStatusEnum::MENUNGGU_DIREVIEW]);
                 file_put_contents(storage_path('logs/file_upload_debug.txt'), 
                     "✅ STATUS CHANGED TO MENUNGGU_DIREVIEW\n\n", 
                     FILE_APPEND);
             } else {
-                 // Jika belum lengkap, pastikan statusnya kembali ke DIAJUKAN (atau status proses lainnya)
-                 $activeModuleStatus->update(['status' => ComdevStatusEnum::DIAJUKAN->value]);
+                 // Jika belum lengkap, pastikan statusnya sesuai dengan tahap
+                 if ($activeModuleStatus->status == 'proses') {
+                     $activeModuleStatus->update(['status' => 'proses']);
+                     $submission->update(['status' => ComdevStatusEnum::PROSES_TAHAP_SELANJUTNYA]);
+                 } else {
+                     $activeModuleStatus->update(['status' => 'diajukan']);
+                     $submission->update(['status' => ComdevStatusEnum::DIAJUKAN]);
+                 }
                  file_put_contents(storage_path('logs/file_upload_debug.txt'), 
-                    "⏳ Status remains DIAJUKAN - not all required files uploaded yet\n\n", 
+                    "⏳ Status remains - not all required files uploaded yet\n\n", 
                     FILE_APPEND);
             }
         } else {
@@ -179,8 +193,9 @@ class ComdevSubmissionFileController extends Controller
         abort(403, 'AKSES DITOLAK');
     }
 
+    $submission = $file->submission;
+
     // Hapus file dari storage HANYA JIKA file_path ADA dan file-nya EKSIS
-    // Ini adalah perbaikan untuk mencegah error TypeError
     if ($file->file_path && Storage::disk('public')->exists($file->file_path)) {
         Storage::disk('public')->delete($file->file_path);
     }
@@ -188,7 +203,32 @@ class ComdevSubmissionFileController extends Controller
     // Hapus data dari database
     $file->delete();
 
-    // Menggunakan pesan yang lebih umum
+    // Cek ulang status setelah delete - apakah masih lengkap atau tidak
+    $activeModuleStatus = $submission->moduleStatuses()
+        ->whereIn('status', ['proses', 'diajukan', 'menunggu_direview'])
+        ->join('comdev_modules', 'comdev_submission_module_statuses.comdev_module_id', '=', 'comdev_modules.id')
+        ->orderBy('comdev_modules.urutan', 'asc')
+        ->select('comdev_submission_module_statuses.*')
+        ->first();
+
+    if ($activeModuleStatus) {
+        $activeModule = $activeModuleStatus->module;
+        $requiredSubChaptersCount = $activeModule->subChapters()->where('is_wajib', true)->count();
+        $requiredSubChapterIds = $activeModule->subChapters()->where('is_wajib', true)->pluck('id');
+        
+        $uploadedFilesCount = ComdevSubmissionFile::where('comdev_submission_id', $submission->id)
+            ->whereIn('comdev_sub_chapter_id', $requiredSubChapterIds)
+            ->count();
+
+        // Jika tidak lengkap lagi, kembalikan status ke proses/diajukan
+        if ($uploadedFilesCount < $requiredSubChaptersCount) {
+            if ($activeModuleStatus->status == 'menunggu_direview') {
+                $activeModuleStatus->update(['status' => 'proses']);
+                $submission->update(['status' => ComdevStatusEnum::PROSES_TAHAP_SELANJUTNYA]);
+            }
+        }
+    }
+
     return back()->with('success', 'Data berhasil dihapus.');
 }
 

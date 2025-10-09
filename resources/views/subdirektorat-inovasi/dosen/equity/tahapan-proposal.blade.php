@@ -93,6 +93,8 @@
     <div class="mt-4 p-3 rounded-lg flex items-start
         @if($statusInfo->status == 'lolos') bg-green-50 border border-green-200
         @elseif($statusInfo->status == 'tidaklolos') bg-red-50 border border-red-200
+        @elseif($statusInfo->status == 'menunggu_direview') bg-blue-50 border border-blue-200
+        @elseif($statusInfo->status == 'proses') bg-gray-50 border border-gray-200
         @else bg-yellow-50 border border-yellow-200 @endif
     ">
         <div class="flex-shrink-0 pt-0.5">
@@ -100,6 +102,10 @@
                 <i class='bx bxs-check-circle text-2xl text-green-500'></i>
             @elseif($statusInfo->status == 'tidaklolos')
                 <i class='bx bxs-x-circle text-2xl text-red-500'></i>
+            @elseif($statusInfo->status == 'menunggu_direview')
+                <i class='bx bxs-hourglass text-2xl text-blue-500'></i>
+            @elseif($statusInfo->status == 'proses')
+                <i class='bx bxs-cog text-2xl text-gray-500'></i>
             @else
                 <i class='bx bxs-info-circle text-2xl text-yellow-500'></i>
             @endif
@@ -108,13 +114,20 @@
             <p class="text-sm font-semibold 
                 @if($statusInfo->status == 'lolos') text-green-800
                 @elseif($statusInfo->status == 'tidaklolos') text-red-800
+                @elseif($statusInfo->status == 'menunggu_direview') text-blue-800
+                @elseif($statusInfo->status == 'proses') text-gray-800
                 @else text-yellow-800 @endif
             ">
                 Status Tahap: 
-                 @if($statusInfo->status == 'tidaklolos')
-        Tidak Lolos
-    @else{{ ucfirst($statusInfo->status) }}
-    @endif
+                @if($statusInfo->status == 'tidaklolos')
+                    Tidak Lolos
+                @elseif($statusInfo->status == 'menunggu_direview')
+                    Menunggu Direview
+                @elseif($statusInfo->status == 'proses')
+                    Sedang Proses
+                @else
+                    {{ ucfirst($statusInfo->status) }}
+                @endif
             </p>
             
            

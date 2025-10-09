@@ -148,7 +148,11 @@ class ComdevSubmissionAdminController extends Controller
                 ->orderBy('urutan')->first();
 
             if ($nextModule) {
-                // ... (buka modul selanjutnya)
+                // Buka modul selanjutnya dengan status 'proses'
+                $submission->moduleStatuses()->updateOrCreate(
+                    ['comdev_module_id' => $nextModule->id],
+                    ['status' => 'proses']
+                );
                 $submission->update(['status' => ComdevStatusEnum::PROSES_TAHAP_SELANJUTNYA]);
             } else {
                 // Final, semua modul lolos

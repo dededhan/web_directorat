@@ -175,11 +175,11 @@
                                                 })
                                             ">
                                             <div class="py-1" role="menu" aria-orientation="vertical">
-                                                <a href="{{ route('admin_equity.comdev.show', $session->id) }}"
+                                                <a href="{{ route('admin_equity.comdev.submissions.index', $session->id) }}"
                                                     class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
                                                     role="menuitem">
                                                     <i class='bx bx-show mr-3 text-lg text-blue-500'></i>
-                                                    Lihat Pengajuan
+                                                    Lihat Proposal Masuk
                                                 </a>
                                                 <a href="{{ route('admin_equity.comdev.modules.index', $session->id) }}"
                                                     class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
@@ -319,11 +319,11 @@
                                     })
                                 ">
                                 <div class="py-1" role="menu" aria-orientation="vertical">
-                                    <a href="{{ route('admin_equity.comdev.show', $session->id) }}"
+                                    <a href="{{ route('admin_equity.comdev.submissions.index', $session->id) }}"
                                         class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
                                         role="menuitem">
                                         <i class='bx bx-show mr-3 text-lg text-blue-500'></i>
-                                        Lihat Pengajuan
+                                        Lihat Proposal Masuk
                                     </a>
                                     <a href="{{ route('admin_equity.comdev.modules.index', $session->id) }}"
                                         class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
