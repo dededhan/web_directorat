@@ -166,6 +166,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
 
     Route::prefix('visiting-professors')->name('visiting-professors.')->group(function () {
             Route::get('/', [\App\Http\Controllers\AdminEquity\VisitingProfessorManagementController::class, 'index'])->name('index');
+            Route::get('/export', [\App\Http\Controllers\AdminEquity\VisitingProfessorManagementController::class, 'export'])->name('export');
             Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\VisitingProfessorManagementController::class, 'show'])->name('show');
             Route::patch('/{submission}/status', [\App\Http\Controllers\AdminEquity\VisitingProfessorManagementController::class, 'updateStatus'])->name('updateStatus');
         });
@@ -173,12 +174,14 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->grou
         // Lakukan hal yang sama untuk Joint Supervision dan Employer Meeting
     Route::prefix('joint-supervision')->name('joint-supervision.')->group(function () {
             Route::get('/', [\App\Http\Controllers\AdminEquity\JointSupervisionManagementController::class, 'index'])->name('index');
+            Route::get('/export', [\App\Http\Controllers\AdminEquity\JointSupervisionManagementController::class, 'export'])->name('export');
             Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\JointSupervisionManagementController::class, 'show'])->name('show');
             Route::patch('/{submission}/status', [\App\Http\Controllers\AdminEquity\JointSupervisionManagementController::class, 'updateStatus'])->name('updateStatus');
         });
         
     Route::prefix('employer-meetings')->name('employer-meetings.')->group(function () {
             Route::get('/', [\App\Http\Controllers\AdminEquity\EmployerMeetingManagementController::class, 'index'])->name('index');
+            Route::get('/export', [\App\Http\Controllers\AdminEquity\EmployerMeetingManagementController::class, 'export'])->name('export');
             Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\EmployerMeetingManagementController::class, 'show'])->name('show');
             Route::patch('/{submission}/status', [\App\Http\Controllers\AdminEquity\EmployerMeetingManagementController::class, 'updateStatus'])->name('updateStatus');
         });
@@ -193,8 +196,22 @@ Route::prefix('equity_fakultas')
 
         Route::get('/dashboard', [EquityFakultasController::class, 'index'])->name('dashboard');
 
+        // Visiting Professors Routes
+        Route::get('/visiting-professors/{visitingProfessor}/edit-draft', [\App\Http\Controllers\EquityFakultas\VisitingProfessorController::class, 'editDraft'])->name('visiting-professors.edit-draft');
+        Route::put('/visiting-professors/{visitingProfessor}/update-draft', [\App\Http\Controllers\EquityFakultas\VisitingProfessorController::class, 'updateDraft'])->name('visiting-professors.update-draft');
+        Route::post('/visiting-professors/{visitingProfessor}/confirm', [\App\Http\Controllers\EquityFakultas\VisitingProfessorController::class, 'confirm'])->name('visiting-professors.confirm');
         Route::resource('visiting-professors', \App\Http\Controllers\EquityFakultas\VisitingProfessorController::class);
+
+        // Joint Supervision Routes
+        Route::get('/joint-supervision/{jointSupervision}/edit-draft', [\App\Http\Controllers\EquityFakultas\JointSupervisionController::class, 'editDraft'])->name('joint-supervision.edit-draft');
+        Route::put('/joint-supervision/{jointSupervision}/update-draft', [\App\Http\Controllers\EquityFakultas\JointSupervisionController::class, 'updateDraft'])->name('joint-supervision.update-draft');
+        Route::post('/joint-supervision/{jointSupervision}/confirm', [\App\Http\Controllers\EquityFakultas\JointSupervisionController::class, 'confirm'])->name('joint-supervision.confirm');
         Route::resource('joint-supervision', \App\Http\Controllers\EquityFakultas\JointSupervisionController::class);
+
+        // Employer Meetings Routes
+        Route::get('/employer-meetings/{employerMeeting}/edit-draft', [\App\Http\Controllers\EquityFakultas\EmployerMeetingController::class, 'editDraft'])->name('employer-meetings.edit-draft');
+        Route::put('/employer-meetings/{employerMeeting}/update-draft', [\App\Http\Controllers\EquityFakultas\EmployerMeetingController::class, 'updateDraft'])->name('employer-meetings.update-draft');
+        Route::post('/employer-meetings/{employerMeeting}/confirm', [\App\Http\Controllers\EquityFakultas\EmployerMeetingController::class, 'confirm'])->name('employer-meetings.confirm');
         Route::resource('employer-meetings', \App\Http\Controllers\EquityFakultas\EmployerMeetingController::class);
 });
 

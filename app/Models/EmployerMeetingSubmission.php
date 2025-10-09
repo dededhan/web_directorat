@@ -14,9 +14,12 @@ class EmployerMeetingSubmission extends Model
         'nama_pengunggah',
         'proposal_path',
         'status',
+        'is_confirmed',
         'catatan_admin',
         'bukti_keuangan_path',
-        'nama_calon_responden', // Tambahan
+        'laporan_kegiatan_path',
+        'nama_calon_responden',
+        'nama_qs_path',
     ];
 
     public function user()

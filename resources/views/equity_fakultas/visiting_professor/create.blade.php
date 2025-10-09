@@ -36,13 +36,14 @@
 
             <div class="mb-6">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="proposal_file">
-                    Unggah Proposal (PDF)
+                    Unggah Proposal (PDF atau Excel)
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('proposal_file') border-red-500 @enderror" 
                        id="proposal_file" 
                        name="proposal_file"
                        type="file"
-                       accept=".pdf">
+                       accept=".pdf,.xlsx,.xls">
+                <p class="text-gray-600 text-xs mt-1">Format yang diterima: PDF, Excel (.xlsx, .xls)</p>
                 @error('proposal_file')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror

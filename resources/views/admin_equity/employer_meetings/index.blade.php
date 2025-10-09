@@ -14,7 +14,7 @@
                 </ol>
             </nav>
             <div>
-                <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Manajemen Proposal: Visiting Professors</h1>
+                <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Manajemen Proposal: Employer meetings</h1>
                 <p class="mt-2 text-gray-600 text-base">Kelola semua pengajuan proposal dari fakultas untuk program Visiting Professors.</p>
             </div>
         </header>
@@ -31,9 +31,15 @@
                             Daftar Pengajuan
                         </h2>
                     </div>
-                    <div class="bg-white bg-opacity-20 backdrop-blur-sm px-4 py-2.5 rounded-xl border-2 border-white border-opacity-30">
-                        <p class="text-xs font-bold uppercase tracking-wide text-teal-100">Total Pengajuan</p>
-                        <p class="text-lg font-bold">{{ $submissions->total() }} Proposal</p>
+                    <div class="flex items-center gap-3">
+                        <a href="{{ route('admin_equity.employer-meetings.export') }}" class="inline-flex items-center px-4 py-2.5 bg-white text-teal-600 font-semibold rounded-xl hover:bg-teal-50 transition-all shadow-lg">
+                            <i class='bx bx-download mr-2 text-lg'></i>
+                            Export Excel
+                        </a>
+                        <div class="bg-white bg-opacity-20 backdrop-blur-sm px-4 py-2.5 rounded-xl border-2 border-white border-opacity-30">
+                            <p class="text-xs font-bold uppercase tracking-wide text-teal-100">Total Pengajuan</p>
+                            <p class="text-lg font-bold">{{ $submissions->total() }} Proposal</p>
+                        </div>
                     </div>
                 </div>
             </div>

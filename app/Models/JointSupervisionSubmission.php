@@ -14,8 +14,10 @@ class JointSupervisionSubmission extends Model
         'nama_pengunggah',
         'proposal_path',
         'status',
+        'is_confirmed',
         'catatan_admin',
         'bukti_keuangan_path',
+        'laporan_kegiatan_path',
     ];
 
     /**

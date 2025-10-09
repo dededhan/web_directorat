@@ -49,29 +49,76 @@
                     </div>
                     <div>
                         <label class="text-sm font-medium text-gray-500">File Proposal</label>
-                        <a href="{{ Storage::url($submission->proposal_path) }}" target="_blank" class="flex items-center mt-1 text-teal-600 hover:text-teal-800 font-semibold">
-                            <i class='bx bxs-file-pdf text-xl mr-2'></i>
-                            Lihat Proposal.pdf
-                        </a>
+                        <div class="flex items-center gap-3 mt-1">
+                            <a href="{{ Storage::url($submission->proposal_path) }}" target="_blank" class="flex items-center text-teal-600 hover:text-teal-800 font-semibold">
+                                <i class='bx bxs-file-pdf text-xl mr-2'></i>
+                                Lihat File
+                            </a>
+                            <a href="{{ Storage::url($submission->proposal_path) }}" download class="inline-flex items-center px-3 py-1.5 bg-teal-500 hover:bg-teal-600 text-white text-sm font-medium rounded-lg transition-colors">
+                                <i class='bx bx-download mr-1'></i>
+                                Download
+                            </a>
+                        </div>
                     </div>
-                     @if($submission->status == 'selesai' && $submission->bukti_keuangan_path)
-                    <div class="border-t pt-5">
-                        <label class="text-sm font-medium text-gray-500">File Bukti Keuangan</label>
-                        <a href="{{ Storage::url($submission->bukti_keuangan_path) }}" target="_blank" class="flex items-center mt-1 text-teal-600 hover:text-teal-800 font-semibold">
-                            <i class='bx bxs-file-pdf text-xl mr-2'></i>
-                            Lihat Bukti_Keuangan.pdf
-                        </a>
-                    </div>
-                    @endif
-                    
-                    {{-- Bagian Khusus untuk Menampilkan Nama Calon Responden --}}
-                    @if(isset($submission->nama_calon_responden) && $submission->status == 'selesai')
-                    <div class="border-t pt-5">
-                        <label class="text-sm font-medium text-gray-500">Nama Calon Responden</label>
-                        <p class="text-gray-800 text-lg whitespace-pre-wrap bg-gray-50 p-3 rounded-md">{{ $submission->nama_calon_responden }}</p>
-                    </div>
-                    @endif
                 </div>
+
+                @if($submission->status == 'selesai' && ($submission->bukti_keuangan_path || $submission->laporan_kegiatan_path || $submission->nama_qs_path))
+                <div class="mt-8 pt-6 border-t-2 border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                        <i class='bx bx-file-blank mr-3 text-teal-500 text-2xl'></i>
+                        Laporan Proposal
+                    </h2>
+                    <div class="space-y-4">
+                        @if($submission->bukti_keuangan_path)
+                        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <label class="text-sm font-medium text-gray-500 block mb-3">File Bukti Keuangan</label>
+                            <div class="flex items-center justify-between">
+                                <a href="{{ Storage::url($submission->bukti_keuangan_path) }}" target="_blank" class="flex items-center text-teal-600 hover:text-teal-800 font-semibold">
+                                    <i class='bx bxs-file-pdf text-2xl mr-3'></i>
+                                    <span>Bukti_Keuangan.pdf</span>
+                                </a>
+                                <a href="{{ Storage::url($submission->bukti_keuangan_path) }}" download class="inline-flex items-center px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white text-sm font-medium rounded-lg transition-colors">
+                                    <i class='bx bx-download mr-2'></i>
+                                    Download
+                                </a>
+                            </div>
+                        </div>
+                        @endif
+
+                        @if($submission->laporan_kegiatan_path)
+                        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <label class="text-sm font-medium text-gray-500 block mb-3">File Laporan Kegiatan</label>
+                            <div class="flex items-center justify-between">
+                                <a href="{{ Storage::url($submission->laporan_kegiatan_path) }}" target="_blank" class="flex items-center text-teal-600 hover:text-teal-800 font-semibold">
+                                    <i class='bx bxs-file-pdf text-2xl mr-3'></i>
+                                    <span>Laporan_Kegiatan.pdf</span>
+                                </a>
+                                <a href="{{ Storage::url($submission->laporan_kegiatan_path) }}" download class="inline-flex items-center px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white text-sm font-medium rounded-lg transition-colors">
+                                    <i class='bx bx-download mr-2'></i>
+                                    Download
+                                </a>
+                            </div>
+                        </div>
+                        @endif
+
+                        @if($submission->nama_qs_path)
+                        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <label class="text-sm font-medium text-gray-500 block mb-3">File Data QS (Excel)</label>
+                            <div class="flex items-center justify-between">
+                                <a href="{{ Storage::url($submission->nama_qs_path) }}" target="_blank" class="flex items-center text-green-600 hover:text-green-800 font-semibold">
+                                    <i class='bx bx-spreadsheet text-2xl mr-3'></i>
+                                    <span>Data_QS.xlsx</span>
+                                </a>
+                                <a href="{{ Storage::url($submission->nama_qs_path) }}" download class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-medium rounded-lg transition-colors">
+                                    <i class='bx bx-download mr-2'></i>
+                                    Download
+                                </a>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+                @endif
             </div>
 
             {{-- Right Column: Actions --}}

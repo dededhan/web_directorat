@@ -38,11 +38,41 @@
             </div>
 
             <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="nama_calon_responden">
-                    Nama Calon Responden <span class="text-red-500">*</span>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="laporan_kegiatan_file">
+                    Unggah Laporan Kegiatan (PDF) <span class="text-red-500">*</span>
                 </label>
-                <textarea id="nama_calon_responden" name="nama_calon_responden" rows="4" class="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 @error('nama_calon_responden') border-red-500 @enderror" placeholder="Masukkan nama-nama calon responden, pisahkan dengan baris baru jika lebih dari satu." required>{{ old('nama_calon_responden') }}</textarea>
-                @error('nama_calon_responden')
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('laporan_kegiatan_file') border-red-500 @enderror" 
+                       id="laporan_kegiatan_file" 
+                       name="laporan_kegiatan_file"
+                       type="file"
+                       accept=".pdf"
+                       required>
+                @error('laporan_kegiatan_file')
+                    <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="nama_qs_file">
+                    Unggah Data QS (Excel) <span class="text-red-500">*</span>
+                </label>
+                <div class="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                    <p class="text-sm text-blue-800 mb-2">
+                        <i class='bx bx-info-circle'></i> Silakan unduh template Excel terlebih dahulu, isi data responden QS, kemudian upload file yang sudah diisi.
+                    </p>
+                    <a href="{{ asset('templates/template_respondens.xlsx') }}" class="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors duration-200" download>
+                        <i class='bx bx-download mr-2'></i>
+                        Download Template Excel
+                    </a>
+                </div>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('nama_qs_file') border-red-500 @enderror" 
+                       id="nama_qs_file" 
+                       name="nama_qs_file"
+                       type="file"
+                       accept=".xlsx,.xls"
+                       required>
+                <p class="text-gray-600 text-xs mt-1">Format yang diterima: Excel (.xlsx, .xls) untuk import/export data QS</p>
+                @error('nama_qs_file')
                     <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
                 @enderror
             </div>

@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use App\Models\Responden;
@@ -11,10 +12,8 @@ class RespondenSeeder extends Seeder
      */
     public function run(): void
     {
-        Responden::insert(
-
+        $respondentsData = [
             [
-                [
                     'title'               => 'mrs',
                     'fullname'            => 'fauziah maryani',
                     'jabatan'             => 'staf kemendikdasmen',
@@ -1418,8 +1417,13 @@ class RespondenSeeder extends Seeder
                     'fakultas'            => 'feb',
                     'category'            => 'academic',
                 ],
-            ]
+             ];
 
-        );
+        foreach ($respondentsData as $data) {
+            Responden::updateOrCreate(
+                ['email' => $data['email']], // Kolom unik untuk dicari
+                $data                       // Data lengkap untuk di-update atau dibuat
+            );
+        }
     }
 }

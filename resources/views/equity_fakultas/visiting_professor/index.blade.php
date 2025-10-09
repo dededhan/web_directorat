@@ -51,6 +51,7 @@
                                 class="relative inline-block px-3 py-1 font-semibold leading-tight
                                 @switch($submission->status)
                                     @case('diajukan') bg-blue-100 text-blue-900 @break
+                                    @case('menunggu diverifikasi') bg-purple-100 text-purple-900 @break
                                     @case('diverifikasi') bg-yellow-100 text-yellow-900 @break
                                     @case('disetujui') bg-green-100 text-green-900 @break
                                     @case('ditolak') bg-red-100 text-red-900 @break
@@ -61,12 +62,31 @@
                             </span>
                         </td>
                         <td class="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                             @if ($submission->status == 'disetujui')
+                             @if ($submission->status == 'diajukan' && !$submission->is_confirmed)
+                                 <div class="flex items-center justify-center gap-2">
+                                     <a href="{{ route('equity_fakultas.visiting-professors.edit-draft', $submission->id) }}" class="text-blue-600 hover:text-blue-900 font-semibold" title="Edit">
+                                         <i class='bx bx-edit text-xl'></i>
+                                     </a>
+                                     <form action="{{ route('equity_fakultas.visiting-professors.destroy', $submission->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus proposal ini?')">
+                                         @csrf
+                                         @method('DELETE')
+                                         <button type="submit" class="text-red-600 hover:text-red-900 font-semibold" title="Hapus">
+                                             <i class='bx bx-trash text-xl'></i>
+                                         </button>
+                                     </form>
+                                     <form action="{{ route('equity_fakultas.visiting-professors.confirm', $submission->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin mengirim proposal ini ke admin? Setelah dikonfirmasi, Anda tidak dapat mengedit atau menghapus lagi.')">
+                                         @csrf
+                                         <button type="submit" class="text-green-600 hover:text-green-900 font-semibold" title="Konfirmasi Kirim">
+                                             <i class='bx bx-check-circle text-xl'></i>
+                                         </button>
+                                     </form>
+                                 </div>
+                             @elseif ($submission->status == 'disetujui')
                                  <a href="{{ route('equity_fakultas.visiting-professors.edit', $submission->id) }}" class="text-teal-600 hover:text-teal-900 font-semibold">
                                      Lengkapi Data
                                  </a>
                              @else
-                                 <a href="#" class="text-indigo-600 hover:text-indigo-900">
+                                 <a href="{{ route('equity_fakultas.visiting-professors.show', $submission->id) }}" class="text-indigo-600 hover:text-indigo-900">
                                      Detail
                                  </a>
                              @endif

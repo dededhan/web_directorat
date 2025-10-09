@@ -44,4 +44,55 @@ class JointSupervisionManagementController extends Controller
 
         return redirect()->route('admin_equity.joint-supervision.index')->with('success', 'Status proposal berhasil diubah.');
     }
+
+    /**
+     * Export data ke Excel
+     */
+    public function export()
+    {
+        $submissions = JointSupervisionSubmission::with('user.profile.fakultas')->get();
+        
+        $fileName = 'joint_supervision_' . date('Y-m-d_His') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        ];
+
+        $callback = function() use ($submissions) {
+            $file = fopen('php://output', 'w');
+            
+            // Header CSV
+            fputcsv($file, [
+                'No',
+                'Fakultas',
+                'Nama Pengunggah',
+                'Tanggal Diajukan',
+                'Status',
+                'Catatan Admin',
+                'File Proposal',
+                'File Bukti Keuangan',
+                'File Laporan Kegiatan'
+            ]);
+
+            // Data
+            foreach ($submissions as $index => $submission) {
+                fputcsv($file, [
+                    $index + 1,
+                    $submission->user->profile->fakultas->name ?? '-',
+                    $submission->nama_pengunggah,
+                    $submission->created_at->format('d/m/Y H:i'),
+                    ucfirst($submission->status),
+                    $submission->catatan_admin ?? '-',
+                    $submission->proposal_path ? url('storage/' . $submission->proposal_path) : '-',
+                    $submission->bukti_keuangan_path ? url('storage/' . $submission->bukti_keuangan_path) : '-',
+                    $submission->laporan_kegiatan_path ? url('storage/' . $submission->laporan_kegiatan_path) : '-',
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
 }
