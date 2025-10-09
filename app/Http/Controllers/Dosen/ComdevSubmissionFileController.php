@@ -102,17 +102,21 @@ class ComdevSubmissionFileController extends Controller
             $dataToUpdate
         );
         
-        // ... (Logika status Anda setelah ini tetap sama, tidak perlu diubah) ...
+        // Update status proposal berdasarkan kelengkapan sub-bab wajib
         $activeModuleStatus = $submission->activeModuleStatus;
         if ($activeModuleStatus) {
             $activeModule = $activeModuleStatus->module;
-            $requiredSubChaptersCount = $activeModule->subChapters()->count();
+            
+            // Hitung hanya sub-bab yang wajib
+            $requiredSubChaptersCount = $activeModule->subChapters()->where('is_wajib', true)->count();
+            $requiredSubChapterIds = $activeModule->subChapters()->where('is_wajib', true)->pluck('id');
+            
             $uploadedFilesCount = ComdevSubmissionFile::where('comdev_submission_id', $submission->id)
-                ->whereIn('comdev_sub_chapter_id', $activeModule->subChapters()->pluck('id'))
+                ->whereIn('comdev_sub_chapter_id', $requiredSubChapterIds)
                 ->count();
 
             if ($requiredSubChaptersCount > 0 && $requiredSubChaptersCount === $uploadedFilesCount) {
-                // Ubah status jadi MENUNGGU_DIREVIEW jika semua sub-bab di modul aktif sudah terisi
+                // Ubah status jadi MENUNGGU_DIREVIEW jika semua sub-bab wajib di modul aktif sudah terisi
                 $activeModuleStatus->update(['status' => ComdevStatusEnum::MENUNGGU_DIREVIEW->value]);
             } else {
                  // Jika belum lengkap, pastikan statusnya kembali ke DIAJUKAN (atau status proses lainnya)

@@ -41,7 +41,11 @@
                             <li class="p-4 bg-gray-50 border border-gray-200 rounded-lg">
                                 <div class="flex justify-between items-center">
                                     <div>
-                                        <p class="font-semibold text-gray-800">{{ $subChapter->urutan }}. {{ $subChapter->nama_sub_bab }}</p>
+                                        <p class="font-semibold text-gray-800">{{ $subChapter->urutan }}. {{ $subChapter->nama_sub_bab }} 
+                                            @if($subChapter->is_wajib)
+                                                <span class="ml-2 inline-flex items-center px-2 py-0.5 bg-red-100 text-red-800 text-xs font-semibold rounded">Wajib</span>
+                                            @endif
+                                        </p>
                                         <p class="text-xs text-gray-500 mt-1">
                                             Periode: 
                                             {{ $subChapter->periode_awal ? \Carbon\Carbon::parse($subChapter->periode_awal)->isoFormat('D MMM YYYY, HH:mm') : 'N/A' }} - 
@@ -88,6 +92,10 @@
                                                 <input type="datetime-local" id="edit_sub_periode_akhir_{{ $subChapter->id }}" name="periode_akhir" value="{{ $subChapter->periode_akhir ? \Carbon\Carbon::parse($subChapter->periode_akhir)->format('Y-m-d\TH:i') : '' }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50">
                                             </div>
                                         </div>
+                                        <div class="flex items-center">
+                                            <input type="checkbox" id="edit_sub_is_wajib_{{ $subChapter->id }}" name="is_wajib" value="1" {{ $subChapter->is_wajib ? 'checked' : '' }} class="h-4 w-4 text-[#11A697] border-gray-300 rounded focus:ring-[#11A697]">
+                                            <label for="edit_sub_is_wajib_{{ $subChapter->id }}" class="ml-2 text-sm text-gray-700">Status Wajib</label>
+                                        </div>
                                         <div class="flex justify-end space-x-2 pt-2">
                                             <button type="button" @click="editingSubChapterId = null" class="px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition">Batal</button>
                                             <button type="submit" class="px-4 py-2 text-sm bg-[#11A697] text-white rounded-md hover:bg-[#0e8a7c] transition">Update</button>
@@ -132,6 +140,10 @@
                                         <label for="sub_periode_akhir_{{ $module->id }}" class="block text-sm font-medium text-gray-700 mb-1">Periode Akhir</label>
                                         <input type="datetime-local" id="sub_periode_akhir_{{ $module->id }}" name="periode_akhir" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50">
                                     </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="sub_is_wajib_{{ $module->id }}" name="is_wajib" value="1" class="h-4 w-4 text-[#11A697] border-gray-300 rounded focus:ring-[#11A697]">
+                                    <label for="sub_is_wajib_{{ $module->id }}" class="ml-2 text-sm text-gray-700">Status Wajib</label>
                                 </div>
                                 <div class="flex justify-end space-x-2 pt-2">
                                     <button type="button" @click="openSubChapterForm = null" class="px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition">Batal</button>

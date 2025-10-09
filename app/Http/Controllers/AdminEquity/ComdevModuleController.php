@@ -53,6 +53,8 @@ class ComdevModuleController extends Controller
                     ['urutan' => 1, 'nama_sub_bab' => 'Laporan Kemajuan Kegiatan'],
                     ['urutan' => 2, 'nama_sub_bab' => 'SPTB Penelitian 70%'],
                     ['urutan' => 3, 'nama_sub_bab' => 'Daftar Peserta'],
+                    ['urutan' => 4, 'nama_sub_bab' => ' Draft Luaran Media Massa'],
+                   
                 ]
             ],
             [
@@ -128,6 +130,7 @@ class ComdevModuleController extends Controller
             'urutan' => 'required|integer',
             'periode_awal' => 'nullable|date',
             'periode_akhir' => 'nullable|date|after_or_equal:periode_awal',
+            'is_wajib' => 'nullable|boolean',
         ]);
 
         $module->subChapters()->create($request->all());
@@ -143,6 +146,7 @@ class ComdevModuleController extends Controller
             'urutan' => 'required|integer',
             'periode_awal' => 'nullable|date',
             'periode_akhir' => 'nullable|date|after_or_equal:periode_awal',
+            'is_wajib' => 'nullable|boolean',
         ]);
 
         $subChapter->update($request->all());

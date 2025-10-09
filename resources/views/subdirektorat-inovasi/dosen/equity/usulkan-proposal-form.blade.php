@@ -28,7 +28,7 @@
 
             {{-- Error Notification --}}
             @if ($errors->any())
-                <div class="bg-red-50 border-l-4 border-red-500 rounded-lg p-4 mb-6 shadow-sm" role="alert">
+                <div class="bg-red-50 border-l-4 border-red-500 rounded-lg p-4 mb-6 shadow-sm" role="alert" id="errorNotification">
                     <div class="flex items-start">
                         <div class="flex-shrink-0">
                             <i class='bx bx-error-circle text-red-500 text-xl'></i>
@@ -46,9 +46,23 @@
                         </div>
                     </div>
                 </div>
+                <script>
+                    // Scroll ke error notification dan log ke console
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const errorDiv = document.getElementById('errorNotification');
+                        if (errorDiv) {
+                            errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            const errors = @json($errors->all());
+                            console.error('Form validation errors:', errors);
+                            
+                            // Tampilkan error sebagai alert untuk debug
+                            alert('ERROR VALIDASI:\n\n' + errors.join('\n\n'));
+                        }
+                    });
+                </script>
             @endif
 
-            <form method="POST"
+            <form method="POST" id="formIdentitas"
                 action="{{ route('subdirektorat-inovasi.dosen.equity.proposal.storeIdentitas', $sesi->id) }}"
                 class="space-y-8">
                 @csrf
@@ -83,12 +97,12 @@
                             <div class="lg:col-span-1">
                                 <label for="ketua_nip" class="block text-sm font-semibold text-gray-700 mb-2">
                                     <i class='bx bx-id-card mr-1 text-green-500'></i>
-                                    NIP <span class="text-red-500">*</span>
+                                    NIP / NIDN / NIDK / NUPTK
                                 </label>
                                 <input id="ketua_nip" name="ketua[nik_nim_nip]"
                                     value="{{ old('ketua.nik_nim_nip', $currentUser->profile?->identifier_number ?? '') }}"
                                     class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 @error('ketua.nik_nim_nip') border-red-500 focus:border-red-500 focus:ring-red-500 @enderror"
-                                    placeholder="Masukkan NIP Anda" type="text">
+                                    placeholder="Masukkan NIP Anda (Opsional)" type="text">
                                 @error('ketua.nik_nim_nip')
                                     <p class="text-red-500 text-xs mt-2 flex items-center"><i
                                             class='bx bx-error-circle mr-1'></i>{{ $message }}</p>
@@ -112,60 +126,72 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:col-span-2">
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2"><i
-                                            class='bx bx-location-plus mr-1 text-orange-500'></i> Provinsi</label>
+                                            class='bx bx-location-plus mr-1 text-orange-500'></i> Provinsi <span class="text-red-500">*</span></label>
                                     <input type="hidden" name="ketua[provinsi]" :value="ketua.provinsiName">
                                     <select x-model="ketua.provinsiId"
                                         @change="handleProvinsiChange(ketua, $event.target.value)"
-                                        class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                                        class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 @error('ketua.provinsi') border-red-500 focus:border-red-500 focus:ring-red-500 @enderror">
                                         <option value="">Pilih Provinsi</option>
                                         <template x-for="prov in provinces" :key="prov.id">
                                             <option :value="prov.id" x-text="prov.name"></option>
                                         </template>
                                     </select>
+                                    @error('ketua.provinsi')
+                                        <p class="text-red-500 text-xs mt-2 flex items-center"><i class='bx bx-error-circle mr-1'></i>{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2"><i
-                                            class='bx bx-buildings mr-1 text-blue-500'></i> Kota/Kabupaten</label>
+                                            class='bx bx-buildings mr-1 text-blue-500'></i> Kota/Kabupaten <span class="text-red-500">*</span></label>
                                     <input type="hidden" name="ketua[kota_kabupaten]" :value="ketua.kotaName">
                                     <select x-model="ketua.kotaId" @change="handleKotaChange(ketua, $event.target.value)"
                                         :disabled="!ketua.provinsiId || ketua.loadingKota"
-                                        class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                                        class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 @error('ketua.kota_kabupaten') border-red-500 focus:border-red-500 focus:ring-red-500 @enderror">
                                         <option x-text="ketua.loadingKota ? 'Memuat...' : 'Pilih Kota/Kabupaten'"
                                             value=""></option>
                                         <template x-for="kota in ketua.listKota" :key="kota.id">
                                             <option :value="kota.id" x-text="kota.name"></option>
                                         </template>
                                     </select>
+                                    @error('ketua.kota_kabupaten')
+                                        <p class="text-red-500 text-xs mt-2 flex items-center"><i class='bx bx-error-circle mr-1'></i>{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2"><i
-                                            class='bx bx-navigation mr-1 text-indigo-500'></i> Kecamatan</label>
+                                            class='bx bx-navigation mr-1 text-indigo-500'></i> Kecamatan <span class="text-red-500">*</span></label>
                                     <input type="hidden" name="ketua[kecamatan]" :value="ketua.kecamatanName">
                                     <select x-model="ketua.kecamatanId"
                                         @change="handleKecamatanChange(ketua, $event.target.value)"
                                         :disabled="!ketua.kotaId || ketua.loadingKecamatan"
-                                        class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                                        class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 @error('ketua.kecamatan') border-red-500 focus:border-red-500 focus:ring-red-500 @enderror">
                                         <option x-text="ketua.loadingKecamatan ? 'Memuat...' : 'Pilih Kecamatan'"
                                             value=""></option>
                                         <template x-for="kec in ketua.listKecamatan" :key="kec.id">
                                             <option :value="kec.id" x-text="kec.name"></option>
                                         </template>
                                     </select>
+                                    @error('ketua.kecamatan')
+                                        <p class="text-red-500 text-xs mt-2 flex items-center"><i class='bx bx-error-circle mr-1'></i>{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2"><i
-                                            class='bx bx-home mr-1 text-pink-500'></i> Kelurahan</label>
+                                            class='bx bx-home mr-1 text-pink-500'></i> Kelurahan <span class="text-red-500">*</span></label>
                                     <input type="hidden" name="ketua[kelurahan]" :value="ketua.kelurahanName">
                                     <select x-model="ketua.kelurahanId"
                                         @change="ketua.kelurahanName = $event.target.options[$event.target.selectedIndex].text"
                                         :disabled="!ketua.kecamatanId || ketua.loadingKelurahan"
-                                        class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                                        class="w-full bg-white border-2 border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 @error('ketua.kelurahan') border-red-500 focus:border-red-500 focus:ring-red-500 @enderror">
                                         <option x-text="ketua.loadingKelurahan ? 'Memuat...' : 'Pilih Kelurahan'"
                                             value=""></option>
                                         <template x-for="kel in ketua.listKelurahan" :key="kel.id">
                                             <option :value="kel.id" x-text="kel.name"></option>
                                         </template>
                                     </select>
+                                    @error('ketua.kelurahan')
+                                        <p class="text-red-500 text-xs mt-2 flex items-center"><i class='bx bx-error-circle mr-1'></i>{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -494,6 +520,48 @@
                     }
                 }
             }
+        </script>
+        
+        <script>
+            // Debug form submission dengan localStorage (persisten)
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('formIdentitas');
+                
+                // Tampilkan data submit terakhir jika ada
+                const lastSubmit = localStorage.getItem('lastFormSubmit');
+                if (lastSubmit) {
+                    console.warn('=== DATA SUBMIT TERAKHIR ===');
+                    console.log(JSON.parse(lastSubmit));
+                    console.warn('=== AKHIR DATA ===');
+                }
+                
+                form.addEventListener('submit', function(e) {
+                    // Log semua input yang akan dikirim
+                    const formData = new FormData(form);
+                    const data = {};
+                    for (let [key, value] of formData.entries()) {
+                        if (data[key]) {
+                            if (Array.isArray(data[key])) {
+                                data[key].push(value);
+                            } else {
+                                data[key] = [data[key], value];
+                            }
+                        } else {
+                            data[key] = value;
+                        }
+                    }
+                    
+                    // Simpan ke localStorage
+                    localStorage.setItem('lastFormSubmit', JSON.stringify(data));
+                    console.log('Form akan di-submit dengan data:', data);
+                });
+                
+                // Check for HTML5 validation errors
+                form.addEventListener('invalid', function(e) {
+                    console.error('❌ Field tidak valid:', e.target.name, '- Error:', e.target.validationMessage);
+                    alert('Field tidak valid: ' + e.target.name + '\nError: ' + e.target.validationMessage);
+                }, true);
+            });
         </script>
     @endpush
 @endsection

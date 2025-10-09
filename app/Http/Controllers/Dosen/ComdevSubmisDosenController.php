@@ -26,9 +26,16 @@ class ComdevSubmisDosenController extends Controller
         $minAnggota = $sesi->min_anggota > 1 ? $sesi->min_anggota - 1 : 0;
         $maxAnggota = $sesi->max_anggota > 1 ? $sesi->max_anggota - 1 : 0;
 
-        $request->validate([
+        // Debug: Log all request data
+        file_put_contents(storage_path('logs/form_debug.txt'), date('Y-m-d H:i:s') . " - Form submitted\n" . json_encode([
+            'all_data' => $request->all(),
+            'min_anggota' => $minAnggota,
+            'max_anggota' => $maxAnggota,
+        ], JSON_PRETTY_PRINT) . "\n\n", FILE_APPEND);
+
+        $validator = \Validator::make($request->all(), [
             'ketua.nama_lengkap'    => 'required|string|max:255',
-            'ketua.nik_nim_nip'     => 'required|string|max:50',
+            'ketua.nik_nim_nip'     => 'nullable|string|max:50',
             'ketua.alamat_jalan'    => 'required|string|max:255',
             'ketua.provinsi'        => 'required|string',
             'ketua.kota_kabupaten'  => 'required|string',
@@ -36,38 +43,66 @@ class ComdevSubmisDosenController extends Controller
             'ketua.kelurahan'       => 'required|string',
             'ketua.kode_pos'        => 'nullable|string|max:10',
             'anggota'                   => ['nullable', 'array', "min:$minAnggota", "max:$maxAnggota"],
-            'anggota.*.nama_lengkap'    => 'required_with:anggota|string|max:255',
-            'anggota.*.nik_nim_nip'     => 'required_with:anggota|string|max:50',
-            
+            'anggota.*.nama_lengkap'    => 'nullable|string|max:255',
+            'anggota.*.nik_nim_nip'     => 'nullable|string|max:50',
+        ], [
+            'ketua.nama_lengkap.required' => 'Nama lengkap ketua wajib diisi',
+            'ketua.alamat_jalan.required' => 'Alamat jalan wajib diisi',
+            'ketua.provinsi.required' => 'Provinsi wajib dipilih',
+            'ketua.kota_kabupaten.required' => 'Kota/Kabupaten wajib dipilih',
+            'ketua.kecamatan.required' => 'Kecamatan wajib dipilih',
+            'ketua.kelurahan.required' => 'Kelurahan wajib dipilih',
+            'anggota.min' => "Minimal harus ada $minAnggota anggota tim",
+            'anggota.max' => "Maksimal hanya boleh $maxAnggota anggota tim",
         ]);
+        
+        if ($validator->fails()) {
+            file_put_contents(storage_path('logs/form_debug.txt'), date('Y-m-d H:i:s') . " - VALIDATION FAILED\n" . json_encode([
+                'errors' => $validator->errors()->all(),
+                'failed_rules' => $validator->failed(),
+            ], JSON_PRETTY_PRINT) . "\n\n", FILE_APPEND);
+            return back()->withErrors($validator)->withInput();
+        }
+        
+        file_put_contents(storage_path('logs/form_debug.txt'), date('Y-m-d H:i:s') . " - Validation passed!\n\n", FILE_APPEND);
         
 
         DB::beginTransaction();
         try {
+            file_put_contents(storage_path('logs/form_debug.txt'), date('Y-m-d H:i:s') . " - Creating submission...\n", FILE_APPEND);
+            
             $submission = ComdevSubmission::create([
                 'comdev_proposal_id' => $sesi->id,
                 'user_id' => Auth::id(),
                 'status' => 'draft',
             ]);
+            
+            file_put_contents(storage_path('logs/form_debug.txt'), date('Y-m-d H:i:s') . " - Submission created: {$submission->id}\n", FILE_APPEND);
 
             $ketuaData = $request->ketua;
             $ketuaData['peran'] = 'Ketua';
+            
+            file_put_contents(storage_path('logs/form_debug.txt'), date('Y-m-d H:i:s') . " - Creating ketua member\n", FILE_APPEND);
             $submission->members()->create($ketuaData);
 
             if ($request->filled('anggota')) {
-                foreach ($request->anggota as $dataAnggota) {
+                foreach ($request->anggota as $index => $dataAnggota) {
                     $dataAnggota['peran'] = 'Anggota';
+                    file_put_contents(storage_path('logs/form_debug.txt'), date('Y-m-d H:i:s') . " - Creating anggota $index\n", FILE_APPEND);
                     $submission->members()->create($dataAnggota);
                 }
             }
 
             DB::commit();
+            
+            file_put_contents(storage_path('logs/form_debug.txt'), date('Y-m-d H:i:s') . " - Transaction committed! Redirecting...\n", FILE_APPEND);
 
             return redirect()
                 ->route('subdirektorat-inovasi.dosen.equity.proposal.createPengajuan', $submission->id)
                 ->with('success', 'Identitas tim berhasil disimpan. Silakan lengkapi detail proposal.');
         } catch (\Exception $e) {
             DB::rollBack();
+            file_put_contents(storage_path('logs/form_debug.txt'), date('Y-m-d H:i:s') . " - ERROR: {$e->getMessage()}\n" . $e->getTraceAsString() . "\n\n", FILE_APPEND);
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
         }
     }
@@ -90,8 +125,9 @@ class ComdevSubmisDosenController extends Controller
             'tempat_pelaksanaan' => 'required|string|max:255',
             'abstrak' => 'required|string|min:10',
             'kata_kunci' => 'required|json', // Biarkan json, karena Tagify mengirim format ini
-            'sdgs' => 'required|json',
-            'mitra_nasional' => 'required|json',
+            'sdgs_fokus' => 'required|json',
+            'sdgs_pendukung' => 'required|json',
+            'mitra_nasional' => 'nullable|json',
             'mitra_internasional' => 'required|json',
             'nominal_usulan' => 'required|string|max:20',
            
@@ -138,8 +174,9 @@ class ComdevSubmisDosenController extends Controller
                 'mitra_nasional' => $decodeTagify($validated['mitra_nasional']),
                 'mitra_internasional' => $decodeTagify($validated['mitra_internasional']),
 
-                // Data sdgs sudah dalam format array yang benar dari frontend
-                'sdgs' => json_decode($validated['sdgs'], true),
+                // Data sdgs fokus dan pendukung sudah dalam format array yang benar dari frontend
+                'sdgs_fokus' => json_decode($validated['sdgs_fokus'], true),
+                'sdgs_pendukung' => json_decode($validated['sdgs_pendukung'], true),
 
                 
             ]);

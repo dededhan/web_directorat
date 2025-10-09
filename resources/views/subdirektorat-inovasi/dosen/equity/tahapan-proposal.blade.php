@@ -174,7 +174,12 @@
                                                         <tr class="bg-white border-b">
                                                             <td
                                                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                                                <div>{{ $subChapter->nama_sub_bab }}</div>
+                                                                <div>
+                                                                    {{ $subChapter->nama_sub_bab }}
+                                                                    @if($subChapter->is_wajib)
+                                                                        <span class="ml-2 inline-flex items-center px-2 py-0.5 bg-red-100 text-red-800 text-xs font-semibold rounded">Wajib</span>
+                                                                    @endif
+                                                                </div>
                                                                 <div class="text-xs text-gray-500 mt-1 font-normal">
                                                                     @if ($subChapter->periode_awal && $subChapter->periode_akhir)
                                                                         <i class='bx bx-calendar text-orange-500'></i>

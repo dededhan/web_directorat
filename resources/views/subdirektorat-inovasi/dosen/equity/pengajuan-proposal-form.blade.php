@@ -50,15 +50,24 @@
 
 @section('content')
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{
-        sdgOptions: ['SDG 1: Tanpa Kemiskinan', 'SDG 2: Tanpa Kelaparan', 'SDG 3: Kehidupan Sehat dan Sejahtera', 'SDG 4: Pendidikan Berkualitas', 'SDG 5: Kesetaraan Gender', 'SDG 6: Air Bersih dan Sanitasi Layak', 'SDG 7: Energi Bersih dan Terjangkau', 'SDG 8: Pekerjaan Layak dan Pertumbuhan Ekonomi', 'SDG 9: Industri, Inovasi, dan Infrastruktur', 'SDG 10: Berkurangnya Kesenjangan', 'SDG 11: Kota dan Pemukiman yang Berkelanjutan', 'SDG 12: Konsumsi dan Produksi yang Bertanggung Jawab', 'SDG 13: Penanganan Perubahan Iklim', 'SDG 14: Ekosistem Lautan', 'SDG 15: Ekosistem Daratan', 'SDG 16: Perdamaian, Keadilan, dan Kelembagaan yang Tangguh', 'SDG 17: Kemitraan untuk Mencapai Tujuan'],
-        selectedSdgs: {{ json_encode(old('sdgs', $submission->sdgs ?? [])) }},
-        sdgDropdownOpen: false,
-        get availableSdgs() { return this.sdgOptions.filter(opt => !this.selectedSdgs.includes(opt)); },
-        selectSdg(sdg) {
-            if (!this.selectedSdgs.includes(sdg)) this.selectedSdgs.push(sdg);
-            this.sdgDropdownOpen = false;
+        sdgFokusOptions: ['SDG 3: Kehidupan Sehat dan Sejahtera', 'SDG 4: Pendidikan Berkualitas', 'SDG 8: Pekerjaan Layak dan Pertumbuhan Ekonomi', 'SDG 10: Berkurangnya Kesenjangan', 'SDG 17: Kemitraan untuk Mencapai Tujuan'],
+        sdgPendukungOptions: ['SDG 1: Tanpa Kemiskinan', 'SDG 2: Tanpa Kelaparan', 'SDG 5: Kesetaraan Gender', 'SDG 6: Air Bersih dan Sanitasi Layak', 'SDG 7: Energi Bersih dan Terjangkau', 'SDG 9: Industri, Inovasi, dan Infrastruktur', 'SDG 11: Kota dan Pemukiman yang Berkelanjutan', 'SDG 12: Konsumsi dan Produksi yang Bertanggung Jawab', 'SDG 13: Penanganan Perubahan Iklim', 'SDG 14: Ekosistem Lautan', 'SDG 15: Ekosistem Daratan', 'SDG 16: Perdamaian, Keadilan, dan Kelembagaan yang Tangguh'],
+        selectedSdgsFokus: {{ json_encode(old('sdgs_fokus', $submission->sdgs_fokus ?? [])) }},
+        selectedSdgsPendukung: {{ json_encode(old('sdgs_pendukung', $submission->sdgs_pendukung ?? [])) }},
+        sdgFokusDropdownOpen: false,
+        sdgPendukungDropdownOpen: false,
+        get availableSdgsFokus() { return this.sdgFokusOptions.filter(opt => !this.selectedSdgsFokus.includes(opt)); },
+        get availableSdgsPendukung() { return this.sdgPendukungOptions.filter(opt => !this.selectedSdgsPendukung.includes(opt)); },
+        selectSdgFokus(sdg) {
+            if (!this.selectedSdgsFokus.includes(sdg)) this.selectedSdgsFokus.push(sdg);
+            this.sdgFokusDropdownOpen = false;
         },
-        removeSdg(index) { this.selectedSdgs.splice(index, 1); },
+        selectSdgPendukung(sdg) {
+            if (!this.selectedSdgsPendukung.includes(sdg)) this.selectedSdgsPendukung.push(sdg);
+            this.sdgPendukungDropdownOpen = false;
+        },
+        removeSdgFokus(index) { this.selectedSdgsFokus.splice(index, 1); },
+        removeSdgPendukung(index) { this.selectedSdgsPendukung.splice(index, 1); },
     
         maxFund: {{ $submission->sesi->dana_maksimal ?? 0 }},
         currentNominal: 0,
@@ -210,40 +219,75 @@
     @enderror
 </div>
 
-                        {{-- SDGs --}}
+                        {{-- SDGs Fokus --}}
                         <div class="md:col-span-2">
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                <i class='bx bx-globe-alt mr-1 text-pink-500'></i> Tujuan Pembangunan Berkelanjutan
-                                (SDGs)
+                                <i class='bx bx-globe-alt mr-1 text-pink-500'></i> Fokus SDG's
                             </label>
-                            <input type="hidden" name="sdgs" :value="JSON.stringify(selectedSdgs)">
+                            <input type="hidden" name="sdgs_fokus" :value="JSON.stringify(selectedSdgsFokus)">
                             <div class="relative">
-                                <div class="w-full bg-white border-2 border-gray-200 rounded-xl p-2 min-h-[50px] flex flex-wrap gap-2 items-center cursor-pointer transition-all duration-200 @error('sdgs') border-red-500 focus-within:border-red-500 focus-within:ring-red-500 @else focus-within:ring-2 focus-within:ring-teal-500 focus-within:border-teal-500 @enderror"
-                                    @click="sdgDropdownOpen = !sdgDropdownOpen">
-                                    <template x-for="(sdg, index) in selectedSdgs" :key="index">
+                                <div class="w-full bg-white border-2 border-gray-200 rounded-xl p-2 min-h-[50px] flex flex-wrap gap-2 items-center cursor-pointer transition-all duration-200 @error('sdgs_fokus') border-red-500 focus-within:border-red-500 focus-within:ring-red-500 @else focus-within:ring-2 focus-within:ring-teal-500 focus-within:border-teal-500 @enderror"
+                                    @click="sdgFokusDropdownOpen = !sdgFokusDropdownOpen">
+                                    <template x-for="(sdg, index) in selectedSdgsFokus" :key="index">
                                         <span
                                             class="flex items-center gap-1.5 bg-teal-100 text-teal-800 text-xs font-semibold px-2.5 py-1.5 rounded-md">
                                             <span x-text="sdg"></span>
-                                            <button type="button" @click.stop="removeSdg(index)"
+                                            <button type="button" @click.stop="removeSdgFokus(index)"
                                                 class="text-teal-600 hover:text-teal-800 font-bold">&times;</button>
                                         </span>
                                     </template>
-                                    <span x-show="selectedSdgs.length === 0" class="text-gray-400 text-sm px-2">Pilih
-                                        satu atau lebih SDGs...</span>
+                                    <span x-show="selectedSdgsFokus.length === 0" class="text-gray-400 text-sm px-2">Pilih SDG's Fokus (3, 4, 8, 10, 17)...</span>
                                 </div>
-                                <div x-show="sdgDropdownOpen" @click.away="sdgDropdownOpen = false" x-transition
+                                <div x-show="sdgFokusDropdownOpen" @click.away="sdgFokusDropdownOpen = false" x-transition
                                     class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-xl py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
                                     style="display: none;">
-                                    <template x-for="sdg in availableSdgs" :key="sdg">
-                                        <a href="#" @click.prevent="selectSdg(sdg)"
+                                    <template x-for="sdg in availableSdgsFokus" :key="sdg">
+                                        <a href="#" @click.prevent="selectSdgFokus(sdg)"
                                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                             x-text="sdg"></a>
                                     </template>
-                                    <div x-show="availableSdgs.length === 0" class="px-4 py-2 text-sm text-gray-500">
-                                        Semua SDGs telah dipilih.</div>
+                                    <div x-show="availableSdgsFokus.length === 0" class="px-4 py-2 text-sm text-gray-500">
+                                        Semua SDG's Fokus telah dipilih.</div>
                                 </div>
                             </div>
-                            @error('sdgs')
+                            @error('sdgs_fokus')
+                                <p class="text-red-500 text-xs mt-2 flex items-center"><i
+                                        class='bx bx-error-circle mr-1'></i>{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        {{-- SDGs Pendukung --}}
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class='bx bx-globe-alt mr-1 text-purple-500'></i> SDG's Pendukung
+                            </label>
+                            <input type="hidden" name="sdgs_pendukung" :value="JSON.stringify(selectedSdgsPendukung)">
+                            <div class="relative">
+                                <div class="w-full bg-white border-2 border-gray-200 rounded-xl p-2 min-h-[50px] flex flex-wrap gap-2 items-center cursor-pointer transition-all duration-200 @error('sdgs_pendukung') border-red-500 focus-within:border-red-500 focus-within:ring-red-500 @else focus-within:ring-2 focus-within:ring-teal-500 focus-within:border-teal-500 @enderror"
+                                    @click="sdgPendukungDropdownOpen = !sdgPendukungDropdownOpen">
+                                    <template x-for="(sdg, index) in selectedSdgsPendukung" :key="index">
+                                        <span
+                                            class="flex items-center gap-1.5 bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-1.5 rounded-md">
+                                            <span x-text="sdg"></span>
+                                            <button type="button" @click.stop="removeSdgPendukung(index)"
+                                                class="text-purple-600 hover:text-purple-800 font-bold">&times;</button>
+                                        </span>
+                                    </template>
+                                    <span x-show="selectedSdgsPendukung.length === 0" class="text-gray-400 text-sm px-2">Pilih SDG's Pendukung (1, 2, 5, 6, 7, 9, 11, 12, 13, 14, 15, 16)...</span>
+                                </div>
+                                <div x-show="sdgPendukungDropdownOpen" @click.away="sdgPendukungDropdownOpen = false" x-transition
+                                    class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-xl py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                                    style="display: none;">
+                                    <template x-for="sdg in availableSdgsPendukung" :key="sdg">
+                                        <a href="#" @click.prevent="selectSdgPendukung(sdg)"
+                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            x-text="sdg"></a>
+                                    </template>
+                                    <div x-show="availableSdgsPendukung.length === 0" class="px-4 py-2 text-sm text-gray-500">
+                                        Semua SDG's Pendukung telah dipilih.</div>
+                                </div>
+                            </div>
+                            @error('sdgs_pendukung')
                                 <p class="text-red-500 text-xs mt-2 flex items-center"><i
                                         class='bx bx-error-circle mr-1'></i>{{ $message }}</p>
                             @enderror
