@@ -3,9 +3,59 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\TheImpactSdg;
+use App\Models\TheImpactContent;
 
 class SdgInitiativeController extends Controller
 {
+    public function index()
+    {
+        $sdgs = TheImpactSdg::where('is_active', true)
+            ->orderBy('number')
+            ->get();
+
+        // Get top 3 featured SDGs with content
+        $featuredSdgs = TheImpactSdg::whereIn('number', [1, 2, 6])
+            ->with(['rootContents' => function($query) {
+                $query->where('is_active', true)->limit(1);
+            }])
+            ->get();
+
+        return view('Pemeringkatan.the_ir_initiatives', compact('sdgs', 'featuredSdgs'));
+    }
+
+    public function show(Request $request, $id)
+    {
+        $selectedYear = $request->get('year');
+        
+        $sdg = TheImpactSdg::where('number', $id)
+            ->where('is_active', true)
+            ->with(['rootContents' => function($query) use ($selectedYear) {
+                $query->where('is_active', true);
+                if ($selectedYear) {
+                    $query->where('year', $selectedYear);
+                }
+                $query->orderBy('order');
+            }, 'rootContents.children' => function($query) use ($selectedYear) {
+                $query->where('is_active', true);
+                if ($selectedYear) {
+                    $query->where('year', $selectedYear);
+                }
+                $query->orderBy('order');
+            }])
+            ->firstOrFail();
+
+        // Get available years from database
+        $years = TheImpactContent::where('sdg_id', $sdg->id)
+            ->whereNotNull('year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year')
+            ->toArray();
+
+        return view('Pemeringkatan.sdg_detail', compact('sdg', 'years', 'selectedYear'));
+    }
+
     private static function getSdgData()
     {
         return [
@@ -385,19 +435,5 @@ class SdgInitiativeController extends Controller
                 ]
             ]
         ];
-    }
-
-    public function show($id)
-    {
-        $sdgData = self::getSdgData();
-        
-        if (!isset($sdgData[$id])) {
-            abort(404);
-        }
-
-        $sdg = $sdgData[$id];
-        $years = [2025, 2024, 2023, 2022];
-
-        return view('Pemeringkatan.sdg_detail', compact('sdg', 'years'));
     }
 }

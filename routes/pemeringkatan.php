@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\SulitestLoginController;
 use App\Http\Controllers\SulitestController;
 use App\Http\Controllers\SulitestBankController;
 use App\Http\Controllers\SulitestExamController;
+use App\Http\Controllers\Admin\TheImpactCmsController;
 
 
 
@@ -17,6 +18,20 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
         Route::get('/dashboard', function () {
             return view('admin_pemeringkatan.dashboard');
         })->name('dashboard');
+
+        // THE Impact Rankings CMS Routes
+        Route::prefix('the-impact-cms')->name('the-impact-cms.')->group(function () {
+            Route::get('/', [TheImpactCmsController::class, 'dashboard'])->name('dashboard');
+            Route::post('/initialize', [TheImpactCmsController::class, 'initializeSdgs'])->name('initialize');
+            
+            Route::get('/{sdg}/editor', [TheImpactCmsController::class, 'editor'])->name('editor');
+            Route::get('/{sdg}/create', [TheImpactCmsController::class, 'create'])->name('content.create');
+            Route::post('/{sdg}/content', [TheImpactCmsController::class, 'storeContent'])->name('content.store');
+            
+            Route::get('/content/{content}/edit', [TheImpactCmsController::class, 'edit'])->name('content.edit');
+            Route::put('/content/{content}', [TheImpactCmsController::class, 'updateContent'])->name('content.update');
+            Route::delete('/content/{content}', [TheImpactCmsController::class, 'deleteContent'])->name('content.delete');
+        });
 
         Route::prefix('question-banks')->name('question_banks.')->group(function () {
             Route::get('/', [SulitestBankController::class, 'index'])->name('index');

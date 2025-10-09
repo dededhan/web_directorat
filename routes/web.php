@@ -186,7 +186,7 @@ Route::get('/ranking_unj', [RankingController::class, 'showAllRankings'])->name(
 Route::get('/ranking_unj/{slug}', [RankingController::class, 'show'])->name('ranking.show');
 
 // THE Impact Rankings Initiatives
-Route::view('/the-ir-initiatives', 'Pemeringkatan.the_ir_initiatives')->name('Pemeringkatan.the_ir_initiatives');
+Route::get('/the-ir-initiatives', [App\Http\Controllers\SdgInitiativeController::class, 'index'])->name('Pemeringkatan.the_ir_initiatives');
 Route::get('/the-ir-initiatives/sdg/{id}', [App\Http\Controllers\SdgInitiativeController::class, 'show'])
     ->where('id', '^(1[0-7]|[1-9])$')
     ->name('sdg.detail');

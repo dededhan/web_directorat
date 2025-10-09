@@ -96,38 +96,44 @@
                 <p class="text-cyan-500 text-lg mb-12">Explore our most impactful projects driving progress in the top three Sustainable Development Goals.</p>
 
                 <div class="space-y-8">
-                    <div class="flex flex-col md:flex-row gap-6 items-start">
-                        <div class="flex-shrink-0">
-                            <img src="{{ asset('images/sdgs/sdg-01.jpg') }}" alt="SDG 1 - No Poverty" class="w-48 h-48 object-cover">
+                    @foreach($featuredSdgs as $featured)
+                        @php
+                            $borderColors = [
+                                1 => 'border-red-200 bg-red-50',
+                                2 => 'border-yellow-200 bg-yellow-50',
+                                6 => 'border-cyan-200 bg-cyan-50'
+                            ];
+                            $textColors = [
+                                1 => 'text-red-600 hover:text-red-800',
+                                2 => 'text-yellow-700 hover:text-yellow-900',
+                                6 => 'text-cyan-600 hover:text-cyan-800'
+                            ];
+                            $rootContent = $featured->rootContents->first();
+                        @endphp
+                        <div class="flex flex-col md:flex-row gap-6 items-start">
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('images/sdgs/sdg-' . str_pad($featured->number, 2, '0', STR_PAD_LEFT) . '.jpg') }}" 
+                                     alt="SDG {{ $featured->number }} - {{ $featured->title }}" 
+                                     class="w-48 h-48 object-cover">
+                            </div>
+                            <div class="flex-1 border-2 {{ $borderColors[$featured->number] ?? 'border-gray-200 bg-gray-50' }} p-6">
+                                <h4 class="text-xl font-bold text-gray-800 mb-3">
+                                    {{ $rootContent ? $rootContent->title : $featured->title }}
+                                </h4>
+                                <p class="text-gray-700 mb-4">
+                                    @if($rootContent && $rootContent->content_type === 'text')
+                                        {{ Str::limit($rootContent->content, 300) }}
+                                    @else
+                                        {{ $featured->description ?? $featured->subtitle }}
+                                    @endif
+                                </p>
+                                <a href="{{ route('sdg.detail', $featured->number) }}" 
+                                   class="{{ $textColors[$featured->number] ?? 'text-gray-600 hover:text-gray-800' }} font-semibold transition-colors">
+                                    Read more
+                                </a>
+                            </div>
                         </div>
-                        <div class="flex-1 border-2 border-red-200 bg-red-50 p-6">
-                            <h4 class="text-xl font-bold text-gray-800 mb-3">Ensuring Education Access for Low-Income Students</h4>
-                            <p class="text-gray-700 mb-4">At Universitas Negeri Jakarta, we are committed to breaking the cycle of poverty by providing accessible education to students from disadvantaged backgrounds. Through targeted scholarships, inclusive admissions policies, and supportive academic programs, we enable these students to pursue higher education and secure better futures.</p>
-                            <a href="#" class="text-red-600 font-semibold hover:text-red-800 transition-colors">Read more</a>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col md:flex-row gap-6 items-start">
-                        <div class="flex-shrink-0">
-                            <img src="{{ asset('images/sdgs/sdg-02.jpg') }}" alt="SDG 2 - Zero Hunger" class="w-48 h-48 object-cover">
-                        </div>
-                        <div class="flex-1 border-2 border-yellow-200 bg-yellow-50 p-6">
-                            <h4 class="text-xl font-bold text-gray-800 mb-3">Providing Meals to Food-Insecure Communities Across the Country</h4>
-                            <p class="text-gray-700 mb-4">At Universitas Negeri Jakarta, we actively combat national hunger by partnering with local farmers for sustainable agriculture and ensuring food security for vulnerable communities. Through our initiatives, we provide thousands of meals annually to those in need across the country.</p>
-                            <a href="#" class="text-yellow-700 font-semibold hover:text-yellow-900 transition-colors">Read more</a>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col md:flex-row gap-6 items-start">
-                        <div class="flex-shrink-0">
-                            <img src="{{ asset('images/sdgs/sdg-06.jpg') }}" alt="SDG 6 - Clean Water and Sanitation" class="w-48 h-48 object-cover">
-                        </div>
-                        <div class="flex-1 border-2 border-cyan-200 bg-cyan-50 p-6">
-                            <h4 class="text-xl font-bold text-gray-800 mb-3">Providing Access to Clean Water and Sanitation for All</h4>
-                            <p class="text-gray-700 mb-4">At Universitas Negeri Jakarta, we are dedicated to improving water and sanitation access by implementing sustainable water management practices and educating communities about the importance of hygiene. Through these efforts, we help ensure that clean water and adequate sanitation are available to everyone on campus and in the surrounding areas.</p>
-                            <a href="#" class="text-cyan-600 font-semibold hover:text-cyan-800 transition-colors">Read more</a>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </section>
