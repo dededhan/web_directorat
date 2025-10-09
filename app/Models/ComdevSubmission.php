@@ -16,10 +16,12 @@ class ComdevSubmission extends Model
         'status' => ComdevStatusEnum::class,
         'kata_kunci' => 'array',
         'sdgs' => 'array',
+        'sdgs_fokus' => 'array',
+        'sdgs_pendukung' => 'array',
         'mitra_nasional' => 'array',
         'mitra_internasional' => 'array',
-        'luaran_wajib' => 'array',       // <-- Tambahkan ini
-    'luaran_opsional' => 'array',
+        'luaran_wajib' => 'array',
+        'luaran_opsional' => 'array',
     ];
 
     public function user()

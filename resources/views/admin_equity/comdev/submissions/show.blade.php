@@ -53,25 +53,127 @@
                             <h3 class="text-sm font-medium text-gray-500">Judul</h3>
                             <p class="mt-1 text-lg font-semibold text-gray-900">{{ $submission->judul }}</p>
                         </div>
-                        <div>
-                            <h3 class="text-sm font-medium text-gray-500">Ketua Tim Pengusul</h3>
-                            <p class="mt-1 text-md text-gray-800">{{ $submission->user->name }}</p>
+                        
+                        {{-- Ketua Tim --}}
+                        @php
+                            $ketua = $submission->members()->where('peran', 'Ketua')->first();
+                            $anggota = $submission->members()->where('peran', 'Anggota')->get();
+                        @endphp
+                        
+                        @if($ketua)
+                        <div class="border-t pt-4">
+                            <h3 class="text-sm font-medium text-gray-500 mb-3">Ketua Tim Pengusul</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg space-y-2">
+                                <p class="text-md font-semibold text-gray-900">{{ $ketua->nama_lengkap }}</p>
+                                @if($ketua->nik_nim_nip)
+                                    <p class="text-sm text-gray-600"><span class="font-medium">NIP:</span> {{ $ketua->nik_nim_nip }}</p>
+                                @endif
+                                <p class="text-sm text-gray-600"><span class="font-medium">Alamat:</span> {{ $ketua->alamat_jalan }}, {{ $ketua->kelurahan }}, {{ $ketua->kecamatan }}, {{ $ketua->kota_kabupaten }}, {{ $ketua->provinsi }}</p>
+                            </div>
                         </div>
+                        @endif
+                        
+                        {{-- Anggota Tim --}}
+                        @if($anggota->count() > 0)
+                        <div class="border-t pt-4">
+                            <h3 class="text-sm font-medium text-gray-500 mb-3">Anggota Tim ({{ $anggota->count() }})</h3>
+                            <div class="space-y-2">
+                                @foreach($anggota as $member)
+                                <div class="bg-gray-50 p-3 rounded-lg">
+                                    <p class="text-sm font-semibold text-gray-900">{{ $member->nama_lengkap }}</p>
+                                    @if($member->nik_nim_nip)
+                                        <p class="text-xs text-gray-600">NIP: {{ $member->nik_nim_nip }}</p>
+                                    @endif
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
+                        
                         <div>
                             <h3 class="text-sm font-medium text-gray-500">Abstrak</h3>
                             <p class="mt-1 text-md text-gray-700 leading-relaxed text-justify">{{ $submission->abstrak }}
                             </p>
                         </div>
+                        
+                        {{-- SDG's --}}
+                        @if($submission->sdgs_fokus || $submission->sdgs_pendukung)
+                        <div class="border-t pt-4">
+                            <h3 class="text-sm font-medium text-gray-500 mb-2">SDG's</h3>
+                            @if($submission->sdgs_fokus && is_array($submission->sdgs_fokus) && count($submission->sdgs_fokus) > 0)
+                            <div class="mb-3">
+                                <p class="text-xs text-gray-600 mb-1 font-medium">Fokus:</p>
+                                <div class="flex flex-wrap gap-1">
+                                    @foreach($submission->sdgs_fokus as $sdg)
+                                        <span class="inline-flex items-center px-2 py-1 bg-teal-100 text-teal-800 text-xs font-medium rounded">{{ $sdg }}</span>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @endif
+                            @if($submission->sdgs_pendukung && is_array($submission->sdgs_pendukung) && count($submission->sdgs_pendukung) > 0)
+                            <div>
+                                <p class="text-xs text-gray-600 mb-1 font-medium">Pendukung:</p>
+                                <div class="flex flex-wrap gap-1">
+                                    @foreach($submission->sdgs_pendukung as $sdg)
+                                        <span class="inline-flex items-center px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded">{{ $sdg }}</span>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                        @endif
+                        
+                        {{-- Mitra --}}
+                        @if($submission->mitra_nasional || $submission->mitra_internasional)
+                        <div class="border-t pt-4">
+                            <h3 class="text-sm font-medium text-gray-500 mb-2">Mitra Kerjasama</h3>
+                            @if($submission->mitra_nasional && is_array($submission->mitra_nasional) && count($submission->mitra_nasional) > 0)
+                            <div class="mb-3">
+                                <p class="text-xs text-gray-600 mb-1 font-medium">Nasional:</p>
+                                <div class="flex flex-wrap gap-1">
+                                    @foreach($submission->mitra_nasional as $mitra)
+                                        <span class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">{{ $mitra }}</span>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @endif
+                            @if($submission->mitra_internasional && is_array($submission->mitra_internasional) && count($submission->mitra_internasional) > 0)
+                            <div>
+                                <p class="text-xs text-gray-600 mb-1 font-medium">Internasional:</p>
+                                <div class="flex flex-wrap gap-1">
+                                    @foreach($submission->mitra_internasional as $mitra)
+                                        <span class="inline-flex items-center px-2 py-1 bg-indigo-100 text-indigo-800 text-xs font-medium rounded">{{ $mitra }}</span>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                        @endif
+                        
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 pt-4 border-t border-gray-200">
                             <div>
                                 <h3 class="text-sm font-medium text-gray-500">Tahun Usulan</h3>
                                 <p class="mt-1 text-md font-semibold text-gray-900">{{ $submission->tahun_usulan }}</p>
                             </div>
                             <div>
+                                <h3 class="text-sm font-medium text-gray-500">Tempat Pelaksanaan</h3>
+                                <p class="mt-1 text-md font-semibold text-gray-900">{{ $submission->tempat_pelaksanaan }}</p>
+                            </div>
+                            <div>
                                 <h3 class="text-sm font-medium text-gray-500">Nominal Usulan</h3>
                                 <p class="mt-1 text-md font-semibold text-gray-900">Rp
                                     {{ number_format($submission->nominal_usulan, 0, ',', '.') }}</p>
                             </div>
+                            @php
+                                $firstModuleStatus = $submission->moduleStatuses->first();
+                            @endphp
+                            @if($firstModuleStatus && $firstModuleStatus->nominal_evaluasi > 0)
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500">Nominal Disetujui</h3>
+                                <p class="mt-1 text-md font-semibold text-green-600">Rp
+                                    {{ number_format($firstModuleStatus->nominal_evaluasi, 0, ',', '.') }}</p>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -279,7 +381,7 @@
                 <div class="p-5 border-b bg-[#11A697] text-white">
                     <h2 class="text-xl font-semibold">Aksi Administrator</h2>
                 </div>
-                <div class="p-6 space-y-3">
+                <div class="p-6 space-y-4">
                     <p class="text-sm text-gray-600">
                         Proposal status saat ini:
                         <span class="font-bold text-[#11A697]">
@@ -288,6 +390,24 @@
                     </p>
 
                     {{-- Form untuk update status manual --}}
+                    <form action="{{ route('admin_equity.comdev.submissions.updateStatus', [$comdev->id, $submission->id]) }}" method="POST" class="space-y-3">
+                        @csrf
+                        @method('PUT')
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Ubah Status Manual</label>
+                            <select name="status" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50">
+                                <option value="">-- Pilih Status --</option>
+                                @foreach(\App\Enums\ComdevStatusEnum::cases() as $statusEnum)
+                                    <option value="{{ $statusEnum->value }}" {{ $submission->status->value === $statusEnum->value ? 'selected' : '' }}>
+                                        {{ str_replace('_', ' ', Str::title($statusEnum->value)) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <button type="submit" class="w-full px-4 py-2 bg-[#11A697] text-white rounded-md hover:bg-[#0e8a7c] transition font-semibold">
+                            <i class='bx bx-save mr-2'></i>Update Status
+                        </button>
+                    </form>
 
                 </div>
             </div>

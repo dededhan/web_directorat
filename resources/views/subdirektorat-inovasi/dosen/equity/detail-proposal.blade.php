@@ -90,10 +90,32 @@
                             <p class="text-sm text-gray-800 md:col-span-3">{{ $submission->tempat_pelaksanaan ?? '-' }}</p>
                         </div>
                         <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4">
-                            <p class="text-sm font-medium text-gray-600 md:col-span-1">Tujuan SGDs</p>
-                            <p class="text-sm text-gray-800 md:col-span-3">
-                                {{-- I've fixed this line to properly display the SDGs array as a string --}}{{ is_array($submission->sdgs) ? implode(', ', $submission->sdgs) : $submission->sdgs ?? '-' }}
-                            </p>
+                            <p class="text-sm font-medium text-gray-600 md:col-span-1">Fokus SDG's</p>
+                            <div class="text-sm text-gray-800 md:col-span-3">
+                                @if($submission->sdgs_fokus && is_array($submission->sdgs_fokus) && count($submission->sdgs_fokus) > 0)
+                                    <div class="flex flex-wrap gap-2">
+                                        @foreach($submission->sdgs_fokus as $sdg)
+                                            <span class="inline-flex items-center px-3 py-1 bg-teal-100 text-teal-800 text-xs font-medium rounded-full">{{ $sdg }}</span>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <span class="text-gray-500">-</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <p class="text-sm font-medium text-gray-600 md:col-span-1">SDG's Pendukung</p>
+                            <div class="text-sm text-gray-800 md:col-span-3">
+                                @if($submission->sdgs_pendukung && is_array($submission->sdgs_pendukung) && count($submission->sdgs_pendukung) > 0)
+                                    <div class="flex flex-wrap gap-2">
+                                        @foreach($submission->sdgs_pendukung as $sdg)
+                                            <span class="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">{{ $sdg }}</span>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <span class="text-gray-500">-</span>
+                                @endif
+                            </div>
                         </div>
                          <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4">
                             <p class="text-sm font-medium text-gray-600 md:col-span-1">Mitra Nasional</p>
@@ -115,8 +137,12 @@
                         </div>
                         <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4">
                             <p class="text-sm font-medium text-gray-600 md:col-span-1">Nominal Disetujui</p>
+                            @php
+                                $firstModuleStatus = $submission->moduleStatuses->first();
+                                $nominalDisetujui = $firstModuleStatus && $firstModuleStatus->nominal_evaluasi > 0 ? $firstModuleStatus->nominal_evaluasi : null;
+                            @endphp
                             <p class="text-sm text-green-600 md:col-span-3 font-bold">
-                                {{ $submission->nominal_disetujui ? 'Rp ' . number_format($submission->nominal_disetujui, 0, ',', '.') : '-' }}
+                                {{ $nominalDisetujui ? 'Rp ' . number_format($nominalDisetujui, 0, ',', '.') : '-' }}
                             </p>
                         </div>
                     </div>

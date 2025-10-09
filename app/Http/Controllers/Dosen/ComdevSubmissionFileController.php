@@ -104,6 +104,11 @@ class ComdevSubmissionFileController extends Controller
         
         // Update status proposal berdasarkan kelengkapan sub-bab wajib
         $activeModuleStatus = $submission->activeModuleStatus;
+        
+        file_put_contents(storage_path('logs/file_upload_debug.txt'), 
+            date('Y-m-d H:i:s') . " - File uploaded for submission {$submission->id}\n", 
+            FILE_APPEND);
+        
         if ($activeModuleStatus) {
             $activeModule = $activeModuleStatus->module;
             
@@ -115,13 +120,32 @@ class ComdevSubmissionFileController extends Controller
                 ->whereIn('comdev_sub_chapter_id', $requiredSubChapterIds)
                 ->count();
 
+            // Debug log ke file
+            file_put_contents(storage_path('logs/file_upload_debug.txt'), 
+                "Module: {$activeModule->nama_modul}\n" .
+                "Required sub-chapters (wajib): {$requiredSubChaptersCount}\n" .
+                "Required IDs: " . json_encode($requiredSubChapterIds->toArray()) . "\n" .
+                "Uploaded files count: {$uploadedFilesCount}\n" .
+                "Current status: {$activeModuleStatus->status}\n", 
+                FILE_APPEND);
+
             if ($requiredSubChaptersCount > 0 && $requiredSubChaptersCount === $uploadedFilesCount) {
                 // Ubah status jadi MENUNGGU_DIREVIEW jika semua sub-bab wajib di modul aktif sudah terisi
                 $activeModuleStatus->update(['status' => ComdevStatusEnum::MENUNGGU_DIREVIEW->value]);
+                file_put_contents(storage_path('logs/file_upload_debug.txt'), 
+                    "✅ STATUS CHANGED TO MENUNGGU_DIREVIEW\n\n", 
+                    FILE_APPEND);
             } else {
                  // Jika belum lengkap, pastikan statusnya kembali ke DIAJUKAN (atau status proses lainnya)
                  $activeModuleStatus->update(['status' => ComdevStatusEnum::DIAJUKAN->value]);
+                 file_put_contents(storage_path('logs/file_upload_debug.txt'), 
+                    "⏳ Status remains DIAJUKAN - not all required files uploaded yet\n\n", 
+                    FILE_APPEND);
             }
+        } else {
+            file_put_contents(storage_path('logs/file_upload_debug.txt'), 
+                "❌ No active module status found!\n\n", 
+                FILE_APPEND);
         }
 
         return back()->with('success', 'Data berhasil disimpan.');
