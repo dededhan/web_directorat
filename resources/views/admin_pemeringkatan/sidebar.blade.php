@@ -42,13 +42,33 @@
                    class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.question_banks.*') ? 'bg-teal-600 !text-white' : '' }}">
                     Bank Soal
                 </a>
+
+                <a href="#" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white'bg-teal-600 !text-white' : '' }}">
+                    Hasil & Analitik
+                </a>
             </div>
         </div>
 
-        <a href="#" class="flex items-center px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200">
-            <i class="fas fa-chart-line fa-fw w-6 text-center"></i>
-            <span class="ml-4">Hasil & Analitik</span>
-        </a>
+
+        <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.question_banks.*') || request()->routeIs('admin_pemeringkatan.sulitest_exams.*') ? 'true' : 'false' }} }">
+            <button @click="open = !open" 
+                    class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
+                <div class="flex items-center">
+                    <i class="fas fa-folder-open fa-fw w-6 text-center"></i>
+                    <span class="ml-4">THE Impact Ranking</span>
+                </div>
+                <i class="fas fa-chevron-down transition-transform duration-200" :class="{'rotate-180': open}"></i>
+            </button>
+            <div x-show="open" x-transition class="mt-2 pl-8 space-y-1" x-cloak>
+                <a href="{{ route('admin_pemeringkatan.sulitest_exams.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.sulitest_exams.*') ? 'bg-teal-600 !text-white' : '' }}">
+                    Manajemen Ujian
+                </a>
+                
+            </div>
+        </div>
+
         
         <a href="#" class="flex items-center px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200">
             <i class="fas fa-cog fa-fw w-6 text-center"></i>
