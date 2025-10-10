@@ -2,6 +2,7 @@
         open: window.innerWidth >= 1024,
         mobileOpen: false,
         comdevOpen: {{ request()->routeIs('admin_equity.comdev.*') ? 'true' : 'false' }},
+        hibahModulOpen: {{ request()->routeIs('admin_equity.hibah_modul.*') ? 'true' : 'false' }},
         init() {
             this.$watch('mobileOpen', value => {
                 if (value) {
@@ -119,7 +120,29 @@
                     </a>
                 </div>
 
-                <!-- 2. APC -->
+                <!-- 2. Hibah Modul Ajar Dropdown -->
+                <button @click="hibahModulOpen = !hibahModulOpen" 
+                        class="flex w-full items-center rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700 group"
+                        :class="open || mobileOpen ? 'justify-between' : 'justify-center'">
+                    <div class="flex items-center space-x-4">
+                        <i class='bx bxs-book-content text-2xl flex-shrink-0'></i>
+                        <span x-show="open || mobileOpen" class="font-medium">Hibah Modul Ajar</span>
+                    </div>
+                    <div x-show="open || mobileOpen" class="flex items-center">
+                        <i class='bx bx-chevron-down text-2xl transition-transform duration-300' 
+                           :class="{'rotate-180': hibahModulOpen}"></i>
+                    </div>
+                </button>
+                
+                <div x-show="hibahModulOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
+                    <a href="{{ route('admin_equity.hibah_modul.sesi.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin_equity.hibah_modul.sesi.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bx-calendar-event text-2xl flex-shrink-0'></i>
+                        <span>Kelola Sesi</span>
+                    </a>
+                </div>
+
+                <!-- 3. APC -->
                 <a href="{{ route('admin_equity.apc.index') }}"
                    class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.apc.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
                    :class="{'justify-center': !open && !mobileOpen}">

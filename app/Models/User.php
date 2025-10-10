@@ -81,4 +81,14 @@ class User extends Authenticatable
             'prodi_id'
         );
     }
+
+    public function proposalModuls()
+    {
+        return $this->hasMany(ProposalModul::class, 'user_id');
+    }
+
+    public function reviewerProposalModuls()
+    {
+        return $this->hasMany(ProposalModul::class, 'reviewer_id');
+    }
 }

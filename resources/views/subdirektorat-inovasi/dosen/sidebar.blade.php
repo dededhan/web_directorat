@@ -10,6 +10,7 @@
         mobileOpen: false,
         inovasiOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.tablekatsinov') || request()->routeIs('subdirektorat-inovasi.dosen.form') ? 'true' : 'false' }},
         equityOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.equity.*') ? 'true' : 'false' }},
+        hibahModulOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.hibah_modul.*') ? 'true' : 'false' }},
         apcOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.apc.*') ? 'true' : 'false' }},
         feeReviewerOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.fee_reviewer.*') ? 'true' : 'false' }},
         feeEditorOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.fee_editor.*') ? 'true' : 'false' }},
@@ -118,6 +119,20 @@
                     <a href="{{ route('subdirektorat-inovasi.dosen.equity.manajement.index') }}" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors {{ request()->routeIs('subdirektorat-inovasi.dosen.equity.manajement.index') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4"><i class='bx bxs-folder-open text-2xl flex-shrink-0'></i><span>Manajemen Proposal</span></a>
                     <a href="{{ route('subdirektorat-inovasi.dosen.equity.usulkan-proposal.index') }}" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors {{ request()->routeIs('subdirektorat-inovasi.dosen.equity.usulkan-proposal.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4"><i class='bx bxs-file-plus text-2xl flex-shrink-0'></i><span>Usulkan Proposal</span></a>
                 </div>
+                
+                <button @click="hibahModulOpen = !hibahModulOpen" 
+                        class="flex w-full items-center rounded-lg p-3 transition-colors hover:bg-gray-700 group mt-2 {{ $isProfileIncomplete ? 'opacity-50 cursor-not-allowed' : '' }}" 
+                        :class="open || mobileOpen ? 'justify-between' : 'justify-center'"
+                        :disabled="{{ $isProfileIncomplete ? 'true' : 'false' }}"
+                        @if($isProfileIncomplete) title="Harap lengkapi profil Anda terlebih dahulu." @endif>
+                    <div class="flex items-center space-x-4"><i class='bx bxs-book-content text-2xl flex-shrink-0'></i><span x-show="open || mobileOpen" class="font-medium">Hibah Modul Ajar</span></div>
+                    <div x-show="open || mobileOpen" class="flex items-center"><i class='bx bx-chevron-down text-2xl transition-transform' :class="{'rotate-180': hibahModulOpen}"></i></div>
+                </button>
+                <div x-show="hibahModulOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
+                    <a href="{{ route('subdirektorat-inovasi.dosen.hibah_modul.manage') }}" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors {{ request()->routeIs('subdirektorat-inovasi.dosen.hibah_modul.manage') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4"><i class='bx bxs-folder-open text-2xl flex-shrink-0'></i><span>Manajemen Proposal</span></a>
+                    <a href="{{ route('subdirektorat-inovasi.dosen.hibah_modul.sesi') }}" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors {{ request()->routeIs('subdirektorat-inovasi.dosen.hibah_modul.sesi') || request()->routeIs('subdirektorat-inovasi.dosen.hibah_modul.create') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4"><i class='bx bxs-file-plus text-2xl flex-shrink-0'></i><span>Usulkan Proposal</span></a>
+                </div>
+                
                 <button @click="apcOpen = !apcOpen" 
                         class="flex w-full items-center rounded-lg p-3 transition-colors hover:bg-gray-700 group mt-2 {{ $isProfileIncomplete ? 'opacity-50 cursor-not-allowed' : '' }}" 
                         :class="open || mobileOpen ? 'justify-between' : 'justify-center'"

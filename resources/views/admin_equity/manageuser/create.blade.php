@@ -160,6 +160,7 @@
                                 <option value="">Pilih Role Pengguna</option>
                                 <option value="dosen">Dosen</option>
                                 <option value="reviewer_equity">Reviewer Equity</option>
+                                <option value="reviewer_hibah">Reviewer Hibah Modul</option>
                                 <option value="equity_fakultas">Equity Fakultas</option>
                             </select>
                             @error('role')

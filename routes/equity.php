@@ -30,10 +30,44 @@ use App\Http\Controllers\EquityFakultas\EquityFakultasController;
 
 
 // Admin Equity Routes
-Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth'])->group(function () {
+Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:admin_equity'])->group(function () {
     Route::get('/dashboard', function () {
         return view('admin_equity.dashboard');
     })->name('dashboard');
+
+    // Hibah Modul Ajar Routes
+    Route::prefix('hibah-modul')->name('hibah_modul.')->group(function () {
+        // CRUD Sesi Hibah Modul
+        Route::prefix('sesi')->name('sesi.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\AdminEquity\SesiHibahModulController::class, 'index'])->name('index');
+            Route::get('/create', [\App\Http\Controllers\AdminEquity\SesiHibahModulController::class, 'create'])->name('create');
+            Route::post('/', [\App\Http\Controllers\AdminEquity\SesiHibahModulController::class, 'store'])->name('store');
+            Route::get('/{sesi}', [\App\Http\Controllers\AdminEquity\SesiHibahModulController::class, 'show'])->name('show');
+            Route::get('/{sesi}/edit', [\App\Http\Controllers\AdminEquity\SesiHibahModulController::class, 'edit'])->name('edit');
+            Route::put('/{sesi}', [\App\Http\Controllers\AdminEquity\SesiHibahModulController::class, 'update'])->name('update');
+            Route::delete('/{sesi}', [\App\Http\Controllers\AdminEquity\SesiHibahModulController::class, 'destroy'])->name('destroy');
+        });
+
+        // Proposal Management
+        Route::prefix('sesi/{sesi}/proposals')->name('proposals.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\AdminEquity\ProposalModulAdminController::class, 'index'])->name('index');
+            Route::get('/{proposal}', [\App\Http\Controllers\AdminEquity\ProposalModulAdminController::class, 'show'])->name('show');
+            Route::post('/{proposal}/status', [\App\Http\Controllers\AdminEquity\ProposalModulAdminController::class, 'updateStatus'])->name('updateStatus');
+            Route::post('/{proposal}/assign-reviewer', [\App\Http\Controllers\AdminEquity\ProposalModulAdminController::class, 'assignReviewer'])->name('assignReviewer');
+        });
+
+        // Modul Akhir (Template Laporan Akhir)
+        Route::prefix('sesi/{sesi}/moduls')->name('moduls.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\AdminEquity\ModulAkhirController::class, 'index'])->name('index');
+            Route::post('/store-modul', [\App\Http\Controllers\AdminEquity\ModulAkhirController::class, 'storeModul'])->name('storeModul');
+            Route::put('/modul/{modul}', [\App\Http\Controllers\AdminEquity\ModulAkhirController::class, 'updateModul'])->name('updateModul');
+            Route::delete('/modul/{modul}', [\App\Http\Controllers\AdminEquity\ModulAkhirController::class, 'destroyModul'])->name('destroyModul');
+            
+            Route::post('/modul/{modul}/subchapter', [\App\Http\Controllers\AdminEquity\ModulAkhirController::class, 'storeSubChapter'])->name('storeSubChapter');
+            Route::put('/subchapter/{subChapter}', [\App\Http\Controllers\AdminEquity\ModulAkhirController::class, 'updateSubChapter'])->name('updateSubChapter');
+            Route::delete('/subchapter/{subChapter}', [\App\Http\Controllers\AdminEquity\ModulAkhirController::class, 'destroySubChapter'])->name('destroySubChapter');
+        });
+    });
 
     Route::resource('manageuser', AdminEquityUserController::class)
         ->parameters(['manageuser' => 'user']);
@@ -226,9 +260,24 @@ Route::prefix('reviewer_equity')->name('reviewer_equity.')->middleware(['auth', 
     Route::get('/comdev/assignments', [ComdevReviewerController::class, 'index'])->name('comdev.assignments.index');
     Route::get('/comdev/assignments/{submission}', [ComdevReviewerController::class, 'show'])->name('comdev.assignments.show');
     Route::post('/comdev/assignments/{submission}/subchapter/{subChapter}/review', [ComdevReviewerController::class, 'storeReview'])->name('comdev.assignments.storeReview');
+});
 
-    // Route::get('/proposals', [ReviewerController::class, 'index'])->name('proposals.index');
-    // Route::get('/proposals/{proposal}', [ReviewerController::class, 'show'])->name('proposals.show');
+// Reviewer Hibah Routes
+Route::prefix('reviewer_hibah')->name('reviewer_hibah.')->middleware(['auth', 'role:reviewer_hibah'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('reviewer_equity.dashboard');
+    })->name('dashboard');
+
+    Route::get('/manageprofile', [App\Http\Controllers\Dosen\DosenProfileController::class, 'edit'])->name('manageprofile.edit');
+    Route::put('/manageprofile', [App\Http\Controllers\Dosen\DosenProfileController::class, 'update'])->name('manageprofile.update');
+
+    // Hibah Modul Review
+    Route::prefix('hibah-modul')->name('hibah_modul.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'index'])->name('index');
+        Route::get('/{proposal}', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'show'])->name('show');
+        Route::post('/{proposal}/subchapter/{subChapter}/review', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'storeReview'])->name('storeReview');
+        Route::post('/{proposal}/submit-final', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'submitFinalReview'])->name('submitFinal');
+    });
 });
 
 
@@ -402,5 +451,44 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
                 // API
                 Route::get('/search-dosen', [DosenSearchController::class, 'search'])->name('search-dosen');
+
+                // Hibah Modul Ajar untuk Dosen
+                Route::prefix('hibah-modul')->name('hibah_modul.')->group(function () {
+                    // List sesi yang dibuka dan manage proposals
+                    Route::get('/sesi', [\App\Http\Controllers\Dosen\ProposalModulDosenController::class, 'listSesi'])->name('sesi');
+                    Route::get('/manage', [\App\Http\Controllers\Dosen\ProposalModulDosenController::class, 'manageProposals'])->name('manage');
+                    
+                    // CRUD Proposal
+                    Route::get('/sesi/{sesi}/create', [\App\Http\Controllers\Dosen\ProposalModulDosenController::class, 'createForm'])->name('create');
+                    Route::post('/sesi/{sesi}/store', [\App\Http\Controllers\Dosen\ProposalModulDosenController::class, 'store'])->name('store');
+                    Route::get('/proposal/{proposal}', [\App\Http\Controllers\Dosen\ProposalModulDosenController::class, 'show'])->name('show');
+                    Route::get('/proposal/{proposal}/edit', [\App\Http\Controllers\Dosen\ProposalModulDosenController::class, 'edit'])->name('edit');
+                    Route::put('/proposal/{proposal}', [\App\Http\Controllers\Dosen\ProposalModulDosenController::class, 'update'])->name('update');
+                    Route::delete('/proposal/{proposal}', [\App\Http\Controllers\Dosen\ProposalModulDosenController::class, 'destroy'])->name('destroy');
+                    
+                    // Confirm/Submit Proposal
+                    Route::post('/proposal/{proposal}/confirm', [\App\Http\Controllers\Dosen\ProposalModulDosenController::class, 'confirm'])->name('confirm');
+                    Route::post('/proposal/{proposal}/confirm-verifikasi', [\App\Http\Controllers\Dosen\ProposalModulDosenController::class, 'confirmVerifikasi'])->name('confirmVerifikasi');
+                    
+                    // Laporan Akhir
+                    Route::get('/proposal/{proposal}/laporan-akhir', [\App\Http\Controllers\Dosen\ModulAkhirDosenController::class, 'showLaporanAkhir'])->name('laporanAkhir');
+                    Route::post('/proposal/{proposal}/subchapter/{subChapter}/upload', [\App\Http\Controllers\Dosen\ModulAkhirDosenController::class, 'uploadFile'])->name('uploadFile');
+                    Route::delete('/file/{file}', [\App\Http\Controllers\Dosen\ModulAkhirDosenController::class, 'deleteFile'])->name('deleteFile');
+                    Route::get('/file/{file}/download', [\App\Http\Controllers\Dosen\ModulAkhirDosenController::class, 'downloadFile'])->name('downloadFile');
+                });
             });
+            
     });
+
+// Reviewer Hibah Routes
+Route::prefix('reviewer-hibah')->name('reviewer_hibah.')->middleware(['auth', 'role:reviewer_hibah'])->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\ReviewerHibah\DashboardController::class, 'index'])->name('dashboard');
+    
+    // Hibah Modul Review
+    Route::prefix('hibah-modul')->name('hibah_modul.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'index'])->name('index');
+        Route::get('/{proposal}', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'show'])->name('show');
+        Route::post('/{proposal}/subchapter/{subChapter}/review', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'storeReview'])->name('storeReview');
+        Route::post('/{proposal}/final', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'submitFinalReview'])->name('submitFinal');
+    });
+});
