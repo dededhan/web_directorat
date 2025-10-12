@@ -47,6 +47,7 @@ use App\Http\Controllers\InternationalFacultyStaffActivitiesController;
 // Ganti route yang ada dengan:
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\IndikatorController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 
 
 
@@ -59,9 +60,7 @@ Route::prefix('admin')->name('admin.')
             return redirect(route('admin.dashboard'));
         });
         // Dashboard
-        Route::get('/dashboard', function () {
-            return view('admin.dashboardadmin');
-        })->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         // News
         Route::resource('/news', BeritaController::class)
