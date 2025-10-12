@@ -56,14 +56,14 @@
                     class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
                 <div class="flex items-center">
                     <i class="fas fa-globe fa-fw w-6 text-center"></i>
-                    <span class="ml-4">THE Impact Rankings</span>
+                    <span class="ml-4">THE Impact</span>
                 </div>
                 <i class="fas fa-chevron-down transition-transform duration-200" :class="{'rotate-180': open}"></i>
             </button>
             <div x-show="open" x-transition class="mt-2 pl-8 space-y-1" x-cloak>
                 <a href="{{ route('admin_pemeringkatan.the-impact-cms.dashboard') }}" 
                    class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.the-impact-cms.*') ? 'bg-teal-600 !text-white' : '' }}">
-                    CMS 17 SDGs
+                    Manajemen Content
                 </a>
                 
             </div>

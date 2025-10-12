@@ -24,6 +24,7 @@ class TheImpactContent extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'link_url' => 'array',
     ];
 
     public function sdg()

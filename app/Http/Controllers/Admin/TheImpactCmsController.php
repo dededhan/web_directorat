@@ -12,8 +12,20 @@ class TheImpactCmsController extends Controller
 {
     public function dashboard()
     {
-        $sdgs = TheImpactSdg::orderBy('number')->get();
-        return view('admin_pemeringkatan.the_impact_cms.dashboard', compact('sdgs'));
+        $sdgs = TheImpactSdg::withCount('contents')->orderBy('number')->get();
+
+        $lastUpdatedContent = TheImpactContent::latest('updated_at')->first();
+
+        $stats = [
+            'total_sdgs' => $sdgs->count(),
+            'active_sdgs' => $sdgs->where('is_active', true)->count(),
+            'completed_sdgs' => $sdgs->where('contents_count', '>', 0)->count(),
+            'empty_sdgs' => $sdgs->where('contents_count', 0)->count(),
+            'total_contents' => $sdgs->sum('contents_count'),
+            'last_update_at' => optional($lastUpdatedContent)->updated_at,
+        ];
+
+        return view('admin_pemeringkatan.the_impact_cms.dashboard', compact('sdgs', 'stats'));
     }
 
     public function editor($sdgId)
@@ -60,13 +72,32 @@ class TheImpactCmsController extends Controller
             'title' => 'required|string|max:255',
             'content_type' => 'required|in:text,link',
             'content' => 'nullable|string',
-            'link_url' => 'nullable|url',
+            'link_url' => 'nullable|array',
+            'link_url.*' => 'nullable|url',
             'year' => 'nullable|integer|min:2020|max:' . (date('Y') + 1),
         ]);
+
+        // Filter out empty links
+        if (isset($validated['link_url'])) {
+            $validated['link_url'] = array_values(array_filter($validated['link_url'], function($link) {
+                return !empty(trim($link));
+            }));
+            
+            // If no valid links, set to null
+            if (empty($validated['link_url'])) {
+                $validated['link_url'] = null;
+            }
+        }
 
         DB::beginTransaction();
         try {
             $sdg = TheImpactSdg::findOrFail($sdgId);
+            
+            // Year constraint: if parent exists, child must have same year
+            if (isset($validated['parent_id'])) {
+                $parent = TheImpactContent::findOrFail($validated['parent_id']);
+                $validated['year'] = $parent->year; // Force child to inherit parent's year
+            }
             
             // Generate point number
             $pointNumber = $this->generatePointNumber($sdgId, $validated['parent_id'] ?? null);
@@ -107,18 +138,47 @@ class TheImpactCmsController extends Controller
             'title' => 'required|string|max:255',
             'content_type' => 'required|in:text,link',
             'content' => 'nullable|string',
-            'link_url' => 'nullable|url',
+            'link_url' => 'nullable|array',
+            'link_url.*' => 'nullable|url',
             'year' => 'nullable|integer|min:2020|max:' . (date('Y') + 1),
         ]);
 
+        // Filter out empty links
+        if (isset($validated['link_url'])) {
+            $validated['link_url'] = array_values(array_filter($validated['link_url'], function($link) {
+                return !empty(trim($link));
+            }));
+            
+            // If no valid links, set to null
+            if (empty($validated['link_url'])) {
+                $validated['link_url'] = null;
+            }
+        }
+
+        DB::beginTransaction();
         try {
             $content = TheImpactContent::findOrFail($contentId);
+            
+            // Year constraint: if content has parent, must match parent's year
+            if ($content->parent_id) {
+                $parent = TheImpactContent::findOrFail($content->parent_id);
+                $validated['year'] = $parent->year; // Force to match parent's year
+            }
+            
+            // If this content has children and year changed, update all children
+            if ($content->children->count() > 0 && isset($validated['year']) && $validated['year'] != $content->year) {
+                $this->updateChildrenYear($content->id, $validated['year']);
+            }
+            
             $content->update($validated);
+
+            DB::commit();
 
             return redirect()
                 ->route('admin_pemeringkatan.the-impact-cms.editor', $content->sdg_id)
                 ->with('success', 'Konten berhasil diupdate: ' . $content->point_number . ' ' . $content->title);
         } catch (\Exception $e) {
+            DB::rollBack();
             return back()
                 ->withInput()
                 ->withErrors(['error' => 'Gagal mengupdate konten: ' . $e->getMessage()]);
@@ -173,6 +233,107 @@ class TheImpactCmsController extends Controller
         }
     }
 
+    public function moveContent(Request $request, $contentId)
+    {
+        $validated = $request->validate([
+            'target_position' => 'required|integer|min:1',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $content = TheImpactContent::findOrFail($contentId);
+            $targetPosition = $validated['target_position'];
+            
+            // Get all siblings (same parent and sdg)
+            $siblings = TheImpactContent::where('sdg_id', $content->sdg_id)
+                ->where('parent_id', $content->parent_id)
+                ->orderBy('order')
+                ->get();
+
+            $currentIndex = $siblings->search(function($item) use ($content) {
+                return $item->id === $content->id;
+            });
+
+            if ($currentIndex === false) {
+                throw new \Exception('Content tidak ditemukan dalam siblings');
+            }
+
+            // Validate target position
+            if ($targetPosition < 1 || $targetPosition > $siblings->count()) {
+                throw new \Exception('Posisi target tidak valid. Harus antara 1 dan ' . $siblings->count());
+            }
+
+            // Convert to 0-based index
+            $targetIndex = $targetPosition - 1;
+
+            if ($currentIndex === $targetIndex) {
+                DB::commit();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Konten sudah berada di posisi tersebut'
+                ]);
+            }
+
+            // Remove content from current position
+            $siblings->splice($currentIndex, 1);
+            
+            // Insert at new position
+            $siblings->splice($targetIndex, 0, [$content]);
+
+            // Update order and point numbers
+            foreach ($siblings as $index => $sibling) {
+                $sibling->order = $index + 1;
+                $newPointNumber = $this->generatePointNumberAtPosition($content->sdg_id, $content->parent_id, $index + 1);
+                $sibling->point_number = $newPointNumber;
+                $sibling->save();
+                
+                // Update children point numbers recursively
+                $this->updateChildrenPointNumbers($sibling);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Konten berhasil dipindahkan ke posisi ' . $targetPosition,
+                'new_point_number' => $content->fresh()->point_number
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memindahkan konten: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    private function generatePointNumberAtPosition($sdgId, $parentId, $position)
+    {
+        if (!$parentId) {
+            return (string)$position;
+        }
+
+        $parent = TheImpactContent::findOrFail($parentId);
+        return $parent->point_number . '.' . $position;
+    }
+
+    private function updateChildrenPointNumbers($parent)
+    {
+        $children = TheImpactContent::where('parent_id', $parent->id)
+            ->orderBy('order')
+            ->get();
+
+        foreach ($children as $index => $child) {
+            $child->point_number = $parent->point_number . '.' . ($index + 1);
+            $child->save();
+            
+            // Recursively update grandchildren
+            if ($child->children->count() > 0) {
+                $this->updateChildrenPointNumbers($child);
+            }
+        }
+    }
+
     private function generatePointNumber($sdgId, $parentId = null)
     {
         if (!$parentId) {
@@ -190,6 +351,20 @@ class TheImpactCmsController extends Controller
         
         $nextNumber = $maxNumber ? $maxNumber + 1 : 1;
         return $parent->point_number . '.' . $nextNumber;
+    }
+
+    private function updateChildrenYear($parentId, $year)
+    {
+        $children = TheImpactContent::where('parent_id', $parentId)->get();
+        
+        foreach ($children as $child) {
+            $child->update(['year' => $year]);
+            
+            // Recursively update grandchildren
+            if ($child->children->count() > 0) {
+                $this->updateChildrenYear($child->id, $year);
+            }
+        }
     }
 
     public function initializeSdgs()

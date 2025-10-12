@@ -16,6 +16,10 @@
             @endif
         </div>
         <div class="flex items-center space-x-2">
+            <button onclick="moveContentModal({{ $content->id }}, '{{ $content->point_number }}', {{ $content->sdg_id }}, {{ $content->parent_id ?? 'null' }})"
+                    class="text-purple-600 hover:text-purple-800 px-3 py-1 text-sm inline-flex items-center">
+                <i class="fas fa-arrows-alt mr-1"></i> Pindah
+            </button>
             <a href="{{ route('admin_pemeringkatan.the-impact-cms.content.create', ['sdg' => $sdg->id, 'parent_id' => $content->id]) }}" 
                class="text-green-600 hover:text-green-800 px-3 py-1 text-sm inline-flex items-center">
                 <i class="fas fa-plus-circle mr-1"></i> Sub

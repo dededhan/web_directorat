@@ -31,6 +31,7 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             Route::get('/content/{content}/edit', [TheImpactCmsController::class, 'edit'])->name('content.edit');
             Route::put('/content/{content}', [TheImpactCmsController::class, 'updateContent'])->name('content.update');
             Route::delete('/content/{content}', [TheImpactCmsController::class, 'deleteContent'])->name('content.delete');
+            Route::post('/content/{content}/move', [TheImpactCmsController::class, 'moveContent'])->name('content.move');
         });
 
         Route::prefix('question-banks')->name('question_banks.')->group(function () {

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SDG {{ $sdg->number }}: {{ $sdg->title }} - UNJ</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
@@ -122,11 +123,8 @@
                         <h1 class="text-4xl font-bold text-gray-900 mb-2">SDG {{ $sdg->number }}: {{ $sdg->title }}</h1>
                         <p class="text-lg text-gray-600 mb-6">{{ $sdg->subtitle }}</p>
                         
+                        @if(count($years) > 0)
                         <div class="flex gap-3 mb-6">
-                            <a href="{{ route('sdg.detail', $sdg->number) }}" 
-                               class="year-btn {{ !$selectedYear ? 'active' : '' }}">
-                                Semua Tahun
-                            </a>
                             @foreach ($years as $year)
                                 <a href="{{ route('sdg.detail', ['id' => $sdg->number, 'year' => $year]) }}" 
                                    class="year-btn {{ $selectedYear == $year ? 'active' : '' }}">
@@ -134,6 +132,7 @@
                                 </a>
                             @endforeach
                         </div>
+                        @endif
                     </div>
                 </div>
 
@@ -160,9 +159,22 @@
                                     @if($rootContent->content_type === 'text' && $rootContent->content)
                                         <p class="text-gray-600 leading-relaxed">{{ $rootContent->content }}</p>
                                     @elseif($rootContent->content_type === 'link' && $rootContent->link_url)
-                                        <a href="{{ $rootContent->link_url }}" target="_blank" class="text-blue-600 hover:text-blue-800">
-                                            <i class="fas fa-external-link-alt mr-2"></i> View Resource
-                                        </a>
+                                        @php
+                                            $links = is_array($rootContent->link_url) ? $rootContent->link_url : [];
+                                        @endphp
+                                        @if(count($links) > 1)
+                                            <div class="space-y-2">
+                                                @foreach($links as $index => $link)
+                                                    <a href="{{ $link }}" target="_blank" class="block text-blue-600 hover:text-blue-800 hover:underline">
+                                                        <i class="fas fa-external-link-alt mr-2"></i> Link {{ $index + 1 }}: {{ $link }}
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        @elseif(count($links) === 1)
+                                            <a href="{{ $links[0] }}" target="_blank" class="text-blue-600 hover:text-blue-800">
+                                                <i class="fas fa-external-link-alt mr-2"></i> View Resource
+                                            </a>
+                                        @endif
                                     @endif
                                 </div>
 
@@ -181,9 +193,22 @@
                                                     @if($child->content_type === 'text' && $child->content)
                                                         <div class="text-gray-700 mb-3 whitespace-pre-line">{{ $child->content }}</div>
                                                     @elseif($child->content_type === 'link' && $child->link_url)
-                                                        <a href="{{ $child->link_url }}" target="_blank" class="text-blue-600 hover:text-blue-800 inline-flex items-center">
-                                                            <i class="fas fa-link mr-2"></i> {{ $child->link_url }}
-                                                        </a>
+                                                        @php
+                                                            $childLinks = is_array($child->link_url) ? $child->link_url : [];
+                                                        @endphp
+                                                        @if(count($childLinks) > 1)
+                                                            <div class="space-y-2">
+                                                                @foreach($childLinks as $index => $link)
+                                                                    <a href="{{ $link }}" target="_blank" class="block text-blue-600 hover:text-blue-800 text-sm hover:underline">
+                                                                        <i class="fas fa-link mr-2"></i> Link {{ $index + 1 }}: {{ Str::limit($link, 60) }}
+                                                                    </a>
+                                                                @endforeach
+                                                            </div>
+                                                        @elseif(count($childLinks) === 1)
+                                                            <a href="{{ $childLinks[0] }}" target="_blank" class="text-blue-600 hover:text-blue-800 inline-flex items-center">
+                                                                <i class="fas fa-link mr-2"></i> {{ $childLinks[0] }}
+                                                            </a>
+                                                        @endif
                                                     @endif
                                                     
                                                     @if($child->children->count() > 0)
@@ -194,9 +219,22 @@
                                                                     @if($subChild->content_type === 'text' && $subChild->content)
                                                                         <p class="text-gray-700 text-sm whitespace-pre-line">{{ $subChild->content }}</p>
                                                                     @elseif($subChild->content_type === 'link' && $subChild->link_url)
-                                                                        <a href="{{ $subChild->link_url }}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm">
-                                                                            <i class="fas fa-external-link-alt mr-1"></i> View Link
-                                                                        </a>
+                                                                        @php
+                                                                            $subLinks = is_array($subChild->link_url) ? $subChild->link_url : [];
+                                                                        @endphp
+                                                                        @if(count($subLinks) > 1)
+                                                                            <div class="space-y-1">
+                                                                                @foreach($subLinks as $index => $link)
+                                                                                    <a href="{{ $link }}" target="_blank" class="block text-blue-600 hover:text-blue-800 text-sm hover:underline">
+                                                                                        <i class="fas fa-external-link-alt mr-1"></i> Link {{ $index + 1 }}: {{ Str::limit($link, 50) }}
+                                                                                    </a>
+                                                                                @endforeach
+                                                                            </div>
+                                                                        @elseif(count($subLinks) === 1)
+                                                                            <a href="{{ $subLinks[0] }}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm">
+                                                                                <i class="fas fa-external-link-alt mr-1"></i> View Link
+                                                                            </a>
+                                                                        @endif
                                                                     @endif
                                                                 </div>
                                                             @endforeach

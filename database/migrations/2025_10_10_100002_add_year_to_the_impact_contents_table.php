@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('the_impact_contents', function (Blueprint $table) {
-            $table->year('year')->nullable()->after('link_url');
-            $table->index('year');
+            if (!Schema::hasColumn('the_impact_contents', 'year')) {
+                $table->year('year')->nullable()->after('link_url');
+            }
+            if (!Schema::hasIndex('the_impact_contents', 'year')) {
+                $table->index('year');
+            }
         });
     }
 

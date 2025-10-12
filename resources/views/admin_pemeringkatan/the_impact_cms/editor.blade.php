@@ -25,7 +25,7 @@
 <!-- Content Tree -->
 <div class="bg-white p-6 rounded-lg shadow-md">
     <div class="mb-4 flex justify-between items-center">
-        <h2 class="text-xl font-semibold text-gray-700">Struktur Konten</h2>
+        <h2 class="text-xl font-semibold text-gray-700">Struktur Konten (Dikelompokkan per Tahun)</h2>
         <span class="text-sm text-gray-500">Total: {{ $sdg->rootContents->count() }} konten root</span>
     </div>
 
@@ -43,5 +43,94 @@
         </div>
     @endif
 </div>
+
+<script>
+function moveContentModal(contentId, currentPointNumber, sdgId, parentId) {
+    Swal.fire({
+        title: `Pindahkan Point ${currentPointNumber}`,
+        html: `
+            <div class="text-left">
+                <p class="text-sm text-gray-600 mb-4">Masukkan posisi baru untuk point ini (angka urutan).</p>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Posisi Baru:</label>
+                <input type="number" 
+                       id="target-position" 
+                       min="1" 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                       placeholder="Contoh: 2 (untuk posisi ke-2)">
+                <p class="text-xs text-gray-500 mt-2">
+                    <i class="fas fa-info-circle"></i> Point akan dipindahkan ke posisi yang Anda tentukan, dan point number akan otomatis diperbarui.
+                </p>
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonColor: '#7c3aed',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: '<i class="fas fa-arrows-alt mr-2"></i> Pindahkan',
+        cancelButtonText: 'Batal',
+        preConfirm: () => {
+            const position = document.getElementById('target-position').value;
+            if (!position || position < 1) {
+                Swal.showValidationMessage('Masukkan posisi yang valid (minimal 1)');
+                return false;
+            }
+            return position;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const targetPosition = result.value;
+            
+            // Show loading
+            Swal.fire({
+                title: 'Memindahkan...',
+                text: 'Mohon tunggu sebentar',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            
+            // Send AJAX request
+            fetch(`{{ url('admin_pemeringkatan/the-impact-cms/content') }}/${contentId}/move`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    target_position: parseInt(targetPosition)
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: data.message,
+                        confirmButtonColor: '#10b981'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: data.message,
+                        confirmButtonColor: '#ef4444'
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Terjadi kesalahan: ' + error.message,
+                    confirmButtonColor: '#ef4444'
+                });
+            });
+        }
+    });
+}
+</script>
 
 @endsection
