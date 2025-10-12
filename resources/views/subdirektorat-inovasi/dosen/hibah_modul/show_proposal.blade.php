@@ -4,26 +4,48 @@
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        <header class="mb-8">
-            <div class="flex items-center justify-between">
+        {{-- Breadcrumb dan Header --}}
+        <header class="mb-10">
+            <nav class="text-sm text-gray-500 mb-3" aria-label="Breadcrumb">
+                <ol class="list-none p-0 inline-flex items-center space-x-2">
+                    <li><a href="{{ route('subdirektorat-inovasi.dosen.dashboard') }}" class="hover:text-teal-600 transition-colors duration-200">Home</a></li>
+                    <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
+                    <li><a href="{{ route('subdirektorat-inovasi.dosen.hibah_modul.manage') }}" class="hover:text-teal-600 transition-colors duration-200">Hibah Modul Ajar</a></li>
+                    <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
+                    <li class="font-medium text-gray-800">Detail Proposal</li>
+                </ol>
+            </nav>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-800">Detail Proposal</h1>
-                    <p class="mt-2 text-gray-600">{{ $proposal->sesi->nama_sesi }}</p>
+                    <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Detail Proposal Hibah Modul Ajar</h1>
+                    <p class="mt-2 text-gray-600 text-base">Sesi: <span class="font-semibold text-teal-600">{{ $proposal->sesi->nama_sesi }}</span></p>
                 </div>
-                <a href="{{ route('subdirektorat-inovasi.dosen.hibah_modul.manage') }}" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
-                    <i class='bx bx-arrow-back mr-2'></i>Kembali
-                </a>
+                <div class="flex-shrink-0">
+                    <a href="{{ route('subdirektorat-inovasi.dosen.hibah_modul.manage') }}" class="inline-flex items-center px-4 py-2.5 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 shadow-sm">
+                        <i class='bx bx-arrow-back mr-2 text-lg'></i>
+                        Kembali
+                    </a>
+                </div>
             </div>
         </header>
 
+        {{-- Alert Messages --}}
         @if(session('success'))
-        <div class="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
-            <p class="text-green-800 font-medium">{{ session('success') }}</p>
+        <div class="mb-6 bg-green-50 border-l-4 border-green-400 p-4 rounded-lg shadow-sm" role="alert">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <i class='bx bx-check-circle text-green-400 text-xl'></i>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-bold text-green-800">Sukses</h3>
+                    <p class="text-sm text-green-700 mt-1">{{ session('success') }}</p>
+                </div>
+            </div>
         </div>
         @endif
 
         <!-- Timeline Status -->
-        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-6">
             <h2 class="text-xl font-bold text-gray-800 mb-4">Status Proposal</h2>
             <div class="flex items-center justify-between">
                 @php
@@ -65,7 +87,7 @@
             <!-- Main Content -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Detail Proposal -->
-                <div class="bg-white rounded-xl shadow-md p-6">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
                     <h2 class="text-xl font-bold text-gray-800 mb-4">Informasi Proposal</h2>
                     <div class="space-y-4">
                         <div>
@@ -108,7 +130,7 @@
                 </div>
 
                 <!-- Anggota -->
-                <div class="bg-white rounded-xl shadow-md p-6">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
                     <h2 class="text-xl font-bold text-gray-800 mb-4">Anggota Penyusun</h2>
                     @foreach($proposal->anggota as $anggota)
                     <div class="border rounded-lg p-4 mb-3">
@@ -121,7 +143,7 @@
 
                 <!-- Review -->
                 @if($proposal->reviews->count() > 0)
-                <div class="bg-white rounded-xl shadow-md p-6">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
                     <h2 class="text-xl font-bold text-gray-800 mb-4">Review dari Reviewer</h2>
                     @foreach($proposal->reviews as $review)
                     <div class="border-l-4 border-purple-500 bg-purple-50 p-4 rounded-r-lg mb-3">

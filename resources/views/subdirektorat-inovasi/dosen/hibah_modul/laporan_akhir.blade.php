@@ -4,31 +4,61 @@
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" x-data="{ currentFile: null, currentSubChapterId: null, showUploadModal: false, fileType: 'pdf' }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        <header class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">Laporan Akhir</h1>
-            <p class="mt-2 text-gray-600">{{ $proposal->judul_modul }}</p>
+        {{-- Breadcrumb dan Header --}}
+        <header class="mb-10">
+            <nav class="text-sm text-gray-500 mb-3" aria-label="Breadcrumb">
+                <ol class="list-none p-0 inline-flex items-center space-x-2">
+                    <li><a href="{{ route('subdirektorat-inovasi.dosen.dashboard') }}" class="hover:text-teal-600 transition-colors duration-200">Home</a></li>
+                    <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
+                    <li><a href="{{ route('subdirektorat-inovasi.dosen.hibah_modul.manage') }}" class="hover:text-teal-600 transition-colors duration-200">Hibah Modul Ajar</a></li>
+                    <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
+                    <li><a href="{{ route('subdirektorat-inovasi.dosen.hibah_modul.show', $proposal->id) }}" class="hover:text-teal-600 transition-colors duration-200">Detail Proposal</a></li>
+                    <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
+                    <li class="font-medium text-gray-800">Laporan Akhir</li>
+                </ol>
+            </nav>
+            <div>
+                <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Laporan Akhir Modul Ajar</h1>
+                <p class="mt-2 text-gray-600 text-base">Proposal: <span class="font-semibold text-teal-600">{{ $proposal->judul_modul }}</span></p>
+            </div>
         </header>
 
+        {{-- Alert Messages --}}
         @if(session('success'))
-        <div class="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
-            <p class="text-green-800 font-medium">{{ session('success') }}</p>
+        <div class="mb-6 bg-green-50 border-l-4 border-green-400 p-4 rounded-lg shadow-sm" role="alert">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <i class='bx bx-check-circle text-green-400 text-xl'></i>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-bold text-green-800">Sukses</h3>
+                    <p class="text-sm text-green-700 mt-1">{{ session('success') }}</p>
+                </div>
+            </div>
         </div>
         @endif
 
         @if($errors->any())
-        <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
-            <p class="text-red-800 font-semibold mb-2">Error:</p>
-            <ul class="list-disc list-inside text-red-700">
-                @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+        <div class="mb-6 bg-red-50 border-l-4 border-red-400 p-4 rounded-lg shadow-sm" role="alert">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <i class='bx bx-error-circle text-red-400 text-xl'></i>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-bold text-red-800">Terdapat Kesalahan</h3>
+                    <ul class="list-disc list-inside text-sm text-red-700 mt-1">
+                        @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
         </div>
         @endif
 
         <!-- Loop Moduls -->
         @foreach($moduls as $modul)
-        <div class="bg-white rounded-xl shadow-md overflow-hidden mb-6">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-6">
             <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-6 py-4">
                 <h2 class="text-xl font-bold text-white">{{ $modul->judul_modul }}</h2>
                 <p class="text-purple-100 text-sm">{{ $modul->deskripsi }}</p>
