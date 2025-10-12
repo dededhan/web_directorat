@@ -155,9 +155,7 @@
                             <span class="absolute left-0 bottom-0 w-10 h-0.5 bg-yellow-400"
                                 style="bottom: -10px;"></span>
                         </h2>
-                        <p>Admin Panel Login</p>
-                        <p class="text-xl font-medium mt-5">Hello, Admin!</p>
-                        <p class="opacity-90">Access your admin tools and manage university content with ease.</p>
+                        <p class="opacity-90 mt-4">Silakan login untuk mengakses berbagai fitur dan layanan administrasi universitas.</p>
                         <div class="decoration-icons">
                             <i class="fas fa-graduation-cap"></i>
                             <i class="fas fa-book"></i>
