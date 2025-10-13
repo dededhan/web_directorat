@@ -1,6 +1,6 @@
 @extends('admin_inovasi.dashboard')
 
-@section('contentadmin')
+@section('contentadmin_inovasi')
 <div class="p-6">
     <div class="mb-6">
         <h1 class="text-3xl font-bold text-gray-800">KATSINOV V2 - Settings Threshold</h1>

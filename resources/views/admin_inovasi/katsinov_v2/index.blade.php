@@ -1,6 +1,6 @@
 @extends('admin_inovasi.dashboard')
 
-@section('contentadmin')
+@section('contentadmin_inovasi')
 <div class="p-6">
     {{-- Header --}}
     <div class="mb-6">
@@ -196,8 +196,8 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex items-center gap-2">
-                                    {{-- Edit button for draft status --}}
-                                    @if($katsinov->status === 'draft' && $katsinov->user_id === Auth::id())
+                                    {{-- Edit button (Draft only) --}}
+                                    @if($katsinov->status === 'draft')
                                         <a href="{{ route('admin_inovasi.katsinov-v2.edit', $katsinov->id) }}" 
                                            class="text-green-600 hover:text-green-900" title="Edit Draft">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -205,7 +205,7 @@
                                             </svg>
                                         </a>
                                     @endif
-                                    
+
                                     {{-- View button --}}
                                     <a href="{{ route('admin_inovasi.katsinov-v2.show', $katsinov->id) }}" 
                                        class="text-blue-600 hover:text-blue-900" title="View Detail">
@@ -215,8 +215,18 @@
                                         </svg>
                                     </a>
                                     
-                                    {{-- Full Report button (Admin/Validator only) --}}
-                                    @if(in_array(Auth::user()->role, ['admin_direktorat', 'validator']) && $katsinov->responses->count() > 0)
+                                    {{-- Delete button (Draft only) --}}
+                                    @if($katsinov->status === 'draft' && in_array(Auth::user()->role, ['admin_direktorat', 'admin_inovasi']))
+                                        <button onclick="deleteKatsinov({{ $katsinov->id }})" 
+                                                class="text-red-600 hover:text-red-900" title="Delete">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                        </button>
+                                    @endif
+                                    
+                                    {{-- Full Report button (Admin_Inovasi only) --}}
+                                    @if(Auth::user()->role === 'admin_inovasi' && $katsinov->responses->count() > 0)
                                         <a href="{{ route('admin_inovasi.katsinov-v2.full-report', $katsinov->id) }}" 
                                            class="text-yellow-600 hover:text-yellow-900" title="Full Report">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -225,8 +235,8 @@
                                         </a>
                                     @endif
 
-                                    {{-- Admin Actions --}}
-                                    @if(Auth::user()->role === 'admin_direktorat')
+                                    {{-- Admin_Inovasi Actions --}}
+                                    @if(Auth::user()->role === 'admin_inovasi')
                                         {{-- Assign Reviewer button for submitted status --}}
                                         @if($katsinov->status === 'submitted')
                                             <button onclick="openAssignModal({{ $katsinov->id }})" 
@@ -246,17 +256,7 @@
                                         </button>
                                     @endif
 
-                                    {{-- Validator Actions --}}
-                                    @if(Auth::user()->role === 'validator' && $katsinov->reviewer_id === Auth::id())
-                                        @if($katsinov->status === 'assigned')
-                                            <button onclick="startReview({{ $katsinov->id }})" 
-                                                    class="text-green-600 hover:text-green-900" title="Start Review">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                                </svg>
-                                            </button>
-                                        @endif
-                                    @endif
+                                    {{-- No Validator section for admin_inovasi --}}
 
                                     {{-- View Review button (for completed) --}}
                                     @if($katsinov->status === 'completed' && $katsinov->reviewer_notes)
@@ -353,7 +353,7 @@ document.getElementById('assignForm').addEventListener('submit', function(e) {
         return;
     }
     
-    fetch(`/admin/katsinov-v2/${katsinovId}/assign-reviewer`, {
+    fetch(`/admin_inovasi/katsinov-v2/${katsinovId}/assign-reviewer`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -376,7 +376,7 @@ document.getElementById('assignForm').addEventListener('submit', function(e) {
 
 function startReview(katsinovId) {
     if (confirm('Mulai review untuk katsinov ini?')) {
-        fetch(`/admin/katsinov-v2/${katsinovId}/start-review`, {
+        fetch(`/admin_inovasi/katsinov-v2/${katsinovId}/start-review`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -488,7 +488,7 @@ document.getElementById('statusForm').addEventListener('submit', function(e) {
     }
     
     if (confirm(`Are you sure you want to change status to ${newStatus.toUpperCase()}?`)) {
-        fetch(`/admin/katsinov-v2/${katsinovId}/change-status`, {
+        fetch(`/admin_inovasi/katsinov-v2/${katsinovId}/change-status`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -514,7 +514,7 @@ document.getElementById('statusForm').addEventListener('submit', function(e) {
 
 // View Review Modal
 function viewReview(katsinovId) {
-    fetch(`/admin/katsinov-v2/${katsinovId}/review`)
+    fetch(`/admin_inovasi/katsinov-v2/${katsinovId}/review`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -532,6 +532,32 @@ function viewReview(katsinovId) {
 
 function closeReviewModal() {
     document.getElementById('reviewModal').classList.add('hidden');
+}
+
+// Delete Katsinov (Draft only)
+function deleteKatsinov(katsinovId) {
+    if (confirm('Apakah Anda yakin ingin menghapus proposal ini? Data tidak dapat dikembalikan!')) {
+        fetch(`/admin_inovasi/katsinov-v2/${katsinovId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert(data.message || 'Gagal menghapus data');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat menghapus data');
+        });
+    }
 }
 </script>
 @endsection

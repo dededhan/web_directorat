@@ -1,6 +1,6 @@
 @extends('admin_inovasi.dashboard')
 
-@section('contentadmin')
+@section('contentadmin_inovasi')
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 
@@ -341,7 +341,7 @@
                 <i class='bx bx-arrow-back'></i> Back to Detail
             </a>
             
-            @if(in_array(Auth::user()->role, ['admin_direktorat', 'validator']))
+            @if(in_array(Auth::user()->role, ['admin_direktorat', 'admin_inovasi', 'validator']))
                 <a href="{{ route('admin_inovasi.katsinov-v2.full-report', $katsinov->id) }}" class="btn btn-warning me-2">
                     <i class='bx bx-file-find'></i> Full Report
                 </a>

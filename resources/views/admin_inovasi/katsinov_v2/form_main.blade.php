@@ -1,6 +1,6 @@
 @extends('admin_inovasi.dashboard')
 
-@section('contentadmin')
+@section('contentadmin_inovasi')
 <div class="p-6 max-w-7xl mx-auto">
     {{-- Header --}}
     <div class="mb-6">
@@ -666,7 +666,7 @@ function sendData(formData, successMessage) {
         jsonData.id = parseInt(idField);
     }
     
-    fetch('{{ route("admin.katsinov-v2.store") }}', {
+    fetch('{{ route("admin_inovasi.katsinov-v2.store") }}', {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -679,7 +679,7 @@ function sendData(formData, successMessage) {
     .then(data => {
         if (data.id) {
             alert(successMessage);
-            window.location.href = '{{ route("admin.katsinov-v2.index") }}';
+            window.location.href = '{{ route("admin_inovasi.katsinov-v2.index") }}';
         } else {
             alert('Error: ' + (data.message || 'Terjadi kesalahan'));
         }

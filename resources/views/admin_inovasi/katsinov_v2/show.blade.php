@@ -1,6 +1,6 @@
 @extends('admin_inovasi.dashboard')
 
-@section('contentadmin')
+@section('contentadmin_inovasi')
 <div class="p-6 max-w-7xl mx-auto">
     {{-- Header with Status --}}
     <div class="mb-6">
@@ -77,7 +77,7 @@
                 @endif
 
                 {{-- Reviewer Actions --}}
-                @if(Auth::user()->role === 'validator' && $katsinov->reviewer_id === Auth::id())
+                @if((Auth::user()->role === 'validator' && $katsinov->reviewer_id === Auth::id()) || Auth::user()->role === 'admin_inovasi')
                     @if($katsinov->status === 'assigned')
                         <button onclick="startReview()" 
                                 class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition duration-300">
@@ -168,7 +168,7 @@
                 <p class="text-gray-600">Lihat detail lengkap penilaian per indikator dan aspek dengan visualisasi grafik</p>
             </div>
             <div class="flex gap-3">
-                @if(in_array(Auth::user()->role, ['admin_direktorat', 'validator']))
+                @if(in_array(Auth::user()->role, ['admin_direktorat', 'admin_inovasi', 'validator']))
                     <a href="{{ route('admin_inovasi.katsinov-v2.full-report', $katsinov->id) }}" 
                        class="px-6 py-3 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold rounded-lg transition duration-300 flex items-center gap-2 shadow-lg">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -315,7 +315,7 @@
 <script>
 function startReview() {
     if (confirm('Mulai review untuk katsinov ini?')) {
-        fetch(`/admin/katsinov-v2/{{ $katsinov->id }}/start-review`, {
+        fetch(`/admin_inovasi/katsinov-v2/{{ $katsinov->id }}/start-review`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -338,7 +338,7 @@ function startReview() {
 
 function submitForReview() {
     if (confirm('Submit data ini untuk review?')) {
-        fetch(`/admin/katsinov-v2/{{ $katsinov->id }}/submit`, {
+        fetch(`/admin_inovasi/katsinov-v2/{{ $katsinov->id }}/submit`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -374,7 +374,7 @@ document.getElementById('completeForm').addEventListener('submit', function(e) {
     const formData = new FormData(this);
     const reviewerNotes = formData.get('reviewer_notes');
     
-    fetch(`/admin/katsinov-v2/{{ $katsinov->id }}/complete-review`, {
+    fetch(`/admin_inovasi/katsinov-v2/{{ $katsinov->id }}/complete-review`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

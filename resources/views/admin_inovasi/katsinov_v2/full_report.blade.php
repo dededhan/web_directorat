@@ -1,6 +1,6 @@
 @extends('admin_inovasi.dashboard')
 
-@section('contentadmin')
+@section('contentadmin_inovasi')
 <div class="container-fluid p-6">
     {{-- Header --}}
     <div class="mb-4">
