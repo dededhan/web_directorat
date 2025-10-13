@@ -91,54 +91,6 @@
             </div>
         </section> -->
 
-        <section class="py-16 bg-gray-50">
-            <div class="container mx-auto px-6">
-                <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Leading the Way: Top 3 SDG Initiatives</h3>
-                <p class="text-cyan-500 text-lg mb-12">Explore our most impactful projects driving progress in the top three Sustainable Development Goals.</p>
-
-                <div class="space-y-8">
-                    @foreach($featuredSdgs as $featured)
-                        @php
-                            $borderColors = [
-                                1 => 'border-red-200 bg-red-50',
-                                2 => 'border-yellow-200 bg-yellow-50',
-                                6 => 'border-cyan-200 bg-cyan-50'
-                            ];
-                            $textColors = [
-                                1 => 'text-red-600 hover:text-red-800',
-                                2 => 'text-yellow-700 hover:text-yellow-900',
-                                6 => 'text-cyan-600 hover:text-cyan-800'
-                            ];
-                            $rootContent = $featured->rootContents->first();
-                        @endphp
-                        <div class="flex flex-col md:flex-row gap-6 items-start">
-                            <div class="flex-shrink-0">
-                                <img src="{{ asset('images/sdgs/sdg-' . str_pad($featured->number, 2, '0', STR_PAD_LEFT) . '.jpg') }}" 
-                                     alt="SDG {{ $featured->number }} - {{ $featured->title }}" 
-                                     class="w-48 h-48 object-cover">
-                            </div>
-                            <div class="flex-1 border-2 {{ $borderColors[$featured->number] ?? 'border-gray-200 bg-gray-50' }} p-6">
-                                <h4 class="text-xl font-bold text-gray-800 mb-3">
-                                    {{ $rootContent ? $rootContent->title : $featured->title }}
-                                </h4>
-                                <p class="text-gray-700 mb-4">
-                                    @if($rootContent && $rootContent->content_type === 'text')
-                                        {{ Str::limit($rootContent->content, 300) }}
-                                    @else
-                                        {{ $featured->description ?? $featured->subtitle }}
-                                    @endif
-                                </p>
-                                <a href="{{ route('sdg.detail', $featured->number) }}" 
-                                   class="{{ $textColors[$featured->number] ?? 'text-gray-600 hover:text-gray-800' }} font-semibold transition-colors">
-                                    Read more
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-
         <section class="py-16 bg-white">
             <div class="container mx-auto px-6">
                 <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Explore More about Our Initiatives in All SDGs</h3>

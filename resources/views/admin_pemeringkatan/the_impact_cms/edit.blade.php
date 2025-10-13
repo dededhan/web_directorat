@@ -49,19 +49,8 @@
                 @enderror
             </div>
 
-            <!-- Tipe Konten -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    Tipe Konten <span class="text-red-500">*</span>
-                </label>
-                <select name="content_type" 
-                        id="content_type"
-                        required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <option value="text" {{ old('content_type', $content->content_type) == 'text' ? 'selected' : '' }}>Text</option>
-                    <option value="link" {{ old('content_type', $content->content_type) == 'link' ? 'selected' : '' }}>Link</option>
-                </select>
-            </div>
+            <!-- Hidden field - always text -->
+            <input type="hidden" name="content_type" value="text">
 
             <!-- Year -->
             <div>
@@ -99,42 +88,19 @@
                 @endif
             </div>
 
-            <!-- Konten Text -->
-            <div id="text-content-field" style="display: {{ old('content_type', $content->content_type) == 'text' ? 'block' : 'none' }}">
+            <!-- Konten -->
+            <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                    Konten Text
+                    Konten <span class="text-red-500">*</span>
                 </label>
                 <textarea name="content" 
                           rows="8"
+                          required
                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('content') border-red-500 @enderror">{{ old('content', $content->content) }}</textarea>
                 @error('content')
                     <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                 @enderror
-            </div>
-
-            <!-- URL Link -->
-            <div id="link-content-field" style="display: {{ old('content_type', $content->content_type) == 'link' ? 'block' : 'none' }}">
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    URL Links (Multiple)
-                </label>
-                <div id="links-container" class="space-y-2">
-                    <!-- Links will be added dynamically -->
-                </div>
-                <button type="button" 
-                        onclick="addLinkField()"
-                        class="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center">
-                    <i class="fas fa-plus mr-2"></i> Tambah Link
-                </button>
-                @error('link_url')
-                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                @enderror
-                @error('link_url.*')
-                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                @enderror
-                <p class="mt-1 text-sm text-gray-500">
-                    <i class="fas fa-info-circle mr-1"></i>
-                    Klik "Tambah Link" untuk menambahkan URL baru. Setiap URL harus lengkap dengan https://
-                </p>
+                <p class="mt-1 text-sm text-gray-500">Masukkan deskripsi atau penjelasan konten. URL yang dicantumkan akan otomatis dapat diklik.</p>
             </div>
 
             <!-- Info Children -->
@@ -186,75 +152,6 @@
 </div>
 
 <script>
-    let linkCounter = 0;
-
-    // Toggle antara text dan link field
-    document.getElementById('content_type').addEventListener('change', function() {
-        const textField = document.getElementById('text-content-field');
-        const linkField = document.getElementById('link-content-field');
-        
-        if (this.value === 'text') {
-            textField.style.display = 'block';
-            linkField.style.display = 'none';
-        } else {
-            textField.style.display = 'none';
-            linkField.style.display = 'block';
-            
-            // Add one link field if container is empty
-            const container = document.getElementById('links-container');
-            if (container.children.length === 0) {
-                addLinkField();
-            }
-        }
-    });
-
-    // Add link field
-    function addLinkField(value = '') {
-        linkCounter++;
-        const container = document.getElementById('links-container');
-        const linkDiv = document.createElement('div');
-        linkDiv.className = 'flex items-center space-x-2';
-        linkDiv.id = `link-field-${linkCounter}`;
-        
-        linkDiv.innerHTML = `
-            <input type="url" 
-                   name="link_url[]" 
-                   value="${value}"
-                   placeholder="https://example.com/report.pdf"
-                   class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            <button type="button" 
-                    onclick="removeLinkField(${linkCounter})"
-                    class="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
-                <i class="fas fa-trash"></i>
-            </button>
-        `;
-        
-        container.appendChild(linkDiv);
-    }
-
-    // Remove link field
-    function removeLinkField(id) {
-        const field = document.getElementById(`link-field-${id}`);
-        if (field) {
-            field.remove();
-        }
-    }
-
-    // Initialize with existing links on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        @if(old('link_url'))
-            @foreach(old('link_url', []) as $link)
-                addLinkField('{{ $link }}');
-            @endforeach
-        @elseif($content->link_url && is_array($content->link_url))
-            @foreach($content->link_url as $link)
-                addLinkField('{{ $link }}');
-            @endforeach
-        @elseif($content->content_type == 'link')
-            addLinkField();
-        @endif
-    });
-
     // Confirm delete
     function confirmDelete() {
         Swal.fire({

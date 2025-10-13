@@ -14,14 +14,7 @@ class SdgInitiativeController extends Controller
             ->orderBy('number')
             ->get();
 
-        // Get top 3 featured SDGs with content
-        $featuredSdgs = TheImpactSdg::whereIn('number', [1, 2, 6])
-            ->with(['rootContents' => function($query) {
-                $query->where('is_active', true)->limit(1);
-            }])
-            ->get();
-
-        return view('Pemeringkatan.the_ir_initiatives', compact('sdgs', 'featuredSdgs'));
+        return view('Pemeringkatan.the_ir_initiatives', compact('sdgs'));
     }
 
     public function show(Request $request, $id)
