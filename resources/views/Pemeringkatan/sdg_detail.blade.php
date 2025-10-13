@@ -156,25 +156,14 @@
                             <div class="mb-12">
                                 <div class="mb-6">
                                     <h3 class="text-2xl font-bold text-gray-800 mb-3">{{ $rootContent->title }}</h3>
-                                    @if($rootContent->content_type === 'text' && $rootContent->content)
-                                        <p class="text-gray-600 leading-relaxed">{{ $rootContent->content }}</p>
-                                    @elseif($rootContent->content_type === 'link' && $rootContent->link_url)
-                                        @php
-                                            $links = is_array($rootContent->link_url) ? $rootContent->link_url : [];
-                                        @endphp
-                                        @if(count($links) > 1)
-                                            <div class="space-y-2">
-                                                @foreach($links as $index => $link)
-                                                    <a href="{{ $link }}" target="_blank" class="block text-blue-600 hover:text-blue-800 hover:underline">
-                                                        <i class="fas fa-external-link-alt mr-2"></i> Link {{ $index + 1 }}: {{ $link }}
-                                                    </a>
-                                                @endforeach
-                                            </div>
-                                        @elseif(count($links) === 1)
-                                            <a href="{{ $links[0] }}" target="_blank" class="text-blue-600 hover:text-blue-800">
-                                                <i class="fas fa-external-link-alt mr-2"></i> View Resource
-                                            </a>
-                                        @endif
+                                    @if($rootContent->content)
+                                        <div class="text-gray-600 leading-relaxed">{!! preg_replace_callback(
+                                            '/(https?:\/\/[^\s<>"]+)/i',
+                                            function($matches) {
+                                                return '<a href="' . $matches[1] . '" target="_blank" class="text-blue-600 hover:text-blue-800 underline">' . $matches[1] . '</a>';
+                                            },
+                                            nl2br(e($rootContent->content))
+                                        ) !!}</div>
                                     @endif
                                 </div>
 
@@ -190,25 +179,14 @@
                                             </div>
                                             <div class="goal-item-content">
                                                 <div class="goal-item-body">
-                                                    @if($child->content_type === 'text' && $child->content)
-                                                        <div class="text-gray-700 mb-3 whitespace-pre-line">{{ $child->content }}</div>
-                                                    @elseif($child->content_type === 'link' && $child->link_url)
-                                                        @php
-                                                            $childLinks = is_array($child->link_url) ? $child->link_url : [];
-                                                        @endphp
-                                                        @if(count($childLinks) > 1)
-                                                            <div class="space-y-2">
-                                                                @foreach($childLinks as $index => $link)
-                                                                    <a href="{{ $link }}" target="_blank" class="block text-blue-600 hover:text-blue-800 text-sm hover:underline">
-                                                                        <i class="fas fa-link mr-2"></i> Link {{ $index + 1 }}: {{ Str::limit($link, 60) }}
-                                                                    </a>
-                                                                @endforeach
-                                                            </div>
-                                                        @elseif(count($childLinks) === 1)
-                                                            <a href="{{ $childLinks[0] }}" target="_blank" class="text-blue-600 hover:text-blue-800 inline-flex items-center">
-                                                                <i class="fas fa-link mr-2"></i> {{ $childLinks[0] }}
-                                                            </a>
-                                                        @endif
+                                                    @if($child->content)
+                                                        <div class="text-gray-700 mb-3">{!! preg_replace_callback(
+                                                            '/(https?:\/\/[^\s<>"]+)/i',
+                                                            function($matches) {
+                                                                return '<a href="' . $matches[1] . '" target="_blank" class="text-blue-600 hover:text-blue-800 underline">' . $matches[1] . '</a>';
+                                                            },
+                                                            nl2br(e($child->content))
+                                                        ) !!}</div>
                                                     @endif
                                                     
                                                     @if($child->children->count() > 0)
@@ -216,25 +194,14 @@
                                                             @foreach($child->children as $subChild)
                                                                 <div class="mb-3">
                                                                     <h6 class="font-semibold text-gray-800 mb-1">{{ $subChild->point_number }} {{ $subChild->title }}</h6>
-                                                                    @if($subChild->content_type === 'text' && $subChild->content)
-                                                                        <p class="text-gray-700 text-sm whitespace-pre-line">{{ $subChild->content }}</p>
-                                                                    @elseif($subChild->content_type === 'link' && $subChild->link_url)
-                                                                        @php
-                                                                            $subLinks = is_array($subChild->link_url) ? $subChild->link_url : [];
-                                                                        @endphp
-                                                                        @if(count($subLinks) > 1)
-                                                                            <div class="space-y-1">
-                                                                                @foreach($subLinks as $index => $link)
-                                                                                    <a href="{{ $link }}" target="_blank" class="block text-blue-600 hover:text-blue-800 text-sm hover:underline">
-                                                                                        <i class="fas fa-external-link-alt mr-1"></i> Link {{ $index + 1 }}: {{ Str::limit($link, 50) }}
-                                                                                    </a>
-                                                                                @endforeach
-                                                                            </div>
-                                                                        @elseif(count($subLinks) === 1)
-                                                                            <a href="{{ $subLinks[0] }}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm">
-                                                                                <i class="fas fa-external-link-alt mr-1"></i> View Link
-                                                                            </a>
-                                                                        @endif
+                                                                    @if($subChild->content)
+                                                                        <div class="text-gray-700 text-sm">{!! preg_replace_callback(
+                                                                            '/(https?:\/\/[^\s<>"]+)/i',
+                                                                            function($matches) {
+                                                                                return '<a href="' . $matches[1] . '" target="_blank" class="text-blue-600 hover:text-blue-800 underline">' . $matches[1] . '</a>';
+                                                                            },
+                                                                            nl2br(e($subChild->content))
+                                                                        ) !!}</div>
                                                                     @endif
                                                                 </div>
                                                             @endforeach

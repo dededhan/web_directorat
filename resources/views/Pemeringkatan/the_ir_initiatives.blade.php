@@ -122,7 +122,7 @@
                                     {{ $rootContent ? $rootContent->title : $featured->title }}
                                 </h4>
                                 <p class="text-gray-700 mb-4">
-                                    @if($rootContent && $rootContent->content_type === 'text')
+                                    @if($rootContent && $rootContent->content)
                                         {{ Str::limit($rootContent->content, 300) }}
                                     @else
                                         {{ $featured->description ?? $featured->subtitle }}
