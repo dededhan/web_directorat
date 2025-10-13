@@ -1,335 +1,418 @@
-@vite(['resources/css/admin/sidebar_dashboardadmin.css'])
-<!-- SIDEBAR -->
-<section id="sidebar">
-    <!-- Brand Logo -->
+<div x-data="{
+        open: window.innerWidth >= 1024,
+        mobileOpen: false,
+        sustainabilityOpen: {{ request()->routeIs('admin.sustainability.*') || request()->routeIs('admin.matakuliah.*') || request()->routeIs('admin.alumniberdampak.*') ? 'true' : 'false' }},
+        dataTablesOpen: {{ request()->routeIs('admin.responden.*') || request()->routeIs('admin.qsgeneraltable') || request()->routeIs('admin.qsresponden.*') || request()->routeIs('admin.responden_laporan') || request()->routeIs('admin.responden_graph') ? 'true' : 'false' }},
+        internationalOpen: {{ request()->routeIs('admin.mahasiswainternational.*') || request()->routeIs('admin.dataakreditasi.*') || request()->routeIs('admin.internationallecture.*') || request()->routeIs('admin.ranking.*') || request()->routeIs('admin.global.*') || request()->routeIs('admin.indikator.*') ? 'true' : 'false' }},
+        lectureStaffOpen: {{ request()->routeIs('admin.international_faculty_staff.*') || request()->routeIs('admin.international-activities') ? 'true' : 'false' }},
+        inovasiOpen: {{ request()->routeIs('admin.katsinov.*') || request()->routeIs('admin.video.*') || request()->routeIs('admin.produk_inovasi') || request()->routeIs('admin.mitra-kolaborasi.*') || request()->routeIs('admin.risetdataunj.*') ? 'true' : 'false' }},
+        sdgsOpen: {{ request()->routeIs('admin.SDGs.*') ? 'true' : 'false' }},
+        init() {
+            this.$watch('mobileOpen', value => {
+                if (value) { document.body.style.overflow = 'hidden'; } 
+                else { document.body.style.overflow = ''; }
+            });
+            window.toggleSidebar = () => { this.mobileOpen = !this.mobileOpen; };
+        },
+        toggleMobile() { this.mobileOpen = !this.mobileOpen; }
+    }"
+    @resize.window="open = window.innerWidth >= 1024"
+    @toggle-sidebar.window="mobileOpen = !this.mobileOpen"
+    @keydown.escape.window="toggleMobile()"
+    class="relative">
 
-    <!-- <link rel="stylesheet" href="{{ asset('dashboard_main/sidebar_dashboardadmin.css') }}"> -->
-    <div class="brand">
-        <!-- Use a button element instead of an icon inside a link -->
-        <button type="button" id="toggle-sidebar-btn"
-            style="background: none; border: none; color: white; cursor: pointer; position: absolute; left: 15px; top: 50%; transform: translateY(-50%); padding: 5px; font-size: 24px;">
-            <i class='bx bx-menu'></i>
-        </button>
-        <i class="logo-icon"></i>
-        <span class="text">Dashboard Direktorat</span>
+    <button type="button" 
+            @click="toggleMobile()"
+            x-show="!mobileOpen"
+            class="fixed top-4 left-4 z-50 inline-flex items-center justify-center rounded-md p-2 text-gray-600 bg-white shadow-lg hover:bg-gray-100 focus:outline-none lg:hidden">
+        <span class="sr-only">Open sidebar</span>
+        <i class='bx bx-menu text-xl'></i>
+    </button>
+
+    <div x-show="mobileOpen" 
+         @click="toggleMobile()"
+         x-transition
+         class="fixed inset-0 z-30 bg-black bg-opacity-50 lg:hidden"
+         style="display: none;"></div>
+
+    <div x-show="mobileOpen || window.innerWidth >= 1024"
+         class="fixed inset-y-0 left-0 z-40 flex h-full transform flex-col bg-gray-800 text-gray-200 shadow-lg transition-all duration-300 ease-in-out lg:relative lg:transform-none lg:z-30"
+         :class="{
+             '-translate-x-full lg:translate-x-0': !mobileOpen && window.innerWidth < 1024,
+             'translate-x-0': mobileOpen || window.innerWidth >= 1024,
+             'w-80': open || (mobileOpen && window.innerWidth < 1024),
+             'w-20': !open && !mobileOpen && window.innerWidth >= 1024
+         }">
+
+        <div class="flex h-16 flex-shrink-0 items-center justify-between border-b border-gray-700 px-6">
+            <a href="#" class="flex items-center space-x-3 overflow-hidden" x-show="open || mobileOpen">
+                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-teal-400 to-teal-600 shadow-lg">
+                    <i class='bx bxs-dashboard text-xl text-white'></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-bold">Admin Direktorat</span>
+                    <span class="text-xs text-gray-400">Management System</span>
+                </div>
+            </a>
+            <button @click="open = !open" class="hidden rounded-md p-2 hover:bg-gray-700 focus:bg-gray-700 focus:outline-none lg:block"><i class='bx bx-menu text-2xl'></i></button>
+            <button @click="toggleMobile()" class="rounded-md p-2 hover:bg-gray-700 focus:bg-gray-700 focus:outline-none lg:hidden"><i class='bx bx-x text-2xl'></i></button>
+        </div>
+
+        <nav class="flex-1 space-y-3 py-6 px-4 overflow-y-auto">
+            <div>
+                <h3 x-show="open || mobileOpen" class="px-3 pb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Main Menu</h3>
+                <a href="{{ route('admin.dashboard') }}" 
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin.dashboard') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}" 
+                   :class="{'justify-center': !open && !mobileOpen}">
+                   <i class='bx bxs-dashboard text-2xl flex-shrink-0'></i>
+                   <span x-show="open || mobileOpen" class="font-medium">Dashboard</span>
+                </a>
+                <a href="{{ route('admin.manageuser.index') }}" 
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin.manageuser.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}" 
+                   :class="{'justify-center': !open && !mobileOpen}">
+                   <i class='bx bxs-user text-2xl flex-shrink-0'></i>
+                   <span x-show="open || mobileOpen" class="font-medium">Manage User</span>
+                </a>
+                <a href="{{ route('admin.news.index') }}" 
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin.news.index') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}" 
+                   :class="{'justify-center': !open && !mobileOpen}">
+                   <i class='bx bxs-news text-2xl flex-shrink-0'></i>
+                   <span x-show="open || mobileOpen" class="font-medium">Berita</span>
+                </a>
+                <a href="{{ route('admin.news-scroll.index') }}" 
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin.news-scroll.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}" 
+                   :class="{'justify-center': !open && !mobileOpen}">
+                   <i class='bx bxs-info-circle text-2xl flex-shrink-0'></i>
+                   <span x-show="open || mobileOpen" class="font-medium">Berita Scroll</span>
+                </a>
+                <a href="{{ route('admin.program-layanan.index') }}" 
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin.program-layanan.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}" 
+                   :class="{'justify-center': !open && !mobileOpen}">
+                   <i class='bx bxs-briefcase text-2xl flex-shrink-0'></i>
+                   <span x-show="open || mobileOpen" class="font-medium">Program dan Layanan</span>
+                </a>
+                <a href="{{ route('admin.document.index') }}" 
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin.document.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}" 
+                   :class="{'justify-center': !open && !mobileOpen}">
+                   <i class='bx bxs-file text-2xl flex-shrink-0'></i>
+                   <span x-show="open || mobileOpen" class="font-medium">Document</span>
+                </a>
+                <a href="{{ route('admin.youtube.index') }}" 
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin.youtube.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}" 
+                   :class="{'justify-center': !open && !mobileOpen}">
+                   <i class='bx bxl-youtube text-2xl flex-shrink-0'></i>
+                   <span x-show="open || mobileOpen" class="font-medium">Youtube</span>
+                </a>
+                <a href="{{ route('admin.instagram.index') }}" 
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin.instagram.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}" 
+                   :class="{'justify-center': !open && !mobileOpen}">
+                   <i class='bx bxl-instagram text-2xl flex-shrink-0'></i>
+                   <span x-show="open || mobileOpen" class="font-medium">Instagram</span>
+                </a>
+                <a href="{{ route('admin.sejarah.index') }}" 
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin.sejarah.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}" 
+                   :class="{'justify-center': !open && !mobileOpen}">
+                   <i class='bx bxs-buildings text-2xl flex-shrink-0'></i>
+                   <span x-show="open || mobileOpen" class="font-medium">Sejarah</span>
+                </a>
+                <a href="{{ route('admin.pimpinan.index') }}" 
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin.pimpinan.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}" 
+                   :class="{'justify-center': !open && !mobileOpen}">
+                   <i class='bx bxs-user-badge text-2xl flex-shrink-0'></i>
+                   <span x-show="open || mobileOpen" class="font-medium">Pimpinan</span>
+                </a>
+                <a href="{{ route('admin.gallery.index') }}" 
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin.gallery.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}" 
+                   :class="{'justify-center': !open && !mobileOpen}">
+                   <i class='bx bxs-photo-album text-2xl flex-shrink-0'></i>
+                   <span x-show="open || mobileOpen" class="font-medium">Galeri</span>
+                </a>
+            </div>
+
+            <div class="pt-3">
+                <h3 x-show="open || mobileOpen" class="px-3 pb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Sustainability</h3>
+                <button @click="sustainabilityOpen = !sustainabilityOpen" 
+                        class="flex w-full items-center rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700 group"
+                        :class="open || mobileOpen ? 'justify-between' : 'justify-center'">
+                    <div class="flex items-center space-x-4">
+                        <i class='bx bxs-leaf text-2xl flex-shrink-0'></i>
+                        <span x-show="open || mobileOpen" class="font-medium">Sustainability</span>
+                    </div>
+                    <div x-show="open || mobileOpen" class="flex items-center">
+                        <i class='bx bx-chevron-down text-2xl transition-transform duration-300' :class="{'rotate-180': sustainabilityOpen}"></i>
+                    </div>
+                </button>
+                <div x-show="sustainabilityOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
+                    <a href="{{ route('admin.sustainability.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.sustainability.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-spreadsheet text-2xl flex-shrink-0'></i>
+                        <span>Sustainability</span>
+                    </a>
+                    <a href="{{ route('admin.matakuliah.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.matakuliah.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-book text-2xl flex-shrink-0'></i>
+                        <span>MK Sustainability</span>
+                    </a>
+                    <a href="{{ route('admin.alumniberdampak.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.alumniberdampak.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-group text-2xl flex-shrink-0'></i>
+                        <span>Alumni Berdampak</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="pt-3">
+                <h3 x-show="open || mobileOpen" class="px-3 pb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Data Tables</h3>
+                <button @click="dataTablesOpen = !dataTablesOpen" 
+                        class="flex w-full items-center rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700 group"
+                        :class="open || mobileOpen ? 'justify-between' : 'justify-center'">
+                    <div class="flex items-center space-x-4">
+                        <i class='bx bxs-data text-2xl flex-shrink-0'></i>
+                        <span x-show="open || mobileOpen" class="font-medium">Data Tables</span>
+                    </div>
+                    <div x-show="open || mobileOpen" class="flex items-center">
+                        <i class='bx bx-chevron-down text-2xl transition-transform duration-300' :class="{'rotate-180': dataTablesOpen}"></i>
+                    </div>
+                </button>
+                <div x-show="dataTablesOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
+                    <a href="{{ route('admin.responden.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.responden.index') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-user-voice text-2xl flex-shrink-0'></i>
+                        <span>Responden</span>
+                    </a>
+                    <a href="{{ route('admin.responden_laporan') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.responden_laporan') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-bar-chart-alt-2 text-2xl flex-shrink-0'></i>
+                        <span>Laporan Responden</span>
+                    </a>
+                    <a href="{{ route('admin.qsgeneraltable') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.qsgeneraltable') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-spreadsheet text-2xl flex-shrink-0'></i>
+                        <span>Tabel General</span>
+                    </a>
+                    <a href="{{ route('admin.qsresponden.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.qsresponden.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-spreadsheet text-2xl flex-shrink-0'></i>
+                        <span>Tabel Responden</span>
+                    </a>
+                    <a href="{{ route('admin.responden_graph') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.responden_graph') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-bar-chart-square text-2xl flex-shrink-0'></i>
+                        <span>Grafik Jawaban</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="pt-3">
+                <h3 x-show="open || mobileOpen" class="px-3 pb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">International</h3>
+                <button @click="internationalOpen = !internationalOpen" 
+                        class="flex w-full items-center rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700 group"
+                        :class="open || mobileOpen ? 'justify-between' : 'justify-center'">
+                    <div class="flex items-center space-x-4">
+                        <i class='bx bxs-globe text-2xl flex-shrink-0'></i>
+                        <span x-show="open || mobileOpen" class="font-medium">International</span>
+                    </div>
+                    <div x-show="open || mobileOpen" class="flex items-center">
+                        <i class='bx bx-chevron-down text-2xl transition-transform duration-300' :class="{'rotate-180': internationalOpen}"></i>
+                    </div>
+                </button>
+                <div x-show="internationalOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
+                    <a href="{{ route('admin.mahasiswainternational.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.mahasiswainternational.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-graduation text-2xl flex-shrink-0'></i>
+                        <span>Mahasiswa International</span>
+                    </a>
+                    <a href="{{ route('admin.dataakreditasi.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.dataakreditasi.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-spreadsheet text-2xl flex-shrink-0'></i>
+                        <span>Data Akreditasi</span>
+                    </a>
+                    <a href="{{ route('admin.internationallecture.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.internationallecture.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-school text-2xl flex-shrink-0'></i>
+                        <span>International Lecture</span>
+                    </a>
+                    <a href="{{ route('admin.ranking.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.ranking.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-trophy text-2xl flex-shrink-0'></i>
+                        <span>Ranking Pemeringkatan</span>
+                    </a>
+                    <a href="{{ route('admin.global.engagement.dashboard') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.global.engagement.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-globe text-2xl flex-shrink-0'></i>
+                        <span>Global Engagement</span>
+                    </a>
+                    <a href="{{ route('admin.indikator.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.indikator.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-chart text-2xl flex-shrink-0'></i>
+                        <span>Indikator Pemeringkatan</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="pt-3">
+                <h3 x-show="open || mobileOpen" class="px-3 pb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Lecture Staff International</h3>
+                <button @click="lectureStaffOpen = !lectureStaffOpen" 
+                        class="flex w-full items-center rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700 group"
+                        :class="open || mobileOpen ? 'justify-between' : 'justify-center'">
+                    <div class="flex items-center space-x-4">
+                        <i class='bx bxs-user-detail text-2xl flex-shrink-0'></i>
+                        <span x-show="open || mobileOpen" class="font-medium">Lecture Staff</span>
+                    </div>
+                    <div x-show="open || mobileOpen" class="flex items-center">
+                        <i class='bx bx-chevron-down text-2xl transition-transform duration-300' :class="{'rotate-180': lectureStaffOpen}"></i>
+                    </div>
+                </button>
+                <div x-show="lectureStaffOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
+                    <a href="{{ route('admin.international_faculty_staff.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.international_faculty_staff.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-graduation text-2xl flex-shrink-0'></i>
+                        <span>Faculty Staff Profile</span>
+                    </a>
+                    <a href="{{ route('admin.international-activities.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.international-activities') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-calendar-event text-2xl flex-shrink-0'></i>
+                        <span>Aktivitas Dosen Asing</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="pt-3">
+                <h3 x-show="open || mobileOpen" class="px-3 pb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Inovasi</h3>
+                <button @click="inovasiOpen = !inovasiOpen" 
+                        class="flex w-full items-center rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700 group"
+                        :class="open || mobileOpen ? 'justify-between' : 'justify-center'">
+                    <div class="flex items-center space-x-4">
+                        <i class='bx bxs-bulb text-2xl flex-shrink-0'></i>
+                        <span x-show="open || mobileOpen" class="font-medium">Inovasi</span>
+                    </div>
+                    <div x-show="open || mobileOpen" class="flex items-center">
+                        <i class='bx bx-chevron-down text-2xl transition-transform duration-300' :class="{'rotate-180': inovasiOpen}"></i>
+                    </div>
+                </button>
+                <div x-show="inovasiOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
+                    <a href="{{ route('admin.katsinov.TableKatsinov') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.katsinov.TableKatsinov') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-table text-2xl flex-shrink-0'></i>
+                        <span>Tabel Katsinov</span>
+                    </a>
+                    <a href="{{ route('admin.katsinov.form') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.katsinov.form') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-file-plus text-2xl flex-shrink-0'></i>
+                        <span>Form Katsinov</span>
+                    </a>
+                    <a href="{{ route('admin.video.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.video.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-video text-2xl flex-shrink-0'></i>
+                        <span>Video Pimpinan</span>
+                    </a>
+                    <a href="{{ route('admin.produk_inovasi') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.produk_inovasi') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-cube text-2xl flex-shrink-0'></i>
+                        <span>Produk Inovasi</span>
+                    </a>
+                    <a href="{{ route('admin.mitra-kolaborasi.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.mitra-kolaborasi.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-group text-2xl flex-shrink-0'></i>
+                        <span>Mitra Kolaborasi</span>
+                    </a>
+                    <a href="{{ route('admin.risetdataunj.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.risetdataunj.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-flask text-2xl flex-shrink-0'></i>
+                        <span>Riset UNJ</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="pt-3">
+                <h3 x-show="open || mobileOpen" class="px-3 pb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">SDGs</h3>
+                <button @click="sdgsOpen = !sdgsOpen" 
+                        class="flex w-full items-center rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700 group"
+                        :class="open || mobileOpen ? 'justify-between' : 'justify-center'">
+                    <div class="flex items-center space-x-4">
+                        <i class='bx bxs-planet text-2xl flex-shrink-0'></i>
+                        <span x-show="open || mobileOpen" class="font-medium">SDGs</span>
+                    </div>
+                    <div x-show="open || mobileOpen" class="flex items-center">
+                        <i class='bx bx-chevron-down text-2xl transition-transform duration-300' :class="{'rotate-180': sdgsOpen}"></i>
+                    </div>
+                </button>
+                <div x-show="sdgsOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
+                    <a href="{{ route('admin.SDGs.program-kegiatan.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.SDGs.program-kegiatan.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-briefcase-alt text-2xl flex-shrink-0'></i>
+                        <span>Program</span>
+                    </a>
+                    <a href="{{ route('admin.SDGs.publikasi-riset.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.SDGs.publikasi-riset.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bxs-book-bookmark text-2xl flex-shrink-0'></i>
+                        <span>Publikasi & Riset</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="border-t border-gray-700 py-4 px-4">
+            <form method="POST" action="{{ route('logout') }}" id="logout-form-sidebar">
+                @csrf
+                <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" 
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 hover:bg-red-600 hover:text-white" 
+                   :class="{'justify-center': !open && !mobileOpen}">
+                   <i class='bx bxs-log-out-circle text-2xl flex-shrink-0'></i>
+                   <span x-show="open || mobileOpen" class="font-medium">Logout</span>
+                </a>
+            </form>
+        </div>
     </div>
+</div>
 
-    <!-- Navigation Menu -->
-    <nav class="side-navigation">
-        <!-- Main Menu Section -->
-        <div class="menu-section">
-            <h3 class="section-title">Main Menu</h3>
-            <ul class="side-menu">
-              
-                <li class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                    <a href="{{ route('admin.dashboard') }}">
-                        <i class='bx bxs-dashboard'></i>
-                        <span class="text">Dashboard</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.manageuser.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.manageuser.index') }}">
-                        <i class='bx bxs-user'></i>
-                        <span class="text">Manage User</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.news.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.news.index') }}">
-                        <i class='bx bxs-news'></i>
-                        <span class="text">Berita</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.news-scroll.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.news-scroll.index') }}">
-                        <i class='bx bxs-user'></i>
-                        <span class="text">Berita Scroll</span>
-                    </a>
-                </li>
+<style>
+[x-cloak] { display: none !important; }
 
-                <li class="{{ request()->routeIs('admin.program-layanan.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.program-layanan.index') }}">
-                        <i class='bx bxs-user'></i>
-                        <span class="text">Program dan Layanan</span>
-                    </a>
-                </li>
+@media (max-width: 1023px) {
+    .sidebar-mobile-hidden {
+        transform: translateX(-100%);
+    }
+    
+    .sidebar-mobile-visible {
+        transform: translateX(0);
+    }
+}
 
-                <li class="{{ request()->routeIs('admin.document.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.document.index') }}">
-                        <i class='bx bxs-user'></i>
-                        <span class="text">Document</span>
-                    </a>
-                </li>
+.sidebar-transition {
+    transition: transform 0.3s ease-in-out;
+}
 
-                <li class="{{ request()->routeIs('admin.youtube.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.youtube.index') }}">
-                        <i class='bx bxl-youtube'></i>
-                        <span class="text">Youtube</span>
-                    </a>
-                </li>
+.body-scroll-locked {
+    overflow: hidden;
+}
 
-                <li class="{{ request()->routeIs('admin.instagram.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.instagram.index') }}">
-                        <i class='bx bxl-instagram'></i>
-                        <span class="text">Instagram</span>
-                    </a>
-                </li>
+.flex-shrink-0 {
+    flex-shrink: 0;
+}
+</style>
 
-                <li class="{{ request()->routeIs('admin.sejarah.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.sejarah.index') }}">
-                        <i class='bx bxl-building'></i>
-                        <span class="text">Sejarah</span>
-                    </a>
-                </li>
-
-                <li class="{{ request()->routeIs('admin.pimpinan.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.pimpinan.index') }}">
-                        <i class='bx bxs-user'></i>
-                        <span class="text">Pimpinan</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.gallery.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.gallery.index') }}">
-                        <i class='bx bxs-user'></i>
-                        <span class="text">Galery</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Sustainability Section -->
-        <div class="menu-section">
-            <h3 class="section-title">Sustainability</h3>
-            <ul class="side-menu">
-                <li class="{{ request()->routeIs('admin.sustainability.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.sustainability.index') }}">
-                        <i class='bx bxs-spreadsheet'></i>
-                        <span class="text">Sustainability</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.matakuliah.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.matakuliah.index') }}">
-                        <i class='bx bxs-book'></i>
-                        <span class="text">MK Sustainability</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.alumniberdampak.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.alumniberdampak.index') }}">
-                        <i class='bx bxs-group'></i>
-                        <span class="text">Alumni Berdampak</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Data Tables Section -->
-        <div class="menu-section">
-            <h3 class="section-title">Data Tables</h3>
-            <ul class="side-menu">
-                <li class="{{ request()->routeIs('admin.responden.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.responden.index') }}">
-                        <i class='bx bxs-user-voice'></i>
-                        <span class="text">Responden</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.responden_laporan') ? 'active' : '' }}">
-                    <a href="{{ route('admin.responden_laporan') }}">
-                        <i class='bx bxs-bar-chart-alt-2'></i>
-                        <span class="text">Laporan Responden</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.qsgeneraltable') ? 'active' : '' }}">
-                    <a href="{{ route('admin.qsgeneraltable') }}">
-                        <i class='bx bxs-spreadsheet'></i>
-                        <span class="text">Tabel General</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.qsresponden.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.qsresponden.index') }}">
-                        <i class='bx bxs-spreadsheet'></i>
-                        <span class="text">Tabel Responden</span>
-                    </a>
-                </li>
-
-                                <li class="{{ request()->routeIs('admin.responden_graph') ? 'active' : '' }}">
-                    <a href="{{ route('admin.responden_graph') }}">
-                        <i class='bx bxs-bar-chart-square' ></i>
-                        <span class="text">Grafik Jawaban</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- International Section -->
-        <div class="menu-section">
-            <h3 class="section-title">International</h3>
-            <ul class="side-menu">
-                <li class="{{ request()->routeIs('admin.mahasiswainternational.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.mahasiswainternational.index') }}">
-                        <i class='bx bxs-graduation'></i>
-                        <span class="text">Mahasiswa International</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.dataakreditasi.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.dataakreditasi.index') }}">
-                        <i class='bx bxs-spreadsheet'></i>
-                        <span class="text">Data Akreditasi</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.internationallecture.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.internationallecture.index') }}">
-                        <i class='bx bxs-school'></i>
-                        <span class="text">International Lecture</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.ranking.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.ranking.index') }}">
-                        <i class='bx bxs-school'></i>
-                        <span class="text">Ranking Pemeringkatan</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.global.engagement.*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.global.engagement.dashboard') }}">
-                        <i class='bx bxs-globe'></i>
-                        <span class="text">Global Engagement</span>
-                    </a>
-                </li>
-
-                <li class="{{ request()->routeIs('admin.indikator.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.indikator.index') }}">
-                        <i class='bx bxs-school'></i>
-                        <span class="text">Indikator Pemeringkatan</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- International Section -->
-
-        <div class="menu-section">
-            <h3 class="section-title">Lecture Staff International</h3>
-            <ul class="side-menu">
-                <li class="{{ request()->routeIs('admin.international_faculty_staff.*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.international_faculty_staff.index') }}">
-                        <i class='bx bxs-graduation'></i>
-                        <span class="text">Faculty Staff Profile</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.international-activities') ? 'active' : '' }}">
-                    <a href="{{ route('admin.international-activities.index') }}">
-                        <i class='bx bxs-graduation'></i>
-                        <span class="text">Aktivitas Dosen Asing</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-
-        <!-- Inovasi Section -->
-        <div class="menu-section">
-            <h3 class="section-title">Inovasi</h3>
-            <ul class="side-menu">
-                <li class="{{ request()->routeIs('admin.katsinov.TableKatsinov') ? 'active' : '' }}">
-                    <a href="{{ route('admin.katsinov.TableKatsinov') }}">
-                        <i class='bx bxs-graduation'></i>
-                        <span class="text">Tabel Katsinov</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.katsinov.form') ? 'active' : '' }}">
-                    <a href="{{ route('admin.katsinov.form') }}">
-                        <i class='bx bxs-file-plus'></i>
-                        <span class="text">Form Katsinov</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.video.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.video.index') }}">
-                        <i class='bx bxs-video'></i>
-                        <span class="text">Video Pimpinan</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.produk_inovasi') ? 'active' : '' }}">
-                    <a href="{{ route('admin.produk_inovasi') }}">
-                        <i class='bx bxs-file-plus'></i>
-                        <span class="text">Produk Inovasi</span>
-                    </a>
-                </li>
-              <li class="{{ request()->routeIs('admin.mitra-kolaborasi.*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.mitra-kolaborasi.index') }}">
-                        <i class='bx bxs-group'></i>
-                        <span class="text">Mitra Kolaborasi</span>
-                    </a>
-                </li>
-                   <li class="{{ request()->routeIs('admin.risetdataunj.*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.risetdataunj.index') }}">
-                        <i class='bx bxs-group'></i>
-                        <span class="text">Riset UNJ</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="menu-section">
-            <h3 class="section-title">SDGs</h3>
-            <ul class="side-menu">
-                <li class="{{ request()->routeIs('admin.SDGs.program-kegiatan.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.SDGs.program-kegiatan.index') }}">
-                        <i class='bx bxs-graduation'></i>
-                        <span class="text">Program</span>
-                    </a>
-                </li>
-
-                <li class="{{ request()->routeIs('admin.SDGs.publikasi-riset.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.SDGs.publikasi-riset.index') }}">
-                        <i class='bx bxs-graduation'></i>
-                        <span class="text">Publikasi & Riset</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Settings Section -->
-        <div class="menu-section">
-            <h3 class="section-title">Settings</h3>
-            <ul class="side-menu">
-                <li>
-                    <form method="POST" action="{{ route('logout') }}" id="logout-form">
-                        @csrf
-                        <a href="#" class="logout"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class='bx bxs-log-out-circle'></i>
-                            <span class="text">Logout</span>
-                        </a>
-                    </form>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <script>
-        // Execute immediately when DOM is ready
-        (function() {
-            // Try different ways to attach the event
-            var btn = document.getElementById('toggle-sidebar-btn');
-            var sidebar = document.getElementById('sidebar');
-
-            if (btn && sidebar) {
-                // Method 1: Direct property
-                btn.onclick = function() {
-                    sidebar.classList.toggle('hide');
-                };
-
-                // Method 2: Add event listener
-                btn.addEventListener('click', function() {
-                    sidebar.classList.toggle('hide');
-                });
-
-                // Method 3: Add event to parent
-                document.addEventListener('click', function(e) {
-                    if (e.target === btn || e.target.closest('#toggle-sidebar-btn')) {
-                        sidebar.classList.toggle('hide');
-                    }
-                });
+<script>
+document.addEventListener('alpine:init', () => {
+    window.debugSidebar = function() {
+        console.log('Sidebar debug called');
+        const event = new CustomEvent('toggle-sidebar');
+        window.dispatchEvent(event);
+    };
+    
+    window.toggleSidebar = function() {
+        const event = new CustomEvent('toggle-sidebar');
+        window.dispatchEvent(event);
+    };
+    
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (window.innerWidth >= 1024) {
+                document.body.style.overflow = '';
             }
-        })();
-    </script>
-</section>
-<!-- SIDEBAR -->
+        }, 100);
+    });
+});
+</script>

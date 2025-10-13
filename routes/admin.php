@@ -35,6 +35,7 @@ use App\Http\Controllers\MitraKolaborasiController;
 use App\Http\Controllers\RisetUnjController;
 use App\Http\Controllers\RespondenAnswerGraphController; 
 use App\Http\Controllers\Dosen\DashboardController as DosenDashboardController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 
 
@@ -59,9 +60,7 @@ Route::prefix('admin')->name('admin.')
             return redirect(route('admin.dashboard'));
         });
         // Dashboard
-        Route::get('/dashboard', function () {
-            return view('admin.dashboardadmin');
-        })->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         // News
         Route::resource('/news', BeritaController::class)
