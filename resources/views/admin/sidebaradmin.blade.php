@@ -5,7 +5,7 @@
         dataTablesOpen: {{ request()->routeIs('admin.responden.*') || request()->routeIs('admin.qsgeneraltable') || request()->routeIs('admin.qsresponden.*') || request()->routeIs('admin.responden_laporan') || request()->routeIs('admin.responden_graph') ? 'true' : 'false' }},
         internationalOpen: {{ request()->routeIs('admin.mahasiswainternational.*') || request()->routeIs('admin.dataakreditasi.*') || request()->routeIs('admin.internationallecture.*') || request()->routeIs('admin.ranking.*') || request()->routeIs('admin.global.*') || request()->routeIs('admin.indikator.*') ? 'true' : 'false' }},
         lectureStaffOpen: {{ request()->routeIs('admin.international_faculty_staff.*') || request()->routeIs('admin.international-activities') ? 'true' : 'false' }},
-        inovasiOpen: {{ request()->routeIs('admin.katsinov.*') || request()->routeIs('admin.video.*') || request()->routeIs('admin.produk_inovasi') || request()->routeIs('admin.mitra-kolaborasi.*') || request()->routeIs('admin.risetdataunj.*') ? 'true' : 'false' }},
+        inovasiOpen: {{ request()->routeIs('admin.katsinov.*') || request()->routeIs('admin.katsinov-v2.*') || request()->routeIs('admin.video.*') || request()->routeIs('admin.produk_inovasi') || request()->routeIs('admin.mitra-kolaborasi.*') || request()->routeIs('admin.risetdataunj.*') ? 'true' : 'false' }},
         sdgsOpen: {{ request()->routeIs('admin.SDGs.*') ? 'true' : 'false' }},
         init() {
             this.$watch('mobileOpen', value => {
@@ -291,23 +291,41 @@
                     </div>
                 </button>
                 <div x-show="inovasiOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
-                    <li class="{{ request()->routeIs('admin.katsinov-v2.*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.katsinov-v2.index') }}">
-                        <i class='bx bxs-star'></i>
-                        <span class="text">Katsinov V2 (New)</span>
-                    </a>
-                </li>
-                    <a href="{{ route('admin.katsinov.TableKatsinov') }}" 
-                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.katsinov.TableKatsinov') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
-                        <i class='bx bxs-table text-2xl flex-shrink-0'></i>
-                        <span>Tabel Katsinov</span>
-                    </a>
-                    
-                    <a href="{{ route('admin.katsinov.form') }}" 
-                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.katsinov.form') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
-                        <i class='bx bxs-file-plus text-2xl flex-shrink-0'></i>
-                        <span>Form Katsinov</span>
-                    </a>
+                    {{-- KATSINOV V2 (New System) --}}
+                    <div class="pl-4 space-y-1">
+                        <div class="flex items-center space-x-2 text-xs font-semibold uppercase tracking-wider text-teal-400 py-2">
+                            <i class='bx bxs-star'></i>
+                            <span>KATSINOV V2 (New)</span>
+                        </div>
+                        <a href="{{ route('admin.katsinov-v2.index') }}" 
+                           class="flex items-center space-x-3 rounded-lg p-2.5 text-sm transition-colors duration-200 {{ request()->routeIs('admin.katsinov-v2.index') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                            <i class='bx bxs-table text-lg flex-shrink-0'></i>
+                            <span>Table Data</span>
+                        </a>
+                        <a href="{{ route('admin.katsinov-v2.create') }}" 
+                           class="flex items-center space-x-3 rounded-lg p-2.5 text-sm transition-colors duration-200 {{ request()->routeIs('admin.katsinov-v2.create') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                            <i class='bx bxs-file-plus text-lg flex-shrink-0'></i>
+                            <span>Form Pengajuan</span>
+                        </a>
+                    </div>
+
+                    {{-- KATSINOV V1 (Old System) --}}
+                    <div class="pl-4 space-y-1 pt-3 border-t border-gray-700 mt-3">
+                        <div class="flex items-center space-x-2 text-xs font-semibold uppercase tracking-wider text-gray-400 py-2">
+                            <span>KATSINOV V1</span>
+                        </div>
+                        <a href="{{ route('admin.katsinov.TableKatsinov') }}" 
+                           class="flex items-center space-x-3 rounded-lg p-2.5 text-sm transition-colors duration-200 {{ request()->routeIs('admin.katsinov.TableKatsinov') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                            <i class='bx bxs-table text-lg flex-shrink-0'></i>
+                            <span>Tabel Katsinov</span>
+                        </a>
+                        
+                        <a href="{{ route('admin.katsinov.form') }}" 
+                           class="flex items-center space-x-3 rounded-lg p-2.5 text-sm transition-colors duration-200 {{ request()->routeIs('admin.katsinov.form') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                            <i class='bx bxs-file-plus text-lg flex-shrink-0'></i>
+                            <span>Form Katsinov</span>
+                        </a>
+                    </div>
                     <a href="{{ route('admin.video.index') }}" 
                        class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.video.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
                         <i class='bx bxs-video text-2xl flex-shrink-0'></i>

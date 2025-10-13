@@ -217,10 +217,26 @@
                                             class="btn btn-info btn-sm mb-1" target="_blank">
                                             <i class='bx bx-printer'></i> Print Form
                                         </a>
-                                        <button class="btn btn-info btn-sm mb-1" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#subforms-{{ $katsinov->id }}" aria-expanded="false">
-                                            <i class='bx bx-folder-open'></i> Formulir Pendukung
-                                        </button>
+                                        <a href="{{ route('admin.katsinov.inovasi.index', ['katsinov_id' => $katsinov->id]) }}"
+                                            class="btn btn-primary btn-sm mb-1">
+                                            <i class='bx bx-file'></i> Form Judul
+                                        </a>
+                                        <a href="{{ route('admin.katsinov.informasi.index', ['katsinov_id' => $katsinov->id]) }}"
+                                            class="btn btn-primary btn-sm mb-1">
+                                            <i class='bx bx-info-circle'></i> Form Informasi Dasar
+                                        </a>
+                                        <a href="{{ route('admin.katsinov.berita.index', ['katsinov_id' => $katsinov->id]) }}"
+                                            class="btn btn-primary btn-sm mb-1">
+                                            <i class='bx bx-news'></i> Form Berita Acara
+                                        </a>
+                                        <a href="{{ route('admin.katsinov.record.index', ['katsinov_id' => $katsinov->id]) }}"
+                                            class="btn btn-primary btn-sm mb-1">
+                                            <i class='bx bx-bar-chart-alt-2'></i> Form Record Hasil
+                                        </a>
+                                        <a href="{{ route('admin.katsinov.lampiran.index', ['katsinov_id' => $katsinov->id]) }}"
+                                            class="btn btn-primary btn-sm mb-1">
+                                            <i class='bx bx-paperclip'></i> Lampiran
+                                        </a>
                                         <a href="{{ route('admin.katsinov.summary-all', ['katsinov_id' => $katsinov->id]) }}"
                                             class="btn btn-primary btn-sm mb-1">
                                             <i class='bx bx-chart'></i> Summary Keseluruhan
@@ -254,40 +270,6 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                </td>
-                            </tr>
-                            <!-- Collapsible Sub-forms Section -->
-                            <tr class="subforms-row">
-                                <td colspan="7" class="p-0">
-                                    <div class="collapse" id="subforms-{{ $katsinov->id }}">
-                                        <div class="card card-body subform-container">
-                                            <h5 class="subform-title">Form pendukung untuk "{{ $katsinov->title }}"</h5>
-                                            <div class="subform-buttons">
-                                                <a href="{{ route('admin.katsinov.inovasi.index', ['katsinov_id' => $katsinov->id]) }}"
-                                                    class="btn btn-primary btn-sm">
-                                                    <i class='bx bx-file'></i> Form Judul
-                                                </a>
-                                                <a href="{{ route('admin.katsinov.informasi.index', ['katsinov_id' => $katsinov->id]) }}"
-                                                    class="btn btn-primary btn-sm">
-                                                    <i class='bx bx-info-circle'></i> Form Informasi Dasar
-                                                </a>
-                                                <a href="{{ route('admin.katsinov.berita.index', ['katsinov_id' => $katsinov->id]) }}"
-                                                    class="btn btn-primary btn-sm">
-                                                    <i class='bx bx-news'></i> Form Berita Acara
-                                                </a>
-                                                <a href="{{ route('admin.katsinov.record.index', ['katsinov_id' => $katsinov->id]) }}"
-                                                    class="btn btn-primary btn-sm">
-                                                    <i class='bx bx-bar-chart-alt-2'></i> Form Record Hasil
-                                                </a>
-                                                <a href="{{ route('admin.katsinov.lampiran.index', ['katsinov_id' => $katsinov->id]) }}"
-                                                    class="btn btn-primary btn-sm">
-                                                    <i class='bx bx-paperclip'></i> Lampiran
-                                                </a>
-
-                                            </div>
-
-                                        </div>
-                                    </div>
                                 </td>
                             </tr>
                             <!-- Main details row -->
@@ -362,46 +344,7 @@
         </div>
     </div>
 
-    <style>
-        /* Style for sub-forms section */
-        .subform-container {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            padding: 15px;
-        }
 
-        .subform-title {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            color: #333;
-            border-bottom: 1px solid #dee2e6;
-            padding-bottom: 8px;
-        }
-
-        .subform-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .subform-buttons .btn {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 6px 12px;
-            transition: all 0.2s;
-        }
-
-        .subform-buttons .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .subforms-row {
-            background-color: transparent !important;
-        }
-    </style>
 
     <script src="{{ asset('resources/movejs/table_katsinov.js') }}"></script>
     <script src="{{ asset('resources/movejs/table_katsinovoverall.js') }}"></script>
