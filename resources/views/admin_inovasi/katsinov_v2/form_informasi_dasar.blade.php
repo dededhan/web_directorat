@@ -1,4 +1,4 @@
-@extends('admin_inovasi.dashboard')
+@extends('admin_inovasi.index')
 
 @section('contentadmin_inovasi')
 <div class="container mx-auto px-4 py-8">

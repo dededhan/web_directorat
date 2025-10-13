@@ -1,7 +1,7 @@
 @extends('admin.admin')
 
 @section('contentadmin')
-<!-- Chart.js -->
+<!-- Chart.js v3 - Required for summary charts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 
 <div class="container-fluid p-6">
@@ -365,9 +365,19 @@
 {{-- Chart.js Scripts --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Check if Chart.js is loaded
+    if (typeof Chart === 'undefined') {
+        console.error('Chart.js is not loaded!');
+        return;
+    }
+    console.log('Chart.js version:', Chart.version);
+    
     // Parse data from controller
     const overallAspectScores = {!! $overallAspectScoresJson !!};
     const indicatorAspectScores = {!! $indicatorAspectScoresJson !!};
+    
+    console.log('Overall Aspect Scores:', overallAspectScores);
+    console.log('Indicator Aspect Scores:', indicatorAspectScores);
     
     // 1. Overall Aspect Bar Chart
     const aspectLabels = ['Technology', 'Market', 'Organization', 'Manufacturing', 'Partnership', 'Investment', 'Risk'];
@@ -493,6 +503,19 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 3. Spider Charts for Each Indicator
     for (let i = 1; i <= 6; i++) {
+        // Check if this indicator exists in the data
+        if (!indicatorAspectScores[i]) {
+            console.log('Skipping indicator ' + i + ' - no data');
+            continue;
+        }
+        
+        // Check if canvas element exists
+        const canvasElement = document.getElementById('indicator' + i + 'Chart');
+        if (!canvasElement) {
+            console.log('Skipping indicator ' + i + ' - canvas not found');
+            continue;
+        }
+        
         const indicatorData = [
             indicatorAspectScores[i].technology || 0,
             indicatorAspectScores[i].market || 0,
@@ -503,7 +526,7 @@ document.addEventListener('DOMContentLoaded', function() {
             indicatorAspectScores[i].risk || 0
         ];
         
-        const ctx = document.getElementById('indicator' + i + 'Chart').getContext('2d');
+        const ctx = canvasElement.getContext('2d');
         new Chart(ctx, {
             type: 'radar',
             data: {
@@ -570,12 +593,21 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     aspects.forEach(aspect => {
-        const data = [];
-        for (let i = 1; i <= 6; i++) {
-            data.push(indicatorAspectScores[i][aspect] || 0);
+        // Check if canvas exists for this aspect
+        const canvasElement = document.getElementById(aspect + 'Chart');
+        if (!canvasElement) {
+            console.log('Skipping aspect chart ' + aspect + ' - canvas not found');
+            return;
         }
         
-        const ctx = document.getElementById(aspect + 'Chart').getContext('2d');
+        const data = [];
+        for (let i = 1; i <= 6; i++) {
+            if (indicatorAspectScores[i]) {
+                data.push(indicatorAspectScores[i][aspect] || 0);
+            }
+        }
+        
+        const ctx = canvasElement.getContext('2d');
         new Chart(ctx, {
             type: 'line',
             data: {
