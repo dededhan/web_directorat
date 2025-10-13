@@ -38,6 +38,7 @@
                             <option value="admin_direktorat">Admin Direktorat</option>
                             <option value="kepala_direktorat">Kepala Direktorat</option>
                             <option value="admin_pemeringkatan">Admin Pemeringkatan</option>
+                            <option value="admin_inovasi">Admin Inovasi</option>
                             <option value="fakultas">Fakultas</option>
                             <option value="prodi">Prodi</option>
                             <option value="admin_hilirisasi">Admin Hilirisasi</option>
@@ -46,10 +47,8 @@
                             <option value="dosen">Dosen</option>
                             <option value="mahasiswa">Mahasiswa</option>
                             <option value="validator">Penilai</option>
-                            {{-- ADDED --}}
                             <option value="admin_equity">Admin Equity</option>
                             <option value="reviewer_equity">Reviewer Equity</option>
-                            {{-- END ADDED --}}
                             <option value="registered_user">Pengguna Terdaftar</option>
                         </select>
                     </div>
@@ -378,6 +377,7 @@
                                 <option value="admin_direktorat">Admin Direktorat</option>
                                 <option value="kepala_direktorat">Kepala Direktorat</option>
                                 <option value="admin_pemeringkatan">Admin Pemeringkatan</option>
+                                <option value="admin_inovasi">Admin Inovasi</option>
                                 <option value="fakultas">Fakultas</option>
                                 <option value="prodi">Prodi</option>
                                 <option value="admin_hilirisasi">Admin Hilirisasi</option>
@@ -386,10 +386,8 @@
                                 <option value="dosen">Dosen</option>
                                 <option value="mahasiswa">Mahasiswa</option>
                                 <option value="validator">Penilai</option>
-                                {{-- ADDED --}}
                                 <option value="admin_equity">Admin Equity</option>
                                 <option value="reviewer_equity">Reviewer Equity</option>
-                                {{-- END ADDED --}}
                                 <option value="registered_user">Pengguna Terdaftar</option>
                             </select>
                         </div>
