@@ -9,13 +9,25 @@
                 <h1 class="text-3xl font-bold text-gray-800">KATSINOV V2 - Innovation Assessment</h1>
                 <p class="text-gray-600 mt-1">Sistem penilaian inovasi dengan workflow management</p>
             </div>
-            <a href="{{ route('admin.katsinov-v2.create') }}" 
-               class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-300 flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                </svg>
-                Tambah Katsinov Baru
-            </a>
+            <div class="flex items-center gap-3">
+                @if(in_array(Auth::user()->role, ['admin_direktorat', 'admin_inovasi']))
+                    <a href="{{ route('admin.katsinov-v2.settings') }}" 
+                       class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg shadow-md transition duration-300 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        Atur Threshold
+                    </a>
+                @endif
+                <a href="{{ route('admin.katsinov-v2.create') }}" 
+                   class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-300 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Tambah Katsinov Baru
+                </a>
+            </div>
         </div>
     </div>
 
@@ -202,6 +214,16 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                         </svg>
                                     </a>
+                                    
+                                    {{-- Full Report button (Admin/Validator only) --}}
+                                    @if(in_array(Auth::user()->role, ['admin_direktorat', 'validator']) && $katsinov->responses->count() > 0)
+                                        <a href="{{ route('admin.katsinov-v2.full-report', $katsinov->id) }}" 
+                                           class="text-yellow-600 hover:text-yellow-900" title="Full Report">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                        </a>
+                                    @endif
 
                                     {{-- Admin Actions --}}
                                     @if(Auth::user()->role === 'admin_direktorat')

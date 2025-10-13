@@ -302,11 +302,15 @@
                                                 @php
                                                     $scorePercent = $questionScore * 20; // Convert 0-5 to percentage
                                                     $barColor = $scorePercent >= 80 ? $aspectInfo['color'] : ($scorePercent >= 60 ? 'orange' : 'red');
+                                                    $questionText = $questionTexts[$index][$aspectKey][$qIndex] ?? 'Pertanyaan ' . ($qIndex + 1);
                                                 @endphp
-                                                <li class="mb-2 small">
+                                                <li class="mb-3 small">
                                                     <div class="d-flex justify-content-between align-items-center mb-1">
-                                                        <span class="text-muted">Q{{ $qIndex + 1 }}</span>
+                                                        <span class="text-muted fw-bold">Q{{ $qIndex + 1 }}</span>
                                                         <span class="badge" style="background-color: {{ $barColor }}">{{ $questionScore }}/5</span>
+                                                    </div>
+                                                    <div class="mb-1">
+                                                        <small class="text-dark">{{ $questionText }}</small>
                                                     </div>
                                                     <div class="progress" style="height: 8px;">
                                                         <div class="progress-bar" role="progressbar" 
@@ -336,6 +340,13 @@
             <a href="{{ route('admin.katsinov-v2.show', $katsinov->id) }}" class="btn btn-secondary me-2">
                 <i class='bx bx-arrow-back'></i> Back to Detail
             </a>
+            
+            @if(in_array(Auth::user()->role, ['admin_direktorat', 'validator']))
+                <a href="{{ route('admin.katsinov-v2.full-report', $katsinov->id) }}" class="btn btn-warning me-2">
+                    <i class='bx bx-file-find'></i> Full Report
+                </a>
+            @endif
+            
             <a href="{{ route('admin.katsinov-v2.print-summary', $katsinov->id) }}" target="_blank" class="btn btn-info me-2">
                 <i class='bx bx-printer'></i> Print Summary
             </a>

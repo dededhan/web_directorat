@@ -311,6 +311,10 @@ Route::prefix('admin')->name('admin.')
         Route::prefix('katsinov-v2')->name('katsinov-v2.')
             ->group(function () {
                 Route::get('/', [\App\Http\Controllers\KatsinovV2Controller::class, 'index'])->name('index');
+                
+                // Settings Threshold
+                Route::get('/settings', [\App\Http\Controllers\KatsinovV2Controller::class, 'settings'])->name('settings');
+                Route::put('/settings', [\App\Http\Controllers\KatsinovV2Controller::class, 'updateSettings'])->name('settings.update');
                 Route::get('/create', [\App\Http\Controllers\KatsinovV2Controller::class, 'create'])->name('create');
                 Route::get('/edit/{id}', [\App\Http\Controllers\KatsinovV2Controller::class, 'edit'])->name('edit');
                 Route::post('/store', [\App\Http\Controllers\KatsinovV2Controller::class, 'store'])->name('store');
@@ -345,6 +349,7 @@ Route::prefix('admin')->name('admin.')
                 // Summary
                 Route::get('/{katsinov_id}/summary', [\App\Http\Controllers\KatsinovV2Controller::class, 'showSummary'])->name('summary');
                 Route::get('/{katsinov_id}/print-summary', [\App\Http\Controllers\KatsinovV2Controller::class, 'printSummary'])->name('print-summary');
+                Route::get('/{katsinov_id}/full-report', [\App\Http\Controllers\KatsinovV2Controller::class, 'fullReport'])->name('full-report');
             });
 
         Route::prefix('SDGs')->name('SDGs.')

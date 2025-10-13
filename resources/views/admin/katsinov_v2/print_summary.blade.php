@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Summary Report - {{ $katsinov->title }}</title>
     
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -244,6 +247,28 @@
         .bg-warning { background: #ff9800; }
         .bg-danger { background: #f44336; }
         
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            margin: 15px auto;
+            page-break-inside: avoid;
+        }
+        
+        .chart-wrapper {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        .chart-title {
+            text-align: center;
+            font-size: 11pt;
+            font-weight: bold;
+            color: #277177;
+            margin-bottom: 10px;
+        }
+        
         /* Print Styles */
         @media print {
             body {
@@ -265,6 +290,10 @@
             }
             
             .indicator-section {
+                page-break-inside: avoid;
+            }
+            
+            .chart-container {
                 page-break-inside: avoid;
             }
         }
@@ -348,6 +377,27 @@
             </span>
         </div>
         
+        {{-- Overall Aspect Charts --}}
+        <div class="page-break"></div>
+        
+        <h3 style="color: #277177; margin-bottom: 15px; text-align: center;">Visualisasi Skor Aspek</h3>
+        
+        {{-- Bar Chart --}}
+        <div class="chart-wrapper" style="margin-bottom: 20px;">
+            <div class="chart-title">Skor Keseluruhan Per Aspek (Bar Chart)</div>
+            <div class="chart-container" style="height: 400px;">
+                <canvas id="overallBarChart"></canvas>
+            </div>
+        </div>
+        
+        {{-- Radar Chart --}}
+        <div class="chart-wrapper" style="margin-bottom: 20px;">
+            <div class="chart-title">Skor Keseluruhan Per Aspek (Radar Chart)</div>
+            <div class="chart-container" style="height: 400px;">
+                <canvas id="overallRadarChart"></canvas>
+            </div>
+        </div>
+        
         {{-- Overall Aspect Scores --}}
         <h3 style="color: #277177; margin-bottom: 10px;">Skor Per Aspek (Keseluruhan)</h3>
         <table>
@@ -406,6 +456,14 @@
                     Indikator {{ $index }}: {{ $indicatorTitles[$index] }}
                 </div>
                 <div class="indicator-body">
+                    {{-- Spider Chart --}}
+                    <div class="chart-wrapper" style="margin-bottom: 20px;">
+                        <div class="chart-title">Spider Chart - Indikator {{ $index }}</div>
+                        <div class="chart-container" style="height: 350px;">
+                            <canvas id="indicator{{ $index }}SpiderChart"></canvas>
+                        </div>
+                    </div>
+                    
                     {{-- Aspect Summary Table --}}
                     <h4 style="margin-bottom: 10px;">Ringkasan Aspek</h4>
                     <table>
@@ -459,11 +517,15 @@
                                         @php
                                             $scorePercent = $questionScore * 20;
                                             $barClass = $scorePercent >= 80 ? 'bg-success' : ($scorePercent >= 60 ? 'bg-warning' : 'bg-danger');
+                                            $questionText = $questionTexts[$index][$aspectKey][$qIndex] ?? 'Pertanyaan ' . ($qIndex + 1);
                                         @endphp
-                                        <li class="question-item">
-                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
-                                                <span><strong>Q{{ $qIndex + 1 }}:</strong></span>
+                                        <li class="question-item" style="margin-bottom: 10px;">
+                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
+                                                <span><strong>Q{{ $qIndex + 1 }}</strong></span>
                                                 <span><strong>{{ $questionScore }}/5 ({{ $scorePercent }}%)</strong></span>
+                                            </div>
+                                            <div style="margin-bottom: 3px; font-size: 9pt; color: #444;">
+                                                {{ $questionText }}
                                             </div>
                                             <div class="progress-bar">
                                                 <div class="progress-fill {{ $barClass }}" style="width: {{ $scorePercent }}%;"></div>
@@ -490,11 +552,209 @@
         </div>
     </div>
     
-    {{-- Auto Print --}}
+    {{-- Chart.js Scripts --}}
     <script>
-        window.onload = function() {
-            window.print();
-        };
+        // Chart Colors
+        const aspectColors = [
+            'rgb(255, 99, 132)',   // Technology
+            'rgb(54, 162, 235)',   // Market
+            'rgb(255, 206, 86)',   // Organization
+            'rgb(75, 192, 192)',   // Manufacturing
+            'rgb(153, 102, 255)',  // Partnership
+            'rgb(255, 159, 64)',   // Investment
+            'rgb(70, 150, 130)'    // Risk
+        ];
+        
+        const aspectLabels = ['Technology', 'Market', 'Organization', 'Manufacturing', 'Partnership', 'Investment', 'Risk'];
+        
+        // Parse data from PHP
+        const overallAspectScores = {!! json_encode($overallAspectScores) !!};
+        const indicatorAspectScores = {!! json_encode($indicatorAspectScores) !!};
+        
+        // Prepare overall aspect data
+        const aspectData = [
+            overallAspectScores.technology || 0,
+            overallAspectScores.market || 0,
+            overallAspectScores.organization || 0,
+            overallAspectScores.manufacturing || 0,
+            overallAspectScores.partnership || 0,
+            overallAspectScores.investment || 0,
+            overallAspectScores.risk || 0
+        ];
+        
+        // Wait for DOM and Chart.js to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Overall Bar Chart
+            const barCtx = document.getElementById('overallBarChart');
+            if (barCtx) {
+                new Chart(barCtx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: aspectLabels,
+                        datasets: [{
+                            label: 'Skor Aspek (%)',
+                            data: aspectData,
+                            backgroundColor: aspectColors.map(color => color.replace('rgb', 'rgba').replace(')', ', 0.7)')),
+                            borderColor: aspectColors,
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // 2. Overall Radar Chart
+            const radarCtx = document.getElementById('overallRadarChart');
+            if (radarCtx) {
+                new Chart(radarCtx.getContext('2d'), {
+                    type: 'radar',
+                    data: {
+                        labels: aspectLabels,
+                        datasets: [{
+                            label: 'Skor Aspek (%)',
+                            data: aspectData,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgb(54, 162, 235)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgb(54, 162, 235)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgb(54, 162, 235)',
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    stepSize: 20,
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + context.parsed.r.toFixed(1) + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // 3. Spider Charts for Each Indicator
+            for (let i = 1; i <= 6; i++) {
+                const indicatorData = [
+                    indicatorAspectScores[i].technology || 0,
+                    indicatorAspectScores[i].market || 0,
+                    indicatorAspectScores[i].organization || 0,
+                    indicatorAspectScores[i].manufacturing || 0,
+                    indicatorAspectScores[i].partnership || 0,
+                    indicatorAspectScores[i].investment || 0,
+                    indicatorAspectScores[i].risk || 0
+                ];
+                
+                const ctx = document.getElementById('indicator' + i + 'SpiderChart');
+                if (ctx) {
+                    new Chart(ctx.getContext('2d'), {
+                        type: 'radar',
+                        data: {
+                            labels: aspectLabels,
+                            datasets: [{
+                                label: 'Indikator ' + i + ' (%)',
+                                data: indicatorData,
+                                backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                                borderColor: 'rgb(102, 126, 234)',
+                                borderWidth: 2,
+                                pointBackgroundColor: aspectColors,
+                                pointBorderColor: '#fff',
+                                pointHoverBackgroundColor: '#fff',
+                                pointHoverBorderColor: aspectColors,
+                                pointRadius: 5,
+                                pointHoverRadius: 7
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                r: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    ticks: {
+                                        stepSize: 20,
+                                        callback: function(value) {
+                                            return value + '%';
+                                        }
+                                    },
+                                    grid: {
+                                        color: 'rgba(0, 0, 0, 0.1)'
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return aspectLabels[context.dataIndex] + ': ' + context.parsed.r.toFixed(1) + '%';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+            
+            // Wait for all charts to render before printing
+            setTimeout(function() {
+                window.print();
+            }, 1000);
+        });
     </script>
 </body>
 </html>

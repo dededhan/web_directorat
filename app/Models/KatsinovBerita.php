@@ -26,13 +26,16 @@ class KatsinovBerita extends Model
         'katsinov_id', 
         'penanggungjawab',
         'penanggungjawab_pdf',
+        'penanggungjawab_signature',
         'ketua',
         'ketua_pdf',
+        'ketua_signature',
         'anggota1',
         'anggota1_pdf',
+        'anggota1_signature',
         'anggota2',
-        'anggota2_pdf'
-
+        'anggota2_pdf',
+        'anggota2_signature'
     ];
 
     public function katsinovs(){

@@ -21,6 +21,25 @@ use App\Models\Setting;
 
 class KatsinovV2Controller extends Controller
 {
+    /**
+     * Get view path based on user role
+     */
+    private function getViewPath($view)
+    {
+        $role = Auth::user()->role ?? 'admin';
+        $prefix = ($role === 'admin_inovasi') ? 'admin_inovasi' : 'admin';
+        return "{$prefix}.katsinov_v2.{$view}";
+    }
+
+    /**
+     * Get route prefix based on user role
+     */
+    private function getRoutePrefix()
+    {
+        $role = Auth::user()->role ?? 'admin';
+        return ($role === 'admin_inovasi') ? 'admin_inovasi' : 'admin';
+    }
+
     public function index()
     {
         $role = Auth::user()->role;
@@ -40,6 +59,7 @@ class KatsinovV2Controller extends Controller
 
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov_v2.index',
+            'admin_inovasi' => 'admin_inovasi.katsinov_v2.index',
             'dosen' => 'subdirektorat-inovasi.dosen.katsinov_v2.index',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.katsinov_v2.index',
             'validator' => 'subdirektorat-inovasi.validator.katsinov_v2.index',
@@ -53,6 +73,7 @@ class KatsinovV2Controller extends Controller
     {
         $view = match (Auth::user()->role) {
             'admin_direktorat' => 'admin.katsinov_v2.form_main',
+            'admin_inovasi' => 'admin_inovasi.katsinov_v2.form_main',
             'dosen' => 'subdirektorat-inovasi.dosen.katsinov_v2.form_main',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.katsinov_v2.form_main',
             'validator' => 'subdirektorat-inovasi.validator.katsinov_v2.form_main',
@@ -93,6 +114,7 @@ class KatsinovV2Controller extends Controller
         
         $view = match (Auth::user()->role) {
             'admin_direktorat' => 'admin.katsinov_v2.form_main',
+            'admin_inovasi' => 'admin_inovasi.katsinov_v2.form_main',
             'dosen' => 'subdirektorat-inovasi.dosen.katsinov_v2.form_main',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.katsinov_v2.form_main',
             'validator' => 'subdirektorat-inovasi.validator.katsinov_v2.form_main',
@@ -101,6 +123,9 @@ class KatsinovV2Controller extends Controller
 
         $setting = Setting::where('key', 'katsinov_threshold')->first();
         $minPercentage = $setting ? $setting->value : 80.0;
+
+        // Get indicator status with threshold info
+        $indicatorStatus = $this->getIndicatorStatus($id);
 
         return view($view, [
             'katsinov' => $katsinov,
@@ -111,6 +136,7 @@ class KatsinovV2Controller extends Controller
             'indicatorFive' => $indicatorFive,
             'indicatorSix' => $indicatorSix,
             'min_percentage_js' => $minPercentage,
+            'indicatorStatus' => $indicatorStatus,
         ]);
     }
 
@@ -290,6 +316,7 @@ class KatsinovV2Controller extends Controller
         $role = Auth::user()->role;
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov_v2.show',
+            'admin_inovasi' => 'admin_inovasi.katsinov_v2.show',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.katsinov_v2.show',
             'validator' => 'subdirektorat-inovasi.validator.katsinov_v2.show',
             'registered_user' => 'subdirektorat-inovasi.registered_user.katsinov_v2.show',
@@ -373,6 +400,7 @@ class KatsinovV2Controller extends Controller
         $role = Auth::user()->role;
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov_v2.form_inovasi',
+            'admin_inovasi' => 'admin_inovasi.katsinov_v2.form_inovasi',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.katsinov_v2.form_inovasi',
             'dosen' => 'subdirektorat-inovasi.dosen.katsinov_v2.form_inovasi',
             'validator' => 'subdirektorat-inovasi.validator.katsinov_v2.form_inovasi',
@@ -454,6 +482,7 @@ class KatsinovV2Controller extends Controller
         $role = Auth::user()->role;
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov_v2.form_lampiran',
+            'admin_inovasi' => 'admin_inovasi.katsinov_v2.form_lampiran',
             'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.katsinov_v2.form_lampiran',
             'dosen' => 'subdirektorat-inovasi.dosen.katsinov_v2.form_lampiran',
             'validator' => 'subdirektorat-inovasi.validator.katsinov_v2.form_lampiran',
@@ -546,6 +575,7 @@ class KatsinovV2Controller extends Controller
         $role = Auth::user()->role;
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov_v2.form_informasi_dasar',
+            'admin_inovasi' => 'admin_inovasi.katsinov_v2.form_informasi_dasar',
             default => 'admin.katsinov_v2.form_informasi_dasar',
         };
 
@@ -589,6 +619,7 @@ class KatsinovV2Controller extends Controller
         $role = Auth::user()->role;
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov_v2.form_berita_acara',
+            'admin_inovasi' => 'admin_inovasi.katsinov_v2.form_berita_acara',
             default => 'admin.katsinov_v2.form_berita_acara',
         };
 
@@ -598,23 +629,72 @@ class KatsinovV2Controller extends Controller
     public function formBeritaAcaraStore(Request $request, $katsinov_id)
     {
         $validated = $request->validate([
-            'hari' => 'required|string',
-            'tanggal' => 'required|string',
-            'bulan' => 'required|string',
-            'tahun' => 'required|string',
-            'keterangan_tanggal' => 'nullable|string',
-            'tempat' => 'required|string',
-            'surat_keputusan' => 'required|string',
-            'judul_inovasi' => 'required|string',
-            'jenis_inovasi' => 'required|string',
-            'nilai_tki' => 'required|numeric',
-            'opini_penilai' => 'required|string',
-            'tanggal_penutupan' => 'required|date',
-            'nama_penanggungjawab' => 'required|string',
-            'nama_ketua_tim' => 'required|string',
-            'nama_anggota1' => 'required|string',
-            'nama_anggota2' => 'required|string',
+            'day' => 'required|string',
+            'date' => 'required|string',
+            'month' => 'required|string',
+            'year' => 'required|string',
+            'yearfull' => 'required|string',
+            'place' => 'required|string',
+            'decree' => 'required|string',
+            'title' => 'required|string',
+            'type' => 'required|string',
+            'tki' => 'required|numeric',
+            'opinion' => 'required|string',
+            'sign_date' => 'required|date',
+            'penanggungjawab' => 'required|string',
+            'ketua' => 'required|string',
+            'anggota1' => 'required|string',
+            'anggota2' => 'required|string',
+            'penanggungjawab_signature' => 'nullable|string',
+            'ketua_signature' => 'nullable|string',
+            'anggota1_signature' => 'nullable|string',
+            'anggota2_signature' => 'nullable|string',
+            'penanggungjawab_pdf' => 'nullable|file|mimes:pdf|max:2048',
+            'ketua_pdf' => 'nullable|file|mimes:pdf|max:2048',
+            'anggota1_pdf' => 'nullable|file|mimes:pdf|max:2048',
+            'anggota2_pdf' => 'nullable|file|mimes:pdf|max:2048',
         ]);
+
+        // Handle digital signatures (base64 to image)
+        $members = ['penanggungjawab', 'ketua', 'anggota1', 'anggota2'];
+        foreach ($members as $member) {
+            $signatureField = $member . '_signature';
+            if ($request->has($signatureField) && !empty($request->$signatureField)) {
+                // Remove data:image/png;base64, prefix
+                $signatureData = $request->$signatureField;
+                if (preg_match('/^data:image\/(\w+);base64,/', $signatureData, $type)) {
+                    $signatureData = substr($signatureData, strpos($signatureData, ',') + 1);
+                    $type = strtolower($type[1]); // jpg, png, gif
+                    
+                    // Decode base64
+                    $signatureData = base64_decode($signatureData);
+                    
+                    if ($signatureData !== false) {
+                        // Generate unique filename
+                        $filename = 'signature_' . $member . '_' . time() . '.png';
+                        $path = 'berita_acara/signatures/' . $filename;
+                        
+                        // Save to storage
+                        \Storage::disk('public')->put($path, $signatureData);
+                        $validated[$signatureField] = $path;
+                    }
+                }
+            }
+        }
+
+        // Handle PDF uploads
+        if ($request->hasFile('penanggungjawab_pdf')) {
+            $validated['penanggungjawab_pdf'] = $request->file('penanggungjawab_pdf')->store('berita_acara/pdf', 'public');
+        }
+        if ($request->hasFile('ketua_pdf')) {
+            $validated['ketua_pdf'] = $request->file('ketua_pdf')->store('berita_acara/pdf', 'public');
+        }
+        if ($request->hasFile('anggota1_pdf')) {
+            $validated['anggota1_pdf'] = $request->file('anggota1_pdf')->store('berita_acara/pdf', 'public');
+        }
+        if ($request->hasFile('anggota2_pdf')) {
+            $validated['anggota2_pdf'] = $request->file('anggota2_pdf')->store('berita_acara/pdf', 'public');
+        }
 
         $validated['katsinov_id'] = $katsinov_id;
         KatsinovBerita::updateOrCreate(
@@ -634,6 +714,7 @@ class KatsinovV2Controller extends Controller
         $role = Auth::user()->role;
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov_v2.form_record_hasil',
+            'admin_inovasi' => 'admin_inovasi.katsinov_v2.form_record_hasil',
             default => 'admin.katsinov_v2.form_record_hasil',
         };
 
@@ -750,7 +831,7 @@ class KatsinovV2Controller extends Controller
         $indicatorFive = $katsinov->responses()->where('indicator_number', 5)->get();
         $indicatorSix = $katsinov->responses()->where('indicator_number', 6)->get();
         
-        return view('admin.katsinov_v2.print', compact(
+        return view($this->getViewPath('print'), compact(
             'katsinov',
             'inovasi',
             'informasi',
@@ -810,7 +891,7 @@ class KatsinovV2Controller extends Controller
         // Load informasi for certificate
         $informasi = KatsinovInformasi::where('katsinov_id', $katsinov_id)->first();
         
-        return view('admin.katsinov_v2.certificate', compact(
+        return view($this->getViewPath('certificate'), compact(
             'katsinov',
             'informasi',
             'overallScore',
@@ -827,13 +908,22 @@ class KatsinovV2Controller extends Controller
     {
         $katsinov = Katsinov::with(['responses', 'notes', 'reviewer'])->findOrFail($katsinov_id);
         
+        // Load questions data
+        $allQuestions = include(resource_path('views/admin/katsinov_v2/includes/indicator_questions.php'));
+        
         // Total rows per indicator
         $totalRowsPerIndicator = [1 => 22, 2 => 21, 3 => 21, 4 => 22, 5 => 24, 6 => 14];
         
-        // Calculate indicator scores
+        // Calculate indicator scores - ONLY for indicators with data
         $indicatorScores = [];
         for ($i = 1; $i <= 6; $i++) {
             $responses = $katsinov->responses()->where('indicator_number', $i)->get();
+            
+            // Skip if no data for this indicator
+            if ($responses->count() === 0) {
+                continue;
+            }
+            
             $totalScore = $responses->sum('score');
             $totalRows = $totalRowsPerIndicator[$i];
             $maxScore = $totalRows * 5;
@@ -889,10 +979,13 @@ class KatsinovV2Controller extends Controller
             }
         }
         
-        // Calculate question scores (for detailed view)
+        // Calculate question scores (for detailed view) with question texts
         $questionScores = [];
-        for ($i = 1; $i <= 6; $i++) {
+        $questionTexts = [];
+        foreach ($indicatorScores as $i => $data) {
             $questionScores[$i] = [];
+            $questionTexts[$i] = [];
+            
             foreach ($aspectMap as $code => $name) {
                 $responses = $katsinov->responses()
                     ->where('indicator_number', $i)
@@ -900,7 +993,13 @@ class KatsinovV2Controller extends Controller
                     ->orderBy('row_number')
                     ->get();
                 
+                // Get question texts for this indicator and aspect
+                $aspectQuestions = collect($allQuestions[$i] ?? [])->filter(function($q) use ($code) {
+                    return $q['aspect'] === $code;
+                })->values();
+                
                 $questionScores[$i][$name] = $responses->pluck('score')->toArray();
+                $questionTexts[$i][$name] = $aspectQuestions->pluck('desc')->toArray();
             }
         }
         
@@ -909,13 +1008,14 @@ class KatsinovV2Controller extends Controller
         $indicatorAspectScoresJson = json_encode($indicatorAspectScores);
         $questionScoresJson = json_encode($questionScores);
         
-        return view('admin.katsinov_v2.summary', compact(
+        return view($this->getViewPath('summary'), compact(
             'katsinov',
             'indicatorScores',
             'overallAverage',
             'overallAspectScores',
             'indicatorAspectScores',
             'questionScores',
+            'questionTexts',
             'overallAspectScoresJson',
             'indicatorAspectScoresJson',
             'questionScoresJson'
@@ -929,13 +1029,22 @@ class KatsinovV2Controller extends Controller
     {
         $katsinov = Katsinov::with(['responses', 'notes', 'reviewer'])->findOrFail($katsinov_id);
         
+        // Load questions data
+        $allQuestions = include(resource_path('views/admin/katsinov_v2/includes/indicator_questions.php'));
+        
         // Total rows per indicator
         $totalRowsPerIndicator = [1 => 22, 2 => 21, 3 => 21, 4 => 22, 5 => 24, 6 => 14];
         
-        // Calculate indicator scores
+        // Calculate indicator scores - ONLY for indicators with data
         $indicatorScores = [];
         for ($i = 1; $i <= 6; $i++) {
             $responses = $katsinov->responses()->where('indicator_number', $i)->get();
+            
+            // Skip if no data for this indicator
+            if ($responses->count() === 0) {
+                continue;
+            }
+            
             $totalScore = $responses->sum('score');
             $totalRows = $totalRowsPerIndicator[$i];
             $maxScore = $totalRows * 5;
@@ -974,9 +1083,9 @@ class KatsinovV2Controller extends Controller
             $overallAspectScores[$name] = round($percentage, 2);
         }
         
-        // Calculate indicator-aspect scores
+        // Calculate indicator-aspect scores - ONLY for indicators with data
         $indicatorAspectScores = [];
-        for ($i = 1; $i <= 6; $i++) {
+        foreach ($indicatorScores as $i => $data) {
             $indicatorAspectScores[$i] = [];
             foreach ($aspectMap as $code => $name) {
                 $responses = $katsinov->responses()
@@ -991,10 +1100,13 @@ class KatsinovV2Controller extends Controller
             }
         }
         
-        // Calculate question scores
+        // Calculate question scores with texts - ONLY for indicators with data
         $questionScores = [];
-        for ($i = 1; $i <= 6; $i++) {
+        $questionTexts = [];
+        foreach ($indicatorScores as $i => $data) {
             $questionScores[$i] = [];
+            $questionTexts[$i] = [];
+            
             foreach ($aspectMap as $code => $name) {
                 $responses = $katsinov->responses()
                     ->where('indicator_number', $i)
@@ -1002,17 +1114,220 @@ class KatsinovV2Controller extends Controller
                     ->orderBy('row_number')
                     ->get();
                 
+                // Get question texts for this indicator and aspect
+                $aspectQuestions = collect($allQuestions[$i] ?? [])->filter(function($q) use ($code) {
+                    return $q['aspect'] === $code;
+                })->values();
+                
                 $questionScores[$i][$name] = $responses->pluck('score')->toArray();
+                $questionTexts[$i][$name] = $aspectQuestions->pluck('desc')->toArray();
             }
         }
         
-        return view('admin.katsinov_v2.print_summary', compact(
+        return view($this->getViewPath('print_summary'), compact(
             'katsinov',
             'indicatorScores',
             'overallAverage',
             'overallAspectScores',
             'indicatorAspectScores',
-            'questionScores'
+            'questionScores',
+            'questionTexts'
         ));
+    }
+
+    /**
+     * Full Report - Admin Only
+     * Show all form data including main form and supporting forms
+     */
+    public function fullReport($katsinov_id)
+    {
+        // Check if user is admin
+        if (!in_array(Auth::user()->role, ['admin_direktorat', 'validator'])) {
+            abort(403, 'Unauthorized - Admin only');
+        }
+
+        $katsinov = Katsinov::with([
+            'responses',
+            'notes',
+            'reviewer',
+            'user',
+            'scores',
+            'katsinovInovasis',
+            'katsinovLampirans',
+            'katsinovInformasis',
+            'katsinovBeritas',
+            'formRecordHasilPengukuran'
+        ])->findOrFail($katsinov_id);
+        
+        // Load questions data
+        $allQuestions = include(resource_path('views/admin/katsinov_v2/includes/indicator_questions.php'));
+        
+        // Get all responses grouped by indicator
+        $responsesByIndicator = [];
+        for ($i = 1; $i <= 6; $i++) {
+            $responses = $katsinov->responses()
+                ->where('indicator_number', $i)
+                ->orderBy('row_number')
+                ->get();
+            
+            if ($responses->count() > 0) {
+                $responsesByIndicator[$i] = $responses;
+            }
+        }
+        
+        // Get informasi dasar
+        $informasi = $katsinov->katsinovInformasis->first();
+        
+        // Get lampiran
+        $lampiran = $katsinov->katsinovLampirans;
+        
+        // Get berita acara
+        $beritaAcara = $katsinov->katsinovBeritas->first();
+        
+        // Get record hasil
+        $recordHasil = $katsinov->formRecordHasilPengukuran;
+        
+        // Get informasi inovasi (if exists from old system)
+        $inovasiInfo = $katsinov->katsinovInovasis->first();
+        
+        return view($this->getViewPath('full_report'), compact(
+            'katsinov',
+            'allQuestions',
+            'responsesByIndicator',
+            'informasi',
+            'lampiran',
+            'beritaAcara',
+            'recordHasil',
+            'inovasiInfo'
+        ));
+    }
+
+    /**
+     * Settings page for threshold configuration
+     */
+    public function settings()
+    {
+        $settings = Setting::first();
+        
+        if (!$settings) {
+            $settings = Setting::create([
+                'key' => 'katsinov_v2_thresholds',
+                'value' => 'Threshold settings for KATSINOV V2',
+                'threshold_indicator_1' => 0,
+                'threshold_indicator_2' => 0,
+                'threshold_indicator_3' => 0,
+                'threshold_indicator_4' => 0,
+                'threshold_indicator_5' => 0,
+                'threshold_indicator_6' => 0,
+            ]);
+        }
+        
+        return view($this->getViewPath('settings'), compact('settings'));
+    }
+
+    /**
+     * Update threshold settings
+     */
+    public function updateSettings(Request $request)
+    {
+        $validated = $request->validate([
+            'threshold_indicator_1' => 'required|numeric|min:0|max:100',
+            'threshold_indicator_2' => 'required|numeric|min:0|max:100',
+            'threshold_indicator_3' => 'required|numeric|min:0|max:100',
+            'threshold_indicator_4' => 'required|numeric|min:0|max:100',
+            'threshold_indicator_5' => 'required|numeric|min:0|max:100',
+            'threshold_indicator_6' => 'required|numeric|min:0|max:100',
+        ]);
+
+        $settings = Setting::first();
+        
+        if (!$settings) {
+            $settings = Setting::create([
+                'key' => 'katsinov_v2_thresholds',
+                'value' => 'Threshold settings for KATSINOV V2',
+            ]);
+        }
+
+        $settings->update($validated);
+
+        $routePrefix = $this->getRoutePrefix();
+        return redirect()->route("{$routePrefix}.katsinov-v2.settings")
+            ->with('success', 'Pengaturan threshold berhasil disimpan!');
+    }
+
+    /**
+     * Check if user can access next indicator based on threshold
+     */
+    private function canAccessIndicator($katsinovId, $indicatorNumber)
+    {
+        if ($indicatorNumber == 1) {
+            return true; // Always can access indicator 1
+        }
+
+        $settings = Setting::first();
+        if (!$settings) {
+            return true; // If no settings, allow access
+        }
+
+        // Get previous indicator number
+        $prevIndicator = $indicatorNumber - 1;
+        $thresholdField = "threshold_indicator_{$prevIndicator}";
+        $threshold = $settings->$thresholdField ?? 0;
+
+        if ($threshold == 0) {
+            return true; // No threshold set, allow access
+        }
+
+        // Calculate average score for previous indicator
+        $responses = KatsinovResponse::where('katsinov_id', $katsinovId)
+            ->where('indicator_number', $prevIndicator)
+            ->get();
+
+        if ($responses->isEmpty()) {
+            return false; // Previous indicator not filled yet
+        }
+
+        $totalScore = $responses->sum('score');
+        $maxScore = $responses->count() * 4; // Assuming max score is 4 per question
+        $percentage = ($totalScore / $maxScore) * 100;
+
+        return $percentage >= $threshold;
+    }
+
+    /**
+     * Get indicator status with threshold info
+     */
+    private function getIndicatorStatus($katsinovId)
+    {
+        $settings = Setting::first();
+        $status = [];
+
+        for ($i = 1; $i <= 6; $i++) {
+            $canAccess = $this->canAccessIndicator($katsinovId, $i);
+            $threshold = $settings ? $settings->{"threshold_indicator_" . ($i - 1)} ?? 0 : 0;
+            
+            $responses = KatsinovResponse::where('katsinov_id', $katsinovId)
+                ->where('indicator_number', $i)
+                ->get();
+
+            $completed = $responses->count() > 0;
+            
+            if ($completed) {
+                $totalScore = $responses->sum('score');
+                $maxScore = $responses->count() * 4;
+                $percentage = ($totalScore / $maxScore) * 100;
+            } else {
+                $percentage = 0;
+            }
+
+            $status[$i] = [
+                'can_access' => $canAccess,
+                'threshold' => $i > 1 ? $threshold : null,
+                'completed' => $completed,
+                'percentage' => round($percentage, 2),
+            ];
+        }
+
+        return $status;
     }
 }

@@ -1,4 +1,4 @@
-@extends('admin.admin')
+@extends('admin_inovasi.dashboard')
 
 @section('contentadmin')
 <div class="container mx-auto px-4 py-8">
@@ -17,7 +17,7 @@
         @endif
 
         {{-- Form --}}
-        <form action="{{ route('admin.katsinov-v2.form-berita-acara.store', $katsinov->id) }}" method="POST" class="bg-white shadow-lg rounded-lg p-8">
+        <form action="{{ route('admin_inovasi.katsinov-v2.form-berita-acara.store', $katsinov->id) }}" method="POST" class="bg-white shadow-lg rounded-lg p-8">
             @csrf
 
             <div class="space-y-6">
@@ -326,7 +326,7 @@
 
             {{-- Action Buttons --}}
             <div class="flex items-center justify-between mt-8 pt-6 border-t">
-                <a href="{{ route('admin.katsinov-v2.show', $katsinov->id) }}" 
+                <a href="{{ route('admin_inovasi.katsinov-v2.show', $katsinov->id) }}" 
                    class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
                     Kembali
                 </a>
