@@ -100,7 +100,7 @@ class KatsinovV2Controller extends Controller
         $katsinov = Katsinov::with(['responses', 'notes'])->findOrFail($id);
         
         // Check permission
-        if ($katsinov->user_id !== Auth::id() && !in_array(Auth::user()->role, ['admin_direktorat', 'validator'])) {
+        if ($katsinov->user_id !== Auth::id() && !in_array(Auth::user()->role, ['admin_direktorat', 'admin_inovasi', 'validator'])) {
             abort(403, 'Unauthorized');
         }
         
@@ -1142,7 +1142,7 @@ class KatsinovV2Controller extends Controller
     public function fullReport($katsinov_id)
     {
         // Check if user is admin
-        if (!in_array(Auth::user()->role, ['admin_direktorat', 'validator'])) {
+        if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_inovasi', 'validator'])) {
             abort(403, 'Unauthorized - Admin only');
         }
 
@@ -1329,5 +1329,58 @@ class KatsinovV2Controller extends Controller
         }
 
         return $status;
+    }
+
+    /**
+     * Delete Katsinov - Draft only
+     */
+    public function destroy($id)
+    {
+        // Check authorization - only admin_direktorat and admin_inovasi
+        if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_inovasi'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized - Admin only'
+            ], 403);
+        }
+
+        $katsinov = Katsinov::findOrFail($id);
+
+        // Check if status is draft
+        if ($katsinov->status !== 'draft') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Hanya proposal dengan status DRAFT yang dapat dihapus'
+            ], 400);
+        }
+
+        try {
+            // Delete related records
+            $katsinov->responses()->delete();
+            $katsinov->notes()->delete();
+            $katsinov->scores()->delete();
+            $katsinov->katsinovInovasis()->delete();
+            $katsinov->katsinovLampirans()->delete();
+            $katsinov->katsinovInformasis()->delete();
+            $katsinov->katsinovBeritas()->delete();
+            
+            // Delete form record hasil if exists
+            if ($katsinov->formRecordHasilPengukuran) {
+                $katsinov->formRecordHasilPengukuran->delete();
+            }
+
+            // Delete main record
+            $katsinov->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Proposal berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus proposal: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

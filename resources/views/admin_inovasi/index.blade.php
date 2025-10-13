@@ -58,6 +58,20 @@
     
 
     <script>
+        // Debug navigation issues
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded:', window.location.href);
+            
+            // Intercept all clicks to check what's happening
+            document.addEventListener('click', function(e) {
+                const target = e.target.closest('a');
+                if (target && target.href) {
+                    console.log('Link clicked:', target.href);
+                    console.log('Event default prevented?', e.defaultPrevented);
+                }
+            }, true);
+        });
+        
         @if(session('success'))
             Swal.fire({
                 title: 'Berhasil!',

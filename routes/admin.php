@@ -350,6 +350,9 @@ Route::prefix('admin')->name('admin.')
                 Route::get('/{katsinov_id}/summary', [\App\Http\Controllers\KatsinovV2Controller::class, 'showSummary'])->name('summary');
                 Route::get('/{katsinov_id}/print-summary', [\App\Http\Controllers\KatsinovV2Controller::class, 'printSummary'])->name('print-summary');
                 Route::get('/{katsinov_id}/full-report', [\App\Http\Controllers\KatsinovV2Controller::class, 'fullReport'])->name('full-report');
+                
+                // Delete - Draft only
+                Route::delete('/{id}', [\App\Http\Controllers\KatsinovV2Controller::class, 'destroy'])->name('destroy');
             });
 
         Route::prefix('SDGs')->name('SDGs.')
