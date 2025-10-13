@@ -18,11 +18,18 @@ class Katsinov extends Model
         'address',
         'contact',
         'assessment_date',
-        'moreuser_id'
+        'moreuser_id',
+        'status',
+        'reviewer_id',
+        'submitted_at',
+        'reviewed_at',
+        'reviewer_notes'
     ];
 
     protected $casts = [
-        'assessment_date' => 'date'
+        'assessment_date' => 'date',
+        'submitted_at' => 'datetime',
+        'reviewed_at' => 'datetime'
     ];
 
     /**
@@ -35,7 +42,12 @@ class Katsinov extends Model
 
     public function moreUser()
     {
-        return $this->belongsTo(User::class, 'moreuser_id'); // Relasi ke moreuser_id
+        return $this->belongsTo(User::class, 'moreuser_id');
+    }
+
+    public function reviewer()
+    {
+        return $this->belongsTo(User::class, 'reviewer_id');
     }
     /**
      * Get the individual responses for this Katsinov assessment

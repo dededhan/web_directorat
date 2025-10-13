@@ -291,11 +291,18 @@
                     </div>
                 </button>
                 <div x-show="inovasiOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
+                    <li class="{{ request()->routeIs('admin.katsinov-v2.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.katsinov-v2.index') }}">
+                        <i class='bx bxs-star'></i>
+                        <span class="text">Katsinov V2 (New)</span>
+                    </a>
+                </li>
                     <a href="{{ route('admin.katsinov.TableKatsinov') }}" 
                        class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.katsinov.TableKatsinov') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
                         <i class='bx bxs-table text-2xl flex-shrink-0'></i>
                         <span>Tabel Katsinov</span>
                     </a>
+                    
                     <a href="{{ route('admin.katsinov.form') }}" 
                        class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin.katsinov.form') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
                         <i class='bx bxs-file-plus text-2xl flex-shrink-0'></i>

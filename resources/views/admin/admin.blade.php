@@ -45,7 +45,7 @@
 @endphp
 
 <body class="bg-gray-100">
-    @if ($currentRoute !== 'admin.katsinov.show' && $currentRoute !== 'admin.katsinov.summary-all')
+    @if ($currentRoute !== 'admin.katsinov.show' && $currentRoute !== 'admin.katsinov.summary-all' && $currentRoute !== 'admin.katsinov-v2.summary')
         <div x-data="{ sidebarOpen: true }" class="flex h-screen bg-gray-100">
             @include('admin.sidebaradmin')
 
