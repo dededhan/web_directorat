@@ -161,6 +161,7 @@ class ProdiSeeder extends Seeder
             ['fakultas_id' => 7, 'name' => 'S1 Pendidikan Bisnis', 'created_at' => $now, 'updated_at' => $now],
             ['fakultas_id' => 7, 'name' => 'S3 Manajemen Bisnis', 'created_at' => $now, 'updated_at' => $now],
             ['fakultas_id' => 7, 'name' => 'S3 Ilmu Akuntansi', 'created_at' => $now, 'updated_at' => $now],
+            ['fakultas_id' => 7, 'name' => 'S3 Ilmu Manajemen', 'created_at' => $now, 'updated_at' => $now],
 
             // Profesi (ID: 10)
             ['fakultas_id' => 10, 'name' => 'Profesi PPG', 'created_at' => $now, 'updated_at' => $now],
