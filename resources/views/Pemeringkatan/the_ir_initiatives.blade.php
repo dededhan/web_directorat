@@ -40,7 +40,7 @@
             </div>
         </section>
 
-        <section class="bg-white py-12">
+        <!-- <section class="bg-white py-12">
             <div class="container mx-auto px-6">
                 <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">Global Recognition: Our Standing in THE Impact Rankings 2024</h3>
                 <p class="text-cyan-500 mb-8">Universitas Negeri Jakarta is recognized globally for its leadership in sustainability through the prestigious Times Higher Education Impact Rankings.</p>
@@ -89,7 +89,7 @@
                     </a>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <section class="py-16 bg-gray-50">
             <div class="container mx-auto px-6">
