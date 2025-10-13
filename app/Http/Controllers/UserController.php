@@ -196,7 +196,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
             'role' => ['required', 'string', Rule::in([
-                'admin_direktorat', 'kepala_direktorat', 'admin_pemeringkatan', 
+                'admin_direktorat', 'kepala_direktorat', 'admin_pemeringkatan', 'admin_inovasi',
                 'fakultas', 'prodi', 'admin_hilirisasi', 'kepala_sub_direktorat', 
                 'wr3', 'dosen', 'mahasiswa', 'validator', 'registered_user','sulitest_user','admin_equity', 'reviewer_equity', 'equity_fakultas'
             ])],
@@ -241,7 +241,7 @@ class UserController extends Controller
             'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
             'password' => 'nullable|string|min:8',
             'role' => ['required', 'string', Rule::in([
-                'admin_direktorat', 'kepala_direktorat', 'admin_pemeringkatan', 
+                'admin_direktorat', 'kepala_direktorat', 'admin_pemeringkatan', 'admin_inovasi',
                 'fakultas', 'prodi', 'admin_hilirisasi', 'kepala_sub_direktorat', 
                 'wr3', 'dosen', 'mahasiswa', 'validator', 'registered_user','sulitest_user','admin_equity', 'reviewer_equity', 'equity_fakultas'
             ])],

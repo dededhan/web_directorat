@@ -293,11 +293,10 @@
                             @enderror
                         </div>
 
-                        {{-- Mitra Nasional (dengan Tagify) --}}
-                       {{-- GANTI BLOK MITRA NASIONAL ANDA DENGAN INI --}}
+                    
 <div>
     <label for="mitra_nasional" class="block text-sm font-semibold text-gray-700 mb-2">
-        <i class='bx bxs-buildings mr-1 text-gray-500'></i> Mitra Nasional (Min. 1)
+        <i class='bx bxs-buildings mr-1 text-gray-500'></i> Mitra Nasional (Opsional)
     </label>
     @php
         $mitraNasionalValue = old('mitra_nasional', $submission->mitra_nasional ?? []);
