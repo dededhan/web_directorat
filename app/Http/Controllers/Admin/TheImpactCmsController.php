@@ -70,24 +70,10 @@ class TheImpactCmsController extends Controller
         $validated = $request->validate([
             'parent_id' => 'nullable|exists:the_impact_contents,id',
             'title' => 'required|string|max:255',
-            'content_type' => 'required|in:text,link',
-            'content' => 'nullable|string',
-            'link_url' => 'nullable|array',
-            'link_url.*' => 'nullable|url',
+            'content_type' => 'required|in:text',
+            'content' => 'required|string',
             'year' => 'nullable|integer|min:2020|max:' . (date('Y') + 1),
         ]);
-
-        // Filter out empty links
-        if (isset($validated['link_url'])) {
-            $validated['link_url'] = array_values(array_filter($validated['link_url'], function($link) {
-                return !empty(trim($link));
-            }));
-            
-            // If no valid links, set to null
-            if (empty($validated['link_url'])) {
-                $validated['link_url'] = null;
-            }
-        }
 
         DB::beginTransaction();
         try {
@@ -112,9 +98,9 @@ class TheImpactCmsController extends Controller
                 'parent_id' => $validated['parent_id'] ?? null,
                 'point_number' => $pointNumber,
                 'title' => $validated['title'],
-                'content_type' => $validated['content_type'],
+                'content_type' => 'text',
                 'content' => $validated['content'],
-                'link_url' => $validated['link_url'],
+                'link_url' => null,
                 'year' => $validated['year'] ?? null,
                 'order' => $maxOrder + 1,
             ]);
@@ -136,24 +122,10 @@ class TheImpactCmsController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'content_type' => 'required|in:text,link',
-            'content' => 'nullable|string',
-            'link_url' => 'nullable|array',
-            'link_url.*' => 'nullable|url',
+            'content_type' => 'required|in:text',
+            'content' => 'required|string',
             'year' => 'nullable|integer|min:2020|max:' . (date('Y') + 1),
         ]);
-
-        // Filter out empty links
-        if (isset($validated['link_url'])) {
-            $validated['link_url'] = array_values(array_filter($validated['link_url'], function($link) {
-                return !empty(trim($link));
-            }));
-            
-            // If no valid links, set to null
-            if (empty($validated['link_url'])) {
-                $validated['link_url'] = null;
-            }
-        }
 
         DB::beginTransaction();
         try {
@@ -169,6 +141,10 @@ class TheImpactCmsController extends Controller
             if ($content->children->count() > 0 && isset($validated['year']) && $validated['year'] != $content->year) {
                 $this->updateChildrenYear($content->id, $validated['year']);
             }
+            
+            // Force content_type to text and link_url to null
+            $validated['content_type'] = 'text';
+            $validated['link_url'] = null;
             
             $content->update($validated);
 
