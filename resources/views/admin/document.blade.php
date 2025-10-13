@@ -1,55 +1,91 @@
 @extends('admin.admin')
 
-
 @section('contentadmin')
-    {{-- Awal: Perubahan untuk Vite --}}
-    @vite([
-        'resources/css/admin/document_dashboard.css',
-        'resources/js/document/document.js'
-    ])
-    {{-- Akhir: Perubahan untuk Vite --}}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 500: '#0d6d38', 600: '#095629' }
+                    }
+                }
+            }
+        }
+    </script>
 
-    <div class="head-title">
-        <div class="left">
-            <h1>Dokumen</h1>
-            <ul class="breadcrumb">
-                <li>
-                    <a href="#">Dashboard</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a class="active" href="#">Kelola Dokumen</a>
-                </li>
-            </ul>
+    <!-- Breadcrumb Header -->
+    <div class="mb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Kelola Dokumen</h1>
+                <div class="flex items-center text-sm text-gray-600 space-x-2">
+                    <a href="#" class="hover:text-primary-500 transition-colors">Dashboard</a>
+                    <i class='bx bx-chevron-right'></i>
+                    <span class="text-primary-500 font-semibold">Kelola Dokumen</span>
+                </div>
+            </div>
         </div>
     </div>
+    <!-- Alerts -->
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg shadow-sm">
+            <div class="flex items-center">
+                <i class="fas fa-check-circle text-green-500 text-xl mr-3"></i>
+                <div class="flex-1">
+                    <p class="text-green-800 font-semibold">{{ session('success') }}</p>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" class="text-green-500 hover:text-green-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
     @endif
+    
     @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-lg shadow-sm">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-circle text-red-500 text-xl mr-3"></i>
+                <div class="flex-1">
+                    <p class="text-red-800 font-semibold">{{ session('error') }}</p>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" class="text-red-500 hover:text-red-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
     @endif
+    
     @if ($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-lg shadow-sm">
+            <div class="flex items-start">
+                <i class="fas fa-exclamation-triangle text-red-500 text-xl mr-3 mt-1"></i>
+                <div class="flex-1">
+                    <p class="text-red-800 font-semibold mb-2">Terjadi kesalahan:</p>
+                    <ul class="list-disc list-inside text-red-700 space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" class="text-red-500 hover:text-red-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
     @endif
-    <div class="table-data">
-        <div class="order">
-            <div class="head">
-                <h3>Input Dokumen</h3>
-            </div> 
+
+    <!-- Input Form -->
+    <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 mb-8 border border-gray-200">
+        <div class="flex items-center mb-6 pb-4 border-b border-gray-200">
+            <div class="w-10 h-10 bg-primary-500 rounded-lg flex items-center justify-center mr-3">
+                <i class="fas fa-file-upload text-white text-lg"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800">Input Dokumen Baru</h3>
+        </div> 
             <form method="POST" action="{{ route('admin.document.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="row">

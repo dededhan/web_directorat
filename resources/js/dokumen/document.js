@@ -125,9 +125,12 @@ function renderDocuments(filteredDocs = documents) {
 
     if (filteredDocs.length === 0) {
         grid.innerHTML = `
-            <div class="empty-results">
-                <i class="fas fa-search"></i>
-                <p>No documents found matching your search criteria. Please try a different search term or category.</p>
+            <div class="col-span-full flex flex-col items-center justify-center py-20">
+                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                    <i class="fas fa-search text-gray-400 text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Tidak Ada Dokumen Ditemukan</h3>
+                <p class="text-gray-500 text-center max-w-md">Tidak ada dokumen yang sesuai dengan kriteria pencarian Anda. Silakan coba kata kunci atau kategori yang berbeda.</p>
             </div>
         `;
         return;
@@ -135,40 +138,61 @@ function renderDocuments(filteredDocs = documents) {
 
     filteredDocs.forEach((doc) => {
         const card = document.createElement("div");
-        card.className = "document-card";
+        card.className = "group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-primary-500 transform hover:-translate-y-2";
         card.dataset.category = doc.kategori;
 
-        // All documents now use PDF icon
-        const icon = "file-pdf";
-        const iconColor = "text-red-600";
+        // Category colors
+        const categoryColors = {
+            umum: { bg: 'bg-blue-50', text: 'text-blue-600', icon: 'fa-file-alt' },
+            pemeringkatan: { bg: 'bg-green-50', text: 'text-green-600', icon: 'fa-trophy' },
+            inovasi: { bg: 'bg-orange-50', text: 'text-orange-600', icon: 'fa-lightbulb' }
+        };
+        
+        const categoryStyle = categoryColors[doc.kategori] || categoryColors.umum;
 
         card.innerHTML = `
-            <div class="document-card-icon">
-                <i class="fas fa-${icon} ${iconColor}"></i>
-            </div>
-            <div class="document-card-title">${doc.judul_dokumen}</div>
-            <div class="document-card-meta">
-                <span><i class="fas fa-calendar-alt"></i> ${formatDate(
-                    doc.tanggal_publikasi
-                )}</span>
-                <span><i class="fas fa-weight-hanging"></i> ${formatFileSize(
-                    doc.ukuran
-                )}</span>
-                <span><i class="fas fa-folder"></i> ${getCategoryLabel(
-                    doc.kategori
-                )}</span>
-            </div>
-            <div class="document-card-actions">
-                <a href="/documents/preview/${
-                    doc.id
-                }" class="action-btn view-btn" target="_blank">
-                    <i class="fas fa-eye"></i> View
-                </a>
-                <a href="/documents/download/${
-                    doc.id
-                }" class="action-btn download-btn">
-                    <i class="fas fa-download"></i> Download
-                </a>
+            <div class="p-6 flex flex-col h-full">
+                <!-- Document Icon -->
+                <div class="mb-5 flex items-start justify-between">
+                    <div class="w-16 h-16 ${categoryStyle.bg} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas ${categoryStyle.icon} ${categoryStyle.text} text-2xl"></i>
+                    </div>
+                    <span class="px-3 py-1 ${categoryStyle.bg} ${categoryStyle.text} text-xs font-semibold rounded-full">
+                        ${getCategoryLabel(doc.kategori)}
+                    </span>
+                </div>
+                
+                <!-- Document Title -->
+                <h3 class="text-lg font-bold text-gray-800 mb-4 line-clamp-2 group-hover:text-primary-600 transition-colors min-h-[3.5rem]">
+                    ${doc.judul_dokumen}
+                </h3>
+                
+                <!-- Document Meta Info -->
+                <div class="space-y-2 mb-6 flex-grow">
+                    <div class="flex items-center text-sm text-gray-600">
+                        <i class="fas fa-calendar-alt w-5 text-gray-400"></i>
+                        <span class="ml-2">${formatDate(doc.tanggal_publikasi)}</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600">
+                        <i class="fas fa-file-pdf w-5 text-red-500"></i>
+                        <span class="ml-2">${formatFileSize(doc.ukuran)}</span>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-3 mt-auto">
+                    <a href="/documents/preview/${doc.id}" 
+                       class="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary-500 text-white rounded-lg font-semibold text-sm hover:bg-primary-600 transition-all duration-300 hover:shadow-lg" 
+                       target="_blank">
+                        <i class="fas fa-eye"></i>
+                        <span>Lihat</span>
+                    </a>
+                    <a href="/documents/download/${doc.id}" 
+                       class="flex items-center justify-center gap-2 px-4 py-2.5 bg-white border-2 border-primary-500 text-primary-500 rounded-lg font-semibold text-sm hover:bg-primary-50 transition-all duration-300">
+                        <i class="fas fa-download"></i>
+                        <span>Unduh</span>
+                    </a>
+                </div>
             </div>
         `;
         grid.appendChild(card);
