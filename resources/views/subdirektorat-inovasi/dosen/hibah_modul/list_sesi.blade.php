@@ -81,19 +81,7 @@
                                     {{ $session->periode_awal->format('d M Y') }} - {{ $session->periode_akhir->format('d M Y') }}
                                 </span>
                             </div>
-                            <div class="flex items-center text-sm text-gray-600">
-                                <i class='bx bx-time-five text-blue-500 mr-2 text-lg'></i>
-                                <span class="font-medium">Waktu Tersisa:</span>
-                                @if($daysLeft > 0)
-                                    <span class="ml-2 px-3 py-1 bg-green-100 text-green-800 text-xs font-bold rounded-full">
-                                        {{ $daysLeft }} hari lagi
-                                    </span>
-                                @else
-                                    <span class="ml-2 px-3 py-1 bg-red-100 text-red-800 text-xs font-bold rounded-full">
-                                        Sudah ditutup
-                                    </span>
-                                @endif
-                            </div>
+                       
                         </div>
 
                         <div class="flex-shrink-0">
