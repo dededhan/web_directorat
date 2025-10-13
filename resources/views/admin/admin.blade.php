@@ -6,27 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Dashboard Direktorat</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.js"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     @vite([
         'resources/css/app.css',
+        'resources/css/admin/admin.css',
+        'resources/css/admin/sidebar_dashboardadmin.css',
+        'resources/css/admin/navbar_dashboard.css',
+        'resources/css/admin/scrollbar-fix.css',
         'resources/css/admin/css/form.css',
         'resources/css/admin/css/berita_acara.css',
         'resources/css/admin/css/formberitaacara.css',
@@ -35,25 +21,47 @@
         'resources/js/indikator.js'
     ])
 
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.0.7/css/boxicons.min.css">
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
+    
+    {{-- <link rel="stylesheet" href="{{ asset('admin.css') }}"> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('dashboard_main/sidebar_dashboardadmin.css') }}"> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('dashboard_main/navbar_dashboard.css') }}"> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('scrollbar-fix.css') }}"> --}}
+
+    <title>Dashboard Direktorat</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html, body {
-            margin: 0;
-            padding: 0;
+        html,
+        body {
             height: 100%;
+            margin: 0;
+            padding: 0;
             overflow-x: hidden;
         }
-        body { 
-            font-family: 'Inter', sans-serif; 
+
+        body {
+            overflow-y: auto !important;
         }
-        [x-cloak] { 
-            display: none !important; 
+
+        #content {
+            overflow: visible !important;
+        }
+
+        #content main {
+            overflow: visible !important;
+        }
+
+        .no-double-scroll {
+            overflow-y: visible !important;
+            height: auto !important;
         }
     </style>
 </head>
@@ -62,30 +70,32 @@
     $currentRoute = Route::currentRouteName();
 @endphp
 
-<body class="bg-gray-100"
-    data-success="{{ session('success') }}"
-    data-error="{{ session('error') }}"
-    style="{{ $currentRoute === 'admin.katsinov.show' || $currentRoute === 'admin.katsinov.summary-all' ? 'margin: 0; padding: 0;' : '' }}">
+<body style="{{ $currentRoute === 'admin.katsinov.show' ? 'margin-left: -200px;' : '' }}">
 
-    @if ($currentRoute === 'admin.katsinov.show' || $currentRoute === 'admin.katsinov.summary-all')
-        @yield('contentadmin')
-    @else
-        <div x-data="{ sidebarOpen: true }" class="flex h-screen w-full bg-gray-100 m-0 p-0">
-            @include('admin.sidebaradmin')
+    
+    @php
+        $currentRoute = Route::currentRouteName();
+    @endphp
 
-            <div class="flex-1 flex flex-col h-full overflow-hidden m-0 p-0">
-                @include('admin.navbaradmin')
-
-                <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4 md:p-6">
-                    @yield('contentadmin')
-                </main>
-            </div>
-        </div>
+    @if ($currentRoute !== 'admin.katsinov.show' && $currentRoute !== 'admin.katsinov.summary-all')
+        @include('admin.sidebaradmin')
     @endif
 
+    <section id="content">
+        @if ($currentRoute !== 'admin.katsinov.show' && $currentRoute !== 'admin.katsinov.summary-all')
+            @include('admin.navbaradmin')
+        @endif
+        
+
+        <main class="content-wrapper">
+            <div class="content-container">
+                @yield('contentadmin')
+            </div>
+        </main>
+    </section>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    @stack('scripts')
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </body>
 
