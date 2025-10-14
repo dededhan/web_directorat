@@ -172,15 +172,15 @@ class DokumenController extends Controller
     public function update(StoreDokumenRequest $request, Dokumen $document)
     {
         try {
-            $data = $request->validated();
+            $data = [
+                'kategori' => $request->kategori,
+                'tanggal_publikasi' => $request->tanggal,
+                'judul_dokumen' => $request->judul_dokumen,
+                'deskripsi' => $request->deskripsi,
+            ];
             
-            // Handle file update
+            // Handle file update only if new file is uploaded
             if ($request->hasFile('file_dokumen')) {
-                // Validasi file
-                $request->validate([
-                    'file_dokumen' => 'required|file|mimes:pdf,docx,doc|max:10240'
-                ]);
-                
                 // Delete old file
                 if (Storage::disk('public')->exists($document->path)) {
                     Storage::disk('public')->delete($document->path);

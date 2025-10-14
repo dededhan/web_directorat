@@ -187,7 +187,8 @@
                                          data-kategori="{{ $dokumen->kategori }}"
                                          data-tanggal="{{ $dokumen->tanggal_publikasi }}"
                                          data-judul="{{ $dokumen->judul_dokumen }}"
-                                         data-deskripsi="{{ $dokumen->deskripsi }}">
+                                         data-deskripsi="{{ $dokumen->deskripsi }}"
+                                         data-filename="{{ $dokumen->nama_file }}">
                                          <i class="fas fa-edit">edit</i>
                                          </button>
                                          <form action="{{ route('admin.document.destroy', $dokumen) }}" method="POST" >
@@ -253,8 +254,11 @@
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label for="edit_file_dokumen" class="form-label">File Dokumen (Opsional)</label>
-                                <input type="file" class="form-control" name="file_dokumen" id="edit_file_dokumen">
-                                <div class="form-text text-muted">Biarkan kosong jika tidak ingin mengubah file</div>
+                                <input type="file" class="form-control" name="file_dokumen" id="edit_file_dokumen" accept=".pdf,.docx,.doc">
+                                <div class="form-text text-muted">
+                                    <i class="fas fa-info-circle"></i> Kosongkan jika tidak ingin mengubah file yang ada<br>
+                                    <span id="current-file-name" class="text-primary"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -287,6 +291,16 @@
                 document.getElementById('edit_tanggal').value = this.dataset.tanggal;
                 document.getElementById('edit_judul_dokumen').value = this.dataset.judul;
                 document.getElementById('edit_deskripsi').value = this.dataset.deskripsi;
+                
+                // Display current filename
+                const currentFileName = this.dataset.filename;
+                const fileNameSpan = document.getElementById('current-file-name');
+                if (currentFileName) {
+                    fileNameSpan.innerHTML = '<i class="fas fa-file-pdf"></i> File saat ini: <strong>' + currentFileName + '</strong>';
+                }
+                
+                // Reset file input
+                document.getElementById('edit_file_dokumen').value = '';
         
                 // Set action form untuk update
                 document.getElementById('edit-document-form').action = `/admin/document/${docId}`;
