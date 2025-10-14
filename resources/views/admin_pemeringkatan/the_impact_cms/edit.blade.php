@@ -12,7 +12,12 @@
         Edit Konten
     </h1>
     <p class="text-gray-600 mt-1 ml-14">
-        {{ $content->point_number }} {{ $content->title }}
+        {{ $content->display_point_number }} {{ $content->title }}
+        @if($content->custom_point_number)
+            <span class="text-xs px-2 py-1 rounded bg-green-100 text-green-700 ml-2">
+                <i class="fas fa-edit"></i> Custom Number
+            </span>
+        @endif
     </p>
 </div>
 
@@ -25,13 +30,37 @@
             <!-- Point Number (Read Only) -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                    Point Number
+                    Point Number Otomatis
                 </label>
                 <input type="text" 
                        value="{{ $content->point_number }}"
                        disabled
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
-                <p class="mt-1 text-sm text-gray-500">Numbering otomatis, tidak bisa diubah</p>
+                <p class="mt-1 text-sm text-gray-500">Numbering otomatis berdasarkan urutan</p>
+            </div>
+
+            <!-- Custom Point Number -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Nomor Point Custom (Opsional)
+                </label>
+                <input type="text" 
+                       name="custom_point_number" 
+                       value="{{ old('custom_point_number', $content->custom_point_number) }}"
+                       placeholder="Contoh: 1.3, 1.4, 2, atau 3.5.2"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('custom_point_number') border-red-500 @enderror">
+                @error('custom_point_number')
+                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                @enderror
+                <p class="mt-1 text-sm text-gray-500">
+                    <i class="fas fa-info-circle"></i> Kosongkan untuk menggunakan numbering otomatis. 
+                    Isi dengan nomor custom untuk override (misal: 1.3, skip 1.2, atau langsung ke 3).
+                </p>
+                @if($content->custom_point_number)
+                    <p class="mt-1 text-sm text-blue-600">
+                        <i class="fas fa-check-circle"></i> Saat ini menggunakan nomor custom: <strong>{{ $content->custom_point_number }}</strong>
+                    </p>
+                @endif
             </div>
 
             <!-- Judul -->

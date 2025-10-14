@@ -13,6 +13,7 @@ class TheImpactContent extends Model
         'sdg_id',
         'parent_id',
         'point_number',
+        'custom_point_number',
         'title',
         'content_type',
         'content',
@@ -51,5 +52,10 @@ class TheImpactContent extends Model
             $parent = $parent->parent;
         }
         return $depth;
+    }
+
+    public function getDisplayPointNumberAttribute()
+    {
+        return $this->custom_point_number ?: $this->point_number;
     }
 }

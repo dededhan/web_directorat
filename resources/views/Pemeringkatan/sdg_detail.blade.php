@@ -172,7 +172,7 @@
                                     @foreach ($rootContent->children as $index => $child)
                                         <div class="goal-item">
                                             <div class="goal-item-header">
-                                                <span class="goal-item-title">{{ $child->point_number }} {{ $child->title }}</span>
+                                                <span class="goal-item-title">{{ $child->display_point_number }} {{ $child->title }}</span>
                                                 <svg class="chevron w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                                 </svg>
@@ -193,7 +193,7 @@
                                                         <div class="mt-4 ml-4 border-l-2 border-gray-200 pl-4">
                                                             @foreach($child->children as $subChild)
                                                                 <div class="mb-3">
-                                                                    <h6 class="font-semibold text-gray-800 mb-1">{{ $subChild->point_number }} {{ $subChild->title }}</h6>
+                                                                    <h6 class="font-semibold text-gray-800 mb-1">{{ $subChild->display_point_number }} {{ $subChild->title }}</h6>
                                                                     @if($subChild->content)
                                                                         <div class="text-gray-700 text-sm">{!! preg_replace_callback(
                                                                             '/(https?:\/\/[^\s<>"]+)/i',

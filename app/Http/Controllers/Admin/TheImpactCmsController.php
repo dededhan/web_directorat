@@ -73,6 +73,7 @@ class TheImpactCmsController extends Controller
             'content_type' => 'required|in:text',
             'content' => 'required|string',
             'year' => 'nullable|integer|min:2020|max:' . (date('Y') + 1),
+            'custom_point_number' => 'nullable|string|max:50',
         ]);
 
         DB::beginTransaction();
@@ -97,6 +98,7 @@ class TheImpactCmsController extends Controller
                 'sdg_id' => $sdgId,
                 'parent_id' => $validated['parent_id'] ?? null,
                 'point_number' => $pointNumber,
+                'custom_point_number' => $validated['custom_point_number'] ?? null,
                 'title' => $validated['title'],
                 'content_type' => 'text',
                 'content' => $validated['content'],
@@ -107,9 +109,10 @@ class TheImpactCmsController extends Controller
 
             DB::commit();
             
+            $displayNumber = $content->custom_point_number ?: $content->point_number;
             return redirect()
                 ->route('admin_pemeringkatan.the-impact-cms.editor', $sdgId)
-                ->with('success', 'Konten berhasil ditambahkan dengan point number: ' . $pointNumber);
+                ->with('success', 'Konten berhasil ditambahkan dengan point number: ' . $displayNumber);
         } catch (\Exception $e) {
             DB::rollBack();
             return back()
@@ -125,6 +128,7 @@ class TheImpactCmsController extends Controller
             'content_type' => 'required|in:text',
             'content' => 'required|string',
             'year' => 'nullable|integer|min:2020|max:' . (date('Y') + 1),
+            'custom_point_number' => 'nullable|string|max:50',
         ]);
 
         DB::beginTransaction();
@@ -150,9 +154,10 @@ class TheImpactCmsController extends Controller
 
             DB::commit();
 
+            $displayNumber = $content->custom_point_number ?: $content->point_number;
             return redirect()
                 ->route('admin_pemeringkatan.the-impact-cms.editor', $content->sdg_id)
-                ->with('success', 'Konten berhasil diupdate: ' . $content->point_number . ' ' . $content->title);
+                ->with('success', 'Konten berhasil diupdate: ' . $displayNumber . ' ' . $content->title);
         } catch (\Exception $e) {
             DB::rollBack();
             return back()
@@ -166,7 +171,7 @@ class TheImpactCmsController extends Controller
         try {
             $content = TheImpactContent::findOrFail($contentId);
             $sdgId = $content->sdg_id;
-            $pointNumber = $content->point_number;
+            $pointNumber = $content->custom_point_number ?: $content->point_number;
             
             $content->delete();
 

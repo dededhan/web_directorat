@@ -28,6 +28,25 @@
         @endif
 
         <div class="space-y-6">
+            <!-- Custom Point Number -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Nomor Point (Opsional)
+                </label>
+                <input type="text" 
+                       name="custom_point_number" 
+                       value="{{ old('custom_point_number') }}"
+                       placeholder="Contoh: 1.3, 1.4, 2, atau 3.5.2"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('custom_point_number') border-red-500 @enderror">
+                @error('custom_point_number')
+                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                @enderror
+                <p class="mt-1 text-sm text-gray-500">
+                    <i class="fas fa-info-circle"></i> Kosongkan untuk menggunakan numbering otomatis. 
+                    Anda bisa memasukkan nomor apa saja (misal: 1.3, skip 1.2, atau langsung ke 3).
+                </p>
+            </div>
+
             <!-- Judul -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">

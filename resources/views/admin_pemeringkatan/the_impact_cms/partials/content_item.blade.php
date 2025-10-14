@@ -2,7 +2,12 @@
     <div class="flex items-start justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
         <div class="flex-1">
             <div class="flex items-center space-x-3 mb-2">
-                <span class="font-semibold text-blue-600">{{ $content->point_number }}</span>
+                <span class="font-semibold text-blue-600">{{ $content->display_point_number }}</span>
+                @if($content->custom_point_number)
+                    <span class="text-xs px-2 py-1 rounded bg-green-100 text-green-700" title="Custom numbering">
+                        <i class="fas fa-edit"></i> Custom
+                    </span>
+                @endif
                 <span class="font-medium">{{ $content->title }}</span>
                 @if($content->year)
                     <span class="text-xs px-2 py-1 rounded bg-purple-100 text-purple-700">
@@ -26,7 +31,7 @@
             @endif
         </div>
         <div class="flex items-center space-x-2 ml-4">
-            <button onclick="moveContentModal({{ $content->id }}, '{{ $content->point_number }}', {{ $content->sdg_id }}, {{ $content->parent_id ?? 'null' }})"
+            <button onclick="moveContentModal({{ $content->id }}, '{{ $content->display_point_number }}', {{ $content->sdg_id }}, {{ $content->parent_id ?? 'null' }})"
                     class="text-purple-600 hover:text-purple-800 px-3 py-1 text-sm inline-flex items-center">
                 <i class="fas fa-arrows-alt mr-1"></i> Pindah
             </button>
