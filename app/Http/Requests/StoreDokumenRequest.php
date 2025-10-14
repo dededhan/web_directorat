@@ -13,12 +13,14 @@ class StoreDokumenRequest extends FormRequest
 
     public function rules()
     {
+        $isUpdate = $this->isMethod('PUT') || $this->isMethod('PATCH');
+        
         return [
             'kategori' => 'required|in:umum,pemeringkatan,inovasi',
             'tanggal' => 'required|date',
             'judul_dokumen' => 'required|max:200',
             'deskripsi' => 'nullable',
-            'file_dokumen' => 'required|file|mimes:pdf,doc,docx|max:10240'
+            'file_dokumen' => ($isUpdate ? 'nullable' : 'required') . '|file|mimes:pdf,doc,docx|max:10240'
         ];
     }
 }
