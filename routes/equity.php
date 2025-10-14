@@ -35,6 +35,9 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         return view('admin_equity.dashboard');
     })->name('dashboard');
 
+    // Equity News Management Routes
+    Route::resource('news', \App\Http\Controllers\AdminEquity\EquityNewsController::class);
+
     // Hibah Modul Ajar Routes
     Route::prefix('hibah-modul')->name('hibah_modul.')->group(function () {
         // CRUD Sesi Hibah Modul

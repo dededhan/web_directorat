@@ -13,92 +13,9 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
-        .glassmorphism-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .counter-animation {
-            transition: --num 3s;
-        }
-
-        .animate-blob {
-            animation: blob 7s infinite;
-        }
-
-        .animation-delay-2000 {
-            animation-delay: 2s;
-        }
-
-        .animation-delay-4000 {
-            animation-delay: 4s;
-        }
-
-        @keyframes blob {
-            0% {
-                transform: translate(0px, 0px) scale(1);
-            }
-            33% {
-                transform: translate(30px, -50px) scale(1.1);
-            }
-            66% {
-                transform: translate(-20px, 20px) scale(0.9);
-            }
-            100% {
-                transform: translate(0px, 0px) scale(1);
-            }
-        }
-
-        /* Menjaga konsistensi font untuk semua elemen yang menggunakan Font Awesome */
-        .fas, .fab, .fa-solid, .fa-brands,
-        .navbar .fas, .navbar .fab, nav .fas, nav .fab, 
-        #mobile-navbar .fas, #mobile-navbar .fab, #mobile-sidebar .fas, #mobile-sidebar .fab,
-        .content-icons .fas, .content-icons .fab {
+        .fas, .fab, .fa-solid, .fa-brands {
             font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
             font-weight: 900 !important;
-        }
-
-        .navbar {
-            z-index: 9999 !important;
-        }
-
-        .desktop-dropdown-menu {
-            z-index: 10000 !important;
-        }
-
-        @media (max-width: 768px) {
-            .mobile-hidden {
-                display: none;
-            }
-            
-            .mobile-text-sm {
-                font-size: 0.875rem;
-            }
-            
-            .mobile-p-4 {
-                padding: 1rem;
-            }
-            
-            .mobile-gap-4 {
-                gap: 1rem;
-            }
         }
     </style>
 
@@ -117,6 +34,18 @@
                             'accent': '#B8860B',
                             'accent-light': '#D4AC0D',
                         }
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
                     }
                 }
             }
@@ -129,26 +58,71 @@
     @include('layout.navbar')
 
     <main class="pt-16 md:pt-20">
-        <section class="relative flex items-center justify-center text-white overflow-hidden px-4 sm:px-6 h-screen">
-            <img src="https://images.pexels.com/photos/281260/pexels-photo-281260.jpeg" alt="Equity in Education" class="absolute inset-0 w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/40"></div>
-
-            <div class="relative w-full max-w-7xl mx-auto">
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 items-center justify-items-center">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/250px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" alt="Logo Tut Wuri Handayani" class="h-16 sm:h-24 lg:h-40 object-contain">
-                    <img src="https://pnn.ac.id/media/2025/05/Logo-Tersier-Diktisaintek-Berdampak-1-1024x1024.png" alt="Logo Kemendiksaintek" class="h-16 sm:h-24 lg:h-40 object-contain">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" alt="Logo UNJ" class="h-16 sm:h-24 lg:h-40 object-contain">
-                    <img src="https://lpdp.kemenkeu.go.id/storage/tentang/selayang-pandang/logo/logo_image_1631632938.png" alt="Logo LPDP" class="h-16 sm:h-24 lg:h-40 object-contain">
+        {{-- New Hero Cards Section --}}
+        <section class="relative min-h-screen flex items-start justify-center bg-white pt-20 pb-8">
+            <div class="w-full">
+                <div class="text-center mb-6 sm:mb-8 px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-brand-dark">Berita & Informasi Terkini</h2>
+                    <p class="mt-2 text-base text-gray-600 max-w-2xl mx-auto">Update terbaru seputar Program EQUITY dan informasi penting Universitas Negeri Jakarta</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
+                    @foreach($equityNews as $newsItem)
+                    <a href="{{ route('equity.news.show', $newsItem->slug) }}" class="group relative h-[450px] sm:h-[520px] lg:h-[580px] overflow-hidden transition-all duration-300 hover:brightness-110">
+                        <img src="{{ asset('storage/' . $newsItem->image) }}" alt="{{ $newsItem->title }}" class="absolute inset-0 w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-{{ $newsItem->gradient_color }}-900/85 via-{{ $newsItem->gradient_color }}-900/50 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-5 text-white">
+                            <p class="text-xs uppercase tracking-wider mb-2 font-semibold">{{ $newsItem->category }}</p>
+                            <h3 class="text-lg lg:text-xl font-bold mb-3">{{ $newsItem->title }}</h3>
+                            <div class="flex items-center mt-2">
+                                <div class="w-9 h-9 border-2 border-white rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-{{ $newsItem->gradient_color }}-900 transition-all">
+                                    <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    @endforeach
                 </div>
             </div>
         </section>
 
-        <section id="tentang" class="min-h-screen flex items-center bg-brand-light py-10 sm:py-12"> <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-2 gap-8 lg:gap-10 items-center mb-6 sm:mb-8"> <div class="order-2 lg:order-1">
+        {{-- Supported By Section --}}
+        <section class="bg-gray-50 py-12 sm:py-16">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl sm:text-3xl font-serif font-bold text-brand-dark">Didukung oleh</h2>
+                    <p class="mt-2 text-base text-gray-600">Institusi dan lembaga yang mendukung Program EQUITY UNJ</p>
+                </div>
+                <div class="flex flex-wrap justify-center items-center gap-8 sm:gap-12 lg:gap-16">
+                    <div class="group">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/250px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" 
+                             alt="Logo Tut Wuri Handayani" 
+                             class="h-28 w-28 sm:h-32 sm:w-32 lg:h-36 lg:w-36 object-contain transition-all duration-300 hover:scale-110">
+                    </div>
+                    <div class="group">
+                        <img src="https://pnn.ac.id/media/2025/05/Logo-Tersier-Diktisaintek-Berdampak-1-1024x1024.png" 
+                             alt="Logo Kemendiksaintek" 
+                             class="h-28 w-28 sm:h-32 sm:w-32 lg:h-36 lg:w-36 object-contain transition-all duration-300 hover:scale-110">
+                    </div>
+                    <div class="group">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" 
+                             alt="Logo UNJ" 
+                             class="h-28 w-28 sm:h-32 sm:w-32 lg:h-36 lg:w-36 object-contain transition-all duration-300 hover:scale-110">
+                    </div>
+                    <div class="group">
+                        <img src="https://lpdp.kemenkeu.go.id/storage/tentang/selayang-pandang/logo/logo_image_1631632938.png" 
+                             alt="Logo LPDP" 
+                             class="h-28 w-28 sm:h-32 sm:w-32 lg:h-36 lg:w-36 object-contain transition-all duration-300 hover:scale-110">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tentang" class="min-h-screen flex items-center bg-brand-light py-12"> <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-6 lg:gap-8 items-center mb-4"> <div class="order-2 lg:order-1">
                         <img src="https://www.discovery.org/m/sites/71/2021/07/equity-stockpack-adobe-stock-scaled.jpg" 
                              alt="Program EQUITY" 
                              class="rounded-xl shadow-2xl w-full h-56 sm:h-72 lg:h-96 object-cover"> </div>
-                    <div class="order-1 lg:order-2 content-icons">
+                    <div class="order-1 lg:order-2">
                         <p class="text-brand-accent-light font-semibold tracking-widest uppercase text-sm">Program EQUITY UNJ</p> <h1 class="mt-2 text-2xl sm:text-3xl lg:text-4xl font-serif font-bold tracking-tight text-brand-dark leading-snug"> Enhancing Quality Education for International University Impacts and Recognition
                         </h1>
                         <p class="mt-3 text-base text-gray-700 leading-relaxed"> Program strategis untuk mendorong UNJ meraih pengakuan global melalui THE Impact Ranking dengan fokus pencapaian Sustainable Development Goals (SDGs).
@@ -163,10 +137,10 @@
 
         </section>
 
-        <section class="flex items-center bg-white py-8 sm:py-10 lg:py-12"> 
+        <section class="min-h-screen flex items-center bg-white py-12"> 
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-12 sm:mb-16 lg:mb-20"> 
-                    <div class="space-y-6 lg:space-y-8 content-icons">
+                <div class="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center mb-8"> 
+                    <div class="space-y-6 lg:space-y-8">
                         <div class="space-y-3">
                             <p class="font-semibold text-brand-accent tracking-wide uppercase text-sm">Latar Belakang Program</p> 
                             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-brand-dark leading-tight"> 
@@ -215,7 +189,7 @@
                     </div>
                 </div>
 
-                <div id="dokumen" class="max-w-6xl mx-auto mb-4">
+                <div id="dokumen" class="max-w-6xl mx-auto">
                     <div class="bg-gradient-to-br from-brand-accent/5 to-brand-accent-light/10 rounded-2xl shadow-xl p-6 sm:p-8 lg:p-10 border-2 border-brand-accent/20 hover:border-brand-accent/40 transition-all duration-300 hover:shadow-2xl">
                         <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
                             <div class="flex-shrink-0 bg-brand-accent/20 p-5 sm:p-6 rounded-2xl">
@@ -237,14 +211,14 @@
             </div>
         </section>
 
-        <section id="program" class="min-h-screen relative overflow-hidden bg-gray-100 py-10 sm:py-14 flex items-center"> <div class="absolute top-0 left-0 w-48 sm:w-64 lg:w-80 h-48 sm:h-64 lg:h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-            <div class="absolute top-0 right-0 w-48 sm:w-64 lg:w-80 h-48 sm:h-64 lg:h-80 bg-amber-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-            <div class="absolute bottom-0 left-1/2 w-48 sm:w-64 lg:w-80 h-48 sm:h-64 lg:h-80 bg-orange-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+        <section id="program" class="min-h-screen relative overflow-hidden bg-gray-100 py-12 flex items-center"> <div class="absolute top-0 left-0 w-48 sm:w-64 lg:w-80 h-48 sm:h-64 lg:h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-[blob_7s_ease-in-out_infinite]"></div>
+            <div class="absolute top-0 right-0 w-48 sm:w-64 lg:w-80 h-48 sm:h-64 lg:h-80 bg-amber-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-[blob_7s_ease-in-out_infinite] [animation-delay:2s]"></div>
+            <div class="absolute bottom-0 left-1/2 w-48 sm:w-64 lg:w-80 h-48 sm:h-64 lg:h-80 bg-orange-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-[blob_7s_ease-in-out_infinite] [animation-delay:4s]"></div>
 
             <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-                <div class="text-center mb-8 sm:mb-10"> <h2 class="text-2xl sm:text-3xl font-serif font-bold text-brand-dark">Komponen Program EQUITY UNJ</h2> <p class="mt-2 text-base text-gray-600 max-w-2xl mx-auto">Enam pilar strategis yang menopang pencapaian THE Impact Ranking melalui kontribusi nyata terhadap SDGs.</p> </div>
+                <div class="text-center mb-6"> <h2 class="text-2xl sm:text-3xl font-serif font-bold text-brand-dark">Komponen Program EQUITY UNJ</h2> <p class="mt-2 text-base text-gray-600 max-w-2xl mx-auto">Enam pilar strategis yang menopang pencapaian THE Impact Ranking melalui kontribusi nyata terhadap SDGs.</p> </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8 content-icons"> <div class="glassmorphism-card p-5 sm:p-6 rounded-2xl space-y-3 sm:space-y-4"> <div class="flex items-center space-x-3">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6"> <div class="bg-white/10 backdrop-blur-lg border border-white/20 p-5 sm:p-6 rounded-2xl space-y-3 sm:space-y-4"> <div class="flex items-center space-x-3">
                             <i class="fas fa-building text-xl text-brand-dark"></i> <h3 class="text-lg font-serif font-bold text-brand-dark">Penguatan Kelembagaan</h3> </div>
                         <div class="space-y-3">
                             <div>
@@ -254,7 +228,7 @@
                         </div>
                     </div>
                     
-                    <div class="glassmorphism-card p-5 sm:p-6 rounded-2xl space-y-3 sm:space-y-4"> <div class="flex items-center space-x-3">
+                    <div class="bg-white/10 backdrop-blur-lg border border-white/20 p-5 sm:p-6 rounded-2xl space-y-3 sm:space-y-4"> <div class="flex items-center space-x-3">
                             <i class="fas fa-microscope text-xl text-brand-dark"></i> <h3 class="text-lg font-serif font-bold text-brand-dark">Penelitian & Inovasi</h3> </div>
                         <div class="space-y-3">
                             <div>
@@ -266,7 +240,7 @@
                         </div>
                     </div>
 
-                    <div class="glassmorphism-card p-5 sm:p-6 rounded-2xl space-y-3 sm:space-y-4"> <div class="flex items-center space-x-3">
+                    <div class="bg-white/10 backdrop-blur-lg border border-white/20 p-5 sm:p-6 rounded-2xl space-y-3 sm:space-y-4"> <div class="flex items-center space-x-3">
                             <i class="fas fa-user-graduate text-xl text-brand-dark"></i> <h3 class="text-lg font-serif font-bold text-brand-dark">Pengembangan SDM</h3> </div>
                         <div class="space-y-3">
                             <div>
@@ -278,7 +252,7 @@
                         </div>
                     </div>
 
-                    <div class="glassmorphism-card p-5 sm:p-6 rounded-2xl space-y-3 sm:space-y-4"> <div class="flex items-center space-x-3">
+                    <div class="bg-white/10 backdrop-blur-lg border border-white/20 p-5 sm:p-6 rounded-2xl space-y-3 sm:space-y-4"> <div class="flex items-center space-x-3">
                             <i class="fas fa-globe-americas text-xl text-brand-dark"></i> <h3 class="text-lg font-serif font-bold text-brand-dark">Kerjasama Internasional</h3> </div>
                         <div class="space-y-3">
                             <div>
@@ -290,7 +264,7 @@
                         </div>
                     </div>
 
-                    <div class="glassmorphism-card p-5 sm:p-6 rounded-2xl space-y-3 sm:space-y-4"> <div class="flex items-center space-x-3">
+                    <div class="bg-white/10 backdrop-blur-lg border border-white/20 p-5 sm:p-6 rounded-2xl space-y-3 sm:space-y-4"> <div class="flex items-center space-x-3">
                             <i class="fas fa-bullhorn text-xl text-brand-dark"></i> <h3 class="text-lg font-serif font-bold text-brand-dark">Promosi Global</h3> </div>
                         <div class="space-y-3">
                             <div>
@@ -302,7 +276,7 @@
                         </div>
                     </div>
 
-                    <div class="glassmorphism-card p-5 sm:p-6 rounded-2xl space-y-3 sm:space-y-4"> <div class="flex items-center space-x-3">
+                    <div class="bg-white/10 backdrop-blur-lg border border-white/20 p-5 sm:p-6 rounded-2xl space-y-3 sm:space-y-4"> <div class="flex items-center space-x-3">
                             <i class="fas fa-cogs text-xl text-brand-dark"></i> <h3 class="text-lg font-serif font-bold text-brand-dark">Pengelolaan Program</h3> </div>
                         <div class="space-y-3">
                             <div>
@@ -315,23 +289,23 @@
             </div>
         </section>
 
-        <section id="dampak" class="min-h-screen bg-brand-dark text-white py-10 sm:py-14 flex items-center"> <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-8 sm:mb-10">
+        <section id="dampak" class="min-h-screen bg-brand-dark text-white py-12 flex items-center"> <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-6">
                     <h2 class="text-2xl sm:text-3xl font-serif font-bold">Target Pencapaian Program EQUITY</h2> <p class="mt-2 text-base text-gray-400 max-w-2xl mx-auto">Target strategis UNJ dalam Program EQUITY THE Impact Ranking 2025-2030.</p> </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center mb-8 sm:mb-10 content-icons" x-data="equityCounter()" x-intersect="start()"> <div class="fade-in-up p-5 sm:p-6">
-                        <i class="fas fa-trophy text-3xl sm:text-4xl text-brand-accent mb-2"></i> <h3 class="text-4xl sm:text-5xl font-bold counter-animation" style="--num: 600">
-                            <span x-text="Math.round(num1)">0</span>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 text-center mb-6"> <div class="p-5 sm:p-6 opacity-0 animate-[fadeInUp_0.8s_ease-out_forwards]">
+                        <i class="fas fa-trophy text-3xl sm:text-4xl text-brand-accent mb-2"></i> <h3 class="text-4xl sm:text-5xl font-bold">
+                            <span>600</span>
                         </h3>
                         <p class="mt-1 text-gray-300 text-base">Target Peringkat THE Impact 2030</p> <p class="text-sm text-gray-400">Top 600 Global Ranking</p> </div>
-                    <div class="fade-in-up p-5 sm:p-6" style="animation-delay: 200ms;">
-                        <i class="fas fa-calendar-alt text-3xl sm:text-4xl text-brand-accent mb-2"></i> <h3 class="text-4xl sm:text-5xl font-bold counter-animation" style="--num: 5">
-                            <span x-text="Math.round(num2)">0</span>
+                    <div class="p-5 sm:p-6 opacity-0 animate-[fadeInUp_0.8s_ease-out_0.2s_forwards]">
+                        <i class="fas fa-calendar-alt text-3xl sm:text-4xl text-brand-accent mb-2"></i> <h3 class="text-4xl sm:text-5xl font-bold">
+                            <span>5</span>
                         </h3>
                         <p class="mt-1 text-gray-300 text-base">Tahun Program</p> <p class="text-sm text-gray-400">2025-2030</p> </div>
-                    <div class="fade-in-up p-5 sm:p-6" style="animation-delay: 400ms;">
-                        <i class="fas fa-bullseye text-3xl sm:text-4xl text-brand-accent mb-2"></i> <h3 class="text-4xl sm:text-5xl font-bold counter-animation" style="--num: 17">
-                             <span x-text="Math.round(num3)">0</span>
+                    <div class="p-5 sm:p-6 opacity-0 animate-[fadeInUp_0.8s_ease-out_0.4s_forwards]">
+                        <i class="fas fa-bullseye text-3xl sm:text-4xl text-brand-accent mb-2"></i> <h3 class="text-4xl sm:text-5xl font-bold">
+                             <span>17</span>
                         </h3>
                         <p class="mt-1 text-gray-300 text-base">Sustainable Development Goals</p> <p class="text-sm text-gray-400">Kontribusi pada semua SDGs</p> </div>
                 </div>
@@ -365,103 +339,6 @@
     
     @include('layout.footer')
 
-    <script>
-        function equityCounter() {
-            return {
-                num1: 0,
-                num2: 0,
-                num3: 0,
-                start() {
-                    const animate = (targetNum, propName) => {
-                        const el = document.querySelector(`[style*="--num: ${targetNum}"]`);
-                        if (!el) return;
-                        
-                        const observer = new IntersectionObserver((entries) => {
-                            if (entries[0].isIntersecting) {
-                                let start = 0;
-                                const end = targetNum;
-                                const duration = 2000;
-                                
-                                const step = (timestamp) => {
-                                    if (!start) start = timestamp;
-                                    const progress = timestamp - start;
-                                    const current = Math.min(Math.floor(progress / duration * end), end);
-                                    this[propName] = current;
-                                    
-                                    if (progress < duration) {
-                                        window.requestAnimationFrame(step);
-                                    }
-                                };
-                                window.requestAnimationFrame(step);
-                                observer.unobserve(el);
-                            }
-                        }, { threshold: 0.1 });
-                        
-                        observer.observe(el);
-                    };
-                    
-                    animate(600, 'num1');
-                    animate(5, 'num2');
-                    animate(17, 'num3');
-                }
-            }
-        }
 
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            if (!window.equityDesktopDropdownInitialized) {
-                window.equityDesktopDropdownInitialized = true;
-                
-                const desktopDropdownToggles = document.querySelectorAll('.desktop-dropdown-toggle');
-                const desktopDropdownMenus = document.querySelectorAll('.desktop-dropdown-menu');
-
-                desktopDropdownToggles.forEach((toggle, index) => {
-                    const menu = desktopDropdownMenus[index];
-                    if (!menu) return;
-                    
-                    toggle.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
-                        desktopDropdownMenus.forEach((otherMenu, otherIndex) => {
-                            if (otherIndex !== index && otherMenu) {
-                                otherMenu.classList.add('hidden');
-                            }
-                        });
-                        
-                        menu.classList.toggle('hidden');
-                    });
-                });
-
-                document.addEventListener('click', function(e) {
-                    if (!e.target.closest('.desktop-dropdown-toggle') && !e.target.closest('.desktop-dropdown-menu')) {
-                        desktopDropdownMenus.forEach(menu => {
-                            if (menu) menu.classList.add('hidden');
-                        });
-                    }
-                });
-
-                desktopDropdownMenus.forEach(menu => {
-                    if (menu) {
-                        menu.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                        });
-                    }
-                });
-            }
-        });
-    </script>
 </body>
 </html>

@@ -125,7 +125,8 @@ Route::view('/daptarcalonadjunct', 'daptarcalonadjunct.daptarcalonadjunct')->nam
 Route::view('/register', 'register')->name('register');
 
 // RUTE BARU UNTUK HALAMAN EQUITY
-Route::view('/equity', 'equity.equity')->name('equity');
+Route::get('/equity', [App\Http\Controllers\EquityController::class, 'index'])->name('equity');
+Route::get('/equity/news/{slug}', [App\Http\Controllers\EquityController::class, 'showNews'])->name('equity.news.show');
 
 // FIX: Added route for sdgscenter and corrected view path.
 // Route::view('/sdgscenter', 'subdirektorat-inovasi.sdgscenter')->name('sdgscenter');

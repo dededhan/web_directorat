@@ -87,6 +87,13 @@
                     <i class='bx bxs-dashboard text-2xl flex-shrink-0'></i>
                     <span x-show="open || mobileOpen" class="font-medium">Dashboard</span>
                 </a>
+                
+                <a href="{{ route('admin_equity.news.index') }}"
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.news.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
+                   :class="{'justify-center': !open && !mobileOpen}">
+                    <i class='bx bxs-news text-2xl flex-shrink-0'></i>
+                    <span x-show="open || mobileOpen" class="font-medium">Berita & Informasi</span>
+                </a>
             </div>
 
             <!-- Equity Programs Section -->
