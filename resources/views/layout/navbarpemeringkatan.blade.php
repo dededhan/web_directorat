@@ -162,6 +162,22 @@
             <li><a href="{{ route('Pemeringkatan.the_ir_initiatives') }}" class="text-white hover:text-yellow-400 transition-colors duration-200">THE IR</a></li>
             <li><a href="{{ route('documents.public.index') }}" class="text-white hover:text-yellow-400 transition-colors duration-200">Dokumen</a></li>
             <li><a href="https://sso.unj.ac.id/login" target="_blank" class="text-white hover:text-yellow-400 transition-colors duration-200">SSO</a></li>
+            
+            {{-- Language Switcher --}}
+            <li class="relative">
+                <div class="flex items-center space-x-2">
+                    <a href="{{ route('language.switch', 'id') }}" 
+                       class="text-white hover:text-yellow-400 transition-colors px-2 py-1 rounded {{ app()->getLocale() === 'id' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                        ID
+                    </a>
+                    <span class="text-white">|</span>
+                    <a href="{{ route('language.switch', 'en') }}" 
+                       class="text-white hover:text-yellow-400 transition-colors px-2 py-1 rounded {{ app()->getLocale() === 'en' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                        EN
+                    </a>
+                </div>
+            </li>
+            
             <li><a class="login text-white cursor-pointer hover:text-yellow-400 transition-colors duration-200" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
         </ul>
     </div>
@@ -238,6 +254,21 @@
             <li><a href="{{ route('documents.public.index') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Dokumen</a></li>
             
             <li><a href="https://sso.unj.ac.id/login" target="_blank" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">SSO</a></li>
+
+            {{-- Mobile Language Switcher --}}
+            <li class="px-6">
+                <div class="flex items-center justify-center space-x-3 py-3">
+                    <span class="text-white text-sm"><i class="fas fa-globe w-6 mr-2"></i>Bahasa:</span>
+                    <a href="{{ route('language.switch', 'id') }}" 
+                       class="text-white hover:bg-white/10 px-3 py-1 rounded {{ app()->getLocale() === 'id' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                        ID
+                    </a>
+                    <a href="{{ route('language.switch', 'en') }}" 
+                       class="text-white hover:bg-white/10 px-3 py-1 rounded {{ app()->getLocale() === 'en' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                        EN
+                    </a>
+                </div>
+            </li>
 
             <li class="px-6 my-4">
                 <button class="login block w-full text-center bg-white text-[#186862] py-2 rounded-md font-medium hover:bg-yellow-400 hover:text-[#186862] transition-colors duration-200" data-bs-toggle="modal" data-bs-target="#loginModal">

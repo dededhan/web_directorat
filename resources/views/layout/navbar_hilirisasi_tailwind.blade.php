@@ -66,6 +66,22 @@
 
             <li><a href="{{ route('document.document') }}" class="py-2 px-3 rounded-md hover:bg-white/10 transition-colors">Dokumen</a></li>
             <li><a href="https://sso.unj.ac.id/login" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-md hover:bg-white/10 transition-colors">SSO</a></li>
+            
+            {{-- Language Switcher --}}
+            <li class="relative">
+                <div class="flex items-center space-x-2">
+                    <a href="{{ route('language.switch', 'id') }}" 
+                       class="text-white hover:text-yellow-400 transition-colors px-2 py-1 rounded {{ app()->getLocale() === 'id' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                        ID
+                    </a>
+                    <span class="text-white">|</span>
+                    <a href="{{ route('language.switch', 'en') }}" 
+                       class="text-white hover:text-yellow-400 transition-colors px-2 py-1 rounded {{ app()->getLocale() === 'en' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                        EN
+                    </a>
+                </div>
+            </li>
+            
             <li><button class="open-login-modal-btn py-2 px-4 rounded-md bg-yellow-400 text-gray-800 font-semibold hover:bg-yellow-500 transition-colors">Masuk</button></li>
         </ul>
     </div>
@@ -153,6 +169,21 @@
         
         <li><a href="{{ route('document.document') }}" class="block text-white py-3 px-6 text-lg hover:bg-white/10">Dokumen</a></li>
         <li><a href="https://sso.unj.ac.id/login" target="_blank" rel="noopener noreferrer" class="block text-white py-3 px-6 text-lg hover:bg-white/10">SSO</a></li>
+        
+        {{-- Mobile Language Switcher --}}
+        <li class="px-6">
+            <div class="flex items-center justify-center space-x-3 py-3">
+                <span class="text-white text-sm"><i class="fas fa-globe w-6 mr-2"></i>Bahasa:</span>
+                <a href="{{ route('language.switch', 'id') }}" 
+                   class="text-white hover:bg-white/10 px-3 py-1 rounded {{ app()->getLocale() === 'id' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                    ID
+                </a>
+                <a href="{{ route('language.switch', 'en') }}" 
+                   class="text-white hover:bg-white/10 px-3 py-1 rounded {{ app()->getLocale() === 'en' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                    EN
+                </a>
+            </div>
+        </li>
         
         <li class="px-6 pt-4">
             <button class="open-login-modal-btn w-full bg-yellow-400 text-gray-800 py-2 rounded-md font-semibold hover:bg-yellow-500">
