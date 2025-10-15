@@ -34,6 +34,14 @@
                 <h3>Input Berita</h3>
             </div>
 
+            {{-- Auto-translation info alert --}}
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <i class="fas fa-language fa-lg"></i>
+                <strong>Fitur Terjemahan Otomatis Aktif!</strong> 
+                <p class="mb-0 mt-2">Cukup masukkan judul dan isi berita dalam <strong>Bahasa Indonesia</strong>. Sistem akan secara otomatis menerjemahkan konten ke <strong>Bahasa Inggris</strong> saat Anda menyimpan berita. Terjemahan akan tersedia untuk pengunjung yang memilih bahasa Inggris di website.</p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
             <form method="POST" action="{{ route($routePrefix . '.news.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
@@ -67,25 +75,31 @@
 
                 <div class="row">
                     <div class="col-md-12 mb-3">
-                        <label for="judul_berita" class="form-label">Judul Berita</label>
+                        <label for="judul_berita" class="form-label">Judul Berita (Bahasa Indonesia)</label>
                         <input type="text" class="form-control @error('judul_berita') is-invalid @enderror"
                             name="judul_berita" id="judul_berita" value="{{ old('judul_berita') }}">
                         @error('judul_berita')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="form-text text-muted">Masukkan judul berita (maksimal 200 karakter)</div>
+                        <div class="form-text text-muted">
+                            <i class="fas fa-language"></i> Masukkan judul berita dalam Bahasa Indonesia (maksimal 200 karakter). 
+                            <strong>Terjemahan Bahasa Inggris akan dibuat secara otomatis.</strong>
+                        </div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-12 mb-3">
-                        <label for="isi_berita" class="form-label">Isi Berita</label>
+                        <label for="isi_berita" class="form-label">Isi Berita (Bahasa Indonesia)</label>
                         <textarea class="form-control @error('isi_berita') is-invalid @enderror" name="isi_berita" id="isi_berita"
                             rows="8">{{ old('isi_berita') }}</textarea>
                         @error('isi_berita')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="form-text text-muted">Tuliskan isi berita secara lengkap dan detail</div>
+                        <div class="form-text text-muted">
+                            <i class="fas fa-language"></i> Tuliskan isi berita dalam Bahasa Indonesia secara lengkap dan detail. 
+                            <strong>Terjemahan Bahasa Inggris akan dibuat secara otomatis.</strong>
+                        </div>
                     </div>
                 </div>
 
@@ -146,7 +160,7 @@
                             @foreach ($beritas as $index => $berita)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $berita->user->name ?? 'admin direktorat' }}</td>
+                                    <td>Admin Direktorat</td>
                                     <td>
                                         <span
                                             class="badge bg-{{ [

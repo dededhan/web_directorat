@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Mews\Purifier\Facades\Purifier;
 use Illuminate\Support\Str; // Import the Str class for slug generation
 use Illuminate\Support\Facades\Gate;
+use App\Services\TranslationService; // Import the Translation Service
 
 class BeritaController extends Controller
 {
@@ -49,7 +50,7 @@ class BeritaController extends Controller
             abort(403, 'Unauthorized access');
         }
         
-        $beritas = Berita::with('user')->latest()->get();
+        $beritas = Berita::latest()->get();
         $routePrefix = $this->getRoutePrefix();
         $viewName = 'admin.newsadmin';
 
@@ -107,16 +108,22 @@ class BeritaController extends Controller
                 $cleanJudul = strip_tags($request->judul_berita);
                 $cleanIsi = Purifier::clean($request->isi_berita);
 
+                // Automatic Translation: Translate Indonesian content to English
+                $translationService = new TranslationService();
+                $judulEn = $translationService->translateToEnglish($cleanJudul);
+                $isiEn = $translationService->translateHtml($cleanIsi, 'en');
+
                 // Robustness: Create a unique slug from the title for clean URLs and reliable lookup.
                 $slug = $this->createUniqueSlug($cleanJudul);
 
                 // Create the berita record with the sanitized and prepared data
                 $berita = Berita::create([
-                    'user_id' => Auth::id(),
                     'kategori' => $request->kategori,
                     'tanggal' => $request->tanggal,
                     'judul' => $cleanJudul,
+                    'judul_en' => $judulEn, // Auto-translated English title
                     'isi' => $cleanIsi,
+                    'isi_en' => $isiEn, // Auto-translated English content
                     'slug' => $slug, // Save the generated slug
                     'gambar' => $gambarPath
                 ]);
@@ -221,8 +228,8 @@ class BeritaController extends Controller
         try {
             $berita = Berita::findOrFail($id);
             
-            // Security: Verify user can only edit their own berita or is admin
-            if (auth()->user()->role !== 'admin_direktorat' && $berita->user_id !== auth()->id()) {
+            // Security: Only admins can edit berita
+            if (!in_array(auth()->user()->role, ['admin_direktorat', 'admin_hilirisasi', 'admin_inovasi', 'admin_pemeringkatan', 'fakultas', 'prodi'])) {
                 return redirect()->back()
                     ->with('error', 'Anda tidak memiliki izin untuk mengedit berita ini.');
             }
@@ -241,11 +248,18 @@ class BeritaController extends Controller
             $cleanJudul = strip_tags($validated['judul_berita']);
             $cleanIsi = Purifier::clean($validated['isi_berita']);
 
+            // Automatic Translation: Translate Indonesian content to English
+            $translationService = new TranslationService();
+            $judulEn = $translationService->translateToEnglish($cleanJudul);
+            $isiEn = $translationService->translateHtml($cleanIsi, 'en');
+
             // Update the model's attributes
             $berita->kategori = $validated['kategori'];
             $berita->tanggal = $validated['tanggal'];
             $berita->judul = $cleanJudul;
+            $berita->judul_en = $judulEn; // Auto-translated English title
             $berita->isi = $cleanIsi;
+            $berita->isi_en = $isiEn; // Auto-translated English content
             
             // Robustness: If the title was changed, regenerate the slug to keep the URL current.
             if ($berita->isDirty('judul')) {
@@ -301,8 +315,8 @@ class BeritaController extends Controller
         try {
             $berita = Berita::findOrFail($id);
             
-            // Security: Verify user can only delete their own berita or is admin
-            if (auth()->user()->role !== 'admin_direktorat' && $berita->user_id !== auth()->id()) {
+            // Security: Only admins can delete berita
+            if (!in_array(auth()->user()->role, ['admin_direktorat', 'admin_hilirisasi', 'admin_inovasi', 'admin_pemeringkatan', 'fakultas', 'prodi'])) {
                 return redirect()->back()
                     ->with('error', 'Anda tidak memiliki izin untuk menghapus berita ini.');
             }
