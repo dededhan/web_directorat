@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
-    <title>{{ $berita->judul }}UNJ News Portal</title>
+    <title>{{ $berita->getTranslatedTitle() }} - UNJ News Portal</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -386,13 +386,13 @@
     <!-- Main Content -->
     <div class="content-container">
         <div class="featured-image-container">
-            <img class="featured-image" src="{{ asset('storage/'.$berita->gambar) }}" alt="{{ $berita->judul }}" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg width=\'680\' height=\'400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'18\' text-anchor=\'middle\' alignment-baseline=\'middle\' font-family=\'Arial, sans-serif\' fill=\'%23888888\'%3EUniversitas Indonesia%3C/text%3E%3C/svg%3E'">
+            <img class="featured-image" src="{{ asset('storage/'.$berita->gambar) }}" alt="{{ $berita->getTranslatedTitle() }}" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg width=\'680\' height=\'400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'18\' text-anchor=\'middle\' alignment-baseline=\'middle\' font-family=\'Arial, sans-serif\' fill=\'%23888888\'%3EUniversitas Indonesia%3C/text%3E%3C/svg%3E'">
             <div class="image-overlay">
                 <div class="date-badge">
                     <span>📅 {{ date('F d, Y', strtotime($berita->tanggal)) }}</span>
                     <span>⌚ {{ date('g:i a', strtotime($berita->tanggal)) }}</span>
                 </div>
-                <h1>{{ $berita->judul }}</h1>
+                <h1>{{ $berita->getTranslatedTitle() }}</h1>
             </div>
         </div>
         
@@ -403,7 +403,7 @@
             
             <div class="article-content">
                 <div class="ck-content">
-                    {!! Purifier::clean($berita->isi) !!}
+                    {!! Purifier::clean($berita->getTranslatedContent()) !!}
                 </div>
                 <div class="article-share">
                     <span>Bagikan:</span>

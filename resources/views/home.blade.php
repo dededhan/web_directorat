@@ -606,7 +606,7 @@
                 @foreach ($regularNews as $news)
                     <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
                         <div class="relative">
-                            <img alt="{{ $news->judul }}" class="w-full h-56 object-cover" src="{{ asset('storage/' . $news->gambar) }}" />
+                            <img alt="{{ $news->getTranslatedTitle() }}" class="w-full h-56 object-cover" src="{{ asset('storage/' . $news->gambar) }}" />
                             <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-xs font-semibold">
                                 {{ ucfirst($news->kategori) }}
                             </div>

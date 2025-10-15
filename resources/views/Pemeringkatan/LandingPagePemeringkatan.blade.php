@@ -270,7 +270,7 @@
                 @foreach ($regularNews as $news)
                     <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
                         <div class="relative">
-                            <img alt="{{ $news->judul }}" class="w-full h-56 object-cover" src="{{ asset('storage/' . $news->gambar) }}" />
+                            <img alt="{{ $news->getTranslatedTitle() }}" class="w-full h-56 object-cover" src="{{ asset('storage/' . $news->gambar) }}" />
                             <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-xs font-semibold">
                                 {{ ucfirst($news->kategori) }}
                             </div>
@@ -282,11 +282,11 @@
                             </div>
                             <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="block">
                                 <h3 class="font-bold text-lg mb-3 text-teal-800 hover:text-yellow-600 transition-colors h-14">
-                                    {{ Str::limit($news->judul, 60) }}
+                                    {{ Str::limit($news->getTranslatedTitle(), 60) }}
                                 </h3>
                             </a>
                             <p class="text-gray-600 mb-4 text-sm flex-grow">
-                                {{ Str::limit(strip_tags($news->isi), 100) }}
+                                {{ Str::limit(strip_tags($news->getTranslatedContent()), 100) }}
                             </p>
                             <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="mt-auto inline-block text-teal-700 hover:text-yellow-500 font-medium text-sm">
                                 Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
@@ -314,7 +314,7 @@
                             <div class="swiper-slide h-auto">
                                 <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full">
                                     <div class="relative">
-                                        <img alt="{{ $news->judul }}" class="w-full h-56 object-cover" src="{{ asset('storage/' . $news->gambar) }}" />
+                                        <img alt="{{ $news->getTranslatedTitle() }}" class="w-full h-56 object-cover" src="{{ asset('storage/' . $news->gambar) }}" />
                                         <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-xs font-semibold">
                                             {{ ucfirst($news->kategori) }}
                                         </div>
@@ -326,11 +326,11 @@
                                         </div>
                                         <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="block">
                                             <h3 class="font-bold text-lg mb-3 text-teal-800 hover:text-yellow-600 transition-colors h-14">
-                                                {{ Str::limit($news->judul, 60) }}
+                                                {{ Str::limit($news->getTranslatedTitle(), 60) }}
                                             </h3>
                                         </a>
                                         <p class="text-gray-600 mb-4 text-sm flex-grow">
-                                            {{ Str::limit(strip_tags($news->isi), 100) }}
+                                            {{ Str::limit(strip_tags($news->getTranslatedContent()), 100) }}
                                         </p>
                                         <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="mt-auto inline-block text-teal-700 hover:text-yellow-500 font-medium text-sm">
                                             Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>

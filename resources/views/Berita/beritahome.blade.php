@@ -764,8 +764,8 @@ img, iframe, .card-img {
                         <div class="card-img" style="background-image: url('{{ asset('storage/'.$berita->gambar) }}')"></div>
                         <div class="card-content">
                             <span class="card-category {{ strtolower($berita->kategori) }}">{{ strtoupper($berita->kategori) }}</span>
-                            <h3 class="card-title">{{ $berita->judul }}</h3>
-                            <p class="card-excerpt">{{ Str::limit(strip_tags($berita->isi), 100) }}</p>
+                            <h3 class="card-title">{{ $berita->getTranslatedTitle() }}</h3>
+                            <p class="card-excerpt">{{ Str::limit(strip_tags($berita->getTranslatedContent()), 100) }}</p>
                             <div class="card-meta">
                                 <span class="card-date">{{ date('d F Y', strtotime($berita->tanggal)) }}</span>
                             </div>
