@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $produk->nama_produk }} - Produk Inovasi UNJ</title>
+    <title>{{ $produk->getTranslatedName() }} - Produk Inovasi UNJ</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
@@ -38,7 +38,7 @@
             <a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}#katalog" class="text-primary hover:text-primary-dark font-semibold transition-colors duration-300">
                 <i class="fas fa-arrow-left mr-2"></i>Kembali ke Katalog
             </a>
-            <h1 class="text-3xl md:text-4xl font-bold text-primary mt-4">{{ $produk->nama_produk }}</h1>
+            <h1 class="text-3xl md:text-4xl font-bold text-primary mt-4">{{ $produk->getTranslatedName() }}</h1>
             <p class="text-textSecondary mt-2">Oleh: {{ $produk->inovator }}</p>
              <div class="w-fit bg-accent/20 text-accent rounded-full px-3 py-1 text-x font-semibold">
                                         {{ $produk->kategori }} No:{{ $produk->nomor_paten }}
@@ -92,7 +92,7 @@
                 <div>
                     <h2 class="text-xl font-bold text-primary mb-4 border-b pb-2">Poster</h2>
                     @if($produk->foto_poster)
-                        <img src="{{ asset('storage/' . $produk->foto_poster) }}" alt="Poster {{ $produk->nama_produk }}" class="w-full h-auto object-cover rounded-lg shadow-md">
+                        <img src="{{ asset('storage/' . $produk->foto_poster) }}" alt="Poster {{ $produk->getTranslatedName() }}" class="w-full h-auto object-cover rounded-lg shadow-md">
                     @else
                         <div class="w-full aspect-[3/4] bg-gray-200 flex items-center justify-center rounded-lg text-center p-4">
                            <span class="text-gray-400">Poster tidak tersedia</span>
@@ -104,7 +104,7 @@
                 <div>
                     <h2 class="text-xl font-bold text-primary mb-4 border-b pb-2">Foto Alat</h2>
                     @if($produk->gambar)
-                        <img src="{{ asset('storage/' . $produk->gambar) }}" alt="{{ $produk->nama_produk }}" class="w-full h-auto object-cover rounded-lg shadow-md mb-8">
+                        <img src="{{ asset('storage/' . $produk->gambar) }}" alt="{{ $produk->getTranslatedName() }}" class="w-full h-auto object-cover rounded-lg shadow-md mb-8">
                     @else
                         <div class="w-full aspect-video bg-gray-200 flex items-center justify-center rounded-lg mb-8">
                             <i class="fas fa-image text-gray-400 text-5xl"></i>
@@ -119,7 +119,7 @@
             <div class="mt-6">
                 <h2 class="text-2xl font-bold text-primary mb-4 border-b pb-2">Penjelasan Alat</h2>
                 <div class="prose max-w-none text-textColor leading-7">
-                    {!! $produk->deskripsi !!}
+                    {!! $produk->getTranslatedDescription() !!}
                 </div>
             </div>
 

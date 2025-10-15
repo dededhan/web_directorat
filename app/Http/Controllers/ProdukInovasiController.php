@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Berita;
 use App\Models\Video;
 use App\Models\MitraKolaborasi;
+use App\Services\TranslationService;
 
 class ProdukInovasiController extends Controller
 {
@@ -118,6 +119,12 @@ class ProdukInovasiController extends Controller
             } elseif ($request->video_type === 'mp4' && $request->hasFile('video_path_mp4')) {
                 $data['video_path'] = $request->file('video_path_mp4')->store('produk_inovasi/video', 'public');
             }
+            
+            // Auto-translate to English
+            $translationService = new TranslationService();
+            $data['nama_produk_en'] = $translationService->translate($request->nama_produk);
+            $data['inovator_en'] = $translationService->translate($data['inovator']);
+            $data['deskripsi_en'] = $translationService->translateHtml($request->deskripsi);
 
             ProdukInovasi::create($data);
 
@@ -184,6 +191,18 @@ class ProdukInovasiController extends Controller
                  $data['video_path'] = null;
             }
 
+            // Auto-translate to English if content changed
+            $translationService = new TranslationService();
+            if ($request->filled('nama_produk') && $request->nama_produk !== $produk->nama_produk) {
+                $data['nama_produk_en'] = $translationService->translate($request->nama_produk);
+            }
+            if (isset($data['inovator']) && $data['inovator'] !== $produk->inovator) {
+                $data['inovator_en'] = $translationService->translate($data['inovator']);
+            }
+            if ($request->filled('deskripsi') && $request->deskripsi !== $produk->deskripsi) {
+                $data['deskripsi_en'] = $translationService->translateHtml($request->deskripsi);
+            }
+            
             $produk->update($data);
 
             if ($request->ajax()) {

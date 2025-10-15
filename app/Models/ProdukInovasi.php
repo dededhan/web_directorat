@@ -23,8 +23,11 @@ class ProdukInovasi extends Model
      */
     protected $fillable = [
         'nama_produk',
+        'nama_produk_en',
         'inovator',
+        'inovator_en',
         'deskripsi',
+        'deskripsi_en',
         'nomor_paten',
         'gambar',
         'foto_poster',       
@@ -33,5 +36,28 @@ class ProdukInovasi extends Model
         'kategori',     
         'link_ebook',  
     ];
- 
+    
+    /**
+     * Get the translated product name based on current locale
+     * 
+     * @return string
+     */
+    public function getTranslatedName(): string
+    {
+        return app()->getLocale() === 'en' && $this->nama_produk_en 
+            ? $this->nama_produk_en 
+            : $this->nama_produk;
+    }
+    
+    /**
+     * Get the translated description based on current locale
+     * 
+     * @return string|null
+     */
+    public function getTranslatedDescription(): ?string
+    {
+        return app()->getLocale() === 'en' && $this->deskripsi_en 
+            ? $this->deskripsi_en 
+            : $this->deskripsi;
+    }
 }

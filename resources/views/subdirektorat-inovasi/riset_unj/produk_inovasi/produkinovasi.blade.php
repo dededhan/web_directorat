@@ -105,13 +105,13 @@
                     <div class="flex flex-col lg:flex-row items-center gap-12">
                         <div class="w-full lg:w-6/12 text-center lg:text-left">
                             <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-primary leading-tight mb-6">
-                                Portal Inovasi Universitas Negeri Jakarta
+                                {{ __('messages.portal_innovation_unj') }}
                             </h1>
                             <p class="text-lg text-textSecondary mb-10 max-w-xl mx-auto lg:mx-0">
-                                Jelajahi berbagai karya, riset, dan produk inovatif dari civitas akademika UNJ yang berkontribusi untuk kemajuan bangsa.
+                                {{ __('messages.portal_innovation_desc') }}
                             </p>
                             <a href="#katalog" class="inline-block bg-primary hover:bg-primary-dark text-white font-bold text-lg py-4 px-10 rounded-button transition-all duration-300 ease-out-expo hover:shadow-lg transform hover:-translate-y-1">
-                                Jelajahi Katalog
+                                {{ __('messages.explore_catalog') }}
                             </a>
                         </div>
                         <div class="w-full lg:w-6/12">
@@ -132,8 +132,8 @@
             <section class="py-20 md:py-28 section-bg">
                 <div class="container mx-auto px-6 lg:px-8 max-w-screen-2xl">
                     <div class="text-center mb-12">
-                        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Sambutan Pimpinan</h2>
-                        <p class="text-textSecondary text-lg max-w-3xl mx-auto">Sambutan dari Ibu Dr. RA Murti Kusuma W.S.IP, M.Si. selaku Direktur Inovasi, Sistem Informasi dan Pemeringkatan Universitas Negeri Jakarta.</p>
+                        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">{{ __('messages.leadership_greeting') }}</h2>
+                        <p class="text-textSecondary text-lg max-w-3xl mx-auto">{{ __('messages.leadership_greeting_desc') }}</p>
                     </div>
                     
                     <div id="video-container" class="max-w-5xl mx-auto bg-black rounded-card shadow-card overflow-hidden aspect-video relative">
@@ -165,17 +165,17 @@
             <section class="py-20 md:py-28">
                 <div class="container mx-auto px-6 lg:px-8 max-w-screen-2xl">
                     <div class="text-center mb-16">
-                        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Tentang Inovasi UNJ</h2>
-                        <p class="text-textSecondary text-lg max-w-3xl mx-auto">Kami berkomitmen untuk menjembatani hasil riset dan pengembangan menjadi produk yang berdampak nyata bagi masyarakat dan industri.</p>
+                        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">{{ __('messages.about_innovation_unj') }}</h2>
+                        <p class="text-textSecondary text-lg max-w-3xl mx-auto">{{ __('messages.about_innovation_desc') }}</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         @php
                             $infoCards = [
-                                ['icon' => 'fa-lightbulb', 'color' => 'accent', 'title' => 'Mengapa Inovasi UNJ?', 'text' => 'Unit Inovasi UNJ dibentuk untuk menjembatani hasil penelitian dan pengembangan civitas akademika menuju produk yang berdampak nyata bagi masyarakat.'],
-                                ['icon' => 'fa-rocket', 'color' => 'primary', 'title' => 'Inovasi Dihasilkan', 'text' => 'Hingga kini UNJ telah menghasilkan lebih dari 150 produk inovasi di berbagai bidang, mulai dari pendidikan, teknologi, kesehatan, hingga industri kreatif.'],
-                                ['icon' => 'fa-seedling', 'color' => 'green', 'title' => 'Harapan ke Depan', 'text' => 'Menjadi pusat inovasi terdepan di Asia Tenggara yang menghasilkan solusi berkelanjutan, dengan target 500 produk inovasi berdampak pada tahun 2030.'],
-                                ['icon' => 'fa-users', 'color' => 'blue', 'title' => 'Dampak Masyarakat', 'text' => 'Produk inovasi UNJ telah menjangkau lebih dari 1 juta masyarakat, meningkatkan kualitas hidup, dan mendorong pertumbuhan ekonomi berkelanjutan.']
+                                ['icon' => 'fa-lightbulb', 'color' => 'accent', 'title' => __('messages.why_innovation_unj'), 'text' => __('messages.why_innovation_desc')],
+                                ['icon' => 'fa-rocket', 'color' => 'primary', 'title' => __('messages.innovation_produced'), 'text' => __('messages.innovation_produced_desc')],
+                                ['icon' => 'fa-seedling', 'color' => 'green', 'title' => __('messages.future_hopes'), 'text' => __('messages.future_hopes_desc')],
+                                ['icon' => 'fa-users', 'color' => 'blue', 'title' => __('messages.community_impact'), 'text' => __('messages.community_impact_desc')]
                             ];
                         @endphp
                         @foreach ($infoCards as $card)
@@ -216,16 +216,16 @@
             <section id="mitra" class="py-20 md:py-28 section-bg">
     <div class="container mx-auto px-6 lg:px-8 max-w-screen-2xl">
         <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Mitra Kolaborasi</h2>
-            <p class="text-textSecondary text-lg max-w-3xl mx-auto">Bersama membangun ekosistem inovasi yang berkelanjutan.</p>
+            <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">{{ __('messages.collaboration_partners') }}</h2>
+            <p class="text-textSecondary text-lg max-w-3xl mx-auto">{{ __('messages.collaboration_partners_desc') }}</p>
         </div>
 
         @php
             $mitraList = [
-                ['slug' => 'pendidikan', 'icon' => 'fa-school', 'title' => 'Pendidikan', 'description' => 'Kolaborasi dengan institusi pendidikan untuk meningkatkan mutu pembelajaran dan teknologi edukasi.'],
-                ['slug' => 'sains-teknologi', 'icon' => 'fa-flask', 'title' => 'Sains & Teknologi', 'description' => 'Bermitra dengan industri teknologi dan lembaga riset untuk menciptakan solusi masa depan.'],
-                ['slug' => 'sosial-humaniora-seni', 'icon' => 'fa-palette', 'title' => 'Sosial Humaniora & Seni', 'description' => 'Mengembangkan inovasi sosial dan budaya yang memperkaya kehidupan masyarakat.'],
-                ['slug' => 'kesehatan-psikologi', 'icon' => 'fa-heart-pulse', 'title' => 'Kesehatan & Psikologi', 'description' => 'Bekerja sama untuk meningkatkan kesejahteraan fisik dan mental melalui inovasi terapan.']
+                ['slug' => 'pendidikan', 'icon' => 'fa-school', 'title' => __('messages.education'), 'description' => __('messages.education_desc')],
+                ['slug' => 'sains-teknologi', 'icon' => 'fa-flask', 'title' => __('messages.science_technology'), 'description' => __('messages.science_technology_desc')],
+                ['slug' => 'sosial-humaniora-seni', 'icon' => 'fa-palette', 'title' => __('messages.social_humanities_arts'), 'description' => __('messages.social_humanities_arts_desc')],
+                ['slug' => 'kesehatan-psikologi', 'icon' => 'fa-heart-pulse', 'title' => __('messages.health_psychology'), 'description' => __('messages.health_psychology_desc')]
             ];
         @endphp
 
@@ -246,8 +246,8 @@
             <section id="katalog" class="py-20 md:py-28">
                 <div class="container mx-auto px-6 lg:px-8 max-w-screen-2xl">
                     <div class="text-center mb-12">
-                        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Katalog Produk Inovasi</h2>
-                        <p class="text-textSecondary text-lg max-w-3xl mx-auto">Temukan berbagai inovasi dan karya terbaik dari civitas akademika Universitas Negeri Jakarta.</p>
+                        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">{{ __('messages.innovation_catalog') }}</h2>
+                        <p class="text-textSecondary text-lg max-w-3xl mx-auto">{{ __('messages.innovation_catalog_desc') }}</p>
                     </div>
                 
                     <div class="w-full max-w-2xl mx-auto mb-12">
@@ -255,12 +255,12 @@
                             <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
                                 <i class="fa-solid fa-search text-gray-400"></i>
                             </div>
-                            <input type="text" id="searchInput" class="w-full py-4 pl-14 pr-6 border-transparent rounded-full outline-none text-base bg-white transition duration-300 text-textColor placeholder-textSecondary placeholder-opacity-70 focus:ring-2 focus:ring-primary/50" placeholder="Cari produk, inovator, atau kata kunci...">
+                            <input type="text" id="searchInput" class="w-full py-4 pl-14 pr-6 border-transparent rounded-full outline-none text-base bg-white transition duration-300 text-textColor placeholder-textSecondary placeholder-opacity-70 focus:ring-2 focus:ring-primary/50" placeholder="{{ __('messages.search_placeholder') }}">
                         </div>
 
                         <div class="flex justify-center items-center gap-2 sm:gap-4 mt-8 p-1.5 bg-primary/5 rounded-full max-w-sm mx-auto">
-                            <button class="filter-btn active flex-1 text-center px-4 py-2.5 rounded-full transition-all duration-300 ease-out-expo text-sm font-semibold" data-filter="all">Semua</button>
-                            <button class="filter-btn flex-1 text-center px-4 py-2.5 rounded-full transition-all duration-300 ease-out-expo text-sm font-semibold" data-filter="paten">Paten</button>
+                            <button class="filter-btn active flex-1 text-center px-4 py-2.5 rounded-full transition-all duration-300 ease-out-expo text-sm font-semibold" data-filter="all">{{ __('messages.all') }}</button>
+                            <button class="filter-btn flex-1 text-center px-4 py-2.5 rounded-full transition-all duration-300 ease-out-expo text-sm font-semibold" data-filter="paten">{{ __('messages.patent') }}</button>
                             <button class="filter-btn flex-1 text-center px-4 py-2.5 rounded-full transition-all duration-300 ease-out-expo text-sm font-semibold" data-filter="hki">HKI</button>
                         </div>
                     </div>
@@ -292,17 +292,17 @@
                                 
                                 <h3 class="product-name text-xl font-bold mb-2 text-textColor group-hover:text-primary transition-colors duration-300">
                                     <a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.show', $produk->id) }}">
-                                        {{ $produk->nama_produk }}
+                                        {{ $produk->getTranslatedName() }}
                                     </a>
                                 </h3>
                                 
                                 <p class="product-description text-textSecondary text-sm mb-5 line-clamp-3">
-                                    {!! Str::limit(strip_tags($produk->deskripsi), 120) !!}
+                                    {!! Str::limit(strip_tags($produk->getTranslatedDescription()), 120) !!}
                                 </p>
                                 
                                 <div class="mt-auto pt-4 border-t border-gray-200/80">
                                     <a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.show', $produk->id) }}" class="w-full bg-primary/5 text-primary hover:bg-primary hover:text-white transition-all duration-300 flex items-center justify-center text-sm font-semibold py-3 px-4 rounded-button">
-                                        <span>Lihat Detail</span>
+                                        <span>{{ __('messages.view_detail') }}</span>
                                         <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
                                     </a>
                                 </div>
@@ -311,15 +311,15 @@
                         @empty
                         <div class="col-span-full flex flex-col items-center justify-center py-16 text-center text-textSecondary">
                             <i class="fas fa-box-open text-6xl mb-4 text-gray-300"></i>
-                            <p class="text-xl font-semibold">Produk Inovasi Belum Tersedia</p>
-                            <p>Silakan kembali lagi nanti untuk melihat karya-karya terbaru.</p>
+                            <p class="text-xl font-semibold">{{ __('messages.no_innovation_available') }}</p>
+                            <p>{{ __('messages.no_innovation_desc') }}</p>
                         </div>
                         @endforelse
                         
                         <div id="noResultsMessage" class="hidden col-span-full flex-col items-center justify-center py-16 text-center text-textSecondary">
                             <i class="fas fa-search-minus text-6xl mb-4 text-gray-300"></i>
-                            <p class="text-xl font-semibold">Hasil Tidak Ditemukan</p>
-                            <p>Coba gunakan kata kunci atau filter yang berbeda.</p>
+                            <p class="text-xl font-semibold">{{ __('messages.no_results_found') }}</p>
+                            <p>{{ __('messages.no_results_desc') }}</p>
                         </div>
                     </div>
                 </div>
@@ -328,8 +328,8 @@
             <section class="py-20 md:py-28 section-bg">
                 <div class="container mx-auto px-6 lg:px-8 max-w-screen-2xl">
                     <div class="text-center mb-16">
-                        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Berita Inovasi Terkini</h2>
-                        <p class="text-textSecondary text-lg max-w-3xl mx-auto">Ikuti perkembangan terbaru seputar inovasi, riset, dan prestasi di lingkungan Universitas Negeri Jakarta.</p>
+                        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">{{ __('messages.latest_innovation_news') }}</h2>
+                        <p class="text-textSecondary text-lg max-w-3xl mx-auto">{{ __('messages.latest_innovation_news_desc') }}</p>
                     </div>
                 
                     @if(isset($beritaInovasi) && $beritaInovasi->count() > 0)
@@ -342,12 +342,12 @@
                                     <div class="w-full md:w-6/12 h-64 md:h-full bg-cover bg-center transition-transform duration-300 ease-out-expo group-hover:scale-105" style="background-image: url('{{ asset('storage/' . $beritaUtama->gambar) }}')"></div>
                                     <div class="w-full md:w-6/12 p-6 md:p-8 flex flex-col justify-center">
                                         <p class="text-sm text-textSecondary mb-2">{{ $beritaUtama->created_at->format('d F Y') }}</p>
-                                        <h3 class="text-2xl font-bold mb-3 text-textColor group-hover:text-primary transition-colors duration-300">{{ $beritaUtama->judul }}</h3>
+                                        <h3 class="text-2xl font-bold mb-3 text-textColor group-hover:text-primary transition-colors duration-300">{{ $beritaUtama->getTranslatedTitle() }}</h3>
                                         <p class="text-textSecondary text-sm leading-relaxed mb-4 line-clamp-3">
-                                            {{ Str::limit(strip_tags($beritaUtama->isi), 150) }}
+                                            {{ Str::limit(strip_tags($beritaUtama->getTranslatedContent()), 150) }}
                                         </p>
                                         <span class="text-primary font-bold mt-auto self-start">
-                                            Baca Selengkapnya <i class="fas fa-arrow-right ml-1 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                                            {{ __('messages.read_more') }} <i class="fas fa-arrow-right ml-1 transform group-hover:translate-x-1 transition-transform duration-300"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -358,9 +358,9 @@
                                     <div class="h-40 bg-cover bg-center transition-transform duration-300 ease-out-expo group-hover:scale-105" style="background-image: url('{{ asset('storage/' . $berita->gambar) }}')"></div>
                                     <div class="p-5 flex flex-col flex-grow">
                                         <p class="text-xs text-textSecondary mb-2">{{ $berita->created_at->format('d F Y') }}</p>
-                                        <h3 class="font-bold text-textColor group-hover:text-primary transition-colors duration-300 mb-2 flex-grow">{{ $berita->judul }}</h3>
+                                        <h3 class="font-bold text-textColor group-hover:text-primary transition-colors duration-300 mb-2 flex-grow">{{ $berita->getTranslatedTitle() }}</h3>
                                         <span class="text-primary font-semibold text-sm mt-auto self-start">
-                                            Baca Selengkapnya <i class="fas fa-arrow-right ml-1 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                                            {{ __('messages.read_more') }} <i class="fas fa-arrow-right ml-1 transform group-hover:translate-x-1 transition-transform duration-300"></i>
                                         </span>
                                     </div>
                                 </a>
@@ -370,14 +370,14 @@
 
                         <div class="text-center mt-12">
                             <a href="{{ route('berita.kategori', 'inovasi') }}" class="inline-block bg-primary hover:bg-primary-dark text-white font-bold text-base py-3 px-8 rounded-button transition-all duration-300 ease-out-expo hover:shadow-lg transform hover:-translate-y-1">
-                                Lihat Semua Berita
+                                {{ __('messages.view_all_news') }}
                             </a>
                         </div>
                     @else
                         <div class="col-span-full flex flex-col items-center justify-center py-16 text-center text-textSecondary bg-gray-50 rounded-card">
                             <i class="fas fa-newspaper text-6xl mb-4 text-gray-300"></i>
-                            <p class="text-xl font-semibold">Belum Ada Berita Inovasi</p>
-                            <p>Nantikan update terbaru dari kami segera.</p>
+                            <p class="text-xl font-semibold">{{ __('messages.no_innovation_news') }}</p>
+                            <p>{{ __('messages.no_innovation_news_desc') }}</p>
                         </div>
                     @endif
                 </div>
