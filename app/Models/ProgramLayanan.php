@@ -12,12 +12,28 @@ class ProgramLayanan extends Model
     protected $fillable = [
         'icon',
         'image', 
-        'judul', 
+        'judul',
+        'judul_en', 
         'url',
         'deskripsi',
+        'deskripsi_en',
         'status',
         'kategori'
     ];
 
     protected $casts = [];
+
+    public function getTranslatedTitle()
+    {
+        return app()->getLocale() === 'en' && $this->judul_en 
+            ? $this->judul_en 
+            : $this->judul;
+    }
+
+    public function getTranslatedDescription()
+    {
+        return app()->getLocale() === 'en' && $this->deskripsi_en 
+            ? $this->deskripsi_en 
+            : $this->deskripsi;
+    }
 }

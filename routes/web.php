@@ -26,7 +26,10 @@ use App\Http\Controllers\BeritasdgController;
 use App\Http\Controllers\Auth\SulitestLoginController;
 use App\Http\Controllers\RisetUnjController;
 use App\Http\Controllers\MitraKolaborasiController;
+use App\Http\Controllers\LanguageController;
 
+// Language switching route
+Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 
 Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
 

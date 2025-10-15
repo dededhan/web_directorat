@@ -597,8 +597,8 @@
     <main class="container mx-auto py-12 px-6">
         {{-- Latest News Section (Regular News) --}}
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-teal-800">Berita Terbaru</h2>
-            <p class="text-gray-600 mt-2">Informasi terkini dari Universitas Negeri Jakarta</p>
+            <h2 class="text-3xl md:text-4xl font-bold text-teal-800">{{ __('messages.latest_news') }}</h2>
+            <p class="text-gray-600 mt-2">{{ __('messages.latest_news') === 'Latest News' ? 'Latest information from Universitas Negeri Jakarta' : 'Informasi terkini dari Universitas Negeri Jakarta' }}</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
@@ -618,14 +618,14 @@
                             </div>
                             <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="block">
                                 <h3 class="font-bold text-lg mb-3 text-teal-800 hover:text-yellow-600 transition-colors h-14">
-                                    {{ Str::limit($news->judul, 60) }}
+                                    {{ Str::limit($news->getTranslatedTitle(), 60) }}
                                 </h3>
                             </a>
                             <p class="text-gray-600 mb-4 text-sm flex-grow">
-                                {{ Str::limit(strip_tags($news->isi), 100) }}
+                                {{ Str::limit(strip_tags($news->getTranslatedContent()), 100) }}
                             </p>
                             <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="mt-auto inline-block text-teal-700 hover:text-yellow-500 font-medium text-sm">
-                                Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                                {{ __('messages.read_more') }} <i class="fas fa-arrow-right ml-1"></i>
                             </a>
                         </div>
                     </div>
@@ -639,8 +639,8 @@
         @if (isset($featuredNews) && $featuredNews->count() > 0)
         <section class="news-carousel-section mt-16">
             <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-teal-800">Berita Unggulan</h2>
-                <p class="text-gray-600 mt-2">Sorotan berita pilihan dari kami</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-teal-800">{{ app()->getLocale() === 'en' ? 'Featured News' : 'Berita Unggulan' }}</h2>
+                <p class="text-gray-600 mt-2">{{ app()->getLocale() === 'en' ? 'Highlights from our featured news' : 'Sorotan berita pilihan dari kami' }}</p>
             </div>
 
             <div class="news-carousel-container relative px-10">
@@ -652,7 +652,7 @@
                                 {{-- KARTU INI SEKARANG IDENTIK DENGAN BERITA TERBARU --}}
                                 <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full">
                                     <div class="relative">
-                                        <img alt="{{ $news->judul }}" class="w-full h-56 object-cover" src="{{ asset('storage/' . $news->gambar) }}" />
+                                        <img alt="{{ $news->getTranslatedTitle() }}" class="w-full h-56 object-cover" src="{{ asset('storage/' . $news->gambar) }}" />
                                         <div class="absolute top-3 right-3 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-xs font-semibold">
                                             {{ ucfirst($news->kategori) }}
                                         </div>
@@ -664,14 +664,14 @@
                                         </div>
                                         <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="block">
                                             <h3 class="font-bold text-lg mb-3 text-teal-800 hover:text-yellow-600 transition-colors h-14">
-                                                {{ Str::limit($news->judul, 60) }}
+                                                {{ Str::limit($news->getTranslatedTitle(), 60) }}
                                             </h3>
                                         </a>
                                         <p class="text-gray-600 mb-4 text-sm flex-grow">
-                                            {{ Str::limit(strip_tags($news->isi), 100) }}
+                                            {{ Str::limit(strip_tags($news->getTranslatedContent()), 100) }}
                                         </p>
                                         <a href="{{ route('Berita.show', ['slug' => $news->slug]) }}" class="mt-auto inline-block text-teal-700 hover:text-yellow-500 font-medium text-sm">
-                                            Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                                            {{ __('messages.read_more') }} <i class="fas fa-arrow-right ml-1"></i>
                                         </a>
                                     </div>
                                 </div>
@@ -692,7 +692,7 @@
     <section class="program-section py-16 bg-gray-100">
         <div class="container mx-auto px-6">
             <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-teal-800">Program & Layanan</h2>
+                <h2 class="text-3xl md:text-4xl font-bold text-teal-800">{{ __('messages.our_programs') }}</h2>
                 <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan Pemeringkatan</p>
             </div>
 
@@ -707,18 +707,18 @@
                             @endif
                         </div>
                         <div class="p-6 flex flex-col flex-grow">
-                            <h3 class="font-bold text-teal-800 text-xl mb-3">{{ $program->judul }}</h3>
+                            <h3 class="font-bold text-teal-800 text-xl mb-3">{{ $program->getTranslatedTitle() }}</h3>
                             <div class="text-gray-600 mb-4 text-sm flex-grow min-h-[80px]">
-                                {!! Str::limit(strip_tags($program->deskripsi), 120) !!}
+                                {!! Str::limit(strip_tags($program->getTranslatedDescription()), 120) !!}
                             </div>
                             <div class="mt-4 pt-4 border-t border-gray-100">
                                 @if (!empty($program->url))
                                     <a href="{{ $program->url }}" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
-                                        Akses Program
+                                        {{ app()->getLocale() === 'en' ? 'Access Program' : 'Akses Program' }}
                                     </a>
                                 @else
                                     <button type="button" class="login w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
-                                        Akses Program
+                                        {{ app()->getLocale() === 'en' ? 'Access Program' : 'Akses Program' }}
                                     </button>
                                 @endif
                             </div>
@@ -745,18 +745,18 @@
                                             @endif
                                         </div>
                                         <div class="p-6 flex flex-col flex-grow">
-                                            <h3 class="font-bold text-teal-800 text-xl mb-3">{{ $program->judul }}</h3>
+                                            <h3 class="font-bold text-teal-800 text-xl mb-3">{{ $program->getTranslatedTitle() }}</h3>
                                             <div class="text-gray-600 mb-4 text-sm flex-grow min-h-[80px]">
-                                                {!! Str::limit(strip_tags($program->deskripsi), 120) !!}
+                                                {!! Str::limit(strip_tags($program->getTranslatedDescription()), 120) !!}
                                             </div>
                                             <div class="mt-4 pt-4 border-t border-gray-100">
                                                 @if (!empty($program->url))
                                                     <a href="{{ $program->url }}" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
-                                                        Akses Program
+                                                        {{ app()->getLocale() === 'en' ? 'Access Program' : 'Akses Program' }}
                                                     </a>
                                                 @else
                                                     <button type="button" class="login w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
-                                                        Akses Program
+                                                        {{ app()->getLocale() === 'en' ? 'Access Program' : 'Akses Program' }}
                                                     </button>
                                                 @endif
                                             </div>

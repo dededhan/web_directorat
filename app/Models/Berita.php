@@ -15,11 +15,27 @@ class Berita extends Model
         'kategori',
         'tanggal',
         'judul',
+        'judul_en',
         'slug', 
         'isi',
+        'isi_en',
         'gambar'
         
     ];
+
+    public function getTranslatedTitle()
+    {
+        return app()->getLocale() === 'en' && $this->judul_en 
+            ? $this->judul_en 
+            : $this->judul;
+    }
+
+    public function getTranslatedContent()
+    {
+        return app()->getLocale() === 'en' && $this->isi_en 
+            ? $this->isi_en 
+            : $this->isi;
+    }
     
 
     protected static function boot()

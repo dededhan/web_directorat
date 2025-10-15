@@ -46,6 +46,22 @@
             <li><a href="{{ route('documents.public.index') }}" class="text-white hover:text-yellow-400 transition-colors">Dokumen</a></li>
             <li><a href="{{ route('equity') }}" class="text-white hover:text-yellow-400 transition-colors">EQUITY</a></li>
             <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400 transition-colors">SSO</a></li>
+            
+            {{-- Language Switcher --}}
+            <li class="relative">
+                <div class="flex items-center space-x-2">
+                    <a href="{{ route('language.switch', 'id') }}" 
+                       class="text-white hover:text-yellow-400 transition-colors px-2 py-1 rounded {{ app()->getLocale() === 'id' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                        ID
+                    </a>
+                    <span class="text-white">|</span>
+                    <a href="{{ route('language.switch', 'en') }}" 
+                       class="text-white hover:text-yellow-400 transition-colors px-2 py-1 rounded {{ app()->getLocale() === 'en' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                        EN
+                    </a>
+                </div>
+            </li>
+            
             <li><a class="login text-white bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded-full transition-colors" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
         </ul>
     </div>
@@ -121,6 +137,22 @@
 
             <li><a href="{{ route('documents.public.index') }}" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2"><i class="fas fa-file-alt w-6 mr-2"></i><span>Dokumen</span></a></li>
             <li><a href="https://sso.unj.ac.id/login" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2"><i class="fas fa-key w-6 mr-2"></i><span>SSO</span></a></li>
+            
+            {{-- Mobile Language Switcher --}}
+            <li class="px-2">
+                <div class="flex items-center justify-center space-x-3 py-3">
+                    <span class="text-white text-sm"><i class="fas fa-globe w-6 mr-2"></i>Bahasa:</span>
+                    <a href="{{ route('language.switch', 'id') }}" 
+                       class="text-white hover:bg-white/10 px-3 py-1 rounded {{ app()->getLocale() === 'id' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                        ID
+                    </a>
+                    <a href="{{ route('language.switch', 'en') }}" 
+                       class="text-white hover:bg-white/10 px-3 py-1 rounded {{ app()->getLocale() === 'en' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                        EN
+                    </a>
+                </div>
+            </li>
+            
             <li><a href="#" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2 login" data-bs-toggle="modal" data-bs-target="#loginModal"><i class="fas fa-sign-in-alt w-6 mr-2"></i><span>Masuk</span></a></li>
         </ul>
     </div>
