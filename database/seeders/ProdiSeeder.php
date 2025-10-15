@@ -95,6 +95,8 @@ class ProdiSeeder extends Seeder
             ['fakultas_id' => 2, 'name' => 'S2 Pendidikan Bahasa Arab', 'created_at' => $now, 'updated_at' => $now],
             ['fakultas_id' => 2, 'name' => 'S1 Pendidikan Bahasa Mandarin', 'created_at' => $now, 'updated_at' => $now],
             ['fakultas_id' => 2, 'name' => 'S2 Pendidikan Seni', 'created_at' => $now, 'updated_at' => $now],
+            //new 1
+            ['fakultas_id' => 2, 'name' => 'S2 Pendidikan Bahasa Indonesia', 'created_at' => $now, 'updated_at' => $now],
 
             // FT (ID: 5)
             ['fakultas_id' => 5, 'name' => 'S1 Pendidikan Teknik Elektronika', 'created_at' => $now, 'updated_at' => $now],
