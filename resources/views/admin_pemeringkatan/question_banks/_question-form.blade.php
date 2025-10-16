@@ -2,8 +2,8 @@
     // cuz im lazy af, i seperate
     $isEdit = isset($question);
     $actionUrl = $isEdit 
-        ? route('admin_pemeringkatan.question_banks.questions.update', $question->id) 
-        : route('admin_pemeringkatan.question_banks.questions.store', $questionBank->id);
+        ? route('admin_pemeringkatan.sulitest_question_banks.questions.update', $question->id) 
+        : route('admin_pemeringkatan.sulitest_question_banks.questions.store', $questionBank->id);
 @endphp
 
 <div class="bg-white p-6 rounded-lg shadow-lg border">
@@ -50,7 +50,7 @@
             </div>
 
             <div class="flex justify-end pt-4 border-t border-gray-200 mt-6">
-                <a href="{{ route('admin_pemeringkatan.question_banks.show', $isEdit ? $question->question_bank_id : $questionBank->id) }}" class="rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-3">
+                <a href="{{ route('admin_pemeringkatan.sulitest_question_banks.show', $isEdit ? $question->question_bank_id : $questionBank->id) }}" class="rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-3">
                     Batal
                 </a>
                 <button type="submit" class="inline-flex items-center justify-center rounded-md bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-700">

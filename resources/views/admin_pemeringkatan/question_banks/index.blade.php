@@ -35,7 +35,7 @@
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $bank->questions_count }} Soal</td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $bank->created_at->format('d M Y') }}</td>
                                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                    <a href="{{ route('admin_pemeringkatan.question_banks.show', $bank->id) }}" class="text-teal-600 hover:text-teal-900">Kelola<span class="sr-only">, {{ $bank->name }}</span></a>
+                                    <a href="{{ route('admin_pemeringkatan.sulitest_question_banks.show', $bank->id) }}" class="text-teal-600 hover:text-teal-900">Kelola<span class="sr-only">, {{ $bank->name }}</span></a>
                                 </td>
                             </tr>
                             @empty
@@ -60,7 +60,7 @@
             <div class="px-6 py-4 border-b">
                 <h3 class="text-lg font-medium text-gray-900">Buat Bank Soal Baru</h3>
             </div>
-            <form action="{{ route('admin_pemeringkatan.question_banks.store') }}" method="POST">
+            <form action="{{ route('admin_pemeringkatan.sulitest_question_banks.store') }}" method="POST">
                 @csrf
                 <div class="p-6 space-y-4">
                     <div>

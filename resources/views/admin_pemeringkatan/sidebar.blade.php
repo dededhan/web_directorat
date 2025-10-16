@@ -23,12 +23,12 @@
             <span class="ml-4">Dashboard</span>
         </a>
 
-        <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.question_banks.*') || request()->routeIs('admin_pemeringkatan.sulitest_exams.*') ? 'true' : 'false' }} }">
+        <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.sulitest_question_banks.*') || request()->routeIs('admin_pemeringkatan.sulitest_exams.*') ? 'true' : 'false' }} }">
             <button @click="open = !open" 
                     class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
                 <div class="flex items-center">
                     <i class="fas fa-folder-open fa-fw w-6 text-center"></i>
-                    <span class="ml-4">Manajemen Tes</span>
+                    <span class="ml-4">Manajemen SULITEST</span>
                 </div>
                 <i class="fas fa-chevron-down transition-transform duration-200" :class="{'rotate-180': open}"></i>
             </button>
@@ -38,8 +38,8 @@
                     Manajemen Ujian
                 </a>
                 
-                <a href="{{ route('admin_pemeringkatan.question_banks.index') }}" 
-                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.question_banks.*') ? 'bg-teal-600 !text-white' : '' }}">
+                <a href="{{ route('admin_pemeringkatan.sulitest_question_banks.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.sulitest_question_banks.*') ? 'bg-teal-600 !text-white' : '' }}">
                     Bank Soal
                 </a>
 

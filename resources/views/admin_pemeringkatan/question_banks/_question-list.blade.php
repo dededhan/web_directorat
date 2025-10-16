@@ -5,11 +5,11 @@
                 <p class="text-base text-gray-800 font-medium">{{ $loop->iteration }}. {{ $question->question_text }}</p>
                 
                 <div class="flex items-center space-x-3">
-                    <a href="{{ route('admin_pemeringkatan.question_banks.questions.edit', $question->id) }}" class="text-gray-400 hover:text-blue-600" title="Edit Soal">
+                    <a href="{{ route('admin_pemeringkatan.sulitest_question_banks.questions.edit', $question->id) }}" class="text-gray-400 hover:text-blue-600" title="Edit Soal">
                         <i class="fas fa-pencil-alt fa-sm"></i>
                     </a>
                     
-                    <form id="delete-form-{{ $question->id }}" action="{{ route('admin_pemeringkatan.question_banks.questions.destroy', $question->id) }}" method="POST" class="inline">
+                    <form id="delete-form-{{ $question->id }}" action="{{ route('admin_pemeringkatan.sulitest_question_banks.questions.destroy', $question->id) }}" method="POST" class="inline">
                         @csrf
                         @method('DELETE')
                         <button type="button" onclick="confirmDelete({{ $question->id }})" class="text-gray-400 hover:text-red-600" title="Hapus Soal">

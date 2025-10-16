@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Pemeringkatan;
 
+use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use App\Models\ExamSession;
 use App\Models\ExamSessionAnswer;
@@ -68,7 +69,6 @@ class SulitestController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            // \Log::error($e->getMessage());
             return redirect()->route('sulitest.dashboard')->with('error', 'Gagal memulai ujian. Silakan coba lagi.');
         }
     }
@@ -175,4 +175,3 @@ class SulitestController extends Controller
         return view('sulitest.results', compact('session', 'totalQuestions', 'correctAnswers'));
     }
 }
-

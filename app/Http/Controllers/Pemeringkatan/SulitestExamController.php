@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Pemeringkatan;
 
+use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use App\Models\QuestionBank;
 use App\Models\User;
@@ -75,7 +76,7 @@ class SulitestExamController extends Controller
     }
 
 
-        public function show(Exam $exam)
+    public function show(Exam $exam)
     {
         $potentialParticipants = User::role('sulitest_user')
             ->whereDoesntHave('exams', function ($query) use ($exam) {
@@ -111,4 +112,3 @@ class SulitestExamController extends Controller
                          ->with('success', 'Peserta berhasil dihapus.');
     }
 }
-
