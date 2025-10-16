@@ -54,17 +54,11 @@ class SulitestBankController extends Controller
                 }
             }
 
-            // Normalize whitespace dan remove special characters
             $fullText = preg_replace('/\r\n/', "\n", $fullText);
             $fullText = preg_replace('/[\x00-\x1F\x7F]/u', '', $fullText);
-            
-            Log::info('=== DEBUG IMPORT SOAL ===');
-            Log::info('Full extracted text:', ['text' => $fullText]);
+            $fullText = preg_replace('/\n\s*(\((?:Skor|Bobot)\s*:?\s*\d+\))/', ' $1', $fullText);
 
-            // Split berdasarkan nomor soal (1., 2., 3., dst)
             $questionBlocks = preg_split('/(?=\d+\.\s)/', $fullText, -1, PREG_SPLIT_NO_EMPTY);
-
-            Log::info('Question blocks found:', ['count' => count($questionBlocks)]);
 
             $importedCount = 0;
             $errors = [];
@@ -74,22 +68,13 @@ class SulitestBankController extends Controller
                     $block = trim($block);
                     if (empty($block)) continue;
 
-                    Log::info("Processing block #$index:", ['block' => $block]);
-
-                    // Match nomor soal dan teks pertanyaan (lebih flexible)
-                    if (!preg_match('/^(\d+)\.\s*(.*?)(?=\n[A-E]\.|\Z)/s', $block, $questionMatches)) {
-                        $errors[] = "Soal #" . ($index + 1) . ": Format nomor atau teks pertanyaan tidak valid.";
-                        Log::warning("Block #$index: Failed to match question pattern");
+                    if (!preg_match('/^(\d+)\.\s*/', $block, $numberMatch)) {
+                        $errors[] = "Soal #" . ($index + 1) . ": Format nomor soal tidak valid.";
                         continue;
                     }
 
-                    $questionNumber = $questionMatches[1];
-                    $questionText = trim($questionMatches[2]);
+                    $questionNumber = $numberMatch[1];
 
-                    Log::info("Question #$questionNumber:", ['text' => $questionText]);
-
-                    // Match opsi dengan regex yang lebih robust
-                    // Mencari: A. text (Skor X) atau A. text (Bobot X) atau A. text (Skor: X)
                     preg_match_all(
                         '/([A-E])\.\s*(.*?)\s*\((?:Skor|Bobot)\s*:?\s*(\d+)\)/is',
                         $block,
@@ -97,25 +82,31 @@ class SulitestBankController extends Controller
                         PREG_SET_ORDER
                     );
 
-                    Log::info("Options found for question #$questionNumber:", [
-                        'count' => count($optionMatches),
-                        'options' => $optionMatches
-                    ]);
-
                     if (count($optionMatches) !== 5) {
-                        $errors[] = "Soal #$questionNumber ($questionText): Ditemukan " . count($optionMatches) . " opsi, seharusnya 5. Periksa format (Skor X).";
-                        Log::warning("Question #$questionNumber: Expected 5 options, got " . count($optionMatches));
+                        $errors[] = "Soal #$questionNumber: Ditemukan " . count($optionMatches) . " opsi, seharusnya 5. Periksa format (Skor X).";
                         continue;
                     }
 
-                    // Validasi opsi A-E lengkap
                     $foundOptions = array_column($optionMatches, 1);
                     $expectedOptions = ['A', 'B', 'C', 'D', 'E'];
                     $missingOptions = array_diff($expectedOptions, $foundOptions);
                     
                     if (!empty($missingOptions)) {
                         $errors[] = "Soal #$questionNumber: Opsi tidak lengkap. Hilang: " . implode(', ', $missingOptions);
-                        Log::warning("Question #$questionNumber: Missing options", ['missing' => $missingOptions]);
+                        continue;
+                    }
+                    $firstOptionPos = strpos($block, $optionMatches[0][0]);
+                    if ($firstOptionPos === false) {
+                        $errors[] = "Soal #$questionNumber: Tidak dapat menemukan teks pertanyaan.";
+                        continue;
+                    }
+
+                    $questionText = substr($block, strlen($numberMatch[0]), $firstOptionPos - strlen($numberMatch[0]));
+                    $questionText = trim($questionText);
+                    $questionText = preg_replace('/\s+/', ' ', $questionText);
+
+                    if (empty($questionText)) {
+                        $errors[] = "Soal #$questionNumber: Teks pertanyaan kosong.";
                         continue;
                     }
 
@@ -130,15 +121,8 @@ class SulitestBankController extends Controller
                     }
                     $question->options()->createMany($optionsData);
                     $importedCount++;
-
-                    Log::info("Question #$questionNumber imported successfully");
                 }
             });
-
-            Log::info('Import completed:', [
-                'imported' => $importedCount,
-                'errors' => count($errors)
-            ]);
 
             if ($importedCount > 0) {
                 return redirect()->route('admin_pemeringkatan.question_banks.show', $questionBank->id)
@@ -150,10 +134,13 @@ class SulitestBankController extends Controller
                     ->with('import_errors', $errors);
             }
         } catch (\Exception $e) {
-            Log::error('Gagal impor soal: ' . $e->getMessage() . ' on line ' . $e->getLine());
-            Log::error('Stack trace: ' . $e->getTraceAsString());
+            Log::error('Import failed: ' . $e->getMessage(), [
+                'bank_id' => $questionBank->id,
+                'line' => $e->getLine()
+            ]);
+            
             return redirect()->route('admin_pemeringkatan.question_banks.show', $questionBank->id)
-                ->with('error', 'Terjadi kesalahan sistem saat memproses file: ' . $e->getMessage());
+                ->with('error', 'Terjadi kesalahan sistem saat memproses file. Silakan cek format file atau hubungi administrator.');
         }
     }
 
@@ -249,23 +236,24 @@ class SulitestBankController extends Controller
             }
 
             DB::transaction(function () use ($questionBank) {
-                foreach ($questionBank->questions as $question) {
-                    $question->options()->delete();
-                    $question->delete();
-                }
+                Option::whereIn('question_id', $questionBank->questions()->pluck('id'))->delete();
+                $questionBank->questions()->delete();
             });
 
-            Log::info("Cleared all questions from bank: {$questionBank->name}", [
+            Log::info("Cleared all questions", [
                 'bank_id' => $questionBank->id,
-                'questions_deleted' => $count
+                'count' => $count
             ]);
 
             return redirect()->route('admin_pemeringkatan.question_banks.show', $questionBank->id)
                 ->with('success', "Berhasil menghapus semua soal ($count soal dihapus)!");
         } catch (\Exception $e) {
-            Log::error('Failed to clear questions: ' . $e->getMessage());
+            Log::error('Clear all failed: ' . $e->getMessage(), [
+                'bank_id' => $questionBank->id
+            ]);
+            
             return redirect()->route('admin_pemeringkatan.question_banks.show', $questionBank->id)
-                ->with('error', 'Gagal menghapus soal: ' . $e->getMessage());
+                ->with('error', 'Gagal menghapus soal. Silakan coba lagi.');
         }
     }
 }
