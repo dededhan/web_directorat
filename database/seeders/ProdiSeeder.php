@@ -58,6 +58,7 @@ class ProdiSeeder extends Seeder
             ['fakultas_id' => 1, 'name' => 'S2 Pendidikan Masyarakat', 'created_at' => $now, 'updated_at' => $now],
             ['fakultas_id' => 1, 'name' => 'S2 Pendidikan Khusus', 'created_at' => $now, 'updated_at' => $now],
             ['fakultas_id' => 1, 'name' => 'S1 Perpustakaan dan Sains Informasi', 'created_at' => $now, 'updated_at' => $now],
+            ['fakultas_id' => 1, 'name' => 'S2 Manajemen Pendidikan', 'created_at' => $now, 'updated_at' => $now],
             
             // FMIPA (ID: 3)
             ['fakultas_id' => 3, 'name' => 'S1 Kimia', 'created_at' => $now, 'updated_at' => $now],
