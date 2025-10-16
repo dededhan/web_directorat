@@ -120,11 +120,19 @@ class ProdukInovasiController extends Controller
                 $data['video_path'] = $request->file('video_path_mp4')->store('produk_inovasi/video', 'public');
             }
             
-            // Auto-translate to English
-            $translationService = new TranslationService();
-            $data['nama_produk_en'] = $translationService->translate($request->nama_produk);
-            $data['inovator_en'] = $translationService->translate($data['inovator']);
-            $data['deskripsi_en'] = $translationService->translateHtml($request->deskripsi);
+            // Auto-translate to English (with error handling)
+            try {
+                $translationService = new TranslationService();
+                $data['nama_produk_en'] = $translationService->translate($request->nama_produk);
+                $data['inovator_en'] = $translationService->translate($data['inovator']);
+                $data['deskripsi_en'] = $translationService->translateHtml($request->deskripsi);
+            } catch (\Exception $e) {
+                \Log::warning('Auto-translation failed during product creation: ' . $e->getMessage());
+                // Continue without translation if it fails
+                $data['nama_produk_en'] = null;
+                $data['inovator_en'] = null;
+                $data['deskripsi_en'] = null;
+            }
 
             ProdukInovasi::create($data);
 
@@ -191,16 +199,21 @@ class ProdukInovasiController extends Controller
                  $data['video_path'] = null;
             }
 
-            // Auto-translate to English if content changed
-            $translationService = new TranslationService();
-            if ($request->filled('nama_produk') && $request->nama_produk !== $produk->nama_produk) {
-                $data['nama_produk_en'] = $translationService->translate($request->nama_produk);
-            }
-            if (isset($data['inovator']) && $data['inovator'] !== $produk->inovator) {
-                $data['inovator_en'] = $translationService->translate($data['inovator']);
-            }
-            if ($request->filled('deskripsi') && $request->deskripsi !== $produk->deskripsi) {
-                $data['deskripsi_en'] = $translationService->translateHtml($request->deskripsi);
+            // Auto-translate to English if content changed (with error handling)
+            try {
+                $translationService = new TranslationService();
+                if ($request->filled('nama_produk') && $request->nama_produk !== $produk->nama_produk) {
+                    $data['nama_produk_en'] = $translationService->translate($request->nama_produk);
+                }
+                if (isset($data['inovator']) && $data['inovator'] !== $produk->inovator) {
+                    $data['inovator_en'] = $translationService->translate($data['inovator']);
+                }
+                if ($request->filled('deskripsi') && $request->deskripsi !== $produk->deskripsi) {
+                    $data['deskripsi_en'] = $translationService->translateHtml($request->deskripsi);
+                }
+            } catch (\Exception $e) {
+                \Log::warning('Auto-translation failed during product update: ' . $e->getMessage());
+                // Continue without translation if it fails
             }
             
             $produk->update($data);
