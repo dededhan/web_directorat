@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Log;
 class TranslationService
 {
     protected $translator;
-    protected $sourceLanguage = 'id'; // Indonesian
-    protected $targetLanguage = 'en'; // English
+    protected $sourceLanguage = 'id'; 
+    protected $targetLanguage = 'en'; 
     
     public function __construct()
     {
@@ -23,24 +23,18 @@ class TranslationService
         }
     }
     
-    /**
-     * Translate text from Indonesian to English
-     * 
-     * @param string $text
-     * @param bool $useCache
-     * @return string|null
-     */
+
     public function translate(?string $text, bool $useCache = true): ?string
     {
-        // Return null if text is empty
+
         if (empty($text)) {
             return null;
         }
         
-        // Create a cache key based on the text
+
         $cacheKey = 'translation_' . md5($text);
         
-        // Try to get from cache first if enabled
+
         if ($useCache && Cache::has($cacheKey)) {
             return Cache::get($cacheKey);
         }
@@ -48,7 +42,7 @@ class TranslationService
         try {
             $translated = $this->translator->translate($text);
             
-            // Cache the translation for 30 days
+     
             if ($useCache) {
                 Cache::put($cacheKey, $translated, now()->addDays(30));
             }
@@ -56,21 +50,21 @@ class TranslationService
             return $translated;
         } catch (\Exception $e) {
             Log::error('Translation failed: ' . $e->getMessage(), [
-                'text' => substr($text, 0, 100) // Log first 100 chars only
+                'text' => substr($text, 0, 100)
             ]);
             
-            // Return original text if translation fails
+
             return $text;
         }
     }
     
-    /**
-     * Translate multiple texts at once
-     * 
-     * @param array $texts
-     * @param bool $useCache
-     * @return array
-     */
+
+    public function translateToEnglish(?string $text, bool $useCache = true): ?string
+    {
+        return $this->translate($text, $useCache);
+    }
+    
+
     public function translateBatch(array $texts, bool $useCache = true): array
     {
         $translations = [];
@@ -82,20 +76,14 @@ class TranslationService
         return $translations;
     }
     
-    /**
-     * Strip HTML tags before translation to avoid issues
-     * 
-     * @param string $html
-     * @param bool $useCache
-     * @return string|null
-     */
-    public function translateHtml(?string $html, bool $useCache = true): ?string
+
+    public function translateHtml(?string $html, string $targetLang = 'en', bool $useCache = true): ?string
     {
         if (empty($html)) {
             return null;
         }
         
-        // Simple approach: translate the plain text content
+
         $plainText = strip_tags($html);
         return $this->translate($plainText, $useCache);
     }

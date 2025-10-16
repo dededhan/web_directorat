@@ -11,6 +11,7 @@ class Berita extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'kategori',
         'tanggal',
         'judul',
@@ -59,6 +60,11 @@ class Berita extends Model
     public function images()
     {
         return $this->hasMany(BeritaImage::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class);
     }
 
     // Generate a unique slug

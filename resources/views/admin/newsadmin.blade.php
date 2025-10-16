@@ -11,7 +11,7 @@
         'resources/css/admin/berita_dashboard.css',
         'resources/css/admin/ckeditor-content.css'
     ])
-    {{-- Akhir: Perubahan untuk Vite --}}
+
 
     <div class="head-title">
         <div class="left">
@@ -42,7 +42,41 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
 
-            <form method="POST" action="{{ route($routePrefix . '.news.store') }}" enctype="multipart/form-data">
+            {{-- Display validation errors --}}
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle fa-lg"></i>
+                    <strong>Terjadi Kesalahan!</strong>
+                    <ul class="mb-0 mt-2">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            {{-- Display success message --}}
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle fa-lg"></i>
+                    <strong>Berhasil!</strong>
+                    <p class="mb-0 mt-2">{{ session('success') }}</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            {{-- Display error message --}}
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-times-circle fa-lg"></i>
+                    <strong>Gagal!</strong>
+                    <p class="mb-0 mt-2">{{ session('error') }}</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route($routePrefix . '.news.store') }}" enctype="multipart/form-data" id="beritaForm">
                 @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -131,7 +165,7 @@
                 </div>
 
                 <div class="mb-3 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary">Simpan Berita</button>
+                    <button type="submit" class="btn btn-primary" id="submitBerita">Simpan Berita</button>
                 </div>
             </form>
         </div>
@@ -160,7 +194,7 @@
                             @foreach ($beritas as $index => $berita)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>Admin Direktorat</td>
+                                    <td>{{ $berita->user ? $berita->user->name : 'N/A' }}</td>
                                     <td>
                                         <span
                                             class="badge bg-{{ [
@@ -286,9 +320,9 @@
         </div>
     </div>
 
-    <!-- Script section -->
+
     <script>
-        // Set global variables for use in external JS file
+
         const appConfig = {
             csrfToken: '{{ csrf_token() }}',
             uploadUrl: '{{ route($routePrefix . '.news.upload') }}',
@@ -296,10 +330,9 @@
         };
     </script>
 
-    {{-- <script src="{{ asset('resources/movejs/berita_dashboard.js') }}"></script> --}}
 
     <script>
-        // Custom upload adapter needs to be defined inline to access Blade variables
+
         class MyUploadAdapter {
             constructor(loader) {
                 this.loader = loader;
@@ -341,40 +374,36 @@
             };
         }
 
-        // Initialize CKEditor for new berita
-        // Initialize CKEditor for new berita
+
 ClassicEditor
     .create(document.querySelector('#isi_berita'), {
         licenseKey: 'GPL',
         extraPlugins: [MyCustomUploadAdapterPlugin],
         toolbar: {
             items: [
-                // Text formatting
+
                 'heading', '|',
                 'bold', 'italic', 'underline', 'strikethrough', '|',
                 'fontColor', 'fontBackgroundColor', '|',
                 'alignment', '|',
                 'subscript', 'superscript', '|',
                 
-                // Paragraph formatting
+
                 'indent', 'outdent', '|',
                 
-                // Lists
+
                 'bulletedList', 'numberedList', '|',
-                
-                // Media and links
+
                 'imageUpload', 'mediaEmbed', 'link', '|',
                 
-                // Block elements
+        
                 'blockQuote', 'insertTable', 'codeBlock', 'htmlEmbed', 'horizontalLine', '|',
-                
-                // Special characters
+   
                 'specialCharacters', 'emoji', '|',
                 
-                // Utility
+    
                 'undo', 'redo', 'findAndReplace', '|',
-                
-                // Source editing
+        
                 'sourceEditing'
             ],
             shouldNotGroupWhenFull: true
@@ -516,7 +545,7 @@ ClassicEditor
     .catch(error => {
         console.error('Error initializing editor:', error);
     });
-        // Initialize CKEditor for edit form
+     
         let editBeritaEditor;
         ClassicEditor
             .create(document.querySelector('#edit_isi_berita'), {
@@ -542,7 +571,22 @@ ClassicEditor
             
 
         document.addEventListener('DOMContentLoaded', function() {
-            // SweetAlert helper functions
+          
+            const beritaForm = document.getElementById('beritaForm');
+            if (beritaForm) {
+                beritaForm.addEventListener('submit', function(e) {
+  
+                    if (window.editor) {
+                        const editorData = window.editor.getData();
+                        document.getElementById('isi_berita').value = editorData;
+                        console.log('CKEditor data synced:', editorData.substring(0, 100));
+                    } else {
+                        console.warn('CKEditor instance not found');
+                    }
+                });
+            }
+
+
             function showSuccessAlert(message) {
                 Swal.fire({
                     title: 'Berhasil!',
@@ -580,7 +624,7 @@ ClassicEditor
                 });
             }
 
-            // Handle view image
+  
             document.querySelectorAll('.view-image').forEach(button => {
                 button.addEventListener('click', function() {
                     const imageUrl = this.dataset.image;
@@ -594,7 +638,6 @@ ClassicEditor
                 });
             });
 
-            // Handle delete button clicks
             document.querySelectorAll('.delete-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const form = this.closest('form');
@@ -605,14 +648,12 @@ ClassicEditor
                 });
             });
 
-            // Handle edit button clicks
-            // Handle edit button clicks
+
             document.querySelectorAll('.edit-berita').forEach(button => {
                 button.addEventListener('click', function() {
                     const beritaId = this.dataset.id;
                     const routePrefix = '{{ $routePrefix }}';
 
-                    // Convert route prefix with dots to path with slashes
                     const routePath = routePrefix.replace('.', '/');
 
                     // Fetch berita details via AJAX
@@ -624,25 +665,23 @@ ClassicEditor
                             return response.json();
                         })
                         .then(data => {
-                            // Populate the edit form
+           
                             document.getElementById('edit_kategori').value = data.kategori;
                             document.getElementById('edit_tanggal').value = data.tanggal;
                             document.getElementById('edit_judul_berita').value = data.judul;
 
-                            // Set content to the CKEditor
+                
                             if (editBeritaEditor) {
                                 editBeritaEditor.setData(data.isi);
                             }
 
-                            // Set the current image
+      
                             const currentImage = document.getElementById('current_image');
                             currentImage.src = `/storage/${data.gambar}`;
 
-                            // Set the form action with correct path structure
                             const form = document.getElementById('editBeritaForm');
                             form.action = `/${routePath}/berita/${beritaId}`;
 
-                            // Show the modal
                             const editModal = new bootstrap.Modal(document.getElementById(
                                 'editBeritaModal'));
                             editModal.show();
@@ -653,7 +692,7 @@ ClassicEditor
                         });
                 });
             });
-            // Handle save button click
+
             document.getElementById('saveEditBerita').addEventListener('click', function() {
                 const editorData = editBeritaEditor.getData();
                 document.getElementById('edit_isi_berita').value = editorData;
@@ -673,15 +712,14 @@ ClassicEditor
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // Close the modal
+
                             const modalElement = document.getElementById('editBeritaModal');
                             const modal = bootstrap.Modal.getInstance(modalElement);
                             modal.hide();
 
-                            // Show success message
+       
                             showSuccessAlert(data.message || 'Berita berhasil diperbarui!');
 
-                            // Refresh the page after a short delay
                             setTimeout(() => {
                                 window.location.reload();
                             }, 1500);

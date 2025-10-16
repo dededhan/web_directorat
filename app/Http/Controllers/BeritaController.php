@@ -12,12 +12,19 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Instagram;
 use Illuminate\Support\Facades\Auth;
 use Mews\Purifier\Facades\Purifier;
-use Illuminate\Support\Str; // Import the Str class for slug generation
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Gate;
-use App\Services\TranslationService; // Import the Translation Service
+use App\Services\TranslationService; 
 
 class BeritaController extends Controller
 {
+    protected $translationService;
+
+    public function __construct(TranslationService $translationService)
+    {
+        $this->translationService = $translationService;
+    }
+
     private function getRoutePrefix()
     {
         $role = auth()->user()->role;
@@ -40,17 +47,14 @@ class BeritaController extends Controller
     }
 
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        // Security: Check if user can view berita
+
         if (!Gate::allows('viewAny', Berita::class)) {
             abort(403, 'Unauthorized access');
         }
         
-        $beritas = Berita::latest()->get();
+        $beritas = Berita::with('user')->latest()->get();
         $routePrefix = $this->getRoutePrefix();
         $viewName = 'admin.newsadmin';
 
@@ -71,18 +75,14 @@ class BeritaController extends Controller
         return view($viewName, compact('beritas', 'routePrefix'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * ENHANCEMENT: Added data purification and unique slug generation.
-     */
+
     public function store(StoreBeritaRequest $request)
     {
         try {
-            // The StoreBeritaRequest already validates the input, which is the first line of defense.
+        
             if ($request->hasFile('gambar')) {
                 $file = $request->file('gambar');
-                
-                // Security: Additional file validation
+
                 $allowedMimes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
                 if (!in_array($file->getMimeType(), $allowedMimes)) {
                     return redirect()->back()
@@ -90,7 +90,7 @@ class BeritaController extends Controller
                         ->withInput();
                 }
                 
-                // Security: Check file size (2MB max)
+
                 if ($file->getSize() > 2048 * 1024) {
                     return redirect()->back()
                         ->with('error', 'Ukuran file terlalu besar. Maksimal 2MB.')
@@ -104,27 +104,33 @@ class BeritaController extends Controller
                     'public'
                 );
                 
-                // Security: Sanitize rich text and title inputs to prevent XSS attacks.
+
                 $cleanJudul = strip_tags($request->judul_berita);
                 $cleanIsi = Purifier::clean($request->isi_berita);
 
-                // Automatic Translation: Translate Indonesian content to English
-                $translationService = new TranslationService();
-                $judulEn = $translationService->translateToEnglish($cleanJudul);
-                $isiEn = $translationService->translateHtml($cleanIsi, 'en');
+       
+                try {
+                    $judulEn = $this->translationService->translateToEnglish($cleanJudul);
+                    $isiEn = $this->translationService->translateHtml($cleanIsi, 'en');
+                } catch (\Exception $e) {
+                    \Log::warning('Translation failed, using original text: ' . $e->getMessage());
+                    $judulEn = $cleanJudul;
+                    $isiEn = $cleanIsi;
+                }
 
-                // Robustness: Create a unique slug from the title for clean URLs and reliable lookup.
+    
                 $slug = $this->createUniqueSlug($cleanJudul);
 
-                // Create the berita record with the sanitized and prepared data
+
                 $berita = Berita::create([
+                    'user_id' => auth()->id(),
                     'kategori' => $request->kategori,
                     'tanggal' => $request->tanggal,
                     'judul' => $cleanJudul,
-                    'judul_en' => $judulEn, // Auto-translated English title
+                    'judul_en' => $judulEn,
                     'isi' => $cleanIsi,
-                    'isi_en' => $isiEn, // Auto-translated English content
-                    'slug' => $slug, // Save the generated slug
+                    'isi_en' => $isiEn, 
+                    'slug' => $slug, 
                     'gambar' => $gambarPath
                 ]);
 
@@ -160,21 +166,14 @@ class BeritaController extends Controller
         }
     }
     
-    /**
-     * Creates a unique slug for a Berita item.
-     *
-     * @param string $title
-     * @param int $excludeId
-     * @return string
-     */
+
     private function createUniqueSlug(string $title, int $excludeId = 0): string
     {
         $slug = Str::slug($title, '-');
         $originalSlug = $slug;
         $count = 1;
 
-        // Loop until a unique slug is found. The 'where' clause ensures we don't conflict
-        // with other records, and '!= excludeId' allows the update operation to work correctly.
+
         while (Berita::where('slug', $slug)->where('id', '!=', $excludeId)->exists()) {
             $slug = "{$originalSlug}-{$count}";
             $count++;
@@ -183,17 +182,13 @@ class BeritaController extends Controller
         return $slug;
     }
 
-    /**
-     * Display the specified resource.
-     * ENHANCEMENT: Now reliably finds news by its unique slug.
-     */
+
     public function show(string $slug)
     {
-        // Security: Finding by a unique slug is more secure and reliable than using an ID or partial title.
+
         $berita = Berita::where('slug', $slug)->firstOrFail();
 
-        // The 'isi' (content) of the news is rendered in the view.
-        // Because we sanitized it with Purifier before saving, it is safe to render with {!! !!} in Blade.
+
 
         $relatedNews = Berita::where('id', '!=', $berita->id)
             ->where('kategori', $berita->kategori)
@@ -207,34 +202,27 @@ class BeritaController extends Controller
         return view('Berita.sampleberita', compact('berita', 'relatedNews', 'latestNews', 'popularNews'));
     }
     
-    /**
-     * Fetches details for a specific news item for the edit modal.
-     * ENHANCEMENT: Simplified to fetch by ID only, making it more secure and efficient.
-     */
+
     public function getBeritaDetail($id)
     {
-        // Security: Removed title-based searching (`LIKE`) to prevent potential SQL injection vectors
-        // and improve performance. Relying on the unique ID is best practice.
+
         $berita = Berita::findOrFail($id);
         return response()->json($berita);
     }
     
-    /**
-     * Update the specified resource in storage.
-     * ENHANCEMENT: Added data purification and slug regeneration on title change.
-     */
+
     public function update(Request $request, string $id)
     {
         try {
             $berita = Berita::findOrFail($id);
             
-            // Security: Only admins can edit berita
+
             if (!in_array(auth()->user()->role, ['admin_direktorat', 'admin_hilirisasi', 'admin_inovasi', 'admin_pemeringkatan', 'fakultas', 'prodi'])) {
                 return redirect()->back()
                     ->with('error', 'Anda tidak memiliki izin untuk mengedit berita ini.');
             }
 
-            // Security: Validate all incoming data.
+
             $validated = $request->validate([
                 'kategori' => 'required|in:inovasi,pemeringkatan,umum,fakultas,prodi',
                 'tanggal' => 'required|date',
@@ -243,37 +231,41 @@ class BeritaController extends Controller
                 'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            // Security: Sanitize inputs to prevent XSS, same as in the store method.
 
             $cleanJudul = strip_tags($validated['judul_berita']);
             $cleanIsi = Purifier::clean($validated['isi_berita']);
 
-            // Automatic Translation: Translate Indonesian content to English
-            $translationService = new TranslationService();
-            $judulEn = $translationService->translateToEnglish($cleanJudul);
-            $isiEn = $translationService->translateHtml($cleanIsi, 'en');
+   
+            try {
+                $judulEn = $this->translationService->translateToEnglish($cleanJudul);
+                $isiEn = $this->translationService->translateHtml($cleanIsi, 'en');
+            } catch (\Exception $e) {
+                \Log::warning('Translation failed, using original text: ' . $e->getMessage());
+                $judulEn = $cleanJudul;
+                $isiEn = $cleanIsi;
+            }
 
             // Update the model's attributes
             $berita->kategori = $validated['kategori'];
             $berita->tanggal = $validated['tanggal'];
             $berita->judul = $cleanJudul;
-            $berita->judul_en = $judulEn; // Auto-translated English title
+            $berita->judul_en = $judulEn; 
             $berita->isi = $cleanIsi;
-            $berita->isi_en = $isiEn; // Auto-translated English content
+            $berita->isi_en = $isiEn;
             
-            // Robustness: If the title was changed, regenerate the slug to keep the URL current.
+
             if ($berita->isDirty('judul')) {
                 $berita->slug = $this->createUniqueSlug($cleanJudul, $berita->id);
             }
 
-            // Handle image update if a new one was uploaded
+
             if ($request->hasFile('gambar') && $request->file('gambar')->isValid()) {
-                // Delete old image
+
                 if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
                     Storage::disk('public')->delete($berita->gambar);
                 }
 
-                // Store new image
+
                 $namaFile = time() . '_' . uniqid() . '.' . $request->file('gambar')->getClientOriginalExtension();
                 $gambarPath = $request->file('gambar')->storeAs(
                     'berita-images',
@@ -307,9 +299,7 @@ class BeritaController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(string $id)
     {
         try {
@@ -321,12 +311,11 @@ class BeritaController extends Controller
                     ->with('error', 'Anda tidak memiliki izin untuk menghapus berita ini.');
             }
 
-            // Delete the image file from storage
+
             if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
                 Storage::disk('public')->delete($berita->gambar);
             }
 
-            // Delete additional images if they exist
             if ($berita->additionalImages) {
                 foreach ($berita->additionalImages as $image) {
                     if (Storage::disk('public')->exists($image->path)) {
@@ -336,7 +325,7 @@ class BeritaController extends Controller
                 }
             }
 
-            // Delete the record
+ 
             $berita->delete();
 
             $routePrefix = $this->getRoutePrefix();
@@ -349,7 +338,7 @@ class BeritaController extends Controller
         }
     }
     
-    // The methods below are unchanged as they were not the focus of the security enhancement.
+
 
     public function upload(Request $request)
     {
