@@ -38,6 +38,10 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             Route::get('/', [SulitestBankController::class, 'index'])->name('index');
             Route::post('/', [SulitestBankController::class, 'store'])->name('store');
             Route::get('/{questionBank}', [SulitestBankController::class, 'show'])->name('show');
+
+            //improt
+            Route::post('/{questionBank}/import', [SulitestBankController::class, 'importQuestions'])->name('import');
+            Route::delete('/{questionBank}/clear-all', [SulitestBankController::class, 'clearAllQuestions'])->name('clear_all');
             // CRUD ENJENRIN
             Route::post('/{questionBank}/questions', [SulitestBankController::class, 'storeQuestion'])->name('questions.store');
             Route::get('/questions/{question}/edit', [SulitestBankController::class, 'editQuestion'])->name('questions.edit');
