@@ -1,58 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     fetchDocuments();
 
-    // Event listeners for navbar toggle
-    document
-        .getElementById("navbarToggle")
-        .addEventListener("click", function () {
-            const menu = document.getElementById("navbarMenu");
-            if (menu) {
-                menu.classList.toggle("active");
-
-                // Change icon based on menu state
-                const icon = this.querySelector("i");
-                if (menu.classList.contains("active")) {
-                    icon.classList.remove("fa-bars");
-                    icon.classList.add("fa-times");
-                } else {
-                    icon.classList.remove("fa-times");
-                    icon.classList.add("fa-bars");
-                }
-            }
-        });
-
-    // Handle search overlay
-    if (document.getElementById("searchOverlay")) {
-        document
-            .getElementById("closeSearch")
-            .addEventListener("click", function () {
-                document.getElementById("searchOverlay").style.display = "none";
-            });
-
-        document
-            .getElementById("searchOverlay")
-            .addEventListener("click", function (e) {
-                if (e.target === this) {
-                    this.style.display = "none";
-                }
-            });
-    }
-
-    // Close mobile menu when window is resized above mobile breakpoint
-    window.addEventListener("resize", function () {
-        if (window.innerWidth > 992) {
-            const navbarMenu = document.getElementById("navbarMenu");
-            if (navbarMenu) {
-                navbarMenu.classList.remove("active");
-                const icon = document.querySelector(".navbar-toggle i");
-                if (icon) {
-                    icon.classList.remove("fa-times");
-                    icon.classList.add("fa-bars");
-                }
-            }
-        }
-    });
-
+    // Category filter buttons
     document.querySelectorAll(".category-btn").forEach((button) => {
         button.addEventListener("click", function () {
             const category = this.dataset.category;
@@ -75,6 +24,7 @@ function fetchDocuments() {
         })
         .then((data) => {
             documents = data;
+            updateDocumentCounter(documents.length);
             renderDocuments(documents);
         })
         .catch((error) => {
@@ -82,13 +32,38 @@ function fetchDocuments() {
             const documentGrid = document.getElementById("documentGrid");
             if (documentGrid) {
                 documentGrid.innerHTML = `
-                    <div class="empty-results">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <p>Failed to load documents. Please try refreshing the page.</p>
+                    <div class="col-span-full flex flex-col items-center justify-center py-24">
+                        <div class="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-exclamation-triangle text-red-500 text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Gagal Memuat Dokumen</h3>
+                        <p class="text-gray-500 text-center max-w-md mb-4">Terjadi kesalahan saat mengambil data. Silakan refresh halaman.</p>
+                        <button onclick="location.reload()" class="px-6 py-2.5 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition-colors">
+                            <i class="fas fa-sync-alt mr-2"></i>Refresh Halaman
+                        </button>
                     </div>
                 `;
             }
         });
+}
+
+// Function to update document counter
+function updateDocumentCounter(count) {
+    const counterElement = document.getElementById("totalDocs");
+    if (counterElement) {
+        // Animate counter
+        let current = 0;
+        const increment = count / 30;
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= count) {
+                counterElement.textContent = count;
+                clearInterval(timer);
+            } else {
+                counterElement.textContent = Math.floor(current);
+            }
+        }, 20);
+    }
 }
 
 // Format date for display
@@ -121,101 +96,145 @@ function renderDocuments(filteredDocs = documents) {
     const grid = document.getElementById("documentGrid");
     if (!grid) return;
 
-    grid.innerHTML = "";
+    // Add fade out effect
+    grid.style.opacity = "0";
+    
+    setTimeout(() => {
+        grid.innerHTML = "";
 
-    if (filteredDocs.length === 0) {
-        grid.innerHTML = `
-            <div class="col-span-full flex flex-col items-center justify-center py-20">
-                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
-                    <i class="fas fa-search text-gray-400 text-4xl"></i>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-700 mb-2">Tidak Ada Dokumen Ditemukan</h3>
-                <p class="text-gray-500 text-center max-w-md">Tidak ada dokumen yang sesuai dengan kriteria pencarian Anda. Silakan coba kata kunci atau kategori yang berbeda.</p>
-            </div>
-        `;
-        return;
-    }
-
-    filteredDocs.forEach((doc) => {
-        const card = document.createElement("div");
-        card.className = "group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-primary-500 transform hover:-translate-y-2";
-        card.dataset.category = doc.kategori;
-
-        // Category colors
-        const categoryColors = {
-            umum: { bg: 'bg-blue-50', text: 'text-blue-600', icon: 'fa-file-alt' },
-            pemeringkatan: { bg: 'bg-green-50', text: 'text-green-600', icon: 'fa-trophy' },
-            inovasi: { bg: 'bg-orange-50', text: 'text-orange-600', icon: 'fa-lightbulb' }
-        };
-        
-        const categoryStyle = categoryColors[doc.kategori] || categoryColors.umum;
-
-        card.innerHTML = `
-            <div class="p-6 flex flex-col h-full">
-                <!-- Document Icon -->
-                <div class="mb-5 flex items-start justify-between">
-                    <div class="w-16 h-16 ${categoryStyle.bg} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <i class="fas ${categoryStyle.icon} ${categoryStyle.text} text-2xl"></i>
+        if (filteredDocs.length === 0) {
+            grid.innerHTML = `
+                <div class="col-span-full flex flex-col items-center justify-center py-24 animate-fade-in">
+                    <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-6 shadow-inner">
+                        <i class="fas fa-search text-gray-400 text-4xl"></i>
                     </div>
-                    <span class="px-3 py-1 ${categoryStyle.bg} ${categoryStyle.text} text-xs font-semibold rounded-full">
-                        ${getCategoryLabel(doc.kategori)}
-                    </span>
+                    <h3 class="text-2xl font-bold text-gray-700 mb-3">Tidak Ada Dokumen Ditemukan</h3>
+                    <p class="text-gray-500 text-center max-w-md leading-relaxed">Tidak ada dokumen yang sesuai dengan kriteria pencarian Anda. Silakan coba kata kunci atau kategori yang berbeda.</p>
                 </div>
-                
-                <!-- Document Title -->
-                <h3 class="text-lg font-bold text-gray-800 mb-4 line-clamp-2 group-hover:text-primary-600 transition-colors min-h-[3.5rem]">
-                    ${doc.judul_dokumen}
-                </h3>
-                
-                <!-- Document Meta Info -->
-                <div class="space-y-2 mb-6 flex-grow">
-                    <div class="flex items-center text-sm text-gray-600">
-                        <i class="fas fa-calendar-alt w-5 text-gray-400"></i>
-                        <span class="ml-2">${formatDate(doc.tanggal_publikasi)}</span>
+            `;
+            grid.style.opacity = "1";
+            return;
+        }
+
+        filteredDocs.forEach((doc, index) => {
+            const card = document.createElement("div");
+            card.className = "group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-primary-500 transform hover:-translate-y-2 animate-scale-in";
+            card.style.animationDelay = `${index * 0.05}s`;
+            card.dataset.category = doc.kategori;
+
+            // Category colors dengan gradient modern
+            const categoryColors = {
+                umum: { 
+                    bg: 'bg-gradient-to-br from-blue-50 to-blue-100', 
+                    text: 'text-blue-600', 
+                    icon: 'fa-file-alt',
+                    badge: 'bg-blue-100 text-blue-700 border-blue-200'
+                },
+                pemeringkatan: { 
+                    bg: 'bg-gradient-to-br from-green-50 to-green-100', 
+                    text: 'text-green-600', 
+                    icon: 'fa-trophy',
+                    badge: 'bg-green-100 text-green-700 border-green-200'
+                },
+                inovasi: { 
+                    bg: 'bg-gradient-to-br from-orange-50 to-orange-100', 
+                    text: 'text-orange-600', 
+                    icon: 'fa-lightbulb',
+                    badge: 'bg-orange-100 text-orange-700 border-orange-200'
+                }
+            };
+            
+            const categoryStyle = categoryColors[doc.kategori] || categoryColors.umum;
+
+            card.innerHTML = `
+                <div class="p-6 flex flex-col h-full">
+                    <!-- Document Icon & Category Badge -->
+                    <div class="mb-5 flex items-start justify-between">
+                        <div class="w-16 h-16 ${categoryStyle.bg} rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-sm">
+                            <i class="fas ${categoryStyle.icon} ${categoryStyle.text} text-2xl"></i>
+                        </div>
+                        <span class="px-3 py-1.5 ${categoryStyle.badge} text-xs font-bold rounded-full border shadow-sm">
+                            ${getCategoryLabel(doc.kategori)}
+                        </span>
                     </div>
-                    <div class="flex items-center text-sm text-gray-600">
-                        <i class="fas fa-file-pdf w-5 text-red-500"></i>
-                        <span class="ml-2">${formatFileSize(doc.ukuran)}</span>
+                    
+                    <!-- Document Title -->
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 line-clamp-2 group-hover:text-primary-600 transition-colors min-h-[3.5rem] leading-snug">
+                        ${doc.judul_dokumen}
+                    </h3>
+                    
+                    <!-- Document Meta Info -->
+                    <div class="space-y-2.5 mb-6 flex-grow">
+                        <div class="flex items-center text-sm text-gray-600">
+                            <div class="w-8 h-8 bg-gray-50 rounded-lg flex items-center justify-center mr-2.5">
+                                <i class="fas fa-calendar-alt text-gray-400 text-xs"></i>
+                            </div>
+                            <span class="font-medium">${formatDate(doc.tanggal_publikasi)}</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600">
+                            <div class="w-8 h-8 bg-red-50 rounded-lg flex items-center justify-center mr-2.5">
+                                <i class="fas fa-file-pdf text-red-500 text-xs"></i>
+                            </div>
+                            <span class="font-medium">${formatFileSize(doc.ukuran)}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-2 gap-3 mt-auto">
+                        <a href="/documents/preview/${doc.id}" 
+                           class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-primary-600 to-primary-500 text-white rounded-xl font-semibold text-sm hover:from-primary-700 hover:to-primary-600 transition-all duration-300 hover:shadow-lg transform hover:scale-105" 
+                           target="_blank">
+                            <i class="fas fa-eye"></i>
+                            <span>Lihat</span>
+                        </a>
+                        <a href="/documents/download/${doc.id}" 
+                           class="flex items-center justify-center gap-2 px-4 py-3 bg-white border-2 border-primary-500 text-primary-600 rounded-xl font-semibold text-sm hover:bg-primary-50 transition-all duration-300 transform hover:scale-105">
+                            <i class="fas fa-download"></i>
+                            <span>Unduh</span>
+                        </a>
                     </div>
                 </div>
-                
-                <!-- Action Buttons -->
-                <div class="grid grid-cols-2 gap-3 mt-auto">
-                    <a href="/documents/preview/${doc.id}" 
-                       class="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary-500 text-white rounded-lg font-semibold text-sm hover:bg-primary-600 transition-all duration-300 hover:shadow-lg" 
-                       target="_blank">
-                        <i class="fas fa-eye"></i>
-                        <span>Lihat</span>
-                    </a>
-                    <a href="/documents/download/${doc.id}" 
-                       class="flex items-center justify-center gap-2 px-4 py-2.5 bg-white border-2 border-primary-500 text-primary-500 rounded-lg font-semibold text-sm hover:bg-primary-50 transition-all duration-300">
-                        <i class="fas fa-download"></i>
-                        <span>Unduh</span>
-                    </a>
-                </div>
-            </div>
-        `;
-        grid.appendChild(card);
-    });
+            `;
+            grid.appendChild(card);
+        });
+
+        // Fade in effect
+        grid.style.opacity = "1";
+    }, 150);
 }
 
 // Function to filter documents by category
 function filterDocuments(category, buttonElement) {
-    // Update active button state
+    // Update active button state dengan styling modern
     const categoryBtns = document.querySelectorAll(".category-btn");
     if (categoryBtns) {
         categoryBtns.forEach((btn) => {
-            btn.classList.remove("active");
+            // Reset ke style default
+            if (btn.dataset.category === 'all') {
+                btn.className = "category-btn group relative flex items-center gap-2.5 px-6 sm:px-7 py-3.5 rounded-xl font-semibold text-sm sm:text-base transition-all duration-300 bg-white text-gray-700 shadow-md hover:shadow-xl border-2 border-transparent transform hover:-translate-y-1";
+            } else {
+                const categoryColors = {
+                    'umum': 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 hover:border-blue-200',
+                    'pemeringkatan': 'hover:bg-gradient-to-r hover:from-green-50 hover:to-green-100 hover:border-green-200',
+                    'inovasi': 'hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 hover:border-orange-200'
+                };
+                const hoverColor = categoryColors[btn.dataset.category] || '';
+                btn.className = `category-btn group relative flex items-center gap-2.5 px-6 sm:px-7 py-3.5 rounded-xl font-semibold text-sm sm:text-base transition-all duration-300 bg-white text-gray-700 shadow-md hover:shadow-xl ${hoverColor} border-2 border-transparent transform hover:-translate-y-1`;
+            }
         });
 
         if (buttonElement) {
-            buttonElement.classList.add("active");
-        } else {
-            const categoryButton = document.querySelector(
-                `[data-category="${category}"]`
-            );
-            if (categoryButton) {
-                categoryButton.classList.add("active");
+            // Set active state dengan styling menarik
+            if (category === 'all') {
+                buttonElement.className = "category-btn group relative flex items-center gap-2.5 px-6 sm:px-7 py-3.5 rounded-xl font-semibold text-sm sm:text-base transition-all duration-300 bg-primary-600 text-white shadow-lg hover:shadow-2xl hover:bg-primary-700 transform hover:-translate-y-1 hover:scale-105 active";
+            } else {
+                const activeColors = {
+                    'umum': 'bg-blue-600 text-white hover:bg-blue-700',
+                    'pemeringkatan': 'bg-green-600 text-white hover:bg-green-700',
+                    'inovasi': 'bg-orange-600 text-white hover:bg-orange-700'
+                };
+                const activeColor = activeColors[category] || 'bg-primary-600 text-white hover:bg-primary-700';
+                buttonElement.className = `category-btn group relative flex items-center gap-2.5 px-6 sm:px-7 py-3.5 rounded-xl font-semibold text-sm sm:text-base transition-all duration-300 ${activeColor} shadow-lg hover:shadow-2xl border-2 border-transparent transform hover:-translate-y-1 hover:scale-105 active`;
             }
         }
     }
