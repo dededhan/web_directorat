@@ -24,6 +24,7 @@
                             <tr>
                                 <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Nama</th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">NIM</th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Fakultas</th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Prodi</th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
@@ -32,20 +33,27 @@
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
                             @forelse($peserta as $p)
-                            <tr>
-                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $p->name }}</td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $p->email }}</td>
-                                <td class="px-3 py-4 text-sm text-gray-500">
-                                    @if($p->fakultas)
+                            <tr class="hover:bg-gray-50">
+                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                    {{ $p->name }}
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ $p->email }}
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ $p->sulitestProfile?->nim ?? '-' }}
+                                </td>
+                                <td class="px-3 py-4 text-sm">
+                                    @if($p->sulitestProfile?->fakultas)
                                         <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                                            {{ $p->fakultas->abbreviation }}
+                                            {{ $p->sulitestProfile->fakultas->abbreviation }}
                                         </span>
                                     @else
                                         <span class="text-gray-400">-</span>
                                     @endif
                                 </td>
                                 <td class="px-3 py-4 text-sm text-gray-500 max-w-xs truncate">
-                                    {{ $p->prodiDirect->name ?? '-' }}
+                                    {{ $p->sulitestProfile?->prodi->name ?? '-' }}
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm">
                                     @if($p->status === 'active')
@@ -72,7 +80,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="6" class="text-center py-10 text-sm text-gray-500">
+                                <td colspan="7" class="text-center py-10 text-sm text-gray-500">
                                     <i class="fas fa-users fa-2x mb-2 text-gray-400"></i>
                                     <p>Belum ada peserta yang terdaftar.</p>
                                 </td>

@@ -39,7 +39,7 @@
     </div>
 
     <div class="mt-8">
-        <div x-show="activeTab === 'details'" x-cloak>
+        <div x-show="activeTab === 'details'">
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                 <div class="px-4 py-5 sm:px-6">
                     <h3 class="text-lg leading-6 font-medium text-gray-900">Informasi Ujian</h3>
@@ -72,7 +72,7 @@
             </div>
         </div>
 
-        <div x-show="activeTab === 'participants'" x-cloak>
+        <div x-show="activeTab === 'participants'">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-2">
                      <h3 class="text-lg font-medium text-gray-900 mb-4">Daftar Peserta Terdaftar</h3>

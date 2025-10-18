@@ -57,13 +57,33 @@
                     </div>
 
                     <div>
+                        <dt class="text-sm font-medium text-gray-500">NIM</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $peserta->sulitestProfile?->nim ?? '-' }}</dd>
+                    </div>
+
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Status</dt>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            @if($peserta->status === 'active')
+                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                    Aktif
+                                </span>
+                            @else
+                                <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+                                    Nonaktif
+                                </span>
+                            @endif
+                        </dd>
+                    </div>
+
+                    <div>
                         <dt class="text-sm font-medium text-gray-500">Fakultas</dt>
                         <dd class="mt-1 text-sm text-gray-900">
-                            @if($peserta->fakultas)
+                            @if($peserta->sulitestProfile?->fakultas)
                                 <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                                    {{ $peserta->fakultas->abbreviation }}
+                                    {{ $peserta->sulitestProfile->fakultas->abbreviation }}
                                 </span>
-                                <span class="ml-2">{{ $peserta->fakultas->name }}</span>
+                                <span class="ml-2">{{ $peserta->sulitestProfile->fakultas->name }}</span>
                             @else
                                 <span class="text-gray-400">Belum diisi</span>
                             @endif
@@ -73,7 +93,7 @@
                     <div>
                         <dt class="text-sm font-medium text-gray-500">Program Studi</dt>
                         <dd class="mt-1 text-sm text-gray-900">
-                            {{ $peserta->prodiDirect->name ?? 'Belum diisi' }}
+                            {{ $peserta->sulitestProfile?->prodi->name ?? 'Belum diisi' }}
                         </dd>
                     </div>
 

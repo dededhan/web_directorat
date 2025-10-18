@@ -141,8 +141,9 @@
 
 @push('scripts')
 <script>
-    document.getElementById('fakultas_id').addEventListener('change', function() {
-        const fakultasId = this.value;
+    const savedProdiId = {{ old('prodi_id', $peserta->sulitestProfile?->prodi_id ?? 'null') }};
+    
+    function loadProdi(fakultasId, selectProdiId = null) {
         const prodiSelect = document.getElementById('prodi_id');
         
         prodiSelect.innerHTML = '<option value="">Loading...</option>';
@@ -154,7 +155,7 @@
                 .then(data => {
                     prodiSelect.innerHTML = '<option value="">-- Pilih Program Studi --</option>';
                     data.forEach(prodi => {
-                        const selected = prodi.id == {{ old('prodi_id', $peserta->prodi_id) }} ? 'selected' : '';
+                        const selected = prodi.id == selectProdiId ? 'selected' : '';
                         prodiSelect.innerHTML += `<option value="${prodi.id}" ${selected}>${prodi.name}</option>`;
                     });
                     prodiSelect.disabled = false;
@@ -162,9 +163,24 @@
                 .catch(error => {
                     console.error('Error:', error);
                     prodiSelect.innerHTML = '<option value="">Error loading prodi</option>';
+                    prodiSelect.disabled = false;
                 });
         } else {
             prodiSelect.innerHTML = '<option value="">-- Pilih Fakultas Terlebih Dahulu --</option>';
+            prodiSelect.disabled = false;
+        }
+    }
+
+    // Event listener untuk perubahan fakultas
+    document.getElementById('fakultas_id').addEventListener('change', function() {
+        loadProdi(this.value);
+    });
+
+    // Load prodi saat page load jika sudah ada fakultas terpilih
+    document.addEventListener('DOMContentLoaded', function() {
+        const fakultasId = document.getElementById('fakultas_id').value;
+        if (fakultasId) {
+            loadProdi(fakultasId, savedProdiId);
         }
     });
 </script>
