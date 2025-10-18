@@ -22,7 +22,10 @@ class SulitestImportController extends Controller
     {
         $request->validate([
             'import_file' => 'required|file|mimes:docx',
+            'question_category_id' => 'nullable|exists:question_categories,id',
         ]);
+
+        $categoryId = $request->input('question_category_id');
 
         try {
             $file = $request->file('import_file');
@@ -53,7 +56,7 @@ class SulitestImportController extends Controller
             $importedCount = 0;
             $errors = [];
 
-            DB::transaction(function () use ($questionBlocks, $questionBank, &$importedCount, &$errors) {
+            DB::transaction(function () use ($questionBlocks, $questionBank, $categoryId, &$importedCount, &$errors) {
                 foreach ($questionBlocks as $index => $block) {
                     $block = trim($block);
                     if (empty($block)) continue;
@@ -100,7 +103,10 @@ class SulitestImportController extends Controller
                         continue;
                     }
 
-                    $question = $questionBank->questions()->create(['question_text' => $questionText]);
+                    $question = $questionBank->questions()->create([
+                        'question_text' => $questionText,
+                        'question_category_id' => $categoryId,
+                    ]);
 
                     $optionsData = [];
                     foreach ($optionMatches as $match) {
@@ -200,7 +206,10 @@ class SulitestImportController extends Controller
     {
         $request->validate([
             'import_file' => 'required|file|mimes:xlsx,xls',
+            'question_category_id' => 'nullable|exists:question_categories,id',
         ]);
+
+        $categoryId = $request->input('question_category_id');
 
         try {
             $file = $request->file('import_file');
@@ -213,7 +222,7 @@ class SulitestImportController extends Controller
             $importedCount = 0;
             $errors = [];
 
-            DB::transaction(function () use ($rows, $questionBank, &$importedCount, &$errors) {
+            DB::transaction(function () use ($rows, $questionBank, $categoryId, &$importedCount, &$errors) {
                 foreach ($rows as $index => $row) {
                     $rowNumber = $index + 2;
 
@@ -252,7 +261,10 @@ class SulitestImportController extends Controller
                         }
                     }
 
-                    $question = $questionBank->questions()->create(['question_text' => $questionText]);
+                    $question = $questionBank->questions()->create([
+                        'question_text' => $questionText,
+                        'question_category_id' => $categoryId,
+                    ]);
                     $question->options()->createMany($options);
                     $importedCount++;
                 }

@@ -34,8 +34,15 @@
                                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $bank->name }}</td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $bank->questions_count }} Soal</td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $bank->created_at->format('d M Y') }}</td>
-                                <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 space-x-4">
                                     <a href="{{ route('admin_pemeringkatan.sulitest_question_banks.show', $bank->id) }}" class="text-teal-600 hover:text-teal-900">Kelola<span class="sr-only">, {{ $bank->name }}</span></a>
+                                    <form id="delete-bank-form-{{ $bank->id }}" action="{{ route('admin_pemeringkatan.sulitest_question_banks.destroy', $bank->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" onclick="confirmDeleteBank({{ $bank->id }}, '{{ $bank->name }}', {{ $bank->questions_count }})" class="text-red-600 hover:text-red-900">
+                                            Hapus<span class="sr-only">, {{ $bank->name }}</span>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                             @empty
@@ -80,4 +87,32 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    function confirmDeleteBank(bankId, bankName, questionCount) {
+        Swal.fire({
+            title: 'Hapus Bank Soal?',
+            html: `<p class="text-gray-600 mb-2">Anda akan menghapus bank soal <strong>${bankName}</strong>.</p>
+                   <p class="text-red-600 font-semibold">Semua ${questionCount} soal dan kategori di dalamnya akan ikut terhapus!</p>
+                   <p class="text-gray-600 mt-2">Data yang terhapus tidak dapat dikembalikan.</p>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal',
+            input: 'checkbox',
+            inputPlaceholder: 'Saya memahami konsekuensinya',
+            inputValidator: (result) => {
+                return !result && 'Anda harus mencentang untuk melanjutkan'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-bank-form-' + bankId).submit();
+            }
+        });
+    }
+</script>
+@endpush
 @endsection

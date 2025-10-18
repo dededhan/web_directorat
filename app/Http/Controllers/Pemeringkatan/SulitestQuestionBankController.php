@@ -183,4 +183,18 @@ class SulitestQuestionBankController extends Controller
         
         return view('admin_pemeringkatan.question_banks.category-detail', compact('category', 'questionBank'));
     }
+
+    public function destroy(QuestionBank $questionBank)
+    {
+        try {
+            $name = $questionBank->name;
+            $questionBank->delete();
+
+            return redirect()->route('admin_pemeringkatan.sulitest_question_banks.index')
+                ->with('success', "Bank soal '$name' berhasil dihapus!");
+        } catch (\Exception $e) {
+            return redirect()->route('admin_pemeringkatan.sulitest_question_banks.index')
+                ->with('error', 'Gagal menghapus bank soal. Silakan coba lagi.');
+        }
+    }
 }

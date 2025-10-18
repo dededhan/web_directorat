@@ -1,7 +1,7 @@
 @extends('admin_pemeringkatan.index')
 
 @section('contentadmin_pemeringkatan')
-<div class="px-4 sm:px-6 lg:px-8 py-8" x-data="{ activeTab: 'questions' }">
+<div class="px-4 sm:px-6 lg:px-8 py-8" x-data="{ activeTab: 'questions', isImportModalOpen: false, isImportExcelModalOpen: false }">
     <div>
         <nav class="hidden sm:flex" aria-label="Breadcrumb">
             <ol role="list" class="flex items-center space-x-4">
@@ -63,6 +63,14 @@
                    :class="{'border-teal-500 text-teal-600': activeTab === 'add_question', 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': activeTab !== 'add_question'}" 
                    class="whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium">
                    <i class="fas fa-plus mr-2"></i>Tambah Soal Baru
+                </a>
+                <a href="#" @click.prevent="isImportModalOpen = true" 
+                   class="whitespace-nowrap border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 py-4 px-1 text-sm font-medium">
+                   <i class="fas fa-file-word mr-2"></i>Import DOCX
+                </a>
+                <a href="#" @click.prevent="isImportExcelModalOpen = true" 
+                   class="whitespace-nowrap border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 py-4 px-1 text-sm font-medium">
+                   <i class="fas fa-file-excel mr-2"></i>Import Excel
                 </a>
             </nav>
         </div>
@@ -175,6 +183,84 @@
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk Import DOCX -->
+    <div x-show="isImportModalOpen" x-transition.opacity class="fixed inset-0 bg-black bg-opacity-50 z-40" x-cloak></div>
+    <div x-show="isImportModalOpen" x-transition
+        class="fixed inset-0 z-50 flex items-center justify-center p-4" x-cloak>
+        <div @click.away="isImportModalOpen = false" class="bg-white rounded-lg shadow-xl w-full max-w-lg">
+            <div class="px-6 py-4 border-b">
+                <h3 class="text-lg font-medium text-gray-900">Import Soal dari DOCX ke Kategori: {{ $category->name }}</h3>
+            </div>
+            <form action="{{ route('admin_pemeringkatan.sulitest_question_banks.import', $questionBank->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="question_category_id" value="{{ $category->id }}">
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label for="import_file_category" class="block text-sm font-medium text-gray-700">Pilih File (.docx)</label>
+                        <input type="file" name="import_file" id="import_file_category" required accept=".docx" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
+                    </div>
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                               <i class="fas fa-info-circle text-blue-500"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-blue-700">
+                                    Semua soal yang diimport akan otomatis masuk ke kategori <strong>{{ $category->name }}</strong>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-6 py-3 bg-gray-50 flex justify-end space-x-3">
+                    <button type="button" @click="isImportModalOpen = false" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Batal</button>
+                    <button type="submit" class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-700">
+                        <i class="fas fa-upload mr-2"></i>Upload dan Proses
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal untuk Import Excel -->
+    <div x-show="isImportExcelModalOpen" x-transition.opacity class="fixed inset-0 bg-black bg-opacity-50 z-40" x-cloak></div>
+    <div x-show="isImportExcelModalOpen" x-transition
+        class="fixed inset-0 z-50 flex items-center justify-center p-4" x-cloak>
+        <div @click.away="isImportExcelModalOpen = false" class="bg-white rounded-lg shadow-xl w-full max-w-lg">
+            <div class="px-6 py-4 border-b">
+                <h3 class="text-lg font-medium text-gray-900">Import Soal dari Excel ke Kategori: {{ $category->name }}</h3>
+            </div>
+            <form action="{{ route('admin_pemeringkatan.sulitest_question_banks.import_excel', $questionBank->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="question_category_id" value="{{ $category->id }}">
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label for="import_file_excel_category" class="block text-sm font-medium text-gray-700">Pilih File (.xlsx atau .xls)</label>
+                        <input type="file" name="import_file" id="import_file_excel_category" required accept=".xlsx,.xls" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                    </div>
+                    <div class="bg-green-50 border-l-4 border-green-400 p-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                               <i class="fas fa-info-circle text-green-500"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-green-700">
+                                    Semua soal yang diimport akan otomatis masuk ke kategori <strong>{{ $category->name }}</strong>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-6 py-3 bg-gray-50 flex justify-end space-x-3">
+                    <button type="button" @click="isImportExcelModalOpen = false" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Batal</button>
+                    <button type="submit" class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-700">
+                        <i class="fas fa-upload mr-2"></i>Upload dan Proses
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

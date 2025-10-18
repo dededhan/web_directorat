@@ -38,6 +38,7 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             Route::get('/', [SulitestQuestionBankController::class, 'index'])->name('index');
             Route::post('/', [SulitestQuestionBankController::class, 'store'])->name('store');
             Route::get('/{questionBank}', [SulitestQuestionBankController::class, 'show'])->name('show');
+            Route::delete('/{questionBank}', [SulitestQuestionBankController::class, 'destroy'])->name('destroy');
 
             //imprto
             Route::get('/download/template', [SulitestImportController::class, 'downloadTemplate'])->name('download_template');

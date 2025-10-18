@@ -141,6 +141,16 @@
                 @csrf
                 <div class="p-6 space-y-4">
                     <div>
+                        <label for="import_category_docx" class="block text-sm font-medium text-gray-700">Kategori (Opsional)</label>
+                        <select name="question_category_id" id="import_category_docx" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                            <option value="">-- Tanpa Kategori --</option>
+                            @foreach($questionBank->categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                        <p class="mt-1 text-xs text-gray-500">Jika dipilih, semua soal akan masuk ke kategori ini</p>
+                    </div>
+                    <div>
                         <label for="import_file" class="block text-sm font-medium text-gray-700">Pilih File (.docx)</label>
                         <input type="file" name="import_file" id="import_file" required accept=".docx" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
                     </div>
@@ -178,6 +188,16 @@
             <form action="{{ route('admin_pemeringkatan.sulitest_question_banks.import_excel', $questionBank->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="p-6 space-y-4">
+                    <div>
+                        <label for="import_category_excel" class="block text-sm font-medium text-gray-700">Kategori (Opsional)</label>
+                        <select name="question_category_id" id="import_category_excel" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                            <option value="">-- Tanpa Kategori --</option>
+                            @foreach($questionBank->categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                        <p class="mt-1 text-xs text-gray-500">Jika dipilih, semua soal akan masuk ke kategori ini</p>
+                    </div>
                     <div>
                         <label for="import_file_excel" class="block text-sm font-medium text-gray-700">Pilih File (.xlsx atau .xls)</label>
                         <input type="file" name="import_file" id="import_file_excel" required accept=".xlsx,.xls" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
