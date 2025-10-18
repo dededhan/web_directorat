@@ -91,4 +91,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(ProposalModul::class, 'reviewer_id');
     }
+
+    public function fakultas()
+    {
+        return $this->belongsTo(Fakultas::class, 'fakultas_id');
+    }
+
+    public function prodiDirect()
+    {
+        return $this->belongsTo(Prodi::class, 'prodi_id');
+    }
+
+    public function sulitestProfile(): HasOne
+    {
+        return $this->hasOne(SulitestPesertaProfile::class);
+    }
 }

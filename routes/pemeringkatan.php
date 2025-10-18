@@ -71,6 +71,25 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             Route::post('/{exam}/assign', [SulitestExamController::class, 'assignParticipants'])->name('participants.assign');
             Route::delete('/{exam}/remove/{user}', [SulitestExamController::class, 'removeParticipant'])->name('participants.remove');
         });
+
+        Route::prefix('peserta')->name('peserta.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Pemeringkatan\SulitestPesertaController::class, 'index'])->name('index');
+            Route::get('/create', [\App\Http\Controllers\Pemeringkatan\SulitestPesertaController::class, 'create'])->name('create');
+            Route::post('/', [\App\Http\Controllers\Pemeringkatan\SulitestPesertaController::class, 'store'])->name('store');
+            Route::get('/{peserta}', [\App\Http\Controllers\Pemeringkatan\SulitestPesertaController::class, 'show'])->name('show');
+            Route::get('/{peserta}/edit', [\App\Http\Controllers\Pemeringkatan\SulitestPesertaController::class, 'edit'])->name('edit');
+            Route::put('/{peserta}', [\App\Http\Controllers\Pemeringkatan\SulitestPesertaController::class, 'update'])->name('update');
+            Route::delete('/{peserta}', [\App\Http\Controllers\Pemeringkatan\SulitestPesertaController::class, 'destroy'])->name('destroy');
+            Route::get('/get-prodi/{fakultasId}', [\App\Http\Controllers\Pemeringkatan\SulitestPesertaController::class, 'getProdiByFakultas'])->name('get_prodi');
+        });
+
+        Route::prefix('hasil')->name('hasil.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Pemeringkatan\SulitestHasilController::class, 'index'])->name('index');
+            Route::get('/{exam}', [\App\Http\Controllers\Pemeringkatan\SulitestHasilController::class, 'show'])->name('show');
+            Route::get('/{exam}/analytics', [\App\Http\Controllers\Pemeringkatan\SulitestHasilController::class, 'analytics'])->name('analytics');
+            Route::get('/{exam}/export', [\App\Http\Controllers\Pemeringkatan\SulitestHasilController::class, 'export'])->name('export');
+            Route::get('/session/{session}/detail', [\App\Http\Controllers\Pemeringkatan\SulitestHasilController::class, 'detail'])->name('detail');
+        });
     });
 
 
