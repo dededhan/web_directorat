@@ -54,7 +54,7 @@
                     <dt class="text-sm font-medium text-gray-500">Total Poin</dt>
                     <dd class="mt-1">
                         <span class="inline-flex items-center rounded-md bg-teal-50 px-3 py-1 text-lg font-semibold text-teal-700 ring-1 ring-inset ring-teal-600/20">
-                            {{ $totalScore }}
+                            {{ $totalScore }} / {{ $maxPossibleScore }}
                         </span>
                     </dd>
                 </div>
@@ -62,58 +62,32 @@
         </div>
     </div>
 
-    <!-- Breakdown per Kategori -->
-    <div class="mt-6 bg-white shadow sm:rounded-lg">
-        <div class="px-4 py-5 sm:p-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Breakdown per Kategori</h3>
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                @foreach($categoryScores as $categoryId => $category)
-                <div class="border border-gray-200 rounded-lg p-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <h4 class="text-sm font-medium text-gray-900">{{ $category['name'] }}</h4>
-                        <span class="text-xs text-gray-500">{{ $category['question_count'] }} soal</span>
-                    </div>
-                    <div class="mt-2">
-                        <div class="text-2xl font-bold text-teal-600">{{ $category['total_points'] }}</div>
-                        <div class="text-xs text-gray-500">dari {{ $category['max_possible'] }} poin</div>
-                    </div>
-                    <div class="mt-3">
-                        <div class="flex items-center">
-                            <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                <div class="bg-teal-600 h-2 rounded-full" style="width: {{ $category['percentage'] }}%"></div>
-                            </div>
-                            <span class="ml-2 text-sm font-medium text-gray-900">{{ $category['percentage'] }}%</span>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-
-    <!-- Detail Jawaban per Kategori -->
-    <div class="mt-6">
-        @foreach($answersByCategory as $categoryId => $answers)
-        @php
-            $categoryName = $answers->first()->question->category->name ?? 'Tanpa Kategori';
-        @endphp
-        <div class="bg-white shadow sm:rounded-lg mb-4">
+    <!-- Breakdown per Bank Soal dan Kategori -->
+    @if($categoryScores && $categoryScores->count() > 0)
+        @foreach($categoryScores as $bankId => $bankCategories)
+        <div class="mt-6 bg-white shadow sm:rounded-lg">
             <div class="px-4 py-5 sm:p-6">
                 <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
-                    <i class="fas fa-folder text-teal-600 mr-2"></i>{{ $categoryName }}
+                    <i class="fas fa-book text-blue-600 mr-2"></i>{{ $bankCategories->first()['bank_name'] }}
                 </h3>
-                <div class="space-y-4">
-                    @foreach($answers as $index => $answer)
-                    <div class="border-l-4 border-teal-500 pl-4 py-2">
-                        <p class="text-sm font-medium text-gray-900">{{ $loop->iteration }}. {{ $answer->question->question_text }}</p>
-                        <div class="mt-2 flex items-center justify-between">
-                            <div>
-                                <span class="text-sm text-gray-600">Jawaban: </span>
-                                <span class="text-sm font-medium text-gray-900">{{ $answer->option->text }}</span>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    @foreach($bankCategories as $category)
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-sm font-medium text-gray-900">{{ $category['category_name'] }}</h4>
+                            <span class="text-xs text-gray-500">{{ $category['question_count'] }} soal</span>
+                        </div>
+                        <div class="mt-2">
+                            <div class="text-2xl font-bold text-teal-600">{{ $category['total_points'] }} / {{ $category['max_possible'] }}</div>
+                            <div class="text-xs text-gray-500">Jumlah total / Maximum</div>
+                        </div>
+                        <div class="mt-3">
+                            <div class="flex items-center">
+                                <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                    <div class="bg-teal-600 h-2 rounded-full" style="width: {{ $category['percentage'] }}%"></div>
+                                </div>
+                                <span class="ml-2 text-sm font-medium text-gray-900">{{ $category['percentage'] }}%</span>
                             </div>
-                            <span class="inline-flex items-center rounded-md bg-teal-50 px-2 py-1 text-xs font-medium text-teal-700 ring-1 ring-inset ring-teal-600/20">
-                                {{ $answer->points }} poin
-                            </span>
                         </div>
                     </div>
                     @endforeach
@@ -121,6 +95,62 @@
             </div>
         </div>
         @endforeach
+    @else
+        <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <p class="text-sm text-yellow-800">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                Tidak ada data kategori. Pastikan setiap soal sudah memiliki kategori yang di-assign.
+            </p>
+        </div>
+    @endif
+
+    <!-- Detail Jawaban per Bank Soal dan Kategori -->
+    <div class="mt-6">
+        @if($answersByBankAndCategory && $answersByBankAndCategory->count() > 0)
+            @foreach($answersByBankAndCategory as $key => $answers)
+            @php
+                $firstAnswer = $answers->first();
+                $bankName = $firstAnswer->question->questionBank->name ?? 'Bank Soal Tidak Diketahui';
+                $categoryName = $firstAnswer->question->category->name ?? 'Tanpa Kategori';
+                $questionNumber = 0;
+            @endphp
+            <div class="bg-white shadow sm:rounded-lg mb-4">
+                <div class="px-4 py-5 sm:p-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-2">
+                        <i class="fas fa-book text-blue-600 mr-2"></i>{{ $bankName }}
+                    </h3>
+                    <h4 class="text-md leading-5 font-medium text-gray-700 mb-4 ml-8">
+                        <i class="fas fa-folder text-teal-600 mr-2"></i>{{ $categoryName }}
+                        <span class="text-xs text-gray-500 ml-2">({{ $answers->count() }} soal)</span>
+                    </h4>
+                    <div class="space-y-4">
+                        @foreach($answers as $index => $answer)
+                        @php $questionNumber++; @endphp
+                        <div class="border-l-4 border-teal-500 pl-4 py-2">
+                            <p class="text-sm font-medium text-gray-900">{{ $questionNumber }}. {{ $answer->question->question_text }}</p>
+                            <div class="mt-2 flex items-center justify-between">
+                                <div>
+                                    <span class="text-sm text-gray-600">Jawaban: </span>
+                                    <span class="text-sm font-medium text-gray-900">{{ $answer->option->text }}</span>
+                                </div>
+                                <span class="inline-flex items-center rounded-md bg-teal-50 px-2 py-1 text-xs font-medium text-teal-700 ring-1 ring-inset ring-teal-600/20">
+                                    {{ $answer->points }} poin
+                                </span>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        @else
+            <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p class="text-sm text-yellow-800">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    Tidak ada jawaban yang tersedia.
+                </p>
+            </div>
+        @endif
     </div>
 </div>
 @endsection

@@ -22,7 +22,7 @@ class SulitestHasilController extends Controller
 
     public function show(Exam $exam)
     {
-        $sessions = ExamSession::with(['user.sulitestProfile.fakultas', 'user.sulitestProfile.prodi'])
+        $sessions = ExamSession::with(['user.sulitestProfile.fakultas', 'user.sulitestProfile.prodi', 'answers'])
             ->where('exam_id', $exam->id)
             ->where('status', 'completed')
             ->latest()
@@ -30,11 +30,14 @@ class SulitestHasilController extends Controller
 
         $results = $sessions->map(function ($session) {
             $categorizedScores = $this->calculateCategorizedScores($session);
+            $totalQuestions = $session->answers->count();
+            $maxPossibleScore = $totalQuestions * 5;
             
             return [
                 'session' => $session,
                 'user' => $session->user,
                 'total_score' => $session->answers->sum('points'),
+                'max_possible_score' => $maxPossibleScore,
                 'categorized_scores' => $categorizedScores,
                 'duration' => $session->start_time && $session->end_time 
                     ? $session->end_time->diffInMinutes($session->start_time) 
@@ -51,19 +54,24 @@ class SulitestHasilController extends Controller
             'user.sulitestProfile.fakultas',
             'user.sulitestProfile.prodi',
             'exam.questionBank.categories',
-            'answers.question.category',
+            'answers.question.category.questionBank',
+            'answers.question.questionBank',
             'answers.option'
         ]);
 
-        $categoryScores = $this->calculateCategorizedScores($session);
-        
-        $answersByCategory = $session->answers->groupBy(function ($answer) {
-            return $answer->question->category_id ?? 'uncategorized';
-        });
+        $categoryScores = $this->calculateCategorizedScoresPerBank($session);
+
+        $answersByBankAndCategory = $session->answers->groupBy(function ($answer) {
+            $bankId = $answer->question->question_bank_id ?? 'uncategorized';
+            $categoryId = $answer->question->question_category_id ?? 'no_category';
+            return $bankId . '_' . $categoryId;
+        })->sortKeys();
 
         $totalScore = $session->answers->sum('points');
+        $totalQuestions = $session->answers->count();
+        $maxPossibleScore = $totalQuestions * 5;
 
-        return view('admin_pemeringkatan.hasil.detail', compact('session', 'categoryScores', 'answersByCategory', 'totalScore'));
+        return view('admin_pemeringkatan.hasil.detail', compact('session', 'categoryScores', 'answersByBankAndCategory', 'totalScore', 'maxPossibleScore'));
     }
 
     private function calculateCategorizedScores(ExamSession $session)
@@ -100,9 +108,51 @@ class SulitestHasilController extends Controller
         return collect($categoryScores);
     }
 
+    private function calculateCategorizedScoresPerBank(ExamSession $session)
+    {
+        $answers = $session->answers()->with('question.category.questionBank', 'question.questionBank')->get();
+        
+        $bankCategoryScores = [];
+        
+        foreach ($answers as $answer) {
+
+            $bankId = $answer->question->question_bank_id ?? 'uncategorized';
+            $bankName = $answer->question->questionBank->name ?? 'Bank Soal Tidak Diketahui';
+            
+
+            $categoryId = $answer->question->question_category_id ?? 'no_category';
+            $categoryName = $answer->question->category->name ?? 'Tanpa Kategori';
+            
+            $key = $bankId . '_' . $categoryId;
+            
+            if (!isset($bankCategoryScores[$key])) {
+                $bankCategoryScores[$key] = [
+                    'bank_id' => $bankId,
+                    'bank_name' => $bankName,
+                    'category_id' => $categoryId,
+                    'category_name' => $categoryName,
+                    'total_points' => 0,
+                    'question_count' => 0,
+                    'max_possible' => 0,
+                ];
+            }
+            
+            $bankCategoryScores[$key]['total_points'] += $answer->points;
+            $bankCategoryScores[$key]['question_count']++;
+            $bankCategoryScores[$key]['max_possible'] += 5;
+        }
+
+        foreach ($bankCategoryScores as $key => $category) {
+            $bankCategoryScores[$key]['percentage'] = $category['max_possible'] > 0 
+                ? round(($category['total_points'] / $category['max_possible']) * 100, 2)
+                : 0;
+        }
+
+        return collect($bankCategoryScores)->sortKeys()->groupBy('bank_id');
+    }
+
     public function export(Exam $exam)
     {
-        //export (tar dlu ngerjainya pusing gw)
         return back()->with('info', 'Fitur export akan segera tersedia');
     }
 

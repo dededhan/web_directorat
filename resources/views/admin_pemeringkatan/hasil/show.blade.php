@@ -70,7 +70,7 @@
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-center">
                                 <span class="inline-flex items-center rounded-md bg-teal-50 px-3 py-1 text-sm font-semibold text-teal-700 ring-1 ring-inset ring-teal-600/20">
-                                    {{ $result['total_score'] }}
+                                    {{ $result['total_score'] }} / {{ $result['max_possible_score'] }}
                                 </span>
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
