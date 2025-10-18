@@ -45,11 +45,17 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             Route::post('/{questionBank}/import-excel', [SulitestImportController::class, 'importFromExcel'])->name('import_excel');
             Route::delete('/{questionBank}/clear-all', [SulitestQuestionBankController::class, 'clearAllQuestions'])->name('clear_all');
             
-            //crud
+            //crud questions
             Route::post('/{questionBank}/questions', [SulitestQuestionBankController::class, 'storeQuestion'])->name('questions.store');
             Route::get('/questions/{question}/edit', [SulitestQuestionBankController::class, 'editQuestion'])->name('questions.edit');
             Route::put('/questions/{question}', [SulitestQuestionBankController::class, 'updateQuestion'])->name('questions.update');
             Route::delete('/questions/{question}', [SulitestQuestionBankController::class, 'destroyQuestion'])->name('questions.destroy');
+
+            //crud categories
+            Route::post('/{questionBank}/categories', [SulitestQuestionBankController::class, 'storeCategory'])->name('categories.store');
+            Route::get('/categories/{category}', [SulitestQuestionBankController::class, 'showCategory'])->name('categories.show');
+            Route::put('/categories/{category}', [SulitestQuestionBankController::class, 'updateCategory'])->name('categories.update');
+            Route::delete('/categories/{category}', [SulitestQuestionBankController::class, 'destroyCategory'])->name('categories.destroy');
         });
 
         Route::prefix('sulitest-exams')->name('sulitest_exams.')->group(function () {

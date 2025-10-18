@@ -1,7 +1,14 @@
 @extends('admin_pemeringkatan.index')
 
 @section('contentadmin_pemeringkatan')
-<div class="px-4 sm:px-6 lg:px-8 py-8" x-data="{ activeTab: 'questions', isImportModalOpen: false, isImportExcelModalOpen: false }">
+<div class="px-4 sm:px-6 lg:px-8 py-8" x-data="{ 
+    activeTab: 'questions', 
+    isImportModalOpen: false, 
+    isImportExcelModalOpen: false,
+    isCategoryModalOpen: false,
+    isEditCategoryModalOpen: false,
+    editingCategory: null
+}">
     <div>
         <nav class="hidden sm:flex" aria-label="Breadcrumb">
             <ol role="list" class="flex items-center space-x-4">
@@ -30,15 +37,15 @@
         <div class="border-b border-gray-200">
             <div class="flex justify-between items-end">
                 <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                    <a href="#" @click.prevent="activeTab = 'categories'" 
+                       :class="{'border-teal-500 text-teal-600': activeTab === 'categories', 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': activeTab !== 'categories'}" 
+                       class="whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium">
+                       <i class="fas fa-folder mr-2"></i>Kategori Soal ({{ count($questionBank->categories) }})
+                    </a>
                     <a href="#" @click.prevent="activeTab = 'questions'" 
                        :class="{'border-teal-500 text-teal-600': activeTab === 'questions', 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': activeTab !== 'questions'}" 
                        class="whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium">
-                       Daftar Soal ({{ count($questionBank->questions) }})
-                    </a>
-                    <a href="#" @click.prevent="activeTab = 'add_question'" 
-                       :class="{'border-teal-500 text-teal-600': activeTab === 'add_question', 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': activeTab !== 'add_question'}" 
-                       class="whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium">
-                       Tambah Soal Baru
+                       Semua Soal ({{ count($questionBank->questions) }})
                     </a>
                      <a href="#" @click.prevent="isImportModalOpen = true" 
                        class="whitespace-nowrap border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 py-4 px-1 text-sm font-medium">
@@ -66,9 +73,57 @@
     </div>
 
     <div class="mt-8">
-        <div x-show="activeTab === 'add_question'" x-cloak>
-            @include('admin_pemeringkatan.question_banks._question-form', ['questionBank' => $questionBank])
+        <div x-show="activeTab === 'categories'" x-cloak>
+            <div class="mb-6">
+                <button @click="isCategoryModalOpen = true" class="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700">
+                    <i class="fas fa-plus mr-2"></i>Buat Kategori Baru
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                @forelse($questionBank->categories as $category)
+                    <div class="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-200">
+                        <a href="{{ route('admin_pemeringkatan.sulitest_question_banks.categories.show', $category->id) }}" class="block p-5 hover:bg-gray-50">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-folder text-teal-600 text-xl mr-3"></i>
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-gray-900">{{ $category->name }}</h4>
+                                            @if($category->description)
+                                                <p class="text-sm text-gray-600 mt-1">{{ $category->description }}</p>
+                                            @endif
+                                            <p class="text-xs text-gray-500 mt-2">
+                                                <i class="fas fa-question-circle mr-1"></i>{{ $category->questions->count() }} Soal
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3 ml-4">
+                                    <button @click.prevent="editingCategory = {{ $category->id }}; isEditCategoryModalOpen = true" class="text-gray-400 hover:text-blue-600" title="Edit Kategori">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                    <form action="{{ route('admin_pemeringkatan.sulitest_question_banks.categories.destroy', $category->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus kategori ini? Soal dalam kategori ini akan tetap ada.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" @click.prevent="$event.target.closest('form').submit()" class="text-gray-400 hover:text-red-600" title="Hapus Kategori">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @empty
+                    <div class="text-center rounded-lg border-2 border-dashed border-gray-300 p-12">
+                        <i class="fas fa-folder-open fa-3x text-gray-400"></i>
+                        <h3 class="mt-4 text-sm font-semibold text-gray-900">Belum ada kategori</h3>
+                        <p class="mt-1 text-sm text-gray-500">Mulai dengan membuat kategori untuk mengorganisir soal Anda.</p>
+                    </div>
+                @endforelse
+            </div>
         </div>
+
         <div x-show="activeTab === 'questions'">
             @include('admin_pemeringkatan.question_banks._question-list', ['questionBank' => $questionBank])
         </div>
@@ -151,6 +206,69 @@
             </form>
         </div>
     </div>
+
+    <!-- Modal untuk Buat Kategori Baru -->
+    <div x-show="isCategoryModalOpen" x-transition.opacity class="fixed inset-0 bg-black bg-opacity-50 z-40" x-cloak></div>
+    <div x-show="isCategoryModalOpen" x-transition
+        class="fixed inset-0 z-50 flex items-center justify-center p-4" x-cloak>
+        <div @click.away="isCategoryModalOpen = false" class="bg-white rounded-lg shadow-xl w-full max-w-lg">
+            <div class="px-6 py-4 border-b">
+                <h3 class="text-lg font-medium text-gray-900">Buat Kategori Soal Baru</h3>
+            </div>
+            <form action="{{ route('admin_pemeringkatan.sulitest_question_banks.categories.store', $questionBank->id) }}" method="POST">
+                @csrf
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label for="category_name" class="block text-sm font-medium text-gray-700">Nama Kategori</label>
+                        <input type="text" name="name" id="category_name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm" placeholder="Contoh: Pengetahuan Umum">
+                    </div>
+                    <div>
+                        <label for="category_description" class="block text-sm font-medium text-gray-700">Deskripsi (Opsional)</label>
+                        <textarea name="description" id="category_description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm" placeholder="Deskripsi singkat mengenai kategori ini..."></textarea>
+                    </div>
+                </div>
+                <div class="px-6 py-3 bg-gray-50 flex justify-end space-x-3">
+                    <button type="button" @click="isCategoryModalOpen = false" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Batal</button>
+                    <button type="submit" class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-700">
+                        <i class="fas fa-save mr-2"></i>Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal untuk Edit Kategori -->
+    @foreach($questionBank->categories as $category)
+    <div x-show="isEditCategoryModalOpen && editingCategory === {{ $category->id }}" x-transition.opacity class="fixed inset-0 bg-black bg-opacity-50 z-40" x-cloak></div>
+    <div x-show="isEditCategoryModalOpen && editingCategory === {{ $category->id }}" x-transition
+        class="fixed inset-0 z-50 flex items-center justify-center p-4" x-cloak>
+        <div @click.away="isEditCategoryModalOpen = false; editingCategory = null" class="bg-white rounded-lg shadow-xl w-full max-w-lg">
+            <div class="px-6 py-4 border-b">
+                <h3 class="text-lg font-medium text-gray-900">Edit Kategori</h3>
+            </div>
+            <form action="{{ route('admin_pemeringkatan.sulitest_question_banks.categories.update', $category->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label for="edit_category_name_{{ $category->id }}" class="block text-sm font-medium text-gray-700">Nama Kategori</label>
+                        <input type="text" name="name" id="edit_category_name_{{ $category->id }}" value="{{ $category->name }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="edit_category_description_{{ $category->id }}" class="block text-sm font-medium text-gray-700">Deskripsi (Opsional)</label>
+                        <textarea name="description" id="edit_category_description_{{ $category->id }}" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">{{ $category->description }}</textarea>
+                    </div>
+                </div>
+                <div class="px-6 py-3 bg-gray-50 flex justify-end space-x-3">
+                    <button type="button" @click="isEditCategoryModalOpen = false; editingCategory = null" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Batal</button>
+                    <button type="submit" class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-700">
+                        <i class="fas fa-save mr-2"></i>Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    @endforeach
 </div>
 
 @push('scripts')

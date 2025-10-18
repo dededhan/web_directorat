@@ -7,14 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Question extends Model
+class QuestionCategory extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'question_bank_id',
-        'question_category_id',
-        'question_text',
+        'name',
+        'description',
+        'order',
+    ];
+
+    protected $casts = [
+        'order' => 'integer',
     ];
 
     public function questionBank(): BelongsTo
@@ -22,14 +27,8 @@ class Question extends Model
         return $this->belongsTo(QuestionBank::class);
     }
 
-    public function category(): BelongsTo
+    public function questions(): HasMany
     {
-        return $this->belongsTo(QuestionCategory::class, 'question_category_id');
-    }
-
-    public function options(): HasMany
-    {
-        return $this->hasMany(Option::class);
+        return $this->hasMany(Question::class);
     }
 }
-

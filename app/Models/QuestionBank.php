@@ -24,5 +24,10 @@ class QuestionBank extends Model
     {
         return $this->hasMany(Question::class);
     }
+
+    public function categories(): HasMany
+    {
+        return $this->hasMany(QuestionCategory::class)->orderBy('order');
+    }
 }
 

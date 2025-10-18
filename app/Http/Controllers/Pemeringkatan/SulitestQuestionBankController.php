@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Option;
 use App\Models\Question;
 use App\Models\QuestionBank;
+use App\Models\QuestionCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -22,7 +23,7 @@ class SulitestQuestionBankController extends Controller
 
     public function show(QuestionBank $questionBank)
     {
-        $questionBank->load('questions.options');
+        $questionBank->load(['questions.options', 'questions.category', 'categories']);
         return view('admin_pemeringkatan.question_banks.show', compact('questionBank'));
     }
 
@@ -44,6 +45,7 @@ class SulitestQuestionBankController extends Controller
     {
         $request->validate([
             'question_text' => 'required|string',
+            'question_category_id' => 'nullable|exists:question_categories,id',
             'options' => 'required|array|size:5',
             'options.*.text' => 'required|string|max:255',
             'options.*.points' => 'required|integer|min:1|max:5',
@@ -52,6 +54,7 @@ class SulitestQuestionBankController extends Controller
         DB::transaction(function () use ($request, $questionBank) {
             $question = $questionBank->questions()->create([
                 'question_text' => $request->input('question_text'),
+                'question_category_id' => $request->input('question_category_id'),
             ]);
 
             foreach ($request->input('options') as $optionData) {
@@ -74,6 +77,7 @@ class SulitestQuestionBankController extends Controller
     {
         $request->validate([
             'question_text' => 'required|string',
+            'question_category_id' => 'nullable|exists:question_categories,id',
             'options' => 'required|array|size:5',
             'options.*.id' => ['required', Rule::exists('options', 'id')->where('question_id', $question->id)],
             'options.*.text' => 'required|string|max:255',
@@ -82,7 +86,8 @@ class SulitestQuestionBankController extends Controller
 
         DB::transaction(function () use ($request, $question) {
             $question->update([
-                'question_text' => $request->input('question_text')
+                'question_text' => $request->input('question_text'),
+                'question_category_id' => $request->input('question_category_id'),
             ]);
 
             foreach ($request->input('options') as $optionData) {
@@ -128,5 +133,54 @@ class SulitestQuestionBankController extends Controller
             return redirect()->route('admin_pemeringkatan.sulitest_question_banks.show', $questionBank->id)
                 ->with('error', 'Gagal menghapus soal. Silakan coba lagi.');
         }
+    }
+
+    public function storeCategory(Request $request, QuestionBank $questionBank)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $maxOrder = $questionBank->categories()->max('order') ?? 0;
+
+        $questionBank->categories()->create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'order' => $maxOrder + 1,
+        ]);
+
+        return redirect()->route('admin_pemeringkatan.sulitest_question_banks.show', $questionBank->id)->with('success', 'Kategori berhasil dibuat!');
+    }
+
+    public function updateCategory(Request $request, QuestionCategory $category)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $category->update([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+        ]);
+
+        return redirect()->route('admin_pemeringkatan.sulitest_question_banks.show', $category->question_bank_id)->with('success', 'Kategori berhasil diperbarui!');
+    }
+
+    public function destroyCategory(QuestionCategory $category)
+    {
+        $questionBankId = $category->question_bank_id;
+        $category->delete();
+
+        return redirect()->route('admin_pemeringkatan.sulitest_question_banks.show', $questionBankId)->with('success', 'Kategori berhasil dihapus!');
+    }
+
+    public function showCategory(QuestionCategory $category)
+    {
+        $category->load(['questionBank', 'questions.options']);
+        $questionBank = $category->questionBank;
+        
+        return view('admin_pemeringkatan.question_banks.category-detail', compact('category', 'questionBank'));
     }
 }

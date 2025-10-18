@@ -15,6 +15,21 @@
         @endif
         <div class="space-y-6">
             <div>
+                <label for="question_category_id" class="block text-sm font-medium text-gray-700">Kategori Soal (Opsional)</label>
+                <select id="question_category_id" name="question_category_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                    <option value="">-- Tanpa Kategori --</option>
+                    @foreach($questionBank->categories as $category)
+                        <option value="{{ $category->id }}" {{ old('question_category_id', $question->question_category_id ?? '') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @if($questionBank->categories->isEmpty())
+                    <p class="mt-1 text-sm text-gray-500">Belum ada kategori. Buat kategori terlebih dahulu di tab "Kategori Soal".</p>
+                @endif
+            </div>
+
+            <div>
                 <label for="question_text" class="block text-sm font-medium text-gray-700">Teks Pertanyaan</label>
                 <textarea id="question_text" name="question_text" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm" placeholder="Tuliskan pertanyaan di sini...">{{ old('question_text', $question->question_text ?? '') }}</textarea>
             </div>
