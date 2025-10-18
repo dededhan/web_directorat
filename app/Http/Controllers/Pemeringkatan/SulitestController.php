@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Option;
+use App\Models\ExamSessionLog;
 
 class SulitestController extends Controller
 {
@@ -99,6 +100,10 @@ class SulitestController extends Controller
 
         $userAnswers = $session->answers()->get()->keyBy('question_id');
         $currentAnswerId = $userAnswers[$currentQuestionId]->option_id ?? null;
+        $currentIsFlagged = $userAnswers[$currentQuestionId]->is_flagged ?? false;
+        
+        //flagging
+        $flaggedQuestionIds = $session->answers()->where('is_flagged', true)->pluck('question_id')->toArray();
 
         return view('sulitest.test', [
             'examSession' => $session,
@@ -108,6 +113,8 @@ class SulitestController extends Controller
             'all_question_ids' => $allQuestionIds,
             'user_answers' => $userAnswers,
             'current_answer_id' => $currentAnswerId,
+            'current_is_flagged' => $currentIsFlagged,
+            'flagged_question_ids' => $flaggedQuestionIds,
         ]);
     }
 
@@ -173,5 +180,54 @@ class SulitestController extends Controller
         $correctAnswers = $session->answers()->where('points', '>', 0)->count();
 
         return view('sulitest.results', compact('session', 'totalQuestions', 'correctAnswers'));
+    }
+
+    public function logActivity(Request $request, ExamSession $session)
+    {
+        if ($session->user_id !== Auth::id() || $session->status !== 'ongoing') {
+            return response()->json(['status' => 'error'], 403);
+        }
+
+        $request->validate([
+            'activity_type' => 'required|string',
+            'metadata' => 'nullable|array',
+        ]);
+
+        ExamSessionLog::create([
+            'exam_session_id' => $session->id,
+            'activity_type' => $request->activity_type,
+            'metadata' => $request->metadata,
+            'logged_at' => now(),
+        ]);
+
+        return response()->json(['status' => 'success']);
+    }
+
+    public function toggleFlag(Request $request, ExamSession $session)
+    {
+        if ($session->user_id !== Auth::id() || $session->status !== 'ongoing') {
+            return response()->json(['status' => 'error'], 403);
+        }
+
+        $request->validate([
+            'question_id' => 'required|exists:questions,id',
+            'is_flagged' => 'required|boolean',
+        ]);
+
+        $answer = $session->answers()->where('question_id', $request->question_id)->first();
+        
+        if ($answer) {
+            $answer->update(['is_flagged' => $request->is_flagged]);
+        } else {
+            
+            $session->answers()->create([
+                'question_id' => $request->question_id,
+                'option_id' => null,
+                'points' => 0,
+                'is_flagged' => $request->is_flagged,
+            ]);
+        }
+
+        return response()->json(['status' => 'success']);
     }
 }

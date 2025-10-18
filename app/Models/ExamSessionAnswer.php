@@ -15,6 +15,7 @@ class ExamSessionAnswer extends Model
         'question_id',
         'option_id',
         'points',
+        'is_flagged',
     ];
 
     public function examSession(): BelongsTo

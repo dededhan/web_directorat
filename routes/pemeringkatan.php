@@ -112,6 +112,8 @@ Route::prefix('sulitest')->name('sulitest.')->group(function () {
         Route::get('/test-session/{session}/{questionNumber?}', [SulitestController::class, 'showTest'])->name('test.show');
         Route::post('/test-session/{session}/submit', [SulitestController::class, 'submitAnswer'])->name('test.submit');
         Route::post('/test-session/{session}/autosave', [SulitestController::class, 'autosaveAnswer'])->name('test.autosave');
+        Route::post('/test-session/{session}/log-activity', [SulitestController::class, 'logActivity'])->name('test.logActivity');
+        Route::post('/test-session/{session}/toggle-flag', [SulitestController::class, 'toggleFlag'])->name('test.toggleFlag');
 
         Route::get('/results/{session}', [SulitestController::class, 'showResults'])->name('results.show');
     });
