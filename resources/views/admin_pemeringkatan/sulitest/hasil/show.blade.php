@@ -24,9 +24,9 @@
                 <a href="{{ route('admin_pemeringkatan.hasil.analytics', $exam->id) }}" class="inline-flex items-center px-4 py-2 border border-teal-300 rounded-md shadow-sm text-sm font-medium text-teal-700 bg-white hover:bg-teal-50">
                     <i class="fas fa-chart-bar mr-2"></i>Analitik
                 </a>
-                <a href="{{ route('admin_pemeringkatan.hasil.export', $exam->id) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                {{-- <a href="{{ route('admin_pemeringkatan.hasil.export', $exam->id) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                     <i class="fas fa-download mr-2"></i>Export Excel
-                </a>
+                </a> --}}
             </div>
         </div>
     </div>

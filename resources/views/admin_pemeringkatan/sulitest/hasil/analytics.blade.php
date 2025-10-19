@@ -14,10 +14,54 @@
                 </li>
             </ol>
         </nav>
-        <div class="mt-2">
-            <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">Analitik: {{ $exam->title }}</h2>
+        <div class="mt-2 md:flex md:items-center md:justify-between">
+            <div class="min-w-0 flex-1">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">Analitik: {{ $exam->title }}</h2>
+            </div>
+            <div class="mt-4 flex md:ml-4 md:mt-0">
+                <div class="relative inline-block text-left">
+                    <button type="button" class="inline-flex items-center rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600" id="export-menu-button" aria-expanded="true" aria-haspopup="true" onclick="toggleExportMenu()">
+                        <i class="fas fa-file-excel -ml-0.5 mr-1.5 h-5 w-5"></i>
+                        Export Excel
+                        <i class="fas fa-chevron-down ml-2 -mr-1 h-5 w-5"></i>
+                    </button>
+
+                    <div class="hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" id="export-menu" role="menu" aria-orientation="vertical" aria-labelledby="export-menu-button" tabindex="-1">
+                        <div class="py-1" role="none">
+                            <a href="{{ route('admin_pemeringkatan.hasil.export_analytics', ['exam' => $exam->id, 'type' => 'overall']) }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
+                                <i class="fas fa-table mr-2"></i>Laporan Keseluruhan
+                            </a>
+                            <a href="{{ route('admin_pemeringkatan.hasil.export_analytics', ['exam' => $exam->id, 'type' => 'by_fakultas']) }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
+                                <i class="fas fa-university mr-2"></i>Laporan per Fakultas
+                            </a>
+                            <a href="{{ route('admin_pemeringkatan.hasil.export_analytics', ['exam' => $exam->id, 'type' => 'by_prodi']) }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
+                                <i class="fas fa-graduation-cap mr-2"></i>Laporan per Prodi
+                            </a>
+                            <a href="{{ route('admin_pemeringkatan.hasil.export_analytics', ['exam' => $exam->id, 'type' => 'by_category']) }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
+                                <i class="fas fa-tags mr-2"></i>Laporan per Kategori Soal
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <script>
+        function toggleExportMenu() {
+            const menu = document.getElementById('export-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        document.addEventListener('click', function(event) {
+            const button = document.getElementById('export-menu-button');
+            const menu = document.getElementById('export-menu');
+            
+            if (!button.contains(event.target) && !menu.contains(event.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+    </script>
 
     <!-- Summary Cards -->
     <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">

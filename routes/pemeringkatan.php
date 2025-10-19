@@ -8,6 +8,7 @@ use App\Http\Controllers\Pemeringkatan\SulitestRiwayatController;
 use App\Http\Controllers\Pemeringkatan\SulitestQuestionBankController;
 use App\Http\Controllers\Pemeringkatan\SulitestImportController;
 use App\Http\Controllers\Pemeringkatan\SulitestExamController;
+use App\Http\Controllers\Pemeringkatan\SulitestExportController;
 use App\Http\Controllers\Admin\TheImpactCmsController;
 
 
@@ -89,6 +90,7 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             Route::get('/{exam}', [\App\Http\Controllers\Pemeringkatan\SulitestHasilController::class, 'show'])->name('show');
             Route::get('/{exam}/analytics', [\App\Http\Controllers\Pemeringkatan\SulitestHasilController::class, 'analytics'])->name('analytics');
             Route::get('/{exam}/export', [\App\Http\Controllers\Pemeringkatan\SulitestHasilController::class, 'export'])->name('export');
+            Route::get('/{exam}/export-analytics', [SulitestExportController::class, 'exportAnalytics'])->name('export_analytics');
             Route::get('/session/{session}/detail', [\App\Http\Controllers\Pemeringkatan\SulitestHasilController::class, 'detail'])->name('detail');
         });
     });
