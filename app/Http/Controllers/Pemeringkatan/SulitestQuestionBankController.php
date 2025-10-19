@@ -17,14 +17,14 @@ class SulitestQuestionBankController extends Controller
     public function index()
     {
         $questionBanks = QuestionBank::withCount('questions')->latest()->get();
-        return view('admin_pemeringkatan.question_banks.index', compact('questionBanks'));
+        return view('admin_pemeringkatan.sulitest.question_banks.index', compact('questionBanks'));
     }
 
 
     public function show(QuestionBank $questionBank)
     {
         $questionBank->load(['questions.options', 'questions.category', 'categories']);
-        return view('admin_pemeringkatan.question_banks.show', compact('questionBank'));
+        return view('admin_pemeringkatan.sulitest.question_banks.show', compact('questionBank'));
     }
 
 
@@ -69,7 +69,7 @@ class SulitestQuestionBankController extends Controller
     public function editQuestion(Question $question)
     {
         $question->load('options', 'questionBank');
-        return view('admin_pemeringkatan.question_banks.edit', compact('question'));
+        return view('admin_pemeringkatan.sulitest.question_banks.edit', compact('question'));
     }
 
 
@@ -181,7 +181,7 @@ class SulitestQuestionBankController extends Controller
         $category->load(['questionBank', 'questions.options']);
         $questionBank = $category->questionBank;
         
-        return view('admin_pemeringkatan.question_banks.category-detail', compact('category', 'questionBank'));
+        return view('admin_pemeringkatan.sulitest.question_banks.category-detail', compact('category', 'questionBank'));
     }
 
     public function destroy(QuestionBank $questionBank)

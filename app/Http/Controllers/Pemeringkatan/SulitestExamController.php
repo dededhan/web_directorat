@@ -13,14 +13,14 @@ class SulitestExamController extends Controller
     public function index()
     {
         $exams = Exam::with('questionBank')->latest()->get();
-        return view('admin_pemeringkatan.sulitest_exams.index', compact('exams'));
+        return view('admin_pemeringkatan.sulitest.exams.index', compact('exams'));
     }
 
 
     public function create()
     {
         $questionBanks = QuestionBank::pluck('name', 'id');
-        return view('admin_pemeringkatan.sulitest_exams.create', compact('questionBanks'));
+        return view('admin_pemeringkatan.sulitest.exams.create', compact('questionBanks'));
     }
 
     public function store(Request $request)
@@ -45,7 +45,7 @@ class SulitestExamController extends Controller
     public function edit(Exam $exam)
     {
         $questionBanks = QuestionBank::pluck('name', 'id');
-        return view('admin_pemeringkatan.sulitest_exams.edit', compact('exam', 'questionBanks'));
+        return view('admin_pemeringkatan.sulitest.exams.edit', compact('exam', 'questionBanks'));
     }
 
     public function update(Request $request, Exam $exam)
@@ -86,7 +86,7 @@ class SulitestExamController extends Controller
             
         $exam->load('participants');
 
-        return view('admin_pemeringkatan.sulitest_exams.show', compact('exam', 'potentialParticipants'));
+        return view('admin_pemeringkatan.sulitest.exams.show', compact('exam', 'potentialParticipants'));
     }
 
 

@@ -17,7 +17,7 @@ class SulitestHasilController extends Controller
             $query->where('status', 'completed');
         }])->latest()->get();
 
-        return view('admin_pemeringkatan.hasil.index', compact('exams'));
+        return view('admin_pemeringkatan.sulitest.hasil.index', compact('exams'));
     }
 
     public function show(Exam $exam)
@@ -45,7 +45,7 @@ class SulitestHasilController extends Controller
             ];
         });
 
-        return view('admin_pemeringkatan.hasil.show', compact('exam', 'results'));
+        return view('admin_pemeringkatan.sulitest.hasil.show', compact('exam', 'results'));
     }
 
     public function detail(ExamSession $session)
@@ -71,7 +71,7 @@ class SulitestHasilController extends Controller
         $totalQuestions = $session->answers->count();
         $maxPossibleScore = $totalQuestions * 5;
 
-        return view('admin_pemeringkatan.hasil.detail', compact('session', 'categoryScores', 'answersByBankAndCategory', 'totalScore', 'maxPossibleScore'));
+        return view('admin_pemeringkatan.sulitest.hasil.detail', compact('session', 'categoryScores', 'answersByBankAndCategory', 'totalScore', 'maxPossibleScore'));
     }
 
     private function calculateCategorizedScores(ExamSession $session)
@@ -214,6 +214,6 @@ class SulitestHasilController extends Controller
             $categoryAnalytics[$key]['avg_score'] = round($data['total_points'] / $data['total_participants'], 2);
         }
 
-        return view('admin_pemeringkatan.hasil.analytics', compact('exam', 'analytics', 'categoryAnalytics'));
+        return view('admin_pemeringkatan.sulitest.hasil.analytics', compact('exam', 'analytics', 'categoryAnalytics'));
     }
 }

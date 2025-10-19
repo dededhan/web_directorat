@@ -20,13 +20,13 @@ class SulitestPesertaController extends Controller
             ->latest()
             ->paginate(20);
 
-        return view('admin_pemeringkatan.peserta.index', compact('peserta'));
+        return view('admin_pemeringkatan.sulitest.peserta.index', compact('peserta'));
     }
 
     public function create()
     {
         $fakultas = Fakultas::orderBy('name')->get();
-        return view('admin_pemeringkatan.peserta.create', compact('fakultas'));
+        return view('admin_pemeringkatan.sulitest.peserta.create', compact('fakultas'));
     }
 
     public function store(Request $request)
@@ -64,7 +64,7 @@ class SulitestPesertaController extends Controller
     public function show(User $peserta)
     {
         $peserta->load(['sulitestProfile.fakultas', 'sulitestProfile.prodi', 'examSessions.exam']);
-        return view('admin_pemeringkatan.peserta.show', compact('peserta'));
+        return view('admin_pemeringkatan.sulitest.peserta.show', compact('peserta'));
     }
 
     public function edit(User $peserta)
@@ -72,7 +72,7 @@ class SulitestPesertaController extends Controller
         $peserta->load('sulitestProfile');
         $fakultas = Fakultas::orderBy('name')->get();
         $prodis = Prodi::where('fakultas_id', $peserta->sulitestProfile?->fakultas_id)->get();
-        return view('admin_pemeringkatan.peserta.edit', compact('peserta', 'fakultas', 'prodis'));
+        return view('admin_pemeringkatan.sulitest.peserta.edit', compact('peserta', 'fakultas', 'prodis'));
     }
 
     public function update(Request $request, User $peserta)
