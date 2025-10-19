@@ -16,7 +16,8 @@
             <span class="ml-4">Dashboard</span>
         </a>
         
-        <a href="#" class="flex items-center px-4 py-2.5 rounded-lg hover:bg-slate-700 hover:text-white transition-colors duration-200">
+        <a href="{{ route('sulitest.riwayat.index') }}" 
+           class="flex items-center px-4 py-2.5 rounded-lg transition-colors duration-200 {{ request()->routeIs('sulitest.riwayat.*') ? 'bg-teal-600 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
             <i class="fas fa-history fa-fw w-6 text-center"></i>
             <span class="ml-4">Riwayat Tes</span>
         </a>

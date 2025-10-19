@@ -116,6 +116,10 @@ Route::prefix('sulitest')->name('sulitest.')->group(function () {
         Route::post('/test-session/{session}/toggle-flag', [SulitestController::class, 'toggleFlag'])->name('test.toggleFlag');
 
         Route::get('/results/{session}', [SulitestController::class, 'showResults'])->name('results.show');
+        
+        Route::get('/riwayat', [SulitestController::class, 'riwayat'])->name('riwayat.index');
+        Route::get('/riwayat/{session}', [SulitestController::class, 'riwayatDetail'])->name('riwayat.detail');
+        Route::get('/riwayat/{session}/download', [SulitestController::class, 'riwayatDownload'])->name('riwayat.download');
     });
 });
 
