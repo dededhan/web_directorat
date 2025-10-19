@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\SulitestLoginController;
 use App\Http\Controllers\Pemeringkatan\SulitestController;
+use App\Http\Controllers\Pemeringkatan\SulitestRiwayatController;
 use App\Http\Controllers\Pemeringkatan\SulitestQuestionBankController;
 use App\Http\Controllers\Pemeringkatan\SulitestImportController;
 use App\Http\Controllers\Pemeringkatan\SulitestExamController;
@@ -117,9 +118,9 @@ Route::prefix('sulitest')->name('sulitest.')->group(function () {
 
         Route::get('/results/{session}', [SulitestController::class, 'showResults'])->name('results.show');
         
-        Route::get('/riwayat', [SulitestController::class, 'riwayat'])->name('riwayat.index');
-        Route::get('/riwayat/{session}', [SulitestController::class, 'riwayatDetail'])->name('riwayat.detail');
-        Route::get('/riwayat/{session}/download', [SulitestController::class, 'riwayatDownload'])->name('riwayat.download');
+        Route::get('/riwayat', [SulitestRiwayatController::class, 'index'])->name('riwayat.index');
+        Route::get('/riwayat/{session}', [SulitestRiwayatController::class, 'detail'])->name('riwayat.detail');
+        Route::get('/riwayat/{session}/download', [SulitestRiwayatController::class, 'download'])->name('riwayat.download');
     });
 });
 
