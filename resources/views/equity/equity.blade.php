@@ -65,11 +65,11 @@
                     <h2 class="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-brand-dark">Berita & Informasi Terkini</h2>
                     <p class="mt-2 text-base text-gray-600 max-w-2xl mx-auto">Update terbaru seputar Program EQUITY dan informasi penting Universitas Negeri Jakarta</p>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 p-4 sm:p-6 lg:p-8">
                     @foreach($equityNews as $newsItem)
-                    <a href="{{ route('equity.news.show', $newsItem->slug) }}" class="group relative h-[450px] sm:h-[520px] lg:h-[580px] overflow-hidden transition-all duration-300 hover:brightness-110">
-                        <img src="{{ asset('storage/' . $newsItem->image) }}" alt="{{ $newsItem->title }}" class="absolute inset-0 w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-{{ $newsItem->gradient_color }}-900/85 via-{{ $newsItem->gradient_color }}-900/50 to-transparent"></div>
+                    <a href="{{ route('equity.news.show', $newsItem->slug) }}" class="group relative h-[450px] sm:h-[520px] lg:h-[580px] overflow-hidden transition-all duration-300 hover:brightness-110 shadow-lg rounded-xl">
+                        <img src="{{ asset('storage/' . $newsItem->image) }}" alt="{{ $newsItem->title }}" class="absolute inset-0 w-full h-full object-cover rounded-xl">
+                        <div class="absolute inset-0 bg-gradient-to-t from-{{ $newsItem->gradient_color }}-900/85 via-{{ $newsItem->gradient_color }}-900/50 to-transparent rounded-xl"></div>
                         <div class="absolute bottom-0 left-0 right-0 p-5 text-white">
                             <p class="text-xs uppercase tracking-wider mb-2 font-semibold">{{ $newsItem->category }}</p>
                             <h3 class="text-lg lg:text-xl font-bold mb-3">{{ $newsItem->title }}</h3>
