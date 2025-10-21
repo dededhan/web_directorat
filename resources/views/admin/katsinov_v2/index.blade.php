@@ -225,8 +225,10 @@
                                         </button>
                                     @endif
                                     
-                                    {{-- Laporan Form Katsinov button (Admin/Validator only) --}}
-                                    @if(in_array(Auth::user()->role, ['admin_direktorat', 'validator']) && $katsinov->responses->count() > 0)
+                                    {{-- Laporan Form Katsinov button (Admin/Validator only, submitted or higher status) --}}
+                                    @if(in_array(Auth::user()->role, ['admin_direktorat', 'validator']) && 
+                                        $katsinov->responses->count() > 0 && 
+                                        in_array($katsinov->status, ['submitted', 'assigned', 'under_review', 'completed']))
                                         <a href="{{ route('admin.katsinov-v2.full-report', $katsinov->id) }}" 
                                            class="text-yellow-600 hover:text-yellow-900" title="Laporan Form Katsinov">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
