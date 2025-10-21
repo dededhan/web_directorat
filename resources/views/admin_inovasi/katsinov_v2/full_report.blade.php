@@ -6,13 +6,13 @@
     <div class="mb-4">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h1 class="h3 mb-2">📋 Full Report - {{ $katsinov->title }}</h1>
+                <h1 class="h3 mb-2">📋 Laporan Form Katsinov - {{ $katsinov->title }}</h1>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('admin_inovasi.dashboard') }}">Dashboard</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('admin_inovasi.katsinov-v2.index') }}">KATSINOV V2</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('admin_inovasi.katsinov-v2.show', $katsinov->id) }}">Detail</a></li>
-                        <li class="breadcrumb-item active">Full Report</li>
+                        <li class="breadcrumb-item active">Laporan Form Katsinov</li>
                     </ol>
                 </nav>
             </div>
@@ -108,21 +108,25 @@
             @endphp
 
             @forelse($responsesByIndicator as $indicatorNum => $responses)
-                <div class="mb-5">
-                    <h5 class="text-primary mb-3">
+                <div class="mb-5 border rounded p-4 bg-light">
+                    <h5 class="text-primary mb-3 pb-2 border-bottom">
                         <i class='bx bx-check-circle'></i> 
                         Indikator {{ $indicatorNum }}: {{ $indicatorTitles[$indicatorNum] }}
                     </h5>
                     
                     <div class="table-responsive">
-                        <table class="table table-sm table-bordered table-hover">
-                            <thead class="table-light">
+                        <table class="table table-bordered table-hover bg-white">
+                            <thead class="table-secondary">
                                 <tr>
                                     <th width="5%" class="text-center">No</th>
                                     <th width="8%" class="text-center">Aspek</th>
-                                    <th width="60%">Pertanyaan</th>
-                                    <th width="12%" class="text-center">Skor</th>
-                                    <th width="15%" class="text-center">Persentase</th>
+                                    <th width="10%" class="text-center">0</th>
+                                    <th width="10%" class="text-center">1</th>
+                                    <th width="10%" class="text-center">2</th>
+                                    <th width="10%" class="text-center">3</th>
+                                    <th width="10%" class="text-center">4</th>
+                                    <th width="10%" class="text-center">5</th>
+                                    <th width="27%">Deskripsi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -130,43 +134,50 @@
                                     @php
                                         $question = collect($allQuestions[$indicatorNum] ?? [])->firstWhere('no', $response->row_number);
                                         $questionText = $question['desc'] ?? 'Pertanyaan tidak ditemukan';
-                                        $scorePercent = ($response->score / 5) * 100;
-                                        $badgeClass = $scorePercent >= 80 ? 'bg-success' : ($scorePercent >= 60 ? 'bg-warning' : 'bg-danger');
+                                        $aspectColors = [
+                                            'T' => 'bg-warning',
+                                            'M' => 'bg-danger',
+                                            'O' => 'bg-primary',
+                                            'Mf' => 'bg-secondary',
+                                            'P' => 'bg-info',
+                                            'I' => 'bg-success',
+                                            'R' => 'bg-dark',
+                                        ];
+                                        $badgeClass = $aspectColors[$response->aspect] ?? 'bg-secondary';
                                     @endphp
                                     <tr>
-                                        <td class="text-center">{{ $response->row_number }}</td>
-                                        <td class="text-center">
-                                            <span class="badge bg-secondary">{{ $response->aspect }}</span>
+                                        <td class="text-center align-middle">{{ $response->row_number }}</td>
+                                        <td class="text-center align-middle">
+                                            <span class="badge {{ $badgeClass }}">{{ $response->aspect }}</span>
                                         </td>
-                                        <td>{{ $questionText }}</td>
-                                        <td class="text-center">
-                                            <strong>{{ $response->score }}/5</strong>
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="badge {{ $badgeClass }}">
-                                                {{ number_format($scorePercent, 1) }}%
-                                            </span>
-                                        </td>
+                                        @for($score = 0; $score <= 5; $score++)
+                                            <td class="text-center align-middle">
+                                                @if($response->score == $score)
+                                                    <i class='bx bxs-circle text-success' style="font-size: 20px;"></i>
+                                                @else
+                                                    <i class='bx bx-circle text-muted' style="font-size: 20px;"></i>
+                                                @endif
+                                            </td>
+                                        @endfor
+                                        <td class="align-middle">{{ $questionText }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
-                            <tfoot class="table-light">
-                                <tr>
-                                    <th colspan="3" class="text-end">Total Skor Indikator {{ $indicatorNum }}:</th>
-                                    <th class="text-center">{{ $responses->sum('score') }}/{{ $responses->count() * 5 }}</th>
-                                    <th class="text-center">
-                                        @php
-                                            $totalPercent = ($responses->sum('score') / ($responses->count() * 5)) * 100;
-                                            $totalBadgeClass = $totalPercent >= 80 ? 'bg-success' : ($totalPercent >= 60 ? 'bg-warning' : 'bg-danger');
-                                        @endphp
-                                        <span class="badge {{ $totalBadgeClass }}">
-                                            {{ number_format($totalPercent, 1) }}%
-                                        </span>
-                                    </th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
+
+                    {{-- Note untuk Indikator --}}
+                    @php
+                        $note = $katsinov->notes->firstWhere('indicator_number', $indicatorNum);
+                    @endphp
+                    @if($note && $note->notes)
+                        <div class="mt-3 p-3 bg-warning bg-opacity-10 border-start border-warning border-4 rounded">
+                            <h6 class="text-warning mb-2">
+                                <i class='bx bx-note'></i> Catatan Indikator {{ $indicatorNum }}
+                            </h6>
+                            <p class="mb-0 text-dark">{{ $note->notes }}</p>
+                        </div>
+                    @endif
                 </div>
             @empty
                 <div class="alert alert-warning">
@@ -695,7 +706,7 @@
     <div class="card shadow-sm">
         <div class="card-body text-center">
             <button onclick="window.print()" class="btn btn-primary btn-lg me-2">
-                <i class='bx bx-printer'></i> Print Full Report
+                <i class='bx bx-printer'></i> Print Laporan Form Katsinov
             </button>
             <a href="{{ route('admin_inovasi.katsinov-v2.show', $katsinov->id) }}" class="btn btn-secondary btn-lg">
                 <i class='bx bx-arrow-back'></i> Back to Detail

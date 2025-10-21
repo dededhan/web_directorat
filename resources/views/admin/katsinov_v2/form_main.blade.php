@@ -2,8 +2,63 @@
 
 @section('contentadmin')
 <div class="p-6 max-w-7xl mx-auto">
-    {{-- Header --}}
+    {{-- Header with Navigation --}}
     <div class="mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-4">
+                <a href="{{ route('admin.katsinov-v2.index') }}" 
+                   class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded-lg transition duration-300 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Kembali
+                </a>
+            </div>
+            
+            {{-- Form Pendukung Menu - Only show when editing existing katsinov --}}
+            @if($katsinov)
+                <div class="relative">
+                    <button id="formMenuBtn" type="button"
+                            class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition duration-300 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        Form Pendukung
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div id="formMenu" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl z-50 py-2 border border-gray-200">
+                        <a href="{{ route('admin.katsinov-v2.form-inovasi', $katsinov->id) }}" 
+                           class="block px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 transition flex items-center gap-2">
+                            <span class="text-lg">📝</span>
+                            <span>Form Judul Inovasi</span>
+                        </a>
+                        <a href="{{ route('admin.katsinov-v2.form-lampiran', $katsinov->id) }}" 
+                           class="block px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 transition flex items-center gap-2">
+                            <span class="text-lg">📎</span>
+                            <span>Form Lampiran</span>
+                        </a>
+                        <a href="{{ route('admin.katsinov-v2.form-informasi-dasar', $katsinov->id) }}" 
+                           class="block px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 transition flex items-center gap-2">
+                            <span class="text-lg">📋</span>
+                            <span>Form Informasi Dasar</span>
+                        </a>
+                        <a href="{{ route('admin.katsinov-v2.form-berita-acara', $katsinov->id) }}" 
+                           class="block px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 transition flex items-center gap-2">
+                            <span class="text-lg">📄</span>
+                            <span>Form Berita Acara</span>
+                        </a>
+                        <a href="{{ route('admin.katsinov-v2.form-record-hasil', $katsinov->id) }}" 
+                           class="block px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 transition flex items-center gap-2">
+                            <span class="text-lg">📊</span>
+                            <span>Form Record Hasil</span>
+                        </a>
+                    </div>
+                </div>
+            @endif
+        </div>
+        
         <h1 class="text-3xl font-bold text-gray-800">PENGUKURAN TINGKAT KESIAPAN INOVASI (KATSINOV)</h1>
         <p class="text-gray-600 mt-1">Innovation Readiness Level - Meter</p>
     </div>
@@ -134,28 +189,27 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Penilaian <span class="text-red-500">*</span></label>
-                        <input type="date" name="assessment_date" value="{{ $katsinov->assessment_date ?? date('Y-m-d') }}" required
+                        <input type="date" name="assessment_date" value="{{ $katsinov && $katsinov->assessment_date ? $katsinov->assessment_date->format('Y-m-d') : date('Y-m-d') }}" required
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
                 </div>
             </div>
 
-            {{-- Kriteria Capaian --}}
+            {{-- Kriteria Capaian Per Indikator --}}
             <div class="mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-blue-500">Kriteria Capaian</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-blue-50 rounded-lg p-4">
-                        <div class="flex justify-between items-center">
-                            <span class="font-semibold text-gray-700">Batas Minimum Capaian</span>
-                            <span class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold" id="minThreshold">{{ $min_percentage_js ?? 80.0 }}%</span>
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-blue-500">Batas Minimum Capaian Per Indikator</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    @foreach([1, 2, 3, 4, 5, 6] as $ind)
+                        <div class="bg-blue-50 rounded-lg p-4 text-center">
+                            <div class="text-sm text-gray-600 mb-2">Indikator {{ $ind }}</div>
+                            <div class="text-2xl font-bold text-blue-600">{{ $thresholds[$ind] ?? 80.0 }}%</div>
                         </div>
-                    </div>
-                    <div class="bg-green-50 rounded-lg p-4">
-                        <div class="flex justify-between items-center">
-                            <span class="font-semibold text-gray-700">Batas Maksimum Capaian</span>
-                            <span class="bg-green-600 text-white px-4 py-2 rounded-lg font-bold">100.0%</span>
-                        </div>
-                    </div>
+                    @endforeach
+                </div>
+                <div class="mt-4 bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
+                    <p class="text-sm text-yellow-800">
+                        <strong>Info:</strong> Setiap indikator memiliki batas minimum yang berbeda. Pastikan total score indikator mencapai batas minimum untuk melanjutkan ke indikator berikutnya.
+                    </p>
                 </div>
             </div>
 
@@ -211,7 +265,7 @@
                         <div id="indicator{{ $i }}" class="indicator-content {{ $i === 1 ? '' : 'hidden' }}">
                             <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 p-6 mb-6 rounded-lg">
                                 <h3 class="text-xl font-bold text-blue-900 mb-2">KATSINOV {{ $i }}</h3>
-                                <p class="text-sm text-blue-700">Silakan isi penilaian untuk setiap pertanyaan di bawah ini. <strong>Total score indikator</strong> harus mencapai minimum <strong id="minThresholdText">80%</strong> untuk melanjutkan ke indikator berikutnya.</p>
+                                <p class="text-sm text-blue-700">Silakan isi penilaian untuk setiap pertanyaan di bawah ini. <strong>Total score indikator</strong> harus mencapai minimum <strong class="text-lg text-red-600">{{ $thresholds[$i] ?? 80 }}%</strong> untuk melanjutkan ke indikator berikutnya.</p>
                             </div>
 
                             {{-- Total Score Display --}}
@@ -219,7 +273,7 @@
                                 <div class="flex items-center justify-between">
                                     <div>
                                         <div class="text-sm text-gray-600">Total Score Indikator {{ $i }}</div>
-                                        <div class="text-xs text-gray-500 mt-1">Harus mencapai minimum <strong>{{ $minThreshold ?? 80 }}%</strong> untuk lanjut ke indikator berikutnya</div>
+                                        <div class="text-xs text-gray-500 mt-1">Harus mencapai minimum <strong class="text-red-600">{{ $thresholds[$i] ?? 80 }}%</strong> untuk lanjut ke indikator berikutnya</div>
                                     </div>
                                     <div class="text-2xl font-bold" id="total-score-{{ $i }}">
                                         <span class="text-gray-400">-%</span>
@@ -335,7 +389,7 @@
                                         <ul class="list-disc list-inside space-y-1 ml-2">
                                             <li>Menghitung <strong>TOTAL SCORE</strong> dari seluruh pertanyaan di indikator ini</li>
                                             <li>Rumus: (Total Score Terjawab / Total Maksimal) × 100%</li>
-                                            <li>Memvalidasi: <strong>Apakah total score ≥ {{ $min_percentage_js ?? 80 }}%?</strong></li>
+                                            <li>Memvalidasi: <strong>Apakah total score ≥ {{ $thresholds[$i] ?? 80 }}%?</strong></li>
                                             <li>✅ Jika YA: Tab indikator berikutnya akan AKTIF (dapat melanjutkan)</li>
                                             <li>❌ Jika TIDAK: Tab indikator berikutnya tetap TERKUNCI (harus perbaiki nilai dulu)</li>
                                         </ul>
@@ -371,12 +425,7 @@
             </div>
 
             {{-- Action Buttons --}}
-            <div class="flex items-center justify-between pt-6 border-t border-gray-200">
-                <a href="{{ route('admin.katsinov-v2.index') }}" 
-                   class="px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded-lg transition duration-300">
-                    Kembali
-                </a>
-                
+            <div class="flex items-center justify-end pt-6 border-t border-gray-200">
                 <div class="flex gap-3">
                     <button type="button" onclick="saveAsDraft()" 
                             class="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-lg transition duration-300 flex items-center gap-2">
@@ -391,7 +440,7 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        Submit untuk Review
+                        Submit Form Katsinov
                     </button>
                 </div>
             </div>
@@ -401,19 +450,20 @@
 
 <script>
 let currentIndicatorNum = 1;
-const minThreshold = {{ $min_percentage_js ?? 80.0 }};
+const thresholds = {
+    1: {{ $thresholds[1] ?? 80.0 }},
+    2: {{ $thresholds[2] ?? 80.0 }},
+    3: {{ $thresholds[3] ?? 80.0 }},
+    4: {{ $thresholds[4] ?? 80.0 }},
+    5: {{ $thresholds[5] ?? 80.0 }},
+    6: {{ $thresholds[6] ?? 80.0 }}
+};
 let indicatorScores = {};
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
-    updateMinThresholdText();
+    // Thresholds are already set by Blade
 });
-
-function updateMinThresholdText() {
-    document.querySelectorAll('#minThresholdText').forEach(el => {
-        el.textContent = minThreshold + '%';
-    });
-}
 
 function showIndicator(num) {
     // Hide all
@@ -510,6 +560,7 @@ function calculateIndicatorScore(indicatorNum) {
     // Rumus: (Total Score Terjawab / (Total Rows × 5)) × 100%
     const maxPossibleTotal = totalRows * 5;
     const totalPercentage = maxPossibleTotal > 0 ? (totalScoreSum / maxPossibleTotal) * 100 : 0;
+    const minThreshold = thresholds[indicatorNum];
     const indicatorPass = totalPercentage >= minThreshold;
     
     // Update total indicator score display (dengan warna berdasarkan threshold)
@@ -540,6 +591,7 @@ function nextIndicator() {
         const warningDiv = document.getElementById('scoreWarning');
         const warningMsg = document.getElementById('warningMessage');
         const totalPercentage = indicatorData.totalPercentage.toFixed(1);
+        const minThreshold = thresholds[currentIndicatorNum];
         warningMsg.innerHTML = `
             <strong>Total score Indikator ${currentIndicatorNum}: ${totalPercentage}%</strong><br>
             Belum mencapai batas minimum ${minThreshold}%.<br>
@@ -610,12 +662,13 @@ function submitForm() {
         }
     }
     
-    const msg = `Anda akan submit hingga Indikator ${highestCompleted}. ${highestCompleted < 6 ? 'Indikator selanjutnya dapat dilengkapi setelah memperbaiki nilai yang kurang.' : 'Semua indikator telah lengkap.'}\n\nLanjutkan submit?`;
+    const msg = `Anda akan submit form Katsinov hingga Indikator ${highestCompleted}. ${highestCompleted < 6 ? 'Indikator selanjutnya dapat dilengkapi setelah memperbaiki nilai yang kurang.' : 'Semua indikator telah lengkap.'}\n\nLanjutkan submit?`;
     
     if (confirm(msg)) {
         const formData = new FormData(document.getElementById('katsinovForm'));
+        formData.append('save_as_draft', '1');
         formData.append('highest_indicator', highestCompleted);
-        sendData(formData, 'Data berhasil disubmit untuk review');
+        sendData(formData, 'Form Katsinov berhasil disubmit sebagai draft');
     }
 }
 
@@ -730,5 +783,25 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Loaded existing data:', existingResponses.length, 'responses');
 });
 @endif
+
+// Toggle Form Pendukung dropdown menu
+document.addEventListener('DOMContentLoaded', function() {
+    const formMenuBtn = document.getElementById('formMenuBtn');
+    const formMenu = document.getElementById('formMenu');
+    
+    if (formMenuBtn && formMenu) {
+        formMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            formMenu.classList.toggle('hidden');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!formMenuBtn.contains(e.target) && !formMenu.contains(e.target)) {
+                formMenu.classList.add('hidden');
+            }
+        });
+    }
+});
 </script>
 @endsection

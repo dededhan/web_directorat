@@ -49,6 +49,9 @@ Route::prefix('admin_inovasi')->name('admin_inovasi.')
                 // Certificate
                 Route::get('/{katsinov_id}/certificate', [\App\Http\Controllers\KatsinovV2Controller::class, 'generateCertificate'])->name('certificate');
                 
+                // Download Report Pengukuran
+                Route::get('/{katsinov_id}/download-report', [\App\Http\Controllers\KatsinovV2Controller::class, 'downloadReport'])->name('download-report');
+                
                 // Summary
                 Route::get('/{katsinov_id}/summary', [\App\Http\Controllers\KatsinovV2Controller::class, 'showSummary'])->name('summary');
                 Route::get('/{katsinov_id}/print-summary', [\App\Http\Controllers\KatsinovV2Controller::class, 'printSummary'])->name('print-summary');

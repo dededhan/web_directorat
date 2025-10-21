@@ -343,15 +343,12 @@
             
             @if(in_array(Auth::user()->role, ['admin_direktorat', 'admin_inovasi', 'validator']))
                 <a href="{{ route('admin_inovasi.katsinov-v2.full-report', $katsinov->id) }}" class="btn btn-warning me-2">
-                    <i class='bx bx-file-find'></i> Full Report
+                    <i class='bx bx-file-find'></i> Laporan Form Katsinov
                 </a>
             @endif
             
             <a href="{{ route('admin_inovasi.katsinov-v2.print-summary', $katsinov->id) }}" target="_blank" class="btn btn-info me-2">
                 <i class='bx bx-printer'></i> Print Summary
-            </a>
-            <a href="{{ route('admin_inovasi.katsinov-v2.print', $katsinov->id) }}" target="_blank" class="btn btn-primary me-2">
-                <i class='bx bx-printer'></i> Print Proposal
             </a>
             @if($katsinov->status === 'completed')
                 <a href="{{ route('admin_inovasi.katsinov-v2.certificate', $katsinov->id) }}" target="_blank" class="btn btn-success">

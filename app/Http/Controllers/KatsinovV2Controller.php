@@ -80,8 +80,17 @@ class KatsinovV2Controller extends Controller
             'registered_user' => 'subdirektorat-inovasi.registered_user.katsinov_v2.form_main',
         };
 
-        $setting = Setting::where('key', 'katsinov_threshold')->first();
-        $minPercentage = $setting ? $setting->value : 80.0;
+        $setting = Setting::first();
+        
+        // Get thresholds per indicator
+        $thresholds = [
+            1 => $setting ? $setting->threshold_indicator_1 : 80.0,
+            2 => $setting ? $setting->threshold_indicator_2 : 80.0,
+            3 => $setting ? $setting->threshold_indicator_3 : 80.0,
+            4 => $setting ? $setting->threshold_indicator_4 : 80.0,
+            5 => $setting ? $setting->threshold_indicator_5 : 80.0,
+            6 => $setting ? $setting->threshold_indicator_6 : 80.0,
+        ];
 
         return view($view, [
             'katsinov' => null,
@@ -91,7 +100,7 @@ class KatsinovV2Controller extends Controller
             'indicatorFour' => collect([]),
             'indicatorFive' => collect([]),
             'indicatorSix' => collect([]),
-            'min_percentage_js' => $minPercentage,
+            'thresholds' => $thresholds,
         ]);
     }
 
@@ -121,8 +130,17 @@ class KatsinovV2Controller extends Controller
             'registered_user' => 'subdirektorat-inovasi.registered_user.katsinov_v2.form_main',
         };
 
-        $setting = Setting::where('key', 'katsinov_threshold')->first();
-        $minPercentage = $setting ? $setting->value : 80.0;
+        $setting = Setting::first();
+        
+        // Get thresholds per indicator
+        $thresholds = [
+            1 => $setting ? $setting->threshold_indicator_1 : 80.0,
+            2 => $setting ? $setting->threshold_indicator_2 : 80.0,
+            3 => $setting ? $setting->threshold_indicator_3 : 80.0,
+            4 => $setting ? $setting->threshold_indicator_4 : 80.0,
+            5 => $setting ? $setting->threshold_indicator_5 : 80.0,
+            6 => $setting ? $setting->threshold_indicator_6 : 80.0,
+        ];
 
         // Get indicator status with threshold info
         $indicatorStatus = $this->getIndicatorStatus($id);
@@ -135,7 +153,7 @@ class KatsinovV2Controller extends Controller
             'indicatorFour' => $indicatorFour,
             'indicatorFive' => $indicatorFive,
             'indicatorSix' => $indicatorSix,
-            'min_percentage_js' => $minPercentage,
+            'thresholds' => $thresholds,
             'indicatorStatus' => $indicatorStatus,
         ]);
     }
@@ -157,8 +175,7 @@ class KatsinovV2Controller extends Controller
             'responses.*.aspect' => 'required|string|in:T,O,R,M,P,Mf,I',
             'responses.*.score' => 'required|integer|min:0|max:5',
             'responses.*.dropdown' => 'nullable|string|in:A,B,C,D,E,F',
-            'notes' => 'nullable|array',
-            'notes.*' => 'nullable|string',
+            'notes' => 'nullable',
             'save_as_draft' => 'nullable|boolean',
         ]);
 
@@ -211,12 +228,20 @@ class KatsinovV2Controller extends Controller
                 $this->processAndSaveScores($katsinov->id, $validated['responses']);
             }
 
+            // Save notes - handle both array and object format from JavaScript
             if (!empty($validated['notes'])) {
-                foreach ($validated['notes'] as $indicatorNumber => $noteText) {
+                $notesData = $validated['notes'];
+                
+                // If notes is an object (from JavaScript), convert to array
+                if (is_object($notesData)) {
+                    $notesData = (array) $notesData;
+                }
+                
+                foreach ($notesData as $indicatorNumber => $noteText) {
                     if (!empty(trim($noteText))) {
                         KatsinovNote::create([
                             'katsinov_id' => $katsinov->id,
-                            'indicator_number' => $indicatorNumber,
+                            'indicator_number' => (int) $indicatorNumber,
                             'notes' => $noteText,
                         ]);
                     }
