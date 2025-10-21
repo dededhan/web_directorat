@@ -449,19 +449,19 @@
         @foreach($indicatorScores as $index => $data)
             <div class="indicator-section">
                 <div class="indicator-header">
-                    Indikator {{ $index }}: {{ $indicatorTitles[$index] }}
+                    KATSINOV {{ $index }}: {{ $indicatorTitles[$index] }}
                 </div>
                 <div class="indicator-body">
                     {{-- Charts Row: Spider Chart + Bar Chart --}}
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
                         <div class="chart-wrapper">
-                            <div class="chart-title">Spider Chart - Indikator {{ $index }}</div>
+                            <div class="chart-title">Spider Chart - KATSINOV {{ $index }}</div>
                             <div class="chart-container" style="height: 350px;">
                                 <canvas id="indicator{{ $index }}SpiderChart"></canvas>
                             </div>
                         </div>
                         <div class="chart-wrapper">
-                            <div class="chart-title">Bar Chart - Indikator {{ $index }}</div>
+                            <div class="chart-title">Bar Chart - KATSINOV {{ $index }}</div>
                             <div class="chart-container" style="height: 350px;">
                                 <canvas id="indicator{{ $index }}BarChart"></canvas>
                             </div>

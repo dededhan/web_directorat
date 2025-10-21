@@ -307,7 +307,7 @@
                                     
                                     {{-- Question List --}}
                                     <div class="aspect-questions">
-                                        <strong class="small">Pertanyaan Indikator {{ $index }}:</strong>
+                                        <strong class="small">Pertanyaan KATSINOV {{ $index }}:</strong>
                                         <ul class="list-unstyled mt-2 mb-0">
                                             @foreach($aspectQuestions as $qIndex => $questionScore)
                                                 @php

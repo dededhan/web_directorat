@@ -201,7 +201,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @foreach([1, 2, 3, 4, 5, 6] as $ind)
                         <div class="bg-blue-50 rounded-lg p-4 text-center">
-                            <div class="text-sm text-gray-600 mb-2">Indikator {{ $ind }}</div>
+                            <div class="text-sm text-gray-600 mb-2">KATSINOV {{ $ind }}</div>
                             <div class="text-2xl font-bold text-blue-600">{{ $thresholds[$ind] ?? 80.0 }}%</div>
                         </div>
                     @endforeach
@@ -239,7 +239,7 @@
                                     data-indicator="{{ $i }}"
                                     {{ $i > 1 ? 'disabled' : '' }}>
                                 <span class="flex items-center justify-center w-6 h-6 rounded-full text-xs {{ $i === 1 ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-600' }}" id="badge-{{ $i }}">{{ $i }}</span>
-                                <span>Indikator {{ $i }}</span>
+                                <span>KATSINOV {{ $i }}</span>
                                 <span class="hidden" id="check-{{ $i }}">✓</span>
                             </button>
                         @endfor
@@ -272,7 +272,7 @@
                             <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4 mb-4 border-2 border-green-200">
                                 <div class="flex items-center justify-between">
                                     <div>
-                                        <div class="text-sm text-gray-600">Total Score Indikator {{ $i }}</div>
+                                        <div class="text-sm text-gray-600">Total Score KATSINOV {{ $i }}</div>
                                         <div class="text-xs text-gray-500 mt-1">Harus mencapai minimum <strong class="text-red-600">{{ $thresholds[$i] ?? 80 }}%</strong> untuk lanjut ke indikator berikutnya</div>
                                     </div>
                                     <div class="text-2xl font-bold" id="total-score-{{ $i }}">
@@ -365,14 +365,14 @@
                                     <svg class="w-16 h-16 text-yellow-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                                     </svg>
-                                    <p class="text-yellow-800 font-medium mb-2">Data pertanyaan untuk Indikator {{ $i }} belum tersedia</p>
+                                    <p class="text-yellow-800 font-medium mb-2">Data pertanyaan untuk KATSINOV {{ $i }} belum tersedia</p>
                                     <p class="text-sm text-yellow-700 mb-4">Tambahkan data di file: includes/indicator_questions.php</p>
                                 </div>
                             @endif
 
                             {{-- Note Area --}}
                             <div class="mt-6">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Catatan untuk Indikator {{ $i }}</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Catatan untuk KATSINOV {{ $i }}</label>
                                 <textarea name="notes[{{ $i }}]" rows="3" 
                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                           placeholder="Tambahkan catatan atau komentar untuk indikator ini..."></textarea>
@@ -648,7 +648,7 @@ function saveAsDraft() {
 function submitForm() {
     // Check if at least indicator 1 is complete
     if (!indicatorScores[1]) {
-        alert('Mohon lengkapi minimal Indikator 1 sebelum submit.');
+        alert('Mohon lengkapi minimal KATSINOV 1 sebelum submit.');
         return;
     }
     

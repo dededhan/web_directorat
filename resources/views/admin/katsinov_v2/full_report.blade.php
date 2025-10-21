@@ -111,7 +111,7 @@
                 <div class="mb-5 border rounded p-4 bg-light">
                     <h5 class="text-primary mb-3 pb-2 border-bottom">
                         <i class='bx bx-check-circle'></i> 
-                        Indikator {{ $indicatorNum }}: {{ $indicatorTitles[$indicatorNum] }}
+                        KATSINOV {{ $indicatorNum }}: {{ $indicatorTitles[$indicatorNum] }}
                     </h5>
                     
                     <div class="table-responsive">
@@ -173,7 +173,7 @@
                     @if($note && $note->notes)
                         <div class="mt-3 p-3 bg-warning bg-opacity-10 border-start border-warning border-4 rounded">
                             <h6 class="text-warning mb-2">
-                                <i class='bx bx-note'></i> Catatan Indikator {{ $indicatorNum }}
+                                <i class='bx bx-note'></i> Catatan KATSINOV {{ $indicatorNum }}
                             </h6>
                             <p class="mb-0 text-dark">{{ $note->notes }}</p>
                         </div>
