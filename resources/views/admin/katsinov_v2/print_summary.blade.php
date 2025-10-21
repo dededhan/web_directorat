@@ -310,6 +310,16 @@
     </style>
 </head>
 <body>
+    {{-- Print Control Buttons - Hidden when printing --}}
+    <div class="print-controls no-print" style="position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; gap: 10px;">
+        <button onclick="window.print()" style="padding: 10px 20px; background: #0d6efd; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            <i style="margin-right: 5px;">🖨️</i> Print / Download PDF
+        </button>
+        <button onclick="window.close()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            <i style="margin-right: 5px;">✖️</i> Close
+        </button>
+    </div>
+    
     <div class="container">
         {{-- Header --}}
         <div class="header">
@@ -361,21 +371,7 @@
             $statusText = $avgScore >= 80 ? 'LAYAK UNTUK DIKEMBANGKAN' : ($avgScore >= 60 ? 'CUKUP LAYAK - PERLU PERBAIKAN' : 'TIDAK LAYAK - PERLU REVISI BESAR');
         @endphp
         
-        <div class="overall-score">
-            <h3>Skor Keseluruhan</h3>
-            <div class="score-display {{ $statusClass }}">
-                {{ number_format($avgScore, 1) }}%
-            </div>
-            <span class="status-badge {{ $statusClass }}">
-                @if($avgScore >= 80)
-                    ✓ {{ $statusText }}
-                @elseif($avgScore >= 60)
-                    ⚠ {{ $statusText }}
-                @else
-                    ✗ {{ $statusText }}
-                @endif
-            </span>
-        </div>
+        
         
         {{-- Overall Aspect Charts --}}
         <div class="page-break"></div>
@@ -456,11 +452,19 @@
                     Indikator {{ $index }}: {{ $indicatorTitles[$index] }}
                 </div>
                 <div class="indicator-body">
-                    {{-- Spider Chart --}}
-                    <div class="chart-wrapper" style="margin-bottom: 20px;">
-                        <div class="chart-title">Spider Chart - Indikator {{ $index }}</div>
-                        <div class="chart-container" style="height: 350px;">
-                            <canvas id="indicator{{ $index }}SpiderChart"></canvas>
+                    {{-- Charts Row: Spider Chart + Bar Chart --}}
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">Spider Chart - Indikator {{ $index }}</div>
+                            <div class="chart-container" style="height: 350px;">
+                                <canvas id="indicator{{ $index }}SpiderChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div class="chart-title">Bar Chart - Indikator {{ $index }}</div>
+                            <div class="chart-container" style="height: 350px;">
+                                <canvas id="indicator{{ $index }}BarChart"></canvas>
+                            </div>
                         </div>
                     </div>
                     
@@ -510,6 +514,11 @@
                                         Overall: {{ number_format($aspectScore, 1) }}% 
                                         ({{ $aspectScore >= 80 ? 'Ready' : ($aspectScore >= 60 ? 'Developing' : 'Needs Review') }})
                                     </div>
+                                </div>
+                                
+                                {{-- Mini Line Chart for Questions --}}
+                                <div class="chart-container" style="height: 120px; margin: 10px 0;">
+                                    <canvas id="chart_{{ $index }}_{{ $aspectKey }}"></canvas>
                                 </div>
                                 
                                 <ul class="question-list">
@@ -748,12 +757,144 @@
                         }
                     });
                 }
+                
+                // Create Bar Chart for this indicator
+                const barCtx = document.getElementById('indicator' + i + 'BarChart');
+                if (barCtx) {
+                    new Chart(barCtx.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: aspectLabels,
+                            datasets: [{
+                                label: 'Indikator ' + i + ' (%)',
+                                data: indicatorData,
+                                backgroundColor: aspectColors.map(color => color.replace('rgb', 'rgba').replace(')', ', 0.7)')),
+                                borderColor: aspectColors,
+                                borderWidth: 2,
+                                borderRadius: 5
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return value + '%';
+                                        },
+                                        stepSize: 20
+                                    }
+                                },
+                                y: {
+                                    grid: {
+                                        display: false
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return context.label + ': ' + context.parsed.x.toFixed(1) + '%';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
             }
             
-            // Wait for all charts to render before printing
-            setTimeout(function() {
-                window.print();
-            }, 1000);
+            // 4. Mini Line Charts for Each Aspect per Indicator (Question Performance)
+            const questionScores = {!! $questionScoresJson !!};
+            const aspects = ['technology', 'market', 'organization', 'manufacturing', 'partnership', 'investment', 'risk'];
+            const aspectChartColors = {
+                'technology': 'rgb(255, 99, 132)',
+                'market': 'rgb(54, 162, 235)',
+                'organization': 'rgb(255, 206, 86)',
+                'manufacturing': 'rgb(75, 192, 192)',
+                'partnership': 'rgb(153, 102, 255)',
+                'investment': 'rgb(255, 159, 64)',
+                'risk': 'rgb(70, 150, 130)'
+            };
+            
+            for (let i = 1; i <= 6; i++) {
+                aspects.forEach(aspect => {
+                    const scores = questionScores[i][aspect] || [];
+                    if (scores.length === 0) return;
+                    
+                    const labels = scores.map((_, index) => 'Q' + (index + 1));
+                    const percentages = scores.map(score => score * 20);
+                    
+                    const canvasId = 'chart_' + i + '_' + aspect;
+                    const canvas = document.getElementById(canvasId);
+                    if (!canvas) return;
+                    
+                    const ctx = canvas.getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Score (%)',
+                                data: percentages,
+                                backgroundColor: aspectChartColors[aspect].replace('rgb', 'rgba').replace(')', ', 0.3)'),
+                                borderColor: aspectChartColors[aspect],
+                                borderWidth: 2,
+                                pointBackgroundColor: aspectChartColors[aspect],
+                                pointBorderColor: '#fff',
+                                pointRadius: 3,
+                                pointHoverRadius: 5,
+                                fill: true,
+                                tension: 0.3
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return value + '%';
+                                        },
+                                        stepSize: 25
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return 'Score: ' + context.parsed.y.toFixed(1) + '%';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+            
+            // Charts rendered - ready for printing
+            // Auto-print removed - user can click Print button manually
         });
     </script>
 </body>

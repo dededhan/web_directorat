@@ -41,8 +41,8 @@
             </a>
 
             <div class="flex gap-3">
-                {{-- Button untuk mengisi form pendukung --}}
-                @if(in_array($katsinov->status, ['draft', 'submitted', 'assigned']))
+                {{-- Button untuk mengisi form pendukung - Only for draft status --}}
+                @if($katsinov->status === 'draft')
                     <div class="relative">
                         <button id="formMenuBtn" 
                                 class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition duration-300 flex items-center gap-2">

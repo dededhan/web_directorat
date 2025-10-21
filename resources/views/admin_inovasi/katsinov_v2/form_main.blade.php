@@ -15,8 +15,8 @@
                 </a>
             </div>
             
-            {{-- Form Pendukung Menu - Only show when editing existing katsinov --}}
-            @if($katsinov)
+            {{-- Form Pendukung Menu - Only show when editing existing katsinov with draft status --}}
+            @if($katsinov && $katsinov->status === 'draft')
                 <div class="relative">
                     <button id="formMenuBtn" type="button"
                             class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition duration-300 flex items-center gap-2">

@@ -1173,6 +1173,22 @@ class KatsinovV2Controller extends Controller
             }
         }
         
+        // Convert to JSON for JavaScript
+        $overallAspectScoresJson = json_encode($overallAspectScores);
+        $indicatorAspectScoresJson = json_encode($indicatorAspectScores);
+        $questionScoresJson = json_encode($questionScores);
+        
+        // Aspect names for chart labels
+        $aspectNames = [
+            'technology' => ['label' => 'Technology (T)', 'icon' => '⚙️', 'color' => 'rgb(255, 99, 132)'],
+            'market' => ['label' => 'Market (M)', 'icon' => '📊', 'color' => 'rgb(54, 162, 235)'],
+            'organization' => ['label' => 'Organization (O)', 'icon' => '🏢', 'color' => 'rgb(255, 206, 86)'],
+            'manufacturing' => ['label' => 'Manufacturing (Mf)', 'icon' => '🏭', 'color' => 'rgb(75, 192, 192)'],
+            'partnership' => ['label' => 'Partnership (P)', 'icon' => '🤝', 'color' => 'rgb(153, 102, 255)'],
+            'investment' => ['label' => 'Investment (I)', 'icon' => '💰', 'color' => 'rgb(255, 159, 64)'],
+            'risk' => ['label' => 'Risk (R)', 'icon' => '⚠️', 'color' => 'rgb(70, 150, 130)'],
+        ];
+        
         return view($this->getViewPath('print_summary'), compact(
             'katsinov',
             'indicatorScores',
@@ -1180,7 +1196,11 @@ class KatsinovV2Controller extends Controller
             'overallAspectScores',
             'indicatorAspectScores',
             'questionScores',
-            'questionTexts'
+            'questionTexts',
+            'overallAspectScoresJson',
+            'indicatorAspectScoresJson',
+            'questionScoresJson',
+            'aspectNames'
         ));
     }
 

@@ -718,24 +718,105 @@
 {{-- Print Styles --}}
 <style>
     @media print {
-        .btn, .breadcrumb, nav {
+        /* Hide UI elements */
+        .btn, .breadcrumb, nav, .sidebar, .navbar, .d-flex.justify-content-between,
+        aside, [x-data], .bg-gray-800, .fixed.inset-y-0, button, .sr-only {
             display: none !important;
         }
         
+        /* Show only main content */
+        .container-fluid {
+            margin: 0 !important;
+            padding: 0 !important;
+            max-width: 100% !important;
+        }
+        
+        /* Full width for print */
+        body, html {
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        
+        /* Adjust flex layout for print */
+        .flex.h-screen, .flex-1.flex.flex-col {
+            display: block !important;
+            width: 100% !important;
+        }
+        
+        /* Card styling for print */
         .card {
             page-break-inside: avoid;
             border: 1px solid #ddd !important;
+            box-shadow: none !important;
+            margin-bottom: 1rem !important;
         }
         
+        /* Header colors for print */
         .card-header {
-            background-color: #f8f9fa !important;
-            color: #000 !important;
+            background-color: #0d6efd !important;
+            color: white !important;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
         }
         
+        .card-header.bg-primary {
+            background-color: #0d6efd !important;
+        }
+        
+        /* Badge colors for print */
+        .badge {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        /* Table styling */
+        table {
+            width: 100% !important;
+            font-size: 10pt;
+        }
+        
+        th, td {
+            padding: 0.4rem !important;
+            border: 1px solid #dee2e6 !important;
+        }
+        
+        /* Circle icons for radio buttons */
+        .bx-circle, .bxs-circle {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        /* Note section */
+        .border-warning {
+            border-color: #ffc107 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        .bg-warning {
+            background-color: #fff3cd !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        /* Body font size */
         body {
             font-size: 11pt;
+        }
+        
+        /* Page breaks */
+        .card {
+            page-break-after: auto;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            page-break-after: avoid;
+        }
+        
+        /* Print header */
+        @page {
+            margin: 1.5cm;
         }
     }
 </style>

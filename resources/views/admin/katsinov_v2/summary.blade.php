@@ -217,14 +217,25 @@
                 <h4 class="m-0">Indicator {{ $index }}: {{ $indicatorTitles[$index] }}</h4>
             </div>
             <div class="card-body">
-                {{-- Spider Chart + Aspect Summary Table --}}
+                {{-- Charts Row: Spider Chart + Bar Chart --}}
                 <div class="row mb-4">
-                    <div class="col-md-4">
-                        <div class="chart-container position-relative" style="height:300px;">
+                    <div class="col-md-6">
+                        <h5 class="text-center mb-3">Spider Chart - All Aspects</h5>
+                        <div class="chart-container position-relative" style="height:350px;">
                             <canvas id="indicator{{ $index }}Chart"></canvas>
                         </div>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-6">
+                        <h5 class="text-center mb-3">Bar Chart - All Aspects</h5>
+                        <div class="chart-container position-relative" style="height:350px;">
+                            <canvas id="indicator{{ $index }}BarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                {{-- Aspect Summary Table --}}
+                <div class="row mb-4">
+                    <div class="col-md-12">
                         <h5 class="mb-3">Aspect Summary</h5>
                         <table class="table table-sm table-bordered">
                             <thead class="table-light">
@@ -575,6 +586,63 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
+        
+        // Create Bar Chart for this indicator
+        const barCanvasElement = document.getElementById('indicator' + i + 'BarChart');
+        if (barCanvasElement) {
+            const barCtx = barCanvasElement.getContext('2d');
+            new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: aspectLabels,
+                    datasets: [{
+                        label: 'Indicator ' + i + ' Score (%)',
+                        data: indicatorData,
+                        backgroundColor: aspectColors.map(color => color.replace('rgb', 'rgba').replace(')', ', 0.7)')),
+                        borderColor: aspectColors,
+                        borderWidth: 2,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Horizontal bar chart
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                },
+                                stepSize: 20
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed.x.toFixed(1) + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
     
     // 4. Line Charts for Each Aspect (Performance by Indicator)
