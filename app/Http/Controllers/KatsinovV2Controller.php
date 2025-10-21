@@ -902,6 +902,30 @@ class KatsinovV2Controller extends Controller
     }
 
     /**
+     * Download Report Pengukuran (Word Document)
+     */
+    public function downloadReport($katsinov_id)
+    {
+        $katsinov = Katsinov::with(['user', 'reviewer', 'responses'])->findOrFail($katsinov_id);
+        
+        // Load template from public path
+        $templatePath = public_path('templates/report-pengukuran-katsinovmeter.docx');
+        
+        if (!file_exists($templatePath)) {
+            return redirect()->back()->with('error', 'Template report tidak ditemukan. Silakan hubungi administrator.');
+        }
+        
+        $fileName = 'Report_Pengukuran_' . $katsinov->title . '_' . date('Y-m-d') . '.docx';
+        
+        return response()->download($templatePath, $fileName, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0'
+        ]);
+    }
+
+    /**
      * Show summary page with full Chart.js visualization
      */
     public function showSummary($katsinov_id)
