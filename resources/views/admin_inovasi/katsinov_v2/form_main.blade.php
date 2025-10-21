@@ -390,8 +390,8 @@
                                             <li>Menghitung <strong>TOTAL SCORE</strong> dari seluruh pertanyaan di indikator ini</li>
                                             <li>Rumus: (Total Score Terjawab / Total Maksimal) × 100%</li>
                                             <li>Memvalidasi: <strong>Apakah total score ≥ {{ $thresholds[$i] ?? 80 }}%?</strong></li>
-                                            <li>✅ Jika YA: Tab indikator berikutnya akan AKTIF (dapat melanjutkan)</li>
-                                            <li>❌ Jika TIDAK: Tab indikator berikutnya tetap TERKUNCI (harus perbaiki nilai dulu)</li>
+                                            <li>✅ Jika YA: Tab Katsinov berikutnya akan AKTIF (dapat melanjutkan)</li>
+                                            <li>❌ Jika TIDAK: Tab Katsinov berikutnya tetap TERKUNCI </li>
                                         </ul>
                                         <div class="mt-2 pt-2 border-t border-blue-200">
                                             <p class="text-xs"><strong>Note:</strong> Score per aspek (T, M, O, dll) adalah informasi saja. Yang menentukan bisa lanjut atau tidak adalah <strong>TOTAL SCORE INDIKATOR</strong>.</p>
@@ -413,7 +413,7 @@
                                         onclick="nextIndicator()" 
                                         id="nextBtn-{{ $i }}"
                                         class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-300 flex items-center gap-2">
-                                    <span>{{ $i === 6 ? 'Selesai Semua Indikator' : 'Validasi & Lanjut ke Indikator Berikutnya' }}</span>
+                                    <span>{{ $i === 6 ? 'Selesai Semua Indikator' : 'Validasi & Lanjut ke Katsinov Berikutnya' }}</span>
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                     </svg>
