@@ -258,19 +258,6 @@
                                 <p class="text-sm text-blue-700">Silakan isi penilaian untuk setiap pertanyaan di bawah ini. <strong>Total score indikator</strong> harus mencapai minimum <strong class="text-lg text-red-600">{{ $thresholds[$i] ?? 80 }}%</strong> untuk melanjutkan ke indikator berikutnya.</p>
                             </div>
 
-                            {{-- Total Score Display --}}
-                            <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4 mb-4 border-2 border-green-200">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <div class="text-sm text-gray-600">Total Score KATSINOV {{ $i }}</div>
-                                        <div class="text-xs text-gray-500 mt-1">Harus mencapai minimum <strong class="text-red-600">{{ $thresholds[$i] ?? 80 }}%</strong> untuk lanjut ke indikator berikutnya</div>
-                                    </div>
-                                    <div class="text-2xl font-bold" id="total-score-{{ $i }}">
-                                        <span class="text-gray-400">-%</span>
-                                    </div>
-                                </div>
-                            </div>
-
                             {{-- Aspek Scores Display (Detail per Aspek) --}}
                             <div class="mb-2">
                                 <div class="text-xs text-gray-600 font-medium mb-2">Detail Score per Aspek (informasi):</div>
@@ -366,6 +353,30 @@
                                 <textarea name="notes[{{ $i }}]" rows="3" 
                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                           placeholder="Tambahkan catatan atau komentar untuk indikator ini..."></textarea>
+                            </div>
+
+                            {{-- Total Score Display - Moved to Bottom --}}
+                            <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-5 mt-6 border-2 border-green-300 shadow-md">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex-1">
+                                        <div class="text-base font-semibold text-gray-700 mb-2">Total Score KATSINOV {{ $i }}</div>
+                                        <div class="flex items-center gap-4 mb-2">
+                                            <div class="text-sm text-gray-600">
+                                                <span class="font-medium">Nilai Input:</span>
+                                                <span class="font-bold text-blue-600" id="total-input-{{ $i }}">0</span>
+                                                <span class="text-gray-500">/</span>
+                                                <span class="font-bold text-gray-700" id="total-max-{{ $i }}">0</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-xs text-gray-600">Harus mencapai minimum <strong class="text-red-600">{{ $thresholds[$i] ?? 80 }}%</strong> untuk lanjut ke indikator berikutnya</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-xs text-gray-500 mb-1">Persentase</div>
+                                        <div class="text-3xl font-bold" id="total-score-{{ $i }}">
+                                            <span class="text-gray-400">-%</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             {{-- Info Box tentang Button Indikator Berikutnya --}}
@@ -555,9 +566,20 @@ function calculateIndicatorScore(indicatorNum) {
     
     // Update total indicator score display (dengan warna berdasarkan threshold)
     const totalScoreEl = document.getElementById(`total-score-${indicatorNum}`);
+    const totalInputEl = document.getElementById(`total-input-${indicatorNum}`);
+    const totalMaxEl = document.getElementById(`total-max-${indicatorNum}`);
+    
     if (totalScoreEl) {
-        const colorClass = indicatorPass ? 'text-green-600 font-bold' : 'text-red-600 font-bold';
-        totalScoreEl.innerHTML = `<span class="${colorClass}">Total: ${totalPercentage.toFixed(1)}% ${indicatorPass ? '✓' : '✗'}</span>`;
+        const colorClass = indicatorPass ? 'text-green-600' : 'text-red-600';
+        totalScoreEl.innerHTML = `<span class="${colorClass}">${totalPercentage.toFixed(1)}% ${indicatorPass ? '✓' : '✗'}</span>`;
+    }
+    
+    // Update nilai input/total nilai
+    if (totalInputEl) {
+        totalInputEl.textContent = totalScoreSum;
+    }
+    if (totalMaxEl) {
+        totalMaxEl.textContent = maxPossibleTotal;
     }
     
     indicatorScores[indicatorNum] = { 
