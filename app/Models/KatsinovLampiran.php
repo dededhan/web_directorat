@@ -12,7 +12,7 @@ class KatsinovLampiran extends Model
 
     protected $fillable = [
         'path',
-        'attribute',
+        'category',
         'type',
         'katsinov_id'
     ];

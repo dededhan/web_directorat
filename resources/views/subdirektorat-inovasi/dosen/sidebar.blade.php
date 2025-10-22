@@ -8,7 +8,7 @@
 <div x-data="{
         open: window.innerWidth >= 1024,
         mobileOpen: false,
-        inovasiOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.tablekatsinov') || request()->routeIs('subdirektorat-inovasi.dosen.form') ? 'true' : 'false' }},
+        inovasiOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.katsinov-v2.*') ? 'true' : 'false' }},
         equityOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.equity.*') ? 'true' : 'false' }},
         hibahModulOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.hibah_modul.*') ? 'true' : 'false' }},
         apcOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.apc.*') ? 'true' : 'false' }},
@@ -100,9 +100,9 @@
                     <div x-show="open || mobileOpen" class="flex items-center"><i class='bx bx-chevron-down text-2xl transition-transform' :class="{'rotate-180': inovasiOpen}"></i></div>
                 </button>
                 <div x-show="inovasiOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
-                    {{-- Submenu dinonaktifkan secara otomatis karena parent-nya disabled --}}
-                    <a href="{{ route('subdirektorat-inovasi.dosen.tablekatsinov') }}" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors {{ request()->routeIs('subdirektorat-inovasi.dosen.tablekatsinov') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4"><i class='bx bx-table text-2xl flex-shrink-0'></i><span>Tabel Katsinov</span></a>
-                    <a href="{{ route('subdirektorat-inovasi.dosen.form') }}" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors {{ request()->routeIs('subdirektorat-inovasi.dosen.form') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4"><i class='bx bxs-file-plus text-2xl flex-shrink-0'></i><span>Form Katsinov</span></a>
+                    {{-- Submenu Katsinov V2 --}}
+                    <a href="{{ route('subdirektorat-inovasi.dosen.katsinov-v2.index') }}" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors {{ request()->routeIs('subdirektorat-inovasi.dosen.katsinov-v2.index') || request()->routeIs('subdirektorat-inovasi.dosen.katsinov-v2.show') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4"><i class='bx bx-table text-2xl flex-shrink-0'></i><span>Tabel Katsinov</span></a>
+                    <a href="{{ route('subdirektorat-inovasi.dosen.katsinov-v2.create') }}" class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors {{ request()->routeIs('subdirektorat-inovasi.dosen.katsinov-v2.create') || request()->routeIs('subdirektorat-inovasi.dosen.katsinov-v2.edit') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4"><i class='bx bxs-file-plus text-2xl flex-shrink-0'></i><span>Form Katsinov</span></a>
                 </div>
             </div>
             <div class="pt-3">

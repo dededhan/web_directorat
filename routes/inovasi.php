@@ -62,3 +62,53 @@ Route::prefix('admin_inovasi')->name('admin_inovasi.')
             });
         
     });
+
+// Dosen Routes - Limited Access
+Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
+    ->group(function () {
+        Route::prefix('dosen')->name('dosen.')
+            ->middleware(['auth', 'role:dosen'])
+            ->group(function () {
+
+                Route::get('/dashboard', [\App\Http\Controllers\Dosen\DashboardController::class, 'index'])->name('dashboard');
+
+                // Katsinov V2 Routes for Dosen - Limited Access
+                Route::prefix('katsinov-v2')->name('katsinov-v2.')
+                    ->group(function () {
+                        // List & Create - Dosen can create new katsinov
+                        Route::get('/', [\App\Http\Controllers\DosenKatsinovController::class, 'index'])->name('index');
+                        Route::get('/create', [\App\Http\Controllers\DosenKatsinovController::class, 'create'])->name('create');
+                        Route::post('/store', [\App\Http\Controllers\DosenKatsinovController::class, 'store'])->name('store');
+                        
+                        // Show - View detail
+                        Route::get('/show/{id}', [\App\Http\Controllers\DosenKatsinovController::class, 'show'])->name('show');
+                        
+                        // Edit & Delete - Only for DRAFT status
+                        Route::get('/edit/{id}', [\App\Http\Controllers\DosenKatsinovController::class, 'edit'])->name('edit');
+                        Route::put('/{id}', [\App\Http\Controllers\DosenKatsinovController::class, 'update'])->name('update');
+                        Route::delete('/{id}', [\App\Http\Controllers\DosenKatsinovController::class, 'destroy'])->name('destroy');
+                        
+                        // Form Pendukung - Only 3 forms (Judul, Lampiran, Informasi Dasar)
+                        Route::get('/{katsinov_id}/form-inovasi', [\App\Http\Controllers\DosenKatsinovController::class, 'formInovasiIndex'])->name('form-inovasi');
+                        Route::post('/{katsinov_id}/form-inovasi', [\App\Http\Controllers\DosenKatsinovController::class, 'formInovasiStore'])->name('form-inovasi.store');
+                        
+                        Route::get('/{katsinov_id}/form-lampiran', [\App\Http\Controllers\DosenKatsinovController::class, 'formLampiranIndex'])->name('form-lampiran');
+                        Route::post('/{katsinov_id}/form-lampiran', [\App\Http\Controllers\DosenKatsinovController::class, 'formLampiranStore'])->name('form-lampiran.store');
+                        
+                        Route::get('/{katsinov_id}/form-informasi-dasar', [\App\Http\Controllers\DosenKatsinovController::class, 'formInformasiDasarIndex'])->name('form-informasi-dasar');
+                        Route::post('/{katsinov_id}/form-informasi-dasar', [\App\Http\Controllers\DosenKatsinovController::class, 'formInformasiDasarStore'])->name('form-informasi-dasar.store');
+                        
+                        // Submit for Review
+                        Route::post('/{id}/submit', [\App\Http\Controllers\DosenKatsinovController::class, 'submitForReview'])->name('submit');
+                        
+                        // View Reports - Full Report & Summary (Read-only after submit)
+                        Route::get('/{katsinov_id}/full-report', [\App\Http\Controllers\DosenKatsinovController::class, 'fullReport'])->name('full-report');
+                        Route::get('/{katsinov_id}/summary', [\App\Http\Controllers\DosenKatsinovController::class, 'showSummary'])->name('summary');
+                        Route::get('/{katsinov_id}/print-summary', [\App\Http\Controllers\DosenKatsinovController::class, 'printSummary'])->name('print-summary');
+                        
+                        // Certificate - Only when completed
+                        Route::get('/{katsinov_id}/certificate', [\App\Http\Controllers\DosenKatsinovController::class, 'generateCertificate'])->name('certificate');
+                    });
+                
+            });
+    });
