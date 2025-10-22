@@ -438,36 +438,38 @@ class KatsinovV2Controller extends Controller
 
     public function formInovasiStore(Request $request, $katsinov_id)
     {
+        $isDraft = $request->has('save_as_draft');
+        
         $validatedData = $request->validate([
-            'judul' => 'required|string',
-            'sub_judul' => 'required|string',
-            'pendahuluan' => 'required|string',
-            'produk_teknologi' => 'required|string',
-            'keunggulan' => 'required|string',
-            'paten' => 'required|string',
-            'kesiapan_teknologi' => 'required|string',
-            'kesiapan_pasar' => 'required|string',
-            'nama' => 'required|string',
-            'phone' => 'required',
-            'mobile' => 'required',
-            'fax' => 'required',
-            'email' => 'required|email:rfc,dns',
+            'judul' => $isDraft ? 'nullable|string' : 'required|string',
+            'sub_judul' => $isDraft ? 'nullable|string' : 'required|string',
+            'pendahuluan' => $isDraft ? 'nullable|string' : 'required|string',
+            'produk_teknologi' => $isDraft ? 'nullable|string' : 'required|string',
+            'keunggulan' => $isDraft ? 'nullable|string' : 'required|string',
+            'paten' => $isDraft ? 'nullable|string' : 'required|string',
+            'kesiapan_teknologi' => $isDraft ? 'nullable|string' : 'required|string',
+            'kesiapan_pasar' => $isDraft ? 'nullable|string' : 'required|string',
+            'nama' => $isDraft ? 'nullable|string' : 'required|string',
+            'phone' => $isDraft ? 'nullable' : 'required',
+            'mobile' => $isDraft ? 'nullable' : 'required',
+            'fax' => $isDraft ? 'nullable' : 'required',
+            'email' => $isDraft ? 'nullable|email:rfc,dns' : 'required|email:rfc,dns',
         ]);
 
         $data = [
-            'title' => $validatedData['judul'],
-            'sub_title' => $validatedData['sub_judul'],
-            'introduction' => $validatedData['pendahuluan'],
-            'tech_product' => $validatedData['produk_teknologi'],
-            'supremacy' => $validatedData['keunggulan'],
-            'patent' => $validatedData['paten'],
-            'tech_preparation' => $validatedData['kesiapan_teknologi'],
-            'market_preparation' => $validatedData['kesiapan_pasar'],
-            'name' => $validatedData['nama'],
-            'phone' => $validatedData['phone'],
-            'mobile' => $validatedData['mobile'],
-            'fax' => $validatedData['fax'],
-            'email' => $validatedData['email'],
+            'title' => $validatedData['judul'] ?? '',
+            'sub_title' => $validatedData['sub_judul'] ?? '',
+            'introduction' => $validatedData['pendahuluan'] ?? '',
+            'tech_product' => $validatedData['produk_teknologi'] ?? '',
+            'supremacy' => $validatedData['keunggulan'] ?? '',
+            'patent' => $validatedData['paten'] ?? '',
+            'tech_preparation' => $validatedData['kesiapan_teknologi'] ?? '',
+            'market_preparation' => $validatedData['kesiapan_pasar'] ?? '',
+            'name' => $validatedData['nama'] ?? '',
+            'phone' => $validatedData['phone'] ?? '',
+            'mobile' => $validatedData['mobile'] ?? '',
+            'fax' => $validatedData['fax'] ?? '',
+            'email' => $validatedData['email'] ?? '',
             'katsinov_id' => $katsinov_id
         ];
 
@@ -475,23 +477,24 @@ class KatsinovV2Controller extends Controller
 
         if ($inovasi) {
             $inovasi->update($data);
-            $message = 'Data inovasi berhasil diperbarui!';
+            $message = $isDraft ? 'Draft berhasil disimpan' : 'Data inovasi berhasil diperbarui!';
         } else {
             KatsinovInovasi::create($data);
-            $message = 'Data inovasi berhasil disimpan!';
+            $message = $isDraft ? 'Draft berhasil disimpan' : 'Data inovasi berhasil disimpan!';
         }
 
         $role = Auth::user()->role;
         $route = match ($role) {
-            'admin_direktorat' => 'admin.katsinov-v2.index',
-            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.katsinov-v2.index',
-            'dosen' => 'subdirektorat-inovasi.dosen.katsinov-v2.index',
-            'validator' => 'subdirektorat-inovasi.validator.katsinov-v2.index',
-            'registered_user' => 'subdirektorat-inovasi.registered_user.katsinov-v2.index',
-            default => 'admin.katsinov-v2.index',
+            'admin_direktorat' => 'admin.katsinov-v2.show',
+            'admin_inovasi' => 'admin_inovasi.katsinov-v2.show',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.katsinov-v2.show',
+            'dosen' => 'subdirektorat-inovasi.dosen.katsinov-v2.show',
+            'validator' => 'subdirektorat-inovasi.validator.katsinov-v2.show',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.katsinov-v2.show',
+            default => 'admin.katsinov-v2.show',
         };
 
-        return redirect()->route($route)->with('success', $message);
+        return redirect()->route($route, $katsinov_id)->with('success', $message);
     }
 
     public function formLampiranIndex($katsinov_id)
@@ -520,21 +523,24 @@ class KatsinovV2Controller extends Controller
 
     public function formLampiranStore(Request $request, $katsinov_id)
     {
+        $isDraft = $request->has('save_as_draft');
+        
+        // All fields nullable to support draft and partial upload
         $files = $request->validate([
-            'aspek_teknologi' => ['array', 'min:1'],
-            'aspek_teknologi.*' => ['file', 'mimes:pdf,doc,docx'],
-            'aspek_pasar' => ['array', 'min:1'],
-            'aspek_pasar.*' => ['file', 'mimes:pdf,doc,docx'],
-            'aspek_organisasi' => ['array', 'min:1'],
-            'aspek_organisasi.*' => ['file', 'mimes:pdf,doc,docx'],
-            'aspek_mitra' => ['array', 'min:1'],
-            'aspek_mitra.*' => ['file', 'mimes:pdf,doc,docx'],
-            'aspek_risiko' => ['array', 'min:1'],
-            'aspek_risiko.*' => ['file', 'mimes:pdf,doc,docx'],
-            'aspek_manufaktur' => ['array', 'min:1'],
-            'aspek_manufaktur.*' => ['file', 'mimes:pdf,doc,docx'],
-            'aspek_investasi' => ['array', 'min:1'],
-            'aspek_investasi.*' => ['file', 'mimes:pdf,doc,docx'],
+            'aspek_teknologi' => ['nullable', 'array'],
+            'aspek_teknologi.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+            'aspek_pasar' => ['nullable', 'array'],
+            'aspek_pasar.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+            'aspek_organisasi' => ['nullable', 'array'],
+            'aspek_organisasi.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+            'aspek_mitra' => ['nullable', 'array'],
+            'aspek_mitra.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+            'aspek_risiko' => ['nullable', 'array'],
+            'aspek_risiko.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+            'aspek_manufaktur' => ['nullable', 'array'],
+            'aspek_manufaktur.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+            'aspek_investasi' => ['nullable', 'array'],
+            'aspek_investasi.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
         ]);
 
         $basePath = 'lampiran_katsinov';
@@ -542,8 +548,10 @@ class KatsinovV2Controller extends Controller
         $data_files = [];
 
         foreach ($files as $aspect => $categories) {
+            if (!is_array($categories)) continue;
+            
             foreach ($categories as $category => $file) {
-                if ($file && $file->isValid()) {
+                if ($file && $file instanceof \Illuminate\Http\UploadedFile && $file->isValid()) {
                     $extension = $file->getClientOriginalExtension();
                     $fileName = "{$aspect}_{$category}_{$now->timestamp}.{$extension}";
 
@@ -576,19 +584,23 @@ class KatsinovV2Controller extends Controller
             }
         }
 
-        KatsinovLampiran::insert($data_files);
+        if (!empty($data_files)) {
+            KatsinovLampiran::insert($data_files);
+        }
 
         $role = Auth::user()->role;
         $route = match ($role) {
-            'admin_direktorat' => 'admin.katsinov-v2.index',
-            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.katsinov-v2.index',
-            'dosen' => 'subdirektorat-inovasi.dosen.katsinov-v2.index',
-            'validator' => 'subdirektorat-inovasi.validator.katsinov-v2.index',
-            'registered_user' => 'subdirektorat-inovasi.registered_user.katsinov-v2.index',
-            default => 'admin.katsinov-v2.index',
+            'admin_direktorat' => 'admin.katsinov-v2.show',
+            'admin_inovasi' => 'admin_inovasi.katsinov-v2.show',
+            'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.katsinov-v2.show',
+            'dosen' => 'subdirektorat-inovasi.dosen.katsinov-v2.show',
+            'validator' => 'subdirektorat-inovasi.validator.katsinov-v2.show',
+            'registered_user' => 'subdirektorat-inovasi.registered_user.katsinov-v2.show',
+            default => 'admin.katsinov-v2.show',
         };
 
-        return redirect()->route($route)->with('success', 'Lampiran berhasil diunggah');
+        $message = $isDraft ? 'Draft berhasil disimpan' : 'Lampiran berhasil diunggah';
+        return redirect()->route($route, $katsinov_id)->with('success', $message);
     }
 
     // Form Informasi Dasar
@@ -597,6 +609,26 @@ class KatsinovV2Controller extends Controller
         $katsinov = Katsinov::findOrFail($katsinov_id);
         $informasi = KatsinovInformasi::where('katsinov_id', $katsinov_id)->first();
         
+        // Get collection data
+        $informasiCollection = null;
+        $groupedData = [];
+        
+        if ($informasi) {
+            $informasiCollection = \App\Models\KatsinovInformasiCollection::where('katsinov_informasi_id', $informasi->id)
+                ->get(['field', 'index', 'attribute', 'value'])
+                ->toArray();
+            
+            foreach ($informasiCollection as $item) {
+                $field = $item['field'];
+                $index = $item['index'];
+                
+                if (!isset($groupedData[$field][$index])) {
+                    $groupedData[$field][$index] = [];
+                }
+                $groupedData[$field][$index][$item['attribute']] = $item['value'];
+            }
+        }
+        
         $role = Auth::user()->role;
         $view = match ($role) {
             'admin_direktorat' => 'admin.katsinov_v2.form_informasi_dasar',
@@ -604,35 +636,118 @@ class KatsinovV2Controller extends Controller
             default => 'admin.katsinov_v2.form_informasi_dasar',
         };
 
-        return view($view, compact('katsinov', 'informasi'));
+        return view($view, [
+            'katsinov' => $katsinov,
+            'informasi' => $informasi,
+            'informasi_team' => $groupedData['team'] ?? null,
+            'informasi_program' => $groupedData['program_implementation'] ?? null,
+            'informasi_partner' => $groupedData['innovation_partner'] ?? null,
+            'informasi_tech' => $groupedData['information_tech'] ?? null,
+            'informasi_market' => $groupedData['information_market'] ?? null,
+        ]);
     }
 
     public function formInformasiDasarStore(Request $request, $katsinov_id)
     {
-        $validated = $request->validate([
-            'pic' => 'required|string',
-            'institution' => 'required|string',
-            'address' => 'required|string',
-            'phone' => 'required|string',
-            'fax' => 'nullable|string',
-            'innovation_title' => 'required|string',
-            'innovation_name' => 'required|string',
-            'innovation_type' => 'required|string',
-            'innovation_field' => 'required|string',
-            'innovation_application' => 'required|string',
-            'innovation_duration' => 'required|string',
-            'innovation_year' => 'required|string',
-            'innovation_summary' => 'required|string',
-            'innovation_novelty' => 'required|string',
-            'innovation_supremacy' => 'required|string',
-        ]);
+        // Check if draft or final
+        $isDraft = $request->has('save_as_draft');
+        
+        // Conditional validation based on draft status
+        $rules = [
+            'person_in_charge' => $isDraft ? 'nullable|string' : 'required|string',
+            'pic_institution' => $isDraft ? 'nullable|string' : 'required|string',
+            'pic_address' => $isDraft ? 'nullable|string' : 'required|string',
+            'pic_phone' => $isDraft ? 'nullable|string' : 'required|string',
+            'pic_fax' => 'nullable|string',
+            'innovation_title' => $isDraft ? 'nullable|string' : 'required|string',
+            'innovation_name' => $isDraft ? 'nullable|string' : 'required|string',
+            'innovation_type' => $isDraft ? 'nullable|string' : 'required|string',
+            'innovation_field' => $isDraft ? 'nullable|string' : 'required|string',
+            'innovation_application' => $isDraft ? 'nullable|string' : 'required|string',
+            'innovation_duration' => 'nullable|string',
+            'innovation_year' => 'nullable|string',
+            'innovation_summary' => 'nullable|string',
+            'innovation_novelty' => 'nullable|string',
+            'innovation_supremacy' => 'nullable|string',
+            'team' => 'nullable|array',
+            'program_implementation' => 'nullable|array',
+            'innovation_partner' => 'nullable|array',
+            'information_tech' => 'nullable|array',
+            'information_market' => 'nullable|array',
+        ];
+        
+        $validated = $request->validate($rules);
 
-        KatsinovInformasi::updateOrCreate(
+        // Save main informasi
+        $informasiData = [
+            'pic' => $validated['person_in_charge'] ?? '',
+            'institution' => $validated['pic_institution'] ?? '',
+            'address' => $validated['pic_address'] ?? '',
+            'phone' => $validated['pic_phone'] ?? '',
+            'fax' => $validated['pic_fax'] ?? '',
+            'innovation_title' => $validated['innovation_title'] ?? '',
+            'innovation_name' => $validated['innovation_name'] ?? '',
+            'innovation_type' => $validated['innovation_type'] ?? '',
+            'innovation_field' => $validated['innovation_field'] ?? '',
+            'innovation_application' => $validated['innovation_application'] ?? '',
+            'innovation_duration' => $validated['innovation_duration'] ?? '',
+            'innovation_year' => $validated['innovation_year'] ?? '',
+            'innovation_summary' => $validated['innovation_summary'] ?? '',
+            'innovation_novelty' => $validated['innovation_novelty'] ?? '',
+            'innovation_supremacy' => $validated['innovation_supremacy'] ?? '',
+            'katsinov_id' => $katsinov_id,
+        ];
+        
+        $informasi = \App\Models\KatsinovInformasi::updateOrCreate(
             ['katsinov_id' => $katsinov_id],
-            array_merge($validated, ['katsinov_id' => $katsinov_id])
+            $informasiData
         );
 
-        return redirect()->route('admin.katsinov-v2.show', $katsinov_id)->with('success', 'Informasi Dasar berhasil disimpan');
+        // Save collection data (team, tech, market, etc.)
+        if ($informasi) {
+            // Delete old collection data
+            \App\Models\KatsinovInformasiCollection::where('katsinov_informasi_id', $informasi->id)->delete();
+            
+            $collectionData = [];
+            $collectionFields = ['team', 'program_implementation', 'innovation_partner', 'information_tech', 'information_market'];
+            
+            foreach ($collectionFields as $field) {
+                if (isset($validated[$field]) && is_array($validated[$field])) {
+                    foreach ($validated[$field] as $index => $items) {
+                        if (is_array($items)) {
+                            foreach ($items as $attribute => $value) {
+                                if (!empty($value)) {
+                                    $collectionData[] = [
+                                        'katsinov_informasi_id' => $informasi->id,
+                                        'field' => $field,
+                                        'index' => $index,
+                                        'attribute' => $attribute,
+                                        'value' => $value,
+                                        'created_at' => now(),
+                                        'updated_at' => now(),
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if (!empty($collectionData)) {
+                \App\Models\KatsinovInformasiCollection::insert($collectionData);
+            }
+        }
+
+        $message = $isDraft ? 'Draft berhasil disimpan' : 'Informasi Dasar berhasil disimpan';
+        
+        $role = \Auth::user()->role;
+        $route = match ($role) {
+            'admin_direktorat' => 'admin.katsinov-v2.show',
+            'admin_inovasi' => 'admin_inovasi.katsinov-v2.show',
+            default => 'admin.katsinov-v2.show',
+        };
+        
+        return redirect()->route($route, $katsinov_id)->with('success', $message);
     }
 
     // Form Berita Acara
@@ -653,23 +768,25 @@ class KatsinovV2Controller extends Controller
 
     public function formBeritaAcaraStore(Request $request, $katsinov_id)
     {
+        $isDraft = $request->has('save_as_draft');
+        
         $validated = $request->validate([
-            'day' => 'required|string',
-            'date' => 'required|string',
-            'month' => 'required|string',
-            'year' => 'required|string',
-            'yearfull' => 'required|string',
-            'place' => 'required|string',
-            'decree' => 'required|string',
-            'title' => 'required|string',
-            'type' => 'required|string',
-            'tki' => 'required|numeric',
-            'opinion' => 'required|string',
-            'sign_date' => 'required|date',
-            'penanggungjawab' => 'required|string',
-            'ketua' => 'required|string',
-            'anggota1' => 'required|string',
-            'anggota2' => 'required|string',
+            'day' => $isDraft ? 'nullable|string' : 'required|string',
+            'date' => $isDraft ? 'nullable|string' : 'required|string',
+            'month' => $isDraft ? 'nullable|string' : 'required|string',
+            'year' => $isDraft ? 'nullable|string' : 'required|string',
+            'yearfull' => $isDraft ? 'nullable|string' : 'required|string',
+            'place' => $isDraft ? 'nullable|string' : 'required|string',
+            'decree' => $isDraft ? 'nullable|string' : 'required|string',
+            'title' => $isDraft ? 'nullable|string' : 'required|string',
+            'type' => $isDraft ? 'nullable|string' : 'required|string',
+            'tki' => $isDraft ? 'nullable|numeric' : 'required|numeric',
+            'opinion' => $isDraft ? 'nullable|string' : 'required|string',
+            'sign_date' => $isDraft ? 'nullable|date' : 'required|date',
+            'penanggungjawab' => $isDraft ? 'nullable|string' : 'required|string',
+            'ketua' => $isDraft ? 'nullable|string' : 'required|string',
+            'anggota1' => $isDraft ? 'nullable|string' : 'required|string',
+            'anggota2' => $isDraft ? 'nullable|string' : 'required|string',
             'penanggungjawab_signature' => 'nullable|string',
             'ketua_signature' => 'nullable|string',
             'anggota1_signature' => 'nullable|string',
@@ -727,7 +844,8 @@ class KatsinovV2Controller extends Controller
             $validated
         );
 
-        return redirect()->route('admin.katsinov-v2.show', $katsinov_id)->with('success', 'Berita Acara berhasil disimpan');
+        $message = $isDraft ? 'Draft berhasil disimpan' : 'Berita Acara berhasil disimpan';
+        return redirect()->route('admin.katsinov-v2.show', $katsinov_id)->with('success', $message);
     }
 
     // Form Record Hasil
@@ -748,23 +866,25 @@ class KatsinovV2Controller extends Controller
 
     public function formRecordHasilStore(Request $request, $katsinov_id)
     {
+        $isDraft = $request->has('save_as_draft');
+        
         $rules = [
-            'nama_penanggung_jawab' => 'required|string',
-            'institusi' => 'required|string',
-            'judul_inovasi' => 'required|string',
-            'jenis_inovasi' => 'required|string',
-            'alamat_kontak' => 'required|string',
-            'phone' => 'required|string',
+            'nama_penanggung_jawab' => $isDraft ? 'nullable|string' : 'required|string',
+            'institusi' => $isDraft ? 'nullable|string' : 'required|string',
+            'judul_inovasi' => $isDraft ? 'nullable|string' : 'required|string',
+            'jenis_inovasi' => $isDraft ? 'nullable|string' : 'required|string',
+            'alamat_kontak' => $isDraft ? 'nullable|string' : 'required|string',
+            'phone' => $isDraft ? 'nullable|string' : 'required|string',
             'fax' => 'nullable|string',
-            'tanggal_penilaian' => 'required|date',
+            'tanggal_penilaian' => $isDraft ? 'nullable|date' : 'required|date',
         ];
 
         // Add validation for 5 rows
         for ($i = 1; $i <= 5; $i++) {
-            $rules["aspek_$i"] = 'required|string';
-            $rules["aktivitas_$i"] = 'required|string';
-            $rules["capaian_$i"] = 'required|integer';
-            $rules["keterangan_$i"] = 'required|string';
+            $rules["aspek_$i"] = $isDraft ? 'nullable|string' : 'required|string';
+            $rules["aktivitas_$i"] = $isDraft ? 'nullable|string' : 'required|string';
+            $rules["capaian_$i"] = $isDraft ? 'nullable|integer' : 'required|integer';
+            $rules["keterangan_$i"] = $isDraft ? 'nullable|string' : 'required|string';
             $rules["catatan_$i"] = 'nullable|string';
         }
 
@@ -776,7 +896,8 @@ class KatsinovV2Controller extends Controller
             $validated
         );
 
-        return redirect()->route('admin.katsinov-v2.show', $katsinov_id)->with('success', 'Record Hasil Pengukuran berhasil disimpan');
+        $message = $isDraft ? 'Draft berhasil disimpan' : 'Record Hasil Pengukuran berhasil disimpan';
+        return redirect()->route('admin.katsinov-v2.show', $katsinov_id)->with('success', $message);
     }
 
     // Change Status (Admin only)

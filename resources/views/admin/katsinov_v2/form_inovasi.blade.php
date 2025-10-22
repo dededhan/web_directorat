@@ -1,38 +1,55 @@
 @extends('admin.admin')
 
 @section('contentadmin')
-<div class="p-6 max-w-7xl mx-auto">
+<div class="min-h-screen bg-gray-50 py-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     {{-- Header --}}
-    <div class="mb-6">
-        <div class="flex items-center gap-4">
+    <div class="mb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Form Judul Inovasi</h1>
+                <p class="mt-2 text-sm text-gray-600">{{ $katsinov->title }}</p>
+            </div>
             <a href="{{ route('admin.katsinov-v2.show', $katsinov->id) }}" 
-               class="p-2 hover:bg-gray-100 rounded-lg transition">
-                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+               class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
+                Kembali
             </a>
-            <div>
-                <h1 class="text-3xl font-bold text-gray-800">Form Judul Inovasi</h1>
-                <p class="text-gray-600 mt-1">{{ $katsinov->title }}</p>
-            </div>
         </div>
     </div>
 
+    {{-- Alert Success --}}
+    @if(session('success'))
+        <div class="mb-6 rounded-md bg-green-50 p-4">
+            <div class="flex">
+                <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
+                </div>
+            </div>
+        </div>
+    @endif
+
     {{-- Form --}}
-    <div class="bg-white rounded-lg shadow-lg p-8">
-        <form action="{{ route('admin.katsinov-v2.form-inovasi.store', $katsinov->id) }}" method="POST">
+    <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+        <form id="form-inovasi" action="{{ route('admin.katsinov-v2.form-inovasi.store', $katsinov->id) }}" method="POST">
             @csrf
 
             {{-- Section 1: Informasi Inovasi --}}
-            <div class="mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-blue-500 flex items-center gap-2">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+                <h2 class="text-xl font-semibold text-white flex items-center">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    Informasi Inovasi
+                    1. Informasi Inovasi
                 </h2>
-                
-                <div class="grid grid-cols-1 gap-6">
+            </div>
+            <div class="p-6 mb-6">
+                <div class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Judul Inovasi <span class="text-red-500">*</span>
@@ -64,15 +81,17 @@
             </div>
 
             {{-- Section 2: Produk & Teknologi --}}
-            <div class="mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-blue-500 flex items-center gap-2">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white shadow-sm rounded-lg overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-green-500 to-green-600 px-6 py-4">
+                <h2 class="text-xl font-semibold text-white flex items-center">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                     </svg>
-                    Produk & Teknologi
+                    2. Produk & Teknologi
                 </h2>
-                
-                <div class="grid grid-cols-1 gap-6">
+            </div>
+            <div class="p-6">
+                <div class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Produk Teknologi <span class="text-red-500">*</span>
@@ -105,15 +124,21 @@
                 </div>
             </div>
 
+                </div>
+            </div>
+            </div>
+
             {{-- Section 3: Kesiapan --}}
-            <div class="mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-blue-500 flex items-center gap-2">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white shadow-sm rounded-lg overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-6 py-4">
+                <h2 class="text-xl font-semibold text-white flex items-center">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    Tingkat Kesiapan
+                    3. Tingkat Kesiapan
                 </h2>
-                
+            </div>
+            <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -137,15 +162,21 @@
                 </div>
             </div>
 
+                </div>
+            </div>
+            </div>
+
             {{-- Section 4: Kontak Person --}}
-            <div class="mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-blue-500 flex items-center gap-2">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white shadow-sm rounded-lg overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-4">
+                <h2 class="text-xl font-semibold text-white flex items-center">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                     </svg>
-                    Kontak Person
+                    4. Kontak Person
                 </h2>
-                
+            </div>
+            <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -194,34 +225,34 @@
                 </div>
             </div>
 
-            {{-- Action Buttons --}}
-            <div class="flex items-center justify-between pt-6 border-t border-gray-200">
-                <a href="{{ route('admin.katsinov-v2.show', $katsinov->id) }}" 
-                   class="px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded-lg transition duration-300">
-                    Kembali
-                </a>
-                
-                <button type="submit" 
-                        class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-300 flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
-                    </svg>
-                    Simpan Data
-                </button>
+                </div>
             </div>
+            </div>
+
+
         </form>
     </div>
+
+    {{-- Floating Action Buttons --}}
+    <div class="fixed bottom-6 right-6 flex gap-3 z-50">
+        <button type="submit" form="form-inovasi" name="save_as_draft" value="1"
+                class="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-lg text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 transition-all hover:scale-105">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+            </svg>
+            Simpan Draft
+        </button>
+        
+        <button type="submit" form="form-inovasi"
+                class="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all hover:scale-105">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Simpan & Selesai
+        </button>
+    </div>
+</div>
 </div>
 
-@if(session('success'))
-<script>
-    alert('{{ session("success") }}');
-</script>
-@endif
 
-@if(session('error'))
-<script>
-    alert('{{ session("error") }}');
-</script>
-@endif
 @endsection
