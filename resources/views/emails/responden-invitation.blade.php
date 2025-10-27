@@ -53,7 +53,7 @@
             <p>
                 The resulting data will be used in aggregate form only. QS will not contact you for any other reason, or for more than two editions of their annual survey, without supplementary or separate consent. Your responses will be combined with those of many others around the world to form academic reputation indicators used in the QS World University Rankings at global, regional, subject and program levels where relevant.
             </p>
-            <p>If we do not receive a response from you by October 17, 2025, we will assume that consent is not given for your contact details to be shared.</p>
+            <p>If we do not receive a response from you by October 31, 2025, we will assume that consent is not given for your contact details to be shared.</p>
             <p>
                 To participate in the survey, please click the button below:
             </p>
@@ -84,7 +84,7 @@
              <p>
                 Data Anda hanya akan digunakan secara agregat dan tidak akan digunakan untuk keperluan lain tanpa persetujuan tambahan. Hasil survei akan digunakan untuk menyusun indikator reputasi akademik dalam QS World University Rankings di tingkat global, regional, subjek, dan program.
             </p>
-            <p>Apabila kami tidak menerima tanggapan dari Anda sebelum 17 Oktober 2025, kami akan menganggap Anda tidak memberikan persetujuan untuk membagikan data kontak Anda.</p>
+            <p>Apabila kami tidak menerima tanggapan dari Anda sebelum 31 Oktober 2025, kami akan menganggap Anda tidak memberikan persetujuan untuk membagikan data kontak Anda.</p>
             <p>
                 Untuk berpartisipasi dalam survei, silakan klik tombol di bawah ini:
             </p>
@@ -116,7 +116,7 @@
             <p>
                 Data Anda hanya akan digunakan secara agregat dan tidak akan digunakan untuk keperluan lain tanpa persetujuan tambahan. Hasil survei akan digunakan untuk menyusun indikator reputasi pemberi kerja dalam QS World University Rankings di tingkat global, regional, subjek, dan program.
             </p>
-            <p>Apabila kami tidak menerima tanggapan dari Anda sebelum 17 Oktober 2025, kami akan menganggap Anda tidak memberikan persetujuan untuk membagikan data kontak Anda.</p>
+            <p>Apabila kami tidak menerima tanggapan dari Anda sebelum 31 Oktober 2025, kami akan menganggap Anda tidak memberikan persetujuan untuk membagikan data kontak Anda.</p>
             <p>
                 Untuk berpartisipasi dalam survei, silakan klik tombol di bawah ini:
             </p>
@@ -144,7 +144,7 @@
             <p>
                 The resulting data will be used in aggregate form only. QS will not contact you for any other reason, or for more than two editions of their annual survey, without supplementary or separate consent. Your responses will be combined with those of many others around the world to form employer reputation indicators used in the QS World University Rankings at global, regional, subject and program levels where relevant.
             </p>
-            <p>If we do not receive a response from you by October 17, 2025, we will assume that consent is not given for your contact details to be shared.</p>
+            <p>If we do not receive a response from you by October 31, 2025, we will assume that consent is not given for your contact details to be shared.</p>
             <p>
                 To participate in the survey, please click the button below:
             </p>
