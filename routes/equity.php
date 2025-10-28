@@ -30,7 +30,7 @@ use App\Http\Controllers\EquityFakultas\EquityFakultasController;
 
 
 // Admin Equity Routes
-Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:admin_equity'])->group(function () {
+Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:admin_equity,sub_admin_equity'])->group(function () {
     Route::get('/dashboard', function () {
         return view('admin_equity.dashboard');
     })->name('dashboard');

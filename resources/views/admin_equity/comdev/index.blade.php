@@ -193,6 +193,7 @@
                                                     <i class='bx bxs-edit mr-3 text-lg text-yellow-500'></i>
                                                     Edit Sesi
                                                 </a>
+                                                @if(auth()->user()->role !== 'sub_admin_equity')
                                                 <form method="POST" action="{{ route('admin_equity.comdev.destroy', $session->id) }}" x-ref="deleteForm{{$session->id}}" class="block">
                                                     @csrf
                                                     @method('DELETE')
@@ -203,6 +204,7 @@
                                                         Hapus Sesi
                                                     </button>
                                                 </form>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -337,6 +339,7 @@
                                         <i class='bx bxs-edit mr-3 text-lg text-yellow-500'></i>
                                         Edit Sesi
                                     </a>
+                                    @if(auth()->user()->role !== 'sub_admin_equity')
                                     <form method="POST" action="{{ route('admin_equity.comdev.destroy', $session->id) }}" x-ref="deleteForm{{$session->id}}" class="block">
                                         @csrf
                                         @method('DELETE')
@@ -347,6 +350,7 @@
                                             Hapus Sesi
                                         </button>
                                     </form>
+                                    @endif
                                 </div>
                             </div>
                         </div>

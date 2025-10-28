@@ -222,6 +222,11 @@
                                             <i class='bx bxs-bank mr-1'></i>
                                             Equity Fakultas
                                         </span>
+                                    @elseif($user->role == 'sub_admin_equity')
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
+                                            <i class='bx bx-shield-alt-2 mr-1'></i>
+                                            Sub Admin Equity
+                                        </span>
                                     @endif
                                 </td>
                                 <td class="px-8 py-6 whitespace-nowrap">
@@ -250,6 +255,7 @@
                                            title="Edit Pengguna">
                                             <i class='bx bxs-edit text-lg'></i>
                                         </a>
+                                        @if(auth()->user()->role !== 'sub_admin_equity')
                                         <form method="POST" action="{{ route('admin_equity.manageuser.destroy', $user->id) }}" 
                                               x-ref="deleteForm{{$user->id}}" class="inline">
                                             @csrf
@@ -261,6 +267,7 @@
                                                <i class='bx bxs-trash text-lg'></i>
                                             </button>
                                         </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -318,6 +325,11 @@
                                             <i class='bx bxs-bank mr-1'></i>
                                             E. Fakultas
                                         </span>
+                                    @elseif($user->role == 'sub_admin_equity')
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
+                                            <i class='bx bx-shield-alt-2 mr-1'></i>
+                                            Sub Admin
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -354,6 +366,7 @@
                                    title="Edit Pengguna">
                                     <i class='bx bxs-edit text-lg'></i>
                                 </a>
+                                @if(auth()->user()->role !== 'sub_admin_equity')
                                 <form method="POST" action="{{ route('admin_equity.manageuser.destroy', $user->id) }}" 
                                       x-ref="deleteForm{{$user->id}}" class="inline">
                                     @csrf
@@ -365,6 +378,7 @@
                                        <i class='bx bxs-trash text-lg'></i>
                                     </button>
                                 </form>
+                                @endif
                             </div>
                         </div>
                     @empty

@@ -162,6 +162,7 @@
                                 <option value="reviewer_equity">Reviewer Equity</option>
                                 <option value="reviewer_hibah">Reviewer Hibah Modul</option>
                                 <option value="equity_fakultas">Equity Fakultas</option>
+                                <option value="sub_admin_equity">Sub Admin Equity</option>
                             </select>
                             @error('role')
                                 <p class="text-red-500 text-sm mt-2 flex items-center">

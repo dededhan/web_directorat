@@ -203,6 +203,7 @@
                                                         Edit Sesi
                                                     </a>
                                                     <div class="border-t my-1 border-gray-100"></div>
+                                                    @if(auth()->user()->role !== 'sub_admin_equity')
                                                     <button @click="confirmDelete({{ $session->id }}); open = false"
                                                         class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
                                                         role="menuitem">
@@ -213,6 +214,7 @@
                                                         @csrf
                                                         @method('DELETE')
                                                     </form>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -321,6 +323,7 @@
                                         Edit Sesi
                                     </a>
                                     <div class="border-t my-1 border-gray-100"></div>
+                                    @if(auth()->user()->role !== 'sub_admin_equity')
                                     <button @click="confirmDelete({{ $session->id }}); open = false"
                                         class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
                                         <i class='bx bx-trash mr-3 text-lg'></i>
@@ -330,6 +333,7 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
+                                    @endif
                                 </div>
                             </div>
                         </div>

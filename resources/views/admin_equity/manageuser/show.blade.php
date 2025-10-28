@@ -39,7 +39,7 @@
                     <dt class="text-sm font-medium text-gray-500">Alamat Email</dt>
                     <dd class="mt-1 text-lg font-semibold text-gray-900">{{ $user->email }}</dd>
                 </div>
-                 <div class="border-b pb-4">
+                <div class="border-b pb-4">
                     <dt class="text-sm font-medium text-gray-500">Role</dt>
                     <dd class="mt-1 text-lg font-semibold text-gray-900">
                          @if($user->role == 'dosen')
@@ -48,6 +48,8 @@
                             <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-teal-100 text-teal-800">Reviewer Equity</span>
                         @elseif($user->role == 'equity_fakultas')
                             <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">Equity Fakultas</span>
+                        @elseif($user->role == 'sub_admin_equity')
+                            <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-amber-100 text-amber-800">Sub Admin Equity</span>
                         @endif
                     </dd>
                 </div>

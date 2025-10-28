@@ -22,7 +22,7 @@ class AdminEquityUserController extends Controller
         $fakultasId = $request->input('fakultas_id');
         $prodiId = $request->input('prodi_id');
 
-        $query = User::whereIn('role', ['dosen', 'reviewer_equity', 'reviewer_hibah', 'equity_fakultas'])
+        $query = User::whereIn('role', ['dosen', 'reviewer_equity', 'reviewer_hibah', 'equity_fakultas', 'sub_admin_equity'])
             ->with('profile.prodi.fakultas', 'profile.fakultas');
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -60,14 +60,13 @@ class AdminEquityUserController extends Controller
         return view('admin_equity.manageuser.create', compact('fakultas'));
     }
 
-  
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required', Rule::in(['dosen', 'reviewer_equity', 'reviewer_hibah', 'equity_fakultas'])],
+            'role' => ['required', Rule::in(['dosen', 'reviewer_equity', 'reviewer_hibah', 'equity_fakultas', 'sub_admin_equity'])],
             'identifier_number' => 'nullable|string|max:255|unique:equity_user_profiles,identifier_number',
             'prodi_id' => 'nullable|required_if:role,dosen|exists:equity_prodi,id',
             'fakultas_id' => [
@@ -101,6 +100,7 @@ class AdminEquityUserController extends Controller
                     'fakultas_id' => $validated['fakultas_id'],
                 ]);
             }
+            // sub_admin_equity dan reviewer_equity tidak perlu profile
             
             DB::commit();
             return redirect()->route('admin_equity.manageuser.index')->with('success', 'User berhasil dibuat.');
@@ -114,7 +114,7 @@ class AdminEquityUserController extends Controller
 
     public function show(User $user)
     {
-        if (!in_array($user->role, ['dosen', 'reviewer_equity', 'equity_fakultas'])) {
+        if (!in_array($user->role, ['dosen', 'reviewer_equity', 'equity_fakultas', 'sub_admin_equity'])) {
             abort(404);
         }
         $user->load('profile.prodi.fakultas', 'profile.fakultas');
@@ -124,7 +124,7 @@ class AdminEquityUserController extends Controller
 
     public function edit(User $user)
     {
-         if (!in_array($user->role, ['dosen', 'reviewer_equity', 'equity_fakultas'])) {
+         if (!in_array($user->role, ['dosen', 'reviewer_equity', 'equity_fakultas', 'sub_admin_equity'])) {
             abort(404);
         }
         $user->load('profile.prodi.fakultas', 'profile.fakultas');
@@ -145,7 +145,7 @@ class AdminEquityUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required', Rule::in(['dosen', 'reviewer_equity', 'reviewer_hibah', 'equity_fakultas'])],
+            'role' => ['required', Rule::in(['dosen', 'reviewer_equity', 'reviewer_hibah', 'equity_fakultas', 'sub_admin_equity'])],
             'identifier_number' => ['nullable', 'string', 'max:255', Rule::unique('equity_user_profiles', 'identifier_number')->ignore($user->profile->id ?? null)],
             'prodi_id' => 'nullable|required_if:role,dosen|exists:equity_prodi,id',
             'fakultas_id' => [
@@ -207,7 +207,12 @@ class AdminEquityUserController extends Controller
 
     public function destroy(User $user)
     {
-        if (!in_array($user->role, ['dosen', 'reviewer_equity', 'reviewer_hibah', 'equity_fakultas'])) {
+        // Cek apakah user yang login adalah sub_admin_equity
+        if (auth()->user()->role === 'sub_admin_equity') {
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk menghapus user.');
+        }
+
+        if (!in_array($user->role, ['dosen', 'reviewer_equity', 'reviewer_hibah', 'equity_fakultas', 'sub_admin_equity'])) {
             abort(404);
         }
 

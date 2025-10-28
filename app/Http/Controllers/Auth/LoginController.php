@@ -45,6 +45,7 @@ class LoginController extends Controller
                 // 'kepala_sub_direktorat' => 'inovasi.admin_hilirisasi.dashboard',
                 'validator' => 'subdirektorat-inovasi.validator.dashboard',
                 'admin_equity' => 'admin_equity.dashboard',
+                'sub_admin_equity' => 'admin_equity.dashboard',
                 'reviewer_equity' => 'reviewer_equity.dashboard',
                 'reviewer_hibah' => 'reviewer_hibah.dashboard',
                 'equity_fakultas' => 'equity_fakultas.dashboard',

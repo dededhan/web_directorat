@@ -67,6 +67,11 @@
                                     <i class='bx bxs-bank mr-1'></i>
                                     Equity Fakultas
                                 </span>
+                            @elseif($user->role == 'sub_admin_equity')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-800">
+                                    <i class='bx bx-shield-alt-2 mr-1'></i>
+                                    Sub Admin Equity
+                                </span>
                             @endif
                         </div>
                     </div>
@@ -199,6 +204,7 @@
                                 <option value="reviewer_equity">Reviewer Equity</option>
                                 <option value="reviewer_hibah">Reviewer Hibah Modul</option>
                                 <option value="equity_fakultas">Equity Fakultas</option>
+                                <option value="sub_admin_equity">Sub Admin Equity</option>
                             </select>
                             @error('role')
                                 <p class="text-red-500 text-sm mt-2 flex items-center">

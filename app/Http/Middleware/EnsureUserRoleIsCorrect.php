@@ -13,9 +13,14 @@ class EnsureUserRoleIsCorrect
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, $role): Response
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        if(auth()->user()->role !== $role){
+
+        if (count($roles) === 1 && str_contains($roles[0], ',')) {
+            $roles = explode(',', $roles[0]);
+        }
+        
+        if(!in_array(auth()->user()->role, $roles)){
             return redirect(url()->previous());
         }
         return $next($request);

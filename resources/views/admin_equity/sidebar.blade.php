@@ -57,7 +57,7 @@
                     <i class='bx bxs-briefcase-alt-2 text-xl text-white'></i>
                 </div>
                 <div class="flex flex-col">
-                    <span class="text-xl font-bold">Admin Equity</span>
+                    <span class="text-xl font-bold">Equity</span>
                     <span class="text-xs text-gray-400">Management System</span>
                 </div>
             </a>

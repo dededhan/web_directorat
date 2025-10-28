@@ -19,6 +19,7 @@
                     <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Manajemen Sesi Bantuan Presentasi</h1>
                     <p class="mt-2 text-gray-600 text-base">Kelola semua sesi program Bantuan Presentasi yang tersedia.</p>
                 </div>
+                @if(auth()->user()->role !== 'sub_admin_equity')
                 <div class="flex-shrink-0">
                     <a href="{{ route('admin_equity.presenting.create') }}"
                         class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
@@ -26,6 +27,7 @@
                         Buat Sesi Baru
                     </a>
                 </div>
+                @endif
             </div>
         </header>
 
@@ -196,6 +198,7 @@
                                                         <i class='bx bx-show mr-3 text-lg text-blue-500'></i>
                                                         Lihat Pengajuan
                                                     </a>
+                                                    @if(auth()->user()->role !== 'sub_admin_equity')
                                                     <a href="{{ route('admin_equity.presenting.edit', $session->id) }}"
                                                         class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-yellow-50 hover:text-yellow-700 transition-colors"
                                                         role="menuitem">
@@ -213,6 +216,7 @@
                                                         @csrf
                                                         @method('DELETE')
                                                     </form>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -315,6 +319,7 @@
                                         <i class='bx bx-show mr-3 text-lg text-blue-500'></i>
                                         Lihat Pengajuan
                                     </a>
+                                    @if(auth()->user()->role !== 'sub_admin_equity')
                                     <a href="{{ route('admin_equity.presenting.edit', $session->id) }}"
                                         class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-yellow-50 hover:text-yellow-700 transition-colors">
                                         <i class='bx bx-edit-alt mr-3 text-lg text-yellow-600'></i>
@@ -330,6 +335,7 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
+                                    @endif
                                 </div>
                             </div>
                         </div>
