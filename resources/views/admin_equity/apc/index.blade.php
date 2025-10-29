@@ -19,6 +19,7 @@
                     <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Manajemen Sesi APC</h1>
                     <p class="mt-2 text-gray-600 text-base">Kelola semua sesi pendanaan Article Processing Cost yang tersedia.</p>
                 </div>
+                @if(auth()->user()->role !== 'sub_admin_equity')
                 <div class="flex-shrink-0">
                     <a href="{{ route('admin_equity.apc.create') }}"
                         class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
@@ -26,6 +27,7 @@
                         Buat Sesi Baru
                     </a>
                 </div>
+                @endif
             </div>
         </header>
 
@@ -196,6 +198,7 @@
                                                         <i class='bx bx-show mr-3 text-lg text-blue-500'></i>
                                                         Lihat Pengajuan
                                                     </a>
+                                                    @if(auth()->user()->role !== 'sub_admin_equity')
                                                     <a href="{{ route('admin_equity.apc.edit', $session->id) }}"
                                                         class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-yellow-50 hover:text-yellow-700 transition-colors"
                                                         role="menuitem">
@@ -203,7 +206,6 @@
                                                         Edit Sesi
                                                     </a>
                                                     <div class="border-t my-1 border-gray-100"></div>
-                                                    @if(auth()->user()->role !== 'sub_admin_equity')
                                                     <button @click="confirmDelete({{ $session->id }}); open = false"
                                                         class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
                                                         role="menuitem">
@@ -229,11 +231,13 @@
                                             </div>
                                             <h3 class="font-bold text-xl text-gray-800 mb-2">Belum Ada Sesi APC</h3>
                                             <p class="text-gray-500 mb-8 max-w-md">Buat sesi baru untuk memulai program pendanaan Article Processing Cost.</p>
+                                            @if(auth()->user()->role !== 'sub_admin_equity')
                                             <a href="{{ route('admin_equity.apc.create') }}"
                                                 class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
                                                 <i class='bx bx-plus-circle mr-2 text-lg'></i>
                                                 Buat Sesi Baru
                                             </a>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
@@ -317,13 +321,13 @@
                                         <i class='bx bx-show mr-3 text-lg text-blue-500'></i>
                                         Lihat Pengajuan
                                     </a>
+                                    @if(auth()->user()->role !== 'sub_admin_equity')
                                     <a href="{{ route('admin_equity.apc.edit', $session->id) }}"
                                         class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-yellow-50 hover:text-yellow-700 transition-colors">
                                         <i class='bx bx-edit-alt mr-3 text-lg text-yellow-600'></i>
                                         Edit Sesi
                                     </a>
                                     <div class="border-t my-1 border-gray-100"></div>
-                                    @if(auth()->user()->role !== 'sub_admin_equity')
                                     <button @click="confirmDelete({{ $session->id }}); open = false"
                                         class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
                                         <i class='bx bx-trash mr-3 text-lg'></i>
