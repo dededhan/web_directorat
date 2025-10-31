@@ -337,13 +337,19 @@ if (!function_exists('getPartnerTypeLabel')) {
                                 </div>
                                 
                                 <div class="space-y-3">
-                                    <form action="{{ route('admin_equity.matchresearch.submission.updateStatus', $submission->id) }}" method="POST" class="w-full">
+                                    <button type="button" 
+                                        onclick="confirmAcceptProposal({{ $submission->id }}, '{{ addslashes($submission->judul_proposal) }}')"
+                                        class="w-full px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl hover:from-green-600 hover:to-green-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center">
+                                        <i class='bx bx-check-circle mr-2'></i>
+                                        Terima Proposal
+                                    </button>
+                                    
+                                    <form id="accept-form-{{ $submission->id }}" 
+                                        action="{{ route('admin_equity.matchresearch.submission.updateStatus', $submission->id) }}" 
+                                        method="POST" 
+                                        class="hidden">
                                         @csrf
-                                        <button type="submit" name="status" value="diterima" 
-                                            class="w-full px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl hover:from-green-600 hover:to-green-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center">
-                                            <i class='bx bx-check-circle mr-2'></i>
-                                            Terima Proposal
-                                        </button>
+                                        <input type="hidden" name="status" value="diterima">
                                     </form>
                                     
                                     <button @click="rejectionModal = true" type="button" 
@@ -478,6 +484,74 @@ document.addEventListener('alpine:init', () => {
         rejectionModal: false
     }));
 });
+
+// Fungsi konfirmasi accept proposal dengan SweetAlert2
+function confirmAcceptProposal(submissionId, proposalTitle) {
+    Swal.fire({
+        title: '<strong>✅ KONFIRMASI PENERIMAAN</strong>',
+        html: `
+            <div style="text-align: left; padding: 20px;">
+                <p style="font-size: 18px; margin-bottom: 15px; color: #059669; font-weight: bold;">
+                    Anda akan menerima proposal:
+                </p>
+                <div style="background-color: #d1fae5; border-left: 4px solid #059669; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+                    <p style="font-size: 16px; font-weight: 600; color: #1f2937; line-height: 1.5;">
+                        "${proposalTitle}"
+                    </p>
+                </div>
+                <div style="background-color: #dbeafe; border: 2px solid #3b82f6; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <p style="font-size: 16px; color: #1e40af; margin-bottom: 10px;">
+                        <strong>ℹ️ Informasi:</strong>
+                    </p>
+                    <ul style="text-align: left; font-size: 15px; color: #1e3a8a; line-height: 1.8; padding-left: 20px;">
+                        <li>Proposal akan disetujui dan masuk ke tahap berikutnya</li>
+                        <li>Dosen pengusul akan mendapat notifikasi persetujuan</li>
+                        <li>Status proposal akan berubah menjadi <strong>"Diterima"</strong></li>
+                        <li>Dosen dapat mulai mengerjakan penelitian</li>
+                    </ul>
+                </div>
+                <p style="font-size: 17px; margin-top: 20px; color: #1f2937; font-weight: 600;">
+                    Apakah Anda yakin ingin <strong style="color: #059669;">MENERIMA</strong> proposal ini?
+                </p>
+            </div>
+        `,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#059669',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: '<span style="font-size: 16px; font-weight: bold;">✅ Ya, Terima Proposal!</span>',
+        cancelButtonText: '<span style="font-size: 16px; font-weight: bold;">❌ Batal</span>',
+        reverseButtons: true,
+        width: '700px',
+        padding: '2em',
+        customClass: {
+            confirmButton: 'swal2-confirm-large',
+            cancelButton: 'swal2-cancel-large',
+            title: 'swal2-title-large',
+            htmlContainer: 'swal2-html-large'
+        },
+        buttonsStyling: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        focusCancel: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Tampilkan loading saat proses
+            Swal.fire({
+                title: 'Sedang Memproses...',
+                html: '<p style="font-size: 16px;">Mohon tunggu sebentar</p>',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            
+            // Submit form accept
+            document.getElementById('accept-form-' + submissionId).submit();
+        }
+    });
+}
 
 // Fungsi konfirmasi delete dengan SweetAlert2 untuk halaman detail
 function confirmDeleteProposalDetail(submissionId, proposalTitle) {
