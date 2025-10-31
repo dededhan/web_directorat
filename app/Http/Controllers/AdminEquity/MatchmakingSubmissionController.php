@@ -92,5 +92,16 @@ class MatchmakingSubmissionController extends Controller
         return redirect()->route('admin_equity.matchresearch.show', $submission->matchmaking_session_id)
                          ->with('success', 'Hasil penilaian laporan berhasil disimpan!');
     }
+
+
+    public function destroy(MatchmakingSubmission $submission)
+    {
+        $sessionId = $submission->matchmaking_session_id;
+        
+        $submission->delete();
+
+        return redirect()->route('admin_equity.matchresearch.show', $sessionId)
+                         ->with('success', 'Proposal berhasil dihapus!');
+    }
 }
 

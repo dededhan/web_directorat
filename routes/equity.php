@@ -196,6 +196,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         Route::post('/submissions/{submission}/status', [MatchmakingSubmissionController::class, 'updateStatus'])->name('submission.updateStatus');
         Route::get('/submissions/{submission}/report', [MatchmakingSubmissionController::class, 'showReport'])->name('submission.report.show');
         Route::post('/submissions/{submission}/report/status', [MatchmakingSubmissionController::class, 'updateReportStatus'])->name('submission.report.updateStatus');
+        Route::delete('/submissions/{submission}', [MatchmakingSubmissionController::class, 'destroy'])->name('submission.destroy');
     });
 
 

@@ -316,7 +316,7 @@ if (!function_exists('getPartnerTypeLabel')) {
 
             {{-- Sidebar - Action Panel --}}
             <div class="xl:col-span-1">
-                <div class="sticky top-8">
+                <div class="sticky top-8 space-y-6">
                     <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
                         <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-4">
                             <h2 class="text-lg font-bold text-white flex items-center">
@@ -385,6 +385,35 @@ if (!function_exists('getPartnerTypeLabel')) {
                             @endif
                         </div>
                     </div>
+                    
+                    {{-- Delete Button Card --}}
+                    <div class="bg-white rounded-2xl shadow-lg border border-red-200 overflow-hidden">
+                        <div class="bg-gradient-to-r from-red-500 to-red-600 px-6 py-4">
+                            <h2 class="text-lg font-bold text-white flex items-center">
+                                <i class='bx bx-trash text-xl mr-3'></i>
+                                Zona Berbahaya
+                            </h2>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-sm text-gray-600 mb-4">
+                                Menghapus proposal ini akan menghapus semua data terkait dan tidak dapat dikembalikan.
+                            </p>
+                            <button type="button" 
+                                onclick="confirmDeleteProposalDetail({{ $submission->id }}, '{{ addslashes($submission->judul_proposal) }}')"
+                                class="w-full px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center">
+                                <i class='bx bx-trash mr-2'></i>
+                                Hapus Proposal
+                            </button>
+                            
+                            <form id="delete-form-detail-{{ $submission->id }}" 
+                                action="{{ route('admin_equity.matchresearch.submission.destroy', $submission->id) }}" 
+                                method="POST" 
+                                class="hidden">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -449,6 +478,74 @@ document.addEventListener('alpine:init', () => {
         rejectionModal: false
     }));
 });
+
+// Fungsi konfirmasi delete dengan SweetAlert2 untuk halaman detail
+function confirmDeleteProposalDetail(submissionId, proposalTitle) {
+    Swal.fire({
+        title: '<strong>⚠️ PERHATIAN!</strong>',
+        html: `
+            <div style="text-align: left; padding: 20px;">
+                <p style="font-size: 18px; margin-bottom: 15px; color: #dc2626; font-weight: bold;">
+                    Anda akan menghapus proposal:
+                </p>
+                <div style="background-color: #fee2e2; border-left: 4px solid #dc2626; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+                    <p style="font-size: 16px; font-weight: 600; color: #1f2937; line-height: 1.5;">
+                        "${proposalTitle}"
+                    </p>
+                </div>
+                <div style="background-color: #fef3c7; border: 2px solid #f59e0b; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <p style="font-size: 16px; color: #92400e; margin-bottom: 10px;">
+                        <strong>⚠️ Peringatan Penting:</strong>
+                    </p>
+                    <ul style="text-align: left; font-size: 15px; color: #78350f; line-height: 1.8; padding-left: 20px;">
+                        <li>Semua data proposal akan <strong>TERHAPUS PERMANEN</strong></li>
+                        <li>Data anggota tim akan ikut terhapus</li>
+                        <li>Laporan yang sudah dibuat akan hilang</li>
+                        <li><strong style="color: #dc2626;">Tindakan ini TIDAK DAPAT dibatalkan!</strong></li>
+                    </ul>
+                </div>
+                <p style="font-size: 17px; margin-top: 20px; color: #1f2937; font-weight: 600;">
+                    Apakah Anda <strong style="color: #dc2626;">BENAR-BENAR YAKIN</strong> ingin melanjutkan?
+                </p>
+            </div>
+        `,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: '<span style="font-size: 16px; font-weight: bold;">🗑️ Ya, Hapus Proposal!</span>',
+        cancelButtonText: '<span style="font-size: 16px; font-weight: bold;">❌ Batal, Jangan Hapus</span>',
+        reverseButtons: true,
+        width: '700px',
+        padding: '2em',
+        customClass: {
+            confirmButton: 'swal2-confirm-large',
+            cancelButton: 'swal2-cancel-large',
+            title: 'swal2-title-large',
+            htmlContainer: 'swal2-html-large'
+        },
+        buttonsStyling: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        focusCancel: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Tampilkan loading saat proses hapus
+            Swal.fire({
+                title: 'Sedang Menghapus...',
+                html: '<p style="font-size: 16px;">Mohon tunggu sebentar</p>',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            
+            // Submit form delete
+            document.getElementById('delete-form-detail-' + submissionId).submit();
+        }
+    });
+}
 </script>
 @endsection
 
@@ -472,6 +569,30 @@ document.addEventListener('alpine:init', () => {
     .sticky {
         position: -webkit-sticky;
         position: sticky;
+    }
+
+    /* Custom SweetAlert2 Styles untuk Admin Boomer */
+    .swal2-confirm-large, .swal2-cancel-large {
+        font-size: 18px !important;
+        padding: 14px 28px !important;
+        min-width: 160px !important;
+        font-weight: 700 !important;
+        border-radius: 10px !important;
+    }
+    
+    .swal2-title-large {
+        font-size: 28px !important;
+        padding: 20px 0 !important;
+    }
+    
+    .swal2-html-large {
+        font-size: 16px !important;
+        line-height: 1.8 !important;
+    }
+
+    .swal2-popup {
+        border-radius: 15px !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
     }
 
     @media (max-width: 640px) {

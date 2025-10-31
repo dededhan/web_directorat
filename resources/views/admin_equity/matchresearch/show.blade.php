@@ -298,16 +298,33 @@ $statuses = ['diajukan', 'diterima', 'ditolak_awal', 'draft_laporan', 'menunggu_
                                         </span>
                                     </td>
                                     <td class="px-6 py-5 text-center">
-                                        <a href="{{ route('admin_equity.matchresearch.submission.show', $submission->id) }}" 
-                                            class="inline-flex items-center px-3 py-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md text-xs">
-                                            @if($submission->status == 'diajukan')
-                                                <i class='bx bx-check-shield mr-1'></i>
-                                                Verifikasi
-                                            @else
-                                                <i class='bx bx-show mr-1'></i>
-                                                Lihat Detail
-                                            @endif
-                                        </a>
+                                        <div class="flex items-center justify-center space-x-2">
+                                            <a href="{{ route('admin_equity.matchresearch.submission.show', $submission->id) }}" 
+                                                class="inline-flex items-center px-3 py-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md text-xs">
+                                                @if($submission->status == 'diajukan')
+                                                    <i class='bx bx-check-shield mr-1'></i>
+                                                    Verifikasi
+                                                @else
+                                                    <i class='bx bx-show mr-1'></i>
+                                                    Lihat Detail
+                                                @endif
+                                            </a>
+                                            
+                                            <button type="button" 
+                                                onclick="confirmDeleteProposal({{ $submission->id }}, '{{ addslashes($submission->judul_proposal) }}')"
+                                                class="inline-flex items-center px-3 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transform hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md text-xs">
+                                                <i class='bx bx-trash mr-1'></i>
+                                                Hapus
+                                            </button>
+                                            
+                                            <form id="delete-form-{{ $submission->id }}" 
+                                                action="{{ route('admin_equity.matchresearch.submission.destroy', $submission->id) }}" 
+                                                method="POST" 
+                                                class="hidden">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
@@ -369,16 +386,33 @@ $statuses = ['diajukan', 'diterima', 'ditolak_awal', 'draft_laporan', 'menunggu_
                         </div>
 
                         <div class="flex justify-center">
-                            <a href="{{ route('admin_equity.matchresearch.submission.show', $submission->id) }}" 
-                                class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transition-all text-sm">
-                                @if($submission->status == 'diajukan')
-                                    <i class='bx bx-check-shield mr-2'></i>
-                                    Verifikasi
-                                @else
-                                    <i class='bx bx-show mr-2'></i>
-                                    Lihat Detail
-                                @endif
-                            </a>
+                            <div class="flex space-x-2">
+                                <a href="{{ route('admin_equity.matchresearch.submission.show', $submission->id) }}" 
+                                    class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transition-all text-sm">
+                                    @if($submission->status == 'diajukan')
+                                        <i class='bx bx-check-shield mr-2'></i>
+                                        Verifikasi
+                                    @else
+                                        <i class='bx bx-show mr-2'></i>
+                                        Lihat Detail
+                                    @endif
+                                </a>
+                                
+                                <button type="button" 
+                                    onclick="confirmDeleteProposal({{ $submission->id }}, '{{ addslashes($submission->judul_proposal) }}')"
+                                    class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all text-sm">
+                                    <i class='bx bx-trash mr-2'></i>
+                                    Hapus
+                                </button>
+                                
+                                <form id="delete-form-{{ $submission->id }}" 
+                                    action="{{ route('admin_equity.matchresearch.submission.destroy', $submission->id) }}" 
+                                    method="POST" 
+                                    class="hidden">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </div>
                         </div>
                     </div>
                 @empty
@@ -457,6 +491,74 @@ document.addEventListener('DOMContentLoaded', function () {
         fetchProdi(fakultasSelect.value, selectedProdiId);
     }
 });
+
+// Fungsi konfirmasi delete dengan SweetAlert2
+function confirmDeleteProposal(submissionId, proposalTitle) {
+    Swal.fire({
+        title: '<strong>⚠️ PERHATIAN!</strong>',
+        html: `
+            <div style="text-align: left; padding: 20px;">
+                <p style="font-size: 18px; margin-bottom: 15px; color: #dc2626; font-weight: bold;">
+                    Anda akan menghapus proposal:
+                </p>
+                <div style="background-color: #fee2e2; border-left: 4px solid #dc2626; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+                    <p style="font-size: 16px; font-weight: 600; color: #1f2937; line-height: 1.5;">
+                        "${proposalTitle}"
+                    </p>
+                </div>
+                <div style="background-color: #fef3c7; border: 2px solid #f59e0b; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <p style="font-size: 16px; color: #92400e; margin-bottom: 10px;">
+                        <strong>⚠️ Peringatan Penting:</strong>
+                    </p>
+                    <ul style="text-align: left; font-size: 15px; color: #78350f; line-height: 1.8; padding-left: 20px;">
+                        <li>Semua data proposal akan <strong>TERHAPUS PERMANEN</strong></li>
+                        <li>Data anggota tim akan ikut terhapus</li>
+                        <li>Laporan yang sudah dibuat akan hilang</li>
+                        <li><strong style="color: #dc2626;">Tindakan ini TIDAK DAPAT dibatalkan!</strong></li>
+                    </ul>
+                </div>
+                <p style="font-size: 17px; margin-top: 20px; color: #1f2937; font-weight: 600;">
+                    Apakah Anda <strong style="color: #dc2626;">BENAR-BENAR YAKIN</strong> ingin melanjutkan?
+                </p>
+            </div>
+        `,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: '<span style="font-size: 16px; font-weight: bold;">🗑️ Ya, Hapus Proposal!</span>',
+        cancelButtonText: '<span style="font-size: 16px; font-weight: bold;">❌ Batal, Jangan Hapus</span>',
+        reverseButtons: true,
+        width: '700px',
+        padding: '2em',
+        customClass: {
+            confirmButton: 'swal2-confirm-large',
+            cancelButton: 'swal2-cancel-large',
+            title: 'swal2-title-large',
+            htmlContainer: 'swal2-html-large'
+        },
+        buttonsStyling: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        focusCancel: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Tampilkan loading saat proses hapus
+            Swal.fire({
+                title: 'Sedang Menghapus...',
+                html: '<p style="font-size: 16px;">Mohon tunggu sebentar</p>',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            
+            // Submit form delete
+            document.getElementById('delete-form-' + submissionId).submit();
+        }
+    });
+}
 </script>
 @endsection
 
@@ -516,6 +618,30 @@ document.addEventListener('DOMContentLoaded', function () {
         background-color: #0d9488;
         color: white;
         border-color: #0d9488;
+    }
+
+    /* Custom SweetAlert2 Styles untuk Admin Boomer */
+    .swal2-confirm-large, .swal2-cancel-large {
+        font-size: 18px !important;
+        padding: 14px 28px !important;
+        min-width: 160px !important;
+        font-weight: 700 !important;
+        border-radius: 10px !important;
+    }
+    
+    .swal2-title-large {
+        font-size: 28px !important;
+        padding: 20px 0 !important;
+    }
+    
+    .swal2-html-large {
+        font-size: 16px !important;
+        line-height: 1.8 !important;
+    }
+
+    .swal2-popup {
+        border-radius: 15px !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
     }
 
     @media (max-width: 640px) {
