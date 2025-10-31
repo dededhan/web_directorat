@@ -387,6 +387,29 @@ if (!function_exists('getPartnerTypeLabel')) {
                                             Lihat Laporan Akhir
                                         </a>
                                     @endif
+                                    
+                                    {{-- Tombol untuk mengubah status kembali ke Diajukan (hanya untuk status Diterima) --}}
+                                    @if($submission->status === 'diterima')
+                                        <div class="mt-4 pt-4 border-t border-gray-200">
+                                            <p class="text-xs text-gray-500 mb-3">
+                                                <i class='bx bx-info-circle'></i> Ubah status kembali jika ada kesalahan
+                                            </p>
+                                            <button type="button" 
+                                                onclick="confirmRevertToSubmitted({{ $submission->id }}, '{{ addslashes($submission->judul_proposal) }}')"
+                                                class="w-full px-4 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold rounded-xl hover:from-amber-600 hover:to-amber-700 transform hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center text-sm">
+                                                <i class='bx bx-undo mr-2'></i>
+                                                Kembalikan ke Status "Diajukan"
+                                            </button>
+                                            
+                                            <form id="revert-form-{{ $submission->id }}" 
+                                                action="{{ route('admin_equity.matchresearch.submission.updateStatus', $submission->id) }}" 
+                                                method="POST" 
+                                                class="hidden">
+                                                @csrf
+                                                <input type="hidden" name="status" value="diajukan">
+                                            </form>
+                                        </div>
+                                    @endif
                                 </div>
                             @endif
                         </div>
@@ -549,6 +572,79 @@ function confirmAcceptProposal(submissionId, proposalTitle) {
             
             // Submit form accept
             document.getElementById('accept-form-' + submissionId).submit();
+        }
+    });
+}
+
+// Fungsi konfirmasi revert status dari Diterima ke Diajukan
+function confirmRevertToSubmitted(submissionId, proposalTitle) {
+    Swal.fire({
+        title: '<strong>🔄 KONFIRMASI PERUBAHAN STATUS</strong>',
+        html: `
+            <div style="text-align: left; padding: 20px;">
+                <p style="font-size: 18px; margin-bottom: 15px; color: #d97706; font-weight: bold;">
+                    Anda akan mengubah status proposal:
+                </p>
+                <div style="background-color: #fef3c7; border-left: 4px solid #d97706; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+                    <p style="font-size: 16px; font-weight: 600; color: #1f2937; line-height: 1.5;">
+                        "${proposalTitle}"
+                    </p>
+                </div>
+                <div style="background-color: #dbeafe; border: 2px solid #3b82f6; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <p style="font-size: 16px; color: #1e40af; margin-bottom: 10px;">
+                        <strong>ℹ️ Yang Akan Terjadi:</strong>
+                    </p>
+                    <ul style="text-align: left; font-size: 15px; color: #1e3a8a; line-height: 1.8; padding-left: 20px;">
+                        <li>Status akan berubah dari <strong>"Diterima"</strong> menjadi <strong>"Diajukan"</strong></li>
+                        <li>Proposal akan kembali ke status menunggu review</li>
+                        <li>Dosen pengusul akan melihat perubahan status ini</li>
+                        <li>Anda dapat me-review ulang proposal ini</li>
+                    </ul>
+                </div>
+                <div style="background-color: #fef3c7; border: 2px solid #f59e0b; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                    <p style="font-size: 14px; color: #92400e; text-align: center; margin: 0;">
+                        <strong>⚠️ Gunakan fitur ini jika terjadi kesalahan dalam menerima proposal</strong>
+                    </p>
+                </div>
+                <p style="font-size: 17px; margin-top: 20px; color: #1f2937; font-weight: 600; text-align: center;">
+                    Apakah Anda yakin ingin <strong style="color: #d97706;">MENGUBAH STATUS</strong> proposal ini?
+                </p>
+            </div>
+        `,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d97706',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: '<span style="font-size: 16px; font-weight: bold;">🔄 Ya, Ubah ke "Diajukan"</span>',
+        cancelButtonText: '<span style="font-size: 16px; font-weight: bold;">❌ Batal</span>',
+        reverseButtons: true,
+        width: '700px',
+        padding: '2em',
+        customClass: {
+            confirmButton: 'swal2-confirm-large',
+            cancelButton: 'swal2-cancel-large',
+            title: 'swal2-title-large',
+            htmlContainer: 'swal2-html-large'
+        },
+        buttonsStyling: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        focusCancel: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Tampilkan loading saat proses
+            Swal.fire({
+                title: 'Sedang Mengubah Status...',
+                html: '<p style="font-size: 16px;">Mohon tunggu sebentar</p>',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            
+            // Submit form revert
+            document.getElementById('revert-form-' + submissionId).submit();
         }
     });
 }

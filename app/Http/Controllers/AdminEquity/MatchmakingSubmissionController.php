@@ -35,7 +35,7 @@ class MatchmakingSubmissionController extends Controller
     public function updateStatus(Request $request, MatchmakingSubmission $submission)
     {
         $validator = Validator::make($request->all(), [
-            'status' => 'required|in:diterima,ditolak_awal',
+            'status' => 'required|in:diterima,ditolak_awal,diajukan',
             'rejection_note' => 'required_if:status,ditolak_awal|nullable|string',
         ]);
 
