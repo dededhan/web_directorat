@@ -26,10 +26,10 @@
         {{-- Header Section --}}
         <div class="mb-8">
             <div class="text-center lg:text-left">
-                <h1 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-3">
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-3">
                     Usulkan Proposal Community Development
                 </h1>
-                <p class="text-gray-600 text-lg max-w-2xl mx-auto lg:mx-0">
+                <p class="text-base sm:text-lg max-w-2xl mx-auto lg:mx-0">
                     Pilih Sesi Community Development yang tersedia
                 </p>
             </div>
@@ -41,7 +41,7 @@
             {{-- Card Header --}}
             <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-8">
                 <div class="text-center lg:text-left">
-                    <h2 class="text-2xl font-bold text-white mb-2">Sesi Proposal Community Development yang Tersedia</h2>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">Sesi Proposal Community Development yang Tersedia</h2>
                     
                 </div>
             </div>
@@ -51,7 +51,7 @@
                 
                 {{-- Desktop Table --}}
                 <div class="hidden lg:block overflow-x-auto">
-                    <table class="w-full text-sm">
+                    <table class="w-full table-auto text-sm">
                         <thead>
                             <tr class="bg-gray-50 border-b border-gray-200">
                                 <th class="text-left py-4 px-6 font-semibold text-gray-700 rounded-tl-lg">
@@ -163,8 +163,8 @@
                             
                             {{-- Card Header --}}
                             <div class="bg-gradient-to-r from-teal-50 to-teal-100 px-5 py-4 border-b border-teal-200">
-                                <h3 class="font-bold text-teal-800 text-lg mb-1">{{ $sesi->nama_sesi }}</h3>
-                                <p class="text-teal-600 text-sm leading-relaxed">{{ $sesi->deskripsi }}</p>
+                                <h3 class="font-bold text-teal-800 text-base sm:text-lg mb-1">{{ $sesi->nama_sesi }}</h3>
+                                <p class="text-teal-600 text-xs sm:text-sm leading-relaxed">{{ $sesi->deskripsi }}</p>
                             </div>
 
                             {{-- Card Content --}}
@@ -172,22 +172,22 @@
                                 
                                 {{-- Dana --}}
                                 <div class="flex items-center justify-between py-2">
-                                    <span class="text-gray-600 font-medium text-sm flex items-center">
+                                    <span class="text-gray-600 font-medium text-xs sm:text-sm flex items-center">
                                         <i class='bx bx-money text-green-500 mr-2 text-lg'></i>
                                         Dana Maksimal
                                     </span>
-                                    <span class="font-bold text-green-600">
+                                    <span class="font-bold text-green-600 text-sm sm:text-base">
                                         Rp {{ number_format($sesi->dana_maksimal, 0, ',', '.') }}
                                     </span>
                                 </div>
 
                                 {{-- Periode --}}
                                 <div class="flex items-start justify-between py-2">
-                                    <span class="text-gray-600 font-medium text-sm flex items-center">
+                                    <span class="text-gray-600 font-medium text-xs sm:text-sm flex items-center">
                                         <i class='bx bx-calendar text-blue-500 mr-2 text-lg'></i>
                                         Periode Submit
                                     </span>
-                                    <div class="text-right text-sm">
+                                    <div class="text-right text-xs sm:text-sm">
                                         <div class="font-semibold text-gray-800">
                                             {{ \Carbon\Carbon::parse($sesi->periode_awal)->isoFormat('D MMM Y') }}
                                         </div>
@@ -199,11 +199,11 @@
 
                                 {{-- Anggota --}}
                                 <div class="flex items-center justify-between py-2">
-                                    <span class="text-gray-600 font-medium text-sm flex items-center">
+                                    <span class="text-gray-600 font-medium text-xs sm:text-sm flex items-center">
                                         <i class='bx bx-group text-purple-500 mr-2 text-lg'></i>
                                         Anggota Tim
                                     </span>
-                                    <span class="font-semibold text-gray-700">
+                                    <span class="font-semibold text-gray-700 text-sm sm:text-base">
                                         {{ $sesi->min_anggota }} - {{ $sesi->max_anggota }} Orang
                                     </span>
                                 </div>
@@ -218,7 +218,7 @@
 
                                     @if (\Carbon\Carbon::now()->isAfter(\Carbon\Carbon::parse($sesi->periode_akhir)->endOfDay()))
                                         <div class="text-center">
-                                            <span class="inline-flex items-center px-4 py-3 bg-gray-100 text-gray-500 font-medium rounded-xl text-sm w-full justify-center">
+                                            <span class="inline-flex items-center px-4 py-3 bg-gray-100 text-gray-500 font-medium rounded-xl text-xs sm:text-sm w-full justify-center">
                                                 <i class='bx bx-lock mr-2'></i>
                                                 Sudah Ditutup
                                             </span>
@@ -226,14 +226,14 @@
                                     @else
                                         <div class="space-y-3">
                                             <a href="{{ route('subdirektorat-inovasi.dosen.equity.proposal.createIdentitas', $sesi->id) }}" 
-                                               class="flex items-center justify-center px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-lg w-full">
+                                               class="flex items-center justify-center px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-lg w-full text-sm sm:text-base">
                                                 <i class='bx bx-plus-circle mr-2 text-lg'></i>
                                                 Usulkan Baru
                                             </a>
 
                                             @if ($draftCount > 0 || $submittedCount > 0)
                                                 <a href="{{ route('subdirektorat-inovasi.dosen.equity.manajement.index') }}?sesi_id={{ $sesi->id }}" 
-                                                   class="block text-center text-sky-600 hover:text-sky-800 text-sm font-medium hover:underline transition-colors duration-200">
+                                                   class="block text-center text-sky-600 hover:text-sky-800 text-xs sm:text-sm font-medium hover:underline transition-colors duration-200">
                                                     <i class='bx bx-file-find mr-1'></i>
                                                     Lihat Proposal Saya ({{ $draftCount }} Draft, {{ $submittedCount }} Diajukan)
                                                 </a>
