@@ -232,6 +232,7 @@
             </div>
 
             <!-- Settings Section -->
+                            @if(auth()->user()->role !== 'sub_admin_equity')
             <div class="pt-3">
                 <h3 x-show="open || mobileOpen" class="px-3 pb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Pengaturan</h3>
                 <a href="{{ route('admin_equity.manageuser.index') }}"
@@ -241,6 +242,8 @@
                     <span x-show="open || mobileOpen" class="font-medium">Manajemen Pengguna</span>
                 </a>
             </div>
+                @endif
+
 
         </nav>
 
