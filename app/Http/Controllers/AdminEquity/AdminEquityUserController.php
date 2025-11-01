@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\UserProfile;
 use App\Models\Fakultas;
 use App\Models\Prodi;
+use App\Models\SubAdminAssignment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -23,7 +24,7 @@ class AdminEquityUserController extends Controller
         $prodiId = $request->input('prodi_id');
 
         $query = User::whereIn('role', ['dosen', 'reviewer_equity', 'reviewer_hibah', 'equity_fakultas', 'sub_admin_equity'])
-            ->with('profile.prodi.fakultas', 'profile.fakultas');
+            ->with('profile.prodi.fakultas', 'profile.fakultas', 'subAdminAssignment');
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
@@ -57,7 +58,8 @@ class AdminEquityUserController extends Controller
     public function create()
     {
         $fakultas = Fakultas::orderBy('name')->get();
-        return view('admin_equity.manageuser.create', compact('fakultas'));
+        $availableModules = SubAdminAssignment::availableModules();
+        return view('admin_equity.manageuser.create', compact('fakultas', 'availableModules'));
     }
 
     public function store(Request $request)
@@ -75,6 +77,8 @@ class AdminEquityUserController extends Controller
                 'exists:equity_fakultas,id',
                 Rule::unique('equity_user_profiles', 'fakultas_id')
             ],
+            'assigned_modules' => 'nullable|required_if:role,sub_admin_equity|array|min:1',
+            'assigned_modules.*' => 'string',
         ]);
 
         DB::beginTransaction();
@@ -99,8 +103,14 @@ class AdminEquityUserController extends Controller
                     'user_id' => $user->id,
                     'fakultas_id' => $validated['fakultas_id'],
                 ]);
+            } elseif ($validated['role'] === 'sub_admin_equity') {
+                // Buat assignment untuk sub_admin_equity
+                SubAdminAssignment::create([
+                    'user_id' => $user->id,
+                    'assigned_modules' => $validated['assigned_modules'] ?? [],
+                ]);
             }
-            // sub_admin_equity dan reviewer_equity tidak perlu profile
+            // reviewer_equity tidak perlu profile
             
             DB::commit();
             return redirect()->route('admin_equity.manageuser.index')->with('success', 'User berhasil dibuat.');
@@ -117,8 +127,9 @@ class AdminEquityUserController extends Controller
         if (!in_array($user->role, ['dosen', 'reviewer_equity', 'equity_fakultas', 'sub_admin_equity'])) {
             abort(404);
         }
-        $user->load('profile.prodi.fakultas', 'profile.fakultas');
-        return view('admin_equity.manageuser.show', compact('user'));
+        $user->load('profile.prodi.fakultas', 'profile.fakultas', 'subAdminAssignment');
+        $availableModules = SubAdminAssignment::availableModules();
+        return view('admin_equity.manageuser.show', compact('user', 'availableModules'));
     }
 
 
@@ -127,7 +138,7 @@ class AdminEquityUserController extends Controller
          if (!in_array($user->role, ['dosen', 'reviewer_equity', 'equity_fakultas', 'sub_admin_equity'])) {
             abort(404);
         }
-        $user->load('profile.prodi.fakultas', 'profile.fakultas');
+        $user->load('profile.prodi.fakultas', 'profile.fakultas', 'subAdminAssignment');
         $fakultas = Fakultas::orderBy('name')->get();
         
         $fakultasIdForProdi = old('fakultas_id', $user->profile?->prodi?->fakultas_id);
@@ -136,7 +147,9 @@ class AdminEquityUserController extends Controller
             ? Prodi::where('fakultas_id', $fakultasIdForProdi)->orderBy('name')->get() 
             : collect();
 
-        return view('admin_equity.manageuser.edit', compact('user', 'fakultas', 'prodi'));
+        $availableModules = SubAdminAssignment::availableModules();
+
+        return view('admin_equity.manageuser.edit', compact('user', 'fakultas', 'prodi', 'availableModules'));
     }
 
     public function update(Request $request, User $user)
@@ -154,6 +167,8 @@ class AdminEquityUserController extends Controller
                 'exists:equity_fakultas,id',
                 Rule::unique('equity_user_profiles', 'fakultas_id')->ignore($user->profile->id ?? null)
             ],
+            'assigned_modules' => 'nullable|required_if:role,sub_admin_equity|array|min:1',
+            'assigned_modules.*' => 'string',
         ]);
 
         DB::beginTransaction();
@@ -180,6 +195,8 @@ class AdminEquityUserController extends Controller
                         'fakultas_id' => null,
                     ]
                 );
+                // Hapus assignment jika ada
+                $user->subAdminAssignment()->delete();
             } elseif ($validated['role'] === 'equity_fakultas') {
                 $user->profile()->updateOrCreate(
                     ['user_id' => $user->id],
@@ -189,10 +206,24 @@ class AdminEquityUserController extends Controller
                         'identifier_number' => null,
                     ]
                 );
-            } else {
+                // Hapus assignment jika ada
+                $user->subAdminAssignment()->delete();
+            } elseif ($validated['role'] === 'sub_admin_equity') {
+                // Update atau create assignment
+                $user->subAdminAssignment()->updateOrCreate(
+                    ['user_id' => $user->id],
+                    ['assigned_modules' => $validated['assigned_modules'] ?? []]
+                );
+                // Hapus profile jika ada
                 if($user->profile){
                     $user->profile()->delete();
                 }
+            } else {
+                // Role reviewer_equity, hapus profile dan assignment jika ada
+                if($user->profile){
+                    $user->profile()->delete();
+                }
+                $user->subAdminAssignment()->delete();
             }
             
             DB::commit();

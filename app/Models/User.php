@@ -106,4 +106,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(SulitestPesertaProfile::class);
     }
+
+    public function subAdminAssignment(): HasOne
+    {
+        return $this->hasOne(SubAdminAssignment::class);
+    }
 }

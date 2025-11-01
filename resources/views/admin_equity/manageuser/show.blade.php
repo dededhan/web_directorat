@@ -87,6 +87,28 @@
                      </dl>
                 </div>
                 @endif
+
+                @if($user->role == 'sub_admin_equity' && $user->subAdminAssignment)
+                <div class="md:col-span-2 pt-6 border-t mt-2">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
+                        <i class='bx bx-sitemap text-blue-600 mr-2'></i>
+                        Assignment Modul Tugas
+                    </h3>
+                    <div class="bg-blue-50 rounded-xl p-4 border border-blue-200">
+                        <p class="text-sm text-gray-600 mb-3">Sub Admin ini memiliki akses ke modul berikut:</p>
+                        <div class="flex flex-wrap gap-2">
+                            @forelse($user->subAdminAssignment->assigned_modules ?? [] as $moduleKey)
+                                <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+                                    <i class='bx bx-check-circle text-base mr-1.5'></i>
+                                    {{ $availableModules[$moduleKey] ?? $moduleKey }}
+                                </span>
+                            @empty
+                                <span class="text-gray-500 text-sm italic">Tidak ada modul yang di-assign</span>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+                @endif
             </dl>
         </div>
 
