@@ -20,11 +20,15 @@
                     <p class="mt-2 text-gray-600 text-base">Kelola semua sesi matchmaking riset yang tersedia.</p>
                 </div>
                 <div class="flex-shrink-0">
-                    <a href="{{ route('admin_equity.matchresearch.create') }}"
+                    @if(auth()->user()->role !== 'sub_admin_equity')
+                                        <a href="{{ route('admin_equity.matchresearch.create') }}"
                         class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
                         <i class='bx bxs-add-to-queue mr-2 text-lg'></i>
                         Buat Sesi Baru
                     </a>
+
+@endif
+
                 </div>
             </div>
         </header>
@@ -178,7 +182,9 @@
                                                         <i class='bx bx-show mr-3 text-lg text-blue-500'></i>
                                                         Lihat Pengajuan
                                                     </a>
-                                                    <a href="{{ route('admin_equity.matchresearch.edit', $session->id) }}"
+                                                    @if(auth()->user()->role !== 'sub_admin_equity')
+
+                                                                                                        <a href="{{ route('admin_equity.matchresearch.edit', $session->id) }}"
                                                         class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-yellow-50 hover:text-yellow-700 transition-colors"
                                                         role="menuitem">
                                                         <i class='bx bxs-edit mr-3 text-lg text-yellow-600'></i>
@@ -195,6 +201,8 @@
                                                         @csrf
                                                         @method('DELETE')
                                                     </form>
+@endif
+
                                                 </div>
                                             </div>
                                         </div>

@@ -19,11 +19,14 @@
                     <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Manajemen Sesi Comdev</h1>
                     <p class="mt-2 text-gray-600 text-base">Kelola semua sesi Community Development yang tersedia dalam sistem.</p>
                 </div>
-                <div class="flex-shrink-0">
-                    <a href="{{ route('admin_equity.comdev.create') }}" class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
+                <div class="flex-shrink-0">@if(auth()->user()->role !== 'sub_admin_equity')
+                                        <a href="{{ route('admin_equity.comdev.create') }}" class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
                         <i class='bx bxs-add-to-queue mr-2 text-lg'></i>
                         Buat Sesi Baru
                     </a>
+
+@endif
+
                 </div>
             </div>
         </header>
@@ -181,7 +184,10 @@
                                                     <i class='bx bx-show mr-3 text-lg text-blue-500'></i>
                                                     Lihat Proposal Masuk
                                                 </a>
-                                                <a href="{{ route('admin_equity.comdev.modules.index', $session->id) }}"
+                                                
+
+                                                @if(auth()->user()->role !== 'sub_admin_equity')
+                                                                                                <a href="{{ route('admin_equity.comdev.modules.index', $session->id) }}"
                                                     class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
                                                     role="menuitem">
                                                     <i class='bx bx-cog mr-3 text-lg text-purple-500'></i>
@@ -193,7 +199,6 @@
                                                     <i class='bx bxs-edit mr-3 text-lg text-yellow-500'></i>
                                                     Edit Sesi
                                                 </a>
-                                                @if(auth()->user()->role !== 'sub_admin_equity')
                                                 <form method="POST" action="{{ route('admin_equity.comdev.destroy', $session->id) }}" x-ref="deleteForm{{$session->id}}" class="block">
                                                     @csrf
                                                     @method('DELETE')
@@ -220,10 +225,14 @@
                                             </div>
                                             <h3 class="font-bold text-xl text-gray-800 mb-2">Belum Ada Sesi Comdev</h3>
                                             <p class="text-gray-500 mb-8 max-w-md">Mulailah dengan membuat sesi Community Development baru untuk memulai program pengabdian masyarakat.</p>
-                                            <a href="{{ route('admin_equity.comdev.create') }}" class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
+                                            @if(auth()->user()->role !== 'sub_admin_equity')
+                                                                                        <a href="{{ route('admin_equity.comdev.create') }}" class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
                                                 <i class='bx bxs-add-to-queue mr-2 text-lg'></i>
                                                 Buat Sesi Baru
                                             </a>
+
+@endif
+
                                         </div>
                                     </div>
                                 </td>

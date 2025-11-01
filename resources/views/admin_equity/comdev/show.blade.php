@@ -60,9 +60,12 @@
              <a href="{{ route('admin_equity.comdev.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition">
                 <i class='bx bx-arrow-back text-lg mr-2'></i> Kembali
             </a>
+                                        @if(auth()->user()->role !== 'sub_admin_equity')
             <a href="{{ route('admin_equity.comdev.edit', $session->id) }}" class="inline-flex items-center px-4 py-2 bg-yellow-500 border border-transparent rounded-md font-semibold text-sm text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition">
                 <i class='bx bxs-edit text-lg mr-2'></i> Edit Sesi
             </a>
+                @endif
+
             <a href="{{ route('admin_equity.comdev.submissions.index', $session->id) }}" class="inline-flex items-center px-4 py-2 bg-[#11A697] border border-transparent rounded-md font-semibold text-sm text-white hover:bg-[#0e8a7c] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#11A697] transition">
                 <i class='bx bx-file-find text-lg mr-2'></i> Lihat Proposal Masuk
             </a>
