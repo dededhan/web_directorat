@@ -239,6 +239,22 @@
                                         <div class="text-sm">
                                             <div class="font-medium text-gray-900">{{ $user->profile->fakultas->name ?? 'N/A' }}</div>
                                         </div>
+                                    @elseif($user->role == 'sub_admin_equity' && $user->subAdminAssignment)
+                                        <div class="text-sm">
+                                            <div class="flex flex-wrap gap-1">
+                                                @php
+                                                    $moduleCount = count($user->subAdminAssignment->assigned_modules ?? []);
+                                                @endphp
+                                                @if($moduleCount > 0)
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700">
+                                                        <i class='bx bx-sitemap mr-1'></i>
+                                                        {{ $moduleCount }} modul
+                                                    </span>
+                                                @else
+                                                    <span class="text-gray-400 text-xs italic">Belum ada assignment</span>
+                                                @endif
+                                            </div>
+                                        </div>
                                     @else
                                         <span class="text-gray-400 text-sm">-</span>
                                     @endif
@@ -349,6 +365,21 @@
                                         <i class='bx bx-building mr-2 text-gray-400 mt-0.5'></i>
                                         <div>
                                             <div class="font-medium text-gray-900">{{ $user->profile->fakultas->name ?? 'N/A' }}</div>
+                                        </div>
+                                    </div>
+                                @elseif($user->role == 'sub_admin_equity' && $user->subAdminAssignment)
+                                    <div class="flex items-start text-sm">
+                                        <i class='bx bx-sitemap mr-2 text-blue-400 mt-0.5'></i>
+                                        <div>
+                                            @php
+                                                $moduleCount = count($user->subAdminAssignment->assigned_modules ?? []);
+                                            @endphp
+                                            @if($moduleCount > 0)
+                                                <div class="font-medium text-gray-900">{{ $moduleCount }} modul di-assign</div>
+                                                <div class="text-xs text-gray-500 mt-1">Klik detail untuk melihat modul</div>
+                                            @else
+                                                <div class="text-gray-500 italic">Belum ada assignment</div>
+                                            @endif
                                         </div>
                                     </div>
                                 @endif

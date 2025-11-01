@@ -100,6 +100,7 @@
             <div class="pt-3">
                 <h3 x-show="open || mobileOpen" class="px-3 pb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Equity Programs</h3>
                 
+                @if(isset($hasAccessTo['comdev']) && $hasAccessTo['comdev'])
                 <!-- 1. Community Development Dropdown -->
                 <button @click="comdevOpen = !comdevOpen" 
                         class="flex w-full items-center rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700 group"
@@ -126,7 +127,9 @@
                         <span>Laporan</span>
                     </a>
                 </div>
+                @endif
 
+                @if(isset($hasAccessTo['hibah_modul']) && $hasAccessTo['hibah_modul'])
                 <!-- 2. Hibah Modul Ajar Dropdown -->
                 <button @click="hibahModulOpen = !hibahModulOpen" 
                         class="flex w-full items-center rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700 group"
@@ -148,7 +151,9 @@
                         <span>Kelola Sesi</span>
                     </a>
                 </div>
+                @endif
 
+                @if(isset($hasAccessTo['apc']) && $hasAccessTo['apc'])
                 <!-- 3. APC -->
                 <a href="{{ route('admin_equity.apc.index') }}"
                    class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.apc.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
@@ -156,32 +161,36 @@
                     <i class='bx bxs-file-doc text-2xl flex-shrink-0'></i>
                     <span x-show="open || mobileOpen" class="font-medium">Article Processing Cost</span>
                 </a>
+                @endif
 
+                @if(isset($hasAccessTo['fee_reviewer']) && $hasAccessTo['fee_reviewer'])
                  <a href="{{ route('admin_equity.fee_reviewer.index') }}"
                    class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.fee_reviewer.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
                    :class="{'justify-center': !open && !mobileOpen}">
                     <i class='bx bxs-award text-2xl flex-shrink-0'></i>
                     <span x-show="open || mobileOpen" class="font-medium">Insentif Reviewer</span>
                 </a>
+                @endif
 
+                @if(isset($hasAccessTo['fee_editor']) && $hasAccessTo['fee_editor'])
                 <a href="{{ route('admin_equity.fee_editor.index') }}"
                    class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.fee_editor.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
                    :class="{'justify-center': !open && !mobileOpen}">
                     <i class='bx bxs-edit text-2xl flex-shrink-0'></i>
                     <span x-show="open || mobileOpen" class="font-medium">Insentif Editor</span>
                 </a>
+                @endif
 
+                @if(isset($hasAccessTo['presenting']) && $hasAccessTo['presenting'])
                 <a href="{{ route('admin_equity.presenting.index') }}"
                    class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.presenting.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
                    :class="{'justify-center': !open && !mobileOpen}">
                     <i class='bx bxs-slideshow text-2xl flex-shrink-0'></i>
                     <span x-show="open || mobileOpen" class="font-medium">Bantuan Presentasi</span>
                 </a>
+                @endif
 
-                <!-- 3. Incentive -->
-                
-            
-
+                @if(isset($hasAccessTo['matchresearch']) && $hasAccessTo['matchresearch'])
                 <!-- 5. Matchmaking Riset-->
                 <a href="{{ route('admin_equity.matchresearch.index') }}"
                    class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.matchresearch.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
@@ -189,7 +198,9 @@
                     <i class='bx bx-user-voice text-2xl flex-shrink-0'></i>
                     <span x-show="open || mobileOpen" class="font-medium">Matchmaking Riset</span>
                 </a>
+                @endif
 
+                @if(isset($hasAccessTo['visiting_professors']) && $hasAccessTo['visiting_professors'])
                 <!-- 6. Visiting Professors -->
                 <a href="{{ route('admin_equity.visiting-professors.index') }}"
                    class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.visiting-professors.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
@@ -197,7 +208,9 @@
                     <i class='bx bxs-user-voice text-2xl flex-shrink-0'></i>
                     <span x-show="open || mobileOpen" class="font-medium">Visiting Professors</span>
                 </a>
+                @endif
                 
+                @if(isset($hasAccessTo['joint_supervision']) && $hasAccessTo['joint_supervision'])
                 <!-- 7. Joint Supervision -->
                 <a href="{{ route('admin_equity.joint-supervision.index') }}"
                    class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.joint-supervision.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
@@ -205,7 +218,9 @@
                     <i class='bx bxs-graduation text-2xl flex-shrink-0'></i>
                     <span x-show="open || mobileOpen" class="font-medium">Joint Supervision</span>
                 </a>
+                @endif
 
+                @if(isset($hasAccessTo['employer_meetings']) && $hasAccessTo['employer_meetings'])
                 {{-- 8 employer meeting --}}
                 <a href="{{ route('admin_equity.employer-meetings.index') }}"
                    class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.employer-meetings.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
@@ -213,9 +228,11 @@
                     <i class='bx bx-briefcase-alt text-2xl flex-shrink-0'></i>
                     <span x-show="open || mobileOpen" class="font-medium">Employer Meetings</span>
                 </a>
+                @endif
             </div>
 
             <!-- Settings Section -->
+                            @if(auth()->user()->role !== 'sub_admin_equity')
             <div class="pt-3">
                 <h3 x-show="open || mobileOpen" class="px-3 pb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Pengaturan</h3>
                 <a href="{{ route('admin_equity.manageuser.index') }}"
@@ -225,6 +242,8 @@
                     <span x-show="open || mobileOpen" class="font-medium">Manajemen Pengguna</span>
                 </a>
             </div>
+                @endif
+
 
         </nav>
 

@@ -286,6 +286,53 @@
                         </div>
                     </div>
 
+                    {{-- Sub Admin Equity Module Assignment Section --}}
+                    <div x-show="selectedRole === 'sub_admin_equity'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform -translate-y-4" x-transition:enter-end="opacity-100 transform translate-y-0" class="space-y-6">
+                        <div class="flex items-center space-x-3 pb-4 border-b border-gray-200">
+                            <div class="p-2 bg-blue-100 rounded-lg">
+                                <i class='bx bx-sitemap text-blue-600 text-lg'></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900">Assignment Modul Tugas</h3>
+                            <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full font-medium">Khusus Sub Admin</span>
+                        </div>
+                        
+                        <div class="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                            <p class="text-sm text-gray-600 mb-4 flex items-start">
+                                <i class='bx bx-info-circle text-blue-500 text-lg mr-2 flex-shrink-0 mt-0.5'></i>
+                                <span>Pilih modul-modul yang dapat diakses oleh Sub Admin Equity ini. Sub Admin hanya akan melihat menu yang telah di-assign.</span>
+                            </p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                @foreach($availableModules as $key => $name)
+                                <label class="flex items-start p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-blue-400 cursor-pointer transition-all duration-200 group">
+                                    <input type="checkbox" name="assigned_modules[]" value="{{ $key }}" 
+                                           class="mt-1 h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 cursor-pointer"
+                                           @if(is_array(old('assigned_modules')) && in_array($key, old('assigned_modules'))) checked @endif>
+                                    <div class="ml-3">
+                                        <span class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-200">
+                                            {{ $name }}
+                                        </span>
+                                    </div>
+                                </label>
+                                @endforeach
+                            </div>
+                            
+                            @error('assigned_modules')
+                                <p class="text-red-500 text-sm mt-3 flex items-center">
+                                    <i class='bx bx-error-circle mr-1'></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                            
+                            @error('assigned_modules.*')
+                                <p class="text-red-500 text-sm mt-3 flex items-center">
+                                    <i class='bx bx-error-circle mr-1'></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                    </div>
+
                 </div>
 
                 {{-- Enhanced Form Actions --}}
