@@ -12,7 +12,7 @@
         * {
             font-family: Arial, sans-serif !important;
         }
-        
+
         body {
             font-family: Arial, sans-serif;
         }
@@ -78,13 +78,25 @@
             margin-bottom: 20px;
         }
 
-        .input-group i {
+        .input-group i.left-icon {
             position: absolute;
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
             color: #aaa;
             z-index: 10;
+        }
+        
+        /* Gaya untuk ikon mata */
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            cursor: pointer;
+            z-index: 10;
+            padding: 5px; /* Area klik yang lebih besar */
         }
 
         .decoration-icons {
@@ -163,14 +175,16 @@
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
                             <div class="input-group">
-                                <i class="fas fa-envelope"></i>
+                                <i class="fas fa-envelope left-icon"></i>
                                 <input type="email" name="email" placeholder="Email" required
                                     class="w-full py-3 px-12 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:border-teal-800 focus:ring-2 focus:ring-teal-800 focus:ring-opacity-20 transition-all duration-300" />
                             </div>
                             <div class="input-group">
-                                <i class="fas fa-lock"></i>
-                                <input type="password" name="password" placeholder="Password" required
-                                    class="w-full py-3 px-12 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:border-teal-800 focus:ring-2 focus:ring-teal-800 focus:ring-opacity-20 transition-all duration-300" />
+                                <i class="fas fa-lock left-icon"></i>
+                                <input type="password" name="password" id="passwordInput" placeholder="Password" required
+                                    class="w-full py-3 pl-12 pr-12 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:border-teal-800 focus:ring-2 focus:ring-teal-800 focus:ring-opacity-20 transition-all duration-300" />
+                                {{-- Ikon Mata untuk toggle password visibility --}}
+                                <i class="fas fa-eye toggle-password" id="togglePassword"></i> 
                             </div>
 
                             <div class="flex justify-center my-4">
@@ -231,40 +245,52 @@
             const modal = document.getElementById('loginModal');
             const loginButtons = document.querySelectorAll('.login');
             
-            // This function handles closing the mobile sidebar.
+            // Elemen untuk toggle password
+            const passwordInput = document.getElementById('passwordInput');
+            const togglePassword = document.getElementById('togglePassword');
+
+            // 1. Fungsi Toggle Password
+            if (togglePassword && passwordInput) {
+                togglePassword.addEventListener('click', function() {
+                    // Cek tipe input: jika 'password', ubah ke 'text', jika 'text', ubah ke 'password'
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    // Ganti ikon mata
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash'); // Menggunakan ikon mata tertutup
+                });
+            }
+
+            // Ini fungsi untuk menutup sidebar di mobile (dari kode lama)
             const closeMobileSidebar = () => {
                 const mobileSidebar = document.getElementById('mobile-sidebar');
                 const sidebarOverlay = document.getElementById('sidebar-overlay');
                 
-                // Check if the elements exist before trying to modify them.
                 if (mobileSidebar) {
-                    // Hide sidebar by moving it off-screen.
                     mobileSidebar.style.transform = 'translateX(100%)';
                 }
                 if (sidebarOverlay) {
-                    // Hide overlay and make it non-interactive.
                     sidebarOverlay.style.opacity = '0';
                     sidebarOverlay.style.pointerEvents = 'none';
                 }
-                // It's also good practice to have a class on the body to track sidebar state,
-                // which should be removed here if it exists.
                 document.body.classList.remove('sidebar-open');
             };
 
+            // Logika menampilkan modal login
             loginButtons.forEach(button => {
                 button.addEventListener('click', function(e) {
-                    // Prevent default anchor behavior
                     e.preventDefault();
                     
-                    // **THE FIX**: First, call the function to close the sidebar.
+                    // Tutup sidebar mobile sebelum menampilkan modal
                     closeMobileSidebar();
                     
-                    // Then, show the login modal.
+                    // Tampilkan modal
                     modal.classList.remove('hidden');
                 });
             });
 
-            // Logic to close the modal when clicking on the background overlay.
+            // Logika menutup modal ketika klik di luar area modal
             modal.addEventListener('click', function(e) {
                 if (e.target === modal) {
                     modal.classList.add('hidden');
