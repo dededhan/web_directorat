@@ -80,13 +80,16 @@
                                         <a href="{{ route('admin_equity.joint-supervision.show', $submission->id) }}" class="p-2 text-teal-600 bg-teal-100 rounded-lg hover:bg-teal-200 transition-colors" title="Lihat Detail">
                                             <i class='bx bx-search-alt'></i>
                                         </a>
+                                        @if(auth()->user()->role !== 'sub_admin_equity')
                                         <button @click="confirmDelete({{ $submission->id }})" class="p-2 text-red-600 bg-red-100 rounded-lg hover:bg-red-200 transition-colors" title="Hapus">
                                             <i class='bx bx-trash'></i>
                                         </button>
+
                                         <form method="POST" action="#" x-ref="deleteForm{{$submission->id}}" class="hidden">
                                             @csrf
                                             @method('DELETE')
                                         </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
