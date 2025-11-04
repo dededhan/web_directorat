@@ -73,7 +73,7 @@ class SubmissionsExportcomdev implements FromQuery, WithHeadings, WithMapping, S
     {
         // Definisikan judul kolom di file Excel
         return [
-            'ID Proposal',
+            'No',
             'Judul Proposal',
             'Ketua Pengusul',
             'Email Pengusul',
@@ -92,7 +92,7 @@ class SubmissionsExportcomdev implements FromQuery, WithHeadings, WithMapping, S
     {
         // Format setiap baris data
         return [
-            $submission->id,
+            $this->rowNumber++, 
             $submission->judul,
             $submission->user->name ?? 'N/A',
             $submission->user->email ?? 'N/A',
