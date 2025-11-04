@@ -59,7 +59,7 @@
                     Inovasi UNJ <i class="fas fa-chevron-down fa-xs"></i>
                 </button>
                 <ul id="inovasi-dropdown" class="absolute right-0 mt-2 w-56 bg-white text-gray-700 rounded-md shadow-lg py-2 hidden">
-                    <li><a href="https://lppm.unj.ac.id/" target="_blank" rel="noopener noreferrer" class="block px-4 py-2 text-sm hover:bg-gray-100">Riset UNJ</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer" class="block px-4 py-2 text-sm hover:bg-gray-100">Riset UNJ</a></li>
                     <li><a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}" class="block px-4 py-2 text-sm hover:bg-gray-100">Produk Inovasi UNJ</a></li>
                 </ul>
             </li>
