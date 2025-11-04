@@ -419,23 +419,85 @@
                 </div>
                 <form id="assignReviewerForm"
                     action="{{ route('admin_equity.comdev.submissions.assignReviewer', ['comdev' => $comdev->id, 'submission' => $submission->id]) }}"
-                    method="POST" class="p-6">
+                    method="POST" class="p-6 space-y-4">
                     @csrf
+                    
+                    @php
+                        $assignedReviewersList = $reviewers->whereIn('id', $assignedReviewers);
+                        $unassignedReviewersList = $reviewers->whereNotIn('id', $assignedReviewers);
+                    @endphp
+                    
+                    @if($assignedReviewersList->count() > 0)
                     <div class="mb-4">
-                        <label for="reviewers" class="block text-sm font-medium text-gray-700 mb-1">Pilih
-                            Reviewer</label>
-                        <select name="reviewers[]" id="reviewers" multiple
-                            class="block w-full h-48 rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50">
-                            @foreach ($reviewers as $reviewer)
-                                <option value="{{ $reviewer->id }}"
-                                    {{ in_array($reviewer->id, $assignedReviewers) ? 'selected' : '' }}>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class='bx bx-user-check mr-1'></i>Reviewer yang Ditugaskan ({{ $assignedReviewersList->count() }})
+                        </label>
+                        <div class="space-y-2">
+                            @foreach ($assignedReviewersList as $reviewer)
+                                @php
+                                    $hasComments = in_array($reviewer->id, $reviewerIdsWithComments);
+                                @endphp
+                                <div class="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-green-200 text-green-700">
+                                            <i class='bx bxs-user'></i>
+                                        </span>
+                                        <div>
+                                            <p class="text-sm font-semibold text-gray-900">{{ $reviewer->name }}</p>
+                                            @if($hasComments)
+                                                <p class="text-xs text-green-600">
+                                                    <i class='bx bxs-message-check'></i> Sudah memberikan komentar
+                                                </p>
+                                            @else
+                                                <p class="text-xs text-gray-500">
+                                                    <i class='bx bx-time'></i> Belum memberikan komentar
+                                                </p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <button type="button" 
+                                        onclick="removeReviewer({{ $reviewer->id }}, '{{ $reviewer->name }}', {{ $hasComments ? 'true' : 'false' }})"
+                                        class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-md {{ $hasComments ? 'bg-red-100 text-red-700 hover:bg-red-200 cursor-not-allowed opacity-60' : 'bg-red-500 text-white hover:bg-red-600' }} transition">
+                                        <i class='bx bx-x mr-1'></i> Batalkan
+                                    </button>
+                                </div>
+                                <input type="hidden" name="reviewers[]" value="{{ $reviewer->id }}" id="reviewer_{{ $reviewer->id }}">
+                            @endforeach
+                        </div>
+                        <p class="text-xs text-green-600 mt-2">
+                            <i class='bx bx-info-circle'></i> Klik tombol <strong>"Batalkan"</strong> untuk menghapus penugasan reviewer
+                        </p>
+                    </div>
+                    @endif
+                    
+                    @if($unassignedReviewersList->count() > 0)
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class='bx bx-user-plus mr-1'></i>Reviewer Tersedia ({{ $unassignedReviewersList->count() }})
+                        </label>
+                        <select name="reviewers[]" id="availableReviewers" multiple
+                            class="block w-full h-32 rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50 bg-gray-50">
+                            @foreach ($unassignedReviewersList as $reviewer)
+                                <option value="{{ $reviewer->id }}" class="py-1">
                                     {{ $reviewer->name }}
                                 </option>
                             @endforeach
                         </select>
-                        <p class="text-xs text-gray-500 mt-2">Gunakan Ctrl + Klik (atau Cmd + Klik di Mac) untuk
-                            memilih lebih dari satu.</p>
+                        <p class="text-xs text-gray-500 mt-1">
+                            <i class='bx bx-info-circle'></i> Gunakan <strong>Ctrl + Klik</strong> untuk memilih lebih dari satu reviewer
+                        </p>
                     </div>
+                    @endif
+                    
+                    <div class="text-xs text-gray-500 bg-blue-50 p-3 rounded border border-blue-200 space-y-1">
+                        <p><i class='bx bx-info-circle mr-1'></i><strong>Cara Penggunaan:</strong></p>
+                        <ul class="list-disc list-inside pl-3 space-y-1">
+                            <li>Pilih reviewer dari daftar <strong>"Reviewer Tersedia"</strong> untuk menugaskan</li>
+                            <li>Klik tombol <strong>"Batalkan"</strong> pada reviewer yang sudah ditugaskan untuk menghapus penugasan</li>
+                            <li>Reviewer yang sudah berkomentar <strong>tidak dapat dibatalkan</strong></li>
+                        </ul>
+                    </div>
+                    
                     <button type="submit"
                         class="w-full inline-flex items-center justify-center px-4 py-2 bg-[#11A697] text-white rounded-md font-semibold hover:bg-[#0e8a7c] transition">
                         <i class='bx bx-save mr-2'></i> Simpan Penugasan
@@ -453,52 +515,123 @@
         // Ambil data dari PHP Controller
         const reviewersWithComments = @json($reviewerIdsWithComments);
         const initialAssignedReviewers = @json($assignedReviewers);
-        const form = document.getElementById('assignReviewerForm'); // Beri ID pada form Anda
+        const form = document.getElementById('assignReviewerForm');
 
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Hentikan submit form sementara
+        // Fungsi untuk membatalkan reviewer
+        function removeReviewer(reviewerId, reviewerName, hasComments) {
+            // Jika reviewer sudah berkomentar, tampilkan peringatan dan blokir
+            if (hasComments) {
+                Swal.fire({
+                    title: 'Tidak Dapat Dibatalkan!',
+                    html: `Reviewer <strong>${reviewerName}</strong> sudah memberikan komentar pada proposal ini.<br><br>Penugasan reviewer yang sudah berkomentar <strong>tidak dapat dibatalkan</strong> untuk menjaga integritas data review.`,
+                    icon: 'error',
+                    confirmButtonColor: '#11A697',
+                    confirmButtonText: '<i class="bx bx-check"></i> Mengerti',
+                    allowOutsideClick: false
+                });
+                return;
+            }
+
+            // Jika belum berkomentar, tampilkan konfirmasi
             Swal.fire({
-                title: 'Simpan Penugasan?',
-                text: "Apakah Anda yakin ingin menyimpan perubahan pada penugasan reviewer?",
-                icon: 'question',
+                title: 'Batalkan Penugasan?',
+                html: `Apakah Anda yakin ingin membatalkan penugasan reviewer <strong>${reviewerName}</strong>?<br><br>Tindakan ini akan menghapus reviewer dari daftar penugasan proposal ini.`,
+                icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#11A697', // Warna tombol konfirmasi
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Simpan!',
-                cancelButtonText: 'Batal'
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: '<i class="bx bx-check"></i> Ya, Batalkan!',
+                cancelButtonText: '<i class="bx bx-x"></i> Batal',
+                allowOutsideClick: false,
+                allowEscapeKey: false
             }).then((result) => {
-                // Jika pengguna menekan tombol "Ya, Simpan!"
                 if (result.isConfirmed) {
-                    // Lanjutkan proses submit form secara manual
-                    form.submit();
+                    // Hapus hidden input untuk reviewer ini
+                    const hiddenInput = document.getElementById(`reviewer_${reviewerId}`);
+                    if (hiddenInput) {
+                        hiddenInput.remove();
+                    }
+
+                    // Tampilkan notifikasi sukses dan reload halaman
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Penugasan reviewer akan dihapus setelah Anda menyimpan perubahan.',
+                        icon: 'success',
+                        confirmButtonColor: '#11A697',
+                        confirmButtonText: '<i class="bx bx-check"></i> OK',
+                        timer: 2000,
+                        timerProgressBar: true
+                    }).then(() => {
+                        // Submit form untuk menyimpan perubahan
+                        form.submit();
+                    });
                 }
             });
+        }
 
-            const selectedOptions = document.getElementById('reviewers').selectedOptions;
-            const newlyAssignedIds = Array.from(selectedOptions).map(el => parseInt(el.value));
+        // Event listener untuk form submit
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Hentikan submit form sementara
+
+            // Ambil semua reviewer yang dipilih dari hidden inputs dan select box
+            const hiddenInputs = document.querySelectorAll('input[name="reviewers[]"]');
+            const availableSelect = document.getElementById('availableReviewers');
+            
+            let selectedIds = [];
+            
+            // Ambil dari hidden inputs (assigned reviewers yang tidak dihapus)
+            hiddenInputs.forEach(input => {
+                selectedIds.push(parseInt(input.value));
+            });
+            
+            // Ambil dari available reviewers (jika ada yang dipilih)
+            if (availableSelect) {
+                Array.from(availableSelect.selectedOptions).forEach(option => {
+                    selectedIds.push(parseInt(option.value));
+                });
+            }
 
             // Cari reviewer yang sebelumnya ditugaskan & sudah berkomentar, tapi sekarang tidak dipilih
             const removedReviewers = initialAssignedReviewers.filter(id =>
-                !newlyAssignedIds.includes(id) && reviewersWithComments.includes(id)
+                !selectedIds.includes(id) && reviewersWithComments.includes(id)
             );
 
+            // Jika ada reviewer dengan komentar yang akan dihapus, tampilkan warning
             if (removedReviewers.length > 0) {
                 Swal.fire({
-                    title: 'Konfirmasi Perubahan',
-                    text: "Anda akan menghapus penugasan dari reviewer yang sudah memberikan komentar. Tindakan ini akan diblokir oleh sistem. Apakah Anda ingin melanjutkan untuk memperbarui penugasan reviewer lain?",
+                    title: 'Perhatian!',
+                    html: "Anda mencoba menghapus penugasan dari reviewer yang <strong>sudah memberikan komentar</strong>.<br><br>Tindakan ini akan <strong>diblokir oleh sistem</strong>.<br><br>Apakah Anda ingin melanjutkan untuk memperbarui penugasan reviewer lain?",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
+                    confirmButtonColor: '#11A697',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, lanjutkan!',
-                    cancelButtonText: 'Batal'
+                    confirmButtonText: '<i class="bx bx-check"></i> Ya, lanjutkan!',
+                    cancelButtonText: '<i class="bx bx-x"></i> Batal',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
                 }).then((result) => {
                     if (result.isConfirmed) {
                         form.submit(); // Lanjutkan submit jika dikonfirmasi
                     }
                 });
             } else {
-                form.submit(); // Langsung submit jika tidak ada konflik
+                // Jika tidak ada konflik, tampilkan konfirmasi normal
+                Swal.fire({
+                    title: 'Simpan Penugasan?',
+                    text: "Apakah Anda yakin ingin menyimpan perubahan pada penugasan reviewer?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#11A697',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '<i class="bx bx-save"></i> Ya, Simpan!',
+                    cancelButtonText: '<i class="bx bx-x"></i> Batal',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit(); // Lanjutkan submit form
+                    }
+                });
             }
         });
     </script>
