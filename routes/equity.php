@@ -79,6 +79,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
     Route::resource('/comdev', \App\Http\Controllers\ComdevController::class);
     Route::prefix('comdev/{comdev}/submissions')->name('comdev.submissions.')->group(function () {
         Route::get('/', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'index'])->name('index');
+        Route::get('/export', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'export'])->name('export');
         Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'show'])->name('show');
         Route::post('/{submission}/assign-reviewer', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'assignReviewer'])->name('assignReviewer');
     });
@@ -89,6 +90,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
     Route::put('/subchapters/{subChapter}', [ComdevModuleController::class, 'updateSubChapter'])->name('comdev.subchapters.update');
     Route::put('/comdev/{comdev}/submissions/{submission}/status', [ComdevSubmissionAdminController::class, 'updateStatus'])
         ->name('comdev.submissions.updateStatus');
+    
 
     Route::prefix('modules/{module}/subchapters')->name('comdev.subchapters.')->group(function () {
         Route::post('/store', [ComdevModuleController::class, 'storeSubChapter'])->name('store');

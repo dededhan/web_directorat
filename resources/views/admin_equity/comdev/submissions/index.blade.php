@@ -101,6 +101,12 @@
                                 class="px-8 py-3 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition">
                                 Terapkan
                             </button>
+                            <a href="{{ route('admin_equity.comdev.submissions.export', ['comdev' => $comdev->id, ...$request]) }}"
+                                target="_blank"
+                                class="inline-flex items-center px-6 py-3 bg-green-600 text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition">
+                                <i class='bx bxs-file-export text-lg mr-2'></i>
+                                Export Excel
+                            </a>
                         </div>
                     </form>
                 </div>

@@ -12,6 +12,9 @@ use App\Models\ComdevModule;
 use Illuminate\Validation\ValidationException;
 use App\Enums\ComdevStatusEnum;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubmissionsExportcomdev;
 
 class ComdevSubmissionAdminController extends Controller
 {
@@ -189,5 +192,23 @@ class ComdevSubmissionAdminController extends Controller
         $submission->update(['status' => $request->status]);
 
         return back()->with('success', 'Status proposal berhasil diperbarui secara manual.');
+    }
+
+    public function export(Request $request, ComdevProposal $comdev)
+    {
+        // Ambil semua filter yang sedang aktif dari request
+        $search = $request->input('search');
+        $status = $request->input('status');
+        $fakultasId = $request->input('fakultas_id');
+        $prodiId = $request->input('prodi_id');
+
+        // Buat nama file yang dinamis
+        $fileName = 'proposals-' . Str::slug($comdev->nama_sesi) . '-' . now()->format('Y-m-d') . '.xlsx';
+
+        // Panggil class Export yang tadi dibuat dan kirimkan filternya
+        return Excel::download(
+            new SubmissionsExportcomdev($comdev->id, $search, $status, $fakultasId, $prodiId), 
+            $fileName
+        );
     }
 }
