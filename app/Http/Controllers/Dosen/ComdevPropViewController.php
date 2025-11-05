@@ -81,7 +81,7 @@ class ComdevPropViewController extends Controller
 
         // Kirim data ke view
         return view('subdirektorat-inovasi.dosen.equity.tahapan-proposal', [
-            'submission' => $submission->load('reviews.reviewer', 'reviews.subChapter'),
+            'submission' => $submission->load('reviews.reviewer', 'reviews.module'),
             'modules' => $unlockedModules, // Kirim HANYA modul yang sudah terbuka
             'moduleStatuses' => $statuses 
         ]);

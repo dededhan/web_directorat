@@ -213,16 +213,24 @@
                                 </div>
                                 <div x-show="open" x-transition class="mt-4 pt-4 border-t p-5">
                                     <h4 class="text-sm font-semibold text-gray-600 mb-2">Dokumen Terunggah:</h4>
-                                    <ul class="list-disc pl-5 space-y-1 text-sm mb-6">
+                                    <ul class="list-disc pl-5 space-y-2 text-sm mb-6">
                                         @forelse($module->subChapters as $subChapter)
                                             @php $file = $uploadedFiles->get($subChapter->id); @endphp
                                             <li>
                                                 <span class="text-gray-800">{{ $subChapter->nama_sub_bab }}:</span>
                                                 @if ($file)
-                                                    <a href="{{ route('subdirektorat-inovasi.dosen.equity.files.download', $file->id) }}"
-                                                        class="text-[#11A697] hover:underline ml-2">
-                                                        <i class='bx bxs-download'></i> {{ $file->original_filename }}
-                                                    </a>
+                                                    <div class="flex flex-wrap items-center gap-2 mt-1">
+                                                        <a href="{{ route('subdirektorat-inovasi.dosen.equity.files.preview', $file->id) }}"
+                                                            target="_blank"
+                                                            class="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-md transition">
+                                                            <i class='bx bx-show mr-1'></i> Lihat
+                                                        </a>
+                                                        <a href="{{ route('subdirektorat-inovasi.dosen.equity.files.download', $file->id) }}"
+                                                            class="inline-flex items-center px-3 py-1 text-xs font-medium text-[#11A697] bg-teal-50 hover:bg-teal-100 rounded-md transition">
+                                                            <i class='bx bxs-download mr-1'></i> Unduh
+                                                        </a>
+                                                        <span class="text-gray-600">{{ $file->original_filename }}</span>
+                                                    </div>
                                                     @if ($file->status_luaran)
                                                         <div class="text-xs text-gray-500 pl-4 mt-1">
                                                             Status Luaran: <strong
@@ -284,93 +292,95 @@
                 </div>
 
                 {{-- Card Reviewer --}}
-                <<div class="lg:col-span-2">
+                <div class="lg:col-span-2">
                     <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
                         <div class="p-5 border-b bg-[#11A697] text-white">
-                            <h2 class="text-xl font-semibold flex items-center"><i class='bx bxs-chat mr-3'></i>Hasil Review
-                                & Komentar</h2>
+                            <h2 class="text-xl font-semibold flex items-center"><i class='bx bxs-chat mr-3'></i>Hasil Review & Penilaian</h2>
                         </div>
 
-                        {{-- Konten utama dengan padding --}}
                         <div class="p-6">
                             @forelse ($submission->sesi->modules as $module)
-                                {{-- Container untuk setiap modul, dengan accordion --}}
-                                <div class="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden mb-4 last:mb-0"
-                                    x-data="{ open: true }">
-                                    {{-- Header Modul yang bisa di-klik --}}
-                                    <div class="p-4 cursor-pointer flex justify-between items-center"
-                                        @click="open = !open">
-                                        <h3 class="font-bold text-gray-800 text-lg">{{ $module->urutan }}.
-                                            {{ $module->nama_modul }}</h3>
-                                        <i class='bx bxs-chevron-down text-xl text-gray-500 transition-transform'
-                                            :class="{ 'rotate-180': open }"></i>
+                                @php
+                                    $reviewsForModule = $submission->reviews->where('comdev_module_id', $module->id);
+                                @endphp
+                                
+                                <div class="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden mb-4 last:mb-0" x-data="{ open: true }">
+                                    <div class="p-4 cursor-pointer flex justify-between items-center" @click="open = !open">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="flex items-center justify-center w-10 h-10 bg-[#11A697] text-white rounded-lg font-bold">
+                                                {{ $module->urutan }}
+                                            </div>
+                                            <div>
+                                                <h3 class="font-bold text-gray-800 text-lg">{{ $module->nama_modul }}</h3>
+                                                <p class="text-xs text-gray-500">{{ $reviewsForModule->count() }} Review</p>
+                                            </div>
+                                        </div>
+                                        <i class='bx bxs-chevron-down text-xl text-gray-500 transition-transform' :class="{ 'rotate-180': open }"></i>
                                     </div>
 
-                                    {{-- Konten Accordion --}}
-                                    <div x-show="open" x-transition class="bg-white p-4 border-t space-y-4">
-                                        @forelse ($module->subChapters as $subChapter)
-                                            <div>
-                                                <h4 class="font-semibold text-gray-700 text-md flex items-center">
-                                                    <i class='bx bx-subdirectory-right mr-2 text-gray-400'></i>
-                                                    {{ $subChapter->nama_sub_bab }}
-                                                </h4>
-
-                                                @php
-                                                    $reviews = $submission->reviews->where(
-                                                        'comdev_sub_chapter_id',
-                                                        $subChapter->id,
-                                                    );
-                                                @endphp
-
-                                                @if ($reviews->isNotEmpty())
-                                                    <div class="mt-3 pl-6 space-y-4">
-                                                        {{-- Loop untuk setiap komentar --}}
-                                                        @foreach ($reviews as $review)
-                                                            <div class="flex items-start space-x-3">
-                                                                {{-- AVATAR ICON --}}
-                                                                <div class="flex-shrink-0">
-                                                                    <span
-                                                                        class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-200 text-gray-600">
-                                                                        <i class='bx bxs-user'></i>
-                                                                    </span>
-                                                                </div>
-                                                                {{-- NAMA, WAKTU, DAN BUBBLE KOMENTAR --}}
-                                                                <div class="flex-1">
-                                                                    <div class="flex items-baseline space-x-2">
-                                                                        <p class="text-sm font-semibold text-gray-900">
-                                                                            {{ $review->reviewer->name }}</p>
-                                                                        <p class="text-xs text-gray-400"
-                                                                            title="{{ $review->created_at->format('d M Y, H:i:s') }}">
-                                                                            {{ $review->created_at->diffForHumans() }}
-                                                                        </p>
-                                                                    </div>
-                                                                    <div
-                                                                        class="mt-1 bg-gray-100 p-3 rounded-lg rounded-tl-none border border-gray-200">
-                                                                        <p
-                                                                            class="text-sm text-gray-700 whitespace-pre-wrap">
-                                                                            {{ $review->komentar }}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
+                                    <div x-show="open" x-transition class="bg-white p-4 md:p-6 border-t space-y-4">
+                                        @forelse ($reviewsForModule as $review)
+                                            <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-4 md:p-5 border border-purple-100" x-data="{ expanded: false }">
+                                                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
+                                                    <div class="flex items-center space-x-3">
+                                                        <div class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-full font-bold text-sm shrink-0">
+                                                            {{ substr($review->reviewer->name, 0, 2) }}
+                                                        </div>
+                                                        <div>
+                                                            <p class="text-sm md:text-base font-bold text-gray-800">{{ $review->reviewer->name }}</p>
+                                                            <p class="text-xs text-gray-500" title="{{ $review->created_at->format('d M Y, H:i:s') }}">
+                                                                {{ $review->created_at->diffForHumans() }}
+                                                            </p>
+                                                        </div>
                                                     </div>
-                                                @else
-                                                    <p class="text-sm text-gray-400 italic mt-2 pl-6">Belum ada komentar.
-                                                    </p>
-                                                @endif
+                                                    @if($review->penilaian)
+                                                        <div class="flex items-center space-x-2 bg-gradient-to-r from-[#11A697] to-[#0e8a7c] text-white px-3 py-2 rounded-lg shadow-sm">
+                                                            <i class='bx bx-star text-lg'></i>
+                                                            <div class="text-left">
+                                                                <p class="text-xs font-medium opacity-90">Penilaian</p>
+                                                                <p class="text-sm font-bold">{{ $review->penilaian }}</p>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="bg-white rounded-lg p-3 md:p-4 border-l-4 border-purple-400">
+                                                    <p class="text-xs font-semibold text-purple-600 mb-2 uppercase tracking-wide">Komentar</p>
+                                                    @php
+                                                        $komentar = $review->komentar;
+                                                        $wordCount = str_word_count($komentar);
+                                                        $charCount = strlen($komentar);
+                                                        $isLong = $wordCount > 100 || $charCount > 500;
+                                                        $preview = $isLong ? substr($komentar, 0, 500) : $komentar;
+                                                    @endphp
+                                                    
+                                                    @if($isLong)
+                                                        <div class="text-sm md:text-base text-gray-700 leading-relaxed">
+                                                            <p x-show="!expanded" class="whitespace-pre-wrap break-words overflow-wrap-anywhere">{{ $preview }}...</p>
+                                                            <p x-show="expanded" class="whitespace-pre-wrap break-words overflow-wrap-anywhere">{{ $komentar }}</p>
+                                                            <button @click="expanded = !expanded" class="mt-2 text-[#11A697] hover:text-[#0e8a7c] font-semibold text-sm flex items-center gap-1">
+                                                                <span x-text="expanded ? 'Tampilkan Lebih Sedikit' : 'Selengkapnya'"></span>
+                                                                <i class='bx' :class="expanded ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                                            </button>
+                                                        </div>
+                                                    @else
+                                                        <p class="text-sm md:text-base text-gray-700 whitespace-pre-wrap leading-relaxed">{{ $komentar }}</p>
+                                                    @endif
+                                                </div>
                                             </div>
                                         @empty
-                                            <p class="text-gray-500 italic">Tidak ada sub-bab untuk modul ini.</p>
+                                            <div class="bg-white rounded-lg p-6 text-center border border-purple-100/50">
+                                                <i class='bx bx-message-square-dots text-4xl text-gray-300 mb-2'></i>
+                                                <p class="text-sm text-gray-500 italic">Belum ada review untuk modul ini</p>
+                                            </div>
                                         @endforelse
                                     </div>
                                 </div>
                             @empty
-                                <p class="text-center text-gray-500 italic py-4">Belum ada modul yang dikonfigurasi untuk
-                                    sesi ini.</p>
+                                <p class="text-center text-gray-500 italic py-4">Belum ada modul yang dikonfigurasi untuk sesi ini.</p>
                             @endforelse
                         </div>
                     </div>
-            </div>
+                </div>
 
         </div>
 

@@ -298,55 +298,63 @@
                                 </div>
                                 <div x-show="tab === 'penilaian'" x-transition style="display: none;">
     <div class="space-y-6">
-        {{-- Cek dulu apakah ada review untuk seluruh proposal ini --}}
-        @if($submission->reviews->isNotEmpty())
-
-            {{-- Loop untuk setiap sub-bab dalam modul ini --}}
-            @foreach($module->subChapters as $subChapter)
-                @php
-                    // Ambil review yang spesifik hanya untuk sub-bab ini
-                    $reviewsForSubChapter = $submission->reviews->where('comdev_sub_chapter_id', $subChapter->id);
-                @endphp
-
-                {{-- Tampilkan hanya jika ada review untuk sub-bab ini --}}
-                @if($reviewsForSubChapter->isNotEmpty())
-                    <div>
-                        {{-- Judul Sub-Bab --}}
-                        <h4 class="font-semibold text-gray-700 text-md flex items-center mb-3">
-                            <i class='bx bx-subdirectory-right mr-2 text-gray-400'></i>
-                            {{ $subChapter->nama_sub_bab }}
-                        </h4>
-
-                        {{-- Area Komentar --}}
-                        <div class="pl-6 space-y-4">
-                            @foreach ($reviewsForSubChapter as $review)
-                                <div class="flex items-start space-x-3">
-                                    {{-- Ikon Avatar Reviewer --}}
-                                    <div class="flex-shrink-0">
-                                        <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-teal-100 text-teal-700">
-                                            <i class='bx bxs-user'></i>
-                                        </span>
-                                    </div>
-                                    {{-- Bubble Komentar --}}
-                                    <div class="flex-1">
-                                        <div class="flex items-baseline space-x-2">
-                                            <p class="text-sm font-semibold text-gray-900">
-                                                {{ $review->reviewer->name ?? 'Reviewer' }}
-                                            </p>
-                                            <p class="text-xs text-gray-400" title="{{ $review->created_at->format('d M Y, H:i:s') }}">
-                                                {{ $review->created_at->diffForHumans() }}
-                                            </p>
-                                        </div>
-                                        <div class="mt-1 bg-gray-50 p-3 rounded-lg rounded-tl-none border border-gray-200">
-                                            <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ $review->komentar }}</p>
-                                        </div>
+        {{-- Cek dulu apakah ada review untuk modul ini --}}
+        @php
+            $reviewsForModule = $submission->reviews->where('comdev_module_id', $module->id);
+        @endphp
+        
+        @if($reviewsForModule->isNotEmpty())
+            <div class="space-y-4">
+                @foreach ($reviewsForModule as $review)
+                    <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-4 md:p-5 border border-purple-100" x-data="{ expanded: false }">
+                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-full font-bold text-sm shrink-0">
+                                    {{ substr($review->reviewer->name ?? 'R', 0, 2) }}
+                                </div>
+                                <div>
+                                    <p class="text-sm md:text-base font-bold text-gray-800">{{ $review->reviewer->name ?? 'Reviewer' }}</p>
+                                    <p class="text-xs text-gray-500" title="{{ $review->created_at->format('d M Y, H:i:s') }}">
+                                        {{ $review->created_at->diffForHumans() }}
+                                    </p>
+                                </div>
+                            </div>
+                            @if($review->penilaian)
+                                <div class="flex items-center space-x-2 bg-gradient-to-r from-[#11A697] to-[#0e8a7c] text-white px-3 py-2 rounded-lg shadow-sm">
+                                    <i class='bx bx-star text-lg'></i>
+                                    <div class="text-left">
+                                        <p class="text-xs font-medium opacity-90">Penilaian</p>
+                                        <p class="text-sm font-bold">{{ $review->penilaian }}</p>
                                     </div>
                                 </div>
-                            @endforeach
+                            @endif
+                        </div>
+                        <div class="bg-white rounded-lg p-3 md:p-4 border-l-4 border-purple-400">
+                            <p class="text-xs font-semibold text-purple-600 mb-2 uppercase tracking-wide">Komentar</p>
+                            @php
+                                $komentar = $review->komentar;
+                                $wordCount = str_word_count($komentar);
+                                $charCount = strlen($komentar);
+                                $isLong = $wordCount > 100 || $charCount > 500;
+                                $preview = $isLong ? substr($komentar, 0, 500) : $komentar;
+                            @endphp
+                            
+                            @if($isLong)
+                                <div class="text-sm md:text-base text-gray-700 leading-relaxed">
+                                    <p x-show="!expanded" class="whitespace-pre-wrap break-words overflow-wrap-anywhere">{{ $preview }}...</p>
+                                    <p x-show="expanded" class="whitespace-pre-wrap break-words overflow-wrap-anywhere">{{ $komentar }}</p>
+                                    <button @click="expanded = !expanded" class="mt-2 text-[#11A697] hover:text-[#0e8a7c] font-semibold text-sm flex items-center gap-1">
+                                        <span x-text="expanded ? 'Tampilkan Lebih Sedikit' : 'Selengkapnya'"></span>
+                                        <i class='bx' :class="expanded ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                                    </button>
+                                </div>
+                            @else
+                                <p class="text-sm md:text-base text-gray-700 whitespace-pre-wrap leading-relaxed">{{ $komentar }}</p>
+                            @endif
                         </div>
                     </div>
-                @endif
-            @endforeach
+                @endforeach
+            </div>
         @else
             {{-- Pesan jika tidak ada komentar sama sekali --}}
             <div class="text-center py-10 text-gray-500">

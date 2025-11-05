@@ -265,7 +265,7 @@ Route::prefix('reviewer_equity')->name('reviewer_equity.')->middleware(['auth', 
 
     Route::get('/comdev/assignments', [ComdevReviewerController::class, 'index'])->name('comdev.assignments.index');
     Route::get('/comdev/assignments/{submission}', [ComdevReviewerController::class, 'show'])->name('comdev.assignments.show');
-    Route::post('/comdev/assignments/{submission}/subchapter/{subChapter}/review', [ComdevReviewerController::class, 'storeReview'])->name('comdev.assignments.storeReview');
+    Route::post('/comdev/assignments/{submission}/module/{module}/review', [ComdevReviewerController::class, 'storeReview'])->name('comdev.assignments.storeReview');
 });
 
 // Reviewer Hibah Routes
@@ -360,6 +360,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
                 // UPLOAD FILE UNGGAH
                 Route::post('/equity/proposal/{submission}/subchapter/{subChapter}/files', [ComdevSubmissionFileController::class, 'store'])->name('equity.files.store');
+                Route::get('/equity/files/{file}/preview', [ComdevSubmissionFileController::class, 'preview'])->name('equity.files.preview');
                 Route::get('/equity/files/{file}/download', [ComdevSubmissionFileController::class, 'download'])->name('equity.files.download');
                 Route::delete('/equity/files/{file}', [ComdevSubmissionFileController::class, 'destroy'])->name('equity.files.destroy');
                 Route::get('/equity/templates/{templateName}/download', [ComdevSubmissionFileController::class, 'downloadTemplate'])->name('equity.templates.download');
