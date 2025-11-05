@@ -16,6 +16,8 @@ class SubmissionsExportcomdev implements FromQuery, WithHeadings, WithMapping, S
     protected $status;
     protected $fakultasId;
     protected $prodiId;
+     
+    private $rowNumber;
 
     // Terima semua parameter filter dari controller
     public function __construct($comdevId, $search, $status, $fakultasId, $prodiId)
@@ -25,6 +27,7 @@ class SubmissionsExportcomdev implements FromQuery, WithHeadings, WithMapping, S
         $this->status = $status;
         $this->fakultasId = $fakultasId;
         $this->prodiId = $prodiId;
+        $this->rowNumber = 1;
     }
 
     /**
