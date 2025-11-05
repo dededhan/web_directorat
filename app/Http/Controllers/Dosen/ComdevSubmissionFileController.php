@@ -166,12 +166,42 @@ class ComdevSubmissionFileController extends Controller
     }
 
     /**
+     * Preview file (view in browser).
+     */
+    public function preview(ComdevSubmissionFile $file)
+    {
+        // Cek otorisasi - bisa dilihat oleh owner, reviewer, atau admin
+        $user = Auth::user();
+        $canView = $file->user_id === $user->id || 
+                   $user->hasRole(['reviewer_equity', 'admin_equity', 'sub_admin_equity']);
+        
+        if (!$canView) {
+            abort(403, 'AKSES DITOLAK');
+        }
+
+        // Cek apakah file ada di storage
+        if (!Storage::disk('public')->exists($file->file_path)) {
+            return back()->with('error', 'File tidak ditemukan.');
+        }
+
+        $filePath = Storage::disk('public')->path($file->file_path);
+        return response()->file($filePath, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $file->original_filename . '"'
+        ]);
+    }
+
+    /**
      * Mengunduh file yang sudah diunggah.
      */
     public function download(ComdevSubmissionFile $file)
     {
-        // Cek otorisasi, pastikan file ini milik user yang login
-        if ($file->user_id !== Auth::id()) {
+        // Cek otorisasi - bisa diunduh oleh owner, reviewer, atau admin
+        $user = Auth::user();
+        $canDownload = $file->user_id === $user->id || 
+                       $user->hasRole(['reviewer_equity', 'admin_equity', 'sub_admin_equity']);
+        
+        if (!$canDownload) {
             abort(403, 'AKSES DITOLAK');
         }
 

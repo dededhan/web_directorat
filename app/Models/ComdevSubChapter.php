@@ -26,8 +26,4 @@ class ComdevSubChapter extends Model
     {
         return $this->belongsTo(ComdevModule::class, 'comdev_module_id');
     }
-    public function reviews()
-    {
-        return $this->hasMany(ComdevReview::class, 'comdev_sub_chapter_id');
-    }
 }

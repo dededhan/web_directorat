@@ -20,11 +20,11 @@ class ComdevReview extends Model
     }
 
     /**
-     * Relasi: Review ini untuk sub-bab yang mana.
+     * Relasi: Review ini untuk modul yang mana.
      */
-    public function subChapter()
+    public function module()
     {
-        return $this->belongsTo(ComdevSubChapter::class, 'comdev_sub_chapter_id');
+        return $this->belongsTo(ComdevModule::class, 'comdev_module_id');
     }
 
     /**

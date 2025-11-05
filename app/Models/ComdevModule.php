@@ -27,4 +27,12 @@ class ComdevModule extends Model
     {
         return $this->hasMany(ComdevSubChapter::class)->orderBy('urutan');
     }
+
+    /**
+     * Relasi: Modul ini memiliki banyak Review.
+     */
+    public function reviews()
+    {
+        return $this->hasMany(ComdevReview::class, 'comdev_module_id');
+    }
 }
