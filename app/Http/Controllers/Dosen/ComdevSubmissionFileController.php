@@ -9,7 +9,7 @@ use App\Models\ComdevSubmissionFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator; 
+use Illuminate\Support\Facades\Validator;
 use App\Enums\ComdevStatusEnum;
 
 class ComdevSubmissionFileController extends Controller
@@ -165,22 +165,25 @@ class ComdevSubmissionFileController extends Controller
      */
     public function preview(ComdevSubmissionFile $file)
     {
-
         $user = Auth::user();
         
-        $canView = $file->user_id === $user->id || 
-                   $user->hasRole(['reviewer_equity', 'admin_equity', 'sub_admin_equity']) ||
-                   $file->submission->reviewers()->where('users.id', $user->id)->exists();
+        // Authorization check
+        $isOwner = $file->user_id === $user->id;
+        $isAdmin = in_array($user->role, ['reviewer_equity', 'admin_equity', 'sub_admin_equity']);
+        $isAssignedReviewer = $file->submission->reviewers()->where('users.id', $user->id)->exists();
+        
+        $canView = $isOwner || $isAdmin || $isAssignedReviewer;
         
         if (!$canView) {
-            abort(403, 'AKSES DITOLAK - Anda tidak memiliki izin untuk melihat file ini.');
+            abort(403, 'Anda tidak memiliki izin untuk melihat file ini.');
         }
 
-
+        // Jika tipe adalah link, redirect ke URL
         if ($file->type === 'link' && $file->url) {
             return redirect($file->url);
         }
 
+        // Jika tipe adalah file, cek apakah file ada di storage
         if ($file->type === 'file' && $file->file_path) {
             if (!Storage::disk('public')->exists($file->file_path)) {
                 return back()->with('error', 'File tidak ditemukan di server.');
@@ -201,15 +204,17 @@ class ComdevSubmissionFileController extends Controller
      */
     public function download(ComdevSubmissionFile $file)
     {
-        // Cek otorisasi - bisa diunduh oleh owner, reviewer, atau admin
         $user = Auth::user();
         
-        $canDownload = $file->user_id === $user->id || 
-                       $user->hasRole(['reviewer_equity', 'admin_equity', 'sub_admin_equity']) ||
-                       $file->submission->reviewers()->where('users.id', $user->id)->exists();
+        // Authorization check
+        $isOwner = $file->user_id === $user->id;
+        $isAdmin = in_array($user->role, ['reviewer_equity', 'admin_equity', 'sub_admin_equity']);
+        $isAssignedReviewer = $file->submission->reviewers()->where('users.id', $user->id)->exists();
+        
+        $canDownload = $isOwner || $isAdmin || $isAssignedReviewer;
         
         if (!$canDownload) {
-            abort(403, 'AKSES DITOLAK - Anda tidak memiliki izin untuk mengunduh file ini.');
+            abort(403, 'Anda tidak memiliki izin untuk mengunduh file ini.');
         }
 
         // Jika tipe adalah link, tidak bisa diunduh
