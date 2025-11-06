@@ -1,7 +1,28 @@
 @extends('admin_equity.index')
 
 @section('content')
-<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ openModuleForm: false, openSubChapterForm: null, editingSubChapterId: null }">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ 
+    openModuleForm: false, 
+    openSubChapterForm: null, 
+    editingSubChapterId: null,
+    editingModuleId: null,
+    formPenilaian: [],
+    addKriteria() {
+        this.formPenilaian.push({
+            label: '',
+            type: 'number',
+            bobot: 0,
+            keterangan: ''
+        });
+    },
+    removeKriteria(index) {
+        this.formPenilaian.splice(index, 1);
+    },
+    initEditModule(moduleId, existingForm) {
+        this.editingModuleId = moduleId;
+        this.formPenilaian = existingForm && existingForm.length > 0 ? JSON.parse(JSON.stringify(existingForm)) : [];
+    }
+}">
     {{-- Header dan Breadcrumbs --}}
     <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-800">Manajemen Modul: {{ $sesi->nama_sesi }}</h1>
@@ -26,12 +47,95 @@
                         {{ $module->urutan }}. {{ $module->nama_modul }}
                     </h2>
                     <div class="flex items-center space-x-2">
+                        <button @click="initEditModule({{ $module->id }}, {{ json_encode($module->form_penilaian ?? []) }})" class="text-white hover:text-yellow-200 transition duration-200" title="Edit Modul & Form Penilaian">
+                            <i class='bx bxs-edit text-xl'></i>
+                        </button>
                         <form action="{{ route('admin_equity.comdev.modules.destroy', $module->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin menghapus modul ini beserta semua sub-bab di dalamnya?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-white hover:text-red-200 transition duration-200" title="Hapus Modul"><i class='bx bxs-trash text-xl'></i></button>
                         </form>
                     </div>
+                </div>
+
+                {{-- [NEW] Edit Modul & Form Penilaian --}}
+                <div x-show="editingModuleId === {{ $module->id }}" x-cloak x-transition class="p-6 border-b bg-gray-50">
+                    <form action="{{ route('admin_equity.comdev.modules.update', $module->id) }}" method="POST" class="space-y-6">
+                        @csrf
+                        @method('PUT')
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Edit Modul & Form Penilaian</h3>
+                        
+                        {{-- Basic Module Info --}}
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Urutan</label>
+                                <input type="number" name="urutan" value="{{ $module->urutan }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Nama Modul</label>
+                                <input type="text" name="nama_modul" value="{{ $module->nama_modul }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+                            <textarea name="deskripsi" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" rows="2">{{ $module->deskripsi }}</textarea>
+                        </div>
+
+                        {{-- Form Penilaian Section --}}
+                        <div class="border-t pt-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-md font-bold text-gray-800">Form Penilaian Reviewer</h4>
+                                <button type="button" @click="addKriteria()" class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition">
+                                    <i class='bx bx-plus text-lg mr-1'></i> Tambah Kriteria
+                                </button>
+                            </div>
+
+                            <div class="space-y-4">
+                                <template x-for="(kriteria, index) in formPenilaian" :key="index">
+                                    <div class="bg-white border border-gray-300 rounded-lg p-4">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <h5 class="text-sm font-semibold text-gray-700">Kriteria <span x-text="index + 1"></span></h5>
+                                            <button type="button" @click="removeKriteria(index)" class="text-red-500 hover:text-red-700">
+                                                <i class='bx bx-trash text-lg'></i>
+                                            </button>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            <div class="md:col-span-2">
+                                                <label class="block text-xs font-medium text-gray-600 mb-1">Label/Nama Kriteria</label>
+                                                <input type="text" x-model="kriteria.label" :name="'form_penilaian[' + index + '][label]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" placeholder="Contoh: Kesesuaian dengan Tujuan" required>
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-600 mb-1">Tipe Input</label>
+                                                <select x-model="kriteria.type" :name="'form_penilaian[' + index + '][type]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" required>
+                                                    <option value="number">Angka (Number)</option>
+                                                    <option value="text">Teks Singkat</option>
+                                                    <option value="textarea">Teks Panjang</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-600 mb-1">Bobot (%)</label>
+                                                <input type="number" x-model="kriteria.bobot" :name="'form_penilaian[' + index + '][bobot]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" placeholder="0-100" min="0" max="100">
+                                            </div>
+                                            <div class="md:col-span-2">
+                                                <label class="block text-xs font-medium text-gray-600 mb-1">Keterangan/Instruksi</label>
+                                                <textarea x-model="kriteria.keterangan" :name="'form_penilaian[' + index + '][keterangan]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" rows="2" placeholder="Instruksi untuk reviewer"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <div x-show="formPenilaian.length === 0" class="text-center py-6 bg-gray-50 border border-dashed border-gray-300 rounded-lg">
+                                    <i class='bx bx-info-circle text-3xl text-gray-400'></i>
+                                    <p class="text-sm text-gray-500 mt-2">Belum ada kriteria penilaian. Klik "Tambah Kriteria" untuk menambahkan.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end space-x-3 border-t pt-4">
+                            <button type="button" @click="editingModuleId = null; formPenilaian = []" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition">Batal</button>
+                            <button type="submit" class="px-4 py-2 bg-[#11A697] text-white rounded-md hover:bg-[#0e8a7c] transition">Update Modul</button>
+                        </div>
+                    </form>
                 </div>
 
                 {{-- Daftar Sub-Bab --}}
@@ -174,8 +278,21 @@
     </div>
 
     {{-- Tombol & Form Tambah Modul (Manual) --}}
-    <div class="mt-8">
-        <button @click="openModuleForm = !openModuleForm" class="inline-flex items-center px-5 py-2.5 bg-[#11A697] text-white rounded-lg font-semibold hover:bg-[#0e8a7c] shadow-sm transition">
+    <div class="mt-8" x-data="{ 
+        newModuleForm: [],
+        addNewKriteria() {
+            this.newModuleForm.push({
+                label: '',
+                type: 'number',
+                bobot: 0,
+                keterangan: ''
+            });
+        },
+        removeNewKriteria(index) {
+            this.newModuleForm.splice(index, 1);
+        }
+    }">
+        <button @click="openModuleForm = !openModuleForm; newModuleForm = []" class="inline-flex items-center px-5 py-2.5 bg-[#11A697] text-white rounded-lg font-semibold hover:bg-[#0e8a7c] shadow-sm transition">
             <i class='bx bxs-add-to-queue text-lg mr-2'></i> Buat Modul Baru (Manual)
         </button>
         <div x-show="openModuleForm" x-cloak x-transition class="mt-4">
@@ -183,7 +300,7 @@
                 <div class="p-5 border-b bg-gray-800 text-white">
                     <h3 class="text-xl font-semibold">Form Modul Baru</h3>
                 </div>
-                <form action="{{ route('admin_equity.comdev.modules.storeModule', $sesi->id) }}" method="POST" class="p-6 space-y-4">
+                <form action="{{ route('admin_equity.comdev.modules.storeModule', $sesi->id) }}" method="POST" class="p-6 space-y-6">
                     @csrf
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
@@ -199,8 +316,59 @@
                         <label for="modul_deskripsi" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi (Opsional)</label>
                         <textarea id="modul_deskripsi" name="deskripsi" placeholder="Jelaskan deskripsi singkat tentang modul ini" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" rows="3"></textarea>
                     </div>
+
+                    {{-- Form Penilaian Section --}}
+                    <div class="border-t pt-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-md font-bold text-gray-800">Form Penilaian Reviewer</h4>
+                            <button type="button" @click="addNewKriteria()" class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition">
+                                <i class='bx bx-plus text-lg mr-1'></i> Tambah Kriteria
+                            </button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <template x-for="(kriteria, index) in newModuleForm" :key="index">
+                                <div class="bg-gray-50 border border-gray-300 rounded-lg p-4">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <h5 class="text-sm font-semibold text-gray-700">Kriteria <span x-text="index + 1"></span></h5>
+                                        <button type="button" @click="removeNewKriteria(index)" class="text-red-500 hover:text-red-700">
+                                            <i class='bx bx-trash text-lg'></i>
+                                        </button>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <div class="md:col-span-2">
+                                            <label class="block text-xs font-medium text-gray-600 mb-1">Label/Nama Kriteria</label>
+                                            <input type="text" x-model="kriteria.label" :name="'form_penilaian[' + index + '][label]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" placeholder="Contoh: Kesesuaian dengan Tujuan" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-medium text-gray-600 mb-1">Tipe Input</label>
+                                            <select x-model="kriteria.type" :name="'form_penilaian[' + index + '][type]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" required>
+                                                <option value="number">Angka (Number)</option>
+                                                <option value="text">Teks Singkat</option>
+                                                <option value="textarea">Teks Panjang</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-medium text-gray-600 mb-1">Bobot (%)</label>
+                                            <input type="number" x-model="kriteria.bobot" :name="'form_penilaian[' + index + '][bobot]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" placeholder="0-100" min="0" max="100">
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label class="block text-xs font-medium text-gray-600 mb-1">Keterangan/Instruksi</label>
+                                            <textarea x-model="kriteria.keterangan" :name="'form_penilaian[' + index + '][keterangan]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" rows="2" placeholder="Instruksi untuk reviewer"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <div x-show="newModuleForm.length === 0" class="text-center py-6 bg-gray-50 border border-dashed border-gray-300 rounded-lg">
+                                <i class='bx bx-info-circle text-3xl text-gray-400'></i>
+                                <p class="text-sm text-gray-500 mt-2">Belum ada kriteria penilaian. Klik "Tambah Kriteria" untuk menambahkan.</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="flex justify-end space-x-3 border-t pt-4">
-                        <button type="button" @click="openModuleForm = false" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition">Batal</button>
+                        <button type="button" @click="openModuleForm = false; newModuleForm = []" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition">Batal</button>
                         <button type="submit" class="px-4 py-2 bg-[#11A697] text-white rounded-md hover:bg-[#0e8a7c] transition">Simpan Modul</button>
                     </div>
                 </form>

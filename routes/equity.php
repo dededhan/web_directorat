@@ -95,6 +95,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
     Route::get('/comdev/{sesi}/modules', [ComdevModuleController::class, 'index'])->name('comdev.modules.index');
     Route::post('/comdev/{sesi}/modules/store', [ComdevModuleController::class, 'storeModule'])->name('comdev.modules.storeModule');
     Route::post('/comdev/{sesi}/modules/store-template', [ComdevModuleController::class, 'storeTemplate'])->name('comdev.modules.storeTemplate');
+    Route::put('/modules/{module}', [ComdevModuleController::class, 'updateModule'])->name('comdev.modules.update');
     Route::put('/submissions/{submission}/modules/{module}/status', [ComdevSubmissionAdminController::class, 'updateModuleStatus'])->name('comdev.submissions.updateModuleStatus');
     Route::put('/subchapters/{subChapter}', [ComdevModuleController::class, 'updateSubChapter'])->name('comdev.subchapters.update');
     Route::put('/comdev/{comdev}/submissions/{submission}/status', [ComdevSubmissionAdminController::class, 'updateStatus'])

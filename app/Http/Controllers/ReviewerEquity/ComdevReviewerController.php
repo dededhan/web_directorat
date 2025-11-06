@@ -32,8 +32,28 @@ class ComdevReviewerController extends Controller
     {
         $request->validate([
             'komentar' => 'required|string|min:1',
-            'penilaian' => 'required|string',
+            'penilaian' => 'nullable|array',
         ]);
+
+        // Jika ada form penilaian, validasi sesuai dengan struktur form
+        if ($module->form_penilaian && is_array($module->form_penilaian)) {
+            foreach ($module->form_penilaian as $index => $kriteria) {
+                if ($kriteria['type'] === 'number') {
+                    $request->validate([
+                        "penilaian.{$index}" => 'required|numeric',
+                    ], [
+                        "penilaian.{$index}.required" => "Kriteria '{$kriteria['label']}' wajib diisi.",
+                        "penilaian.{$index}.numeric" => "Kriteria '{$kriteria['label']}' harus berupa angka.",
+                    ]);
+                } else {
+                    $request->validate([
+                        "penilaian.{$index}" => 'required|string',
+                    ], [
+                        "penilaian.{$index}.required" => "Kriteria '{$kriteria['label']}' wajib diisi.",
+                    ]);
+                }
+            }
+        }
 
         $submission->reviews()->updateOrCreate(
             [
@@ -42,7 +62,7 @@ class ComdevReviewerController extends Controller
             ],
             [
                 'komentar'  => $request->komentar,
-                'penilaian' => $request->penilaian,
+                'penilaian' => $request->penilaian ? json_encode($request->penilaian) : null,
             ]
         );
         
@@ -65,7 +85,7 @@ class ComdevReviewerController extends Controller
             }
         }
    
-    return back()->with('success', 'Komentar Anda berhasil disimpan.');
+    return back()->with('success', 'Komentar dan penilaian Anda berhasil disimpan.');
     }
 
     /**

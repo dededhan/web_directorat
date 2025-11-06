@@ -11,6 +11,10 @@ class ComdevModule extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'form_penilaian' => 'array',
+    ];
+
     /**
      * Relasi: Modul ini milik Sesi Proposal mana.
      */

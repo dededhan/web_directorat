@@ -103,11 +103,37 @@ class ComdevModuleController extends Controller
             'nama_modul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'urutan' => 'required|integer',
+            'form_penilaian' => 'nullable|array',
+            'form_penilaian.*.label' => 'required|string|max:255',
+            'form_penilaian.*.type' => 'required|in:number,text,textarea',
+            'form_penilaian.*.bobot' => 'nullable|numeric|min:0|max:100',
+            'form_penilaian.*.keterangan' => 'nullable|string',
         ]);
 
         $sesi->modules()->create($request->all());
 
         return back()->with('success', 'Modul baru berhasil ditambahkan.');
+    }
+
+    /**
+     * Mengupdate modul yang sudah ada.
+     */
+    public function updateModule(Request $request, ComdevModule $module)
+    {
+        $request->validate([
+            'nama_modul' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'urutan' => 'required|integer',
+            'form_penilaian' => 'nullable|array',
+            'form_penilaian.*.label' => 'required|string|max:255',
+            'form_penilaian.*.type' => 'required|in:number,text,textarea',
+            'form_penilaian.*.bobot' => 'nullable|numeric|min:0|max:100',
+            'form_penilaian.*.keterangan' => 'nullable|string',
+        ]);
+
+        $module->update($request->all());
+
+        return back()->with('success', 'Modul berhasil diperbarui.');
     }
 
     /**

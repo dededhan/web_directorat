@@ -297,16 +297,42 @@
                                                         <p class="text-xs text-gray-500">Reviewer</p>
                                                     </div>
                                                 </div>
-                                                @if($review->penilaian)
-                                                    <div class="flex items-center space-x-2 bg-gradient-to-r from-[#11A697] to-[#0e8a7c] text-white px-3 py-2 rounded-lg shadow-sm">
-                                                        <i class='bx bx-star text-lg'></i>
-                                                        <div class="text-left">
-                                                            <p class="text-xs font-medium opacity-90">Penilaian</p>
-                                                            <p class="text-sm font-bold break-words">{{ strlen($review->penilaian) > 30 ? substr($review->penilaian, 0, 30) . '...' : $review->penilaian }}</p>
+                                            </div>
+                                            @if($review->penilaian && $module->form_penilaian && count($module->form_penilaian) > 0)
+                                                @php
+                                                    $penilaianData = is_string($review->penilaian) ? json_decode($review->penilaian, true) : $review->penilaian;
+                                                @endphp
+                                                @if($penilaianData && is_array($penilaianData))
+                                                    <div class="mb-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-3 md:p-4 border border-blue-100">
+                                                        <p class="text-xs font-semibold text-blue-600 mb-3 uppercase tracking-wide flex items-center">
+                                                            <i class='bx bx-list-check mr-1'></i>
+                                                            Hasil Penilaian
+                                                        </p>
+                                                        <div class="space-y-2">
+                                                            @foreach($module->form_penilaian as $index => $kriteria)
+                                                                @if(isset($penilaianData[$index]))
+                                                                    <div class="flex justify-between items-start bg-white rounded p-2 border border-blue-100/50">
+                                                                        <div class="flex-1">
+                                                                            <p class="text-xs md:text-sm font-semibold text-gray-700">
+                                                                                {{ $kriteria['label'] ?? 'Kriteria ' . ($index + 1) }}
+                                                                                @if(isset($kriteria['bobot']) && $kriteria['bobot'] > 0)
+                                                                                    <span class="ml-1 text-xs font-normal text-gray-500">({{ $kriteria['bobot'] }}%)</span>
+                                                                                @endif
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="ml-3">
+                                                                            <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs md:text-sm font-bold rounded">
+                                                                                {{ $penilaianData[$index] }}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+                                                            @endforeach
                                                         </div>
                                                     </div>
                                                 @endif
-                                            </div>
+                                            @endif
+
                                             <div class="bg-gray-50 rounded-lg p-3 md:p-4 border-l-4 border-purple-400">
                                                 <p class="text-xs font-semibold text-purple-600 mb-2 uppercase tracking-wide">Komentar</p>
                                                 @php
@@ -352,26 +378,74 @@
                                 <form action="{{ route('reviewer_equity.comdev.assignments.storeReview', ['submission' => $submission->id, 'module' => $module->id]) }}" method="POST" class="space-y-5">
                                     @csrf
                                     
-                                    {{-- Penilaian Input --}}
-                                    <div class="bg-white rounded-lg p-4 md:p-5 shadow-sm border border-green-100/50">
-                                        <label for="penilaian-{{ $module->id }}" class="flex items-center text-sm md:text-base font-bold text-gray-800 mb-3">
-                                            <i class='bx bx-star text-yellow-500 text-xl mr-2'></i>
-                                            Penilaian (0-100)
-                                            <span class="text-red-500 ml-1">*</span>
-                                        </label>
-                                        <textarea 
-                                            name="penilaian" 
-                                            id="penilaian-{{ $module->id }}" 
-                                            rows="3" 
-                                            class="w-full rounded-lg border-2 border-gray-200 focus:border-[#11A697] focus:ring-2 focus:ring-[#11A697]/20 text-sm md:text-base p-3 transition-all duration-200" 
-                                            placeholder="Contoh: 85 - Proposal sudah cukup baik dengan beberapa catatan perbaikan..."
-                                            required
-                                        >{{ old('penilaian', $myReview->penilaian ?? '') }}</textarea>
-                                        <p class="text-xs text-gray-500 mt-2 flex items-center">
-                                            <i class='bx bx-info-circle mr-1'></i>
-                                            Masukkan nilai dan penjelasan singkat penilaian Anda
-                                        </p>
-                                    </div>
+                                    {{-- Form Penilaian Dinamis (jika ada) --}}
+                                    @if($module->form_penilaian && count($module->form_penilaian) > 0)
+                                        <div class="bg-white rounded-lg p-4 md:p-5 shadow-sm border border-green-100/50">
+                                            <div class="flex items-center mb-4">
+                                                <i class='bx bx-list-check text-[#11A697] text-2xl mr-2'></i>
+                                                <h5 class="text-sm md:text-base font-bold text-gray-800">Form Penilaian</h5>
+                                            </div>
+                                            
+                                            @php
+                                                $existingPenilaian = $myReview && $myReview->penilaian 
+                                                    ? (is_string($myReview->penilaian) ? json_decode($myReview->penilaian, true) : $myReview->penilaian)
+                                                    : [];
+                                            @endphp
+
+                                            <div class="space-y-4">
+                                                @foreach($module->form_penilaian as $index => $kriteria)
+                                                    <div class="border-l-4 border-[#11A697] pl-4 py-2">
+                                                        <label for="penilaian-{{ $module->id }}-{{ $index }}" class="block text-sm font-semibold text-gray-800 mb-2">
+                                                            {{ $kriteria['label'] ?? 'Kriteria ' . ($index + 1) }}
+                                                            <span class="text-red-500">*</span>
+                                                            @if(isset($kriteria['bobot']) && $kriteria['bobot'] > 0)
+                                                                <span class="ml-2 text-xs font-normal bg-[#11A697] text-white px-2 py-0.5 rounded">Bobot: {{ $kriteria['bobot'] }}%</span>
+                                                            @endif
+                                                        </label>
+                                                        
+                                                        @if(isset($kriteria['keterangan']) && $kriteria['keterangan'])
+                                                            <p class="text-xs text-gray-500 mb-2 flex items-start">
+                                                                <i class='bx bx-info-circle mr-1 mt-0.5'></i>
+                                                                {{ $kriteria['keterangan'] }}
+                                                            </p>
+                                                        @endif
+
+                                                        @if($kriteria['type'] === 'number')
+                                                            <input 
+                                                                type="number" 
+                                                                step="0.01"
+                                                                name="penilaian[{{ $index }}]" 
+                                                                id="penilaian-{{ $module->id }}-{{ $index }}"
+                                                                value="{{ old('penilaian.' . $index, $existingPenilaian[$index] ?? '') }}"
+                                                                class="w-full rounded-lg border-2 border-gray-200 focus:border-[#11A697] focus:ring-2 focus:ring-[#11A697]/20 text-sm md:text-base p-3 transition-all duration-200" 
+                                                                placeholder="Masukkan nilai"
+                                                                required
+                                                            >
+                                                        @elseif($kriteria['type'] === 'textarea')
+                                                            <textarea 
+                                                                name="penilaian[{{ $index }}]" 
+                                                                id="penilaian-{{ $module->id }}-{{ $index }}"
+                                                                rows="4"
+                                                                class="w-full rounded-lg border-2 border-gray-200 focus:border-[#11A697] focus:ring-2 focus:ring-[#11A697]/20 text-sm md:text-base p-3 transition-all duration-200" 
+                                                                placeholder="Tulis penilaian Anda"
+                                                                required
+                                                            >{{ old('penilaian.' . $index, $existingPenilaian[$index] ?? '') }}</textarea>
+                                                        @else
+                                                            <input 
+                                                                type="text" 
+                                                                name="penilaian[{{ $index }}]" 
+                                                                id="penilaian-{{ $module->id }}-{{ $index }}"
+                                                                value="{{ old('penilaian.' . $index, $existingPenilaian[$index] ?? '') }}"
+                                                                class="w-full rounded-lg border-2 border-gray-200 focus:border-[#11A697] focus:ring-2 focus:ring-[#11A697]/20 text-sm md:text-base p-3 transition-all duration-200" 
+                                                                placeholder="Masukkan jawaban"
+                                                                required
+                                                            >
+                                                        @endif
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
 
                                     {{-- Komentar Input --}}
                                     <div class="bg-white rounded-lg p-4 md:p-5 shadow-sm border border-green-100/50">
