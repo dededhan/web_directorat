@@ -323,15 +323,7 @@
                                     </p>
                                 </div>
                             </div>
-                            @if($review->penilaian)
-                                <div class="flex items-center space-x-2 bg-gradient-to-r from-[#11A697] to-[#0e8a7c] text-white px-3 py-2 rounded-lg shadow-sm">
-                                    <i class='bx bx-star text-lg'></i>
-                                    <div class="text-left">
-                                        <p class="text-xs font-medium opacity-90">Penilaian</p>
-                                        <p class="text-sm font-bold">{{ $review->penilaian }}</p>
-                                    </div>
-                                </div>
-                            @endif
+                            
                         </div>
                         <div class="bg-white rounded-lg p-3 md:p-4 border-l-4 border-purple-400">
                             <p class="text-xs font-semibold text-purple-600 mb-2 uppercase tracking-wide">Komentar</p>
@@ -345,15 +337,15 @@
                             
                             @if($isLong)
                                 <div class="text-sm md:text-base text-gray-700 leading-relaxed">
-                                    <p x-show="!expanded" class="whitespace-pre-wrap break-words overflow-wrap-anywhere">{{ $preview }}...</p>
-                                    <p x-show="expanded" class="whitespace-pre-wrap break-words overflow-wrap-anywhere">{{ $komentar }}</p>
+                                    <p x-show="!expanded" class="whitespace-pre-wrap break-all ">{{ $preview }}...</p>
+                                    <p x-show="expanded" class="whitespace-pre-wrap break-all ">{{ $komentar }}</p>
                                     <button @click="expanded = !expanded" class="mt-2 text-[#11A697] hover:text-[#0e8a7c] font-semibold text-sm flex items-center gap-1">
                                         <span x-text="expanded ? 'Tampilkan Lebih Sedikit' : 'Selengkapnya'"></span>
                                         <i class='bx' :class="expanded ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
                                     </button>
                                 </div>
                             @else
-                                <p class="text-sm md:text-base text-gray-700 whitespace-pre-wrap leading-relaxed">{{ $komentar }}</p>
+                                <p class="text-sm md:text-base text-gray-700 whitespace-pre-wrap break-all leading-relaxed">{{ $komentar }}</p>
                             @endif
                         </div>
                     </div>
