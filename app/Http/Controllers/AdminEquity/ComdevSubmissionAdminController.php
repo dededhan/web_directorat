@@ -211,4 +211,32 @@ class ComdevSubmissionAdminController extends Controller
             $fileName
         );
     }
+
+    public function destroy(ComdevProposal $comdev, ComdevSubmission $submission)
+    {
+        // Pastikan submission ini milik sesi ($comdev) yang benar
+        abort_if($submission->comdev_proposal_id !== $comdev->id, 404);
+
+        // Cek apakah ada reviewer yang sudah memberikan review
+        $hasReviews = $submission->reviews()->exists();
+        
+        if ($hasReviews) {
+            return back()->with('error', 'Proposal tidak dapat dihapus karena sudah memiliki review dari reviewer.');
+        }
+
+        // Simpan judul untuk pesan sukses
+        $judul = $submission->judul;
+
+        // Hapus relasi dan data terkait
+        $submission->reviewers()->detach(); // Hapus relasi dengan reviewer
+        $submission->moduleStatuses()->delete(); // Hapus status modul
+        $submission->files()->delete(); // Hapus file yang diupload
+        $submission->members()->delete(); // Hapus anggota tim
+        
+        // Hapus submission
+        $submission->delete();
+
+        return redirect()->route('admin_equity.comdev.submissions.index', $comdev->id)
+            ->with('success', "Proposal \"{$judul}\" berhasil dihapus.");
+    }
 }

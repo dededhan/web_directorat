@@ -173,7 +173,8 @@
                                         </td>
                                         <td class="px-6 py-5 text-sm text-gray-600">
                                             <p class="font-semibold">{{ $submission->user->name }}</p>
-                                            <p class="text-xs text-gray-500">{{ $submission->user->profile?->prodi?->name ?? '' }}</p>
+                                            <p class="text-xs text-gray-500">
+                                                {{ $submission->user->profile?->prodi?->name ?? '' }}</p>
                                         </td>
                                         <td class="px-6 py-5 text-sm text-gray-600">
                                             {{ $submission->updated_at->isoFormat('D MMMM YYYY, HH:mm') }}</td>
@@ -187,10 +188,29 @@
                                             @endif
                                         </td>
                                         <td class="px-6 py-5 text-center">
-                                            <a href="{{ route('admin_equity.comdev.submissions.show', ['comdev' => $comdev->id, 'submission' => $submission->id]) }}"
-                                                class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold text-xs rounded-lg hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md">
-                                                <i class='bx bx-search-alt mr-1.5'></i> Detail
-                                            </a>
+                                            <div class="flex items-center justify-center gap-x-2">
+                                                {{-- Tombol Detail --}}
+                                                <a href="{{ route('admin_equity.comdev.submissions.show', ['comdev' => $comdev->id, 'submission' => $submission->id]) }}"
+                                                    class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold text-xs rounded-lg hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md">
+                                                    <i class='bx bx-search-alt mr-1.5'></i> Detail
+                                                </a>
+
+                                                {{-- Tombol Hapus --}}
+                                                @if (auth()->user()->role !== 'sub_admin_equity')
+                                                    <button type="button"
+                                                        onclick="confirmDelete('{{ $submission->id }}', '{{ addslashes($submission->judul) }}')"
+                                                        class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold text-xs rounded-lg hover:from-red-600 hover:to-red-700 transform hover:scale-105 transition-all duration-200 shadow-md">
+                                                        <i class='bx bx-trash mr-1.5'></i> Hapus
+                                                    </button>
+                                                    
+                                                    <form id="delete-form-{{ $submission->id }}"
+                                                        action="{{ route('admin_equity.comdev.submissions.destroy', ['comdev' => $comdev->id, 'submission' => $submission->id]) }}"
+                                                        method="POST" style="display: none;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                    </form>
+                                                @endif
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty
@@ -202,7 +222,8 @@
                                                     <i class='bx bx-data text-4xl text-gray-400'></i>
                                                 </div>
                                                 <h3 class="font-bold text-xl text-gray-800 mb-2">Data Tidak Ditemukan</h3>
-                                                <p class="text-gray-500 max-w-md">Tidak ada proposal yang cocok dengan kriteria filter Anda. Silakan coba reset filter.</p>
+                                                <p class="text-gray-500 max-w-md">Tidak ada proposal yang cocok dengan
+                                                    kriteria filter Anda. Silakan coba reset filter.</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -237,19 +258,39 @@
                                         class='bx bxs-calendar mr-2 text-gray-400'></i>{{ $submission->updated_at->isoFormat('D MMMM YYYY, HH:mm') }}
                                 </p>
                             </div>
-                            <a href="{{ route('admin_equity.comdev.submissions.show', ['comdev' => $comdev->id, 'submission' => $submission->id]) }}"
-                                class="w-full text-center inline-flex justify-center items-center px-4 py-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold text-xs rounded-lg hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md">
-                                <i class='bx bx-search-alt mr-1.5'></i> Detail & Kelola
-                            </a>
+                            <div class="flex flex-col gap-y-2">
+                                {{-- Tombol Detail --}}
+                                <a href="{{ route('admin_equity.comdev.submissions.show', ['comdev' => $comdev->id, 'submission' => $submission->id]) }}"
+                                    class="w-full text-center inline-flex justify-center items-center px-4 py-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold text-xs rounded-lg hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-md">
+                                    <i class='bx bx-search-alt mr-1.5'></i> Detail & Kelola
+                                </a>
+
+                                {{-- Tombol Hapus --}}
+                                @if (auth()->user()->role !== 'sub_admin_equity')
+                                    <button type="button"
+                                        onclick="confirmDelete('{{ $submission->id }}', '{{ addslashes($submission->judul) }}')"
+                                        class="w-full text-center inline-flex justify-center items-center px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold text-xs rounded-lg hover:from-red-600 hover:to-red-700 transform hover:scale-105 transition-all duration-200 shadow-md">
+                                        <i class='bx bx-trash mr-1.5'></i> Hapus
+                                    </button>
+                                    
+                                    <form id="delete-form-mobile-{{ $submission->id }}"
+                                        action="{{ route('admin_equity.comdev.submissions.destroy', ['comdev' => $comdev->id, 'submission' => $submission->id]) }}"
+                                        method="POST" style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                @endif
+                            </div>
                         </div>
                     @empty
                         <div class="text-center py-16 px-4">
-                             <div class="flex flex-col items-center">
+                            <div class="flex flex-col items-center">
                                 <div class="w-24 h-24 bg-gray-100 rounded-2xl flex items-center justify-center mb-6">
                                     <i class='bx bx-data text-4xl text-gray-400'></i>
                                 </div>
                                 <h3 class="font-bold text-xl text-gray-800 mb-2">Data Tidak Ditemukan</h3>
-                                <p class="text-gray-500 max-w-md text-center">Tidak ada proposal yang cocok dengan kriteria filter Anda. Silakan coba reset filter.</p>
+                                <p class="text-gray-500 max-w-md text-center">Tidak ada proposal yang cocok dengan kriteria
+                                    filter Anda. Silakan coba reset filter.</p>
                             </div>
                         </div>
                     @endforelse
@@ -268,48 +309,109 @@
 @endsection
 
 @push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const fakultasSelect = document.getElementById('fakultas_id');
-    const prodiSelect = document.getElementById('prodi_id');
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fakultasSelect = document.getElementById('fakultas_id');
+            const prodiSelect = document.getElementById('prodi_id');
 
-    const selectedProdiId = '{{ $request['prodi_id'] ?? '' }}';
+            const selectedProdiId = '{{ $request['prodi_id'] ?? '' }}';
 
-    function fetchProdi(fakultasId, selectedId = null) {
-        if (!fakultasId) {
-            prodiSelect.innerHTML = '<option value="">-- Pilih Fakultas Terlebih Dahulu --</option>';
-            prodiSelect.disabled = true;
-            return;
-        }
+            function fetchProdi(fakultasId, selectedId = null) {
+                if (!fakultasId) {
+                    prodiSelect.innerHTML = '<option value="">-- Pilih Fakultas Terlebih Dahulu --</option>';
+                    prodiSelect.disabled = true;
+                    return;
+                }
 
-        fetch(`/api/prodi/${fakultasId}`)
-            .then(response => response.json())
-            .then(data => {
-                prodiSelect.innerHTML = '<option value="">Semua Prodi</option>';
-                data.forEach(prodi => {
-                    const option = new Option(prodi.name, prodi.id);
-                    if (selectedId && prodi.id == selectedId) {
-                        option.selected = true;
-                    }
-                    prodiSelect.add(option);
-                });
-                prodiSelect.disabled = false;
-            })
-            .catch(error => {
-                console.error('Error fetching prodi:', error);
-                prodiSelect.innerHTML = '<option value="">Gagal memuat prodi</option>';
-                prodiSelect.disabled = true;
+                fetch(`/api/prodi/${fakultasId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        prodiSelect.innerHTML = '<option value="">Semua Prodi</option>';
+                        data.forEach(prodi => {
+                            const option = new Option(prodi.name, prodi.id);
+                            if (selectedId && prodi.id == selectedId) {
+                                option.selected = true;
+                            }
+                            prodiSelect.add(option);
+                        });
+                        prodiSelect.disabled = false;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching prodi:', error);
+                        prodiSelect.innerHTML = '<option value="">Gagal memuat prodi</option>';
+                        prodiSelect.disabled = true;
+                    });
+            }
+
+            fakultasSelect.addEventListener('change', function() {
+                fetchProdi(this.value);
             });
-    }
 
-    fakultasSelect.addEventListener('change', function () {
-        fetchProdi(this.value);
-    });
+            if (fakultasSelect.value) {
+                fetchProdi(fakultasSelect.value, selectedProdiId);
+            }
+        });
 
-    if (fakultasSelect.value) {
-        fetchProdi(fakultasSelect.value, selectedProdiId);
-    }
-});
-</script>
+        // Konfirmasi Delete dengan SweetAlert2 (2 kali konfirmasi)
+        function confirmDelete(submissionId, judulProposal) {
+            // Konfirmasi pertama
+            Swal.fire({
+                title: 'Peringatan!',
+                html: `Anda akan menghapus proposal:<br><strong>"${judulProposal}"</strong><br><br>Apakah Anda yakin?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: '<i class="bx bx-check"></i> Ya, Saya Yakin',
+                cancelButtonText: '<i class="bx bx-x"></i> Batal',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Konfirmasi kedua
+                    Swal.fire({
+                        title: 'Konfirmasi Akhir!',
+                        html: `<strong class="text-red-600">PERHATIAN:</strong> Tindakan ini akan menghapus:<br><br>
+                               <ul class="text-left list-disc list-inside space-y-1">
+                                   <li>Proposal beserta semua data</li>
+                                   <li>File yang telah diupload</li>
+                                   <li>Anggota tim</li>
+                                   <li>Status modul</li>
+                                   <li>Penugasan reviewer</li>
+                               </ul><br>
+                               <strong class="text-red-600">Tindakan ini TIDAK dapat dibatalkan!</strong><br><br>
+                               Ketik <strong>"HAPUS"</strong> untuk melanjutkan:`,
+                        icon: 'error',
+                        input: 'text',
+                        inputPlaceholder: 'Ketik: HAPUS',
+                        showCancelButton: true,
+                        confirmButtonColor: '#dc2626',
+                        cancelButtonColor: '#6b7280',
+                        confirmButtonText: '<i class="bx bx-trash"></i> Hapus Permanen',
+                        cancelButtonText: '<i class="bx bx-x"></i> Batal',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        inputValidator: (value) => {
+                            if (value !== 'HAPUS') {
+                                return 'Anda harus mengetik "HAPUS" untuk melanjutkan!';
+                            }
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Submit form (cek desktop atau mobile)
+                            const desktopForm = document.getElementById('delete-form-' + submissionId);
+                            const mobileForm = document.getElementById('delete-form-mobile-' + submissionId);
+                            
+                            if (desktopForm) {
+                                desktopForm.submit();
+                            } else if (mobileForm) {
+                                mobileForm.submit();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 @endpush
-

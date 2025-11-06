@@ -90,6 +90,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         Route::get('/', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'index'])->name('index');
         Route::get('/export', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'export'])->name('export');
         Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'show'])->name('show');
+        Route::delete('/{submission}', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'destroy'])->name('destroy');
         Route::post('/{submission}/assign-reviewer', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'assignReviewer'])->name('assignReviewer');
     });
     Route::get('/comdev/{sesi}/modules', [ComdevModuleController::class, 'index'])->name('comdev.modules.index');
