@@ -305,15 +305,19 @@
         
         @if($reviewsForModule->isNotEmpty())
             <div class="space-y-4">
-                @foreach ($reviewsForModule as $review)
+                @foreach ($reviewsForModule as $index => $review)
+                    @php
+                        $reviewerNumber = $index + 1;
+                        $reviewerLabel = "Reviewer " . $reviewerNumber;
+                    @endphp
                     <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-4 md:p-5 border border-purple-100" x-data="{ expanded: false }">
                         <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                             <div class="flex items-center space-x-3">
                                 <div class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-full font-bold text-sm shrink-0">
-                                    {{ substr($review->reviewer->name ?? 'R', 0, 2) }}
+                                    R{{ $reviewerNumber }}
                                 </div>
                                 <div>
-                                    <p class="text-sm md:text-base font-bold text-gray-800">{{ $review->reviewer->name ?? 'Reviewer' }}</p>
+                                    <p class="text-sm md:text-base font-bold text-gray-800">{{ $reviewerLabel }}</p>
                                     <p class="text-xs text-gray-500" title="{{ $review->created_at->format('d M Y, H:i:s') }}">
                                         {{ $review->created_at->diffForHumans() }}
                                     </p>
