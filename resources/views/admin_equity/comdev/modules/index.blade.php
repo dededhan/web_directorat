@@ -60,7 +60,25 @@
 
                 {{-- [NEW] Edit Modul & Form Penilaian --}}
                 <div x-show="editingModuleId === {{ $module->id }}" x-cloak x-transition class="p-6 border-b bg-gray-50">
-                    <form action="{{ route('admin_equity.comdev.modules.update', $module->id) }}" method="POST" class="space-y-6">
+                    <form action="{{ route('admin_equity.comdev.modules.update', $module->id) }}" method="POST" class="space-y-6" 
+                          x-ref="editForm{{ $module->id }}"
+                          @submit.prevent="
+                              const form = $refs.editForm{{ $module->id }};
+                              const existingInputs = form.querySelectorAll('input[name^=form_penilaian], select[name^=form_penilaian], textarea[name^=form_penilaian]');
+                              existingInputs.forEach(input => input.remove());
+                              
+                              formPenilaian.forEach((kriteria, idx) => {
+                                  ['label', 'type', 'bobot', 'keterangan'].forEach(field => {
+                                      const input = document.createElement('input');
+                                      input.type = 'hidden';
+                                      input.name = `form_penilaian[${idx}][${field}]`;
+                                      input.value = kriteria[field] || '';
+                                      form.appendChild(input);
+                                  });
+                              });
+                              
+                              form.submit();
+                          ">
                         @csrf
                         @method('PUT')
                         <h3 class="text-lg font-bold text-gray-800 mb-4">Edit Modul & Form Penilaian</h3>
@@ -102,11 +120,17 @@
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                             <div class="md:col-span-2">
                                                 <label class="block text-xs font-medium text-gray-600 mb-1">Label/Nama Kriteria</label>
-                                                <input type="text" x-model="kriteria.label" :name="'form_penilaian[' + index + '][label]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" placeholder="Contoh: Kesesuaian dengan Tujuan" required>
+                                                <input type="text" 
+                                                       x-model="kriteria.label" 
+                                                       class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" 
+                                                       placeholder="Contoh: Kesesuaian dengan Tujuan" 
+                                                       required>
                                             </div>
                                             <div>
                                                 <label class="block text-xs font-medium text-gray-600 mb-1">Tipe Input</label>
-                                                <select x-model="kriteria.type" :name="'form_penilaian[' + index + '][type]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" required>
+                                                <select x-model="kriteria.type" 
+                                                        class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" 
+                                                        required>
                                                     <option value="number">Angka (Number)</option>
                                                     <option value="text">Teks Singkat</option>
                                                     <option value="textarea">Teks Panjang</option>
@@ -114,11 +138,19 @@
                                             </div>
                                             <div>
                                                 <label class="block text-xs font-medium text-gray-600 mb-1">Bobot (%)</label>
-                                                <input type="number" x-model="kriteria.bobot" :name="'form_penilaian[' + index + '][bobot]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" placeholder="0-100" min="0" max="100">
+                                                <input type="number" 
+                                                       x-model="kriteria.bobot" 
+                                                       class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" 
+                                                       placeholder="0-100" 
+                                                       min="0" 
+                                                       max="100">
                                             </div>
                                             <div class="md:col-span-2">
                                                 <label class="block text-xs font-medium text-gray-600 mb-1">Keterangan/Instruksi</label>
-                                                <textarea x-model="kriteria.keterangan" :name="'form_penilaian[' + index + '][keterangan]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" rows="2" placeholder="Instruksi untuk reviewer"></textarea>
+                                                <textarea x-model="kriteria.keterangan" 
+                                                          class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" 
+                                                          rows="2" 
+                                                          placeholder="Instruksi untuk reviewer"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -300,7 +332,25 @@
                 <div class="p-5 border-b bg-gray-800 text-white">
                     <h3 class="text-xl font-semibold">Form Modul Baru</h3>
                 </div>
-                <form action="{{ route('admin_equity.comdev.modules.storeModule', $sesi->id) }}" method="POST" class="p-6 space-y-6">
+                <form action="{{ route('admin_equity.comdev.modules.storeModule', $sesi->id) }}" method="POST" class="p-6 space-y-6"
+                      x-ref="newModuleFormElement"
+                      @submit.prevent="
+                          const form = $refs.newModuleFormElement;
+                          const existingInputs = form.querySelectorAll('input[name^=form_penilaian]');
+                          existingInputs.forEach(input => input.remove());
+                          
+                          newModuleForm.forEach((kriteria, idx) => {
+                              ['label', 'type', 'bobot', 'keterangan'].forEach(field => {
+                                  const input = document.createElement('input');
+                                  input.type = 'hidden';
+                                  input.name = `form_penilaian[${idx}][${field}]`;
+                                  input.value = kriteria[field] || '';
+                                  form.appendChild(input);
+                              });
+                          });
+                          
+                          form.submit();
+                      ">
                     @csrf
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
@@ -338,11 +388,19 @@
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                         <div class="md:col-span-2">
                                             <label class="block text-xs font-medium text-gray-600 mb-1">Label/Nama Kriteria</label>
-                                            <input type="text" x-model="kriteria.label" :name="'form_penilaian[' + index + '][label]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" placeholder="Contoh: Kesesuaian dengan Tujuan" required>
+                                            <input type="text" 
+                                                   x-model="kriteria.label" 
+                                                   :name="'form_penilaian[' + index + '][label]'"
+                                                   class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" 
+                                                   placeholder="Contoh: Kesesuaian dengan Tujuan" 
+                                                   required>
                                         </div>
                                         <div>
                                             <label class="block text-xs font-medium text-gray-600 mb-1">Tipe Input</label>
-                                            <select x-model="kriteria.type" :name="'form_penilaian[' + index + '][type]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" required>
+                                            <select x-model="kriteria.type" 
+                                                    :name="'form_penilaian[' + index + '][type]'"
+                                                    class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" 
+                                                    required>
                                                 <option value="number">Angka (Number)</option>
                                                 <option value="text">Teks Singkat</option>
                                                 <option value="textarea">Teks Panjang</option>
@@ -350,11 +408,21 @@
                                         </div>
                                         <div>
                                             <label class="block text-xs font-medium text-gray-600 mb-1">Bobot (%)</label>
-                                            <input type="number" x-model="kriteria.bobot" :name="'form_penilaian[' + index + '][bobot]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" placeholder="0-100" min="0" max="100">
+                                            <input type="number" 
+                                                   x-model="kriteria.bobot" 
+                                                   :name="'form_penilaian[' + index + '][bobot]'"
+                                                   class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" 
+                                                   placeholder="0-100" 
+                                                   min="0" 
+                                                   max="100">
                                         </div>
                                         <div class="md:col-span-2">
                                             <label class="block text-xs font-medium text-gray-600 mb-1">Keterangan/Instruksi</label>
-                                            <textarea x-model="kriteria.keterangan" :name="'form_penilaian[' + index + '][keterangan]'" class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" rows="2" placeholder="Instruksi untuk reviewer"></textarea>
+                                            <textarea x-model="kriteria.keterangan" 
+                                                      :name="'form_penilaian[' + index + '][keterangan]'"
+                                                      class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring focus:ring-[#11A697] focus:ring-opacity-50" 
+                                                      rows="2" 
+                                                      placeholder="Instruksi untuk reviewer"></textarea>
                                         </div>
                                     </div>
                                 </div>
