@@ -28,6 +28,138 @@
         </div>
     </div>
 
+    {{-- Detail Proposal Section --}}
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-6 md:mb-8">
+        <div class="p-5 border-b bg-[#11A697] text-white">
+            <h2 class="text-xl font-semibold flex items-center">
+                <i class='bx bx-detail text-2xl mr-2'></i>
+                Detail Proposal
+            </h2>
+        </div>
+        <div class="p-6 space-y-5">
+            {{-- Judul --}}
+            <div>
+                <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Judul Proposal</h3>
+                <p class="text-base text-gray-800">{{ $submission->judul }}</p>
+            </div>
+            
+            {{-- Ketua Tim --}}
+            @php
+                $ketua = $submission->members()->where('peran', 'Ketua')->first();
+                $anggota = $submission->members()->where('peran', 'Anggota')->get();
+            @endphp
+            
+            @if($ketua)
+            <div class="border-t pt-4">
+                <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Ketua Tim</h3>
+                <div class="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-4 border border-blue-100">
+                    <p class="text-base font-bold text-gray-800 mb-1">{{ $ketua->nama_lengkap }}</p>
+                    @if($ketua->nik_nim_nip)
+                        <p class="text-sm text-gray-600">NIK/NIM/NIP: {{ $ketua->nik_nim_nip }}</p>
+                    @endif
+                </div>
+            </div>
+            @endif
+            
+            {{-- Anggota Tim --}}
+            @if($anggota->count() > 0)
+            <div class="border-t pt-4">
+                <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Anggota Tim</h3>
+                <div class="space-y-2">
+                    @foreach($anggota as $member)
+                        <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                            <p class="text-base font-semibold text-gray-800">{{ $member->nama_lengkap }}</p>
+                            @if($member->nik_nim_nip)
+                                <p class="text-sm text-gray-600">NIK/NIM/NIP: {{ $member->nik_nim_nip }}</p>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+            
+            {{-- Abstrak --}}
+            <div class="border-t pt-4">
+                <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Abstrak</h3>
+                <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{{ $submission->abstrak }}</p>
+            </div>
+            
+            {{-- SDG's --}}
+            @if($submission->sdgs_fokus || $submission->sdgs_pendukung)
+            <div class="border-t pt-4">
+                <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Sustainable Development Goals (SDGs)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @if($submission->sdgs_fokus)
+                        <div class="bg-green-50 rounded-lg p-4 border border-green-200">
+                            <p class="text-sm font-bold text-green-800 mb-2">SDGs Fokus</p>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach($submission->sdgs_fokus as $sdg)
+                                    <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium">{{ $sdg }}</span>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                    @if($submission->sdgs_pendukung)
+                        <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                            <p class="text-sm font-bold text-blue-800 mb-2">SDGs Pendukung</p>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach($submission->sdgs_pendukung as $sdg)
+                                    <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium">{{ $sdg }}</span>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+            @endif
+            
+            {{-- Mitra --}}
+            @if($submission->mitra_nasional || $submission->mitra_internasional)
+            <div class="border-t pt-4">
+                <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Mitra</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @if($submission->mitra_nasional)
+                        <div class="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                            <p class="text-sm font-bold text-purple-800 mb-2">Mitra Nasional</p>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach($submission->mitra_nasional as $mitra)
+                                    <span class="bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-medium">{{ $mitra }}</span>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                    @if($submission->mitra_internasional)
+                        <div class="bg-indigo-50 rounded-lg p-4 border border-indigo-200">
+                            <p class="text-sm font-bold text-indigo-800 mb-2">Mitra Internasional</p>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach($submission->mitra_internasional as $mitra)
+                                    <span class="bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-medium">{{ $mitra }}</span>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+            @endif
+            
+            {{-- Info Lainnya --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 pt-4 border-t border-gray-200">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Tempat Pelaksanaan</h3>
+                    <p class="text-base text-gray-800">{{ $submission->tempat_pelaksanaan }}</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Tahun Usulan</h3>
+                    <p class="text-base text-gray-800">{{ $submission->tahun_usulan }}</p>
+                </div>
+                <div class="md:col-span-2">
+                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Nominal Usulan</h3>
+                    <p class="text-xl font-bold text-[#11A697]">Rp {{ number_format($submission->nominal_usulan, 0, ',', '.') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @php
         $allModules = $submission->sesi->modules;
         $uploadedFiles = $submission->files->keyBy('comdev_sub_chapter_id');
@@ -87,24 +219,45 @@
                                             <div class="flex-1">
                                                 <p class="text-sm md:text-base font-semibold text-gray-700 mb-2">{{ $subChapter->nama_sub_bab }}</p>
                                                 @if($file)
-                                                    <div class="flex flex-wrap items-center gap-2">
-                                                        <a href="{{ route('subdirektorat-inovasi.dosen.equity.files.preview', $file->id) }}" 
-                                                           target="_blank"
-                                                           class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors group">
-                                                            <span class="flex items-center justify-center w-5 h-5 mr-1.5">
-                                                                <i class='bx bx-show text-base'></i>
-                                                            </span>
-                                                            Lihat
-                                                        </a>
-                                                        <a href="{{ route('subdirektorat-inovasi.dosen.equity.files.download', $file->id) }}" 
-                                                           class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-[#11A697] bg-[#11A697]/10 hover:bg-[#11A697]/20 rounded-lg transition-colors group">
-                                                            <span class="flex items-center justify-center w-5 h-5 mr-1.5">
-                                                                <i class='bx bxs-download text-base'></i>
-                                                            </span>
-                                                            Unduh
-                                                        </a>
-                                                        <span class="text-xs text-gray-600 break-all">{{ $file->original_filename }}</span>
-                                                    </div>
+                                                    @if($file->type === 'file' && $file->file_path)
+                                                        {{-- Untuk file PDF --}}
+                                                        <div class="flex flex-wrap items-center gap-2">
+                                                            <a href="{{ route('subdirektorat-inovasi.dosen.equity.files.preview', $file->id) }}" 
+                                                               target="_blank"
+                                                               class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors group">
+                                                                <span class="flex items-center justify-center w-5 h-5 mr-1.5">
+                                                                    <i class='bx bx-show text-base'></i>
+                                                                </span>
+                                                                Lihat
+                                                            </a>
+                                                            <a href="{{ route('subdirektorat-inovasi.dosen.equity.files.download', $file->id) }}" 
+                                                               class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-[#11A697] bg-[#11A697]/10 hover:bg-[#11A697]/20 rounded-lg transition-colors group">
+                                                                <span class="flex items-center justify-center w-5 h-5 mr-1.5">
+                                                                    <i class='bx bxs-download text-base'></i>
+                                                                </span>
+                                                                Unduh
+                                                            </a>
+                                                            <span class="text-xs text-gray-600 break-all">{{ $file->original_filename }}</span>
+                                                        </div>
+                                                    @elseif($file->type === 'link' && $file->url)
+                                                        {{-- Untuk URL/Link --}}
+                                                        <div class="flex flex-wrap items-center gap-2">
+                                                            <a href="{{ $file->url }}" 
+                                                               target="_blank"
+                                                               class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-indigo-700 bg-indigo-100 hover:bg-indigo-200 rounded-lg transition-colors group">
+                                                                <span class="flex items-center justify-center w-5 h-5 mr-1.5">
+                                                                    <i class='bx bx-link-external text-base'></i>
+                                                                </span>
+                                                                Buka Link
+                                                            </a>
+                                                            <span class="text-xs text-gray-600 break-all">{{ Str::limit($file->url, 50) }}</span>
+                                                        </div>
+                                                    @else
+                                                        <div class="flex items-center text-gray-400 text-sm">
+                                                            <i class='bx bx-error-circle mr-2 text-lg'></i>
+                                                            <span class="italic">Data file tidak valid</span>
+                                                        </div>
+                                                    @endif
                                                 @else
                                                     <div class="flex items-center text-gray-400 text-sm">
                                                         <i class='bx bx-info-circle mr-2 text-lg'></i>

@@ -63,11 +63,9 @@ class ComdevSubmissionFileController extends Controller
     ];
 
 
-        // 2. Logika kondisional untuk file atau link
+
        if ($validated['type'] === 'file') {
-        // Hanya proses upload jika file baru diunggah
         if ($request->hasFile('file_dokumen')) {
-            // Jika ada file lama, hapus dari storage
             if ($existingRecord && $existingRecord->type === 'file' && Storage::disk('public')->exists($existingRecord->file_path)) {
                 Storage::disk('public')->delete($existingRecord->file_path);
             }
@@ -81,7 +79,7 @@ class ComdevSubmissionFileController extends Controller
         }
         $dataToUpdate['url'] = null; // Kosongkan URL
 
-    } else { // Jika tipenya 'link'
+    } else {
         if ($existingRecord && $existingRecord->type === 'file' && Storage::disk('public')->exists($existingRecord->file_path)) {
             Storage::disk('public')->delete($existingRecord->file_path);
         }
@@ -92,7 +90,7 @@ class ComdevSubmissionFileController extends Controller
     }
 
 
-        // 3. Gunakan updateOrCreate
+
         ComdevSubmissionFile::updateOrCreate(
             [
                 'comdev_submission_id' => $submission->id,
@@ -102,8 +100,6 @@ class ComdevSubmissionFileController extends Controller
             $dataToUpdate
         );
         
-        // Update status proposal berdasarkan kelengkapan sub-bab wajib
-        // Cari modul yang sedang aktif (status proses, diajukan, atau menunggu_direview)
         $activeModuleStatus = $submission->moduleStatuses()
             ->whereIn('status', ['proses', 'diajukan', 'menunggu_direview'])
             ->join('comdev_modules', 'comdev_submission_module_statuses.comdev_module_id', '=', 'comdev_modules.id')
@@ -118,7 +114,7 @@ class ComdevSubmissionFileController extends Controller
         if ($activeModuleStatus) {
             $activeModule = $activeModuleStatus->module;
             
-            // Hitung hanya sub-bab yang wajib
+
             $requiredSubChaptersCount = $activeModule->subChapters()->where('is_wajib', true)->count();
             $requiredSubChapterIds = $activeModule->subChapters()->where('is_wajib', true)->pluck('id');
             
@@ -137,7 +133,6 @@ class ComdevSubmissionFileController extends Controller
                 FILE_APPEND);
 
             if ($requiredSubChaptersCount > 0 && $requiredSubChaptersCount === $uploadedFilesCount) {
-                // Ubah status jadi MENUNGGU_DIREVIEW jika semua sub-bab wajib di modul aktif sudah terisi
                 $activeModuleStatus->update(['status' => 'menunggu_direview']);
                 $submission->update(['status' => ComdevStatusEnum::MENUNGGU_DIREVIEW]);
                 file_put_contents(storage_path('logs/file_upload_debug.txt'), 
@@ -170,25 +165,35 @@ class ComdevSubmissionFileController extends Controller
      */
     public function preview(ComdevSubmissionFile $file)
     {
-        // Cek otorisasi - bisa dilihat oleh owner, reviewer, atau admin
+
         $user = Auth::user();
+        
         $canView = $file->user_id === $user->id || 
-                   $user->hasRole(['reviewer_equity', 'admin_equity', 'sub_admin_equity']);
+                   $user->hasRole(['reviewer_equity', 'admin_equity', 'sub_admin_equity']) ||
+                   $file->submission->reviewers()->where('users.id', $user->id)->exists();
         
         if (!$canView) {
-            abort(403, 'AKSES DITOLAK');
+            abort(403, 'AKSES DITOLAK - Anda tidak memiliki izin untuk melihat file ini.');
         }
 
-        // Cek apakah file ada di storage
-        if (!Storage::disk('public')->exists($file->file_path)) {
-            return back()->with('error', 'File tidak ditemukan.');
+
+        if ($file->type === 'link' && $file->url) {
+            return redirect($file->url);
         }
 
-        $filePath = Storage::disk('public')->path($file->file_path);
-        return response()->file($filePath, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $file->original_filename . '"'
-        ]);
+        if ($file->type === 'file' && $file->file_path) {
+            if (!Storage::disk('public')->exists($file->file_path)) {
+                return back()->with('error', 'File tidak ditemukan di server.');
+            }
+
+            $filePath = Storage::disk('public')->path($file->file_path);
+            return response()->file($filePath, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . $file->original_filename . '"'
+            ]);
+        }
+
+        return back()->with('error', 'File tidak valid atau tidak ditemukan.');
     }
 
     /**
@@ -198,16 +203,23 @@ class ComdevSubmissionFileController extends Controller
     {
         // Cek otorisasi - bisa diunduh oleh owner, reviewer, atau admin
         $user = Auth::user();
+        
         $canDownload = $file->user_id === $user->id || 
-                       $user->hasRole(['reviewer_equity', 'admin_equity', 'sub_admin_equity']);
+                       $user->hasRole(['reviewer_equity', 'admin_equity', 'sub_admin_equity']) ||
+                       $file->submission->reviewers()->where('users.id', $user->id)->exists();
         
         if (!$canDownload) {
-            abort(403, 'AKSES DITOLAK');
+            abort(403, 'AKSES DITOLAK - Anda tidak memiliki izin untuk mengunduh file ini.');
+        }
+
+        // Jika tipe adalah link, tidak bisa diunduh
+        if ($file->type === 'link') {
+            return back()->with('error', 'Link tidak dapat diunduh. Silakan gunakan tombol "Buka Link".');
         }
 
         // Cek apakah file ada di storage
-        if (!Storage::disk('public')->exists($file->file_path)) {
-            return back()->with('error', 'File tidak ditemukan.');
+        if (!$file->file_path || !Storage::disk('public')->exists($file->file_path)) {
+            return back()->with('error', 'File tidak ditemukan di server.');
         }
 
         return Storage::disk('public')->download($file->file_path, $file->original_filename);
