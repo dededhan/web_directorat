@@ -301,6 +301,14 @@
                                             @if($review->penilaian && $module->form_penilaian && count($module->form_penilaian) > 0)
                                                 @php
                                                     $penilaianData = is_string($review->penilaian) ? json_decode($review->penilaian, true) : $review->penilaian;
+                                                    $totalNilaiReviewer = 0;
+                                                    if ($penilaianData && is_array($penilaianData)) {
+                                                        foreach ($penilaianData as $nilai) {
+                                                            if (is_numeric($nilai)) {
+                                                                $totalNilaiReviewer += floatval($nilai);
+                                                            }
+                                                        }
+                                                    }
                                                 @endphp
                                                 @if($penilaianData && is_array($penilaianData))
                                                     <div class="mb-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-3 md:p-4 border border-blue-100">
@@ -308,26 +316,9 @@
                                                             <i class='bx bx-list-check mr-1'></i>
                                                             Hasil Penilaian
                                                         </p>
-                                                        <div class="space-y-2">
-                                                            @foreach($module->form_penilaian as $index => $kriteria)
-                                                                @if(isset($penilaianData[$index]))
-                                                                    <div class="flex justify-between items-start bg-white rounded p-2 border border-blue-100/50">
-                                                                        <div class="flex-1">
-                                                                            <p class="text-xs md:text-sm font-semibold text-gray-700">
-                                                                                {{ $kriteria['label'] ?? 'Kriteria ' . ($index + 1) }}
-                                                                                @if(isset($kriteria['bobot']) && $kriteria['bobot'] > 0)
-                                                                                    <span class="ml-1 text-xs font-normal text-gray-500">({{ $kriteria['bobot'] }}%)</span>
-                                                                                @endif
-                                                                            </p>
-                                                                        </div>
-                                                                        <div class="ml-3">
-                                                                            <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs md:text-sm font-bold rounded">
-                                                                                {{ $penilaianData[$index] }}
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                @endif
-                                                            @endforeach
+                                                        <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg p-4 text-center">
+                                                            <p class="text-sm font-semibold mb-1">Total Nilai</p>
+                                                            <p class="text-3xl font-bold">{{ number_format($totalNilaiReviewer, 2) }}</p>
                                                         </div>
                                                     </div>
                                                 @endif
@@ -367,7 +358,40 @@
                             </div>
                         
                             {{-- 3. Your Review Form --}}
-                            <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-4 md:p-6 border border-green-100">
+                            @php
+                                $existingPenilaian = $myReview && $myReview->penilaian 
+                                    ? (is_string($myReview->penilaian) ? json_decode($myReview->penilaian, true) : $myReview->penilaian)
+                                    : [];
+                            @endphp
+                            <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-4 md:p-6 border border-green-100" 
+                                 x-data="{
+                                     nilai: {{ json_encode(array_map(function($k) use ($myReview, $existingPenilaian) {
+                                         $existing = $myReview && isset($existingPenilaian[$k]) ? $existingPenilaian[$k] : '';
+                                         return is_numeric($existing) ? floatval($existing) : 0;
+                                     }, array_keys($module->form_penilaian ?? []))) }},
+                                     bobot: {{ json_encode(array_map(function($k) { return floatval($k['bobot'] ?? 0); }, $module->form_penilaian ?? [])) }},
+                                     totalNilai: 0,
+                                     init() {
+                                         this.calculateTotal();
+                                         this.$watch('nilai', () => this.calculateTotal());
+                                     },
+                                     calculateTotal() {
+                                         this.totalNilai = this.nilai.reduce((sum, val, idx) => {
+                                             return sum + (parseFloat(val) || 0);
+                                         }, 0);
+                                     },
+                                     validateInput(index, event) {
+                                         const maxValue = this.bobot[index];
+                                         const inputValue = parseFloat(event.target.value) || 0;
+                                         if (maxValue > 0 && inputValue > maxValue) {
+                                             event.target.value = maxValue;
+                                             this.nilai[index] = maxValue;
+                                             alert('Nilai tidak boleh melebihi bobot: ' + maxValue);
+                                         } else {
+                                             this.nilai[index] = inputValue;
+                                         }
+                                     }
+                                 }">
                                 <div class="flex items-center mb-5">
                                     <div class="flex items-center justify-center w-8 h-8 bg-green-500 text-white rounded-lg mr-3">
                                         <i class='bx bx-edit-alt text-xl'></i>
@@ -381,16 +405,16 @@
                                     {{-- Form Penilaian Dinamis (jika ada) --}}
                                     @if($module->form_penilaian && count($module->form_penilaian) > 0)
                                         <div class="bg-white rounded-lg p-4 md:p-5 shadow-sm border border-green-100/50">
-                                            <div class="flex items-center mb-4">
-                                                <i class='bx bx-list-check text-[#11A697] text-2xl mr-2'></i>
-                                                <h5 class="text-sm md:text-base font-bold text-gray-800">Form Penilaian</h5>
+                                            <div class="flex items-center justify-between mb-4">
+                                                <div class="flex items-center">
+                                                    <i class='bx bx-list-check text-[#11A697] text-2xl mr-2'></i>
+                                                    <h5 class="text-sm md:text-base font-bold text-gray-800">Form Penilaian</h5>
+                                                </div>
+                                                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-lg shadow-md">
+                                                    <span class="text-xs font-semibold">Total Nilai: </span>
+                                                    <span class="text-lg font-bold" x-text="totalNilai.toFixed(2)">0</span>
+                                                </div>
                                             </div>
-                                            
-                                            @php
-                                                $existingPenilaian = $myReview && $myReview->penilaian 
-                                                    ? (is_string($myReview->penilaian) ? json_decode($myReview->penilaian, true) : $myReview->penilaian)
-                                                    : [];
-                                            @endphp
 
                                             <div class="space-y-4">
                                                 @foreach($module->form_penilaian as $index => $kriteria)
@@ -404,7 +428,7 @@
                                                         </label>
                                                         
                                                         @if(isset($kriteria['keterangan']) && $kriteria['keterangan'])
-                                                            <p class="text-xs text-gray-500 mb-2 flex items-start">
+                                                            <p class="text-xs text-gray-500 mb-2 flex items-start whitespace-pre-wrap">
                                                                 <i class='bx bx-info-circle mr-1 mt-0.5'></i>
                                                                 {{ $kriteria['keterangan'] }}
                                                             </p>
@@ -416,9 +440,14 @@
                                                                 step="0.01"
                                                                 name="penilaian[{{ $index }}]" 
                                                                 id="penilaian-{{ $module->id }}-{{ $index }}"
-                                                                value="{{ old('penilaian.' . $index, $existingPenilaian[$index] ?? '') }}"
+                                                                x-model.number="nilai[{{ $index }}]"
+                                                                @input="validateInput({{ $index }}, $event)"
+                                                                @if(isset($kriteria['bobot']) && $kriteria['bobot'] > 0)
+                                                                max="{{ $kriteria['bobot'] }}"
+                                                                @endif
+                                                                min="0"
                                                                 class="w-full rounded-lg border-2 border-gray-200 focus:border-[#11A697] focus:ring-2 focus:ring-[#11A697]/20 text-sm md:text-base p-3 transition-all duration-200" 
-                                                                placeholder="Masukkan nilai"
+                                                                placeholder="Masukkan nilai (max: {{ $kriteria['bobot'] ?? 100 }})"
                                                                 required
                                                             >
                                                         @elseif($kriteria['type'] === 'textarea')

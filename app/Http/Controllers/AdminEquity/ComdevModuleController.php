@@ -125,8 +125,8 @@ class ComdevModuleController extends Controller
             'deskripsi' => 'nullable|string',
             'urutan' => 'required|integer',
             'form_penilaian' => 'nullable|array',
-            'form_penilaian.*.label' => 'required|string|max:255',
-            'form_penilaian.*.type' => 'required|in:number,text,textarea',
+            'form_penilaian.*.label' => 'required_with:form_penilaian|string|max:255',
+            'form_penilaian.*.type' => 'required_with:form_penilaian|in:number,text,textarea',
             'form_penilaian.*.bobot' => 'nullable|numeric|min:0|max:100',
             'form_penilaian.*.keterangan' => 'nullable|string',
         ]);

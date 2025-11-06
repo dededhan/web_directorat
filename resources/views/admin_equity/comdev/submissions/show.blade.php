@@ -14,6 +14,11 @@
 @push('styles')
     {{-- Jika Anda menggunakan library seperti Select2, tambahkan CSS-nya di sini --}}
     {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
 @endpush
 
 
@@ -351,7 +356,7 @@
 
                                     <div x-show="open" x-transition class="bg-white p-4 md:p-6 border-t space-y-4">
                                         @forelse ($reviewsForModule as $review)
-                                            <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-4 md:p-5 border border-purple-100" x-data="{ expanded: false }">
+                                            <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-4 md:p-5 border border-purple-100" x-data="{ expanded: false, showModal: false }">
                                                 <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                                                     <div class="flex items-center space-x-3">
                                                         <div class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-full font-bold text-sm shrink-0">
@@ -364,12 +369,111 @@
                                                             </p>
                                                         </div>
                                                     </div>
-                                                    @if($review->penilaian)
-                                                        <div class="flex items-center space-x-2 bg-gradient-to-r from-[#11A697] to-[#0e8a7c] text-white px-3 py-2 rounded-lg shadow-sm">
-                                                            <i class='bx bx-star text-lg'></i>
-                                                            <div class="text-left">
-                                                                <p class="text-xs font-medium opacity-90">Penilaian</p>
-                                                                <p class="text-sm font-bold">{{ $review->penilaian }}</p>
+                                                    @if($review->penilaian && $module->form_penilaian && count($module->form_penilaian) > 0)
+                                                        @php
+                                                            $penilaianData = is_string($review->penilaian) ? json_decode($review->penilaian, true) : $review->penilaian;
+                                                            $totalNilai = 0;
+                                                            if ($penilaianData && is_array($penilaianData)) {
+                                                                foreach ($penilaianData as $nilai) {
+                                                                    if (is_numeric($nilai)) {
+                                                                        $totalNilai += floatval($nilai);
+                                                                    }
+                                                                }
+                                                            }
+                                                        @endphp
+                                                        <div class="flex items-center space-x-2">
+                                                            <div class="bg-gradient-to-r from-[#11A697] to-[#0e8a7c] text-white px-3 py-2 rounded-lg shadow-sm">
+                                                                <p class="text-xs font-medium opacity-90">Total Nilai</p>
+                                                                <p class="text-lg font-bold">{{ number_format($totalNilai, 2) }}</p>
+                                                            </div>
+                                                            <button @click="showModal = true" class="inline-flex items-center px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-sm transition-colors duration-200">
+                                                                <i class='bx bx-detail text-lg mr-1'></i>
+                                                                <span class="text-xs font-semibold">Detail</span>
+                                                            </button>
+                                                        </div>
+
+                                                        {{-- Modal Pop-up untuk Detail Penilaian --}}
+                                                        <div x-show="showModal" 
+                                                             x-cloak
+                                                             @click.away="showModal = false"
+                                                             class="fixed inset-0 z-50 overflow-y-auto" 
+                                                             style="display: none;">
+                                                            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                                                                {{-- Background overlay --}}
+                                                                <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" @click="showModal = false"></div>
+
+                                                                {{-- Modal panel --}}
+                                                                <div class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                                                                    {{-- Header --}}
+                                                                    <div class="bg-gradient-to-r from-[#11A697] to-[#0e8a7c] px-6 py-4">
+                                                                        <div class="flex items-center justify-between">
+                                                                            <div class="flex items-center space-x-3">
+                                                                                <div class="flex items-center justify-center w-10 h-10 bg-white/20 rounded-full">
+                                                                                    <i class='bx bx-list-check text-white text-2xl'></i>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <h3 class="text-lg font-bold text-white">Detail Penilaian</h3>
+                                                                                    <p class="text-xs text-white/80">{{ $review->reviewer->name }}</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <button @click="showModal = false" class="text-white/80 hover:text-white transition">
+                                                                                <i class='bx bx-x text-3xl'></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {{-- Body --}}
+                                                                    <div class="px-6 py-5 bg-gray-50">
+                                                                        <div class="mb-4 p-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg text-center shadow-md">
+                                                                            <p class="text-sm font-semibold mb-1">Total Nilai</p>
+                                                                            <p class="text-4xl font-bold">{{ number_format($totalNilai, 2) }}</p>
+                                                                        </div>
+
+                                                                        <div class="space-y-3">
+                                                                            @foreach($module->form_penilaian as $index => $kriteria)
+                                                                                @if(isset($penilaianData[$index]))
+                                                                                    <div class="bg-white rounded-lg p-4 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                                                                        <div class="flex justify-between items-start mb-2">
+                                                                                            <div class="flex-1">
+                                                                                                <h4 class="font-bold text-gray-800 text-sm mb-1">
+                                                                                                    {{ $kriteria['label'] ?? 'Kriteria ' . ($index + 1) }}
+                                                                                                </h4>
+                                                                                                @if(isset($kriteria['keterangan']) && $kriteria['keterangan'])
+                                                                                                    <p class="text-xs text-gray-500 italic whitespace-pre-wrap">{{ $kriteria['keterangan'] }}</p>
+                                                                                                @endif
+                                                                                            </div>
+                                                                                            @if(isset($kriteria['bobot']) && $kriteria['bobot'] > 0)
+                                                                                                <span class="ml-3 inline-flex items-center px-2.5 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">
+                                                                                                    Bobot: {{ $kriteria['bobot'] }}%
+                                                                                                </span>
+                                                                                            @endif
+                                                                                        </div>
+                                                                                        <div class="flex items-center space-x-2">
+                                                                                            <div class="flex-1 bg-gray-100 rounded-lg px-3 py-2">
+                                                                                                <p class="text-xs text-gray-600 mb-0.5">Nilai</p>
+                                                                                                <p class="text-xl font-bold text-[#11A697]">{{ $penilaianData[$index] }}</p>
+                                                                                            </div>
+                                                                                            @if(isset($kriteria['bobot']) && $kriteria['bobot'] > 0)
+                                                                                                <div class="flex-1 bg-blue-50 rounded-lg px-3 py-2">
+                                                                                                    <p class="text-xs text-gray-600 mb-0.5">Maksimal</p>
+                                                                                                    <p class="text-xl font-bold text-blue-600">{{ $kriteria['bobot'] }}</p>
+                                                                                                </div>
+                                                                                            @endif
+                                                                                        </div>
+                                                                                    </div>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {{-- Footer --}}
+                                                                    <div class="px-6 py-4 bg-gray-100 border-t">
+                                                                        <button @click="showModal = false" class="w-full inline-flex justify-center items-center px-4 py-2 bg-[#11A697] hover:bg-[#0e8a7c] text-white font-semibold rounded-lg transition-colors duration-200">
+                                                                            <i class='bx bx-check mr-2'></i>
+                                                                            Tutup
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     @endif
@@ -386,15 +490,15 @@
                                                     
                                                     @if($isLong)
                                                         <div class="text-sm md:text-base text-gray-700 leading-relaxed">
-                                                            <p x-show="!expanded" class="whitespace-pre-wrap break-words overflow-wrap-anywhere">{{ $preview }}...</p>
-                                                            <p x-show="expanded" class="whitespace-pre-wrap break-words overflow-wrap-anywhere">{{ $komentar }}</p>
+                                                            <p x-show="!expanded" class="whitespace-pre-wrap break-all">{{ $preview }}...</p>
+                                                            <p x-show="expanded" class="whitespace-pre-wrap break-all">{{ $komentar }}</p>
                                                             <button @click="expanded = !expanded" class="mt-2 text-[#11A697] hover:text-[#0e8a7c] font-semibold text-sm flex items-center gap-1">
                                                                 <span x-text="expanded ? 'Tampilkan Lebih Sedikit' : 'Selengkapnya'"></span>
                                                                 <i class='bx' :class="expanded ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
                                                             </button>
                                                         </div>
                                                     @else
-                                                        <p class="text-sm md:text-base text-gray-700 whitespace-pre-wrap leading-relaxed">{{ $komentar }}</p>
+                                                        <p class="text-sm md:text-base text-gray-700 whitespace-pre-wrap break-all leading-relaxed">{{ $komentar }}</p>
                                                     @endif
                                                 </div>
                                             </div>
