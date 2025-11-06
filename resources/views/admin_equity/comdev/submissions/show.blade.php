@@ -217,24 +217,55 @@
                                         @forelse($module->subChapters as $subChapter)
                                             @php $file = $uploadedFiles->get($subChapter->id); @endphp
                                             <li>
-                                                <span class="text-gray-800">{{ $subChapter->nama_sub_bab }}:</span>
+                                                <span class="text-gray-800 font-medium">{{ $subChapter->nama_sub_bab }}:</span>
                                                 @if ($file)
-                                                    <div class="flex flex-wrap items-center gap-2 mt-1">
-                                                        <a href="{{ route('subdirektorat-inovasi.dosen.equity.files.preview', $file->id) }}"
-                                                            target="_blank"
-                                                            class="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-md transition">
-                                                            <i class='bx bx-show mr-1'></i> Lihat
-                                                        </a>
-                                                        <a href="{{ route('subdirektorat-inovasi.dosen.equity.files.download', $file->id) }}"
-                                                            class="inline-flex items-center px-3 py-1 text-xs font-medium text-[#11A697] bg-teal-50 hover:bg-teal-100 rounded-md transition">
-                                                            <i class='bx bxs-download mr-1'></i> Unduh
-                                                        </a>
-                                                        <span class="text-gray-600">{{ $file->original_filename }}</span>
-                                                    </div>
-                                                    @if ($file->status_luaran)
-                                                        <div class="text-xs text-gray-500 pl-4 mt-1">
-                                                            Status Luaran: <strong
-                                                                class="font-medium">{{ $file->status_luaran }}</strong>
+                                                    @if($file->type === 'file' && $file->file_path)
+                                                        {{-- Untuk file PDF --}}
+                                                        <div class="flex flex-wrap items-center gap-2 mt-1">
+                                                            <a href="{{ route('subdirektorat-inovasi.dosen.equity.files.preview', $file->id) }}"
+                                                                target="_blank"
+                                                                class="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-md transition">
+                                                                <i class='bx bx-show mr-1'></i> Lihat
+                                                            </a>
+                                                            <a href="{{ route('subdirektorat-inovasi.dosen.equity.files.download', $file->id) }}"
+                                                                class="inline-flex items-center px-3 py-1 text-xs font-medium text-[#11A697] bg-teal-50 hover:bg-teal-100 rounded-md transition">
+                                                                <i class='bx bxs-download mr-1'></i> Unduh
+                                                            </a>
+                                                            <span class="text-gray-600">{{ $file->original_filename }}</span>
+                                                        </div>
+                                                        @if ($file->judul_luaran)
+                                                            <div class="text-xs text-gray-500 pl-4 mt-1">
+                                                                Judul: <strong class="font-medium">{{ $file->judul_luaran }}</strong>
+                                                            </div>
+                                                        @endif
+                                                        @if ($file->status_luaran)
+                                                            <div class="text-xs text-gray-500 pl-4 mt-1">
+                                                                Status Luaran: <strong class="font-medium">{{ $file->status_luaran }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    @elseif($file->type === 'link' && $file->url)
+                                                        {{-- Untuk URL/Link --}}
+                                                        <div class="flex flex-wrap items-center gap-2 mt-1">
+                                                            <a href="{{ $file->url }}"
+                                                                target="_blank"
+                                                                class="inline-flex items-center px-3 py-1 text-xs font-medium text-indigo-700 bg-indigo-100 hover:bg-indigo-200 rounded-md transition">
+                                                                <i class='bx bx-link-external mr-1'></i> Buka Link
+                                                            </a>
+                                                            <span class="text-gray-600 break-all">{{ Str::limit($file->url, 50) }}</span>
+                                                        </div>
+                                                        @if ($file->judul_luaran)
+                                                            <div class="text-xs text-gray-500 pl-4 mt-1">
+                                                                Judul: <strong class="font-medium">{{ $file->judul_luaran }}</strong>
+                                                            </div>
+                                                        @endif
+                                                        @if ($file->status_luaran)
+                                                            <div class="text-xs text-gray-500 pl-4 mt-1">
+                                                                Status Luaran: <strong class="font-medium">{{ $file->status_luaran }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    @else
+                                                        <div class="text-xs text-gray-400 italic ml-2 mt-1">
+                                                            <i class='bx bx-error-circle'></i> Data file tidak valid
                                                         </div>
                                                     @endif
                                                 @else

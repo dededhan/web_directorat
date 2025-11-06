@@ -29,7 +29,16 @@ use App\Http\Controllers\AdminEquity\IncentiveReviewerController;
 use App\Http\Controllers\EquityFakultas\EquityFakultasController;
 
 
-// Admin Equity Routes
+
+// previewe routes multiple
+Route::middleware(['auth'])->group(function () {
+    Route::get('/equity/files/{file}/preview', [ComdevSubmissionFileController::class, 'preview'])->name('subdirektorat-inovasi.dosen.equity.files.preview');
+    Route::get('/equity/files/{file}/download', [ComdevSubmissionFileController::class, 'download'])->name('subdirektorat-inovasi.dosen.equity.files.download');
+});
+
+
+// ADMIN EQUITY ROUTES
+
 Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:admin_equity,sub_admin_equity'])->group(function () {
     Route::get('/dashboard', function () {
         return view('admin_equity.dashboard');
@@ -360,8 +369,6 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
                 // UPLOAD FILE UNGGAH
                 Route::post('/equity/proposal/{submission}/subchapter/{subChapter}/files', [ComdevSubmissionFileController::class, 'store'])->name('equity.files.store');
-                Route::get('/equity/files/{file}/preview', [ComdevSubmissionFileController::class, 'preview'])->name('equity.files.preview');
-                Route::get('/equity/files/{file}/download', [ComdevSubmissionFileController::class, 'download'])->name('equity.files.download');
                 Route::delete('/equity/files/{file}', [ComdevSubmissionFileController::class, 'destroy'])->name('equity.files.destroy');
                 Route::get('/equity/templates/{templateName}/download', [ComdevSubmissionFileController::class, 'downloadTemplate'])->name('equity.templates.download');
 
