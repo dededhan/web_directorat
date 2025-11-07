@@ -1,5 +1,9 @@
 @extends('admin_equity.index')
 
+@push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+@endpush
+
 @section('content')
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ 
     openModuleForm: false, 
@@ -50,10 +54,18 @@
                         <button @click="initEditModule({{ $module->id }}, {{ json_encode($module->form_penilaian ?? []) }})" class="text-white hover:text-yellow-200 transition duration-200" title="Edit Modul & Form Penilaian">
                             <i class='bx bxs-edit text-xl'></i>
                         </button>
-                        <form action="{{ route('admin_equity.comdev.modules.destroy', $module->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin menghapus modul ini beserta semua sub-bab di dalamnya?');">
+                        <button type="button" 
+                                onclick="confirmDeleteModule({{ $module->id }}, '{{ addslashes($module->nama_modul) }}')" 
+                                class="text-white hover:text-red-200 transition duration-200" 
+                                title="Hapus Modul">
+                            <i class='bx bxs-trash text-xl'></i>
+                        </button>
+                        <form id="delete-module-form-{{ $module->id }}" 
+                              action="{{ route('admin_equity.comdev.modules.destroy', $module->id) }}" 
+                              method="POST" 
+                              class="hidden">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-white hover:text-red-200 transition duration-200" title="Hapus Modul"><i class='bx bxs-trash text-xl'></i></button>
                         </form>
                     </div>
                 </div>
@@ -190,10 +202,18 @@
                                     </div>
                                     <div class="flex items-center space-x-2">
                                         <button @click="editingSubChapterId = {{ $subChapter->id }}" class="text-blue-500 hover:text-blue-700 transition" title="Edit Sub-Bab"><i class='bx bxs-edit text-lg'></i></button>
-                                        <form action="{{ route('admin_equity.comdev.subchapters.destroy', $subChapter->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin menghapus sub-bab ini?');">
+                                        <button type="button" 
+                                                onclick="confirmDeleteSubChapter({{ $subChapter->id }}, '{{ addslashes($subChapter->nama_sub_bab) }}')" 
+                                                class="text-red-500 hover:text-red-700 transition" 
+                                                title="Hapus Sub-Bab">
+                                            <i class='bx bx-trash text-lg'></i>
+                                        </button>
+                                        <form id="delete-subchapter-form-{{ $subChapter->id }}" 
+                                              action="{{ route('admin_equity.comdev.subchapters.destroy', $subChapter->id) }}" 
+                                              method="POST" 
+                                              class="hidden">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:text-red-700 transition" title="Hapus Sub-Bab"><i class='bx bx-trash text-lg'></i></button>
                                         </form>
                                     </div>
                                 </div>
@@ -297,12 +317,14 @@
                 <p class="text-sm text-gray-500 mt-1">Anda dapat membuat modul secara manual atau menggunakan template standar.</p>
                 
                 <div class="mt-6">
-                    <form action="{{ route('admin_equity.comdev.modules.storeTemplate', $sesi->id) }}" method="POST" onsubmit="return confirm('Ini akan membuat set modul standar. Lanjutkan?');">
+                    <form id="create-template-form" action="{{ route('admin_equity.comdev.modules.storeTemplate', $sesi->id) }}" method="POST" class="hidden">
                         @csrf
-                        <button type="submit" class="inline-flex items-center px-5 py-2.5 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 shadow-sm transition">
-                            <i class='bx bxs-file-plus text-lg mr-2'></i> Buat Modul Standar
-                        </button>
                     </form>
+                    <button type="button" 
+                            onclick="confirmCreateTemplate()" 
+                            class="inline-flex items-center px-5 py-2.5 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 shadow-sm transition">
+                        <i class='bx bxs-file-plus text-lg mr-2'></i> Buat Modul Standar
+                    </button>
                 </div>
 
             </div>
@@ -445,4 +467,143 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmCreateTemplate() {
+        Swal.fire({
+            title: 'Buat Modul Standar?',
+            html: `<p class="text-gray-600">Ini akan membuat set modul standar untuk sesi ini.</p>
+                   <p class="text-sm text-blue-600 mt-2">ℹ️ Modul standar hanya dapat dibuat jika sesi belum memiliki modul.</p>`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#16a34a',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: '<i class="bx bx-check mr-2"></i>Ya, Buat!',
+            cancelButtonText: '<i class="bx bx-x mr-2"></i>Batal',
+            reverseButtons: true,
+            customClass: {
+                popup: 'rounded-xl',
+                confirmButton: 'px-6 py-2.5 rounded-lg font-semibold',
+                cancelButton: 'px-6 py-2.5 rounded-lg font-semibold'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show loading
+                Swal.fire({
+                    title: 'Membuat Modul...',
+                    text: 'Mohon tunggu sebentar',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                
+                // Submit form
+                document.getElementById('create-template-form').submit();
+            }
+        });
+    }
+
+    function confirmDeleteModule(moduleId, moduleName) {
+        Swal.fire({
+            title: 'Hapus Modul?',
+            html: `<p class="text-gray-600">Anda yakin ingin menghapus modul <strong>"${moduleName}"</strong>?</p>
+                   <p class="text-sm text-red-600 mt-2">⚠️ Semua sub-bab di dalam modul ini juga akan terhapus!</p>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: '<i class="bx bx-trash mr-2"></i>Ya, Hapus!',
+            cancelButtonText: '<i class="bx bx-x mr-2"></i>Batal',
+            reverseButtons: true,
+            customClass: {
+                popup: 'rounded-xl',
+                confirmButton: 'px-6 py-2.5 rounded-lg font-semibold',
+                cancelButton: 'px-6 py-2.5 rounded-lg font-semibold'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show loading
+                Swal.fire({
+                    title: 'Menghapus...',
+                    text: 'Mohon tunggu sebentar',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                
+                // Submit form
+                document.getElementById('delete-module-form-' + moduleId).submit();
+            }
+        });
+    }
+
+    function confirmDeleteSubChapter(subChapterId, subChapterName) {
+        Swal.fire({
+            title: 'Hapus Sub-Bab?',
+            html: `<p class="text-gray-600">Anda yakin ingin menghapus sub-bab <strong>"${subChapterName}"</strong>?</p>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: '<i class="bx bx-trash mr-2"></i>Ya, Hapus!',
+            cancelButtonText: '<i class="bx bx-x mr-2"></i>Batal',
+            reverseButtons: true,
+            customClass: {
+                popup: 'rounded-xl',
+                confirmButton: 'px-6 py-2.5 rounded-lg font-semibold',
+                cancelButton: 'px-6 py-2.5 rounded-lg font-semibold'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show loading
+                Swal.fire({
+                    title: 'Menghapus...',
+                    text: 'Mohon tunggu sebentar',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                
+                // Submit form
+                document.getElementById('delete-subchapter-form-' + subChapterId).submit();
+            }
+        });
+    }
+
+    // Show success message if redirected after delete
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            confirmButtonColor: '#11A697',
+            customClass: {
+                popup: 'rounded-xl',
+                confirmButton: 'px-6 py-2.5 rounded-lg font-semibold'
+            }
+        });
+    @endif
+
+    @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            confirmButtonColor: '#dc2626',
+            customClass: {
+                popup: 'rounded-xl',
+                confirmButton: 'px-6 py-2.5 rounded-lg font-semibold'
+            }
+        });
+    @endif
+</script>
+@endpush
 
