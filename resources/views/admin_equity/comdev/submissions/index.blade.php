@@ -177,7 +177,7 @@
                                                 {{ $submission->user->profile?->prodi?->name ?? '' }}</p>
                                         </td>
                                         <td class="px-6 py-5 text-sm text-gray-600">
-                                            {{ $submission->updated_at->isoFormat('D MMMM YYYY, HH:mm') }}</td>
+                                            {{ $submission->created_at->isoFormat('D MMMM YYYY, HH:mm') }}</td>
                                         <td class="px-6 py-5 text-s text-center text-gray-600">
                                             @if ($submission->status)
                                                 <span class="font-semibold">
