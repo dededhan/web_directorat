@@ -54,6 +54,7 @@
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">No</th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Nama Sesi</th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Periode</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Nominal Usulan</th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Status</th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Jumlah Proposal</th>
                             <th class="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase">Aksi</th>
@@ -73,6 +74,12 @@
                                 <div class="flex items-center space-x-2">
                                     <i class='bx bx-calendar text-orange-500'></i>
                                     <span>{{ $session->periode_awal->format('d M Y') }} - {{ $session->periode_akhir->format('d M Y') }}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm font-semibold text-gray-700">
+                                <div class="flex items-center space-x-2">
+                                    <i class='bx bx-money text-purple-500'></i>
+                                    <span>Rp {{ number_format($session->nominal_usulan ?? 0, 0, ',', '.') }}</span>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
@@ -108,7 +115,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center">
+                            <td colspan="7" class="px-6 py-12 text-center">
                                 <div class="flex flex-col items-center justify-center">
                                     <i class='bx bx-inbox text-6xl text-gray-300 mb-4'></i>
                                     <p class="text-gray-500 text-lg font-medium">Belum ada sesi hibah modul</p>

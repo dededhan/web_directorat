@@ -89,14 +89,99 @@
                         </div>
                         @endif
 
-                        @if($proposal->sdgs)
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Tahun Usulan</label>
+                                <p class="text-gray-800">{{ $proposal->tahun_usulan ?? '-' }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Tahun Pelaksanaan</label>
+                                <p class="text-gray-800">{{ $proposal->tahun_pelaksanaan ?? '-' }}</p>
+                            </div>
+                        </div>
+
                         <div>
-                            <label class="text-sm font-semibold text-gray-600">SDGs Terkait</label>
+                            <label class="text-sm font-semibold text-gray-600">Tempat Pelaksanaan</label>
+                            <p class="text-gray-800">{{ $proposal->tempat_pelaksanaan ?? '-' }}</p>
+                        </div>
+
+                        @if($proposal->sdgs_fokus && is_array($proposal->sdgs_fokus))
+                        <div>
+                            <label class="text-sm font-semibold text-gray-600">SDGs Fokus (4, 5, 11, 17)</label>
                             <div class="flex flex-wrap gap-2 mt-2">
-                                @foreach($proposal->sdgs as $sdg)
-                                <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">SDG {{ $sdg }}</span>
+                                @foreach($proposal->sdgs_fokus as $sdg)
+                                <span class="px-3 py-1 bg-teal-100 text-teal-800 rounded-full text-sm font-semibold">{{ $sdg }}</span>
                                 @endforeach
                             </div>
+                        </div>
+                        @endif
+
+                        @if($proposal->sdgs_pendukung && is_array($proposal->sdgs_pendukung))
+                        <div>
+                            <label class="text-sm font-semibold text-gray-600">SDGs Pendukung</label>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                @foreach($proposal->sdgs_pendukung as $sdg)
+                                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">{{ $sdg }}</span>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
+
+                        <div>
+                            <label class="text-sm font-semibold text-gray-600">Anggaran Usulan</label>
+                            <p class="text-gray-800 text-xl font-bold text-teal-600">Rp {{ number_format($proposal->anggaran_usulan ?? 0, 0, ',', '.') }}</p>
+                        </div>
+
+                        <div>
+                            <label class="text-sm font-semibold text-gray-600">Platform Digital yang Digunakan</label>
+                            <p class="text-gray-800">{{ $proposal->platform_digital ?? '-' }}</p>
+                        </div>
+
+                        @if($proposal->mitra)
+                        <div>
+                            <label class="text-sm font-semibold text-gray-600">Mitra</label>
+                            <p class="text-gray-800">{{ $proposal->mitra }}</p>
+                        </div>
+                        @endif
+
+                        <div class="grid grid-cols-3 gap-4">
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Modul Interdisiplin Digital</label>
+                                <p class="text-gray-800 mt-1">
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold {{ ($proposal->modul_interdisiplin ?? '') == 'Ada' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                        {{ $proposal->modul_interdisiplin ?? '-' }}
+                                    </span>
+                                </p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Publikasi Media Massa</label>
+                                <p class="text-gray-800 mt-1">
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold {{ ($proposal->publikasi_media_massa ?? '') == 'Ada' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                        {{ $proposal->publikasi_media_massa ?? '-' }}
+                                    </span>
+                                </p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">HKI</label>
+                                <p class="text-gray-800 mt-1">
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold {{ ($proposal->hki ?? '') == 'Ada' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                        {{ $proposal->hki ?? '-' }}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        @if($proposal->nama_media_massa)
+                        <div>
+                            <label class="text-sm font-semibold text-gray-600">Nama Media Massa</label>
+                            <p class="text-gray-800">{{ $proposal->nama_media_massa }}</p>
+                        </div>
+                        @endif
+
+                        @if($proposal->jenis_hki_dan_judul)
+                        <div>
+                            <label class="text-sm font-semibold text-gray-600">Jenis HKI dan Judul</label>
+                            <p class="text-gray-800 bg-gray-50 p-3 rounded-lg border border-gray-200">{{ $proposal->jenis_hki_dan_judul }}</p>
                         </div>
                         @endif
 

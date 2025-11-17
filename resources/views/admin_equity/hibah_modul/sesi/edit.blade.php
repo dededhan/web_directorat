@@ -32,6 +32,15 @@
                         <textarea name="deskripsi" id="deskripsi" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500">{{ old('deskripsi', $sesi->deskripsi) }}</textarea>
                     </div>
 
+                    <div>
+                        <label for="nominal_usulan" class="block text-sm font-semibold text-gray-700 mb-2">Nominal Usulan</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">Rp</span>
+                            <input type="text" name="nominal_usulan" id="nominal_usulan" value="{{ old('nominal_usulan', number_format($sesi->nominal_usulan ?? 0, 0, ',', '.')) }}" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500" placeholder="0" x-data x-mask:dynamic="$money($input, ',', '.')">
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2"><i class='bx bx-info-circle mr-1'></i>Masukkan nominal usulan dalam Rupiah</p>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label for="periode_awal" class="block text-sm font-semibold text-gray-700 mb-2">Periode Awal <span class="text-red-500">*</span></label>
@@ -63,4 +72,9 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js" defer></script>
+@endpush
+
 @endsection

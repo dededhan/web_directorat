@@ -31,7 +31,7 @@
         </header>
 
         <!-- Info Sesi -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-teal-500">
                 <div class="flex items-center justify-between">
                     <div>
@@ -48,6 +48,15 @@
                         <p class="text-lg font-bold text-gray-800">{{ $sesi->proposals->count() }}</p>
                     </div>
                     <i class='bx bx-file text-4xl text-blue-500'></i>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600">Nominal Usulan</p>
+                        <p class="text-lg font-bold text-gray-800">Rp {{ number_format($sesi->nominal_usulan ?? 0, 0, ',', '.') }}</p>
+                    </div>
+                    <i class='bx bx-money text-4xl text-purple-500'></i>
                 </div>
             </div>
             <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-{{ $sesi->status === 'dibuka' ? 'green' : 'red' }}-500">

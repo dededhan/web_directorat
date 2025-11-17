@@ -109,26 +109,122 @@
                         <input name="kata_kunci" x-ref="keywords" value="{{ old('kata_kunci') }}" class="w-full" placeholder="Ketik kata kunci lalu tekan Enter">
                     </div>
 
-                    {{-- === INPUT SDGS BARU (ALPINE.JS DROPDOWN) === --}}
+                    {{-- === INPUT SDG FOKUS (4, 5, 11, 17) === --}}
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">SDGs Terkait</label>
-                        <input type="hidden" name="sdgs" :value="JSON.stringify(selectedSdgs)">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">SDGs Fokus (4, 5, 11, 17)</label>
+                        <input type="hidden" name="sdgs_fokus" :value="JSON.stringify(selectedSdgsFokus)">
                         <div class="relative">
-                            <div class="w-full bg-white border-2 border-gray-300 rounded-xl p-2 min-h-[50px] flex flex-wrap gap-2 items-center cursor-pointer" @click="sdgDropdownOpen = !sdgDropdownOpen">
-                                <template x-for="(sdg, index) in selectedSdgs" :key="index">
+                            <div class="w-full bg-white border-2 border-gray-300 rounded-xl p-2 min-h-[50px] flex flex-wrap gap-2 items-center cursor-pointer" @click="sdgFokusDropdownOpen = !sdgFokusDropdownOpen">
+                                <template x-for="(sdg, index) in selectedSdgsFokus" :key="index">
                                     <span class="flex items-center gap-1.5 bg-teal-100 text-teal-800 text-xs font-semibold px-2.5 py-1.5 rounded-md">
                                         <span x-text="sdg"></span>
-                                        <button type="button" @click.stop="removeSdg(index)" class="text-teal-600 hover:text-teal-800 font-bold">&times;</button>
+                                        <button type="button" @click.stop="removeSdgFokus(index)" class="text-teal-600 hover:text-teal-800 font-bold">&times;</button>
                                     </span>
                                 </template>
-                                <span x-show="selectedSdgs.length === 0" class="text-gray-400 text-sm px-2">Pilih SDG's...</span>
+                                <span x-show="selectedSdgsFokus.length === 0" class="text-gray-400 text-sm px-2">Pilih SDG Fokus...</span>
                             </div>
-                            <div x-show="sdgDropdownOpen" @click.away="sdgDropdownOpen = false" x-transition class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-xl py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm" style="display: none;">
-                                <template x-for="sdg in availableSdgs" :key="sdg">
-                                    <a href="#" @click.prevent="selectSdg(sdg)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" x-text="sdg"></a>
+                            <div x-show="sdgFokusDropdownOpen" @click.away="sdgFokusDropdownOpen = false" x-transition class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-xl py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm" style="display: none;">
+                                <template x-for="sdg in availableSdgsFokus" :key="sdg">
+                                    <a href="#" @click.prevent="selectSdgFokus(sdg)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" x-text="sdg"></a>
                                 </template>
                             </div>
                         </div>
+                    </div>
+
+                    {{-- === INPUT SDG PENDUKUNG (Kecuali 4, 5, 11, 17) === --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">SDGs Pendukung</label>
+                        <input type="hidden" name="sdgs_pendukung" :value="JSON.stringify(selectedSdgsPendukung)">
+                        <div class="relative">
+                            <div class="w-full bg-white border-2 border-gray-300 rounded-xl p-2 min-h-[50px] flex flex-wrap gap-2 items-center cursor-pointer" @click="sdgPendukungDropdownOpen = !sdgPendukungDropdownOpen">
+                                <template x-for="(sdg, index) in selectedSdgsPendukung" :key="index">
+                                    <span class="flex items-center gap-1.5 bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-1.5 rounded-md">
+                                        <span x-text="sdg"></span>
+                                        <button type="button" @click.stop="removeSdgPendukung(index)" class="text-blue-600 hover:text-blue-800 font-bold">&times;</button>
+                                    </span>
+                                </template>
+                                <span x-show="selectedSdgsPendukung.length === 0" class="text-gray-400 text-sm px-2">Pilih SDG Pendukung...</span>
+                            </div>
+                            <div x-show="sdgPendukungDropdownOpen" @click.away="sdgPendukungDropdownOpen = false" x-transition class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-xl py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm" style="display: none;">
+                                <template x-for="sdg in availableSdgsPendukung" :key="sdg">
+                                    <a href="#" @click.prevent="selectSdgPendukung(sdg)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" x-text="sdg"></a>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Usulan <span class="text-red-500">*</span></label>
+                            <input type="text" name="tahun_usulan" value="{{ old('tahun_usulan') }}" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all" placeholder="Contoh: 2025">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Pelaksanaan <span class="text-red-500">*</span></label>
+                            <input type="text" name="tahun_pelaksanaan" value="{{ old('tahun_pelaksanaan') }}" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all" placeholder="Contoh: 2025">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Tempat Pelaksanaan <span class="text-red-500">*</span></label>
+                        <input type="text" name="tempat_pelaksanaan" value="{{ old('tempat_pelaksanaan') }}" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all" placeholder="Masukkan tempat pelaksanaan">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Anggaran Usulan <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">Rp</span>
+                            <input type="text" name="anggaran_usulan" value="{{ old('anggaran_usulan') }}" required class="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all" placeholder="0" x-mask:dynamic="$money($input, ',', '.')">
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2"><i class='bx bx-info-circle mr-1'></i>Masukkan anggaran dalam Rupiah</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Platform Digital yang Digunakan <span class="text-red-500">*</span></label>
+                        <input type="text" name="platform_digital" value="{{ old('platform_digital') }}" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all" placeholder="Contoh: Moodle, Google Classroom, dll">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Mitra (Opsional)</label>
+                        <input type="text" name="mitra" value="{{ old('mitra') }}" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all" placeholder="Masukkan nama mitra jika ada">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Modul Interdisiplin Digital <span class="text-red-500">*</span></label>
+                            <select name="modul_interdisiplin" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all">
+                                <option value="">-- Pilih --</option>
+                                <option value="Ada" {{ old('modul_interdisiplin') == 'Ada' ? 'selected' : '' }}>Ada</option>
+                                <option value="Draft" {{ old('modul_interdisiplin') == 'Draft' ? 'selected' : '' }}>Draft</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Publikasi Media Massa <span class="text-red-500">*</span></label>
+                            <select name="publikasi_media_massa" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all" x-model="publikasiMediaMassa">
+                                <option value="">-- Pilih --</option>
+                                <option value="Ada" {{ old('publikasi_media_massa') == 'Ada' ? 'selected' : '' }}>Ada</option>
+                                <option value="Draft" {{ old('publikasi_media_massa') == 'Draft' ? 'selected' : '' }}>Draft</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">HKI <span class="text-red-500">*</span></label>
+                            <select name="hki" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all" x-model="hkiStatus">
+                                <option value="">-- Pilih --</option>
+                                <option value="Ada" {{ old('hki') == 'Ada' ? 'selected' : '' }}>Ada</option>
+                                <option value="Draft" {{ old('hki') == 'Draft' ? 'selected' : '' }}>Draft</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div x-show="publikasiMediaMassa === 'Ada' || publikasiMediaMassa === 'Draft'" x-transition>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Media Massa <span class="text-red-500">*</span></label>
+                        <input type="text" name="nama_media_massa" value="{{ old('nama_media_massa') }}" :required="publikasiMediaMassa === 'Ada' || publikasiMediaMassa === 'Draft'" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all" placeholder="Masukkan nama media massa">
+                    </div>
+
+                    <div x-show="hkiStatus === 'Ada' || hkiStatus === 'Draft'" x-transition>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Jenis HKI dan Judul <span class="text-red-500">*</span></label>
+                        <textarea name="jenis_hki_dan_judul" rows="3" :required="hkiStatus === 'Ada' || hkiStatus === 'Draft'" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all" placeholder="Contoh: Hak Cipta - Modul Pembelajaran Inovatif">{{ old('jenis_hki_dan_judul') }}</textarea>
                     </div>
 
                     <div>
@@ -195,22 +291,48 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js" defer></script>
 <script>
 function proposalFormData() {
     return {
-        // --- Data untuk SDGs ---
-        sdgOptions: [
-            'SDG 1: Tanpa Kemiskinan', 'SDG 2: Tanpa Kelaparan', 'SDG 3: Kehidupan Sehat dan Sejahtera', 'SDG 4: Pendidikan Berkualitas',
-            'SDG 5: Kesetaraan Gender', 'SDG 6: Air Bersih dan Sanitasi Layak', 'SDG 7: Energi Bersih dan Terjangkau',
-            'SDG 8: Pekerjaan Layak dan Pertumbuhan Ekonomi', 'SDG 9: Industri, Inovasi, dan Infrastruktur', 'SDG 10: Berkurangnya Kesenjangan',
-            'SDG 11: Kota dan Pemukiman yang Berkelanjutan', 'SDG 12: Konsumsi dan Produksi yang Bertanggung Jawab', 'SDG 13: Penanganan Perubahan Iklim',
-            'SDG 14: Ekosistem Lautan', 'SDG 15: Ekosistem Daratan', 'SDG 16: Perdamaian, Keadilan, dan Kelembagaan yang Tangguh', 'SDG 17: Kemitraan untuk Mencapai Tujuan'
+        // --- Data untuk SDGs Fokus (4, 5, 11, 17) ---
+        sdgFokusOptions: [
+            'SDG 4: Pendidikan Berkualitas',
+            'SDG 5: Kesetaraan Gender',
+            'SDG 11: Kota dan Pemukiman yang Berkelanjutan',
+            'SDG 17: Kemitraan untuk Mencapai Tujuan'
         ],
-        selectedSdgs: @json(old('sdgs') ? json_decode(old('sdgs')) : []),
-        sdgDropdownOpen: false,
-        get availableSdgs() { return this.sdgOptions.filter(opt => !this.selectedSdgs.includes(opt)); },
-        selectSdg(sdg) { if (!this.selectedSdgs.includes(sdg)) this.selectedSdgs.push(sdg); this.sdgDropdownOpen = false; },
-        removeSdg(index) { this.selectedSdgs.splice(index, 1); },
+        selectedSdgsFokus: @json(old('sdgs_fokus') ? json_decode(old('sdgs_fokus')) : []),
+        sdgFokusDropdownOpen: false,
+        get availableSdgsFokus() { return this.sdgFokusOptions.filter(opt => !this.selectedSdgsFokus.includes(opt)); },
+        selectSdgFokus(sdg) { if (!this.selectedSdgsFokus.includes(sdg)) this.selectedSdgsFokus.push(sdg); this.sdgFokusDropdownOpen = false; },
+        removeSdgFokus(index) { this.selectedSdgsFokus.splice(index, 1); },
+
+        // --- Data untuk SDGs Pendukung (Kecuali 4, 5, 11, 17) ---
+        sdgPendukungOptions: [
+            'SDG 1: Tanpa Kemiskinan', 
+            'SDG 2: Tanpa Kelaparan', 
+            'SDG 3: Kehidupan Sehat dan Sejahtera',
+            'SDG 6: Air Bersih dan Sanitasi Layak', 
+            'SDG 7: Energi Bersih dan Terjangkau',
+            'SDG 8: Pekerjaan Layak dan Pertumbuhan Ekonomi', 
+            'SDG 9: Industri, Inovasi, dan Infrastruktur', 
+            'SDG 10: Berkurangnya Kesenjangan',
+            'SDG 12: Konsumsi dan Produksi yang Bertanggung Jawab', 
+            'SDG 13: Penanganan Perubahan Iklim',
+            'SDG 14: Ekosistem Lautan', 
+            'SDG 15: Ekosistem Daratan', 
+            'SDG 16: Perdamaian, Keadilan, dan Kelembagaan yang Tangguh'
+        ],
+        selectedSdgsPendukung: @json(old('sdgs_pendukung') ? json_decode(old('sdgs_pendukung')) : []),
+        sdgPendukungDropdownOpen: false,
+        get availableSdgsPendukung() { return this.sdgPendukungOptions.filter(opt => !this.selectedSdgsPendukung.includes(opt)); },
+        selectSdgPendukung(sdg) { if (!this.selectedSdgsPendukung.includes(sdg)) this.selectedSdgsPendukung.push(sdg); this.sdgPendukungDropdownOpen = false; },
+        removeSdgPendukung(index) { this.selectedSdgsPendukung.splice(index, 1); },
+
+        // --- Data untuk conditional fields ---
+        publikasiMediaMassa: '{{ old('publikasi_media_massa', '') }}',
+        hkiStatus: '{{ old('hki', '') }}',
 
         // --- Data untuk Anggota ---
         anggotaCounter: 0,

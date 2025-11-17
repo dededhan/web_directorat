@@ -4,7 +4,9 @@
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" x-data="{ 
     anggota: {{ json_encode($proposal->anggota->map(function($a) { 
         return ['nama_dosen' => $a->nama_dosen, 'nip' => $a->nip, 'fakultas' => $a->fakultas, 'prodi' => $a->prodi]; 
-    })->toArray()) }} 
+    })->toArray()) }},
+    publikasiMediaMassa: '{{ old('publikasi_media_massa', $proposal->publikasi_media_massa ?? '') }}',
+    hkiStatus: '{{ old('hki', $proposal->hki ?? '') }}'
 }">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
@@ -95,26 +97,147 @@
                         </p>
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Kata Kunci
+                        </label>
+                        <input type="text" name="kata_kunci" id="kata_kunci" value="{{ old('kata_kunci', is_array($proposal->kata_kunci) ? implode(', ', $proposal->kata_kunci) : '') }}" 
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
+                               placeholder="pembelajaran, inovatif, digital">
+                        <p class="text-xs text-gray-500 mt-2">Pisahkan dengan koma</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            SDGs Fokus (4, 5, 11, 17)
+                        </label>
+                        <input type="text" name="sdgs_fokus" id="sdgs_fokus" value="{{ old('sdgs_fokus', is_array($proposal->sdgs_fokus ?? null) ? implode(', ', $proposal->sdgs_fokus) : '') }}" 
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
+                               placeholder="SDG 4, SDG 5, SDG 11, SDG 17">
+                        <p class="text-xs text-gray-500 mt-2">Pisahkan dengan koma</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            SDGs Pendukung
+                        </label>
+                        <input type="text" name="sdgs_pendukung" id="sdgs_pendukung" value="{{ old('sdgs_pendukung', is_array($proposal->sdgs_pendukung ?? null) ? implode(', ', $proposal->sdgs_pendukung) : '') }}" 
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
+                               placeholder="SDG 1, SDG 2, SDG 3, dll">
+                        <p class="text-xs text-gray-500 mt-2">Pisahkan dengan koma</p>
+                    </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Kata Kunci
+                                Tahun Usulan <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="kata_kunci" id="kata_kunci" value="{{ old('kata_kunci', is_array($proposal->kata_kunci) ? implode(', ', $proposal->kata_kunci) : '') }}" 
+                            <input type="text" name="tahun_usulan" value="{{ old('tahun_usulan', $proposal->tahun_usulan ?? '') }}" required
                                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
-                                   placeholder="pembelajaran, inovatif, digital">
-                            <p class="text-xs text-gray-500 mt-2">Pisahkan dengan koma</p>
+                                   placeholder="Contoh: 2025">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Tahun Pelaksanaan <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" name="tahun_pelaksanaan" value="{{ old('tahun_pelaksanaan', $proposal->tahun_pelaksanaan ?? '') }}" required
+                                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
+                                   placeholder="Contoh: 2025">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Tempat Pelaksanaan <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" name="tempat_pelaksanaan" value="{{ old('tempat_pelaksanaan', $proposal->tempat_pelaksanaan ?? '') }}" required
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
+                               placeholder="Masukkan tempat pelaksanaan">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Anggaran Usulan <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">Rp</span>
+                            <input type="text" name="anggaran_usulan" value="{{ old('anggaran_usulan', number_format($proposal->anggaran_usulan ?? 0, 0, ',', '.')) }}" required
+                                   class="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
+                                   placeholder="0">
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2"><i class='bx bx-info-circle mr-1'></i>Masukkan anggaran dalam Rupiah</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Platform Digital yang Digunakan <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" name="platform_digital" value="{{ old('platform_digital', $proposal->platform_digital ?? '') }}" required
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
+                               placeholder="Contoh: Moodle, Google Classroom, dll">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Mitra (Opsional)
+                        </label>
+                        <input type="text" name="mitra" value="{{ old('mitra', $proposal->mitra ?? '') }}"
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
+                               placeholder="Masukkan nama mitra jika ada">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Modul Interdisiplin Digital <span class="text-red-500">*</span>
+                            </label>
+                            <select name="modul_interdisiplin" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all">
+                                <option value="">-- Pilih --</option>
+                                <option value="Ada" {{ old('modul_interdisiplin', $proposal->modul_interdisiplin ?? '') == 'Ada' ? 'selected' : '' }}>Ada</option>
+                                <option value="Draft" {{ old('modul_interdisiplin', $proposal->modul_interdisiplin ?? '') == 'Draft' ? 'selected' : '' }}>Draft</option>
+                            </select>
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                SDGs Terkait
+                                Publikasi Media Massa <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="sdgs" id="sdgs" value="{{ old('sdgs', is_array($proposal->sdgs) ? implode(', ', $proposal->sdgs) : '') }}" 
-                                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
-                                   placeholder="4, 8, 17">
-                            <p class="text-xs text-gray-500 mt-2">Pisahkan dengan koma</p>
+                            <select name="publikasi_media_massa" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all" x-model="publikasiMediaMassa">
+                                <option value="">-- Pilih --</option>
+                                <option value="Ada" {{ old('publikasi_media_massa', $proposal->publikasi_media_massa ?? '') == 'Ada' ? 'selected' : '' }}>Ada</option>
+                                <option value="Draft" {{ old('publikasi_media_massa', $proposal->publikasi_media_massa ?? '') == 'Draft' ? 'selected' : '' }}>Draft</option>
+                            </select>
                         </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                HKI <span class="text-red-500">*</span>
+                            </label>
+                            <select name="hki" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all" x-model="hkiStatus">
+                                <option value="">-- Pilih --</option>
+                                <option value="Ada" {{ old('hki', $proposal->hki ?? '') == 'Ada' ? 'selected' : '' }}>Ada</option>
+                                <option value="Draft" {{ old('hki', $proposal->hki ?? '') == 'Draft' ? 'selected' : '' }}>Draft</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div x-show="publikasiMediaMassa === 'Ada' || publikasiMediaMassa === 'Draft'" x-transition>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Nama Media Massa <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" name="nama_media_massa" value="{{ old('nama_media_massa', $proposal->nama_media_massa ?? '') }}"
+                               :required="publikasiMediaMassa === 'Ada' || publikasiMediaMassa === 'Draft'"
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
+                               placeholder="Masukkan nama media massa">
+                    </div>
+
+                    <div x-show="hkiStatus === 'Ada' || hkiStatus === 'Draft'" x-transition>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Jenis HKI dan Judul <span class="text-red-500">*</span>
+                        </label>
+                        <textarea name="jenis_hki_dan_judul" rows="3" :required="hkiStatus === 'Ada' || hkiStatus === 'Draft'"
+                                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
+                                  placeholder="Contoh: Hak Cipta - Modul Pembelajaran Inovatif">{{ old('jenis_hki_dan_judul', $proposal->jenis_hki_dan_judul ?? '') }}</textarea>
                     </div>
 
                     <div>
@@ -214,6 +337,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Kata Kunci
     if (document.getElementById('kata_kunci')) {
         var kataKunci = document.getElementById('kata_kunci');
         kataKunci.addEventListener('change', function() {
@@ -227,16 +351,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    if (document.getElementById('sdgs')) {
-        var sdgs = document.getElementById('sdgs');
-        sdgs.addEventListener('change', function() {
-            var values = sdgs.value.split(',').map(v => v.trim()).filter(v => v);
+    // SDGs Fokus
+    if (document.getElementById('sdgs_fokus')) {
+        var sdgsFokus = document.getElementById('sdgs_fokus');
+        sdgsFokus.addEventListener('change', function() {
+            var values = sdgsFokus.value.split(',').map(v => v.trim()).filter(v => v);
             var input = document.createElement('input');
             input.type = 'hidden';
-            input.name = 'sdgs';
+            input.name = 'sdgs_fokus';
             input.value = JSON.stringify(values);
-            sdgs.parentNode.appendChild(input);
-            sdgs.removeAttribute('name');
+            sdgsFokus.parentNode.appendChild(input);
+            sdgsFokus.removeAttribute('name');
+        });
+    }
+    
+    // SDGs Pendukung
+    if (document.getElementById('sdgs_pendukung')) {
+        var sdgsPendukung = document.getElementById('sdgs_pendukung');
+        sdgsPendukung.addEventListener('change', function() {
+            var values = sdgsPendukung.value.split(',').map(v => v.trim()).filter(v => v);
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'sdgs_pendukung';
+            input.value = JSON.stringify(values);
+            sdgsPendukung.parentNode.appendChild(input);
+            sdgsPendukung.removeAttribute('name');
         });
     }
 });

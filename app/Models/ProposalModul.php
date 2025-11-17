@@ -16,7 +16,10 @@ class ProposalModul extends Model
     protected $casts = [
         'kata_kunci' => 'array',
         'sdgs' => 'array',
+        'sdgs_fokus' => 'array',
+        'sdgs_pendukung' => 'array',
         'nominal_hibah' => 'decimal:2',
+        'anggaran_usulan' => 'decimal:2',
     ];
     
     public function sesi()

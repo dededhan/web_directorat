@@ -51,12 +51,18 @@ class SesiHibahModulController extends Controller
         $request->validate([
             'nama_sesi' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
+            'nominal_usulan' => 'nullable|string',
             'periode_awal' => 'required|date',
             'periode_akhir' => 'required|date|after_or_equal:periode_awal',
             'status' => 'required|in:dibuka,ditutup',
         ]);
 
-        $sesi->update($request->all());
+        $data = $request->all();
+        if ($request->filled('nominal_usulan')) {
+            $data['nominal_usulan'] = preg_replace('/[^0-9]/', '', $request->nominal_usulan);
+        }
+
+        $sesi->update($data);
 
         return redirect()->route('admin_equity.hibah_modul.sesi.index')
             ->with('success', 'Sesi hibah modul berhasil diperbarui.');

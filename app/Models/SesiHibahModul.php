@@ -14,6 +14,7 @@ class SesiHibahModul extends Model
     protected $fillable = [
         'nama_sesi',
         'deskripsi',
+        'nominal_usulan',
         'periode_awal',
         'periode_akhir',
         'status',
@@ -22,6 +23,7 @@ class SesiHibahModul extends Model
     protected $casts = [
         'periode_awal' => 'date',
         'periode_akhir' => 'date',
+        'nominal_usulan' => 'decimal:2',
     ];
     
     public function proposals()
