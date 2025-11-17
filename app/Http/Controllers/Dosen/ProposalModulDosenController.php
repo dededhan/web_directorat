@@ -103,6 +103,14 @@ class ProposalModulDosenController extends Controller
 
             // Clean anggaran_usulan (remove formatting)
             $anggaranUsulan = preg_replace('/[^0-9]/', '', $request->anggaran_usulan);
+            $anggaranUsulanNumeric = (float) $anggaranUsulan;
+
+            // Validasi anggaran usulan tidak melebihi nominal usulan dari sesi
+            if ($sesi->nominal_usulan && $anggaranUsulanNumeric > $sesi->nominal_usulan) {
+                return back()->withErrors([
+                    'anggaran_usulan' => 'Anggaran usulan tidak boleh melebihi dana maksimal (Rp ' . number_format($sesi->nominal_usulan, 0, ',', '.') . ')'
+                ])->withInput();
+            }
 
             $proposal = ProposalModul::create([
                 'sesi_hibah_modul_id' => $sesi->id,
@@ -222,6 +230,15 @@ class ProposalModulDosenController extends Controller
 
             // Clean anggaran_usulan (remove formatting)
             $anggaranUsulan = preg_replace('/[^0-9]/', '', $request->anggaran_usulan);
+            $anggaranUsulanNumeric = (float) $anggaranUsulan;
+
+            // Validasi anggaran usulan tidak melebihi nominal usulan dari sesi
+            $sesi = $proposal->sesi;
+            if ($sesi->nominal_usulan && $anggaranUsulanNumeric > $sesi->nominal_usulan) {
+                return back()->withErrors([
+                    'anggaran_usulan' => 'Anggaran usulan tidak boleh melebihi dana maksimal (Rp ' . number_format($sesi->nominal_usulan, 0, ',', '.') . ')'
+                ])->withInput();
+            }
 
             $data = [
                 'judul_modul' => $request->judul_modul,

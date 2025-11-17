@@ -5,6 +5,7 @@
     showModulForm: false, 
     showSubChapterForm: false, 
     showEditSubChapterForm: false,
+    showEditModulForm: false,
     currentModulId: null,
     editingModul: null,
     editSubChapter: null
@@ -110,6 +111,9 @@
                 </div>
 
                 <div class="px-6 py-4 bg-gray-50 border-t flex justify-end space-x-2">
+                    <button @click="showEditModulForm = true; editingModul = { id: {{ $modul->id }}, judul_modul: '{{ addslashes($modul->judul_modul) }}', deskripsi: '{{ addslashes($modul->deskripsi ?? '') }}', urutan: {{ $modul->urutan }}, periode_awal: '{{ $modul->periode_awal ? $modul->periode_awal->format('Y-m-d') : '' }}', periode_akhir: '{{ $modul->periode_akhir ? $modul->periode_akhir->format('Y-m-d') : '' }}' }" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        <i class='bx bx-edit mr-2'></i>Edit Modul
+                    </button>
                     <form action="{{ route('admin_equity.hibah_modul.moduls.destroyModul', [$sesi->id, $modul->id]) }}" method="POST" onsubmit="return confirm('Yakin hapus modul ini beserta semua sub chapter?')">
                         @csrf
                         @method('DELETE')
@@ -210,6 +214,48 @@
                         <div class="flex justify-end space-x-3 mt-6">
                             <button type="button" @click="showSubChapterForm = false; currentModulId = null" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">Batal</button>
                             <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Simpan Sub Chapter</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Edit Modul -->
+        <div x-show="showEditModulForm" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+            <div class="flex items-center justify-center min-h-screen px-4">
+                <div @click="showEditModulForm = false; editingModul = null" class="fixed inset-0 bg-black opacity-50"></div>
+                <div class="relative bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6 z-10">
+                    <h3 class="text-2xl font-bold mb-4">Edit Modul</h3>
+                    <form :action="`{{ url('admin_equity/hibah-modul/sesi/' . $sesi->id . '/moduls/modul') }}/${editingModul?.id}`" method="POST" x-show="editingModul">
+                        @csrf
+                        @method('PUT')
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Judul Modul</label>
+                                <input type="text" name="judul_modul" :value="editingModul?.judul_modul" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi</label>
+                                <textarea name="deskripsi" rows="3" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500" x-model="editingModul.deskripsi"></textarea>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Urutan</label>
+                                    <input type="number" name="urutan" :value="editingModul?.urutan" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Periode Awal</label>
+                                    <input type="date" name="periode_awal" :value="editingModul?.periode_awal" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Periode Akhir</label>
+                                    <input type="date" name="periode_akhir" :value="editingModul?.periode_akhir" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end space-x-3 mt-6">
+                            <button type="button" @click="showEditModulForm = false; editingModul = null" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">Batal</button>
+                            <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700">Update Modul</button>
                         </div>
                     </form>
                 </div>
