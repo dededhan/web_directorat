@@ -38,7 +38,7 @@ class SubmissionsExportcomdev implements FromQuery, WithHeadings, WithMapping, S
         // Logika query ini diambil langsung dari method index() di controller Anda
         // untuk memastikan data yang diekspor konsisten dengan yang ditampilkan.
         $query = ComdevSubmission::where('comdev_proposal_id', $this->comdevId)
-            ->with('user.profile.prodi.fakultas');
+            ->with(['user.profile.prodi.fakultas', 'reviews']);
 
         if ($this->search) {
             $search = $this->search;
@@ -84,6 +84,8 @@ class SubmissionsExportcomdev implements FromQuery, WithHeadings, WithMapping, S
             'Program Studi',
             'Status',
             'Tanggal Diajukan',
+            'Review 1 Score',
+            'Review 2 Score',
         ];
     }
 
@@ -94,6 +96,8 @@ class SubmissionsExportcomdev implements FromQuery, WithHeadings, WithMapping, S
     public function map($submission): array
     {
         // Format setiap baris data
+        $reviewerScores = $this->getReviewerScores($submission);
+
         return [
             $this->rowNumber++, 
             $submission->judul,
@@ -103,6 +107,50 @@ class SubmissionsExportcomdev implements FromQuery, WithHeadings, WithMapping, S
             $submission->user->profile?->prodi?->name ?? 'N/A',
             str_replace('_', ' ', Str::title($submission->status->value ?? '-')),
             $submission->updated_at->isoFormat('D MMMM YYYY, HH:mm'),
+            $reviewerScores[0] ?? null,
+            $reviewerScores[1] ?? null,
         ];
+    }
+
+    private function getReviewerScores($submission)
+    {
+        if (!$submission->relationLoaded('reviews')) {
+            $submission->load('reviews');
+        }
+
+        if (!$submission->reviews || $submission->reviews->isEmpty()) {
+            return [];
+        }
+
+        $scores = [];
+        foreach ($submission->reviews as $review) {
+            if (!$review->penilaian) {
+                continue;
+            }
+
+            $penilaianData = is_string($review->penilaian)
+                ? json_decode($review->penilaian, true)
+                : $review->penilaian;
+
+            if (is_array($penilaianData)) {
+                $totalScore = 0;
+                $hasScore = false;
+
+                foreach ($penilaianData as $nilai) {
+                    if (is_numeric($nilai)) {
+                        $totalScore += floatval($nilai);
+                        $hasScore = true;
+                    }
+                }
+
+                if ($hasScore) {
+                    $scores[] = round($totalScore, 2);
+                } else {
+                    $scores[] = null;
+                }
+            }
+        }
+
+        return $scores;
     }
 }
