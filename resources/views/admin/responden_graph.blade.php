@@ -16,11 +16,6 @@
                     </li>
                 </ul>
             </div>
-            {{-- Tombol Print di-nonaktifkan untuk sementara --}}
-            {{-- <button id="print-button" class="btn-download">
-                <i class='bx bxs-printer'></i>
-                <span class="text">Cetak Laporan</span>
-            </button> --}}
         </div>
 
 
@@ -156,11 +151,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Daftarkan plugin datalabels secara global
+      
             Chart.register(ChartDataLabels);
 
             let sumberDataChart, kategoriChart, trenChart, detailFakultasChart, prodiPerFakultasChart;
-            let fullProdiData = {}; // Store full prodi data for filtering
+            let fullProdiData = {}; 
 
             const chartColors = {
                 blue: 'rgba(54, 162, 235, 0.8)',
@@ -200,8 +195,7 @@
                     renderKategoriChart(data.kategori);
                     renderTrenChart(data.tren);
                     renderDetailFakultasChart(data.perFakultas);
-                    
-                    // Store full data and populate fakultas dropdown
+
                     fullProdiData = data.prodiPerFakultas;
                     populateFakultasDropdown(data.prodiPerFakultas);
                     renderProdiPerFakultasChart(data.prodiPerFakultas);
@@ -219,7 +213,7 @@
                 return new Chart(ctx, config);
             }
 
-            // 1. Render Sumber Data Chart
+      
             function renderSumberDataChart(data) {
                 const labels = Object.keys(data);
                 const values = Object.values(data);
@@ -260,7 +254,7 @@
                 });
             }
 
-            // 2. Render Kategori Chart
+  
             function renderKategoriChart(data) {
                 const labels = Object.keys(data);
                 const values = Object.values(data);
@@ -301,7 +295,7 @@
                 });
             }
 
-            // 3. Render Tren Chart
+
             function renderTrenChart(data) {
                 const labels = Object.keys(data);
                 const values = Object.values(data);
@@ -335,7 +329,7 @@
                 });
             }
 
-            // 4. Render Detail Fakultas Chart
+   
             function renderDetailFakultasChart(data) {
                 const labels = Object.keys(data);
                 const values = Object.values(data);
@@ -377,12 +371,11 @@
                 });
             }
 
-            // Populate Fakultas Dropdown
             function populateFakultasDropdown(data) {
                 const select = document.getElementById('fakultas_filter');
                 const currentValue = select.value;
                 
-                // Clear existing options except the first one
+       
                 select.innerHTML = '<option value="">Semua Fakultas</option>';
                 
                 const faculties = Object.keys(data).sort();
@@ -393,18 +386,16 @@
                     select.appendChild(option);
                 });
                 
-                // Restore previous selection if exists
+
                 if (currentValue) {
                     select.value = currentValue;
                 }
             }
 
-            // 5. Render Prodi per Fakultas Chart
             function renderProdiPerFakultasChart(data) {
                 const selectedFakultas = document.getElementById('fakultas_filter').value;
                 let filteredData = data;
                 
-                // Filter by selected fakultas
                 if (selectedFakultas) {
                     filteredData = {
                         [selectedFakultas]: data[selectedFakultas] || {}
@@ -414,14 +405,12 @@
                 const faculties = Object.keys(filteredData);
                 const allProdis = new Set();
                 
-                // Collect all unique prodi names
                 faculties.forEach(faculty => {
                     Object.keys(filteredData[faculty]).forEach(prodi => allProdis.add(prodi));
                 });
                 
                 const prodiList = Array.from(allProdis).sort();
                 
-                // Prepare datasets for each prodi
                 const datasets = prodiList.map((prodi, index) => {
                     return {
                         label: prodi,
@@ -466,17 +455,14 @@
                 });
             }
 
-            // Event Listeners
             document.getElementById('filter-btn').addEventListener('click', fetchDataAndRenderCharts);
             
-            // Fakultas filter change - re-render only prodi chart
             document.getElementById('fakultas_filter').addEventListener('change', function() {
                 if (Object.keys(fullProdiData).length > 0) {
                     renderProdiPerFakultasChart(fullProdiData);
                 }
             });
 
-            // Initial data load
             fetchDataAndRenderCharts();
         });
     </script>
