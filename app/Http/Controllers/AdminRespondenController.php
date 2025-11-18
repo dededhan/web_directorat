@@ -158,7 +158,7 @@ class AdminRespondenController extends Controller
                 return view('admin.respondenadmin', $viewData + ['routePrefix' => $routePrefix]);
             case 'admin_pemeringkatan':
                 $routePrefix = 'admin_pemeringkatan';
-                return view('admin_pemeringkatan.respondenadmin', $viewData + ['routePrefix' => $routePrefix]);
+                return view('admin_pemeringkatan.responden.index', $viewData + ['routePrefix' => $routePrefix]);
             case 'fakultas':
                 $routePrefix = 'fakultas';
                 return view('fakultas.respondenadmin', $viewData + ['routePrefix' => $routePrefix]);
@@ -174,13 +174,20 @@ class AdminRespondenController extends Controller
 
     public function create()
     {
-        if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas'])) {
+        $role = Auth::user()->role;
+        
+        if (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan', 'fakultas'])) {
             return redirect()->back()->with('error', 'Anda tidak diizinkan membuat responden.');
         }
-        $viewData = [];
-        if (Auth::user()->role === 'admin_direktorat' || Auth::user()->role === 'admin_pemeringkatan') {
-        }
-        return view('admin.responden.create', $viewData);
+        
+        // Determine the view based on role
+        $view = match($role) {
+            'admin_pemeringkatan' => 'admin_pemeringkatan.responden.create',
+            'fakultas' => 'fakultas.responden.create',
+            default => 'admin.responden.create'
+        };
+        
+        return view($view);
     }
 
     public function store(StoreRespondenRequest $request)
@@ -249,17 +256,25 @@ class AdminRespondenController extends Controller
         if ($role === 'fakultas') {
             $userInfo = $this->getUserFacultyInfo($user);
             if (!$userInfo['faculty_code'] || $responden->fakultas !== $userInfo['faculty_code']) {
-                return response()->json(['message' => 'Akses ditolak.'], 403);
+                return redirect()->back()->with('error', 'Akses ditolak.');
             }
         } elseif ($role === 'prodi') {
             if ($responden->user_id !== $user->id) {
-                return response()->json(['message' => 'Akses ditolak. Anda hanya boleh mengedit data yang Anda buat.'], 403);
+                return redirect()->back()->with('error', 'Akses ditolak. Anda hanya boleh mengedit data yang Anda buat.');
             }
         } elseif (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan'])) {
-            return response()->json(['message' => 'Akses ditolak.'], 403);
+            return redirect()->back()->with('error', 'Akses ditolak.');
         }
 
-        return response()->json($responden);
+        //permission view role (to do list)
+        $view = match($role) {
+            'admin_pemeringkatan' => 'admin_pemeringkatan.responden.edit',
+            'fakultas' => 'fakultas.responden.edit',
+            'prodi' => 'prodis.responden.edit',
+            default => 'admin.responden.edit'
+        };
+
+        return view($view, compact('responden'));
     }
 
 

@@ -163,7 +163,7 @@ Route::prefix('admin')->name('admin.')
 
         Route::get('/qsgeneraltable', [QuesionerGeneralController::class, 'index'])->name('qsgeneraltable');
 
-        Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store', 'show']);
+        Route::resource('/qsresponden', RespondenAnswerController::class)->except(['show']);
         Route::get('/qsresponden-export', [RespondenAnswerController::class, 'export'])->name('qsresponden.export');
 
         // mahasiswa
@@ -419,7 +419,7 @@ Route::prefix('prodis')->name('prodis.')
         Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
         Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
         Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
-        Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
+        Route::resource('/qsresponden', RespondenAnswerController::class)->except(['show']);
 
 
         // NEW: Manage Account Routes for Fakultas
@@ -473,7 +473,7 @@ Route::prefix('fakultas')->name('fakultas.')
         Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
         Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
         Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
-        Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
+        Route::resource('/qsresponden', RespondenAnswerController::class)->except(['show']);
 
         Route::get('/account', function () {
             return view('fakultas.manage_account');
@@ -542,7 +542,7 @@ Route::prefix('fakultas')->name('fakultas.')
 //         Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
 
 //         //responden
-//         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['create', 'store']);
+//         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['show']);
 //     });
 
 

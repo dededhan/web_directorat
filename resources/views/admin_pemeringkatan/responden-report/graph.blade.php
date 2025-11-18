@@ -1,14 +1,15 @@
-@extends('admin.admin')
+@extends('admin_pemeringkatan.index')
 
-@section('contentadmin')
-    <div class="p-4 sm:p-6 bg-gray-50 min-h-full font-sans">
+@section('contentadmin_pemeringkatan')
+    <div class="p-4 sm:p-6 lg:p-8 xl:p-10 2xl:p-12 bg-gray-50 min-h-full font-sans">
+        <div class="max-w-[1920px] mx-auto">
 
         <div class="head-title">
             <div class="left">
                 <h1>Laporan Grafik Responden</h1>
                 <ul class="breadcrumb">
                     <li>
-                        <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+                        <a href="{{ route('admin_pemeringkatan.dashboard') }}">Dashboard</a>
                     </li>
                     <li><i class='bx bx-chevron-right'></i></li>
                     <li>
@@ -480,5 +481,8 @@
             fetchDataAndRenderCharts();
         });
     </script>
+        </div>
+    </div>
 @endsection
+
 

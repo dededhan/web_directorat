@@ -1,12 +1,48 @@
 @extends('admin_pemeringkatan.index')
 
 @section('contentadmin_pemeringkatan')
+    @php
+        // mapping 1
+        $employeeJobTitles = [
+            'ceo' => 'CEO/President/Managing Director',
+            'coo' => 'COO/CFO/CTO/CIO/CMO',
+            'vp' => 'Director/Partner/Vice President',
+            'shr' => 'Senior Human Resources/Recruitment',
+            'ohr' => 'Other Human Resources/Recruitment',
+            'exe' => 'Manager/Executive',
+            'cons' => 'Consultant/Advisor',
+            'coor' => 'Coordinator/Officer',
+            'ana' => 'Analyst/Specialist',
+            'ass' => 'Assistant/Administrator',
+            'other' => 'Other',
+        ];
+
+        // mapping 2
+        $academicJobTitles = [
+            'vc' => 'President/Vice-Chancellor',
+            'vp' => 'Vice-President/Deputy Vice-Chancellor',
+            'sa' => 'Senior Administrator',
+            'hod' => 'Head of Department',
+            'ass' => 'Professor/Associate Professor',
+            'ap' => 'Assistant Professor',
+            'sl' => 'Senior Lecturer',
+            'lec' => 'Lecturer',
+            'rs' => 'Research Specialist',
+            'fm' => 'Administrator/Functional Manager',
+            'ra' => 'Research Assistant',
+            'ta' => 'Teaching Assistant',
+            'ao' => 'Admissions Officer',
+            'la' => 'Librarian/Library Assistant',
+            'other' => 'Other',
+        ];
+    @endphp
+
     <div class="head-title">
         <div class="left">
             <h1>QS Responden Table</h1>
             <ul class="breadcrumb">
                 <li>
-                    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+                    <a href="{{ route('admin_pemeringkatan.dashboard') }}">Dashboard</a>
                 </li>
                 <li><i class='bx bx-chevron-right'></i></li>
                 <li>
@@ -16,21 +52,114 @@
         </div>
     </div>
 
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="table-data">
         <div class="order">
             <div class="head">
                 <h3>QS Respondent Data</h3>
             </div>
-            
+
+            <form method="GET" action="{{ route('admin_pemeringkatan.qsresponden.index') }}" class="mb-3">
+                <div class="filter-card p-3 mb-3">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-lg-4">
+                            <label class="form-label">Search</label>
+                            <input type="text" name="q" value="{{ request('q') }}" class="form-control"
+                                placeholder="Name, email, institution, company, country, job title">
+                        </div>
+                        <div class="col-lg-2 col-md-4">
+                            <label class="form-label">Category</label>
+                            <select name="category" class="form-select">
+                                <option value="">All</option>
+                                <option value="academic" {{ request('category') === 'academic' ? 'selected' : '' }}>Academic
+                                </option>
+                                <option value="employee"
+                                    {{ request('category') === 'employee' || request('category') === 'employer' ? 'selected' : '' }}>
+                                    Employee</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-4">
+                            <label class="form-label">Country</label>
+                            <input type="text" name="country" value="{{ request('country') }}" class="form-control"
+                                placeholder="e.g. Indonesia">
+                        </div>
+                        <div class="col-lg-4 col-md-8">
+                            <label class="form-label">Job Title</label>
+                            <select name="job_title" class="form-select">
+                                <option value="">All Job Titles</option>
+                                <optgroup label="Academic">
+                                    @foreach ($academicJobTitles as $key => $label)
+                                        <option value="{{ $key }}"
+                                            {{ request('job_title') === $key ? 'selected' : '' }}>{{ $label }}
+                                        </option>
+                                    @endforeach
+                                </optgroup>
+                                <optgroup label="Employee">
+                                    @foreach ($employeeJobTitles as $key => $label)
+                                        <option value="{{ $key }}"
+                                            {{ request('job_title') === $key ? 'selected' : '' }}>{{ $label }}
+                                        </option>
+                                    @endforeach
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-4">
+                            <label class="form-label">Rows</label>
+                            <select name="per_page" class="form-select">
+                                @foreach ([25, 50, 100, 200] as $n)
+                                    <option value="{{ $n }}"
+                                        {{ (int) request('per_page', 50) === $n ? 'selected' : '' }}>{{ $n }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-4">
+                            <label class="form-label">Survey 2023</label>
+                            <select name="survey_2023" class="form-select">
+                                <option value="">All</option>
+                                <option value="yes" {{ request('survey_2023') === 'yes' ? 'selected' : '' }}>Yes</option>
+                                <option value="no" {{ request('survey_2023') === 'no' ? 'selected' : '' }}>No</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-4">
+                            <label class="form-label">Survey 2024</label>
+                            <select name="survey_2024" class="form-select">
+                                <option value="">All</option>
+                                <option value="yes" {{ request('survey_2024') === 'yes' ? 'selected' : '' }}>Yes</option>
+                                <option value="no" {{ request('survey_2024') === 'no' ? 'selected' : '' }}>No</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 d-flex gap-2">
+                            <button type="submit" class="btn btn-primary flex-fill">Apply</button>
+                            <a href="{{ route('admin_pemeringkatan.qsresponden.index') }}" class="btn btn-outline-secondary">Reset</a>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                data-bs-target="#exportModal">
+                                Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
             <div class="table-responsive">
-                <table class="table table-striped" id="respondent-table">
+                <table class="table table-striped table-hover" id="respondent-table">
                     <thead>
                         <tr>
                             <th>Input Source</th>
                             <th>Title</th>
                             <th>First Name</th>
                             <th>Last Name</th>
-                            <th>Institution</th>
+                            <th>Institution / Industry</th>
                             <th>Company Name</th>
                             <th>Job Title</th>
                             <th>Country</th>
@@ -39,56 +168,98 @@
                             <th>2023 Survey</th>
                             <th>2024 Survey</th>
                             <th>Category</th>
+                            <th>Tanggal Dibuat</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($respondens as $responden)
                             <tr>
-                                <td>
-                                    @if($responden->responden && $responden->responden->user)
-                                        @php
-                                            $user = $responden->responden->user;
-                                            $role = $user->role;
-                                            $name = $user->name;
-                                            
-                                            if ($role === 'admin_direktorat') {
-                                                $displayText = 'Direktorat';
-                                            } elseif ($role === 'fakultas') {
-                                                $displayText = 'Fakultas (' . strtoupper($name) . ')';
-                                            } elseif ($role === 'prodi') {
-                                                $parts = explode('-', $name, 2);
-                                                $facultyCode = $parts[0] ?? '';
-                                                $prodiName = $parts[1] ?? 'Unknown';
-                                                $displayText = 'Prodi (' . strtoupper($facultyCode) . ' - ' . ucwords($prodiName) . ')';
+                             <td>
+                                    @php
+                                        $displayText = 'Unknown (No responden relation)'; 
+                                        
+                                        if ($responden->responden) {
+                                            if ($responden->responden->user) {
+                                                $user = $responden->responden->user;
+                                                $role = $user->role;
+                                                $name = $user->name;
+
+                                                if ($role === 'admin_direktorat') {
+                                                    $displayText = 'Direktorat';
+                                                } elseif ($role === 'fakultas') {
+                                                    $displayText = 'Fakultas (' . strtoupper($name) . ')';
+                                                } elseif ($role === 'prodi') {
+                                                    if (Str::contains($name, '-')) {
+                                                        $prodiName = trim(Str::after($name, '-'));
+                                                        $fakultasName = trim(Str::before($name, '-'));
+                                                        $displayText = 'Prodi (' . strtoupper($fakultasName) . ' - ' . ucwords(strtolower($prodiName)) . ')';
+                                                    } else {
+                                                        $displayText = 'Prodi (' . ucwords(strtolower($name)) . ')';
+                                                    }
+                                                } else {
+                                                    $displayText = ucfirst($role) . ($name ? ' (' . $name . ')' : '');
+                                                }
                                             } else {
-                                                $displayText = ucfirst($role) . ' (' . $name . ')';
+                                                $displayText = 'Unknown (User Missing)';
                                             }
-                                        @endphp
-                                        {{ $displayText }}
-                                    @else
-                                        Unknown
-                                    @endif
+                                        }
+                                    @endphp
+                                    {{ $displayText }}
                                 </td>
                                 <td>{{ Str::ucfirst($responden->title) }}</td>
                                 <td>{{ Str::title($responden->first_name) }}</td>
                                 <td>{{ Str::title($responden->last_name) }}</td>
                                 <td>{{ Str::title($responden->institution) }}</td>
                                 <td>{{ $responden->company_name }}</td>
-                                <td>{{ $responden->job_title }}</td>
+                                <td>
+                                    @php
+                                        $jobTitleKey = $responden->job_title;
+                                        $jobTitleDisplay = Str::title(str_replace('_', ' ', $jobTitleKey));
+
+                                        if ($responden->category === 'academic') {
+                                            $jobTitleDisplay = $academicJobTitles[$jobTitleKey] ?? $jobTitleDisplay;
+                                        } elseif (
+                                            $responden->category === 'employee' ||
+                                            $responden->category === 'employer'
+                                        ) {
+                                            $jobTitleDisplay = $employeeJobTitles[$jobTitleKey] ?? $jobTitleDisplay;
+                                        }
+                                    @endphp
+                                    {{ $jobTitleDisplay }}
+                                </td>
                                 <td>{{ Str::title($responden->country) }}</td>
                                 <td>{{ $responden->email }}</td>
                                 <td>{{ $responden->phone }}</td>
                                 <td>{{ Str::ucfirst($responden->survey_2023) }}</td>
                                 <td>{{ Str::ucfirst($responden->survey_2024) }}</td>
-                                <td>{{ $responden->category === 'employer' ? 'Employee' : Str::ucfirst($responden->category) }}</td>
+                                <td>{{ $responden->category === 'employer' ? 'Employee' : Str::ucfirst($responden->category) }}
+                                </td>
+
+                                <td>{{ $responden->created_at ? $responden->created_at->format('d M Y, H:i') : 'N/A' }}
+                                </td>
                                 <td>
-                                    <!-- Add action buttons if needed -->
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ route('admin_pemeringkatan.qsresponden.edit', $responden->id) }}"
+                                            class="btn btn-warning btn-sm">
+                                            <i class='bx bxs-edit'></i>
+                                        </a>
+                                        <button type="button" class="btn btn-danger btn-sm delete-btn"
+                                            data-id="{{ $responden->id }}">
+                                            <i class='bx bxs-trash'></i>
+                                        </button>
+                                        <form id="delete-form-{{ $responden->id }}"
+                                            action="{{ route('admin_pemeringkatan.qsresponden.destroy', $responden->id) }}"
+                                            method="POST" style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="14" class="text-center">Tidak ada data</td>
+                                <td colspan="15" class="text-center">Tidak ada data</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -121,11 +292,42 @@
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const respondenId = this.dataset.id;
+                    Swal.fire({
+                        title: 'Anda yakin?',
+                        text: "Data yang dihapus tidak dapat dikembalikan!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById(`delete-form-${respondenId}`).submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
     <style>
+        .filter-card {
+            background: #f8f9fb;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+        }
+
         .table-data {
             margin-top: 24px;
         }
-        
+
         .order {
             background: #fff;
             padding: 24px;
@@ -142,15 +344,23 @@
             gap: 5px;
         }
 
-        .table th {
+        .table thead th {
             background-color: #f8f9fa;
             color: #333;
             font-weight: 600;
             white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 14px;
         }
 
         .table td {
             vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f5f5f5;
         }
 
         .head {
@@ -166,11 +376,64 @@
             .table-responsive {
                 font-size: 14px;
             }
-            
+
             .btn-sm {
                 padding: 0.25rem 0.5rem;
                 font-size: 12px;
             }
         }
     </style>
+
+    <!-- Export Modal -->
+    <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exportModalLabel">Export QS Respondens</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="exportForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Start date</label>
+                                <input type="date" name="start_date" class="form-control"
+                                    value="{{ request('start_date') }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">End date</label>
+                                <input type="date" name="end_date" class="form-control"
+                                    value="{{ request('end_date') }}">
+                            </div>
+                        </div>
+                        <div class="mb-2 mt-2 text-muted">
+                            Export will use the current filters. Adjust filters above and click Export.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnDoExport" class="btn btn-success">Download</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const exportBtn = document.getElementById('btnDoExport');
+            exportBtn.addEventListener('click', function() {
+                const params = new URLSearchParams(window.location.search);
+                const startDate = document.querySelector('#exportForm input[name="start_date"]').value;
+                const endDate = document.querySelector('#exportForm input[name="end_date"]').value;
+                if (startDate) params.set('start_date', startDate);
+                else params.delete('start_date');
+                if (endDate) params.set('end_date', endDate);
+                else params.delete('end_date');
+                const url = `{{ route('admin_pemeringkatan.qsresponden.export') }}` + '?' + params.toString();
+                window.location.href = url;
+            });
+        });
+    </script>
 @endsection
+

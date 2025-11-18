@@ -93,6 +93,36 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             Route::get('/{exam}/export-analytics', [SulitestExportController::class, 'exportAnalytics'])->name('export_analytics');
             Route::get('/session/{session}/detail', [\App\Http\Controllers\Pemeringkatan\SulitestHasilController::class, 'detail'])->name('detail');
         });
+
+        // Responden routes
+        Route::get('/responden/laporan', [\App\Http\Controllers\AdminRespondenReportController::class, 'laporan'])
+            ->name('responden.laporan');
+
+        Route::get('/responden/graph', [\App\Http\Controllers\RespondenAnswerGraphController::class, 'index'])
+            ->name('responden.graph');
+
+        Route::resource('/responden', \App\Http\Controllers\AdminRespondenController::class)->except(['update']);
+        Route::put('/responden/{responden}', [\App\Http\Controllers\AdminRespondenController::class, 'update'])
+            ->name('responden.update');
+
+        Route::post('/responden/update-status/{id}', [\App\Http\Controllers\AdminRespondenController::class, 'updateStatus'])
+            ->name('responden.updateStatus');
+
+        Route::post('/responden/import', [\App\Http\Controllers\AdminRespondenController::class, 'import'])
+            ->name('responden.import');
+        Route::get('/responden/filter', [\App\Http\Controllers\AdminRespondenController::class, 'filter'])
+            ->name('responden.filter');
+
+        Route::get('/responden/export/excel', [\App\Http\Controllers\AdminRespondenExportController::class, 'exportExcel'])
+            ->name('responden.export.excel');
+        Route::get('/responden/export/csv', [\App\Http\Controllers\AdminRespondenExportController::class, 'exportCSV'])
+            ->name('responden.export.csv');
+
+        Route::resource('/qsresponden', \App\Http\Controllers\RespondenAnswerController::class)->except(['show']);
+        Route::get('/qsresponden-export', [\App\Http\Controllers\RespondenAnswerController::class, 'export'])
+            ->name('qsresponden.export');
+        Route::post('/qsresponden-import', [\App\Http\Controllers\RespondenAnswerController::class, 'import'])
+            ->name('qsresponden.import');
     });
 
 

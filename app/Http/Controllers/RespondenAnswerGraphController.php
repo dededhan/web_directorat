@@ -30,7 +30,9 @@ class RespondenAnswerGraphController extends Controller
             ->sort()
             ->values();
 
-        return view('admin.responden_graph', compact('years', 'faculties'));
+        $user = \Illuminate\Support\Facades\Auth::user();
+        $viewName = $user->role === 'admin_pemeringkatan' ? 'admin_pemeringkatan.responden-report.graph' : 'admin.responden_graph';
+        return view($viewName, compact('years', 'faculties'));
     }
 
     /**

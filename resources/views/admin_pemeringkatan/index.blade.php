@@ -16,7 +16,6 @@
     
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        // Setup Axios with CSRF token
         axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
     </script>
@@ -40,7 +39,7 @@
         [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-white font-sans">
 
     <div x-data="{ sidebarOpen: true }" class="flex h-screen bg-gray-100">
         @include('admin_pemeringkatan.sidebar')
@@ -48,8 +47,8 @@
         <div class="flex-1 flex flex-col overflow-hidden">
             @include('admin_pemeringkatan.navbar')
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-                <div class="container mx-auto">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-white">
+                <div class="w-full max-w-[1920px] mx-auto">
                     @yield('contentadmin_pemeringkatan')
                 </div>
             </main>

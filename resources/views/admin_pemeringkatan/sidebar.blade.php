@@ -12,7 +12,7 @@
 
 
     <div class="h-16 flex items-center justify-center bg-gray-900 shadow-md">
-        <i class="fas fa-feather-alt text-white text-2xl mr-3"></i>
+        <i class="fas  text-white text-2xl mr-3"></i>
         <span class="text-white text-lg font-semibold">Admin Pemeringkatan</span>
     </div>
 
@@ -71,6 +71,38 @@
                     Manajemen Content
                 </a>
                 
+            </div>
+        </div>
+
+        <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.responden.*') || request()->routeIs('admin_pemeringkatan.qsresponden.*') ? 'true' : 'false' }} }">
+            <button @click="open = !open" 
+                    class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
+                <div class="flex items-center">
+                    <i class="fas fa-users fa-fw w-6 text-center"></i>
+                    <span class="ml-4">QS Responden</span>
+                </div>
+                <i class="fas fa-chevron-down transition-transform duration-200" :class="{'rotate-180': open}"></i>
+            </button>
+            <div x-show="open" x-transition class="mt-2 pl-8 space-y-2" x-cloak>
+                <a href="{{ route('admin_pemeringkatan.responden.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.responden.index') ? 'bg-teal-600 !text-white' : '' }}">
+                    Input Responden
+                </a>
+                
+                <a href="{{ route('admin_pemeringkatan.qsresponden.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.qsresponden.*') ? 'bg-teal-600 !text-white' : '' }}">
+                    QS Survey Responden
+                </a>
+
+                <a href="{{ route('admin_pemeringkatan.responden.graph') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.responden.graph') ? 'bg-teal-600 !text-white' : '' }}">
+                    Grafik Responden
+                </a>
+
+                <a href="{{ route('admin_pemeringkatan.responden.laporan') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.responden.laporan') ? 'bg-teal-600 !text-white' : '' }}">
+                    Laporan Responden
+                </a>
             </div>
         </div>
 

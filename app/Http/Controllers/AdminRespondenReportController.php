@@ -31,7 +31,8 @@ class AdminRespondenReportController extends Controller
 
     public function laporan()
     {
-        if (Auth::user()->role !== 'admin_direktorat') {
+        $user = Auth::user();
+        if (!in_array($user->role, ['admin_direktorat', 'admin_pemeringkatan'])) {
             return redirect()->route('admin.dashboard')->with('error', 'Tidak ada akses');
         }
         $faculties = Responden::query()
@@ -48,7 +49,9 @@ class AdminRespondenReportController extends Controller
             ->pluck('fakultas_cleaned', 'fakultas_cleaned')
             ->sort()
             ->unique();
-        return view('admin.responden_laporan', compact('faculties'));
+        
+        $viewName = $user->role === 'admin_pemeringkatan' ? 'admin_pemeringkatan.responden-report.laporan' : 'admin.responden_laporan';
+        return view($viewName, compact('faculties'));
     }
 
     public function laporanFakultas()

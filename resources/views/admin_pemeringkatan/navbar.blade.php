@@ -1,4 +1,4 @@
-<header class="h-16 bg-white shadow-md flex items-center justify-between px-6">
+<header class="h-16 bg-gray-100 shadow-md flex items-center justify-between px-6">
     <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 focus:outline-none lg:hidden">
         <i class="fas fa-bars text-xl"></i>
     </button>
