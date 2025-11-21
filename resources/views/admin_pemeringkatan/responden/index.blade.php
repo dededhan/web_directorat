@@ -31,7 +31,7 @@
                         </svg>
                     </div>
                     <div class="ml-3">
-                        <p class="text-sm text-green-700">{{ session('success') }}</p>
+                        <p class="text-sm text-green-700 whitespace-pre-line">{{ session('success') }}</p>
                     </div>
                 </div>
             </div>

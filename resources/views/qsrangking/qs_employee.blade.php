@@ -137,6 +137,13 @@
                     {{ $message }}
                 @enderror
             </div>
+            <div class="form-group">
+                <label class="form-label">Position</label>
+                <input type="text" class="form-control" name="answer_position">
+                @error('answer_position')
+                    {{ $message }}
+                @enderror
+            </div>
         </div>
 
         <div class="form-section">

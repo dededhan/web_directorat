@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\Responden;
+use App\Models\EmailTemplate;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -21,15 +22,20 @@ class RespondenInvitationMail extends Mailable
     public function envelope(): Envelope
     {
         $normalizedCategory = $this->normalizeCategory($this->responden->category);
-        $categoryName = ucfirst($normalizedCategory);
-        $subject = "Consent Letter for {$categoryName} Respondent Universitas Negeri Jakarta QS World University Ranking";
+        $template = EmailTemplate::getTemplate($normalizedCategory, 'en');
+        
+        if ($template) {
+            $subject = $template->subject;
+        } else {
+            $categoryName = ucfirst($normalizedCategory);
+            $subject = "Consent Letter for {$categoryName} Respondent Universitas Negeri Jakarta QS World University Ranking";
+        }
 
         return new Envelope(subject: $subject);
     }
 
     public function content(): Content
     {
-        // Ensure required fields exist
         if (empty($this->responden->email)) {
             throw new \RuntimeException('Responden email is required');
         }
@@ -40,14 +46,21 @@ class RespondenInvitationMail extends Mailable
 
         $normalizedCategory = $this->normalizeCategory($this->responden->category);
         $displayTitle = $this->normalizeTitle($this->responden->title);
+        $surveyLink = $this->generateSurveyLink($normalizedCategory);
+
+        // Get templates from database
+        $templateEn = EmailTemplate::getTemplate($normalizedCategory, 'en');
+        $templateId = EmailTemplate::getTemplate($normalizedCategory, 'id');
 
         return new Content(
-            view: 'emails.responden-invitation',
+            view: 'emails.responden-invitation-dynamic',
             with: [
                 'responden' => $this->responden,
-                'surveyLink' => $this->generateSurveyLink($normalizedCategory),
+                'surveyLink' => $surveyLink,
                 'normalizedCategory' => $normalizedCategory,
                 'displayTitle' => $displayTitle,
+                'templateEn' => $templateEn,
+                'templateId' => $templateId,
             ]
         );
     }

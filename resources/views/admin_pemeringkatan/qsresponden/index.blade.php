@@ -49,12 +49,6 @@
                         <span class="text-gray-800 font-medium">QS Responden</span>
                     </nav>
                 </div>
-                <a href="{{ route('admin_pemeringkatan.qsresponden.create') }}" 
-                    class="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition duration-200 shadow-md hover:shadow-lg flex items-center justify-center">
-                    <i class='bx bx-plus-circle text-xl mr-2'></i>
-                    <span class="hidden sm:inline">Add New QS Responden</span>
-                    <span class="sm:hidden">Add New</span>
-                </a>
             </div>
         </div>
 
@@ -189,8 +183,8 @@
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Title</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">First Name</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Last Name</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Institution</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Company</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Institution / Company</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Department / Position</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Job Title</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Country</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Email</th>
@@ -246,8 +240,12 @@
                                 <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{ Str::ucfirst($responden->title) }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900">{{ Str::title($responden->first_name) }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900">{{ Str::title($responden->last_name) }}</td>
-                                <td class="px-4 py-3 text-sm text-gray-600">{{ Str::title($responden->institution) }}</td>
-                                <td class="px-4 py-3 text-sm text-gray-600">{{ $responden->company_name }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-600">
+                                    {{ $responden->institution ? Str::title($responden->institution) : ($responden->company_name ?? '-') }}
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-600">
+                                    {{ $responden->department ?? ($responden->position ?? '-') }}
+                                </td>
                                 <td class="px-4 py-3 text-sm text-gray-600">
                                 @php
                                     $jobTitleKey = $responden->job_title;

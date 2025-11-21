@@ -246,7 +246,7 @@ class AdminRespondenController extends Controller
         return response()->json($responden);
     }
 
-    public function edit(Responden $responden)
+    public function edit(Request $request, Responden $responden)
     {
         $user = Auth::user();
         $role = $user->role;
@@ -256,14 +256,28 @@ class AdminRespondenController extends Controller
         if ($role === 'fakultas') {
             $userInfo = $this->getUserFacultyInfo($user);
             if (!$userInfo['faculty_code'] || $responden->fakultas !== $userInfo['faculty_code']) {
+                if ($request->wantsJson()) {
+                    return response()->json(['message' => 'Akses ditolak.'], 403);
+                }
                 return redirect()->back()->with('error', 'Akses ditolak.');
             }
         } elseif ($role === 'prodi') {
             if ($responden->user_id !== $user->id) {
+                if ($request->wantsJson()) {
+                    return response()->json(['message' => 'Akses ditolak. Anda hanya boleh mengedit data yang Anda buat.'], 403);
+                }
                 return redirect()->back()->with('error', 'Akses ditolak. Anda hanya boleh mengedit data yang Anda buat.');
             }
         } elseif (!in_array($role, ['admin_direktorat', 'admin_pemeringkatan'])) {
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'Akses ditolak.'], 403);
+            }
             return redirect()->back()->with('error', 'Akses ditolak.');
+        }
+
+        // If AJAX request, return JSON data
+        if ($request->wantsJson()) {
+            return response()->json($responden);
         }
 
         //permission view role (to do list)
@@ -287,24 +301,25 @@ class AdminRespondenController extends Controller
 
         if ($role === 'prodi') {
             if ($responden->user_id !== $user->id) {
-                return response()->json(['message' => 'Akses ditolak. Anda tidak diizinkan memperbarui data ini.'], 403);
+                return redirect()->back()->with('error', 'Akses ditolak. Anda tidak diizinkan memperbarui data ini.');
             }
         } elseif ($role === 'fakultas') {
             $userInfo = $this->getUserFacultyInfo($user);
             if ($responden->fakultas !== $userInfo['faculty_code']) {
-                return response()->json(['message' => 'Anda tidak diizinkan memperbarui responden ini.'], 403);
+                return redirect()->back()->with('error', 'Anda tidak diizinkan memperbarui responden ini.');
             }
         }
 
-
-
         $responden->update($validated);
 
+        $redirectRoute = match($role) {
+            'admin_pemeringkatan' => 'admin_pemeringkatan.responden.index',
+            'prodi' => 'prodi.responden.index',
+            'fakultas' => 'fakultas.responden.index',
+            default => 'admin.responden.index'
+        };
 
-        return response()->json([
-            'message' => 'Data berhasil diperbarui',
-            'data' => $responden->fresh()
-        ]);
+        return redirect()->route($redirectRoute)->with('success', 'Data responden berhasil diperbarui');
     }
 
     public function updateStatus(Request $request, $id)
@@ -442,9 +457,7 @@ class AdminRespondenController extends Controller
             $skippedCount = $import->getSkippedCount();
 
 
-            $successMessage = "Proses impor selesai. <br><br>" .
-                "&bull; Berhasil diimpor: <strong>" . $importedCount . "</strong> baris. <br>" .
-                "&bull; Dilewati (duplikat): <strong>" . $skippedCount . "</strong> baris.";
+            $successMessage = "Proses impor selesai!\n\n• Berhasil diimpor: {$importedCount} baris\n• Dilewati (duplikat): {$skippedCount} baris";
 
 
             if ($request->wantsJson()) {
