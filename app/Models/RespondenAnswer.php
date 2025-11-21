@@ -10,6 +10,24 @@ class RespondenAnswer extends Model
     /** @use HasFactory<\Database\Factories\RespondenAnswerFactory> */
     use HasFactory;
     protected $guarded = ['id'];
+    
+    protected $fillable = [
+        'title',
+        'first_name',
+        'last_name',
+        'job_title',
+        'institution',
+        'department',
+        'company_name',
+        'position',
+        'country',
+        'email',
+        'phone',
+        'survey_2023',
+        'survey_2024',
+        'category',
+        'responden_id'
+    ];
 
 
 
