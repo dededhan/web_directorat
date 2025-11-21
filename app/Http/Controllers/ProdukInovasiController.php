@@ -8,9 +8,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Berita;
-use App\Models\Video;
+use App\Models\ProdukInovasiVideo;
 use App\Models\MitraKolaborasi;
 use App\Services\TranslationService;
+use Illuminate\Support\Facades\DB;
+
 
 class ProdukInovasiController extends Controller
 {
@@ -29,7 +31,7 @@ class ProdukInovasiController extends Controller
 
     public function index()
     {
-        $produkInovasi = ProdukInovasi::all();
+        $produkInovasi = ProdukInovasi::with('videos')->get();
         $routePrefix = $this->getRoutePrefix();
 
         $view = auth()->user()->hasRole('admin_hilirisasi')
@@ -48,7 +50,7 @@ class ProdukInovasiController extends Controller
     {
         $produkInovasi = ProdukInovasi::latest()->get();
         $beritaInovasi = Berita::where('kategori', 'inovasi')->latest()->take(4)->get();
-        $video = Video::first();
+        $video = ProdukInovasiVideo::first(); // Should be ProdukInovasiVideo
         $semuaMitra = MitraKolaborasi::all();
 
         return view('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi', compact(
@@ -94,18 +96,18 @@ class ProdukInovasiController extends Controller
             'foto_poster' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'kategori' => 'required|in:HKI,PATEN',
             'link_ebook' => 'nullable|url|max:255',
-            'video_type' => 'nullable|in:youtube,mp4',
-            'video_path_youtube' => 'nullable|url|required_if:video_type,youtube',
-            'video_path_mp4' => 'nullable|file|mimes:mp4|max:20480|required_if:video_type,mp4', // max 20MB
+            'videos' => 'nullable|array',
+            'videos.*.type' => 'required|in:youtube,mp4',
+            'videos.*.path_youtube' => 'nullable|url|required_if:videos.*.type,youtube',
+            'videos.*.path_mp4' => 'nullable|file|mimes:mp4|max:20480|required_if:videos.*.type,mp4', // max 20MB
         ]);
 
+        DB::beginTransaction();
         try {
-            $data = $request->except(['inovator', 'gambar', 'foto_poster', 'video_path_youtube', 'video_path_mp4']);
+            $data = $request->except(['inovator', 'gambar', 'foto_poster', 'videos']);
             
-            // Handle multiple innovators
-          $data['inovator'] = implode(', ', $request->input('inovator'));
+            $data['inovator'] = implode(', ', $request->input('inovator'));
 
-            // Handle file uploads
             if ($request->hasFile('gambar')) {
                 $data['gambar'] = $request->file('gambar')->store('produk_inovasi/gambar', 'public');
             }
@@ -113,14 +115,6 @@ class ProdukInovasiController extends Controller
                 $data['foto_poster'] = $request->file('foto_poster')->store('produk_inovasi/poster', 'public');
             }
 
-            // Handle video
-            if ($request->video_type === 'youtube') {
-                $data['video_path'] = $request->video_path_youtube;
-            } elseif ($request->video_type === 'mp4' && $request->hasFile('video_path_mp4')) {
-                $data['video_path'] = $request->file('video_path_mp4')->store('produk_inovasi/video', 'public');
-            }
-            
-            // Auto-translate to English (with error handling)
             try {
                 $translationService = new TranslationService();
                 $data['nama_produk_en'] = $translationService->translate($request->nama_produk);
@@ -128,17 +122,38 @@ class ProdukInovasiController extends Controller
                 $data['deskripsi_en'] = $translationService->translateHtml($request->deskripsi);
             } catch (\Exception $e) {
                 \Log::warning('Auto-translation failed during product creation: ' . $e->getMessage());
-                // Continue without translation if it fails
                 $data['nama_produk_en'] = null;
                 $data['inovator_en'] = null;
                 $data['deskripsi_en'] = null;
             }
 
-            ProdukInovasi::create($data);
+            $produk = ProdukInovasi::create($data);
+
+            // Handle multiple videos
+            if ($request->has('videos')) {
+                foreach ($request->videos as $videoData) {
+                    $videoPath = null;
+                    if ($videoData['type'] === 'youtube') {
+                        $videoPath = $videoData['path_youtube'];
+                    } elseif ($videoData['type'] === 'mp4' && isset($videoData['path_mp4'])) {
+                        $videoPath = $videoData['path_mp4']->store('produk_inovasi/video', 'public');
+                    }
+
+                    if ($videoPath) {
+                        $produk->videos()->create([
+                            'type' => $videoData['type'],
+                            'path' => $videoPath,
+                        ]);
+                    }
+                }
+            }
+            
+            DB::commit();
 
             return redirect()->route($this->getRoutePrefix() . '.produk_inovasi')
                 ->with('success', 'Produk inovasi berhasil ditambahkan!');
         } catch (\Exception $e) {
+            DB::rollBack();
             return redirect()->back()
                 ->with('error', 'Gagal menambahkan produk inovasi: ' . $e->getMessage())
                 ->withInput();
@@ -148,7 +163,7 @@ class ProdukInovasiController extends Controller
 
     public function getProdukDetail($id)
     {
-        $produk = ProdukInovasi::findOrFail($id);
+        $produk = ProdukInovasi::with('videos')->findOrFail($id);
         return response()->json($produk);
     }
 
@@ -165,18 +180,20 @@ class ProdukInovasiController extends Controller
             'foto_poster' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'kategori' => 'required|in:HKI,PATEN',
             'link_ebook' => 'nullable|url|max:255',
-            'video_type' => 'nullable|in:youtube,mp4',
-            'video_path_youtube' => 'nullable|url|required_if:video_type,youtube',
-            'video_path_mp4' => 'nullable|file|mimes:mp4|max:20480', // max 20MB
+            'videos' => 'nullable|array',
+            'videos.*.id' => 'nullable|integer|exists:produk_inovasi_videos,id',
+            'videos.*.type' => 'required|in:youtube,mp4',
+            'videos.*.path_youtube' => 'nullable|url|required_if:videos.*.type,youtube',
+            'videos.*.path_mp4' => 'nullable|file|mimes:mp4|max:20480', // max 20MB
         ]);
 
+        DB::beginTransaction();
         try {
             $produk = ProdukInovasi::findOrFail($id);
-            $data = $request->except(['inovator', 'gambar', 'foto_poster', 'video_path_youtube', 'video_path_mp4', '_token', '_method']);
+            $data = $request->except(['inovator', 'gambar', 'foto_poster', 'videos', '_token', '_method']);
             
-          $data['inovator'] = implode(', ', $request->input('inovator'));
+            $data['inovator'] = implode(', ', $request->input('inovator'));
 
-            // Handle file updates
             if ($request->hasFile('gambar')) {
                 if ($produk->gambar) Storage::disk('public')->delete($produk->gambar);
                 $data['gambar'] = $request->file('gambar')->store('produk_inovasi/gambar', 'public');
@@ -186,20 +203,48 @@ class ProdukInovasiController extends Controller
                 $data['foto_poster'] = $request->file('foto_poster')->store('produk_inovasi/poster', 'public');
             }
 
-            // Handle video update
-            if ($request->video_type === 'youtube') {
-                if ($produk->video_type === 'mp4' && $produk->video_path) Storage::disk('public')->delete($produk->video_path);
-                $data['video_path'] = $request->video_path_youtube;
-            } elseif ($request->video_type === 'mp4' && $request->hasFile('video_path_mp4')) {
-                if ($produk->video_path) Storage::disk('public')->delete($produk->video_path);
-                $data['video_path'] = $request->file('video_path_mp4')->store('produk_inovasi/video', 'public');
-            } elseif (empty($request->video_type)) {
-                 if ($produk->video_path) Storage::disk('public')->delete($produk->video_path);
-                 $data['video_type'] = null;
-                 $data['video_path'] = null;
-            }
+            // Handle video updates
+            $submittedVideoIds = [];
+            if ($request->has('videos')) {
+                foreach ($request->videos as $videoData) {
+                    $videoPath = null;
+                    $isNewFile = false;
 
-            // Auto-translate to English if content changed (with error handling)
+                    if ($videoData['type'] === 'youtube') {
+                        $videoPath = $videoData['path_youtube'];
+                    } elseif ($videoData['type'] === 'mp4' && isset($videoData['path_mp4'])) {
+                        $videoPath = $videoData['path_mp4']->store('produk_inovasi/video', 'public');
+                        $isNewFile = true;
+                    }
+                    
+                    if (isset($videoData['id']) && !empty($videoData['id'])) {
+                        // Update existing video
+                        $video = ProdukInovasiVideo::findOrFail($videoData['id']);
+                        $updateData = ['type' => $videoData['type']];
+                        if ($videoPath) {
+                            if ($isNewFile && $video->type === 'mp4' && $video->path) {
+                                Storage::disk('public')->delete($video->path); // delete old mp4
+                            }
+                            $updateData['path'] = $videoPath;
+                        }
+                        $video->update($updateData);
+                        $submittedVideoIds[] = $video->id;
+                    } else {
+                        // Create new video
+                        if ($videoPath) {
+                            $newVideo = $produk->videos()->create([
+                                'type' => $videoData['type'],
+                                'path' => $videoPath,
+                            ]);
+                            $submittedVideoIds[] = $newVideo->id;
+                        }
+                    }
+                }
+            }
+            
+            // Delete videos that were removed from the form
+            $produk->videos()->whereNotIn('id', $submittedVideoIds)->get()->each->delete();
+
             try {
                 $translationService = new TranslationService();
                 if ($request->filled('nama_produk') && $request->nama_produk !== $produk->nama_produk) {
@@ -213,10 +258,11 @@ class ProdukInovasiController extends Controller
                 }
             } catch (\Exception $e) {
                 \Log::warning('Auto-translation failed during product update: ' . $e->getMessage());
-                // Continue without translation if it fails
             }
             
             $produk->update($data);
+
+            DB::commit();
 
             if ($request->ajax()) {
                 return response()->json(['success' => true, 'message' => 'Produk inovasi berhasil diperbarui!']);
@@ -224,6 +270,7 @@ class ProdukInovasiController extends Controller
 
             return redirect()->route($this->getRoutePrefix() . '.produk_inovasi')->with('success', 'Produk inovasi berhasil diperbarui!');
         } catch (\Exception $e) {
+             DB::rollBack();
              if ($request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'Gagal memperbarui: ' . $e->getMessage()]);
             }
@@ -234,12 +281,11 @@ class ProdukInovasiController extends Controller
     public function destroy($id)
     {
         try {
+            // The deleting event on the ProdukInovasi model will handle deleting child videos & files.
             $produk = ProdukInovasi::findOrFail($id);
 
-            // Delete associated files
             if ($produk->gambar) Storage::disk('public')->delete($produk->gambar);
             if ($produk->foto_poster) Storage::disk('public')->delete($produk->foto_poster);
-            if ($produk->video_type === 'mp4' && $produk->video_path) Storage::disk('public')->delete($produk->video_path);
 
             $produk->delete();
             

@@ -47,40 +47,53 @@
 
         <div class="bg-cardColor rounded-card shadow-lg p-6 md:p-8">
 
-            {{-- Bagian Video Produk --}}
-            @if($produk->video_path)
+            {{-- Bagian Video Produk (Slider) --}}
+            @if($produk->videos->count() > 0)
             <div class="mb-8">
                 <h2 class="text-2xl font-bold text-primary mb-4 border-b pb-2">Video Produk</h2>
-                <div id="video-container" class="max-w-4xl mx-auto bg-black rounded-card shadow-lg overflow-hidden aspect-video relative">
-                    
-                    @php
-                        $youtubeId = '';
-                        if ($produk->video_type == 'youtube') {
-                            preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $produk->video_path, $matches);
-                            if (isset($matches[1])) {
-                                $youtubeId = $matches[1];
-                            }
-                        }
-                    @endphp
+                <div class="relative max-w-4xl mx-auto bg-black rounded-card shadow-lg overflow-hidden aspect-video">
+                    <div id="video-slider" class="relative w-full h-full">
+                        @foreach($produk->videos as $index => $video)
+                            <div class="video-slide absolute w-full h-full top-0 left-0 transition-opacity duration-500 ease-in-out {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}" data-index="{{ $index }}" data-video-type="{{ $video->type }}" data-video-path="{{ $video->path }}">
+                                @if($video->type == 'youtube')
+                                    @php
+                                        $youtubeId = '';
+                                        preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $video->path, $matches);
+                                        if (isset($matches[1])) {
+                                            $youtubeId = $matches[1];
+                                        }
+                                    @endphp
+                                    @if($youtubeId)
+                                        <div class="video-placeholder w-full h-full bg-cover bg-center cursor-pointer relative group"
+                                             style="background-image: url('https://img.youtube.com/vi/{{ $youtubeId }}/maxresdefault.jpg');"
+                                             data-youtube-id="{{ $youtubeId }}">
+                                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center text-center text-white p-4 transition-colors duration-300 group-hover:bg-black/20">
+                                                <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 ease-out-expo">
+                                                    <i class="fa-solid fa-play text-white text-3xl ml-1"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @elseif($video->type == 'mp4')
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-900">
+                                        <video class="w-full h-full" controls preload="metadata">
+                                            <source src="{{ asset('storage/' . $video->path) }}" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
 
-                    @if($produk->video_type == 'youtube' && $youtubeId)
-                        <div class="video-placeholder w-full h-full bg-cover bg-center cursor-pointer relative group"
-                             style="background-image: url('https://img.youtube.com/vi/{{ $youtubeId }}/maxresdefault.jpg');"
-                             data-video-type="{{ $produk->video_type }}" data-video-path="{{ $youtubeId }}">
-                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center text-center text-white p-4 transition-colors duration-300 group-hover:bg-black/20">
-                                <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 ease-out-expo">
-                                    <i class="fa-solid fa-play text-white text-3xl ml-1"></i>
-                                </div>
-                            </div>
-                        </div>
-                    @elseif($produk->video_type == 'mp4')
-                        <div class="video-placeholder w-full h-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center cursor-pointer group"
-                             data-video-type="{{ $produk->video_type }}" data-video-path="{{ asset('storage/' . $produk->video_path) }}">
-                            <div class="text-center text-white">
-                                <i class="fas fa-play-circle text-6xl mb-4 opacity-80 transform group-hover:scale-110 transition-transform duration-300 ease-out-expo"></i>
-                                <p class="text-xl">Putar Video</p>
-                            </div>
-                        </div>
+                    {{-- Slider Navigation --}}
+                    @if($produk->videos->count() > 1)
+                    <button id="prevBtn" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-3 rounded-full z-20 transition-all duration-300">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button id="nextBtn" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-3 rounded-full z-20 transition-all duration-300">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                     @endif
                 </div>
             </div>
@@ -153,24 +166,86 @@
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-        const videoContainer = document.getElementById('video-container');
-        videoContainer.addEventListener('click', function (e) {
-            const placeholder = e.target.closest('.video-placeholder');
-            if (!placeholder) return;
-            const type = placeholder.dataset.videoType;
-            const path = placeholder.dataset.videoPath;
-            let playerHtml = '';
+        const slides = document.querySelectorAll('.video-slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentSlide = 0;
 
-            if (type === 'youtube') {
-                playerHtml = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${path}?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
-            } else if (type === 'mp4') {
-                playerHtml = `<video class="w-full h-full" controls autoplay><source src="${path}" type="video/mp4">Browser Anda tidak mendukung tag video.</video>`;
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('opacity-100', 'z-10');
+                slide.classList.add('opacity-0', 'z-0');
+
+                // Stop any playing videos
+                const videoElement = slide.querySelector('video');
+                if (videoElement) {
+                    videoElement.pause();
+                }
+                const iframeElement = slide.querySelector('iframe');
+                if (iframeElement) {
+                     // Replace iframe with placeholder to stop playback
+                    const youtubeId = slide.dataset.youtubeId; // Assuming you set this data attribute
+                    if (youtubeId) {
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'video-placeholder w-full h-full bg-cover bg-center cursor-pointer relative group';
+                        placeholder.style.backgroundImage = `url('https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg')`;
+                        placeholder.dataset.youtubeId = youtubeId;
+                        placeholder.innerHTML = `
+                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center text-center text-white p-4 transition-colors duration-300 group-hover:bg-black/20">
+                                <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 ease-out-expo">
+                                    <i class="fa-solid fa-play text-white text-3xl ml-1"></i>
+                                </div>
+                            </div>
+                        `;
+                        slide.innerHTML = '';
+                        slide.appendChild(placeholder);
+                    }
+                }
+            });
+
+            slides[index].classList.add('opacity-100', 'z-10');
+            
+            // Auto-play MP4 if it's the current slide
+            const currentVideoElement = slides[index].querySelector('video');
+            if (currentVideoElement) {
+                currentVideoElement.play();
             }
+        }
 
-            if (playerHtml) {
-                videoContainer.innerHTML = playerHtml;
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+        if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+
+        // Handle clicking on YouTube placeholders
+        document.getElementById('video-slider').addEventListener('click', function(e) {
+            const placeholder = e.target.closest('.video-placeholder');
+            if (placeholder && placeholder.dataset.youtubeId) {
+                const youtubeId = placeholder.dataset.youtubeId;
+                const iframe = document.createElement('iframe');
+                iframe.className = 'w-full h-full';
+                iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`;
+                iframe.setAttribute('frameborder', '0');
+                iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+                iframe.setAttribute('allowfullscreen', '');
+                placeholder.parentNode.innerHTML = ''; // Clear placeholder
+                placeholder.parentNode.appendChild(iframe);
             }
         });
+
+
+        // Initialize slider
+        if (slides.length > 0) {
+            showSlide(currentSlide);
+        }
     });
 </script>
 

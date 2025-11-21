@@ -103,25 +103,10 @@
             {{-- Video Section --}}
             <div class="mb-3">
                 <label class="form-label">Video (Opsional)</label>
-                <select class="form-control" name="video_type" id="video_type">
-                    <option value="">-- Pilih Tipe Video --</option>
-                    <option value="youtube" {{ old('video_type') == 'youtube' ? 'selected' : '' }}>YouTube</option>
-                    <option value="mp4" {{ old('video_type') == 'mp4' ? 'selected' : '' }}>Upload MP4</option>
-                </select>
-            </div>
-            
-            {{-- YouTube Input --}}
-            <div id="youtube-input" class="mb-3" style="display:{{ old('video_type') == 'youtube' ? 'block' : 'none' }};">
-                <label for="video_path_youtube" class="form-label">Link Video YouTube</label>
-                <input type="url" class="form-control @error('video_path_youtube') is-invalid @enderror" name="video_path_youtube" value="{{ old('video_path_youtube') }}">
-                 @error('video_path_youtube')<div class="invalid-feedback">{{ $message }}</div>@enderror
-            </div>
-
-            {{-- MP4 Input --}}
-            <div id="mp4-input" class="mb-3" style="display:{{ old('video_type') == 'mp4' ? 'block' : 'none' }};">
-                <label for="video_path_mp4" class="form-label">Upload File MP4</label>
-                <input type="file" class="form-control @error('video_path_mp4') is-invalid @enderror" name="video_path_mp4" accept="video/mp4">
-                 @error('video_path_mp4')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                <div id="create-video-container">
+                    {{-- Video inputs will be added here by JS --}}
+                </div>
+                <button type="button" class="btn btn-sm btn-success mt-2" id="add-video-btn">Tambah Video</button>
             </div>
 
 
@@ -166,9 +151,9 @@
                             @else - @endif
                         </td>
                          <td>
-                            @if($produk->video_path)
-                            <button class="btn btn-sm btn-info view-video" data-type="{{$produk->video_type}}" data-path="{{ $produk->video_type === 'mp4' ? asset('storage/' . $produk->video_path) : $produk->video_path }}">Lihat</button>
-                             @else - @endif
+                            @if($produk->videos->count() > 0)
+                                <button class="btn btn-sm btn-info view-videos" data-id="{{ $produk->id }}">Lihat ({{ $produk->videos->count() }})</button>
+                            @else - @endif
                         </td>
                         <td>
                             <div class="btn-group">
@@ -212,7 +197,7 @@
                     <h5 class="modal-title" id="videoModalLabel">Video</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body text-center" id="video-container">
+                <div class="modal-body text-center" id="view-video-container">
                     {{-- Video will be inserted here by JS --}}
                 </div>
             </div>
@@ -297,24 +282,10 @@
                         {{-- Video Section --}}
                         <div class="mb-3">
                             <label class="form-label">Video (Opsional)</label>
-                            <select class="form-control" name="video_type" id="edit_video_type">
-                                <option value="">-- Hapus Video --</option>
-                                <option value="youtube">YouTube</option>
-                                <option value="mp4">Upload MP4</option>
-                            </select>
-                        </div>
-                        
-                        {{-- YouTube Input --}}
-                        <div id="edit-youtube-input" class="mb-3" style="display:none;">
-                            <label for="edit_video_path_youtube" class="form-label">Link Video YouTube</label>
-                            <input type="url" class="form-control" name="video_path_youtube" id="edit_video_path_youtube">
-                        </div>
-    
-                        {{-- MP4 Input --}}
-                        <div id="edit-mp4-input" class="mb-3" style="display:none;">
-                            <label for="edit_video_path_mp4" class="form-label">Upload File MP4 Baru</label>
-                            <input type="file" class="form-control" name="video_path_mp4" id="edit_video_path_mp4" accept="video/mp4">
-                            <div id="current_video_mp4_info" class="mt-2"></div>
+                            <div id="edit-video-container">
+                                {{-- Edit video inputs will be added here by JS --}}
+                            </div>
+                            <button type="button" class="btn btn-sm btn-success mt-2" id="edit-add-video-btn">Tambah Video</button>
                         </div>
     
                     </form>
@@ -447,16 +418,75 @@
                 }
             });
 
-            // Toggle Video Input in Create Form
-            document.getElementById('video_type').addEventListener('change', function() {
-                document.getElementById('youtube-input').style.display = (this.value === 'youtube') ? 'block' : 'none';
-                document.getElementById('mp4-input').style.display = (this.value === 'mp4') ? 'block' : 'none';
+            // =================================================================
+            // SCRIPTS FOR MULTIPLE VIDEOS (CREATE FORM)
+            // =================================================================
+            let createVideoIndex = 0;
+
+            function addCreateVideoField() {
+                const container = document.getElementById('create-video-container');
+                const newVideoGroup = document.createElement('div');
+                newVideoGroup.className = 'video-group border rounded p-3 mb-3';
+                const videoKey = 'videos[' + createVideoIndex + ']';
+
+                newVideoGroup.innerHTML = `
+                    <div class="d-flex justify-content-between mb-2">
+                        <strong>Video ${createVideoIndex + 1}</strong>
+                        <button type="button" class="btn btn-sm btn-danger remove-video-btn">Hapus</button>
+                    </div>
+                    <div class="mb-2">
+                        <select class="form-control video-type-select" name="${videoKey}[type]">
+                            <option value="youtube" selected>YouTube</option>
+                            <option value="mp4">Upload MP4</option>
+                        </select>
+                    </div>
+                    <div class="youtube-input-group">
+                        <label class="form-label">Link Video YouTube</label>
+                        <input type="url" class="form-control" name="${videoKey}[path_youtube]">
+                    </div>
+                    <div class="mp4-input-group" style="display:none;">
+                        <label class="form-label">Upload File MP4</label>
+                        <input type="file" class="form-control" name="${videoKey}[path_mp4]" accept="video/mp4">
+                    </div>
+                `;
+                container.appendChild(newVideoGroup);
+                createVideoIndex++;
+            }
+
+            document.getElementById('add-video-btn').addEventListener('click', addCreateVideoField);
+
+            document.getElementById('create-video-container').addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-video-btn')) {
+                    e.target.closest('.video-group').remove();
+                }
+            });
+
+            document.getElementById('create-video-container').addEventListener('change', function(e) {
+                if (e.target.classList.contains('video-type-select')) {
+                    const group = e.target.closest('.video-group');
+                    const youtubeInput = group.querySelector('.youtube-input-group');
+                    const mp4Input = group.querySelector('.mp4-input-group');
+                    const youtubeField = youtubeInput.querySelector('input');
+                    const mp4Field = mp4Input.querySelector('input');
+                    
+                    if (e.target.value === 'youtube') {
+                        youtubeInput.style.display = 'block';
+                        mp4Input.style.display = 'none';
+                        mp4Field.value = '';
+                    } else {
+                        youtubeInput.style.display = 'none';
+                        mp4Input.style.display = 'block';
+                        youtubeField.value = '';
+                    }
+                }
             });
 
             // =================================================================
             // SCRIPTS FOR EDIT MODAL
             // =================================================================
-             function addEditInovatorField(value = '') {
+            let editVideoIndex = 0;
+
+            function addEditInovatorField(value = '') {
                 const container = document.getElementById('edit-inovator-container');
                 const newInputGroup = document.createElement('div');
                 newInputGroup.className = 'input-group mb-2';
@@ -467,29 +497,81 @@
                 container.appendChild(newInputGroup);
             }
 
-            // Add Inovator in Edit Modal
+             document.getElementById('edit-inovator-container').addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('remove-inovator-btn')) {
+                    e.target.closest('.input-group').remove();
+                }
+            });
+
             document.getElementById('edit-add-inovator-btn').addEventListener('click', function() {
                 addEditInovatorField();
             });
 
-            // Remove Inovator in Edit Modal
-            document.getElementById('edit-inovator-container').addEventListener('click', function(e) {
-                if (e.target && e.target.classList.contains('remove-inovator-btn')) {
-                    // Prevent removing the last innovator
-                    if (document.querySelectorAll('#edit-inovator-container .input-group').length > 1) {
-                        e.target.closest('.input-group').remove();
+            function addEditVideoField(video = {}) {
+                const container = document.getElementById('edit-video-container');
+                const videoId = video.id || null;
+                const type = video.type || 'youtube';
+                const path = video.path || '';
+                const newVideoGroup = document.createElement('div');
+                newVideoGroup.className = 'video-group border rounded p-3 mb-3';
+                const videoKey = 'videos[' + editVideoIndex + ']';
+                const pathYoutube = (type === 'youtube') ? path : '';
+
+                newVideoGroup.innerHTML = `
+                    <div class="d-flex justify-content-between mb-2">
+                        <strong>Video ${editVideoIndex + 1}</strong>
+                        <button type="button" class="btn btn-sm btn-danger remove-video-btn">Hapus</button>
+                    </div>
+                    <input type="hidden" name="${videoKey}[id]" value="${videoId || ''}">
+                    <div class="mb-2">
+                        <select class="form-control video-type-select" name="${videoKey}[type]">
+                            <option value="youtube" ${type === 'youtube' ? 'selected' : ''}>YouTube</option>
+                            <option value="mp4" ${type === 'mp4' ? 'selected' : ''}>Upload MP4</option>
+                        </select>
+                    </div>
+                    <div class="youtube-input-group" style="display:${type === 'youtube' ? 'block' : 'none'};">
+                        <label class="form-label">Link Video YouTube</label>
+                        <input type="url" class="form-control" name="${videoKey}[path_youtube]" value="${pathYoutube}">
+                    </div>
+                    <div class="mp4-input-group" style="display:${type === 'mp4' ? 'block' : 'none'};">
+                        <label class="form-label">Upload File MP4 Baru (Opsional)</label>
+                        <input type="file" class="form-control" name="${videoKey}[path_mp4]" accept="video/mp4">
+                        ${(type === 'mp4' && path) ? `<div class="mt-2">Video saat ini: <a href="/storage/${path}" target="_blank" rel="noopener noreferrer">Lihat Video</a></div>` : ''}
+                    </div>
+                `;
+                container.appendChild(newVideoGroup);
+                editVideoIndex++;
+            }
+
+            document.getElementById('edit-add-video-btn').addEventListener('click', function() {
+                addEditVideoField();
+            });
+
+            document.getElementById('edit-video-container').addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-video-btn')) {
+                    e.target.closest('.video-group').remove();
+                }
+            });
+
+            document.getElementById('edit-video-container').addEventListener('change', function(e) {
+                if (e.target.classList.contains('video-type-select')) {
+                    const group = e.target.closest('.video-group');
+                    const youtubeInput = group.querySelector('.youtube-input-group');
+                    const mp4Input = group.querySelector('.mp4-input-group');
+                    const youtubeField = youtubeInput.querySelector('input');
+                    const mp4Field = mp4Input.querySelector('input');
+
+                    if (e.target.value === 'youtube') {
+                        youtubeInput.style.display = 'block';
+                        mp4Input.style.display = 'none';
+                        mp4Field.value = '';
                     } else {
-                        Swal.fire('Info', 'Minimal harus ada satu inovator.', 'info');
+                        youtubeInput.style.display = 'none';
+                        mp4Input.style.display = 'block';
+                        youtubeField.value = '';
                     }
                 }
             });
-             
-            // Toggle Video Input in Edit Modal
-            document.getElementById('edit_video_type').addEventListener('change', function() {
-                document.getElementById('edit-youtube-input').style.display = (this.value === 'youtube') ? 'block' : 'none';
-                document.getElementById('edit-mp4-input').style.display = (this.value === 'mp4') ? 'block' : 'none';
-            });
-
 
             // =================================================================
             // GENERAL & EVENT LISTENERS
@@ -544,26 +626,13 @@
                             }
 
                             // Handle video
-                            const videoTypeSelect = document.getElementById('edit_video_type');
-                            const youtubeInput = document.getElementById('edit-youtube-input');
-                            const mp4Input = document.getElementById('edit-mp4-input');
-                            const youtubePath = document.getElementById('edit_video_path_youtube');
-                            const currentMp4Info = document.getElementById('current_video_mp4_info');
-
-                            videoTypeSelect.value = data.video_type || '';
-                            youtubeInput.style.display = 'none';
-                            mp4Input.style.display = 'none';
-                            youtubePath.value = '';
-                            currentMp4Info.innerHTML = '';
-
-                            if (data.video_type === 'youtube') {
-                                youtubeInput.style.display = 'block';
-                                youtubePath.value = data.video_path || '';
-                            } else if (data.video_type === 'mp4') {
-                                mp4Input.style.display = 'block';
-                                if(data.video_path) {
-                                    currentMp4Info.innerHTML = `<p>Video saat ini: <a href="/storage/${data.video_path}" target="_blank">Lihat Video</a></p>`;
-                                }
+                            const videoContainer = document.getElementById('edit-video-container');
+                            videoContainer.innerHTML = ''; // Clear previous videos
+                            editVideoIndex = 0; // Reset index
+                            if (data.videos && data.videos.length > 0) {
+                                data.videos.forEach(video => {
+                                    addEditVideoField(video);
+                                });
                             }
                             
                             new bootstrap.Modal(document.getElementById('editProdukModal')).show();
@@ -602,7 +671,22 @@
                                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                                 }
                             })
-                            .then(response => response.json())
+                            .then(response => {
+                                if (!response.ok) {
+                                    return response.json().then(errorData => {
+                                        let errorMessage = errorData.message || 'Terjadi kesalahan saat menyimpan.';
+                                        if (errorData.errors) {
+                                            errorMessage += '<br><ul>';
+                                            for (const key in errorData.errors) {
+                                                errorMessage += `<li>${errorData.errors[key][0]}</li>`;
+                                            }
+                                            errorMessage += '</ul>';
+                                        }
+                                        throw new Error(errorMessage);
+                                    });
+                                }
+                                return response.json();
+                            })
                             .then(data => {
                                 if (data.success) {
                                     bootstrap.Modal.getInstance(document.getElementById('editProdukModal')).hide();
@@ -614,7 +698,7 @@
                             })
                             .catch(error => {
                                 console.error('Error saving produk:', error);
-                                Swal.fire('Error!', 'Terjadi kesalahan saat menyimpan.', 'error');
+                                Swal.fire('Error!', error.message || 'Terjadi kesalahan saat menyimpan.', 'error');
                             });
                     }
                 });
@@ -655,32 +739,57 @@
             });
 
 
-            // Handle view image & video
+            // Handle view image & ALL videos
             document.querySelectorAll('.view-image').forEach(button => {
                 button.addEventListener('click', function() {
                     document.getElementById('modalImage').src = this.dataset.image;
                     new bootstrap.Modal(document.getElementById('imageModal')).show();
                 });
             });
-             document.querySelectorAll('.view-video').forEach(button => {
-                button.addEventListener('click', function() {
-                    const type = this.dataset.type;
-                    const path = this.dataset.path;
-                    const container = document.getElementById('video-container');
-                    
-                    if (type === 'youtube') {
-                        const videoId = new URL(path).searchParams.get('v');
-                        container.innerHTML = `<iframe width="100%" height="400" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
-                    } else {
-                        container.innerHTML = `<video width="100%" controls><source src="${path}" type="video/mp4">Your browser does not support the video tag.</video>`;
-                    }
-                    const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
-                    videoModal.show();
 
-                    // Stop video when modal is closed
-                     document.getElementById('videoModal').addEventListener('hidden.bs.modal', function () {
-                        container.innerHTML = '';
-                    });
+            document.querySelectorAll('.view-videos').forEach(button => {
+                button.addEventListener('click', function() {
+                    const produkId = this.dataset.id;
+                    const routePrefix = appConfig.routePrefix; // Use appConfig for routePrefix
+                    const routePath = routePrefix.replace(/\./g, '/');
+
+                    Swal.fire({ title: 'Memuat Video...', text: 'Mohon tunggu', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+                    fetch(`/${routePath}/produk_inovasi/${produkId}/detail`)
+                        .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
+                        .then(data => {
+                            Swal.close();
+                            const container = document.getElementById('view-video-container');
+                            container.innerHTML = ''; // Clear previous content
+
+                            if (data.videos && data.videos.length > 0) {
+                                data.videos.forEach(video => {
+                                    let videoHtml = '';
+                                    if (video.type === 'youtube') {
+                                        const videoId = new URL(video.path).searchParams.get('v');
+                                        if (videoId) {
+                                            videoHtml = `<div class="mb-4"><iframe width="100%" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+                                        }
+                                    } else if (video.type === 'mp4') {
+                                        videoHtml = `<div class="mb-4"><video width="100%" height="315" controls><source src="/storage/${video.path}" type="video/mp4">Your browser does not support the video tag.</video></div>`;
+                                    }
+                                    container.innerHTML += videoHtml;
+                                });
+                            } else {
+                                container.innerHTML = '<p>Tidak ada video untuk produk ini.</p>';
+                            }
+                            const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
+                            videoModal.show();
+
+                            // Stop video when modal is closed
+                            document.getElementById('videoModal').addEventListener('hidden.bs.modal', function () {
+                                container.innerHTML = '';
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error fetching videos:', error);
+                            Swal.fire('Error!', 'Gagal mengambil data video.', 'error');
+                        });
                 });
             });
 

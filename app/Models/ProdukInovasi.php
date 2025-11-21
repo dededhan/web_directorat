@@ -31,8 +31,6 @@ class ProdukInovasi extends Model
         'nomor_paten',
         'gambar',
         'foto_poster',       
-        'video_type',      
-        'video_path',  
         'kategori',     
         'link_ebook',  
     ];
@@ -59,5 +57,31 @@ class ProdukInovasi extends Model
         return app()->getLocale() === 'en' && $this->deskripsi_en 
             ? $this->deskripsi_en 
             : $this->deskripsi;
+    }
+
+    /**
+     * Get the videos for the product.
+     */
+    public function videos()
+    {
+        return $this->hasMany(ProdukInovasiVideo::class, 'produk_inovasi_id');
+    }
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::deleting(function ($produk) {
+            // Delete associated mp4 files from storage
+            foreach ($produk->videos as $video) {
+                if ($video->type === 'mp4' && $video->path) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($video->path);
+                }
+            }
+            // Videos from DB will be deleted by cascade constraint
+        });
     }
 }
