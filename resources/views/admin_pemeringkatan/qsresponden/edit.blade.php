@@ -68,8 +68,19 @@
                         <input type="text" class="form-control" id="institution" name="institution" value="{{ old('institution', $responden->institution) }}">
                     </div>
                     <div class="col-md-6 mb-3">
+                        <label for="department" class="form-label">Department</label>
+                        <input type="text" class="form-control" id="department" name="department" value="{{ old('department', $responden->department) }}">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
                         <label for="company_name" class="form-label">Company Name</label>
                         <input type="text" class="form-control" id="company_name" name="company_name" value="{{ old('company_name', $responden->company_name) }}">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="position" class="form-label">Position</label>
+                        <input type="text" class="form-control" id="position" name="position" value="{{ old('position', $responden->position) }}">
                     </div>
                 </div>
 

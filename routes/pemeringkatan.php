@@ -118,6 +118,18 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
         Route::get('/responden/export/csv', [\App\Http\Controllers\AdminRespondenExportController::class, 'exportCSV'])
             ->name('responden.export.csv');
 
+        // Email Template Management Routes
+        Route::get('/email', [\App\Http\Controllers\AdminRespondenEmailController::class, 'index'])
+            ->name('email.index');
+        Route::get('/email/{id}/edit', [\App\Http\Controllers\AdminRespondenEmailController::class, 'edit'])
+            ->name('email.edit');
+        Route::put('/email/{id}', [\App\Http\Controllers\AdminRespondenEmailController::class, 'update'])
+            ->name('email.update');
+        Route::post('/email/{id}/reset', [\App\Http\Controllers\AdminRespondenEmailController::class, 'reset'])
+            ->name('email.reset');
+        Route::get('/email/{id}/preview', [\App\Http\Controllers\AdminRespondenEmailController::class, 'preview'])
+            ->name('email.preview');
+
         Route::resource('/qsresponden', \App\Http\Controllers\RespondenAnswerController::class)->except(['show']);
         Route::get('/qsresponden-export', [\App\Http\Controllers\RespondenAnswerController::class, 'export'])
             ->name('qsresponden.export');
