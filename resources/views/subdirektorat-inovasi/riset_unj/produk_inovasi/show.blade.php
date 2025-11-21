@@ -181,57 +181,42 @@
         let currentSlide = 0;
 
         function showSlide(index) {
+            if (index === currentSlide && document.querySelector('.video-slide[data-index="' + index + '"] iframe')) {
+                 // Do not interrupt a video that is already playing on the current slide.
+                return;
+            }
+            
             slides.forEach((slide, i) => {
-                slide.classList.remove('opacity-100', 'z-10');
-                slide.classList.add('opacity-0', 'z-0');
+                const isCurrent = i === index;
+                slide.classList.toggle('opacity-100', isCurrent);
+                slide.classList.toggle('z-10', isCurrent);
+                slide.classList.toggle('opacity-0', !isCurrent);
+                slide.classList.toggle('z-0', !isCurrent);
 
-                // Stop any playing videos
                 const videoElement = slide.querySelector('video');
                 if (videoElement) {
-                    videoElement.pause();
-                }
-                const iframeElement = slide.querySelector('iframe');
-                if (iframeElement) {
-                     // Replace iframe with placeholder to stop playback
-                    const youtubeId = slide.dataset.youtubeId; // Assuming you set this data attribute
-                    if (youtubeId) {
-                        const placeholder = document.createElement('div');
-                        placeholder.className = 'video-placeholder w-full h-full bg-cover bg-center cursor-pointer relative group';
-                        placeholder.style.backgroundImage = `url('https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg')`;
-                        placeholder.dataset.youtubeId = youtubeId;
-                        placeholder.innerHTML = `
-                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center text-center text-white p-4 transition-colors duration-300 group-hover:bg-black/20">
-                                <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 ease-out-expo">
-                                    <i class="fa-solid fa-play text-white text-3xl ml-1"></i>
-                                </div>
-                            </div>
-                        `;
-                        slide.innerHTML = '';
-                        slide.appendChild(placeholder);
+                    if (isCurrent) {
+                        videoElement.play().catch(error => console.log("Autoplay was prevented.", error));
+                    } else {
+                        videoElement.pause();
                     }
                 }
-            });
-
-            if (slides.length > 0) {
-                slides[index].classList.add('opacity-100', 'z-10');
-            
-                // Auto-play MP4 if it's the current slide
-                const currentVideoElement = slides[index].querySelector('video');
-                if (currentVideoElement) {
-                    // Attempt to play, will work if muted
-                    currentVideoElement.play().catch(error => console.log("Autoplay was prevented.", error));
+                
+                const iframe = slide.querySelector('iframe');
+                if (iframe) {
+                    slide.querySelector('.video-placeholder').style.display = 'block';
+                    iframe.remove();
                 }
-            }
+            });
+            currentSlide = index;
         }
 
         function nextSlide() {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
+            showSlide((currentSlide + 1) % slides.length);
         }
 
         function prevSlide() {
-            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-            showSlide(currentSlide);
+            showSlide((currentSlide - 1 + slides.length) % slides.length);
         }
 
         if (nextBtn) nextBtn.addEventListener('click', nextSlide);
@@ -248,7 +233,8 @@
                 iframe.setAttribute('frameborder', '0');
                 iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
                 iframe.setAttribute('allowfullscreen', '');
-                placeholder.parentNode.innerHTML = ''; // Clear placeholder
+                
+                placeholder.style.display = 'none';
                 placeholder.parentNode.appendChild(iframe);
             }
         });

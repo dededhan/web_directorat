@@ -140,10 +140,23 @@
                         $video_id_or_path = '';
                         $thumbnail_url = '';
                         if ($video->type == 'youtube') {
-                            preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $video->path, $matches);
-                            if (isset($matches[1])) {
-                                $video_id_or_path = $matches[1];
-                                $thumbnail_url = "https://img.youtube.com/vi/{$video_id_or_path}/maxresdefault.jpg";
+                            $path = $video->path;
+                            $youtube_id = '';
+
+                            // Try to extract ID from a full URL
+                            preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $path, $matches);
+                            
+                            if (isset($matches[1]) && !empty($matches[1])) {
+                                // ID extracted from URL
+                                $youtube_id = $matches[1];
+                            } else if (!empty(trim($path))) {
+                                // If regex fails, assume the path is already the ID
+                                $youtube_id = $path;
+                            }
+
+                            if (!empty(trim($youtube_id))) {
+                                 $video_id_or_path = trim($youtube_id);
+                                 $thumbnail_url = "https://img.youtube.com/vi/{$video_id_or_path}/maxresdefault.jpg";
                             }
                         } else {
                             $video_id_or_path = \Illuminate\Support\Facades\Storage::url($video->path);
