@@ -54,32 +54,41 @@
                 <div class="relative max-w-4xl mx-auto bg-black rounded-card shadow-lg overflow-hidden aspect-video">
                     <div id="video-slider" class="relative w-full h-full">
                         @foreach($produk->videos as $index => $video)
-                            <div class="video-slide absolute w-full h-full top-0 left-0 transition-opacity duration-500 ease-in-out {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}" data-index="{{ $index }}" data-video-type="{{ $video->type }}" data-video-path="{{ $video->path }}">
-                                @if($video->type == 'youtube')
-                                    @php
-                                        $youtubeId = '';
-                                        preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $video->path, $matches);
-                                        if (isset($matches[1])) {
-                                            $youtubeId = $matches[1];
-                                        }
-                                    @endphp
-                                    @if($youtubeId)
-                                        <div class="video-placeholder w-full h-full bg-cover bg-center cursor-pointer relative group"
-                                             style="background-image: url('https://img.youtube.com/vi/{{ $youtubeId }}/maxresdefault.jpg');"
-                                             data-youtube-id="{{ $youtubeId }}">
-                                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center text-center text-white p-4 transition-colors duration-300 group-hover:bg-black/20">
-                                                <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 ease-out-expo">
-                                                    <i class="fa-solid fa-play text-white text-3xl ml-1"></i>
-                                                </div>
+                            @php
+                                $youtubeId = '';
+                                if ($video->type == 'youtube') {
+                                    // Extract YouTube ID from various URL formats
+                                    preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $video->path, $matches);
+                                    if (isset($matches[1])) {
+                                        $youtubeId = $matches[1];
+                                    }
+                                }
+                            @endphp
+                            <div class="video-slide absolute w-full h-full top-0 left-0 transition-opacity duration-500 ease-in-out {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}" 
+                                 data-index="{{ $index }}"
+                                 data-video-type="{{ $video->type }}"
+                                 @if($youtubeId) data-youtube-id="{{ $youtubeId }}" @endif>
+                                 
+                                @if($video->type == 'youtube' && $youtubeId)
+                                    <div class="video-placeholder w-full h-full bg-cover bg-center cursor-pointer relative group"
+                                         style="background-image: url('https://img.youtube.com/vi/{{ $youtubeId }}/maxresdefault.jpg');"
+                                         data-youtube-id="{{ $youtubeId }}">
+                                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center text-center text-white p-4 transition-colors duration-300 group-hover:bg-black/20">
+                                            <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 ease-out-expo">
+                                                <i class="fa-solid fa-play text-white text-3xl ml-1"></i>
                                             </div>
                                         </div>
-                                    @endif
+                                    </div>
                                 @elseif($video->type == 'mp4')
                                     <div class="w-full h-full flex items-center justify-center bg-gray-900">
-                                        <video class="w-full h-full" controls preload="metadata">
-                                            <source src="{{ asset('storage/' . $video->path) }}" type="video/mp4">
+                                        <video class="w-full h-full" controls muted preload="metadata" controlsList="nodownload">
+                                            <source src="{{ \Illuminate\Support\Facades\Storage::url($video->path) }}" type="video/mp4">
                                             Your browser does not support the video tag.
                                         </video>
+                                    </div>
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-900 text-white">
+                                        <p>Video tidak dapat dimuat.</p>
                                     </div>
                                 @endif
                             </div>
@@ -203,12 +212,15 @@
                 }
             });
 
-            slides[index].classList.add('opacity-100', 'z-10');
+            if (slides.length > 0) {
+                slides[index].classList.add('opacity-100', 'z-10');
             
-            // Auto-play MP4 if it's the current slide
-            const currentVideoElement = slides[index].querySelector('video');
-            if (currentVideoElement) {
-                currentVideoElement.play();
+                // Auto-play MP4 if it's the current slide
+                const currentVideoElement = slides[index].querySelector('video');
+                if (currentVideoElement) {
+                    // Attempt to play, will work if muted
+                    currentVideoElement.play().catch(error => console.log("Autoplay was prevented.", error));
+                }
             }
         }
 
@@ -232,7 +244,7 @@
                 const youtubeId = placeholder.dataset.youtubeId;
                 const iframe = document.createElement('iframe');
                 iframe.className = 'w-full h-full';
-                iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`;
+                iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&mute=1`;
                 iframe.setAttribute('frameborder', '0');
                 iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
                 iframe.setAttribute('allowfullscreen', '');

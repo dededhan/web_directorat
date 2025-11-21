@@ -136,24 +136,38 @@
                         <p class="text-textSecondary text-lg max-w-3xl mx-auto">{{ __('messages.leadership_greeting_desc') }}</p>
                     </div>
                     
+                    @php
+                        $video_id_or_path = '';
+                        $thumbnail_url = '';
+                        if ($video->type == 'youtube') {
+                            preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $video->path, $matches);
+                            if (isset($matches[1])) {
+                                $video_id_or_path = $matches[1];
+                                $thumbnail_url = "https://img.youtube.com/vi/{$video_id_or_path}/maxresdefault.jpg";
+                            }
+                        } else {
+                            $video_id_or_path = \Illuminate\Support\Facades\Storage::url($video->path);
+                        }
+                    @endphp
+
                     <div id="video-container" class="max-w-5xl mx-auto bg-black rounded-card shadow-card overflow-hidden aspect-video relative">
-                        @if($video->type == 'youtube')
+                        @if($video->type == 'youtube' && $video_id_or_path)
                             <div id="video-placeholder" class="w-full h-full bg-cover bg-center cursor-pointer relative group"
-                                style="background-image: url('https://img.youtube.com/vi/{{ $video->path }}/maxresdefault.jpg');"
-                                data-video-type="{{ $video->type }}" data-video-path="{{ $video->path }}">
+                                style="background-image: url('{{ $thumbnail_url }}');"
+                                data-video-type="{{ $video->type }}" data-video-path="{{ $video_id_or_path }}">
                                 <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center text-white p-4 transition-colors duration-300 group-hover:bg-black/20">
                                     <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 ease-out-expo">
                                         <i class="fa-solid fa-play text-white text-3xl ml-1"></i>
                                     </div>
-                                    <h3 class="text-xl md:text-2xl font-bold tracking-wide mt-6">{{ $video->title }}</h3>
+                                    <h3 class="text-xl md:text-2xl font-bold tracking-wide mt-6">{{ $video->title ?? 'Video Sambutan' }}</h3>
                                 </div>
                             </div>
-                        @elseif($video->type == 'mp4')
+                        @elseif($video->type == 'mp4' && $video_id_or_path)
                             <div id="video-placeholder" class="w-full h-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center cursor-pointer group"
-                                data-video-type="{{ $video->type }}" data-video-path="{{ asset('storage/' . $video->path) }}">
+                                data-video-type="{{ $video->type }}" data-video-path="{{ $video_id_or_path }}">
                                 <div class="text-center text-white">
                                     <i class="fas fa-play-circle text-6xl mb-4 opacity-80 transform group-hover:scale-110 transition-transform duration-300 ease-out-expo"></i>
-                                    <p class="text-xl">{{ $video->title }}</p>
+                                    <p class="text-xl">{{ $video->title ?? 'Video Sambutan' }}</p>
                                 </div>
                             </div>
                         @endif

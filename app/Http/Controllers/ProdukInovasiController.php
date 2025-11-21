@@ -50,7 +50,7 @@ class ProdukInovasiController extends Controller
     {
         $produkInovasi = ProdukInovasi::latest()->get();
         $beritaInovasi = Berita::where('kategori', 'inovasi')->latest()->take(4)->get();
-        $video = ProdukInovasiVideo::first(); // Should be ProdukInovasiVideo
+        $video = ProdukInovasiVideo::latest()->first(); // Corrected model and gets the latest
         $semuaMitra = MitraKolaborasi::all();
 
         return view('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi', compact(
