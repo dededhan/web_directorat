@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Berita;
+use App\Models\Video;
 use App\Models\ProdukInovasiVideo;
 use App\Models\MitraKolaborasi;
 use App\Services\TranslationService;
@@ -50,7 +51,7 @@ class ProdukInovasiController extends Controller
     {
         $produkInovasi = ProdukInovasi::latest()->get();
         $beritaInovasi = Berita::where('kategori', 'inovasi')->latest()->take(4)->get();
-        $video = ProdukInovasiVideo::latest()->first(); // Corrected model and gets the latest
+        $video = Video::first(); // Use the correct model for the single leadership video
         $semuaMitra = MitraKolaborasi::all();
 
         return view('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi', compact(
