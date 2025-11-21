@@ -193,7 +193,7 @@
                 const iframeElement = slide.querySelector('iframe');
                 if (iframeElement) {
                      // Replace iframe with placeholder to stop playback
-                    const youtubeId = slide.dataset.youtubeId; // Assuming you set this data attribute
+                    const youtubeId = slide.dataset.youtubeId;
                     if (youtubeId) {
                         const placeholder = document.createElement('div');
                         placeholder.className = 'video-placeholder w-full h-full bg-cover bg-center cursor-pointer relative group';
@@ -214,13 +214,6 @@
 
             if (slides.length > 0) {
                 slides[index].classList.add('opacity-100', 'z-10');
-            
-                // Auto-play MP4 if it's the current slide
-                const currentVideoElement = slides[index].querySelector('video');
-                if (currentVideoElement) {
-                    // Attempt to play, will work if muted
-                    currentVideoElement.play().catch(error => console.log("Autoplay was prevented.", error));
-                }
             }
         }
 
@@ -244,7 +237,7 @@
                 const youtubeId = placeholder.dataset.youtubeId;
                 const iframe = document.createElement('iframe');
                 iframe.className = 'w-full h-full';
-                iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&mute=1`;
+                iframe.src = `https://www.youtube.com/embed/${youtubeId}?rel=0&mute=0`;
                 iframe.setAttribute('frameborder', '0');
                 iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
                 iframe.setAttribute('allowfullscreen', '');
