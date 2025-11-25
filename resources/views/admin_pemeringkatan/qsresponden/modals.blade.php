@@ -40,6 +40,34 @@
                 <div class="bg-white px-6 py-6">
                     <form id="exportQSForm">
                         <div class="mb-4">
+                            <h6 class="font-semibold mb-3 text-gray-700">Export Filters (Optional)</h6>
+                            <div class="grid grid-cols-1 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                                    <select name="category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                        <option value="">All Categories</option>
+                                        <option value="academic" {{ request('category') === 'academic' ? 'selected' : '' }}>Academic</option>
+                                        <option value="employee" {{ in_array(request('category'), ['employee', 'employer']) ? 'selected' : '' }}>Employee</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Input Source (Fakultas)</label>
+                                    <select name="fakultas" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                        <option value="">All Sources</option>
+                                        <option value="direktorat">Direktorat</option>
+                                        <option value="fik">FIK</option>
+                                        <option value="feb">FEB</option>
+                                        <option value="fkip">FKIP</option>
+                                        <option value="faperta">FAPERTA</option>
+                                        <option value="fisip">FISIP</option>
+                                        <option value="fh">FH</option>
+                                        <option value="ft">FT</option>
+                                        <option value="fmipa">FMIPA</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
                             <h6 class="font-semibold mb-3 text-gray-700">Date Range Filter (Optional)</h6>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
@@ -89,11 +117,17 @@
                 const params = new URLSearchParams(window.location.search);
                 const startDate = document.querySelector('#exportQSForm input[name="start_date"]').value;
                 const endDate = document.querySelector('#exportQSForm input[name="end_date"]').value;
+                const category = document.querySelector('#exportQSForm select[name="category"]').value;
+                const fakultas = document.querySelector('#exportQSForm select[name="fakultas"]').value;
                 
                 if (startDate) params.set('start_date', startDate);
                 else params.delete('start_date');
                 if (endDate) params.set('end_date', endDate);
                 else params.delete('end_date');
+                if (category) params.set('category', category);
+                else params.delete('category');
+                if (fakultas) params.set('fakultas', fakultas);
+                else params.delete('fakultas');
                 
                 const url = `{{ route('admin_pemeringkatan.qsresponden.export') }}` + '?' + params.toString();
                 window.location.href = url;

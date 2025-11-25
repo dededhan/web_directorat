@@ -39,15 +39,15 @@
         [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="bg-white font-sans">
+<body class="bg-gray-50 font-sans">
 
-    <div x-data="{ sidebarOpen: true }" class="flex h-screen bg-gray-100">
+    <div x-data="{ sidebarOpen: true }" class="flex h-screen bg-gray-50">
         @include('admin_pemeringkatan.sidebar')
 
         <div class="flex-1 flex flex-col overflow-hidden">
             @include('admin_pemeringkatan.navbar')
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-white">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
                 <div class="w-full max-w-[1920px] mx-auto">
                     @yield('contentadmin_pemeringkatan')
                 </div>

@@ -94,6 +94,11 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             Route::get('/session/{session}/detail', [\App\Http\Controllers\Pemeringkatan\SulitestHasilController::class, 'detail'])->name('detail');
         });
 
+        // Data Akreditasi routes
+        Route::resource('/data-akreditasi', \App\Http\Controllers\AkreditasiController::class);
+        Route::get('/data-akreditasi/{id}/detail', [\App\Http\Controllers\AkreditasiController::class, 'getAkreditasiDetail'])
+            ->name('data-akreditasi.detail');
+
         // Responden routes
         Route::get('/responden/laporan', [\App\Http\Controllers\AdminRespondenReportController::class, 'laporan'])
             ->name('responden.laporan');

@@ -6,72 +6,76 @@ use Illuminate\Http\Request;
 use App\Models\Akreditasi;
 use App\Http\Requests\StoreAkreditasiRequest;
 use App\Http\Requests\UpdateAkreditasiRequest;
+use App\Http\Controllers\Traits\HasRoleBasedViews;
 
 class AkreditasiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $akreditasis = Akreditasi::latest()->get();
-        return view('admin.dataakreditasi', compact('akreditasis'));  
-    }
+    use HasRoleBasedViews;
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function index(Request $request)
+    {
+        $query = Akreditasi::query();
+
+        // Apply filters
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('prodi', 'like', "%{$search}%")
+                  ->orWhere('nomor_sk', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('fakultas')) {
+            $query->where('fakultas', $request->fakultas);
+        }
+
+        if ($request->filled('lembaga')) {
+            $query->where('lembaga_akreditasi', $request->lembaga);
+        }
+
+        if ($request->filled('peringkat')) {
+            $query->where('peringkat', $request->peringkat);
+        }
+        $akreditasis = $query->latest()->paginate(20);
+
+        return view($this->resolveViewByRole('data-akreditasi.index'), compact('akreditasis'));
+    }
     public function create()
     {
-        //
+        return view($this->resolveViewByRole('data-akreditasi.create'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreAkreditasiRequest $request)
     {
         Akreditasi::create($request->validated());
         
-        return redirect()->back()->with('success', 'Data akreditasi berhasil disimpan');
+        return redirect()
+            ->route($this->resolveRedirectByRole('data-akreditasi.index'))
+            ->with('success', 'Data akreditasi berhasil disimpan');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Get akreditasi detail for API request
-     */
     public function getAkreditasiDetail($id)
     {
         $akreditasi = Akreditasi::findOrFail($id);
         return response()->json($akreditasi);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $akreditasi = Akreditasi::findOrFail($id);
+        return view($this->resolveViewByRole('data-akreditasi.edit'), compact('akreditasi'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, string $id)
     {
         try {
             $akreditasi = Akreditasi::findOrFail($id);
-            
-            // If you have UpdateAkreditasiRequest, use:
-            // $validatedData = $request->validated();
-            // Otherwise validate here:
             $validatedData = $request->validate([
                 'fakultas' => 'required',
                 'prodi' => 'required',
@@ -91,7 +95,8 @@ class AkreditasiController extends Controller
                 ]);
             }
             
-            return redirect()->route('admin.dataakreditasi.index')
+            return redirect()
+                ->route($this->resolveRedirectByRole('data-akreditasi.index'))
                 ->with('success', 'Data akreditasi berhasil diperbarui!');
                 
         } catch (\Exception $e) {
@@ -108,16 +113,14 @@ class AkreditasiController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         try {
             $akreditasi = Akreditasi::findOrFail($id);
             $akreditasi->delete();
             
-            return redirect()->route('admin.dataakreditasi.index')
+            return redirect()
+                ->route($this->resolveRedirectByRole('data-akreditasi.index'))
                 ->with('success', 'Data akreditasi berhasil dihapus!');
         } catch (\Exception $e) {
             return redirect()->back()
