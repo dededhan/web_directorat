@@ -1,0 +1,280 @@
+@extends('admin_pemeringkatan.index')
+
+@section('contentadmin_pemeringkatan')
+    <div class="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 xl:p-10 2xl:p-12">
+        <div class="max-w-[1920px] mx-auto">
+            <!-- Header -->
+            <div class="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Mahasiswa International</h1>
+                    <p class="text-sm sm:text-base text-gray-600">Kelola data mahasiswa internasional inbound dan outbound</p>
+                </div>
+                <a href="{{ route('admin_pemeringkatan.mahasiswa-international.create') }}" 
+                   class="inline-flex items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 w-full sm:w-auto">
+                    <i class='bx bx-plus text-lg sm:text-xl mr-2'></i>
+                    Tambah Mahasiswa
+                </a>
+            </div>
+
+            <!-- Alert Messages -->
+            @if(session('success'))
+            <div class="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg shadow-sm">
+                <div class="flex items-start">
+                    <i class='bx bx-check-circle text-green-500 text-2xl mr-3 flex-shrink-0'></i>
+                    <p class="text-green-700 whitespace-pre-line">{{ session('success') }}</p>
+                </div>
+            </div>
+            @endif
+
+            @if(session('error'))
+            <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-lg shadow-sm">
+                <div class="flex items-start">
+                    <i class='bx bx-error-circle text-red-500 text-2xl mr-3 flex-shrink-0'></i>
+                    <p class="text-red-700 whitespace-pre-line">{{ session('error') }}</p>
+                </div>
+            </div>
+            @endif
+
+            <!-- Filters Card -->
+            <div class="bg-white rounded-xl shadow-md p-4 sm:p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+                        <i class='bx bx-filter text-xl mr-2 text-blue-600'></i>
+                        Filter Data
+                    </h2>
+                    @if(request()->hasAny(['search', 'kategori', 'status', 'negara']))
+                    <a href="{{ route('admin_pemeringkatan.mahasiswa-international.index') }}" 
+                       class="text-sm text-gray-600 hover:text-gray-800 flex items-center">
+                        <i class='bx bx-x text-lg mr-1'></i>
+                        Reset Filter
+                    </a>
+                    @endif
+                </div>
+                
+                <form method="GET" action="{{ route('admin_pemeringkatan.mahasiswa-international.index') }}" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Search -->
+                        <div>
+                            <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
+                            <input type="text" 
+                                   name="search" 
+                                   id="search" 
+                                   value="{{ request('search') }}"
+                                   placeholder="Nama atau NIM..."
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+
+                        <!-- Kategori Filter -->
+                        <div>
+                            <label for="kategori" class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                            <select name="kategori" 
+                                    id="kategori" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">Semua Kategori</option>
+                                <option value="inbound" {{ request('kategori') == 'inbound' ? 'selected' : '' }}>Inbound</option>
+                                <option value="outbound" {{ request('kategori') == 'outbound' ? 'selected' : '' }}>Outbound</option>
+                            </select>
+                        </div>
+
+                        <!-- Status Filter -->
+                        <div>
+                            <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                            <select name="status" 
+                                    id="status" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">Semua Status</option>
+                                <option value="fulltime" {{ request('status') == 'fulltime' ? 'selected' : '' }}>Full Time</option>
+                                <option value="parttime" {{ request('status') == 'parttime' ? 'selected' : '' }}>Part Time</option>
+                                <option value="other" {{ request('status') == 'other' ? 'selected' : '' }}>Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Country Filter -->
+                        <div>
+                            <label for="negara" class="block text-sm font-medium text-gray-700 mb-1">Negara</label>
+                            <input type="text" 
+                                   name="negara" 
+                                   id="negara" 
+                                   value="{{ request('negara') }}"
+                                   placeholder="Nama negara..."
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-2 sm:justify-end">
+                        <button type="submit" 
+                                class="inline-flex items-center justify-center px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 w-full sm:w-auto">
+                            <i class='bx bx-search text-lg mr-2'></i>
+                            Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Data Table -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="bg-gradient-to-r from-gray-700 to-gray-800 px-6 py-4">
+                    <h2 class="text-xl font-semibold text-white flex items-center">
+                        <i class='bx bx-world text-2xl mr-2'></i>
+                        Daftar Mahasiswa International
+                    </h2>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">No</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Nama Mahasiswa</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">NIM</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Negara</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Kategori</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Fakultas</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Program Studi</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Periode</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse($students as $index => $student)
+                            <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                <td class="px-6 py-4 text-sm text-gray-900">
+                                    {{ ($students->currentPage() - 1) * $students->perPage() + $index + 1 }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm font-medium text-gray-900">{{ $student->nama_mahasiswa }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-700">{{ $student->nim ?? '-' }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-700">{{ $student->negara }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if($student->kategori == 'inbound')
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            <i class='bx bx-log-in text-sm mr-1'></i>
+                                            Inbound
+                                        </span>
+                                    @else
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                            <i class='bx bx-log-out text-sm mr-1'></i>
+                                            Outbound
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if($student->status == 'fulltime')
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
+                                            Full Time
+                                        </span>
+                                    @elseif($student->status == 'parttime')
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            Part Time
+                                        </span>
+                                    @else
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                                            Other
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-700">{{ $student->fakultas ?? '-' }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-700">{{ $student->program_studi ?? '-' }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-700">
+                                        {{ \Carbon\Carbon::parse($student->periode_mulai)->format('d/m/Y') }} - 
+                                        {{ \Carbon\Carbon::parse($student->periode_akhir)->format('d/m/Y') }}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-sm font-medium">
+                                    <div class="flex items-center gap-2">
+                                        <a href="{{ route('admin_pemeringkatan.mahasiswa-international.edit', $student->id) }}" 
+                                           class="inline-flex items-center px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-colors duration-200">
+                                            <i class='bx bx-edit text-lg mr-1'></i>
+                                            Edit
+                                        </a>
+                                        <form action="{{ route('admin_pemeringkatan.mahasiswa-international.destroy', $student->id) }}" 
+                                              method="POST" 
+                                              class="inline-block delete-form">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" 
+                                                    class="inline-flex items-center px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors duration-200 delete-btn">
+                                                <i class='bx bx-trash text-lg mr-1'></i>
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="10" class="px-6 py-12 text-center">
+                                    <div class="flex flex-col items-center justify-center">
+                                        <i class='bx bx-data text-6xl text-gray-300 mb-4'></i>
+                                        <p class="text-gray-500 text-lg">Tidak ada data mahasiswa international</p>
+                                        <a href="{{ route('admin_pemeringkatan.mahasiswa-international.create') }}" 
+                                           class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200">
+                                            <i class='bx bx-plus text-lg mr-2'></i>
+                                            Tambah Mahasiswa Pertama
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                @if($students->hasPages())
+                <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="text-sm text-gray-600">
+                            Menampilkan {{ $students->firstItem() ?? 0 }} - {{ $students->lastItem() ?? 0 }} dari {{ $students->total() }} data
+                        </div>
+                        <div>
+                            {{ $students->appends(request()->query())->links() }}
+                        </div>
+                    </div>
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <!-- SweetAlert2 for Delete Confirmation -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // delete confirmation
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const form = this.closest('.delete-form');
+                    
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Data mahasiswa international akan dihapus permanen!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#ef4444',
+                        cancelButtonColor: '#6b7280',
+                        confirmButtonText: 'Ya, Hapus!',
+                        cancelButtonText: 'Batal',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+@endsection

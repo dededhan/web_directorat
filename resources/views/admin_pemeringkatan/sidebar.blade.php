@@ -113,7 +113,7 @@
         </div>
 
         {{-- International Dropdown (Phase 2 - To be populated) --}}
-        <div x-data="{ open: false }">
+        <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.data-akreditasi.*') || request()->routeIs('admin_pemeringkatan.mahasiswa-international.*') ? 'true' : 'false' }} }">
             <button @click="open = !open" 
                     class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
                 <div class="flex items-center">
@@ -123,16 +123,16 @@
                 <i class="fas fa-chevron-down transition-transform duration-200" :class="{'rotate-180': open}"></i>
             </button>
             <div x-show="open" x-transition class="mt-2 pl-8 space-y-2" x-cloak>
-                {{-- Phase 2 Routes - Active: Data Akreditasi --}}
+                {{-- Phase 2 Routes - Active: Data Akreditasi & Mahasiswa International --}}
                 <a href="{{ route('admin_pemeringkatan.data-akreditasi.index') }}" 
                    class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-600 hover:text-white transition-colors {{ request()->routeIs('admin_pemeringkatan.data-akreditasi.*') ? 'bg-gray-600 text-white' : '' }}">
                     <i class="fas fa-certificate fa-xs mr-2"></i>
                     Data Akreditasi
                 </a>
 
-                <a href="#" 
-                   class="block px-4 py-2 text-sm rounded-lg text-gray-500 cursor-not-allowed">
-                    <i class="fas fa-clock fa-xs mr-1"></i>
+                <a href="{{ route('admin_pemeringkatan.mahasiswa-international.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-600 hover:text-white transition-colors {{ request()->routeIs('admin_pemeringkatan.mahasiswa-international.*') ? 'bg-gray-600 text-white' : '' }}">
+                    <i class="fas fa-user-graduate fa-xs mr-2"></i>
                     Mahasiswa International
                 </a>
 

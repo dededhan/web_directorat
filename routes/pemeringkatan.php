@@ -99,6 +99,11 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
         Route::get('/data-akreditasi/{id}/detail', [\App\Http\Controllers\AkreditasiController::class, 'getAkreditasiDetail'])
             ->name('data-akreditasi.detail');
 
+        // Mahasiswa International routes
+        Route::resource('/mahasiswa-international', \App\Http\Controllers\InternationalStudentController::class);
+        Route::get('/mahasiswa-international/{id}/detail', [\App\Http\Controllers\InternationalStudentController::class, 'getStudentDetail'])
+            ->name('mahasiswa-international.detail');
+
         // Responden routes
         Route::get('/responden/laporan', [\App\Http\Controllers\AdminRespondenReportController::class, 'laporan'])
             ->name('responden.laporan');
