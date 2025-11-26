@@ -4,31 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Indikator;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Traits\HasRoleBasedViews;
+use Illuminate\Support\Facades\Storage;
 
 class IndikatorController extends Controller
 {
-    private function getRoutePrefix()
-    {
-        if (auth()->user()->role === 'admin_direktorat') {
-            return 'admin';
-        } else if (auth()->user()->role === 'admin_pemeringkatan') {
-            return 'admin_pemeringkatan';
-        }
-        return 'admin';
-    }
+    use HasRoleBasedViews;
 
     public function index()
     {
         $indikators = Indikator::orderBy('id', 'asc')->get();
-        $routePrefix = $this->getRoutePrefix();
+        return view($this->resolveViewByRole('indikator.index'), compact('indikators'));
+    }
 
-        if (auth()->user()->role === 'admin_direktorat') {
-            return view('admin.indikator_dashboard', compact('indikators', 'routePrefix'));
-        } else if (auth()->user()->role === 'admin_pemeringkatan') {
-            return view('admin_pemeringkatan.indikator_dashboard', compact('indikators', 'routePrefix'));
-        }
-
-        return view('admin.indikator_dashboard', compact('indikators', 'routePrefix'));
+    public function create()
+    {
+        return view($this->resolveViewByRole('indikator.create'));
     }
 
     public function store(Request $request)
@@ -40,15 +31,18 @@ class IndikatorController extends Controller
             ]);
 
             $indikator = Indikator::create([
-                'judul' => $request->judul,
-                'deskripsi' => $request->deskripsi,
-                'section' => $request->judul // Use judul as section or any default value
+                'judul' => $validated['judul'],
+                'deskripsi' => $validated['deskripsi'],
+                'section' => $validated['judul']
             ]);
-
-            $routePrefix = $this->getRoutePrefix();
-            return redirect()->route($routePrefix . '.indikator.index')
+            
+            return redirect()->route($this->resolveRedirectByRole('indikator.index'))
                 ->with('success', 'Indikator berhasil disimpan!');
             
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                ->withErrors($e->errors())
+                ->withInput();
         } catch (\Exception $e) {
             \Log::error('Error storing indikator: ' . $e->getMessage());
             return redirect()->back()
@@ -63,6 +57,12 @@ class IndikatorController extends Controller
         return response()->json($indikator);
     }
 
+    public function edit(string $id)
+    {
+        $indikator = Indikator::findOrFail($id);
+        return view($this->resolveViewByRole('indikator.edit'), compact('indikator'));
+    }
+
     public function update(Request $request, string $id)
     {
         try {
@@ -74,15 +74,21 @@ class IndikatorController extends Controller
 
             $indikator->judul = $validated['judul'];
             $indikator->deskripsi = $validated['deskripsi'];
-            $indikator->section = $validated['judul']; // Use judul as section
+            $indikator->section = $validated['judul'];
             $indikator->save();
 
-            $routePrefix = $this->getRoutePrefix();
             if ($request->ajax()) {
                 return response()->json(['success' => true, 'message' => 'Indikator berhasil diperbarui!']);
             }
-            return redirect()->route($routePrefix . '.indikator.index')
+            return redirect()->route($this->resolveRedirectByRole('indikator.index'))
                 ->with('success', 'Indikator berhasil diperbarui!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Validasi gagal', 'errors' => $e->errors()]);
+            }
+            return redirect()->back()
+                ->withErrors($e->errors())
+                ->withInput();
         } catch (\Exception $e) {
             \Log::error('Error updating indikator: ' . $e->getMessage());
             if ($request->ajax()) {
@@ -100,14 +106,27 @@ class IndikatorController extends Controller
             $indikator = Indikator::findOrFail($id);
             $indikator->delete();
 
-            $routePrefix = $this->getRoutePrefix();
-            return redirect()->route($routePrefix . '.indikator.index')
+            return redirect()->route($this->resolveRedirectByRole('indikator.index'))
                 ->with('success', 'Indikator berhasil dihapus!');
         } catch (\Exception $e) {
             \Log::error('Error deleting indikator: ' . $e->getMessage());
             return redirect()->back()
                 ->with('error', 'Gagal menghapus indikator: ' . $e->getMessage());
         }
+    }
+
+    public function uploadImage(Request $request)
+    {
+        $request->validate([
+            'upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $path = $request->file('upload')->store('indikator_images', 'public');
+        $url = Storage::url($path);
+
+        return response()->json([
+            'url' => asset($url),
+        ]);
     }
 
     public function showAllIndikators()

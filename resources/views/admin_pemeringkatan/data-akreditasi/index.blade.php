@@ -5,27 +5,20 @@
     <div class="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 xl:p-10 2xl:p-12">
         <div class="max-w-[1920px] mx-auto">
             
-            <!-- Page Header -->
-            <div class="mb-6">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
-                    <div>
-                        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Data Akreditasi</h1>
-                        <p class="text-sm text-gray-600 mt-1">Kelola data akreditasi program studi</p>
-                    </div>
-                    <nav class="text-sm text-gray-600">
-                        <ol class="flex items-center space-x-2">
-                            <li><a href="{{ route('admin_pemeringkatan.dashboard') }}" class="hover:text-blue-600">Dashboard</a></li>
-                            <li>/</li>
-                            <li class="text-gray-900 font-medium">Data Akreditasi</li>
-                        </ol>
-                    </nav>
+            <!-- Header -->
+            <div class="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Data Akreditasi</h1>
+                    <p class="text-sm sm:text-base text-gray-600">Kelola data akreditasi program studi</p>
                 </div>
                 <a href="{{ route('admin_pemeringkatan.data-akreditasi.create') }}" 
-                   class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-150 ease-in-out w-full sm:w-auto justify-center">
-                    <i class='bx bx-plus text-xl mr-2'></i>
+                   class="inline-flex items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 w-full sm:w-auto">
+                    <i class='bx bx-plus text-lg sm:text-xl mr-2'></i>
                     Tambah Data Akreditasi
                 </a>
             </div>
+
+            
 
             <!-- Alert Messages -->
             @if(session('success'))
@@ -46,36 +39,40 @@
                 </div>
             @endif
 
-            <!-- Filter Card -->
-            <div class="bg-white rounded-xl shadow-md mb-6 overflow-hidden">
-                <div class="bg-gradient-to-r from-gray-700 to-gray-800 px-4 sm:px-6 py-3">
-                    <h2 class="text-lg font-semibold text-white flex items-center">
-                        <i class='bx bx-filter text-xl mr-2'></i>
+            <!-- Filters Card -->
+            <div class="bg-white rounded-xl shadow-md p-4 sm:p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+                        <i class='bx bx-filter text-xl mr-2 text-blue-600'></i>
                         Filter Data
                     </h2>
+                    @if(request()->hasAny(['search', 'fakultas', 'lembaga', 'peringkat']))
+                    <a href="{{ route('admin_pemeringkatan.data-akreditasi.index') }}" 
+                       class="text-sm text-gray-600 hover:text-gray-800 flex items-center">
+                        <i class='bx bx-x text-lg mr-1'></i>
+                        Reset Filter
+                    </a>
+                    @endif
                 </div>
-                <div class="p-4 sm:p-6">
-                    <form method="GET" action="{{ route('admin_pemeringkatan.data-akreditasi.index') }}" 
-                          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <div>
+                    <form method="GET" action="{{ route('admin_pemeringkatan.data-akreditasi.index') }}" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         
-                        <!-- Search -->
-                        <div>
-                            <label for="search" class="block text-sm font-medium text-gray-700 mb-2">
-                                Cari
-                            </label>
+                            <!-- Search -->
+                            <div>
+                                <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
                             <input type="text" 
                                    name="search" 
                                    id="search"
                                    value="{{ request('search') }}"
                                    placeholder="Program studi, nomor SK..."
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
+                            </div>
 
-                        <!-- Fakultas -->
-                        <div>
-                            <label for="fakultas" class="block text-sm font-medium text-gray-700 mb-2">
-                                Fakultas
-                            </label>
+                            <!-- Fakultas -->
+                            <div>
+                                <label for="fakultas" class="block text-sm font-medium text-gray-700 mb-1">Fakultas</label>
                             <select name="fakultas" 
                                     id="fakultas"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
@@ -91,13 +88,11 @@
                                 <option value="fe" {{ request('fakultas') == 'fe' ? 'selected' : '' }}>FE</option>
                                 <option value="profesi" {{ request('fakultas') == 'profesi' ? 'selected' : '' }}>PROFESI</option>
                             </select>
-                        </div>
+                            </div>
 
-                        <!-- Lembaga -->
-                        <div>
-                            <label for="lembaga" class="block text-sm font-medium text-gray-700 mb-2">
-                                Lembaga Akreditasi
-                            </label>
+                            <!-- Lembaga -->
+                            <div>
+                                <label for="lembaga" class="block text-sm font-medium text-gray-700 mb-1">Lembaga Akreditasi</label>
                             <select name="lembaga" 
                                     id="lembaga"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
@@ -109,13 +104,11 @@
                                 <option value="lam-pendidikan" {{ request('lembaga') == 'lam-pendidikan' ? 'selected' : '' }}>LAMDIK</option>
                                 <option value="lam-sains" {{ request('lembaga') == 'lam-sains' ? 'selected' : '' }}>LAMSAMA</option>
                             </select>
-                        </div>
+                            </div>
 
-                        <!-- Peringkat -->
-                        <div>
-                            <label for="peringkat" class="block text-sm font-medium text-gray-700 mb-2">
-                                Peringkat
-                            </label>
+                            <!-- Peringkat -->
+                            <div>
+                                <label for="peringkat" class="block text-sm font-medium text-gray-700 mb-1">Peringkat</label>
                             <select name="peringkat" 
                                     id="peringkat"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
@@ -127,20 +120,15 @@
                                 <option value="b" {{ request('peringkat') == 'b' ? 'selected' : '' }}>B</option>
                                 <option value="c" {{ request('peringkat') == 'c' ? 'selected' : '' }}>C</option>
                             </select>
+                            </div>
                         </div>
 
-                        <!-- Action Buttons -->
-                        <div class="sm:col-span-2 lg:col-span-4 flex flex-col sm:flex-row gap-2">
+                        <div class="flex flex-col sm:flex-row gap-2 sm:justify-end">
                             <button type="submit" 
-                                    class="inline-flex items-center justify-center px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-150 ease-in-out">
+                                    class="inline-flex items-center justify-center px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 w-full sm:w-auto">
                                 <i class='bx bx-search text-lg mr-2'></i>
-                                Terapkan Filter
+                                Filter
                             </button>
-                            <a href="{{ route('admin_pemeringkatan.data-akreditasi.index') }}" 
-                               class="inline-flex items-center justify-center px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-lg transition duration-150 ease-in-out">
-                                <i class='bx bx-reset text-lg mr-2'></i>
-                                Reset Filter
-                            </a>
                         </div>
                     </form>
                 </div>

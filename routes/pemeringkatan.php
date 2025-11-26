@@ -104,6 +104,13 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
         Route::get('/mahasiswa-international/{id}/detail', [\App\Http\Controllers\InternationalStudentController::class, 'getStudentDetail'])
             ->name('mahasiswa-international.detail');
 
+        // Indikator Pemeringkatan routes
+        Route::post('/indikator/upload', [\App\Http\Controllers\IndikatorController::class, 'uploadImage'])
+            ->name('indikator.upload');
+        Route::get('/indikator/{id}/detail', [\App\Http\Controllers\IndikatorController::class, 'getIndikatorDetail'])
+            ->name('indikator.detail');
+        Route::resource('/indikator', \App\Http\Controllers\IndikatorController::class);
+
         // Responden routes
         Route::get('/responden/laporan', [\App\Http\Controllers\AdminRespondenReportController::class, 'laporan'])
             ->name('responden.laporan');
