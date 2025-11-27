@@ -111,6 +111,18 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             ->name('indikator.detail');
         Route::resource('/indikator', \App\Http\Controllers\IndikatorController::class);
 
+        // Ranking Pemeringkatan routes
+        Route::post('/ranking/upload', [\App\Http\Controllers\RankingController::class, 'upload'])
+            ->name('ranking.upload');
+        Route::get('/ranking/{id}/detail', [\App\Http\Controllers\RankingController::class, 'getRankingDetail'])
+            ->name('ranking.detail');
+        Route::resource('/ranking', \App\Http\Controllers\RankingController::class)->except(['show']);
+
+        // International Lecture routes
+        Route::get('/international-lecture/{id}/detail', [\App\Http\Controllers\DosenInternasionalController::class, 'getDosenDetail'])
+            ->name('international-lecture.detail');
+        Route::resource('/international-lecture', \App\Http\Controllers\DosenInternasionalController::class);
+
         // Responden routes
         Route::get('/responden/laporan', [\App\Http\Controllers\AdminRespondenReportController::class, 'laporan'])
             ->name('responden.laporan');

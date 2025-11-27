@@ -135,60 +135,69 @@ const prodisByFaculty = {
     ]
 };
 
-// Faculty change handler for add form
-document.getElementById('fakultas').addEventListener('change', function() {
-    const prodiSelect = document.getElementById('prodi');
+// Function to populate prodi dropdown based on selected fakultas
+function populateProdi(fakultasValue, prodiSelect, selectedProdi = null) {
     prodiSelect.innerHTML = '<option value="">Pilih Program Studi</option>';
     
-    if (this.value) {
+    if (fakultasValue) {
         prodiSelect.disabled = false;
-        const prodis = prodisByFaculty[this.value];
+        const prodis = prodisByFaculty[fakultasValue];
         if (prodis) {
             prodis.forEach(prodi => {
                 const option = document.createElement('option');
-                // Use the original format instead of converting to lowercase with underscores
                 option.value = prodi;
                 option.textContent = prodi;
+                if (selectedProdi && prodi === selectedProdi) {
+                    option.selected = true;
+                }
                 prodiSelect.appendChild(option);
             });
         }
     } else {
         prodiSelect.disabled = true;
     }
-});
+}
 
-// Faculty change handler for edit form
-document.getElementById('edit_fakultas').addEventListener('change', function() {
-    const prodiSelect = document.getElementById('edit_prodi');
-    prodiSelect.innerHTML = '<option value="">Pilih Program Studi</option>';
-    
-    if (this.value) {
-        prodiSelect.disabled = false;
-        const prodis = prodisByFaculty[this.value];
-        if (prodis) {
-            prodis.forEach(prodi => {
-                const option = document.createElement('option');
-                // Use the original format instead of converting to lowercase with underscores
-                option.value = prodi;
-                option.textContent = prodi;
-                prodiSelect.appendChild(option);
-            });
-        }
-    } else {
-        prodiSelect.disabled = true;
-    }
-});
+// Faculty change handler for both add and edit forms (unified)
+const fakultasSelect = document.getElementById('fakultas');
+const prodiSelect = document.getElementById('prodi');
 
-// Search functionality
-document.getElementById('searchInput').addEventListener('keyup', function() {
-    const searchText = this.value.toLowerCase();
-    const rows = document.querySelector('#lecture-table tbody').getElementsByTagName('tr');
-
-    Array.from(rows).forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(searchText) ? '' : 'none';
+if (fakultasSelect && prodiSelect) {
+    // Handle fakultas change event
+    fakultasSelect.addEventListener('change', function() {
+        populateProdi(this.value, prodiSelect);
     });
-});
+
+    // For edit form: populate prodi on page load if fakultas is already selected
+    if (fakultasSelect.value) {
+        const selectedProdi = prodiSelect.dataset.selected;
+        populateProdi(fakultasSelect.value, prodiSelect, selectedProdi);
+    }
+}
+
+// Keep old modal handlers for backward compatibility with admin_direktorat
+const editFakultasSelect = document.getElementById('edit_fakultas');
+const editProdiSelect = document.getElementById('edit_prodi');
+
+if (editFakultasSelect && editProdiSelect) {
+    editFakultasSelect.addEventListener('change', function() {
+        populateProdi(this.value, editProdiSelect);
+    });
+}
+
+// Search functionality (for old admin_direktorat view only)
+const searchInput = document.getElementById('searchInput');
+if (searchInput) {
+    searchInput.addEventListener('keyup', function() {
+        const searchText = this.value.toLowerCase();
+        const rows = document.querySelector('#lecture-table tbody').getElementsByTagName('tr');
+
+        Array.from(rows).forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchText) ? '' : 'none';
+        });
+    });
+}
 
 // SweetAlert helper functions
 function showSuccessAlert(message) {
