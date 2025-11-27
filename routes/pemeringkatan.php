@@ -123,6 +123,16 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             ->name('international-lecture.detail');
         Route::resource('/international-lecture', \App\Http\Controllers\DosenInternasionalController::class);
 
+        // International Faculty Staff routes
+        Route::get('/international-faculty-staff/{id}/detail', [\App\Http\Controllers\InternationalFacultyStaffController::class, 'getStaffDetail'])
+            ->name('international-faculty-staff.detail');
+        Route::resource('/international-faculty-staff', \App\Http\Controllers\InternationalFacultyStaffController::class);
+
+        // International Faculty Activities routes
+        Route::post('/international-faculty-activities/upload-image', [\App\Http\Controllers\InternationalFacultyStaffActivitiesController::class, 'uploadImage'])
+            ->name('international-faculty-activities-upload-image');
+        Route::resource('/international-faculty-activities', \App\Http\Controllers\InternationalFacultyStaffActivitiesController::class);
+
         // Responden routes
         Route::get('/responden/laporan', [\App\Http\Controllers\AdminRespondenReportController::class, 'laporan'])
             ->name('responden.laporan');

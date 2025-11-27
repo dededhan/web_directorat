@@ -162,10 +162,10 @@
             </div>
         </div>
 
-        {{-- Lecture Staff International Dropdown (Phase 3 - To be populated) --}}
-        <div x-data="{ open: false }">
+        {{-- Lecture Staff International Dropdown --}}
+        <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.international-faculty-staff.*') || request()->routeIs('admin_pemeringkatan.international-faculty-activities.*') ? 'true' : 'false' }} }">
             <button @click="open = !open" 
-                    class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
+                    class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none {{ request()->routeIs('admin_pemeringkatan.international-faculty-staff.*') || request()->routeIs('admin_pemeringkatan.international-faculty-activities.*') ? 'bg-gray-700 text-white' : '' }}">
                 <div class="flex items-center">
                     <i class="fas fa-user-graduate fa-fw w-6 text-center"></i>
                     <span class="ml-4">Lecture Staff</span>
@@ -173,16 +173,16 @@
                 <i class="fas fa-chevron-down transition-transform duration-200" :class="{'rotate-180': open}"></i>
             </button>
             <div x-show="open" x-transition class="mt-2 pl-8 space-y-2" x-cloak>
-                <a href="#" 
-                   class="block px-4 py-2 text-sm rounded-lg text-gray-500 cursor-not-allowed">
-                    <i class="fas fa-clock fa-xs mr-1"></i>
+                <a href="{{ route('admin_pemeringkatan.international-faculty-staff.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg {{ request()->routeIs('admin_pemeringkatan.international-faculty-staff.*') ? 'bg-teal-600 text-white font-semibold' : 'hover:bg-gray-700 hover:text-white' }} transition-colors duration-200">
+                    <i class="fas fa-user-tie fa-xs mr-2"></i>
                     Faculty Staff Profile
                 </a>
                 
-                <a href="#" 
-                   class="block px-4 py-2 text-sm rounded-lg text-gray-500 cursor-not-allowed">
-                    <i class="fas fa-clock fa-xs mr-1"></i>
-                    Aktivitas Dosen Asing
+                <a href="{{ route('admin_pemeringkatan.international-faculty-activities.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg {{ request()->routeIs('admin_pemeringkatan.international-faculty-activities.*') ? 'bg-teal-600 text-white font-semibold' : 'hover:bg-gray-700 hover:text-white' }} transition-colors duration-200">
+                    <i class="fas fa-newspaper fa-xs mr-2"></i>
+                    Faculty Activities
                 </a>
             </div>
         </div>

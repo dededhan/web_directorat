@@ -2,51 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\HasRoleBasedViews;
 use App\Models\AktivitasDosenAsing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
-use App\Models\InternationalActivity;
-
 
 class InternationalFacultyStaffActivitiesController extends Controller
 {
-    private function getRoutePrefix()
+    use HasRoleBasedViews;
+
+    public function index(Request $request)
     {
-        $role = auth()->user()->role;
-        switch ($role) {
-            case 'admin_direktorat':
-                return 'admin';
-            case 'admin_hilirisasi':
-                return 'subdirektorat-inovasi.admin_hilirisasi';
-            case 'admin_inovasi':
-                return 'subdirektorat-inovasi.admin_inovasi';
-            case 'admin_pemeringkatan':
-                return 'admin_pemeringkatan';
-            default:
-                return 'admin';
+        $query = AktivitasDosenAsing::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                  ->orWhere('isi', 'like', "%{$search}%");
+            });
         }
+
+        // Date range filter
+        if ($request->filled('start_date')) {
+            $query->whereDate('tanggal', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('tanggal', '<=', $request->end_date);
+        }
+
+        $activities = $query->latest('tanggal')->paginate(20)->appends($request->query());
+
+        return view($this->resolveViewByRole('international-faculty-activities.index'), compact('activities'));
     }
 
-    public function index()
+    public function create()
     {
-        $activities = AktivitasDosenAsing::latest()->get();
-        $routePrefix = $this->getRoutePrefix();
-        $userRole = Auth::user()->role;
-
-        $viewMap = [
-            'admin_direktorat' => 'admin.international_faculty_staff_activities',
-            'prodi' => 'prodi.international_faculty_staff_activities',
-            'fakultas' => 'fakultas.international_faculty_staff_activities',
-            'admin_pemeringkatan' => 'admin_pemeringkatan.international_faculty_staff_activities',
-        ];
-        
-        if (isset($viewMap[$userRole])) {
-            return view($viewMap[$userRole], compact('activities', 'routePrefix'));
-        }
-
-        // Fallback for any other roles if necessary
-        return view('admin.international_faculty_staff_activities', compact('activities', 'routePrefix'));
+        return view($this->resolveViewByRole('international-faculty-activities.create'));
     }
 
     public function store(Request $request)
@@ -54,9 +48,9 @@ class InternationalFacultyStaffActivitiesController extends Controller
         try {
             $validated = $request->validate([
                 'tanggal' => 'required|date',
-                'judul_berita' => 'required|string|max:200',
-                'isi_berita' => 'required|string',
-                'gambar' => 'required|image|max:2048',
+                'judul' => 'required|string|max:200',
+                'isi' => 'required|string',
+                'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
             if ($request->hasFile('gambar')) {
@@ -66,16 +60,17 @@ class InternationalFacultyStaffActivitiesController extends Controller
                     $namaFile,
                     'public'
                 );
+                $isi = $this->sanitizeHtmlContent($validated['isi']);
 
                 AktivitasDosenAsing::create([
                     'tanggal' => $validated['tanggal'],
-                    'judul' => $validated['judul_berita'],
-                    'isi' => $validated['isi_berita'],
+                    'judul' => $validated['judul'],
+                    'isi' => $isi,
                     'gambar' => $gambarPath
                 ]);
 
-                $routePrefix = $this->getRoutePrefix();
-                return redirect()->route($routePrefix . '.international-faculty.index')
+                return redirect()
+                    ->route($this->resolveRedirectByRole('international-faculty-activities.index'))
                     ->with('success', 'Aktivitas berhasil disimpan!');
             }
 
@@ -83,11 +78,17 @@ class InternationalFacultyStaffActivitiesController extends Controller
                 ->with('error', 'Upload gambar gagal.')
                 ->withInput();
         } catch (\Exception $e) {
-            \Log::error('Error storing activity: ' . $e->getMessage());
+            Log::error('Error storing activity: ' . $e->getMessage());
             return redirect()->back()
                 ->with('error', 'Gagal menambahkan aktivitas: ' . $e->getMessage())
                 ->withInput();
         }
+    }
+
+    public function edit(string $id)
+    {
+        $activity = AktivitasDosenAsing::findOrFail($id);
+        return view($this->resolveViewByRole('international-faculty-activities.edit'), compact('activity'));
     }
     
 
@@ -98,14 +99,16 @@ class InternationalFacultyStaffActivitiesController extends Controller
 
             $validated = $request->validate([
                 'tanggal' => 'required|date',
-                'judul_berita' => 'required|string|max:200',
-                'isi_berita' => 'required|string',
-                'gambar' => 'nullable|image|max:2048',
+                'judul' => 'required|string|max:200',
+                'isi' => 'required|string',
+                'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
+            $isi = $this->sanitizeHtmlContent($validated['isi']);
+
             $activity->tanggal = $validated['tanggal'];
-            $activity->judul = $validated['judul_berita'];
-            $activity->isi = $validated['isi_berita'];
+            $activity->judul = $validated['judul'];
+            $activity->isi = $isi;
 
             if ($request->hasFile('gambar') && $request->file('gambar')->isValid()) {
                 if ($activity->gambar && Storage::disk('public')->exists($activity->gambar)) {
@@ -124,37 +127,15 @@ class InternationalFacultyStaffActivitiesController extends Controller
 
             $activity->save();
 
-            $routePrefix = $this->getRoutePrefix();
-
-            if ($request->ajax()) {
-                return response()->json(['success' => true, 'message' => 'Aktivitas berhasil diperbarui!']);
-            }
-
-            return redirect()->route($routePrefix . '.international-faculty.index')
+            return redirect()
+                ->route($this->resolveRedirectByRole('international-faculty-activities.index'))
                 ->with('success', 'Aktivitas berhasil diperbarui!');
         } catch (\Exception $e) {
-            \Log::error('Error updating activity: ' . $e->getMessage());
-
-            if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => 'Gagal memperbarui aktivitas: ' . $e->getMessage()]);
-            }
-
+            Log::error('Error updating activity: ' . $e->getMessage());
             return redirect()->back()
                 ->with('error', 'Gagal memperbarui aktivitas: ' . $e->getMessage())
                 ->withInput();
         }
-    }
-    
-    /**
-     * FIX: This function was using the wrong Model. 
-     * Corrected from InternationalActivity to AktivitasDosenAsing.
-     * It's better to use the show() method and remove this one to avoid duplication,
-     * but this fix will make it work.
-     */
-    public function detail($id)
-    {
-        $activity = AktivitasDosenAsing::findOrFail($id);
-        return response()->json($activity);
     }
 
     public function destroy(string $id)
@@ -168,28 +149,43 @@ class InternationalFacultyStaffActivitiesController extends Controller
 
             $activity->delete();
 
-            $routePrefix = $this->getRoutePrefix();
-            return redirect()->route($routePrefix . '.international-faculty.index')
+            return redirect()
+                ->route($this->resolveRedirectByRole('international-faculty-activities.index'))
                 ->with('success', 'Aktivitas berhasil dihapus!');
         } catch (\Exception $e) {
-            \Log::error('Error deleting activity: ' . $e->getMessage());
+            Log::error('Error deleting activity: ' . $e->getMessage());
             return redirect()->back()
                 ->with('error', 'Gagal menghapus aktivitas: ' . $e->getMessage());
         }
     }
-
-    /**
-     * This is the recommended function to fetch activity details for an API call.
-     * Ensure your route in routes/api.php points to this method.
-     * Example: Route::get('/aktivitas-dosen-asing/{id}', [InternationalFacultyStaffActivitiesController::class, 'show']);
-     */
-    public function show($id)
+    public function uploadImage(Request $request)
     {
-        try {
-            $activity = AktivitasDosenAsing::findOrFail($id);
-            return response()->json($activity);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Activity not found'], 404);
+        if ($request->hasFile('upload')) {
+            $file = $request->file('upload');
+            $namaFile = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('aktivitas-dosen-asing/content-images', $namaFile, 'public');
+            
+            $url = Storage::url($path);
+            
+            return response()->json([
+                'url' => $url,
+                'uploaded' => 1,
+                'fileName' => $namaFile
+            ]);
         }
+        
+        return response()->json(['uploaded' => 0, 'error' => ['message' => 'No file uploaded']], 400);
+    }
+
+    private function sanitizeHtmlContent($content)
+    {
+        $config = \HTMLPurifier_Config::createDefault();
+        $config->set('HTML.Allowed', 'p,br,strong,em,u,h1,h2,h3,h4,h5,h6,ul,ol,li,a[href|target],img[src|alt|width|height],table,thead,tbody,tr,th,td,blockquote,code,pre,span[style]');
+        $config->set('CSS.AllowedProperties', 'color,background-color,font-size,font-weight,text-align');
+        $config->set('HTML.Nofollow', true);
+        $config->set('Attr.AllowedFrameTargets', ['_blank']);
+        
+        $purifier = new \HTMLPurifier($config);
+        return $purifier->purify($content);
     }
 }
