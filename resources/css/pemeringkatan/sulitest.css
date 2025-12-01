@@ -1,0 +1,42 @@
+/* Sulitest Landing Page Styles */
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #fafaf9;
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.decorative-shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.6;
+}
+
+/* Font Awesome compatibility */
+.fab,
+.fas,
+.far,
+.fal,
+.fad {
+    font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands' !important;
+    font-weight: 900 !important;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+}
+
+.fab {
+    font-family: 'Font Awesome 6 Brands' !important;
+    font-weight: 400 !important;
+}

@@ -31,7 +31,7 @@
                 <a href="#" class="desktop-dropdown-toggle text-white hover:text-yellow-400 transition-colors flex items-center">Sub Direktorat <i class="fas fa-chevron-down ml-1 text-xs"></i></a>
                 <ul class="desktop-dropdown-menu absolute hidden bg-white text-gray-800 py-2 mt-2 rounded-lg shadow-xl w-72 z-10">
                     <li><a href="{{ route('subdirektorat-inovasi.landingpage') }}" class="block px-4 py-2 hover:bg-gray-100">Subdirektorat Inovasi dan Hilirisasi</a></li>
-                    <li><a href="{{ route('pemeringkatan.landingpage') }}" class="block px-4 py-2 hover:bg-gray-100">Subdirektorat Sistem Informasi dan Pemeringkatan</a></li>
+                    <li><a href="{{ route('pemeringkatan.landing') }}" class="block px-4 py-2 hover:bg-gray-100">Subdirektorat Sistem Informasi dan Pemeringkatan</a></li>
                 </ul>
             </li>
             <li><a href="{{ route('Berita.beritahome') }}" class="text-white hover:text-yellow-400 transition-colors">Berita</a></li>
@@ -118,7 +118,7 @@
                 </button>
                 <ul class="hidden bg-white/5 mt-1 rounded-md overflow-hidden">
                     <li><a href="{{ route('subdirektorat-inovasi.landingpage') }}" class="block text-white py-2.5 px-4 pl-12 hover:bg-white/10">Inovasi dan Hilirisasi</a></li>
-                    <li><a href="{{ route('pemeringkatan.landingpage') }}" class="block text-white py-2.5 px-4 pl-12 hover:bg-white/10">Pemeringkatan dan SI</a></li>
+                    <li><a href="{{ route('pemeringkatan.landing') }}" class="block text-white py-2.5 px-4 pl-12 hover:bg-white/10">Pemeringkatan dan SI</a></li>
                 </ul>
             </li>
 

@@ -97,9 +97,8 @@ class RespondenAnswerExport implements FromQuery, WithHeadings, WithMapping, Sho
             'First Name',
             'Last Name',
             'Institution / Industry',
-            'Department',
             'Company Name',
-            'Position',
+            'Department / Position',
             'Job Title',
             'Country',
             'Email',
@@ -183,13 +182,21 @@ class RespondenAnswerExport implements FromQuery, WithHeadings, WithMapping, Sho
 
         $categoryLabel = $row->category === 'employer' ? 'Employee' : ucfirst((string)$row->category);
 
+        // category clasz
+        if (in_array(strtolower($row->category), ['employee', 'employer'])) {
+            $deptPosValue = $row->position ?? '-';
+        } else {
+            $deptPosValue = $row->department ?? '-';
+        }
+
         return [
             $displayText,
             ucfirst((string)$row->title),
             ucfirst((string)$row->first_name),
             ucfirst((string)$row->last_name),
-            $row->institution ? ucfirst((string)$row->institution) : ((string)$row->company_name ?: '-'),
-            $row->department ?? ($row->position ?? '-'),
+            $row->institution ? ucfirst((string)$row->institution) : '-',
+            $row->company_name ? ucfirst((string)$row->company_name) : '-',
+            $deptPosValue,
             $jobLabel,
             ucfirst((string)$row->country),
             (string)$row->email,

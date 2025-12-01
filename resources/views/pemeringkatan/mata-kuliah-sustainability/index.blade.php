@@ -1,26 +1,12 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.pemeringkatan')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mata Kuliah Sustainability</title>
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-   
-       @vite([
-        'resources/css/fitur/matakuliahsustainability.css',
-        'resources/js/fitur/matakuliahsustainability.js'
-    ])
-    
-</head>
+@section('title', 'Mata Kuliah Sustainability')
 
-<body>
-    @include('layout.navbar_pemeringkatan')
+@push('styles')
+    @vite('resources/css/pemeringkatan/mata-kuliah-sustainability.css')
+@endpush
 
+@section('content')
     <div class="main-content-wrapper">
         <div class="header">
             <h1>Mata Kuliah Sustainability</h1>
@@ -74,10 +60,8 @@
             </div>
         </div>
     </div>
+@endsection
 
-
-    <!-- Uncomment when you have the footer component -->
-    @include('layout.footer')
-</body>
-
-</html>
+@push('scripts')
+    @vite('resources/js/pemeringkatan/mata-kuliah-sustainability.js')
+@endpush

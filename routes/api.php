@@ -2,9 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminRespondenController;
-use App\Http\Controllers\AdminRespondenReportController;
-use App\Http\Controllers\AdminRespondenExportController;
+use App\Http\Controllers\Pemeringkatan\Admin\AdminRespondenController;
+use App\Http\Controllers\Pemeringkatan\Admin\AdminRespondenReportController;
+use App\Http\Controllers\Pemeringkatan\Admin\AdminRespondenExportController;
 
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\PengumumanController;
@@ -14,13 +14,13 @@ use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\ProgramKegiatanController;
 use App\Http\Controllers\PublikasiRisetController;
-use App\Http\Controllers\AdminMataKuliahController;
+use App\Http\Controllers\Pemeringkatan\AdminMataKuliahController;
 use App\Http\Controllers\AdminSustainabilityController;
-use App\Http\Controllers\InternationalFacultyStaffActivitiesController;
+use App\Http\Controllers\Pemeringkatan\Admin\InternationalFacultyStaffActivitiesController;
 use App\Http\Controllers\RisetUnjController;
 use App\Http\Controllers\Api\CountryController;
 use App\Models\Prodi; 
-use App\Http\Controllers\RespondenAnswerGraphController; 
+use App\Http\Controllers\Pemeringkatan\Admin\RespondenAnswerGraphController; 
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -37,7 +37,7 @@ Route::get('/Berita/{id}', [BeritaController::class, 'getBeritaDetail']);
 
 Route::get('/sdgscenter/programs', [ProgramKegiatanController::class, 'getSDGCenterPrograms'])->name('api.sdgscenter.programs');
 Route::get('/sdgscenter/publications', [PublikasiRisetController::class, 'getSDGCenterPublications'])->name('api.sdgscenter.publications');
-Route::get('/public/sustainability-courses/{faculty}', [App\Http\Controllers\AdminMataKuliahController::class, 'getPublicSustainabilityCourses']);
+Route::get('/public/sustainability-courses/{faculty}', [AdminMataKuliahController::class, 'getPublicSustainabilityCourses']);
 
 Route::prefix('pemeringkatan/sustainability')->name('api.pemeringkatan.sustainability.')->group(function () {
     Route::get('/data', [AdminMataKuliahController::class, 'getSustainabilityData'])->name('data');

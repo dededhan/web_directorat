@@ -1,19 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0, user-scalable=yes" name="viewport"/>
-    <title>Pemeringkatan Klaster Perguruan Tinggi - UNJ</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <link rel="stylesheet" href="{{ asset('home.css') }}">
-    <script src="{{ asset('home.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('mobile.css') }}">
-    <script src="{{ asset('mobile.js') }}"></script>
+@extends('layouts.pemeringkatan')
+
+@section('title', 'Pemeringkatan Klaster Perguruan Tinggi')
+
+@push('styles')
+    @vite(['resources/css/home.css', 'resources/css/mobile.css'])
     <style>
         /* Add custom styles for this page */
         .active-nav-item {
@@ -122,13 +112,11 @@
             </div>
         </div>
     </main>
-    
-    <!-- Include the footer -->
-    @include('Pemeringkatan.Ranking_Universitas.Footer')
-    
-    <!-- Additional Scripts -->
+@endsection
+
+@push('scripts')
+    @vite(['resources/js/home.js', 'resources/js/mobile.js'])
     <script>
         // You can add page-specific JavaScript here
     </script>
-</body>
-</html>
+@endpush

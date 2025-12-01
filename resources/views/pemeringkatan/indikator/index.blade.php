@@ -1,33 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.pemeringkatan')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indikator Pemeringkatan</title>
+@section('title', 'Indikator Pemeringkatan')
 
-    <!-- External CSS Libraries -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@push('styles')
+    @vite(['resources/css/home.css', 'resources/css/pemeringkatan/indikator.css', 'resources/css/admin/ckeditor-list.css'])
+@endpush
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <!-- <link rel="stylesheet" href="{{ asset('home.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/ckeditor-list.css') }}"> -->
-    @vite([
-        'resources/css/home.css',
-        'resources/css/fitur/indikator.css'
-        'resources/css/admin/ckeditor-list.css' {{-- Path disesuaikan untuk Vite dan typo diperbaiki --}}
-    ])
-</head>
-
-
-<body>
-    @include('layout.navbar_pemeringkatan')
-    <a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="back-button">
+@section('content')
+    <a href="{{ route('pemeringkatan.ranking-unj.index') }}" class="back-button">
         <i class="fas fa-arrow-left"></i> Back to Rankings
     </a>
     <div class="page-title">
@@ -72,12 +52,9 @@
             </div>
         @endif
     </div>
+@endsection
 
-    @include('layout.footer')
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-
+@push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const links = document.querySelectorAll('a[href*="#"]');
@@ -133,9 +110,4 @@
             }
         });
     </script>
-
-    <!-- Footer -->
-
-</body>
-
-</html>
+@endpush

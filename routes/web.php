@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\QuesionerGeneralController;
 use App\Http\Controllers\AdminAlumniBerdampakController;
-use App\Http\Controllers\RespondenAnswerController;
+use App\Http\Controllers\Pemeringkatan\Admin\RespondenAnswerController;
 use App\Http\Controllers\KatsinovController;
 use App\Http\Controllers\AlumniController;
 use App\Http\Controllers\InstagramController;
@@ -11,15 +11,15 @@ use App\Http\Controllers\FormRecordHasilPengukuranController;
 use App\Http\Controllers\ProdukInovasiController;
 use App\Http\Controllers\SejarahContentController;
 use App\Http\Controllers\PimpinanController;
-use App\Http\Controllers\RankingController;
+use App\Http\Controllers\Pemeringkatan\RankingController;
 use App\Http\Controllers\ProgramLayananController;
 use App\Http\Middleware\HandleRespondenForm;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BeritaController;
-use App\Http\Controllers\InternationalFacultyStaffController;
+use App\Http\Controllers\Pemeringkatan\InternationalFacultyStaffController;
 use App\Http\Controllers\DokumenController;
-use App\Http\Controllers\AdminMataKuliahController;
+use App\Http\Controllers\Pemeringkatan\AdminMataKuliahController;
 use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\GlobalEngagementController;
 use App\Http\Controllers\BeritasdgController;
@@ -181,42 +181,49 @@ Route::get('/admin/katsinov/{id}/certificate', [KatsinovController::class, 'down
 Route::get('/katsinov/pdf', [KatsinovController::class, 'downloadPDF'])->name('katsinov.pdf');
 Route::get('/katsinov/{katsinov_id}/summary-rating', [KatsinovController::class, 'showRatingSummary'])->name('admin.katsinov.summary-rating');
 
-// Sejarah Routes
-Route::get('/sejarah-pemeringkatan', [SejarahContentController::class, 'showPublic'])->name('Pemeringkatan.sejarah.sejarah');
+// ============================================
+// just in case
+// ============================================
+
+
+// Main landing page redirects
+Route::redirect('/Pemeringkatans', '/pemeringkatan', 301);
+
+// About/Profile redirects
+Route::redirect('/tupoksipemeringkatan', '/pemeringkatan/tupoksi', 301);
+Route::redirect('/strukturorganisasipemeringkatan', '/pemeringkatan/struktur-organisasi', 301);
+Route::redirect('/sejarah-pemeringkatan', '/pemeringkatan/sejarah', 301);
+
+// Ranking redirects
+Route::redirect('/ranking_unj', '/pemeringkatan/ranking-unj', 301);
+Route::redirect('/Pemeringkatans/Ranking-Universitas/klaster-perguruan-tinggi', '/pemeringkatan/klaster-perguruan-tinggi', 301);
+Route::redirect('/indikator', '/pemeringkatan/indikator', 301);
+
+// THE Impact Rankings redirects
+Route::redirect('/the-ir-initiatives', '/pemeringkatan/the-ir-initiatives', 301);
+
+// Sustainability program redirects
+Route::redirect('/Pemeringkatan/kegiatansustainability', '/pemeringkatan/sustainability/kegiatan', 301);
+Route::redirect('/Pemeringkatans/matakuliahsustainability', '/pemeringkatan/sustainability/mata-kuliah', 301);
+Route::redirect('/Pemeringkatans/programsustainability/programsustainability', '/pemeringkatan/sustainability/program', 301);
+
+// International program redirects
+Route::redirect('/Pemeringkatans/program/global-engagement', '/pemeringkatan/program/global-engagement', 301);
+Route::redirect('/Pemeringkatans/program/lecturer-expose', '/pemeringkatan/program/lecturer-expose', 301);
+Route::redirect('/Pemeringkatans/program/international-faculty-staff', '/pemeringkatan/program/international-faculty-staff', 301);
+Route::redirect('/Pemeringkatan/program/international-student-mobility', '/pemeringkatan/program/international-student-mobility', 301);
+
+// Data responden redirect
+Route::redirect('/Pemeringkatan/dataresponden', '/pemeringkatan/data-responden', 301);
+
+// Sulitest redirect
+Route::redirect('/Pemeringkatan/sulitest', '/pemeringkatan/sulitest', 301);
+
+// Sejarah Hilirisasi (
 Route::get('/sejarah-hilirisasi', [SejarahContentController::class, 'showPublic'])->name('subdirektorat-inovasi.sejarah.sejarah');
-
-// Ranking UNJ Routes
-Route::get('/ranking_unj', [RankingController::class, 'showAllRankings'])->name('Pemeringkatan.ranking_unj.rankingunj');
-Route::get('/ranking_unj/{slug}', [RankingController::class, 'show'])->name('ranking.show');
-
-// THE Impact Rankings Initiatives
-Route::get('/the-ir-initiatives', [App\Http\Controllers\SdgInitiativeController::class, 'index'])->name('Pemeringkatan.the_ir_initiatives');
-Route::get('/the-ir-initiatives/sdg/{id}', [App\Http\Controllers\SdgInitiativeController::class, 'show'])
-    ->where('id', '^(1[0-7]|[1-9])$')
-    ->name('sdg.detail');
-
-// Pemeringkatan Routes
-Route::get('/tupoksipemeringkatan', function () {
-    return view('Pemeringkatan.tupoksipemeringkatan.tupoksi');
-})->name('tupoksipemeringkatan');
 
 Route::get('/subdirektorat-inovasi/riset-unj/produk-inovasi/mitra-kolaborasi', [MitraKolaborasiController::class, 'showPublicByCategory'])
      ->name('subdirektorat-inovasi.riset_unj.produk_inovasi.mitra-kolaborasi');
-Route::get('/strukturorganisasipemeringkatan', function () {
-    return view('Pemeringkatan.struktur organisasi.strukturorganisasi');
-})->name('strukturorganisasipemeringkatan');
-Route::get('/Pemeringkatans', [BeritaController::class, 'landingPagePemeringkatan'])->name('pemeringkatan.landingpage');
-Route::view('/Pemeringkatans/Ranking-Universitas/klaster-perguruan-tinggi', 'Pemeringkatan.Ranking_Universitas.Pemeringkatan_Klaster_Perguruan_Tinggi')->name('pemeringkatan.klaster');
-Route::get('/Pemeringkatans/matakuliahsustainability', [AdminMataKuliahController::class, 'matakuliahSustainabilityView'])->name('Pemeringkatan.matakuliahsustainability.matakuliahsustainability');
-Route::view('/Pemeringkatans/program/global-engagement', 'Pemeringkatan.program.global-engagement')->name('Pemeringkatan.program.global-engagement');
-Route::view('/Pemeringkatans/programsustainability/programsustainability', 'Pemeringkatan.programsustainability.programsustainability')->name('Pemeringkatan.programsustainability.programsustainability');
-Route::view('/Pemeringkatan/kegiatansustainability', 'Pemeringkatan.kegiatansustainability.kegiatansustainability')->name('Pemeringkatan.kegiatansustainability.kegiatansustainability');
-Route::view('/Pemeringkatan/dataresponden', 'Pemeringkatan.dataresponden.dataresponden')->name('Pemeringkatan.dataresponden.dataresponden');
-Route::view('/Pemeringkatans/program/lecturer-expose', 'Pemeringkatan.program.lecturer-expose')->name('Pemeringkatan.program.lecturer-expose');
-Route::get('/Pemeringkatans/program/international-faculty-staff', [InternationalFacultyStaffController::class, 'publicIndex'])->name('Pemeringkatan.program.international-faculty-staff');
-Route::view('/Pemeringkatan/program/international-student-mobility', 'Pemeringkatan.program.international-student-mobility')->name('Pemeringkatan.program.international-student-mobility');
-Route::get('/indikator', [\App\Http\Controllers\IndikatorController::class, 'showAllIndikators'])->name('Pemeringkatan.indikator.indikator');
-Route::view('/Pemeringkatan/sulitest', 'Pemeringkatan.sulitest.index')->name('Pemeringkatan.sulitest.index');
 
 
 Route::get('/survey/thank-you', function () {

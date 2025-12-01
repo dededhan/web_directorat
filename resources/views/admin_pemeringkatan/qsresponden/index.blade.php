@@ -183,7 +183,8 @@
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Title</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">First Name</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Last Name</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Institution / Company</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Institution / Industry</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Company Name</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Department / Position</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Job Title</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Country</th>
@@ -240,11 +241,14 @@
                                 <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{ Str::ucfirst($responden->title) }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900">{{ Str::title($responden->first_name) }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900">{{ Str::title($responden->last_name) }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-600">{{ $responden->institution ? Str::title($responden->institution) : '-' }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-600">{{ $responden->company_name ? Str::title($responden->company_name) : '-' }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-600">
-                                    {{ $responden->institution ? Str::title($responden->institution) : ($responden->company_name ?? '-') }}
-                                </td>
-                                <td class="px-4 py-3 text-sm text-gray-600">
-                                    {{ $responden->department ?? ($responden->position ?? '-') }}
+                                    @if(in_array(strtolower($responden->category), ['employee', 'employer']))
+                                        {{ $responden->position ?? '-' }}
+                                    @else
+                                        {{ $responden->department ?? '-' }}
+                                    @endif
                                 </td>
                                 <td class="px-4 py-3 text-sm text-gray-600">
                                 @php
@@ -314,7 +318,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="16" class="px-4 py-8 text-center text-gray-500">
+                                <td colspan="17" class="px-4 py-8 text-center text-gray-500">
                                     <i class='bx bx-folder-open text-4xl mb-2'></i>
                                     <p>No QS Responden data available</p>
                                 </td>
@@ -370,6 +374,4 @@
     </script>
         </div>
     </div>
-
-    @include('admin_pemeringkatan.qsresponden.modals')
 @endsection

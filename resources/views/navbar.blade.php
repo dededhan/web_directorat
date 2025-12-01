@@ -44,7 +44,7 @@
                 <a href="#" class="text-white hover:text-yellow-400">Sub Direktorat</a>
                 <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
                     <li><a href="{{ route('subdirektorat-inovasi.landingpage') }}" class="hover:text-yellow-400">Subdirektorat Inovasi dan Hilirisasi</a></li>
-                    <li><a href="{{ route('pemeringkatan.landingpage') }}" class="hover:text-yellow-400">Subdirektorat Pemeringkatan dan Sistem Informasi</a></li>
+                    <li><a href="{{ route('pemeringkatan.landing') }}" class="hover:text-yellow-400">Subdirektorat Pemeringkatan dan Sistem Informasi</a></li>
                 </ul>
             </li>
             <li class="relative group">
@@ -122,7 +122,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('pemeringkatan.landingpage') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                            <a href="{{ route('pemeringkatan.landing') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 Subdirektorat Pemeringkatan dan Sistem Informasi
                             </a>
                         </li>

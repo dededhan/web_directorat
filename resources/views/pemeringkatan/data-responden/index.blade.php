@@ -1,22 +1,12 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Responden</title>
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    @vite([
-        'resources/css/fitur/dataresponden.css',
-        'resources/js/fitur/dataresponden.js' {{-- Path disesuaikan untuk Vite dan typo diperbaiki --}}
-    ])
-</head>
-<body>
-    @include('layout.navbar_pemeringkatan')
-    
+@extends('layouts.pemeringkatan')
+
+@section('title', 'Data Responden')
+
+@push('styles')
+    @vite('resources/css/pemeringkatan/data-responden.css')
+@endpush
+
+@section('content')
     <div class="main-content-wrapper">
         <div class="header">
             <h1>Data Responden</h1>
@@ -93,8 +83,8 @@
             </div>
         </div>
     </div>
+@endsection
 
-    @include('layout.footer')
-
-</body>
-</html>
+@push('scripts')
+    @vite('resources/js/pemeringkatan/data-responden.js')
+@endpush

@@ -1,22 +1,12 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kegiatan Sustainability</title>
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    @vite([
-        'resources/css/fitur/kegiatansustainability.css',
-        'resources/js/fitur/kegiatansustainability.js'
-    ])
-</head>
-<body>
-     @include('layout.navbar_pemeringkatan')
+@extends('layouts.pemeringkatan')
 
+@section('title', 'Kegiatan Sustainability')
+
+@push('styles')
+    @vite('resources/css/pemeringkatan/kegiatan-sustainability.css')
+@endpush
+
+@section('content')
     <div class="main-content-wrapper">
         <div class="header">
             <h1>Kegiatan Sustainability</h1>
@@ -67,10 +57,8 @@
             </div>
         </div>
     </div>
+@endsection
 
-<script>
-    
-</script>
-    @include('layout.footer') 
-</body>
-</html>
+@push('scripts')
+    @vite('resources/js/pemeringkatan/kegiatan-sustainability.js')
+@endpush

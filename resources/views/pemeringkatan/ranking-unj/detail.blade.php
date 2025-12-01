@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNJ Ranking Detail</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="{{ asset('home.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/ckeditor-list.css') }}">
+@extends('layouts.pemeringkatan')
+
+@section('title', 'UNJ Ranking Detail')
+
+@push('styles')
+    @vite(['resources/css/home.css', 'resources/css/admin/ckeditor-list.css'])
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -163,7 +157,7 @@
             
             <!-- Back Button -->
             <div class="flex justify-center mb-16 animate-fade-in" style="animation-delay: 0.2s;">
-                <a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" 
+                <a href="{{ route('pemeringkatan.ranking-unj.index') }}" 
                     class="btn-back px-6 py-3 rounded-full flex items-center text-sm md:text-base">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" 
                         class="mr-2" viewBox="0 0 16 16">
@@ -175,9 +169,9 @@
             </div>
         </div>
     </div>
+@endsection
 
-    @include('layout.footer')
-    
+@push('scripts')
     <script>
         // Simple scroll animation
         document.addEventListener('DOMContentLoaded', function() {
@@ -191,5 +185,4 @@
             });
         });
     </script>
-</body>
-</html>
+@endpush

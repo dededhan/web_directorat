@@ -1,27 +1,15 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDG {{ $sdg->number }}: {{ $sdg->title }} - UNJ</title>
+@extends('layouts.pemeringkatan')
+
+@section('title', 'SDG ' . $sdg->number . ': ' . $sdg->title)
+
+@push('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
-    @vite('resources/css/app.css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @vite('resources/css/pemeringkatan/sdg-detail.css')
     <style>
-        .sdg-header {
-            background-color: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-        }
+        /* Dynamic color styles using SDG color */
         .year-btn {
             border: 2px solid {{ $sdg->color }};
             color: {{ $sdg->color }};
-            background: white;
-            padding: 8px 20px;
-            border-radius: 4px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
         }
         .year-btn:hover,
         .year-btn.active {
@@ -31,66 +19,14 @@
         .initiative-box {
             border: 2px solid {{ $sdg->color }};
             background-color: {{ $sdg->color }}10;
-            border-radius: 8px;
-            padding: 24px;
-        }
-        .goal-item {
-            border: 1px solid #e5e7eb;
-            border-radius: 4px;
-            background: white;
-            transition: all 0.2s;
-            overflow: hidden;
-        }
-        .goal-item-header {
-            padding: 12px 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.2s;
-        }
-        .goal-item-header:hover {
-            background-color: #f9fafb;
         }
         .goal-item.active .goal-item-header {
-            background-color: #f9fafb;
             border-left: 4px solid {{ $sdg->color }};
         }
-        .goal-item-title::before {
-            content: "›";
-            margin-right: 8px;
-            font-size: 1.2em;
-            font-weight: bold;
-        }
-        .goal-item-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            background-color: #f9fafb;
-        }
-        .goal-item.active .goal-item-content {
-            max-height: 500px;
-        }
-        .goal-item-body {
-            padding: 16px;
-            border-top: 1px solid #e5e7eb;
-        }
-        .chevron {
-            transition: transform 0.3s;
-        }
-        .goal-item.active .chevron {
-            transform: rotate(180deg);
-        }
-        .sdg-icon-large {
-            width: 200px;
-            height: 200px;
-            object-fit: contain;
-        }
     </style>
-</head>
-<body class="bg-gray-50">
-    @include('layout.navbarpemeringkatan')
+@endpush
 
+@section('content')
     <main class="min-h-screen relative z-0">
         <section class="sdg-header py-8 bg-white">
             <div class="container mx-auto px-6">
@@ -233,27 +169,9 @@
             </div>
         </section>
     </main>
+@endsection
 
-    @include('layout.footer')
-
+@push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Year buttons handled by server-side routing (no JS needed)
-        
-        document.querySelectorAll('.goal-item-header').forEach(header => {
-            header.addEventListener('click', function() {
-                const goalItem = this.closest('.goal-item');
-                const isActive = goalItem.classList.contains('active');
-                
-                document.querySelectorAll('.goal-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-                
-                if (!isActive) {
-                    goalItem.classList.add('active');
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+    @vite('resources/js/pemeringkatan/sdg-detail.js')
+@endpush

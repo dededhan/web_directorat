@@ -381,7 +381,10 @@ class BeritaController extends Controller
         return view('home', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
     }
 
-    public function landingPagePemeringkatan()
+    /**
+     * Pemeringkatan landing page - shows news and programs for pemeringkatan section
+     */
+    public function pemeringkatanLanding()
     {
         $categoryName = 'pemeringkatan';
         $countRegularNews = 3;
@@ -410,7 +413,7 @@ class BeritaController extends Controller
 
         $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();
 
-        return view('Pemeringkatan.LandingPagePemeringkatan', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
+        return view('pemeringkatan.landing', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
     }
 
     public function landingPageInovasi()

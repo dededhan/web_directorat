@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE Impact Rankings Initiatives - UNJ</title>
+@extends('layouts.pemeringkatan')
+
+@section('title', 'THE Impact Rankings Initiatives')
+
+@push('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
-    @vite('resources/css/app.css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Fix Font Awesome icons - prevent Tailwind from overriding */
         .fas, .far, .fab, .fa {
@@ -28,10 +24,9 @@
             font-weight: 400;
         }
     </style>
-</head>
-<body class="bg-gray-50">
-    @include('layout.navbarpemeringkatan')
+@endpush
 
+@section('content')
     <main class="min-h-screen relative z-0">
         <section class="relative bg-cover bg-center py-32" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920');">
             <div class="container mx-auto px-6 text-center">
@@ -160,9 +155,8 @@
             </div>
         </section>
     </main>
+@endsection
 
-    @include('layout.footer')
-
+@push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endpush

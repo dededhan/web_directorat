@@ -9,9 +9,103 @@ use App\Http\Controllers\Pemeringkatan\SulitestQuestionBankController;
 use App\Http\Controllers\Pemeringkatan\SulitestImportController;
 use App\Http\Controllers\Pemeringkatan\SulitestExamController;
 use App\Http\Controllers\Pemeringkatan\SulitestExportController;
-use App\Http\Controllers\Admin\TheImpactCmsController;
+use App\Http\Controllers\Pemeringkatan\Admin\TheImpactCmsController;
+use App\Http\Controllers\Pemeringkatan\Admin\AkreditasiController;
+use App\Http\Controllers\Pemeringkatan\Admin\InternationalStudentController;
+use App\Http\Controllers\Pemeringkatan\IndikatorController;
+use App\Http\Controllers\Pemeringkatan\RankingController;
+use App\Http\Controllers\Pemeringkatan\Admin\DosenInternasionalController;
+use App\Http\Controllers\Pemeringkatan\InternationalFacultyStaffController;
+use App\Http\Controllers\Pemeringkatan\Admin\InternationalFacultyStaffActivitiesController;
+use App\Http\Controllers\Pemeringkatan\Admin\AdminRespondenController;
+use App\Http\Controllers\Pemeringkatan\Admin\AdminRespondenReportController;
+use App\Http\Controllers\Pemeringkatan\Admin\AdminRespondenExportController;
+use App\Http\Controllers\Pemeringkatan\Admin\AdminRespondenEmailController;
+use App\Http\Controllers\Pemeringkatan\Admin\RespondenAnswerController;
+use App\Http\Controllers\Pemeringkatan\Admin\RespondenAnswerGraphController;
+use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\SejarahContentController;
+use App\Http\Controllers\Pemeringkatan\SdgInitiativeController;
+use App\Http\Controllers\Pemeringkatan\AdminMataKuliahController;
 
+//public routes
+Route::prefix('pemeringkatan')->name('pemeringkatan.')->group(function () {
+    
+    // Main landing page
+    Route::get('/home', [BeritaController::class, 'pemeringkatanLanding'])->name('landing');
+    
+    // About/Profile pages
+    Route::get('/tupoksi', function () {
+        return view('pemeringkatan.tupoksi.index');
+    })->name('tupoksi');
+    
+    Route::get('/struktur-organisasi', function () {
+        return view('pemeringkatan.struktur-organisasi.index');
+    })->name('struktur-organisasi');
+    
+    Route::get('/sejarah', [SejarahContentController::class, 'showPublic'])->name('sejarah');
+    
+    // Ranking pages
+    Route::prefix('ranking-unj')->name('ranking-unj.')->group(function () {
+        Route::get('/', [RankingController::class, 'showAllRankings'])->name('index');
+        Route::get('/{slug}', [RankingController::class, 'show'])->name('show');
+    });
+    
+    Route::get('/klaster-perguruan-tinggi', function () {
+        return view('pemeringkatan.ranking-universitas.klaster-perguruan-tinggi');
+    })->name('klaster-perguruan-tinggi');
+    
+    // THE Impact Rankings
+    Route::prefix('the-ir-initiatives')->name('the-ir.')->group(function () {
+        Route::get('/', [SdgInitiativeController::class, 'index'])->name('index');
+        Route::get('/sdg/{id}', [SdgInitiativeController::class, 'show'])->name('sdg.show');
+    });
+    
+    // Indikator
+    Route::get('/indikator', [IndikatorController::class, 'showAllIndikators'])->name('indikator.index');
+    
+    // Sustainability programs
+    Route::prefix('sustainability')->name('sustainability.')->group(function () {
+        Route::get('/kegiatan', function () {
+            return view('pemeringkatan.kegiatan-sustainability.index');
+        })->name('kegiatan');
+        
+        Route::get('/mata-kuliah', [AdminMataKuliahController::class, 'matakuliahSustainabilityView'])->name('mata-kuliah');
+        
+        Route::get('/program', function () {
+            return view('pemeringkatan.program-sustainability.index');
+        })->name('program');
+    });
+    
+    // International programs
+    Route::prefix('program')->name('program.')->group(function () {
+        Route::get('/global-engagement', function () {
+            return view('pemeringkatan.program.global-engagement');
+        })->name('global-engagement');
+        
+        Route::get('/lecturer-expose', function () {
+            return view('pemeringkatan.program.lecturer-expose');
+        })->name('lecturer-expose');
+        
+        Route::get('/international-faculty-staff', [InternationalFacultyStaffController::class, 'publicIndex'])->name('international-faculty-staff');
+        
+        Route::get('/international-student-mobility', function () {
+            return view('pemeringkatan.program.international-student-mobility');
+        })->name('international-student-mobility');
+    });
+    
+    // Data responden
+    Route::get('/data-responden', function () {
+        return view('pemeringkatan.data-responden.index');
+    })->name('data-responden.index');
+    
+    // Sulitest
+    Route::get('/sulitest', function () {
+        return view('pemeringkatan.sulitest.index');
+    })->name('sulitest.index');
+});
 
+//admin routes
 
 Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
     ->middleware(['auth', 'role:admin_pemeringkatan'])
@@ -95,92 +189,88 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
         });
 
         // Data Akreditasi routes
-        Route::resource('/data-akreditasi', \App\Http\Controllers\AkreditasiController::class);
-        Route::get('/data-akreditasi/{id}/detail', [\App\Http\Controllers\AkreditasiController::class, 'getAkreditasiDetail'])
+        Route::resource('/data-akreditasi', AkreditasiController::class);
+        Route::get('/data-akreditasi/{id}/detail', [AkreditasiController::class, 'getAkreditasiDetail'])
             ->name('data-akreditasi.detail');
 
         // Mahasiswa International routes
-        Route::resource('/mahasiswa-international', \App\Http\Controllers\InternationalStudentController::class);
-        Route::get('/mahasiswa-international/{id}/detail', [\App\Http\Controllers\InternationalStudentController::class, 'getStudentDetail'])
+        Route::resource('/mahasiswa-international', InternationalStudentController::class);
+        Route::get('/mahasiswa-international/{id}/detail', [InternationalStudentController::class, 'getStudentDetail'])
             ->name('mahasiswa-international.detail');
 
         // Indikator Pemeringkatan routes
-        Route::post('/indikator/upload', [\App\Http\Controllers\IndikatorController::class, 'uploadImage'])
+        Route::post('/indikator/upload', [IndikatorController::class, 'uploadImage'])
             ->name('indikator.upload');
-        Route::get('/indikator/{id}/detail', [\App\Http\Controllers\IndikatorController::class, 'getIndikatorDetail'])
+        Route::get('/indikator/{id}/detail', [IndikatorController::class, 'getIndikatorDetail'])
             ->name('indikator.detail');
-        Route::resource('/indikator', \App\Http\Controllers\IndikatorController::class);
+        Route::resource('/indikator', IndikatorController::class);
 
         // Ranking Pemeringkatan routes
-        Route::post('/ranking/upload', [\App\Http\Controllers\RankingController::class, 'upload'])
+        Route::post('/ranking/upload', [RankingController::class, 'upload'])
             ->name('ranking.upload');
-        Route::get('/ranking/{id}/detail', [\App\Http\Controllers\RankingController::class, 'getRankingDetail'])
+        Route::get('/ranking/{id}/detail', [RankingController::class, 'getRankingDetail'])
             ->name('ranking.detail');
-        Route::resource('/ranking', \App\Http\Controllers\RankingController::class)->except(['show']);
+        Route::resource('/ranking', RankingController::class)->except(['show']);
 
         // International Lecture routes
-        Route::get('/international-lecture/{id}/detail', [\App\Http\Controllers\DosenInternasionalController::class, 'getDosenDetail'])
+        Route::get('/international-lecture/{id}/detail', [DosenInternasionalController::class, 'getDosenDetail'])
             ->name('international-lecture.detail');
-        Route::resource('/international-lecture', \App\Http\Controllers\DosenInternasionalController::class);
+        Route::resource('/international-lecture', DosenInternasionalController::class);
 
         // International Faculty Staff routes
-        Route::get('/international-faculty-staff/{id}/detail', [\App\Http\Controllers\InternationalFacultyStaffController::class, 'getStaffDetail'])
+        Route::get('/international-faculty-staff/{id}/detail', [InternationalFacultyStaffController::class, 'getStaffDetail'])
             ->name('international-faculty-staff.detail');
-        Route::resource('/international-faculty-staff', \App\Http\Controllers\InternationalFacultyStaffController::class);
+        Route::resource('/international-faculty-staff', InternationalFacultyStaffController::class);
 
         // International Faculty Activities routes
-        Route::post('/international-faculty-activities/upload-image', [\App\Http\Controllers\InternationalFacultyStaffActivitiesController::class, 'uploadImage'])
+        Route::post('/international-faculty-activities/upload-image', [InternationalFacultyStaffActivitiesController::class, 'uploadImage'])
             ->name('international-faculty-activities-upload-image');
-        Route::resource('/international-faculty-activities', \App\Http\Controllers\InternationalFacultyStaffActivitiesController::class);
+        Route::resource('/international-faculty-activities', InternationalFacultyStaffActivitiesController::class);
 
         // Responden routes
-        Route::get('/responden/laporan', [\App\Http\Controllers\AdminRespondenReportController::class, 'laporan'])
+        Route::get('/responden/laporan', [AdminRespondenReportController::class, 'laporan'])
             ->name('responden.laporan');
 
-        Route::get('/responden/graph', [\App\Http\Controllers\RespondenAnswerGraphController::class, 'index'])
+        Route::get('/responden/graph', [RespondenAnswerGraphController::class, 'index'])
             ->name('responden.graph');
 
-        Route::resource('/responden', \App\Http\Controllers\AdminRespondenController::class)->except(['update']);
-        Route::put('/responden/{responden}', [\App\Http\Controllers\AdminRespondenController::class, 'update'])
+        Route::resource('/responden', AdminRespondenController::class)->except(['update']);
+        Route::put('/responden/{responden}', [AdminRespondenController::class, 'update'])
             ->name('responden.update');
 
-        Route::post('/responden/update-status/{id}', [\App\Http\Controllers\AdminRespondenController::class, 'updateStatus'])
+        Route::post('/responden/update-status/{id}', [AdminRespondenController::class, 'updateStatus'])
             ->name('responden.updateStatus');
 
-        Route::post('/responden/import', [\App\Http\Controllers\AdminRespondenController::class, 'import'])
+        Route::post('/responden/import', [AdminRespondenController::class, 'import'])
             ->name('responden.import');
-        Route::get('/responden/filter', [\App\Http\Controllers\AdminRespondenController::class, 'filter'])
+        Route::get('/responden/filter', [AdminRespondenController::class, 'filter'])
             ->name('responden.filter');
 
-        Route::get('/responden/export/excel', [\App\Http\Controllers\AdminRespondenExportController::class, 'exportExcel'])
+        Route::get('/responden/export/excel', [AdminRespondenExportController::class, 'exportExcel'])
             ->name('responden.export.excel');
-        Route::get('/responden/export/csv', [\App\Http\Controllers\AdminRespondenExportController::class, 'exportCSV'])
+        Route::get('/responden/export/csv', [AdminRespondenExportController::class, 'exportCSV'])
             ->name('responden.export.csv');
 
         // Email Template Management Routes
-        Route::get('/email', [\App\Http\Controllers\AdminRespondenEmailController::class, 'index'])
+        Route::get('/email', [AdminRespondenEmailController::class, 'index'])
             ->name('email.index');
-        Route::get('/email/{id}/edit', [\App\Http\Controllers\AdminRespondenEmailController::class, 'edit'])
+        Route::get('/email/{id}/edit', [AdminRespondenEmailController::class, 'edit'])
             ->name('email.edit');
-        Route::put('/email/{id}', [\App\Http\Controllers\AdminRespondenEmailController::class, 'update'])
+        Route::put('/email/{id}', [AdminRespondenEmailController::class, 'update'])
             ->name('email.update');
-        Route::post('/email/{id}/reset', [\App\Http\Controllers\AdminRespondenEmailController::class, 'reset'])
+        Route::post('/email/{id}/reset', [AdminRespondenEmailController::class, 'reset'])
             ->name('email.reset');
-        Route::get('/email/{id}/preview', [\App\Http\Controllers\AdminRespondenEmailController::class, 'preview'])
+        Route::get('/email/{id}/preview', [AdminRespondenEmailController::class, 'preview'])
             ->name('email.preview');
 
-        Route::resource('/qsresponden', \App\Http\Controllers\RespondenAnswerController::class)->except(['show']);
-        Route::get('/qsresponden-export', [\App\Http\Controllers\RespondenAnswerController::class, 'export'])
+        Route::resource('/qsresponden', RespondenAnswerController::class)->except(['show']);
+        Route::get('/qsresponden-export', [RespondenAnswerController::class, 'export'])
             ->name('qsresponden.export');
-        Route::post('/qsresponden-import', [\App\Http\Controllers\RespondenAnswerController::class, 'import'])
+        Route::post('/qsresponden-import', [RespondenAnswerController::class, 'import'])
             ->name('qsresponden.import');
     });
 
-
-Route::get('/sulitest-unj', function () {
-    return view('sulitest.page.index');
-})->name('sulitest.page.index');
-
+//exam
 Route::prefix('sulitest')->name('sulitest.')->group(function () {
 
     Route::middleware('guest')->group(function () {

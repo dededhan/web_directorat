@@ -3,17 +3,17 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KatsinovController;
-use App\Http\Controllers\AkreditasiController;
-use App\Http\Controllers\AdminRespondenController;
-use App\Http\Controllers\AdminRespondenReportController;
-use App\Http\Controllers\AdminRespondenExportController;
-use App\Http\Controllers\AdminMataKuliahController;
-use App\Http\Controllers\RespondenAnswerController;
+use App\Http\Controllers\Pemeringkatan\Admin\AkreditasiController;
+use App\Http\Controllers\Pemeringkatan\Admin\AdminRespondenController;
+use App\Http\Controllers\Pemeringkatan\Admin\AdminRespondenReportController;
+use App\Http\Controllers\Pemeringkatan\Admin\AdminRespondenExportController;
+use App\Http\Controllers\Pemeringkatan\AdminMataKuliahController;
+use App\Http\Controllers\Pemeringkatan\Admin\RespondenAnswerController;
 use App\Http\Controllers\QuesionerGeneralController;
-use App\Http\Controllers\DosenInternasionalController;
+use App\Http\Controllers\Pemeringkatan\Admin\DosenInternasionalController;
 use App\Http\Controllers\AdminSustainabilityController;
 use App\Http\Controllers\AdminAlumniBerdampakController;
-use App\Http\Controllers\InternationalStudentController;
+use App\Http\Controllers\Pemeringkatan\Admin\InternationalStudentController;
 use App\Http\Controllers\ProgramKegiatanController;
 use App\Http\Controllers\PublikasiRisetController;
 use App\Http\Controllers\BeritaAcaraController;
@@ -27,13 +27,13 @@ use App\Http\Controllers\InstagramController;
 use App\Http\Controllers\ProdukInovasiController;
 use App\Http\Controllers\SejarahContentController;
 use App\Http\Controllers\PimpinanController;
-use App\Http\Controllers\RankingController;
+use App\Http\Controllers\Pemeringkatan\RankingController;
 use App\Http\Controllers\GlobalEngagementController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VideoinovasiController;
 use App\Http\Controllers\MitraKolaborasiController;
 use App\Http\Controllers\RisetUnjController;
-use App\Http\Controllers\RespondenAnswerGraphController; 
+use App\Http\Controllers\Pemeringkatan\Admin\RespondenAnswerGraphController; 
 use App\Http\Controllers\Dosen\DashboardController as DosenDashboardController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
@@ -43,11 +43,11 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\GalleryController;
-use App\Http\Controllers\InternationalFacultyStaffController;
-use App\Http\Controllers\InternationalFacultyStaffActivitiesController;
+use App\Http\Controllers\Pemeringkatan\InternationalFacultyStaffController;
+use App\Http\Controllers\Pemeringkatan\Admin\InternationalFacultyStaffActivitiesController;
 // Ganti route yang ada dengan:
 use App\Http\Controllers\DokumenController;
-use App\Http\Controllers\IndikatorController;
+use App\Http\Controllers\Pemeringkatan\IndikatorController;
 
 
 
@@ -480,70 +480,6 @@ Route::prefix('fakultas')->name('fakultas.')
         })->name('manage.account');
     });
 
-
-// Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
-//     ->middleware(['checked', 'role:admin_pemeringkatan'])
-//     ->group(function () {
-//         Route::get('/', function () {
-//             return redirect(route('admin_pemeringkatan.dashboard'));
-//         });
-//         // Dashboard
-//         Route::get('/dashboard', function () {
-//             return view('admin_pemeringkatan.dashboard');
-//         })->name('dashboard');
-
-//         // News
-//         Route::resource('/news', BeritaController::class)
-//             ->except(['show', 'edit', 'update']);
-//         Route::get('/berita/{id}/detail', [BeritaController::class, 'getBeritaDetail'])
-//             ->name('news.detail');
-//         Route::put('/berita/{id}', [BeritaController::class, 'update'])
-//             ->name('news.update');
-//         Route::post('/berita/upload', [BeritaController::class, 'upload'])->name('news.upload');
-
-//         Route::resource('/news-scroll', PengumumanController::class);
-//         Route::get('/pengumuman/{id}/detail', [PengumumanController::class, 'getPengumumanDetail'])
-//             ->name('news-scroll.detail');
-
-//         Route::resource('/program-layanan', ProgramLayananController::class);
-//         Route::get('/program-layanan/{id}/detail', [ProgramLayananController::class, 'getProgramDetail'])
-//             ->name('program-layanan.detail');
-//         Route::put('program-layanan/{programLayanan}', [ProgramLayananController::class, 'update'])->name('program-layanan.update');
-//         //Youtube
-//         Route::resource('/youtube', YoutubeController::class)
-//             ->except(['show', 'edit']);
-//         Route::get('/youtube/{id}/detail', [YoutubeController::class, 'getVideoDetail'])
-//             ->name('youtube.detail');
-//         Route::get('/youtube/{id}/preview', [YoutubeController::class, 'preview'])
-//             ->name('youtube.preview');
-
-//         // Instagram
-//         Route::resource('/instagram', InstagramController::class)
-//             ->except(['show', 'edit', 'update']);
-
-//         Route::get('/instagram/{id}/preview', [InstagramController::class, 'preview'])
-//             ->name('instagram.preview');
-
-//         Route::resource('/document', DokumenController::class);
-//         Route::get('document/{dokumen}/download', [DokumenController::class, 'download'])
-//             ->name('document.download');
-
-//         //sejarah
-//         Route::resource('/sejarah', SejarahContentController::class);
-
-//         Route::resource('/sustainability', AdminSustainabilityController::class);
-
-//         //Mata Kuliah
-//         Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
-//         Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
-
-//         //Alumni
-//         Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
-//         Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
-
-//         //responden
-//         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['show']);
-//     });
 
 
 

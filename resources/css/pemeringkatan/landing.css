@@ -1,0 +1,235 @@
+/* Landing Page Styles - Extracted from landing.blade.php */
+
+/* Global Font */
+body, p, h1, h2, h3, h4, h5, h6, span, div, a, button, input, textarea, select, label {
+    font-family: 'Inter', Arial, sans-serif !important;
+}
+
+/* Navbar scroll effect - FIXED untuk mempertahankan warna teal */
+.navbar.scrolled {
+    background-color: rgba(39, 113, 119, 0.95) !important;
+    backdrop-filter: blur(10px);
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+/* Memastikan navbar tetap teal */
+.navbar.hidden.md\:block {
+    background-color: #277177 !important;
+}
+
+.navbar:not(.scrolled) {
+    background-color: #277177 !important;
+}
+
+/* Prevent body scroll when sidebar is open */
+body.sidebar-open {
+    overflow: hidden;
+}
+
+/* Custom styles for program cards to ensure equal height */
+.program-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.program-card > div:last-child {
+    margin-top: auto;
+}
+
+/* Swiper Carousel Customization */
+.program-carousel-container .swiper-button-next,
+.program-carousel-container .swiper-button-prev,
+.news-carousel-container .swiper-button-next,
+.news-carousel-container .swiper-button-prev {
+    color: #14B8A6; /* teal-500 */
+    background-color: white;
+    border-radius: 9999px;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.program-carousel .swiper-button-next::after,
+.program-carousel .swiper-button-prev::after,
+.news-carousel-container .swiper-button-next::after,
+.news-carousel-container .swiper-button-prev::after {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.program-carousel .swiper-pagination-bullet-active,
+.news-carousel-container .swiper-pagination-bullet-active {
+    background-color: #14B8A6;
+}
+
+/* Header Carousel Styles */
+.header-carousel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.header-carousel-slides {
+    width: 100%;
+    height: 100%;
+}
+
+.header-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.header-slide.active {
+    opacity: 1;
+}
+
+.header-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.header-carousel-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+}
+
+.header-carousel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.header-carousel-dot.active {
+    background-color: #FBBF24; /* Yellow-400 */
+    transform: scale(1.1);
+    border-color: white;
+}
+
+/* General Styles */
+.media-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.media-card .p-6 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.media-card .mt-4 {
+    margin-top: auto;
+}
+
+.grid {
+    align-items: stretch;
+}
+
+.news-marquee a {
+    color: #facc15;
+    text-decoration: underline;
+}
+
+.news-marquee strong, .news-marquee b {
+    font-weight: bold;
+    color: white;
+}
+
+.news-marquee em, .news-marquee i {
+    font-style: italic;
+}
+
+.news-marquee * {
+    color: white;
+}
+
+.news-marquee .text-yellow-400 {
+    color: #facc15 !important;
+}
+
+html, body, p, h1, h2, h3, h4, h5, h6, span, div:not(.fas):not(.fab):not(.far):not(.fa), a:not(.fas):not(.fab):not(.far):not(.fa), button, input, textarea, select, label {
+    font-family: Arial, sans-serif !important;
+}
+
+.fas, .fab, .far, .fa, [class^="fa-"], [class*=" fa-"], i.fas, i.fab, i.far, i.fa {
+    font-family: "Font Awesome 5 Free", "Font Awesome 5 Brands", "FontAwesome" !important;
+}
+
+/* Carousel Styling */
+.program-carousel-container,
+.news-carousel-container {
+    position: relative;
+    overflow: hidden;
+    padding: 0 60px;
+}
+
+.program-carousel,
+.news-carousel {
+    overflow: hidden !important;
+}
+
+.program-carousel .swiper-wrapper,
+.news-carousel .swiper-wrapper {
+    align-items: stretch;
+}
+
+.program-carousel .swiper-slide,
+.news-carousel .swiper-slide {
+    height: auto;
+    display: flex;
+}
+
+.program-carousel-container .swiper-button-prev,
+.news-carousel-container .swiper-button-prev {
+    left: 10px !important;
+    z-index: 20;
+}
+
+.program-carousel-container .swiper-button-next,
+.news-carousel-container .swiper-button-next {
+    right: 10px !important;
+    z-index: 20;
+}
+
+.program-carousel-container .swiper-pagination,
+.news-carousel-container .swiper-pagination {
+    position: relative;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+@media (max-width: 767px) {
+    .program-carousel-container,
+    .news-carousel-container {
+        padding: 0 15px;
+    }
+    .program-carousel-container .swiper-button-next,
+    .program-carousel-container .swiper-button-prev,
+    .news-carousel-container .swiper-button-next,
+    .news-carousel-container .swiper-button-prev {
+        display: none;
+    }
+}

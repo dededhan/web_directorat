@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.pemeringkatan')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reputation Center Universitas Negeri Jakarta </title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <link rel="stylesheet" href="{{ asset('home.css') }}">
+@section('title', 'Reputation Center Universitas Negeri Jakarta')
+
+@push('styles')
+    @vite('resources/css/home.css')
     <style>
         * {
             margin: 0;
@@ -386,10 +378,9 @@
             }
         }
     </style>
-</head>
-@include('layout.navbar_pemeringkatan')
+@endpush
 
-<body>
+@section('content')
     <div class="hero-section">
         <div class="hero-content">
             <h1>PUSAT PEMERINGKATAN<br>Universitas Negeri Jakarta</h1>
@@ -401,88 +392,13 @@
         </div>
     </div>
 
-    {{-- <div class="ranking-section" id="rankings">
-        <h2 class="ranking-title">Ranking Universitas Negeri Jakarta</h2>
-
-        <div class="ranking-grid">
-            <!-- Pemeringkatan Klaster Pendidikan Tinggi (SINTA) -->
-            <a href="https://sinta.kemdikbud.go.id/affiliations/profile/435" class="ranking-card" target="_blank"
-                rel="noopener noreferrer">
-                <div class="logo-container">
-                    <img src="/images/logos/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.png"
-                        alt="Kementerian Pendidikan Logo">
-                </div>
-                <p>Pemeringkatan Perguruan Tinggi Indonesia</p>
-            </a>
-
-            <!-- QS World University Ranking -->
-            <a href="https://www.topuniversities.com/universities/universitas-negeri-jakarta" class="ranking-card"
-                target="_blank" rel="noopener noreferrer">
-                <div class="logo-container">
-                    <img src="/images/logos/QS world ranking.png" alt="QS World Ranking Logo">
-                </div>
-                <p>QS World University Ranking</p>
-            </a>
-
-            <!-- QS Asian University Rankings -->
-            <a href="https://www.topuniversities.com/universities/universitas-negeri-jakarta" class="ranking-card"
-                target="_blank" rel="noopener noreferrer">
-                <div class="logo-container">
-                    <img src="/images/logos/QS asian ranking.jpg" alt="QS Asian Ranking Logo">
-                </div>
-                <p>QS Asian University Rankings</p>
-            </a>
-            <!-- Times Higher Education Impact Rankings -->
-            <a href="https://www.timeshighereducation.com/world-university-rankings/universitas-negeri-jakarta"
-                class="ranking-card" target="_blank" rel="noopener noreferrer">
-                <div class="logo-container">
-                    <img src="/images/logos/Times_Higher_Education_logo.png" alt="Times Higher Education Logo">
-                </div>
-                <p>Times Higher Education Impact Rankings</p>
-            </a>
-            <!-- Webometrics World University Ranking -->
-            <a href="https://www.webometrics.info/en/Asia/Indonesia%20" class="ranking-card" target="_blank"
-                rel="noopener noreferrer">
-                <div class="logo-container">
-                    <img src="/images/logos/Webometrics-Logo.jpeg" alt="Webometrics Logo">
-                </div>
-                <p>Webometrics World University Ranking</p>
-            </a>
-
-            <!-- UI Greenmetric World University Ranking -->
-            <a href="https://greenmetric.ui.ac.id/" class="ranking-card" target="_blank" rel="noopener noreferrer">
-                <div class="logo-container">
-                    <img src="/images/logos/logo_uigm.png" alt="UI GreenMetric Logo">
-                </div>
-                <p>UI Greenmetric World University Ranking</p>
-            </a>
-
-            <!-- Scimago Institutions Rankings -->
-            <a href="https://www.scimagoir.com/institution.php?idp=3796" class="ranking-card" target="_blank"
-                rel="noopener noreferrer">
-                <div class="logo-container">
-                    <img src="/images/logos/scimago.png" alt="Scimago Logo">
-                </div>
-                <p>Scimago Institutions Rankings</p>
-            </a>
-
-            <a href="https://unj.ac.id/akreditasi/" class="ranking-card" target="_blank"
-                rel="noopener noreferrer">
-                <div class="logo-container">
-                    <img src="/images/logos/Logo Baru UNJ.png" alt="Scimago Logo">
-                </div>
-                <p>Akreditasi</p>
-            </a>
-        </div>
-    </div> --}}
-
     <div class="ranking-section" id="rankings">
         <h2 class="ranking-title">Ranking Universitas Negeri Jakarta</h2>
 
         <div class="ranking-grid">
             <!-- Dynamic ranking cards from database -->
             @foreach ($rankings as $ranking)
-                <a href="{{ route('ranking.show', $ranking->slug) }}" class="ranking-card">
+                <a href="{{ route('pemeringkatan.ranking-unj.show', $ranking->slug) }}" class="ranking-card">
                     <div class="logo-container">
                         <img src="{{ asset('storage/' . $ranking->gambar) }}" alt="{{ $ranking->judul }}">
                     </div>
@@ -495,14 +411,11 @@
 
     <!-- Replaced banner with a centered button -->
     <div style="text-align: center; padding: 20px 0; background-color: #f5f5f5;">
-        <a href="{{ route('Pemeringkatan.indikator.indikator') }}" class="hero-button"
+        <a href="{{ route('pemeringkatan.indikator.index') }}" class="hero-button"
             style="font-size: 1rem; padding: 12px 25px;">Indikator Pemeringkatan</a>
     </div>
 
     <!-- Added padding/margin to prevent footer overlap -->
     <div class="footer-spacer" style="height: 50px;"></div>
 
-</body>
-@include('layout.footer')
-
-</html>
+@endsection

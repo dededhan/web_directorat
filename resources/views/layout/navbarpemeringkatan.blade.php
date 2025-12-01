@@ -127,19 +127,19 @@
                 <a href="#" class="text-white hover:text-yellow-400 transition-colors duration-200 primary-dropdown-toggle" data-dropdown="tentang-dropdown">Tentang</a>
                 <ul id="tentang-dropdown" class="dropdown-menu primary-dropdown hidden">
                     <li><a href="{{ route('pimpinan.pimpinan') }}">Pimpinan Direktorat</a></li>
-                    <li><a href="{{ route('strukturorganisasipemeringkatan') }}">Struktur Organisasi</a></li>
-                    <li><a href="{{ route('tupoksipemeringkatan') }}">Tugas Pokok dan Fungsi</a></li>
-                    <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}">Profil</a></li>
+                    <li><a href="{{ route('pemeringkatan.struktur-organisasi') }}">Struktur Organisasi</a></li>
+                    <li><a href="{{ route('pemeringkatan.tupoksi') }}">Tugas Pokok dan Fungsi</a></li>
+                    <li><a href="{{ route('pemeringkatan.sejarah') }}">Profil</a></li>
                 </ul>
             </li>
 
             <li class="relative">
                 <a href="#" class="text-white hover:text-yellow-400 transition-colors duration-200 primary-dropdown-toggle" data-dropdown="program-dropdown">Program</a>
                 <ul id="program-dropdown" class="dropdown-menu primary-dropdown hidden">
-                    <li><a href="{{ route('Pemeringkatan.program.global-engagement') }}">Global Engagement</a></li>
-                    <li><a href="{{ route('Pemeringkatan.program.lecturer-expose') }}">Lecturer Expose</a></li>
-                    <li><a href="{{ route('Pemeringkatan.program.international-faculty-staff') }}">International Faculty Staff</a></li>
-                    <li><a href="{{ route('Pemeringkatan.program.international-student-mobility') }}">International Student Mobility</a></li>
+                    <li><a href="{{ route('pemeringkatan.program.global-engagement') }}">Global Engagement</a></li>
+                    <li><a href="{{ route('pemeringkatan.program.lecturer-expose') }}">Lecturer Expose</a></li>
+                    <li><a href="{{ route('pemeringkatan.program.international-faculty-staff') }}">International Faculty Staff</a></li>
+                    <li><a href="{{ route('pemeringkatan.program.international-student-mobility') }}">International Student Mobility</a></li>
                     
                     <li class="relative">
                         <a href="#" class="flex justify-between items-center secondary-dropdown-toggle" data-dropdown="sustainability-dropdown">
@@ -147,19 +147,19 @@
                             <i class="fas fa-chevron-right ml-2"></i>
                         </a>
                         <ul id="sustainability-dropdown" class="dropdown-menu nested-menu secondary-dropdown hidden">
-                            <li><a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}">Kegiatan Sustainability</a></li>
-                            <li><a href="{{ route('Pemeringkatan.matakuliahsustainability.matakuliahsustainability') }}">Mata Kuliah Sustainability</a></li>
-                            <li><a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}">Program Sustainability UNJ</a></li>
-                            <li><a href="{{ route('sulitest.page.index') }}">UNJ Sustainability Literacy Test</a></li>
+                            <li><a href="{{ route('pemeringkatan.sustainability.kegiatan') }}">Kegiatan Sustainability</a></li>
+                            <li><a href="{{ route('pemeringkatan.sustainability.mata-kuliah') }}">Mata Kuliah Sustainability</a></li>
+                            <li><a href="{{ route('pemeringkatan.sustainability.program') }}">Program Sustainability UNJ</a></li>
+                            <li><a href="{{ route('pemeringkatan.sulitest.index') }}">UNJ Sustainability Literacy Test</a></li>
                         </ul>
                     </li>
                     
-                    <li><a href="{{ route('Pemeringkatan.dataresponden.dataresponden') }}">Data Responden</a></li>
+                    <li><a href="{{ route('pemeringkatan.data-responden.index') }}">Data Responden</a></li>
                 </ul>
             </li>
 
-            <li><a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="text-white hover:text-yellow-400 transition-colors duration-200">Ranking UNJ</a></li>
-            <li><a href="{{ route('Pemeringkatan.the_ir_initiatives') }}" class="text-white hover:text-yellow-400 transition-colors duration-200">THE IR</a></li>
+            <li><a href="{{ route('pemeringkatan.ranking-unj.index') }}" class="text-white hover:text-yellow-400 transition-colors duration-200">Ranking UNJ</a></li>
+            <li><a href="{{ route('pemeringkatan.the-ir.index') }}" class="text-white hover:text-yellow-400 transition-colors duration-200">THE IR</a></li>
             <li><a href="{{ route('documents.public.index') }}" class="text-white hover:text-yellow-400 transition-colors duration-200">Dokumen</a></li>
             <li><a href="https://sso.unj.ac.id/login" target="_blank" class="text-white hover:text-yellow-400 transition-colors duration-200">SSO</a></li>
             
@@ -215,9 +215,9 @@
                 </button>
                 <ul class="dropdown-content hidden bg-[#135a54] overflow-hidden">
                     <li><a href="{{ route('pimpinan.pimpinan') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Pimpinan Direktorat</a></li>
-                    <li><a href="{{ route('strukturorganisasipemeringkatan') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Struktur Organisasi</a></li>
-                    <li><a href="{{ route('tupoksipemeringkatan') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Tugas Pokok dan Fungsi</a></li>
-                    <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Profil</a></li>
+                    <li><a href="{{ route('pemeringkatan.struktur-organisasi') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Struktur Organisasi</a></li>
+                    <li><a href="{{ route('pemeringkatan.tupoksi') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Tugas Pokok dan Fungsi</a></li>
+                    <li><a href="{{ route('pemeringkatan.sejarah') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Profil</a></li>
                 </ul>
             </li>
 
@@ -227,10 +227,10 @@
                     <i class="fas fa-chevron-down transition-transform duration-300"></i>
                 </button>
                 <ul class="dropdown-content hidden bg-[#135a54] overflow-hidden">
-                    <li><a href="{{ route('Pemeringkatan.program.global-engagement') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Global Engagement</a></li>
-                    <li><a href="{{ route('Pemeringkatan.program.lecturer-expose') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Lecturer Expose</a></li>
-                    <li><a href="{{ route('Pemeringkatan.program.international-faculty-staff') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">International Faculty Staff</a></li>
-                    <li><a href="{{ route('Pemeringkatan.program.international-student-mobility') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">International Student Mobility</a></li>
+                    <li><a href="{{ route('pemeringkatan.program.global-engagement') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Global Engagement</a></li>
+                    <li><a href="{{ route('pemeringkatan.program.lecturer-expose') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Lecturer Expose</a></li>
+                    <li><a href="{{ route('pemeringkatan.program.international-faculty-staff') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">International Faculty Staff</a></li>
+                    <li><a href="{{ route('pemeringkatan.program.international-student-mobility') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">International Student Mobility</a></li>
                     
                     <li class="sidebar-dropdown nested-dropdown">
                         <button class="sidebar-dropdown-toggle flex justify-between items-center w-full text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">
@@ -238,19 +238,19 @@
                             <i class="fas fa-chevron-down transition-transform duration-300"></i>
                         </button>
                         <ul class="dropdown-content hidden bg-[#0d4540] overflow-hidden">
-                            <li><a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Kegiatan Sustainability</a></li>
-                            <li><a href="{{ route('Pemeringkatan.matakuliahsustainability.matakuliahsustainability') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Mata Kuliah Sustainability</a></li>
-                            <li><a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Program Sustainability UNJ</a></li>
-                            <li><a href="{{ route('sulitest.page.index') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Sulitest</a></li>
+                            <li><a href="{{ route('pemeringkatan.sustainability.kegiatan') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Kegiatan Sustainability</a></li>
+                            <li><a href="{{ route('pemeringkatan.sustainability.mata-kuliah') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Mata Kuliah Sustainability</a></li>
+                            <li><a href="{{ route('pemeringkatan.sustainability.program') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Program Sustainability UNJ</a></li>
+                            <li><a href="{{ route('pemeringkatan.sulitest.index') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Sulitest</a></li>
                         </ul>
                     </li>
                     
-                    <li><a href="{{ route('Pemeringkatan.dataresponden.dataresponden') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Data Responden</a></li>
+                    <li><a href="{{ route('pemeringkatan.data-responden.index') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Data Responden</a></li>
                 </ul>
             </li>
             
-            <li><a href="{{ route('Pemeringkatan.ranking_unj.rankingunj') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Ranking UNJ</a></li>
-            <li><a href="{{ route('Pemeringkatan.the_ir_initiatives') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">THE IR</a></li>
+            <li><a href="{{ route('pemeringkatan.ranking-unj.index') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Ranking UNJ</a></li>
+            <li><a href="{{ route('pemeringkatan.the-ir.index') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">THE IR</a></li>
             <li><a href="{{ route('documents.public.index') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Dokumen</a></li>
             
             <li><a href="https://sso.unj.ac.id/login" target="_blank" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">SSO</a></li>

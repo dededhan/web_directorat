@@ -102,9 +102,9 @@
                 <a href="#" class="text-white hover:text-yellow-400 primary-dropdown-toggle" data-dropdown="tentang-dropdown">Tentang</a>
                 <ul id="tentang-dropdown" class="dropdown-menu primary-dropdown hidden">
                     <li><a href="{{ route('pimpinan.pimpinan') }}">Pimpinan Direktorat</a></li>
-                    <li><a href="{{ route('strukturorganisasipemeringkatan') }}">Struktur Organisasi</a></li>
-                    <li><a href="{{ route('tupoksipemeringkatan') }}">Tugas Pokok dan Fungsi</a></li>
-                    <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}">Profil</a></li>
+                    <li><a href="{{ route('pemeringkatan.struktur-organisasi') }}">Struktur Organisasi</a></li>
+                    <li><a href="{{ route('pemeringkatan.tupoksi') }}">Tugas Pokok dan Fungsi</a></li>
+                    <li><a href="{{ route('pemeringkatan.sejarah') }}">Profil</a></li>
                 </ul>
             </li>
 
@@ -125,7 +125,7 @@
                             <li><a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}">Kegiatan Sustainability</a></li>
                             <li><a href="{{ route('Pemeringkatan.matakuliahsustainability.matakuliahsustainability') }}">Mata Kuliah Sustainability</a></li>
                             <li><a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}">Program Sustainability UNJ</a></li>
-                                                        <li><a href="{{ route('sulitest.page.index') }}">UNJ Sustainability Literacy Test</a></li>
+                                                        <li><a href="{{ route('pemeringkatan.sulitest.index') }}">UNJ Sustainability Literacy Test</a></li>
                         </ul>
                     </li>
                     
@@ -187,9 +187,9 @@
                 </button>
                 <ul class="dropdown-content hidden bg-[#135a54] overflow-hidden">
                     <li><a href="{{ route('pimpinan.pimpinan') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Pimpinan Direktorat</a></li>
-                    <li><a href="{{ route('strukturorganisasipemeringkatan') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Struktur Organisasi</a></li>
-                    <li><a href="{{ route('tupoksipemeringkatan') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Tugas Pokok dan Fungsi</a></li>
-                    <li><a href="{{ route('Pemeringkatan.sejarah.sejarah') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Profil</a></li>
+                    <li><a href="{{ route('pemeringkatan.struktur-organisasi') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Struktur Organisasi</a></li>
+                    <li><a href="{{ route('pemeringkatan.tupoksi') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Tugas Pokok dan Fungsi</a></li>
+                    <li><a href="{{ route('pemeringkatan.sejarah') }}" class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Profil</a></li>
                 </ul>
             </li>
 
@@ -213,7 +213,7 @@
                             <li><a href="{{ route('Pemeringkatan.kegiatansustainability.kegiatansustainability') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Kegiatan Sustainability</a></li>
                             <li><a href="{{ route('Pemeringkatan.matakuliahsustainability.matakuliahsustainability') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Mata Kuliah Sustainability</a></li>
                             <li><a href="{{ route('Pemeringkatan.programsustainability.programsustainability') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Program Sustainability UNJ</a></li>
-                            <li><a href="{{ route('sulitest.page.index') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Sulitest</a></li>
+                            <li><a href="{{ route('pemeringkatan.sulitest.index') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Sulitest</a></li>
                         </ul>
                     </li>
                     

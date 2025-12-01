@@ -1,28 +1,15 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.pemeringkatan')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>International Faculty Staff DITISIP</title>
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-   @vite([
-        'resources/css/fitur/international-faculty-staff.css',
-        'resources/js/fitur/international-faculty-staff.js'
-    ])
-    @include('layout.navbarpemeringkatan')
-</head>
+@section('title', 'International Faculty Staff - DITISIP UNJ')
 
-<body class="min-h-screen">
+@push('styles')
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+@vite('resources/css/pemeringkatan/international-faculty-staff.css')
+@endpush
 
-
-
-    <div class="pt-16">
+@section('content')
+<div class="pt-16">
 
         <section class="faculty-hero flex items-center justify-center text-center text-white">
             <div class="container mx-auto px-6 py-20">
@@ -533,9 +520,9 @@
             <!-- CTA Section -->
 
         </div>
-        @include('layout.footer')
+</div>
+@endsection
 
-    </div>
-</body>
-
-</html>
+@push('scripts')
+@vite('resources/js/pemeringkatan/international-faculty-staff.js')
+@endpush

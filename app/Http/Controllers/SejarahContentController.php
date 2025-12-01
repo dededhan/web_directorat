@@ -251,7 +251,7 @@ class SejarahContentController extends Controller
         // Determine category from the URL
         $routeName = $request->route()->getName();
 
-        if ($routeName === 'Pemeringkatan.sejarah.sejarah') {
+        if ($routeName === 'pemeringkatan.sejarah') {
             $category = SejarahContent::CATEGORY_PEMERINGKATAN;
         } elseif ($routeName === 'subdirektorat-inovasi.sejarah.sejarah') {
             $category = SejarahContent::CATEGORY_INOVASI;
@@ -267,7 +267,7 @@ class SejarahContentController extends Controller
         $sections = SejarahContent::getSections();
 
         if ($category === SejarahContent::CATEGORY_PEMERINGKATAN) {
-            return view('Pemeringkatan.sejarah.sejarah', compact('contents', 'sections'));
+            return view('pemeringkatan.sejarah.index', compact('contents', 'sections'));
         } else {
             return view('subdirektorat-inovasi.sejarah.sejarah', compact('contents', 'sections'));
         }
