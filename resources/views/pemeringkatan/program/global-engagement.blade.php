@@ -1,163 +1,186 @@
 @extends('layouts.pemeringkatan')
 
-@section('title', 'Global Engagement - UNJ')
+@section('title', 'Global Engagement Program')
 
 @push('styles')
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-<style>
-    * { font-family: 'Poppins', sans-serif !important; }
-    :root {
-        --primary-color: #186862;
-        --secondary-color: #125a54;
-        --accent-color: #facc15;
-        --light-color: #ecf0f1;
-        --dark-color: #34495e;
-    }
-    .bg-primary { background-color: var(--primary-color); }
-    .text-primary { color: var(--primary-color); }
-    .border-primary { border-color: var(--primary-color); }
-    .bg-accent { background-color: var(--accent-color); }
-    .text-accent { color: var(--accent-color); }
-    .global-hero { background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://media.quipper.com/media/W1siZiIsIjIwMTgvMDEvMjMvMDkvNDMvMjcvYWVjNTQ1OTctOTJiNi00Y2EyLWEzZDctMGZiNTg1ZTU1MDEzLyJdLFsicCIsInRodW1iIiwiMTIwMHhcdTAwM2UiLHt9XSxbInAiLCJjb252ZXJ0IiwiLWNvbG9yc3BhY2Ugc1JHQiAtc3RyaXAiLHsiZm9ybWF0IjoianBnIn1dXQ?sha=9c61a35270604434') center/cover no-repeat; height: 500px; display: flex; align-items: center; justify-content: center; color: white; text-align: center; position: relative; margin-bottom: 0; }
-    .global-hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 5rem; background: linear-gradient(to top, white, transparent); }
-    .global-hero-content { max-width: 900px; padding: 2rem; z-index: 10; }
-    .global-intro { background-color: white; margin-top: -4rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); position: relative; z-index: 20; padding: 3rem; }
-    .global-program { margin-bottom: 2.5rem; padding: 2rem; background-color: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; border-left: 5px solid var(--primary-color); position: relative; overflow: hidden; }
-    .global-program:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); }
-    .global-program::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(24, 104, 98, 0.05) 0%, rgba(255, 255, 255, 0) 100%); z-index: 0; }
-    .global-program-content { position: relative; z-index: 1; }
-    .global-program h3 { color: var(--primary-color); margin-bottom: 1.5rem; display: flex; align-items: center; font-weight: 600; }
-    .program-number { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background-color: var(--primary-color); color: white; border-radius: 50%; margin-right: 12px; font-size: 1.1rem; font-weight: 600; flex-shrink: 0; }
-    .section-heading { position: relative; display: inline-block; padding-bottom: 1rem; margin-bottom: 2rem; }
-    .section-heading::after { content: ''; position: absolute; left: 0; bottom: 0; width: 80px; height: 4px; background-color: var(--accent-color); }
-    .list-icon { color: var(--primary-color); margin-right: 8px; }
-    .back-to-top { position: fixed; bottom: 2rem; right: 2rem; background-color: var(--primary-color); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); transition: all 0.3s ease; z-index: 100; }
-    .back-to-top:hover { background-color: var(--accent-color); color: var(--primary-color); transform: translateY(-5px); }
-    .partners-section { padding: 4rem 0; background-color: #f8f9fa; }
-    .partner-logo { filter: grayscale(100%); transition: all 0.3s ease; }
-    .partner-logo:hover { filter: grayscale(0%); transform: scale(1.1); }
-
-    @media (max-width: 768px) {
-        .global-hero { height: 400px; }
-        .global-hero h2 { font-size: 1.8rem; }
-        .global-intro { padding: 2rem; margin-top: -3rem; }
-        .global-program { padding: 1.5rem; }
-    }
-</style>
+    <style>
+        .program-card {
+            transition: all 0.3s ease;
+        }
+        .program-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #176369 0%, #277177 100%);
+        }
+    </style>
 @endpush
 
 @section('content')
-
-    <div x-data="{ showBackToTop: false }" @scroll.window="showBackToTop = window.pageYOffset > 500">
-        <div class="global-hero">
-            <div class="global-hero-content">
-                <h2 class="text-5xl font-bold mb-6">Global <span class="text-accent">Engagement</span></h2>
-                <p class="text-xl font-light mb-8">Program strategis untuk memperluas jejaring internasional dan meningkatkan reputasi Universitas Negeri Jakarta di kancah global</p>
-                <a href="#programs" class="inline-flex items-center justify-center bg-primary hover:bg-accent hover:text-primary px-8 py-3 rounded-full text-white font-medium transition-all duration-300 transform hover:scale-105">
-                    <span>Jelajahi Program</span>
-                    <i class="fas fa-arrow-down ml-2"></i>
-                </a>
+    <main class="min-h-screen relative z-0">
+        <!-- Hero Section -->
+        <section class="hero-section py-24 text-white">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Global Engagement Program</h1>
+                <p class="text-xl opacity-90 mb-8 max-w-3xl mx-auto">
+                    Fostering international collaboration and building bridges across cultures through education and research
+                </p>
             </div>
-        </div>
+        </section>
 
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {{-- "TENTANG" SECTION --}}
-            <div class="global-intro">
-                <h2 class="section-heading text-3xl font-bold text-primary">Tentang Global Engagement</h2>
-                <div class="space-y-6 text-gray-700 leading-relaxed">
-                    @if(isset($about) && $about)
-                        {!! $about->content !!}
-                    @else
-                        <p>Information about Global Engagement will be available soon. Please check back later.</p>
-                    @endif
+        <!-- Introduction Section -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto">
+                    <div class="border-l-4 border-yellow-400 pl-6 mb-8">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-4">About Global Engagement</h2>
+                        <p class="text-gray-600 text-lg leading-relaxed">
+                            Our Global Engagement Program is designed to strengthen international partnerships, 
+                            enhance academic collaboration, and provide students and faculty with opportunities 
+                            to engage with the global academic community.
+                        </p>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            {{-- "PROGRAM" SECTION --}}
-            <section id="programs" class="mt-16 mb-20">
-                <div class="flex items-center justify-center mb-12">
-                    <div class="h-1 bg-primary rounded-full w-12 mr-3"></div>
-                    <h2 class="text-4xl font-bold text-primary">Program Global Engagement</h2>
-                    <div class="h-1 bg-primary rounded-full w-12 ml-3"></div>
+        <!-- Key Programs Section -->
+        <section class="py-16 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Our Key Programs</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">
+                        Explore our diverse range of international programs and initiatives
+                    </p>
                 </div>
-                
-                <div class="space-y-8">
-                    @forelse ($programs ?? [] as $program)
-                    <div class="global-program">
-                        <div class="global-program-content">
-                            <h3 class="text-2xl">
-                                <span class="program-number">{{ $loop->iteration }}</span>
-                                {{ $program->title }}
-                            </h3>
-                            <p class="mb-4 text-gray-700">{{ $program->description }}</p>
-                            
-                            <div class="bg-gray-50 p-5 rounded-lg mb-4">
-                                <p class="font-semibold mb-2 text-primary">Tujuan utama:</p>
-                                <div class="space-y-2 ck-content">
-                                    {!! $program->objectives !!}
-                                </div>
-                            </div>
-                            
-                            <div class="bg-gray-50 p-5 rounded-lg">
-                                <p class="font-semibold mb-2 text-primary">Kegiatan:</p>
-                                <div class="space-y-2 ck-content">
-                                     {!! $program->activities !!}
-                                </div>
-                            </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Program Card 1 -->
+                    <div class="program-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="h-48 bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center">
+                            <i class="fas fa-globe text-white text-6xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">International Partnerships</h3>
+                            <p class="text-gray-600">
+                                Building strategic partnerships with universities and institutions worldwide 
+                                to enhance academic collaboration and research opportunities.
+                            </p>
                         </div>
                     </div>
-                    @empty
-                    <div class="text-center py-10">
-                        <p class="text-gray-500">Program details will be available soon.</p>
-                    </div>
-                    @endforelse
-                </div>
-            </section>
-            
-            {{-- "MITRA/PARTNERS" SECTION --}}
-            @if(isset($partners) && $partners->isNotEmpty())
-            <section id="partners" class="partners-section">
-                <div class="container mx-auto px-4">
-                    <div class="flex items-center justify-center mb-12">
-                        <div class="h-1 bg-primary rounded-full w-12 mr-3"></div>
-                        <h2 class="text-4xl font-bold text-primary text-center">Mitra Kami</h2>
-                        <div class="h-1 bg-primary rounded-full w-12 ml-3"></div>
-                    </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
-                        @foreach ($partners as $partner)
-                        <a href="{{ $partner->website_url ?? '#' }}" target="_blank" rel="noopener noreferrer" class="text-center partner-logo">
-                            <img src="{{ Storage::url($partner->logo_path) }}" alt="{{ $partner->name }}" class="mx-auto h-20 object-contain">
-                        </a>
-                        @endforeach
-                    </div>
-                </div>
-            </section>
-            @endif
 
-        </div>
-        
-        <a href="#" class="back-to-top" x-show="showBackToTop" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-10" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform translate-y-10">
-            <i class="fas fa-arrow-up"></i>
-        </a>
-    </div>
+                    <!-- Program Card 2 -->
+                    <div class="program-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="h-48 bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+                            <i class="fas fa-users text-white text-6xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">Student Exchange Programs</h3>
+                            <p class="text-gray-600">
+                                Facilitating student mobility and cultural exchange through semester-long 
+                                and short-term exchange programs with partner institutions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Program Card 3 -->
+                    <div class="program-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="h-48 bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center">
+                            <i class="fas fa-chalkboard-teacher text-white text-6xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">Faculty Development</h3>
+                            <p class="text-gray-600">
+                                Supporting faculty members in international research collaborations, 
+                                conferences, and professional development opportunities.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Program Card 4 -->
+                    <div class="program-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="h-48 bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center">
+                            <i class="fas fa-microscope text-white text-6xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">Joint Research Initiatives</h3>
+                            <p class="text-gray-600">
+                                Promoting collaborative research projects addressing global challenges 
+                                through interdisciplinary and cross-border cooperation.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Program Card 5 -->
+                    <div class="program-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="h-48 bg-gradient-to-br from-orange-500 to-orange-700 flex items-center justify-center">
+                            <i class="fas fa-graduation-cap text-white text-6xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">International Conferences</h3>
+                            <p class="text-gray-600">
+                                Hosting and participating in international conferences and symposia 
+                                to share knowledge and foster academic discourse.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Program Card 6 -->
+                    <div class="program-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="h-48 bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center">
+                            <i class="fas fa-award text-white text-6xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">Cultural Exchange</h3>
+                            <p class="text-gray-600">
+                                Organizing cultural programs and activities to promote mutual understanding 
+                                and appreciation of diverse cultures and perspectives.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Impact Section -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-8">Global Impact</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div>
+                            <div class="text-5xl font-bold text-teal-600 mb-2">50+</div>
+                            <div class="text-gray-600">Partner Universities</div>
+                        </div>
+                        <div>
+                            <div class="text-5xl font-bold text-teal-600 mb-2">30+</div>
+                            <div class="text-gray-600">Countries</div>
+                        </div>
+                        <div>
+                            <div class="text-5xl font-bold text-teal-600 mb-2">200+</div>
+                            <div class="text-gray-600">Annual Exchange Students</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="py-16 bg-gradient-to-r from-teal-600 to-teal-700 text-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold mb-4">Join Our Global Network</h2>
+                <p class="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
+                    Interested in collaborating with us or learning more about our programs?
+                </p>
+                <a href="{{ route('pemeringkatan.landing') }}" class="inline-block bg-yellow-400 text-gray-900 font-bold px-8 py-3 rounded-lg hover:bg-yellow-300 transition-colors">
+                    Get in Touch
+                </a>
+            </div>
+        </section>
+    </main>
 @endsection
 
 @push('scripts')
-<script>
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 100,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-</script>
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
 @endpush

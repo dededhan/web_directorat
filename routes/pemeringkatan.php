@@ -33,6 +33,8 @@ Route::prefix('pemeringkatan')->name('pemeringkatan.')->group(function () {
     
     // Main landing page
     Route::get('/home', [BeritaController::class, 'pemeringkatanLanding'])->name('landing');
+    // Alias for landing page
+    Route::get('/home', [BeritaController::class, 'pemeringkatanLanding'])->name('landingpage');
     
     // About/Profile pages
     Route::get('/tupoksi', function () {
@@ -48,6 +50,9 @@ Route::prefix('pemeringkatan')->name('pemeringkatan.')->group(function () {
     // Ranking pages
     Route::prefix('ranking-unj')->name('ranking-unj.')->group(function () {
         Route::get('/', [RankingController::class, 'showAllRankings'])->name('index');
+        Route::get('/pemeringkatan-klaster-pendidikan-tinggi', function () {
+            return view('pemeringkatan.ranking-universitas.klaster-perguruan-tinggi');
+        })->name('pemeringkatan-klaster-pendidikan-tinggi');
         Route::get('/{slug}', [RankingController::class, 'show'])->name('show');
     });
     
