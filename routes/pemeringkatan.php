@@ -33,8 +33,6 @@ Route::prefix('pemeringkatan')->name('pemeringkatan.')->group(function () {
     
     // Main landing page
     Route::get('/home', [BeritaController::class, 'pemeringkatanLanding'])->name('landing');
-    // Alias for landing page
-    Route::get('/home', [BeritaController::class, 'pemeringkatanLanding'])->name('landingpage');
     
     // About/Profile pages
     Route::get('/tupoksi', function () {

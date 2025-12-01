@@ -48,8 +48,6 @@
     </style>
 </head>
 <body class="font-sans bg-gray-100">
-    <!-- Include the navbar -->
-    @include('Pemeringkatan.Ranking_Universitas.Navbar')
     
     <!-- Empty div for spacing due to fixed navbar on mobile -->
     <div class="md:hidden h-16"></div>
