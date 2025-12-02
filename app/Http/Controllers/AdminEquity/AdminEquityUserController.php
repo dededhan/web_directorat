@@ -23,7 +23,7 @@ class AdminEquityUserController extends Controller
         $fakultasId = $request->input('fakultas_id');
         $prodiId = $request->input('prodi_id');
 
-        $query = User::whereIn('role', ['dosen', 'reviewer_equity', 'reviewer_hibah', 'equity_fakultas', 'sub_admin_equity'])
+        $query = User::whereIn('role', ['dosen', 'reviewer_equity', 'reviewer_hibah', 'reviewer_student_exchange', 'equity_fakultas', 'sub_admin_equity'])
             ->with('profile.prodi.fakultas', 'profile.fakultas', 'subAdminAssignment');
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -68,7 +68,7 @@ class AdminEquityUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required', Rule::in(['dosen', 'reviewer_equity', 'reviewer_hibah', 'equity_fakultas', 'sub_admin_equity'])],
+            'role' => ['required', Rule::in(['dosen', 'reviewer_equity', 'reviewer_hibah', 'reviewer_student_exchange', 'equity_fakultas', 'sub_admin_equity'])],
             'identifier_number' => 'nullable|string|max:255|unique:equity_user_profiles,identifier_number',
             'prodi_id' => 'nullable|required_if:role,dosen|exists:equity_prodi,id',
             'fakultas_id' => [
@@ -158,7 +158,7 @@ class AdminEquityUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required', Rule::in(['dosen', 'reviewer_equity', 'reviewer_hibah', 'equity_fakultas', 'sub_admin_equity'])],
+            'role' => ['required', Rule::in(['dosen', 'reviewer_equity', 'reviewer_hibah', 'reviewer_student_exchange', 'equity_fakultas', 'sub_admin_equity'])],
             'identifier_number' => ['nullable', 'string', 'max:255', Rule::unique('equity_user_profiles', 'identifier_number')->ignore($user->profile->id ?? null)],
             'prodi_id' => 'nullable|required_if:role,dosen|exists:equity_prodi,id',
             'fakultas_id' => [
@@ -243,7 +243,7 @@ class AdminEquityUserController extends Controller
             return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk menghapus user.');
         }
 
-        if (!in_array($user->role, ['dosen', 'reviewer_equity', 'reviewer_hibah', 'equity_fakultas', 'sub_admin_equity'])) {
+        if (!in_array($user->role, ['dosen', 'reviewer_equity', 'reviewer_hibah', 'reviewer_student_exchange', 'equity_fakultas', 'sub_admin_equity'])) {
             abort(404);
         }
 

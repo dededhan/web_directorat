@@ -34,6 +34,7 @@ class SubAdminAssignment extends Model
         return [
             'comdev' => 'Community Development',
             'hibah_modul' => 'Hibah Modul Ajar',
+            'student_exchange' => 'Student Exchange',
             'apc' => 'Article Processing Cost',
             'fee_reviewer' => 'Insentif Reviewer',
             'fee_editor' => 'Insentif Editor',

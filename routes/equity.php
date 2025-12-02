@@ -81,6 +81,45 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         });
     });
 
+    // Student Exchange Routes
+    Route::prefix('student-exchange')->name('student_exchange.')->group(function () {
+        // CRUD Sesi Student Exchange
+        Route::prefix('sesi')->name('sesi.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\AdminEquity\SesiStudentExchangeController::class, 'index'])->name('index');
+            Route::get('/create', [\App\Http\Controllers\AdminEquity\SesiStudentExchangeController::class, 'create'])->name('create');
+            Route::post('/', [\App\Http\Controllers\AdminEquity\SesiStudentExchangeController::class, 'store'])->name('store');
+            Route::get('/{sesi}', [\App\Http\Controllers\AdminEquity\SesiStudentExchangeController::class, 'show'])->name('show');
+            Route::get('/{sesi}/edit', [\App\Http\Controllers\AdminEquity\SesiStudentExchangeController::class, 'edit'])->name('edit');
+            Route::put('/{sesi}', [\App\Http\Controllers\AdminEquity\SesiStudentExchangeController::class, 'update'])->name('update');
+            Route::delete('/{sesi}', [\App\Http\Controllers\AdminEquity\SesiStudentExchangeController::class, 'destroy'])->name('destroy');
+        });
+
+        // Proposal Management
+        Route::prefix('sesi/{sesi}/proposals')->name('proposals.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\AdminEquity\ProposalStudentExchangeAdminController::class, 'index'])->name('index');
+            Route::get('/{proposal}', [\App\Http\Controllers\AdminEquity\ProposalStudentExchangeAdminController::class, 'show'])->name('show');
+            Route::post('/{proposal}/status', [\App\Http\Controllers\AdminEquity\ProposalStudentExchangeAdminController::class, 'updateStatus'])->name('updateStatus');
+            Route::post('/{proposal}/assign-reviewer', [\App\Http\Controllers\AdminEquity\ProposalStudentExchangeAdminController::class, 'assignReviewer'])->name('assignReviewer');
+            Route::delete('/{proposal}/remove-reviewer', [\App\Http\Controllers\AdminEquity\ProposalStudentExchangeAdminController::class, 'removeReviewer'])->name('removeReviewer');
+            Route::post('/bulk-status', [\App\Http\Controllers\AdminEquity\ProposalStudentExchangeAdminController::class, 'bulkUpdateStatus'])->name('bulkUpdateStatus');
+        });
+
+        // Modul Management (Template Laporan Akhir)
+        Route::prefix('sesi/{sesi}/moduls')->name('moduls.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\AdminEquity\StudentExchangeModulController::class, 'index'])->name('index');
+            Route::post('/store-modul', [\App\Http\Controllers\AdminEquity\StudentExchangeModulController::class, 'storeModul'])->name('storeModul');
+            Route::put('/modul/{modul}', [\App\Http\Controllers\AdminEquity\StudentExchangeModulController::class, 'updateModul'])->name('updateModul');
+            Route::delete('/modul/{modul}', [\App\Http\Controllers\AdminEquity\StudentExchangeModulController::class, 'destroyModul'])->name('destroyModul');
+            
+            Route::post('/modul/{modul}/subchapter', [\App\Http\Controllers\AdminEquity\StudentExchangeModulController::class, 'storeSubChapter'])->name('storeSubChapter');
+            Route::put('/subchapter/{subChapter}', [\App\Http\Controllers\AdminEquity\StudentExchangeModulController::class, 'updateSubChapter'])->name('updateSubChapter');
+            Route::delete('/subchapter/{subChapter}', [\App\Http\Controllers\AdminEquity\StudentExchangeModulController::class, 'destroySubChapter'])->name('destroySubChapter');
+            
+            Route::post('/reorder', [\App\Http\Controllers\AdminEquity\StudentExchangeModulController::class, 'reorderModuls'])->name('reorder');
+            Route::post('/modul/{modul}/subchapter/reorder', [\App\Http\Controllers\AdminEquity\StudentExchangeModulController::class, 'reorderSubChapters'])->name('subchapter.reorder');
+        });
+    });
+
     Route::resource('manageuser', AdminEquityUserController::class)
         ->parameters(['manageuser' => 'user']);
 
@@ -491,6 +530,28 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                     Route::post('/proposal/{proposal}/subchapter/{subChapter}/upload', [\App\Http\Controllers\Dosen\ModulAkhirDosenController::class, 'uploadFile'])->name('uploadFile');
                     Route::delete('/file/{file}', [\App\Http\Controllers\Dosen\ModulAkhirDosenController::class, 'deleteFile'])->name('deleteFile');
                     Route::get('/file/{file}/download', [\App\Http\Controllers\Dosen\ModulAkhirDosenController::class, 'downloadFile'])->name('downloadFile');
+                });
+
+                // Student Exchange untuk Dosen
+                Route::prefix('student-exchange')->name('student_exchange.')->group(function () {
+                    // List sesi yang dibuka dan manage proposals
+                    Route::get('/sesi', [\App\Http\Controllers\Dosen\ProposalStudentExchangeDosenController::class, 'listSesi'])->name('sesi');
+                    Route::get('/manage', [\App\Http\Controllers\Dosen\ProposalStudentExchangeDosenController::class, 'manageProposals'])->name('manage');
+                    
+                    // CRUD Proposal
+                    Route::get('/sesi/{sesi}/create', [\App\Http\Controllers\Dosen\ProposalStudentExchangeDosenController::class, 'createForm'])->name('create');
+                    Route::post('/sesi/{sesi}/store', [\App\Http\Controllers\Dosen\ProposalStudentExchangeDosenController::class, 'store'])->name('store');
+                    Route::get('/proposal/{proposal}', [\App\Http\Controllers\Dosen\ProposalStudentExchangeDosenController::class, 'show'])->name('show');
+                    Route::get('/proposal/{proposal}/edit', [\App\Http\Controllers\Dosen\ProposalStudentExchangeDosenController::class, 'edit'])->name('edit');
+                    Route::put('/proposal/{proposal}', [\App\Http\Controllers\Dosen\ProposalStudentExchangeDosenController::class, 'update'])->name('update');
+                    Route::delete('/proposal/{proposal}', [\App\Http\Controllers\Dosen\ProposalStudentExchangeDosenController::class, 'destroy'])->name('destroy');
+                    
+                    // Confirm/Submit Proposal
+                    Route::post('/proposal/{proposal}/confirm', [\App\Http\Controllers\Dosen\ProposalStudentExchangeDosenController::class, 'confirm'])->name('confirm');
+                    
+                    // Laporan Akhir
+                    Route::get('/proposal/{proposal}/laporan-akhir', [\App\Http\Controllers\Dosen\ProposalStudentExchangeDosenController::class, 'laporanAkhir'])->name('laporanAkhir');
+                    Route::post('/proposal/{proposal}/submit-laporan', [\App\Http\Controllers\Dosen\ProposalStudentExchangeDosenController::class, 'submitLaporan'])->name('submitLaporan');
                 });
             });
             

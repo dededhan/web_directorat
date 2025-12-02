@@ -3,6 +3,7 @@
         mobileOpen: false,
         comdevOpen: {{ request()->routeIs('admin_equity.comdev.*') ? 'true' : 'false' }},
         hibahModulOpen: {{ request()->routeIs('admin_equity.hibah_modul.*') ? 'true' : 'false' }},
+        studentExchangeOpen: {{ request()->routeIs('admin_equity.student_exchange.*') ? 'true' : 'false' }},
         init() {
             this.$watch('mobileOpen', value => {
                 if (value) {
@@ -147,6 +148,30 @@
                 <div x-show="hibahModulOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
                     <a href="{{ route('admin_equity.hibah_modul.sesi.index') }}" 
                        class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin_equity.hibah_modul.sesi.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
+                        <i class='bx bx-calendar-event text-2xl flex-shrink-0'></i>
+                        <span>Kelola Sesi</span>
+                    </a>
+                </div>
+                @endif
+
+                @if(isset($hasAccessTo['student_exchange']) && $hasAccessTo['student_exchange'])
+                <!-- 2.1 Student Exchange Dropdown -->
+                <button @click="studentExchangeOpen = !studentExchangeOpen" 
+                        class="flex w-full items-center rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700 group"
+                        :class="open || mobileOpen ? 'justify-between' : 'justify-center'">
+                    <div class="flex items-center space-x-4">
+                        <i class='bx bxs-plane-alt text-2xl flex-shrink-0'></i>
+                        <span x-show="open || mobileOpen" class="font-medium">Student Exchange</span>
+                    </div>
+                    <div x-show="open || mobileOpen" class="flex items-center">
+                        <i class='bx bx-chevron-down text-2xl transition-transform duration-300' 
+                           :class="{'rotate-180': studentExchangeOpen}"></i>
+                    </div>
+                </button>
+                
+                <div x-show="studentExchangeOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
+                    <a href="{{ route('admin_equity.student_exchange.sesi.index') }}" 
+                       class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors duration-200 {{ request()->routeIs('admin_equity.student_exchange.sesi.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4">
                         <i class='bx bx-calendar-event text-2xl flex-shrink-0'></i>
                         <span>Kelola Sesi</span>
                     </a>
