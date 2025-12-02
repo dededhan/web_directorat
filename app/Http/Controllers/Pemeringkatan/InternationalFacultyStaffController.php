@@ -27,7 +27,7 @@ class InternationalFacultyStaffController extends Controller
             'uniqueUniversities' => InternationalFacultyStaff::distinct('universitas_asal')->count('universitas_asal')
         ];
         
-        return view('Pemeringkatan.program.international-faculty-staff', compact('facultyStaffs', 'stats', 'activities'));
+        return view('pemeringkatan.program.international-faculty-staff', compact('facultyStaffs', 'stats', 'activities'));
     }
 
     public function index(Request $request)

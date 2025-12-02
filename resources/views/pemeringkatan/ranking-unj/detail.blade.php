@@ -102,10 +102,9 @@
             animation: fadeIn 0.5s ease-out forwards;
         }
     </style>
-</head>
-<body class="min-h-screen flex flex-col">
-    @include('layout.navbar_pemeringkatan')
-    
+@endpush
+
+@section('content')
     <!-- Hero Section -->
     <div class="hero-gradient py-16 md:py-24">
         <div class="container mx-auto px-4">
