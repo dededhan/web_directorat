@@ -17,10 +17,11 @@
     <meta property="og:description" content="@yield('meta_description', 'Subdirektorat Pemeringkatan - Direktorat Inovasi, Sistem Informasi, dan Pemeringkatan Universitas Negeri Jakarta')">
     
     {{-- Page Title --}}
-    <title>@yield('title', 'Pemeringkatan') - Direktorat ISIP UNJ</title>
+    <title>@yield('title', 'Pemeringkatan') - Subdirektorat Sistem Informasi dan Pemeringkatan</title>
     
-    {{-- Favicon --}}
-    <link rel="icon" href="{{ asset('assets/images/favicon.png') }}" type="image/png">
+
+  
+ <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     
     {{-- Google Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
