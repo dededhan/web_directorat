@@ -92,55 +92,55 @@
                 <p class="text-cyan-500 text-lg mb-12">Select and click the SDGs to read our detailed initiatives</p>
 
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                    <a href="{{ route('sdg.detail', 1) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 1) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-01.jpg') }}" alt="SDG 1 - No Poverty" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 2) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 2) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-02.jpg') }}" alt="SDG 2 - Zero Hunger" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 3) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 3) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-03.jpg') }}" alt="SDG 3 - Good Health and Well-Being" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 4) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 4) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-04.jpg') }}" alt="SDG 4 - Quality Education" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 5) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 5) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-05.jpg') }}" alt="SDG 5 - Gender Equality" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 6) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 6) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-06.jpg') }}" alt="SDG 6 - Clean Water and Sanitation" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 7) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 7) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-07.jpg') }}" alt="SDG 7 - Affordable and Clean Energy" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 8) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 8) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-08.jpg') }}" alt="SDG 8 - Decent Work and Economic Growth" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 9) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 9) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-09.jpg') }}" alt="SDG 9 - Industry, Innovation and Infrastructure" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 10) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 10) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-10.jpg') }}" alt="SDG 10 - Reduced Inequalities" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 11) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 11) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-11.jpg') }}" alt="SDG 11 - Sustainable Cities and Communities" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 12) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 12) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-12.jpg') }}" alt="SDG 12 - Responsible Consumption and Production" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 13) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 13) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-13.jpg') }}" alt="SDG 13 - Climate Action" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 14) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 14) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-14.jpg') }}" alt="SDG 14 - Life Below Water" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 15) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 15) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-15.jpg') }}" alt="SDG 15 - Life on Land" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 16) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 16) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-16.jpg') }}" alt="SDG 16 - Peace, Justice and Strong Institutions" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
-                    <a href="{{ route('sdg.detail', 17) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
+                    <a href="{{ route('pemeringkatan.the-ir.sdg.show', 17) }}" class="transform hover:scale-105 active:scale-95 transition-transform duration-300 cursor-pointer">
                         <img src="{{ asset('images/sdgs/sdg-17.jpg') }}" alt="SDG 17 - Partnerships for the Goals" class="w-full shadow-md hover:shadow-xl rounded-lg">
                     </a>
                     <div class="flex items-center justify-center">

@@ -16,7 +16,7 @@ class SdgInitiativeController extends Controller
             ->orderBy('number')
             ->get();
 
-        return view('Pemeringkatan.the_ir_initiatives', compact('sdgs'));
+        return view('pemeringkatan.the-ir-initiatives', compact('sdgs'));
     }
 
     public function show(Request $request, $id)
@@ -48,7 +48,7 @@ class SdgInitiativeController extends Controller
             ->pluck('year')
             ->toArray();
 
-        return view('Pemeringkatan.sdg_detail', compact('sdg', 'years', 'selectedYear'));
+        return view('pemeringkatan.sdg-detail', compact('sdg', 'years', 'selectedYear'));
     }
 
     private static function getSdgData()

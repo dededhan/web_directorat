@@ -37,7 +37,7 @@
 
                 <div class="flex justify-center gap-2 mb-8 flex-wrap">
                     @for ($i = 1; $i <= 17; $i++)
-                        <a href="{{ route('sdg.detail', $i) }}" class="transform hover:scale-110 transition-transform">
+                        <a href="{{ route('pemeringkatan.the-ir.sdg.show', $i) }}" class="transform hover:scale-110 transition-transform">
                             <img src="{{ asset('images/sdgs/sdg-' . str_pad($i, 2, '0', STR_PAD_LEFT) . '.jpg') }}" 
                                  alt="SDG {{ $i }}" 
                                  class="w-16 h-16 {{ $i == $sdg->number ? 'ring-4 ring-blue-500' : '' }}">
@@ -62,7 +62,7 @@
                         @if(count($years) > 0)
                         <div class="flex gap-3 mb-6">
                             @foreach ($years as $year)
-                                <a href="{{ route('sdg.detail', ['id' => $sdg->number, 'year' => $year]) }}" 
+                                <a href="{{ route('pemeringkatan.the-ir.sdg.show', ['id' => $sdg->number, 'year' => $year]) }}" 
                                    class="year-btn {{ $selectedYear == $year ? 'active' : '' }}">
                                     {{ $year }}
                                 </a>
@@ -156,7 +156,7 @@
                             <i class="fas fa-info-circle text-4xl text-gray-400 mb-4"></i>
                             @if($selectedYear)
                                 <p class="text-gray-500 text-lg mb-2">No content available for year {{ $selectedYear }}</p>
-                                <a href="{{ route('sdg.detail', $sdg->number) }}" class="text-blue-600 hover:text-blue-800">
+                                <a href="{{ route('pemeringkatan.the-ir.sdg.show', $sdg->number) }}" class="text-blue-600 hover:text-blue-800">
                                     <i class="fas fa-arrow-left mr-2"></i>View all years
                                 </a>
                             @else
