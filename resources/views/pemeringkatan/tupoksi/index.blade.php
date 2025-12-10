@@ -1,6 +1,6 @@
 @extends('layouts.pemeringkatan')
 
-@section('title', 'Tupoksi - Direktorat Pemeringkatan')
+@section('title', 'Tupoksi - Subdirektorat Sistem Informasi dan Pemeringkatan')
 
 @push('styles')
     @vite('resources/css/pemeringkatan/tupoksi.css')

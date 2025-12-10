@@ -10,6 +10,9 @@ use App\Models\Pengumuman;
 use App\Models\ProgramLayanan;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Instagram;
+use App\Models\Ranking;
+use App\Models\InternationalStudent;
+use App\Models\InternationalFacultyStaff;
 use Illuminate\Support\Facades\Auth;
 use Mews\Purifier\Facades\Purifier;
 use Illuminate\Support\Str;
@@ -386,19 +389,41 @@ class BeritaController extends Controller
      */
     public function pemeringkatanLanding()
     {
-        $categoryName = 'pemeringkatan';
-        $countRegularNews = 3;
-        $countFeaturedNews = 5;
-
-        $regularNews = Berita::where('kategori', $categoryName)
-            ->latest()
-            ->take($countRegularNews)
+        // Stats data for hero/stats section
+        $stats = [
+            'totalRankings' => Ranking::count(),
+            'totalPrograms' => ProgramLayanan::where('kategori', 'pemeringkatan')->where('status', 1)->count(),
+            'totalStudents' => InternationalStudent::count(),
+            'totalFaculty' => InternationalFacultyStaff::count(),
+        ];
+        
+        // Featured rankings (top 3, prioritize those with scores)
+        $featuredRankings = Ranking::whereNotNull('score_ranking')
+            ->orderBy('score_ranking', 'desc')
+            ->take(3)
             ->get();
-
-        $featuredNews = Berita::where('kategori', $categoryName)
+        
+        // If less than 3 with scores, get remaining without scores
+        if ($featuredRankings->count() < 3) {
+            $remaining = 3 - $featuredRankings->count();
+            $additionalRankings = Ranking::whereNull('score_ranking')
+                ->latest()
+                ->take($remaining)
+                ->get();
+            $featuredRankings = $featuredRankings->merge($additionalRankings);
+        }
+        
+        // Latest news for news section
+        $regularNews = Berita::where('kategori', 'pemeringkatan')
             ->latest()
-            ->skip($countRegularNews)
-            ->take($countFeaturedNews)
+            ->take(3)
+            ->get();
+        
+        // Legacy data (kept for backward compatibility if needed)
+        $featuredNews = Berita::where('kategori', 'pemeringkatan')
+            ->latest()
+            ->skip(3)
+            ->take(5)
             ->get();
 
         $announcements = Pengumuman::where('status', true)
@@ -413,7 +438,15 @@ class BeritaController extends Controller
 
         $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();
 
-        return view('pemeringkatan.landing', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
+        return view('pemeringkatan.landing', compact(
+            'stats',
+            'featuredRankings',
+            'regularNews',
+            'featuredNews',
+            'announcements',
+            'programLayanan',
+            'instagramPosts'
+        ));
     }
 
     public function landingPageInovasi()
