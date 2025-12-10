@@ -125,6 +125,11 @@ $statuses = ['diajukan', 'verifikasi', 'disetujui', 'ditolak', 'revisi', 'verifi
                         </div>
                     </div>
                     <div class="mt-8 flex items-center justify-end space-x-4">
+                        <a href="{{ route('admin_equity.fee_reviewer.export') }}" 
+                            class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white text-base font-semibold rounded-xl hover:from-green-600 hover:to-green-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
+                            <i class='bx bx-download mr-2 text-lg'></i>
+                            Export Excel
+                        </a>
                         <a href="{{ route('admin_equity.fee_reviewer.show', $session->id) }}" 
                             class="inline-flex items-center px-6 py-3 border-2 border-gray-300 text-base font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 shadow-sm hover:shadow-md">
                             <i class='bx bx-refresh mr-2 text-lg'></i>

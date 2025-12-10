@@ -26,6 +26,7 @@ use App\Http\Controllers\Dosen\MatchmakingDosenSubmissionController;
 use App\Http\Controllers\Dosen\MatchmakingDosenReportController;
 use App\Http\Controllers\AdminEquity\MatchmakingSubmissionController;
 use App\Http\Controllers\AdminEquity\IncentiveReviewerController;
+use App\Http\Controllers\AdminEquity\EquityExportController;
 use App\Http\Controllers\EquityFakultas\EquityFakultasController;
 
 
@@ -127,7 +128,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
     Route::resource('/comdev', \App\Http\Controllers\ComdevController::class);
     Route::prefix('comdev/{comdev}/submissions')->name('comdev.submissions.')->group(function () {
         Route::get('/', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'index'])->name('index');
-        Route::get('/export', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'export'])->name('export');
+        Route::get('/export', [EquityExportController::class, 'exportComdev'])->name('export');
         Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'show'])->name('show');
         Route::delete('/{submission}', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'destroy'])->name('destroy');
         Route::post('/{submission}/assign-reviewer', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'assignReviewer'])->name('assignReviewer');
@@ -164,6 +165,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         Route::get('/{submission}', [ApcSubmissionAdminController::class, 'show'])->name('show');
         Route::post('/{submission}/status', [ApcSubmissionAdminController::class, 'updateStatus'])->name('updateStatus');
     });
+    Route::get('/apc/export', [EquityExportController::class, 'exportApc'])->name('apc.export');
     //
 
     // 3. Insentif reviewer dan editorial board (ROUTE LAMA)
@@ -184,6 +186,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         Route::get('/{report}', [App\Http\Controllers\AdminEquity\FeeReviewerReportAdminController::class, 'show'])->name('show');
         Route::post('/{report}/status', [App\Http\Controllers\AdminEquity\FeeReviewerReportAdminController::class, 'updateStatus'])->name('updateStatus');
     });
+    Route::get('/fee-reviewer/export', [EquityExportController::class, 'exportFeeReviewer'])->name('fee_reviewer.export');
 
     // Fee Editor
     Route::prefix('fee-editor')->name('fee_editor.')->group(function () {
@@ -200,6 +203,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         Route::get('/{report}', [App\Http\Controllers\AdminEquity\FeeEditorReportAdminController::class, 'show'])->name('show');
         Route::post('/{report}/status', [App\Http\Controllers\AdminEquity\FeeEditorReportAdminController::class, 'updateStatus'])->name('updateStatus');
     });
+    Route::get('/fee-editor/export', [EquityExportController::class, 'exportFeeEditor'])->name('fee_editor.export');
 
     // Presenting
     Route::prefix('presenting')->name('presenting.')->group(function () {
@@ -216,6 +220,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         Route::get('/{report}', [App\Http\Controllers\AdminEquity\PresentingReportAdminController::class, 'show'])->name('show');
         Route::post('/{report}/status', [App\Http\Controllers\AdminEquity\PresentingReportAdminController::class, 'updateStatus'])->name('updateStatus');
     });
+    Route::get('/presenting/export', [EquityExportController::class, 'exportPresenting'])->name('presenting.export');
 
     Route::get('/incentive-editor', function () {
         return view('admin_equity.incentiveeditor.index');
@@ -234,6 +239,9 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
 
     // matchmaking
     Route::prefix('matchresearch')->name('matchresearch.')->group(function () {
+        //export
+        Route::get('/export', [EquityExportController::class, 'exportMatchmaking'])->name('export');
+        
         //session
         Route::get('/', [MatchresearchController::class, 'index'])->name('index');
         Route::get('/create', [MatchresearchController::class, 'create'])->name('create');
@@ -256,7 +264,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
 
     Route::prefix('visiting-professors')->name('visiting-professors.')->group(function () {
             Route::get('/', [\App\Http\Controllers\AdminEquity\VisitingProfessorManagementController::class, 'index'])->name('index');
-            Route::get('/export', [\App\Http\Controllers\AdminEquity\VisitingProfessorManagementController::class, 'export'])->name('export');
+            Route::get('/export', [EquityExportController::class, 'exportVisitingProfessor'])->name('export');
             Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\VisitingProfessorManagementController::class, 'show'])->name('show');
             Route::patch('/{submission}/status', [\App\Http\Controllers\AdminEquity\VisitingProfessorManagementController::class, 'updateStatus'])->name('updateStatus');
         });
@@ -264,14 +272,14 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         // Lakukan hal yang sama untuk Joint Supervision dan Employer Meeting
     Route::prefix('joint-supervision')->name('joint-supervision.')->group(function () {
             Route::get('/', [\App\Http\Controllers\AdminEquity\JointSupervisionManagementController::class, 'index'])->name('index');
-            Route::get('/export', [\App\Http\Controllers\AdminEquity\JointSupervisionManagementController::class, 'export'])->name('export');
+            Route::get('/export', [EquityExportController::class, 'exportJointSupervision'])->name('export');
             Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\JointSupervisionManagementController::class, 'show'])->name('show');
             Route::patch('/{submission}/status', [\App\Http\Controllers\AdminEquity\JointSupervisionManagementController::class, 'updateStatus'])->name('updateStatus');
         });
         
     Route::prefix('employer-meetings')->name('employer-meetings.')->group(function () {
             Route::get('/', [\App\Http\Controllers\AdminEquity\EmployerMeetingManagementController::class, 'index'])->name('index');
-            Route::get('/export', [\App\Http\Controllers\AdminEquity\EmployerMeetingManagementController::class, 'export'])->name('export');
+            Route::get('/export', [EquityExportController::class, 'exportEmployerMeeting'])->name('export');
             Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\EmployerMeetingManagementController::class, 'show'])->name('show');
             Route::patch('/{submission}/status', [\App\Http\Controllers\AdminEquity\EmployerMeetingManagementController::class, 'updateStatus'])->name('updateStatus');
         });
