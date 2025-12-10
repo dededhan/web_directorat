@@ -176,6 +176,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         Route::get('/', [App\Http\Controllers\AdminEquity\FeeReviewerSessionController::class, 'index'])->name('index');
         Route::get('/create', [App\Http\Controllers\AdminEquity\FeeReviewerSessionController::class, 'create'])->name('create');
         Route::post('/', [App\Http\Controllers\AdminEquity\FeeReviewerSessionController::class, 'store'])->name('store');
+        Route::get('/export', [EquityExportController::class, 'exportFeeReviewer'])->name('export');
         Route::get('/{id}', [App\Http\Controllers\AdminEquity\FeeReviewerSessionController::class, 'show'])->name('show');
         Route::get('/{id}/edit', [App\Http\Controllers\AdminEquity\FeeReviewerSessionController::class, 'edit'])->name('edit');
         Route::put('/{id}', [App\Http\Controllers\AdminEquity\FeeReviewerSessionController::class, 'update'])->name('update');
@@ -186,7 +187,6 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         Route::get('/{report}', [App\Http\Controllers\AdminEquity\FeeReviewerReportAdminController::class, 'show'])->name('show');
         Route::post('/{report}/status', [App\Http\Controllers\AdminEquity\FeeReviewerReportAdminController::class, 'updateStatus'])->name('updateStatus');
     });
-    Route::get('/fee-reviewer/export', [EquityExportController::class, 'exportFeeReviewer'])->name('fee_reviewer.export');
 
     // Fee Editor
     Route::prefix('fee-editor')->name('fee_editor.')->group(function () {
