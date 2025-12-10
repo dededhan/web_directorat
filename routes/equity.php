@@ -155,6 +155,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         Route::get('/', [ApcSessionController::class, 'index'])->name('index');
         Route::get('/create', [ApcSessionController::class, 'create'])->name('create');
         Route::post('/', [ApcSessionController::class, 'store'])->name('store');
+        Route::get('/export', [EquityExportController::class, 'exportApc'])->name('export');
         Route::get('/{apc}', [ApcSessionController::class, 'show'])->name('show');
         Route::get('/{apc}/edit', [ApcSessionController::class, 'edit'])->name('edit');
         Route::put('/{apc}', [ApcSessionController::class, 'update'])->name('update');
@@ -165,7 +166,6 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         Route::get('/{submission}', [ApcSubmissionAdminController::class, 'show'])->name('show');
         Route::post('/{submission}/status', [ApcSubmissionAdminController::class, 'updateStatus'])->name('updateStatus');
     });
-    Route::get('/apc/export', [EquityExportController::class, 'exportApc'])->name('apc.export');
     //
 
     // 3. Insentif reviewer dan editorial board (ROUTE LAMA)
@@ -193,6 +193,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         Route::get('/', [App\Http\Controllers\AdminEquity\FeeEditorSessionController::class, 'index'])->name('index');
         Route::get('/create', [App\Http\Controllers\AdminEquity\FeeEditorSessionController::class, 'create'])->name('create');
         Route::post('/', [App\Http\Controllers\AdminEquity\FeeEditorSessionController::class, 'store'])->name('store');
+        Route::get('/export', [EquityExportController::class, 'exportFeeEditor'])->name('export');
         Route::get('/{id}', [App\Http\Controllers\AdminEquity\FeeEditorSessionController::class, 'show'])->name('show');
         Route::get('/{id}/edit', [App\Http\Controllers\AdminEquity\FeeEditorSessionController::class, 'edit'])->name('edit');
         Route::put('/{id}', [App\Http\Controllers\AdminEquity\FeeEditorSessionController::class, 'update'])->name('update');
@@ -203,13 +204,13 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         Route::get('/{report}', [App\Http\Controllers\AdminEquity\FeeEditorReportAdminController::class, 'show'])->name('show');
         Route::post('/{report}/status', [App\Http\Controllers\AdminEquity\FeeEditorReportAdminController::class, 'updateStatus'])->name('updateStatus');
     });
-    Route::get('/fee-editor/export', [EquityExportController::class, 'exportFeeEditor'])->name('fee_editor.export');
 
     // Presenting
     Route::prefix('presenting')->name('presenting.')->group(function () {
         Route::get('/', [App\Http\Controllers\AdminEquity\PresentingSessionController::class, 'index'])->name('index');
         Route::get('/create', [App\Http\Controllers\AdminEquity\PresentingSessionController::class, 'create'])->name('create');
         Route::post('/', [App\Http\Controllers\AdminEquity\PresentingSessionController::class, 'store'])->name('store');
+        Route::get('/export', [EquityExportController::class, 'exportPresenting'])->name('export');
         Route::get('/{id}', [App\Http\Controllers\AdminEquity\PresentingSessionController::class, 'show'])->name('show');
         Route::get('/{id}/edit', [App\Http\Controllers\AdminEquity\PresentingSessionController::class, 'edit'])->name('edit');
         Route::put('/{id}', [App\Http\Controllers\AdminEquity\PresentingSessionController::class, 'update'])->name('update');
@@ -220,7 +221,6 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
         Route::get('/{report}', [App\Http\Controllers\AdminEquity\PresentingReportAdminController::class, 'show'])->name('show');
         Route::post('/{report}/status', [App\Http\Controllers\AdminEquity\PresentingReportAdminController::class, 'updateStatus'])->name('updateStatus');
     });
-    Route::get('/presenting/export', [EquityExportController::class, 'exportPresenting'])->name('presenting.export');
 
     Route::get('/incentive-editor', function () {
         return view('admin_equity.incentiveeditor.index');
