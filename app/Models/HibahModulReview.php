@@ -5,15 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class StudentExchangeReview extends Model
+class HibahModulReview extends Model
 {
     use HasFactory;
 
-    protected $table = 'student_exchange_reviews';
-
     protected $fillable = [
-        'student_exchange_proposal_id',
-        'student_exchange_modul_id',
+        'proposal_modul_id',
+        'hibah_modul_akhir_id',
         'reviewer_id',
         'nilai',
         'komentar',
@@ -26,25 +24,16 @@ class StudentExchangeReview extends Model
         'updated_at' => 'datetime',
     ];
 
-    /**
-     * Get the proposal this review is for.
-     */
     public function proposal()
     {
-        return $this->belongsTo(ProposalStudentExchange::class, 'student_exchange_proposal_id');
+        return $this->belongsTo(ProposalModul::class, 'proposal_modul_id');
     }
 
-    /**
-     * Get the modul this review is for.
-     */
     public function modul()
     {
-        return $this->belongsTo(StudentExchangeModul::class, 'student_exchange_modul_id');
+        return $this->belongsTo(HibahModulAkhir::class, 'hibah_modul_akhir_id');
     }
 
-    /**
-     * Get the reviewer who created this review.
-     */
     public function reviewer()
     {
         return $this->belongsTo(User::class, 'reviewer_id');

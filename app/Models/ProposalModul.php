@@ -49,11 +49,11 @@ class ProposalModul extends Model
     
     public function reviews()
     {
-        return $this->hasMany(ModulReview::class, 'proposal_modul_id');
+        return $this->hasMany(HibahModulReview::class, 'proposal_modul_id');
     }
     
-    public function reviewerAssignments()
+    public function sesi()
     {
-        return $this->hasMany(ReviewerHibahAssignment::class, 'proposal_modul_id');
+        return $this->belongsTo(SesiHibahModul::class, 'sesi_hibah_modul_id');
     }
 }

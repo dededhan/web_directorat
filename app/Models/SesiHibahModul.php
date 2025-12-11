@@ -33,6 +33,6 @@ class SesiHibahModul extends Model
     
     public function moduls()
     {
-        return $this->hasMany(ModulAkhir::class, 'sesi_hibah_modul_id')->orderBy('urutan');
+        return $this->hasMany(HibahModulAkhir::class, 'sesi_hibah_modul_id')->orderBy('urutan');
     }
 }

@@ -339,8 +339,26 @@ Route::prefix('reviewer_hibah')->name('reviewer_equity.')->middleware(['auth', '
     Route::prefix('hibah-modul')->name('hibah_modul.')->group(function () {
         Route::get('/', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'index'])->name('index');
         Route::get('/{proposal}', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'show'])->name('show');
-        Route::post('/{proposal}/subchapter/{subChapter}/review', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'storeReview'])->name('storeReview');
+        Route::post('/{proposal}/modul/{modul}/review', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'storeReview'])->name('storeReview');
         Route::post('/{proposal}/submit-final', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'submitFinalReview'])->name('submitFinal');
+    });
+});
+
+// Reviewer Student Exchange Routes - Using reviewer_equity namespace for views
+Route::prefix('reviewer_student_exchange')->name('reviewer_equity.')->middleware(['auth', 'role:reviewer_student_exchange'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('reviewer_equity.dashboard');
+    })->name('dashboard');
+
+    Route::get('/manageprofile', [App\Http\Controllers\Dosen\DosenProfileController::class, 'edit'])->name('manageprofile.edit');
+    Route::put('/manageprofile', [App\Http\Controllers\Dosen\DosenProfileController::class, 'update'])->name('manageprofile.update');
+
+    // Student Exchange Review
+    Route::prefix('student-exchange')->name('student_exchange.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\ReviewerEquity\ReviewStudentExchangeController::class, 'index'])->name('index');
+        Route::get('/{proposal}', [\App\Http\Controllers\ReviewerEquity\ReviewStudentExchangeController::class, 'show'])->name('show');
+        Route::post('/{proposal}/modul/{modul}/review', [\App\Http\Controllers\ReviewerEquity\ReviewStudentExchangeController::class, 'storeReview'])->name('storeReview');
+        Route::post('/{proposal}/submit-final', [\App\Http\Controllers\ReviewerEquity\ReviewStudentExchangeController::class, 'submitFinalReview'])->name('submitFinal');
     });
 });
 

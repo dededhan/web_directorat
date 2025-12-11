@@ -37,7 +37,7 @@ class SesiStudentExchange extends Model
      */
     public function moduls()
     {
-        return $this->hasMany(StudentExchangeModul::class);
+        return $this->hasMany(StudentExchangeModul::class, 'sesi_student_exchange_id')->orderBy('urutan');
     }
 
     /**

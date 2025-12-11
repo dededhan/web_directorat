@@ -30,6 +30,8 @@ class ProposalStudentExchange extends Model
         'reviewer_id',
         'komentar_admin',
         'komentar_reviewer',
+        'nilai_reviewer',
+        'tanggal_review',
         'alasan_penolakan',
     ];
 
@@ -38,8 +40,10 @@ class ProposalStudentExchange extends Model
         'sdgs_pendukung' => 'array',
         'tanggal_online' => 'date',
         'tanggal_onsite' => 'date',
+        'tanggal_review' => 'datetime',
         'jumlah_peserta' => 'integer',
         'sks' => 'integer',
+        'nilai_reviewer' => 'decimal:2',
     ];
 
     /**
@@ -95,7 +99,15 @@ class ProposalStudentExchange extends Model
      */
     public function reviews()
     {
-        return $this->hasMany(StudentExchangeReview::class);
+        return $this->hasMany(StudentExchangeReview::class, 'student_exchange_proposal_id');
+    }
+
+    /**
+     * Get all files for this proposal.
+     */
+    public function files()
+    {
+        return $this->hasMany(StudentExchangeSubmissionFile::class, 'proposal_student_exchange_id');
     }
 
     /**
