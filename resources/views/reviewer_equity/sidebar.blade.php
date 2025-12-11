@@ -1,7 +1,8 @@
 <div x-data="{
         open: true,
         mobileOpen: false,
-        equityOpen: {{ request()->routeIs('reviewer_equity.comdev.*') ? 'true' : 'false' }}
+        equityOpen: {{ request()->routeIs('reviewer_equity.comdev.*') ? 'true' : 'false' }},
+        hibahOpen: {{ request()->routeIs('reviewer_equity.hibah_modul.*') ? 'true' : 'false' }}
      }"
      @window.toggle-sidebar.document="mobileOpen = !mobileOpen">
 
@@ -39,23 +40,47 @@
                 </a>
             </div>
 
+            {{-- Community Development Section - Hanya untuk reviewer_equity --}}
+            @if(auth()->user()->role === 'reviewer_equity')
             <div class="pt-2">
-                <h3 x-show="open" class="px-3 pb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">Equity</h3>
+                <h3 x-show="open" class="px-3 pb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">Community Development</h3>
                 <button @click="equityOpen = !equityOpen" class="flex w-full items-center justify-between space-x-3 rounded-md p-2 transition-colors duration-200 hover:bg-gray-700">
                     <div class="flex items-center space-x-3">
                         <i class='bx bxs-briefcase-alt-2 text-xl'></i>
-                        <span x-show="open" class="whitespace-nowrap">Community Development</span>
+                        <span x-show="open" class="whitespace-nowrap">Comdev</span>
                     </div>
                     <i x-show="open" class='bx bx-chevron-down transition-transform duration-300' :class="{'rotate-180': equityOpen}"></i>
                 </button>
                 <div x-show="equityOpen" x-collapse class="pt-1 pl-5" style="display: none;">
                     <a href="{{ route('reviewer_equity.comdev.assignments.index') }}"
-                       class="flex items-center space-x-3 rounded-md p-2 text-sm transition-colors duration-200 {{ request()->routeIs('reviewer_equity.comdev.index') ? 'bg-[#0D9488] font-semibold text-white' : 'hover:bg-gray-700' }}">
+                       class="flex items-center space-x-3 rounded-md p-2 text-sm transition-colors duration-200 {{ request()->routeIs('reviewer_equity.comdev.*') ? 'bg-[#0D9488] font-semibold text-white' : 'hover:bg-gray-700' }}">
                         <i class='bx bxs-folder-open text-lg'></i>
-                        <span x-show="open">Manajement Proposal</span>
+                        <span x-show="open">Daftar Proposal</span>
                     </a>
                 </div>
             </div>
+            @endif
+
+            {{-- Hibah Modul Section - Hanya untuk reviewer_hibah --}}
+            @if(auth()->user()->role === 'reviewer_hibah')
+            <div class="pt-2">
+                <h3 x-show="open" class="px-3 pb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">Hibah Modul Ajar</h3>
+                <button @click="hibahOpen = !hibahOpen" class="flex w-full items-center justify-between space-x-3 rounded-md p-2 transition-colors duration-200 hover:bg-gray-700">
+                    <div class="flex items-center space-x-3">
+                        <i class='bx bxs-book-content text-xl'></i>
+                        <span x-show="open" class="whitespace-nowrap">Hibah Modul</span>
+                    </div>
+                    <i x-show="open" class='bx bx-chevron-down transition-transform duration-300' :class="{'rotate-180': hibahOpen}"></i>
+                </button>
+                <div x-show="hibahOpen" x-collapse class="pt-1 pl-5" style="display: none;">
+                    <a href="{{ route('reviewer_equity.hibah_modul.index') }}"
+                       class="flex items-center space-x-3 rounded-md p-2 text-sm transition-colors duration-200 {{ request()->routeIs('reviewer_equity.hibah_modul.*') ? 'bg-[#0D9488] font-semibold text-white' : 'hover:bg-gray-700' }}">
+                        <i class='bx bx-task text-lg'></i>
+                        <span x-show="open">Daftar Review</span>
+                    </a>
+                </div>
+            </div>
+            @endif
 
         </nav>
 

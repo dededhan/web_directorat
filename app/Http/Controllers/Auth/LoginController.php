@@ -47,7 +47,7 @@ class LoginController extends Controller
                 'admin_equity' => 'admin_equity.dashboard',
                 'sub_admin_equity' => 'admin_equity.dashboard',
                 'reviewer_equity' => 'reviewer_equity.dashboard',
-                'reviewer_hibah' => 'reviewer_hibah.dashboard',
+                'reviewer_hibah' => 'reviewer_equity.dashboard',
                 'equity_fakultas' => 'equity_fakultas.dashboard',
             };
             

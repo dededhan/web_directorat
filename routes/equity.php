@@ -326,8 +326,8 @@ Route::prefix('reviewer_equity')->name('reviewer_equity.')->middleware(['auth', 
     Route::post('/comdev/assignments/{submission}/module/{module}/review', [ComdevReviewerController::class, 'storeReview'])->name('comdev.assignments.storeReview');
 });
 
-// Reviewer Hibah Routes
-Route::prefix('reviewer_hibah')->name('reviewer_hibah.')->middleware(['auth', 'role:reviewer_hibah'])->group(function () {
+// Reviewer Hibah Routes - Using reviewer_equity namespace for views
+Route::prefix('reviewer_hibah')->name('reviewer_equity.')->middleware(['auth', 'role:reviewer_hibah'])->group(function () {
     Route::get('/dashboard', function () {
         return view('reviewer_equity.dashboard');
     })->name('dashboard');
@@ -565,15 +565,5 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
             
     });
 
-// Reviewer Hibah Routes
-Route::prefix('reviewer-hibah')->name('reviewer_hibah.')->middleware(['auth', 'role:reviewer_hibah'])->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\ReviewerHibah\DashboardController::class, 'index'])->name('dashboard');
-    
-    // Hibah Modul Review
-    Route::prefix('hibah-modul')->name('hibah_modul.')->group(function () {
-        Route::get('/', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'index'])->name('index');
-        Route::get('/{proposal}', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'show'])->name('show');
-        Route::post('/{proposal}/subchapter/{subChapter}/review', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'storeReview'])->name('storeReview');
-        Route::post('/{proposal}/final', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'submitFinalReview'])->name('submitFinal');
-    });
-});
+// Note: reviewer_hibah routes are defined above (line ~330)
+// Using reviewer_equity namespace for unified dashboard and views

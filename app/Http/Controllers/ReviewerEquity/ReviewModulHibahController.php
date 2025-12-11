@@ -4,8 +4,8 @@ namespace App\Http\Controllers\ReviewerEquity;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProposalModul;
-use App\Models\ModulReview;
-use App\Models\ModulSubChapter;
+use App\Models\HibahModulReview;
+use App\Models\HibahModulSubChapter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,8 +14,8 @@ class ReviewModulHibahController extends Controller
     public function index()
     {
         $proposals = ProposalModul::where('reviewer_id', Auth::id())
-            ->with(['sesi', 'user', 'anggota'])
-            ->orderBy('updated_at', 'desc')
+            ->with(['user', 'user.prodi'])
+            ->latest()
             ->paginate(10);
         
         return view('reviewer_equity.hibah_modul.index', compact('proposals'));
@@ -23,65 +23,73 @@ class ReviewModulHibahController extends Controller
 
     public function show(ProposalModul $proposal)
     {
-        abort_if($proposal->reviewer_id !== Auth::id(), 403, 'Anda tidak ditugaskan untuk me-review proposal ini.');
+        // Verify this proposal is assigned to current reviewer
+        abort_if($proposal->reviewer_id !== Auth::id(), 403, 'Unauthorized access to this proposal');
         
-        $proposal->load([
-            'sesi.moduls.subChapters',
-            'user',
-            'anggota',
-            'files.subChapter',
-            'reviews' => function($query) {
-                $query->where('reviewer_id', Auth::id());
-            }
-        ]);
+        $proposal->load(['user', 'user.prodi', 'files', 'reviews']);
         
         return view('reviewer_equity.hibah_modul.show', compact('proposal'));
     }
 
-    public function storeReview(Request $request, ProposalModul $proposal, ModulSubChapter $subChapter)
+    public function storeReview(Request $request, ProposalModul $proposal, HibahModulSubChapter $subChapter)
     {
+        // Verify this proposal is assigned to current reviewer
         abort_if($proposal->reviewer_id !== Auth::id(), 403);
 
-        $request->validate([
-            'komentar' => 'required|string',
-            'nilai' => 'nullable|integer|min:0|max:100',
+        $validated = $request->validate([
+            'nilai' => 'required|numeric|min:0|max:100',
+            'komentar' => 'nullable|string|max:1000',
         ]);
 
-        ModulReview::updateOrCreate(
+        // Check if file exists for this subchapter
+        $fileExists = $proposal->files()
+            ->where('hibah_modul_sub_chapter_id', $subChapter->id)
+            ->exists();
+
+        if (!$fileExists) {
+            return back()->with('error', 'Tidak dapat memberikan review. File belum diupload untuk bagian ini.');
+        }
+
+        // Create or update review
+        HibahModulReview::updateOrCreate(
             [
                 'proposal_modul_id' => $proposal->id,
-                'modul_sub_chapter_id' => $subChapter->id,
+                'hibah_modul_sub_chapter_id' => $subChapter->id,
                 'reviewer_id' => Auth::id(),
             ],
             [
-                'komentar' => $request->komentar,
-                'nilai' => $request->nilai,
+                'nilai' => $validated['nilai'],
+                'komentar' => $validated['komentar'],
             ]
         );
 
-        $proposal->reviewerAssignments()
-            ->where('reviewer_id', Auth::id())
-            ->update(['reviewed_at' => now()]);
-
-        return back()->with('success', 'Review berhasil disimpan.');
+        return back()->with('success', 'Review berhasil disimpan!');
     }
 
     public function submitFinalReview(Request $request, ProposalModul $proposal)
     {
+        // Verify this proposal is assigned to current reviewer
         abort_if($proposal->reviewer_id !== Auth::id(), 403);
 
-        $request->validate([
-            'komentar_reviewer' => 'required|string',
+        $validated = $request->validate([
+            'komentar_reviewer' => 'required|string|max:2000',
         ]);
 
-        $proposal->update([
-            'komentar_reviewer' => $request->komentar_reviewer,
-        ]);
-
-        $proposal->reviewerAssignments()
+        // Calculate average score
+        $averageScore = $proposal->reviews()
             ->where('reviewer_id', Auth::id())
-            ->update(['reviewed_at' => now()]);
+            ->avg('nilai');
 
-        return back()->with('success', 'Review final berhasil dikirim ke admin.');
+        // Update proposal with final review
+        $proposal->update([
+            'komentar_reviewer' => $validated['komentar_reviewer'],
+            'nilai_reviewer' => $averageScore,
+            'tanggal_review' => now(),
+            'status' => 'reviewed',
+        ]);
+
+        return redirect()
+            ->route('reviewer_equity.hibah_modul.index')
+            ->with('success', 'Review final berhasil disubmit!');
     }
 }
