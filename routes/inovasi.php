@@ -94,6 +94,8 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                         
                         Route::get('/{katsinov_id}/form-lampiran', [\App\Http\Controllers\DosenKatsinovController::class, 'formLampiranIndex'])->name('form-lampiran');
                         Route::post('/{katsinov_id}/form-lampiran', [\App\Http\Controllers\DosenKatsinovController::class, 'formLampiranStore'])->name('form-lampiran.store');
+                        Route::delete('/{katsinov_id}/lampiran/{lampiran_id}', [\App\Http\Controllers\DosenKatsinovController::class, 'deleteLampiran'])->name('lampiran.delete');
+                        Route::get('/{katsinov_id}/lampiran/{lampiran_id}/preview', [\App\Http\Controllers\DosenKatsinovController::class, 'previewLampiran'])->name('lampiran.preview');
                         
                         Route::get('/{katsinov_id}/form-informasi-dasar', [\App\Http\Controllers\DosenKatsinovController::class, 'formInformasiDasarIndex'])->name('form-informasi-dasar');
                         Route::post('/{katsinov_id}/form-informasi-dasar', [\App\Http\Controllers\DosenKatsinovController::class, 'formInformasiDasarStore'])->name('form-informasi-dasar.store');

@@ -53,24 +53,14 @@
                         <h3 class="text-lg font-medium text-gray-900 mb-4">a) Dokumen Perencanaan</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             @foreach(['proposal' => 'Proposal penelitian dan pengembangan', 'jadwal' => 'Jadwal program (Program Schedule)'] as $key => $label)
-                                <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-400 transition-colors duration-200">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        {{ $label }}
-                                    </label>
-                                    <input type="file" name="aspek_teknologi[{{ $key }}]" accept=".pdf,.doc,.docx"
-                                           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                                    @if(isset($lampiran['aspek_teknologi'][$key]))
-                                        <div class="mt-2 flex items-center text-sm text-green-600">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                            </svg>
-                                            File sudah diupload
-                                        </div>
-                                    @endif
-                                    @error('aspek_teknologi.'.$key)
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                @include('subdirektorat-inovasi.dosen.katsinov_v2.partials.file_upload_field', [
+                                    'aspek' => 'aspek_teknologi',
+                                    'key' => $key,
+                                    'label' => $label,
+                                    'color' => 'blue',
+                                    'lampiran' => $lampiran,
+                                    'katsinov' => $katsinov
+                                ])
                             @endforeach
                         </div>
                     </div>
@@ -91,21 +81,14 @@
                                 'simulasi_lingkungan' => 'Uji pada simulasi lingkungan operasional',
                                 'test_evaluasi' => 'Hasil test dan evaluasi'
                             ] as $key => $label)
-                                <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-400 transition-colors duration-200">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        {{ $label }}
-                                    </label>
-                                    <input type="file" name="aspek_teknologi[{{ $key }}]" accept=".pdf,.doc,.docx"
-                                           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                                    @if(isset($lampiran['aspek_teknologi'][$key]))
-                                        <div class="mt-2 flex items-center text-sm text-green-600">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                            </svg>
-                                            File sudah diupload
-                                        </div>
-                                    @endif
-                                </div>
+                                @include('subdirektorat-inovasi.dosen.katsinov_v2.partials.file_upload_field', [
+                                    'aspek' => 'aspek_teknologi',
+                                    'key' => $key,
+                                    'label' => $label,
+                                    'color' => 'blue',
+                                    'lampiran' => $lampiran,
+                                    'katsinov' => $katsinov
+                                ])
                             @endforeach
                         </div>
                     </div>
@@ -115,21 +98,14 @@
                         <h3 class="text-lg font-medium text-gray-900 mb-4">c) Dokumen Publikasi</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             @foreach(['dokumen_ilmiah' => 'Publikasi ilmiah: paper, prosiding, jurnal, dll', 'dokumen_haki' => 'Kekayaan Intelektual: paten, lisensi, desain industri, dll'] as $key => $label)
-                                <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-400 transition-colors duration-200">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        {{ $label }}
-                                    </label>
-                                    <input type="file" name="aspek_teknologi[{{ $key }}]" accept=".pdf,.doc,.docx"
-                                           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                                    @if(isset($lampiran['aspek_teknologi'][$key]))
-                                        <div class="mt-2 flex items-center text-sm text-green-600">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                            </svg>
-                                            File sudah diupload
-                                        </div>
-                                    @endif
-                                </div>
+                                @include('subdirektorat-inovasi.dosen.katsinov_v2.partials.file_upload_field', [
+                                    'aspek' => 'aspek_teknologi',
+                                    'key' => $key,
+                                    'label' => $label,
+                                    'color' => 'blue',
+                                    'lampiran' => $lampiran,
+                                    'katsinov' => $katsinov
+                                ])
                             @endforeach
                         </div>
                     </div>
@@ -157,21 +133,14 @@
                             'model_bisnis' => 'Model bisnis',
                             'posisioning_pasar' => 'Posisioning pasar'
                         ] as $key => $label)
-                            <div class="border border-gray-200 rounded-lg p-4 hover:border-green-400 transition-colors duration-200">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    {{ $label }}
-                                </label>
-                                <input type="file" name="aspek_pasar[{{ $key }}]" accept=".pdf,.doc,.docx"
-                                       class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
-                                @if(isset($lampiran['aspek_pasar'][$key]))
-                                    <div class="mt-2 flex items-center text-sm text-green-600">
-                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
-                                        File sudah diupload
-                                    </div>
-                                @endif
-                            </div>
+                            @include('subdirektorat-inovasi.dosen.katsinov_v2.partials.file_upload_field', [
+                                'aspek' => 'aspek_pasar',
+                                'key' => $key,
+                                'label' => $label,
+                                'color' => 'green',
+                                'lampiran' => $lampiran,
+                                'katsinov' => $katsinov
+                            ])
                         @endforeach
                     </div>
                 </div>
@@ -195,21 +164,14 @@
                             'analisis_bisnis' => 'Analisis dan Rencana Bisnis',
                             'struktur_bisnis' => 'Organisasi Formal (Struktur Bisnis dengan Staff dan Kolaborator)'
                         ] as $key => $label)
-                            <div class="border border-gray-200 rounded-lg p-4 hover:border-purple-400 transition-colors duration-200">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    {{ $label }}
-                                </label>
-                                <input type="file" name="aspek_organisasi[{{ $key }}]" accept=".pdf,.doc,.docx"
-                                       class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100">
-                                @if(isset($lampiran['aspek_organisasi'][$key]))
-                                    <div class="mt-2 flex items-center text-sm text-green-600">
-                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
-                                        File sudah diupload
-                                    </div>
-                                @endif
-                            </div>
+                            @include('subdirektorat-inovasi.dosen.katsinov_v2.partials.file_upload_field', [
+                                'aspek' => 'aspek_organisasi',
+                                'key' => $key,
+                                'label' => $label,
+                                'color' => 'purple',
+                                'lampiran' => $lampiran,
+                                'katsinov' => $katsinov
+                            ])
                         @endforeach
                     </div>
                 </div>
@@ -232,21 +194,14 @@
                             'kerjasama' => 'Kerjasama',
                             'pengelolaan_kerjasama' => 'Pengelolaan Kerjasama yang Telah Berjalan'
                         ] as $key => $label)
-                            <div class="border border-gray-200 rounded-lg p-4 hover:border-yellow-400 transition-colors duration-200">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    {{ $label }}
-                                </label>
-                                <input type="file" name="aspek_mitra[{{ $key }}]" accept=".pdf,.doc,.docx"
-                                       class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100">
-                                @if(isset($lampiran['aspek_mitra'][$key]))
-                                    <div class="mt-2 flex items-center text-sm text-green-600">
-                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
-                                        File sudah diupload
-                                    </div>
-                                @endif
-                            </div>
+                            @include('subdirektorat-inovasi.dosen.katsinov_v2.partials.file_upload_field', [
+                                'aspek' => 'aspek_mitra',
+                                'key' => $key,
+                                'label' => $label,
+                                'color' => 'yellow',
+                                'lampiran' => $lampiran,
+                                'katsinov' => $katsinov
+                            ])
                         @endforeach
                     </div>
                 </div>
@@ -269,21 +224,14 @@
                             'kajian_pasar' => 'Kajian Risiko Pasar',
                             'kajian_organisasi' => 'Kajian Risiko Organisasi'
                         ] as $key => $label)
-                            <div class="border border-gray-200 rounded-lg p-4 hover:border-red-400 transition-colors duration-200">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    {{ $label }}
-                                </label>
-                                <input type="file" name="aspek_risiko[{{ $key }}]" accept=".pdf,.doc,.docx"
-                                       class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100">
-                                @if(isset($lampiran['aspek_risiko'][$key]))
-                                    <div class="mt-2 flex items-center text-sm text-green-600">
-                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
-                                        File sudah diupload
-                                    </div>
-                                @endif
-                            </div>
+                            @include('subdirektorat-inovasi.dosen.katsinov_v2.partials.file_upload_field', [
+                                'aspek' => 'aspek_risiko',
+                                'key' => $key,
+                                'label' => $label,
+                                'color' => 'red',
+                                'lampiran' => $lampiran,
+                                'katsinov' => $katsinov
+                            ])
                         @endforeach
                     </div>
                 </div>
@@ -309,21 +257,14 @@
                             'jaminan_mutu' => 'Jaminan Mutu (Quality Assurance)',
                             'lean_manufaktur' => 'Penerapan Lean Manufacturing'
                         ] as $key => $label)
-                            <div class="border border-gray-200 rounded-lg p-4 hover:border-indigo-400 transition-colors duration-200">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    {{ $label }}
-                                </label>
-                                <input type="file" name="aspek_manufaktur[{{ $key }}]" accept=".pdf,.doc,.docx"
-                                       class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-                                @if(isset($lampiran['aspek_manufaktur'][$key]))
-                                    <div class="mt-2 flex items-center text-sm text-green-600">
-                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
-                                        File sudah diupload
-                                    </div>
-                                @endif
-                            </div>
+                            @include('subdirektorat-inovasi.dosen.katsinov_v2.partials.file_upload_field', [
+                                'aspek' => 'aspek_manufaktur',
+                                'key' => $key,
+                                'label' => $label,
+                                'color' => 'indigo',
+                                'lampiran' => $lampiran,
+                                'katsinov' => $katsinov
+                            ])
                         @endforeach
                     </div>
                 </div>
@@ -348,21 +289,14 @@
                             'potensi_pasar' => 'Estimasi Potensi Pasar',
                             'ekspansi_pasar' => 'Estimasi Ekspansi Pasar'
                         ] as $key => $label)
-                            <div class="border border-gray-200 rounded-lg p-4 hover:border-pink-400 transition-colors duration-200">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    {{ $label }}
-                                </label>
-                                <input type="file" name="aspek_investasi[{{ $key }}]" accept=".pdf,.doc,.docx"
-                                       class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100">
-                                @if(isset($lampiran['aspek_investasi'][$key]))
-                                    <div class="mt-2 flex items-center text-sm text-green-600">
-                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
-                                        File sudah diupload
-                                    </div>
-                                @endif
-                            </div>
+                            @include('subdirektorat-inovasi.dosen.katsinov_v2.partials.file_upload_field', [
+                                'aspek' => 'aspek_investasi',
+                                'key' => $key,
+                                'label' => $label,
+                                'color' => 'pink',
+                                'lampiran' => $lampiran,
+                                'katsinov' => $katsinov
+                            ])
                         @endforeach
                     </div>
                 </div>
@@ -371,28 +305,56 @@
         </form>
     </div>
 
-    {{-- Floating Action Buttons --}}
-    <div class="fixed bottom-6 right-6 flex gap-3 z-50">
-        <button type="submit" form="form-lampiran" name="save_as_draft" value="1"
-                class="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-lg text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 transition-all hover:scale-105">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
-            </svg>
-            Simpan Draft
-        </button>
-        
-        <button type="submit" form="form-lampiran"
-                class="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all hover:scale-105">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
-            </svg>
-            Upload & Selesai
-        </button>
+    {{-- Floating Action Button - Only Simpan Draft --}}
+    <div class="fixed bottom-6 right-6 z-50">
+        @if($katsinov->status !== 'draft')
+            <div class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg shadow-lg text-gray-500 bg-gray-200 cursor-not-allowed">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+                Form Terkunci ({{ $katsinov->status }})
+            </div>
+        @else
+            <button type="submit" form="form-lampiran" name="save_as_draft" value="1"
+                    class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all hover:scale-105">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+                </svg>
+                Simpan Draft
+            </button>
+        @endif
     </div>
 </div>
 </div>
 
+<script>
+function deleteFile(fileId, aspek, category) {
+    if (!confirm('Apakah Anda yakin ingin menghapus file ini?')) {
+        return;
+    }
+
+    fetch(`{{ route('subdirektorat-inovasi.dosen.katsinov-v2.lampiran.delete', ['katsinov_id' => $katsinov->id, 'lampiran_id' => '__FILE_ID__']) }}`.replace('__FILE_ID__', fileId), {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Gagal menghapus file: ' + (data.message || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat menghapus file');
+    });
+}
+</script>
 
 @endsection
-
 

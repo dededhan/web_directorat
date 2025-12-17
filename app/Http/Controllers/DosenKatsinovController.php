@@ -427,19 +427,19 @@ class DosenKatsinovController extends Controller
             // Validate with optional files (not required)
             $request->validate([
                 'aspek_teknologi' => ['nullable', 'array'],
-                'aspek_teknologi.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+                'aspek_teknologi.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:51200'],
                 'aspek_pasar' => ['nullable', 'array'],
-                'aspek_pasar.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+                'aspek_pasar.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:51200'],
                 'aspek_organisasi' => ['nullable', 'array'],
-                'aspek_organisasi.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+                'aspek_organisasi.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:51200'],
                 'aspek_mitra' => ['nullable', 'array'],
-                'aspek_mitra.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+                'aspek_mitra.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:51200'],
                 'aspek_risiko' => ['nullable', 'array'],
-                'aspek_risiko.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+                'aspek_risiko.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:51200'],
                 'aspek_manufaktur' => ['nullable', 'array'],
-                'aspek_manufaktur.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+                'aspek_manufaktur.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:51200'],
                 'aspek_investasi' => ['nullable', 'array'],
-                'aspek_investasi.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+                'aspek_investasi.*' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:51200'],
             ]);
 
             DB::beginTransaction();
@@ -514,6 +514,95 @@ class DosenKatsinovController extends Controller
             DB::rollBack();
             Log::error('Error saving form lampiran: ' . $e->getMessage());
             return back()->withInput()->with('error', 'Gagal menyimpan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete a specific lampiran file
+     */
+    public function deleteLampiran($katsinov_id, $lampiran_id)
+    {
+        try {
+            $katsinov = Katsinov::findOrFail($katsinov_id);
+
+            if ($katsinov->user_id !== Auth::id()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized action.'
+                ], 403);
+            }
+
+            $lampiran = KatsinovLampiran::where('id', $lampiran_id)
+                ->where('katsinov_id', $katsinov_id)
+                ->firstOrFail();
+
+            // Delete file from storage
+            if (Storage::disk('public')->exists($lampiran->path)) {
+                Storage::disk('public')->delete($lampiran->path);
+            }
+
+            // Delete database record
+            $lampiran->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'File berhasil dihapus'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error deleting lampiran: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus file: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Preview a lampiran file (display PDF inline)
+     */
+    public function previewLampiran($katsinov_id, $lampiran_id)
+    {
+        try {
+            $katsinov = Katsinov::findOrFail($katsinov_id);
+
+            if ($katsinov->user_id !== Auth::id()) {
+                abort(403, 'Unauthorized action.');
+            }
+
+            $lampiran = KatsinovLampiran::where('id', $lampiran_id)
+                ->where('katsinov_id', $katsinov_id)
+                ->firstOrFail();
+
+            // Get file path
+            $filePath = storage_path('app/public/' . $lampiran->path);
+
+            if (!file_exists($filePath)) {
+                abort(404, 'File not found.');
+            }
+
+            // Get file extension
+            $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+            
+            // Determine content type
+            $contentType = match($extension) {
+                'pdf' => 'application/pdf',
+                'doc' => 'application/msword',
+                'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                default => 'application/octet-stream'
+            };
+
+            // For PDF, use inline display. For others, force download
+            $disposition = $extension === 'pdf' ? 'inline' : 'attachment';
+
+            return response()->file($filePath, [
+                'Content-Type' => $contentType,
+                'Content-Disposition' => $disposition,
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error previewing lampiran: ' . $e->getMessage());
+            abort(500, 'Error loading file preview.');
         }
     }
 
