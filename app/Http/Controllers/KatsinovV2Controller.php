@@ -17,6 +17,7 @@ use App\Models\KatsinovResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Setting;
 
 class KatsinovV2Controller extends Controller
@@ -602,6 +603,72 @@ class KatsinovV2Controller extends Controller
         $message = $isDraft ? 'Draft berhasil disimpan' : 'Lampiran berhasil diunggah';
         return redirect()->route($route, $katsinov_id)->with('success', $message);
     }
+
+    /**
+     * Preview a lampiran file (display PDF inline)
+     */
+    public function previewLampiran($katsinov_id, $lampiran_id)
+    {
+        try {
+            // Check if user is admin
+            if (!in_array(Auth::user()->role, ['admin_direktorat', 'admin_inovasi', 'validator'])) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+
+            $katsinov = Katsinov::findOrFail($katsinov_id);
+            $lampiran = KatsinovLampiran::where('id', $lampiran_id)
+                ->where('katsinov_id', $katsinov_id)
+                ->firstOrFail();
+
+            // Check if file exists using Storage facade
+            if (!Storage::disk('public')->exists($lampiran->path)) {
+                Log::error('File not found in storage', [
+                    'path' => $lampiran->path,
+                    'full_path' => storage_path('app/public/' . $lampiran->path)
+                ]);
+                return response()->json(['error' => 'File not found'], 404);
+            }
+
+            // Get file contents
+            $fileContents = Storage::disk('public')->get($lampiran->path);
+            
+            // Get file extension
+            $extension = strtolower(pathinfo($lampiran->path, PATHINFO_EXTENSION));
+            $fileName = basename($lampiran->path);
+            
+            // Determine content type
+            $contentType = match($extension) {
+                'pdf' => 'application/pdf',
+                'doc' => 'application/msword',
+                'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                default => 'application/octet-stream'
+            };
+
+            // For PDF, use inline display. For others, force download
+            $disposition = $extension === 'pdf' ? 'inline' : 'attachment';
+            
+            Log::info('Serving file', [
+                'file' => $fileName,
+                'extension' => $extension,
+                'content_type' => $contentType,
+                'size' => strlen($fileContents)
+            ]);
+
+            return response($fileContents, 200)
+                ->header('Content-Type', $contentType)
+                ->header('Content-Disposition', $disposition . '; filename="' . $fileName . '"')
+                ->header('Content-Length', strlen($fileContents));
+
+        } catch (\Exception $e) {
+            Log::error('Error previewing lampiran', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+            return response()->json(['error' => 'Error: ' . $e->getMessage()], 500);
+        }
+    }
+
 
     // Form Informasi Dasar
     public function formInformasiDasarIndex($katsinov_id)
@@ -1366,9 +1433,27 @@ class KatsinovV2Controller extends Controller
         }
         
         // Get informasi dasar
-        $informasi = $katsinov->katsinovInformasis->first();
+    $informasi = $katsinov->katsinovInformasis->first();
+    
+    // Get informasi collection data
+    $informasiCollection = [];
+    if ($informasi) {
+        $collectionData = \App\Models\KatsinovInformasiCollection::where('katsinov_informasi_id', $informasi->id)
+            ->get(['field', 'index', 'attribute', 'value'])
+            ->toArray();
         
-        // Get lampiran
+        foreach ($collectionData as $item) {
+            $field = $item['field'];
+            $index = $item['index'];
+            
+            if (!isset($informasiCollection[$field][$index])) {
+                $informasiCollection[$field][$index] = [];
+            }
+            $informasiCollection[$field][$index][$item['attribute']] = $item['value'];
+        }
+    }
+    
+    // Get lampiran
         $lampiran = $katsinov->katsinovLampirans;
         
         // Get berita acara

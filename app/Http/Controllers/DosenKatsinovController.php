@@ -564,45 +564,48 @@ class DosenKatsinovController extends Controller
     public function previewLampiran($katsinov_id, $lampiran_id)
     {
         try {
-            $katsinov = Katsinov::findOrFail($katsinov_id);
-
-            if ($katsinov->user_id !== Auth::id()) {
-                abort(403, 'Unauthorized action.');
+            // Simple authorization check
+            $user = Auth::user();
+            if (!$user) {
+                abort(403, 'Not authenticated');
             }
 
-            $lampiran = KatsinovLampiran::where('id', $lampiran_id)
-                ->where('katsinov_id', $katsinov_id)
-                ->firstOrFail();
-
-            // Get file path
-            $filePath = storage_path('app/public/' . $lampiran->path);
-
-            if (!file_exists($filePath)) {
-                abort(404, 'File not found.');
-            }
-
-            // Get file extension
-            $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+            // Get lampiran
+            $lampiran = KatsinovLampiran::findOrFail($lampiran_id);
             
-            // Determine content type
-            $contentType = match($extension) {
-                'pdf' => 'application/pdf',
-                'doc' => 'application/msword',
-                'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                default => 'application/octet-stream'
-            };
+            // Build file path
+            $filePath = storage_path('app/public/' . $lampiran->path);
+            
+            // Check if file exists
+            if (!file_exists($filePath)) {
+                // Return debug info
+                return response()->json([
+                    'error' => 'File not found',
+                    'path' => $lampiran->path,
+                    'full_path' => $filePath,
+                    'directory_exists' => is_dir(dirname($filePath)),
+                    'directory_contents' => is_dir(dirname($filePath)) ? scandir(dirname($filePath)) : []
+                ], 404);
+            }
 
-            // For PDF, use inline display. For others, force download
-            $disposition = $extension === 'pdf' ? 'inline' : 'attachment';
-
+            // Get file info
+            $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+            $mimeType = mime_content_type($filePath);
+            
+            // Return file
             return response()->file($filePath, [
-                'Content-Type' => $contentType,
-                'Content-Disposition' => $disposition,
+                'Content-Type' => $mimeType,
+                'Content-Disposition' => ($extension === 'pdf' ? 'inline' : 'attachment') . '; filename="' . basename($filePath) . '"'
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Error previewing lampiran: ' . $e->getMessage());
-            abort(500, 'Error loading file preview.');
+            // Return error details
+            return response()->json([
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => explode("\n", $e->getTraceAsString())
+            ], 500);
         }
     }
 
@@ -853,7 +856,7 @@ class DosenKatsinovController extends Controller
      */
     public function fullReport($katsinov_id)
     {
-        $katsinov = Katsinov::with(['scores', 'user', 'reviewer', 'responses'])
+        $katsinov = Katsinov::with(['scores', 'user', 'reviewer', 'responses', 'notes'])
             ->findOrFail($katsinov_id);
 
         if ($katsinov->user_id !== Auth::id()) {
@@ -876,6 +879,19 @@ class DosenKatsinovController extends Controller
         $indicatorFour = $katsinov->responses->where('indicator_number', 4);
         $indicatorFive = $katsinov->responses->where('indicator_number', 5);
         $indicatorSix = $katsinov->responses->where('indicator_number', 6);
+        
+        // Group responses by indicator for easier display
+        $responsesByIndicator = $katsinov->responses->groupBy('indicator_number');
+        
+        // Load all questions for reference
+        $allQuestions = include(resource_path('views/admin/katsinov_v2/includes/indicator_questions.php'));
+        
+        // Load form pendukung data
+        $lampiran = KatsinovLampiran::where('katsinov_id', $katsinov_id)->get();
+        $inovasiInfo = KatsinovInovasi::where('katsinov_id', $katsinov_id)->first();
+        $informasi = KatsinovInformasi::where('katsinov_id', $katsinov_id)->first();
+        $beritaAcara = KatsinovBeritaAcara::where('katsinov_id', $katsinov_id)->first();
+        $recordHasil = KatsinovRecordHasil::where('katsinov_id', $katsinov_id)->first();
 
         return view('subdirektorat-inovasi.dosen.katsinov_v2.full_report', compact(
             'katsinov',
@@ -885,7 +901,14 @@ class DosenKatsinovController extends Controller
             'indicatorFour',
             'indicatorFive',
             'indicatorSix',
-            'thresholds'
+            'thresholds',
+            'responsesByIndicator',
+            'allQuestions',
+            'lampiran',
+            'inovasiInfo',
+            'informasi',
+            'beritaAcara',
+            'recordHasil'
         ));
     }
 

@@ -385,33 +385,112 @@
             <h4 class="m-0">📎 Lampiran</h4>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-sm table-bordered">
-                    <thead class="table-light">
-                        <tr>
-                            <th width="5%">No</th>
-                            <th width="30%">Jenis Lampiran</th>
-                            <th width="40%">File</th>
-                            <th width="25%">Tanggal Upload</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($lampiran as $index => $item)
-                        <tr>
-                            <td class="text-center">{{ $index + 1 }}</td>
-                            <td>{{ $item->jenis_lampiran }}</td>
-                            <td>
-                                <a href="{{ asset('storage/' . $item->file_path) }}" target="_blank" class="btn btn-sm btn-primary">
-                                    <i class='bx bx-download'></i> Download
-                                </a>
-                                <small class="text-muted ms-2">{{ basename($item->file_path) }}</small>
-                            </td>
-                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y, H:i') }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+            @php
+                $lampiranByAspek = $lampiran->groupBy('type');
+                $aspekLabels = [
+                    'aspek_teknologi' => '🔧 Aspek Teknologi',
+                    'aspek_pasar' => '📊 Aspek Pasar',
+                    'aspek_organisasi' => '👥 Aspek Organisasi',
+                    'aspek_mitra' => '🤝 Aspek Kemitraan',
+                    'aspek_manufaktur' => '🏭 Aspek Manufaktur',
+                    'aspek_investasi' => '💰 Aspek Investasi',
+                    'aspek_risiko' => '⚠️ Aspek Risiko',
+                ];
+                
+                $categoryLabels = [
+                    // Aspek Teknologi
+                    'dokumen_perencanaan' => 'Dokumen Perencanaan',
+                    'dokumen_pelaksanaan' => 'Dokumen Pelaksanaan',
+                    'dokumen_publikasi' => 'Dokumen Publikasi',
+                    
+                    // Aspek Pasar
+                    'penelitian_pasar' => 'Hasil Penelitian Pasar',
+                    'identifkasi_segmen' => 'Identifikasi Segmen',
+                    'perhitungan_kebutuhan' => 'Perhitungan Kebutuhan Investasi',
+                    'estimasi_harga' => 'Estimasi Harga',
+                    'identifikasi_kompetitor' => 'Identifikasi Kompetitor',
+                    'model_bisnis' => 'Model Bisnis',
+                    'posisioning_pasar' => 'Posisioning Pasar',
+                    
+                    // Aspek Organisasi
+                    'strategi_inovasi' => 'Strategi Inovasi',
+                    'sdm' => 'Sumber Daya Manusia',
+                    'analisis_bisnis' => 'Analisis dan Rencana Bisnis',
+                    'struktur_bisnis' => 'Struktur Bisnis',
+                    
+                    // Aspek Kemitraan
+                    'mitra_potensial' => 'Daftar Mitra Potensial',
+                    'kerjasama' => 'Kerjasama',
+                    'pengelolaan_kerjasama' => 'Pengelolaan Kerjasama',
+                    
+                    // Aspek Manufaktur
+                    'analisis_materil' => 'Analisis Awal Solusi Material',
+                    'material_prototipe' => 'Material, Perkakas dan Alat Uji',
+                    'analisis_biaya' => 'Analisis Rincian Biaya',
+                    'proses_prosedur' => 'Proses dan Prosedur Manufaktur',
+                    'jaminan_mutu' => 'Jaminan Mutu',
+                    'lean_manufaktur' => 'Penerapan Lean Manufacturing',
+                    
+                    // Aspek Investasi
+                    'pelanggan_pasar' => 'Analisis Pelanggan, Pasar dan Pesaing',
+                    'mvp' => 'Market Value Proposition',
+                    'kondisi_produk' => 'Estimasi Kondisi Akhir Produk',
+                    'potensi_pasar' => 'Estimasi Potensi Pasar',
+                    'ekspansi_pasar' => 'Estimasi Ekspansi Pasar',
+                    
+                    // Aspek Risiko
+                    'kajian_teknologi' => 'Kajian Risiko Teknologi',
+                    'kajian_pasar' => 'Kajian Risiko Pasar',
+                    'kajian_organisasi' => 'Kajian Risiko Organisasi',
+                ];
+            @endphp
+            
+            @foreach($aspekLabels as $aspekKey => $aspekLabel)
+                @if(isset($lampiranByAspek[$aspekKey]) && $lampiranByAspek[$aspekKey]->count() > 0)
+                    <div class="mb-4">
+                        <h5 class="text-primary border-bottom pb-2 mb-3">{{ $aspekLabel }}</h5>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th width="5%">No</th>
+                                        <th width="35%">Kategori</th>
+                                        <th width="40%">File</th>
+                                        <th width="20%">Tanggal Upload</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($lampiranByAspek[$aspekKey] as $index => $item)
+                                    <tr>
+                                        <td class="text-center">{{ $index + 1 }}</td>
+                                        <td>{{ $categoryLabels[$item->category] ?? ucwords(str_replace('_', ' ', $item->category)) }}</td>
+                                        <td>
+                                            <a href="{{ url('admin_inovasi/katsinov-v2/' . $katsinov->id . '/lampiran/' . $item->id . '/preview') }}" 
+                                               class="btn btn-sm btn-info me-1">
+                                                <i class='bx bx-show'></i> Lihat
+                                            </a>
+                                            <a href="{{ Storage::url($item->path) }}" 
+                                               download 
+                                               class="btn btn-sm btn-primary">
+                                                <i class='bx bx-download'></i> Unduh
+                                            </a>
+                                            <small class="text-muted ms-2">{{ basename($item->path) }}</small>
+                                        </td>
+                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y, H:i') }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                @endif
+            @endforeach
+            
+            @if($lampiranByAspek->isEmpty())
+                <div class="alert alert-info">
+                    <i class='bx bx-info-circle'></i> Belum ada lampiran yang diupload.
+                </div>
+            @endif
         </div>
     </div>
     @endif

@@ -36,6 +36,7 @@ Route::prefix('admin_inovasi')->name('admin_inovasi.')
                 Route::post('/{katsinov_id}/form-inovasi', [\App\Http\Controllers\KatsinovV2Controller::class, 'formInovasiStore'])->name('form-inovasi.store');
                 Route::get('/{katsinov_id}/form-lampiran', [\App\Http\Controllers\KatsinovV2Controller::class, 'formLampiranIndex'])->name('form-lampiran');
                 Route::post('/{katsinov_id}/form-lampiran', [\App\Http\Controllers\KatsinovV2Controller::class, 'formLampiranStore'])->name('form-lampiran.store');
+                Route::get('/{katsinov_id}/lampiran/{lampiran_id}/preview', [\App\Http\Controllers\KatsinovV2Controller::class, 'previewLampiran'])->name('lampiran.preview');
                 Route::get('/{katsinov_id}/form-informasi-dasar', [\App\Http\Controllers\KatsinovV2Controller::class, 'formInformasiDasarIndex'])->name('form-informasi-dasar');
                 Route::post('/{katsinov_id}/form-informasi-dasar', [\App\Http\Controllers\KatsinovV2Controller::class, 'formInformasiDasarStore'])->name('form-informasi-dasar.store');
                 Route::get('/{katsinov_id}/form-berita-acara', [\App\Http\Controllers\KatsinovV2Controller::class, 'formBeritaAcaraIndex'])->name('form-berita-acara');
@@ -95,6 +96,17 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                         Route::get('/{katsinov_id}/form-lampiran', [\App\Http\Controllers\DosenKatsinovController::class, 'formLampiranIndex'])->name('form-lampiran');
                         Route::post('/{katsinov_id}/form-lampiran', [\App\Http\Controllers\DosenKatsinovController::class, 'formLampiranStore'])->name('form-lampiran.store');
                         Route::delete('/{katsinov_id}/lampiran/{lampiran_id}', [\App\Http\Controllers\DosenKatsinovController::class, 'deleteLampiran'])->name('lampiran.delete');
+                        
+                        // Test route
+                        Route::get('/{katsinov_id}/lampiran/{lampiran_id}/test', function($katsinov_id, $lampiran_id) {
+                            return response()->json([
+                                'message' => 'Route works!',
+                                'katsinov_id' => $katsinov_id,
+                                'lampiran_id' => $lampiran_id,
+                                'user' => Auth::user()->name ?? 'Guest'
+                            ]);
+                        })->name('lampiran.test');
+                        
                         Route::get('/{katsinov_id}/lampiran/{lampiran_id}/preview', [\App\Http\Controllers\DosenKatsinovController::class, 'previewLampiran'])->name('lampiran.preview');
                         
                         Route::get('/{katsinov_id}/form-informasi-dasar', [\App\Http\Controllers\DosenKatsinovController::class, 'formInformasiDasarIndex'])->name('form-informasi-dasar');

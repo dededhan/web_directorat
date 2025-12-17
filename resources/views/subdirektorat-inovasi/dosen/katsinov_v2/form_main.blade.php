@@ -650,6 +650,28 @@ function previousIndicator() {
 }
 
 function saveAsDraft() {
+    // Validate required fields first
+    const form = document.getElementById('katsinovForm');
+    const requiredFields = form.querySelectorAll('[required]');
+    const emptyFields = [];
+    
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            emptyFields.push(field.previousElementSibling?.textContent.replace('*', '').trim() || field.name);
+        }
+    });
+    
+    if (emptyFields.length > 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Field Wajib Belum Diisi!',
+            html: `Mohon lengkapi field berikut:<br><br><strong>${emptyFields.join('<br>')}</strong>`,
+            confirmButtonColor: '#f59e0b',
+            footer: 'Semua field dengan tanda bintang (*) wajib diisi'
+        });
+        return;
+    }
+    
     if (confirm('Simpan sebagai draft? Data Anda akan tersimpan dan dapat dilanjutkan nanti.')) {
         const formData = new FormData(document.getElementById('katsinovForm'));
         formData.append('save_as_draft', '1');
@@ -745,18 +767,53 @@ function sendData(formData, successMessage) {
         },
         body: JSON.stringify(jsonData)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                throw err;
+            });
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.id) {
-            alert(successMessage);
-            window.location.href = '{{ route("subdirektorat-inovasi.dosen.katsinov-v2.index") }}';
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: successMessage,
+                confirmButtonColor: '#3085d6'
+            }).then(() => {
+                window.location.href = '{{ route("subdirektorat-inovasi.dosen.katsinov-v2.index") }}';
+            });
         } else {
-            alert('Error: ' + (data.message || 'Terjadi kesalahan'));
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: data.message || 'Terjadi kesalahan saat menyimpan data',
+                confirmButtonColor: '#d33'
+            });
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Terjadi kesalahan saat menyimpan data');
+        
+        let errorMessage = 'Terjadi kesalahan saat menyimpan data';
+        
+        // Check for validation errors
+        if (error.errors) {
+            const errorList = Object.values(error.errors).flat();
+            errorMessage = errorList.join('<br>');
+        } else if (error.message) {
+            errorMessage = error.message;
+        }
+        
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal Menyimpan!',
+            html: errorMessage,
+            confirmButtonColor: '#d33',
+            footer: 'Pastikan semua field yang wajib diisi sudah terisi dengan benar'
+        });
     });
 }
 
