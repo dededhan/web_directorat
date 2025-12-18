@@ -166,18 +166,7 @@
                         </table>
                     </div>
 
-                    {{-- Note untuk Indikator --}}
-                    @php
-                        $note = $katsinov->notes->firstWhere('indicator_number', $indicatorNum);
-                    @endphp
-                    @if($note && $note->notes)
-                        <div class="mt-3 p-3 bg-warning bg-opacity-10 border-start border-warning border-4 rounded">
-                            <h6 class="text-warning mb-2">
-                                <i class='bx bx-note'></i> Catatan KATSINOV {{ $indicatorNum }}
-                            </h6>
-                            <p class="mb-0 text-dark">{{ $note->notes }}</p>
-                        </div>
-                    @endif
+
                 </div>
             @empty
                 <div class="alert alert-warning">
@@ -194,100 +183,92 @@
             <h4 class="m-0">💡 Form Judul Inovasi</h4>
         </div>
         <div class="card-body">
-            {{-- Title & Sub Title --}}
+            {{-- Section 1: Informasi Inovasi --}}
             <div class="mb-4">
-                <h5 class="text-primary border-bottom pb-2">Judul & Sub Judul</h5>
+                <h6 class="text-primary border-bottom pb-2 mb-3">
+                    <i class='bx bx-info-circle'></i> 1. Informasi Inovasi
+                </h6>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Judul Inovasi</label>
+                    <input type="text" class="form-control" value="{{ $inovasiInfo->title ?? '-' }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Sub Judul</label>
+                    <input type="text" class="form-control" value="{{ $inovasiInfo->sub_title ?? '-' }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Pendahuluan</label>
+                    <textarea class="form-control" rows="5" readonly>{{ $inovasiInfo->introduction ?? '-' }}</textarea>
+                    <small class="text-muted">Latar belakang, permasalahan, dan tujuan inovasi</small>
+                </div>
+            </div>
+
+            {{-- Section 2: Produk & Teknologi --}}
+            <div class="mb-4">
+                <h6 class="text-success border-bottom pb-2 mb-3">
+                    <i class='bx bx-chip'></i> 2. Produk & Teknologi
+                </h6>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Produk Teknologi</label>
+                    <textarea class="form-control" rows="5" readonly>{{ $inovasiInfo->tech_product ?? '-' }}</textarea>
+                    <small class="text-muted">Deskripsi detail produk atau teknologi yang dihasilkan</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Keunggulan</label>
+                    <textarea class="form-control" rows="4" readonly>{{ $inovasiInfo->supremacy ?? '-' }}</textarea>
+                    <small class="text-muted">Keunggulan dan nilai tambah inovasi</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Status Paten/HKI</label>
+                    <textarea class="form-control" rows="3" readonly>{{ $inovasiInfo->patent ?? '-' }}</textarea>
+                    <small class="text-muted">Status paten atau hak kekayaan intelektual</small>
+                </div>
+            </div>
+
+            {{-- Section 3: Tingkat Kesiapan --}}
+            <div class="mb-4">
+                <h6 class="text-purple border-bottom pb-2 mb-3">
+                    <i class='bx bx-check-circle'></i> 3. Tingkat Kesiapan
+                </h6>
                 <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <strong>Judul Inovasi:</strong>
-                        <p class="mt-1 text-muted">{{ $inovasiInfo->title ?? '-' }}</p>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Kesiapan Teknologi (TRL)</label>
+                        <textarea class="form-control" rows="4" readonly>{{ $inovasiInfo->tech_preparation ?? '-' }}</textarea>
+                        <small class="text-muted">Level 1-9, tingkat kematangan teknologi</small>
                     </div>
-                    <div class="col-md-12 mb-3">
-                        <strong>Sub Judul:</strong>
-                        <p class="mt-1 text-muted">{{ $inovasiInfo->sub_title ?? '-' }}</p>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Kesiapan Pasar (MRL)</label>
+                        <textarea class="form-control" rows="4" readonly>{{ $inovasiInfo->market_preparation ?? '-' }}</textarea>
+                        <small class="text-muted">Kesiapan pasar dan calon pengguna</small>
                     </div>
                 </div>
             </div>
 
-            {{-- Introduction --}}
-            @if($inovasiInfo->introduction)
+            {{-- Section 4: Kontak Person --}}
             <div class="mb-4">
-                <h5 class="text-primary border-bottom pb-2">Pengantar / Latar Belakang</h5>
-                <p class="text-justify">{{ $inovasiInfo->introduction }}</p>
-            </div>
-            @endif
-
-            {{-- Tech Product --}}
-            @if($inovasiInfo->tech_product)
-            <div class="mb-4">
-                <h5 class="text-primary border-bottom pb-2">Produk Teknologi</h5>
-                <p class="text-justify">{{ $inovasiInfo->tech_product }}</p>
-            </div>
-            @endif
-
-            {{-- Supremacy --}}
-            @if($inovasiInfo->supremacy)
-            <div class="mb-4">
-                <h5 class="text-primary border-bottom pb-2">Keunggulan</h5>
-                <p class="text-justify">{{ $inovasiInfo->supremacy }}</p>
-            </div>
-            @endif
-
-            {{-- Patent --}}
-            @if($inovasiInfo->patent)
-            <div class="mb-4">
-                <h5 class="text-primary border-bottom pb-2">Paten / Hak Kekayaan Intelektual</h5>
-                <p class="text-justify">{{ $inovasiInfo->patent }}</p>
-            </div>
-            @endif
-
-            {{-- Tech Preparation --}}
-            @if($inovasiInfo->tech_preparation)
-            <div class="mb-4">
-                <h5 class="text-primary border-bottom pb-2">Kesiapan Teknologi</h5>
-                <p class="text-justify">{{ $inovasiInfo->tech_preparation }}</p>
-            </div>
-            @endif
-
-            {{-- Market Preparation --}}
-            @if($inovasiInfo->market_preparation)
-            <div class="mb-4">
-                <h5 class="text-primary border-bottom pb-2">Kesiapan Pasar</h5>
-                <p class="text-justify">{{ $inovasiInfo->market_preparation }}</p>
-            </div>
-            @endif
-
-            {{-- Contact Information --}}
-            <div class="mb-4">
-                <h5 class="text-primary border-bottom pb-2">Informasi Kontak</h5>
+                <h6 class="text-warning border-bottom pb-2 mb-3">
+                    <i class='bx bx-user'></i> 4. Kontak Person
+                </h6>
                 <div class="row">
-                    <div class="col-md-6">
-                        <table class="table table-sm table-borderless">
-                            <tr>
-                                <th width="40%">Nama:</th>
-                                <td>{{ $inovasiInfo->name ?? '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Telepon:</th>
-                                <td>{{ $inovasiInfo->phone ?? '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Mobile:</th>
-                                <td>{{ $inovasiInfo->mobile ?? '-' }}</td>
-                            </tr>
-                        </table>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Nama Lengkap</label>
+                        <input type="text" class="form-control" value="{{ $inovasiInfo->name ?? '-' }}" readonly>
                     </div>
-                    <div class="col-md-6">
-                        <table class="table table-sm table-borderless">
-                            <tr>
-                                <th width="40%">Fax:</th>
-                                <td>{{ $inovasiInfo->fax ?? '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Email:</th>
-                                <td>{{ $inovasiInfo->email ?? '-' }}</td>
-                            </tr>
-                        </table>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Email</label>
+                        <input type="email" class="form-control" value="{{ $inovasiInfo->email ?? '-' }}" readonly>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold">Telepon</label>
+                        <input type="text" class="form-control" value="{{ $inovasiInfo->phone ?? '-' }}" readonly>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold">Mobile/HP</label>
+                        <input type="text" class="form-control" value="{{ $inovasiInfo->mobile ?? '-' }}" readonly>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold">Fax</label>
+                        <input type="text" class="form-control" value="{{ $inovasiInfo->fax ?? '-' }}" readonly>
                     </div>
                 </div>
             </div>
@@ -297,83 +278,354 @@
 
     {{-- Informasi Dasar --}}
     @if($informasi)
+    @php
+        // Get collection data
+        $collections = \App\Models\KatsinovInformasiCollection::where(
+            'katsinov_informasi_id',
+            $informasi->id,
+        )->get();
+
+        // Group by field and index
+        $informasiTeam = [];
+        $informasiProgram = [];
+        $informasiPartner = [];
+        $informasiTech = [];
+        $informasiMarket = [];
+
+        foreach ($collections as $collection) {
+            $field = $collection->field;
+            $index = $collection->index;
+            $attribute = $collection->attribute;
+            $value = $collection->value;
+
+            if ($field == 'team') {
+                if (!isset($informasiTeam[$index])) {
+                    $informasiTeam[$index] = [];
+                }
+                $informasiTeam[$index][$attribute] = $value;
+            } elseif ($field == 'program_implementation') {
+                if (!isset($informasiProgram[$index])) {
+                    $informasiProgram[$index] = [];
+                }
+                $informasiProgram[$index][$attribute] = $value;
+            } elseif ($field == 'innovation_partner') {
+                if (!isset($informasiPartner[$index])) {
+                    $informasiPartner[$index] = [];
+                }
+                $informasiPartner[$index][$attribute] = $value;
+            } elseif ($field == 'information_tech') {
+                if (!isset($informasiTech[$index])) {
+                    $informasiTech[$index] = [];
+                }
+                $informasiTech[$index][$attribute] = $value;
+            } elseif ($field == 'information_market') {
+                if (!isset($informasiMarket[$index])) {
+                    $informasiMarket[$index] = [];
+                }
+                $informasiMarket[$index][$attribute] = $value;
+            }
+        }
+    @endphp
+
     <div class="card mb-4 shadow-sm">
         <div class="card-header bg-warning text-dark">
-            <h4 class="m-0">📄 Informasi Dasar</h4>
+            <h4 class="m-0">📄 Form Informasi Dasar</h4>
         </div>
         <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <table class="table table-sm table-borderless">
-                        <tr>
-                            <th width="40%">PIC:</th>
-                            <td>{{ $informasi->pic ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Institusi:</th>
-                            <td>{{ $informasi->institution ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Alamat:</th>
-                            <td>{{ $informasi->address ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Telepon:</th>
-                            <td>{{ $informasi->phone ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Fax:</th>
-                            <td>{{ $informasi->fax ?? '-' }}</td>
-                        </tr>
-                    </table>
+            {{-- Section 1: Informasi Inovator --}}
+            <div class="mb-4">
+                <h6 class="text-primary border-bottom pb-2 mb-3">
+                    <i class='bx bx-user-circle'></i> 1. Informasi Inovator
+                </h6>
+
+                {{-- Subsection a --}}
+                <div class="mb-4">
+                    <p class="fw-bold mb-3">a) Penanggung jawab / Pusat / Alamat Kontak / Telp / Faks</p>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Nama Penanggungjawab</label>
+                            <input type="text" class="form-control" value="{{ $informasi->pic ?? '-' }}" readonly>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Institusi</label>
+                            <input type="text" class="form-control" value="{{ $informasi->institution ?? '-' }}" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Alamat Kontak</label>
+                        <textarea class="form-control" rows="2" readonly>{{ $informasi->address ?? '-' }}</textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Phone</label>
+                            <input type="text" class="form-control" value="{{ $informasi->phone ?? '-' }}" readonly>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Fax</label>
+                            <input type="text" class="form-control" value="{{ $informasi->fax ?? '-' }}" readonly>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <table class="table table-sm table-borderless">
-                        <tr>
-                            <th width="40%">Judul Inovasi:</th>
-                            <td>{{ $informasi->innovation_title ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Nama Inovasi:</th>
-                            <td>{{ $informasi->innovation_name ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Jenis:</th>
-                            <td>{{ $informasi->innovation_type ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Bidang:</th>
-                            <td>{{ $informasi->innovation_field ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Durasi:</th>
-                            <td>{{ $informasi->innovation_duration ?? '-' }}</td>
-                        </tr>
-                    </table>
+
+                {{-- Subsection b --}}
+                <div class="mb-4">
+                    <p class="fw-bold mb-3">b) Anggota Tim (Team Member)</p>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="50">No.</th>
+                                    <th>Nama</th>
+                                    <th>Keahlian</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($informasiTeam as $index => $team)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $team['name'] ?? '-' }}</td>
+                                        <td>{{ $team['skill'] ?? '-' }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted">Tidak ada data tim</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            
-            @if($informasi->innovation_summary)
-            <hr>
-            <div class="mb-3">
-                <strong>Ringkasan:</strong>
-                <p class="mt-2">{{ $informasi->innovation_summary }}</p>
+
+            {{-- Section 2: Informasi Tentang Inovasi --}}
+            <div class="mb-4">
+                <h6 class="text-success border-bottom pb-2 mb-3">
+                    <i class='bx bx-bulb'></i> 2. Informasi Tentang Inovasi Yang Dilaksanakan
+                </h6>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">a) Judul Inovasi</label>
+                    <input type="text" class="form-control" value="{{ $informasi->innovation_title ?? '-' }}" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">b) Nama Program</label>
+                    <input type="text" class="form-control" value="{{ $informasi->innovation_name ?? '-' }}" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">c) Jenis Inovasi</label>
+                    <input type="text" class="form-control" value="{{ ucfirst($informasi->innovation_type ?? '-') }}" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">d) Bidang Inovasi</label>
+                    <input type="text" class="form-control" value="{{ ucfirst($informasi->innovation_field ?? '-') }}" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">e) Aplikasi dan Manfaat Inovasi</label>
+                    <textarea class="form-control" rows="3" readonly>{{ $informasi->innovation_application ?? '-' }}</textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">f) Pelaksanaan Program/Kegiatan</label>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Lama program yang direncanakan (tahun)</label>
+                            <input type="text" class="form-control" value="{{ $informasi->innovation_duration ?? '-' }}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Program yang berjalan tahun ke-</label>
+                            <input type="text" class="form-control" value="{{ $informasi->innovation_year ?? '-' }}" readonly>
+                        </div>
+                    </div>
+
+                    <label class="form-label fw-bold mt-3">Sumber Pendanaan</label>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="50">No</th>
+                                    <th>Tahun ke-</th>
+                                    <th>Total Dana</th>
+                                    <th>Sumber Dana</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($informasiProgram as $index => $program)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $program['year'] ?? '-' }}</td>
+                                        <td>{{ $program['funds'] ?? '-' }}</td>
+                                        <td>{{ $program['source'] ?? '-' }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">Tidak ada data pendanaan</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">g) Mitra Dalam Inovasi</label>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="50">No</th>
+                                    <th>Nama Mitra</th>
+                                    <th>Alamat Mitra</th>
+                                    <th>Peran Mitra</th>
+                                    <th>Status Kerjasama</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($informasiPartner as $index => $partner)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $partner['name'] ?? '-' }}</td>
+                                        <td>{{ $partner['address'] ?? '-' }}</td>
+                                        <td>{{ $partner['role'] ?? '-' }}</td>
+                                        <td>{{ $partner['cooperation'] ?? '-' }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">Tidak ada data mitra</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">h) Ringkasan Inovasi</label>
+                    <textarea class="form-control" rows="3" readonly>{{ $informasi->innovation_summary ?? '-' }}</textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">i) Kebaruan dan Keunggulan Inovasi</label>
+                    <div class="mb-2">
+                        <label class="form-label">Kebaruan yang ditawarkan</label>
+                        <textarea class="form-control" rows="2" readonly>{{ $informasi->innovation_novelty ?? '-' }}</textarea>
+                    </div>
+                    <div>
+                        <label class="form-label">Keunggulan yang membedakan</label>
+                        <textarea class="form-control" rows="2" readonly>{{ $informasi->innovation_supremacy ?? '-' }}</textarea>
+                    </div>
+                </div>
             </div>
-            @endif
-            
-            @if($informasi->innovation_novelty)
-            <div class="mb-3">
-                <strong>Kebaruan:</strong>
-                <p class="mt-2">{{ $informasi->innovation_novelty }}</p>
+
+            {{-- Section 3: Informasi Kemajuan Inovasi --}}
+            <div class="mb-4">
+                <h6 class="text-info border-bottom pb-2 mb-3">
+                    <i class='bx bx-trending-up'></i> 3. Informasi Tentang Kemajuan Inovasi
+                </h6>
+
+                {{-- Pengembangan Teknologi --}}
+                <div class="mb-4">
+                    <p class="fw-bold mb-3">A) Pengembangan Teknologi</p>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="50">No</th>
+                                    <th>Uraian</th>
+                                    <th width="150">Status</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $techDescriptions = [
+                                        'Pengembangan prinsip dasar / Ide teknologi',
+                                        'Formulasi Konsep dan/atau aplikasi teknologi',
+                                        'Pembuatan prototipe',
+                                        'Hasil uji Prototipe dapat berfungsi baik',
+                                        'Percobaan fungsi utama prototipe dalam lingkungan yang relevan (simulasi)',
+                                        'Validasi prototipe pada lingkungan yang relevan (simulasi)',
+                                        'Validasi prototipe pada lingkungan yang sebenarnya',
+                                        'Ujicoba/demonstrasi prototipe pada lingkungan yg relevan',
+                                        'Ujicoba/demonstrasi prototipe pada lingkungan yg sebenarnya',
+                                        'Telah dimanfaatkan sesuai fungsi yang dirancang / telah teruji / proven',
+                                    ];
+                                @endphp
+                                @foreach ($techDescriptions as $index => $description)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $description }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ isset($informasiTech[$index]) && $informasiTech[$index]['status'] == 'sudah' ? 'success' : 'secondary' }}">
+                                                {{ isset($informasiTech[$index]) ? ucfirst($informasiTech[$index]['status'] ?? '-') : '-' }}
+                                            </span>
+                                        </td>
+                                        <td>{{ isset($informasiTech[$index]) ? $informasiTech[$index]['explanation'] ?? '-' : '-' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {{-- Evolusi Pasar --}}
+                <div class="mb-4">
+                    <p class="fw-bold mb-3">B) Evolusi Pasar</p>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="50">No</th>
+                                    <th>Uraian</th>
+                                    <th width="150">Status</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $marketDescriptions = [
+                                        'Kebutuhan dan permintaan pelanggan teramati',
+                                        'Pelanggan akhir teridentifikasi',
+                                        'Telah dikeluarkan rencana luncuran pasar secara rinci',
+                                        'Kebutuhan khusus dan keperluan pelanggan telah diketahui',
+                                        'Segmen, ukuran dan pangsa pasar telah diprediksi',
+                                        'Telah dikeluarkan harga dan luncuran produk',
+                                        'Posisioning pasar',
+                                        'Model bisnis ditetapkan',
+                                        'Pemasaran ditekankan pada pengenalan dengan baik para pelanggannya',
+                                        'Pesaing diidentifikasi dengan baik',
+                                        'Menggunakan kemitraan untuk memasuki pasar',
+                                        'Diferensiasi produk',
+                                        'Menyediakan pelayanan dan solusi',
+                                        'Dilakukan review secara periodik',
+                                        'Penyempurnaan model bisnis',
+                                        'Menggunakan kemitraan untuk berkompetisi',
+                                        'Penurunan pasar telah dikonfirmasi',
+                                        'Riset pasar untuk persetujuan inovasi ulang atau meninggalkannya',
+                                        'Review permintaan pasar',
+                                        'Identifikasi peluang tumbuhnya pasar atau ekspansi pasar baru',
+                                    ];
+                                @endphp
+                                @foreach ($marketDescriptions as $index => $description)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $description }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ isset($informasiMarket[$index]) && $informasiMarket[$index]['status'] == 'sudah' ? 'success' : 'secondary' }}">
+                                                {{ isset($informasiMarket[$index]) ? ucfirst($informasiMarket[$index]['status'] ?? '-') : '-' }}
+                                            </span>
+                                        </td>
+                                        <td>{{ isset($informasiMarket[$index]) ? $informasiMarket[$index]['explanation'] ?? '-' : '-' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            @endif
-            
-            @if($informasi->innovation_supremacy)
-            <div class="mb-3">
-                <strong>Keunggulan:</strong>
-                <p class="mt-2">{{ $informasi->innovation_supremacy }}</p>
-            </div>
-            @endif
         </div>
     </div>
     @endif
@@ -469,11 +721,7 @@
                                                class="btn btn-sm btn-info me-1">
                                                 <i class='bx bx-show'></i> Lihat
                                             </a>
-                                            <a href="{{ Storage::url($item->path) }}" 
-                                               download 
-                                               class="btn btn-sm btn-primary">
-                                                <i class='bx bx-download'></i> Unduh
-                                            </a>
+
                                             <small class="text-muted ms-2">{{ basename($item->path) }}</small>
                                         </td>
                                         <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y, H:i') }}</td>
@@ -495,291 +743,11 @@
     </div>
     @endif
 
-    {{-- Form Berita Acara --}}
-    @if($beritaAcara)
-    <div class="card mb-4 shadow-sm">
-        <div class="card-header bg-dark text-white">
-            <h4 class="m-0">📜 Form Berita Acara Penilaian</h4>
-        </div>
-        <div class="card-body">
-            {{-- Date and Place Information --}}
-            <div class="mb-4">
-                <h5 class="text-primary border-bottom pb-2">Waktu & Tempat</h5>
-                <div class="row">
-                    <div class="col-md-6">
-                        <table class="table table-sm table-borderless">
-                            <tr>
-                                <th width="40%">Hari:</th>
-                                <td>{{ $beritaAcara->day ?? '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Tanggal:</th>
-                                <td>{{ $beritaAcara->date ?? '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Bulan:</th>
-                                <td>{{ $beritaAcara->month ?? '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Tahun:</th>
-                                <td>{{ $beritaAcara->year ?? ($beritaAcara->yearfull ?? '-') }}</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <table class="table table-sm table-borderless">
-                            <tr>
-                                <th width="40%">Tempat:</th>
-                                <td>{{ $beritaAcara->place ?? '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Surat Keputusan:</th>
-                                <td>{{ $beritaAcara->decree ?? '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Tanggal Pengesahan:</th>
-                                <td>{{ $beritaAcara->sign_date ? \Carbon\Carbon::parse($beritaAcara->sign_date)->format('d M Y') : '-' }}</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
 
-            {{-- Innovation Details --}}
-            <div class="mb-4">
-                <h5 class="text-primary border-bottom pb-2">Detail Inovasi</h5>
-                <div class="row">
-                    <div class="col-md-12">
-                        <table class="table table-sm table-borderless">
-                            <tr>
-                                <th width="20%">Judul Inovasi:</th>
-                                <td>{{ $beritaAcara->title ?? '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Jenis Inovasi:</th>
-                                <td>{{ $beritaAcara->type ?? '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Nilai TKI (Tingkat Kesiapan Inovasi):</th>
-                                <td>
-                                    <span class="badge bg-primary fs-6">{{ $beritaAcara->tki ?? '-' }}</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
 
-            {{-- Assessment Team --}}
-            <div class="mb-4">
-                <h5 class="text-primary border-bottom pb-2">Tim Penilai</h5>
-                <div class="table-responsive">
-                    <table class="table table-sm table-bordered">
-                        <thead class="table-light">
-                            <tr>
-                                <th width="25%">Posisi</th>
-                                <th width="25%">Nama</th>
-                                <th width="25%">Tanda Tangan</th>
-                                <th width="25%">PDF/Dokumen</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Penanggung Jawab</strong></td>
-                                <td>{{ $beritaAcara->penanggungjawab ?? '-' }}</td>
-                                <td class="text-center">
-                                    @if($beritaAcara->penanggungjawab_signature)
-                                        <img src="{{ asset('storage/' . $beritaAcara->penanggungjawab_signature) }}" 
-                                             alt="Signature" 
-                                             style="max-width: 150px; max-height: 60px; border: 1px solid #ddd; padding: 5px;">
-                                    @else
-                                        <span class="text-muted">Belum TTD</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($beritaAcara->penanggungjawab_pdf)
-                                        <a href="{{ asset('storage/' . $beritaAcara->penanggungjawab_pdf) }}" target="_blank" class="btn btn-sm btn-info">
-                                            <i class='bx bx-file-pdf'></i> PDF
-                                        </a>
-                                    @else
-                                        <span class="text-muted">-</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><strong>Ketua Tim</strong></td>
-                                <td>{{ $beritaAcara->ketua ?? '-' }}</td>
-                                <td class="text-center">
-                                    @if($beritaAcara->ketua_signature)
-                                        <img src="{{ asset('storage/' . $beritaAcara->ketua_signature) }}" 
-                                             alt="Signature" 
-                                             style="max-width: 150px; max-height: 60px; border: 1px solid #ddd; padding: 5px;">
-                                    @else
-                                        <span class="text-muted">Belum TTD</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($beritaAcara->ketua_pdf)
-                                        <a href="{{ asset('storage/' . $beritaAcara->ketua_pdf) }}" target="_blank" class="btn btn-sm btn-info">
-                                            <i class='bx bx-file-pdf'></i> PDF
-                                        </a>
-                                    @else
-                                        <span class="text-muted">-</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><strong>Anggota 1</strong></td>
-                                <td>{{ $beritaAcara->anggota1 ?? '-' }}</td>
-                                <td class="text-center">
-                                    @if($beritaAcara->anggota1_signature)
-                                        <img src="{{ asset('storage/' . $beritaAcara->anggota1_signature) }}" 
-                                             alt="Signature" 
-                                             style="max-width: 150px; max-height: 60px; border: 1px solid #ddd; padding: 5px;">
-                                    @else
-                                        <span class="text-muted">Belum TTD</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($beritaAcara->anggota1_pdf)
-                                        <a href="{{ asset('storage/' . $beritaAcara->anggota1_pdf) }}" target="_blank" class="btn btn-sm btn-info">
-                                            <i class='bx bx-file-pdf'></i> PDF
-                                        </a>
-                                    @else
-                                        <span class="text-muted">-</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><strong>Anggota 2</strong></td>
-                                <td>{{ $beritaAcara->anggota2 ?? '-' }}</td>
-                                <td class="text-center">
-                                    @if($beritaAcara->anggota2_signature)
-                                        <img src="{{ asset('storage/' . $beritaAcara->anggota2_signature) }}" 
-                                             alt="Signature" 
-                                             style="max-width: 150px; max-height: 60px; border: 1px solid #ddd; padding: 5px;">
-                                    @else
-                                        <span class="text-muted">Belum TTD</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($beritaAcara->anggota2_pdf)
-                                        <a href="{{ asset('storage/' . $beritaAcara->anggota2_pdf) }}" target="_blank" class="btn btn-sm btn-info">
-                                            <i class='bx bx-file-pdf'></i> PDF
-                                        </a>
-                                    @else
-                                        <span class="text-muted">-</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            {{-- Opinion --}}
-            @if($beritaAcara->opinion)
-            <div class="mb-4">
-                <h5 class="text-primary border-bottom pb-2">Opini Penilai</h5>
-                <div class="alert alert-info">
-                    <p class="mb-0 text-justify">{{ $beritaAcara->opinion }}</p>
-                </div>
-            </div>
-            @endif
-        </div>
-    </div>
-    @endif
 
-    {{-- Record Hasil Pengukuran --}}
-    @if($recordHasil)
-    <div class="card mb-4 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h4 class="m-0">📊 Record Hasil Pengukuran</h4>
-        </div>
-        <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <table class="table table-sm table-borderless">
-                        <tr>
-                            <th width="40%">Penanggung Jawab:</th>
-                            <td>{{ $recordHasil->nama_penanggung_jawab ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Institusi:</th>
-                            <td>{{ $recordHasil->institusi ?? '-' }}</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="col-md-6">
-                    <table class="table table-sm table-borderless">
-                        <tr>
-                            <th width="40%">Tanggal Penilaian:</th>
-                            <td>{{ $recordHasil->tanggal_penilaian ? \Carbon\Carbon::parse($recordHasil->tanggal_penilaian)->format('d M Y') : '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Kontak:</th>
-                            <td>{{ $recordHasil->phone ?? '-' }}</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            
-            <div class="table-responsive">
-                <table class="table table-sm table-bordered">
-                    <thead class="table-light">
-                        <tr>
-                            <th width="5%">No</th>
-                            <th width="20%">Aspek</th>
-                            <th width="25%">Aktivitas</th>
-                            <th width="10%" class="text-center">Capaian</th>
-                            <th width="20%">Keterangan</th>
-                            <th width="20%">Catatan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for($i = 1; $i <= 5; $i++)
-                        <tr>
-                            <td class="text-center">{{ $i }}</td>
-                            <td>{{ $recordHasil->{"aspek_$i"} ?? '-' }}</td>
-                            <td>{{ $recordHasil->{"aktivitas_$i"} ?? '-' }}</td>
-                            <td class="text-center">
-                                <span class="badge bg-primary">{{ $recordHasil->{"capaian_$i"} ?? 0 }}</span>
-                            </td>
-                            <td>{{ $recordHasil->{"keterangan_$i"} ?? '-' }}</td>
-                            <td>{{ $recordHasil->{"catatan_$i"} ?? '-' }}</td>
-                        </tr>
-                        @endfor
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    @endif
 
-    {{-- Notes from Reviewer --}}
-    @if($katsinov->notes && $katsinov->notes->count() > 0)
-    <div class="card mb-4 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h4 class="m-0">💬 Catatan Reviewer</h4>
-        </div>
-        <div class="card-body">
-            @foreach($katsinov->notes as $note)
-            <div class="card mb-3 border-start border-danger border-3">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <div>
-                            <strong>{{ $note->reviewer->name ?? 'Reviewer' }}</strong>
-                            <small class="text-muted ms-2">{{ \Carbon\Carbon::parse($note->created_at)->format('d M Y, H:i') }}</small>
-                        </div>
-                        <span class="badge bg-info">Indicator {{ $note->indicator_number }}</span>
-                    </div>
-                    <p class="mb-0">{{ $note->note }}</p>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
+
 
     {{-- Action Buttons --}}
     <div class="card shadow-sm">
