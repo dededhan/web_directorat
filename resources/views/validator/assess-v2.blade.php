@@ -845,7 +845,7 @@
                     pada hari dan tanggal, bulan, tahun tersebut di atas.
                 </p>
 
-                <h5 class="mt-5 mb-4">Tanda Tangan</h5>
+                <h5 class="mt-5 mb-4">Tanda Tangan Digital</h5>
 
                 <div class="row mb-4">
                     <div class="col-md-6">
@@ -853,22 +853,30 @@
                             <div class="card-body">
                                 <h6 class="card-title"><strong>Penanggungjawab Inovasi</strong></h6>
                                 <div class="mb-3">
-                                    <label class="form-label">Upload Tanda Tangan (PDF)</label>
-                                    <input type="file" class="form-control" name="penanggungjawab_pdf"
-                                        accept=".pdf">
-                                    @if ($beritaAcara && $beritaAcara->penanggungjawab_pdf)
-                                        <div class="mt-2">
-                                            <a href="{{ route('validator.berita-acara.signature.view', ['formId' => $form->id, 'type' => 'penanggungjawab']) }}"
-                                                target="_blank" class="btn btn-sm btn-outline-success">
-                                                <i class='bx bx-file-pdf'></i> Lihat PDF
-                                            </a>
-                                        </div>
-                                    @endif
-                                </div>
-                                <div class="mb-3">
                                     <label class="form-label">Nama Penanggungjawab</label>
                                     <input type="text" class="form-control" name="penanggungjawab"
                                         value="{{ $beritaAcara->penanggungjawab ?? '' }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    @if ($beritaAcara && $beritaAcara->penanggungjawab_signature)
+                                        <label class="form-label"><strong>Tanda Tangan (Tersimpan)</strong></label>
+                                        <div class="border rounded p-3 bg-light">
+                                            <img src="{{ $beritaAcara->penanggungjawab_signature }}" alt="Signature Penanggungjawab"
+                                                style="max-width: 100%; height: auto; border: 1px solid #ddd;">
+                                        </div>
+                                    @else
+                                        <label class="form-label"><strong>Tanda Tangan Digital</strong></label>
+                                        <div class="border rounded p-3">
+                                            <canvas id="signature-penanggungjawab" width="400" height="150"
+                                                style="border: 1px solid #ddd; cursor: crosshair;"></canvas>
+                                        </div>
+                                        <div class="mt-2">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary clear-signature"
+                                                data-canvas="signature-penanggungjawab">
+                                                <i class='bx bx-eraser'></i> Hapus
+                                            </button>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -877,54 +885,102 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <h6 class="card-title"><strong>Tim Penilai</strong></h6>
-
+                                <h6 class="card-title"><strong>Ketua Tim Penilai</strong></h6>
                                 <div class="mb-3">
-                                    <label class="form-label text-muted">Ketua Tim Penilai</label>
-                                    <input type="file" class="form-control form-control-sm mb-2" name="ketua_pdf"
-                                        accept=".pdf">
-                                    @if ($beritaAcara && $beritaAcara->ketua_pdf)
-                                        <div class="mb-2">
-                                            <a href="{{ route('validator.berita-acara.signature.view', ['formId' => $form->id, 'type' => 'ketua']) }}"
-                                                target="_blank" class="btn btn-sm btn-outline-success">
-                                                <i class='bx bx-file-pdf'></i> Lihat PDF
-                                            </a>
-                                        </div>
-                                    @endif
+                                    <label class="form-label">Nama Ketua</label>
                                     <input type="text" class="form-control" name="ketua"
                                         value="{{ $beritaAcara->ketua ?? '' }}" placeholder="Nama Ketua" required>
                                 </div>
-
                                 <div class="mb-3">
-                                    <label class="form-label text-muted">Anggota 1</label>
-                                    <input type="file" class="form-control form-control-sm mb-2" name="anggota1_pdf"
-                                        accept=".pdf">
-                                    @if ($beritaAcara && $beritaAcara->anggota1_pdf)
-                                        <div class="mb-2">
-                                            <a href="{{ route('validator.berita-acara.signature.view', ['formId' => $form->id, 'type' => 'anggota1']) }}"
-                                                target="_blank" class="btn btn-sm btn-outline-success">
-                                                <i class='bx bx-file-pdf'></i> Lihat PDF
-                                            </a>
+                                    @if ($beritaAcara && $beritaAcara->ketua_signature)
+                                        <label class="form-label"><strong>Tanda Tangan (Tersimpan)</strong></label>
+                                        <div class="border rounded p-3 bg-light">
+                                            <img src="{{ $beritaAcara->ketua_signature }}" alt="Signature Ketua"
+                                                style="max-width: 100%; height: auto; border: 1px solid #ddd;">
+                                        </div>
+                                    @else
+                                        <label class="form-label"><strong>Tanda Tangan Digital</strong></label>
+                                        <div class="border rounded p-3">
+                                            <canvas id="signature-ketua" width="400" height="150"
+                                                style="border: 1px solid #ddd; cursor: crosshair;"></canvas>
+                                        </div>
+                                        <div class="mt-2">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary clear-signature"
+                                                data-canvas="signature-ketua">
+                                                <i class='bx bx-eraser'></i> Hapus
+                                            </button>
                                         </div>
                                     @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title"><strong>Anggota 1 Tim Penilai</strong></h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Nama Anggota 1</label>
                                     <input type="text" class="form-control" name="anggota1"
                                         value="{{ $beritaAcara->anggota1 ?? '' }}" placeholder="Nama Anggota 1" required>
                                 </div>
-
                                 <div class="mb-3">
-                                    <label class="form-label text-muted">Anggota 2</label>
-                                    <input type="file" class="form-control form-control-sm mb-2" name="anggota2_pdf"
-                                        accept=".pdf">
-                                    @if ($beritaAcara && $beritaAcara->anggota2_pdf)
-                                        <div class="mb-2">
-                                            <a href="{{ route('validator.berita-acara.signature.view', ['formId' => $form->id, 'type' => 'anggota2']) }}"
-                                                target="_blank" class="btn btn-sm btn-outline-success">
-                                                <i class='bx bx-file-pdf'></i> Lihat PDF
-                                            </a>
+                                    @if ($beritaAcara && $beritaAcara->anggota1_signature)
+                                        <label class="form-label"><strong>Tanda Tangan (Tersimpan)</strong></label>
+                                        <div class="border rounded p-3 bg-light">
+                                            <img src="{{ $beritaAcara->anggota1_signature }}" alt="Signature Anggota 1"
+                                                style="max-width: 100%; height: auto; border: 1px solid #ddd;">
+                                        </div>
+                                    @else
+                                        <label class="form-label"><strong>Tanda Tangan Digital</strong></label>
+                                        <div class="border rounded p-3">
+                                            <canvas id="signature-anggota1" width="400" height="150"
+                                                style="border: 1px solid #ddd; cursor: crosshair;"></canvas>
+                                        </div>
+                                        <div class="mt-2">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary clear-signature"
+                                                data-canvas="signature-anggota1">
+                                                <i class='bx bx-eraser'></i> Hapus
+                                            </button>
                                         </div>
                                     @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title"><strong>Anggota 2 Tim Penilai</strong></h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Nama Anggota 2</label>
                                     <input type="text" class="form-control" name="anggota2"
                                         value="{{ $beritaAcara->anggota2 ?? '' }}" placeholder="Nama Anggota 2" required>
+                                </div>
+                                <div class="mb-3">
+                                    @if ($beritaAcara && $beritaAcara->anggota2_signature)
+                                        <label class="form-label"><strong>Tanda Tangan (Tersimpan)</strong></label>
+                                        <div class="border rounded p-3 bg-light">
+                                            <img src="{{ $beritaAcara->anggota2_signature }}" alt="Signature Anggota 2"
+                                                style="max-width: 100%; height: auto; border: 1px solid #ddd;">
+                                        </div>
+                                    @else
+                                        <label class="form-label"><strong>Tanda Tangan Digital</strong></label>
+                                        <div class="border rounded p-3">
+                                            <canvas id="signature-anggota2" width="400" height="150"
+                                                style="border: 1px solid #ddd; cursor: crosshair;"></canvas>
+                                        </div>
+                                        <div class="mt-2">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary clear-signature"
+                                                data-canvas="signature-anggota2">
+                                                <i class='bx bx-eraser'></i> Hapus
+                                            </button>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -1139,6 +1195,7 @@
 
         // Initialize Signature Pad (lazy initialization)
         let signaturePad = null;
+        let beritaAcaraSignaturePads = {};
 
         function initSignaturePad() {
             if (signaturePad) return; // Already initialized
@@ -1154,6 +1211,27 @@
                     signaturePad.clear();
                 });
             }
+        }
+
+        function initBeritaAcaraSignaturePads() {
+            const canvasIds = ['signature-penanggungjawab', 'signature-ketua', 'signature-anggota1', 'signature-anggota2'];
+            
+            canvasIds.forEach(canvasId => {
+                const canvas = document.getElementById(canvasId);
+                if (canvas && !beritaAcaraSignaturePads[canvasId]) {
+                    beritaAcaraSignaturePads[canvasId] = new SignaturePad(canvas);
+                }
+            });
+
+            // Add clear button handlers
+            document.querySelectorAll('.clear-signature').forEach(btn => {
+                const canvasId = btn.dataset.canvas;
+                if (canvasId && beritaAcaraSignaturePads[canvasId]) {
+                    btn.addEventListener('click', () => {
+                        beritaAcaraSignaturePads[canvasId].clear();
+                    });
+                }
+            });
         }
 
         // Show section function
@@ -1190,7 +1268,7 @@
         // Navigation
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                if (isReadOnly && this.dataset.section.startsWith('irl')) return;
+                // if (isReadOnly && this.dataset.section.startsWith('irl')) return;
 
                 const sectionId = 'section-' + this.dataset.section;
                 const targetSection = document.getElementById(sectionId);
@@ -1214,6 +1292,11 @@
                 // Initialize signature pad when showing agreement section
                 if (this.dataset.section === 'agreement') {
                     setTimeout(() => initSignaturePad(), 100);
+                }
+                
+                // Initialize berita acara signature pads
+                if (this.dataset.section === 'berita-acara') {
+                    setTimeout(() => initBeritaAcaraSignaturePads(), 100);
                 }
             });
         });
@@ -1358,24 +1441,57 @@
         // Save Berita Acara
         async function saveBeritaAcara(isFinal = false) {
             const form = document.getElementById('form-berita-acara');
-            const formData = new FormData(form);
-
+            
             // Validate required fields
             if (!form.checkValidity()) {
                 form.reportValidity();
                 return;
             }
 
-            // Add is_final flag
-            formData.append('is_final', isFinal);
+            // Collect form data
+            const formData = new FormData(form);
+            const data = {
+                is_final: isFinal,
+                text_day: formData.get('text_day'),
+                text_date: formData.get('text_date'),
+                text_month: formData.get('text_month'),
+                text_year: formData.get('text_year'),
+                text_yearfull: formData.get('text_yearfull'),
+                text_place: formData.get('text_place'),
+                text_decree: formData.get('text_decree'),
+                innovation_title: formData.get('innovation_title'),
+                innovation_type: formData.get('innovation_type'),
+                innovation_tki: formData.get('innovation_tki'),
+                innovation_opinion: formData.get('innovation_opinion'),
+                innovation_date: formData.get('innovation_date'),
+                penanggungjawab: formData.get('penanggungjawab'),
+                ketua: formData.get('ketua'),
+                anggota1: formData.get('anggota1'),
+                anggota2: formData.get('anggota2')
+            };
+
+            // Add signature data if available
+            if (beritaAcaraSignaturePads['signature-penanggungjawab'] && !beritaAcaraSignaturePads['signature-penanggungjawab'].isEmpty()) {
+                data.penanggungjawab_signature = beritaAcaraSignaturePads['signature-penanggungjawab'].toDataURL();
+            }
+            if (beritaAcaraSignaturePads['signature-ketua'] && !beritaAcaraSignaturePads['signature-ketua'].isEmpty()) {
+                data.ketua_signature = beritaAcaraSignaturePads['signature-ketua'].toDataURL();
+            }
+            if (beritaAcaraSignaturePads['signature-anggota1'] && !beritaAcaraSignaturePads['signature-anggota1'].isEmpty()) {
+                data.anggota1_signature = beritaAcaraSignaturePads['signature-anggota1'].toDataURL();
+            }
+            if (beritaAcaraSignaturePads['signature-anggota2'] && !beritaAcaraSignaturePads['signature-anggota2'].isEmpty()) {
+                data.anggota2_signature = beritaAcaraSignaturePads['signature-anggota2'].toDataURL();
+            }
 
             try {
                 const response = await fetch(`/validator/assess/${formId}/berita-acara`, {
                     method: 'POST',
                     headers: {
+                        'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                     },
-                    body: formData
+                    body: JSON.stringify(data)
                 });
 
                 const result = await response.json();

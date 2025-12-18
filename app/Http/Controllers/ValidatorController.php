@@ -262,33 +262,21 @@ class ValidatorController extends Controller
                 'anggota2' => $request->anggota2,
             ];
 
-            // Handle PDF uploads
-            if ($request->hasFile('penanggungjawab_pdf')) {
-                $file = $request->file('penanggungjawab_pdf');
-                $filename = 'penanggungjawab_' . $formId . '_' . time() . '.pdf';
-                $file->storeAs('katsinov/signatures', $filename, 'public');
-                $data['penanggungjawab_pdf'] = $filename;
+            // Handle signature data (base64)
+            if ($request->has('penanggungjawab_signature')) {
+                $data['penanggungjawab_signature'] = $request->penanggungjawab_signature;
             }
 
-            if ($request->hasFile('ketua_pdf')) {
-                $file = $request->file('ketua_pdf');
-                $filename = 'ketua_' . $formId . '_' . time() . '.pdf';
-                $file->storeAs('katsinov/signatures', $filename, 'public');
-                $data['ketua_pdf'] = $filename;
+            if ($request->has('ketua_signature')) {
+                $data['ketua_signature'] = $request->ketua_signature;
             }
 
-            if ($request->hasFile('anggota1_pdf')) {
-                $file = $request->file('anggota1_pdf');
-                $filename = 'anggota1_' . $formId . '_' . time() . '.pdf';
-                $file->storeAs('katsinov/signatures', $filename, 'public');
-                $data['anggota1_pdf'] = $filename;
+            if ($request->has('anggota1_signature')) {
+                $data['anggota1_signature'] = $request->anggota1_signature;
             }
 
-            if ($request->hasFile('anggota2_pdf')) {
-                $file = $request->file('anggota2_pdf');
-                $filename = 'anggota2_' . $formId . '_' . time() . '.pdf';
-                $file->storeAs('katsinov/signatures', $filename, 'public');
-                $data['anggota2_pdf'] = $filename;
+            if ($request->has('anggota2_signature')) {
+                $data['anggota2_signature'] = $request->anggota2_signature;
             }
 
             $beritaAcara = \App\Models\KatsinovBerita::updateOrCreate(
