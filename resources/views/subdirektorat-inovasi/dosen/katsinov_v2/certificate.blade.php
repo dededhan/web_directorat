@@ -9,6 +9,16 @@
             margin: 0;
             size: A4 landscape;
         }
+        @media print {
+            @page {
+                margin: 0;
+                size: A4 landscape;
+            }
+            body {
+                margin: 0;
+                box-shadow: none;
+            }
+        }
         body {
             font-family: 'Times New Roman', Times, serif;
             margin: 0;
@@ -66,39 +76,36 @@
 
         .diberikan-kepada-label {
             font-size: 15px;
-            margin-top: 0.6cm;
+            margin-top: 2cm;
             color: #444;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-
+/* username */
         .participant-name {
             font-size: 30px;
             font-weight: bold;
-            margin-top: 0.3cm;
+            margin-top: 1cm;
             color: #1a3d2e;
-            text-decoration: underline;
-            text-decoration-thickness: 2px;
-            text-underline-offset: 8px;
-            text-decoration-color: #255946;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
             letter-spacing: 1px;
             line-height: 1.2;
         }
-
+        /* telah men */
         .sebagai-peserta-label {
             font-size: 15px;
-            margin-top: 0.4cm;
+            margin-top: 1cm;
             color: #444;
             font-weight: 500;
             text-transform: capitalize;
         }
 
+        /* pengukuran kesiapan */
         .event-name {
             font-size: 17px;
             font-weight: bold;
-            margin-top: 0.2cm;
+            margin-top: 0.7cm;
             line-height: 1.4;
             color: #1a3d2e;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
@@ -108,7 +115,7 @@
         }
 
         .achievement-box {
-            margin-top: 0.3cm;
+            margin-top: 2cm;
             padding: 0.3cm 0.5cm;
             background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
             border-radius: 8px;
@@ -121,32 +128,34 @@
             font-weight: bold;
             color: #16a34a;
             margin: 0;
+            
         }
 
         .grade-text {
             font-size: 16px;
             color: #1e40af;
             font-weight: bold;
-            margin: 0.05cm 0;
+            margin-top: 0.7cm;
         }
 
         .predicate-text {
             font-size: 13px;
             color: #475569;
             font-style: italic;
-            margin: 0;
+            margin: 2;
+            margin-top: 0.7cm;
         }
 
         .event-details {
             font-size: 13px;
-            margin-top: 0.2cm;
+            margin-top: 20cm;
             color: #555;
             font-style: italic;
             line-height: 1.3;
         }
-
+        /* jakarta,19 des */
         .signature-section {
-            margin-top: 0.5cm;
+            margin-top: 1cm;
             width: 100%;
             position: relative;
         }
@@ -156,9 +165,9 @@
             line-height: 1.4;
             color: #333;
         }
-
+/* johansyah */
         .signature-title {
-            margin-bottom: 1.8cm;
+            margin-bottom: 3cm;
             position: relative;
         }
 
@@ -220,21 +229,8 @@
             {{ strtoupper($katsinov->title) }}
         </div>
 
-        <div class="achievement-box">
-            <div class="score-main">{{ number_format($overallScore, 2) }}%</div>
-            <div class="grade-text">{{ $grade }}</div>
-            <div class="predicate-text">{{ $predicate }}</div>
-        </div>
-
-        <div class="event-details">
-            @if($informasi)
-                {{ $informasi->innovation_type ?? 'Inovasi' }} - {{ $informasi->innovation_field ?? $katsinov->focus_area }}
-                <br>
-            @endif
-            Institusi: {{ $katsinov->institution }}
-            <br>
-            Tanggal Penilaian: {{ $katsinov->assessment_date->format('d F Y') }}
-        </div>
+        
+        
 
         <div class="signature-section">
             <div class="signature-details">
@@ -252,11 +248,6 @@
             </div>
         </div>
 
-        @if($katsinov->reviewer)
-        <div style="position: absolute; bottom: 0.5cm; left: 0; right: 0; font-size: 11px; color: #888;">
-            Reviewer: {{ $katsinov->reviewer->name }}
-        </div>
-        @endif
     </div>
 
     <div style="position: absolute; bottom: 0.3cm; right: 1cm; font-size: 9px; color: #aaa;">
