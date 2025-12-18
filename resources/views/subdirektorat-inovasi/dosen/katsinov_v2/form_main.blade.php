@@ -276,6 +276,7 @@
                             {{-- Form Pertanyaan dengan Radio Buttons --}}
                             @php
                                 $questions = include(resource_path('views/admin/katsinov_v2/includes/indicator_questions.php'));
+                                $scoreDescriptions = include(resource_path('views/admin/katsinov_v2/includes/indicator_score_descriptions.php'));
                                 $indicatorQuestions = $questions[$i] ?? [];
                                 
                                 // Aspect color mapping
@@ -327,10 +328,32 @@
                                                                    class="w-4 h-4 text-blue-600 radio-input cursor-pointer" 
                                                                    data-indicator="{{ $i }}" 
                                                                    data-aspect="{{ $q['aspect'] }}" 
-                                                                   data-row="{{ $q['no'] }}">
+                                                                   data-row="{{ $q['no'] }}"
+                                                                   onclick="showScoreTooltip({{ $i }}, {{ $q['no'] }}, {{ $score }}, this)">
                                                         </td>
                                                     @endfor
                                                     <td class="px-6 py-3 text-sm text-gray-700">{{ $q['desc'] }}</td>
+                                                </tr>
+                                                {{-- Tooltip row that will be shown when radio is clicked --}}
+                                                <tr id="tooltip-{{ $i }}-{{ $q['no'] }}" class="hidden bg-blue-50 border-l-4 border-blue-500">
+                                                    <td colspan="9" class="px-6 py-4">
+                                                        <div class="flex items-start gap-3">
+                                                            <div class="flex-shrink-0">
+                                                                <span id="tooltip-score-badge-{{ $i }}-{{ $q['no'] }}" class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-blue-600 text-white font-bold text-lg">
+                                                                    0
+                                                                </span>
+                                                            </div>
+                                                            <div class="flex-1">
+                                                                <p class="text-sm font-semibold text-blue-900 mb-1">Deskripsi Nilai:</p>
+                                                                <p id="tooltip-desc-{{ $i }}-{{ $q['no'] }}" class="text-sm text-blue-800"></p>
+                                                            </div>
+                                                            <button type="button" onclick="hideScoreTooltip({{ $i }}, {{ $q['no'] }})" class="text-blue-600 hover:text-blue-800">
+                                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -450,6 +473,67 @@
 </div>
 
 <script>
+// Score descriptions data from PHP
+const scoreDescriptions = @json($scoreDescriptions ?? []);
+
+// Track currently open tooltip
+let currentOpenTooltip = null;
+
+// Function to show score tooltip inline
+function showScoreTooltip(indicator, rowNum, score, radioElement) {
+    // Close any previously open tooltip (auto-close feature)
+    if (currentOpenTooltip && currentOpenTooltip !== `${indicator}-${rowNum}`) {
+        const prevTooltip = document.getElementById(`tooltip-${currentOpenTooltip}`);
+        if (prevTooltip) {
+            prevTooltip.classList.add('hidden');
+        }
+    }
+    
+    // Get the tooltip row
+    const tooltipRow = document.getElementById(`tooltip-${indicator}-${rowNum}`);
+    const scoreBadge = document.getElementById(`tooltip-score-badge-${indicator}-${rowNum}`);
+    const descElement = document.getElementById(`tooltip-desc-${indicator}-${rowNum}`);
+    
+    // Get the description for this score
+    const description = scoreDescriptions[indicator]?.[rowNum]?.[score] || 'Deskripsi tidak tersedia';
+    
+    // Update tooltip content
+    scoreBadge.textContent = score;
+    descElement.textContent = description;
+    
+    // Update badge color based on score
+    scoreBadge.className = 'inline-flex items-center justify-center h-10 w-10 rounded-full font-bold text-lg text-white ';
+    if (score === 0) {
+        scoreBadge.className += 'bg-red-600';
+    } else if (score === 5) {
+        scoreBadge.className += 'bg-green-600';
+    } else {
+        scoreBadge.className += 'bg-blue-600';
+    }
+    
+    // Show the tooltip row
+    tooltipRow.classList.remove('hidden');
+    
+    // Update current open tooltip tracker
+    currentOpenTooltip = `${indicator}-${rowNum}`;
+    
+    // Scroll to tooltip smoothly
+    setTimeout(() => {
+        tooltipRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
+}
+
+// Function to hide score tooltip
+function hideScoreTooltip(indicator, rowNum) {
+    const tooltipRow = document.getElementById(`tooltip-${indicator}-${rowNum}`);
+    tooltipRow.classList.add('hidden');
+    
+    // Clear current open tooltip tracker if this was the open one
+    if (currentOpenTooltip === `${indicator}-${rowNum}`) {
+        currentOpenTooltip = null;
+    }
+}
+
 let currentIndicatorNum = 1;
 const thresholds = {
     1: {{ $thresholds[1] ?? 80.0 }},

@@ -624,6 +624,9 @@
                     // Get IRL number from category code (IRL1 = 1, IRL2 = 2, etc)
                     $irlNumber = (int) str_replace(['IRL', 'K'], '', $category->code);
                     $categoryResponses = $assessments->get($irlNumber, collect());
+                    
+                    // Load score descriptions for tooltips
+                    $scoreDescriptions = include(resource_path('views/admin/katsinov_v2/includes/indicator_score_descriptions.php'));
                 @endphp
 
                 @if ($categoryResponses->count() > 0)
@@ -747,10 +750,27 @@
                                 @for ($score = 0; $score <= 5; $score++)
                                     <button type="button"
                                         class="score-btn {{ $savedValidatorScore === $score ? 'selected' : '' }}"
-                                        data-score="{{ $score }}">
+                                        data-score="{{ $score }}"
+                                        onclick="showValidatorScoreTooltip({{ $irlNumber }}, {{ $indicatorIndex + 1 }}, {{ $score }}, this)">
                                         {{ $score }}
                                     </button>
                                 @endfor
+                            </div>
+                            
+                            {{-- Tooltip row for score description --}}
+                            <div id="validator-tooltip-{{ $irlNumber }}-{{ $indicatorIndex + 1 }}" class="mt-3 p-3 bg-info bg-opacity-10 border-start border-info border-4 rounded" style="display: none;">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="flex-shrink-0">
+                                        <span id="validator-tooltip-score-badge-{{ $irlNumber }}-{{ $indicatorIndex + 1 }}" class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary text-white fw-bold" style="width: 40px; height: 40px; font-size: 18px;">
+                                            0
+                                        </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="fw-semibold text-primary mb-1" style="font-size: 14px;">Deskripsi Nilai:</p>
+                                        <p id="validator-tooltip-desc-{{ $irlNumber }}-{{ $indicatorIndex + 1 }}" class="text-dark mb-0" style="font-size: 13px;"></p>
+                                    </div>
+                                    <button type="button" onclick="hideValidatorScoreTooltip({{ $irlNumber }}, {{ $indicatorIndex + 1 }})" class="btn-close" aria-label="Close"></button>
+                                </div>
                             </div>
                         </div>
                     @endforeach
@@ -2182,4 +2202,78 @@
             </div>
         </div>
     @endif
+
+    <script>
+    // Load score descriptions for tooltips
+    const validatorScoreDescriptions = @json($scoreDescriptions ?? []);
+    
+    // Track currently open tooltip
+    let currentOpenValidatorTooltip = null;
+    
+    // Function to show validator score tooltip
+    function showValidatorScoreTooltip(indicator, rowNum, score, buttonElement) {
+        // Close any previously open tooltip (auto-close feature)
+        if (currentOpenValidatorTooltip && currentOpenValidatorTooltip !== `${indicator}-${rowNum}`) {
+            const prevTooltip = document.getElementById(`validator-tooltip-${currentOpenValidatorTooltip}`);
+            if (prevTooltip) {
+                prevTooltip.style.display = 'none';
+            }
+        }
+        
+        // Get the tooltip elements
+        const tooltipDiv = document.getElementById(`validator-tooltip-${indicator}-${rowNum}`);
+        const scoreBadge = document.getElementById(`validator-tooltip-score-badge-${indicator}-${rowNum}`);
+        const descElement = document.getElementById(`validator-tooltip-desc-${indicator}-${rowNum}`);
+        
+        if (!tooltipDiv || !scoreBadge || !descElement) {
+            console.error('Tooltip elements not found for', indicator, rowNum);
+            return;
+        }
+        
+        // Get the description for this score
+        const description = validatorScoreDescriptions[indicator]?.[rowNum]?.[score] || 'Deskripsi tidak tersedia';
+        
+        // Update tooltip content
+        scoreBadge.textContent = score;
+        descElement.textContent = description;
+        
+        // Update badge color based on score
+        scoreBadge.className = 'd-inline-flex align-items-center justify-content-center rounded-circle text-white fw-bold';
+        scoreBadge.style.width = '40px';
+        scoreBadge.style.height = '40px';
+        scoreBadge.style.fontSize = '18px';
+        
+        if (score === 0) {
+            scoreBadge.classList.add('bg-danger');
+        } else if (score === 5) {
+            scoreBadge.classList.add('bg-success');
+        } else {
+            scoreBadge.classList.add('bg-primary');
+        }
+        
+        // Show the tooltip
+        tooltipDiv.style.display = 'block';
+        
+        // Update current open tooltip tracker
+        currentOpenValidatorTooltip = `${indicator}-${rowNum}`;
+        
+        // Scroll to tooltip smoothly
+        setTimeout(() => {
+            tooltipDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+    }
+    
+    // Function to hide validator score tooltip
+    function hideValidatorScoreTooltip(indicator, rowNum) {
+        const tooltipDiv = document.getElementById(`validator-tooltip-${indicator}-${rowNum}`);
+        if (tooltipDiv) {
+            tooltipDiv.style.display = 'none';
+        }
+        
+        // Clear current open tooltip tracker if this was the open one
+        if (currentOpenValidatorTooltip === `${indicator}-${rowNum}`) {
+            currentOpenValidatorTooltip = null;
+        }
+    }
+    </script>
 @endsection
