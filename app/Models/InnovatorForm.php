@@ -60,4 +60,44 @@ class InnovatorForm extends Model
     {
         return $this->progress()->where('type', 'market')->get();
     }
+
+    /**
+     * Validator relationships for V2
+     */
+    public function validators()
+    {
+        return $this->belongsToMany(User::class, 'form_validator_assignments', 'form_id', 'validator_id')
+            ->withTimestamps();
+    }
+
+    public function validatorAgreements()
+    {
+        return $this->hasMany(ValidatorAgreement::class, 'form_id');
+    }
+
+    public function validatorAssessments()
+    {
+        return $this->hasMany(ValidatorAssessment::class, 'form_id');
+    }
+
+    public function validatorProgress()
+    {
+        return $this->hasMany(ValidatorProgress::class, 'form_id');
+    }
+
+    public function beritaAcara()
+    {
+        return $this->hasOne(BeritaAcara::class, 'form_id');
+    }
+
+    public function validatorRecords()
+    {
+        return $this->hasMany(ValidatorRecord::class, 'form_id');
+    }
+
+    // Get user/dosen who submitted the form
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

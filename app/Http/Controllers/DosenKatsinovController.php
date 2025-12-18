@@ -1078,7 +1078,7 @@ class DosenKatsinovController extends Controller
      */
     public function generateCertificate($katsinov_id)
     {
-        $katsinov = Katsinov::with(['scores', 'user'])
+        $katsinov = Katsinov::with(['scores', 'user', 'reviewer'])
             ->findOrFail($katsinov_id);
 
         if ($katsinov->user_id !== Auth::id()) {
@@ -1089,7 +1089,46 @@ class DosenKatsinovController extends Controller
             return back()->with('error', 'Sertifikat hanya tersedia untuk Katsinov dengan status COMPLETED.');
         }
 
-        return view('subdirektorat-inovasi.dosen.katsinov_v2.certificate', compact('katsinov'));
+        // Calculate overall score
+        $totalRowsPerIndicator = [1 => 22, 2 => 21, 3 => 21, 4 => 22, 5 => 24, 6 => 14];
+        $indicatorScores = [];
+
+        for ($i = 1; $i <= 6; $i++) {
+            $responses = $katsinov->responses()->where('indicator_number', $i)->get();
+            $totalScore = $responses->sum('score');
+            $totalRows = $totalRowsPerIndicator[$i];
+            $percentage = $totalRows > 0 ? ($totalScore / ($totalRows * 5)) * 100 : 0;
+            $indicatorScores[$i] = $percentage;
+        }
+
+        $overallScore = collect($indicatorScores)->avg();
+
+        // Determine grade
+        if ($overallScore >= 90) {
+            $grade = 'A - Excellent';
+            $predicate = 'Sangat Layak';
+        } elseif ($overallScore >= 80) {
+            $grade = 'B - Good';
+            $predicate = 'Layak';
+        } elseif ($overallScore >= 70) {
+            $grade = 'C - Fair';
+            $predicate = 'Cukup Layak';
+        } else {
+            $grade = 'D - Poor';
+            $predicate = 'Perlu Perbaikan';
+        }
+
+        // Load informasi for certificate
+        $informasi = \App\Models\KatsinovInformasi::where('katsinov_id', $katsinov_id)->first();
+
+        return view('subdirektorat-inovasi.dosen.katsinov_v2.certificate', compact(
+            'katsinov',
+            'informasi',
+            'overallScore',
+            'grade',
+            'predicate',
+            'indicatorScores'
+        ));
     }
 
     // =============== HELPER METHODS ===============

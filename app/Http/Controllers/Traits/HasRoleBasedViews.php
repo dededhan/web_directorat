@@ -13,7 +13,8 @@ trait HasRoleBasedViews
         if (!empty($customMap)) {
             return $customMap[$role] ?? $customMap['admin_direktorat'] ?? "admin.{$baseName}";
         }
-        return match($role) {
+        return match ($role) {
+            'super_admin' => "admin.{$baseName}",
             'admin_pemeringkatan' => "admin_pemeringkatan.{$baseName}",
             'admin_direktorat' => "admin.{$baseName}",
             default => "admin.{$baseName}"
@@ -29,7 +30,8 @@ trait HasRoleBasedViews
             return $customMap[$role] ?? $customMap['admin_direktorat'] ?? "admin.{$baseRoute}";
         }
 
-        return match($role) {
+        return match ($role) {
+            'super_admin' => "admin.{$baseRoute}",
             'admin_pemeringkatan' => "admin_pemeringkatan.{$baseRoute}",
             'admin_direktorat' => "admin.{$baseRoute}",
             default => "admin.{$baseRoute}"

@@ -23,7 +23,9 @@ class Katsinov extends Model
         'reviewer_id',
         'submitted_at',
         'reviewed_at',
-        'reviewer_notes'
+        'reviewer_notes',
+        'validator_agreement_signature',
+        'validator_agreement_date'
     ];
 
     protected $casts = [
@@ -69,19 +71,23 @@ class Katsinov extends Model
         return $this->hasMany(KatsinovNote::class);
     }
 
-    public function katsinovLampirans(){
+    public function katsinovLampirans()
+    {
         return $this->hasMany(KatsinovLampiran::class);
     }
 
-    public function katsinovInovasis(){
+    public function katsinovInovasis()
+    {
         return $this->hasMany(KatsinovInovasi::class);
     }
 
-    public function katsinovInformasis(){
+    public function katsinovInformasis()
+    {
         return $this->hasMany(KatsinovInformasi::class);
     }
 
-    public function katsinovBeritas(){
+    public function katsinovBeritas()
+    {
         return $this->hasMany(KatsinovBerita::class);
     }
 
@@ -176,7 +182,7 @@ class Katsinov extends Model
     public function getStatus()
     {
         $avg = $this->getAverageScore();
-        
+
         if ($avg >= 80) return 'SANGAT BAIK';
         if ($avg >= 60) return 'BAIK';
         if ($avg >= 40) return 'CUKUP';

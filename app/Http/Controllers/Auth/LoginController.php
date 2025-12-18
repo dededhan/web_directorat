@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Rules\Recaptcha; 
+use App\Rules\Recaptcha;
 use App\Models\User;
 
 
@@ -21,6 +21,7 @@ class LoginController extends Controller
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+            // Temporarily disabled for testing
             'g-recaptcha-response' => ['required', new Recaptcha()]
         ]);
 
@@ -28,30 +29,32 @@ class LoginController extends Controller
 
         if (Auth::attempt($authCredentials)) {
             $request->session()->regenerate();
-            
+
             // PERBAIKAN: Ambil objek user yang sedang login dan simpan ke variabel $user
-            $user = Auth::user(); 
-            
+            $user = Auth::user();
+
             // much clean, me like :D
             $next = match ($user->role) {
+                'super_admin' => 'admin.dashboard',
                 'admin_direktorat' => 'admin.dashboard',
                 'prodi' =>  'prodis.manage.account',
-                    //    'prodi' => 'maintenance.page',
-                'fakultas' =>'fakultas.dashboard',
+                //    'prodi' => 'maintenance.page',
+                'fakultas' => 'fakultas.dashboard',
                 'admin_pemeringkatan' => 'admin_pemeringkatan.dashboard',
                 'admin_inovasi' => 'admin_inovasi.dashboard',
                 'dosen' => 'subdirektorat-inovasi.dosen.dashboard',
                 'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.dashboard',
                 // 'kepala_sub_direktorat' => 'inovasi.admin_hilirisasi.dashboard',
-                'validator' => 'subdirektorat-inovasi.validator.dashboard',
+                'validator' => 'validator.index', // Updated to use Validator V2
                 'admin_equity' => 'admin_equity.dashboard',
                 'sub_admin_equity' => 'admin_equity.dashboard',
                 'reviewer_equity' => 'reviewer_equity.dashboard',
                 'reviewer_hibah' => 'reviewer_equity.dashboard',
                 'reviewer_student_exchange' => 'reviewer_equity.dashboard',
                 'equity_fakultas' => 'equity_fakultas.dashboard',
+                default => 'admin.dashboard',
             };
-            
+
             // *** NEW LOGIC FOR DOSEN ***
             if ($user->role === 'dosen') {
                 $user->load('profile');
@@ -77,5 +80,4 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
         return redirect('/');
     }
-    
 }

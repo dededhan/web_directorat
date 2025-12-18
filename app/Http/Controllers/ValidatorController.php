@@ -1,0 +1,554 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Katsinov;
+use App\Models\KatsinovResponse;
+use App\Models\KatsinovNote;
+use App\Models\KatsinovBerita;
+use App\Models\KatsinovLampiran;
+use App\Models\FormRecordHasilPengukuran;
+use App\Models\KatsinovCategory;
+use App\Models\KatsinovIndicator;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
+class ValidatorController extends Controller
+{
+    /**
+     * Display list of forms assigned to validator
+     */
+    public function index()
+    {
+        $validator = Auth::user();
+
+        // Get katsinovs assigned to this validator (use katsinovs table, not innovator_forms)
+        $forms = \App\Models\Katsinov::where('reviewer_id', $validator->id)
+            ->with(['user', 'reviewer'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('validator.index', compact('forms'));
+    }
+
+    /**
+     * Display single page assessment view
+     */
+    public function assess($formId)
+    {
+        $validator = Auth::user();
+        $form = \App\Models\Katsinov::with(['user', 'responses', 'katsinovInformasis', 'katsinovInovasis', 'katsinovLampirans'])->findOrFail($formId);
+
+        // Check if validator is assigned to this form
+        if ($form->reviewer_id !== $validator->id) {
+            abort(403, 'Unauthorized access');
+        }
+
+        // Get existing responses (nilai dosen dari katsinov_responses table)
+        // indicator_number di table ini adalah integer (1, 2, 3...) yang merepresentasikan kategori IRL
+        $assessments = \App\Models\KatsinovResponse::where('katsinov_id', $formId)
+            ->get()
+            ->groupBy('indicator_number'); // Group by IRL number (1=IRL1, 2=IRL2, etc)
+
+        // Get notes (comments per category)
+        $categoryComments = \App\Models\KatsinovNote::where('katsinov_id', $formId)
+            ->get()
+            ->keyBy('indicator_number');
+
+        // Only show categories that have been filled by dosen
+        // Validator can only assess IRLs that dosen has completed
+        $filledIRLNumbers = $assessments->keys()->toArray(); // e.g., [1, 2] untuk IRL1 dan IRL2
+
+        if (!empty($filledIRLNumbers)) {
+            // Get categories where the numeric part matches filled IRL numbers
+            $categories = KatsinovCategory::with('indicators')
+                ->get()
+                ->filter(function ($category) use ($filledIRLNumbers) {
+                    // Extract number from category code (IRL1 -> 1, IRL2 -> 2, K1 -> 1, etc)
+                    $categoryNumber = (int)str_replace(['IRL', 'K'], '', $category->code);
+                    return in_array($categoryNumber, $filledIRLNumbers);
+                })
+                ->values();
+        } else {
+            // If no data filled by dosen, show empty collection
+            $categories = collect();
+        }
+
+        // Agreement - load from katsinov table
+        $agreement = (object)[
+            'signature' => $form->validator_agreement_signature,
+            'signed_at' => $form->validator_agreement_date,
+        ];
+
+        // Get berita acara from katsinov_beritas
+        $beritaAcara = \App\Models\KatsinovBerita::where('katsinov_id', $formId)->first();
+
+        // Get validator record (form record hasil pengukuran)
+        $validatorRecord = \App\Models\FormRecordHasilPengukuran::where('katsinov_id', $formId)->first();
+
+        $isReadOnly = ($form->status === 'completed');
+
+        // Build progress object with all required properties for view
+        $progress = (object)[
+            'status' => $form->status ?? 'assigned',
+            'started_at' => $form->created_at,
+            'agreement_completed' => $form->status === 'under_review' || $form->status === 'completed',
+            'assessment_completed' => $assessments->count() > 0,
+            'berita_acara_completed' => $beritaAcara !== null,
+            'record_completed' => $validatorRecord !== null,
+        ];
+
+        return view('validator.assess-v2', compact(
+            'form',
+            'progress',
+            'categories',
+            'assessments',
+            'categoryComments',
+            'agreement',
+            'beritaAcara',
+            'validatorRecord',
+            'isReadOnly'
+        ));
+    }
+
+    /**
+     * Save agreement signature
+     */
+    public function saveAgreement(Request $request, $formId)
+    {
+        $request->validate([
+            'signature' => 'required|string',
+        ]);
+
+        $validator = Auth::user();
+        $form = Katsinov::findOrFail($formId);
+
+        // Check read-only status
+        if ($form->status === 'completed') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Penilaian sudah final dan tidak dapat diubah',
+            ], 403);
+        }
+
+        // Save signature and update status to under_review
+        $form->update([
+            'status' => 'under_review',
+            'validator_agreement_signature' => $request->signature,
+            'validator_agreement_date' => now(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Persetujuan berhasil disimpan',
+        ]);
+    }
+
+    /**
+     * Save assessment for specific category
+     */
+    public function saveAssessment(Request $request, $formId)
+    {
+        $validator = Auth::user();
+        $form = Katsinov::findOrFail($formId);
+
+        // Check read-only status
+        if ($form->status === 'completed') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Penilaian sudah final dan tidak dapat diubah',
+            ], 403);
+        }
+
+        $categoryId = $request->category_id;
+        $indicators = $request->indicators; // Array of indicator assessments
+        $categoryComment = $request->category_comment;
+
+        try {
+            DB::beginTransaction();
+
+            // Get IRL number from category (K1 = 1, K2 = 2, etc)
+            $irlNumber = (int)str_replace('K', '', 'K' . $categoryId);
+
+            // Save validator assessments to dropdown_value column
+            // Do NOT overwrite dosen's score - validator uses separate dropdown_value field
+            foreach ($indicators as $indicatorData) {
+                // Map validator score (0-5) to dropdown value (A-F)
+                $dropdownMapping = [0 => 'A', 1 => 'B', 2 => 'C', 3 => 'D', 4 => 'E', 5 => 'F'];
+                $dropdownValue = $dropdownMapping[$indicatorData['validator_score']] ?? null;
+
+                KatsinovResponse::updateOrCreate(
+                    [
+                        'katsinov_id' => $formId,
+                        'indicator_number' => $irlNumber,
+                        'row_number' => $indicatorData['row_number'],
+                    ],
+                    [
+                        'dropdown_value' => $dropdownValue,
+                        // Keep dosen's score unchanged
+                    ]
+                );
+            }
+
+            // Save category comment
+            if ($categoryComment) {
+                KatsinovNote::updateOrCreate(
+                    [
+                        'katsinov_id' => $formId,
+                        'indicator_number' => $irlNumber,
+                    ],
+                    [
+                        'notes' => $categoryComment,
+                    ]
+                );
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Penilaian berhasil disimpan',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error saving assessment: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyimpan penilaian',
+            ], 500);
+        }
+    }
+
+    /**
+     * Save Berita Acara
+     */
+    public function saveBeritaAcara(Request $request, $formId)
+    {
+        $validator = Auth::user();
+        $form = Katsinov::findOrFail($formId);
+
+        // Check read-only status
+        if ($form->status === 'completed') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Penilaian sudah final dan tidak dapat diubah',
+            ], 403);
+        }
+
+        try {
+            // Map to katsinov_beritas table structure - sesuai dengan format V1
+            $signDate = \Carbon\Carbon::parse($request->innovation_date);
+
+            $data = [
+                'day' => $request->text_day,
+                'date' => $request->text_date,
+                'month' => $request->text_month,
+                'year' => $request->text_year,
+                'yearfull' => $request->text_yearfull,
+                'place' => $request->text_place,
+                'decree' => $request->text_decree,
+                'title' => $request->innovation_title,
+                'type' => $request->innovation_type,
+                'tki' => $request->innovation_tki,
+                'opinion' => $request->innovation_opinion,
+                'sign_date' => $signDate,
+                'penanggungjawab' => $request->penanggungjawab,
+                'ketua' => $request->ketua,
+                'anggota1' => $request->anggota1,
+                'anggota2' => $request->anggota2,
+            ];
+
+            // Handle PDF uploads
+            if ($request->hasFile('penanggungjawab_pdf')) {
+                $file = $request->file('penanggungjawab_pdf');
+                $filename = 'penanggungjawab_' . $formId . '_' . time() . '.pdf';
+                $file->storeAs('katsinov/signatures', $filename, 'public');
+                $data['penanggungjawab_pdf'] = $filename;
+            }
+
+            if ($request->hasFile('ketua_pdf')) {
+                $file = $request->file('ketua_pdf');
+                $filename = 'ketua_' . $formId . '_' . time() . '.pdf';
+                $file->storeAs('katsinov/signatures', $filename, 'public');
+                $data['ketua_pdf'] = $filename;
+            }
+
+            if ($request->hasFile('anggota1_pdf')) {
+                $file = $request->file('anggota1_pdf');
+                $filename = 'anggota1_' . $formId . '_' . time() . '.pdf';
+                $file->storeAs('katsinov/signatures', $filename, 'public');
+                $data['anggota1_pdf'] = $filename;
+            }
+
+            if ($request->hasFile('anggota2_pdf')) {
+                $file = $request->file('anggota2_pdf');
+                $filename = 'anggota2_' . $formId . '_' . time() . '.pdf';
+                $file->storeAs('katsinov/signatures', $filename, 'public');
+                $data['anggota2_pdf'] = $filename;
+            }
+
+            $beritaAcara = \App\Models\KatsinovBerita::updateOrCreate(
+                ['katsinov_id' => $formId],
+                $data
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berita Acara berhasil disimpan',
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error saving berita acara: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyimpan berita acara: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * View signature PDF
+     */
+    public function viewSignature($formId, $type)
+    {
+        $beritaAcara = \App\Models\KatsinovBerita::where('katsinov_id', $formId)->firstOrFail();
+
+        $filename = null;
+        switch ($type) {
+            case 'penanggungjawab':
+                $filename = $beritaAcara->penanggungjawab_pdf;
+                break;
+            case 'ketua':
+                $filename = $beritaAcara->ketua_pdf;
+                break;
+            case 'anggota1':
+                $filename = $beritaAcara->anggota1_pdf;
+                break;
+            case 'anggota2':
+                $filename = $beritaAcara->anggota2_pdf;
+                break;
+        }
+
+        if (!$filename) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        $path = storage_path('app/public/katsinov/signatures/' . $filename);
+
+        if (!file_exists($path)) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        return response()->file($path);
+    }
+
+    /**
+     * Save Validator Record (Record Hasil Pengukuran)
+     */
+    public function saveValidatorRecord(Request $request, $formId)
+    {
+        $validator = Auth::user();
+        $form = Katsinov::findOrFail($formId);
+
+        // Check read-only status
+        if ($form->status === 'completed') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Penilaian sudah final dan tidak dapat diubah',
+            ], 403);
+        }
+
+        try {
+            $data = [
+                'nama_penanggung_jawab' => $request->nama_penanggung_jawab,
+                'institusi' => $request->institusi,
+                'judul_inovasi' => $request->judul_inovasi,
+                'jenis_inovasi' => $request->jenis_inovasi,
+                'alamat_kontak' => $request->alamat_kontak,
+                'phone' => $request->phone,
+                'fax' => $request->fax,
+                'tanggal_penilaian' => $request->tanggal_penilaian,
+            ];
+
+            // Add detail data dynamically (up to 5 rows)
+            for ($i = 1; $i <= 5; $i++) {
+                $data["aspek_$i"] = $request->{"aspek_$i"} ?? '';
+                $data["aktivitas_$i"] = $request->{"aktivitas_$i"} ?? '';
+                $data["capaian_$i"] = $request->{"capaian_$i"} ?? 0;
+                $data["keterangan_$i"] = $request->{"keterangan_$i"} ?? '';
+                $data["catatan_$i"] = $request->{"catatan_$i"} ?? '';
+            }
+
+            $validatorRecord = \App\Models\FormRecordHasilPengukuran::updateOrCreate(
+                ['katsinov_id' => $formId],
+                $data
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Record Hasil Pengukuran berhasil disimpan',
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error saving validator record: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyimpan record: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Get progress status
+     */
+    public function getProgress($formId)
+    {
+        $validator = Auth::user();
+        $form = Katsinov::findOrFail($formId);
+
+        $assessments = KatsinovResponse::where('katsinov_id', $formId)->count();
+        $beritaAcara = KatsinovBerita::where('katsinov_id', $formId)->exists();
+        $record = FormRecordHasilPengukuran::where('katsinov_id', $formId)->exists();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'agreement_completed' => $form->status === 'under_review' || $form->status === 'completed',
+                'assessment_completed' => $assessments > 0,
+                'berita_acara_completed' => $beritaAcara,
+                'record_completed' => $record,
+                'all_completed' => $form->status === 'completed',
+                'can_submit' => $assessments > 0 && $beritaAcara && $record,
+                'is_read_only' => $form->status === 'completed',
+                'status' => $form->status,
+            ],
+        ]);
+    }
+
+    /**
+     * Submit final assessment
+     */
+    public function submit(Request $request, $formId)
+    {
+        $validator = Auth::user();
+        $form = Katsinov::findOrFail($formId);
+
+        // Check if already submitted
+        if ($form->status === 'completed') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Penilaian sudah disubmit sebelumnya',
+            ], 400);
+        }
+
+        // Check if can submit
+        $assessments = KatsinovResponse::where('katsinov_id', $formId)->count();
+        $beritaAcara = KatsinovBerita::where('katsinov_id', $formId)->exists();
+        $record = FormRecordHasilPengukuran::where('katsinov_id', $formId)->exists();
+
+        if ($assessments === 0 || !$beritaAcara || !$record) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lengkapi semua bagian sebelum submit',
+            ], 400);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // Update form status to completed
+            $form->update([
+                'status' => 'completed',
+                'reviewed_at' => now(),
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Penilaian berhasil disubmit. Semua data sekarang dalam mode read-only.',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error submitting assessment: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal submit penilaian',
+            ], 500);
+        }
+    }
+
+    /**
+     * Save draft (auto-save)
+     */
+    public function saveDraft(Request $request, $formId)
+    {
+        $validator = Auth::user();
+        $form = Katsinov::findOrFail($formId);
+
+        // Check read-only status
+        if ($form->status === 'completed') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Penilaian sudah final dan tidak dapat diubah',
+            ], 403);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Draft disimpan',
+        ]);
+    }
+
+    /**
+     * Preview lampiran file
+     */
+    public function previewLampiran($formId, $lampiranId)
+    {
+        $validator = Auth::user();
+        $form = Katsinov::findOrFail($formId);
+
+        // Check if validator is assigned to this form
+        if ($form->reviewer_id !== $validator->id) {
+            abort(403, 'Unauthorized access');
+        }
+
+        $lampiran = KatsinovLampiran::where('id', $lampiranId)
+            ->where('katsinov_id', $formId)
+            ->firstOrFail();
+
+        // Try different path formats
+        $possiblePaths = [
+            storage_path('app/public/' . $lampiran->path),
+            storage_path('app/' . $lampiran->path),
+            public_path('storage/' . $lampiran->path),
+        ];
+
+        $filePath = null;
+        foreach ($possiblePaths as $path) {
+            if (file_exists($path)) {
+                $filePath = $path;
+                break;
+            }
+        }
+
+        if (!$filePath) {
+            Log::error('File not found for lampiran', [
+                'lampiran_id' => $lampiranId,
+                'path' => $lampiran->path,
+                'tried_paths' => $possiblePaths
+            ]);
+            abort(404, 'File not found: ' . basename($lampiran->path));
+        }
+
+        $mimeType = mime_content_type($filePath);
+
+        return response()->file($filePath, [
+            'Content-Type' => $mimeType,
+            'Content-Disposition' => 'inline; filename="' . basename($lampiran->path) . '"'
+        ]);
+    }
+}

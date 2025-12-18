@@ -43,7 +43,8 @@ Route::get('/instagram/{id}/preview', [InstagramController::class, 'preview'])->
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-Route::get('/reload-captcha', function () {return response()->json(['captcha'=> captcha_img('default')]);
+Route::get('/reload-captcha', function () {
+    return response()->json(['captcha' => captcha_img('default')]);
 })->name('captcha.reload');
 
 
@@ -157,15 +158,14 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')->group(fu
     Route::view('/inkubator/inovasiaward', 'subdirektorat-inovasi.inkubator.inovasiaward')->name('inkubator.inovasiaward');
     Route::get('/risetunj/produk_inovasi', [ProdukInovasiController::class, 'publicIndex'])->name('riset_unj.produk_inovasi.produkinovasi');
     Route::get('/risetunj/produk_inovasi/{produk}', [ProdukInovasiController::class, 'show'])->name('riset_unj.produk_inovasi.show');
-    Route::get('/landingpage', [BeritaController::class, 'landingPageInovasi'])->name('landingpage');  
-
+    Route::get('/landingpage', [BeritaController::class, 'landingPageInovasi'])->name('landingpage');
 });
- Route::get('/riset/download', [RisetUnjController::class, 'showDownloadForm'])
-     ->name('riset.public.download');
+Route::get('/riset/download', [RisetUnjController::class, 'showDownloadForm'])
+    ->name('riset.public.download');
 
 // 2. Route untuk MEMPROSES password dan memulai download
 Route::post('/riset/verify-download', [RisetUnjController::class, 'verifyAndDownload'])
-     ->name('riset.public.verify_and_download');
+    ->name('riset.public.verify_and_download');
 
 Route::get('/pimpinan', [PimpinanController::class, 'showPublic'])->name('pimpinan.pimpinan');
 
@@ -223,7 +223,7 @@ Route::redirect('/Pemeringkatan/sulitest', '/pemeringkatan/sulitest', 301);
 Route::get('/sejarah-hilirisasi', [SejarahContentController::class, 'showPublic'])->name('subdirektorat-inovasi.sejarah.sejarah');
 
 Route::get('/subdirektorat-inovasi/riset-unj/produk-inovasi/mitra-kolaborasi', [MitraKolaborasiController::class, 'showPublicByCategory'])
-     ->name('subdirektorat-inovasi.riset_unj.produk_inovasi.mitra-kolaborasi');
+    ->name('subdirektorat-inovasi.riset_unj.produk_inovasi.mitra-kolaborasi');
 
 
 Route::get('/survey/thank-you', function () {
@@ -237,9 +237,27 @@ Route::get('/maintenance', function () {
 
 
 
+// Validator Routes
+Route::middleware(['auth'])->prefix('validator')->name('validator.')->group(function () {
+    Route::get('/', [App\Http\Controllers\ValidatorController::class, 'index'])->name('index');
+    Route::get('/assess/{formId}', [App\Http\Controllers\ValidatorController::class, 'assess'])->name('assess');
+    Route::get('/assess/{formId}/lampiran/{lampiranId}/preview', [App\Http\Controllers\ValidatorController::class, 'previewLampiran'])->name('lampiran.preview');
+    Route::post('/assess/{formId}/agreement', [App\Http\Controllers\ValidatorController::class, 'saveAgreement'])->name('save-agreement');
+    Route::post('/assess/{formId}/assessment', [App\Http\Controllers\ValidatorController::class, 'saveAssessment'])->name('save-assessment');
+    Route::post('/assess/{formId}/berita-acara', [App\Http\Controllers\ValidatorController::class, 'saveBeritaAcara'])->name('save-berita-acara');
+    Route::get('/assess/{formId}/berita-acara/signature/{type}', [App\Http\Controllers\ValidatorController::class, 'viewSignature'])->name('berita-acara.signature.view');
+    Route::post('/assess/{formId}/validator-record', [App\Http\Controllers\ValidatorController::class, 'saveValidatorRecord'])->name('save-validator-record');
+    Route::get('/assess/{formId}/progress', [App\Http\Controllers\ValidatorController::class, 'getProgress'])->name('get-progress');
+    Route::post('/assess/{formId}/submit', [App\Http\Controllers\ValidatorController::class, 'submit'])->name('submit');
+    Route::post('/assess/{formId}/save-draft', [App\Http\Controllers\ValidatorController::class, 'saveDraft'])->name('save-draft');
+    
+    // Download routes
+    Route::get('/{formId}/certificate', [App\Http\Controllers\KatsinovV2Controller::class, 'generateCertificate'])->name('certificate');
+    Route::get('/{formId}/download-report', [App\Http\Controllers\KatsinovV2Controller::class, 'downloadReport'])->name('download-report');
+});
+
 require __DIR__ . '/api.php';
 require __DIR__ . '/admin.php';
 require __DIR__ . '/pemeringkatan.php';
 require __DIR__ . '/inovasi.php';
 require __DIR__ . '/equity.php';
-
