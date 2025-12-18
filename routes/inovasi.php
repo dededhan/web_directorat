@@ -58,6 +58,7 @@ Route::prefix('admin_inovasi')->name('admin_inovasi.')
                 Route::get('/{katsinov_id}/print-summary', [\App\Http\Controllers\KatsinovV2Controller::class, 'printSummary'])->name('print-summary');
                 Route::get('/{katsinov_id}/full-report', [\App\Http\Controllers\KatsinovV2Controller::class, 'fullReport'])->name('full-report');
                 Route::get('/{katsinov_id}/validator-report', [\App\Http\Controllers\ValidatorController::class, 'fullReport'])->name('validator-report');
+                Route::get('/{katsinov_id}/validator-summary', [\App\Http\Controllers\ValidatorController::class, 'validatorSummary'])->name('validator-summary');
                 
                 // Delete - Draft only
                 Route::delete('/{id}', [\App\Http\Controllers\KatsinovV2Controller::class, 'destroy'])->name('destroy');

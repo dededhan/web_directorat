@@ -641,7 +641,7 @@ class ValidatorController extends Controller
         // Get validator record
         $validatorRecord = FormRecordHasilPengukuran::where('katsinov_id', $formId)->first();
 
-        return view('validator.full_report', compact(
+        return view('validator.full_report_validator', compact(
             'form',
             'allQuestions',
             'responsesByIndicator',
@@ -655,6 +655,170 @@ class ValidatorController extends Controller
             'recordHasil',
             'inovasiInfo',
             'validatorRecord'
+        ));
+    }
+
+    /**
+     * Show validator summary with charts
+     */
+    public function validatorSummary($formId)
+    {
+        $validator = Auth::user();
+        $katsinov = Katsinov::with(['responses', 'notes', 'reviewer'])->findOrFail($formId);
+
+        // Check if validator is assigned to this form OR user is admin_inovasi
+        if ($katsinov->reviewer_id !== $validator->id && !in_array($validator->role, ['admin_inovasi', 'admin_direktorat'])) {
+            abort(403, 'Unauthorized access');
+        }
+
+        // Load questions data
+        $allQuestions = include(resource_path('views/admin/katsinov_v2/includes/indicator_questions.php'));
+
+        // Total rows per indicator
+        $totalRowsPerIndicator = [1 => 22, 2 => 21, 3 => 21, 4 => 22, 5 => 24, 6 => 14];
+
+        // Dropdown to score mapping
+        $dropdownMap = [
+            'A' => 0,
+            'B' => 1,
+            'C' => 2,
+            'D' => 3,
+            'E' => 4,
+            'F' => 5,
+        ];
+
+        // Calculate indicator scores - ONLY for indicators with data
+        $indicatorScores = [];
+        for ($i = 1; $i <= 6; $i++) {
+            $responses = $katsinov->responses()->where('indicator_number', $i)->get();
+
+            // Skip if no data for this indicator
+            if ($responses->count() === 0) {
+                continue;
+            }
+
+            // Convert dropdown_value to score and sum
+            $totalScore = 0;
+            foreach ($responses as $response) {
+                $score = $dropdownMap[$response->dropdown_value] ?? 0;
+                $totalScore += $score;
+            }
+
+            $totalRows = $totalRowsPerIndicator[$i];
+            $maxScore = $totalRows * 5;
+            $percentage = $totalRows > 0 ? ($totalScore / $maxScore) * 100 : 0;
+
+            $indicatorScores[$i] = [
+                'score' => $totalScore,
+                'max_score' => $maxScore,
+                'percentage' => $percentage,
+                'total_rows' => $totalRows,
+                'status' => $percentage >= 80 ? 'excellent' : ($percentage >= 60 ? 'good' : 'poor')
+            ];
+        }
+
+        // Calculate overall average
+        $overallAverage = collect($indicatorScores)->avg('percentage');
+
+        // Calculate aspect scores (for overall chart)
+        $aspectMap = [
+            'T' => 'technology',
+            'M' => 'market',
+            'O' => 'organization',
+            'Mf' => 'manufacturing',
+            'P' => 'partnership',
+            'I' => 'investment',
+            'R' => 'risk'
+        ];
+
+        $overallAspectScores = [];
+        foreach ($aspectMap as $code => $name) {
+            $responses = $katsinov->responses()->where('aspect', $code)->get();
+            
+            // Convert dropdown_value to score and sum
+            $totalScore = 0;
+            foreach ($responses as $response) {
+                $score = $dropdownMap[$response->dropdown_value] ?? 0;
+                $totalScore += $score;
+            }
+            
+            $totalRows = $responses->count();
+            $maxScore = $totalRows * 5;
+            $percentage = $totalRows > 0 ? ($totalScore / $maxScore) * 100 : 0;
+            $overallAspectScores[$name] = round($percentage, 2);
+        }
+
+        // Calculate indicator-aspect scores (for spider charts)
+        $indicatorAspectScores = [];
+        for ($i = 1; $i <= 6; $i++) {
+            $indicatorAspectScores[$i] = [];
+            foreach ($aspectMap as $code => $name) {
+                $responses = $katsinov->responses()
+                    ->where('indicator_number', $i)
+                    ->where('aspect', $code)
+                    ->get();
+                
+                // Convert dropdown_value to score and sum
+                $totalScore = 0;
+                foreach ($responses as $response) {
+                    $score = $dropdownMap[$response->dropdown_value] ?? 0;
+                    $totalScore += $score;
+                }
+                
+                $totalRows = $responses->count();
+                $maxScore = $totalRows * 5;
+                $percentage = $totalRows > 0 ? ($totalScore / $maxScore) * 100 : 0;
+                $indicatorAspectScores[$i][$name] = round($percentage, 2);
+            }
+        }
+
+        // Calculate question scores (for detailed view) with question texts
+        $questionScores = [];
+        $questionTexts = [];
+        foreach ($indicatorScores as $i => $data) {
+            $questionScores[$i] = [];
+            $questionTexts[$i] = [];
+
+            foreach ($aspectMap as $code => $name) {
+                $responses = $katsinov->responses()
+                    ->where('indicator_number', $i)
+                    ->where('aspect', $code)
+                    ->orderBy('row_number')
+                    ->get();
+
+                // Get question texts for this indicator and aspect
+                $aspectQuestions = collect($allQuestions[$i] ?? [])->filter(function ($q) use ($code) {
+                    return $q['aspect'] === $code;
+                })->values();
+
+                // Convert dropdown_value to score for each question
+                $scores = [];
+                foreach ($responses as $response) {
+                    $score = $dropdownMap[$response->dropdown_value] ?? 0;
+                    $scores[] = $score;
+                }
+
+                $questionScores[$i][$name] = $scores;
+                $questionTexts[$i][$name] = $aspectQuestions->pluck('desc')->toArray();
+            }
+        }
+
+        // Convert to JSON for JavaScript
+        $overallAspectScoresJson = json_encode($overallAspectScores);
+        $indicatorAspectScoresJson = json_encode($indicatorAspectScores);
+        $questionScoresJson = json_encode($questionScores);
+
+        return view('validator.summaryvalidator', compact(
+            'katsinov',
+            'indicatorScores',
+            'overallAverage',
+            'overallAspectScores',
+            'indicatorAspectScores',
+            'questionScores',
+            'questionTexts',
+            'overallAspectScoresJson',
+            'indicatorAspectScoresJson',
+            'questionScoresJson'
         ));
     }
 }
