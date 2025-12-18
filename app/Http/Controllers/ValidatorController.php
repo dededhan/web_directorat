@@ -551,4 +551,110 @@ class ValidatorController extends Controller
             'Content-Disposition' => 'inline; filename="' . basename($lampiran->path) . '"'
         ]);
     }
+
+    /**
+     * Display full report of validator assessment
+     */
+    public function fullReport($formId)
+    {
+        $validator = Auth::user();
+        $form = Katsinov::with([
+            'responses',
+            'notes',
+            'reviewer',
+            'user',
+            'scores',
+            'katsinovInovasis',
+            'katsinovLampirans',
+            'katsinovInformasis',
+            'katsinovBeritas',
+            'formRecordHasilPengukuran'
+        ])->findOrFail($formId);
+
+        // Check if validator is assigned to this form OR user is admin_inovasi
+        if ($form->reviewer_id !== $validator->id && !in_array($validator->role, ['admin_inovasi', 'admin_direktorat'])) {
+            abort(403, 'Unauthorized access');
+        }
+
+        // Load questions data for displaying indicator descriptions
+        $allQuestions = include(resource_path('views/admin/katsinov_v2/includes/indicator_questions.php'));
+
+        // Get all responses grouped by indicator (IRL/KATSINOV number)
+        $responsesByIndicator = [];
+        for ($i = 1; $i <= 6; $i++) {
+            $responses = $form->responses()
+                ->where('indicator_number', $i)
+                ->orderBy('row_number')
+                ->get();
+
+            if ($responses->count() > 0) {
+                $responsesByIndicator[$i] = $responses;
+            }
+        }
+
+        // Get validator assessment data (grouped by IRL categories)
+        $categories = KatsinovCategory::with('indicators')->get();
+        
+        // Get assessments grouped by IRL number
+        $assessments = KatsinovResponse::where('katsinov_id', $formId)
+            ->get()
+            ->groupBy('indicator_number');
+
+        // Get category comments
+        $categoryComments = KatsinovNote::where('katsinov_id', $formId)
+            ->get()
+            ->keyBy('indicator_number');
+
+        // Get informasi dasar
+        $informasi = $form->katsinovInformasis->first();
+
+        // Get informasi collection data (team, program, partners, etc.)
+        $informasiCollection = [];
+        if ($informasi) {
+            $collectionData = \App\Models\KatsinovInformasiCollection::where('katsinov_informasi_id', $informasi->id)
+                ->get(['field', 'index', 'attribute', 'value'])
+                ->toArray();
+
+            foreach ($collectionData as $item) {
+                $field = $item['field'];
+                $index = $item['index'];
+
+                if (!isset($informasiCollection[$field][$index])) {
+                    $informasiCollection[$field][$index] = [];
+                }
+                $informasiCollection[$field][$index][$item['attribute']] = $item['value'];
+            }
+        }
+
+        // Get lampiran
+        $lampiran = $form->katsinovLampirans;
+
+        // Get berita acara
+        $beritaAcara = $form->katsinovBeritas->first();
+
+        // Get record hasil pengukuran
+        $recordHasil = $form->formRecordHasilPengukuran;
+
+        // Get informasi inovasi
+        $inovasiInfo = $form->katsinovInovasis->first();
+
+        // Get validator record
+        $validatorRecord = FormRecordHasilPengukuran::where('katsinov_id', $formId)->first();
+
+        return view('validator.full_report', compact(
+            'form',
+            'allQuestions',
+            'responsesByIndicator',
+            'categories',
+            'assessments',
+            'categoryComments',
+            'informasi',
+            'informasiCollection',
+            'lampiran',
+            'beritaAcara',
+            'recordHasil',
+            'inovasiInfo',
+            'validatorRecord'
+        ));
+    }
 }
