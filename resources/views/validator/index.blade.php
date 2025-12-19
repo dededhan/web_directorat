@@ -113,143 +113,145 @@
                                     <tbody>
                                         @foreach ($forms as $index => $form)
                                             @php
+                                                // Get ValidatorProgress record (don't create, just read)
                                                 $progress = App\Models\ValidatorProgress::where('form_id', $form->id)
                                                     ->where('validator_id', Auth::id())
                                                     ->first();
 
+                                                // If no progress record exists, create default values
+                                                if (!$progress) {
+                                                    $progress = (object)[
+                                                        'status' => 'assigned',
+                                                        'agreement_completed' => false,
+                                                        'assessment_completed' => false,
+                                                        'berita_acara_completed' => false,
+                                                        'record_completed' => false,
+                                                        'all_completed' => false,
+                                                    ];
+                                                }
+
                                                 $progressPercentage = 0;
+                                                $completed = 0;
+                                                $total = 0;
 
-                                                if ($progress) {
-                                                    $completed = 0;
-                                                    $total = 0;
+                                                // Form Dosen (always completed - read only)
+                                                $total++;
+                                                $completed++;
 
-                                                    // Form Dosen (always completed - read only)
-                                                    $total++;
+                                                // Persetujuan
+                                                $total++;
+                                                if ($form->validator_agreement_signature) {
                                                     $completed++;
+                                                }
 
-                                                    // Persetujuan
-                                                    $total++;
-                                                    if ($form->validator_agreement_signature) {
-                                                        $completed++;
-                                                    }
+                                                // Penilaian IRL (only categories filled by dosen)
+                                                $assessments = \App\Models\KatsinovResponse::where(
+                                                    'katsinov_id',
+                                                    $form->id,
+                                                )
+                                                    ->get()
+                                                    ->groupBy('indicator_number');
+                                                $categoryComments = \App\Models\KatsinovNote::where(
+                                                    'katsinov_id',
+                                                    $form->id,
+                                                )
+                                                    ->get()
+                                                    ->keyBy('indicator_number');
 
-                                                    // Penilaian IRL (only categories filled by dosen)
-                                                    $assessments = \App\Models\KatsinovResponse::where(
-                                                        'katsinov_id',
-                                                        $form->id,
-                                                    )
+                                                $filledIRLNumbers = $assessments->keys()->toArray();
+
+                                                if (!empty($filledIRLNumbers)) {
+                                                    $categories = \App\Models\KatsinovCategory::with('indicators')
                                                         ->get()
-                                                        ->groupBy('indicator_number');
-                                                    $categoryComments = \App\Models\KatsinovNote::where(
-                                                        'katsinov_id',
-                                                        $form->id,
-                                                    )
-                                                        ->get()
-                                                        ->keyBy('indicator_number');
+                                                        ->filter(function ($category) use ($filledIRLNumbers) {
+                                                            $categoryNumber = (int) str_replace(
+                                                                ['IRL', 'K'],
+                                                                '',
+                                                                $category->code,
+                                                            );
+                                                            return in_array($categoryNumber, $filledIRLNumbers);
+                                                        })
+                                                        ->values();
+                                                } else {
+                                                    $categories = collect();
+                                                }
 
-                                                    $filledIRLNumbers = $assessments->keys()->toArray();
-
-                                                    if (!empty($filledIRLNumbers)) {
-                                                        $categories = \App\Models\KatsinovCategory::with('indicators')
-                                                            ->get()
-                                                            ->filter(function ($category) use ($filledIRLNumbers) {
-                                                                $categoryNumber = (int) str_replace(
-                                                                    ['IRL', 'K'],
-                                                                    '',
-                                                                    $category->code,
-                                                                );
-                                                                return in_array($categoryNumber, $filledIRLNumbers);
-                                                            })
-                                                            ->values();
-                                                    } else {
-                                                        $categories = collect();
-                                                    }
-
-                                                    foreach ($categories as $category) {
-                                                        $total++;
-
-                                                        $irlNumber = (int) str_replace(
-                                                            ['IRL', 'K'],
-                                                            '',
-                                                            $category->code,
-                                                        );
-                                                        $categoryResponses = $assessments->get($irlNumber, collect());
-                                                        $totalIndicators = $category->indicators->count();
-                                                        $assessedIndicators = $categoryResponses
-                                                            ->filter(function ($response) {
-                                                                return !empty($response->dropdown_value);
-                                                            })
-                                                            ->count();
-
-                                                        $hasComment = !empty(
-                                                            $categoryComments[$irlNumber]->notes ?? ''
-                                                        );
-
-                                                        if (
-                                                            $assessedIndicators === $totalIndicators &&
-                                                            $totalIndicators > 0 &&
-                                                            $hasComment
-                                                        ) {
-                                                            $completed++;
-                                                        }
-                                                    }
-
-                                                    // Berita Acara
+                                                foreach ($categories as $category) {
                                                     $total++;
-                                                    $beritaAcara = \App\Models\KatsinovBerita::where(
-                                                        'katsinov_id',
-                                                        $form->id,
-                                                    )->first();
-                                                    if ($beritaAcara && $beritaAcara->title) {
-                                                        $completed++;
-                                                    }
 
-                                                    // Record Hasil
-                                                    $total++;
-                                                    $validatorRecord = \App\Models\FormRecordHasilPengukuran::where(
-                                                        'katsinov_id',
-                                                        $form->id,
-                                                    )->first();
-                                                    if ($validatorRecord && $validatorRecord->nama_penanggung_jawab) {
-                                                        $completed++;
-                                                    }
+                                                    $irlNumber = (int) str_replace(
+                                                        ['IRL', 'K'],
+                                                        '',
+                                                        $category->code,
+                                                    );
+                                                    $categoryResponses = $assessments->get($irlNumber, collect());
+                                                    $totalIndicators = $category->indicators->count();
+                                                    $assessedIndicators = $categoryResponses
+                                                        ->filter(function ($response) {
+                                                            return !empty($response->dropdown_value);
+                                                        })
+                                                        ->count();
 
-                                                    if ($total > 0) {
-                                                        $progressPercentage = ($completed / $total) * 100;
-                                                    }
-                                                    
-                                                    // Auto-update status to completed if progress is 100%
-                                                    if ($progressPercentage >= 100 && $progress->status !== 'completed') {
-                                                        $progress->status = 'completed';
-                                                        $progress->save();
-                                                        
-                                                        // Also update katsinov status
-                                                        $form->status = 'completed';
-                                                        $form->save();
+                                                    $hasComment = !empty(
+                                                        $categoryComments[$irlNumber]->notes ?? ''
+                                                    );
+
+                                                    if (
+                                                        $assessedIndicators === $totalIndicators &&
+                                                        $totalIndicators > 0 &&
+                                                        $hasComment
+                                                    ) {
+                                                        $completed++;
                                                     }
                                                 }
 
+                                                // Berita Acara
+                                                $total++;
+                                                $beritaAcara = \App\Models\KatsinovBerita::where(
+                                                    'katsinov_id',
+                                                    $form->id,
+                                                )->first();
+                                                if ($beritaAcara && $beritaAcara->title) {
+                                                    $completed++;
+                                                }
+
+                                                // Record Hasil
+                                                $total++;
+                                                $validatorRecord = \App\Models\FormRecordHasilPengukuran::where(
+                                                    'katsinov_id',
+                                                    $form->id,
+                                                )->first();
+                                                if ($validatorRecord && $validatorRecord->nama_penanggung_jawab) {
+                                                    $completed++;
+                                                }
+
+                                                if ($total > 0) {
+                                                    $progressPercentage = ($completed / $total) * 100;
+                                                }
+
                                                 $statusBadge = 'secondary';
-                                                $statusText = 'Assigned';
-                                                if ($progress) {
-                                                    switch ($progress->status) {
-                                                        case 'assigned':
-                                                            $statusBadge = 'secondary';
-                                                            $statusText = 'Ditugaskan';
-                                                            break;
-                                                        case 'in_progress':
-                                                            $statusBadge = 'warning';
-                                                            $statusText = 'Dalam Progress';
-                                                            break;
-                                                        case 'in_review':
-                                                            $statusBadge = 'info';
-                                                            $statusText = 'Dalam Review';
-                                                            break;
-                                                        case 'completed':
-                                                            $statusBadge = 'success';
-                                                            $statusText = 'Selesai';
-                                                            break;
-                                                    }
+                                                $statusText = 'Ditugaskan';
+                                                
+                                                // Use status from $progress (which is either DB record or default object)
+                                                $currentStatus = is_object($progress) ? $progress->status : 'assigned';
+                                                
+                                                switch ($currentStatus) {
+                                                    case 'assigned':
+                                                        $statusBadge = 'secondary';
+                                                        $statusText = 'Ditugaskan';
+                                                        break;
+                                                    case 'in_progress':
+                                                        $statusBadge = 'warning';
+                                                        $statusText = 'Dalam Progress';
+                                                        break;
+                                                    case 'in_review':
+                                                        $statusBadge = 'info';
+                                                        $statusText = 'Dalam Review';
+                                                        break;
+                                                    case 'completed':
+                                                        $statusBadge = 'success';
+                                                        $statusText = 'Selesai';
+                                                        break;
                                                 }
                                             @endphp
                                             <tr>

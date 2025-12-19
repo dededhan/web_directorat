@@ -1,4 +1,4 @@
-@extends('admin_inovasi.index')
+=@extends('admin_inovasi.index')
 
 @section('title', 'Laporan Lengkap Penilaian Validator')
 
@@ -331,13 +331,20 @@
                                     <label class="form-label fw-bold">Nama:</label>
                                     <p class="mb-0">{{ $beritaAcara->penanggungjawab ?? '-' }}</p>
                                 </div>
-                                @if($beritaAcara->penanggungjawab_pdf)
+                                @if($beritaAcara->penanggungjawab_signature)
+                                    <div class="mb-2">
+                                        <label class="form-label fw-bold">Tanda Tangan:</label>
+                                        <div class="border rounded p-2 bg-white text-center">
+                                            <img src="{{ $beritaAcara->penanggungjawab_signature }}" alt="Signature" style="max-height: 100px; max-width: 100%; width: auto;">
+                                        </div>
+                                    </div>
+                                @elseif($beritaAcara->penanggungjawab_pdf)
                                     <div class="mb-2">
                                         <label class="form-label fw-bold">Tanda Tangan (PDF):</label>
                                         <div>
                                             <a href="{{ route('validator.berita-acara.signature.view', ['formId' => $form->id, 'type' => 'penanggungjawab']) }}"
                                                target="_blank" class="btn btn-sm btn-success">
-                                                <i class='bx bx-file-pdf'></i> Lihat PDF Tanda Tangan
+                                                <i class='bx bx-file-pdf'></i> Lihat PDF
                                             </a>
                                         </div>
                                     </div>
@@ -358,7 +365,11 @@
                                 <div class="mb-3 pb-3 border-bottom">
                                     <label class="form-label fw-bold text-success">Ketua Tim Penilai:</label>
                                     <p class="mb-1">{{ $beritaAcara->ketua ?? '-' }}</p>
-                                    @if($beritaAcara->ketua_pdf)
+                                    @if($beritaAcara->ketua_signature)
+                                        <div class="mt-2 text-center border rounded p-1 bg-white">
+                                            <img src="{{ $beritaAcara->ketua_signature }}" alt="Signature" style="max-height: 60px; max-width: 100%; width: auto;">
+                                        </div>
+                                    @elseif($beritaAcara->ketua_pdf)
                                         <a href="{{ route('validator.berita-acara.signature.view', ['formId' => $form->id, 'type' => 'ketua']) }}"
                                            target="_blank" class="btn btn-sm btn-outline-success">
                                             <i class='bx bx-file-pdf'></i> Lihat PDF
@@ -372,7 +383,11 @@
                                 <div class="mb-3 pb-3 border-bottom">
                                     <label class="form-label fw-bold text-success">Anggota 1:</label>
                                     <p class="mb-1">{{ $beritaAcara->anggota1 ?? '-' }}</p>
-                                    @if($beritaAcara->anggota1_pdf)
+                                    @if($beritaAcara->anggota1_signature)
+                                        <div class="mt-2 text-center border rounded p-1 bg-white">
+                                            <img src="{{ $beritaAcara->anggota1_signature }}" alt="Signature" style="max-height: 60px; max-width: 100%; width: auto;">
+                                        </div>
+                                    @elseif($beritaAcara->anggota1_pdf)
                                         <a href="{{ route('validator.berita-acara.signature.view', ['formId' => $form->id, 'type' => 'anggota1']) }}"
                                            target="_blank" class="btn btn-sm btn-outline-success">
                                             <i class='bx bx-file-pdf'></i> Lihat PDF
@@ -386,7 +401,11 @@
                                 <div class="mb-3">
                                     <label class="form-label fw-bold text-success">Anggota 2:</label>
                                     <p class="mb-1">{{ $beritaAcara->anggota2 ?? '-' }}</p>
-                                    @if($beritaAcara->anggota2_pdf)
+                                    @if($beritaAcara->anggota2_signature)
+                                        <div class="mt-2 text-center border rounded p-1 bg-white">
+                                            <img src="{{ $beritaAcara->anggota2_signature }}" alt="Signature" style="max-height: 60px; max-width: 100%; width: auto;">
+                                        </div>
+                                    @elseif($beritaAcara->anggota2_pdf)
                                         <a href="{{ route('validator.berita-acara.signature.view', ['formId' => $form->id, 'type' => 'anggota2']) }}"
                                            target="_blank" class="btn btn-sm btn-outline-success">
                                             <i class='bx bx-file-pdf'></i> Lihat PDF

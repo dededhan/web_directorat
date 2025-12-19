@@ -31,7 +31,11 @@ class ValidatorController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('validator.index', compact('forms'));
+        return response()
+            ->view('validator.index', compact('forms'))
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
     }
 
     /**
@@ -45,6 +49,26 @@ class ValidatorController extends Controller
         // Check if validator is assigned to this form
         if ($form->reviewer_id !== $validator->id) {
             abort(403, 'Unauthorized access');
+        }
+
+        // Update ValidatorProgress status to 'in_review' when opening the form for the first time
+        $validatorProgress = \App\Models\ValidatorProgress::firstOrCreate(
+            [
+                'form_id' => $formId,
+                'validator_id' => Auth::id(),
+            ],
+            [
+                'status' => 'in_review',
+                'started_at' => now(),
+            ]
+        );
+
+        // If status is still 'assigned', update to 'in_review'
+        if ($validatorProgress->status === 'assigned') {
+            $validatorProgress->update([
+                'status' => 'in_review',
+                'started_at' => $validatorProgress->started_at ?? now(),
+            ]);
         }
 
         // Get existing responses (nilai dosen dari katsinov_responses table)
@@ -141,6 +165,24 @@ class ValidatorController extends Controller
             'validator_agreement_date' => now(),
         ]);
 
+        // Get existing progress to preserve started_at
+        $existingProgress = \App\Models\ValidatorProgress::where('form_id', $formId)
+            ->where('validator_id', Auth::id())
+            ->first();
+
+        // Update ValidatorProgress - keep status as in_review, don't change to in_progress
+        $progress = \App\Models\ValidatorProgress::updateOrCreate(
+            [
+                'form_id' => $formId,
+                'validator_id' => Auth::id(),
+            ],
+            [
+                'agreement_completed' => true,
+                'status' => $existingProgress && $existingProgress->status !== 'assigned' ? $existingProgress->status : 'in_review',
+                'started_at' => $existingProgress->started_at ?? now(),
+            ]
+        );
+
         return response()->json([
             'success' => true,
             'message' => 'Persetujuan berhasil disimpan',
@@ -206,6 +248,23 @@ class ValidatorController extends Controller
                 );
             }
 
+            // Get existing progress to preserve started_at
+            $existingProgress = \App\Models\ValidatorProgress::where('form_id', $formId)
+                ->where('validator_id', Auth::id())
+                ->first();
+
+            // Update ValidatorProgress - keep status as in_review
+            $progress = \App\Models\ValidatorProgress::updateOrCreate(
+                [
+                    'form_id' => $formId,
+                    'validator_id' => Auth::id(),
+                ],
+                [
+                    'status' => $existingProgress && $existingProgress->status !== 'assigned' ? $existingProgress->status : 'in_review',
+                    'started_at' => $existingProgress->started_at ?? now(),
+                ]
+            );
+
             DB::commit();
 
             return response()->json([
@@ -240,6 +299,8 @@ class ValidatorController extends Controller
         }
 
         try {
+            DB::beginTransaction();
+
             // Map to katsinov_beritas table structure - sesuai dengan format V1
             $signDate = \Carbon\Carbon::parse($request->innovation_date);
 
@@ -284,11 +345,32 @@ class ValidatorController extends Controller
                 $data
             );
 
+            // Get existing progress to preserve started_at
+            $existingProgress = \App\Models\ValidatorProgress::where('form_id', $formId)
+                ->where('validator_id', Auth::id())
+                ->first();
+
+            // Update ValidatorProgress - keep status as in_review
+            $progress = \App\Models\ValidatorProgress::updateOrCreate(
+                [
+                    'form_id' => $formId,
+                    'validator_id' => Auth::id(),
+                ],
+                [
+                    'berita_acara_completed' => true,
+                    'status' => $existingProgress && $existingProgress->status !== 'assigned' ? $existingProgress->status : 'in_review',
+                    'started_at' => $existingProgress->started_at ?? now(),
+                ]
+            );
+
+            DB::commit();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Berita Acara berhasil disimpan',
             ]);
         } catch (\Exception $e) {
+            DB::rollBack();
             \Log::error('Error saving berita acara: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
@@ -350,6 +432,8 @@ class ValidatorController extends Controller
         }
 
         try {
+            DB::beginTransaction();
+
             $data = [
                 'nama_penanggung_jawab' => $request->nama_penanggung_jawab,
                 'institusi' => $request->institusi,
@@ -375,11 +459,32 @@ class ValidatorController extends Controller
                 $data
             );
 
+            // Get existing progress to preserve started_at
+            $existingProgress = \App\Models\ValidatorProgress::where('form_id', $formId)
+                ->where('validator_id', Auth::id())
+                ->first();
+
+            // Update ValidatorProgress - keep status as in_review
+            $progress = \App\Models\ValidatorProgress::updateOrCreate(
+                [
+                    'form_id' => $formId,
+                    'validator_id' => Auth::id(),
+                ],
+                [
+                    'record_completed' => true,
+                    'status' => $existingProgress && $existingProgress->status !== 'assigned' ? $existingProgress->status : 'in_review',
+                    'started_at' => $existingProgress->started_at ?? now(),
+                ]
+            );
+
+            DB::commit();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Record Hasil Pengukuran berhasil disimpan',
             ]);
         } catch (\Exception $e) {
+            DB::rollBack();
             \Log::error('Error saving validator record: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
@@ -435,8 +540,9 @@ class ValidatorController extends Controller
         $assessments = KatsinovResponse::where('katsinov_id', $formId)->count();
         $beritaAcara = KatsinovBerita::where('katsinov_id', $formId)->exists();
         $record = FormRecordHasilPengukuran::where('katsinov_id', $formId)->exists();
+        $hasAgreement = !empty($form->validator_agreement_signature);
 
-        if ($assessments === 0 || !$beritaAcara || !$record) {
+        if ($assessments === 0 || !$beritaAcara || !$record || !$hasAgreement) {
             return response()->json([
                 'success' => false,
                 'message' => 'Lengkapi semua bagian sebelum submit',
@@ -452,6 +558,35 @@ class ValidatorController extends Controller
                 'reviewed_at' => now(),
             ]);
 
+            // Get existing progress to preserve started_at
+            $existingProgress = \App\Models\ValidatorProgress::where('form_id', $formId)
+                ->where('validator_id', Auth::id())
+                ->first();
+
+            // Determine started_at value
+            $startedAt = now(); // Default to now
+            if ($existingProgress && $existingProgress->started_at) {
+                $startedAt = $existingProgress->started_at;
+            }
+
+            // Update ValidatorProgress to completed
+            $progress = \App\Models\ValidatorProgress::updateOrCreate(
+                [
+                    'form_id' => $formId,
+                    'validator_id' => Auth::id(),
+                ],
+                [
+                    'agreement_completed' => true,
+                    'assessment_completed' => true,
+                    'berita_acara_completed' => true,
+                    'record_completed' => true,
+                    'all_completed' => true,
+                    'status' => 'completed',
+                    'submitted_at' => now(),
+                    'started_at' => $startedAt,
+                ]
+            );
+
             DB::commit();
 
             return response()->json([
@@ -461,10 +596,11 @@ class ValidatorController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error submitting assessment: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
 
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal submit penilaian',
+                'message' => 'Gagal submit penilaian: ' . $e->getMessage(),
             ], 500);
         }
     }

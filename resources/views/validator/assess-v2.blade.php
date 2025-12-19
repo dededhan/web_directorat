@@ -1670,7 +1670,8 @@
 
                     if (data.success) {
                         Swal.fire('Berhasil', 'Penilaian berhasil disubmit', 'success').then(() => {
-                            window.location.href = '/validator';
+                            // Use location.replace to force reload and prevent caching
+                            window.location.replace('/validator');
                         });
                     } else {
                         Swal.fire('Error', data.message, 'error');
