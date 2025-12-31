@@ -145,7 +145,18 @@ class SulitestRiwayatController extends Controller
         $phpWord = new PhpWord();
         $section = $phpWord->addSection();
 
-        $section->addText('HASIL UJIAN SULITEST', ['bold' => true, 'size' => 16], ['alignment' => 'center']);
+        // Add logo
+        $logoPath = public_path('images/logos/logo-sulitest.png');
+        if (file_exists($logoPath)) {
+            $section->addImage($logoPath, [
+                'width' => 100,
+                'height' => 100,
+                'alignment' => 'center'
+            ]);
+        }
+        
+        $section->addText('Hasil Sustainability Literacy Question', ['bold' => true, 'size' => 16], ['alignment' => 'center']);
+        $section->addText('Universitas Negeri Jakarta', ['bold' => true, 'size' => 14], ['alignment' => 'center']);
         $section->addTextBreak(1);
 
         $section->addText('Informasi Peserta', ['bold' => true, 'size' => 12]);
