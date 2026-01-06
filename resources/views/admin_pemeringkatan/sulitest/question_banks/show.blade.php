@@ -125,7 +125,7 @@
         </div>
 
         <div x-show="activeTab === 'questions'">
-            @include('admin_pemeringkatan.question_banks._question-list', ['questionBank' => $questionBank])
+            @include('admin_pemeringkatan.sulitest.question_banks._question-list', ['questionBank' => $questionBank])
         </div>
     </div>
     

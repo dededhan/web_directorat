@@ -14,10 +14,10 @@ class Berita extends Model
         'user_id',
         'kategori',
         'tanggal',
-        'judul',
+        'judul_berita',
         'judul_en',
         'slug', 
-        'isi',
+        'isi_berita',
         'isi_en',
         'gambar'
         
@@ -27,14 +27,14 @@ class Berita extends Model
     {
         return app()->getLocale() === 'en' && $this->judul_en 
             ? $this->judul_en 
-            : $this->judul;
+            : $this->judul_berita;
     }
 
     public function getTranslatedContent()
     {
         return app()->getLocale() === 'en' && $this->isi_en 
             ? $this->isi_en 
-            : $this->isi;
+            : $this->isi_berita;
     }
     
 
@@ -45,14 +45,14 @@ class Berita extends Model
         static::creating(function ($berita) {
             // If no slug was provided, generate one from the title
             if (!$berita->slug) {
-                $berita->slug = $berita->generateUniqueSlug($berita->judul);
+                $berita->slug = $berita->generateUniqueSlug($berita->judul_berita);
             }
         });
 
         static::updating(function ($berita) {
             // Only regenerate slug if title changed and slug wasn't explicitly set
-            if ($berita->isDirty('judul') && !$berita->isDirty('slug')) {
-                $berita->slug = $berita->generateUniqueSlug($berita->judul);
+            if ($berita->isDirty('judul_berita') && !$berita->isDirty('slug')) {
+                $berita->slug = $berita->generateUniqueSlug($berita->judul_berita);
             }
         });
     }

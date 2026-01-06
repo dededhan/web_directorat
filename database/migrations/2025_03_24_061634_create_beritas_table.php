@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('beritas', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->enum('kategori', ['inovasi', 'pemeringkatan']);
             $table->date('tanggal');
             $table->string('judul', 200);

@@ -50,17 +50,16 @@ class AdminMataKuliahController extends Controller
         if (!$user) return 'login';
 
         $role = $user->role;
-        $baseRouteName = 'matakuliah.' . $actionSuffix;
 
         switch ($role) {
             case 'admin_direktorat':
-                return 'admin.' . $baseRouteName;
+                return 'admin.matakuliah.' . $actionSuffix;
             case 'fakultas':
-                return 'fakultas.' . $baseRouteName;
+                return 'fakultas.matakuliah.' . $actionSuffix;
             case 'prodi':
-                return 'prodi.' . $baseRouteName;
+                return 'prodi.matakuliah.' . $actionSuffix;
             case 'admin_pemeringkatan':
-                return 'admin_pemeringkatan.' . $baseRouteName;
+                return 'admin_pemeringkatan.mata-kuliah-sustainability.' . $actionSuffix;
             default:
                 Log::warning('Trying to get role based route for matakuliah for unhandled role: ' . $role);
                 return 'dashboard';
@@ -119,7 +118,47 @@ class AdminMataKuliahController extends Controller
                 }
                 break;
             case 'admin_pemeringkatan':
-                $viewName = 'admin_pemeringkatan.matakuliah';
+                $viewName = 'admin_pemeringkatan.mata-kuliah-sustainability.index';
+                $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
+                break;
+            default:
+                return redirect('/')->with('error', 'View not defined for your role in Mata Kuliah.');
+        }
+
+        return view($viewName, $viewData);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $user = Auth::user();
+        $role = $user->role;
+        $userInfo = $this->getUserFacultyProdiInfo($user);
+
+        $viewName = '';
+        $viewData = ['user_info' => $userInfo];
+
+        switch ($role) {
+            case 'admin_direktorat':
+                $viewName = 'admin.matakuliah-create';
+                $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
+                break;
+            case 'prodi':
+                $viewName = 'prodi.matakuliah-create';
+                break;
+            case 'fakultas':
+                $viewName = 'fakultas.matakuliah-create';
+                if ($userInfo['faculty_key']) {
+                    $allFacultiesData = $this->getFacultyProgramDataForView();
+                    $viewData['prodi_list_for_fakultas'] = $allFacultiesData[strtoupper($userInfo['faculty_key'])]['programs'] ?? [];
+                } else {
+                    $viewData['prodi_list_for_fakultas'] = [];
+                }
+                break;
+            case 'admin_pemeringkatan':
+                $viewName = 'admin_pemeringkatan.mata-kuliah-sustainability.create';
                 $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
                 break;
             default:
@@ -179,11 +218,11 @@ class AdminMataKuliahController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource. 
-     * For AJAX calls to populate edit modals.
+     * Show the form for editing the specified resource.
      */
-    public function edit(MataKuliah $matakuliah) // Route model binding
+    public function edit(MataKuliah $mata_kuliah_sustainability) // Route model binding
     {
+        $matakuliah = $mata_kuliah_sustainability; // Keep using $matakuliah internally
         $user = Auth::user();
         $role = $user->role;
         $userInfo = $this->getUserFacultyProdiInfo($user);
@@ -192,19 +231,49 @@ class AdminMataKuliahController extends Controller
         // Authorization
         if ($role === 'fakultas') {
             if ($matakuliah->fakultas !== $userInfo['faculty_code'] && !$isOwner) {
-                return response()->json(['error' => 'Unauthorized. Not your faculty or owner.'], 403);
+                return redirect()->back()->with('error', 'Unauthorized. Not your faculty or owner.');
             }
         } elseif ($role === 'prodi') {
             if (!(($matakuliah->fakultas === $userInfo['faculty_code'] && $matakuliah->prodi === $userInfo['prodi_name']) && $isOwner)) {
-                return response()->json(['error' => 'Unauthorized. Not your prodi or owner.'], 403);
+                return redirect()->back()->with('error', 'Unauthorized. Not your prodi or owner.');
             }
         }
         // Admins can edit any.
-        return response()->json($matakuliah);
+
+        $viewName = '';
+        $viewData = ['matakuliah' => $matakuliah, 'user_info' => $userInfo];
+
+        switch ($role) {
+            case 'admin_direktorat':
+                $viewName = 'admin.matakuliah-edit';
+                $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
+                break;
+            case 'prodi':
+                $viewName = 'prodi.matakuliah-edit';
+                break;
+            case 'fakultas':
+                $viewName = 'fakultas.matakuliah-edit';
+                if ($userInfo['faculty_key']) {
+                    $allFacultiesData = $this->getFacultyProgramDataForView();
+                    $viewData['prodi_list_for_fakultas'] = $allFacultiesData[strtoupper($userInfo['faculty_key'])]['programs'] ?? [];
+                } else {
+                    $viewData['prodi_list_for_fakultas'] = [];
+                }
+                break;
+            case 'admin_pemeringkatan':
+                $viewName = 'admin_pemeringkatan.mata-kuliah-sustainability.edit';
+                $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
+                break;
+            default:
+                return redirect('/')->with('error', 'View not defined for your role in Mata Kuliah.');
+        }
+
+        return view($viewName, $viewData);
     }
 
-    public function update(StoreMataKuliahRequest $request, MataKuliah $matakuliah) // Route model binding
+    public function update(StoreMataKuliahRequest $request, MataKuliah $mata_kuliah_sustainability) // Route model binding
     {
+        $matakuliah = $mata_kuliah_sustainability; // Keep using $matakuliah internally
         $user = Auth::user();
         $role = $user->role;
         $validatedData = $request->validated();
@@ -259,8 +328,9 @@ class AdminMataKuliahController extends Controller
         }
     }
 
-    public function destroy(Request $request, MataKuliah $matakuliah) // Route model binding
+    public function destroy(Request $request, MataKuliah $mata_kuliah_sustainability) // Route model binding
     {
+        $matakuliah = $mata_kuliah_sustainability; // Keep using $matakuliah internally
         $user = Auth::user();
         $role = $user->role;
         $userInfo = $this->getUserFacultyProdiInfo($user);

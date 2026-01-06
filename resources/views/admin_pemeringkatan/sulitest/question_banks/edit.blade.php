@@ -26,7 +26,7 @@
     </div>
 
     <div class="mt-8">
-        @include('admin_pemeringkatan.question_banks._question-form', ['question' => $question, 'questionBank' => $question->questionBank])
+        @include('admin_pemeringkatan.sulitest.question_banks._question-form', ['question' => $question, 'questionBank' => $question->questionBank])
     </div>
 </div>
 @endsection

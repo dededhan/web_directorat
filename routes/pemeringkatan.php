@@ -271,6 +271,31 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             ->name('qsresponden.export');
         Route::post('/qsresponden-import', [RespondenAnswerController::class, 'import'])
             ->name('qsresponden.import');
+
+        // CMS Module Routes
+        // Berita (News)
+        Route::resource('/berita', \App\Http\Controllers\BeritaController::class);
+        Route::post('/berita/upload', [\App\Http\Controllers\BeritaController::class, 'upload'])
+            ->name('berita.upload');
+        
+        // Alumni Berdampak  
+        Route::resource('/alumni-berdampak', \App\Http\Controllers\AdminAlumniBerdampakController::class);
+        
+        // Kegiatan Sustainability
+        Route::resource('/kegiatan-sustainability', \App\Http\Controllers\AdminSustainabilityController::class);
+        Route::get('/kegiatan-sustainability/{id}/detail', 
+            [\App\Http\Controllers\AdminSustainabilityController::class, 'getSustainabilityDetail'])
+            ->name('kegiatan-sustainability.detail');
+        
+        // Mata Kuliah Sustainability
+        Route::resource('/mata-kuliah-sustainability', \App\Http\Controllers\Pemeringkatan\AdminMataKuliahController::class);
+        
+        // User Management - Fakultas, Prodi, Admin Pemeringkatan only
+        Route::resource('/manageuser', \App\Http\Controllers\Pemeringkatan\Admin\ManageUserController::class)
+            ->parameters(['manageuser' => 'user']);
+        Route::put('/manageuser/{user}/toggle-status', 
+            [\App\Http\Controllers\Pemeringkatan\Admin\ManageUserController::class, 'toggleStatus'])
+            ->name('manageuser.toggleStatus');
     });
 
 //exam

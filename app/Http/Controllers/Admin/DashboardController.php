@@ -136,7 +136,7 @@ class DashboardController extends Controller
             ->get()
             ->map(function ($berita) {
                 return [
-                    'title' => $berita->judul,
+                    'title' => $berita->judul_berita,
                     'description' => 'Berita dipublikasikan',
                     'date' => $berita->created_at->diffForHumans(),
                     'type' => 'news',

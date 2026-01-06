@@ -130,7 +130,44 @@ class AdminSustainabilityController extends Controller
                 }
                 break;
             case 'admin_pemeringkatan':
-                $viewName = 'admin_pemeringkatan.sustainability';
+                $viewName = 'admin_pemeringkatan.kegiatan-sustainability.index';
+                $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
+                break;
+            default:
+                return redirect('/')->with('error', 'View not defined for your role in sustainability.');
+        }
+
+        return view($viewName, $viewData);
+    }
+
+    public function create()
+    {
+        $user = Auth::user();
+        $role = $user->role;
+        $userInfo = $this->getUserFacultyProdiInfo($user);
+
+        $viewName = '';
+        $viewData = ['user_info' => $userInfo];
+
+        switch ($role) {
+            case 'admin_direktorat':
+                $viewName = 'admin.sustainability-create';
+                $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
+                break;
+            case 'prodi':
+                $viewName = 'prodi.sustainability-create';
+                break;
+            case 'fakultas':
+                $viewName = 'fakultas.sustainability-create';
+                if ($userInfo['faculty_key']) {
+                    $allFacultiesData = $this->getFacultyProgramDataForView();
+                    $viewData['prodi_list_for_fakultas'] = $allFacultiesData[strtoupper($userInfo['faculty_key'])]['programs'] ?? [];
+                } else {
+                    $viewData['prodi_list_for_fakultas'] = [];
+                }
+                break;
+            case 'admin_pemeringkatan':
+                $viewName = 'admin_pemeringkatan.kegiatan-sustainability.create';
                 $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
                 break;
             default:
@@ -228,19 +265,67 @@ class AdminSustainabilityController extends Controller
         return response()->json($sustainability);
     }
 
-    public function show(string $id) // For admin view if needed
+    public function show(Sustainability $kegiatan_sustainability) // For admin view if needed
     {
-        $sustainability = Sustainability::with('photos')->findOrFail($id);
+        $sustainability = $kegiatan_sustainability;
         // Add authorization if this view is intended for specific roles
         return view('admin.sustainability.show', compact('sustainability')); // Example path
     }
 
-    public function update(Request $request, string $id) // Use UpdateSustainabilityRequest if available
+    public function edit(Sustainability $kegiatan_sustainability)
     {
+        $sustainability = $kegiatan_sustainability;
         $user = Auth::user();
         $role = $user->role;
-        $sustainability = Sustainability::findOrFail($id);
         $userInfo = $this->getUserFacultyProdiInfo($user);
+        $isOwner = ($sustainability->user_id === $user->id);
+
+        // Authorization
+        if ($role === 'fakultas') {
+            if ($sustainability->fakultas !== $userInfo['faculty_code'] && !$isOwner) {
+                return redirect()->back()->with('error', 'Unauthorized. Not your faculty or owner.');
+            }
+        } elseif ($role === 'prodi') {
+            if (!(($sustainability->fakultas === $userInfo['faculty_code'] && $sustainability->prodi === $userInfo['prodi_name']) && $isOwner)) {
+                return redirect()->back()->with('error', 'Unauthorized. Not your prodi or owner.');
+            }
+        }
+        // Admins can edit any.
+
+        $viewName = '';
+        $viewData = ['sustainability' => $sustainability, 'user_info' => $userInfo];
+
+        switch ($role) {
+            case 'admin_direktorat':
+                $viewName = 'admin.sustainability-edit';
+                $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
+                break;
+            case 'prodi':
+                $viewName = 'prodi.sustainability-edit';
+                break;
+            case 'fakultas':
+                $viewName = 'fakultas.sustainability-edit';
+                if ($userInfo['faculty_key']) {
+                    $allFacultiesData = $this->getFacultyProgramDataForView();
+                    $viewData['prodi_list_for_fakultas'] = $allFacultiesData[strtoupper($userInfo['faculty_key'])]['programs'] ?? [];
+                } else {
+                    $viewData['prodi_list_for_fakultas'] = [];
+                }
+                break;
+            case 'admin_pemeringkatan':
+                $viewName = 'admin_pemeringkatan.kegiatan-sustainability.edit';
+                $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
+                break;
+            default:
+                return redirect('/')->with('error', 'View not defined for your role in sustainability.');
+        }
+
+        return view($viewName, $viewData);
+    }
+
+    public function update(Request $request, Sustainability $kegiatan_sustainability) // Use UpdateSustainabilityRequest if available
+    {
+        $sustainability = $kegiatan_sustainability;
 
         // Authorization Check
         $isOwner = ($sustainability->user_id === $user->id); // Check if the current user created the entry
@@ -318,7 +403,7 @@ class AdminSustainabilityController extends Controller
             }
             return redirect()->route($redirectRoute)->with('success', 'Data kegiatan sustainability berhasil diperbarui!');
         } catch (\Exception $e) {
-            Log::error('Error updating sustainability ID ' . $id . ': ' . $e->getMessage(), ['request_data' => $request->all(), 'user_id' => $user->id]);
+            Log::error('Error updating sustainability ID ' . $sustainability->id . ': ' . $e->getMessage(), ['request_data' => $request->all(), 'user_id' => $user->id]);
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
@@ -331,12 +416,13 @@ class AdminSustainabilityController extends Controller
         }
     }
 
-    public function destroy(Request $request, string $id) // Added Request for AJAX check
+    public function destroy(Request $request, Sustainability $kegiatan_sustainability) // Added Request for AJAX check
     {
+        $sustainability = $kegiatan_sustainability;
         $user = Auth::user();
         $role = $user->role;
-        $sustainability = Sustainability::with('photos')->findOrFail($id);
         $userInfo = $this->getUserFacultyProdiInfo($user);
+        $isOwner = ($sustainability->user_id === $user->id);
         $isOwner = ($sustainability->user_id === $user->id);
 
         // Authorization Check

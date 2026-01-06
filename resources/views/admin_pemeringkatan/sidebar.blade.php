@@ -22,6 +22,46 @@
             <i class="fas fa-home fa-fw w-6 text-center"></i>
             <span class="ml-4">Dashboard</span>
         </a>
+         {{-- Content Management / CMS Dropdown --}}
+        <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.berita.*') || 
+                                 request()->routeIs('admin_pemeringkatan.alumni-berdampak.*') || 
+                                 request()->routeIs('admin_pemeringkatan.kegiatan-sustainability.*') || 
+                                 request()->routeIs('admin_pemeringkatan.mata-kuliah-sustainability.*') 
+                                 ? 'true' : 'false' }} }">
+            <button @click="open = !open" 
+                    class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
+                <div class="flex items-center">
+                    <i class="fas fa-edit fa-fw w-6 text-center"></i>
+                    <span class="ml-4">Content Management</span>
+                </div>
+                <i class="fas fa-chevron-down transition-transform duration-200" :class="{'rotate-180': open}"></i>
+            </button>
+            <div x-show="open" x-transition class="mt-2 pl-8 space-y-2" x-cloak>
+                <a href="{{ route('admin_pemeringkatan.berita.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.berita.*') ? 'bg-teal-600 !text-white' : '' }}">
+                    <i class="fas fa-newspaper fa-xs mr-2"></i>
+                    Berita123
+                </a>
+                
+                <a href="{{ route('admin_pemeringkatan.alumni-berdampak.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.alumni-berdampak.*') ? 'bg-teal-600 !text-white' : '' }}">
+                    <i class="fas fa-user-graduate fa-xs mr-2"></i>
+                    Alumni Berdampak
+                </a>
+                
+                <a href="{{ route('admin_pemeringkatan.kegiatan-sustainability.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.kegiatan-sustainability.*') ? 'bg-teal-600 !text-white' : '' }}">
+                    <i class="fas fa-leaf fa-xs mr-2"></i>
+                    Kegiatan Sustainability
+                </a>
+                
+                <a href="{{ route('admin_pemeringkatan.mata-kuliah-sustainability.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.mata-kuliah-sustainability.*') ? 'bg-teal-600 !text-white' : '' }}">
+                    <i class="fas fa-book fa-xs mr-2"></i>
+                    Mata Kuliah Sustainability
+                </a>
+            </div>
+        </div>
 
         <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.sulitest_question_banks.*') || request()->routeIs('admin_pemeringkatan.sulitest_exams.*') || request()->routeIs('admin_pemeringkatan.peserta.*') ? 'true' : 'false' }} }">
             <button @click="open = !open" 
@@ -54,27 +94,7 @@
                 </a>
             </div>
         </div>
-
-
-        <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.the-impact-cms.*') ? 'true' : 'false' }} }">
-            <button @click="open = !open" 
-                    class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
-                <div class="flex items-center">
-                    <i class="fas fa-globe fa-fw w-6 text-center"></i>
-                    <span class="ml-4">THE Impact</span>
-                </div>
-                <i class="fas fa-chevron-down transition-transform duration-200" :class="{'rotate-180': open}"></i>
-            </button>
-            <div x-show="open" x-transition class="mt-2 pl-8 space-y-1" x-cloak>
-                <a href="{{ route('admin_pemeringkatan.the-impact-cms.dashboard') }}" 
-                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.the-impact-cms.*') ? 'bg-teal-600 !text-white' : '' }}">
-                    Manajemen Content
-                </a>
-                
-            </div>
-        </div>
-
-        {{-- Data Tables Dropdown --}}
+          {{-- Data Tables Dropdown --}}
         <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.responden.*') || request()->routeIs('admin_pemeringkatan.qsresponden.*') || request()->routeIs('admin_pemeringkatan.email.*') ? 'true' : 'false' }} }">
             <button @click="open = !open" 
                     class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
@@ -95,10 +115,6 @@
                     QS Responden
                 </a>
 
-                <a href="{{ route('admin_pemeringkatan.email.index') }}" 
-                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.email.*') ? 'bg-teal-600 !text-white' : '' }}">
-                    Email Templates
-                </a>
 
                 <a href="{{ route('admin_pemeringkatan.responden.graph') }}" 
                    class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.responden.graph') ? 'bg-teal-600 !text-white' : '' }}">
@@ -112,7 +128,27 @@
             </div>
         </div>
 
-        {{-- International Dropdown (Phase 2 - To be populated) --}}
+
+        <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.the-impact-cms.*') ? 'true' : 'false' }} }">
+            <button @click="open = !open" 
+                    class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
+                <div class="flex items-center">
+                    <i class="fas fa-globe fa-fw w-6 text-center"></i>
+                    <span class="ml-4">THE Impact</span>
+                </div>
+                <i class="fas fa-chevron-down transition-transform duration-200" :class="{'rotate-180': open}"></i>
+            </button>
+            <div x-show="open" x-transition class="mt-2 pl-8 space-y-1" x-cloak>
+                <a href="{{ route('admin_pemeringkatan.the-impact-cms.dashboard') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.the-impact-cms.*') ? 'bg-teal-600 !text-white' : '' }}">
+                    Manajemen Content
+                </a>
+                
+            </div>
+        </div>
+
+      
+
         <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.data-akreditasi.*') || request()->routeIs('admin_pemeringkatan.mahasiswa-international.*') || request()->routeIs('admin_pemeringkatan.indikator.*') || request()->routeIs('admin_pemeringkatan.ranking.*') || request()->routeIs('admin_pemeringkatan.international-lecture.*') ? 'true' : 'false' }} }">
             <button @click="open = !open" 
                     class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
@@ -123,7 +159,7 @@
                 <i class="fas fa-chevron-down transition-transform duration-200" :class="{'rotate-180': open}"></i>
             </button>
             <div x-show="open" x-transition class="mt-2 pl-8 space-y-2" x-cloak>
-                {{-- Phase 2 Routes - Active: Data Akreditasi, Mahasiswa International, Indikator, Ranking & International Lecture --}}
+              
                 <a href="{{ route('admin_pemeringkatan.data-akreditasi.index') }}" 
                    class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-600 hover:text-white transition-colors {{ request()->routeIs('admin_pemeringkatan.data-akreditasi.*') ? 'bg-gray-600 text-white' : '' }}">
                     <i class="fas fa-certificate fa-xs mr-2"></i>
@@ -186,6 +222,15 @@
                 </a>
             </div>
         </div>
+
+        {{-- User Management --}}
+        <a href="{{ route('admin_pemeringkatan.manageuser.index') }}" 
+           class="flex items-center px-4 py-2.5 rounded-lg transition-colors duration-200 {{ request()->routeIs('admin_pemeringkatan.manageuser.*') ? 'bg-teal-600 text-white' : 'hover:bg-gray-700 hover:text-white' }}">
+            <i class="fas fa-users fa-fw w-6 text-center"></i>
+            <span class="ml-4">Manajemen User</span>
+        </a>
+
+       
 
         {{-- Settings --}}
         <a href="#" class="flex items-center px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200">

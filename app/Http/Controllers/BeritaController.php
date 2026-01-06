@@ -57,7 +57,7 @@ class BeritaController extends Controller
             abort(403, 'Unauthorized access');
         }
         
-        $beritas = Berita::with('user')->latest()->get();
+        $beritas = Berita::with('user')->latest()->paginate(10);
         $routePrefix = $this->getRoutePrefix();
         $viewName = 'admin.newsadmin';
 
@@ -67,7 +67,8 @@ class BeritaController extends Controller
         } elseif ($role === 'admin_inovasi') {
             $viewName = 'subdirektorat-inovasi.admin_inovasi.newsadmin';
         } elseif ($role === 'admin_pemeringkatan') {
-            $viewName = 'admin_pemeringkatan.newsadmin';
+            //letgo
+            $viewName = 'admin_pemeringkatan.berita.index';
         } elseif ($role === 'admin_direktorat') {
             $viewName = 'admin.newsadmin';
         } elseif ($role === 'fakultas') {
@@ -78,89 +79,107 @@ class BeritaController extends Controller
         return view($viewName, compact('beritas', 'routePrefix'));
     }
 
+    /**
+     * Show the form for creating a new berita
+     */
+    public function create()
+    {
+        if (!Gate::allows('create', Berita::class)) {
+            abort(403, 'Unauthorized access');
+        }
+
+        $role = auth()->user()->role;
+        
+       
+        if ($role === 'admin_pemeringkatan') {
+            return view('admin_pemeringkatan.berita.create');
+        }
+        
+
+        return redirect()->back()->with('info', 'Gunakan form di halaman utama untuk menambah berita.');
+    }
+
+
+    public function edit(string $id)
+    {
+        $berita = Berita::findOrFail($id);
+        
+        if (!Gate::allows('update', $berita)) {
+            abort(403, 'Unauthorized access');
+        }
+
+        $role = auth()->user()->role;
+        
+
+        if ($role === 'admin_pemeringkatan') {
+            return view('admin_pemeringkatan.berita.edit', compact('berita'));
+        }
+        
+
+        return redirect()->back()->with('info', 'Gunakan tombol edit di halaman utama untuk mengubah berita.');
+    }
+
 
     public function store(StoreBeritaRequest $request)
     {
         try {
-        
+
+            $data = $request->validated();
+            $data['user_id'] = auth()->id();
+            
+            // Clean HTML content
+            $cleanJudul = strip_tags($data['judul_berita']);
+            $cleanIsi = Purifier::clean($data['isi_berita']);
+            
+            $data['judul_berita'] = $cleanJudul;
+            $data['isi_berita'] = $cleanIsi;
+            
+            // Generate translations
+            try {
+                $data['judul_en'] = $this->translationService->translateToEnglish($cleanJudul);
+                $data['isi_en'] = $this->translationService->translateHtml($cleanIsi, 'en');
+            } catch (\Exception $e) {
+                \Log::warning('Translation failed, using original text: ' . $e->getMessage());
+                $data['judul_en'] = $cleanJudul;
+                $data['isi_en'] = $cleanIsi;
+            }
+            
+            // Generate unique slug
+            $data['slug'] = $this->createUniqueSlug($cleanJudul);
+            
+            // Handle main image upload
             if ($request->hasFile('gambar')) {
                 $file = $request->file('gambar');
-
-                $allowedMimes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
-                if (!in_array($file->getMimeType(), $allowedMimes)) {
-                    return redirect()->back()
-                        ->with('error', 'Format file tidak diizinkan. Hanya JPG, PNG, dan GIF yang diperbolehkan.')
-                        ->withInput();
-                }
-                
-
-                if ($file->getSize() > 2048 * 1024) {
-                    return redirect()->back()
-                        ->with('error', 'Ukuran file terlalu besar. Maksimal 2MB.')
-                        ->withInput();
-                }
-                
                 $namaFile = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                $gambarPath = $file->storeAs(
-                    'berita-images',
-                    $namaFile,
-                    'public'
-                );
-                
-
-                $cleanJudul = strip_tags($request->judul_berita);
-                $cleanIsi = Purifier::clean($request->isi_berita);
-
-       
-                try {
-                    $judulEn = $this->translationService->translateToEnglish($cleanJudul);
-                    $isiEn = $this->translationService->translateHtml($cleanIsi, 'en');
-                } catch (\Exception $e) {
-                    \Log::warning('Translation failed, using original text: ' . $e->getMessage());
-                    $judulEn = $cleanJudul;
-                    $isiEn = $cleanIsi;
-                }
-
-    
-                $slug = $this->createUniqueSlug($cleanJudul);
-
-
-                $berita = Berita::create([
-                    'user_id' => auth()->id(),
-                    'kategori' => $request->kategori,
-                    'tanggal' => $request->tanggal,
-                    'judul' => $cleanJudul,
-                    'judul_en' => $judulEn,
-                    'isi' => $cleanIsi,
-                    'isi_en' => $isiEn, 
-                    'slug' => $slug, 
-                    'gambar' => $gambarPath
-                ]);
-
-                if ($request->hasFile('additional_images')) {
-                    foreach ($request->file('additional_images') as $image) {
-                        $namaAdditionalFile = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-                        $additionalPath = $image->storeAs(
-                            'berita-images',
-                            $namaAdditionalFile,
-                            'public'
-                        );
-
-                        BeritaImage::create([
-                            'berita_id' => $berita->id,
-                            'path' => $additionalPath
-                        ]);
-                    }
-                }
-
-                $routePrefix = $this->getRoutePrefix();
-                return redirect()->route($routePrefix . '.news.index')
-                    ->with('success', 'Berita berhasil disimpan!');
-            } else {
-                return redirect()->back()
-                    ->with('error', 'Upload gambar gagal. Pastikan file gambar valid.')
-                    ->withInput();
+                $data['gambar'] = $file->storeAs('berita-images', $namaFile, 'public');
             }
+            
+            // Create berita record
+            $berita = Berita::create($data);
+
+            // Handle additional images
+            if ($request->hasFile('additional_images')) {
+                foreach ($request->file('additional_images') as $image) {
+                    $namaAdditionalFile = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                    $additionalPath = $image->storeAs(
+                        'berita-images',
+                        $namaAdditionalFile,
+                        'public'
+                    );
+
+                    BeritaImage::create([
+                        'berita_id' => $berita->id,
+                        'path' => $additionalPath
+                    ]);
+                }
+            }
+
+            $routePrefix = $this->getRoutePrefix();
+            $role = auth()->user()->role;
+            $routeName = ($role === 'admin_pemeringkatan') ? 'admin_pemeringkatan.berita.index' : $routePrefix . '.news.index';
+            return redirect()->route($routeName)
+                ->with('success', 'Berita berhasil disimpan!');
+                
         } catch (\Exception $e) {
             \Log::error('Error storing news: ' . $e->getMessage());
             return redirect()->back()
@@ -234,11 +253,11 @@ class BeritaController extends Controller
                 'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-
+            // Clean HTML content
             $cleanJudul = strip_tags($validated['judul_berita']);
             $cleanIsi = Purifier::clean($validated['isi_berita']);
 
-   
+            // Generate translations
             try {
                 $judulEn = $this->translationService->translateToEnglish($cleanJudul);
                 $isiEn = $this->translationService->translateHtml($cleanIsi, 'en');
@@ -251,13 +270,13 @@ class BeritaController extends Controller
             // Update the model's attributes
             $berita->kategori = $validated['kategori'];
             $berita->tanggal = $validated['tanggal'];
-            $berita->judul = $cleanJudul;
+            $berita->judul_berita = $cleanJudul;
             $berita->judul_en = $judulEn; 
-            $berita->isi = $cleanIsi;
+            $berita->isi_berita = $cleanIsi;
             $berita->isi_en = $isiEn;
             
-
-            if ($berita->isDirty('judul')) {
+            // Regenerate slug if title changed
+            if ($berita->isDirty('judul_berita')) {
                 $berita->slug = $this->createUniqueSlug($cleanJudul, $berita->id);
             }
 
@@ -287,7 +306,9 @@ class BeritaController extends Controller
                 return response()->json(['success' => true, 'message' => 'Berita berhasil diperbarui!']);
             }
 
-            return redirect()->route($routePrefix . '.news.index')
+            $role = auth()->user()->role;
+            $routeName = ($role === 'admin_pemeringkatan') ? 'admin_pemeringkatan.berita.index' : $routePrefix . '.news.index';
+            return redirect()->route($routeName)
                 ->with('success', 'Berita berhasil diperbarui!');
         } catch (\Exception $e) {
             \Log::error('Error updating news: ' . $e->getMessage());
@@ -332,7 +353,9 @@ class BeritaController extends Controller
             $berita->delete();
 
             $routePrefix = $this->getRoutePrefix();
-            return redirect()->route($routePrefix . '.news.index')
+            $role = auth()->user()->role;
+            $routeName = ($role === 'admin_pemeringkatan') ? 'admin_pemeringkatan.berita.index' : $routePrefix . '.news.index';
+            return redirect()->route($routeName)
                 ->with('success', 'Berita berhasil dihapus!');
         } catch (\Exception $e) {
             \Log::error('Error deleting news: ' . $e->getMessage());
