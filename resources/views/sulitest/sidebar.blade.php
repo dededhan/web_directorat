@@ -22,7 +22,8 @@
             <span class="ml-4">Riwayat Tes</span>
         </a>
 
-        <a href="#" class="flex items-center px-4 py-2.5 rounded-lg hover:bg-slate-700 hover:text-white transition-colors duration-200">
+        <a href="{{ route('sulitest.pengaturan-akun.edit') }}" 
+           class="flex items-center px-4 py-2.5 rounded-lg transition-colors duration-200 {{ request()->routeIs('sulitest.pengaturan-akun.*') ? 'bg-teal-600 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
             <i class="fas fa-user-circle fa-fw w-6 text-center"></i>
             <span class="ml-4">Pengaturan Akun</span>
         </a>

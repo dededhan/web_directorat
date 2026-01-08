@@ -40,7 +40,7 @@
                 <a href="{{ route('admin_pemeringkatan.berita.index') }}" 
                    class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.berita.*') ? 'bg-teal-600 !text-white' : '' }}">
                     <i class="fas fa-newspaper fa-xs mr-2"></i>
-                    Berita123
+                    Berita
                 </a>
                 
                 <a href="{{ route('admin_pemeringkatan.alumni-berdampak.index') }}" 
@@ -107,14 +107,17 @@
             <div x-show="open" x-transition class="mt-2 pl-8 space-y-2" x-cloak>
                 <a href="{{ route('admin_pemeringkatan.responden.index') }}" 
                    class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.responden.index') ? 'bg-teal-600 !text-white' : '' }}">
-                    Responden
+                    Calon Responden
                 </a>
                 
                 <a href="{{ route('admin_pemeringkatan.qsresponden.index') }}" 
                    class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.qsresponden.*') ? 'bg-teal-600 !text-white' : '' }}">
                     QS Responden
                 </a>
-
+                <a href="{{ route('admin_pemeringkatan.email.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.email.*') ? 'bg-teal-600 !text-white' : '' }}">
+                    Email Templates
+                </a>
 
                 <a href="{{ route('admin_pemeringkatan.responden.graph') }}" 
                    class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.responden.graph') ? 'bg-teal-600 !text-white' : '' }}">

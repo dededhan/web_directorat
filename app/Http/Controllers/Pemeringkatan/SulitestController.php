@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Option;
 use App\Models\ExamSessionLog;
+use App\Models\Fakultas;
+use App\Models\Prodi;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 class SulitestController extends Controller
 {
     public function dashboard()
@@ -228,5 +232,57 @@ class SulitestController extends Controller
         }
 
         return response()->json(['status' => 'success']);
+    }
+
+    public function editAccount()
+    {
+        $user = Auth::user();
+        $user->load('sulitestProfile.fakultas', 'sulitestProfile.prodi');
+        $fakultas = Fakultas::orderBy('name')->get();
+        $prodis = Prodi::where('fakultas_id', $user->sulitestProfile?->fakultas_id)->get();
+        
+        return view('sulitest.pengaturan-akun', compact('user', 'fakultas', 'prodis'));
+    }
+
+    public function updateAccount(Request $request)
+    {
+        $user = Auth::user();
+        $profileId = $user->sulitestProfile?->id;
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
+            'nim' => ['nullable', 'string', 'max:20', Rule::unique('sulitest_peserta_profiles')->ignore($profileId)],
+            'password' => 'nullable|string|min:8|confirmed',
+            'fakultas_id' => 'required|exists:equity_fakultas,id',
+            'prodi_id' => 'required|exists:equity_prodi,id',
+        ]);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        if ($request->filled('password')) {
+            $user->update(['password' => Hash::make($request->password)]);
+        }
+
+        $user->sulitestProfile()->updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'nim' => $request->nim,
+                'fakultas_id' => $request->fakultas_id,
+                'prodi_id' => $request->prodi_id,
+            ]
+        );
+
+        return redirect()->route('sulitest.pengaturan-akun.edit')
+            ->with('success', 'Profil berhasil diperbarui!');
+    }
+
+    public function getProdiByFakultas($fakultasId)
+    {
+        $prodis = Prodi::where('fakultas_id', $fakultasId)->orderBy('name')->get();
+        return response()->json($prodis);
     }
 }

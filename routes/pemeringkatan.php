@@ -322,6 +322,10 @@ Route::prefix('sulitest')->name('sulitest.')->group(function () {
         Route::get('/riwayat', [SulitestRiwayatController::class, 'index'])->name('riwayat.index');
         Route::get('/riwayat/{session}', [SulitestRiwayatController::class, 'detail'])->name('riwayat.detail');
         Route::get('/riwayat/{session}/download', [SulitestRiwayatController::class, 'download'])->name('riwayat.download');
+        
+        Route::get('/pengaturan-akun', [SulitestController::class, 'editAccount'])->name('pengaturan-akun.edit');
+        Route::put('/pengaturan-akun', [SulitestController::class, 'updateAccount'])->name('pengaturan-akun.update');
+        Route::get('/pengaturan-akun/get-prodi/{fakultasId}', [SulitestController::class, 'getProdiByFakultas'])->name('pengaturan-akun.get-prodi');
     });
 });
 
