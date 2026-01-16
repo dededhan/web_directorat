@@ -53,8 +53,8 @@ class BeritaPolicy
      */
     public function update(User $user, Berita $berita)
     {
-        // Admin direktorat can update any berita
-        if ($user->role === 'admin_direktorat') {
+        // Admin direktorat and admin_pemeringkatan can update any berita
+        if (in_array($user->role, ['admin_direktorat', 'admin_pemeringkatan'])) {
             return true;
         }
         
@@ -67,8 +67,8 @@ class BeritaPolicy
      */
     public function delete(User $user, Berita $berita)
     {
-        // Admin direktorat can delete any berita
-        if ($user->role === 'admin_direktorat') {
+        // Admin direktorat and admin_pemeringkatan can delete any berita
+        if (in_array($user->role, ['admin_direktorat', 'admin_pemeringkatan'])) {
             return true;
         }
         

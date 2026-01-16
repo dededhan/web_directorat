@@ -13,6 +13,8 @@ use App\Models\Instagram;
 use App\Models\Ranking;
 use App\Models\InternationalStudent;
 use App\Models\InternationalFacultyStaff;
+use App\Models\Sustainability;
+use App\Models\AlumniBerdampak;
 use Illuminate\Support\Facades\Auth;
 use Mews\Purifier\Facades\Purifier;
 use Illuminate\Support\Str;
@@ -43,7 +45,7 @@ class BeritaController extends Controller
             case 'fakultas':
                 return 'fakultas';
             case 'prodi':
-                return 'prodi';
+                return 'prodis';
             default:
                 return 'admin';
         }
@@ -74,7 +76,7 @@ class BeritaController extends Controller
         } elseif ($role === 'fakultas') {
             $viewName = 'fakultas.newsadmin';
         } elseif ($role === 'prodi') {
-            $viewName = 'prodi.newsadmin';
+            $viewName = 'prodis.newsadmin';
         }
         return view($viewName, compact('beritas', 'routePrefix'));
     }
@@ -459,7 +461,14 @@ class BeritaController extends Controller
             ->take(6)
             ->get();
 
-        $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();
+        $sustainabilities = Sustainability::with('photos')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        $alumniBerdampak = AlumniBerdampak::latest()
+            ->take(3)
+            ->get();
 
         return view('pemeringkatan.landing', compact(
             'stats',
@@ -468,7 +477,8 @@ class BeritaController extends Controller
             'featuredNews',
             'announcements',
             'programLayanan',
-            'instagramPosts'
+            'sustainabilities',
+            'alumniBerdampak'
         ));
     }
 

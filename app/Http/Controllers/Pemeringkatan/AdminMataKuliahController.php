@@ -57,7 +57,7 @@ class AdminMataKuliahController extends Controller
             case 'fakultas':
                 return 'fakultas.matakuliah.' . $actionSuffix;
             case 'prodi':
-                return 'prodi.matakuliah.' . $actionSuffix;
+                return 'prodis.matakuliah.' . $actionSuffix;
             case 'admin_pemeringkatan':
                 return 'admin_pemeringkatan.mata-kuliah-sustainability.' . $actionSuffix;
             default:
@@ -106,7 +106,7 @@ class AdminMataKuliahController extends Controller
                 $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
                 break;
             case 'prodi':
-                $viewName = 'prodi.matakuliah';
+                $viewName = 'prodis.matakuliah';
                 break;
             case 'fakultas':
                 $viewName = 'fakultas.matakuliah';
@@ -146,7 +146,7 @@ class AdminMataKuliahController extends Controller
                 $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
                 break;
             case 'prodi':
-                $viewName = 'prodi.matakuliah-create';
+                $viewName = 'prodis.matakuliah-create';
                 break;
             case 'fakultas':
                 $viewName = 'fakultas.matakuliah-create';
@@ -220,25 +220,51 @@ class AdminMataKuliahController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(MataKuliah $mata_kuliah_sustainability) // Route model binding
+    public function edit($id) // Route model binding
     {
-        $matakuliah = $mata_kuliah_sustainability; // Keep using $matakuliah internally
+        $matakuliah = MataKuliah::findOrFail($id);
         $user = Auth::user();
         $role = $user->role;
         $userInfo = $this->getUserFacultyProdiInfo($user);
         $isOwner = ($matakuliah->user_id === $user->id);
 
+        // Debug logging
+        Log::info('Edit authorization check', [
+            'role' => $role,
+            'matakuliah_fakultas' => $matakuliah->fakultas,
+            'user_faculty_code' => $userInfo['faculty_code'],
+            'matakuliah_user_id' => $matakuliah->user_id,
+            'current_user_id' => $user->id,
+            'isOwner' => $isOwner,
+        ]);
+
         // Authorization
         if ($role === 'fakultas') {
-            if ($matakuliah->fakultas !== $userInfo['faculty_code'] && !$isOwner) {
+            // Allow access if: 1) Faculty matches, 2) Is owner, 3) Legacy data (null fakultas)
+            $canAccess = ($matakuliah->fakultas === $userInfo['faculty_code']) || 
+                         $isOwner || 
+                         is_null($matakuliah->fakultas);
+            
+            if (!$canAccess) {
+                if (request()->ajax() || request()->expectsJson()) {
+                    return response()->json(['error' => 'Unauthorized. Not your faculty or owner.'], 403);
+                }
                 return redirect()->back()->with('error', 'Unauthorized. Not your faculty or owner.');
             }
         } elseif ($role === 'prodi') {
-            if (!(($matakuliah->fakultas === $userInfo['faculty_code'] && $matakuliah->prodi === $userInfo['prodi_name']) && $isOwner)) {
+            if (!(($matakuliah->fakultas === $userInfo['faculty_code'] && $matakuliah->prodi === $userInfo['prodi_name']) || $isOwner)) {
+                if (request()->ajax() || request()->expectsJson()) {
+                    return response()->json(['error' => 'Unauthorized. Not your prodi or owner.'], 403);
+                }
                 return redirect()->back()->with('error', 'Unauthorized. Not your prodi or owner.');
             }
         }
         // Admins can edit any.
+
+        // If this is an AJAX request (e.g., from modal), return JSON data
+        if (request()->ajax() || request()->expectsJson()) {
+            return response()->json($matakuliah);
+        }
 
         $viewName = '';
         $viewData = ['matakuliah' => $matakuliah, 'user_info' => $userInfo];
@@ -249,7 +275,7 @@ class AdminMataKuliahController extends Controller
                 $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
                 break;
             case 'prodi':
-                $viewName = 'prodi.matakuliah-edit';
+                $viewName = 'prodis.matakuliah-edit';
                 break;
             case 'fakultas':
                 $viewName = 'fakultas.matakuliah-edit';
@@ -271,9 +297,38 @@ class AdminMataKuliahController extends Controller
         return view($viewName, $viewData);
     }
 
-    public function update(StoreMataKuliahRequest $request, MataKuliah $mata_kuliah_sustainability) // Route model binding
+    /**
+     * Get mata kuliah detail for AJAX requests (for modal editing)
+     */
+    public function getMataKuliahDetail($id)
     {
-        $matakuliah = $mata_kuliah_sustainability; // Keep using $matakuliah internally
+        $matakuliah = MataKuliah::findOrFail($id);
+        $user = Auth::user();
+        $role = $user->role;
+        $userInfo = $this->getUserFacultyProdiInfo($user);
+        $isOwner = ($matakuliah->user_id === $user->id);
+
+        // Authorization check
+        if ($role === 'fakultas') {
+            $canAccess = ($matakuliah->fakultas === $userInfo['faculty_code']) || 
+                         $isOwner || 
+                         is_null($matakuliah->fakultas);
+            
+            if (!$canAccess) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+        } elseif ($role === 'prodi') {
+            if (!(($matakuliah->fakultas === $userInfo['faculty_code'] && $matakuliah->prodi === $userInfo['prodi_name']) || $isOwner)) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+        }
+
+        return response()->json($matakuliah);
+    }
+
+    public function update(StoreMataKuliahRequest $request, $id) // Route model binding
+    {
+        $matakuliah = MataKuliah::findOrFail($id);
         $user = Auth::user();
         $role = $user->role;
         $validatedData = $request->validated();
@@ -282,7 +337,12 @@ class AdminMataKuliahController extends Controller
 
         // Authorization
         if ($role === 'fakultas') {
-            if ($matakuliah->fakultas !== $userInfo['faculty_code'] && !$isOwner) {
+            // Allow access if: 1) Faculty matches, 2) Is owner, 3) Legacy data (null fakultas)
+            $canAccess = ($matakuliah->fakultas === $userInfo['faculty_code']) || 
+                         $isOwner || 
+                         is_null($matakuliah->fakultas);
+            
+            if (!$canAccess) {
                 return redirect()->back()->with('error', 'Unauthorized to update. Not your faculty or owner.');
             }
             // Fakultas can change prodi within their faculty or set to null
@@ -291,7 +351,7 @@ class AdminMataKuliahController extends Controller
                 $validatedData['prodi'] = null;
             }
         } elseif ($role === 'prodi') {
-            if (!(($matakuliah->fakultas === $userInfo['faculty_code'] && $matakuliah->prodi === $userInfo['prodi_name']) && $isOwner)) {
+            if (!(($matakuliah->fakultas === $userInfo['faculty_code'] && $matakuliah->prodi === $userInfo['prodi_name']) || $isOwner)) {
                 return redirect()->back()->with('error', 'Unauthorized to update. Not your prodi or owner.');
             }
             // Prodi cannot change their faculty or prodi
@@ -328,9 +388,9 @@ class AdminMataKuliahController extends Controller
         }
     }
 
-    public function destroy(Request $request, MataKuliah $mata_kuliah_sustainability) // Route model binding
+    public function destroy(Request $request, $id) // Route model binding
     {
-        $matakuliah = $mata_kuliah_sustainability; // Keep using $matakuliah internally
+        $matakuliah = MataKuliah::findOrFail($id);
         $user = Auth::user();
         $role = $user->role;
         $userInfo = $this->getUserFacultyProdiInfo($user);
@@ -338,11 +398,16 @@ class AdminMataKuliahController extends Controller
 
         // Authorization
         if ($role === 'fakultas') {
-            if ($matakuliah->fakultas !== $userInfo['faculty_code'] && !$isOwner) {
+            // Allow access if: 1) Faculty matches, 2) Is owner, 3) Legacy data (null fakultas)
+            $canAccess = ($matakuliah->fakultas === $userInfo['faculty_code']) || 
+                         $isOwner || 
+                         is_null($matakuliah->fakultas);
+            
+            if (!$canAccess) {
                 return redirect()->back()->with('error', 'Unauthorized to delete. Not your faculty or owner.');
             }
         } elseif ($role === 'prodi') {
-            if (!(($matakuliah->fakultas === $userInfo['faculty_code'] && $matakuliah->prodi === $userInfo['prodi_name']) && $isOwner)) {
+            if (!(($matakuliah->fakultas === $userInfo['faculty_code'] && $matakuliah->prodi === $userInfo['prodi_name']) || $isOwner)) {
                 return redirect()->back()->with('error', 'Unauthorized to delete. Not your prodi or owner.');
             }
         }

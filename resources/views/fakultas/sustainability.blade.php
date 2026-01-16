@@ -256,7 +256,9 @@
         document.querySelectorAll('.edit-activity').forEach(button => {
             button.addEventListener('click', function() {
                 const activityId = this.dataset.id;
-                document.getElementById('edit-form').action = `{{ url('fakultas/sustainability') }}/${activityId}`;
+                const form = document.getElementById('edit-form');
+                form.action = `{{ url('fakultas/sustainability') }}/${activityId}`;
+                form.dataset.activityId = activityId; // Store for later use
 
                 fetch(`{{ url('fakultas/sustainability') }}/${activityId}/detail`)
                 .then(response => response.json())
@@ -273,6 +275,78 @@
                         ? '<p>Foto saat ini:</p>' + data.photos.map(p => `<img src="/storage/${p.path}" class="img-thumbnail" style="width:100px; height:100px; object-fit:cover;">`).join(' ')
                         : '<p><em>Tidak ada foto terunggah.</em></p>';
                 }).catch(err => console.error('Fetch error:', err));
+            });
+        });
+
+        // Handle edit form submission via AJAX
+        document.getElementById('edit-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const formData = new FormData(form);
+            const activityId = form.dataset.activityId;
+            
+            console.log('Submitting edit form for activity ID:', activityId);
+            console.log('Form action:', form.action);
+            console.log('Form data:', Object.fromEntries(formData));
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw err;
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response data:', data);
+                if (data.success) {
+                    // Close the modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
+                    modal.hide();
+                    
+                    // Show success message
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert alert-success alert-dismissible fade show';
+                    alertDiv.innerHTML = `
+                        ${data.message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    `;
+                    document.querySelector('.head-title').after(alertDiv);
+                    
+                    // Reload the page to refresh the table (hard refresh to bypass cache)
+                    setTimeout(() => {
+                        window.location.href = window.location.href.split('?')[0] + '?t=' + new Date().getTime();
+                    }, 1000);
+                } else {
+                    console.error('Update failed:', data);
+                    alert(data.message || 'Gagal memperbarui data');
+                }
+            })
+            .catch(err => {
+                console.error('Submit error:', err);
+                
+                // Handle validation errors
+                if (err.errors) {
+                    let errorMsg = 'Validasi gagal:\n';
+                    Object.keys(err.errors).forEach(key => {
+                        errorMsg += `- ${err.errors[key].join(', ')}\n`;
+                    });
+                    alert(errorMsg);
+                } else if (err.message) {
+                    alert('Error: ' + err.message);
+                } else {
+                    alert('Terjadi kesalahan saat memperbarui data. Silakan cek console untuk detail.');
+                }
             });
         });
 

@@ -153,7 +153,14 @@
                                 </td>
                                 <td>
                                     @if($alumni->image)
-                                        <img src="{{ Storage::url($alumni->image) }}" alt="Image" width="100">
+                                        <button class="btn btn-sm btn-info view-photo" 
+                                            data-image="{{ $alumni->image }}" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#photoModal">
+                                            <i class='bx bx-image'></i> View Photo
+                                        </button>
+                                    @else
+                                        <span class="text-muted">No image</span>
                                     @endif
                                 </td>
                                 <td>{{ $alumni->user->name ?? 'admin direktorat' }}</td>
@@ -164,8 +171,8 @@
                                                 data-judul="{{ $alumni->judul_berita }}"
                                                 data-tanggal="{{ $alumni->tanggal_berita }}"
                                                 data-fakultas="{{ $alumni->fakultas }}"
-                                                {{-- data-prodi="{{ $alumni->prodi }}" --}}
-                                                data-link="{{ $alumni->link_berita }}">
+                                                data-link="{{ $alumni->link_berita }}"
+                                                data-image="{{ $alumni->image ?? '' }}">
                                             <i class="fas fa-edit"></i> Edit
                                         </button>
                                         <form action="{{ route('fakultas.alumniberdampak.destroy', $alumni->id) }}" method="POST" class="d-inline">
@@ -248,8 +255,10 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="edit_image" class="form-label">Gambar</label>
+                                <label for="edit_image" class="form-label">Gambar (Opsional)</label>
+                                <div id="current_image_preview" class="mb-2"></div>
                                 <input type="file" class="form-control" name="image" id="edit_image">
+                                <div class="form-text text-muted">Biarkan kosong jika tidak ingin mengubah gambar</div>
                             </div>
                         </div>
                     </div>
@@ -258,6 +267,20 @@
                         <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- Photo Modal --}}
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="photoModalLabel">Foto Alumni</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" id="photoGallery">
+                </div>
             </div>
         </div>
     </div>
@@ -272,6 +295,35 @@
 
     {{-- Script inline bisa tetap di sini --}}
     <script>
+        // Handle photo modal
+        document.querySelectorAll('.view-photo').forEach(button => {
+            button.addEventListener('click', function() {
+                let imagePath = this.dataset.image;
+                const gallery = document.getElementById('photoGallery');
+                
+                if (imagePath) {
+                    // Handle old paths with 'public/' prefix
+                    imagePath = imagePath.replace(/^public\//, '');
+                    
+                    // Create image element with error handling
+                    const img = document.createElement('img');
+                    img.className = 'img-fluid rounded';
+                    img.style.cssText = 'max-height: 500px; object-fit: contain; display: block; margin: auto;';
+                    img.src = `/storage/${imagePath}`;
+                    
+                    img.onerror = function() {
+                        // If image fails to load, show error message
+                        gallery.innerHTML = '<div class="alert alert-warning">Gambar tidak dapat dimuat. File mungkin sudah dihapus atau dipindahkan.</div>';
+                    };
+                    
+                    gallery.innerHTML = '';
+                    gallery.appendChild(img);
+                } else {
+                    gallery.innerHTML = '<p>Tidak ada foto.</p>';
+                }
+            });
+        });
+
         // Program studi options
         const prodiOptions = {
             'pascasarjana': ['S3 Penelitian Dan Evaluasi Pendidikan', 'S2 Penelitian Dan Evaluasi Pendidikan', 'S2 Manajemen Lingkungan', 'S3 Ilmu Manajemen', 'S3 Manajemen Pendidikan', 'S3 Pendidikan Dasar', 'S2 Linguistik Terapan', 'S3 Pendidikan Kependudukan Dan Lingkungan Hidup', 'S2 Pendidikan Lingkungan', 'S3 Pendidikan Jasmani', 'S3 Teknologi Pendidikan', 'S3 Linguistik Terapan', 'S3 Pendidikan Anak Usia Dini', 'S2 Manajemen Pendidikan Tinggi'],
@@ -312,58 +364,136 @@
             button.addEventListener('click', function() {
                 const alumniId = this.dataset.id;
                 const modal = new bootstrap.Modal(document.getElementById('editAlumniModal'));
+                const editForm = document.getElementById('edit-alumni-form');
                 
                 // Populate form data
                 document.getElementById('edit_judul_berita').value = this.dataset.judul;
                 document.getElementById('edit_tanggal_berita').value = this.dataset.tanggal;
                 document.getElementById('edit_fakultas').value = this.dataset.fakultas;
-                document.getElementById('edit_link_berita').value = this.dataset.link;
+                document.getElementById('edit_link_berita').value =  this.dataset.link;
                 
-                // Set form action
-                document.getElementById('edit-alumni-form').action = `/admin/alumniberdampak/${alumniId}`;
+                // Show current image if exists
+                const currentImagePreview = document.getElementById('current_image_preview');
+                if (this.dataset.image) {
+                    // Extract just the path part after /storage/
+                    const imagePath = this.dataset.image.includes('/storage/') 
+                        ? this.dataset.image.split('/storage/')[1] 
+                        : this.dataset.image;
+                    
+                    currentImagePreview.innerHTML = `
+                        <div class="alert alert-info">
+                            <strong>Gambar saat ini:</strong><br>
+                            <img src="/storage/${imagePath}" alt="Current Image" style="max-width: 200px; max-height: 200px; object-fit: cover;" class="mt-2 img-thumbnail">
+                        </div>
+                    `;
+                } else {
+                    currentImagePreview.innerHTML = '<em class="text-muted">Tidak ada gambar</em>';
+                }
+                
+                // Set form action and store ID
+                editForm.action = `/fakultas/alumniberdampak/${alumniId}`;
+                editForm.dataset.alumniId = alumniId;
                 
                 // Show modal
                 modal.show();
             });
         });
-    
-        // Handle fakultas change for edit form
-        document.getElementById('edit_fakultas').addEventListener('change', function() {
-            const prodiSelect = document.getElementById('edit_prodi');
-            prodiSelect.disabled = false;
-            updateProdiOptions(this.value, prodiSelect);
-        });
-    
-        // Handle delete confirmation
-        document.querySelectorAll('.delete-alumni').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const form = this.closest('form');
-                
-                Swal.fire({
-                    title: 'Konfirmasi Hapus',
-                    text: "Apakah Anda yakin ingin menghapus data alumni ini?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Ya, Hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
-                });
-            });
-        });
-    
-        // Handle form submission feedback
+
+        // Handle edit form submission via AJAX
         const editForm = document.getElementById('edit-alumni-form');
         if (editForm) {
             editForm.addEventListener('submit', function(e) {
-                const submitButton = this.querySelector('button[type="submit"]');
-                submitButton.disabled = true;
-                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Menyimpan...';
+                e.preventDefault();
+                
+                const form = this;
+                const formData = new FormData(form);
+                const alumniId = form.dataset.alumniId;
+                
+                console.log('Submitting edit form for alumni ID:', alumniId);
+                console.log('Form action:', form.action);
+                
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw err;
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Response data:', data);
+                    if (data.success) {
+                        // Close the modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('editAlumniModal'));
+                        modal.hide();
+                        
+                        // Show success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: data.message || 'Data berhasil diperbarui',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                        
+                        // Reload the page to refresh the table
+                        setTimeout(() => {
+                            window.location.href = window.location.href.split('?')[0] + '?t=' + new Date().getTime();
+                        }, 1000);
+                    } else {
+                        console.error('Update failed:', data);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: data.message || 'Gagal memperbarui data',
+                            timer: 3000,
+                            showConfirmButton: false
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error('Submit error:', err);
+                    
+                    // Handle validation errors
+                    if (err.errors) {
+                        let errorMsg = 'Validasi gagal:\n';
+                        Object.keys(err.errors).forEach(key => {
+                            errorMsg += `- ${err.errors[key].join(', ')}\n`;
+                        });
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Validasi Gagal',
+                            text: errorMsg,
+                            timer: 5000,
+                            showConfirmButton: true
+                        });
+                    } else if (err.message) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'Error: ' + err.message,
+                            timer: 3000,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'Terjadi kesalahan saat memperbarui data. Silakan cek console untuk detail.',
+                            timer: 3000,
+                            showConfirmButton: false
+                        });
+                    }
+                });
             });
         }
     </script>

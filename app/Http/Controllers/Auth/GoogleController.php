@@ -59,7 +59,7 @@ class GoogleController extends Controller
                 // Use match for redirection
                 $next = match ($existingUser->role) {
                     'admin_direktorat' => 'admin.dashboard',
-                    'prodi' =>  'prodi.dashboard',
+                    'prodi' =>  'prodis.dashboard',
                     'fakultas' =>'fakultas.dashboard',
                     'admin_pemeringkatan' => 'admin_pemeringkatan.dashboard',
                     'dosen' => 'subdirektorat-inovasi.dosen.dashboard',

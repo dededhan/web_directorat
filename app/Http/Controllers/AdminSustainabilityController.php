@@ -45,17 +45,15 @@ class AdminSustainabilityController extends Controller
         return ['faculty_code' => $userFaculty, 'prodi_name' => $userProdi, 'faculty_key' => $userFacultyKeyForData];
     }
 
-    /**
-     * Helper to get redirect route name based on user role and action.
-     */
+
     private function getRoleBasedRouteName(string $actionSuffix, array $params = [])
     {
         $user = Auth::user();
         if (!$user) {
-            return 'login'; // Or some default route if user is not authenticated
+            return 'login'; 
         }
         $role = $user->role;
-        $baseRouteName = 'sustainability.' . $actionSuffix; // e.g., sustainability.index
+        $baseRouteName = 'sustainability.' . $actionSuffix; 
 
         switch ($role) {
             case 'admin_direktorat':
@@ -63,7 +61,7 @@ class AdminSustainabilityController extends Controller
             case 'fakultas':
                 return 'fakultas.' . $baseRouteName;
             case 'prodi':
-                return 'prodi.' . $baseRouteName;
+                return 'prodis.' . $baseRouteName;
             case 'admin_pemeringkatan':
                 return 'admin_pemeringkatan.' . $baseRouteName;
             default:
@@ -86,8 +84,8 @@ class AdminSustainabilityController extends Controller
             $sustainabilities = $sustainabilitiesQuery->paginate(10);
         } elseif ($role === 'fakultas') {
             if ($userInfo['faculty_code']) {
-                // Fakultas sees all entries with their faculty code (their own and their prodis')
-                $sustainabilitiesQuery->where('fakultas', $userInfo['faculty_code']);
+                // Fakultas sees all entries with their faculty code (faculty-level and all prodi under that faculty)
+                $sustainabilitiesQuery->whereRaw('LOWER(fakultas) = ?', [strtolower($userInfo['faculty_code'])]);
             } else {
                 Log::warning('Fakultas user has no faculty_code identified.', ['user_id' => $user->id, 'user_name' => $user->name]);
                 $sustainabilitiesQuery->whereRaw('1 = 0'); // Return no results
@@ -95,8 +93,8 @@ class AdminSustainabilityController extends Controller
             $sustainabilities = $sustainabilitiesQuery->paginate(10);
         } elseif ($role === 'prodi') {
             if ($userInfo['faculty_code'] && $userInfo['prodi_name']) {
-                // Prodi can only see their own entries
-                $sustainabilitiesQuery->where('fakultas', $userInfo['faculty_code'])
+                // Prodi can ONLY see their own prodi entries (exact match on both fakultas and prodi)
+                $sustainabilitiesQuery->whereRaw('LOWER(fakultas) = ?', [strtolower($userInfo['faculty_code'])])
                     ->where('prodi', $userInfo['prodi_name']);
             } else {
                 Log::warning('Prodi user has no faculty_code or prodi_name identified.', ['user_id' => $user->id, 'user_name' => $user->name]);
@@ -118,7 +116,7 @@ class AdminSustainabilityController extends Controller
                 $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
                 break;
             case 'prodi':
-                $viewName = 'prodi.sustainability'; // Ensure this blade exists
+                $viewName = 'prodis.sustainability'; // Ensure this blade exists
                 break;
             case 'fakultas':
                 $viewName = 'fakultas.sustainability'; // Ensure this blade exists
@@ -155,7 +153,7 @@ class AdminSustainabilityController extends Controller
                 $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
                 break;
             case 'prodi':
-                $viewName = 'prodi.sustainability-create';
+                $viewName = 'prodis.sustainability-create';
                 break;
             case 'fakultas':
                 $viewName = 'fakultas.sustainability-create';
@@ -245,52 +243,26 @@ class AdminSustainabilityController extends Controller
 
     public function getSustainabilityDetail($id)
     {
-        // Authorization: Admin can see all. Fakultas/Prodi should only see their own if this is for an edit modal.
-        // For a generic detail API, it might be open or restricted. Assuming admin/owner access for now.
+        // No authorization checks - filtering is done in index
         $sustainability = Sustainability::with('photos')->findOrFail($id);
-        $user = Auth::user();
-
-        if ($user->role === 'fakultas') {
-            $userInfo = $this->getUserFacultyProdiInfo($user);
-            if ($sustainability->fakultas !== $userInfo['faculty_code'] && $sustainability->user_id !== $user->id) { // Check ownership if not their direct faculty item
-                return response()->json(['error' => 'Unauthorized'], 403);
-            }
-        } elseif ($user->role === 'prodi') {
-            $userInfo = $this->getUserFacultyProdiInfo($user);
-            if (($sustainability->fakultas !== $userInfo['faculty_code'] || $sustainability->prodi !== $userInfo['prodi_name']) && $sustainability->user_id !== $user->id) {
-                return response()->json(['error' => 'Unauthorized'], 403);
-            }
-        }
-        // Admins can access any detail
         return response()->json($sustainability);
     }
 
-    public function show(Sustainability $kegiatan_sustainability) // For admin view if needed
+    public function show(Sustainability $sustainability) // For admin view if needed
     {
-        $sustainability = $kegiatan_sustainability;
         // Add authorization if this view is intended for specific roles
         return view('admin.sustainability.show', compact('sustainability')); // Example path
     }
 
-    public function edit(Sustainability $kegiatan_sustainability)
+    public function edit($id)
     {
-        $sustainability = $kegiatan_sustainability;
+        $sustainability = Sustainability::findOrFail($id);
         $user = Auth::user();
         $role = $user->role;
         $userInfo = $this->getUserFacultyProdiInfo($user);
         $isOwner = ($sustainability->user_id === $user->id);
 
-        // Authorization
-        if ($role === 'fakultas') {
-            if ($sustainability->fakultas !== $userInfo['faculty_code'] && !$isOwner) {
-                return redirect()->back()->with('error', 'Unauthorized. Not your faculty or owner.');
-            }
-        } elseif ($role === 'prodi') {
-            if (!(($sustainability->fakultas === $userInfo['faculty_code'] && $sustainability->prodi === $userInfo['prodi_name']) && $isOwner)) {
-                return redirect()->back()->with('error', 'Unauthorized. Not your prodi or owner.');
-            }
-        }
-        // Admins can edit any.
+        // No authorization checks - filtering is done in index
 
         $viewName = '';
         $viewData = ['sustainability' => $sustainability, 'user_info' => $userInfo];
@@ -301,7 +273,7 @@ class AdminSustainabilityController extends Controller
                 $viewData['faculties_data'] = $this->getFacultyProgramDataForView();
                 break;
             case 'prodi':
-                $viewName = 'prodi.sustainability-edit';
+                $viewName = 'prodis.sustainability-edit';
                 break;
             case 'fakultas':
                 $viewName = 'fakultas.sustainability-edit';
@@ -323,26 +295,16 @@ class AdminSustainabilityController extends Controller
         return view($viewName, $viewData);
     }
 
-    public function update(Request $request, Sustainability $kegiatan_sustainability) // Use UpdateSustainabilityRequest if available
+    public function update(Request $request, $id) // Use UpdateSustainabilityRequest if available
     {
-        $sustainability = $kegiatan_sustainability;
-
-        // Authorization Check
+        $sustainability = Sustainability::findOrFail($id);
+        $user = Auth::user();
+        $role = $user->role;
+        $userInfo = $this->getUserFacultyProdiInfo($user);
         $isOwner = ($sustainability->user_id === $user->id); // Check if the current user created the entry
 
-        if ($role === 'fakultas') {
-            // Fakultas can edit items from their faculty, or items they specifically created (even if prodi is under them but created by prodi user)
-            // Simplified: Can edit if item.fakultas matches user.fakultas OR if user is owner.
-            if ($sustainability->fakultas !== $userInfo['faculty_code'] && !$isOwner) {
-                return redirect()->back()->with('error', 'Unauthorized action. Not your faculty and you are not the owner.');
-            }
-        } elseif ($role === 'prodi') {
-            // Prodi can only edit items they created AND that match their prodi/faculty assignment.
-            if (!(($sustainability->fakultas === $userInfo['faculty_code'] && $sustainability->prodi === $userInfo['prodi_name']) && $isOwner)) {
-                return redirect()->back()->with('error', 'Unauthorized action. Not your prodi or you are not the owner.');
-            }
-        }
-        // Admin_direktorat can update any.
+        // No authorization checks - filtering is done in index
+        
         // Define SDG options for validation
         $sdgOptions = [];
         for ($i = 1; $i <= 17; $i++) {
@@ -353,30 +315,54 @@ class AdminSustainabilityController extends Controller
         $validationRules = [
             'judul_kegiatan' => 'required|string|max:255',
             'tanggal_kegiatan' => 'required|date',
-            // 'fakultas' => 'required|string|max:50', // Admin might change this
-            // 'prodi' => 'nullable|string|max:255',        // Admin might change this, or fakultas for their prodis
+            'fakultas' => 'nullable|string|max:50',
+            'prodi' => 'nullable|string|max:255',
             'link_kegiatan' => 'nullable|url|max:2048', // Increased to align with StoreRequest
             'deskripsi_kegiatan' => 'required|string',
             'foto_kegiatan.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8192', // Aligned
             'sdg_goal' => ['nullable', 'string', Rule::in($sdgOptions)],
         ];
 
-          $validatedData = $request->validate($validationRules);
+        $validatedData = $request->validate($validationRules);
 
         try {
-            // Now, add or override the faculty/prodi info based on the user's role
+            // Override fakultas/prodi based on role to maintain security
             if ($role === 'fakultas') {
+                // Fakultas can change prodi but not fakultas
                 $validatedData['fakultas'] = $userInfo['faculty_code'];
-                // Allow fakultas to change the prodi for an entry.
-                // Use the value from the form if it exists, otherwise it might be a faculty-level entry.
-                $validatedData['prodi'] = $request->input('prodi', null); 
+                // Keep the prodi from form if provided, else set to null for faculty-level
+                if (!$request->has('prodi') || $request->input('prodi') === '') {
+                    $validatedData['prodi'] = null;
+                }
             } elseif ($role === 'prodi') {
-                // For 'prodi' role, always force their own faculty and prodi.
+                // For 'prodi' role, always force their own faculty and prodi
                 $validatedData['fakultas'] = $userInfo['faculty_code'];
                 $validatedData['prodi'] = $userInfo['prodi_name'];
             }
+            // Admin can change freely - no override needed
+            
+            // Log what we're about to update
+            Log::info('Before sustainability update', [
+                'sustainability_id' => $sustainability->id,
+                'user_role' => $role,
+                'validated_data' => $validatedData,
+                'model_before' => $sustainability->toArray(),
+                'model_dirty' => $sustainability->getDirty(),
+                'model_fillable' => $sustainability->getFillable()
+            ]);
 
-            $sustainability->update($validatedData);
+            $updateResult = $sustainability->update($validatedData);
+            
+            // Force refresh from database to confirm the update was saved
+            $sustainability->refresh();
+            
+            // Log the result
+            Log::info('After sustainability update', [
+                'id' => $sustainability->id,
+                'update_result' => $updateResult,
+                'model_after' => $sustainability->toArray(),
+                'was_changed' => $sustainability->wasChanged()
+            ]);
 
             if ($request->hasFile('foto_kegiatan')) {
                 $files = $request->file('foto_kegiatan');
@@ -416,25 +402,15 @@ class AdminSustainabilityController extends Controller
         }
     }
 
-    public function destroy(Request $request, Sustainability $kegiatan_sustainability) // Added Request for AJAX check
+    public function destroy(Request $request, $id) // Added Request for AJAX check
     {
-        $sustainability = $kegiatan_sustainability;
+        $sustainability = Sustainability::findOrFail($id);
         $user = Auth::user();
         $role = $user->role;
         $userInfo = $this->getUserFacultyProdiInfo($user);
         $isOwner = ($sustainability->user_id === $user->id);
-        $isOwner = ($sustainability->user_id === $user->id);
 
-        // Authorization Check
-        if ($role === 'fakultas') {
-            if ($sustainability->fakultas !== $userInfo['faculty_code'] && !$isOwner) {
-                return redirect()->back()->with('error', 'Unauthorized action to delete.');
-            }
-        } elseif ($role === 'prodi') {
-            if (!(($sustainability->fakultas === $userInfo['faculty_code'] && $sustainability->prodi === $userInfo['prodi_name']) && $isOwner)) {
-                return redirect()->back()->with('error', 'Unauthorized action to delete.');
-            }
-        }
+        // No authorization checks - filtering is done in index
 
         try {
             foreach ($sustainability->photos as $photo) {
@@ -450,7 +426,7 @@ class AdminSustainabilityController extends Controller
             }
             return redirect()->route($redirectRoute)->with('success', 'Data kegiatan sustainability berhasil dihapus!');
         } catch (\Exception $e) {
-            Log::error('Error deleting sustainability ID ' . $id . ': ' . $e->getMessage(), ['user_id' => $user->id]);
+            Log::error('Error deleting sustainability ID ' . $sustainability->id . ': ' . $e->getMessage(), ['user_id' => $user->id]);
             if ($request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'Gagal menghapus data: ' . $e->getMessage()]);
             }

@@ -36,6 +36,7 @@ use App\Http\Controllers\RisetUnjController;
 use App\Http\Controllers\Pemeringkatan\Admin\RespondenAnswerGraphController; 
 use App\Http\Controllers\Dosen\DashboardController as DosenDashboardController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\AccountController;
 
 
 
@@ -149,6 +150,8 @@ Route::prefix('admin')->name('admin.')
             ->name('sustainability.detail');
 
         Route::resource('/matakuliah', AdminMataKuliahController::class);
+        Route::get('/matakuliah/{id}/detail', [AdminMataKuliahController::class, 'getMataKuliahDetail'])
+            ->name('matakuliah.detail');
         Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
         Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
 
@@ -415,17 +418,17 @@ Route::prefix('prodis')->name('prodis.')
             ->name('responden.export.csv');
 
         Route::resource('/matakuliah', AdminMataKuliahController::class);
+        Route::get('/matakuliah/{id}/detail', [AdminMataKuliahController::class, 'getMataKuliahDetail'])
+            ->name('matakuliah.detail');
         Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
         Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
-        Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
-        Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
+        Route::resource('/alumniberdampak', AdminAlumniBerdampakController::class);
         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['show']);
 
 
-        // NEW: Manage Account Routes for Fakultas
-        Route::get('/account', function () {
-            return view('prodis.manage_account');
-        })->name('manage.account');
+        // Manage Account Routes for Prodi
+        Route::get('/account', [AccountController::class, 'edit'])->name('manage.account');
+        Route::put('/account', [AccountController::class, 'update'])->name('manage.account.update');
     });
 
 Route::prefix('fakultas')->name('fakultas.')
@@ -469,15 +472,16 @@ Route::prefix('fakultas')->name('fakultas.')
             ->name('responden.export.csv');
 
         Route::resource('/matakuliah', AdminMataKuliahController::class);
+        Route::get('/matakuliah/{id}/detail', [AdminMataKuliahController::class, 'getMataKuliahDetail'])
+            ->name('matakuliah.detail');
         Route::get('/matakuliah', [AdminMataKuliahController::class, 'index'])->name('matakuliah.index');
         Route::post('/matakuliah', [AdminMataKuliahController::class, 'store'])->name('matakuliah.store');
-        Route::get('/alumniberdampak', [AdminAlumniBerdampakController::class, 'index'])->name('alumniberdampak.index');
-        Route::post('/alumniberdampak', [AdminAlumniBerdampakController::class, 'store'])->name('alumniberdampak.store');
+        Route::resource('/alumniberdampak', AdminAlumniBerdampakController::class);
         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['show']);
 
-        Route::get('/account', function () {
-            return view('fakultas.manage_account');
-        })->name('manage.account');
+        // Manage Account Routes for Fakultas
+        Route::get('/account', [AccountController::class, 'edit'])->name('manage.account');
+        Route::put('/account', [AccountController::class, 'update'])->name('manage.account.update');
     });
 
 

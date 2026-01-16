@@ -26,19 +26,20 @@
                     </a>
                 </li>
 
-                {{-- <li class="{{ request()->routeIs('prodis.news.index') ? 'active' : '' }}">
+
+            </ul> 
+        </div>
+
+        <!-- Sustainability Section -->
+   <div class="menu-section">
+            <h3 class="section-title">Konten Manajemen</h3>
+            <ul class="side-menu">
+                <li class="{{ request()->routeIs('prodis.news.index') ? 'active' : '' }}">
                     <a href="{{ route('prodis.news.index') }}">
                         <i class='bx bxs-news'></i>
                         <span class="text">Berita</span>
                     </a>
                 </li>
-            </ul> --}}
-        </div>
-
-        <!-- Sustainability Section -->
-        {{-- <div class="menu-section">
-            <h3 class="section-title">Sustainability</h3>
-            <ul class="side-menu">
                 <li class="{{ request()->routeIs('prodis.sustainability.index') ? 'active' : '' }}">
                     <a href="{{ route('prodis.sustainability.index') }}">
                         <i class='bx bxs-spreadsheet'></i>
@@ -58,7 +59,7 @@
                     </a>
                 </li>
             </ul>
-        </div> --}}
+        </div> 
 
         <!-- Data Tables Section -->
         <div class="menu-section">

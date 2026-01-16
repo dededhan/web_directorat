@@ -38,7 +38,7 @@ class AdminAlumniBerdampakController extends Controller
 
         $viewMap = [
             'admin_direktorat' => 'admin.alumniberdampak',
-            'prodi' => 'prodi.alumniberdampak',
+            'prodi' => 'prodis.alumniberdampak',
             'fakultas' => 'fakultas.alumniberdampak',
             'admin_pemeringkatan' => 'admin_pemeringkatan.alumni-berdampak.index',
         ];
@@ -58,7 +58,7 @@ class AdminAlumniBerdampakController extends Controller
     {
         $viewMap = [
             'admin_direktorat' => 'admin.alumniberdampak-create',
-            'prodi' => 'prodi.alumniberdampak-create',
+            'prodi' => 'prodis.alumniberdampak-create',
             'fakultas' => 'fakultas.alumniberdampak-create',
             'admin_pemeringkatan' => 'admin_pemeringkatan.alumni-berdampak.create',
         ];
@@ -80,14 +80,14 @@ class AdminAlumniBerdampakController extends Controller
         $data['user_id'] = Auth::id();
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('public/images');
+            $data['image'] = $request->file('image')->store('images', 'public');
         }
 
         AlumniBerdampak::create($data);
 
         $routeMap = [
             'admin_direktorat' => 'admin.alumniberdampak.index',
-            'prodi' => 'prodi.alumniberdampak.index',
+            'prodi' => 'prodis.alumniberdampak.index',
             'fakultas' => 'fakultas.alumniberdampak.index',
             'admin_pemeringkatan' => 'admin_pemeringkatan.alumni-berdampak.index',
         ];
@@ -98,11 +98,13 @@ class AdminAlumniBerdampakController extends Controller
     }
 
 
-    public function edit(AlumniBerdampak $alumni_berdampak)
+    public function edit($id)
     {
+        $alumni_berdampak = AlumniBerdampak::findOrFail($id);
+        
         $viewMap = [
             'admin_direktorat' => 'admin.alumniberdampak-edit',
-            'prodi' => 'prodi.alumniberdampak-edit',
+            'prodi' => 'prodis.alumniberdampak-edit',
             'fakultas' => 'fakultas.alumniberdampak-edit',
             'admin_pemeringkatan' => 'admin_pemeringkatan.alumni-berdampak.edit',
         ];
@@ -118,35 +120,46 @@ class AdminAlumniBerdampakController extends Controller
         return view($view, $viewData);
     }
 
-    public function update(StoreAlumniBerdampakRequest $request, AlumniBerdampak $alumni_berdampak)
-{
+    public function update(StoreAlumniBerdampakRequest $request, $id)
+    {
+        $alumni_berdampak = AlumniBerdampak::findOrFail($id);
         $data = $request->validated();
 
         if ($request->hasFile('image')) {
             if ($alumni_berdampak->image) {
-                Storage::delete($alumni_berdampak->image);
+                Storage::disk('public')->delete($alumni_berdampak->image);
             }
-            $data['image'] = $request->file('image')->store('public/images');
+            $data['image'] = $request->file('image')->store('images', 'public');
         }
 
         $alumni_berdampak->update($data);
 
         $routeMap = [
             'admin_direktorat' => 'admin.alumniberdampak.index',
-            'prodi' => 'prodi.alumniberdampak.index',
+            'prodi' => 'prodis.alumniberdampak.index',
             'fakultas' => 'fakultas.alumniberdampak.index',
             'admin_pemeringkatan' => 'admin_pemeringkatan.alumni-berdampak.index',
         ];
 
         $route = $routeMap[Auth::user()->role] ?? 'admin.alumniberdampak.index';
 
+        // Add AJAX support
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil diperbarui'
+            ]);
+        }
+
         return redirect()->route($route)->with('success', 'Data berhasil diperbarui');
     }
 
-     public function destroy(AlumniBerdampak $alumni_berdampak)
+    public function destroy($id)
     {
+        $alumni_berdampak = AlumniBerdampak::findOrFail($id);
+        
         if ($alumni_berdampak->image) {
-            Storage::delete($alumni_berdampak->image);
+            Storage::disk('public')->delete($alumni_berdampak->image);
         }
         $alumni_berdampak->delete();
         return back()->with('success', 'Data berhasil dihapus');

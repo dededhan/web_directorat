@@ -1,15 +1,15 @@
-@extends('prodi.index')
+@extends('prodis.index')
 
 @vite(['resources/css/admin/sustainability_dashboard.css'])
 
-@section('contentprodi')
+@section('contentprodis')
     <div class="head-title">
         <div class="left">
             <h1>Sustainability</h1>
             <ul class="breadcrumb">
-                <li><a href="{{ route('prodi.dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ route('prodis.dashboard') }}">Dashboard</a></li>
                 <li><i class='bx bx-chevron-right'></i></li>
-                <li><a class="active" href="{{ route('prodi.sustainability.index') }}">Input Kegiatan Sustainability</a></li>
+                <li><a class="active" href="{{ route('prodis.sustainability.index') }}">Input Kegiatan Sustainability</a></li>
             </ul>
         </div>
     </div>
@@ -40,7 +40,7 @@
             <div class="head">
                 <h3>Input Kegiatan Sustainability</h3>
             </div>
-            <form id="sustainability-form" method="POST" action="{{ route('prodi.sustainability.store') }}" enctype="multipart/form-data">
+            <form id="sustainability-form" method="POST" action="{{ route('prodis.sustainability.store') }}" enctype="multipart/form-data">
                 @csrf
                 @php
                     $sdgGoalsData = $sdgDetailsList ?? [
@@ -234,9 +234,11 @@
         document.querySelectorAll('.edit-activity').forEach(button => {
             button.addEventListener('click', function() {
                 const activityId = this.dataset.id;
-                document.getElementById('edit-form').action = `{{ url('prodi/sustainability') }}/${activityId}`;
+                const form = document.getElementById('edit-form');
+                form.action = `{{ url('prodis/sustainability') }}/${activityId}`;
+                form.dataset.activityId = activityId; // Store for later use
 
-                fetch(`{{ url('prodi/sustainability') }}/${activityId}/detail`)
+                fetch(`{{ url('prodis/sustainability') }}/${activityId}/detail`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('edit_sdg_goal_modal').value = data.sdg_goal || "";
@@ -253,6 +255,78 @@
             });
         });
 
+        // Handle edit form submission via AJAX
+        document.getElementById('edit-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const formData = new FormData(form);
+            const activityId = form.dataset.activityId;
+            
+            console.log('Submitting edit form for activity ID:', activityId);
+            console.log('Form action:', form.action);
+            console.log('Form data:', Object.fromEntries(formData));
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw err;
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response data:', data);
+                if (data.success) {
+                    // Close the modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
+                    modal.hide();
+                    
+                    // Show success message
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert alert-success alert-dismissible fade show';
+                    alertDiv.innerHTML = `
+                        ${data.message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    `;
+                    document.querySelector('.head-title').after(alertDiv);
+                    
+                    // Reload the page to refresh the table (hard refresh to bypass cache)
+                    setTimeout(() => {
+                        window.location.href = window.location.href.split('?')[0] + '?t=' + new Date().getTime();
+                    }, 1000);
+                } else {
+                    console.error('Update failed:', data);
+                    alert(data.message || 'Gagal memperbarui data');
+                }
+            })
+            .catch(err => {
+                console.error('Submit error:', err);
+                
+                // Handle validation errors
+                if (err.errors) {
+                    let errorMsg = 'Validasi gagal:\n';
+                    Object.keys(err.errors).forEach(key => {
+                        errorMsg += `- ${err.errors[key].join(', ')}\n`;
+                    });
+                    alert(errorMsg);
+                } else if (err.message) {
+                    alert('Error: ' + err.message);
+                } else {
+                    alert('Terjadi kesalahan saat memperbarui data. Silakan cek console untuk detail.');
+                }
+            });
+        });
+
         document.querySelectorAll('.delete-activity').forEach(button => {
             button.addEventListener('click', function() {
                 Swal.fire({
@@ -265,7 +339,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         const deleteForm = document.getElementById('delete-form');
-                        deleteForm.action = `{{ url('prodi/sustainability') }}/${this.dataset.id}`;
+                        deleteForm.action = `{{ url('prodis/sustainability') }}/${this.dataset.id}`;
                         deleteForm.submit();
                     }
                 });

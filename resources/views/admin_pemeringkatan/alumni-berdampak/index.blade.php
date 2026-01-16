@@ -106,11 +106,10 @@
                     <table class="w-full">
                         <thead class="bg-gray-50 border-b-2 border-gray-200">
                             <tr>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Gambar</th>
+                                
                                 <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Judul Berita/Artikel</th>
                                 <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Tanggal</th>
                                 <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Fakultas</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Program Studi</th>
                                 <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Link</th>
                                 <th class="px-4 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Aksi</th>
                             </tr>
@@ -118,17 +117,7 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse($alumniBerdampak as $alumni)
                             <tr class="hover:bg-gray-50 transition-colors duration-200">
-                                <td class="px-4 py-4 whitespace-nowrap">
-                                    @if($alumni->image)
-                                        <img src="{{ str_replace('public/', '/storage/', $alumni->image) }}" 
-                                             alt="{{ $alumni->judul_berita }}" 
-                                             class="w-16 h-16 object-cover rounded-lg border border-gray-200">
-                                    @else
-                                        <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                                            <i class='bx bx-image text-gray-400 text-2xl'></i>
-                                        </div>
-                                    @endif
-                                </td>
+
                                 <td class="px-4 py-4">
                                     <div class="text-sm font-medium text-gray-900">{{ $alumni->judul_berita }}</div>
                                 </td>
@@ -138,9 +127,7 @@
                                 <td class="px-4 py-4 whitespace-nowrap">
                                     <span class="text-sm text-gray-900">{{ strtoupper($alumni->fakultas) }}</span>
                                 </td>
-                                <td class="px-4 py-4">
-                                    <span class="text-sm text-gray-900">{{ $alumni->prodi ?? '-' }}</span>
-                                </td>
+
                                 <td class="px-4 py-4 whitespace-nowrap">
                                     @if($alumni->link_berita)
                                         <a href="{{ $alumni->link_berita }}" 
@@ -155,12 +142,12 @@
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-center">
                                     <div class="flex items-center justify-center space-x-2">
-                                        <a href="{{ route('admin_pemeringkatan.alumni-berdampak.edit', $alumni->id) }}" 
+                                        <a href="{{ route('admin_pemeringkatan.alumni-berdampak.edit', $alumni) }}" 
                                            class="inline-flex items-center px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium rounded-lg transition-colors duration-200">
                                             <i class='bx bx-edit mr-1'></i>
                                             Edit
                                         </a>
-                                        <form action="{{ route('admin_pemeringkatan.alumni-berdampak.destroy', $alumni->id) }}" 
+                                        <form action="{{ route('admin_pemeringkatan.alumni-berdampak.destroy', $alumni) }}" 
                                               method="POST" 
                                               class="inline-block"
                                               onsubmit="return confirm('Apakah Anda yakin ingin menghapus alumni berdampak {{ $alumni->judul_berita }}?')">

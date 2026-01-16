@@ -34,7 +34,7 @@
                 </div>
 
                 <!-- Form -->
-                <form action="{{ route('admin_pemeringkatan.alumni-berdampak.update', $alumniBerdampak->id) }}" method="POST" enctype="multipart/form-data" class="p-6 sm:p-8">
+                <form action="{{ route('admin_pemeringkatan.alumni-berdampak.update', $alumniBerdampak) }}" method="POST" enctype="multipart/form-data" class="p-6 sm:p-8">
                     @csrf
                     @method('PUT')
 
@@ -105,7 +105,7 @@
                                 </label>
                                 @if($alumniBerdampak->image)
                                     <div class="mb-3">
-                                        <img src="{{ str_replace('public/', '/storage/', $alumniBerdampak->image) }}" 
+                                        <img src="{{ asset('storage/' . $alumniBerdampak->image) }}" 
                                              alt="Current image" 
                                              class="w-32 h-32 object-cover rounded-lg border border-gray-300">
                                         <p class="text-xs text-gray-500 mt-2">Gambar saat ini</p>

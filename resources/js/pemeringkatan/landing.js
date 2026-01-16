@@ -55,82 +55,42 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // --- Fetch Instagram Posts ---
-    const instaContainer = document.getElementById('instagram-api-feed-container');
-    if (instaContainer) {
-        fetch('/api/instagram-posts')
-            .then(response => response.json())
-            .then(posts => {
-                instaContainer.innerHTML = ''; 
-                if (!posts || posts.length === 0) {
-                    instaContainer.innerHTML = '<p class="col-span-full text-center text-gray-500">Gagal memuat post Instagram.</p>';
-                    return;
-                }
-                posts.slice(0, 3).forEach(post => {
-                    const postDate = new Date(post.posted_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-                    const card = `
-                        <a href="${post.permalink}" target="_blank" class="group block bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-                            <div class="relative">
-                                <img src="${post.media_url}" alt="${post.title || 'Instagram Post'}" class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                <div class="absolute bottom-0 left-0 p-4 text-white">
-                                    <h3 class="font-bold text-lg">${post.title || 'Postingan Instagram'}</h3>
-                                    <p class="text-sm opacity-90">${postDate}</p>
-                                </div>
-                            </div>
-                        </a>`;
-                    instaContainer.innerHTML += card;
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching Instagram posts:', error);
-                instaContainer.innerHTML = '<p class="col-span-full text-center text-gray-500">Gagal memuat post Instagram.</p>';
-            });
+    // --- Swiper Carousel for Sustainability ---
+    const sustainabilityCarouselElement = document.querySelector('.sustainability-carousel');
+    if (sustainabilityCarouselElement) {
+        new Swiper('.sustainability-carousel', {
+            loop: true,
+            spaceBetween: 24,
+            autoplay: { delay: 4000, disableOnInteraction: false },
+            pagination: { el: '.sustainability-carousel .swiper-pagination', clickable: true },
+            navigation: { nextEl: '.sustainability-carousel .swiper-button-next', prevEl: '.sustainability-carousel .swiper-button-prev' },
+            breakpoints: {
+                320: { slidesPerView: 1, spaceBetween: 16 },
+                768: { slidesPerView: 2, spaceBetween: 20 },
+                1024: { slidesPerView: 3, spaceBetween: 24 },
+            },
+            observer: true,
+            observeParents: true,
+        });
     }
 
-    // --- Fetch YouTube Videos ---
-    const videoContainer = document.getElementById('dynamic-videos-container');
-    if (videoContainer) {
-        fetch('/api/youtube-videos')
-            .then(response => response.json())
-            .then(videos => {
-                videoContainer.innerHTML = '';
-                if (!videos || videos.length === 0) {
-                    videoContainer.innerHTML = '<p class="col-span-full text-center text-gray-500">Belum ada video tersedia.</p>';
-                    return;
-                }
-                videos.slice(0, 3).forEach(video => {
-                    let videoId = '';
-                    try {
-                        if (video.link.includes('youtu.be/')) {
-                            videoId = new URL(video.link).pathname.substring(1);
-                        } else {
-                            videoId = new URL(video.link).searchParams.get('v');
-                        }
-                    } catch (e) { console.error('Invalid YouTube URL:', video.link); return; }
-                    
-                    if (!videoId) return;
-
-                    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-                    const card = `
-                        <a href="${video.link}" target="_blank" class="group block bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-                            <div class="relative">
-                                <img src="${thumbnailUrl}" alt="${video.judul}" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
-                                <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                    <i class="fab fa-youtube text-white text-5xl opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all"></i>
-                                </div>
-                            </div>
-                            <div class="p-4">
-                                <h3 class="font-bold text-gray-800 group-hover:text-teal-600 transition-colors">${video.judul}</h3>
-                            </div>
-                        </a>`;
-                    videoContainer.innerHTML += card;
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching YouTube videos:', error);
-                videoContainer.innerHTML = '<p class="col-span-full text-center text-gray-500">Gagal memuat video.</p>';
-            });
+    // --- Swiper Carousel for Alumni ---
+    const alumniCarouselElement = document.querySelector('.alumni-carousel');
+    if (alumniCarouselElement) {
+        new Swiper('.alumni-carousel', {
+            loop: true,
+            spaceBetween: 24,
+            autoplay: { delay: 4500, disableOnInteraction: false },
+            pagination: { el: '.alumni-carousel .swiper-pagination', clickable: true },
+            navigation: { nextEl: '.alumni-carousel .swiper-button-next', prevEl: '.alumni-carousel .swiper-button-prev' },
+            breakpoints: {
+                320: { slidesPerView: 1, spaceBetween: 16 },
+                768: { slidesPerView: 2, spaceBetween: 20 },
+                1024: { slidesPerView: 3, spaceBetween: 24 },
+            },
+            observer: true,
+            observeParents: true,
+        });
     }
 
     // --- Header Carousel Logic ---

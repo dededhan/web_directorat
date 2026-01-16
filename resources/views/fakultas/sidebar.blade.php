@@ -25,12 +25,7 @@
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="{{ request()->routeIs('fakultas.news.index') ? 'active' : '' }}">
-                    <a href="{{ route('fakultas.news.index') }}">
-                        <i class='bx bxs-news'></i>
-                        <span class="text">Berita</span>
-                    </a>
-                </li>
+
             </ul>
 
 
@@ -38,8 +33,14 @@
 
         <!-- Sustainability Section -->
         <div class="menu-section">
-            <h3 class="section-title">Sustainability</h3>
+            <h3 class="section-title">Konten Manajemen</h3>
             <ul class="side-menu">
+                                <li class="{{ request()->routeIs('fakultas.news.index') ? 'active' : '' }}">
+                    <a href="{{ route('fakultas.news.index') }}">
+                        <i class='bx bxs-news'></i>
+                        <span class="text">Berita</span>
+                    </a>
+                </li>
                 <li class="{{ Request::is('fakultas/sustainability*') ? 'active' : '' }}">
                     <a href="{{ route('fakultas.sustainability.index') }}">
                         <i class='bx bxs-spreadsheet'></i>

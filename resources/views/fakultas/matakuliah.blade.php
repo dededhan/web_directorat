@@ -180,7 +180,7 @@
                                 <td>{{ Str::limit($matakuliah->deskripsi, 50) }}</td>
                                 <td>
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning edit-matakuliah" data-id="{{ $matakuliah->id }}" data-bs-toggle="modal" data-bs-target="#editMatakuliahModal">Edit</button>
+                                        <button class="btn btn-sm btn-warning edit-matakuliah" data-id="{{ $matakuliah->id }}">Edit</button>
                                         <button class="btn btn-sm btn-danger delete-matakuliah" data-id="{{ $matakuliah->id }}" data-nama="{{ $matakuliah->nama_matkul }}">Delete</button>
                                     </div>
                                 </td>
@@ -296,27 +296,52 @@
     
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const editModal = document.getElementById('editMatakuliahModal');
+        const editForm = document.getElementById('edit-matakuliah-form');
+        
         document.querySelectorAll('.edit-matakuliah').forEach(button => {
             button.addEventListener('click', function() {
                 const matkulId = this.dataset.id;
-                const editForm = document.getElementById('edit-matakuliah-form');
                 editForm.action = `{{ url('fakultas/matakuliah') }}/${matkulId}`;
+                editForm.dataset.matkulId = matkulId; // Store for later use
                 document.getElementById('edit_matakuliah_id').value = matkulId;
 
-                fetch(`{{ url('fakultas/matakuliah') }}/${matkulId}/edit`)
-                .then(response => response.json())
+                // Show loading state
+                Swal.fire({
+                    title: 'Memuat data...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                fetch(`{{ url('fakultas/matakuliah') }}/${matkulId}/detail`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    document.getElementById('edit_sdgs_group').value = data.sdgs_group;
-                    document.getElementById('edit_nama_matkul').value = data.nama_matkul;
-                    document.getElementById('edit_semester').value = data.semester;
-                    document.getElementById('edit_kode_matkul').value = data.kode_matkul;
+                    // Populate form fields
+                    document.getElementById('edit_sdgs_group').value = data.sdgs_group || '';
+                    document.getElementById('edit_nama_matkul').value = data.nama_matkul || '';
+                    document.getElementById('edit_semester').value = data.semester || '';
+                    document.getElementById('edit_kode_matkul').value = data.kode_matkul || '';
+                    document.getElementById('edit_deskripsi').value = data.deskripsi || '';
+                    
                     const editProdiSelect = document.getElementById('edit_prodi');
                     if (data.prodi) {
                         editProdiSelect.value = data.prodi;
                     } else {
                         editProdiSelect.value = "";
                     }
-                    document.getElementById('edit_deskripsi').value = data.deskripsi;
+                    
                     const currentRpsInfoEdit = document.getElementById('current_rps_info_edit');
                     if(data.rps_path){
                         currentRpsInfoEdit.innerHTML = `File saat ini: <a href="/storage/${data.rps_path}" target="_blank">${data.rps_path.split('/').pop()}</a>`;
@@ -324,8 +349,117 @@
                         currentRpsInfoEdit.innerHTML = '<em>Tidak ada file RPS terunggah.</em>';
                     }
                     document.getElementById('edit_rps').value = '';
+                    
+                    // Close loading and open modal
+                    Swal.close();
+                    const modal = new bootstrap.Modal(editModal);
+                    modal.show();
                 })
-                .catch(error => console.error('Error fetching matakuliah details:', error));
+                .catch(error => {
+                    console.error('Error fetching matakuliah details:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Gagal memuat data mata kuliah',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                });
+            });
+        });
+
+        // Handle edit form submission via AJAX
+        editForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const formData = new FormData(form);
+            const matkulId = form.dataset.matkulId;
+            
+            console.log('Submitting edit form for matakuliah ID:', matkulId);
+            console.log('Form action:', form.action);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw err;
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response data:', data);
+                if (data.success) {
+                    // Close the modal
+                    const modal = bootstrap.Modal.getInstance(editModal);
+                    modal.hide();
+                    
+                    // Show success message
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: data.message || 'Data mata kuliah berhasil diperbarui',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    
+                    // Reload the page to refresh the table
+                    setTimeout(() => {
+                        window.location.href = window.location.href.split('?')[0] + '?t=' + new Date().getTime();
+                    }, 1000);
+                } else {
+                    console.error('Update failed:', data);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: data.message || 'Gagal memperbarui data',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                }
+            })
+            .catch(err => {
+                console.error('Submit error:', err);
+                
+                // Handle validation errors
+                if (err.errors) {
+                    let errorMsg = 'Validasi gagal:\n';
+                    Object.keys(err.errors).forEach(key => {
+                        errorMsg += `- ${err.errors[key].join(', ')}\n`;
+                    });
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Validasi Gagal',
+                        text: errorMsg,
+                        timer: 5000,
+                        showConfirmButton: true
+                    });
+                } else if (err.message) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Error: ' + err.message,
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Terjadi kesalahan saat memperbarui data. Silakan cek console untuk detail.',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                }
             });
         });
 

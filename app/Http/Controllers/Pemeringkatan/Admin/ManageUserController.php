@@ -199,6 +199,13 @@ class ManageUserController extends Controller
         return view('admin_pemeringkatan.manageuser.index', compact('users', 'facultiesAndProgramsData'));
     }
 
+    public function create()
+    {
+        $facultiesAndProgramsData = $this->getFacultiesAndProgramsData();
+        
+        return view('admin_pemeringkatan.manageuser.create', compact('facultiesAndProgramsData'));
+    }
+
     public function store(Request $request) 
     {
         // Only allow creating fakultas, prodi, admin_pemeringkatan accounts
@@ -251,6 +258,18 @@ class ManageUserController extends Controller
         ]);
         
         return redirect()->back()->with('success', 'Status user berhasil diubah untuk: ' . $user->name);
+    }
+
+    public function edit(User $user)
+    {
+        // Only allow editing fakultas, prodi, admin_pemeringkatan accounts
+        if (!in_array($user->role, ['fakultas', 'prodi', 'admin_pemeringkatan'])) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengubah user ini.');
+        }
+
+        $facultiesAndProgramsData = $this->getFacultiesAndProgramsData();
+        
+        return view('admin_pemeringkatan.manageuser.edit', compact('user', 'facultiesAndProgramsData'));
     }
 
     public function update(Request $request, User $user) 

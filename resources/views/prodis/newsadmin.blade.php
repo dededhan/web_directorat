@@ -1,11 +1,11 @@
-@extends('prodi.index')
+@extends('prodis.index')
 
 
 <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="{{ asset('dashboard_main/dashboard/berita_dashboard.css') }}">
 <link rel="stylesheet" href="{{ asset('css/ckeditor-content.css') }}">
-@section('contentprodi')
+@section('contentprodis')
     <div class="head-title">
         <div class="left">
             <h1>Berita</h1>
@@ -130,7 +130,6 @@
                                 <th>Kategori</th>
                                 <th>Tanggal</th>
                                 <th>Judul Berita</th>
-                                <th>Isi</th>
                                 <th>Cover Gambar</th>
                                 <th>Actions</th>
                             </tr>
@@ -153,12 +152,11 @@
                                         </span>
                                     </td>
                                     <td>{{ $berita->tanggal }}</td>
-                                    <td>{{ $berita->judul }}</td>
-                                    <td>{{ Str::limit(strip_tags($berita->isi), 50) }}</td>
+                                    <td>{{ $berita->judul_berita }}</td>
                                     <td>
                                         <button class="btn btn-sm btn-info view-image"
                                             data-image="{{ asset('storage/' . $berita->gambar) }}"
-                                            data-title="{{ $berita->judul }}">
+                                            data-title="{{ $berita->judul_berita }}">
                                             Lihat Gambar
                                         </button>
                                     </td>
@@ -604,18 +602,21 @@ ClassicEditor
                         })
                         .then(data => {
                             // Populate the edit form
-                            document.getElementById('edit_kategori').value = data.kategori;
-                            document.getElementById('edit_tanggal').value = data.tanggal;
-                            document.getElementById('edit_judul_berita').value = data.judul;
+                            document.getElementById('edit_kategori').value = data.kategori || '';
+                            document.getElementById('edit_tanggal').value = data.tanggal || '';
+                            document.getElementById('edit_judul_berita').value = data.judul_berita || '';
 
                             // Set content to the CKEditor
                             if (editBeritaEditor) {
-                                editBeritaEditor.setData(data.isi);
+                                const content = data.isi_berita || '';
+                                editBeritaEditor.setData(content);
                             }
 
                             // Set the current image
                             const currentImage = document.getElementById('current_image');
-                            currentImage.src = `/storage/${data.gambar}`;
+                            if (data.gambar) {
+                                currentImage.src = `/storage/${data.gambar}`;
+                            }
 
                             // Set the form action with correct path structure
                             const form = document.getElementById('editBeritaForm');

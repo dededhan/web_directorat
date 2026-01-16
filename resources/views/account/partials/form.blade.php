@@ -1,7 +1,3 @@
-@extends('prodis.index')
-
-@section('contentprodis')
-
 <div class="head-title">
     <div class="left">
         <h1>Manage Account</h1>
@@ -53,7 +49,7 @@
             <h3>Informasi Akun</h3>
         </div>
         <div class="form-container p-4">
-            <form action="{{ route('prodis.manage.account.update') }}" method="POST">
+            <form action="{{ route(auth()->user()->role . '.manage.account.update') }}" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -209,5 +205,3 @@
         }, 5000);
     });
 </script>
-
-@endsection

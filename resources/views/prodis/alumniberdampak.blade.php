@@ -1,12 +1,19 @@
-@extends('prodi.index')
+@extends('prodis.index')
 
-@section('contentprodi')
+@section('contentprodis')
+     {{-- Awal: Perubahan untuk Vite --}}
+    @vite([
+        'resources/css/admin/alumniberdampak_dashboard.css',
+        'resources/js/admin/alumniberdampak_dashboard.js'
+    ])
+    {{-- Akhir: Perubahan untuk Vite --}}
+
     <div class="head-title">
         <div class="left">
             <h1>Alumni Berdampak</h1>
             <ul class="breadcrumb">
                 <li>
-                    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+                    <a href="{{ route('prodis.dashboard') }}">Dashboard</a>
                 </li>
                 <li><i class='bx bx-chevron-right'></i></li>
                 <li>
@@ -16,18 +23,44 @@
         </div>
     </div>
 
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <div class="table-data">
         <div class="order">
             <div class="head">
                 <h3>Input Berita Alumni Berdampak</h3>
             </div> 
 
-            <form id="alumni-form" action="{{ route('admin.alumniberdampak.store') }}" method="POST">
+            <form id="alumni-form" action="{{ route('prodis.alumniberdampak.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="judul_berita" class="form-label">Judul Berita/Artikel</label>
                         <input type="text" class="form-control" name="judul_berita" id="judul_berita">
+                        <div class="form-text text-muted">Masukkan judul berita/artikel sesuai dengan sumber aslinya. Pastikan judul mencerminkan dampak alumni terhadap sustainability</div>
                     </div>
                 </div>
 
@@ -35,6 +68,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="tanggal_berita" class="form-label">Tanggal Berita/Artikel</label>
                         <input type="date" class="form-control" name="tanggal_berita" id="tanggal_berita">
+                        <div class="form-text text-muted">Pilih tanggal publikasi berita/artikel asli</div>
                     </div>
                 </div>
 
@@ -43,27 +77,39 @@
                         <label for="fakultas" class="form-label">Fakultas</label>
                         <select class="form-select" name="fakultas" id="fakultas">
                             <option value="">Pilih Fakultas</option>
-                            <option value="fmipa">FMIPA</option>
-                            <option value="fik">FIK</option>
-                            <option value="ft">FT</option>
-                            <option value="fbs">FBS</option>
+                            <option value="pascasarjana">PASCASARJANA</option>
                             <option value="fip">FIP</option>
-                            <option value="fe">FE</option>
-                            <option value="fis">FIS</option>
+                            <option value="fmipa">FMIPA</option>
+                            <option value="fppsi">FPsi</option>
+                            <option value="fbs">FBS</option>
+                            <option value="ft">FT</option>
+                            <option value="fik">FIK</option>
+                            <option value="fis">FISH</option>
+                            <option value="fe">FEB</option>
+                            <option value="profesi">PROFESI</option>
                         </select>
+                        <div class="form-text text-muted">Pilih fakultas asal alumni yang bersangkutan</div>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    {{-- <div class="col-md-6 mb-3">
                         <label for="prodi" class="form-label">Program Studi</label>
                         <select class="form-select" name="prodi" id="prodi" disabled>
                             <option value="">Pilih Program Studi</option>
                         </select>
-                    </div>
+                        <div class="form-text text-muted">Pilih program studi asal alumni yang bersangkutan</div>
+                    </div> --}}
                 </div>
 
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="link_berita" class="form-label">Link Berita/Artikel</label>
                         <input type="url" class="form-control" name="link_berita" id="link_berita">
+                        <div class="form-text text-muted">Masukkan link berita/artikel dari sumber terpercaya (media massa online, website resmi institusi, atau publikasi resmi lainnya)</div>
+                    </div>
+                </div>
+                 <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="image" class="form-label">Gambar</label>
+                        <input type="file" class="form-control" name="image" id="image">
                     </div>
                 </div>
 
@@ -88,6 +134,7 @@
                                 <th>Fakultas</th>
                                 <th>Program Studi</th>
                                 <th>Link</th>
+                                <th>Gambar</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -104,9 +151,30 @@
                                     </a>
                                 </td>
                                 <td>
+                                    @if($alumni->image)
+                                        <button class="btn btn-sm btn-info view-photo" 
+                                            data-image="{{ $alumni->image }}" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#photoModal">
+                                            <i class='bx bx-image'></i> View Photo
+                                        </button>
+                                    @else
+                                        <span class="text-muted">No image</span>
+                                    @endif
+                                </td>
+                                <td>
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-warning">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                        <button class="btn btn-sm btn-warning edit-alumni" 
+                                            data-id="{{ $alumni->id }}"
+                                            data-judul="{{ $alumni->judul_berita }}"
+                                            data-tanggal="{{ $alumni->tanggal_berita }}"
+                                            data-fakultas="{{ $alumni->fakultas }}"
+                                            data-prodi="{{ $alumni->prodi }}"
+                                            data-link="{{ $alumni->link_berita }}"
+                                            data-image="{{ $alumni->image }}">
+                                            Edit
+                                        </button>
+                                        <button class="btn btn-sm btn-danger delete-alumni" data-id="{{ $alumni->id }}">Delete</button>
                                     </div>
                                 </td>
                             </tr>
@@ -118,78 +186,325 @@
         </div>
     </div>
 
-    <script>
-        const prodisByFaculty = {
-            'fmipa': ['Ilmu Komputer', 'Matematika', 'Pendidikan Matematika', 'Fisika', 'Pendidikan Fisika', 'Biologi', 'Pendidikan Biologi', 'Kimia', 'Pendidikan Kimia'],
-            'fik': ['Pendidikan Teknologi Informasi', 'Pendidikan Teknik Elektronika', 'Pendidikan Teknik Elektro', 'Teknik Informatika dan Komputer'],
-            'ft': ['Teknik Sipil', 'Teknik Mesin', 'Teknik Elektro', 'Pendidikan Teknik Bangunan', 'Pendidikan Teknik Mesin'],
-            'fbs': ['Pendidikan Bahasa Indonesia', 'Pendidikan Bahasa Inggris', 'Pendidikan Bahasa Jerman', 'Pendidikan Bahasa Prancis', 'Pendidikan Seni Rupa'],
-            'fip': ['Pendidikan Guru Sekolah Dasar', 'Pendidikan Anak Usia Dini', 'Bimbingan dan Konseling', 'Teknologi Pendidikan', 'Pendidikan Luar Biasa'],
-            'fe': ['Pendidikan Ekonomi', 'Manajemen', 'Akuntansi', 'Pendidikan Administrasi Perkantoran'],
-            'fis': ['Pendidikan Pancasila dan Kewarganegaraan', 'Pendidikan Sejarah', 'Pendidikan Geografi', 'Pendidikan Sosiologi', 'Ilmu Komunikasi']
-        };
+    <div class="modal fade" id="editAlumniModal" tabindex="-1" role="dialog" aria-labelledby="editAlumniModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAlumniModalLabel">Edit Alumni Berdampak</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="edit-alumni-form" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="edit_judul_berita" class="form-label">Judul Berita/Artikel</label>
+                                <input type="text" class="form-control" name="judul_berita" id="edit_judul_berita">
+                            </div>
+                        </div>
+    
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_tanggal_berita" class="form-label">Tanggal Berita/Artikel</label>
+                                <input type="date" class="form-control" name="tanggal_berita" id="edit_tanggal_berita">
+                            </div>
+                        </div>
+    
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_fakultas" class="form-label">Fakultas</label>
+                                <select class="form-select" name="fakultas" id="edit_fakultas">
+                                    <option value="">Pilih Fakultas</option>
+                                    <option value="pascasarjana">PASCASARJANA</option>
+                                    <option value="fip">FIP</option>
+                                    <option value="fmipa">FMIPA</option>
+                                    <option value="fppsi">FPsi</option>
+                                    <option value="fbs">FBS</option>
+                                    <option value="ft">FT</option>
+                                    <option value="fik">FIK</option>
+                                    <option value="fis">FISH</option>
+                                    <option value="fe">FEB</option>
+                                    <option value="profesi">PROFESI</option>
+                                </select>
+                            </div>
+                            {{-- <div class="col-md-6 mb-3">
+                                <label for="edit_prodi" class="form-label">Program Studi</label>
+                                <select class="form-select" name="prodi" id="edit_prodi" disabled>
+                                    <option value="">Pilih Program Studi</option>
+                                </select>
+                            </div> --}}
+                        </div>
+    
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="edit_link_berita" class="form-label">Link Berita/Artikel</label>
+                                <input type="url" class="form-control" name="link_berita" id="edit_link_berita">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="edit_image" class="form-label">Gambar</label>
+                                <input type="file" class="form-control" name="image" id="edit_image">
+                                <div id="current_image_preview" class="mt-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-        document.getElementById('fakultas').addEventListener('change', function() {
-            const prodiSelect = document.getElementById('prodi');
-            prodiSelect.innerHTML = '<option value="">Pilih Program Studi</option>';
+    {{-- Photo Modal --}}
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="photoModalLabel">Foto Alumni</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" id="photoGallery">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    {{-- Script lama dikomentari karena sudah dihandle Vite --}}
+    {{-- <script src="{{ asset('dashboard_main/dashboard/alumniberdampak_dashboard.js') }}"></script> --}}
+
+    {{-- Script inline bisa tetap di sini --}}
+    <script>
+        // Handle photo modal
+        document.querySelectorAll('.view-photo').forEach(button => {
+            button.addEventListener('click', function() {
+                let imagePath = this.dataset.image;
+                const gallery = document.getElementById('photoGallery');
+                
+                if (imagePath) {
+                    // Handle old paths with 'public/' prefix
+                    imagePath = imagePath.replace(/^public\//, '');
+                    
+                    // Create image element with error handling
+                    const img = document.createElement('img');
+                    img.className = 'img-fluid rounded';
+                    img.style.cssText = 'max-height: 500px; object-fit: contain; display: block; margin: auto;';
+                    img.src = `/storage/${imagePath}`;
+                    
+                    img.onerror = function() {
+                        // If image fails to load, show error message
+                        gallery.innerHTML = '<div class="alert alert-warning">Gambar tidak dapat dimuat. File mungkin sudah dihapus atau dipindahkan.</div>';
+                    };
+                    
+                    gallery.innerHTML = '';
+                    gallery.appendChild(img);
+                } else {
+                    gallery.innerHTML = '<p>Tidak ada foto.</p>';
+                }
+            });
+        });
+
+        // Program studi options
+        const prodiOptions = {
+            'pascasarjana': ['S3 Penelitian Dan Evaluasi Pendidikan', 'S2 Penelitian Dan Evaluasi Pendidikan', 'S2 Manajemen Lingkungan', 'S3 Ilmu Manajemen', 'S3 Manajemen Pendidikan', 'S3 Pendidikan Dasar', 'S2 Linguistik Terapan', 'S3 Pendidikan Kependudukan Dan Lingkungan Hidup', 'S2 Pendidikan Lingkungan', 'S3 Pendidikan Jasmani', 'S3 Teknologi Pendidikan', 'S3 Linguistik Terapan', 'S3 Pendidikan Anak Usia Dini', 'S2 Manajemen Pendidikan Tinggi'],
+            'fip': ['S2 Bimbingan Konseling', 'S1 Bimbingan Dan Konseling', 'S1 Pendidikan Luar Biasa', 'S1 Manajemen Pendidikan', 'S1 Pendidikan Masyarakat', 'S1 Pendidikan Guru Pendidikan Anak Usia Dini', 'S2 Pendidikan Dasar', 'S2 Teknologi Pendidikan', 'S1 Pendidikan Guru Sekolah Dasar', 'S1 Teknologi Pendidikan', 'S2 Pendidikan Masyarakat', 'S2 Pendidikan Khusus', 'S1 Perpustakaan dan Sains Informasi'],
+            'fmipa': ['S1 Kimia', 'S1 Statistika', 'S1 Matematika', 'S1 Pendidikan Matematika', 'S1 Biologi', 'S1 Ilmu Komputer', 'S1 Fisika', 'S2 Pendidikan Kimia', 'S2 Pendidikan Biologi', 'S2 Pendidikan Matematika', 'S1 Pendidikan Biologi', 'S1 Pendidikan Fisika', 'S1 Pendidikan Kimia', 'S2 Pendidikan Fisika'],
+            'fppsi': ['S1 Psikologi', 'S2 Psikologi'],
+            'fbs': ['S1 Pendidikan Musik', 'S1 Pendidikan Tari', 'S1 Pendidikan Seni Rupa', 'S1 Pendidikan Bahasa Jepang', 'S1 Sastra Indonesia', 'S1 Pendidikan Bahasa Dan Sastra Indonesia', 'S1 Pendidikan Bahasa Perancis', 'S1 Sastra Inggris', 'S1 Pendidikan Bahasa Jerman', 'S1 Pendidikan Bahasa Inggris', 'S2 Pendidikan Bahasa Inggris', 'S1 Pendidikan Bahasa Arab', 'S2 Pendidikan Bahasa Arab', 'S1 Pendidikan Bahasa Mandarin', 'S2 Pendidikan Seni'],
+            'ft': ['S1 Pendidikan Teknik Elektronika', 'D4 Kosmetik dan Perawatan Kecantikan', 'D4 Teknik Rekayasa Manufaktur', 'D4 Seni Kuliner dan Pengolahan Jasa Makanan', 'D4 Desain mode', 'D4 Manajemen Pelabuhan dan Logistik Maritim', 'S1 Pendidikan Teknik Informatika Dan Komputer', 'S1 Pendidikan Tata Boga', 'S1 Pendidikan Tata Busana', 'S1 Pendidikan Tata Rias', 'S1 Pendidikan Kesejahteraan Keluarga', 'S2 Pendidikan Teknologi Dan Kejuruan', 'S1 Pendidikan Teknik Bangunan', 'S1 Pendidikan Teknik Elektro', 'S1 Pendidikan Teknik Mesin', 'D4 Teknik Rekayasa Otomasi', 'D4 Teknologi Rekayasa Konstruksi Bangunan Gedung', 'S1 Rekayasa Keselamatan Kebakaran', 'S1 Teknik Mesin', 'S1 Sistem dan Teknologi Informasi'],
+            'fik': ['S1 Ilmu Keolahragaan', 'S1 Pendidikan Kepelatihan Olahraga', 'S1 Pendidikan Jasmani, Kesehatan Dan Rekreasi', 'S2 Pendidikan Jasmani', 'S1 Kepelatihan Kecabangan Olahraga', 'S1 Olahraga Rekreasi', 'S2 Ilmu Keolahragaan'],
+            'fis': ['D4 Usaha Perjalanan Wisata', 'S1 Sosiologi', 'S1 Pendidikan Agama Islam', 'S1 Pendidikan Sosiologi', 'S2 Pendidikan Sejarah', 'D4 Hubungan Masyarakat dan Komunikasi Digital', 'S1 Pendidikan Pancasila Dan Kewarganegaraan', 'S1 Pendidikan Geografi', 'S1 Pendidikan IPS', 'S1 Pendidikan Sejarah', 'S1 Ilmu Komunikasi (ILKOM)', 'S1 Geografi', 'S2 Pendidikan Geografi', 'S2 Pendidikan Pancasila Dan Kewarganegaraan'],
+            'fe': ['D4 Akuntansi Sektor Publik', 'D4 Administrasi Perkantoran Digital', 'D4 Pemasaran Digital', 'S1 Akuntansi', 'S1 Manajemen', 'S1 Pendidikan Ekonomi', 'S2 Manajemen', 'S1 Pendidikan Administrasi Perkantoran', 'S1 Bisnis Digital', 'S2 Akuntansi', 'S1 Pendidikan Akuntansi', 'S2 Pendidikan Ekonomi', 'S1 Pendidikan Bisnis'],
+            'profesi': ['Profesi PPG']
+        };
+    
+        // Update prodi options when fakultas changes
+        function updateProdiOptions(fakultas, selectElement) {
+            selectElement.innerHTML = '<option value="">Pilih Program Studi</option>';
             
-            if (this.value) {
-                prodiSelect.disabled = false;
-                const prodis = prodisByFaculty[this.value];
-                prodis.forEach(prodi => {
+            if (prodiOptions[fakultas]) {
+                prodiOptions[fakultas].forEach(prodi => {
                     const option = document.createElement('option');
-                    option.value = prodi.toLowerCase().replace(/ /g, '_');
+                    option.value = prodi;
                     option.textContent = prodi;
-                    prodiSelect.appendChild(option);
+                    selectElement.appendChild(option);
                 });
-            } else {
-                prodiSelect.disabled = true;
             }
+        }
+    
+        // Handle fakultas change for create form
+        document.getElementById('fakultas').addEventListener('change', function() {
+            // const prodiSelect = document.getElementById('prodi');
+            // prodiSelect.disabled = false;
+            // updateProdiOptions(this.value, prodiSelect);
+        });
+    
+        // Handle edit button
+        document.querySelectorAll('.edit-alumni').forEach(button => {
+            button.addEventListener('click', function() {
+                const alumniId = this.dataset.id;
+                const modal = new bootstrap.Modal(document.getElementById('editAlumniModal'));
+                const editForm = document.getElementById('edit-alumni-form');
+                
+                // Populate form data
+                document.getElementById('edit_judul_berita').value = this.dataset.judul;
+                document.getElementById('edit_tanggal_berita').value = this.dataset.tanggal;
+                document.getElementById('edit_fakultas').value = this.dataset.fakultas;
+                document.getElementById('edit_link_berita').value =  this.dataset.link;
+                
+                // Show current image if exists
+                const currentImagePreview = document.getElementById('current_image_preview');
+                if (this.dataset.image) {
+                    // Extract just the path part after /storage/
+                    const imagePath = this.dataset.image.includes('/storage/') 
+                        ? this.dataset.image.split('/storage/')[1] 
+                        : this.dataset.image;
+                    
+                    currentImagePreview.innerHTML = `
+                        <div class="alert alert-info">
+                            <strong>Gambar saat ini:</strong><br>
+                            <img src="/storage/${imagePath}" alt="Current Image" style="max-width: 200px; max-height: 200px; object-fit: cover;" class="mt-2 img-thumbnail">
+                        </div>
+                    `;
+                } else {
+                    currentImagePreview.innerHTML = '<em class="text-muted">Tidak ada gambar</em>';
+                }
+                
+                // Set form action and store ID
+                editForm.action = `/prodis/alumniberdampak/${alumniId}`;
+                editForm.dataset.alumniId = alumniId;
+                
+                // Show modal
+                modal.show();
+            });
+        });
+
+        // Handle edit form submission via AJAX
+        const editForm = document.getElementById('edit-alumni-form');
+        if (editForm) {
+            editForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const form = this;
+                const formData = new FormData(form);
+                const alumniId = form.dataset.alumniId;
+                
+                console.log('Submitting edit form for alumni ID:', alumniId);
+                console.log('Form action:', form.action);
+                
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw err;
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Response data:', data);
+                    if (data.success) {
+                        // Close the modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('editAlumniModal'));
+                        modal.hide();
+                        
+                        // Show success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Data alumni berdampak berhasil diperbarui',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                        
+                        // Reload the page to refresh the table
+                        setTimeout(() => {
+                            window.location.href = window.location.href.split('?')[0] + '?t=' + new Date().getTime();
+                        }, 1000);
+                    } else {
+                        console.error('Update failed:', data);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: data.message || 'Terjadi kesalahan saat memperbarui data',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error('Submit error:', err);
+                    
+                    // Handle validation errors
+                    if (err.errors) {
+                        let errorMsg = 'Validasi gagal:\n';
+                        Object.keys(err.errors).forEach(key => {
+                            errorMsg += `- ${err.errors[key].join(', ')}\n`;
+                        });
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Validasi Gagal',
+                            text: errorMsg,
+                            timer: 3000,
+                            showConfirmButton: true
+                        });
+                    } else if (err.message) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: err.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Terjadi kesalahan saat memperbarui data',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                    }
+                });
+            });
+        }
+    </script>
+    <script>
+        // Display SweetAlert for flash messages
+        document.addEventListener('DOMContentLoaded', function() {
+            @if(session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}',
+                    timer: 2000
+                });
+            @endif
+
+            @if(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: '{{ session('error') }}',
+                    timer: 2000
+                });
+            @endif
         });
     </script>
-
-    <style>
-        .table-data {
-            margin-top: 24px;
-        }
-        
-        .order {
-            background: #fff;
-            padding: 24px;
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-control:focus, .form-select:focus {
-            border-color: #3498db;
-            box-shadow: none;
-        }
-
-        .btn-primary {
-            background-color: #3498db;
-            border-color: #3498db;
-        }
-
-        .btn-primary:hover {
-            background-color: #2980b9;
-            border-color: #2980b9;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-        
-        .badge {
-            font-size: 0.7em;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 5px;
-        }
-
-        .table th {
-            white-space: nowrap;
-        }
-    </style>
 @endsection

@@ -53,10 +53,17 @@
                                         <i class="fas fa-clock mr-2 text-gray-400"></i>
                                         <span>Durasi: {{ $exam->duration }} menit</span>
                                     </div>
-                                    <div class="flex items-center text-gray-600">
-                                        <i class="fas fa-chart-line mr-2 text-gray-400"></i>
-                                        <span>Skor: <strong>{{ $session->score ?? 0 }}</strong></span>
-                                    </div>
+                                    @if($canAccess)
+                                        <div class="flex items-center text-gray-600">
+                                            <i class="fas fa-chart-line mr-2 text-gray-400"></i>
+                                            <span>Skor: <strong>{{ $session->score ?? 0 }}</strong></span>
+                                        </div>
+                                    @else
+                                        <div class="flex items-center text-gray-600">
+                                            <i class="fas fa-lock mr-2 text-gray-400"></i>
+                                            <span class="text-yellow-600">Skor tersedia setelah ujian selesai</span>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
 
