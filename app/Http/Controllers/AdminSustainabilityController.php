@@ -63,7 +63,7 @@ class AdminSustainabilityController extends Controller
             case 'prodi':
                 return 'prodis.' . $baseRouteName;
             case 'admin_pemeringkatan':
-                return 'admin_pemeringkatan.' . $baseRouteName;
+                return 'admin_pemeringkatan.kegiatan-' . $baseRouteName;
             default:
                 Log::warning('Trying to get role based route for unknown role or unhandled role: ' . $role);
                 return 'dashboard'; // Fallback route
@@ -522,5 +522,15 @@ class AdminSustainabilityController extends Controller
             Log::error('Error fetching distinct sustainability years: ' . $e->getMessage());
             return response()->json(['error' => 'Could not fetch years'], 500);
         }
+    }
+
+    public function publicKegiatanIndex()
+    {
+        $sustainabilities = Sustainability::with('photos')
+            ->orderBy('tanggal_kegiatan', 'desc')
+            ->get()
+            ->groupBy('fakultas');
+
+        return view('pemeringkatan.kegiatan-sustainability.index', compact('sustainabilities'));
     }
 }

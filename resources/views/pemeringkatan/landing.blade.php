@@ -399,36 +399,44 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 @forelse($alumniBerdampak as $alumni)
-                    <a href="{{ $alumni->link_berita ?: '#' }}" 
-                       target="{{ $alumni->link_berita ? '_blank' : '_self' }}"
-                       class="alumni-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
+                    <a href="{{ route('alumni') }}"
+                       class="alumni-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col group">
                         @if($alumni->image)
                             <div class="relative h-56 overflow-hidden">
                                 <img src="{{ Storage::url(str_replace('public/', '', $alumni->image)) }}" 
                                      alt="{{ $alumni->judul_berita }}" 
-                                     class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
-                                <div class="absolute top-4 right-4 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-xs font-semibold">
+                                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                <div class="absolute top-4 right-4 bg-yellow-400 text-teal-800 px-3 py-1 rounded-full text-xs font-semibold shadow-md z-10">
                                     {{ \Carbon\Carbon::parse($alumni->tanggal_berita)->format('d M Y') }}
                                 </div>
                             </div>
                         @else
                             <div class="relative h-56 bg-gradient-to-br from-yellow-100 to-yellow-200 flex items-center justify-center">
                                 <i class='bx bx-user-check text-6xl text-yellow-600 opacity-50'></i>
+                                <div class="absolute top-4 right-4 bg-white/80 text-teal-800 px-3 py-1 rounded-full text-xs font-semibold shadow-md">
+                                    {{ \Carbon\Carbon::parse($alumni->tanggal_berita)->format('d M Y') }}
+                                </div>
                             </div>
                         @endif
                         <div class="p-6 flex flex-col flex-1">
-                            <h3 class="text-xl font-bold text-gray-800 mb-3 line-clamp-2">{{ $alumni->judul_berita }}</h3>
-                            <div class="mt-auto space-y-2">
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <i class='bx bx-buildings text-teal-600 mr-2'></i>
-                                    <span class="font-medium">{{ strtoupper($alumni->fakultas) }}</span>
+                            <div class="mb-3">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
+                                    <i class='bx bx-buildings mr-1'></i>
+                                    {{ strtoupper($alumni->fakultas) }}
+                                </span>
+                            </div>
+
+                            <h3 class="text-xl font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-teal-700 transition-colors">{{ $alumni->judul_berita }}</h3>
+                            
+                            <p class="text-sm text-gray-600 mb-4 line-clamp-3">
+                                {{ Str::limit(strip_tags($alumni->deskripsi), 100) }}
+                            </p>
+
+                            <div class="mt-auto">
+                                <div class="flex items-center text-sm text-teal-600 font-medium group-hover:text-yellow-600 transition-colors">
+                                    <i class='bx bx-link-external mr-2'></i>
+                                    <span>Baca Selengkapnya</span>
                                 </div>
-                                @if($alumni->link_berita)
-                                    <div class="flex items-center text-sm text-teal-600 font-medium">
-                                        <i class='bx bx-link-external mr-2'></i>
-                                        <span>Baca Selengkapnya</span>
-                                    </div>
-                                @endif
                             </div>
                         </div>
                     </a>

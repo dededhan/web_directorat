@@ -146,7 +146,7 @@
                         </a>
                         <ul id="sustainability-dropdown" class="dropdown-menu nested-menu secondary-dropdown hidden">
                             <li><a href="{{ route('pemeringkatan.sustainability.kegiatan') }}">Kegiatan Sustainability</a></li>
-                            <li><a href="{{ route('pemeringkatan.sustainability.mata-kuliah') }}">Mata Kuliah Sustainability</a></li>
+                            {{-- <li><a href="{{ route('pemeringkatan.sustainability.mata-kuliah') }}">Mata Kuliah Sustainability</a></li> --}}
                             <li><a href="{{ route('pemeringkatan.sustainability.program') }}">Program Sustainability UNJ</a></li>
                             <li><a href="{{ route('pemeringkatan.sulitest.index') }}">UNJ Sustainability Literacy Test</a></li>
                         </ul>
@@ -237,7 +237,7 @@
                         </button>
                         <ul class="dropdown-content hidden bg-[#0d4540] overflow-hidden">
                             <li><a href="{{ route('pemeringkatan.sustainability.kegiatan') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Kegiatan Sustainability</a></li>
-                            <li><a href="{{ route('pemeringkatan.sustainability.mata-kuliah') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Mata Kuliah Sustainability</a></li>
+                            {{-- <li><a href="{{ route('pemeringkatan.sustainability.mata-kuliah') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Mata Kuliah Sustainability</a></li> --}}
                             <li><a href="{{ route('pemeringkatan.sustainability.program') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Program Sustainability UNJ</a></li>
                             <li><a href="{{ route('pemeringkatan.sulitest.index') }}" class="block text-white py-3 px-10 hover:bg-[#0a3c38] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Sulitest</a></li>
                         </ul>

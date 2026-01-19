@@ -13,6 +13,7 @@ class AlumniBerdampak extends Model
 
     protected $fillable = [
         'judul_berita',
+        'deskripsi',
         'tanggal_berita',
         'fakultas',
         // 'prodi',

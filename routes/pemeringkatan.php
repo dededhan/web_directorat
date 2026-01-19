@@ -69,9 +69,7 @@ Route::prefix('pemeringkatan')->name('pemeringkatan.')->group(function () {
     
     // Sustainability programs
     Route::prefix('sustainability')->name('sustainability.')->group(function () {
-        Route::get('/kegiatan', function () {
-            return view('pemeringkatan.kegiatan-sustainability.index');
-        })->name('kegiatan');
+        Route::get('/kegiatan', [\App\Http\Controllers\AdminSustainabilityController::class, 'publicKegiatanIndex'])->name('kegiatan');
         
         Route::get('/mata-kuliah', [AdminMataKuliahController::class, 'matakuliahSustainabilityView'])->name('mata-kuliah');
         
