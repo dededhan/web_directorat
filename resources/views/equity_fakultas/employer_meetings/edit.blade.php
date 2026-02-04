@@ -41,6 +41,15 @@
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="laporan_kegiatan_file">
                     Unggah Laporan Kegiatan (PDF) <span class="text-red-500">*</span>
                 </label>
+                <div class="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                    <p class="text-sm text-blue-800 mb-2">
+                        <i class='bx bx-info-circle'></i> Silakan unduh template Word terlebih dahulu, isi laporan kegiatan, kemudian konversi ke PDF dan upload file PDF tersebut.
+                    </p>
+                    <a href="{{ asset('templates/template_employer_laporan.docx') }}" class="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors duration-200" download>
+                        <i class='bx bx-download mr-2'></i>
+                        Download Template Word
+                    </a>
+                </div>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('laporan_kegiatan_file') border-red-500 @enderror" 
                        id="laporan_kegiatan_file" 
                        name="laporan_kegiatan_file"
