@@ -134,7 +134,7 @@ class EmployerMeetingController extends Controller
      */
     public function edit(EmployerMeetingSubmission $employerMeeting)
     {
-        if ($employerMeeting->user_id !== Auth::id() || $employerMeeting->status !== 'disetujui') {
+        if ($employerMeeting->user_id !== Auth::id() || !in_array($employerMeeting->status, ['disetujui', 'selesai'])) {
             abort(403, 'Akses Ditolak');
         }
         return view('equity_fakultas.employer_meetings.edit', ['submission' => $employerMeeting]);
@@ -145,36 +145,51 @@ class EmployerMeetingController extends Controller
      */
     public function update(Request $request, EmployerMeetingSubmission $employerMeeting)
     {
-        if ($employerMeeting->user_id !== Auth::id() || $employerMeeting->status !== 'disetujui') {
+        if ($employerMeeting->user_id !== Auth::id() || !in_array($employerMeeting->status, ['disetujui', 'selesai'])) {
             abort(403, 'Akses Ditolak');
         }
 
+        // Jika status sudah selesai, file bersifat optional (untuk re-edit)
+        $isReEdit = $employerMeeting->status === 'selesai';
+        
         $request->validate([
-            'bukti_keuangan_file' => 'required|file|mimes:pdf|max:2048',
-            'laporan_kegiatan_file' => 'required|file|mimes:pdf|max:2048',
-            'nama_qs_file' => 'required|file|mimes:xlsx,xls|max:2048',
+            'bukti_keuangan_file' => ($isReEdit ? 'nullable' : 'required') . '|file|mimes:pdf|max:2048',
+            'laporan_kegiatan_file' => ($isReEdit ? 'nullable' : 'required') . '|file|mimes:pdf|max:2048',
+            'nama_qs_file' => ($isReEdit ? 'nullable' : 'required') . '|file|mimes:xlsx,xls|max:2048',
         ]);
         
-        if ($employerMeeting->bukti_keuangan_path) {
-            Storage::disk('public')->delete($employerMeeting->bukti_keuangan_path);
-        }
-        if ($employerMeeting->laporan_kegiatan_path) {
-            Storage::disk('public')->delete($employerMeeting->laporan_kegiatan_path);
-        }
-        if ($employerMeeting->nama_qs_path) {
-            Storage::disk('public')->delete($employerMeeting->nama_qs_path);
+        $updateData = [];
+        
+        // Update Bukti Keuangan jika ada file baru
+        if ($request->hasFile('bukti_keuangan_file')) {
+            if ($employerMeeting->bukti_keuangan_path) {
+                Storage::disk('public')->delete($employerMeeting->bukti_keuangan_path);
+            }
+            $updateData['bukti_keuangan_path'] = $request->file('bukti_keuangan_file')->store('bukti_keuangan/employer_meetings', 'public');
         }
 
-        $buktiPath = $request->file('bukti_keuangan_file')->store('bukti_keuangan/employer_meetings', 'public');
-        $laporanPath = $request->file('laporan_kegiatan_file')->store('laporan_kegiatan/employer_meetings', 'public');
-        $qsPath = $request->file('nama_qs_file')->store('nama_qs/employer_meetings', 'public');
+        // Update Laporan Kegiatan jika ada file baru
+        if ($request->hasFile('laporan_kegiatan_file')) {
+            if ($employerMeeting->laporan_kegiatan_path) {
+                Storage::disk('public')->delete($employerMeeting->laporan_kegiatan_path);
+            }
+            $updateData['laporan_kegiatan_path'] = $request->file('laporan_kegiatan_file')->store('laporan_kegiatan/employer_meetings', 'public');
+        }
 
-        $employerMeeting->update([
-            'bukti_keuangan_path' => $buktiPath,
-            'laporan_kegiatan_path' => $laporanPath,
-            'nama_qs_path' => $qsPath,
-            'status' => 'selesai',
-        ]);
+        // Update Data QS jika ada file baru
+        if ($request->hasFile('nama_qs_file')) {
+            if ($employerMeeting->nama_qs_path) {
+                Storage::disk('public')->delete($employerMeeting->nama_qs_path);
+            }
+            $updateData['nama_qs_path'] = $request->file('nama_qs_file')->store('nama_qs/employer_meetings', 'public');
+        }
+
+        // Set status to selesai only if it wasn't already
+        if (!$isReEdit) {
+            $updateData['status'] = 'selesai';
+        }
+
+        $employerMeeting->update($updateData);
 
         return redirect()->route('equity_fakultas.employer-meetings.index')->with('success', 'Data proposal berhasil dilengkapi.');
     }

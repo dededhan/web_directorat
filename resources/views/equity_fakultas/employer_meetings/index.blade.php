@@ -61,6 +61,15 @@
                                  <a href="{{ route('equity_fakultas.employer-meetings.edit', $submission->id) }}" class="text-teal-600 hover:text-teal-900 font-semibold">
                                      Lengkapi Data
                                  </a>
+                             @elseif ($submission->status == 'selesai')
+                                 <div class="flex items-center justify-center gap-2">
+                                     <a href="{{ route('equity_fakultas.employer-meetings.edit', $submission->id) }}" class="text-orange-600 hover:text-orange-900 font-semibold" title="Edit">
+                                         <i class='bx bx-edit text-xl'></i>
+                                     </a>
+                                     <a href="{{ route('equity_fakultas.employer-meetings.show', $submission->id) }}" class="text-indigo-600 hover:text-indigo-900" title="Detail">
+                                         <i class='bx bx-show text-xl'></i>
+                                     </a>
+                                 </div>
                              @else
                                  <a href="{{ route('equity_fakultas.employer-meetings.show', $submission->id) }}" class="text-indigo-600 hover:text-indigo-900">
                                      Detail
