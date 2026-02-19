@@ -39,7 +39,7 @@ class EmployerMeetingController extends Controller
     {
         $request->validate([
             'nama_pengunggah' => 'required|string|max:255',
-            'proposal_file' => 'required|file|mimes:pdf,xlsx,xls|max:2048',
+            'proposal_file' => 'required|file|mimes:pdf,xlsx,xls|max:5120',
         ]);
 
         $path = $request->file('proposal_file')->store('proposals/employer_meetings', 'public');
@@ -77,7 +77,7 @@ class EmployerMeetingController extends Controller
 
         $request->validate([
             'nama_pengunggah' => 'required|string|max:255',
-            'proposal_file' => 'nullable|file|mimes:pdf,xlsx,xls|max:2048',
+            'proposal_file' => 'nullable|file|mimes:pdf,xlsx,xls|max:5120',
         ]);
 
         $data = ['nama_pengunggah' => $request->nama_pengunggah];
@@ -153,9 +153,9 @@ class EmployerMeetingController extends Controller
         $isReEdit = $employerMeeting->status === 'selesai';
         
         $request->validate([
-            'bukti_keuangan_file' => ($isReEdit ? 'nullable' : 'required') . '|file|mimes:pdf|max:2048',
-            'laporan_kegiatan_file' => ($isReEdit ? 'nullable' : 'required') . '|file|mimes:pdf|max:2048',
-            'nama_qs_file' => ($isReEdit ? 'nullable' : 'required') . '|file|mimes:xlsx,xls|max:2048',
+            'bukti_keuangan_file' => ($isReEdit ? 'nullable' : 'required') . '|file|mimes:pdf|max:5120',
+            'laporan_kegiatan_file' => ($isReEdit ? 'nullable' : 'required') . '|file|mimes:pdf|max:5120',
+            'nama_qs_file' => ($isReEdit ? 'nullable' : 'required') . '|file|mimes:xlsx,xls|max:5120',
         ]);
         
         $updateData = [];
