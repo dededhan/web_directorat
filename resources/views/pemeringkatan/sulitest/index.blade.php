@@ -1,198 +1,204 @@
 @extends('layouts.pemeringkatan')
 
-@section('title', 'Sulitest UNJ - Mainstreaming Sustainability Literacy')
+@section('title', 'UNJ Sustain Quest - Mainstreaming Sustainability Literacy')
 
 @section('meta_description', 'UNJ Sustain Quest provides internationally recognized online tools to measure, improve and certify sustainability knowledge.')
 
 @push('styles')
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     @vite('resources/css/pemeringkatan/sulitest.css')
 @endpush
 
 @section('content')
     <main>
-        <!-- HERO -->
-        <section class="relative bg-white pt-32 pb-20 overflow-hidden">
-            <div class="decorative-shape absolute top-10 right-32 w-8 h-8 bg-yellow-400"></div>
-            <div class="decorative-shape absolute top-24 right-20 w-6 h-6 bg-yellow-400 opacity-70"></div>
-            <div class="decorative-shape absolute top-16 right-40 w-4 h-4 bg-yellow-400 opacity-50"></div>
-            <div class="decorative-shape absolute top-40 right-16 w-10 h-10 bg-yellow-400 opacity-40"></div>
+        {{-- ═══════════════════════════════════════════════════════════════
+             HERO — deep navy gradient with animated mesh overlay
+        ═══════════════════════════════════════════════════════════════ --}}
+        <section class="sulitest-hero relative overflow-hidden">
+            <div class="hero-mesh"></div>
 
             <div class="container mx-auto px-6 relative z-10">
-                <div class="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
-                    <!-- Left -->
-                    <div>
-                        <h1 class="text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900 mb-6">
-                            Mainstreaming<br>sustainability<br>literacy!
+                <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[85vh]">
+                    {{-- Left copy --}}
+                    <div class="hero-text-col" data-reveal="left">
+                        <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-red-300 text-sm font-semibold px-4 py-1.5 rounded-full mb-6 border border-red-400/20">
+                            <span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
+                            UNJ Sustain Quest
+                        </span>
+
+                        <h1 class="text-5xl lg:text-7xl font-black leading-[1.05] text-white mb-6 tracking-tight">
+                            Mainstreaming<br>
+                            <span class="hero-gradient-text">sustainability</span><br>
+                            literacy!
                         </h1>
-                        <p class="text-lg text-gray-700 mb-8 leading-relaxed">
-                            We provide internationally recognized online tools to <strong>measure, improve and certify
-                                sustainability knowledge</strong>
+
+                        <p class="text-lg text-gray-300 mb-10 max-w-lg leading-relaxed">
+                            Mainstreaming Sustainability Literacy for a <strong class="text-white">Greener Future</strong>
                         </p>
-                        <a href="{{ route('sulitest.login') }}"
-                            class="inline-block bg-gray-800 text-white font-semibold px-8 py-3.5 rounded-full hover:bg-gray-700 transition-all">
-                            Schedule a demo
-                        </a>
-                    </div>
 
-                    <!-- Right-->
-                    <div class="relative">
-                        <div class="space-y-4">
-
+                        <div class="flex flex-wrap gap-4">
                             <a href="{{ route('sulitest.login') }}"
-                                class="card-hover flex items-center gap-4 bg-blue-50 border-2 border-blue-100 rounded-xl p-6 hover:border-blue-300">
-                                <div class="flex-shrink-0">
-                                    <div class="w-12 h-12 flex items-center justify-center">
-                                        <svg class="w-10 h-10 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-900">A professor or a university</h3>
-                                </div>
+                               class="hero-btn-primary group">
+                                <span>Get Started</span>
+                                <i class="fas fa-arrow-right text-sm transition-transform group-hover:translate-x-1"></i>
                             </a>
-
-                            <a href="{{ route('sulitest.login') }}"
-                                class="card-hover flex items-center gap-4 bg-orange-50 border-2 border-orange-100 rounded-xl p-6 hover:border-orange-300">
-                                <div class="flex-shrink-0">
-                                    <div class="w-12 h-12 flex items-center justify-center">
-                                        <svg class="w-10 h-10 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-900">A company or an organization</h3>
-                                </div>
-                            </a>
-
-                            <a href="{{ route('sulitest.login') }}"
-                                class="card-hover flex items-center gap-4 bg-stone-100 border-2 border-stone-200 rounded-xl p-6 hover:border-stone-400">
-                                <div class="flex-shrink-0">
-                                    <div class="w-12 h-12 flex items-center justify-center">
-                                        <svg class="w-10 h-10 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-900">A student or a professional</h3>
-                                </div>
+                            <a href="#about"
+                               class="hero-btn-secondary">
+                                Learn More
                             </a>
                         </div>
+                    </div>
+
+                    {{-- Right — role cards --}}
+                    <div class="flex flex-col gap-5" data-reveal="right">
+                        <a href="{{ route('sulitest.login') }}" class="role-card role-card--red">
+                            <div class="role-card__icon bg-red-500/20 text-red-400">
+                                <i class="fas fa-graduation-cap text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-lg">A professor or a university</h3>
+                                <p class="text-gray-400 text-sm mt-0.5">Assess your institution's sustainability literacy</p>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-500 ml-auto role-card__arrow"></i>
+                        </a>
+
+                        <a href="{{ route('sulitest.login') }}" class="role-card role-card--amber">
+                            <div class="role-card__icon bg-amber-500/20 text-amber-400">
+                                <i class="fas fa-building text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-lg">A company or an organization</h3>
+                                <p class="text-gray-400 text-sm mt-0.5">Evaluate workforce sustainability competence</p>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-500 ml-auto role-card__arrow"></i>
+                        </a>
+
+                        <a href="{{ route('sulitest.login') }}" class="role-card role-card--navy">
+                            <div class="role-card__icon bg-blue-500/20 text-blue-400">
+                                <i class="fas fa-user text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-lg">A student or a professional</h3>
+                                <p class="text-gray-400 text-sm mt-0.5">Certify your personal sustainability knowledge</p>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-500 ml-auto role-card__arrow"></i>
+                        </a>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- GLOBAL CHALLENGE -->
-        <section id="about" class="py-20 bg-stone-50 relative overflow-hidden">
-            <div class="absolute left-0 top-1/2 transform -translate-y-1/2 opacity-5">
-                <svg width="300" height="400" viewBox="0 0 300 400">
-                    <path d="M 50,200 Q 100,150 150,200 T 250,200" stroke="#d4d4d8" stroke-width="2" fill="none" />
+            {{-- bottom wave --}}
+            <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none" style="transform:translateY(1px)">
+                <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+                    <path d="M0 40L48 36C96 32 192 24 288 28C384 32 480 48 576 52C672 56 768 48 864 40C960 32 1056 24 1152 28C1248 32 1344 48 1392 56L1440 64V80H1392C1344 80 1248 80 1152 80C1056 80 960 80 864 80C768 80 672 80 576 80C480 80 384 80 288 80C192 80 96 80 48 80H0V40Z" fill="#f8fafc"/>
                 </svg>
             </div>
+        </section>
+
+        {{-- ═══════════════════════════════════════════════════════════════
+             GLOBAL CHALLENGE
+        ═══════════════════════════════════════════════════════════════ --}}
+        <section id="about" class="py-24 lg:py-32 bg-slate-50 relative overflow-hidden">
+            <div class="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-red-100/30 blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-amber-100/30 blur-3xl pointer-events-none"></div>
+
             <div class="container mx-auto px-6 relative z-10">
-                <div class="grid md:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
-                    <div class="flex justify-center">
-                        <div class="relative">
-                            <div
-                                class="w-72 h-96 bg-gray-800 rounded-3xl flex flex-col items-center justify-center p-8 shadow-xl">
-                                <div class="decorative-shape w-6 h-6 bg-yellow-400 absolute top-8 left-8"></div>
-                                <div class="decorative-shape w-4 h-4 bg-yellow-400 absolute top-12 left-16 opacity-70">
-                                </div>
-                                <div class="decorative-shape w-3 h-3 bg-yellow-400 absolute top-16 left-12 opacity-50">
-                                </div>
-                                <div class="mb-4">
-                                    <svg class="w-32 h-32 text-teal-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path
-                                            d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z">
-                                        </path>
-                                        <path
-                                            d="M3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0z">
-                                        </path>
-                                    </svg>
-                                </div>
+                <div class="grid md:grid-cols-2 gap-16 lg:gap-24 items-center max-w-6xl mx-auto">
+                    {{-- Left visual --}}
+                    <div class="flex justify-center" data-reveal="up">
+                        <div class="challenge-visual">
+                            <div class="challenge-visual__ring challenge-visual__ring--outer"></div>
+                            <div class="challenge-visual__ring challenge-visual__ring--inner"></div>
+                            <div class="challenge-visual__core">
+                                <i class="fas fa-leaf text-4xl text-red-500"></i>
+                                <span class="text-sm font-bold text-gray-500 mt-2 tracking-widest uppercase">SDG</span>
+                            </div>
+                            <div class="challenge-visual__float challenge-visual__float--1">
+                                <i class="fas fa-water text-blue-500"></i>
+                            </div>
+                            <div class="challenge-visual__float challenge-visual__float--2">
+                                <i class="fas fa-sun text-amber-500"></i>
+                            </div>
+                            <div class="challenge-visual__float challenge-visual__float--3">
+                                <i class="fas fa-heart text-red-400"></i>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">A global challenge</h2>
-                        <div class="bg-orange-50 rounded-2xl p-6 mb-6">
+
+                    {{-- Right copy --}}
+                    <div data-reveal="up">
+                        <span class="section-badge section-badge--red">About</span>
+                        <h2 class="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+                            A Global Challenge,<br><span class="text-red-600">A Local Commitment</span>
+                        </h2>
+                        <div class="glass-card mb-6">
                             <p class="text-gray-700 leading-relaxed">
                                 The environmental and social challenges of our era demand that every student, educator,
                                 and professional understands sustainability issues and takes part in solving them.
                             </p>
                         </div>
-                        <p class="text-gray-900 font-semibold leading-relaxed">
-                            Building a sustainable future demands enhancing knowledge, skills, and mindsets around
-                            sustainability.
+                        <p class="text-gray-700 leading-relaxed">
+                            <strong class="text-gray-900">UNJ Sustain Quest</strong> is Universitas Negeri Jakarta's initiative to strengthen sustainability literacy and foster environmentally responsible mindsets across all disciplines.
                         </p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Combine -->
-        <section class="py-20 bg-white">
-            <div class="container mx-auto px-6">
-                <div class="grid lg:grid-cols-2 gap-16 items-start max-w-7xl mx-auto">
-                    <!-- Left: Our Mission -->
-                    <div>
-                        <div class="flex items-center gap-2 mb-4">
-                            <div class="decorative-shape w-6 h-6 bg-yellow-400"></div>
-                            <div class="decorative-shape w-3 h-3 bg-yellow-400 opacity-60"></div>
-                        </div>
-                        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Our Mission</h2>
-                        <div class="bg-orange-50 rounded-2xl p-6">
-                            <p class="text-gray-800 leading-relaxed">
+        {{-- ═══════════════════════════════════════════════════════════════
+             MISSION + SOLUTION
+        ═══════════════════════════════════════════════════════════════ --}}
+        <section class="py-24 lg:py-32 bg-white relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-red-50 to-transparent blur-3xl opacity-60 pointer-events-none"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start max-w-7xl mx-auto">
+                    {{-- Mission --}}
+                    <div data-reveal="up">
+                        <span class="section-badge section-badge--amber">Our Purpose</span>
+                        <h2 class="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+                            Our <span class="text-amber-500">Mission</span>
+                        </h2>
+                        <div class="glass-card glass-card--warm">
+                            <p class="text-gray-800 leading-relaxed text-lg">
                                 To integrate sustainability knowledge, values, and practices into education, research, and community engagement—preparing UNJ graduates to become future-ready leaders who contribute to Indonesia's sustainable development goals.
                             </p>
                         </div>
                     </div>
 
-                    <!-- Right: Our Solution -->
-                    <div>
-                        <h3 class="text-3xl font-bold text-gray-900 mb-6">Our Solution</h3>
-                        <div class="grid sm:grid-cols-2 gap-6">
-                            <div class="card-hover p-6 border-2 border-gray-100 rounded-2xl bg-white shadow-sm">
-                                <div
-                                    class="h-14 w-14 bg-gradient-to-br from-teal-500 to-teal-600 text-white rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                    {{-- Solution --}}
+                    <div data-reveal="up">
+                        <span class="section-badge section-badge--navy">What We Do</span>
+                        <h3 class="text-3xl font-extrabold text-gray-900 mb-3">Our Solution: <span class="text-red-600">UNJ Sustain Quest (USQ)</span></h3>
+                        <p class="text-gray-600 mb-8 leading-relaxed">Through USQ, UNJ provides a standardized tool to:</p>
+                        <div class="grid sm:grid-cols-2 gap-5">
+                            <div class="solution-card">
+                                <div class="solution-card__icon solution-card__icon--red">
                                     <i class="fas fa-globe text-xl"></i>
                                 </div>
-                                <h4 class="font-bold text-lg text-gray-900 mb-2">Measure</h4>
-                                <p class="text-gray-600 leading-relaxed">Sustainability knowledge and awareness among students and staff.</p>
+                                <h4 class="font-bold text-lg text-gray-900 mb-1.5">Measure</h4>
+                                <p class="text-gray-500 text-sm leading-relaxed">Sustainability knowledge and awareness among students and staff.</p>
                             </div>
-                            <div class="card-hover p-6 border-2 border-gray-100 rounded-2xl bg-white shadow-sm">
-                                <div
-                                    class="h-14 w-14 bg-gradient-to-br from-amber-400 to-amber-500 text-white rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                            <div class="solution-card">
+                                <div class="solution-card__icon solution-card__icon--amber">
                                     <i class="fas fa-chart-pie text-xl"></i>
                                 </div>
-                                <h4 class="font-bold text-lg text-gray-900 mb-2">Improve</h4>
-                                <p class="text-gray-600 leading-relaxed">Sustainability literacy through tailored learning modules and workshops.</p>
+                                <h4 class="font-bold text-lg text-gray-900 mb-1.5">Improve</h4>
+                                <p class="text-gray-500 text-sm leading-relaxed">Sustainability literacy through tailored learning modules and workshops.</p>
                             </div>
-                            <div class="card-hover p-6 border-2 border-gray-100 rounded-2xl bg-white shadow-sm">
-                                <div
-                                    class="h-14 w-14 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                            <div class="solution-card">
+                                <div class="solution-card__icon solution-card__icon--navy">
                                     <i class="fas fa-user-check text-xl"></i>
                                 </div>
-                                <h4 class="font-bold text-lg text-gray-900 mb-2">Report</h4>
-                                <p class="text-gray-600 leading-relaxed">Progress in alignment with UI GreenMetric and THE Impact Rankings indicators.</p>
+                                <h4 class="font-bold text-lg text-gray-900 mb-1.5">Report</h4>
+                                <p class="text-gray-500 text-sm leading-relaxed">Progress in alignment with UI GreenMetric and THE Impact Rankings indicators.</p>
                             </div>
-                            <div class="card-hover p-6 border-2 border-gray-100 rounded-2xl bg-white shadow-sm">
-                                <div
-                                    class="h-14 w-14 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                            <div class="solution-card">
+                                <div class="solution-card__icon solution-card__icon--blue">
                                     <i class="fas fa-file-export text-xl"></i>
                                 </div>
-                                <h4 class="font-bold text-lg text-gray-900 mb-2">Certify</h4>
-                                <p class="text-gray-600 leading-relaxed">Sustainability competence to support graduates' employability and green job readiness.</p>
+                                <h4 class="font-bold text-lg text-gray-900 mb-1.5">Certify</h4>
+                                <p class="text-gray-500 text-sm leading-relaxed">Sustainability competence to support graduates' employability and green job readiness.</p>
                             </div>
                         </div>
                     </div>
@@ -200,107 +206,86 @@
             </div>
         </section>
 
-        <!-- Why Matters -->
-        <section id="why-matters" class="py-20 bg-stone-50 overflow-hidden">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-16">
-                    <div class="flex justify-center mb-6">
-                        <div class="decorative-shape w-6 h-6 bg-yellow-400"></div>
-                        <div class="decorative-shape w-4 h-4 bg-yellow-400 opacity-70 ml-2"></div>
-                        <div class="decorative-shape w-3 h-3 bg-yellow-400 opacity-50 ml-1"></div>
-                    </div>
-                    <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Why UNJ Sustain Quest Matters</h2>
+        {{-- ═══════════════════════════════════════════════════════════════
+             WHY IT MATTERS — dark navy section with carousel
+        ═══════════════════════════════════════════════════════════════ --}}
+        <section id="why-matters" class="py-24 lg:py-32 bg-gray-900 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect width=%2260%22 height=%2260%22 fill=%22none%22 stroke=%22white%22 stroke-width=%221%22/></svg>');"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-14" data-reveal="up">
+                    <span class="section-badge section-badge--white">Impact</span>
+                    <h2 class="text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight">
+                        Why UNJ Sustain Quest <span class="text-red-400">Matters</span>
+                    </h2>
+                    <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+                        Driving real impact across education, research, and community engagement.
+                    </p>
                 </div>
 
-                <div class="relative max-w-7xl mx-auto">
+                <div class="relative max-w-7xl mx-auto" data-reveal="up">
                     <div id="scroll-container"
-                        class="flex gap-8 overflow-x-auto pb-8 snap-x snap-mandatory scroll-smooth"
-                        style="scrollbar-width: none; -ms-overflow-style: none;">
+                         class="flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scroll-smooth"
+                         style="scrollbar-width: none; -ms-overflow-style: none;">
 
-                        <style>
-                            #scroll-container::-webkit-scrollbar {
-                                display: none;
-                            }
-                        </style>
+                        <style>#scroll-container::-webkit-scrollbar { display: none; }</style>
 
-                        <div
-                            class="snap-start flex-shrink-0 w-80 bg-gray-800 text-white rounded-2xl p-8 flex flex-col justify-between shadow-lg">
-                            <div>
-                                <h3 class="font-bold text-2xl mb-3">Why It Matters</h3>
-                            </div>
-                            <div class="text-right">
-                                <i class="fas fa-info-circle text-2xl opacity-50"></i>
+                        {{-- Lead card --}}
+                        <div class="snap-start flex-shrink-0 w-80 matters-card matters-card--lead">
+                            <div class="h-full flex flex-col justify-between">
+                                <div>
+                                    <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-6">
+                                        <i class="fas fa-lightbulb text-2xl text-red-400"></i>
+                                    </div>
+                                    <h3 class="font-extrabold text-2xl text-white mb-2">Why It Matters</h3>
+                                    <p class="text-gray-400 text-sm leading-relaxed">Discover how sustainability literacy transforms institutions and communities.</p>
+                                </div>
+                                <div class="flex items-center gap-2 text-red-400 text-sm font-semibold mt-6">
+                                    <span>Scroll to explore</span>
+                                    <i class="fas fa-arrow-right animate-pulse"></i>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Card 1-->
-                        <div
-                            class="group snap-start flex-shrink-0 w-80 card-hover p-8 border-2 border-gray-100 rounded-2xl bg-white shadow-sm flex flex-col justify-between min-h-[280px]">
-                            <div>
-                                <h3 class="font-bold text-xl text-gray-900 mb-3">Change Leader</h3>
-                                <div class="w-10 h-0.5 bg-teal-500 mb-4"></div>
-                                <p class="text-gray-600 leading-relaxed">Empowers UNJ as a Change Leader in
-                                    sustainability education in Indonesia.</p>
-                            </div>
-                            <div class="text-right mt-4">
-                                <i
-                                    class="fas fa-arrow-right text-gray-400 group-hover:text-teal-500 transition-colors"></i>
-                            </div>
+                        {{-- Card 1 --}}
+                        <div class="snap-start flex-shrink-0 w-80 matters-card matters-card--item group">
+                            <div class="matters-card__number text-red-500/20 group-hover:text-red-500/40">01</div>
+                            <h3 class="font-bold text-xl text-white mb-3 relative z-10">Change Leader</h3>
+                            <div class="w-10 h-0.5 bg-red-500 mb-4 group-hover:w-16 transition-all duration-300"></div>
+                            <p class="text-gray-400 leading-relaxed relative z-10">Empowers UNJ as a Change Leader in sustainability education in Indonesia.</p>
                         </div>
 
-                        <!-- Card 2-->
-                        <div
-                            class="group snap-start flex-shrink-0 w-80 card-hover p-8 border-2 border-gray-100 rounded-2xl bg-white shadow-sm flex flex-col justify-between min-h-[280px]">
-                            <div>
-                                <h3 class="font-bold text-xl text-gray-900 mb-3">SDG-Based Curricula</h3>
-                                <div class="w-10 h-0.5 bg-amber-500 mb-4"></div>
-                                <p class="text-gray-600 leading-relaxed">Supports the implementation of SDG-based
-                                    curricula.</p>
-                            </div>
-                            <div class="text-right mt-4">
-                                <i
-                                    class="fas fa-arrow-right text-gray-400 group-hover:text-amber-500 transition-colors"></i>
-                            </div>
+                        {{-- Card 2 --}}
+                        <div class="snap-start flex-shrink-0 w-80 matters-card matters-card--item group">
+                            <div class="matters-card__number text-amber-500/20 group-hover:text-amber-500/40">02</div>
+                            <h3 class="font-bold text-xl text-white mb-3 relative z-10">SDG-Based Curricula</h3>
+                            <div class="w-10 h-0.5 bg-amber-500 mb-4 group-hover:w-16 transition-all duration-300"></div>
+                            <p class="text-gray-400 leading-relaxed relative z-10">Supports the implementation of SDG-based curricula.</p>
                         </div>
 
-                        <!-- Card 3-->
-                        <div
-                            class="group snap-start flex-shrink-0 w-80 card-hover p-8 border-2 border-gray-100 rounded-2xl bg-white shadow-sm flex flex-col justify-between min-h-[280px]">
-                            <div>
-                                <h3 class="font-bold text-xl text-gray-900 mb-3">Interdisciplinary Collaboration</h3>
-                                <div class="w-10 h-0.5 bg-blue-500 mb-4"></div>
-                                <p class="text-gray-600 leading-relaxed">Encourages interdisciplinary collaboration on
-                                    sustainability research and community projects.</p>
-                            </div>
-                            <div class="text-right mt-4">
-                                <i
-                                    class="fas fa-arrow-right text-gray-400 group-hover:text-blue-500 transition-colors"></i>
-                            </div>
+                        {{-- Card 3 --}}
+                        <div class="snap-start flex-shrink-0 w-80 matters-card matters-card--item group">
+                            <div class="matters-card__number text-blue-500/20 group-hover:text-blue-500/40">03</div>
+                            <h3 class="font-bold text-xl text-white mb-3 relative z-10">Interdisciplinary Collaboration</h3>
+                            <div class="w-10 h-0.5 bg-blue-500 mb-4 group-hover:w-16 transition-all duration-300"></div>
+                            <p class="text-gray-400 leading-relaxed relative z-10">Encourages interdisciplinary collaboration on sustainability research and community projects.</p>
                         </div>
 
-                        <!-- Card 4-->
-                        <div
-                            class="group snap-start flex-shrink-0 w-80 card-hover p-8 border-2 border-gray-100 rounded-2xl bg-white shadow-sm flex flex-col justify-between min-h-[280px]">
-                            <div>
-                                <h3 class="font-bold text-xl text-gray-900 mb-3">Evidence for Rankings</h3>
-                                <div class="w-10 h-0.5 bg-purple-500 mb-4"></div>
-                                <p class="text-gray-600 leading-relaxed">Contributes evidence for national and
-                                    international university rankings related to sustainability impact.</p>
-                            </div>
-                            <div class="text-right mt-4">
-                                <i
-                                    class="fas fa-arrow-right text-gray-400 group-hover:text-purple-500 transition-colors"></i>
-                            </div>
+                        {{-- Card 4 --}}
+                        <div class="snap-start flex-shrink-0 w-80 matters-card matters-card--item group">
+                            <div class="matters-card__number text-indigo-500/20 group-hover:text-indigo-500/40">04</div>
+                            <h3 class="font-bold text-xl text-white mb-3 relative z-10">Evidence for Rankings</h3>
+                            <div class="w-10 h-0.5 bg-indigo-500 mb-4 group-hover:w-16 transition-all duration-300"></div>
+                            <p class="text-gray-400 leading-relaxed relative z-10">Contributes evidence for national and international university rankings related to sustainability impact.</p>
                         </div>
                     </div>
 
-                    <div class="flex justify-center gap-4 mt-8">
-                        <button id="scroll-left-btn"
-                            class="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center transition-all shadow-md">
+                    {{-- Navigation --}}
+                    <div class="flex justify-center gap-3 mt-8">
+                        <button id="scroll-left-btn" class="scroll-nav-btn" aria-label="Scroll left">
                             <i class="fas fa-arrow-left"></i>
                         </button>
-                        <button id="scroll-right-btn"
-                            class="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center transition-all shadow-md">
+                        <button id="scroll-right-btn" class="scroll-nav-btn" aria-label="Scroll right">
                             <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
@@ -308,53 +293,71 @@
             </div>
         </section>
 
-        <!-- Community -->
-        <section class="py-20 bg-white">
-            <div class="container mx-auto px-6">
-                <div class="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
-                    <div class="relative">
-                        <div class="relative overflow-hidden rounded-2xl border border-stone-200 bg-white p-8 md:p-10 shadow-sm">
-                            <div class="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-yellow-300/30 blur-2xl"></div>
-                            <div class="pointer-events-none absolute -bottom-20 -left-10 h-56 w-56 rounded-full bg-teal-300/20 blur-2xl"></div>
+        {{-- ═══════════════════════════════════════════════════════════════
+             COMMUNITY
+        ═══════════════════════════════════════════════════════════════ --}}
+        <section class="py-24 lg:py-32 bg-white relative overflow-hidden">
+            <div class="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full bg-red-50/50 blur-3xl pointer-events-none"></div>
 
-                            <div class="relative z-10 flex flex-col gap-4">
-                                <h3 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900">Join the Movement!</h3>
-                                <p class="text-gray-700">Let's strengthen UNJ's sustainability culture together.</p>
-                                <p class="text-gray-700">Explore the modules, take the UNJ Sustain Quest Assessment, and be part of a campus that leads by example.</p>
-
-                                <div class="pt-2">
-                                    <div class="inline-flex items-center gap-3 rounded-full bg-stone-100 px-4 py-2 text-gray-800">
-                                        <span class="text-xl">📩</span>
-                                        <a href="mailto:dir.inovasi@unj.ac.id" class="font-medium hover:underline">dir.inovasi@unj.ac.id</a>
-                                    </div>
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center max-w-7xl mx-auto">
+                    {{-- Left — CTA card --}}
+                    <div data-reveal="up">
+                        <div class="community-cta-card">
+                            <div class="community-cta-card__bg"></div>
+                            <div class="relative z-10">
+                                <div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-6">
+                                    <i class="fas fa-rocket text-2xl text-white"></i>
+                                </div>
+                                <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-3">Join the Movement!</h3>
+                                <p class="text-white/80 mb-2">Let's strengthen UNJ's sustainability culture together.</p>
+                                <p class="text-white/80 mb-6">Explore the modules, take the UNJ Sustain Quest Assessment, and be part of a campus that leads by example.</p>
+                                <div class="inline-flex items-center gap-3 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 px-5 py-2.5 text-white">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="mailto:dir.inovasi@unj.ac.id" class="font-medium hover:underline">dir.inovasi@unj.ac.id</a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right -->
-                    <div>
-                        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Our Community</h2>
-                        <p class="text-gray-700 leading-relaxed mb-6">UNJ Sustain Quest brings together:</p>
+                    {{-- Right — stakeholder list --}}
+                    <div data-reveal="up">
+                        <span class="section-badge section-badge--red">Together</span>
+                        <h2 class="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+                            Our <span class="text-red-600">Community</span>
+                        </h2>
+                        <p class="text-gray-600 leading-relaxed mb-8 text-lg">UNJ Sustain Quest brings together:</p>
 
-                        <ul class="space-y-4">
-                            <li class="flex gap-3">
-                                <span class="mt-2 h-2.5 w-2.5 rounded-full bg-teal-500 flex-shrink-0"></span>
-                                <p class="text-gray-800"><span class="font-semibold">Students</span> – as change agents for sustainable lifestyles.</p>
-                            </li>
-                            <li class="flex gap-3">
-                                <span class="mt-2 h-2.5 w-2.5 rounded-full bg-amber-500 flex-shrink-0"></span>
-                                <p class="text-gray-800"><span class="font-semibold">Faculty</span> – as mentors embedding sustainability in teaching.</p>
-                            </li>
-                            <li class="flex gap-3">
-                                <span class="mt-2 h-2.5 w-2.5 rounded-full bg-blue-500 flex-shrink-0"></span>
-                                <p class="text-gray-800"><span class="font-semibold">Administrative staff</span> – as enablers of sustainable campus operations.</p>
-                            </li>
-                            <li class="flex gap-3">
-                                <span class="mt-2 h-2.5 w-2.5 rounded-full bg-purple-500 flex-shrink-0"></span>
-                                <p class="text-gray-800"><span class="font-semibold">Partners and alumni</span> – as advocates for sustainable practices beyond campus.</p>
-                            </li>
-                        </ul>
+                        <div class="space-y-4">
+                            <div class="stakeholder-row">
+                                <div class="stakeholder-dot bg-red-500"></div>
+                                <div>
+                                    <span class="font-bold text-gray-900">Students</span>
+                                    <span class="text-gray-500"> – as change agents for sustainable lifestyles.</span>
+                                </div>
+                            </div>
+                            <div class="stakeholder-row">
+                                <div class="stakeholder-dot bg-amber-500"></div>
+                                <div>
+                                    <span class="font-bold text-gray-900">Faculty</span>
+                                    <span class="text-gray-500"> – as mentors embedding sustainability in teaching.</span>
+                                </div>
+                            </div>
+                            <div class="stakeholder-row">
+                                <div class="stakeholder-dot bg-blue-600"></div>
+                                <div>
+                                    <span class="font-bold text-gray-900">Administrative staff</span>
+                                    <span class="text-gray-500"> – as enablers of sustainable campus operations.</span>
+                                </div>
+                            </div>
+                            <div class="stakeholder-row">
+                                <div class="stakeholder-dot bg-indigo-600"></div>
+                                <div>
+                                    <span class="font-bold text-gray-900">Partners and alumni</span>
+                                    <span class="text-gray-500"> – as advocates for sustainable practices beyond campus.</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

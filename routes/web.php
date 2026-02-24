@@ -217,8 +217,9 @@ Route::redirect('/Pemeringkatan/program/international-student-mobility', '/pemer
 // Data responden redirect
 Route::redirect('/Pemeringkatan/dataresponden', '/pemeringkatan/data-responden', 301);
 
-// Sulitest redirect
-Route::redirect('/Pemeringkatan/sulitest', '/pemeringkatan/sulitest', 301);
+// Sulitest redirects → new canonical URL
+Route::redirect('/Pemeringkatan/sulitest', '/pemeringkatan/unj-sustain-quest', 301);
+Route::redirect('/pemeringkatan/sulitest', '/pemeringkatan/unj-sustain-quest', 301);
 
 // Sejarah Hilirisasi (
 Route::get('/sejarah-hilirisasi', [SejarahContentController::class, 'showPublic'])->name('subdirektorat-inovasi.sejarah.sejarah');

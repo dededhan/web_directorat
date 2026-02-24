@@ -96,8 +96,8 @@ Route::prefix('pemeringkatan')->name('pemeringkatan.')->group(function () {
         return view('pemeringkatan.data-responden.index');
     })->name('data-responden.index');
     
-    // Sulitest
-    Route::get('/sulitest', function () {
+    // UNJ Sustain Quest landing page
+    Route::get('/unj-sustain-quest', function () {
         return view('pemeringkatan.sulitest.index');
     })->name('sulitest.index');
 });
