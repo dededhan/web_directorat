@@ -12,85 +12,93 @@
 @section('content')
     <main>
         {{-- ═══════════════════════════════════════════════════════════════
-             HERO — deep navy gradient with animated mesh overlay
+             HERO — Centered full-width with floating orbs
         ═══════════════════════════════════════════════════════════════ --}}
         <section class="sulitest-hero relative overflow-hidden">
             <div class="hero-mesh"></div>
 
+            {{-- Floating orbs --}}
+            <div class="hero-orb hero-orb--1"></div>
+            <div class="hero-orb hero-orb--2"></div>
+            <div class="hero-orb hero-orb--3"></div>
+
             <div class="container mx-auto px-6 relative z-10">
-                <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[85vh]">
-                    {{-- Left copy --}}
-                    <div class="hero-text-col" data-reveal="left">
-                        <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-red-300 text-sm font-semibold px-4 py-1.5 rounded-full mb-6 border border-red-400/20">
-                            <span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
-                            UNJ Sustain Quest
-                        </span>
+                {{-- Centered headline block --}}
+                <div class="hero-centered" data-reveal="up">
+                    <span class="hero-pill">
+                        <span class="hero-pill__dot"></span>
+                        UNJ Sustain Quest
+                    </span>
 
-                        <h1 class="text-5xl lg:text-7xl font-black leading-[1.05] text-white mb-6 tracking-tight">
-                            Mainstreaming<br>
-                            <span class="hero-gradient-text">sustainability</span><br>
-                            literacy!
-                        </h1>
+                    <h1 class="hero-title">
+                        Empowering <span class="hero-gradient-text">Sustainability</span>
+                        <br class="hidden sm:block">Literacy Across Campus
+                    </h1>
 
-                        <p class="text-lg text-gray-300 mb-10 max-w-lg leading-relaxed">
-                            Mainstreaming Sustainability Literacy for a <strong class="text-white">Greener Future</strong>
-                        </p>
+                    <p class="hero-subtitle">
+                        Measure, improve, and certify sustainability knowledge — building a
+                        <strong class="text-white">greener and smarter</strong> UNJ community.
+                    </p>
 
-                        <div class="flex flex-wrap gap-4">
-                            <a href="{{ route('sulitest.login') }}"
-                               class="hero-btn-primary group">
-                                <span>Get Started</span>
-                                <i class="fas fa-arrow-right text-sm transition-transform group-hover:translate-x-1"></i>
-                            </a>
-                            <a href="#about"
-                               class="hero-btn-secondary">
-                                Learn More
-                            </a>
-                        </div>
-                    </div>
-
-                    {{-- Right — role cards --}}
-                    <div class="flex flex-col gap-5" data-reveal="right">
-                        <a href="{{ route('sulitest.login') }}" class="role-card role-card--red">
-                            <div class="role-card__icon bg-red-500/20 text-red-400">
-                                <i class="fas fa-graduation-cap text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-white text-lg">A professor or a university</h3>
-                                <p class="text-gray-400 text-sm mt-0.5">Assess your institution's sustainability literacy</p>
-                            </div>
-                            <i class="fas fa-chevron-right text-gray-500 ml-auto role-card__arrow"></i>
+                    <div class="hero-actions">
+                        <a href="{{ route('sulitest.login') }}" class="hero-btn-primary group">
+                            <span>Take the Assessment</span>
+                            <i class="fas fa-arrow-right text-sm transition-transform group-hover:translate-x-1"></i>
                         </a>
-
-                        <a href="{{ route('sulitest.login') }}" class="role-card role-card--amber">
-                            <div class="role-card__icon bg-amber-500/20 text-amber-400">
-                                <i class="fas fa-building text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-white text-lg">A company or an organization</h3>
-                                <p class="text-gray-400 text-sm mt-0.5">Evaluate workforce sustainability competence</p>
-                            </div>
-                            <i class="fas fa-chevron-right text-gray-500 ml-auto role-card__arrow"></i>
-                        </a>
-
-                        <a href="{{ route('sulitest.login') }}" class="role-card role-card--navy">
-                            <div class="role-card__icon bg-blue-500/20 text-blue-400">
-                                <i class="fas fa-user text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-white text-lg">A student or a professional</h3>
-                                <p class="text-gray-400 text-sm mt-0.5">Certify your personal sustainability knowledge</p>
-                            </div>
-                            <i class="fas fa-chevron-right text-gray-500 ml-auto role-card__arrow"></i>
+                        <a href="#about" class="hero-btn-secondary">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Learn More</span>
                         </a>
                     </div>
                 </div>
+
+                {{-- Role selector strip — 3 columns --}}
+                <div class="hero-roles" data-reveal="up">
+                    <a href="{{ route('sulitest.login') }}" class="hero-role-card group">
+                        <div class="hero-role-card__icon-wrap hero-role-card__icon-wrap--red">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="hero-role-card__body">
+                            <h3 class="hero-role-card__title">Faculty Member / Lecturer</h3>
+                            <p class="hero-role-card__desc">Embed sustainability literacy into your curriculum and research.</p>
+                        </div>
+                        <div class="hero-role-card__arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+
+                    <a href="{{ route('sulitest.login') }}" class="hero-role-card group">
+                        <div class="hero-role-card__icon-wrap hero-role-card__icon-wrap--amber">
+                            <i class="fas fa-id-badge"></i>
+                        </div>
+                        <div class="hero-role-card__body">
+                            <h3 class="hero-role-card__title">Administrative Staff</h3>
+                            <p class="hero-role-card__desc">Enable sustainable campus operations and institutional goals.</p>
+                        </div>
+                        <div class="hero-role-card__arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+
+                    <a href="{{ route('sulitest.login') }}" class="hero-role-card group">
+                        <div class="hero-role-card__icon-wrap hero-role-card__icon-wrap--blue">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="hero-role-card__body">
+                            <h3 class="hero-role-card__title">Students</h3>
+                            <p class="hero-role-card__desc">Certify your sustainability knowledge and become a change agent.</p>
+                        </div>
+                        <div class="hero-role-card__arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                </div>
             </div>
 
-            {{-- bottom wave --}}
-            <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none" style="transform:translateY(1px)">
-                <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-                    <path d="M0 40L48 36C96 32 192 24 288 28C384 32 480 48 576 52C672 56 768 48 864 40C960 32 1056 24 1152 28C1248 32 1344 48 1392 56L1440 64V80H1392C1344 80 1248 80 1152 80C1056 80 960 80 864 80C768 80 672 80 576 80C480 80 384 80 288 80C192 80 96 80 48 80H0V40Z" fill="#f8fafc"/>
+            {{-- Angled bottom divider --}}
+            <div class="hero-divider">
+                <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0 100V60C240 20 480 0 720 10C960 20 1200 50 1440 40V100H0Z" fill="#f8fafc"/>
                 </svg>
             </div>
         </section>
