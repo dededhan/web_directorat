@@ -199,8 +199,9 @@ Route::redirect('/ranking_unj', '/pemeringkatan/ranking-unj', 301);
 Route::redirect('/Pemeringkatans/Ranking-Universitas/klaster-perguruan-tinggi', '/pemeringkatan/klaster-perguruan-tinggi', 301);
 Route::redirect('/indikator', '/pemeringkatan/indikator', 301);
 
-// THE Impact Rankings redirects
-Route::redirect('/the-ir-initiatives', '/pemeringkatan/the-ir-initiatives', 301);
+// THE Impact Rankings redirects — canonical URL is now /the-ir-initiatives (no /pemeringkatan prefix)
+Route::redirect('/pemeringkatan/the-ir-initiatives', '/the-ir-initiatives', 301);
+Route::redirect('/pemeringkatan/the-ir-initiatives/sdg/{id}', '/the-ir-initiatives/sdg/{id}', 301);
 
 // Sustainability program redirects
 Route::redirect('/Pemeringkatan/kegiatansustainability', '/pemeringkatan/sustainability/kegiatan', 301);

@@ -58,11 +58,7 @@ Route::prefix('pemeringkatan')->name('pemeringkatan.')->group(function () {
         return view('pemeringkatan.ranking-universitas.klaster-perguruan-tinggi');
     })->name('klaster-perguruan-tinggi');
     
-    // THE Impact Rankings
-    Route::prefix('the-ir-initiatives')->name('the-ir.')->group(function () {
-        Route::get('/', [SdgInitiativeController::class, 'index'])->name('index');
-        Route::get('/sdg/{id}', [SdgInitiativeController::class, 'show'])->name('sdg.show');
-    });
+    // THE Impact Rankings (routes moved outside this group — see below)
     
     // Indikator
     Route::get('/indikator', [IndikatorController::class, 'showAllIndikators'])->name('indikator.index');
@@ -104,6 +100,12 @@ Route::prefix('pemeringkatan')->name('pemeringkatan.')->group(function () {
     Route::get('/sulitest', function () {
         return view('pemeringkatan.sulitest.index');
     })->name('sulitest.index');
+});
+
+// THE Impact Rankings — served without /pemeringkatan prefix
+Route::prefix('the-ir-initiatives')->name('the-ir.')->group(function () {
+    Route::get('/', [SdgInitiativeController::class, 'index'])->name('index');
+    Route::get('/sdg/{id}', [SdgInitiativeController::class, 'show'])->name('sdg.show');
 });
 
 //admin routes
