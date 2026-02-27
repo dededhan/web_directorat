@@ -253,7 +253,7 @@ Route::middleware(['auth'])->prefix('validator')->name('validator.')->group(func
     Route::get('/assess/{formId}/progress', [App\Http\Controllers\ValidatorController::class, 'getProgress'])->name('get-progress');
     Route::post('/assess/{formId}/submit', [App\Http\Controllers\ValidatorController::class, 'submit'])->name('submit');
     Route::post('/assess/{formId}/save-draft', [App\Http\Controllers\ValidatorController::class, 'saveDraft'])->name('save-draft');
-    
+
     // Download routes
     Route::get('/{formId}/certificate', [App\Http\Controllers\KatsinovV2Controller::class, 'generateCertificate'])->name('certificate');
     Route::get('/{formId}/download-report', [App\Http\Controllers\KatsinovV2Controller::class, 'downloadReport'])->name('download-report');
@@ -263,4 +263,5 @@ require __DIR__ . '/api.php';
 require __DIR__ . '/admin.php';
 require __DIR__ . '/pemeringkatan.php';
 require __DIR__ . '/inovasi.php';
+require __DIR__ . '/inovchalange.php';
 require __DIR__ . '/equity.php';
