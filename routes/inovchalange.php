@@ -6,6 +6,8 @@ use App\Http\Controllers\InovChalenge\TahapController;
 use App\Http\Controllers\InovChalenge\DosenController;
 use App\Http\Controllers\InovChalenge\MemberController;
 use App\Http\Controllers\InovChalenge\AlumniController;
+use App\Http\Controllers\InovChalenge\SubmissionAdminController;
+use App\Http\Controllers\InovChalenge\ReviewerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +44,18 @@ Route::prefix('admin_inovasi/inovchalenge')->name('admin_inovasi.inovchalenge.')
             ->name('tahap.fields.destroy');
         Route::patch('tahap/{tahap}/fields/reorder', [TahapController::class, 'reorderFields'])
             ->name('tahap.fields.reorder');
+
+        // Submissions management
+        Route::get('submissions', [SubmissionAdminController::class, 'index'])
+            ->name('submissions.index');
+        Route::get('submissions/{submission}', [SubmissionAdminController::class, 'show'])
+            ->name('submissions.show');
+        Route::patch('submissions/{submission}/status', [SubmissionAdminController::class, 'updateStatus'])
+            ->name('submissions.updateStatus');
+        Route::patch('submissions/{submission}/assign-reviewer', [SubmissionAdminController::class, 'assignReviewer'])
+            ->name('submissions.assignReviewer');
+        Route::patch('submission-tahap/{submissionTahap}/status', [SubmissionAdminController::class, 'updateTahapStatus'])
+            ->name('submissions.updateTahapStatus');
     });
 
 // ── Dosen Routes ──────────────────────────────────────────────────────────
@@ -95,4 +109,21 @@ Route::prefix('subdirektorat-inovasi/alumni/inovchalenge')
             ->name('invitations.approve');
         Route::patch('invitations/{member}/reject', [AlumniController::class, 'reject'])
             ->name('invitations.reject');
+    });
+
+// ── Reviewer Routes ───────────────────────────────────────────────────────
+Route::prefix('reviewer-inovchalenge')
+    ->name('reviewer_inovchalenge.')
+    ->middleware(['auth', 'role:reviewer_inovchalenge'])
+    ->group(function () {
+
+        Route::get('dashboard', [ReviewerController::class, 'dashboard'])
+            ->name('dashboard');
+
+        Route::get('assignments', [ReviewerController::class, 'index'])
+            ->name('assignments.index');
+        Route::get('assignments/{submission}', [ReviewerController::class, 'show'])
+            ->name('assignments.show');
+        Route::post('assignments/{submission}/review/{tahapId}', [ReviewerController::class, 'storeReview'])
+            ->name('assignments.review');
     });

@@ -138,35 +138,35 @@
 
 **Goal:** Admin manages submissions and per-Tahap status; reviewers post per-Tahap reviews.
 **Dependencies:** Sprint 2 complete
-**Status:** ⬜ Not Started
+**Status:** ✅ Done
 
 ### Tasks
 
 | #     | Task                                                                                                                                                                                    | File                                                                     | Status |
 | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------ |
-| S3-01 | Model: `InovChalengeReview` (belongsTo submission + tahap + reviewer)                                                                                                                   | `app/Models/InovChalengeReview.php`                                      | ⬜     |
-| S3-02 | Controller: `SubmissionAdminController` (index, show, assignReviewer, updateStatus, updateTahapStatus)                                                                                  | `app/Http/Controllers/InovChalenge/SubmissionAdminController.php`        | ⬜     |
-| S3-03 | Controller: `ReviewerController` (dashboard, index, show, store/update review per Tahap)                                                                                                | `app/Http/Controllers/InovChalenge/ReviewerController.php`               | ⬜     |
-| S3-04 | View: admin `submissions/index.blade.php` — submissions list (filter: status, Tahap status, search)                                                                                     | `resources/views/admin_inovasi/inovchalenge/submissions/index.blade.php` | ⬜     |
-| S3-05 | View: admin `submissions/show.blade.php` — submission detail: per-Tahap accordion (field values, files, anggota), reviewer assign modal, admin per-Tahap status controls, reviews panel | `resources/views/admin_inovasi/inovchalenge/submissions/show.blade.php`  | ⬜     |
-| S3-06 | View: reviewer `dashboard.blade.php` — stats (assigned, reviewed, pending)                                                                                                              | `resources/views/reviewer_inovchalenge/dashboard.blade.php`              | ⬜     |
-| S3-07 | View: reviewer `assignments/index.blade.php` — assigned submissions list with per-Tahap progress chips                                                                                  | `resources/views/reviewer_inovchalenge/assignments/index.blade.php`      | ⬜     |
-| S3-08 | View: reviewer `assignments/show.blade.php` — per-Tahap tabs: field values + anggota (Tahap 1) + review form (komentar + penilaian)                                                     | `resources/views/reviewer_inovchalenge/assignments/show.blade.php`       | ⬜     |
-| S3-09 | Routes: Reviewer route group in `inovchalange.php`                                                                                                                                      | `routes/inovchalange.php`                                                | ⬜     |
-| S3-10 | Block reviewer removal if they already posted a review for any Tahap                                                                                                                    | `SubmissionAdminController@assignReviewer`                               | ⬜     |
+| S3-01 | Model: `InovChalengeReview` (belongsTo submission + tahap + reviewer)                                                                                                                   | `app/Models/InovChalengeReview.php`                                      | ✅     |
+| S3-02 | Controller: `SubmissionAdminController` (index, show, assignReviewer, updateStatus, updateTahapStatus)                                                                                  | `app/Http/Controllers/InovChalenge/SubmissionAdminController.php`        | ✅     |
+| S3-03 | Controller: `ReviewerController` (dashboard, index, show, store/update review per Tahap)                                                                                                | `app/Http/Controllers/InovChalenge/ReviewerController.php`               | ✅     |
+| S3-04 | View: admin `submissions/index.blade.php` — submissions list (filter: status, Tahap status, search)                                                                                     | `resources/views/admin_inovasi/inovchalenge/submissions/index.blade.php` | ✅     |
+| S3-05 | View: admin `submissions/show.blade.php` — submission detail: per-Tahap accordion (field values, files, anggota), reviewer assign modal, admin per-Tahap status controls, reviews panel | `resources/views/admin_inovasi/inovchalenge/submissions/show.blade.php`  | ✅     |
+| S3-06 | View: reviewer `dashboard.blade.php` — stats (assigned, reviewed, pending)                                                                                                              | `resources/views/reviewer_inovchalenge/dashboard.blade.php`              | ✅     |
+| S3-07 | View: reviewer `assignments/index.blade.php` — assigned submissions list with per-Tahap progress chips                                                                                  | `resources/views/reviewer_inovchalenge/assignments/index.blade.php`      | ✅     |
+| S3-08 | View: reviewer `assignments/show.blade.php` — per-Tahap tabs: field values + anggota (Tahap 1) + review form (komentar + penilaian)                                                     | `resources/views/reviewer_inovchalenge/assignments/show.blade.php`       | ✅     |
+| S3-09 | Routes: Reviewer route group in `inovchalange.php`                                                                                                                                      | `routes/inovchalange.php`                                                | ✅     |
+| S3-10 | Block reviewer removal if they already posted a review for any Tahap                                                                                                                    | `SubmissionAdminController@assignReviewer`                               | ✅     |
 
 ### Acceptance Criteria
 
-- [ ] Admin sees all submissions for a session with status filters
-- [ ] Admin opens submission detail → per-Tahap accordion shows submitted field values, file download links, anggota + alumni approval status (Tahap 1)
-- [ ] Admin assigns one or more `reviewer_inovchalenge` users to a submission
-- [ ] Admin changes overall submission status via dropdown
-- [ ] Admin sets per-Tahap `admin_status` (menunggu / disetujui / perbaikan / selesai)
-- [ ] Setting `admin_status = perbaikan` unlocks that Tahap for dosen re-edit
-- [ ] Reviewer logs in → sees assigned submissions
-- [ ] Reviewer opens submission → sees tabs for each submitted Tahap only
-- [ ] Reviewer posts komentar + penilaian per Tahap → saved as `inov_chalenge_reviews` row
-- [ ] Reviewer with existing reviews cannot be unassigned
+- [x] Admin sees all submissions for a session with status filters
+- [x] Admin opens submission detail → per-Tahap accordion shows submitted field values, file download links, anggota + alumni approval status (Tahap 1)
+- [x] Admin assigns one or more `reviewer_inovchalenge` users to a submission
+- [x] Admin changes overall submission status via dropdown
+- [x] Admin sets per-Tahap `admin_status` (menunggu / disetujui / perbaikan / selesai)
+- [x] Setting `admin_status = perbaikan` unlocks that Tahap for dosen re-edit
+- [x] Reviewer logs in → sees assigned submissions
+- [x] Reviewer opens submission → sees tabs for each submitted Tahap only
+- [x] Reviewer posts komentar + penilaian per Tahap → saved as `inov_chalenge_reviews` row
+- [x] Reviewer with existing reviews cannot be unassigned
 
 ---
 
@@ -174,19 +174,19 @@
 
 **Goal:** Add Innovation Challenge link to admin_inovasi sidebar.
 **Dependencies:** Sprint 1 complete (routes registered)
-**Status:** ⬜ Not Started
+**Status:** ✅ Done
 
 ### Tasks
 
 | #     | Task                                                                           | File                                              | Status |
 | ----- | ------------------------------------------------------------------------------ | ------------------------------------------------- | ------ |
-| S4-01 | Add "Innovation Challenge" nav group with dropdown to sidebar (after KATSINOV) | `resources/views/admin_inovasi/sidebar.blade.php` | ⬜     |
+| S4-01 | Add "Innovation Challenge" nav group with dropdown to sidebar (after KATSINOV) | `resources/views/admin_inovasi/sidebar.blade.php` | ✅     |
 
 ### Acceptance Criteria
 
-- [ ] "Innovation Challenge" nav group appears in sidebar after KATSINOV section
-- [ ] Dropdown item: "Daftar Sesi" → `admin_inovasi.inovchalenge.sessions.index`
-- [ ] Active state highlights when on any `admin_inovasi.inovchalenge.*` route
+- [x] "Innovation Challenge" nav group appears in sidebar after KATSINOV section
+- [x] Dropdown items: "Daftar Sesi" + "Submissions" with correct route links
+- [x] Active state highlights when on any `admin_inovasi.inovchalenge.*` route
 
 ---
 
@@ -226,11 +226,11 @@ The following files from a **previous failed attempt** exist in the codebase and
 
 ## Progress Summary
 
-| Sprint    | Goal                                    | Status         | Completion |
-| --------- | --------------------------------------- | -------------- | ---------- |
-| Sprint 0  | Database & Infrastructure               | ⬜ Not Started | 0 / 13     |
-| Sprint 1  | Admin Session & Tahap Field Builder     | ⬜ Not Started | 0 / 11     |
-| Sprint 2  | Dosen Submission Flow + Alumni Approval | ⬜ Not Started | 0 / 15     |
-| Sprint 3  | Admin Submission Mgmt + Reviewer Portal | ⬜ Not Started | 0 / 10     |
-| Sprint 4  | Navigation Integration                  | ⬜ Not Started | 0 / 1      |
-| **Total** |                                         |                | **0 / 50** |
+| Sprint    | Goal                                    | Status         | Completion  |
+| --------- | --------------------------------------- | -------------- | ----------- |
+| Sprint 0  | Database & Infrastructure               | ✅ Done        | 13 / 13     |
+| Sprint 1  | Admin Session & Tahap Field Builder     | ✅ Done        | 11 / 11     |
+| Sprint 2  | Dosen Submission Flow + Alumni Approval | ✅ Done        | 15 / 15     |
+| Sprint 3  | Admin Submission Mgmt + Reviewer Portal | ✅ Done        | 10 / 10     |
+| Sprint 4  | Navigation Integration                  | ✅ Done        | 1 / 1       |
+| **Total** |                                         |                | **50 / 50** |
