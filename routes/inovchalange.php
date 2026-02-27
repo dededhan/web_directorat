@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InovChalenge\SessionController;
 use App\Http\Controllers\InovChalenge\TahapController;
+use App\Http\Controllers\InovChalenge\DosenController;
+use App\Http\Controllers\InovChalenge\MemberController;
+use App\Http\Controllers\InovChalenge\AlumniController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,4 +42,57 @@ Route::prefix('admin_inovasi/inovchalenge')->name('admin_inovasi.inovchalenge.')
             ->name('tahap.fields.destroy');
         Route::patch('tahap/{tahap}/fields/reorder', [TahapController::class, 'reorderFields'])
             ->name('tahap.fields.reorder');
+    });
+
+// ── Dosen Routes ──────────────────────────────────────────────────────────
+Route::prefix('subdirektorat-inovasi/dosen/inovchalenge')
+    ->name('subdirektorat-inovasi.dosen.inovchalenge.')
+    ->middleware(['auth', 'role:dosen'])
+    ->group(function () {
+
+        // Sessions browsing
+        Route::get('sessions', [DosenController::class, 'sessions'])
+            ->name('sessions.index');
+        Route::get('sessions/{session}', [DosenController::class, 'showSession'])
+            ->name('sessions.show');
+
+        // Submissions
+        Route::get('submissions', [DosenController::class, 'mySubmissions'])
+            ->name('submissions.index');
+        Route::post('sessions/{session}/submissions', [DosenController::class, 'store'])
+            ->name('submissions.store');
+        Route::get('submissions/{submission}', [DosenController::class, 'showSubmission'])
+            ->name('submissions.show');
+
+        // Tahap form
+        Route::get('submissions/{submission}/tahap/{tahapId}', [DosenController::class, 'showTahap'])
+            ->name('submissions.tahap');
+        Route::post('submissions/{submission}/tahap/{tahapId}/save', [DosenController::class, 'saveTahap'])
+            ->name('submissions.tahap.save');
+        Route::post('submissions/{submission}/tahap/{tahapId}/submit', [DosenController::class, 'submitTahap'])
+            ->name('submissions.tahap.submit');
+
+        // Team members
+        Route::post('submissions/{submission}/members', [MemberController::class, 'store'])
+            ->name('members.store');
+        Route::put('submissions/{submission}/members/{member}', [MemberController::class, 'update'])
+            ->name('members.update');
+        Route::delete('submissions/{submission}/members/{member}', [MemberController::class, 'destroy'])
+            ->name('members.destroy');
+        Route::get('members/search', [MemberController::class, 'searchUsers'])
+            ->name('members.search');
+    });
+
+// ── Alumni Routes ─────────────────────────────────────────────────────────
+Route::prefix('subdirektorat-inovasi/alumni/inovchalenge')
+    ->name('subdirektorat-inovasi.alumni.inovchalenge.')
+    ->middleware(['auth', 'role:alumni'])
+    ->group(function () {
+
+        Route::get('invitations', [AlumniController::class, 'invitations'])
+            ->name('invitations.index');
+        Route::patch('invitations/{member}/approve', [AlumniController::class, 'approve'])
+            ->name('invitations.approve');
+        Route::patch('invitations/{member}/reject', [AlumniController::class, 'reject'])
+            ->name('invitations.reject');
     });

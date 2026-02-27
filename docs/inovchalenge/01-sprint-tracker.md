@@ -93,44 +93,44 @@
 
 **Goal:** Dosen fill each Tahap's dynamic form, manage tim, submit per Tahap. Alumni approve/reject invitations.
 **Dependencies:** Sprint 1 complete
-**Status:** ⬜ Not Started
+**Status:** ✅ Done
 
 ### Tasks
 
 | #     | Task                                                                                                                                                                                                         | File                                                                                    | Status |
 | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- | ------ |
-| S2-01 | Model: `InovChalengeSubmission` (hasMany submissionTahap, hasMany members, belongsToMany reviewers)                                                                                                          | `app/Models/InovChalengeSubmission.php`                                                 | ⬜     |
-| S2-02 | Model: `InovChalengeSubmissionTahap` (belongsTo submission + tahap, hasMany fieldValues)                                                                                                                     | `app/Models/InovChalengeSubmissionTahap.php`                                            | ⬜     |
-| S2-03 | Model: `InovChalengeFieldValue` (belongsTo submissionTahap + field)                                                                                                                                          | `app/Models/InovChalengeFieldValue.php`                                                 | ⬜     |
-| S2-04 | Model: `InovChalengeSubmissionMember` (belongsTo submission, belongsTo user nullable, approval_status)                                                                                                       | `app/Models/InovChalengeSubmissionMember.php`                                           | ⬜     |
-| S2-05 | Controller: `DosenController` (sessions, showSession, mySubmissions, create, store, showSubmission, showTahap, saveTahap, submitTahap)                                                                       | `app/Http/Controllers/InovChalenge/DosenController.php`                                 | ⬜     |
-| S2-06 | Controller: `MemberController` (store, update, destroy — handles dosen/alumni/eksternal)                                                                                                                     | `app/Http/Controllers/InovChalenge/MemberController.php`                                | ⬜     |
-| S2-07 | Controller: `AlumniController` (invitations index, approve, reject)                                                                                                                                          | `app/Http/Controllers/InovChalenge/AlumniController.php`                                | ⬜     |
-| S2-08 | View: dosen `sessions/index.blade.php` — active sessions card grid                                                                                                                                           | `resources/views/subdirektorat-inovasi/dosen/inovchalenge/sessions/index.blade.php`     | ⬜     |
-| S2-09 | View: dosen `sessions/show.blade.php` — session detail + 3-Tahap progress overview + "Mulai Proposal" button                                                                                                 | `resources/views/subdirektorat-inovasi/dosen/inovchalenge/sessions/show.blade.php`      | ⬜     |
-| S2-10 | View: dosen `submissions/index.blade.php` — own submissions list with per-Tahap status chips                                                                                                                 | `resources/views/subdirektorat-inovasi/dosen/inovchalenge/submissions/index.blade.php`  | ⬜     |
-| S2-11 | View: dosen `submissions/show.blade.php` — 3-Tahap progress tracker (belum diisi / draft / diajukan / status admin)                                                                                          | `resources/views/subdirektorat-inovasi/dosen/inovchalenge/submissions/show.blade.php`   | ⬜     |
-| S2-12 | View: dosen `submissions/tahap.blade.php` — fill a single Tahap: dynamic form renderer (per field type) + Anggota Tim section (Tahap 1 only) + Fakultas section (Tahap 1 only) + Save draft / Submit buttons | `resources/views/subdirektorat-inovasi/dosen/inovchalenge/submissions/tahap.blade.php`  | ⬜     |
-| S2-13 | View: alumni `invitations/index.blade.php` — pending invitations list with session/submission info + Approve/Reject buttons                                                                                  | `resources/views/subdirektorat-inovasi/alumni/inovchalenge/invitations/index.blade.php` | ⬜     |
-| S2-14 | Routes: Dosen + Alumni route groups in `inovchalange.php`                                                                                                                                                    | `routes/inovchalange.php`                                                               | ⬜     |
-| S2-15 | File storage: ensure `storage/app/public/inovchalenge/` is writable, storage link exists                                                                                                                     | CLI / `config/filesystems.php`                                                          | ⬜     |
+| S2-01 | Model: `InovChalengeSubmission` (hasMany submissionTahap, hasMany members, belongsToMany reviewers)                                                                                                          | `app/Models/InovChalengeSubmission.php`                                                 | ✅     |
+| S2-02 | Model: `InovChalengeSubmissionTahap` (belongsTo submission + tahap, hasMany fieldValues)                                                                                                                     | `app/Models/InovChalengeSubmissionTahap.php`                                            | ✅     |
+| S2-03 | Model: `InovChalengeFieldValue` (belongsTo submissionTahap + field)                                                                                                                                          | `app/Models/InovChalengeFieldValue.php`                                                 | ✅     |
+| S2-04 | Model: `InovChalengeSubmissionMember` (belongsTo submission, belongsTo user nullable, approval_status)                                                                                                       | `app/Models/InovChalengeSubmissionMember.php`                                           | ✅     |
+| S2-05 | Controller: `DosenController` (sessions, showSession, mySubmissions, create, store, showSubmission, showTahap, saveTahap, submitTahap)                                                                       | `app/Http/Controllers/InovChalenge/DosenController.php`                                 | ✅     |
+| S2-06 | Controller: `MemberController` (store, update, destroy — handles dosen/alumni/eksternal)                                                                                                                     | `app/Http/Controllers/InovChalenge/MemberController.php`                                | ✅     |
+| S2-07 | Controller: `AlumniController` (invitations index, approve, reject)                                                                                                                                          | `app/Http/Controllers/InovChalenge/AlumniController.php`                                | ✅     |
+| S2-08 | View: dosen `sessions/index.blade.php` — active sessions card grid                                                                                                                                           | `resources/views/subdirektorat-inovasi/dosen/inovchalenge/sessions/index.blade.php`     | ✅     |
+| S2-09 | View: dosen `sessions/show.blade.php` — session detail + 3-Tahap progress overview + "Mulai Proposal" button                                                                                                 | `resources/views/subdirektorat-inovasi/dosen/inovchalenge/sessions/show.blade.php`      | ✅     |
+| S2-10 | View: dosen `submissions/index.blade.php` — own submissions list with per-Tahap status chips                                                                                                                 | `resources/views/subdirektorat-inovasi/dosen/inovchalenge/submissions/index.blade.php`  | ✅     |
+| S2-11 | View: dosen `submissions/show.blade.php` — 3-Tahap progress tracker (belum diisi / draft / diajukan / status admin)                                                                                          | `resources/views/subdirektorat-inovasi/dosen/inovchalenge/submissions/show.blade.php`   | ✅     |
+| S2-12 | View: dosen `submissions/tahap.blade.php` — fill a single Tahap: dynamic form renderer (per field type) + Anggota Tim section (Tahap 1 only) + Fakultas section (Tahap 1 only) + Save draft / Submit buttons | `resources/views/subdirektorat-inovasi/dosen/inovchalenge/submissions/tahap.blade.php`  | ✅     |
+| S2-13 | View: alumni `invitations/index.blade.php` — pending invitations list with session/submission info + Approve/Reject buttons                                                                                  | `resources/views/subdirektorat-inovasi/alumni/inovchalenge/invitations/index.blade.php` | ✅     |
+| S2-14 | Routes: Dosen + Alumni route groups in `inovchalange.php`                                                                                                                                                    | `routes/inovchalange.php`                                                               | ✅     |
+| S2-15 | File storage: ensure `storage/app/public/inovchalenge/` is writable, storage link exists                                                                                                                     | CLI / `config/filesystems.php`                                                          | ✅     |
 
 ### Acceptance Criteria
 
-- [ ] Dosen sees only `active` sessions (draft/closed hidden)
-- [ ] Creating a submission auto-creates 3 `inov_chalenge_submission_tahap` rows (status: `belum_diisi`)
-- [ ] Only one submission per dosen per session (unique constraint enforced)
-- [ ] Dosen fills and saves Tahap form as draft (`save` → `submission_tahap.status = draft`)
-- [ ] Each field type renders correctly (text, textarea, number, date, dropdown, file upload, URL input)
-- [ ] File upload saves to `storage/app/public/inovchalenge/submissions/{id}/tahap_{n}/{field_id}/`
-- [ ] Dosen submits Tahap → `submission_tahap.status = diajukan`, `submitted_at` set, form becomes read-only
-- [ ] Tahap 1 shows Anggota Tim section: add dosen (lookup by NIDN), add alumni (lookup by user), add eksternal (manual)
-- [ ] Adding an alumni member creates record with `approval_status = pending`
-- [ ] Alumni logs in → sees "Undangan Tim" panel → can approve or reject
-- [ ] Approval updates `approval_status` and `responded_at`; visible to dosen in Tahap 1 view
-- [ ] Tahap 1 shows Fakultas section
-- [ ] Dosen cannot re-edit a submitted Tahap unless admin sets `admin_status = perbaikan`
-- [ ] Submission show page renders 3-Tahap tracker with correct badge per status
+- [x] Dosen sees only `active` sessions (draft/closed hidden)
+- [x] Creating a submission auto-creates 3 `inov_chalenge_submission_tahap` rows (status: `belum_diisi`)
+- [x] Only one submission per dosen per session (unique constraint enforced)
+- [x] Dosen fills and saves Tahap form as draft (`save` → `submission_tahap.status = draft`)
+- [x] Each field type renders correctly (text, textarea, number, date, dropdown, file upload, URL input)
+- [x] File upload saves to `storage/app/public/inovchalenge/submissions/{id}/tahap_{n}/{field_id}/`
+- [x] Dosen submits Tahap → `submission_tahap.status = diajukan`, `submitted_at` set, form becomes read-only
+- [x] Tahap 1 shows Anggota Tim section: add dosen (lookup by NIDN), add alumni (lookup by user), add eksternal (manual)
+- [x] Adding an alumni member creates record with `approval_status = pending`
+- [x] Alumni logs in → sees "Undangan Tim" panel → can approve or reject
+- [x] Approval updates `approval_status` and `responded_at`; visible to dosen in Tahap 1 view
+- [x] Tahap 1 shows Fakultas section
+- [x] Dosen cannot re-edit a submitted Tahap unless admin sets `admin_status = perbaikan`
+- [x] Submission show page renders 3-Tahap tracker with correct badge per status
 
 ---
 
