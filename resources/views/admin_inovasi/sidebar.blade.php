@@ -48,6 +48,25 @@
             </div>
         </div>
 
+        {{-- Innovation Challenge Menu --}}
+        <div x-data="{ open: {{ request()->routeIs('admin_inovasi.inovchalenge.*') ? 'true' : 'false' }} }">
+            <button @click="open = !open"
+                    class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none {{ request()->routeIs('admin_inovasi.inovchalenge.*') ? 'bg-teal-600 text-white' : '' }}">
+                <div class="flex items-center">
+                    <i class="fas fa-trophy fa-fw w-6 text-center"></i>
+                    <span class="ml-4">Innovation Challenge</span>
+                </div>
+                <i class="fas fa-chevron-down transition-transform duration-200" :class="{'rotate-180': open}"></i>
+            </button>
+            <div x-show="open" x-transition class="mt-2 pl-8 space-y-2" x-cloak>
+                <a href="{{ route('admin_inovasi.inovchalenge.sessions.index') }}"
+                   class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 {{ request()->routeIs('admin_inovasi.inovchalenge.sessions.*') ? 'bg-gray-700 text-white' : '' }}">
+                    <i class="fas fa-list fa-fw w-5 text-center mr-2"></i>
+                    Sesi Challenge
+                </a>
+            </div>
+        </div>
+
         <div x-data="{ open: false }">
             <button @click="open = !open" 
                     class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
