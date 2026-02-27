@@ -7,8 +7,6 @@ use App\Http\Controllers\InovChallenge\Admin\InovChallengeSubmissionController;
 use App\Http\Controllers\InovChallenge\Admin\InovChallengeReviewerController;
 use App\Http\Controllers\InovChallenge\Admin\InovChallengeDashboardController;
 use App\Http\Controllers\InovChallenge\Admin\InovChallengeReportController;
-use App\Http\Controllers\InovChallenge\Dosen\InovChallengeDosenController;
-use App\Http\Controllers\InovChallenge\Dosen\InovChallengeTeamController;
 
 // ADMIN INNOVATION CHALLENGE ROUTES
 Route::prefix('admin/inov-challenge')->name('admin.inov_challenge.')->middleware(['auth', 'role:inovchalange'])->group(function () {
@@ -59,39 +57,9 @@ Route::prefix('admin/inov-challenge')->name('admin.inov_challenge.')->middleware
     });
 });
 
-// DOSEN ROUTES
+// DOSEN ROUTES (to be expanded in Sprint 3)
 Route::prefix('dosen/inov-challenge')->name('dosen.inov_challenge.')->middleware(['auth', 'role:dosen'])->group(function () {
-
-    // Dashboard & Session List
-    Route::get('/', [InovChallengeDosenController::class, 'index'])->name('index');
-    Route::get('/sessions', [InovChallengeDosenController::class, 'sessions'])->name('sessions.index');
-    Route::get('/sessions/{session}', [InovChallengeDosenController::class, 'sessionDetail'])->name('sessions.show');
-    Route::post('/sessions/{session}/join', [InovChallengeDosenController::class, 'joinSession'])->name('sessions.join');
-
-    // My Submissions
-    Route::get('/submissions', [InovChallengeDosenController::class, 'mySubmissions'])->name('submissions.index');
-    Route::get('/submissions/create/{session}', [InovChallengeDosenController::class, 'createSubmission'])->name('submissions.create');
-    Route::post('/submissions', [InovChallengeDosenController::class, 'storeSubmission'])->name('submissions.store');
-    Route::get('/submissions/{submission}', [InovChallengeDosenController::class, 'showSubmission'])->name('submissions.show');
-
-    // Phase Submissions
-    Route::get('/submissions/{submission}/phase-1', [InovChallengeDosenController::class, 'editPhase1'])->name('submissions.phase1.edit');
-    Route::post('/submissions/{submission}/phase-1', [InovChallengeDosenController::class, 'storePhase1'])->name('submissions.phase1.store');
-
-    Route::get('/submissions/{submission}/phase-2', [InovChallengeDosenController::class, 'editPhase2'])->name('submissions.phase2.edit');
-    Route::post('/submissions/{submission}/phase-2', [InovChallengeDosenController::class, 'storePhase2'])->name('submissions.phase2.store');
-
-    Route::get('/submissions/{submission}/phase-3', [InovChallengeDosenController::class, 'editPhase3'])->name('submissions.phase3.edit');
-    Route::post('/submissions/{submission}/phase-3', [InovChallengeDosenController::class, 'storePhase3'])->name('submissions.phase3.store');
-
-    // Team Management
-    Route::prefix('submissions/{submission}/team')->name('team.')->group(function () {
-        Route::get('/', [InovChallengeTeamController::class, 'index'])->name('index');
-        Route::post('/members', [InovChallengeTeamController::class, 'addMember'])->name('add_member');
-        Route::delete('/members/{member}', [InovChallengeTeamController::class, 'removeMember'])->name('remove_member');
-        Route::post('/invite-external', [InovChallengeTeamController::class, 'inviteExternal'])->name('invite_external');
-        Route::post('/members/{member}/resend-invitation', [InovChallengeTeamController::class, 'resendInvitation'])->name('resend_invitation');
-    });
+    // Placeholder for Sprint 3
 });
 
 // ALUMNI ROUTES (to be expanded in Sprint 4)

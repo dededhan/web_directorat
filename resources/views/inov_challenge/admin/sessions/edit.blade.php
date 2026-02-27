@@ -252,7 +252,7 @@
             if (originalStatus === 'active' && this.value === 'closed') {
                 if (!confirm(
                         'Are you sure you want to close this session? This action cannot be undone. All draft submissions will be cancelled.'
-                    )) {
+                        )) {
                     this.value = originalStatus;
                 }
             }

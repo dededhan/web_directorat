@@ -1,11 +1,9 @@
 # Innovation Challenge Data Export
 
 ## Overview
-
 Comprehensive Excel export functionality for Innovation Challenge submissions with multiple sheets, advanced filtering, and professional formatting.
 
 ## Files
-
 - `app/Exports/InovChallengeSubmissionsExport.php` - Main export class with multi-sheet support
 - `app/Http/Controllers/InovChallenge/Admin/InovChallengeSubmissionController.php` - Export endpoint
 
@@ -18,7 +16,7 @@ Comprehensive Excel export functionality for Innovation Challenge submissions wi
 ✅ **Professional Formatting** - Color-coded headers, auto-sized columns  
 ✅ **Config-Driven** - Include/exclude sheets based on configuration  
 ✅ **Comprehensive Data** - All submission details, scores, timestamps  
-✅ **Dynamic Filename** - Reflects applied filters
+✅ **Dynamic Filename** - Reflects applied filters  
 
 ---
 
@@ -27,7 +25,6 @@ Comprehensive Excel export functionality for Innovation Challenge submissions wi
 ### Sheet 1: Submissions
 
 **Contains:**
-
 - Submission ID, Title, Session
 - Team leader details (name, email, fakultas, prodi)
 - Team member count
@@ -47,7 +44,6 @@ Comprehensive Excel export functionality for Innovation Challenge submissions wi
 ### Sheet 2: Team Members
 
 **Contains:**
-
 - Submission ID and title
 - Team leader name
 - Member details (name, email, type, role)
@@ -63,7 +59,6 @@ Comprehensive Excel export functionality for Innovation Challenge submissions wi
 ### Sheet 3: Reviews
 
 **Contains:**
-
 - Submission ID and title
 - Team leader name
 - Phase
@@ -86,14 +81,14 @@ Comprehensive Excel export functionality for Innovation Challenge submissions wi
 
 **Query Parameters:**
 
-| Parameter    | Type    | Required | Description                                                     |
-| ------------ | ------- | -------- | --------------------------------------------------------------- |
-| `session_id` | integer | No       | Filter by session ID                                            |
-| `status`     | string  | No       | Filter by final status (`draft`, `submitted`, `approved`, etc.) |
-| `phase`      | string  | No       | Filter by phase (`phase_1`, `phase_2`, `phase_3`)               |
-| `date_from`  | date    | No       | Filter submissions from this date (Y-m-d)                       |
-| `date_to`    | date    | No       | Filter submissions to this date (Y-m-d)                         |
-| `search`     | string  | No       | Search in title, team leader name, or email                     |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `session_id` | integer | No | Filter by session ID |
+| `status` | string | No | Filter by final status (`draft`, `submitted`, `approved`, etc.) |
+| `phase` | string | No | Filter by phase (`phase_1`, `phase_2`, `phase_3`) |
+| `date_from` | date | No | Filter submissions from this date (Y-m-d) |
+| `date_to` | date | No | Filter submissions to this date (Y-m-d) |
+| `search` | string | No | Search in title, team leader name, or email |
 
 **Example Requests:**
 
@@ -121,13 +116,12 @@ GET /admin/inov-challenge/submissions/export?session_id=5&status=approved&phase=
 ```
 
 **Response:**
-
 - Downloads an Excel file (.xlsx)
 - Filename format: `innovation_challenge_submissions_YYYY-MM-DD_HHmmss[_filters].xlsx`
 - Examples:
-    - `innovation_challenge_submissions_2026-02-27_143021.xlsx`
-    - `innovation_challenge_submissions_2026-02-27_143021_session_5.xlsx`
-    - `innovation_challenge_submissions_2026-02-27_143021_session_5_phase_1_approved.xlsx`
+  - `innovation_challenge_submissions_2026-02-27_143021.xlsx`
+  - `innovation_challenge_submissions_2026-02-27_143021_session_5.xlsx`
+  - `innovation_challenge_submissions_2026-02-27_143021_session_5_phase_1_approved.xlsx`
 
 ---
 
@@ -159,31 +153,31 @@ INOV_CHALLENGE_EXPORT_REVIEWS=true
 
 ### Submissions Sheet Columns
 
-| Column                | Width | Description             |
-| --------------------- | ----- | ----------------------- |
-| A - ID                | 8     | Submission ID           |
-| B - Session           | 25    | Session title           |
-| C - Judul             | 35    | Submission title        |
-| D - Ketua Tim         | 25    | Team leader name        |
-| E - Email Ketua       | 30    | Team leader email       |
-| F - Fakultas          | 20    | Faculty                 |
-| G - Prodi             | 30    | Study program           |
-| H - Jumlah Anggota    | 15    | Team member count       |
-| I - Phase 1 Status    | 18    | Phase 1 status          |
-| J - Phase 1 Submitted | 18    | Phase 1 submission date |
-| K - Phase 1 Score     | 12    | Phase 1 average score   |
-| L - Phase 1 Reviews   | 12    | Phase 1 review count    |
-| M - Phase 2 Status    | 18    | Phase 2 status          |
-| N - Phase 2 Submitted | 18    | Phase 2 submission date |
-| O - Phase 2 Score     | 12    | Phase 2 average score   |
-| P - Phase 2 Reviews   | 12    | Phase 2 review count    |
-| Q - Phase 3 Status    | 18    | Phase 3 status          |
-| R - Phase 3 Submitted | 18    | Phase 3 submission date |
-| S - Phase 3 Score     | 12    | Phase 3 average score   |
-| T - Phase 3 Reviews   | 12    | Phase 3 review count    |
-| U - Final Status      | 18    | Final submission status |
-| V - Created At        | 18    | Creation timestamp      |
-| W - Updated At        | 18    | Last update timestamp   |
+| Column | Width | Description |
+|--------|-------|-------------|
+| A - ID | 8 | Submission ID |
+| B - Session | 25 | Session title |
+| C - Judul | 35 | Submission title |
+| D - Ketua Tim | 25 | Team leader name |
+| E - Email Ketua | 30 | Team leader email |
+| F - Fakultas | 20 | Faculty |
+| G - Prodi | 30 | Study program |
+| H - Jumlah Anggota | 15 | Team member count |
+| I - Phase 1 Status | 18 | Phase 1 status |
+| J - Phase 1 Submitted | 18 | Phase 1 submission date |
+| K - Phase 1 Score | 12 | Phase 1 average score |
+| L - Phase 1 Reviews | 12 | Phase 1 review count |
+| M - Phase 2 Status | 18 | Phase 2 status |
+| N - Phase 2 Submitted | 18 | Phase 2 submission date |
+| O - Phase 2 Score | 12 | Phase 2 average score |
+| P - Phase 2 Reviews | 12 | Phase 2 review count |
+| Q - Phase 3 Status | 18 | Phase 3 status |
+| R - Phase 3 Submitted | 18 | Phase 3 submission date |
+| S - Phase 3 Score | 12 | Phase 3 average score |
+| T - Phase 3 Reviews | 12 | Phase 3 review count |
+| U - Final Status | 18 | Final submission status |
+| V - Created At | 18 | Creation timestamp |
+| W - Updated At | 18 | Last update timestamp |
 
 ---
 
@@ -191,17 +185,17 @@ INOV_CHALLENGE_EXPORT_REVIEWS=true
 
 Export uses human-readable status labels:
 
-| Database Value   | Export Label   |
-| ---------------- | -------------- |
-| `draft`          | Draft          |
-| `submitted`      | Submitted      |
-| `under_review`   | Under Review   |
-| `reviewed`       | Reviewed       |
-| `approved`       | Approved       |
-| `rejected`       | Rejected       |
-| `in_progress`    | In Progress    |
+| Database Value | Export Label |
+|----------------|--------------|
+| `draft` | Draft |
+| `submitted` | Submitted |
+| `under_review` | Under Review |
+| `reviewed` | Reviewed |
+| `approved` | Approved |
+| `rejected` | Rejected |
+| `in_progress` | In Progress |
 | `needs_revision` | Needs Revision |
-| `null` or empty  | -              |
+| `null` or empty | - |
 
 ---
 
@@ -232,19 +226,19 @@ Example: `2026-02-27 14:30`
     @if(request('session_id'))
         <input type="hidden" name="session_id" value="{{ request('session_id') }}">
     @endif
-
+    
     @if(request('status'))
         <input type="hidden" name="status" value="{{ request('status') }}">
     @endif
-
+    
     @if(request('phase'))
         <input type="hidden" name="phase" value="{{ request('phase') }}">
     @endif
-
+    
     @if(request('search'))
         <input type="hidden" name="search" value="{{ request('search') }}">
     @endif
-
+    
     <button type="submit" class="btn btn-success">
         <i class='bx bx-download'></i>
         Export to Excel
@@ -349,41 +343,39 @@ $fullPath = storage_path('app/public/' . $path);
 For exports with thousands of records:
 
 1. **Use Chunking** (if needed in future):
-
-    ```php
-    // Add to SubmissionsSheet class
-    use Maatwebsite\Excel\Concerns\FromQuery;
-    use Maatwebsite\Excel\Concerns\WithChunkReading;
-
-    public function query()
-    {
-        return InovChallengeSubmission::query()->with(...);
-    }
-
-    public function chunkSize(): int
-    {
-        return 1000;
-    }
-    ```
+   ```php
+   // Add to SubmissionsSheet class
+   use Maatwebsite\Excel\Concerns\FromQuery;
+   use Maatwebsite\Excel\Concerns\WithChunkReading;
+   
+   public function query()
+   {
+       return InovChallengeSubmission::query()->with(...);
+   }
+   
+   public function chunkSize(): int
+   {
+       return 1000;
+   }
+   ```
 
 2. **Queue Exports** (for very large datasets):
-
-    ```php
-    use Maatwebsite\Excel\Concerns\WithCustomChunkSize;
-    use Illuminate\Contracts\Queue\ShouldQueue;
-
-    class InovChallengeSubmissionsExport implements WithMultipleSheets, ShouldQueue
-    {
-        // ...
-    }
-
-    // In controller
-    return (new InovChallengeSubmissionsExport($filters))
-        ->queue('innovation_challenge_export.xlsx')
-        ->chain([
-            // Send email notification when done
-        ]);
-    ```
+   ```php
+   use Maatwebsite\Excel\Concerns\WithCustomChunkSize;
+   use Illuminate\Contracts\Queue\ShouldQueue;
+   
+   class InovChallengeSubmissionsExport implements WithMultipleSheets, ShouldQueue
+   {
+       // ...
+   }
+   
+   // In controller
+   return (new InovChallengeSubmissionsExport($filters))
+       ->queue('innovation_challenge_export.xlsx')
+       ->chain([
+           // Send email notification when done
+       ]);
+   ```
 
 ### Current Implementation
 
@@ -398,7 +390,6 @@ For exports with thousands of records:
 ### Header Styles
 
 All sheet headers use:
-
 - **Bold font**, size 12
 - **White text color** (`#FFFFFF`)
 - **Colored background** (different per sheet)
@@ -413,7 +404,6 @@ All sheet headers use:
 ### Column Widths
 
 All columns are auto-sized for optimal readability:
-
 - ID columns: 8-12 pixels
 - Short text: 15-20 pixels
 - Medium text: 25-30 pixels
@@ -447,7 +437,6 @@ try {
 ```
 
 Common errors:
-
 - **Memory limit exceeded**: Reduce dataset size or implement chunking
 - **Timeout**: Increase PHP max_execution_time or use queued exports
 - **Permission denied**: Check storage directory permissions
@@ -529,7 +518,6 @@ public function test_can_export_submissions()
 
 **Cause:** Too many submissions loaded at once  
 **Solution:**
-
 1. Add filters to reduce dataset size
 2. Increase PHP memory_limit in php.ini
 3. Implement chunking (see Performance section)
@@ -555,6 +543,6 @@ The Innovation Challenge Data Export system provides:
 ✅ **Professional Output** - Multi-sheet, color-coded, formatted  
 ✅ **Easy Integration** - Simple controller method, Blade-ready  
 ✅ **Configurable** - Enable/disable sheets via config  
-✅ **Performance-Ready** - Can handle thousands of records
+✅ **Performance-Ready** - Can handle thousands of records  
 
 This export feature enables administrators to analyze Innovation Challenge data in Excel for reporting, analysis, and decision-making.
