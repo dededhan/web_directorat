@@ -1,9 +1,11 @@
 # Innovation Challenge Phase Approval Logic
 
 ## Overview
+
 The phase approval system manages the sequential progression of submissions through three phases (Phase 1, 2, 3) with comprehensive validation, scoring, and automatic phase unlocking.
 
 ## Files Modified
+
 - `app/Http/Controllers/InovChallenge/Admin/InovChallengeSubmissionController.php`
 - `routes/inovchalange.php`
 
@@ -18,7 +20,7 @@ The phase approval system manages the sequential progression of submissions thro
 ✅ **Status Management** - Proper final_status updates based on phase and decision  
 ✅ **Notifications** - Sends notifications to submission owner and team members  
 ✅ **Manual Phase Unlock** - Admin can manually unlock phases if needed  
-✅ **Email Notifications** - Placeholder for email notifications (Sprint 7)  
+✅ **Email Notifications** - Placeholder for email notifications (Sprint 7)
 
 ---
 
@@ -61,6 +63,7 @@ Submission → Reviews Completed → Status: 'reviewed' → Admin Approve → Ph
 4. ✅ Average score must meet or exceed minimum threshold
 
 **Example:**
+
 ```php
 // Phase 1 Approval Requirements:
 - phase_1_status = 'reviewed'
@@ -68,7 +71,7 @@ Submission → Reviews Completed → Status: 'reviewed' → Admin Approve → Ph
 - Average score >= 70 (min_score_for_approval)
 
 // Phase 2 Approval Requirements:
-- All Phase 1 requirements + 
+- All Phase 1 requirements +
 - phase_1_status = 'approved'
 
 // Phase 3 Approval Requirements:
@@ -90,6 +93,7 @@ Submission → Reviews Completed → Status: 'reviewed' → Admin Reject → Pha
 - **Phase 2/3 Rejection**: `final_status` = `'needs_revision'` (allow resubmission)
 
 **Validation:**
+
 - Rejection reason must be at least 10 characters
 - Phase must be in 'submitted', 'under_review', or 'reviewed' status
 
@@ -104,10 +108,12 @@ Submission → Reviews Completed → Status: 'reviewed' → Admin Reject → Pha
 Approves a submission for a specific phase.
 
 **Parameters:**
+
 - `{submission}` - Submission ID
 - `{phase}` - Phase name (`phase_1`, `phase_2`, or `phase_3`)
 
 **Response:**
+
 ```json
 {
     "success": "Submission untuk phase_1 berhasil disetujui. phase_2 telah dibuka."
@@ -115,6 +121,7 @@ Approves a submission for a specific phase.
 ```
 
 **Errors:**
+
 ```json
 {
     "error": "Phase 1 harus disetujui terlebih dahulu sebelum menyetujui Phase 2."
@@ -136,6 +143,7 @@ Approves a submission for a specific phase.
 Rejects a submission for a specific phase.
 
 **Request Body:**
+
 ```json
 {
     "rejection_reason": "Proposal kurang detail dan tidak sesuai dengan tema innovation challenge."
@@ -143,6 +151,7 @@ Rejects a submission for a specific phase.
 ```
 
 **Response:**
+
 ```json
 {
     "success": "Submission untuk phase_1 berhasil ditolak."
@@ -158,6 +167,7 @@ Rejects a submission for a specific phase.
 Manually unlocks a phase for a submission (useful when auto-unlock is disabled).
 
 **Response:**
+
 ```json
 {
     "success": "phase_2 berhasil dibuka."
@@ -173,6 +183,7 @@ Manually unlocks a phase for a submission (useful when auto-unlock is disabled).
 Returns detailed status for all phases including approval readiness.
 
 **Response:**
+
 ```json
 {
     "submission_id": 123,
@@ -212,26 +223,26 @@ Returns detailed status for all phases including approval readiness.
 
 ### Phase Status Values
 
-| Status | Description |
-|--------|-------------|
-| `null` | Phase not yet accessible |
-| `locked` | Phase locked (previous phase not approved) |
-| `draft` | Phase unlocked, can be edited |
-| `submitted` | Phase submitted, waiting for review assignment |
-| `under_review` | Reviews in progress |
-| `reviewed` | All reviews completed, ready for admin decision |
-| `approved` | Phase approved by admin |
-| `rejected` | Phase rejected by admin |
+| Status         | Description                                     |
+| -------------- | ----------------------------------------------- |
+| `null`         | Phase not yet accessible                        |
+| `locked`       | Phase locked (previous phase not approved)      |
+| `draft`        | Phase unlocked, can be edited                   |
+| `submitted`    | Phase submitted, waiting for review assignment  |
+| `under_review` | Reviews in progress                             |
+| `reviewed`     | All reviews completed, ready for admin decision |
+| `approved`     | Phase approved by admin                         |
+| `rejected`     | Phase rejected by admin                         |
 
 ### Final Status Values
 
-| Status | Description |
-|--------|-------------|
-| `draft` | Initial submission, no phases submitted |
-| `in_progress` | At least one phase approved, more phases pending |
-| `needs_revision` | Phase 2 or 3 rejected, can revise and resubmit |
-| `rejected` | Phase 1 rejected or permanently rejected |
-| `approved` | Phase 3 approved, submission complete |
+| Status           | Description                                      |
+| ---------------- | ------------------------------------------------ |
+| `draft`          | Initial submission, no phases submitted          |
+| `in_progress`    | At least one phase approved, more phases pending |
+| `needs_revision` | Phase 2 or 3 rejected, can revise and resubmit   |
+| `rejected`       | Phase 1 rejected or permanently rejected         |
+| `approved`       | Phase 3 approved, submission complete            |
 
 ---
 
@@ -309,6 +320,7 @@ POST /admin/inov-challenge/submissions/123/unlock/phase_2
 ## Notifications
 
 ### Approval Notification
+
 ```
 Subject: Phase Approved - Innovation Challenge
 
@@ -317,10 +329,11 @@ Phase selanjutnya (phase_2) telah dibuka dan siap untuk diisi.
 ```
 
 ### Rejection Notification
+
 ```
 Subject: Phase Rejected - Innovation Challenge
 
-Submission Anda untuk phase_1 ditolak. 
+Submission Anda untuk phase_1 ditolak.
 
 Alasan: Proposal kurang detail dan tidak sesuai dengan tema innovation challenge.
 
@@ -328,6 +341,7 @@ Silakan perbaiki dan submit ulang.
 ```
 
 ### Phase Unlocked Notification
+
 ```
 Subject: Phase Unlocked - Innovation Challenge
 
@@ -384,6 +398,7 @@ INOV_CHALLENGE_AUTO_UNLOCK_PHASE=false
 ```
 
 **Behavior:**
+
 - Users MUST complete phases in order (1 → 2 → 3)
 - Admin must manually unlock each phase after approval
 - Use case: Strict milestone-based progression with admin control
@@ -398,6 +413,7 @@ INOV_CHALLENGE_AUTO_UNLOCK_PHASE=true
 ```
 
 **Behavior:**
+
 - Users MUST complete phases in order (1 → 2 → 3)
 - Next phase automatically unlocks upon approval
 - Use case: Standard competition workflow with automatic progression
@@ -412,6 +428,7 @@ INOV_CHALLENGE_AUTO_UNLOCK_PHASE=true
 ```
 
 **Behavior:**
+
 - Users can work on any phase independently
 - All phases unlocked from the start
 - Use case: Flexible submission where phases are independent modules
@@ -465,7 +482,8 @@ INOV_CHALLENGE_AUTO_UNLOCK_PHASE=true
 ### "Minimum X reviewer diperlukan untuk menyetujui phase ini"
 
 **Cause:** Not enough reviewers assigned or completed reviews  
-**Solution:** 
+**Solution:**
+
 1. Assign more reviewers to the submission
 2. Wait for existing reviewers to complete reviews
 3. Or adjust `INOV_CHALLENGE_MIN_REVIEWERS` in config (not recommended)
@@ -476,6 +494,7 @@ INOV_CHALLENGE_AUTO_UNLOCK_PHASE=true
 
 **Cause:** Average review score below threshold  
 **Solution:**
+
 1. Request reviewers to reassess (if they made errors)
 2. Reject the phase and ask participant to improve
 3. Or adjust `INOV_CHALLENGE_MIN_SCORE` in config (must be justified)
@@ -486,6 +505,7 @@ INOV_CHALLENGE_AUTO_UNLOCK_PHASE=true
 
 **Cause:** Trying to approve a phase while previous phase is not approved  
 **Solution:**
+
 1. Approve previous phases first (proper sequence)
 2. Or use manual unlock if justified
 3. Or disable sequential phases (not recommended for competitions)
@@ -501,6 +521,6 @@ The phase approval system provides:
 ✅ **Automatic Progression** - Reduces admin workload  
 ✅ **Clear Communication** - Notifications keep participants informed  
 ✅ **Admin Control** - Manual overrides when needed  
-✅ **Audit Trail** - All actions logged via notifications  
+✅ **Audit Trail** - All actions logged via notifications
 
 This system ensures fair, transparent, and efficient progression through the Innovation Challenge phases.

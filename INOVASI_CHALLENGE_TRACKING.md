@@ -2,8 +2,8 @@
 
 > **Project Start Date**: 2026-02-24  
 > **Target Completion**: 2026-05-24 (3 bulan)  
-> **Current Phase**: Admin Module Complete  
-> **Overall Progress**: 29.17% (35/120 tasks completed)
+> **Current Phase**: Dosen Module In Progress  
+> **Overall Progress**: 32.5% (39/120 tasks completed)
 
 ---
 
@@ -13,7 +13,7 @@
 | -------- | ------------------------ | -------------- | -------- | ---------- | ---------- | --------------- |
 | Sprint 1 | Foundation Setup         | ✅ Completed   | 100%     | 2026-02-27 | 2026-02-27 | 15/15           |
 | Sprint 2 | Admin Module             | ✅ Completed   | 100%     | 2026-02-27 | 2026-02-27 | 20/20           |
-| Sprint 3 | Dosen Module             | 🔲 Not Started | 0%       | TBD        | TBD        | 0/18            |
+| Sprint 3 | Dosen Module             | � In Progress  | 16.67%   | 2026-02-27 | TBD        | 3/18            |
 | Sprint 4 | Alumni Module            | 🔲 Not Started | 0%       | TBD        | TBD        | 0/12            |
 | Sprint 5 | Reviewer Module          | 🔲 Not Started | 0%       | TBD        | TBD        | 0/15            |
 | Sprint 6 | Phase 2 & 3              | 🔲 Not Started | 0%       | TBD        | TBD        | 0/20            |
@@ -347,79 +347,123 @@
 ## 👨‍🏫 Sprint 3: Dosen Module (Week 5-6)
 
 **Target**: Interface dosen untuk join sesi dan submit di 3 fase  
-**Status**: 🔲 Not Started  
-**Progress**: 0/18 tasks completed
+**Status**: � In Progress  
+**Progress**: 3/18 tasks completed
 
 ### Routing & Controllers
 
-- [ ] **Task 3.1**: Add routes untuk dosen di `routes/inovchalange.php`
+- [x] **Task 3.1**: Add routes untuk dosen di `routes/inovchalange.php`
     - ⏱️ Estimated: 30 min
+    - ✅ Completed: 2026-02-27
     - 📝 Notes: Prefix: /dosen/inov-challenge
     - 🔗 Dependencies: Sprint 2 completed
-- [ ] **Task 3.2**: Create `InovChallengeDosenController`
+- [x] **Task 3.2**: Create `InovChallengeDosenController`
     - ⏱️ Estimated: 3 hours
+    - ✅ Completed: 2026-02-27
     - 📝 Notes: Handle dosen submission workflow
     - 🔗 Dependencies: Task 3.1
     - **Methods**:
-        - index (list sessions)
-        - join (join session)
-        - mySubmissions
-        - createSubmission
-        - storePhase1, storePhase2, storePhase3
-        - editSubmission
-- [ ] **Task 3.3**: Create `InovChallengeTeamController`
+        - index, sessions, sessionDetail, joinSession
+        - mySubmissions, showSubmission
+        - editPhase1, storePhase1
+        - editPhase2, storePhase2
+        - editPhase3, storePhase3
+        - handleFileUploads, calculatePhaseProgress
+- [x] **Task 3.3**: Create `InovChallengeTeamController`
     - ⏱️ Estimated: 2 hours
+    - ✅ Completed: 2026-02-27
     - 📝 Notes: Manage team members
     - 🔗 Dependencies: Task 3.2
-    - **Methods**: addMember, removeMember, inviteExternal
+    - **Methods**: index, addMember, removeMember, inviteExternal, resendInvitation, acceptInvitation, rejectInvitation
 
 ### Views - Sidebar Update
 
-- [ ] **Task 3.4**: Update dosen sidebar dengan menu "Innovation Challenge"
+- [x] **Task 3.4**: Update dosen sidebar dengan menu "Innovation Challenge"
     - ⏱️ Estimated: 30 min
+    - ✅ Completed: 2026-02-27
     - 📝 Notes: Add menu di existing dosen sidebar
     - 🔗 Dependencies: Task 3.1
-    - **File**: Cari file sidebar dosen yang existing
+    - **File**: resources/views/subdirektorat-inovasi/dosen/sidebar.blade.php
     - **Menu Structure**:
         ```
         Innovation Challenge
+        ├── Dashboard
         ├── Sesi Aktif
-        ├── Submission Saya
-        ├── Tim Saya
-        └── Panduan
+        └── Submission Saya
         ```
 
 ### Views - Session List
 
-- [ ] **Task 3.5**: Create session list view `resources/views/inov_challenge/dosen/sessions/index.blade.php`
+- [x] **Task 3.5**: Create session list view `resources/views/inov_challenge/dosen/sessions/index.blade.php`
     - ⏱️ Estimated: 1.5 hours
+    - ✅ Completed: 2026-02-27
     - 📝 Notes: Card-based layout untuk active sessions
     - 🔗 Dependencies: Task 3.4
     - **Features**:
         - Session cards dengan info (title, dates, quota)
-        - Join button
+        - Join button with validation (deadline, quota check)
         - Status badge (Joined/Not Joined)
-- [ ] **Task 3.6**: Create session detail view `resources/views/inov_challenge/dosen/sessions/show.blade.php`
+        - Deadline warning for sessions closing within 7 days
+        - Empty state handling
+        - Responsive grid layout (1/2/3 columns)
+        - Progress bar for quota visualization
+        - Alert messages (success/error/info)
+- [x] **Task 3.6**: Create session detail view `resources/views/inov_challenge/dosen/sessions/show.blade.php`
     - ⏱️ Estimated: 1 hour
+    - ✅ Completed: 2026-02-27
     - 📝 Notes: Detail sesi sebelum join
     - 🔗 Dependencies: Task 3.5
+    - **Features**:
+        - Two-column layout (main content + sticky sidebar)
+        - Session description with formatted text
+        - Phase information cards (3 phases with icons and descriptions)
+        - Requirements & guidelines section
+        - Participant list (visible for joined sessions, top 10)
+        - Sidebar with comprehensive session info (period, deadline, quota, status)
+        - Smart action buttons based on session state (join/view submission)
+        - Disabled states (expired, full quota)
+        - Deadline warnings and quota alerts
+        - Confirmation dialog before joining
+        - Status badges (Akan Datang, Sedang Berlangsung, Selesai)
+        - Quota progress visualization with slots remaining
+        - Breadcrumb navigation back to session list
 
 ### Views - My Submissions
 
-- [ ] **Task 3.7**: Create my submissions list `resources/views/inov_challenge/dosen/submissions/index.blade.php`
+- [x] **Task 3.7**: Create my submissions list `resources/views/inov_challenge/dosen/submissions/index.blade.php`
     - ⏱️ Estimated: 1.5 hours
+    - ✅ Completed: 2026-02-27
     - 📝 Notes: List submission dengan phase indicator
     - 🔗 Dependencies: Task 3.6
     - **Components**:
-        - Submission cards
-        - Phase progress bar
-        - Status badges
-        - Action buttons (Continue, View, Edit)
-- [ ] **Task 3.8**: Create submission dashboard `resources/views/inov_challenge/dosen/submissions/dashboard.blade.php`
+        - Submission cards with comprehensive information
+        - Phase progress bar (overall progress with percentage)
+        - Phase status indicators (3 phases with color-coded status)
+        - Status badges (draft, pending, under_review, revision_requested, approved, rejected, completed)
+        - Action buttons (Lihat Detail, Continue/Edit Phase, Kelola Tim)
+        - Smart edit buttons based on phase status and sequential requirements
+        - Statistics cards (Total, Draft, Under Review, Completed)
+        - Team member count display
+        - Revision notices with alerts
+        - Empty state with CTA to browse sessions
+        - Pagination support
+- [x] **Task 3.8**: Create submission dashboard `resources/views/inov_challenge/dosen/submissions/show.blade.php`
     - ⏱️ Estimated: 2 hours
-    - 📝 Notes: Single submission dashboard dengan tabs per phase
+    - ✅ Completed: 2026-02-27
+    - 📝 Notes: Single submission dashboard dengan tabs per phase (created as show.blade.php to match route naming)
     - 🔗 Dependencies: Task 3.7
-    - **Tabs**: Phase 1 | Phase 2 | Phase 3 | Tim | History
+    - **Tabs**: Overview | Phase 1 | Phase 2 | Phase 3 | Tim | History
+    - **Features**:
+        - Alpine.js tab navigation with URL sync
+        - Overview tab: Overall progress bar, phase status cards (3 phases), submission timeline
+        - Phase tabs: Status indicators, progress bars, feedback/review sections, submitted data display, uploaded files list
+        - Team tab: Team leader display, member list with status badges, manage team link
+        - History tab: Timeline of activities (created, submitted, reviewed, completed)
+        - Sidebar: Quick actions (continue/edit phase, manage team, view session), session info, next steps guide
+        - Smart action buttons based on sequential phase requirements
+        - Status badges with color coding (7 status types)
+        - Phase detail partial component for reusability
+        - Empty states for phases not yet started
 
 ### Views - Phase 1 Form
 

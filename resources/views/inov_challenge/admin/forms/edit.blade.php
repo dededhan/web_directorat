@@ -112,8 +112,11 @@
                         <div class="space-y-3" x-ref="fieldsContainer">
                             <template x-for="(field, index) in fields" :key="field.id">
                                 <div class="field-item border rounded-lg p-4 hover:shadow-md transition-shadow"
-                                    :class="{ 'border-indigo-500 bg-indigo-50': selectedFieldIndex ===
-                                        index, 'border-gray-200': selectedFieldIndex !== index }"
+                                    :class="{
+                                        'border-indigo-500 bg-indigo-50': selectedFieldIndex ===
+                                            index,
+                                        'border-gray-200': selectedFieldIndex !== index
+                                    }"
                                     @click="selectField(index)">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center space-x-3 flex-1">

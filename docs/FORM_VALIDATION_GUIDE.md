@@ -1,12 +1,15 @@
 # Innovation Challenge Form Validation
 
 ## Overview
+
 Dynamic form validation based on JSON configuration stored in the `inov_challenge_form_builders` table.
 
 ## Service Location
+
 `App\Services\InovChallengeFormValidationService`
 
 ## Features
+
 - ✅ Generate Laravel validation rules from JSON config
 - ✅ Support for 9 field types (text, textarea, number, email, date, select, radio, checkbox, file)
 - ✅ Dynamic required/optional field handling
@@ -128,36 +131,42 @@ $fieldConfig = $validationService->getFieldConfig($form->form_config, 'title');
 ## Validation Rules by Field Type
 
 ### Text
+
 ```php
 ['name' => 'title', 'type' => 'text', 'required' => true]
 // Generates: 'required|string|max:255'
 ```
 
 ### Textarea
+
 ```php
 ['name' => 'description', 'type' => 'textarea', 'required' => true]
 // Generates: 'required|string|max:65535'
 ```
 
 ### Number
+
 ```php
 ['name' => 'amount', 'type' => 'number', 'required' => true]
 // Generates: 'required|numeric'
 ```
 
 ### Email
+
 ```php
 ['name' => 'contact_email', 'type' => 'email', 'required' => true]
 // Generates: 'required|email|max:255'
 ```
 
 ### Date
+
 ```php
 ['name' => 'start_date', 'type' => 'date', 'required' => true]
 // Generates: 'required|date'
 ```
 
 ### Select / Radio
+
 ```php
 [
     'name' => 'innovation_type',
@@ -173,6 +182,7 @@ $fieldConfig = $validationService->getFieldConfig($form->form_config, 'title');
 ```
 
 ### Checkbox (Multiple)
+
 ```php
 [
     'name' => 'sdg_goals',
@@ -190,6 +200,7 @@ $fieldConfig = $validationService->getFieldConfig($form->form_config, 'title');
 ```
 
 ### File (Single)
+
 ```php
 [
     'name' => 'proposal_document',
@@ -202,6 +213,7 @@ $fieldConfig = $validationService->getFieldConfig($form->form_config, 'title');
 ```
 
 ### File (Multiple)
+
 ```php
 [
     'name' => 'supporting_documents',
@@ -227,6 +239,7 @@ GET /admin/inov-challenge/sessions/{session}/forms/{form}/validation-rules
 ```
 
 Response:
+
 ```json
 {
     "phase": "phase_1",
@@ -253,6 +266,7 @@ Response:
 ## Error Messages
 
 All error messages are in Indonesian by default:
+
 - Required fields: `{label} wajib diisi.`
 - Email: Standard Laravel email validation
 - File size: `The {label} must not be greater than {size} kilobytes.`
@@ -316,6 +330,7 @@ Complete example from `phase_1` default fields:
 ```
 
 Generated validation rules:
+
 ```php
 [
     'title' => 'required|string|max:255',
@@ -338,18 +353,19 @@ When implementing the participant submission controller in Sprint 3:
 5. Store submission data in `inov_challenge_submissions` table
 
 Example:
+
 ```php
 public function submitPhase(Request $request, $phase)
 {
     $activeSession = InovChallengeSession::where('status', 'active')->firstOrFail();
     $form = $activeSession->getFormByPhase($phase);
-    
+
     // Validate
     $validated = $this->validationService->validateSubmissionData(
         $request->except('_token'),
         $form->form_config
     );
-    
+
     // Handle files
     foreach ($form->form_config as $field) {
         if ($field['type'] === 'file' && $request->hasFile($field['name'])) {
@@ -357,13 +373,13 @@ public function submitPhase(Request $request, $phase)
             $validated[$field['name']] = $path;
         }
     }
-    
+
     // Save submission
     $submission = InovChallengeSubmission::updateOrCreate(
         ['user_id' => auth()->id(), 'session_id' => $activeSession->id],
         [$phase . '_data' => $validated, $phase . '_status' => 'submitted']
     );
-    
+
     return redirect()->back()->with('success', 'Submission berhasil disimpan.');
 }
 ```
@@ -385,16 +401,16 @@ class InovChallengeFormValidationServiceTest extends TestCase
     public function test_generates_rules_for_required_text_field()
     {
         $service = new InovChallengeFormValidationService();
-        
+
         $formConfig = [
             ['name' => 'title', 'label' => 'Title', 'type' => 'text', 'required' => true]
         ];
-        
+
         $rules = $service->getRules($formConfig);
-        
+
         $this->assertEquals('required|string|max:255', $rules['title']);
     }
-    
+
     // Add more tests for each field type...
 }
 ```
@@ -404,6 +420,7 @@ class InovChallengeFormValidationServiceTest extends TestCase
 ## Summary
 
 The Innovation Challenge Form Validation system provides:
+
 - **Flexibility**: Forms can be customized per session without code changes
 - **Consistency**: Single source of truth for validation rules
 - **Maintainability**: Validation logic centralized in one service
