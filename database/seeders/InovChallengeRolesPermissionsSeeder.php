@@ -24,42 +24,42 @@ class InovChallengeRolesPermissionsSeeder extends Seeder
             'edit_inov_challenge_session',
             'delete_inov_challenge_session',
             'activate_inov_challenge_session',
-
+            
             // Form Builder (Admin Only)
             'manage_inov_challenge_forms',
             'create_inov_challenge_form',
             'edit_inov_challenge_form',
             'delete_inov_challenge_form',
-
+            
             // Submission Management (Dosen)
             'submit_inov_challenge',
             'view_own_inov_challenge_submission',
             'edit_own_inov_challenge_submission',
             'delete_own_inov_challenge_submission',
-
+            
             // Team Management (Dosen & Alumni)
             'manage_inov_challenge_team',
             'invite_inov_challenge_team_member',
             'remove_inov_challenge_team_member',
             'accept_inov_challenge_invitation',
             'reject_inov_challenge_invitation',
-
+            
             // Review & Scoring (Reviewer)
             'review_inov_challenge',
             'score_inov_challenge_submission',
             'view_assigned_inov_challenge_reviews',
             'submit_inov_challenge_review',
-
+            
             // Approval (Admin Only)
             'approve_inov_challenge_submission',
             'reject_inov_challenge_submission',
             'assign_inov_challenge_reviewer',
             'view_all_inov_challenge_submissions',
-
+            
             // Reports & Statistics (Admin)
             'view_inov_challenge_reports',
             'export_inov_challenge_data',
-
+            
             // Notifications
             'view_inov_challenge_notifications',
             'mark_inov_challenge_notification_read',
@@ -71,7 +71,7 @@ class InovChallengeRolesPermissionsSeeder extends Seeder
         }
 
         // Create roles and assign permissions
-
+        
         // 1. Admin Innovation Challenge (inovchalange)
         $adminRole = Role::firstOrCreate(['name' => 'inovchalange']);
         $adminRole->givePermissionTo([
