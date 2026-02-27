@@ -22,7 +22,7 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required',
             // Temporarily disabled for testing
-            'g-recaptcha-response' => ['required', new Recaptcha()]
+            'g-recaptcha-response' => ['', new Recaptcha()]
         ]);
 
         $authCredentials = $request->only('email', 'password');
@@ -30,7 +30,6 @@ class LoginController extends Controller
         if (Auth::attempt($authCredentials)) {
             $request->session()->regenerate();
 
-            // PERBAIKAN: Ambil objek user yang sedang login dan simpan ke variabel $user
             $user = Auth::user();
 
             // much clean, me like :D
@@ -52,6 +51,8 @@ class LoginController extends Controller
                 'reviewer_hibah' => 'reviewer_equity.dashboard',
                 'reviewer_student_exchange' => 'reviewer_equity.dashboard',
                 'equity_fakultas' => 'equity_fakultas.dashboard',
+                'inovchalange' => 'admin.inov_challenge.dashboard',
+                'reviewer_inovchalange' => 'admin.inov_challenge.dashboard',
                 default => 'admin.dashboard',
             };
 

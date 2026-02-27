@@ -15,14 +15,12 @@ class AccountController extends Controller
         $user = auth()->user();
         $role = $user->role;
         
-        // Return the appropriate view based on user role
         if ($role === 'fakultas') {
             return view('fakultas.manage_account', compact('user'));
         } elseif ($role === 'prodi') {
             return view('prodis.manage_account', compact('user'));
         }
         
-        // Fallback if role doesn't match
         abort(403, 'Unauthorized access');
     }
 
