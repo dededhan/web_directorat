@@ -102,7 +102,7 @@
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @for($i = 1; $i <= 17; $i++)
-                        <a href="{{ route('pemeringkatan.the-ir.sdg.show', $i) }}" 
+                        <a href="{{ route('the-ir.sdg.show', $i) }}" 
                            class="block bg-white border-2 border-gray-200 rounded-lg p-6 hover:border-teal-500 hover:shadow-lg transition-all duration-300">
                             <div class="flex items-center gap-4">
                                 <div class="w-16 h-16 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0">

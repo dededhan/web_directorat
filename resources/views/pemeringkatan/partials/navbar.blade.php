@@ -157,7 +157,7 @@
             </li>
 
             <li><a href="{{ route('pemeringkatan.ranking-unj.index') }}" class="text-white hover:text-yellow-400 transition-colors duration-200">Ranking UNJ</a></li>
-            <li><a href="{{ route('pemeringkatan.the-ir.index') }}" class="text-white hover:text-yellow-400 transition-colors duration-200">THE IR</a></li>
+            <li><a href="{{ route('the-ir.index') }}" class="text-white hover:text-yellow-400 transition-colors duration-200">THE IR</a></li>
             <li><a href="{{ route('documents.public.index') }}" class="text-white hover:text-yellow-400 transition-colors duration-200">Dokumen</a></li>
             <li><a href="https://sso.unj.ac.id/login" target="_blank" class="text-white hover:text-yellow-400 transition-colors duration-200">SSO</a></li>
             
@@ -248,7 +248,7 @@
             </li>
 
             <li><a href="{{ route('pemeringkatan.ranking-unj.index') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Ranking UNJ</a></li>
-            <li><a href="{{ route('pemeringkatan.the-ir.index') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">THE IR</a></li>
+            <li><a href="{{ route('the-ir.index') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">THE IR</a></li>
             <li><a href="{{ route('documents.public.index') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Dokumen</a></li>
             
             <li><a href="https://sso.unj.ac.id/login" target="_blank" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">SSO</a></li>

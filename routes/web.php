@@ -199,8 +199,9 @@ Route::redirect('/ranking_unj', '/pemeringkatan/ranking-unj', 301);
 Route::redirect('/Pemeringkatans/Ranking-Universitas/klaster-perguruan-tinggi', '/pemeringkatan/klaster-perguruan-tinggi', 301);
 Route::redirect('/indikator', '/pemeringkatan/indikator', 301);
 
-// THE Impact Rankings redirects
-Route::redirect('/the-ir-initiatives', '/pemeringkatan/the-ir-initiatives', 301);
+// THE Impact Rankings redirects — canonical URL is now /the-ir-initiatives (no /pemeringkatan prefix)
+Route::redirect('/pemeringkatan/the-ir-initiatives', '/the-ir-initiatives', 301);
+Route::redirect('/pemeringkatan/the-ir-initiatives/sdg/{id}', '/the-ir-initiatives/sdg/{id}', 301);
 
 // Sustainability program redirects
 Route::redirect('/Pemeringkatan/kegiatansustainability', '/pemeringkatan/sustainability/kegiatan', 301);
@@ -216,8 +217,9 @@ Route::redirect('/Pemeringkatan/program/international-student-mobility', '/pemer
 // Data responden redirect
 Route::redirect('/Pemeringkatan/dataresponden', '/pemeringkatan/data-responden', 301);
 
-// Sulitest redirect
-Route::redirect('/Pemeringkatan/sulitest', '/pemeringkatan/sulitest', 301);
+// Sulitest redirects → new canonical URL
+Route::redirect('/Pemeringkatan/sulitest', '/pemeringkatan/unj-sustain-quest', 301);
+Route::redirect('/pemeringkatan/sulitest', '/pemeringkatan/unj-sustain-quest', 301);
 
 // Sejarah Hilirisasi (
 Route::get('/sejarah-hilirisasi', [SejarahContentController::class, 'showPublic'])->name('subdirektorat-inovasi.sejarah.sejarah');
