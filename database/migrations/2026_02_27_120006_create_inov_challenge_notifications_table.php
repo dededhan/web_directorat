@@ -17,7 +17,7 @@ return new class extends Migration
             $table->boolean('is_read')->default(false);
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
-            
+
             // Index for faster queries
             $table->index(['user_id', 'is_read']);
         });
