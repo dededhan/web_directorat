@@ -38,11 +38,22 @@ class TahapController extends Controller
             'field_label' => 'required|string|max:255',
             'field_type' => 'required|in:text,textarea,number,date,dropdown,file,url',
             'field_options' => 'nullable|array',
-            'field_options.*' => 'string|max:255',
+            'field_options.*' => 'nullable|string|max:255',
             'is_required' => 'boolean',
         ]);
 
+        // Clear or filter options based on field type
+        if ($validated['field_type'] !== 'dropdown') {
+            $validated['field_options'] = null;
+        } else {
+            // Filter out empty option strings
+            $validated['field_options'] = array_values(
+                array_filter($validated['field_options'] ?? [], fn($v) => $v !== null && $v !== '')
+            ) ?: null;
+        }
+
         $validated['urutan'] = $tahap->fields()->max('urutan') + 1;
+        $validated['is_required'] = $validated['is_required'] ?? true;
 
         $tahap->fields()->create($validated);
 
@@ -59,10 +70,16 @@ class TahapController extends Controller
             'is_required' => 'boolean',
         ]);
 
-        // Clear options if field type is not dropdown
+        // Clear or filter options based on field type
         if ($validated['field_type'] !== 'dropdown') {
             $validated['field_options'] = null;
+        } else {
+            $validated['field_options'] = array_values(
+                array_filter($validated['field_options'] ?? [], fn($v) => $v !== null && $v !== '')
+            ) ?: null;
         }
+
+        $validated['is_required'] = $validated['is_required'] ?? false;
 
         $field->update($validated);
 

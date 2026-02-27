@@ -27,7 +27,8 @@ class SessionController extends Controller
         $validated = $request->validate([
             'nama_sesi' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
-            'dana_maksimal' => 'nullable|numeric|min:0',
+            'dana_minimal' => 'nullable|numeric|min:0',
+            'dana_maksimal' => 'nullable|numeric|min:0|gte:dana_minimal',
             'periode_awal' => 'required|date',
             'periode_akhir' => 'required|date|after_or_equal:periode_awal',
             'min_anggota' => 'nullable|integer|min:1',
@@ -72,7 +73,8 @@ class SessionController extends Controller
         $validated = $request->validate([
             'nama_sesi' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
-            'dana_maksimal' => 'nullable|numeric|min:0',
+            'dana_minimal' => 'nullable|numeric|min:0',
+            'dana_maksimal' => 'nullable|numeric|min:0|gte:dana_minimal',
             'periode_awal' => 'required|date',
             'periode_akhir' => 'required|date|after_or_equal:periode_awal',
             'min_anggota' => 'nullable|integer|min:1',

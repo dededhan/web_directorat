@@ -1,7 +1,7 @@
 @extends('admin_inovasi.index')
 
 @section('contentadmin_inovasi')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+<div class="bg-gradient-to-br from-gray-50 to-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {{-- Breadcrumb --}}
@@ -26,9 +26,9 @@
         </div>
 
         {{-- Card --}}
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100">
             {{-- Card header --}}
-            <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-4">
+            <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-4 rounded-t-2xl">
                 <h2 class="text-white font-semibold text-lg">
                     <i class="fas fa-list mr-2"></i> Daftar Sesi
                     <span class="ml-2 bg-white/20 text-white text-sm px-3 py-0.5 rounded-full">{{ $sessions->total() }}</span>
@@ -83,45 +83,47 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 text-center" x-data="{ open: false }">
-                                    <div class="relative inline-block">
-                                        <button @click="open = !open" class="p-2 text-gray-400 hover:text-teal-600 rounded-lg hover:bg-gray-100 transition">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                        <div x-show="open" @click.away="open = false" x-transition
-                                             class="absolute right-0 mt-1 w-44 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
-                                            <a href="{{ route('admin_inovasi.inovchalenge.sessions.show', $session) }}"
-                                               class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                                                <i class="fas fa-eye w-5 text-teal-500"></i> Lihat
-                                            </a>
-                                            <a href="{{ route('admin_inovasi.inovchalenge.sessions.edit', $session) }}"
-                                               class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                                                <i class="fas fa-edit w-5 text-blue-500"></i> Edit
-                                            </a>
-                                            @if($session->status === 'draft')
-                                                <form method="POST" action="{{ route('admin_inovasi.inovchalenge.sessions.activate', $session) }}">
-                                                    @csrf @method('PATCH')
-                                                    <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                                                        <i class="fas fa-play w-5 text-green-500"></i> Aktifkan
-                                                    </button>
-                                                </form>
-                                            @elseif($session->status === 'active')
-                                                <form method="POST" action="{{ route('admin_inovasi.inovchalenge.sessions.close', $session) }}">
-                                                    @csrf @method('PATCH')
-                                                    <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                                                        <i class="fas fa-stop w-5 text-red-500"></i> Tutup
-                                                    </button>
-                                                </form>
-                                            @endif
-                                            <hr class="my-1">
-                                            <form method="POST" action="{{ route('admin_inovasi.inovchalenge.sessions.destroy', $session) }}"
-                                                  onsubmit="return confirm('Yakin ingin menghapus sesi ini?')">
-                                                @csrf @method('DELETE')
-                                                <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                                                    <i class="fas fa-trash w-5"></i> Hapus
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center justify-center gap-1">
+                                        {{-- Lihat --}}
+                                        <a href="{{ route('admin_inovasi.inovchalenge.sessions.show', $session) }}"
+                                           title="Lihat"
+                                           class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-teal-600 hover:bg-teal-50 transition">
+                                            <i class="fas fa-eye text-sm"></i>
+                                        </a>
+                                        {{-- Edit --}}
+                                        <a href="{{ route('admin_inovasi.inovchalenge.sessions.edit', $session) }}"
+                                           title="Edit"
+                                           class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-blue-600 hover:bg-blue-50 transition">
+                                            <i class="fas fa-edit text-sm"></i>
+                                        </a>
+                                        {{-- Activate / Close --}}
+                                        @if($session->status === 'draft')
+                                            <form method="POST" action="{{ route('admin_inovasi.inovchalenge.sessions.activate', $session) }}">
+                                                @csrf @method('PATCH')
+                                                <button type="submit" title="Aktifkan"
+                                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-green-600 hover:bg-green-50 transition">
+                                                    <i class="fas fa-play text-sm"></i>
                                                 </button>
                                             </form>
-                                        </div>
+                                        @elseif($session->status === 'active')
+                                            <form method="POST" action="{{ route('admin_inovasi.inovchalenge.sessions.close', $session) }}">
+                                                @csrf @method('PATCH')
+                                                <button type="submit" title="Tutup"
+                                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-orange-600 hover:bg-orange-50 transition">
+                                                    <i class="fas fa-stop text-sm"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                        {{-- Hapus --}}
+                                        <form method="POST" action="{{ route('admin_inovasi.inovchalenge.sessions.destroy', $session) }}"
+                                              onsubmit="return confirm('Yakin ingin menghapus sesi ini?')">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" title="Hapus"
+                                                    class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-red-500 hover:bg-red-50 transition">
+                                                <i class="fas fa-trash text-sm"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -179,7 +181,7 @@
 
             {{-- Pagination --}}
             @if ($sessions->hasPages())
-                <div class="bg-gray-50 px-6 py-3 border-t border-gray-100">
+                <div class="bg-gray-50 px-6 py-3 border-t border-gray-100 rounded-b-2xl">
                     {{ $sessions->links() }}
                 </div>
             @endif

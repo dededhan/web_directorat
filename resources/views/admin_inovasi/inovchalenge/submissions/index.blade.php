@@ -1,7 +1,7 @@
 @extends('admin_inovasi.index')
 
 @section('contentadmin_inovasi')
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div class="bg-gradient-to-br from-gray-50 to-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
             {{-- Breadcrumb --}}
@@ -79,8 +79,8 @@
             @endif
 
             {{-- Table Card --}}
-            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-4">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100">
+                <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-4 rounded-t-2xl">
                     <h2 class="text-white font-semibold text-lg">
                         <i class="fas fa-file-alt mr-2"></i> Daftar Submission
                         <span
@@ -228,7 +228,7 @@
 
                 {{-- Pagination --}}
                 @if ($submissions->hasPages())
-                    <div class="px-6 py-4 border-t border-gray-100">
+                    <div class="px-6 py-4 border-t border-gray-100 rounded-b-2xl">
                         {{ $submissions->links() }}
                     </div>
                 @endif

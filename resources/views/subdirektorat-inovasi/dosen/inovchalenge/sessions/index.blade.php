@@ -35,10 +35,16 @@
                                     {{ $session->periode_awal->format('d M Y') }} —
                                     {{ $session->periode_akhir->format('d M Y') }}
                                 </div>
-                                @if ($session->dana_maksimal)
-                                    <div class="flex items-center">
+                                @if ($session->dana_minimal || $session->dana_maksimal)
+                                    <div class="flex items-center gap-1">
                                         <i class="fas fa-money-bill-wave w-5 text-gray-400"></i>
-                                        Rp {{ number_format($session->dana_maksimal, 0, ',', '.') }}
+                                        @if($session->dana_minimal)
+                                            Rp {{ number_format($session->dana_minimal, 0, ',', '.') }}
+                                            @if($session->dana_maksimal) — @endif
+                                        @endif
+                                        @if($session->dana_maksimal)
+                                            Rp {{ number_format($session->dana_maksimal, 0, ',', '.') }}
+                                        @endif
                                     </div>
                                 @endif
                                 <div class="flex items-center">

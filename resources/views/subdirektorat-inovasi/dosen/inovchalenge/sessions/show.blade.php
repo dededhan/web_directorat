@@ -23,11 +23,17 @@
                     @if ($session->deskripsi)
                         <p class="text-sm text-gray-600 mb-4">{{ $session->deskripsi }}</p>
                     @endif
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
                         <div>
                             <dt class="text-xs font-medium text-gray-400 uppercase">Periode</dt>
                             <dd class="mt-1 text-gray-700">{{ $session->periode_awal->format('d M Y') }} —
                                 {{ $session->periode_akhir->format('d M Y') }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs font-medium text-gray-400 uppercase">Dana Minimal</dt>
+                            <dd class="mt-1 text-gray-700">
+                                {{ $session->dana_minimal ? 'Rp ' . number_format($session->dana_minimal, 0, ',', '.') : '-' }}
+                            </dd>
                         </div>
                         <div>
                             <dt class="text-xs font-medium text-gray-400 uppercase">Dana Maksimal</dt>

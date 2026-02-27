@@ -1,7 +1,7 @@
 @extends('admin_inovasi.index')
 
 @section('contentadmin_inovasi')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+<div class="bg-gradient-to-br from-gray-50 to-gray-100">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {{-- Breadcrumb --}}
@@ -15,8 +15,8 @@
             </ol>
         </nav>
 
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-            <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-4">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100">
+            <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-4 rounded-t-2xl">
                 <h2 class="text-white font-semibold text-lg">
                     <i class="fas fa-edit mr-2"></i> Edit Sesi
                 </h2>
@@ -43,13 +43,22 @@
                     @error('deskripsi') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                 </div>
 
-                {{-- Dana Maksimal --}}
-                <div>
-                    <label for="dana_maksimal" class="block text-sm font-medium text-gray-700 mb-1">Dana Maksimal (Rp)</label>
-                    <input type="number" name="dana_maksimal" id="dana_maksimal"
-                           value="{{ old('dana_maksimal', $session->dana_maksimal) }}" step="0.01" min="0"
-                           class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 text-sm">
-                    @error('dana_maksimal') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                {{-- Dana Minimal & Maksimal --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="dana_minimal" class="block text-sm font-medium text-gray-700 mb-1">Dana Minimal (Rp)</label>
+                        <input type="number" name="dana_minimal" id="dana_minimal"
+                               value="{{ old('dana_minimal', $session->dana_minimal) }}" step="0.01" min="0"
+                               class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 text-sm">
+                        @error('dana_minimal') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label for="dana_maksimal" class="block text-sm font-medium text-gray-700 mb-1">Dana Maksimal (Rp)</label>
+                        <input type="number" name="dana_maksimal" id="dana_maksimal"
+                               value="{{ old('dana_maksimal', $session->dana_maksimal) }}" step="0.01" min="0"
+                               class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 text-sm">
+                        @error('dana_maksimal') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
                 </div>
 
                 {{-- Periode --}}
@@ -88,39 +97,6 @@
                     </div>
                 </div>
 
-                {{-- Status Info --}}
-                <div class="bg-gray-50 rounded-lg p-4">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <span class="text-sm font-medium text-gray-600">Status saat ini:</span>
-                            @if($session->status === 'active')
-                                <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">Active</span>
-                            @elseif($session->status === 'closed')
-                                <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800">Closed</span>
-                            @else
-                                <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">Draft</span>
-                            @endif
-                        </div>
-                        <div class="flex space-x-2">
-                            @if($session->status === 'draft')
-                                <form method="POST" action="{{ route('admin_inovasi.inovchalenge.sessions.activate', $session) }}">
-                                    @csrf @method('PATCH')
-                                    <button type="submit" class="px-3 py-1.5 text-xs font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 transition">
-                                        <i class="fas fa-play mr-1"></i> Aktifkan
-                                    </button>
-                                </form>
-                            @elseif($session->status === 'active')
-                                <form method="POST" action="{{ route('admin_inovasi.inovchalenge.sessions.close', $session) }}">
-                                    @csrf @method('PATCH')
-                                    <button type="submit" class="px-3 py-1.5 text-xs font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 transition">
-                                        <i class="fas fa-stop mr-1"></i> Tutup
-                                    </button>
-                                </form>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-
                 {{-- Actions --}}
                 <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-100">
                     <a href="{{ route('admin_inovasi.inovchalenge.sessions.show', $session) }}"
@@ -133,6 +109,39 @@
                     </button>
                 </div>
             </form>
+
+            {{-- Status Controls — outside the edit form to avoid nested <form> --}}
+            <div class="border-t border-gray-100 bg-gray-50 px-6 py-4 rounded-b-2xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-sm font-medium text-gray-600">Status saat ini:</span>
+                        @if($session->status === 'active')
+                            <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">Active</span>
+                        @elseif($session->status === 'closed')
+                            <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800">Closed</span>
+                        @else
+                            <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">Draft</span>
+                        @endif
+                    </div>
+                    <div class="flex space-x-2">
+                        @if($session->status === 'draft')
+                            <form method="POST" action="{{ route('admin_inovasi.inovchalenge.sessions.activate', $session) }}">
+                                @csrf @method('PATCH')
+                                <button type="submit" class="px-3 py-1.5 text-xs font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 transition">
+                                    <i class="fas fa-play mr-1"></i> Aktifkan
+                                </button>
+                            </form>
+                        @elseif($session->status === 'active')
+                            <form method="POST" action="{{ route('admin_inovasi.inovchalenge.sessions.close', $session) }}">
+                                @csrf @method('PATCH')
+                                <button type="submit" class="px-3 py-1.5 text-xs font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 transition">
+                                    <i class="fas fa-stop mr-1"></i> Tutup
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

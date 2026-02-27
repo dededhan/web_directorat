@@ -1,7 +1,7 @@
 @extends('admin_inovasi.index')
 
 @section('contentadmin_inovasi')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+<div class="bg-gradient-to-br from-gray-50 to-gray-100">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {{-- Breadcrumb --}}
@@ -15,8 +15,8 @@
             </ol>
         </nav>
 
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-            <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-4">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100">
+            <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-4 rounded-t-2xl">
                 <h2 class="text-white font-semibold text-lg">
                     <i class="fas fa-plus-circle mr-2"></i> Buat Sesi Baru
                 </h2>
@@ -43,13 +43,22 @@
                     @error('deskripsi') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                 </div>
 
-                {{-- Dana Maksimal --}}
-                <div>
-                    <label for="dana_maksimal" class="block text-sm font-medium text-gray-700 mb-1">Dana Maksimal (Rp)</label>
-                    <input type="number" name="dana_maksimal" id="dana_maksimal" value="{{ old('dana_maksimal') }}" step="0.01" min="0"
-                           class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 text-sm"
-                           placeholder="0">
-                    @error('dana_maksimal') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                {{-- Dana Minimal & Maksimal --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="dana_minimal" class="block text-sm font-medium text-gray-700 mb-1">Dana Minimal (Rp)</label>
+                        <input type="number" name="dana_minimal" id="dana_minimal" value="{{ old('dana_minimal') }}" step="0.01" min="0"
+                               class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 text-sm"
+                               placeholder="0">
+                        @error('dana_minimal') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label for="dana_maksimal" class="block text-sm font-medium text-gray-700 mb-1">Dana Maksimal (Rp)</label>
+                        <input type="number" name="dana_maksimal" id="dana_maksimal" value="{{ old('dana_maksimal') }}" step="0.01" min="0"
+                               class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 text-sm"
+                               placeholder="0">
+                        @error('dana_maksimal') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
                 </div>
 
                 {{-- Periode --}}

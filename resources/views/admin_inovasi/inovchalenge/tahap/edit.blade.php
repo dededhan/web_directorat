@@ -97,6 +97,17 @@
                 </button>
             </div>
 
+            {{-- Validation errors for add-field form --}}
+            @if($errors->has('field_label') || $errors->has('field_type') || $errors->has('field_options') || $errors->has('field_options.*'))
+                <div class="bg-red-50 border-b border-red-200 px-6 py-3">
+                    <ul class="text-sm text-red-600 space-y-1">
+                        @foreach($errors->all() as $error)
+                            <li><i class="fas fa-exclamation-circle mr-1"></i>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             {{-- Add Field Form (toggle) --}}
             <div x-show="showAddForm" x-transition class="border-b border-gray-200 bg-gray-50 p-6">
                 <form action="{{ route('admin_inovasi.inovchalenge.tahap.fields.store', $tahap) }}" method="POST" class="space-y-4">
@@ -105,8 +116,10 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Label Field <span class="text-red-500">*</span></label>
                             <input type="text" name="field_label" required
-                                   class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 text-sm"
+                                   value="{{ old('field_label') }}"
+                                   class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 text-sm {{ $errors->has('field_label') ? 'border-red-400' : '' }}"
                                    placeholder="Contoh: Judul Inovasi">
+                            @error('field_label')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tipe <span class="text-red-500">*</span></label>
@@ -125,8 +138,8 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1">Wajib diisi?</label>
                             <select name="is_required"
                                     class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 text-sm">
-                                <option value="1">Ya</option>
-                                <option value="0">Tidak</option>
+                                <option value="1" {{ old('is_required', '1') === '1' ? 'selected' : '' }}>Ya</option>
+                                <option value="0" {{ old('is_required') === '0' ? 'selected' : '' }}>Tidak</option>
                             </select>
                         </div>
                     </div>
@@ -304,9 +317,10 @@
 <script>
     function fieldBuilder() {
         return {
-            showAddForm: false,
-            newFieldType: 'text',
-            newOptions: [''],
+            // Auto-open if there were validation errors on the add-field form
+            showAddForm: {{ $errors->has('field_label') || $errors->has('field_type') || $errors->has('field_options') ? 'true' : 'false' }},
+            newFieldType: '{{ old('field_type', 'text') }}',
+            newOptions: @json(old('field_options') ? array_values(old('field_options')) : ['']),
         }
     }
 </script>

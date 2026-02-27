@@ -59,7 +59,13 @@
                         <dd class="text-sm text-gray-600">{{ $session->deskripsi }}</dd>
                     </div>
                 @endif
-                <div class="mt-4 pt-4 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="mt-4 pt-4 border-t border-gray-100 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div>
+                        <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider">Dana Minimal</dt>
+                        <dd class="mt-1 text-sm text-gray-700">
+                            {{ $session->dana_minimal ? 'Rp ' . number_format($session->dana_minimal, 0, ',', '.') : '-' }}
+                        </dd>
+                    </div>
                     <div>
                         <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider">Dana Maksimal</dt>
                         <dd class="mt-1 text-sm text-gray-700">
