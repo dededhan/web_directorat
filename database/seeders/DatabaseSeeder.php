@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             UsersSeeder::class,
             RolesAndPermissionsSeeder::class,
             InovChallengeRolesPermissionsSeeder::class,
+            InovChallengeUsersSeeder::class,
 
             // Foundation data - HARUS SEBELUM PesertaSeeder
             FakultasSeeder::class,           // Mengisi equity_fakultas table
