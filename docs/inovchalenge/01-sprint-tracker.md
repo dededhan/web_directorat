@@ -29,18 +29,18 @@
 
 | #     | Task                                                                         | File                                                                                           | Status |
 | ----- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------ |
-| S0-01 | Migration: `inov_chalenge_sessions`                                          | `database/migrations/2026_02_27_160001_create_inov_chalenge_sessions_table.php`                 | ✅     |
-| S0-02 | Migration: `inov_chalenge_tahap` (3-per-session, seeded on session create)   | `database/migrations/2026_02_27_160002_create_inov_chalenge_tahap_table.php`                    | ✅     |
-| S0-03 | Migration: `inov_chalenge_tahap_fields` (dynamic form fields)                | `database/migrations/2026_02_27_160003_create_inov_chalenge_tahap_fields_table.php`             | ✅     |
-| S0-04 | Migration: `inov_chalenge_submissions`                                       | `database/migrations/2026_02_27_160004_create_inov_chalenge_submissions_table.php`              | ✅     |
-| S0-05 | Migration: `inov_chalenge_submission_tahap` (per-Tahap status tracking)      | `database/migrations/2026_02_27_160005_create_inov_chalenge_submission_tahap_table.php`         | ✅     |
-| S0-06 | Migration: `inov_chalenge_submission_field_values` (dynamic answers)         | `database/migrations/2026_02_27_160006_create_inov_chalenge_submission_field_values_table.php`  | ✅     |
-| S0-07 | Migration: `inov_chalenge_submission_members` (with alumni approval columns) | `database/migrations/2026_02_27_160007_create_inov_chalenge_submission_members_table.php`       | ✅     |
-| S0-08 | Migration: `inov_chalenge_submission_reviewer` pivot                         | `database/migrations/2026_02_27_160008_create_inov_chalenge_submission_reviewer_table.php`      | ✅     |
-| S0-09 | Migration: `inov_chalenge_reviews` (per Tahap)                               | `database/migrations/2026_02_27_160009_create_inov_chalenge_reviews_table.php`                  | ✅     |
-| S0-10 | Migration: Add `alumni` + `reviewer_inovchalenge` to `users.role` enum       | `database/migrations/2026_02_27_160010_add_inovchalenge_roles_to_users_table.php`               | ✅     |
+| S0-01 | Migration: `inov_chalenge_sessions`                                          | `database/migrations/2026_02_27_160001_create_inov_chalenge_sessions_table.php`                | ✅     |
+| S0-02 | Migration: `inov_chalenge_tahap` (3-per-session, seeded on session create)   | `database/migrations/2026_02_27_160002_create_inov_chalenge_tahap_table.php`                   | ✅     |
+| S0-03 | Migration: `inov_chalenge_tahap_fields` (dynamic form fields)                | `database/migrations/2026_02_27_160003_create_inov_chalenge_tahap_fields_table.php`            | ✅     |
+| S0-04 | Migration: `inov_chalenge_submissions`                                       | `database/migrations/2026_02_27_160004_create_inov_chalenge_submissions_table.php`             | ✅     |
+| S0-05 | Migration: `inov_chalenge_submission_tahap` (per-Tahap status tracking)      | `database/migrations/2026_02_27_160005_create_inov_chalenge_submission_tahap_table.php`        | ✅     |
+| S0-06 | Migration: `inov_chalenge_submission_field_values` (dynamic answers)         | `database/migrations/2026_02_27_160006_create_inov_chalenge_submission_field_values_table.php` | ✅     |
+| S0-07 | Migration: `inov_chalenge_submission_members` (with alumni approval columns) | `database/migrations/2026_02_27_160007_create_inov_chalenge_submission_members_table.php`      | ✅     |
+| S0-08 | Migration: `inov_chalenge_submission_reviewer` pivot                         | `database/migrations/2026_02_27_160008_create_inov_chalenge_submission_reviewer_table.php`     | ✅     |
+| S0-09 | Migration: `inov_chalenge_reviews` (per Tahap)                               | `database/migrations/2026_02_27_160009_create_inov_chalenge_reviews_table.php`                 | ✅     |
+| S0-10 | Migration: Add `alumni` + `reviewer_inovchalenge` to `users.role` enum       | `database/migrations/2026_02_27_160010_add_inovchalenge_roles_to_users_table.php`              | ✅     |
 | S0-11 | Verify `alumni` exists in `users.role` enum (check existing migration)       | CLI / existing migrations                                                                      | ✅     |
-| S0-12 | Enum class: `InovChalengeStatusEnum` + `InovChalengeTahapStatusEnum`         | `app/Enums/InovChalengeStatusEnum.php`, `app/Enums/InovChalengeTahapStatusEnum.php`             | ✅     |
+| S0-12 | Enum class: `InovChalengeStatusEnum` + `InovChalengeTahapStatusEnum`         | `app/Enums/InovChalengeStatusEnum.php`, `app/Enums/InovChalengeTahapStatusEnum.php`            | ✅     |
 | S0-13 | Run `php artisan migrate` — verify all tables created                        | CLI                                                                                            | ✅     |
 
 ### Acceptance Criteria
