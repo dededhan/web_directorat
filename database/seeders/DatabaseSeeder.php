@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             // Core data first (no dependencies)
             UsersSeeder::class,
             RolesAndPermissionsSeeder::class,
+            InovChallengeRolesPermissionsSeeder::class,
 
             // Foundation data - HARUS SEBELUM PesertaSeeder
             FakultasSeeder::class,           // Mengisi equity_fakultas table
