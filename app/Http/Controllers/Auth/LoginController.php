@@ -53,6 +53,8 @@ class LoginController extends Controller
                 'equity_fakultas' => 'equity_fakultas.dashboard',
                 'inovchalange' => 'admin.inov_challenge.dashboard',
                 'reviewer_inovchalange' => 'admin.inov_challenge.dashboard',
+                'reviewer_inovchalenge' => 'reviewer_inovchalenge.dashboard',
+                'alumni' => 'subdirektorat-inovasi.alumni.inovchalenge.invitations.index',
                 default => 'admin.dashboard',
             };
 

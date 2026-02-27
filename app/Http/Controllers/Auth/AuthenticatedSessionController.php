@@ -39,13 +39,19 @@ class AuthenticatedSessionController extends Controller
         // Your existing redirect logic based on role middleware
         $user = Auth::user();
         if ($user->role === 'admin_direktorat' || $user->role === 'kepala_direktorat') {
-             return redirect()->intended('/admin/dashboard');
+            return redirect()->intended('/admin/dashboard');
         }
         if ($user->role === 'inovchalange') {
             return redirect()->intended('/admin/inov-challenge/dashboard');
         }
         if ($user->role === 'reviewer_inovchalange') {
             return redirect()->intended('/reviewer/inov-challenge');
+        }
+        if ($user->role === 'reviewer_inovchalenge') {
+            return redirect()->intended(route('reviewer_inovchalenge.dashboard'));
+        }
+        if ($user->role === 'alumni') {
+            return redirect()->intended(route('subdirektorat-inovasi.alumni.inovchalenge.invitations.index'));
         }
         // Add other role redirects here...
 

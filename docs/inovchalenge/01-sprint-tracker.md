@@ -226,11 +226,11 @@ The following files from a **previous failed attempt** exist in the codebase and
 
 ## Progress Summary
 
-| Sprint    | Goal                                    | Status         | Completion  |
-| --------- | --------------------------------------- | -------------- | ----------- |
-| Sprint 0  | Database & Infrastructure               | ✅ Done        | 13 / 13     |
-| Sprint 1  | Admin Session & Tahap Field Builder     | ✅ Done        | 11 / 11     |
-| Sprint 2  | Dosen Submission Flow + Alumni Approval | ✅ Done        | 15 / 15     |
-| Sprint 3  | Admin Submission Mgmt + Reviewer Portal | ✅ Done        | 10 / 10     |
-| Sprint 4  | Navigation Integration                  | ✅ Done        | 1 / 1       |
-| **Total** |                                         |                | **50 / 50** |
+| Sprint    | Goal                                    | Status  | Completion  |
+| --------- | --------------------------------------- | ------- | ----------- |
+| Sprint 0  | Database & Infrastructure               | ✅ Done | 13 / 13     |
+| Sprint 1  | Admin Session & Tahap Field Builder     | ✅ Done | 11 / 11     |
+| Sprint 2  | Dosen Submission Flow + Alumni Approval | ✅ Done | 15 / 15     |
+| Sprint 3  | Admin Submission Mgmt + Reviewer Portal | ✅ Done | 10 / 10     |
+| Sprint 4  | Navigation Integration                  | ✅ Done | 1 / 1       |
+| **Total** |                                         |         | **50 / 50** |
