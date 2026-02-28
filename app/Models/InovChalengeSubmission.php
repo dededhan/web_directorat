@@ -57,6 +57,12 @@ class InovChalengeSubmission extends Model
         return $this->hasOne(InovChalengeSubmissionIdentitas::class, 'inov_chalenge_submission_id');
     }
 
+    public function statusLogs()
+    {
+        return $this->hasMany(InovChalengeStatusLog::class, 'inov_chalenge_submission_id')
+            ->orderByDesc('created_at');
+    }
+
     /**
      * Returns true when the identitas step is complete enough to unlock Tahap access.
      * Conditions:

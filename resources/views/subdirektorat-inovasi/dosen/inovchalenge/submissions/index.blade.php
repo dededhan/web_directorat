@@ -32,59 +32,51 @@
                                         Dibuat {{ $submission->created_at->format('d M Y H:i') }}
                                     </p>
 
-                                    {{-- Overall status --}}
-                                    <div class="mt-2">
-                                        @php
-                                            $statusColors = [
-                                                'draft' => 'bg-gray-100 text-gray-700',
-                                                'diajukan' => 'bg-blue-100 text-blue-700',
-                                                'menunggu_direview' => 'bg-yellow-100 text-yellow-700',
-                                                'sedang_direview' => 'bg-purple-100 text-purple-700',
-                                                'perbaikan_diperlukan' => 'bg-orange-100 text-orange-700',
-                                                'proses_tahap_selanjutnya' => 'bg-cyan-100 text-cyan-700',
-                                                'selesai' => 'bg-green-100 text-green-700',
-                                            ];
-                                            $statusLabel = str_replace(
-                                                '_',
-                                                ' ',
-                                                is_object($submission->status)
-                                                    ? $submission->status->value
-                                                    : $submission->status,
-                                            );
-                                            $statusKey = is_object($submission->status)
-                                                ? $submission->status->value
-                                                : $submission->status;
-                                        @endphp
-                                        <span
-                                            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold {{ $statusColors[$statusKey] ?? 'bg-gray-100 text-gray-700' }}">
-                                            {{ ucwords($statusLabel) }}
-                                        </span>
+                                    {{-- Tracking status per Tahap --}}
+                                    <div class="mt-3 flex flex-wrap gap-1.5">
+                                        @foreach ($submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke) as $st)
+                                            @php
+                                                $hasReviewer = $submission->reviewers->isNotEmpty() ?? false;
+                                                $tracking = $st->getTrackingStatus($hasReviewer);
+                                                $chipColors = [
+                                                    'belum_diisi' => 'bg-gray-100 text-gray-500 border-gray-200',
+                                                    'draft' => 'bg-yellow-50 text-yellow-700 border-yellow-200',
+                                                    'diajukan' => 'bg-blue-50 text-blue-700 border-blue-200',
+                                                    'sedang_direview' =>
+                                                        'bg-purple-50 text-purple-700 border-purple-200',
+                                                    'perbaikan' => 'bg-orange-50 text-orange-700 border-orange-200',
+                                                    'lolos' => 'bg-green-50 text-green-700 border-green-200',
+                                                ];
+                                            @endphp
+                                            <span
+                                                class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold border {{ $chipColors[$tracking['key']] ?? 'bg-gray-100 text-gray-500 border-gray-200' }}">
+                                                <i class="fas {{ $tracking['icon'] }} mr-1 text-[9px]"></i>
+                                                T{{ $st->tahap->tahap_ke }}: {{ $tracking['short'] }}
+                                            </span>
+                                        @endforeach
                                     </div>
                                 </div>
 
-                                {{-- Right: Tahap chips --}}
+                                {{-- Right: Tahap timing --}}
                                 <div class="flex flex-col gap-1.5">
                                     @foreach ($submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke) as $st)
                                         @php
-                                            $tahapColors = [
-                                                'belum_diisi' => 'bg-gray-100 text-gray-500 border-gray-200',
-                                                'draft' => 'bg-yellow-50 text-yellow-700 border-yellow-200',
-                                                'diajukan' => 'bg-green-50 text-green-700 border-green-200',
+                                            $timingStatus = $st->tahap->getTimingStatus();
+                                            $timingColors = [
+                                                'belum_dibuka' => 'bg-red-50 text-red-600 border-red-200',
+                                                'dibuka' => 'bg-green-50 text-green-600 border-green-200',
+                                                'ditutup' => 'bg-gray-100 text-gray-500 border-gray-200',
                                             ];
-                                            $adminColors = [
-                                                'menunggu' => '',
-                                                'disetujui' => 'ring-2 ring-green-300',
-                                                'perbaikan' => 'ring-2 ring-orange-300',
-                                                'selesai' => 'ring-2 ring-blue-300',
-                                            ];
+                                            $timingLabel = match ($timingStatus) {
+                                                'belum_dibuka' => 'Belum Dibuka',
+                                                'ditutup' => 'Ditutup',
+                                                default => 'Dibuka',
+                                            };
                                         @endphp
                                         <span
-                                            class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium border {{ $tahapColors[$st->status] ?? '' }} {{ $adminColors[$st->admin_status] ?? '' }}">
+                                            class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium border {{ $timingColors[$timingStatus] ?? '' }}">
                                             <span class="w-5 font-bold">T{{ $st->tahap->tahap_ke }}</span>
-                                            <span class="ml-1">{{ ucwords(str_replace('_', ' ', $st->status)) }}</span>
-                                            @if ($st->admin_status !== 'menunggu')
-                                                <span class="ml-1 text-[10px] opacity-75">({{ $st->admin_status }})</span>
-                                            @endif
+                                            <span class="ml-1">{{ $timingLabel }}</span>
                                         </span>
                                     @endforeach
                                 </div>

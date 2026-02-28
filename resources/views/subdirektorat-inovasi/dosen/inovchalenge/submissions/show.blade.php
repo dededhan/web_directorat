@@ -30,12 +30,14 @@
 
             {{-- ═══ Identitas Tim Banner ═══ --}}
             @if (!$submission->identitasIsComplete())
-                <div class="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div
+                    class="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div class="flex items-start gap-3 text-orange-700">
                         <i class="fas fa-exclamation-triangle text-lg mt-0.5 flex-shrink-0"></i>
                         <div>
                             <p class="font-semibold text-sm">Identitas Tim belum lengkap</p>
-                            <p class="text-xs mt-0.5 text-orange-600">Lengkapi Identitas Tim &amp; tambahkan minimal 1 anggota non-Ketua sebelum mengisi tahap.</p>
+                            <p class="text-xs mt-0.5 text-orange-600">Lengkapi Identitas Tim &amp; tambahkan minimal 1
+                                anggota non-Ketua sebelum mengisi tahap.</p>
                         </div>
                     </div>
                     <a href="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.identitas', $submission) }}"
@@ -72,100 +74,142 @@
                 </div>
             @endif
 
-            {{-- Overall Status --}}
-            @php
-                $overallColors = [
-                    'draft' => 'from-gray-400 to-gray-500',
-                    'diajukan' => 'from-blue-400 to-blue-500',
-                    'menunggu_direview' => 'from-yellow-400 to-yellow-500',
-                    'sedang_direview' => 'from-purple-400 to-purple-500',
-                    'perbaikan_diperlukan' => 'from-orange-400 to-orange-500',
-                    'proses_tahap_selanjutnya' => 'from-cyan-400 to-cyan-500',
-                    'selesai' => 'from-green-400 to-green-500',
-                ];
-                $statusKey = is_object($submission->status) ? $submission->status->value : $submission->status;
-            @endphp
-            <div
-                class="bg-gradient-to-r {{ $overallColors[$statusKey] ?? 'from-gray-400 to-gray-500' }} rounded-2xl p-5 mb-8 text-white shadow-lg">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-white/70 text-xs font-medium uppercase tracking-wider">Status Keseluruhan</p>
-                        <p class="text-lg font-bold mt-0.5">{{ ucwords(str_replace('_', ' ', $statusKey)) }}</p>
-                    </div>
-                    <div class="text-4xl opacity-30">
-                        <i class="fas fa-clipboard-check"></i>
+            {{-- ═══ Tracking Progress Per Tahap ═══ --}}
+            <div class="mb-8">
+                <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-tasks text-teal-500"></i> Tracking Progress
+                </h2>
+
+                {{-- Progress Steps (horizontal tracker) --}}
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-6">
+                    <div class="p-5">
+                        <div class="flex items-center justify-between relative">
+                            @foreach ($submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke) as $idx => $st)
+                                @php
+                                    $tracking = $st->getTrackingStatus($hasReviewer ?? false);
+                                    $stepColors = [
+                                        'belum_diisi' => 'bg-gray-200 text-gray-500',
+                                        'draft' => 'bg-yellow-400 text-white',
+                                        'diajukan' => 'bg-blue-500 text-white',
+                                        'sedang_direview' => 'bg-purple-500 text-white',
+                                        'perbaikan' => 'bg-orange-500 text-white',
+                                        'lolos' => 'bg-green-500 text-white',
+                                    ];
+                                    $lineColors = [
+                                        'lolos' => 'bg-green-400',
+                                        'default' => 'bg-gray-200',
+                                    ];
+                                @endphp
+                                <div class="flex flex-col items-center flex-1 relative z-10">
+                                    <div
+                                        class="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold shadow-md {{ $stepColors[$tracking['key']] ?? 'bg-gray-200 text-gray-500' }}">
+                                        <i class="fas {{ $tracking['icon'] }}"></i>
+                                    </div>
+                                    <p class="mt-2 text-xs font-bold text-gray-700 text-center">Tahap
+                                        {{ $st->tahap->tahap_ke }}</p>
+                                    <p
+                                        class="text-[11px] text-center font-semibold mt-0.5 {{ $tracking['key'] === 'lolos' ? 'text-green-600' : ($tracking['key'] === 'perbaikan' ? 'text-orange-600' : 'text-gray-500') }}">
+                                        {{ $tracking['short'] }}
+                                    </p>
+                                </div>
+                                @if (!$loop->last)
+                                    <div
+                                        class="flex-1 h-1 rounded {{ $tracking['key'] === 'lolos' ? 'bg-green-400' : 'bg-gray-200' }} -mt-6 mx-1">
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {{-- 3-Tahap Progress Tracker --}}
+            {{-- 3-Tahap Cards --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 @foreach ($submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke) as $st)
                     @php
                         $tahap = $st->tahap;
                         $isEditable = $st->isEditable();
-                        $statusMap = [
-                            'belum_diisi' => ['icon' => 'fa-circle', 'color' => 'gray', 'label' => 'Belum Diisi'],
-                            'draft' => ['icon' => 'fa-edit', 'color' => 'yellow', 'label' => 'Draft'],
-                            'diajukan' => ['icon' => 'fa-check-circle', 'color' => 'green', 'label' => 'Diajukan'],
+                        $tracking = $st->getTrackingStatus($hasReviewer ?? false);
+                        $timingStatus = $tahap->getTimingStatus();
+
+                        $trackingBadgeColors = [
+                            'belum_diisi' => 'bg-gray-100 text-gray-600',
+                            'draft' => 'bg-yellow-100 text-yellow-700',
+                            'diajukan' => 'bg-blue-100 text-blue-700',
+                            'sedang_direview' => 'bg-purple-100 text-purple-700',
+                            'perbaikan' => 'bg-orange-100 text-orange-700',
+                            'lolos' => 'bg-green-100 text-green-700',
                         ];
-                        $adminMap = [
-                            'menunggu' => ['icon' => 'fa-clock', 'color' => 'gray', 'label' => 'Menunggu'],
-                            'disetujui' => ['icon' => 'fa-thumbs-up', 'color' => 'green', 'label' => 'Disetujui'],
-                            'perbaikan' => ['icon' => 'fa-redo', 'color' => 'orange', 'label' => 'Perbaikan'],
-                            'selesai' => ['icon' => 'fa-flag-checkered', 'color' => 'blue', 'label' => 'Selesai'],
-                        ];
-                        $s = $statusMap[$st->status] ?? $statusMap['belum_diisi'];
-                        $a = $adminMap[$st->admin_status] ?? $adminMap['menunggu'];
+
+                        $timingBadge = match ($timingStatus) {
+                            'belum_dibuka' => [
+                                'label' => 'Belum Dibuka',
+                                'color' => 'bg-red-100 text-red-600',
+                                'icon' => 'fa-lock',
+                            ],
+                            'ditutup' => [
+                                'label' => 'Ditutup',
+                                'color' => 'bg-gray-200 text-gray-500',
+                                'icon' => 'fa-ban',
+                            ],
+                            default => [
+                                'label' => 'Dibuka',
+                                'color' => 'bg-green-100 text-green-600',
+                                'icon' => 'fa-unlock',
+                            ],
+                        };
+
+                        $headerGradient = match ($tracking['key']) {
+                            'lolos' => 'from-green-500 to-green-600',
+                            'perbaikan' => 'from-orange-500 to-orange-600',
+                            'sedang_direview' => 'from-purple-500 to-purple-600',
+                            'diajukan' => 'from-blue-500 to-blue-600',
+                            'draft' => 'from-yellow-500 to-yellow-600',
+                            default => 'from-teal-500 to-teal-600',
+                        };
                     @endphp
                     <div
-                        class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition">
+                        class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition {{ $timingStatus === 'belum_dibuka' ? 'opacity-60' : '' }}">
                         {{-- Tahap Header --}}
-                        <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-5 py-4 text-white">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-lg font-bold">
-                                        {{ $tahap->tahap_ke }}
-                                    </div>
-                                    <div>
-                                        <h3 class="font-bold text-sm">{{ $tahap->judul }}</h3>
-                                    </div>
+                        <div class="bg-gradient-to-r {{ $headerGradient }} px-5 py-4 text-white">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-lg font-bold">
+                                    {{ $tahap->tahap_ke }}
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-bold text-sm">{{ $tahap->nama_tahap }}</h3>
+                                    <span
+                                        class="inline-flex items-center px-2 py-0.5 mt-1 rounded-full text-[10px] font-bold bg-white/20 text-white/90">
+                                        <i class="fas {{ $tracking['icon'] }} mr-1"></i>{{ $tracking['short'] }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="p-5 space-y-4">
-                            {{-- Description --}}
-                            @if ($tahap->deskripsi)
-                                <p class="text-xs text-gray-500">{{ Str::limit($tahap->deskripsi, 80) }}</p>
-                            @endif
-
-                            {{-- Period --}}
+                        <div class="p-5 space-y-3">
+                            {{-- Timing badge --}}
                             @if ($tahap->periode_awal && $tahap->periode_akhir)
-                                <div class="flex items-center text-xs text-gray-400">
-                                    <i class="fas fa-calendar-alt mr-1.5"></i>
-                                    {{ $tahap->periode_awal->format('d M Y') }} –
-                                    {{ $tahap->periode_akhir->format('d M Y') }}
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center text-xs text-gray-400">
+                                        <i class="fas fa-calendar-alt mr-1.5"></i>
+                                        {{ $tahap->periode_awal->format('d M Y') }} –
+                                        {{ $tahap->periode_akhir->format('d M Y') }}
+                                    </div>
+                                    <span
+                                        class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold {{ $timingBadge['color'] }}">
+                                        <i
+                                            class="fas {{ $timingBadge['icon'] }} mr-1 text-[8px]"></i>{{ $timingBadge['label'] }}
+                                    </span>
                                 </div>
                             @endif
 
-                            {{-- Submission Status --}}
-                            <div class="flex flex-col gap-2">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs text-gray-400 w-16">Dosen:</span>
-                                    <span
-                                        class="inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full bg-{{ $s['color'] }}-100 text-{{ $s['color'] }}-700">
-                                        <i class="fas {{ $s['icon'] }} mr-1 text-[10px]"></i>{{ $s['label'] }}
-                                    </span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs text-gray-400 w-16">Admin:</span>
-                                    <span
-                                        class="inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full bg-{{ $a['color'] }}-100 text-{{ $a['color'] }}-700">
-                                        <i class="fas {{ $a['icon'] }} mr-1 text-[10px]"></i>{{ $a['label'] }}
-                                    </span>
-                                </div>
+                            {{-- Tracking Status Badge --}}
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold {{ $trackingBadgeColors[$tracking['key']] ?? 'bg-gray-100 text-gray-600' }}">
+                                    <i class="fas {{ $tracking['icon'] }} mr-1.5 text-[10px]"></i>{{ $tracking['label'] }}
+                                </span>
                             </div>
 
                             {{-- Submitted at --}}
@@ -191,6 +235,11 @@
                                         class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-orange-100 text-orange-600 text-sm font-medium rounded-xl hover:bg-orange-200 transition">
                                         <i class="fas fa-lock mr-1.5"></i> Lengkapi Identitas Dulu
                                     </a>
+                                @elseif ($timingStatus === 'belum_dibuka')
+                                    <button disabled
+                                        class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-gray-100 text-gray-400 text-sm font-medium rounded-xl cursor-not-allowed">
+                                        <i class="fas fa-lock mr-1.5"></i> Belum Dibuka
+                                    </button>
                                 @elseif ($isEditable)
                                     <a href="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.tahap', [$submission, $tahap->id]) }}"
                                         class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white text-sm font-medium rounded-xl hover:from-teal-600 hover:to-teal-700 transition shadow-sm">
@@ -228,35 +277,148 @@
                                         <div>
                                             <p class="text-sm font-medium text-gray-900">{{ $member->nama_lengkap }}</p>
                                             <p class="text-xs text-gray-400">
-                                                {{ ucfirst($member->tipe_anggota) }}{{ $member->peran ? ' — ' . $member->peran : '' }}
+                                                {{ $member->getTipeLabel() }}{{ $member->peran ? ' — ' . $member->peran : '' }}
                                             </p>
                                         </div>
                                     </div>
-                                    <div>
-                                        @if ($member->tipe_anggota === 'alumni')
-                                            @php
-                                                $apColors = [
-                                                    'pending' => 'bg-yellow-100 text-yellow-700',
-                                                    'approved' => 'bg-green-100 text-green-700',
-                                                    'rejected' => 'bg-red-100 text-red-700',
-                                                ];
-                                            @endphp
-                                            <span
-                                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold {{ $apColors[$member->approval_status] ?? 'bg-gray-100 text-gray-700' }}">
-                                                {{ ucfirst($member->approval_status) }}
-                                            </span>
-                                        @elseif($member->peran === 'Ketua')
+                                    <div class="flex items-center gap-2">
+                                        @if ($member->peran === 'Ketua')
                                             <span
                                                 class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-teal-100 text-teal-700">
                                                 <i class="fas fa-crown mr-1 text-[9px]"></i> Ketua
                                             </span>
                                         @endif
+                                        @php $badge = $member->getApprovalBadge(); @endphp
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold {{ $badge['color'] }}">
+                                            <i class="{{ $badge['icon'] }} mr-1 text-[9px]"></i>
+                                            {{ $badge['label'] }}
+                                        </span>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
                     @else
                         <p class="text-sm text-gray-400 text-center py-4">Belum ada anggota tim</p>
+                    @endif
+                </div>
+            </div>
+
+            {{-- ═══ Riwayat Perubahan Status ═══ --}}
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mt-6">
+                <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-gray-900">
+                        <i class="fas fa-bell mr-2 text-teal-500"></i>Notifikasi &amp; Riwayat Status
+                    </h2>
+                    @if ($submission->statusLogs->count() > 5)
+                        <span class="text-xs text-gray-400">{{ $submission->statusLogs->count() }} aktivitas</span>
+                    @endif
+                </div>
+                <div class="p-6">
+                    @if ($submission->statusLogs->count())
+                        <div class="relative">
+                            {{-- Timeline line --}}
+                            <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+
+                            <div class="space-y-0">
+                                @foreach ($submission->statusLogs->take(20) as $log)
+                                    @php
+                                        $dotColors = [
+                                            'draft' => 'bg-yellow-400',
+                                            'diajukan' => 'bg-blue-500',
+                                            'menunggu' => 'bg-gray-400',
+                                            'menunggu_direview' => 'bg-yellow-500',
+                                            'sedang_direview' => 'bg-purple-500',
+                                            'disetujui' => 'bg-green-500',
+                                            'perbaikan' => 'bg-orange-500',
+                                            'perbaikan_diperlukan' => 'bg-orange-500',
+                                            'selesai' => 'bg-teal-500',
+                                            'proses_tahap_selanjutnya' => 'bg-cyan-500',
+                                            'belum_diisi' => 'bg-gray-300',
+                                        ];
+                                        $dotColor = $dotColors[$log->status_ke] ?? 'bg-gray-400';
+
+                                        $roleColors = [
+                                            'dosen' => 'text-teal-600',
+                                            'admin' => 'text-indigo-600',
+                                            'system' => 'text-gray-500',
+                                        ];
+                                        $roleColor = $roleColors[$log->causer_role] ?? 'text-gray-500';
+
+                                        $roleBadge = match ($log->causer_role) {
+                                            'admin' => 'bg-indigo-100 text-indigo-700',
+                                            'dosen' => 'bg-teal-100 text-teal-700',
+                                            default => 'bg-gray-100 text-gray-600',
+                                        };
+                                    @endphp
+                                    <div class="relative pl-10 pb-5">
+                                        {{-- Dot --}}
+                                        <div
+                                            class="absolute left-2.5 top-1 w-3 h-3 rounded-full {{ $dotColor }} ring-2 ring-white shadow-sm z-10">
+                                        </div>
+
+                                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1">
+                                            <div class="flex-1">
+                                                {{-- Status change text --}}
+                                                <p class="text-sm text-gray-800 font-medium leading-snug">
+                                                    @if ($log->tipe === 'tahap' && $log->tahap)
+                                                        <span
+                                                            class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-gray-100 text-gray-600 mr-1">
+                                                            T{{ $log->tahap->tahap_ke }}
+                                                        </span>
+                                                    @endif
+                                                    {{ $log->keterangan ?? $log->getStatusLabel($log->status_ke) }}
+                                                </p>
+
+                                                {{-- From → To badges --}}
+                                                <div class="flex items-center gap-1.5 mt-1">
+                                                    @if ($log->status_dari)
+                                                        <span
+                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 text-gray-500">
+                                                            {{ $log->getStatusLabel($log->status_dari) }}
+                                                        </span>
+                                                        <i class="fas fa-arrow-right text-[8px] text-gray-300"></i>
+                                                    @endif
+                                                    <span
+                                                        class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold {{ str_replace('bg-', 'bg-', $dotColor) }} bg-opacity-20 {{ $roleColor }}">
+                                                        <i class="fas {{ $log->getStatusIcon() }} mr-1 text-[8px]"></i>
+                                                        {{ $log->getStatusLabel($log->status_ke) }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {{-- Timestamp + role --}}
+                                            <div class="flex items-center gap-2 flex-shrink-0 mt-1 sm:mt-0">
+                                                <span
+                                                    class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold {{ $roleBadge }}">
+                                                    {{ ucfirst($log->causer_role ?? 'system') }}
+                                                </span>
+                                                <span class="text-[11px] text-gray-400 whitespace-nowrap">
+                                                    <i class="far fa-clock mr-0.5"></i>
+                                                    {{ $log->created_at->format('d M Y') }}
+                                                    <span
+                                                        class="font-semibold">{{ $log->created_at->format('H:i') }}</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            @if ($submission->statusLogs->count() > 20)
+                                <div class="pl-10 pt-2 text-xs text-gray-400">
+                                    <i class="fas fa-ellipsis-h mr-1"></i> +{{ $submission->statusLogs->count() - 20 }}
+                                    aktivitas lainnya
+                                </div>
+                            @endif
+                        </div>
+                    @else
+                        <div class="text-center py-8">
+                            <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-bell-slash text-xl text-gray-300"></i>
+                            </div>
+                            <p class="text-sm text-gray-400">Belum ada riwayat perubahan status</p>
+                        </div>
                     @endif
                 </div>
             </div>

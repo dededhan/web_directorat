@@ -68,6 +68,12 @@ Route::prefix('admin_inovasi/inovchalenge')->name('admin_inovasi.inovchalenge.')
             ->name('submissions.assignReviewer');
         Route::patch('submission-tahap/{submissionTahap}/status', [SubmissionAdminController::class, 'updateTahapStatus'])
             ->name('submissions.updateTahapStatus');
+
+        // Member approval by admin
+        Route::patch('submissions/{submission}/members/{member}/approve', [SubmissionAdminController::class, 'approveMember'])
+            ->name('submissions.members.approve');
+        Route::patch('submissions/{submission}/members/{member}/reject', [SubmissionAdminController::class, 'rejectMember'])
+            ->name('submissions.members.reject');
     });
 
 // ── Dosen Routes ──────────────────────────────────────────────────────────

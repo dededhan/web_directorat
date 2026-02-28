@@ -4,11 +4,14 @@ namespace App\Http\Controllers\InovChalenge;
 
 use App\Http\Controllers\Controller;
 use App\Models\InovChalengeSubmission;
+use App\Models\InovChalengeSubmissionMember;
 use App\Models\InovChalengeSubmissionTahap;
 use App\Models\InovChalengeFieldValue;
 use App\Models\InovChalengeReview;
+use App\Models\InovChalengeStatusLog;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SubmissionAdminController extends Controller
 {
@@ -17,7 +20,7 @@ class SubmissionAdminController extends Controller
      */
     public function index(Request $request)
     {
-        $query = InovChalengeSubmission::with(['session', 'user', 'submissionTahap.tahap'])
+        $query = InovChalengeSubmission::with(['session', 'user', 'submissionTahap.tahap', 'members'])
             ->withCount('reviewers');
 
         // Filter by session
@@ -104,6 +107,16 @@ class SubmissionAdminController extends Controller
 
         $submission->reviewers()->sync($newIds);
 
+        // Log reviewer assignment
+        InovChalengeStatusLog::logSubmissionStatus(
+            $submission->id,
+            is_object($submission->status) ? $submission->status->value : $submission->status,
+            'sedang_direview',
+            'Reviewer diassign oleh admin',
+            Auth::id(),
+            'admin'
+        );
+
         return back()->with('success', 'Reviewer berhasil diperbarui.');
     }
 
@@ -116,7 +129,17 @@ class SubmissionAdminController extends Controller
             'status' => 'required|in:draft,diajukan,menunggu_direview,sedang_direview,perbaikan_diperlukan,proses_tahap_selanjutnya,selesai',
         ]);
 
+        $oldStatus = is_object($submission->status) ? $submission->status->value : $submission->status;
         $submission->update(['status' => $request->status]);
+
+        InovChalengeStatusLog::logSubmissionStatus(
+            $submission->id,
+            $oldStatus,
+            $request->status,
+            'Status submission diubah oleh admin',
+            Auth::id(),
+            'admin'
+        );
 
         return back()->with('success', 'Status submission berhasil diperbarui.');
     }
@@ -132,11 +155,29 @@ class SubmissionAdminController extends Controller
             'nominal_evaluasi' => 'nullable|numeric|min:0',
         ]);
 
+        $oldAdminStatus = $submissionTahap->admin_status;
+        $tahapKe = $submissionTahap->tahap->tahap_ke ?? '?';
+
         $submissionTahap->update([
             'admin_status' => $request->admin_status,
             'catatan_admin' => $request->catatan_admin,
             'nominal_evaluasi' => $request->nominal_evaluasi,
         ]);
+
+        // Log: admin changed tahap status
+        $keterangan = 'Status Tahap ' . $tahapKe . ' diubah menjadi ' . ucfirst($request->admin_status) . ' oleh admin';
+        if ($request->catatan_admin) {
+            $keterangan .= ': ' . $request->catatan_admin;
+        }
+        InovChalengeStatusLog::logTahapStatus(
+            $submissionTahap->inov_chalenge_submission_id,
+            $submissionTahap->inov_chalenge_tahap_id,
+            $oldAdminStatus,
+            $request->admin_status,
+            $keterangan,
+            Auth::id(),
+            'admin'
+        );
 
         // If set to perbaikan, also reset dosen status to draft so they can re-edit
         if ($request->admin_status === 'perbaikan') {
@@ -144,5 +185,55 @@ class SubmissionAdminController extends Controller
         }
 
         return back()->with('success', 'Status tahap berhasil diperbarui.');
+    }
+
+    /**
+     * Approve a pending team member.
+     */
+    public function approveMember(InovChalengeSubmission $submission, InovChalengeSubmissionMember $member)
+    {
+        abort_if($member->inov_chalenge_submission_id !== $submission->id, 404);
+        abort_if($member->approval_status !== 'pending', 422, 'Anggota ini tidak dalam status pending.');
+
+        $member->update([
+            'approval_status' => 'approved',
+            'responded_at' => now(),
+        ]);
+
+        InovChalengeStatusLog::logSubmissionStatus(
+            $submission->id,
+            is_object($submission->status) ? $submission->status->value : $submission->status,
+            is_object($submission->status) ? $submission->status->value : $submission->status,
+            "Anggota {$member->nama_lengkap} ({$member->getTipeLabel()}) disetujui oleh admin",
+            Auth::id(),
+            'admin'
+        );
+
+        return back()->with('success', "Anggota {$member->nama_lengkap} berhasil disetujui.");
+    }
+
+    /**
+     * Reject a pending team member.
+     */
+    public function rejectMember(InovChalengeSubmission $submission, InovChalengeSubmissionMember $member)
+    {
+        abort_if($member->inov_chalenge_submission_id !== $submission->id, 404);
+        abort_if($member->approval_status !== 'pending', 422, 'Anggota ini tidak dalam status pending.');
+
+        $member->update([
+            'approval_status' => 'rejected',
+            'responded_at' => now(),
+        ]);
+
+        InovChalengeStatusLog::logSubmissionStatus(
+            $submission->id,
+            is_object($submission->status) ? $submission->status->value : $submission->status,
+            is_object($submission->status) ? $submission->status->value : $submission->status,
+            "Anggota {$member->nama_lengkap} ({$member->getTipeLabel()}) ditolak oleh admin",
+            Auth::id(),
+            'admin'
+        );
+
+        return back()->with('success', "Anggota {$member->nama_lengkap} berhasil ditolak.");
     }
 }

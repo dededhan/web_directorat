@@ -8,6 +8,7 @@ use App\Models\InovChalengeSubmission;
 use App\Models\InovChalengeSubmissionIdentitas;
 use App\Models\InovChalengeSubmissionTahap;
 use App\Models\InovChalengeFieldValue;
+use App\Models\InovChalengeStatusLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -51,7 +52,7 @@ class DosenController extends Controller
     public function mySubmissions()
     {
         $submissions = InovChalengeSubmission::where('user_id', Auth::id())
-            ->with(['session', 'submissionTahap.tahap'])
+            ->with(['session', 'submissionTahap.tahap', 'reviewers'])
             ->latest()
             ->paginate(10);
 
@@ -128,6 +129,16 @@ class DosenController extends Controller
                 'approval_status' => 'not_required',
             ]);
 
+            // Log: submission created
+            InovChalengeStatusLog::logSubmissionStatus(
+                $submission->id,
+                null,
+                'draft',
+                'Submission baru dibuat',
+                $user->id,
+                'dosen'
+            );
+
             return $submission;
         });
 
@@ -148,9 +159,15 @@ class DosenController extends Controller
             'submissionTahap.tahap',
             'members.user',
             'identitas',
+            'reviewers',
+            'statusLogs.tahap',
+            'statusLogs.causer',
         ]);
 
-        return view('subdirektorat-inovasi.dosen.inovchalenge.submissions.show', compact('submission'));
+        // Pre-compute whether this submission has assigned reviewers
+        $hasReviewer = $submission->reviewers->isNotEmpty();
+
+        return view('subdirektorat-inovasi.dosen.inovchalenge.submissions.show', compact('submission', 'hasReviewer'));
     }
 
     /**
@@ -226,6 +243,14 @@ class DosenController extends Controller
 
         $submissionTahap->load(['tahap.sections.fields', 'tahap.unsectionedFields']);
 
+        // Check tahap timing — redirect if not yet open
+        $tahapModel = $submissionTahap->tahap;
+        if ($tahapModel->isUpcoming()) {
+            return redirect()
+                ->route('subdirektorat-inovasi.dosen.inovchalenge.submissions.show', $submission)
+                ->with('error', 'Tahap ' . $tahapModel->tahap_ke . ' belum dibuka. Periode dimulai ' . $tahapModel->periode_awal->format('d M Y H:i') . '.');
+        }
+
         // Load existing field values keyed by field_id
         $fieldValues = InovChalengeFieldValue::where('inov_chalenge_submission_id', $submission->id)
             ->where('inov_chalenge_tahap_id', $tahapId)
@@ -272,11 +297,29 @@ class DosenController extends Controller
 
             // Update status to draft if belum_diisi
             if ($submissionTahap->status === 'belum_diisi') {
+                InovChalengeStatusLog::logTahapStatus(
+                    $submission->id,
+                    $tahap->id,
+                    'belum_diisi',
+                    'draft',
+                    'Tahap ' . $tahap->tahap_ke . ' mulai diisi',
+                    Auth::id(),
+                    'dosen'
+                );
                 $submissionTahap->update(['status' => 'draft']);
             }
 
             // If returning from perbaikan, reset to draft
             if ($submissionTahap->admin_status === 'perbaikan') {
+                InovChalengeStatusLog::logTahapStatus(
+                    $submission->id,
+                    $tahap->id,
+                    'perbaikan',
+                    'draft',
+                    'Tahap ' . $tahap->tahap_ke . ' diperbaiki oleh dosen',
+                    Auth::id(),
+                    'dosen'
+                );
                 $submissionTahap->update(['status' => 'draft']);
             }
         });
@@ -326,18 +369,39 @@ class DosenController extends Controller
                 $this->saveFieldValue($request, $submission->id, $tahap->id, $field);
             }
 
+            $oldStatus = $submissionTahap->status;
             $submissionTahap->update([
                 'status' => 'diajukan',
                 'submitted_at' => now(),
             ]);
 
-            // Check if all tahap are submitted → update overall status
+            // Log: tahap submitted
+            InovChalengeStatusLog::logTahapStatus(
+                $submission->id,
+                $tahap->id,
+                $oldStatus,
+                'diajukan',
+                'Tahap ' . $tahap->tahap_ke . ' diajukan oleh dosen',
+                Auth::id(),
+                'dosen'
+            );
+
+            // Check if all tahap are submitted -> update overall status
             $allSubmitted = InovChalengeSubmissionTahap::where('inov_chalenge_submission_id', $submission->id)
                 ->where('status', '!=', 'diajukan')
                 ->doesntExist();
 
             if ($allSubmitted) {
+                $oldOverall = is_object($submission->status) ? $submission->status->value : $submission->status;
                 $submission->update(['status' => 'diajukan']);
+                InovChalengeStatusLog::logSubmissionStatus(
+                    $submission->id,
+                    $oldOverall,
+                    'diajukan',
+                    'Semua tahap telah diajukan',
+                    Auth::id(),
+                    'dosen'
+                );
             }
         });
 

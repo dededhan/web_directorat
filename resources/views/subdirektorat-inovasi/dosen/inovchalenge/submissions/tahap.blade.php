@@ -12,8 +12,7 @@
             {{-- Header --}}
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">Tahap {{ $tahap->tahap_ke }}: {{ $tahap->judul }}</h1>
-                    <p class="mt-1 text-sm text-gray-500">{{ $submission->session->nama_sesi }}</p>
+                    <h1 class="text-2xl font-bold text-gray-900">{{ $tahap->nama_tahap }}</h1>
                 </div>
                 <a href="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.show', $submission) }}"
                     class="mt-4 sm:mt-0 inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 font-medium text-sm rounded-xl hover:bg-gray-200 transition">
@@ -33,32 +32,32 @@
                 </div>
             @endif
 
-            {{-- Status banner --}}
+            {{-- Status badge --}}
             <div class="mb-6 flex flex-wrap gap-2 items-center text-sm">
                 @php
-                    $statusBadge = match ($submissionTahap->status) {
+                    $tracking = $submissionTahap->getTrackingStatus();
+                    $trackingBadgeColors = [
                         'belum_diisi' => 'bg-gray-100 text-gray-600',
                         'draft' => 'bg-yellow-100 text-yellow-700',
-                        'diajukan' => 'bg-green-100 text-green-700',
-                        default => 'bg-gray-100 text-gray-600',
-                    };
+                        'diajukan' => 'bg-blue-100 text-blue-700',
+                        'sedang_direview' => 'bg-purple-100 text-purple-700',
+                        'perbaikan' => 'bg-orange-100 text-orange-700',
+                        'lolos' => 'bg-green-100 text-green-700',
+                    ];
                 @endphp
-                <span class="inline-flex items-center px-3 py-1 rounded-full font-semibold {{ $statusBadge }}">
-                    <i class="fas fa-circle text-[8px] mr-1.5"></i>
-                    {{ ucwords(str_replace('_', ' ', $submissionTahap->status)) }}
+                <span
+                    class="inline-flex items-center px-3 py-1 rounded-full font-semibold {{ $trackingBadgeColors[$tracking['key']] ?? 'bg-gray-100 text-gray-600' }}">
+                    <i class="fas {{ $tracking['icon'] }} text-[8px] mr-1.5"></i>
+                    {{ $tracking['label'] }}
                 </span>
-                @if ($submissionTahap->admin_status !== 'menunggu')
-                    @php
-                        $adminBadge = match ($submissionTahap->admin_status) {
-                            'disetujui' => 'bg-green-100 text-green-700',
-                            'perbaikan' => 'bg-orange-100 text-orange-700',
-                            'selesai' => 'bg-blue-100 text-blue-700',
-                            default => 'bg-gray-100 text-gray-600',
-                        };
-                    @endphp
-                    <span class="inline-flex items-center px-3 py-1 rounded-full font-semibold {{ $adminBadge }}">
-                        Admin: {{ ucfirst($submissionTahap->admin_status) }}
-                    </span>
+                @if ($tahap->periode_awal && $tahap->periode_akhir)
+                    @php $timingStatus = $tahap->getTimingStatus(); @endphp
+                    @if ($timingStatus === 'ditutup')
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-full font-semibold bg-gray-200 text-gray-500">
+                            <i class="fas fa-ban mr-1 text-[10px]"></i> Periode Ditutup
+                        </span>
+                    @endif
                 @endif
                 @if (!$isEditable)
                     <span class="inline-flex items-center px-3 py-1 rounded-full font-semibold bg-red-100 text-red-600">
@@ -72,13 +71,6 @@
                 <div class="mb-6 bg-orange-50 border border-orange-200 rounded-xl p-4 text-sm text-orange-700">
                     <p class="font-semibold mb-1"><i class="fas fa-comment-alt mr-1"></i> Catatan dari Admin:</p>
                     <p>{{ $submissionTahap->catatan_admin }}</p>
-                </div>
-            @endif
-
-            {{-- Description --}}
-            @if ($tahap->deskripsi)
-                <div class="mb-6 bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-700">
-                    <i class="fas fa-info-circle mr-1"></i> {{ $tahap->deskripsi }}
                 </div>
             @endif
 
@@ -137,7 +129,8 @@
                         </div>
                         <div class="p-6 space-y-6">
                             @if ($tahap->fields->isEmpty())
-                                <p class="text-sm text-gray-400 text-center py-4">Belum ada field yang dikonfigurasi untuk tahap ini.</p>
+                                <p class="text-sm text-gray-400 text-center py-4">Belum ada field yang dikonfigurasi untuk
+                                    tahap ini.</p>
                             @else
                                 @foreach ($tahap->fields->sortBy('urutan') as $field)
                                     @include('subdirektorat-inovasi.dosen.inovchalenge.submissions._field_input')
@@ -205,6 +198,5 @@
                 }
             });
         });
-
     </script>
 @endpush

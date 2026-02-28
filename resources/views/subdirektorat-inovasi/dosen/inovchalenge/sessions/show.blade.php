@@ -56,7 +56,28 @@
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 @foreach ($session->tahap as $tahap)
-                    <div class="bg-white rounded-xl shadow border border-gray-100 p-5">
+                    @php
+                        $timingStatus = $tahap->getTimingStatus();
+                        $timingBadge = match ($timingStatus) {
+                            'belum_dibuka' => [
+                                'label' => 'Belum Dibuka',
+                                'color' => 'bg-red-100 text-red-600',
+                                'icon' => 'fa-lock',
+                            ],
+                            'ditutup' => [
+                                'label' => 'Ditutup',
+                                'color' => 'bg-gray-200 text-gray-500',
+                                'icon' => 'fa-ban',
+                            ],
+                            default => [
+                                'label' => 'Dibuka',
+                                'color' => 'bg-green-100 text-green-600',
+                                'icon' => 'fa-unlock',
+                            ],
+                        };
+                    @endphp
+                    <div
+                        class="bg-white rounded-xl shadow border border-gray-100 p-5 {{ $timingStatus === 'belum_dibuka' ? 'opacity-60' : '' }}">
                         <div class="flex items-center mb-2">
                             <span
                                 class="flex items-center justify-center w-8 h-8 rounded-lg text-white text-sm font-bold
@@ -69,18 +90,10 @@
                             <p class="text-xs text-gray-500 mb-2">{{ $tahap->deskripsi }}</p>
                         @endif
                         <div class="flex flex-wrap gap-1.5">
-                            @if ($tahap->has_anggota)
-                                <span
-                                    class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-700">
-                                    <i class="fas fa-users mr-1"></i> Tim
-                                </span>
-                            @endif
-                            @if ($tahap->has_fakultas)
-                                <span
-                                    class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-green-50 text-green-700">
-                                    <i class="fas fa-university mr-1"></i> Fakultas
-                                </span>
-                            @endif
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium {{ $timingBadge['color'] }}">
+                                <i class="fas {{ $timingBadge['icon'] }} mr-1"></i> {{ $timingBadge['label'] }}
+                            </span>
                             <span
                                 class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-600">
                                 {{ $tahap->fields->count() }} field(s)

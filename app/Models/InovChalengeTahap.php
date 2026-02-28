@@ -46,4 +46,43 @@ class InovChalengeTahap extends Model
             ->whereNull('inov_chalenge_tahap_section_id')
             ->orderBy('urutan');
     }
+
+    // ── Timing helpers ──────────────────────────────────────────
+
+    /**
+     * Check if this tahap period has started and not yet ended.
+     */
+    public function isOpen(): bool
+    {
+        $now = now();
+        if ($this->periode_awal && $now->lt($this->periode_awal)) return false;
+        if ($this->periode_akhir && $now->gt($this->periode_akhir)) return false;
+        return true;
+    }
+
+    /**
+     * Check if this tahap period hasn't started yet.
+     */
+    public function isUpcoming(): bool
+    {
+        return $this->periode_awal && now()->lt($this->periode_awal);
+    }
+
+    /**
+     * Check if this tahap period has passed.
+     */
+    public function isClosed(): bool
+    {
+        return $this->periode_akhir && now()->gt($this->periode_akhir);
+    }
+
+    /**
+     * Get human-readable timing status.
+     */
+    public function getTimingStatus(): string
+    {
+        if ($this->isUpcoming()) return 'belum_dibuka';
+        if ($this->isClosed()) return 'ditutup';
+        return 'dibuka';
+    }
 }

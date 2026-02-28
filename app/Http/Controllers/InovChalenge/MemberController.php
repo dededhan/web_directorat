@@ -12,18 +12,20 @@ use Illuminate\Support\Facades\Auth;
 class MemberController extends Controller
 {
     /**
-     * Add a team member (dosen, alumni, or eksternal).
+     * Add a team member.
      */
     public function store(Request $request, InovChalengeSubmission $submission)
     {
         abort_if($submission->user_id !== Auth::id(), 403);
 
+        $tipeOptions = implode(',', InovChalengeSubmissionMember::TIPE_OPTIONS);
+
         $validated = $request->validate([
-            'tipe_anggota' => 'required|in:dosen,alumni,eksternal',
-            'nama_lengkap' => 'required|string|max:255',
-            'nik_nim_nip' => 'nullable|string|max:100',
+            'tipe_anggota'      => "required|in:{$tipeOptions}",
+            'nama_lengkap'      => 'required|string|max:255',
+            'nik_nim_nip'       => 'nullable|string|max:100',
             'institusi_fakultas' => 'nullable|string|max:255',
-            'user_id' => 'nullable|exists:users,id',
+            'user_id'           => 'nullable|exists:users,id',
         ]);
 
         // Check max member limit
@@ -36,10 +38,7 @@ class MemberController extends Controller
         }
 
         // Set approval status based on type
-        $approvalStatus = 'not_required';
-        if ($validated['tipe_anggota'] === 'alumni') {
-            $approvalStatus = 'pending';
-        }
+        $approvalStatus = InovChalengeSubmissionMember::defaultApprovalStatus($validated['tipe_anggota']);
 
         // If user_id provided for dosen/alumni, verify the user exists and pre-fill name
         if (!empty($validated['user_id'])) {
@@ -50,13 +49,13 @@ class MemberController extends Controller
         }
 
         $submission->members()->create([
-            'user_id' => $validated['user_id'] ?? null,
-            'peran' => 'Anggota',
-            'tipe_anggota' => $validated['tipe_anggota'],
-            'nama_lengkap' => $validated['nama_lengkap'],
-            'nik_nim_nip' => $validated['nik_nim_nip'] ?? null,
+            'user_id'           => $validated['user_id'] ?? null,
+            'peran'             => 'Anggota',
+            'tipe_anggota'      => $validated['tipe_anggota'],
+            'nama_lengkap'      => $validated['nama_lengkap'],
+            'nik_nim_nip'       => $validated['nik_nim_nip'] ?? null,
             'institusi_fakultas' => $validated['institusi_fakultas'] ?? null,
-            'approval_status' => $approvalStatus,
+            'approval_status'   => $approvalStatus,
         ]);
 
         return back()->with('success', 'Anggota berhasil ditambahkan.');
@@ -72,8 +71,8 @@ class MemberController extends Controller
         abort_if($member->peran === 'Ketua', 403, 'Ketua tidak dapat diubah.');
 
         $validated = $request->validate([
-            'nama_lengkap' => 'required|string|max:255',
-            'nik_nim_nip' => 'nullable|string|max:100',
+            'nama_lengkap'      => 'required|string|max:255',
+            'nik_nim_nip'       => 'nullable|string|max:100',
             'institusi_fakultas' => 'nullable|string|max:255',
         ]);
 
@@ -98,11 +97,17 @@ class MemberController extends Controller
 
     /**
      * Search users by name/email for adding as members (AJAX).
+     * Only searches for types that have system accounts (dosen, alumni).
      */
     public function searchUsers(Request $request)
     {
         $query = $request->get('q', '');
         $type = $request->get('type', 'dosen');
+
+        // Only allow searching for types that exist in the users table
+        if (!in_array($type, InovChalengeSubmissionMember::TIPE_SEARCHABLE)) {
+            return response()->json([]);
+        }
 
         if (strlen($query) < 2) {
             return response()->json([]);

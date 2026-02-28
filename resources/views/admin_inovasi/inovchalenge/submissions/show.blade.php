@@ -78,11 +78,13 @@
                         <i class="fas fa-id-card text-teal-500"></i> Identitas Tim &amp; Produk
                     </h2>
                     @if ($submission->identitasIsComplete())
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-green-100 text-green-700">
+                        <span
+                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-green-100 text-green-700">
                             <i class="fas fa-check-circle mr-1 text-[9px]"></i> Lengkap
                         </span>
                     @else
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-orange-100 text-orange-700">
+                        <span
+                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-orange-100 text-orange-700">
                             <i class="fas fa-exclamation-triangle mr-1 text-[9px]"></i> Belum Lengkap
                         </span>
                     @endif
@@ -155,7 +157,8 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-600 mb-1">Nominal Evaluasi
-                                        (Rp)</label>
+                                        (Rp)
+                                    </label>
                                     <input type="number" name="nominal_evaluasi" value="{{ $st->nominal_evaluasi }}"
                                         step="0.01" min="0"
                                         class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500">
@@ -244,14 +247,25 @@
                     {{-- Anggota Tim (Tahap 1 only) --}}
                     @if ($st->tahap->has_anggota)
                         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                            <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-6 py-3">
-                                <h3 class="text-white font-semibold text-sm"><i class="fas fa-users mr-1.5"></i> Anggota Tim
-                                </h3>
+                            <div
+                                class="bg-gradient-to-r from-purple-500 to-purple-600 px-6 py-3 flex items-center justify-between">
+                                <h3 class="text-white font-semibold text-sm"><i class="fas fa-users mr-1.5"></i> Anggota
+                                    Tim</h3>
+                                @php
+                                    $pendingCount = $submission->members->where('approval_status', 'pending')->count();
+                                @endphp
+                                @if ($pendingCount > 0)
+                                    <span
+                                        class="bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                        {{ $pendingCount }} Menunggu Approval
+                                    </span>
+                                @endif
                             </div>
                             <div class="p-6">
                                 @if ($submission->members->count())
                                     <div class="divide-y divide-gray-100">
                                         @foreach ($submission->members as $member)
+                                            @php $badge = $member->getApprovalBadge(); @endphp
                                             <div class="flex items-center justify-between py-3">
                                                 <div class="flex items-center gap-3">
                                                     <div
@@ -262,7 +276,7 @@
                                                         <p class="text-sm font-medium text-gray-900">
                                                             {{ $member->nama_lengkap }}</p>
                                                         <p class="text-xs text-gray-400">
-                                                            {{ ucfirst($member->tipe_anggota) }}
+                                                            {{ $member->getTipeLabel() }}
                                                             @if ($member->nik_nim_nip)
                                                                 · {{ $member->nik_nim_nip }}
                                                             @endif
@@ -279,18 +293,40 @@
                                                             <i class="fas fa-crown mr-1 text-[8px]"></i> Ketua
                                                         </span>
                                                     @endif
-                                                    @if ($member->tipe_anggota === 'alumni')
-                                                        @php
-                                                            $apColors = [
-                                                                'pending' => 'bg-yellow-100 text-yellow-700',
-                                                                'approved' => 'bg-green-100 text-green-700',
-                                                                'rejected' => 'bg-red-100 text-red-700',
-                                                            ];
-                                                        @endphp
+
+                                                    {{-- Approval status badge --}}
+                                                    @if ($member->peran !== 'Ketua')
                                                         <span
-                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold {{ $apColors[$member->approval_status] ?? '' }}">
-                                                            {{ ucfirst($member->approval_status) }}
+                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold {{ $badge['color'] }}">
+                                                            <i class="{{ $badge['icon'] }} mr-1 text-[8px]"></i>
+                                                            {{ $badge['label'] }}
                                                         </span>
+
+                                                        {{-- Admin approve/reject buttons for pending members --}}
+                                                        @if ($member->approval_status === 'pending')
+                                                            <form method="POST"
+                                                                action="{{ route('admin_inovasi.inovchalenge.submissions.members.approve', [$submission, $member]) }}"
+                                                                class="inline">
+                                                                @csrf
+                                                                @method('PATCH')
+                                                                <button type="submit"
+                                                                    class="inline-flex items-center px-2 py-0.5 bg-green-500 text-white text-[10px] font-semibold rounded hover:bg-green-600 transition"
+                                                                    title="Setujui">
+                                                                    <i class="fas fa-check mr-0.5"></i> Approve
+                                                                </button>
+                                                            </form>
+                                                            <form method="POST"
+                                                                action="{{ route('admin_inovasi.inovchalenge.submissions.members.reject', [$submission, $member]) }}"
+                                                                class="inline">
+                                                                @csrf
+                                                                @method('PATCH')
+                                                                <button type="submit"
+                                                                    class="inline-flex items-center px-2 py-0.5 bg-red-500 text-white text-[10px] font-semibold rounded hover:bg-red-600 transition"
+                                                                    title="Tolak">
+                                                                    <i class="fas fa-times mr-0.5"></i> Reject
+                                                                </button>
+                                                            </form>
+                                                        @endif
                                                     @endif
                                                 </div>
                                             </div>

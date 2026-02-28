@@ -107,6 +107,9 @@
                                     Tahap</th>
                                 <th
                                     class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Anggota</th>
+                                <th
+                                    class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     Status</th>
                                 <th
                                     class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -160,6 +163,26 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 text-center">
+                                        @php
+                                            $totalMembers = $sub->members->count();
+                                            $pendingMembers = $sub->members->where('approval_status', 'pending')->count();
+                                            $approvedMembers = $sub->members->where('approval_status', 'approved')->count()
+                                                + $sub->members->where('approval_status', 'not_required')->count();
+                                        @endphp
+                                        <div class="flex flex-col items-center gap-0.5">
+                                            <span class="text-xs text-gray-600 font-medium">{{ $totalMembers }}</span>
+                                            @if ($pendingMembers > 0)
+                                                <span class="inline-flex items-center px-1.5 py-0 rounded-full text-[9px] font-bold bg-yellow-100 text-yellow-700">
+                                                    <i class="fas fa-clock mr-0.5 text-[7px]"></i>{{ $pendingMembers }}
+                                                </span>
+                                            @elseif($totalMembers > 0)
+                                                <span class="inline-flex items-center px-1.5 py-0 rounded-full text-[9px] font-bold bg-green-100 text-green-700">
+                                                    <i class="fas fa-check mr-0.5 text-[7px]"></i>OK
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
                                         <span
                                             class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold {{ $statusColors[$statusKey] ?? 'bg-gray-100 text-gray-700' }}">
                                             {{ ucwords(str_replace('_', ' ', $statusKey)) }}
@@ -177,7 +200,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="px-6 py-12 text-center text-gray-400">
+                                    <td colspan="8" class="px-6 py-12 text-center text-gray-400">
                                         <i class="fas fa-inbox text-3xl mb-2"></i>
                                         <p>Belum ada submission</p>
                                     </td>
