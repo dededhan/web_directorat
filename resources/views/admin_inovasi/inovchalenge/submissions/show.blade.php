@@ -71,6 +71,38 @@
                 </div>
             </div>
 
+            {{-- Identitas Tim & Produk (read-only) --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+                <div class="px-5 py-3 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="text-sm font-bold text-gray-700 flex items-center gap-2">
+                        <i class="fas fa-id-card text-teal-500"></i> Identitas Tim &amp; Produk
+                    </h2>
+                    @if ($submission->identitasIsComplete())
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-green-100 text-green-700">
+                            <i class="fas fa-check-circle mr-1 text-[9px]"></i> Lengkap
+                        </span>
+                    @else
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-orange-100 text-orange-700">
+                            <i class="fas fa-exclamation-triangle mr-1 text-[9px]"></i> Belum Lengkap
+                        </span>
+                    @endif
+                </div>
+                <div class="px-5 py-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                    <div>
+                        <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-0.5">Nama Produk</p>
+                        <p class="text-gray-800 font-semibold">{{ $submission->identitas?->nama_produk ?? '—' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-0.5">Skema Inovasi</p>
+                        <p class="text-gray-700 text-xs">{{ $submission->identitas?->skema_inovasi ?? '—' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-0.5">Bidang Utama</p>
+                        <p class="text-gray-700 text-xs">{{ $submission->identitas?->bidang_utama_produk ?? '—' }}</p>
+                    </div>
+                </div>
+            </div>
+
             {{-- Per-Tahap Tabs --}}
             <div class="mb-6 flex gap-2 border-b border-gray-200 pb-0">
                 @foreach ($submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke) as $st)

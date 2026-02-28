@@ -14,7 +14,7 @@ return new class extends Migration
                 ->constrained('inov_chalenge_tahap')
                 ->cascadeOnDelete();
             $table->string('field_label');
-            $table->enum('field_type', ['text', 'textarea', 'number', 'date', 'dropdown', 'file', 'url']);
+            $table->enum('field_type', ['text', 'textarea', 'number', 'date', 'dropdown', 'checkbox', 'file', 'url']);
             $table->json('field_options')->nullable(); // for dropdown: array of option strings
             $table->boolean('is_required')->default(true);
             $table->unsignedTinyInteger('urutan')->default(0);

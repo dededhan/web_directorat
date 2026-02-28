@@ -5,6 +5,7 @@ namespace App\Http\Controllers\InovChalenge;
 use App\Http\Controllers\Controller;
 use App\Models\InovChalengeSession;
 use App\Models\InovChalengeSubmission;
+use App\Models\InovChalengeSubmissionIdentitas;
 use App\Models\InovChalengeSubmissionTahap;
 use App\Models\InovChalengeFieldValue;
 use Illuminate\Http\Request;
@@ -146,23 +147,84 @@ class DosenController extends Controller
             'session',
             'submissionTahap.tahap',
             'members.user',
+            'identitas',
         ]);
 
         return view('subdirektorat-inovasi.dosen.inovchalenge.submissions.show', compact('submission'));
     }
 
     /**
+     * Show the Identitas Tim & Status Produk form (gate step).
+     */
+    public function showIdentitas(InovChalengeSubmission $submission)
+    {
+        abort_if($submission->user_id !== Auth::id(), 403);
+
+        $user = Auth::user()->load('profile.fakultas');
+        $submission->load(['session', 'identitas', 'members.user']);
+
+        $fakultasName = $user->profile?->fakultas?->name ?? '-';
+        $ketuaName    = $user->name;
+
+        $skemaOptions = [
+            'Hilirisasi Produk Riset Inovasi',
+            'Hilirisasi Produk Kolaborasi Dosen dan Alumni',
+        ];
+
+        return view(
+            'subdirektorat-inovasi.dosen.inovchalenge.submissions.identitas',
+            compact('submission', 'fakultasName', 'ketuaName', 'skemaOptions')
+        );
+    }
+
+    /**
+     * Save the Identitas Tim & Status Produk data.
+     */
+    public function saveIdentitas(Request $request, InovChalengeSubmission $submission)
+    {
+        abort_if($submission->user_id !== Auth::id(), 403);
+
+        $request->validate([
+            'nama_produk'         => 'required|string|max:255',
+            'skema_inovasi'       => 'required|in:Hilirisasi Produk Riset Inovasi,Hilirisasi Produk Kolaborasi Dosen dan Alumni',
+            'bidang_utama_produk' => 'required|string|max:255',
+        ]);
+
+        InovChalengeSubmissionIdentitas::updateOrCreate(
+            ['inov_chalenge_submission_id' => $submission->id],
+            [
+                'nama_produk'         => $request->nama_produk,
+                'skema_inovasi'       => $request->skema_inovasi,
+                'bidang_utama_produk' => $request->bidang_utama_produk,
+            ]
+        );
+
+        return redirect()
+            ->route('subdirektorat-inovasi.dosen.inovchalenge.submissions.identitas', $submission)
+            ->with('success', 'Identitas tim berhasil disimpan.');
+    }
+
+    /**
      * Show tahap form for filling.
+     * Gate: identitasIsComplete() must be true.
      */
     public function showTahap(InovChalengeSubmission $submission, $tahapId)
     {
         abort_if($submission->user_id !== Auth::id(), 403);
 
+        // Gate: identitas must be complete before accessing any tahap
+        $submission->load('identitas');
+        if (!$submission->identitasIsComplete()) {
+            return redirect()
+                ->route('subdirektorat-inovasi.dosen.inovchalenge.submissions.identitas', $submission)
+                ->with('error', 'Lengkapi Identitas Tim & Anggota terlebih dahulu sebelum mengisi tahap.');
+        }
+
         $submissionTahap = InovChalengeSubmissionTahap::where('inov_chalenge_submission_id', $submission->id)
             ->where('inov_chalenge_tahap_id', $tahapId)
             ->firstOrFail();
 
-        $submissionTahap->load('tahap.fields');
+        $submissionTahap->load(['tahap.sections.fields', 'tahap.unsectionedFields']);
 
         // Load existing field values keyed by field_id
         $fieldValues = InovChalengeFieldValue::where('inov_chalenge_submission_id', $submission->id)
@@ -170,28 +232,29 @@ class DosenController extends Controller
             ->get()
             ->keyBy('inov_chalenge_tahap_field_id');
 
-        // Load members only for Tahap 1 (has_anggota)
-        $members = null;
-        if ($submissionTahap->tahap->has_anggota) {
-            $members = $submission->members()->with('user')->get();
-        }
-
         $submission->load('session');
 
         return view('subdirektorat-inovasi.dosen.inovchalenge.submissions.tahap', compact(
             'submission',
             'submissionTahap',
-            'fieldValues',
-            'members'
+            'fieldValues'
         ));
     }
 
     /**
      * Save tahap form as draft.
+     * Gate: identitasIsComplete() must be true.
      */
     public function saveTahap(Request $request, InovChalengeSubmission $submission, $tahapId)
     {
         abort_if($submission->user_id !== Auth::id(), 403);
+
+        $submission->load('identitas');
+        if (!$submission->identitasIsComplete()) {
+            return redirect()
+                ->route('subdirektorat-inovasi.dosen.inovchalenge.submissions.identitas', $submission)
+                ->with('error', 'Lengkapi Identitas Tim & Anggota terlebih dahulu sebelum mengisi tahap.');
+        }
 
         $submissionTahap = InovChalengeSubmissionTahap::where('inov_chalenge_submission_id', $submission->id)
             ->where('inov_chalenge_tahap_id', $tahapId)
@@ -223,10 +286,18 @@ class DosenController extends Controller
 
     /**
      * Submit tahap (make it read-only).
+     * Gate: identitasIsComplete() must be true.
      */
     public function submitTahap(Request $request, InovChalengeSubmission $submission, $tahapId)
     {
         abort_if($submission->user_id !== Auth::id(), 403);
+
+        $submission->load('identitas');
+        if (!$submission->identitasIsComplete()) {
+            return redirect()
+                ->route('subdirektorat-inovasi.dosen.inovchalenge.submissions.identitas', $submission)
+                ->with('error', 'Lengkapi Identitas Tim & Anggota terlebih dahulu sebelum submit tahap.');
+        }
 
         $submissionTahap = InovChalengeSubmissionTahap::where('inov_chalenge_submission_id', $submission->id)
             ->where('inov_chalenge_tahap_id', $tahapId)
@@ -306,6 +377,9 @@ class DosenController extends Controller
             }
         } elseif ($field->field_type === 'url') {
             $data['value_url'] = $request->input($fieldKey);
+        } elseif ($field->field_type === 'checkbox') {
+            $selected = $request->input($fieldKey, []);
+            $data['value_text'] = json_encode(array_values(array_filter((array) $selected)));
         } else {
             $data['value_text'] = $request->input($fieldKey);
         }
@@ -326,6 +400,10 @@ class DosenController extends Controller
         }
         if ($field->field_type === 'url') {
             return empty($value->value_url);
+        }
+        if ($field->field_type === 'checkbox') {
+            $decoded = json_decode($value->value_text ?? '', true);
+            return empty($decoded);
         }
         return empty($value->value_text);
     }

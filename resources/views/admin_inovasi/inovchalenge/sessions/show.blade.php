@@ -85,57 +85,187 @@
         </div>
 
         {{-- 3-Tahap Grid --}}
-        <h3 class="text-lg font-bold text-gray-900 mb-4">
-            <i class="fas fa-layer-group mr-2 text-teal-500"></i> Tahap Konfigurasi
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @foreach($session->tahap as $tahap)
-                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition">
-                    <div class="px-5 py-3 {{ $tahap->tahap_ke === 1 ? 'bg-gradient-to-r from-blue-500 to-blue-600' : ($tahap->tahap_ke === 2 ? 'bg-gradient-to-r from-purple-500 to-purple-600' : 'bg-gradient-to-r from-orange-500 to-orange-600') }}">
-                        <h4 class="text-white font-semibold">
-                            <i class="fas fa-flag mr-1.5"></i> {{ $tahap->nama_tahap }}
-                        </h4>
-                    </div>
-                    <div class="p-5">
-                        <p class="text-sm text-gray-500 mb-3">
-                            {{ $tahap->deskripsi ?: 'Belum ada deskripsi.' }}
-                        </p>
+        <div class="flex items-center justify-between mb-5">
+            <h3 class="text-lg font-bold text-gray-900">
+                <i class="fas fa-layer-group mr-2 text-teal-500"></i> Tahap Konfigurasi
+            </h3>
+            <span class="text-xs text-gray-400 bg-white border border-gray-200 rounded-full px-3 py-1 shadow-sm">
+                {{ $session->tahap->count() }} tahap &bull;
+                {{ $session->tahap->sum(fn($t) => $t->fields->count()) }} total fields
+            </span>
+        </div>
 
-                        {{-- Flags --}}
-                        <div class="flex flex-wrap gap-2 mb-3">
-                            @if($tahap->has_anggota)
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                                    <i class="fas fa-users mr-1"></i> Anggota Tim
-                                </span>
-                            @endif
-                            @if($tahap->has_fakultas)
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700 border border-green-200">
-                                    <i class="fas fa-university mr-1"></i> Fakultas
-                                </span>
-                            @endif
+        {{-- Connector layout wrapper --}}
+        <div class="relative">
+            {{-- Horizontal connector line (desktop only) --}}
+            <div class="hidden md:block absolute top-[72px] left-[calc(33.33%+8px)] right-[calc(33.33%+8px)] h-0.5 bg-gradient-to-r from-blue-200 via-purple-200 to-orange-200 z-0"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                @foreach($session->tahap->sortBy('tahap_ke') as $tahap)
+                    @php
+                        $colors = match($tahap->tahap_ke) {
+                            1 => ['from' => 'from-blue-500',   'to' => 'to-blue-600',   'ring' => 'ring-blue-200',   'badge' => 'bg-blue-600',    'light' => 'bg-blue-50',   'text' => 'text-blue-700',   'border' => 'border-blue-100', 'dot' => 'bg-blue-500'],
+                            2 => ['from' => 'from-purple-500', 'to' => 'to-purple-600', 'ring' => 'ring-purple-200', 'badge' => 'bg-purple-600',  'light' => 'bg-purple-50', 'text' => 'text-purple-700', 'border' => 'border-purple-100','dot' => 'bg-purple-500'],
+                            default => ['from' => 'from-orange-500', 'to' => 'to-orange-600', 'ring' => 'ring-orange-200', 'badge' => 'bg-orange-600',  'light' => 'bg-orange-50', 'text' => 'text-orange-700', 'border' => 'border-orange-100','dot' => 'bg-orange-500'],
+                        };
+
+                        $now = now();
+                        $periodStatus = null;
+                        if ($tahap->periode_awal && $tahap->periode_akhir) {
+                            if ($now < $tahap->periode_awal) {
+                                $periodStatus = 'upcoming';
+                            } elseif ($now > $tahap->periode_akhir) {
+                                $periodStatus = 'ended';
+                            } else {
+                                $periodStatus = 'active';
+                            }
+                        }
+
+                        $totalFields    = $tahap->fields->count();
+                        $requiredFields = $tahap->fields->where('is_required', true)->count();
+                        $fieldTypeCounts = $tahap->fields->groupBy('field_type')->map->count();
+                        $typeIcons = [
+                            'text'     => ['icon' => 'fa-font',          'color' => 'text-gray-500'],
+                            'textarea' => ['icon' => 'fa-align-left',    'color' => 'text-gray-500'],
+                            'number'   => ['icon' => 'fa-hashtag',       'color' => 'text-blue-500'],
+                            'date'     => ['icon' => 'fa-calendar',      'color' => 'text-teal-500'],
+                            'dropdown' => ['icon' => 'fa-caret-square-down', 'color' => 'text-orange-500'],
+                            'checkbox' => ['icon' => 'fa-check-square',  'color' => 'text-indigo-500'],
+                            'file'     => ['icon' => 'fa-paperclip',     'color' => 'text-purple-500'],
+                            'url'      => ['icon' => 'fa-link',          'color' => 'text-cyan-500'],
+                        ];
+                    @endphp
+
+                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 flex flex-col">
+
+                        {{-- Card Header --}}
+                        <div class="bg-gradient-to-r {{ $colors['from'] }} {{ $colors['to'] }} px-5 py-4 flex items-center gap-4">
+                            {{-- Big number badge --}}
+                            <div class="flex-shrink-0 w-12 h-12 bg-white/20 ring-2 {{ $colors['ring'] }} rounded-xl flex items-center justify-center">
+                                <span class="text-white font-black text-xl leading-none">{{ $tahap->tahap_ke }}</span>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-white/70 text-[10px] uppercase tracking-widest font-semibold">Tahap {{ $tahap->tahap_ke }}</p>
+                                <h4 class="text-white font-bold text-base leading-tight truncate">{{ $tahap->nama_tahap }}</h4>
+                            </div>
                         </div>
 
-                        {{-- Periode --}}
-                        @if($tahap->periode_awal && $tahap->periode_akhir)
-                            <p class="text-xs text-gray-400 mb-3">
-                                <i class="fas fa-calendar-alt mr-1"></i>
-                                {{ $tahap->periode_awal->format('d M Y H:i') }} — {{ $tahap->periode_akhir->format('d M Y H:i') }}
-                            </p>
-                        @endif
+                        <div class="flex flex-col flex-1 divide-y divide-gray-100">
 
-                        {{-- Fields count --}}
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs text-gray-400">
-                                <i class="fas fa-list-ul mr-1"></i> {{ $tahap->fields->count() }} field(s)
-                            </span>
-                            <a href="{{ route('admin_inovasi.inovchalenge.tahap.edit', $tahap) }}"
-                               class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-teal-700 bg-teal-50 rounded-lg hover:bg-teal-100 border border-teal-200 transition">
-                                <i class="fas fa-cog mr-1"></i> Konfigurasi
-                            </a>
+                            {{-- Description + Period --}}
+                            <div class="px-5 pt-4 pb-3 space-y-3">
+                                <p class="text-sm text-gray-500 leading-relaxed line-clamp-2 min-h-[2.5rem]">
+                                    {{ $tahap->deskripsi ?: 'Belum ada deskripsi.' }}
+                                </p>
+
+                                {{-- Period block --}}
+                                @if($tahap->periode_awal && $tahap->periode_akhir)
+                                    <div class="rounded-xl border {{ $colors['border'] }} {{ $colors['light'] }} px-3 py-2.5">
+                                        <div class="flex items-center justify-between mb-1.5">
+                                            <span class="text-xs font-semibold {{ $colors['text'] }}">
+                                                <i class="fas fa-calendar-alt mr-1"></i> Periode
+                                            </span>
+                                            @if($periodStatus === 'active')
+                                                <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700 border border-green-200">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse inline-block"></span> Berjalan
+                                                </span>
+                                            @elseif($periodStatus === 'upcoming')
+                                                <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200">
+                                                    <i class="fas fa-clock text-[8px]"></i> Akan Datang
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
+                                                    <i class="fas fa-check text-[8px]"></i> Selesai
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <div class="text-xs text-gray-600 space-y-0.5">
+                                            <div class="flex items-center gap-1.5">
+                                                <span class="w-1.5 h-1.5 rounded-full {{ $colors['dot'] }} inline-block flex-shrink-0"></span>
+                                                <span>{{ $tahap->periode_awal->format('d M Y, H:i') }}</span>
+                                            </div>
+                                            <div class="flex items-center gap-1.5">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-gray-300 inline-block flex-shrink-0"></span>
+                                                <span>{{ $tahap->periode_akhir->format('d M Y, H:i') }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="rounded-xl border border-dashed border-gray-200 px-3 py-2.5 text-center">
+                                        <p class="text-xs text-gray-400"><i class="fas fa-calendar-times mr-1"></i> Periode belum diatur</p>
+                                    </div>
+                                @endif
+                            </div>
+
+                            {{-- Feature Flags --}}
+                            <div class="px-5 py-3 flex flex-wrap gap-2">
+                                @if($tahap->has_anggota)
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                        <i class="fas fa-users mr-1.5"></i> Anggota Tim
+                                    </span>
+                                @endif
+                                @if($tahap->has_fakultas)
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-green-50 text-green-700 border border-green-200">
+                                        <i class="fas fa-university mr-1.5"></i> Fakultas
+                                    </span>
+                                @endif
+                                @if(!$tahap->has_anggota && !$tahap->has_fakultas)
+                                    <span class="text-xs text-gray-300 italic">Tidak ada fitur tambahan</span>
+                                @endif
+                            </div>
+
+                            {{-- Fields Stats --}}
+                            <div class="px-5 py-3">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Form Fields</span>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold {{ $colors['text'] }}">{{ $totalFields }}</span>
+                                        <span class="text-xs text-gray-400">total</span>
+                                        @if($totalFields > 0)
+                                            <span class="text-xs text-gray-300">·</span>
+                                            <span class="text-xs text-red-500">{{ $requiredFields }}</span>
+                                            <span class="text-xs text-gray-400">wajib</span>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                @if($totalFields > 0)
+                                    <div class="flex flex-wrap gap-1.5">
+                                        @foreach($fieldTypeCounts as $type => $count)
+                                            @php $ti = $typeIcons[$type] ?? ['icon' => 'fa-circle', 'color' => 'text-gray-400']; @endphp
+                                            <span class="inline-flex items-center gap-1 px-2 py-1 bg-gray-50 border border-gray-200 rounded-lg text-xs text-gray-600">
+                                                <i class="fas {{ $ti['icon'] }} {{ $ti['color'] }} text-[10px]"></i>
+                                                <span class="font-medium">{{ $count }}</span>
+                                                <span class="text-gray-400">{{ ucfirst($type) }}</span>
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <div class="rounded-lg border border-dashed border-gray-200 px-3 py-2 text-center">
+                                        <p class="text-xs text-gray-400"><i class="fas fa-exclamation-triangle text-yellow-400 mr-1"></i> Belum ada field</p>
+                                    </div>
+                                @endif
+                            </div>
+
+                            {{-- Footer Action --}}
+                            <div class="px-5 py-3 bg-gray-50 mt-auto">
+                                <a href="{{ route('admin_inovasi.inovchalenge.tahap.edit', $tahap) }}"
+                                   class="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-semibold {{ $colors['text'] }} {{ $colors['light'] }} rounded-xl hover:brightness-95 border {{ $colors['border'] }} transition">
+                                    <i class="fas fa-cog"></i> Konfigurasi Tahap {{ $tahap->tahap_ke }}
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
+        </div>
+
+        {{-- Back --}}
+        <div class="mt-6">
+            <a href="{{ route('admin_inovasi.inovchalenge.sessions.index') }}"
+               class="inline-flex items-center text-sm text-gray-500 hover:text-teal-600 transition">
+                <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar Sesi
+            </a>
         </div>
     </div>
 </div>

@@ -28,6 +28,50 @@
                 </div>
             @endif
 
+            {{-- ═══ Identitas Tim Banner ═══ --}}
+            @if (!$submission->identitasIsComplete())
+                <div class="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div class="flex items-start gap-3 text-orange-700">
+                        <i class="fas fa-exclamation-triangle text-lg mt-0.5 flex-shrink-0"></i>
+                        <div>
+                            <p class="font-semibold text-sm">Identitas Tim belum lengkap</p>
+                            <p class="text-xs mt-0.5 text-orange-600">Lengkapi Identitas Tim &amp; tambahkan minimal 1 anggota non-Ketua sebelum mengisi tahap.</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.identitas', $submission) }}"
+                        class="flex-shrink-0 inline-flex items-center px-4 py-2 bg-orange-500 text-white text-xs font-semibold rounded-xl hover:bg-orange-600 transition shadow-sm">
+                        <i class="fas fa-id-card mr-1.5"></i> Lengkapi Identitas
+                    </a>
+                </div>
+            @else
+                {{-- Identitas summary card --}}
+                <div class="mb-6 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-5 py-3 border-b border-gray-100 flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-gray-700 flex items-center gap-2">
+                            <i class="fas fa-id-card text-teal-500"></i> Identitas Tim &amp; Produk
+                        </h2>
+                        <a href="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.identitas', $submission) }}"
+                            class="text-xs text-teal-600 hover:text-teal-800 font-medium flex items-center gap-1">
+                            <i class="fas fa-edit text-[11px]"></i> Edit
+                        </a>
+                    </div>
+                    <div class="px-5 py-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-0.5">Nama Produk</p>
+                            <p class="text-gray-800 font-semibold">{{ $submission->identitas?->nama_produk ?? '—' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-0.5">Skema Inovasi</p>
+                            <p class="text-gray-700 text-xs">{{ $submission->identitas?->skema_inovasi ?? '—' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-0.5">Bidang Utama</p>
+                            <p class="text-gray-700 text-xs">{{ $submission->identitas?->bidang_utama_produk ?? '—' }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             {{-- Overall Status --}}
             @php
                 $overallColors = [
@@ -142,7 +186,12 @@
 
                             {{-- Action button --}}
                             <div class="pt-2">
-                                @if ($isEditable)
+                                @if (!$submission->identitasIsComplete())
+                                    <a href="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.identitas', $submission) }}"
+                                        class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-orange-100 text-orange-600 text-sm font-medium rounded-xl hover:bg-orange-200 transition">
+                                        <i class="fas fa-lock mr-1.5"></i> Lengkapi Identitas Dulu
+                                    </a>
+                                @elseif ($isEditable)
                                     <a href="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.tahap', [$submission, $tahap->id]) }}"
                                         class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white text-sm font-medium rounded-xl hover:from-teal-600 hover:to-teal-700 transition shadow-sm">
                                         <i class="fas fa-edit mr-1.5"></i>

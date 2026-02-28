@@ -69,6 +69,9 @@
                                                         $displayValue = $fv->value_file_path;
                                                     } elseif ($field->field_type === 'url') {
                                                         $displayValue = $fv->value_url;
+                                                    } elseif ($field->field_type === 'checkbox') {
+                                                        $decoded = json_decode($fv->value_text ?? '', true);
+                                                        $displayValue = is_array($decoded) && count($decoded) ? $decoded : null;
                                                     } else {
                                                         $displayValue = $fv->value_text;
                                                     }
@@ -90,6 +93,18 @@
                                                         class="text-sm text-teal-600 hover:underline break-all">
                                                         {{ $displayValue }}
                                                     </a>
+                                                @elseif($field->field_type === 'checkbox')
+                                                    @if($displayValue)
+                                                        <ul class="list-none space-y-1">
+                                                            @foreach($displayValue as $item)
+                                                                <li class="flex items-center gap-1.5 text-sm text-gray-800">
+                                                                    <i class="fas fa-check-square text-teal-500 text-xs"></i> {{ $item }}
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    @else
+                                                        <p class="text-sm text-gray-300 italic">Belum diisi</p>
+                                                    @endif
                                                 @elseif($displayValue)
                                                     <p class="text-sm text-gray-800 whitespace-pre-wrap">
                                                         {{ $displayValue }}</p>

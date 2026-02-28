@@ -226,11 +226,114 @@ The following files from a **previous failed attempt** exist in the codebase and
 
 ## Progress Summary
 
-| Sprint    | Goal                                    | Status  | Completion  |
-| --------- | --------------------------------------- | ------- | ----------- |
-| Sprint 0  | Database & Infrastructure               | ✅ Done | 13 / 13     |
-| Sprint 1  | Admin Session & Tahap Field Builder     | ✅ Done | 11 / 11     |
-| Sprint 2  | Dosen Submission Flow + Alumni Approval | ✅ Done | 15 / 15     |
-| Sprint 3  | Admin Submission Mgmt + Reviewer Portal | ✅ Done | 10 / 10     |
-| Sprint 4  | Navigation Integration                  | ✅ Done | 1 / 1       |
-| **Total** |                                         |         | **50 / 50** |
+| Sprint    | Goal                                    | Status      | Completion  |
+| --------- | --------------------------------------- | ----------- | ----------- |
+| Sprint 0  | Database & Infrastructure               | ✅ Done     | 13 / 13     |
+| Sprint 1  | Admin Session & Tahap Field Builder     | ✅ Done     | 11 / 11     |
+| Sprint 2  | Dosen Submission Flow + Alumni Approval | ✅ Done     | 15 / 15     |
+| Sprint 3  | Admin Submission Mgmt + Reviewer Portal | ✅ Done     | 10 / 10     |
+| Sprint 4  | Navigation Integration                  | ✅ Done     | 1 / 1       |
+| Sprint 5  | Identitas Tim & Gate Refactor           | ⬜ Planned  | 0 / 18      |
+| **Total** |                                         |             | **50 / 68** |
+
+---
+
+## Sprint 5 — Identitas Tim & Status Produk (Gate Refactor)
+
+**Goal:** Introduce a mandatory "Identitas Tim & Status Produk" step as a gate before any Tahap can be accessed. Move Anggota Tim out of Tahap 1 and into this new dedicated page. Deprecate `has_anggota` flag.
+
+**Dependencies:** Sprint 0–4 complete
+**Status:** ⬜ Not Started
+**PRD Reference:** [00-overview.md — Amendment v2.1](00-overview.md#amendment-v21--identitas-tim--status-produk-sprint-5)
+
+---
+
+### Sub-Sprint 5A — Database & Model
+
+| #     | Task | File | Status |
+|-------|------|------|--------|
+| S5-01 | Migration: create `inov_chalenge_submission_identitas` table (`inov_chalenge_submission_id` UNIQUE FK, `nama_produk`, `skema_inovasi`, `bidang_utama_produk`, timestamps) | `database/migrations/YYYY_MM_DD_create_inov_chalenge_submission_identitas_table.php` | ⬜ |
+| S5-02 | Data migration: set `has_anggota = false` on all existing `inov_chalenge_tahap` rows | Inside S5-01 migration or separate migration `YYYY_MM_DD_deprecate_has_anggota.php` | ⬜ |
+| S5-03 | Model: `InovChalengeSubmissionIdentitas` — `fillable`, `belongsTo(InovChalengeSubmission::class)` | `app/Models/InovChalengeSubmissionIdentitas.php` | ⬜ |
+| S5-04 | `InovChalengeSubmission`: add `identitas()` → `hasOne(InovChalengeSubmissionIdentitas::class)` | `app/Models/InovChalengeSubmission.php` | ⬜ |
+| S5-05 | `InovChalengeSubmission`: add `identitasIsComplete(): bool` helper method (checks: identitas exists + 3 fields filled + ≥1 non-Ketua member) | `app/Models/InovChalengeSubmission.php` | ⬜ |
+| S5-06 | Run `php artisan migrate` — verify new table created | CLI | ⬜ |
+
+**Acceptance Criteria (5A):**
+- [ ] `inov_chalenge_submission_identitas` table exists with correct schema
+- [ ] All existing `inov_chalenge_tahap` rows have `has_anggota = false`
+- [ ] `InovChalengeSubmissionIdentitas` model exists and is importable
+- [ ] `$submission->identitas` returns `null` for new submissions (no record yet)
+- [ ] `$submission->identitasIsComplete()` returns `false` for new submissions
+- [ ] `$submission->identitasIsComplete()` returns `true` when: identitas record exists + all 3 fields filled + ≥1 non-Ketua member
+
+---
+
+### Sub-Sprint 5B — Routes & Controller
+
+| #     | Task | File | Status |
+|-------|------|------|--------|
+| S5-07 | Routes: add `GET submissions/{submission}/identitas` → `DosenController@showIdentitas` (name: `…submissions.identitas`) | `routes/inovchalange.php` | ⬜ |
+| S5-08 | Routes: add `POST submissions/{submission}/identitas` → `DosenController@saveIdentitas` (name: `…submissions.identitas.save`) | `routes/inovchalange.php` | ⬜ |
+| S5-09 | `DosenController::showIdentitas()`: load `$submission` with `identitas`, `members.user`, `session`; eager-load `$user->profile->fakultas`; pass `$ketuaName`, `$fakultasName` to view | `app/Http/Controllers/InovChalenge/DosenController.php` | ⬜ |
+| S5-10 | `DosenController::saveIdentitas()`: validate `nama_produk` (required), `skema_inovasi` (required, in: 2 values), `bidang_utama_produk` (required); `updateOrCreate` on identitas; redirect back with success flash | `app/Http/Controllers/InovChalenge/DosenController.php` | ⬜ |
+| S5-11 | Gate guard: add `identitasIsComplete()` check at the top of `showTahap()`, `saveTahap()`, `submitTahap()` — redirect to `submissions.identitas` with error flash if incomplete | `app/Http/Controllers/InovChalenge/DosenController.php` | ⬜ |
+| S5-12 | `DosenController::showTahap()`: remove `$members` variable (no longer passed from tahap controller since anggota moved to identitas) | `app/Http/Controllers/InovChalenge/DosenController.php` | ⬜ |
+
+**Acceptance Criteria (5B):**
+- [ ] `GET /…/submissions/{id}/identitas` returns 200 for the submission owner
+- [ ] `POST /…/submissions/{id}/identitas` with valid data creates/updates the identitas record and redirects with success
+- [ ] `POST /…/submissions/{id}/identitas` with missing fields returns validation errors
+- [ ] `GET /…/submissions/{id}/tahap/{tahapId}` when identitas incomplete → redirects to identitas page with error flash
+- [ ] `POST /…/submissions/{id}/tahap/{tahapId}/save` when identitas incomplete → redirects to identitas page
+- [ ] `POST /…/submissions/{id}/tahap/{tahapId}/submit` when identitas incomplete → redirects to identitas page
+- [ ] When identitas IS complete, all three tahap routes behave normally
+
+---
+
+### Sub-Sprint 5C — Dosen Views
+
+| #     | Task | File | Status |
+|-------|------|------|--------|
+| S5-13 | **NEW** View: `identitas.blade.php` — Section A (identitas form: Nama Produk text, Nama Ketua read-only, Fakultas read-only, Skema Inovasi select, Bidang Utama text) + completion status badge + save button | `resources/views/subdirektorat-inovasi/dosen/inovchalenge/submissions/identitas.blade.php` | ⬜ |
+| S5-14 | **NEW** View: `identitas.blade.php` — Section B (Anggota Tim: member list + Alpine.js `memberManager()` add form — same logic as was in `tahap.blade.php`) + "Proceed" link to `submissions.show` | `resources/views/subdirektorat-inovasi/dosen/inovchalenge/submissions/identitas.blade.php` | ⬜ |
+| S5-15 | Update `show.blade.php`: add orange gate banner when identitas incomplete ("Lengkapi Identitas Tim sebelum mengisi tahap" + link to identitas page); add Identitas Tim summary card (nama_produk, skema, bidang, ketua, fakultas, member count); grey out tahap action buttons when gate not met | `resources/views/subdirektorat-inovasi/dosen/inovchalenge/submissions/show.blade.php` | ⬜ |
+| S5-16 | Update `tahap.blade.php`: remove the `@if ($tahap->has_anggota && $members !== null)` Anggota Tim section entirely | `resources/views/subdirektorat-inovasi/dosen/inovchalenge/submissions/tahap.blade.php` | ⬜ |
+
+**Acceptance Criteria (5C):**
+- [ ] `identitas.blade.php` renders identitas form with Nama Ketua and Fakultas pre-filled (read-only)
+- [ ] Skema Inovasi select shows exactly 2 options: "Hilirisasi Produk Riset Inovasi" and "Hilirisasi Produk Kolaborasi Dosen dan Alumni"
+- [ ] Completion status badge shows orange ⚠ when incomplete, green ✓ when complete
+- [ ] Member manager UI (search dosen/alumni, add eksternal) works on identitas page
+- [ ] "Proceed" / back-to-submission link is present
+- [ ] `show.blade.php` shows gate banner when `!$submission->identitasIsComplete()`
+- [ ] Tahap action buttons are visually greyed when gate not met (CSS opacity/pointer-events)
+- [ ] Identitas summary card displays saved data when identitas exists
+- [ ] `tahap.blade.php` no longer contains any Anggota Tim panel
+
+---
+
+### Sub-Sprint 5D — Admin Side
+
+| #     | Task | File | Status |
+|-------|------|------|--------|
+| S5-17 | `SubmissionAdminController::show()`: eager-load `$submission->load(['identitas', 'members.user', ...])` | `app/Http/Controllers/InovChalenge/SubmissionAdminController.php` | ⬜ |
+| S5-18 | Admin `submissions/show.blade.php`: add read-only Identitas Tim card (nama_produk, skema_inovasi, bidang_utama_produk, ketua name, member count) | `resources/views/admin_inovasi/inovchalenge/submissions/show.blade.php` | ⬜ |
+
+**Acceptance Criteria (5D):**
+- [ ] Admin submission detail page shows Identitas Tim section with correct data
+- [ ] Section displays "Belum diisi" state gracefully when identitas is null
+- [ ] All existing admin features (status controls, reviewer assign, field values) remain unaffected
+
+---
+
+### Definition of Done — Sprint 5
+
+- [ ] All 18 tasks above marked ✅
+- [ ] `php artisan migrate` runs without errors (new identitas table created, has_anggota reset)
+- [ ] A new dosen submission cannot access any Tahap until identitas is complete
+- [ ] Identitas page auto-fills Ketua name and Fakultas (via `$user->profile?->fakultas?->name`)
+- [ ] Member management (add/remove anggota) works from the identitas page
+- [ ] `has_anggota`-related Anggota Tim panel is gone from `tahap.blade.php`
+- [ ] Admin can see identitas data on the submission detail page
+- [ ] No regressions on Sprints 0–4 functionality (existing submissions, field values, reviews still work)

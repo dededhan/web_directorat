@@ -44,6 +44,18 @@ Route::prefix('admin_inovasi/inovchalenge')->name('admin_inovasi.inovchalenge.')
             ->name('tahap.fields.destroy');
         Route::patch('tahap/{tahap}/fields/reorder', [TahapController::class, 'reorderFields'])
             ->name('tahap.fields.reorder');
+        Route::patch('fields/{field}/move', [TahapController::class, 'moveField'])
+            ->name('tahap.fields.move');
+
+        // Tahap sections CRUD
+        Route::post('tahap/{tahap}/sections', [TahapController::class, 'storeSection'])
+            ->name('tahap.sections.store');
+        Route::put('sections/{section}', [TahapController::class, 'updateSection'])
+            ->name('tahap.sections.update');
+        Route::delete('sections/{section}', [TahapController::class, 'destroySection'])
+            ->name('tahap.sections.destroy');
+        Route::patch('tahap/{tahap}/sections/reorder', [TahapController::class, 'reorderSections'])
+            ->name('tahap.sections.reorder');
 
         // Submissions management
         Route::get('submissions', [SubmissionAdminController::class, 'index'])
@@ -77,6 +89,12 @@ Route::prefix('subdirektorat-inovasi/dosen/inovchalenge')
             ->name('submissions.store');
         Route::get('submissions/{submission}', [DosenController::class, 'showSubmission'])
             ->name('submissions.show');
+
+        // Identitas Tim (gate step)
+        Route::get('submissions/{submission}/identitas', [DosenController::class, 'showIdentitas'])
+            ->name('submissions.identitas');
+        Route::post('submissions/{submission}/identitas', [DosenController::class, 'saveIdentitas'])
+            ->name('submissions.identitas.save');
 
         // Tahap form
         Route::get('submissions/{submission}/tahap/{tahapId}', [DosenController::class, 'showTahap'])

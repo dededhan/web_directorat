@@ -22,4 +22,9 @@ class InovChalengeTahapField extends Model
     {
         return $this->belongsTo(InovChalengeTahap::class, 'inov_chalenge_tahap_id');
     }
+
+    public function section()
+    {
+        return $this->belongsTo(InovChalengeTahapSection::class, 'inov_chalenge_tahap_section_id');
+    }
 }

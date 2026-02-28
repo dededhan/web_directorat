@@ -666,3 +666,209 @@ admin_inovasi sidebar
 | Alumni approval in-app                        | Alumni are registered users; they see invitation in their dashboard, no email dependency      |
 | Field values stored flat (one row per field)  | Easy to query, render, and validate; avoids JSON blob issues                                  |
 | File stored per field (not per "sub-chapter") | Cleaner 1:1 mapping; field_type=file is self-contained                                        |
+
+---
+
+---
+
+# AMENDMENT v2.1 — Identitas Tim & Status Produk (Sprint 5)
+
+> **Date:** 2026-02-28
+> **Status:** Planned — Implementation pending
+
+---
+
+## A1. Change Summary
+
+The original design embedded the "Anggota Tim" panel inside the Tahap 1 form (gated by `has_anggota = true` on the tahap row). This was architecturally wrong — team identity is a **prerequisite for the entire submission**, not a Tahap-level concern.
+
+This amendment introduces a mandatory **"Identitas Tim & Status Produk"** step that gates all Tahap access.
+
+### What changes
+
+| Area | Before | After |
+|---|---|---|
+| Anggota Tim location | Inside `tahap.blade.php` (Tahap 1 only, via `has_anggota` flag) | Dedicated `identitas.blade.php` page, independent of any Tahap |
+| Tahap 1 `has_anggota` flag | `true` | `false` (deprecated for all rows; flag kept in DB but unused) |
+| Tahap gate | None — dosen could open any Tahap immediately | `identitasIsComplete()` must return `true` before any Tahap is editable/submittable |
+| Team identity storage | Implicit (Ketua member record only) | Explicit `inov_chalenge_submission_identitas` table |
+
+---
+
+## A2. New Database Table
+
+### `inov_chalenge_submission_identitas`
+
+**One-to-one** with `inov_chalenge_submissions`.
+
+| Column | Type | Notes |
+|---|---|---|
+| `id` | bigint PK | |
+| `inov_chalenge_submission_id` | bigint FK UNIQUE | Cascade delete. One per submission. |
+| `nama_produk` | string(255) | Product / technology name |
+| `skema_inovasi` | string(255) | Fixed-list value (see §A3) |
+| `bidang_utama_produk` | string(255) | Main sector / field of the product |
+| timestamps | | |
+
+**Why a separate table (not columns on `inov_chalenge_submissions`)?**
+Future fields — e.g. `link_website`, `status_hki`, `kategori_produk`, `tahun_inovasi` — can be added here without touching the core submissions table.
+
+---
+
+## A3. Identitas Tim Form Fields
+
+| # | Field | Input Type | Source / Validation |
+|---|---|---|---|
+| a | Nama Produk / Teknologi | `text` (required) | User-entered |
+| b | Nama Ketua Tim | Read-only display | `$user->name` (auto) |
+| c | Fakultas | Read-only display | `$user->profile?->fakultas?->name` (auto) — see §A7 |
+| d | Skema Inovasi | `select` (required) | One of 2 fixed values (see §A3.1) |
+| e | Anggota Tim | Member manager UI (Alpine.js) | Search existing dosen/alumni, or add eksternal |
+| f | Bidang Utama Produk | `text` (required) | User-entered |
+
+### A3.1 Skema Inovasi — Valid Values
+
+Stored as the full display string:
+
+- `Hilirisasi Produk Riset Inovasi`
+- `Hilirisasi Produk Kolaborasi Dosen dan Alumni`
+
+---
+
+## A4. Gate Logic
+
+### `InovChalengeSubmission::identitasIsComplete(): bool`
+
+```php
+public function identitasIsComplete(): bool
+{
+    return $this->identitas !== null
+        && filled($this->identitas->nama_produk)
+        && filled($this->identitas->skema_inovasi)
+        && filled($this->identitas->bidang_utama_produk)
+        && $this->members()->where('peran', '!=', 'Ketua')->count() >= 1;
+}
+```
+
+**Conditions for identitas to be "complete":**
+1. An `InovChalengeSubmissionIdentitas` record exists for this submission
+2. `nama_produk` is non-empty
+3. `skema_inovasi` is non-empty
+4. `bidang_utama_produk` is non-empty
+5. At least 1 member with `peran != 'Ketua'` (i.e. ≥1 non-Ketua member added)
+
+### Gate enforcement points (server-side)
+
+| Controller method | Action if gate fails |
+|---|---|
+| `DosenController::showTahap()` | `redirect()->route('…submissions.identitas')` with error flash |
+| `DosenController::saveTahap()` | `redirect()->route('…submissions.identitas')` with error flash |
+| `DosenController::submitTahap()` | `redirect()->route('…submissions.identitas')` with error flash |
+
+### Gate feedback (client-side)
+
+| View | UI signal |
+|---|---|
+| `show.blade.php` | Orange warning banner + greyed/disabled Tahap action buttons |
+| `identitas.blade.php` | Completion status badge (green ✓ / orange ⚠) + disabled "Proceed" button |
+
+---
+
+## A5. Updated Dosen Workflow
+
+```
+[1] Browse active sessions
+    │
+    ▼
+[2] Create submission
+    → auto-creates 3 × InovChalengeSubmissionTahap (status=belum_diisi)
+    → auto-adds Dosen as Ketua member
+    │
+    ▼
+[3] show.blade.php — GATE BANNER shown if identitas incomplete
+    │
+    ▼
+[4] Fill Identitas Tim  ← ★ NEW MANDATORY GATE STEP
+    GET  /submissions/{id}/identitas
+    POST /submissions/{id}/identitas
+    │
+    ├── a. Nama Produk             (required text)
+    ├── b. Nama Ketua Tim          (read-only)
+    ├── c. Fakultas                (read-only)
+    ├── d. Skema Inovasi           (required select)
+    ├── e. Anggota Tim (member UI) (≥1 non-Ketua required)
+    └── f. Bidang Utama Produk     (required text)
+    │
+    ▼ identitasIsComplete() = true
+[5] show.blade.php — all 3 Tahap cards are now unlocked
+    │
+    ▼
+[6] Fill Tahap 1 → Save draft → Submit
+[7] Fill Tahap 2 → Save draft → Submit
+[8] Fill Tahap 3 → Save draft → Submit
+    │
+    ▼
+[9] Admin reviews per-tahap
+```
+
+---
+
+## A6. New Routes
+
+Two new dosen routes added to `routes/inovchalange.php` under the dosen prefix:
+
+| Method | URI | Name | Controller@Method |
+|---|---|---|---|
+| GET | `submissions/{submission}/identitas` | `…submissions.identitas` | `DosenController@showIdentitas` |
+| POST | `submissions/{submission}/identitas` | `…submissions.identitas.save` | `DosenController@saveIdentitas` |
+
+---
+
+## A7. Critical: Fakultas Resolution Path
+
+> ⚠️ **DO NOT** use `$user->fakultas->name` — the `User::fakultas()` relationship references `users.fakultas_id`, a column that **does not exist** on the `users` table. It will always return `null`.
+
+**Correct path:**
+
+```php
+// Eager load in controller:
+$user->load('profile.fakultas');
+
+// Access:
+$fakultasName = $user->profile?->fakultas?->name;
+
+// Chain follows:
+// users → equity_user_profiles (uvia user_id)
+//       → equity_fakultas (via equity_user_profiles.fakultas_id)
+// Models: User → UserProfile → Fakultas
+```
+
+---
+
+## A8. Updated Model Relationship Map (v2.1)
+
+```
+InovChalengeSubmission
+  ├─ belongsTo InovChalengeSession
+  ├─ belongsTo User (user_id = dosen/ketua)
+  ├─ hasOne  InovChalengeSubmissionIdentitas   ← NEW (v2.1)
+  ├─ hasMany InovChalengeSubmissionTahap
+  ├─ hasMany InovChalengeSubmissionMember
+  ├─ belongsToMany User (reviewers via pivot)
+  └─ hasMany InovChalengeReview
+
+InovChalengeSubmissionIdentitas (NEW v2.1)
+  └─ belongsTo InovChalengeSubmission
+```
+
+---
+
+## A9. View Changes Summary
+
+| View | Change |
+|---|---|
+| `submissions/identitas.blade.php` | **NEW** — identitas form + member manager UI |
+| `submissions/show.blade.php` | Add: gate banner if incomplete; identitas summary card; grey tahap buttons if incomplete |
+| `submissions/tahap.blade.php` | **Remove** `@if ($tahap->has_anggota ...)` Anggota Tim section entirely |
+| `admin_inovasi/inovchalenge/submissions/show.blade.php` | Add: read-only Identitas Tim card for admin view |
+| `admin_inovasi/inovchalenge/tahap/edit.blade.php` | Remove / hide `has_anggota` toggle (no longer meaningful) |
