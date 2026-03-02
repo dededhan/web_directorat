@@ -71,7 +71,8 @@
                                                         $displayValue = $fv->value_url;
                                                     } elseif ($field->field_type === 'checkbox') {
                                                         $decoded = json_decode($fv->value_text ?? '', true);
-                                                        $displayValue = is_array($decoded) && count($decoded) ? $decoded : null;
+                                                        $displayValue =
+                                                            is_array($decoded) && count($decoded) ? $decoded : null;
                                                     } else {
                                                         $displayValue = $fv->value_text;
                                                     }
@@ -94,11 +95,13 @@
                                                         {{ $displayValue }}
                                                     </a>
                                                 @elseif($field->field_type === 'checkbox')
-                                                    @if($displayValue)
+                                                    @if ($displayValue)
                                                         <ul class="list-none space-y-1">
-                                                            @foreach($displayValue as $item)
+                                                            @foreach ($displayValue as $item)
                                                                 <li class="flex items-center gap-1.5 text-sm text-gray-800">
-                                                                    <i class="fas fa-check-square text-teal-500 text-xs"></i> {{ $item }}
+                                                                    <i
+                                                                        class="fas fa-check-square text-teal-500 text-xs"></i>
+                                                                    {{ $item }}
                                                                 </li>
                                                             @endforeach
                                                         </ul>

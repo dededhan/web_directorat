@@ -143,7 +143,8 @@
                         $pendingCount = $submission->members->where('approval_status', 'pending')->count();
                     @endphp
                     @if ($pendingCount > 0)
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-700">
+                        <span
+                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-700">
                             <i class="fas fa-clock mr-1 text-[8px]"></i> {{ $pendingCount }} Menunggu Approval
                         </span>
                     @endif
@@ -153,34 +154,48 @@
                         <div class="flex flex-wrap gap-3">
                             @foreach ($submission->members as $member)
                                 @php $badge = $member->getApprovalBadge(); @endphp
-                                <div class="flex items-center gap-2.5 bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
-                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+                                <div
+                                    class="flex items-center gap-2.5 bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
                                         {{ strtoupper(substr($member->nama_lengkap, 0, 1)) }}
                                     </div>
                                     <div class="min-w-0">
-                                        <p class="text-sm font-medium text-gray-900 truncate">{{ $member->nama_lengkap }}</p>
+                                        <p class="text-sm font-medium text-gray-900 truncate">{{ $member->nama_lengkap }}
+                                        </p>
                                         <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
                                             <span class="text-[10px] text-gray-400">{{ $member->getTipeLabel() }}</span>
                                             @if ($member->peran === 'Ketua')
-                                                <span class="inline-flex items-center px-1.5 py-0 rounded text-[9px] font-bold bg-purple-100 text-purple-700">
+                                                <span
+                                                    class="inline-flex items-center px-1.5 py-0 rounded text-[9px] font-bold bg-purple-100 text-purple-700">
                                                     <i class="fas fa-crown mr-0.5 text-[7px]"></i> Ketua
                                                 </span>
                                             @endif
-                                            <span class="inline-flex items-center px-1.5 py-0 rounded text-[9px] font-bold {{ $badge['color'] }}">
-                                                <i class="{{ $badge['icon'] }} mr-0.5 text-[7px]"></i> {{ $badge['label'] }}
+                                            <span
+                                                class="inline-flex items-center px-1.5 py-0 rounded text-[9px] font-bold {{ $badge['color'] }}">
+                                                <i class="{{ $badge['icon'] }} mr-0.5 text-[7px]"></i>
+                                                {{ $badge['label'] }}
                                             </span>
                                         </div>
                                     </div>
                                     {{-- Admin approve/reject for pending --}}
                                     @if ($member->peran !== 'Ketua' && $member->approval_status === 'pending')
                                         <div class="flex gap-1 ml-auto flex-shrink-0">
-                                            <form method="POST" action="{{ route('admin_inovasi.inovchalenge.submissions.members.approve', [$session, $submission, $member]) }}" class="inline">@csrf @method('PATCH')
-                                                <button type="submit" class="w-6 h-6 rounded-md bg-green-500 text-white text-[10px] hover:bg-green-600 transition flex items-center justify-center" title="Approve">
+                                            <form method="POST"
+                                                action="{{ route('admin_inovasi.inovchalenge.submissions.members.approve', [$session, $submission, $member]) }}"
+                                                class="inline">@csrf @method('PATCH')
+                                                <button type="submit"
+                                                    class="w-6 h-6 rounded-md bg-green-500 text-white text-[10px] hover:bg-green-600 transition flex items-center justify-center"
+                                                    title="Approve">
                                                     <i class="fas fa-check"></i>
                                                 </button>
                                             </form>
-                                            <form method="POST" action="{{ route('admin_inovasi.inovchalenge.submissions.members.reject', [$session, $submission, $member]) }}" class="inline">@csrf @method('PATCH')
-                                                <button type="submit" class="w-6 h-6 rounded-md bg-red-500 text-white text-[10px] hover:bg-red-600 transition flex items-center justify-center" title="Reject">
+                                            <form method="POST"
+                                                action="{{ route('admin_inovasi.inovchalenge.submissions.members.reject', [$session, $submission, $member]) }}"
+                                                class="inline">@csrf @method('PATCH')
+                                                <button type="submit"
+                                                    class="w-6 h-6 rounded-md bg-red-500 text-white text-[10px] hover:bg-red-600 transition flex items-center justify-center"
+                                                    title="Reject">
                                                     <i class="fas fa-times"></i>
                                                 </button>
                                             </form>
@@ -291,7 +306,8 @@
                             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                                 {{-- Section header --}}
                                 <div class="px-5 py-3 border-b border-gray-100 flex items-center gap-3">
-                                    <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
                                         {{ $sIdx + 1 }}
                                     </div>
                                     <div>
@@ -300,22 +316,31 @@
                                             <p class="text-[11px] text-gray-400 mt-0.5">{{ $section->deskripsi }}</p>
                                         @endif
                                     </div>
-                                    <span class="ml-auto text-[10px] text-gray-300 font-medium">{{ $section->fields->count() }} field</span>
+                                    <span
+                                        class="ml-auto text-[10px] text-gray-300 font-medium">{{ $section->fields->count() }}
+                                        field</span>
                                 </div>
                                 {{-- Section fields --}}
                                 <div class="divide-y divide-gray-50">
                                     @forelse ($section->fields as $field)
                                         @php
-                                            $fv = isset($st->loadedFieldValues) ? ($st->loadedFieldValues[$field->id] ?? null) : null;
+                                            $fv = isset($st->loadedFieldValues)
+                                                ? $st->loadedFieldValues[$field->id] ?? null
+                                                : null;
                                             $displayValue = null;
                                             if ($fv) {
-                                                if ($field->field_type === 'file') { $displayValue = $fv->value_file_path; }
-                                                elseif ($field->field_type === 'url') { $displayValue = $fv->value_url; }
-                                                else { $displayValue = $fv->value_text; }
+                                                if ($field->field_type === 'file') {
+                                                    $displayValue = $fv->value_file_path;
+                                                } elseif ($field->field_type === 'url') {
+                                                    $displayValue = $fv->value_url;
+                                                } else {
+                                                    $displayValue = $fv->value_text;
+                                                }
                                             }
                                             $isFilled = !is_null($displayValue) && $displayValue !== '';
                                         @endphp
-                                        <div class="px-5 py-3 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6 {{ !$isFilled ? 'opacity-50' : '' }}">
+                                        <div
+                                            class="px-5 py-3 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6 {{ !$isFilled ? 'opacity-50' : '' }}">
                                             <div class="sm:w-1/3 flex-shrink-0">
                                                 <p class="text-xs font-semibold text-gray-500 flex items-center gap-1">
                                                     {{ $field->field_label }}
@@ -335,10 +360,12 @@
                                                 @elseif ($field->field_type === 'url' && $isFilled)
                                                     <a href="{{ $displayValue }}" target="_blank"
                                                         class="text-sm text-teal-600 hover:underline break-all">
-                                                        <i class="fas fa-external-link-alt text-[10px] mr-1"></i>{{ $displayValue }}
+                                                        <i
+                                                            class="fas fa-external-link-alt text-[10px] mr-1"></i>{{ $displayValue }}
                                                     </a>
                                                 @elseif ($isFilled)
-                                                    <p class="text-sm text-gray-800 whitespace-pre-wrap leading-relaxed">{{ $displayValue }}</p>
+                                                    <p class="text-sm text-gray-800 whitespace-pre-wrap leading-relaxed">
+                                                        {{ $displayValue }}</p>
                                                 @else
                                                     <p class="text-sm text-gray-300 italic flex items-center gap-1">
                                                         <i class="fas fa-minus-circle text-[10px]"></i> Belum diisi
@@ -357,7 +384,8 @@
                         @if ($st->tahap->unsectionedFields->isNotEmpty())
                             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                                 <div class="px-5 py-3 border-b border-gray-100 flex items-center gap-3">
-                                    <div class="w-7 h-7 rounded-lg bg-gray-400 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-gray-400 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
                                         <i class="fas fa-ellipsis-h"></i>
                                     </div>
                                     <h4 class="text-sm font-bold text-gray-800">Lainnya</h4>
@@ -365,18 +393,26 @@
                                 <div class="divide-y divide-gray-50">
                                     @foreach ($st->tahap->unsectionedFields as $field)
                                         @php
-                                            $fv = isset($st->loadedFieldValues) ? ($st->loadedFieldValues[$field->id] ?? null) : null;
+                                            $fv = isset($st->loadedFieldValues)
+                                                ? $st->loadedFieldValues[$field->id] ?? null
+                                                : null;
                                             $displayValue = null;
                                             if ($fv) {
-                                                if ($field->field_type === 'file') { $displayValue = $fv->value_file_path; }
-                                                elseif ($field->field_type === 'url') { $displayValue = $fv->value_url; }
-                                                else { $displayValue = $fv->value_text; }
+                                                if ($field->field_type === 'file') {
+                                                    $displayValue = $fv->value_file_path;
+                                                } elseif ($field->field_type === 'url') {
+                                                    $displayValue = $fv->value_url;
+                                                } else {
+                                                    $displayValue = $fv->value_text;
+                                                }
                                             }
                                             $isFilled = !is_null($displayValue) && $displayValue !== '';
                                         @endphp
-                                        <div class="px-5 py-3 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6 {{ !$isFilled ? 'opacity-50' : '' }}">
+                                        <div
+                                            class="px-5 py-3 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6 {{ !$isFilled ? 'opacity-50' : '' }}">
                                             <div class="sm:w-1/3 flex-shrink-0">
-                                                <p class="text-xs font-semibold text-gray-500">{{ $field->field_label }}</p>
+                                                <p class="text-xs font-semibold text-gray-500">{{ $field->field_label }}
+                                                </p>
                                             </div>
                                             <div class="flex-1 min-w-0">
                                                 @if ($field->field_type === 'file' && $isFilled)
@@ -386,11 +422,15 @@
                                                         {{ $fv->original_filename ?? basename($displayValue) }}
                                                     </a>
                                                 @elseif ($field->field_type === 'url' && $isFilled)
-                                                    <a href="{{ $displayValue }}" target="_blank" class="text-sm text-teal-600 hover:underline break-all">{{ $displayValue }}</a>
+                                                    <a href="{{ $displayValue }}" target="_blank"
+                                                        class="text-sm text-teal-600 hover:underline break-all">{{ $displayValue }}</a>
                                                 @elseif ($isFilled)
-                                                    <p class="text-sm text-gray-800 whitespace-pre-wrap">{{ $displayValue }}</p>
+                                                    <p class="text-sm text-gray-800 whitespace-pre-wrap">
+                                                        {{ $displayValue }}</p>
                                                 @else
-                                                    <p class="text-sm text-gray-300 italic"><i class="fas fa-minus-circle text-[10px] mr-1"></i>Belum diisi</p>
+                                                    <p class="text-sm text-gray-300 italic"><i
+                                                            class="fas fa-minus-circle text-[10px] mr-1"></i>Belum diisi
+                                                    </p>
                                                 @endif
                                             </div>
                                         </div>
@@ -409,20 +449,29 @@
                                 <div class="divide-y divide-gray-50">
                                     @foreach ($st->tahap->fields->sortBy('urutan') as $field)
                                         @php
-                                            $fv = isset($st->loadedFieldValues) ? ($st->loadedFieldValues[$field->id] ?? null) : null;
+                                            $fv = isset($st->loadedFieldValues)
+                                                ? $st->loadedFieldValues[$field->id] ?? null
+                                                : null;
                                             $displayValue = null;
                                             if ($fv) {
-                                                if ($field->field_type === 'file') { $displayValue = $fv->value_file_path; }
-                                                elseif ($field->field_type === 'url') { $displayValue = $fv->value_url; }
-                                                else { $displayValue = $fv->value_text; }
+                                                if ($field->field_type === 'file') {
+                                                    $displayValue = $fv->value_file_path;
+                                                } elseif ($field->field_type === 'url') {
+                                                    $displayValue = $fv->value_url;
+                                                } else {
+                                                    $displayValue = $fv->value_text;
+                                                }
                                             }
                                             $isFilled = !is_null($displayValue) && $displayValue !== '';
                                         @endphp
-                                        <div class="px-5 py-3 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6 {{ !$isFilled ? 'opacity-50' : '' }}">
+                                        <div
+                                            class="px-5 py-3 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6 {{ !$isFilled ? 'opacity-50' : '' }}">
                                             <div class="sm:w-1/3 flex-shrink-0">
                                                 <p class="text-xs font-semibold text-gray-500">
                                                     {{ $field->field_label }}
-                                                    @if ($field->is_required)<span class="text-red-400">*</span>@endif
+                                                    @if ($field->is_required)
+                                                        <span class="text-red-400">*</span>
+                                                    @endif
                                                 </p>
                                                 <p class="text-[10px] text-gray-300 mt-0.5">{{ $field->field_type }}</p>
                                             </div>
@@ -434,11 +483,15 @@
                                                         {{ $fv->original_filename ?? basename($displayValue) }}
                                                     </a>
                                                 @elseif ($field->field_type === 'url' && $isFilled)
-                                                    <a href="{{ $displayValue }}" target="_blank" class="text-sm text-teal-600 hover:underline break-all">{{ $displayValue }}</a>
+                                                    <a href="{{ $displayValue }}" target="_blank"
+                                                        class="text-sm text-teal-600 hover:underline break-all">{{ $displayValue }}</a>
                                                 @elseif ($isFilled)
-                                                    <p class="text-sm text-gray-800 whitespace-pre-wrap">{{ $displayValue }}</p>
+                                                    <p class="text-sm text-gray-800 whitespace-pre-wrap">
+                                                        {{ $displayValue }}</p>
                                                 @else
-                                                    <p class="text-sm text-gray-300 italic"><i class="fas fa-minus-circle text-[10px] mr-1"></i>Belum diisi</p>
+                                                    <p class="text-sm text-gray-300 italic"><i
+                                                            class="fas fa-minus-circle text-[10px] mr-1"></i>Belum diisi
+                                                    </p>
                                                 @endif
                                             </div>
                                         </div>
