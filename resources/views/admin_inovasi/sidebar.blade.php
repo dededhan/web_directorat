@@ -54,14 +54,9 @@
             </button>
             <div x-show="open" x-transition class="mt-2 pl-8 space-y-2" x-cloak>
                 <a href="{{ route('admin_inovasi.inovchalenge.sessions.index') }}"
-                    class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 {{ request()->routeIs('admin_inovasi.inovchalenge.sessions.*') ? 'bg-gray-700 text-white' : '' }}">
+                    class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 {{ request()->routeIs('admin_inovasi.inovchalenge.sessions.*') || request()->routeIs('admin_inovasi.inovchalenge.submissions.*') ? 'bg-gray-700 text-white' : '' }}">
                     <i class="fas fa-list fa-fw w-5 text-center mr-2"></i>
                     Daftar Sesi
-                </a>
-                <a href="{{ route('admin_inovasi.inovchalenge.submissions.index') }}"
-                    class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 {{ request()->routeIs('admin_inovasi.inovchalenge.submissions.*') ? 'bg-gray-700 text-white' : '' }}">
-                    <i class="fas fa-file-alt fa-fw w-5 text-center mr-2"></i>
-                    Submissions
                 </a>
             </div>
         </div>

@@ -4,20 +4,78 @@
     @php
         $tahap = $submissionTahap->tahap;
         $isEditable = $submissionTahap->isEditable();
+        $hasSections = $tahap->sections->isNotEmpty();
+        $tracking = $submissionTahap->getTrackingStatus();
+        $trackingBadgeColors = [
+            'belum_diisi' => 'bg-gray-100 text-gray-600 border-gray-200',
+            'draft' => 'bg-yellow-100 text-yellow-700 border-yellow-200',
+            'diajukan' => 'bg-blue-100 text-blue-700 border-blue-200',
+            'sedang_direview' => 'bg-purple-100 text-purple-700 border-purple-200',
+            'perbaikan' => 'bg-orange-100 text-orange-700 border-orange-200',
+            'lolos' => 'bg-green-100 text-green-700 border-green-200',
+        ];
+
+        // Build section list for navigation
+        $sectionList = [];
+        if ($hasSections) {
+            foreach ($tahap->sections as $i => $sec) {
+                $sectionList[] = [
+                    'id' => 'section-' . $sec->id,
+                    'label' => $sec->judul,
+                    'count' => $sec->fields->count(),
+                ];
+            }
+            if ($tahap->unsectionedFields->isNotEmpty()) {
+                $sectionList[] = [
+                    'id' => 'section-other',
+                    'label' => 'Lainnya',
+                    'count' => $tahap->unsectionedFields->count(),
+                ];
+            }
+        }
     @endphp
 
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-            {{-- Header --}}
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $tahap->nama_tahap }}</h1>
+            {{-- Top Bar --}}
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.show', $submission) }}"
+                        class="w-9 h-9 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-700 hover:border-gray-300 transition shadow-sm">
+                        <i class="fas fa-arrow-left text-sm"></i>
+                    </a>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-teal-100 text-teal-700 text-xs font-bold">{{ $tahap->tahap_ke }}</span>
+                            <h1 class="text-lg font-bold text-gray-900">{{ $tahap->nama_tahap }}</h1>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-0.5">{{ $submission->session->nama_sesi }}</p>
+                    </div>
                 </div>
-                <a href="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.show', $submission) }}"
-                    class="mt-4 sm:mt-0 inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 font-medium text-sm rounded-xl hover:bg-gray-200 transition">
-                    <i class="fas fa-arrow-left mr-2"></i> Kembali
-                </a>
+                <div class="flex flex-wrap gap-2">
+                    <span
+                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border {{ $trackingBadgeColors[$tracking['key']] ?? 'bg-gray-100 text-gray-600 border-gray-200' }}">
+                        <i class="fas {{ $tracking['icon'] }} text-[8px] mr-1.5"></i>
+                        {{ $tracking['label'] }}
+                    </span>
+                    @if ($tahap->periode_awal && $tahap->periode_akhir)
+                        @php $timingStatus = $tahap->getTimingStatus(); @endphp
+                        @if ($timingStatus === 'ditutup')
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-500 border border-gray-200">
+                                <i class="fas fa-ban mr-1 text-[10px]"></i> Ditutup
+                            </span>
+                        @endif
+                    @endif
+                    @if (!$isEditable)
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-600 border border-red-200">
+                            <i class="fas fa-lock mr-1 text-[10px]"></i> Read-only
+                        </span>
+                    @endif
+                </div>
             </div>
 
             {{-- Flash --}}
@@ -32,40 +90,6 @@
                 </div>
             @endif
 
-            {{-- Status badge --}}
-            <div class="mb-6 flex flex-wrap gap-2 items-center text-sm">
-                @php
-                    $tracking = $submissionTahap->getTrackingStatus();
-                    $trackingBadgeColors = [
-                        'belum_diisi' => 'bg-gray-100 text-gray-600',
-                        'draft' => 'bg-yellow-100 text-yellow-700',
-                        'diajukan' => 'bg-blue-100 text-blue-700',
-                        'sedang_direview' => 'bg-purple-100 text-purple-700',
-                        'perbaikan' => 'bg-orange-100 text-orange-700',
-                        'lolos' => 'bg-green-100 text-green-700',
-                    ];
-                @endphp
-                <span
-                    class="inline-flex items-center px-3 py-1 rounded-full font-semibold {{ $trackingBadgeColors[$tracking['key']] ?? 'bg-gray-100 text-gray-600' }}">
-                    <i class="fas {{ $tracking['icon'] }} text-[8px] mr-1.5"></i>
-                    {{ $tracking['label'] }}
-                </span>
-                @if ($tahap->periode_awal && $tahap->periode_akhir)
-                    @php $timingStatus = $tahap->getTimingStatus(); @endphp
-                    @if ($timingStatus === 'ditutup')
-                        <span
-                            class="inline-flex items-center px-3 py-1 rounded-full font-semibold bg-gray-200 text-gray-500">
-                            <i class="fas fa-ban mr-1 text-[10px]"></i> Periode Ditutup
-                        </span>
-                    @endif
-                @endif
-                @if (!$isEditable)
-                    <span class="inline-flex items-center px-3 py-1 rounded-full font-semibold bg-red-100 text-red-600">
-                        <i class="fas fa-lock mr-1 text-[10px]"></i> Read-only
-                    </span>
-                @endif
-            </div>
-
             {{-- Admin note --}}
             @if ($submissionTahap->catatan_admin)
                 <div class="mb-6 bg-orange-50 border border-orange-200 rounded-xl p-4 text-sm text-orange-700">
@@ -74,95 +98,152 @@
                 </div>
             @endif
 
-            {{-- ═══════════════════ FORM FIELDS ═══════════════════ --}}
-            <form id="tahapForm"
-                action="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.tahap.save', [$submission, $tahap->id]) }}"
-                method="POST" enctype="multipart/form-data">
-                @csrf
-
-                {{-- ══ SECTIONED FORM FIELDS ══ --}}
-                @php $hasSections = $tahap->sections->isNotEmpty(); @endphp
-
-                @if ($hasSections)
-                    @foreach ($tahap->sections as $section)
-                        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-6">
-                            <div class="px-6 py-3 border-b border-gray-100 bg-gradient-to-r from-indigo-500 to-indigo-600">
-                                <h2 class="text-base font-bold text-white">
-                                    <i class="fas fa-folder-open mr-2"></i>{{ $section->judul }}
-                                </h2>
-                                @if ($section->deskripsi)
-                                    <p class="text-indigo-200 text-xs mt-0.5">{{ $section->deskripsi }}</p>
-                                @endif
-                            </div>
-                            <div class="p-6 space-y-6">
-                                @if ($section->fields->isEmpty())
-                                    <p class="text-sm text-gray-400 text-center py-4">Belum ada field di seksi ini.</p>
-                                @else
-                                    @foreach ($section->fields as $field)
-                                        @include('subdirektorat-inovasi.dosen.inovchalenge.submissions._field_input')
-                                    @endforeach
-                                @endif
-                            </div>
-                        </div>
-                    @endforeach
-
-                    {{-- Unsectioned fields (if any) --}}
-                    @if ($tahap->unsectionedFields->isNotEmpty())
-                        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-6">
-                            <div class="px-6 py-3 border-b border-gray-100 bg-gradient-to-r from-gray-500 to-gray-600">
-                                <h2 class="text-base font-bold text-white">
-                                    <i class="fas fa-file-alt mr-2"></i>Informasi Tambahan
-                                </h2>
-                            </div>
-                            <div class="p-6 space-y-6">
-                                @foreach ($tahap->unsectionedFields as $field)
-                                    @include('subdirektorat-inovasi.dosen.inovchalenge.submissions._field_input')
+            {{-- ═══ MAIN LAYOUT: Section Nav + Form ═══ --}}
+            <div class="flex gap-6">
+                {{-- Section Navigation Sidebar (desktop) --}}
+                @if ($hasSections && count($sectionList) > 1)
+                    <div class="hidden lg:block w-56 flex-shrink-0">
+                        <div class="sticky top-8">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Bagian Formulir
+                            </p>
+                            <nav class="space-y-1">
+                                @foreach ($sectionList as $i => $sec)
+                                    <a href="#{{ $sec['id'] }}"
+                                        class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-teal-700 hover:bg-teal-50 transition group">
+                                        <span
+                                            class="w-5 h-5 rounded-md bg-gray-100 group-hover:bg-teal-100 flex items-center justify-center text-[10px] font-bold text-gray-400 group-hover:text-teal-600">{{ $i + 1 }}</span>
+                                        <span class="truncate">{{ $sec['label'] }}</span>
+                                        <span class="ml-auto text-[10px] text-gray-300">{{ $sec['count'] }}</span>
+                                    </a>
                                 @endforeach
+                            </nav>
+
+                            {{-- Quick field count --}}
+                            <div class="mt-4 p-3 bg-gray-50 rounded-xl border border-gray-100">
+                                <p class="text-[10px] text-gray-400 font-semibold uppercase">Total Fields</p>
+                                <p class="text-lg font-bold text-gray-700">{{ $tahap->fields->count() }}</p>
                             </div>
                         </div>
-                    @endif
-                @else
-                    {{-- No sections → flat form --}}
-                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-6">
-                        <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-teal-500 to-teal-600">
-                            <h2 class="text-lg font-bold text-white"><i class="fas fa-file-alt mr-2"></i>Formulir</h2>
-                        </div>
-                        <div class="p-6 space-y-6">
-                            @if ($tahap->fields->isEmpty())
-                                <p class="text-sm text-gray-400 text-center py-4">Belum ada field yang dikonfigurasi untuk
-                                    tahap ini.</p>
-                            @else
-                                @foreach ($tahap->fields->sortBy('urutan') as $field)
-                                    @include('subdirektorat-inovasi.dosen.inovchalenge.submissions._field_input')
-                                @endforeach
+                    </div>
+                @endif
+
+                {{-- Form Content --}}
+                <div class="flex-1 min-w-0">
+                    <form id="tahapForm"
+                        action="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.tahap.save', [$submission, $tahap->id]) }}"
+                        method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        @if ($hasSections)
+                            @foreach ($tahap->sections as $sIdx => $section)
+                                <div id="section-{{ $section->id }}" class="mb-6 scroll-mt-8">
+                                    {{-- Section Header --}}
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div
+                                            class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                            {{ $sIdx + 1 }}
+                                        </div>
+                                        <div>
+                                            <h2 class="text-base font-bold text-gray-900">{{ $section->judul }}</h2>
+                                            @if ($section->deskripsi)
+                                                <p class="text-xs text-gray-400 mt-0.5">{{ $section->deskripsi }}</p>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    {{-- Section Fields --}}
+                                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                                        <div class="divide-y divide-gray-50">
+                                            @if ($section->fields->isEmpty())
+                                                <div class="p-6 text-center text-sm text-gray-400">Belum ada field di bagian
+                                                    ini.</div>
+                                            @else
+                                                @foreach ($section->fields as $field)
+                                                    <div class="p-5">
+                                                        @include('subdirektorat-inovasi.dosen.inovchalenge.submissions._field_input')
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            {{-- Unsectioned fields --}}
+                            @if ($tahap->unsectionedFields->isNotEmpty())
+                                <div id="section-other" class="mb-6 scroll-mt-8">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div
+                                            class="w-8 h-8 rounded-xl bg-gray-400 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                            <i class="fas fa-ellipsis-h text-sm"></i>
+                                        </div>
+                                        <h2 class="text-base font-bold text-gray-900">Informasi Tambahan</h2>
+                                    </div>
+                                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                                        <div class="divide-y divide-gray-50">
+                                            @foreach ($tahap->unsectionedFields as $field)
+                                                <div class="p-5">
+                                                    @include('subdirektorat-inovasi.dosen.inovchalenge.submissions._field_input')
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
                             @endif
-                        </div>
-                    </div>
-                @endif
+                        @else
+                            {{-- No sections: flat form --}}
+                            <div class="mb-6">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div
+                                        class="w-8 h-8 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                        <i class="fas fa-file-alt text-sm"></i>
+                                    </div>
+                                    <h2 class="text-base font-bold text-gray-900">Formulir</h2>
+                                </div>
+                                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                                    @if ($tahap->fields->isEmpty())
+                                        <div class="p-6 text-center text-sm text-gray-400">Belum ada field yang
+                                            dikonfigurasi untuk tahap ini.</div>
+                                    @else
+                                        <div class="divide-y divide-gray-50">
+                                            @foreach ($tahap->fields->sortBy('urutan') as $field)
+                                                <div class="p-5">
+                                                    @include('subdirektorat-inovasi.dosen.inovchalenge.submissions._field_input')
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
 
-                {{-- ═══════════════════ ACTION BUTTONS ═══════════════════ --}}
-                @if ($isEditable && $tahap->fields->isNotEmpty())
-                    <div class="flex flex-col sm:flex-row gap-3 mb-8">
-                        <button type="submit"
-                            class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white font-semibold text-sm rounded-xl hover:from-gray-600 hover:to-gray-700 transition shadow">
-                            <i class="fas fa-save mr-2"></i> Simpan Draft
-                        </button>
-                        <button type="button" id="btnSubmit"
-                            class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold text-sm rounded-xl hover:from-teal-600 hover:to-teal-700 transition shadow">
-                            <i class="fas fa-paper-plane mr-2"></i> Submit Tahap {{ $tahap->tahap_ke }}
-                        </button>
-                    </div>
-                @endif
-            </form>
+                        {{-- ═══ ACTION BUTTONS ═══ --}}
+                        @if ($isEditable && $tahap->fields->isNotEmpty())
+                            <div class="sticky bottom-4 z-20">
+                                <div
+                                    class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 p-4 flex flex-col sm:flex-row gap-3">
+                                    <button type="submit"
+                                        class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-gray-100 text-gray-700 font-semibold text-sm rounded-xl hover:bg-gray-200 transition border border-gray-200">
+                                        <i class="fas fa-save mr-2"></i> Simpan Draft
+                                    </button>
+                                    <button type="button" id="btnSubmit"
+                                        class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold text-sm rounded-xl hover:from-teal-600 hover:to-teal-700 transition shadow-sm">
+                                        <i class="fas fa-paper-plane mr-2"></i> Submit Tahap {{ $tahap->tahap_ke }}
+                                    </button>
+                                </div>
+                            </div>
+                        @endif
+                    </form>
 
-            {{-- Hidden submit form --}}
-            <form id="submitForm"
-                action="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.tahap.submit', [$submission, $tahap->id]) }}"
-                method="POST" class="hidden">
-                @csrf
-            </form>
+                    {{-- Hidden submit form --}}
+                    <form id="submitForm"
+                        action="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.tahap.submit', [$submission, $tahap->id]) }}"
+                        method="POST" class="hidden">
+                        @csrf
+                    </form>
+                </div>
+            </div>
 
-            {{-- Anggota Tim: moved to identitas page --}}
         </div>
     </div>
 @endsection
@@ -182,7 +263,6 @@
                 cancelButtonText: 'Batal',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Copy form field values to hidden submit form
                     const tahapForm = document.getElementById('tahapForm');
                     const submitForm = document.getElementById('submitForm');
                     const formData = new FormData(tahapForm);

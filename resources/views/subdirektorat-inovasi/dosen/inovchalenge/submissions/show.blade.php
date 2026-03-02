@@ -74,6 +74,68 @@
                 </div>
             @endif
 
+            {{-- ═══ Anggota Tim ═══ --}}
+            <div class="mb-6 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-5 py-3 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="text-sm font-bold text-gray-700 flex items-center gap-2">
+                        <i class="fas fa-users text-indigo-500"></i> Anggota Tim
+                        <span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                            {{ $submission->members->count() }} orang
+                        </span>
+                    </h2>
+                    <a href="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.identitas', $submission) }}"
+                        class="text-xs text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1">
+                        <i class="fas fa-user-plus text-[11px]"></i> Kelola
+                    </a>
+                </div>
+                <div class="px-5 py-3">
+                    @if ($submission->members->count())
+                        <div class="flex flex-wrap gap-3">
+                            @foreach ($submission->members as $member)
+                                @php $badge = $member->getApprovalBadge(); @endphp
+                                <div
+                                    class="flex items-center gap-2.5 bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+                                        {{ strtoupper(substr($member->nama_lengkap, 0, 1)) }}
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 truncate">{{ $member->nama_lengkap }}
+                                        </p>
+                                        <div class="flex items-center gap-1.5 mt-0.5">
+                                            <span class="text-[10px] text-gray-400">{{ $member->getTipeLabel() }}</span>
+                                            @if ($member->peran === 'Ketua')
+                                                <span
+                                                    class="inline-flex items-center px-1.5 py-0 rounded text-[9px] font-bold bg-indigo-100 text-indigo-700">
+                                                    <i class="fas fa-crown mr-0.5 text-[7px]"></i> Ketua
+                                                </span>
+                                            @endif
+                                            <span
+                                                class="inline-flex items-center px-1.5 py-0 rounded text-[9px] font-bold {{ $badge['color'] }}">
+                                                <i class="{{ $badge['icon'] }} mr-0.5 text-[7px]"></i>
+                                                {{ $badge['label'] }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        @php
+                            $pendingCount = $submission->members->where('approval_status', 'pending')->count();
+                        @endphp
+                        @if ($pendingCount > 0)
+                            <div
+                                class="mt-3 flex items-center gap-2 text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                                <i class="fas fa-clock"></i>
+                                <span><strong>{{ $pendingCount }}</strong> anggota menunggu approval</span>
+                            </div>
+                        @endif
+                    @else
+                        <p class="text-sm text-gray-400 text-center py-2">Belum ada anggota tim</p>
+                    @endif
+                </div>
+            </div>
+
             {{-- ═══ Tracking Progress Per Tahap ═══ --}}
             <div class="mb-8">
                 <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -256,52 +318,6 @@
                         </div>
                     </div>
                 @endforeach
-            </div>
-
-            {{-- Members --}}
-            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-100">
-                    <h2 class="text-lg font-bold text-gray-900"><i class="fas fa-users mr-2 text-teal-500"></i>Anggota Tim
-                    </h2>
-                </div>
-                <div class="p-6">
-                    @if ($submission->members->count())
-                        <div class="divide-y divide-gray-100">
-                            @foreach ($submission->members as $member)
-                                <div class="flex items-center justify-between py-3 {{ $loop->first ? '' : '' }}">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="w-9 h-9 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white font-bold text-sm">
-                                            {{ strtoupper(substr($member->nama_lengkap, 0, 1)) }}
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-900">{{ $member->nama_lengkap }}</p>
-                                            <p class="text-xs text-gray-400">
-                                                {{ $member->getTipeLabel() }}{{ $member->peran ? ' — ' . $member->peran : '' }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        @if ($member->peran === 'Ketua')
-                                            <span
-                                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-teal-100 text-teal-700">
-                                                <i class="fas fa-crown mr-1 text-[9px]"></i> Ketua
-                                            </span>
-                                        @endif
-                                        @php $badge = $member->getApprovalBadge(); @endphp
-                                        <span
-                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold {{ $badge['color'] }}">
-                                            <i class="{{ $badge['icon'] }} mr-1 text-[9px]"></i>
-                                            {{ $badge['label'] }}
-                                        </span>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <p class="text-sm text-gray-400 text-center py-4">Belum ada anggota tim</p>
-                    @endif
-                </div>
             </div>
 
             {{-- ═══ Riwayat Perubahan Status ═══ --}}

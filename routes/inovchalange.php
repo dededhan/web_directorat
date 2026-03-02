@@ -57,22 +57,22 @@ Route::prefix('admin_inovasi/inovchalenge')->name('admin_inovasi.inovchalenge.')
         Route::patch('tahap/{tahap}/sections/reorder', [TahapController::class, 'reorderSections'])
             ->name('tahap.sections.reorder');
 
-        // Submissions management
-        Route::get('submissions', [SubmissionAdminController::class, 'index'])
+        // Submissions management (scoped per session)
+        Route::get('sessions/{session}/submissions', [SubmissionAdminController::class, 'index'])
             ->name('submissions.index');
-        Route::get('submissions/{submission}', [SubmissionAdminController::class, 'show'])
+        Route::get('sessions/{session}/submissions/{submission}', [SubmissionAdminController::class, 'show'])
             ->name('submissions.show');
-        Route::patch('submissions/{submission}/status', [SubmissionAdminController::class, 'updateStatus'])
+        Route::patch('sessions/{session}/submissions/{submission}/status', [SubmissionAdminController::class, 'updateStatus'])
             ->name('submissions.updateStatus');
-        Route::patch('submissions/{submission}/assign-reviewer', [SubmissionAdminController::class, 'assignReviewer'])
+        Route::patch('sessions/{session}/submissions/{submission}/assign-reviewer', [SubmissionAdminController::class, 'assignReviewer'])
             ->name('submissions.assignReviewer');
         Route::patch('submission-tahap/{submissionTahap}/status', [SubmissionAdminController::class, 'updateTahapStatus'])
             ->name('submissions.updateTahapStatus');
 
         // Member approval by admin
-        Route::patch('submissions/{submission}/members/{member}/approve', [SubmissionAdminController::class, 'approveMember'])
+        Route::patch('sessions/{session}/submissions/{submission}/members/{member}/approve', [SubmissionAdminController::class, 'approveMember'])
             ->name('submissions.members.approve');
-        Route::patch('submissions/{submission}/members/{member}/reject', [SubmissionAdminController::class, 'rejectMember'])
+        Route::patch('sessions/{session}/submissions/{submission}/members/{member}/reject', [SubmissionAdminController::class, 'rejectMember'])
             ->name('submissions.members.reject');
     });
 

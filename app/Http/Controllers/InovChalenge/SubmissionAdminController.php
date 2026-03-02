@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\InovChalenge;
 
 use App\Http\Controllers\Controller;
+use App\Models\InovChalengeSession;
 use App\Models\InovChalengeSubmission;
 use App\Models\InovChalengeSubmissionMember;
 use App\Models\InovChalengeSubmissionTahap;
@@ -16,22 +17,13 @@ use Illuminate\Support\Facades\Auth;
 class SubmissionAdminController extends Controller
 {
     /**
-     * List all submissions (filterable by session, status, search).
+     * List submissions for a specific session.
      */
-    public function index(Request $request)
+    public function index(Request $request, InovChalengeSession $session)
     {
-        $query = InovChalengeSubmission::with(['session', 'user', 'submissionTahap.tahap', 'members'])
-            ->withCount('reviewers');
-
-        // Filter by session
-        if ($request->filled('session_id')) {
-            $query->where('inov_chalenge_session_id', $request->session_id);
-        }
-
-        // Filter by overall status
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
+        $query = InovChalengeSubmission::with(['user', 'submissionTahap.tahap', 'members', 'reviewers'])
+            ->withCount('reviewers')
+            ->where('inov_chalenge_session_id', $session->id);
 
         // Search by user name
         if ($request->filled('search')) {
@@ -42,21 +34,28 @@ class SubmissionAdminController extends Controller
 
         $submissions = $query->latest()->paginate(15)->withQueryString();
 
-        // Sessions for filter dropdown
-        $sessions = \App\Models\InovChalengeSession::orderBy('nama_sesi')->get();
+        $session->load('tahap');
+        $hasReviewerMap = [];
+        foreach ($submissions as $sub) {
+            $hasReviewerMap[$sub->id] = $sub->reviewers->isNotEmpty();
+        }
 
-        return view('admin_inovasi.inovchalenge.submissions.index', compact('submissions', 'sessions'));
+        return view('admin_inovasi.inovchalenge.submissions.index', compact('submissions', 'session', 'hasReviewerMap'));
     }
 
     /**
      * Show submission detail — per-Tahap accordion with field values, anggota, reviews.
      */
-    public function show(InovChalengeSubmission $submission)
+    public function show(InovChalengeSession $session, InovChalengeSubmission $submission)
     {
+        abort_if($submission->inov_chalenge_session_id !== $session->id, 404);
+
         $submission->load([
             'session',
             'user',
             'submissionTahap.tahap.fields',
+            'submissionTahap.tahap.sections.fields',
+            'submissionTahap.tahap.unsectionedFields',
             'members.user',
             'reviewers',
             'reviews.reviewer',
@@ -77,13 +76,15 @@ class SubmissionAdminController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('admin_inovasi.inovchalenge.submissions.show', compact('submission', 'availableReviewers'));
+        $hasReviewer = $submission->reviewers->isNotEmpty();
+
+        return view('admin_inovasi.inovchalenge.submissions.show', compact('submission', 'availableReviewers', 'session', 'hasReviewer'));
     }
 
     /**
      * Assign / sync reviewers to a submission.
      */
-    public function assignReviewer(Request $request, InovChalengeSubmission $submission)
+    public function assignReviewer(Request $request, InovChalengeSession $session, InovChalengeSubmission $submission)
     {
         $request->validate([
             'reviewer_ids' => 'required|array',
@@ -123,7 +124,7 @@ class SubmissionAdminController extends Controller
     /**
      * Update overall submission status.
      */
-    public function updateStatus(Request $request, InovChalengeSubmission $submission)
+    public function updateStatus(Request $request, InovChalengeSession $session, InovChalengeSubmission $submission)
     {
         $request->validate([
             'status' => 'required|in:draft,diajukan,menunggu_direview,sedang_direview,perbaikan_diperlukan,proses_tahap_selanjutnya,selesai',
@@ -190,7 +191,7 @@ class SubmissionAdminController extends Controller
     /**
      * Approve a pending team member.
      */
-    public function approveMember(InovChalengeSubmission $submission, InovChalengeSubmissionMember $member)
+    public function approveMember(InovChalengeSession $session, InovChalengeSubmission $submission, InovChalengeSubmissionMember $member)
     {
         abort_if($member->inov_chalenge_submission_id !== $submission->id, 404);
         abort_if($member->approval_status !== 'pending', 422, 'Anggota ini tidak dalam status pending.');
@@ -215,7 +216,7 @@ class SubmissionAdminController extends Controller
     /**
      * Reject a pending team member.
      */
-    public function rejectMember(InovChalengeSubmission $submission, InovChalengeSubmissionMember $member)
+    public function rejectMember(InovChalengeSession $session, InovChalengeSubmission $submission, InovChalengeSubmissionMember $member)
     {
         abort_if($member->inov_chalenge_submission_id !== $submission->id, 404);
         abort_if($member->approval_status !== 'pending', 422, 'Anggota ini tidak dalam status pending.');

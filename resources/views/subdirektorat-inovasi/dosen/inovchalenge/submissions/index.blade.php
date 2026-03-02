@@ -55,6 +55,32 @@
                                             </span>
                                         @endforeach
                                     </div>
+
+                                    {{-- Anggota Tim info --}}
+                                    @if ($submission->members && $submission->members->count())
+                                        @php
+                                            $memberCount = $submission->members->count();
+                                            $pendingCount = $submission->members
+                                                ->where('approval_status', 'pending')
+                                                ->count();
+                                        @endphp
+                                        <div class="mt-2 flex items-center gap-3 text-xs text-gray-400">
+                                            <span class="inline-flex items-center gap-1">
+                                                <i class="fas fa-users text-indigo-400"></i>
+                                                <strong class="text-gray-600">{{ $memberCount }}</strong> anggota
+                                            </span>
+                                            @if ($pendingCount > 0)
+                                                <span class="inline-flex items-center gap-1 text-amber-500">
+                                                    <i class="fas fa-clock"></i>
+                                                    {{ $pendingCount }} menunggu approval
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center gap-1 text-green-500">
+                                                    <i class="fas fa-check-circle"></i> Semua approved
+                                                </span>
+                                            @endif
+                                        </div>
+                                    @endif
                                 </div>
 
                                 {{-- Right: Tahap timing --}}

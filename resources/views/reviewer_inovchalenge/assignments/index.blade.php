@@ -1,4 +1,4 @@
-@extends('subdirektorat-inovasi.dosen.index')
+@extends('reviewer_inovchalenge.layout')
 
 @section('content')
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -21,16 +21,6 @@
                 @forelse($submissions as $sub)
                     @php
                         $hasReviewed = $reviewedSubmissionIds->contains($sub->id);
-                        $statusKey = is_object($sub->status) ? $sub->status->value : $sub->status;
-                        $statusColors = [
-                            'draft' => 'bg-gray-100 text-gray-700',
-                            'diajukan' => 'bg-blue-100 text-blue-700',
-                            'menunggu_direview' => 'bg-yellow-100 text-yellow-700',
-                            'sedang_direview' => 'bg-purple-100 text-purple-700',
-                            'perbaikan_diperlukan' => 'bg-orange-100 text-orange-700',
-                            'proses_tahap_selanjutnya' => 'bg-cyan-100 text-cyan-700',
-                            'selesai' => 'bg-green-100 text-green-700',
-                        ];
                     @endphp
                     <div
                         class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition">
@@ -54,11 +44,6 @@
                                     </div>
                                     <p class="text-sm text-gray-500">
                                         <i class="fas fa-user mr-1"></i> {{ $sub->user->name }}
-                                        <span class="text-gray-300 mx-1">·</span>
-                                        <span
-                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold {{ $statusColors[$statusKey] ?? 'bg-gray-100 text-gray-700' }}">
-                                            {{ ucwords(str_replace('_', ' ', $statusKey)) }}
-                                        </span>
                                     </p>
                                 </div>
 

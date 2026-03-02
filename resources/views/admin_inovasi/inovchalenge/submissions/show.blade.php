@@ -9,7 +9,13 @@
                 <ol class="flex items-center space-x-2 text-sm text-gray-500">
                     <li><a href="{{ route('admin_inovasi.dashboard') }}" class="hover:text-teal-600">Dashboard</a></li>
                     <li><i class="fas fa-chevron-right text-xs"></i></li>
-                    <li><a href="{{ route('admin_inovasi.inovchalenge.submissions.index') }}"
+                    <li><a href="{{ route('admin_inovasi.inovchalenge.sessions.index') }}"
+                            class="hover:text-teal-600">Innovation Challenge</a></li>
+                    <li><i class="fas fa-chevron-right text-xs"></i></li>
+                    <li><a href="{{ route('admin_inovasi.inovchalenge.sessions.show', $session) }}"
+                            class="hover:text-teal-600">{{ Str::limit($session->nama_sesi, 25) }}</a></li>
+                    <li><i class="fas fa-chevron-right text-xs"></i></li>
+                    <li><a href="{{ route('admin_inovasi.inovchalenge.submissions.index', $session) }}"
                             class="hover:text-teal-600">Submissions</a></li>
                     <li><i class="fas fa-chevron-right text-xs"></i></li>
                     <li class="text-gray-700 font-medium">Detail #{{ $submission->id }}</li>
@@ -29,9 +35,9 @@
             @endif
 
             {{-- Header / Summary --}}
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div class="grid grid-cols-1 gap-6 mb-8">
                 {{-- Info Card --}}
-                <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
                     <h1 class="text-xl font-bold text-gray-900 mb-4">{{ $submission->session->nama_sesi }}</h1>
                     <div class="grid grid-cols-2 gap-4 text-sm">
                         <div>
@@ -45,29 +51,48 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                {{-- Status Control Card --}}
-                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-                    <h3 class="text-sm font-bold text-gray-700 mb-3"><i class="fas fa-sliders-h mr-1 text-teal-500"></i>
-                        Status Keseluruhan</h3>
-                    <form method="POST"
-                        action="{{ route('admin_inovasi.inovchalenge.submissions.updateStatus', $submission) }}">
-                        @csrf
-                        @method('PATCH')
-                        @php $statusKey = is_object($submission->status) ? $submission->status->value : $submission->status; @endphp
-                        <select name="status"
-                            class="w-full rounded-lg border-gray-300 text-sm focus:border-teal-500 focus:ring-teal-500 mb-3">
-                            @foreach (['draft', 'diajukan', 'menunggu_direview', 'sedang_direview', 'perbaikan_diperlukan', 'proses_tahap_selanjutnya', 'selesai'] as $st)
-                                <option value="{{ $st }}" {{ $statusKey === $st ? 'selected' : '' }}>
-                                    {{ ucwords(str_replace('_', ' ', $st)) }}
-                                </option>
+            {{-- ═══ Tracking Progress Per Tahap ═══ --}}
+            <div class="mb-8">
+                <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-tasks text-teal-500"></i> Tracking Progress
+                </h2>
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                    <div class="p-5">
+                        <div class="flex items-center justify-between relative">
+                            @foreach ($submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke) as $idx => $st)
+                                @php
+                                    $tracking = $st->getTrackingStatus($hasReviewer ?? false);
+                                    $stepColors = [
+                                        'belum_diisi' => 'bg-gray-200 text-gray-500',
+                                        'draft' => 'bg-yellow-400 text-white',
+                                        'diajukan' => 'bg-blue-500 text-white',
+                                        'sedang_direview' => 'bg-purple-500 text-white',
+                                        'perbaikan' => 'bg-orange-500 text-white',
+                                        'lolos' => 'bg-green-500 text-white',
+                                    ];
+                                @endphp
+                                <div class="flex flex-col items-center flex-1 relative z-10">
+                                    <div
+                                        class="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold shadow-md {{ $stepColors[$tracking['key']] ?? 'bg-gray-200 text-gray-500' }}">
+                                        <i class="fas {{ $tracking['icon'] }}"></i>
+                                    </div>
+                                    <p class="mt-2 text-xs font-bold text-gray-700 text-center">Tahap
+                                        {{ $st->tahap->tahap_ke }}</p>
+                                    <p
+                                        class="text-[11px] text-center font-semibold mt-0.5 {{ $tracking['key'] === 'lolos' ? 'text-green-600' : ($tracking['key'] === 'perbaikan' ? 'text-orange-600' : 'text-gray-500') }}">
+                                        {{ $tracking['short'] }}
+                                    </p>
+                                </div>
+                                @if (!$loop->last)
+                                    <div
+                                        class="flex-1 h-1 rounded {{ $tracking['key'] === 'lolos' ? 'bg-green-400' : 'bg-gray-200' }} -mt-6 mx-1">
+                                    </div>
+                                @endif
                             @endforeach
-                        </select>
-                        <button type="submit"
-                            class="w-full inline-flex items-center justify-center px-4 py-2 bg-teal-500 text-white text-sm font-medium rounded-lg hover:bg-teal-600 transition">
-                            <i class="fas fa-save mr-1.5"></i> Update Status
-                        </button>
-                    </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -105,16 +130,85 @@
                 </div>
             </div>
 
+            {{-- ═══ Anggota Tim (top level) ═══ --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+                <div class="px-5 py-3 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="text-sm font-bold text-gray-700 flex items-center gap-2">
+                        <i class="fas fa-users text-purple-500"></i> Anggota Tim
+                        <span class="bg-purple-100 text-purple-700 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                            {{ $submission->members->count() }} orang
+                        </span>
+                    </h2>
+                    @php
+                        $pendingCount = $submission->members->where('approval_status', 'pending')->count();
+                    @endphp
+                    @if ($pendingCount > 0)
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-700">
+                            <i class="fas fa-clock mr-1 text-[8px]"></i> {{ $pendingCount }} Menunggu Approval
+                        </span>
+                    @endif
+                </div>
+                <div class="px-5 py-3">
+                    @if ($submission->members->count())
+                        <div class="flex flex-wrap gap-3">
+                            @foreach ($submission->members as $member)
+                                @php $badge = $member->getApprovalBadge(); @endphp
+                                <div class="flex items-center gap-2.5 bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+                                        {{ strtoupper(substr($member->nama_lengkap, 0, 1)) }}
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 truncate">{{ $member->nama_lengkap }}</p>
+                                        <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                                            <span class="text-[10px] text-gray-400">{{ $member->getTipeLabel() }}</span>
+                                            @if ($member->peran === 'Ketua')
+                                                <span class="inline-flex items-center px-1.5 py-0 rounded text-[9px] font-bold bg-purple-100 text-purple-700">
+                                                    <i class="fas fa-crown mr-0.5 text-[7px]"></i> Ketua
+                                                </span>
+                                            @endif
+                                            <span class="inline-flex items-center px-1.5 py-0 rounded text-[9px] font-bold {{ $badge['color'] }}">
+                                                <i class="{{ $badge['icon'] }} mr-0.5 text-[7px]"></i> {{ $badge['label'] }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    {{-- Admin approve/reject for pending --}}
+                                    @if ($member->peran !== 'Ketua' && $member->approval_status === 'pending')
+                                        <div class="flex gap-1 ml-auto flex-shrink-0">
+                                            <form method="POST" action="{{ route('admin_inovasi.inovchalenge.submissions.members.approve', [$session, $submission, $member]) }}" class="inline">@csrf @method('PATCH')
+                                                <button type="submit" class="w-6 h-6 rounded-md bg-green-500 text-white text-[10px] hover:bg-green-600 transition flex items-center justify-center" title="Approve">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            </form>
+                                            <form method="POST" action="{{ route('admin_inovasi.inovchalenge.submissions.members.reject', [$session, $submission, $member]) }}" class="inline">@csrf @method('PATCH')
+                                                <button type="submit" class="w-6 h-6 rounded-md bg-red-500 text-white text-[10px] hover:bg-red-600 transition flex items-center justify-center" title="Reject">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="text-sm text-gray-400 text-center py-2">Belum ada anggota</p>
+                    @endif
+                </div>
+            </div>
+
             {{-- Per-Tahap Tabs --}}
             <div class="mb-6 flex gap-2 border-b border-gray-200 pb-0">
                 @foreach ($submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke) as $st)
                     @php
-                        $tc = match ($st->status) {
-                            'belum_diisi' => 'bg-gray-200 text-gray-500',
-                            'draft' => 'bg-yellow-200 text-yellow-700',
-                            'diajukan' => 'bg-green-200 text-green-700',
-                            default => 'bg-gray-200 text-gray-500',
-                        };
+                        $tracking = $st->getTrackingStatus($hasReviewer ?? false);
+                        $tcMap = [
+                            'gray' => 'bg-gray-200 text-gray-500',
+                            'yellow' => 'bg-yellow-200 text-yellow-700',
+                            'blue' => 'bg-blue-200 text-blue-700',
+                            'purple' => 'bg-purple-200 text-purple-700',
+                            'orange' => 'bg-orange-200 text-orange-700',
+                            'green' => 'bg-green-200 text-green-700',
+                        ];
+                        $tc = $tcMap[$tracking['color']] ?? 'bg-gray-200 text-gray-500';
                     @endphp
                     <button @click="activeTab = {{ $st->tahap->tahap_ke }}"
                         :class="activeTab === {{ $st->tahap->tahap_ke }} ? 'border-teal-500 text-teal-700 bg-teal-50' :
@@ -186,156 +280,173 @@
                         </div>
                     </div>
 
-                    {{-- Field Values --}}
-                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                        <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-3">
-                            <h3 class="text-white font-semibold text-sm"><i class="fas fa-file-alt mr-1.5"></i> Data
-                                Formulir</h3>
-                        </div>
-                        <div class="p-6">
-                            @if ($st->tahap->fields->isNotEmpty())
-                                <div class="space-y-4">
-                                    @foreach ($st->tahap->fields->sortBy('urutan') as $field)
+                    {{-- ═══ Data Formulir (with Sections) ═══ --}}
+                    @php
+                        $hasSections = $st->tahap->sections->isNotEmpty();
+                    @endphp
+
+                    @if ($hasSections)
+                        {{-- Sectioned display --}}
+                        @foreach ($st->tahap->sections as $sIdx => $section)
+                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                                {{-- Section header --}}
+                                <div class="px-5 py-3 border-b border-gray-100 flex items-center gap-3">
+                                    <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
+                                        {{ $sIdx + 1 }}
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-gray-800">{{ $section->judul }}</h4>
+                                        @if ($section->deskripsi)
+                                            <p class="text-[11px] text-gray-400 mt-0.5">{{ $section->deskripsi }}</p>
+                                        @endif
+                                    </div>
+                                    <span class="ml-auto text-[10px] text-gray-300 font-medium">{{ $section->fields->count() }} field</span>
+                                </div>
+                                {{-- Section fields --}}
+                                <div class="divide-y divide-gray-50">
+                                    @forelse ($section->fields as $field)
                                         @php
-                                            $fv = isset($st->loadedFieldValues)
-                                                ? $st->loadedFieldValues[$field->id] ?? null
-                                                : null;
+                                            $fv = isset($st->loadedFieldValues) ? ($st->loadedFieldValues[$field->id] ?? null) : null;
                                             $displayValue = null;
                                             if ($fv) {
-                                                if ($field->field_type === 'file') {
-                                                    $displayValue = $fv->value_file_path;
-                                                } elseif ($field->field_type === 'url') {
-                                                    $displayValue = $fv->value_url;
-                                                } else {
-                                                    $displayValue = $fv->value_text;
-                                                }
+                                                if ($field->field_type === 'file') { $displayValue = $fv->value_file_path; }
+                                                elseif ($field->field_type === 'url') { $displayValue = $fv->value_url; }
+                                                else { $displayValue = $fv->value_text; }
                                             }
+                                            $isFilled = !is_null($displayValue) && $displayValue !== '';
                                         @endphp
-                                        <div class="border-b border-gray-100 pb-3 last:border-0 last:pb-0">
-                                            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
-                                                {{ $field->field_label }}
-                                                @if ($field->is_required)
-                                                    <span class="text-red-400">*</span>
-                                                @endif
-                                            </p>
-                                            @if ($field->field_type === 'file' && $displayValue)
-                                                <a href="{{ asset('storage/' . $displayValue) }}" target="_blank"
-                                                    class="inline-flex items-center text-sm text-teal-600 hover:underline">
-                                                    <i class="fas fa-download mr-1.5"></i>
-                                                    {{ $fv->original_filename ?? basename($displayValue) }}
-                                                </a>
-                                            @elseif($field->field_type === 'url' && $displayValue)
-                                                <a href="{{ $displayValue }}" target="_blank"
-                                                    class="text-sm text-teal-600 hover:underline break-all">
-                                                    {{ $displayValue }}
-                                                </a>
-                                            @elseif($displayValue)
-                                                <p class="text-sm text-gray-800 whitespace-pre-wrap">{{ $displayValue }}
+                                        <div class="px-5 py-3 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6 {{ !$isFilled ? 'opacity-50' : '' }}">
+                                            <div class="sm:w-1/3 flex-shrink-0">
+                                                <p class="text-xs font-semibold text-gray-500 flex items-center gap-1">
+                                                    {{ $field->field_label }}
+                                                    @if ($field->is_required)
+                                                        <span class="text-red-400">*</span>
+                                                    @endif
                                                 </p>
-                                            @else
-                                                <p class="text-sm text-gray-300 italic">Belum diisi</p>
-                                            @endif
+                                                <p class="text-[10px] text-gray-300 mt-0.5">{{ $field->field_type }}</p>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                @if ($field->field_type === 'file' && $isFilled)
+                                                    <a href="{{ asset('storage/' . $displayValue) }}" target="_blank"
+                                                        class="inline-flex items-center gap-1.5 text-sm text-teal-600 hover:text-teal-800 bg-teal-50 px-3 py-1.5 rounded-lg transition">
+                                                        <i class="fas fa-download text-[10px]"></i>
+                                                        {{ $fv->original_filename ?? basename($displayValue) }}
+                                                    </a>
+                                                @elseif ($field->field_type === 'url' && $isFilled)
+                                                    <a href="{{ $displayValue }}" target="_blank"
+                                                        class="text-sm text-teal-600 hover:underline break-all">
+                                                        <i class="fas fa-external-link-alt text-[10px] mr-1"></i>{{ $displayValue }}
+                                                    </a>
+                                                @elseif ($isFilled)
+                                                    <p class="text-sm text-gray-800 whitespace-pre-wrap leading-relaxed">{{ $displayValue }}</p>
+                                                @else
+                                                    <p class="text-sm text-gray-300 italic flex items-center gap-1">
+                                                        <i class="fas fa-minus-circle text-[10px]"></i> Belum diisi
+                                                    </p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @empty
+                                        <div class="px-5 py-4 text-center text-sm text-gray-400">Belum ada field</div>
+                                    @endforelse
+                                </div>
+                            </div>
+                        @endforeach
+
+                        {{-- Unsectioned fields --}}
+                        @if ($st->tahap->unsectionedFields->isNotEmpty())
+                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                                <div class="px-5 py-3 border-b border-gray-100 flex items-center gap-3">
+                                    <div class="w-7 h-7 rounded-lg bg-gray-400 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-gray-800">Lainnya</h4>
+                                </div>
+                                <div class="divide-y divide-gray-50">
+                                    @foreach ($st->tahap->unsectionedFields as $field)
+                                        @php
+                                            $fv = isset($st->loadedFieldValues) ? ($st->loadedFieldValues[$field->id] ?? null) : null;
+                                            $displayValue = null;
+                                            if ($fv) {
+                                                if ($field->field_type === 'file') { $displayValue = $fv->value_file_path; }
+                                                elseif ($field->field_type === 'url') { $displayValue = $fv->value_url; }
+                                                else { $displayValue = $fv->value_text; }
+                                            }
+                                            $isFilled = !is_null($displayValue) && $displayValue !== '';
+                                        @endphp
+                                        <div class="px-5 py-3 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6 {{ !$isFilled ? 'opacity-50' : '' }}">
+                                            <div class="sm:w-1/3 flex-shrink-0">
+                                                <p class="text-xs font-semibold text-gray-500">{{ $field->field_label }}</p>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                @if ($field->field_type === 'file' && $isFilled)
+                                                    <a href="{{ asset('storage/' . $displayValue) }}" target="_blank"
+                                                        class="inline-flex items-center gap-1.5 text-sm text-teal-600 hover:text-teal-800 bg-teal-50 px-3 py-1.5 rounded-lg transition">
+                                                        <i class="fas fa-download text-[10px]"></i>
+                                                        {{ $fv->original_filename ?? basename($displayValue) }}
+                                                    </a>
+                                                @elseif ($field->field_type === 'url' && $isFilled)
+                                                    <a href="{{ $displayValue }}" target="_blank" class="text-sm text-teal-600 hover:underline break-all">{{ $displayValue }}</a>
+                                                @elseif ($isFilled)
+                                                    <p class="text-sm text-gray-800 whitespace-pre-wrap">{{ $displayValue }}</p>
+                                                @else
+                                                    <p class="text-sm text-gray-300 italic"><i class="fas fa-minus-circle text-[10px] mr-1"></i>Belum diisi</p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+                    @else
+                        {{-- No sections: flat display --}}
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="px-5 py-3 border-b border-gray-100 flex items-center gap-2">
+                                <i class="fas fa-file-alt text-teal-500 text-sm"></i>
+                                <h4 class="text-sm font-bold text-gray-700">Data Formulir</h4>
+                            </div>
+                            @if ($st->tahap->fields->isNotEmpty())
+                                <div class="divide-y divide-gray-50">
+                                    @foreach ($st->tahap->fields->sortBy('urutan') as $field)
+                                        @php
+                                            $fv = isset($st->loadedFieldValues) ? ($st->loadedFieldValues[$field->id] ?? null) : null;
+                                            $displayValue = null;
+                                            if ($fv) {
+                                                if ($field->field_type === 'file') { $displayValue = $fv->value_file_path; }
+                                                elseif ($field->field_type === 'url') { $displayValue = $fv->value_url; }
+                                                else { $displayValue = $fv->value_text; }
+                                            }
+                                            $isFilled = !is_null($displayValue) && $displayValue !== '';
+                                        @endphp
+                                        <div class="px-5 py-3 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6 {{ !$isFilled ? 'opacity-50' : '' }}">
+                                            <div class="sm:w-1/3 flex-shrink-0">
+                                                <p class="text-xs font-semibold text-gray-500">
+                                                    {{ $field->field_label }}
+                                                    @if ($field->is_required)<span class="text-red-400">*</span>@endif
+                                                </p>
+                                                <p class="text-[10px] text-gray-300 mt-0.5">{{ $field->field_type }}</p>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                @if ($field->field_type === 'file' && $isFilled)
+                                                    <a href="{{ asset('storage/' . $displayValue) }}" target="_blank"
+                                                        class="inline-flex items-center gap-1.5 text-sm text-teal-600 hover:text-teal-800 bg-teal-50 px-3 py-1.5 rounded-lg transition">
+                                                        <i class="fas fa-download text-[10px]"></i>
+                                                        {{ $fv->original_filename ?? basename($displayValue) }}
+                                                    </a>
+                                                @elseif ($field->field_type === 'url' && $isFilled)
+                                                    <a href="{{ $displayValue }}" target="_blank" class="text-sm text-teal-600 hover:underline break-all">{{ $displayValue }}</a>
+                                                @elseif ($isFilled)
+                                                    <p class="text-sm text-gray-800 whitespace-pre-wrap">{{ $displayValue }}</p>
+                                                @else
+                                                    <p class="text-sm text-gray-300 italic"><i class="fas fa-minus-circle text-[10px] mr-1"></i>Belum diisi</p>
+                                                @endif
+                                            </div>
                                         </div>
                                     @endforeach
                                 </div>
                             @else
-                                <p class="text-sm text-gray-400 text-center py-4">Tidak ada field untuk tahap ini.</p>
+                                <div class="p-6 text-center text-sm text-gray-400">Tidak ada field untuk tahap ini.</div>
                             @endif
-                        </div>
-                    </div>
-
-                    {{-- Anggota Tim (Tahap 1 only) --}}
-                    @if ($st->tahap->has_anggota)
-                        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                            <div
-                                class="bg-gradient-to-r from-purple-500 to-purple-600 px-6 py-3 flex items-center justify-between">
-                                <h3 class="text-white font-semibold text-sm"><i class="fas fa-users mr-1.5"></i> Anggota
-                                    Tim</h3>
-                                @php
-                                    $pendingCount = $submission->members->where('approval_status', 'pending')->count();
-                                @endphp
-                                @if ($pendingCount > 0)
-                                    <span
-                                        class="bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                                        {{ $pendingCount }} Menunggu Approval
-                                    </span>
-                                @endif
-                            </div>
-                            <div class="p-6">
-                                @if ($submission->members->count())
-                                    <div class="divide-y divide-gray-100">
-                                        @foreach ($submission->members as $member)
-                                            @php $badge = $member->getApprovalBadge(); @endphp
-                                            <div class="flex items-center justify-between py-3">
-                                                <div class="flex items-center gap-3">
-                                                    <div
-                                                        class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold text-xs">
-                                                        {{ strtoupper(substr($member->nama_lengkap, 0, 1)) }}
-                                                    </div>
-                                                    <div>
-                                                        <p class="text-sm font-medium text-gray-900">
-                                                            {{ $member->nama_lengkap }}</p>
-                                                        <p class="text-xs text-gray-400">
-                                                            {{ $member->getTipeLabel() }}
-                                                            @if ($member->nik_nim_nip)
-                                                                · {{ $member->nik_nim_nip }}
-                                                            @endif
-                                                            @if ($member->institusi_fakultas)
-                                                                · {{ $member->institusi_fakultas }}
-                                                            @endif
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div class="flex items-center gap-2">
-                                                    @if ($member->peran === 'Ketua')
-                                                        <span
-                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-100 text-purple-700">
-                                                            <i class="fas fa-crown mr-1 text-[8px]"></i> Ketua
-                                                        </span>
-                                                    @endif
-
-                                                    {{-- Approval status badge --}}
-                                                    @if ($member->peran !== 'Ketua')
-                                                        <span
-                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold {{ $badge['color'] }}">
-                                                            <i class="{{ $badge['icon'] }} mr-1 text-[8px]"></i>
-                                                            {{ $badge['label'] }}
-                                                        </span>
-
-                                                        {{-- Admin approve/reject buttons for pending members --}}
-                                                        @if ($member->approval_status === 'pending')
-                                                            <form method="POST"
-                                                                action="{{ route('admin_inovasi.inovchalenge.submissions.members.approve', [$submission, $member]) }}"
-                                                                class="inline">
-                                                                @csrf
-                                                                @method('PATCH')
-                                                                <button type="submit"
-                                                                    class="inline-flex items-center px-2 py-0.5 bg-green-500 text-white text-[10px] font-semibold rounded hover:bg-green-600 transition"
-                                                                    title="Setujui">
-                                                                    <i class="fas fa-check mr-0.5"></i> Approve
-                                                                </button>
-                                                            </form>
-                                                            <form method="POST"
-                                                                action="{{ route('admin_inovasi.inovchalenge.submissions.members.reject', [$submission, $member]) }}"
-                                                                class="inline">
-                                                                @csrf
-                                                                @method('PATCH')
-                                                                <button type="submit"
-                                                                    class="inline-flex items-center px-2 py-0.5 bg-red-500 text-white text-[10px] font-semibold rounded hover:bg-red-600 transition"
-                                                                    title="Tolak">
-                                                                    <i class="fas fa-times mr-0.5"></i> Reject
-                                                                </button>
-                                                            </form>
-                                                        @endif
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <p class="text-sm text-gray-400 text-center py-2">Belum ada anggota</p>
-                                @endif
-                            </div>
                         </div>
                     @endif
 
@@ -394,7 +505,7 @@
                 </div>
                 <div class="p-6">
                     <form method="POST"
-                        action="{{ route('admin_inovasi.inovchalenge.submissions.assignReviewer', $submission) }}">
+                        action="{{ route('admin_inovasi.inovchalenge.submissions.assignReviewer', [$session, $submission]) }}">
                         @csrf
                         @method('PATCH')
                         <div class="mb-4">

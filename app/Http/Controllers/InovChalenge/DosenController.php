@@ -52,7 +52,7 @@ class DosenController extends Controller
     public function mySubmissions()
     {
         $submissions = InovChalengeSubmission::where('user_id', Auth::id())
-            ->with(['session', 'submissionTahap.tahap', 'reviewers'])
+            ->with(['session', 'submissionTahap.tahap', 'reviewers', 'members'])
             ->latest()
             ->paginate(10);
 
