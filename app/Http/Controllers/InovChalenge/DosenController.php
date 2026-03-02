@@ -22,6 +22,7 @@ class DosenController extends Controller
     public function sessions()
     {
         $sessions = InovChalengeSession::where('status', 'active')
+            ->with('tahap')
             ->withCount('submissions')
             ->latest()
             ->paginate(12);

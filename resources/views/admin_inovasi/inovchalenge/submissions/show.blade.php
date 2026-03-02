@@ -531,13 +531,30 @@
                                                     {{ $review->updated_at->format('d M Y H:i') }}</p>
                                             </div>
                                         </div>
-                                        <div class="ml-9 space-y-1">
+                                        <div class="ml-9 space-y-2">
+                                            {{-- Score bar --}}
+                                            @if ($review->skor !== null)
+                                                <div class="flex items-center gap-3 mb-2">
+                                                    <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm {{ $review->getSkorColor() }}">
+                                                        {{ $review->skor }}
+                                                    </div>
+                                                    <div class="flex-1">
+                                                        <div class="flex items-center justify-between mb-0.5">
+                                                            <span class="text-[10px] font-semibold text-gray-500">Skor Penilaian</span>
+                                                            <span class="text-[10px] text-gray-400">{{ $review->skor }}/100</span>
+                                                        </div>
+                                                        <div class="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                                            <div class="h-full rounded-full bg-gradient-to-r {{ $review->getSkorBarColor() }}" style="width: {{ $review->skor }}%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
                                             <p class="text-sm text-gray-700"><strong
                                                     class="text-xs text-gray-400">Komentar:</strong><br>{{ $review->komentar }}
                                             </p>
                                             @if ($review->penilaian)
                                                 <p class="text-sm text-gray-700"><strong
-                                                        class="text-xs text-gray-400">Penilaian:</strong><br>{{ $review->penilaian }}
+                                                        class="text-xs text-gray-400">Catatan Tambahan:</strong><br>{{ $review->penilaian }}
                                                 </p>
                                             @endif
                                         </div>

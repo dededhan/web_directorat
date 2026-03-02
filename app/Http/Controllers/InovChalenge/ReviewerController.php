@@ -111,6 +111,7 @@ class ReviewerController extends Controller
 
         $request->validate([
             'komentar' => 'required|string|max:5000',
+            'skor' => 'required|integer|min:0|max:100',
             'penilaian' => 'nullable|string|max:5000',
         ]);
 
@@ -122,6 +123,7 @@ class ReviewerController extends Controller
             ],
             [
                 'komentar' => $request->komentar,
+                'skor' => $request->skor,
                 'penilaian' => $request->penilaian,
             ]
         );

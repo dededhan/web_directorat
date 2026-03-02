@@ -172,22 +172,71 @@
                         @endif
 
                         {{-- Review Form --}}
-                        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                            <div class="bg-gradient-to-r from-amber-500 to-amber-600 px-6 py-3">
-                                <h3 class="text-white font-semibold text-sm">
-                                    <i class="fas fa-star mr-1.5"></i>
+                        @php $existingReview = $myReviews[$st->inov_chalenge_tahap_id] ?? null; @endphp
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden" x-data="{ skor: {{ old('skor', $existingReview->skor ?? 75) }} }">
+                            <div class="px-5 py-3 border-b border-gray-100 flex items-center justify-between">
+                                <h3 class="text-sm font-bold text-gray-700 flex items-center gap-2">
+                                    <i class="fas fa-star text-amber-500"></i>
                                     Review Tahap {{ $st->tahap->tahap_ke }}
-                                    @if (isset($myReviews[$st->inov_chalenge_tahap_id]))
-                                        <span class="ml-1 text-xs bg-white/20 px-2 py-0.5 rounded-full">Sudah diisi</span>
-                                    @endif
                                 </h3>
+                                @if ($existingReview)
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-700">
+                                        <i class="fas fa-check mr-1 text-[8px]"></i> Sudah diisi
+                                    </span>
+                                @endif
                             </div>
-                            <div class="p-6">
-                                @php $existingReview = $myReviews[$st->inov_chalenge_tahap_id] ?? null; @endphp
+                            <div class="p-5">
                                 <form method="POST"
                                     action="{{ route('reviewer_inovchalenge.assignments.review', [$submission, $st->inov_chalenge_tahap_id]) }}">
                                     @csrf
-                                    <div class="space-y-4">
+                                    <div class="space-y-5">
+                                        {{-- Score --}}
+                                        <div>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-3">
+                                                Skor Penilaian <span class="text-red-500">*</span>
+                                            </label>
+                                            <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <div class="flex items-center gap-2">
+                                                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-xl transition-all"
+                                                            :class="skor >= 80 ? 'bg-green-100 text-green-700' : (skor >= 60 ? 'bg-cyan-100 text-cyan-700' : (skor >= 40 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'))">
+                                                            <span x-text="skor"></span>
+                                                        </div>
+                                                        <div>
+                                                            <p class="text-xs font-medium text-gray-500">dari 100</p>
+                                                            <p class="text-[10px] font-bold transition-colors"
+                                                                :class="skor >= 80 ? 'text-green-600' : (skor >= 60 ? 'text-cyan-600' : (skor >= 40 ? 'text-yellow-600' : 'text-red-600'))">
+                                                                <span x-show="skor >= 80">Sangat Baik</span>
+                                                                <span x-show="skor >= 60 && skor < 80">Baik</span>
+                                                                <span x-show="skor >= 40 && skor < 60">Cukup</span>
+                                                                <span x-show="skor < 40">Kurang</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <input type="number" name="skor" x-model.number="skor" min="0" max="100" required
+                                                        class="w-20 text-center rounded-lg border-gray-300 text-sm font-semibold focus:border-amber-500 focus:ring-amber-500">
+                                                </div>
+                                                {{-- Slider --}}
+                                                <div class="relative">
+                                                    <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                        <div class="h-full rounded-full transition-all bg-gradient-to-r"
+                                                            :class="skor >= 80 ? 'from-green-400 to-green-600' : (skor >= 60 ? 'from-cyan-400 to-cyan-600' : (skor >= 40 ? 'from-yellow-400 to-yellow-600' : 'from-red-400 to-red-600'))"
+                                                            :style="'width:' + skor + '%'"></div>
+                                                    </div>
+                                                    <input type="range" min="0" max="100" x-model.number="skor"
+                                                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                                </div>
+                                                <div class="flex justify-between text-[10px] text-gray-400 mt-1">
+                                                    <span>0</span>
+                                                    <span>25</span>
+                                                    <span>50</span>
+                                                    <span>75</span>
+                                                    <span>100</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- Komentar --}}
                                         <div>
                                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">
                                                 Komentar <span class="text-red-500">*</span>
@@ -195,14 +244,18 @@
                                             <textarea name="komentar" rows="4" required placeholder="Berikan komentar review Anda..."
                                                 class="w-full rounded-xl border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 text-sm px-4 py-2.5">{{ old('komentar', $existingReview->komentar ?? '') }}</textarea>
                                         </div>
+
+                                        {{-- Catatan tambahan --}}
                                         <div>
                                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">
-                                                Penilaian <span class="text-gray-400 text-xs">(opsional)</span>
+                                                Catatan Tambahan <span class="text-gray-400 text-xs">(opsional)</span>
                                             </label>
-                                            <textarea name="penilaian" rows="3" placeholder="Berikan penilaian (nilai, komentar tambahan, rekomendasi)..."
+                                            <textarea name="penilaian" rows="2" placeholder="Rekomendasi, catatan, dll..."
                                                 class="w-full rounded-xl border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 text-sm px-4 py-2.5">{{ old('penilaian', $existingReview->penilaian ?? '') }}</textarea>
                                         </div>
-                                        <div class="flex items-center gap-3">
+
+                                        {{-- Submit --}}
+                                        <div class="flex items-center justify-between pt-2 border-t border-gray-100">
                                             <button type="submit"
                                                 class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold text-sm rounded-xl hover:from-amber-600 hover:to-amber-700 transition shadow">
                                                 <i class="fas fa-paper-plane mr-1.5"></i>
