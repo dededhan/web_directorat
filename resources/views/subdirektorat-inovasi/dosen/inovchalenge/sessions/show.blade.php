@@ -60,7 +60,8 @@
                                 </a>
                             @elseif(isset($existingMembership) && $existingMembership)
                                 <div class="text-right">
-                                    <div class="inline-flex items-center px-4 py-2 bg-white/20 text-white text-sm font-semibold rounded-xl mb-2">
+                                    <div
+                                        class="inline-flex items-center px-4 py-2 bg-white/20 text-white text-sm font-semibold rounded-xl mb-2">
                                         <i class="fas fa-users mr-2"></i> Anda sudah menjadi anggota tim
                                     </div>
                                     <a href="{{ route('subdirektorat-inovasi.dosen.inovchalenge.team.show', $existingMembership->submission) }}"

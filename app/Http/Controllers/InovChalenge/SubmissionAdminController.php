@@ -196,7 +196,6 @@ class SubmissionAdminController extends Controller
                 Auth::id(),
                 'admin'
             );
-
         }
 
         // If lolos (disetujui/selesai), add progression notification
@@ -222,7 +221,6 @@ class SubmissionAdminController extends Controller
                 Auth::id(),
                 'admin'
             );
-
         }
 
         return back()->with('success', 'Status tahap berhasil diperbarui.');

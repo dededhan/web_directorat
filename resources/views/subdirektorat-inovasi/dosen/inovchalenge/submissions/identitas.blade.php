@@ -276,9 +276,9 @@
                                             <option value="">-- Pilih --</option>
                                             <option value="dosen">Dosen</option>
                                             <option value="alumni">Alumni</option>
-                                        <option value="peneliti">Peneliti</option>
-                                        <option value="mahasiswa">Mahasiswa</option>
-                                        <option value="DUDI">DUDI</option>
+                                            <option value="peneliti">Peneliti</option>
+                                            <option value="mahasiswa">Mahasiswa</option>
+                                            <option value="DUDI">DUDI</option>
                                             <option value="PPPK">PPPK</option>
                                         </select>
                                         <p x-show="tipeAnggota && tipeAnggota !== 'dosen'"
@@ -289,8 +289,9 @@
                                         </p>
                                     </div>
 
-                                {{-- User search for all registered types --}}
-                                <div x-show="['dosen','alumni','mahasiswa','peneliti','DUDI','PPPK'].includes(tipeAnggota)">
+                                    {{-- User search for all registered types --}}
+                                    <div
+                                        x-show="['dosen','alumni','mahasiswa','peneliti','DUDI','PPPK'].includes(tipeAnggota)">
                                         <label class="block text-xs font-semibold text-gray-600 mb-1">Cari User</label>
                                         <div class="relative">
                                             <input type="text" x-model="searchQuery"
