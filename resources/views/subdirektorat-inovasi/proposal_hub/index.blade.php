@@ -730,28 +730,29 @@
             {{-- Siapa yang Bisa Mendaftar --}}
             <section class="ph-section">
                 <h2 class="ph-section-title">Siapa yang Bisa Mendaftar?</h2>
-                <p class="ph-intro">Program ini terbuka untuk seluruh civitas akademika dan alumni Universitas Negeri
-                    Jakarta.</p>
+                <p class="ph-intro">Program ini terbuka untuk dosen, mahasiswa, alumni, dan mitra dari Dunia Usaha Dunia
+                    Industri (DUDI) yang ingin berinovasi bersama Universitas Negeri Jakarta.</p>
                 <div class="ph-service-grid">
                     <div class="ph-service-card">
                         <div class="ph-service-icon-wrap"><i class="fas fa-chalkboard-teacher"></i></div>
                         <h3>Dosen</h3>
-                        <p>Dosen aktif UNJ dari seluruh fakultas dan program studi.</p>
+                        <p>Dosen aktif UNJ dari seluruh fakultas dan program studi yang memiliki ide inovatif.</p>
                     </div>
                     <div class="ph-service-card">
-                        <div class="ph-service-icon-wrap"><i class="fas fa-microscope"></i></div>
-                        <h3>Peneliti</h3>
-                        <p>Peneliti yang tergabung dalam unit-unit penelitian di lingkungan UNJ.</p>
+                        <div class="ph-service-icon-wrap"><i class="fas fa-building"></i></div>
+                        <h3>DUDI</h3>
+                        <p>Mitra dari Dunia Usaha Dunia Industri yang ingin berkolaborasi dalam pengembangan inovasi.
+                        </p>
                     </div>
                     <div class="ph-service-card">
                         <div class="ph-service-icon-wrap"><i class="fas fa-user-graduate"></i></div>
                         <h3>Alumni</h3>
-                        <p>Alumni UNJ yang memiliki ide inovasi dan ingin berkontribusi.</p>
+                        <p>Alumni UNJ yang memiliki ide inovasi dan ingin berkontribusi bagi almamater.</p>
                     </div>
                     <div class="ph-service-card">
-                        <div class="ph-service-icon-wrap"><i class="fas fa-user-tie"></i></div>
-                        <h3>PPPK</h3>
-                        <p>Pegawai Pemerintah dengan Perjanjian Kerja di lingkungan UNJ.</p>
+                        <div class="ph-service-icon-wrap"><i class="fas fa-graduation-cap"></i></div>
+                        <h3>Mahasiswa</h3>
+                        <p>Mahasiswa aktif UNJ yang ingin mengembangkan ide kreatif dan inovatif.</p>
                     </div>
                 </div>
             </section>
@@ -797,9 +798,10 @@
                         </button>
                         <div x-show="activeIndex === 1" x-collapse
                             style="padding: 0 1.5rem 1.2rem 1.5rem; color: #555; line-height: 1.8; font-size: 0.95rem;">
-                            Program ini terbuka untuk dosen, peneliti, dan alumni UNJ. Selain itu, PPPK (Pegawai
-                            Pemerintah dengan Perjanjian Kerja) di lingkungan UNJ juga dapat berpartisipasi. Setiap tim
-                            harus memiliki ketua yang merupakan dosen aktif UNJ.
+                            Program ini terbuka untuk <strong>Dosen</strong>, <strong>Mahasiswa</strong>,
+                            <strong>Alumni</strong> UNJ, serta mitra dari <strong>Dunia Usaha Dunia Industri
+                                (DUDI)</strong> yang ingin berkolaborasi dalam pengembangan inovasi. Setiap tim harus
+                            memiliki ketua yang merupakan dosen aktif UNJ.
                         </div>
                     </div>
 

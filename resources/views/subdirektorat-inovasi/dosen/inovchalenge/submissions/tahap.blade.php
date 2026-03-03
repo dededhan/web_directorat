@@ -238,7 +238,7 @@
                                     class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 p-4 flex flex-col sm:flex-row gap-3">
                                     <button type="submit"
                                         class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-gray-100 text-gray-700 font-semibold text-sm rounded-xl hover:bg-gray-200 transition border border-gray-200">
-                                        <i class="fas fa-save mr-2"></i> Simpan Draft
+                                        <i class="fas fa-save mr-2"></i> Simpan
                                     </button>
                                     <button type="button" id="btnSubmit"
                                         class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold text-sm rounded-xl hover:from-teal-600 hover:to-teal-700 transition shadow-sm">

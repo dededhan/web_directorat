@@ -19,6 +19,7 @@ class UserProfile extends Model
         'fakultas_id',
         'alamat',
         'kode_pos',
+        'institusi',
     ];
 
 

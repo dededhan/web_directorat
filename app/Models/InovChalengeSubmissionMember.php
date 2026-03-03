@@ -34,6 +34,7 @@ class InovChalengeSubmissionMember extends Model
 
     /** Types that require approval from the invited member. */
     public const TIPE_NEEDS_APPROVAL = [
+        self::TIPE_DOSEN,
         self::TIPE_ALUMNI,
         self::TIPE_DUDI,
         self::TIPE_MAHASISWA,

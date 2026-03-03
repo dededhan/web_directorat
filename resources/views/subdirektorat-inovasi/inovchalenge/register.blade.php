@@ -12,23 +12,69 @@
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="stylesheet" href="{{ asset('home.css') }}">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
         .hero-pattern {
             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
-        .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); }
-        .role-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .role-card:hover { transform: translateY(-2px); }
-        .role-card.active { transform: translateY(-2px); box-shadow: 0 8px 25px -5px rgba(39, 113, 119, 0.3); }
-        .input-field { transition: all 0.2s ease; }
-        .input-field:focus { box-shadow: 0 0 0 3px rgba(39, 113, 119, 0.15); }
-        .btn-submit { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 10px 25px -5px rgba(39, 113, 119, 0.4); }
-        .floating-shape { animation: float 6s ease-in-out infinite; }
-        .floating-shape-delay { animation: float 8s ease-in-out infinite; animation-delay: 2s; }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .role-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .role-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .role-card.active {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px -5px rgba(39, 113, 119, 0.3);
+        }
+
+        .input-field {
+            transition: all 0.2s ease;
+        }
+
+        .input-field:focus {
+            box-shadow: 0 0 0 3px rgba(39, 113, 119, 0.15);
+        }
+
+        .btn-submit {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px -5px rgba(39, 113, 119, 0.4);
+        }
+
+        .floating-shape {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-shape-delay {
+            animation: float 8s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+
         @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
         }
     </style>
 </head>
@@ -39,25 +85,35 @@
     <div class="min-h-screen relative overflow-hidden" style="margin-top: 70px;">
         {{-- Background decoration --}}
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-teal-400/20 to-emerald-300/10 rounded-full blur-3xl floating-shape"></div>
-            <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-blue-400/15 to-purple-300/10 rounded-full blur-3xl floating-shape-delay"></div>
-            <div class="absolute top-1/3 left-1/4 w-64 h-64 bg-gradient-to-br from-teal-500/10 to-cyan-400/5 rounded-full blur-2xl"></div>
+            <div
+                class="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-teal-400/20 to-emerald-300/10 rounded-full blur-3xl floating-shape">
+            </div>
+            <div
+                class="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-blue-400/15 to-purple-300/10 rounded-full blur-3xl floating-shape-delay">
+            </div>
+            <div
+                class="absolute top-1/3 left-1/4 w-64 h-64 bg-gradient-to-br from-teal-500/10 to-cyan-400/5 rounded-full blur-2xl">
+            </div>
         </div>
 
         <div class="relative z-10 flex items-center justify-center py-10 px-4 sm:px-6">
             <div class="w-full max-w-5xl">
 
                 {{-- Two-column layout --}}
-                <div class="flex flex-col lg:flex-row gap-0 bg-white rounded-3xl shadow-2xl shadow-gray-200/60 overflow-hidden border border-gray-100">
+                <div
+                    class="flex flex-col lg:flex-row gap-0 bg-white rounded-3xl shadow-2xl shadow-gray-200/60 overflow-hidden border border-gray-100">
 
                     {{-- Left panel - Branding --}}
-                    <div class="lg:w-5/12 relative bg-gradient-to-br from-[#1d5559] via-[#277177] to-[#2d8a8a] hero-pattern p-8 lg:p-10 flex flex-col justify-between text-white">
-                        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20"></div>
+                    <div
+                        class="lg:w-5/12 relative bg-gradient-to-br from-[#1d5559] via-[#277177] to-[#2d8a8a] hero-pattern p-8 lg:p-10 flex flex-col justify-between text-white">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20">
+                        </div>
 
                         <div class="relative z-10">
                             {{-- Logo --}}
                             <div class="flex items-center gap-3 mb-10">
-                                <div class="w-12 h-12 bg-white/15 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/20">
+                                <div
+                                    class="w-12 h-12 bg-white/15 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/20">
                                     <i class="fas fa-trophy text-xl text-yellow-300"></i>
                                 </div>
                                 <div>
@@ -72,36 +128,43 @@
                                 <span class="text-teal-200">Sekarang!</span>
                             </h1>
                             <p class="text-teal-100/90 text-sm leading-relaxed mb-8 max-w-xs">
-                                Daftarkan diri Anda dan jadilah bagian dari ekosistem inovasi UNJ. Wujudkan ide kreatif menjadi solusi nyata.
+                                Daftarkan diri Anda dan jadilah bagian dari ekosistem inovasi UNJ. Wujudkan ide kreatif
+                                menjadi solusi nyata.
                             </p>
 
                             {{-- Feature list --}}
                             <div class="space-y-4">
                                 <div class="flex items-start gap-3">
-                                    <div class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <div
+                                        class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
                                         <i class="fas fa-lightbulb text-yellow-300 text-xs"></i>
                                     </div>
                                     <div>
                                         <p class="font-semibold text-sm">Ajukan Inovasi</p>
-                                        <p class="text-teal-200/80 text-xs">Submit proposal dan kembangkan ide bersama tim</p>
+                                        <p class="text-teal-200/80 text-xs">Submit proposal dan kembangkan ide bersama
+                                            tim</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start gap-3">
-                                    <div class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <div
+                                        class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
                                         <i class="fas fa-users text-blue-300 text-xs"></i>
                                     </div>
                                     <div>
                                         <p class="font-semibold text-sm">Kolaborasi Tim</p>
-                                        <p class="text-teal-200/80 text-xs">Bentuk tim lintas disiplin untuk hasil maksimal</p>
+                                        <p class="text-teal-200/80 text-xs">Bentuk tim lintas disiplin untuk hasil
+                                            maksimal</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start gap-3">
-                                    <div class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <div
+                                        class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
                                         <i class="fas fa-award text-orange-300 text-xs"></i>
                                     </div>
                                     <div>
                                         <p class="font-semibold text-sm">Pendanaan & Mentoring</p>
-                                        <p class="text-teal-200/80 text-xs">Dapatkan dukungan dana dan bimbingan ahli</p>
+                                        <p class="text-teal-200/80 text-xs">Dapatkan dukungan dana dan bimbingan ahli
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -112,12 +175,19 @@
                             <div class="glass rounded-2xl p-4">
                                 <div class="flex items-center gap-3">
                                     <div class="flex -space-x-2">
-                                        <div class="w-8 h-8 rounded-full bg-teal-400 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/20">A</div>
-                                        <div class="w-8 h-8 rounded-full bg-blue-400 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/20">R</div>
-                                        <div class="w-8 h-8 rounded-full bg-purple-400 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/20">D</div>
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-teal-400 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/20">
+                                            A</div>
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-blue-400 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/20">
+                                            R</div>
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-purple-400 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/20">
+                                            D</div>
                                     </div>
                                     <div>
-                                        <p class="text-xs font-semibold text-white">Bergabung bersama inovator lainnya</p>
+                                        <p class="text-xs font-semibold text-white">Bergabung bersama inovator lainnya
+                                        </p>
                                         <p class="text-[10px] text-teal-200/80">dan ciptakan dampak nyata</p>
                                     </div>
                                 </div>
@@ -137,13 +207,16 @@
                         {{-- Desktop header --}}
                         <div class="hidden lg:block mb-8">
                             <h2 class="text-2xl font-bold text-gray-900">Buat Akun Baru</h2>
-                            <p class="text-gray-500 text-sm mt-1">Lengkapi data berikut untuk mendaftar di Innovation Challenge</p>
+                            <p class="text-gray-500 text-sm mt-1">Lengkapi data berikut untuk mendaftar di Innovation
+                                Challenge</p>
                         </div>
 
                         {{-- Success message --}}
                         @if (session('success'))
-                            <div class="mb-6 p-4 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 flex items-start gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
+                            <div
+                                class="mb-6 p-4 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 flex items-start gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
                                     <i class="fas fa-check-circle text-green-500 text-lg"></i>
                                 </div>
                                 <div>
@@ -155,7 +228,8 @@
 
                         {{-- Error summary --}}
                         @if ($errors->any())
-                            <div class="mb-6 p-4 rounded-2xl bg-gradient-to-r from-red-50 to-rose-50 border border-red-200">
+                            <div
+                                class="mb-6 p-4 rounded-2xl bg-gradient-to-r from-red-50 to-rose-50 border border-red-200">
                                 <div class="flex items-center gap-2 mb-2">
                                     <i class="fas fa-exclamation-triangle text-red-500"></i>
                                     <p class="font-bold text-red-700 text-sm">Terdapat kesalahan</p>
@@ -175,14 +249,18 @@
                             {{-- Step indicator --}}
                             <div class="flex items-center gap-3 mb-2">
                                 <div class="flex items-center gap-2">
-                                    <div class="w-7 h-7 rounded-full bg-[#277177] text-white flex items-center justify-center text-xs font-bold">1</div>
+                                    <div
+                                        class="w-7 h-7 rounded-full bg-[#277177] text-white flex items-center justify-center text-xs font-bold">
+                                        1</div>
                                     <span class="text-xs font-semibold text-gray-700">Pilih Role</span>
                                 </div>
                                 <div class="flex-1 h-px bg-gray-200"></div>
                                 <div class="flex items-center gap-2">
                                     <div class="w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center"
-                                        :class="selectedRole ? 'bg-[#277177] text-white' : 'bg-gray-200 text-gray-400'">2</div>
-                                    <span class="text-xs font-semibold" :class="selectedRole ? 'text-gray-700' : 'text-gray-400'">Data Diri</span>
+                                        :class="selectedRole ? 'bg-[#277177] text-white' : 'bg-gray-200 text-gray-400'">
+                                        2</div>
+                                    <span class="text-xs font-semibold"
+                                        :class="selectedRole ? 'text-gray-700' : 'text-gray-400'">Data Diri</span>
                                 </div>
                             </div>
 
@@ -191,30 +269,36 @@
                                 <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
                                     Daftar Sebagai
                                 </label>
-                                <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                                     @foreach ([
-                                        'alumni' => ['label' => 'Alumni', 'icon' => 'fa-user-graduate', 'color' => 'from-blue-500 to-blue-600'],
-                                        'peneliti' => ['label' => 'Peneliti', 'icon' => 'fa-microscope', 'color' => 'from-purple-500 to-purple-600'],
-                                        'dudi' => ['label' => 'DUDI', 'icon' => 'fa-building', 'color' => 'from-orange-500 to-orange-600'],
-                                        'pppk' => ['label' => 'PPPK', 'icon' => 'fa-user-tie', 'color' => 'from-indigo-500 to-indigo-600'],
-                                        'mahasiswa' => ['label' => 'Mahasiswa', 'icon' => 'fa-graduation-cap', 'color' => 'from-teal-500 to-teal-600'],
-                                    ] as $value => $info)
-                                        <label class="cursor-pointer role-card" :class="selectedRole === '{{ $value }}' ? 'active' : ''">
-                                            <input type="radio" name="role" value="{{ $value }}" class="hidden peer"
-                                                x-model="selectedRole" {{ old('role') === $value ? 'checked' : '' }}>
+        'dosen' => ['label' => 'Dosen', 'icon' => 'fa-chalkboard-teacher', 'color' => 'from-cyan-500 to-cyan-600'],
+        'alumni' => ['label' => 'Alumni', 'icon' => 'fa-user-graduate', 'color' => 'from-blue-500 to-blue-600'],
+        'dudi' => ['label' => 'DUDI', 'icon' => 'fa-building', 'color' => 'from-orange-500 to-orange-600'],
+        'mahasiswa' => ['label' => 'Mahasiswa', 'icon' => 'fa-graduation-cap', 'color' => 'from-teal-500 to-teal-600'],
+    ] as $value => $info)
+                                        <label class="cursor-pointer role-card"
+                                            :class="selectedRole === '{{ $value }}' ? 'active' : ''">
+                                            <input type="radio" name="role" value="{{ $value }}"
+                                                class="hidden peer" x-model="selectedRole"
+                                                {{ old('role') === $value ? 'checked' : '' }}>
                                             <div class="relative flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl border-2 transition-all duration-300 text-center"
                                                 :class="selectedRole === '{{ $value }}'
-                                                    ? 'border-[#277177] bg-gradient-to-br from-teal-50 to-emerald-50 shadow-lg'
-                                                    : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'">
+                                                    ?
+                                                    'border-[#277177] bg-gradient-to-br from-teal-50 to-emerald-50 shadow-lg' :
+                                                    'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'">
                                                 <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center mb-2 transition-all duration-300"
                                                     :class="selectedRole === '{{ $value }}'
-                                                        ? 'bg-gradient-to-br {{ $info['color'] }} shadow-md'
-                                                        : 'bg-gray-100'">
+                                                        ?
+                                                        'bg-gradient-to-br {{ $info['color'] }} shadow-md' :
+                                                        'bg-gray-100'">
                                                     <i class="fas {{ $info['icon'] }} text-sm sm:text-base transition-colors duration-300"
-                                                        :class="selectedRole === '{{ $value }}' ? 'text-white' : 'text-gray-400'"></i>
+                                                        :class="selectedRole === '{{ $value }}' ? 'text-white' :
+                                                            'text-gray-400'"></i>
                                                 </div>
-                                                <span class="text-[11px] sm:text-xs font-semibold transition-colors duration-300"
-                                                    :class="selectedRole === '{{ $value }}' ? 'text-[#1d5559]' : 'text-gray-500'">{{ $info['label'] }}</span>
+                                                <span
+                                                    class="text-[11px] sm:text-xs font-semibold transition-colors duration-300"
+                                                    :class="selectedRole === '{{ $value }}' ? 'text-[#1d5559]' :
+                                                        'text-gray-500'">{{ $info['label'] }}</span>
                                                 {{-- Checkmark --}}
                                                 <div x-show="selectedRole === '{{ $value }}'" x-transition
                                                     class="absolute -top-1 -right-1 w-5 h-5 bg-[#277177] rounded-full flex items-center justify-center shadow-sm">
@@ -225,50 +309,57 @@
                                     @endforeach
                                 </div>
                                 @error('role')
-                                    <p class="text-red-500 text-xs mt-2"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
+                                    <p class="text-red-500 text-xs mt-2"><i
+                                            class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
                                 @enderror
                             </div>
 
                             {{-- Form fields (shown after role selection) --}}
                             <div x-show="selectedRole" x-transition:enter="transition ease-out duration-300"
-                                x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-1 translate-y-0"
-                                class="space-y-5">
+                                x-transition:enter-start="opacity-0 translate-y-2"
+                                x-transition:enter-end="opacity-1 translate-y-0" class="space-y-5">
 
                                 <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
 
                                 {{-- Nama Lengkap --}}
                                 <div>
-                                    <label for="name" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                                    <label for="name"
+                                        class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
                                         Nama Lengkap <span class="text-red-400">*</span>
                                     </label>
                                     <div class="relative">
                                         <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                                             <i class="fas fa-user text-sm"></i>
                                         </div>
-                                        <input type="text" id="name" name="name" value="{{ old('name') }}"
+                                        <input type="text" id="name" name="name"
+                                            value="{{ old('name') }}"
                                             class="input-field w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:border-[#277177] focus:ring-0 transition-all bg-gray-50/50 focus:bg-white @error('name') border-red-300 @enderror"
                                             placeholder="Masukkan nama lengkap Anda" required>
                                     </div>
                                     @error('name')
-                                        <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
+                                        <p class="text-red-500 text-xs mt-1"><i
+                                                class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 {{-- Email --}}
                                 <div>
-                                    <label for="email" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                                    <label for="email"
+                                        class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
                                         Email <span class="text-red-400">*</span>
                                     </label>
                                     <div class="relative">
                                         <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                                             <i class="fas fa-envelope text-sm"></i>
                                         </div>
-                                        <input type="email" id="email" name="email" value="{{ old('email') }}"
+                                        <input type="email" id="email" name="email"
+                                            value="{{ old('email') }}"
                                             class="input-field w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:border-[#277177] focus:ring-0 transition-all bg-gray-50/50 focus:bg-white @error('email') border-red-300 @enderror"
                                             placeholder="contoh@email.com" required>
                                     </div>
                                     @error('email')
-                                        <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
+                                        <p class="text-red-500 text-xs mt-1"><i
+                                                class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
                                     @enderror
                                 </div>
 
@@ -276,7 +367,8 @@
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {{-- Password --}}
                                     <div>
-                                        <label for="password" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                                        <label for="password"
+                                            class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
                                             Password <span class="text-red-400">*</span>
                                         </label>
                                         <div class="relative" x-data="{ show: false }">
@@ -292,13 +384,15 @@
                                             </button>
                                         </div>
                                         @error('password')
-                                            <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
+                                            <p class="text-red-500 text-xs mt-1"><i
+                                                    class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
                                         @enderror
                                     </div>
 
                                     {{-- Konfirmasi Password --}}
                                     <div>
-                                        <label for="password_confirmation" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                                        <label for="password_confirmation"
+                                            class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
                                             Konfirmasi <span class="text-red-400">*</span>
                                         </label>
                                         <div class="relative" x-data="{ show: false }">
@@ -330,34 +424,41 @@
                                 <p class="text-center text-sm text-gray-500">
                                     Sudah punya akun?
                                     <a href="{{ route('subdirektorat-inovasi.inovation_chalangge.index') }}"
-                                        class="text-[#277177] font-semibold hover:underline hover:text-[#1d5559] transition-colors">Masuk di sini</a>
+                                        class="text-[#277177] font-semibold hover:underline hover:text-[#1d5559] transition-colors">Masuk
+                                        di sini</a>
                                 </p>
                             </div>
 
                             {{-- Placeholder when no role selected --}}
                             <div x-show="!selectedRole" class="text-center py-8">
-                                <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <div
+                                    class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                                     <i class="fas fa-hand-pointer text-2xl text-gray-300"></i>
                                 </div>
-                                <p class="text-sm text-gray-400 font-medium">Pilih role di atas untuk melanjutkan pendaftaran</p>
+                                <p class="text-sm text-gray-400 font-medium">Pilih role di atas untuk melanjutkan
+                                    pendaftaran</p>
                             </div>
                         </form>
 
                         {{-- Info box --}}
-                        <div class="mt-6 p-4 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 flex items-start gap-3">
+                        <div
+                            class="mt-6 p-4 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 flex items-start gap-3">
                             <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
                                 <i class="fas fa-info text-blue-500 text-xs"></i>
                             </div>
                             <div>
                                 <p class="font-semibold text-blue-800 text-xs">Informasi Penting</p>
-                                <p class="text-[11px] text-blue-600/80 mt-0.5 leading-relaxed">Setelah mendaftar, akun Anda akan ditinjau oleh admin. Anda akan dapat login setelah pendaftaran disetujui.</p>
+                                <p class="text-[11px] text-blue-600/80 mt-0.5 leading-relaxed">Setelah mendaftar, akun
+                                    Anda akan ditinjau oleh admin. Anda akan dapat login setelah pendaftaran disetujui.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {{-- Footer --}}
-                <p class="text-center text-xs text-gray-400 mt-6">&copy; {{ date('Y') }} UNJ Innovation Challenge. All rights reserved.</p>
+                <p class="text-center text-xs text-gray-400 mt-6">&copy; {{ date('Y') }} UNJ Innovation Challenge.
+                    All rights reserved.</p>
             </div>
         </div>
     </div>

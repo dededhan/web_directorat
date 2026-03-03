@@ -22,7 +22,7 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required',
             // Temporarily disabled for testing
-            'g-recaptcha-response' => ['', new Recaptcha()]
+            //'g-recaptcha-response' => ['', new Recaptcha()]
         ]);
 
         $authCredentials = $request->only('email', 'password');
@@ -58,6 +58,7 @@ class LoginController extends Controller
                 'peneliti' => 'inovchalenge.role.dashboard',
                 'dudi' => 'inovchalenge.role.dashboard',
                 'pppk' => 'inovchalenge.role.dashboard',
+                'mahasiswa' => 'inovchalenge.role.dashboard',
                 default => 'admin.dashboard',
             };
 

@@ -61,6 +61,8 @@ class SubmissionAdminController extends Controller
             'reviews.reviewer',
             'reviews.tahap',
             'identitas',
+            'statusLogs.tahap',
+            'statusLogs.causer',
         ]);
 
         // Load field values per submission_tahap

@@ -91,12 +91,14 @@ class DosenController extends Controller
     public function showMemberSubmission(InovChalengeSubmission $submission)
     {
         // Verify current user is a member of this submission
-        $isMember = InovChalengeSubmissionMember::where('inov_chalenge_submission_id', $submission->id)
+        $member = InovChalengeSubmissionMember::where('inov_chalenge_submission_id', $submission->id)
             ->where('user_id', Auth::id())
             ->where('peran', '!=', 'Ketua')
-            ->exists();
+            ->first();
 
-        abort_if(!$isMember, 403, 'Anda bukan anggota tim dari submission ini.');
+        abort_if(!$member, 403, 'Anda bukan anggota tim dari submission ini.');
+        abort_if($member->approval_status === 'pending', 403, 'Anda belum menerima undangan perkumpulan ini.');
+        abort_if($member->approval_status === 'rejected', 403, 'Anda sudah menolak undangan ini.');
 
         $submission->load([
             'session',
@@ -118,12 +120,13 @@ class DosenController extends Controller
      */
     public function showMemberTahap(InovChalengeSubmission $submission, $tahapId)
     {
-        $isMember = InovChalengeSubmissionMember::where('inov_chalenge_submission_id', $submission->id)
+        $member = InovChalengeSubmissionMember::where('inov_chalenge_submission_id', $submission->id)
             ->where('user_id', Auth::id())
             ->where('peran', '!=', 'Ketua')
-            ->exists();
+            ->first();
 
-        abort_if(!$isMember, 403, 'Anda bukan anggota tim dari submission ini.');
+        abort_if(!$member, 403, 'Anda bukan anggota tim dari submission ini.');
+        abort_if(!in_array($member->approval_status, ['approved', 'not_required']), 403, 'Anda belum memiliki akses ke submission ini.');
 
         $submissionTahap = InovChalengeSubmissionTahap::where('inov_chalenge_submission_id', $submission->id)
             ->where('inov_chalenge_tahap_id', $tahapId)
@@ -606,5 +609,37 @@ class DosenController extends Controller
             return empty($decoded);
         }
         return empty($value->value_text);
+    }
+
+    /**
+     * Approve an invitation to join a team as Anggota.
+     */
+    public function approveInvitation(InovChalengeSubmissionMember $member)
+    {
+        abort_if($member->user_id !== Auth::id(), 403);
+        abort_if($member->approval_status !== 'pending', 403, 'Undangan ini sudah direspon.');
+
+        $member->update([
+            'approval_status' => 'approved',
+            'responded_at'    => now(),
+        ]);
+
+        return back()->with('success', 'Undangan berhasil diterima. Anda sekarang tergabung di tim.');
+    }
+
+    /**
+     * Reject an invitation to join a team.
+     */
+    public function rejectInvitation(InovChalengeSubmissionMember $member)
+    {
+        abort_if($member->user_id !== Auth::id(), 403);
+        abort_if($member->approval_status !== 'pending', 403, 'Undangan ini sudah direspon.');
+
+        $member->update([
+            'approval_status' => 'rejected',
+            'responded_at'    => now(),
+        ]);
+
+        return back()->with('success', 'Undangan berhasil ditolak.');
     }
 }

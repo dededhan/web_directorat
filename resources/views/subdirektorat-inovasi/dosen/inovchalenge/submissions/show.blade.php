@@ -104,6 +104,10 @@
                                         </p>
                                         <div class="flex items-center gap-1.5 mt-0.5">
                                             <span class="text-[10px] text-gray-400">{{ $member->getTipeLabel() }}</span>
+                                            @if ($member->tipe_anggota === 'DUDI' && $member->user?->profile?->institusi)
+                                                <span class="text-[10px] text-gray-400">·
+                                                    {{ $member->user->profile->institusi }}</span>
+                                            @endif
                                             @if ($member->peran === 'Ketua')
                                                 <span
                                                     class="inline-flex items-center px-1.5 py-0 rounded text-[9px] font-bold bg-indigo-100 text-indigo-700">
@@ -394,15 +398,7 @@
                                                     {{ $log->keterangan ?? $log->getStatusLabel($log->status_ke) }}
                                                 </p>
 
-                                                {{-- From → To badges --}}
                                                 <div class="flex items-center gap-1.5 mt-1">
-                                                    @if ($log->status_dari)
-                                                        <span
-                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 text-gray-500">
-                                                            {{ $log->getStatusLabel($log->status_dari) }}
-                                                        </span>
-                                                        <i class="fas fa-arrow-right text-[8px] text-gray-300"></i>
-                                                    @endif
                                                     <span
                                                         class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold {{ str_replace('bg-', 'bg-', $dotColor) }} bg-opacity-20 {{ $roleColor }}">
                                                         <i class="fas {{ $log->getStatusIcon() }} mr-1 text-[8px]"></i>

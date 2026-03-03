@@ -16,6 +16,18 @@
                 </ol>
             </nav>
 
+            {{-- Action Buttons --}}
+            <div class="mb-6 flex items-center justify-between">
+                <a href="{{ route('admin_inovasi.inovchalenge.sessions.index') }}"
+                    class="inline-flex items-center text-sm text-gray-500 hover:text-teal-600 transition">
+                    <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar Sesi
+                </a>
+                <a href="{{ route('admin_inovasi.inovchalenge.submissions.index', $session) }}"
+                    class="inline-flex items-center px-5 py-2.5 bg-teal-500 text-white text-sm font-semibold rounded-xl hover:bg-teal-600 transition shadow-sm">
+                    <i class="fas fa-file-alt mr-2"></i> Lihat Submissions ({{ $session->submissions->count() }})
+                </a>
+            </div>
+
             {{-- Session Header --}}
             <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-6">
                 <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-4 flex items-center justify-between">
@@ -323,17 +335,6 @@
                 </div>
             </div>
 
-            {{-- Back --}}
-            <div class="mt-6 flex items-center justify-between">
-                <a href="{{ route('admin_inovasi.inovchalenge.sessions.index') }}"
-                    class="inline-flex items-center text-sm text-gray-500 hover:text-teal-600 transition">
-                    <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar Sesi
-                </a>
-                <a href="{{ route('admin_inovasi.inovchalenge.submissions.index', $session) }}"
-                    class="inline-flex items-center px-5 py-2.5 bg-teal-500 text-white text-sm font-semibold rounded-xl hover:bg-teal-600 transition shadow-sm">
-                    <i class="fas fa-file-alt mr-2"></i> Lihat Submissions ({{ $session->submissions->count() }})
-                </a>
-            </div>
         </div>
     </div>
 @endsection

@@ -201,7 +201,10 @@
                                                 <span class="text-[10px] text-gray-400">· NIM/NIP/NIK/NIDN:
                                                     {{ $member->user->profile->identifier_number }}</span>
                                             @endif
-                                            @if ($member->user?->profile?->fakultas)
+                                            @if ($member->tipe_anggota === 'DUDI' && $member->user?->profile?->institusi)
+                                                <span class="text-[10px] text-gray-400">·
+                                                    {{ $member->user->profile->institusi }}</span>
+                                            @elseif ($member->user?->profile?->fakultas)
                                                 <span class="text-[10px] text-gray-400">·
                                                     {{ $member->user->profile->fakultas->name }}</span>
                                                 @if ($member->user?->profile?->prodi)

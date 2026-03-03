@@ -31,15 +31,22 @@
             @if ($submittedTahap->isNotEmpty())
                 <div class="mb-6 flex gap-2 border-b border-gray-200">
                     @foreach ($submittedTahap as $st)
+                        @php
+                            $hasReview = isset($myReviews[$st->inov_chalenge_tahap_id]);
+                            $tabBadgeClass = $hasReview ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700';
+                        @endphp
                         <button @click="activeTab = {{ $st->tahap->tahap_ke }}"
                             :class="activeTab === {{ $st->tahap->tahap_ke }} ? 'border-cyan-500 text-cyan-700 bg-cyan-50' :
                                 'border-transparent text-gray-500 hover:text-gray-700'"
                             class="px-4 py-3 border-b-2 text-sm font-medium rounded-t-xl transition inline-flex items-center gap-2">
                             <span
-                                class="inline-flex items-center justify-center w-6 h-6 rounded-lg text-[10px] font-bold bg-green-200 text-green-700">{{ $st->tahap->tahap_ke }}</span>
+                                class="inline-flex items-center justify-center w-6 h-6 rounded-lg text-[10px] font-bold {{ $tabBadgeClass }}">{{ $st->tahap->tahap_ke }}</span>
                             {{ $st->tahap->judul }}
-                            @if (isset($myReviews[$st->inov_chalenge_tahap_id]))
+                            @if ($hasReview)
                                 <i class="fas fa-check-circle text-green-500 text-xs"></i>
+                            @else
+                                <span
+                                    class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-red-100 text-red-600">Belum</span>
                             @endif
                         </button>
                     @endforeach
@@ -49,16 +56,34 @@
                 @foreach ($submittedTahap as $st)
                     <div x-show="activeTab === {{ $st->tahap->tahap_ke }}" x-cloak class="space-y-6">
 
-                        {{-- Field Values (read-only) --}}
-                        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                            <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-3">
-                                <h3 class="text-white font-semibold text-sm"><i class="fas fa-file-alt mr-1.5"></i> Data
-                                    Formulir</h3>
-                            </div>
-                            <div class="p-6">
-                                @if ($st->tahap->fields->isNotEmpty())
-                                    <div class="space-y-4">
-                                        @foreach ($st->tahap->fields->sortBy('urutan') as $field)
+                        {{-- ═══ Data Formulir (with Sections) ═══ --}}
+                        @php
+                            $hasSections = $st->tahap->sections->isNotEmpty();
+                        @endphp
+
+                        @if ($hasSections)
+                            {{-- Sectioned display --}}
+                            @foreach ($st->tahap->sections as $sIdx => $section)
+                                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                                    {{-- Section header --}}
+                                    <div class="px-5 py-3 border-b border-gray-100 flex items-center gap-3">
+                                        <div
+                                            class="w-7 h-7 rounded-lg bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
+                                            {{ $sIdx + 1 }}
+                                        </div>
+                                        <div>
+                                            <h4 class="text-sm font-bold text-gray-800">{{ $section->judul }}</h4>
+                                            @if ($section->deskripsi)
+                                                <p class="text-[11px] text-gray-400 mt-0.5">{{ $section->deskripsi }}</p>
+                                            @endif
+                                        </div>
+                                        <span
+                                            class="ml-auto text-[10px] text-gray-300 font-medium">{{ $section->fields->count() }}
+                                            field</span>
+                                    </div>
+                                    {{-- Section fields --}}
+                                    <div class="divide-y divide-gray-50">
+                                        @forelse ($section->fields as $field)
                                             @php
                                                 $fv = isset($st->loadedFieldValues)
                                                     ? $st->loadedFieldValues[$field->id] ?? null
@@ -77,25 +102,34 @@
                                                         $displayValue = $fv->value_text;
                                                     }
                                                 }
+                                                $isFilled = !is_null($displayValue) && $displayValue !== '';
                                             @endphp
-                                            <div class="border-b border-gray-100 pb-3 last:border-0 last:pb-0">
-                                                <p
-                                                    class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
-                                                    {{ $field->field_label }}
-                                                </p>
-                                                @if ($field->field_type === 'file' && $displayValue)
-                                                    <a href="{{ asset('storage/' . $displayValue) }}" target="_blank"
-                                                        class="inline-flex items-center text-sm text-teal-600 hover:underline">
-                                                        <i class="fas fa-download mr-1.5"></i>
-                                                        {{ $fv->original_filename ?? basename($displayValue) }}
-                                                    </a>
-                                                @elseif($field->field_type === 'url' && $displayValue)
-                                                    <a href="{{ $displayValue }}" target="_blank"
-                                                        class="text-sm text-teal-600 hover:underline break-all">
-                                                        {{ $displayValue }}
-                                                    </a>
-                                                @elseif($field->field_type === 'checkbox')
-                                                    @if ($displayValue)
+                                            <div
+                                                class="px-5 py-3 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6 {{ !$isFilled ? 'opacity-50' : '' }}">
+                                                <div class="sm:w-1/3 flex-shrink-0">
+                                                    <p class="text-xs font-semibold text-gray-500 flex items-center gap-1">
+                                                        {{ $field->field_label }}
+                                                        @if ($field->is_required)
+                                                            <span class="text-red-400">*</span>
+                                                        @endif
+                                                    </p>
+                                                    <p class="text-[10px] text-gray-300 mt-0.5">{{ $field->field_type }}
+                                                    </p>
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    @if ($field->field_type === 'file' && $isFilled)
+                                                        <a href="{{ asset('storage/' . $displayValue) }}" target="_blank"
+                                                            class="inline-flex items-center gap-1.5 text-sm text-teal-600 hover:text-teal-800 bg-teal-50 px-3 py-1.5 rounded-lg transition">
+                                                            <i class="fas fa-download text-[10px]"></i>
+                                                            {{ $fv->original_filename ?? basename($displayValue) }}
+                                                        </a>
+                                                    @elseif ($field->field_type === 'url' && $isFilled)
+                                                        <a href="{{ $displayValue }}" target="_blank"
+                                                            class="text-sm text-teal-600 hover:underline break-all">
+                                                            <i
+                                                                class="fas fa-external-link-alt text-[10px] mr-1"></i>{{ $displayValue }}
+                                                        </a>
+                                                    @elseif ($field->field_type === 'checkbox' && $isFilled)
                                                         <ul class="list-none space-y-1">
                                                             @foreach ($displayValue as $item)
                                                                 <li class="flex items-center gap-1.5 text-sm text-gray-800">
@@ -105,23 +139,173 @@
                                                                 </li>
                                                             @endforeach
                                                         </ul>
+                                                    @elseif ($isFilled)
+                                                        <p
+                                                            class="text-sm text-gray-800 whitespace-pre-wrap leading-relaxed">
+                                                            {{ $displayValue }}</p>
                                                     @else
-                                                        <p class="text-sm text-gray-300 italic">Belum diisi</p>
+                                                        <p class="text-sm text-gray-300 italic flex items-center gap-1">
+                                                            <i class="fas fa-minus-circle text-[10px]"></i> Belum diisi
+                                                        </p>
                                                     @endif
-                                                @elseif($displayValue)
-                                                    <p class="text-sm text-gray-800 whitespace-pre-wrap">
-                                                        {{ $displayValue }}</p>
-                                                @else
-                                                    <p class="text-sm text-gray-300 italic">Belum diisi</p>
-                                                @endif
+                                                </div>
+                                            </div>
+                                        @empty
+                                            <div class="px-5 py-4 text-center text-sm text-gray-400">Belum ada field</div>
+                                        @endforelse
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            {{-- Unsectioned fields --}}
+                            @if ($st->tahap->unsectionedFields->isNotEmpty())
+                                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                                    <div class="px-5 py-3 border-b border-gray-100 flex items-center gap-3">
+                                        <div
+                                            class="w-7 h-7 rounded-lg bg-gray-400 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </div>
+                                        <h4 class="text-sm font-bold text-gray-800">Lainnya</h4>
+                                    </div>
+                                    <div class="divide-y divide-gray-50">
+                                        @foreach ($st->tahap->unsectionedFields as $field)
+                                            @php
+                                                $fv = isset($st->loadedFieldValues)
+                                                    ? $st->loadedFieldValues[$field->id] ?? null
+                                                    : null;
+                                                $displayValue = null;
+                                                if ($fv) {
+                                                    if ($field->field_type === 'file') {
+                                                        $displayValue = $fv->value_file_path;
+                                                    } elseif ($field->field_type === 'url') {
+                                                        $displayValue = $fv->value_url;
+                                                    } elseif ($field->field_type === 'checkbox') {
+                                                        $decoded = json_decode($fv->value_text ?? '', true);
+                                                        $displayValue =
+                                                            is_array($decoded) && count($decoded) ? $decoded : null;
+                                                    } else {
+                                                        $displayValue = $fv->value_text;
+                                                    }
+                                                }
+                                                $isFilled = !is_null($displayValue) && $displayValue !== '';
+                                            @endphp
+                                            <div
+                                                class="px-5 py-3 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6 {{ !$isFilled ? 'opacity-50' : '' }}">
+                                                <div class="sm:w-1/3 flex-shrink-0">
+                                                    <p class="text-xs font-semibold text-gray-500">
+                                                        {{ $field->field_label }}</p>
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    @if ($field->field_type === 'file' && $isFilled)
+                                                        <a href="{{ asset('storage/' . $displayValue) }}" target="_blank"
+                                                            class="inline-flex items-center gap-1.5 text-sm text-teal-600 hover:text-teal-800 bg-teal-50 px-3 py-1.5 rounded-lg transition">
+                                                            <i class="fas fa-download text-[10px]"></i>
+                                                            {{ $fv->original_filename ?? basename($displayValue) }}
+                                                        </a>
+                                                    @elseif ($field->field_type === 'url' && $isFilled)
+                                                        <a href="{{ $displayValue }}" target="_blank"
+                                                            class="text-sm text-teal-600 hover:underline break-all">{{ $displayValue }}</a>
+                                                    @elseif ($field->field_type === 'checkbox' && $isFilled)
+                                                        <ul class="list-none space-y-1">
+                                                            @foreach ($displayValue as $item)
+                                                                <li class="flex items-center gap-1.5 text-sm text-gray-800">
+                                                                    <i
+                                                                        class="fas fa-check-square text-teal-500 text-xs"></i>
+                                                                    {{ $item }}
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    @elseif ($isFilled)
+                                                        <p class="text-sm text-gray-800 whitespace-pre-wrap">
+                                                            {{ $displayValue }}</p>
+                                                    @else
+                                                        <p class="text-sm text-gray-300 italic"><i
+                                                                class="fas fa-minus-circle text-[10px] mr-1"></i>Belum diisi
+                                                        </p>
+                                                    @endif
+                                                </div>
                                             </div>
                                         @endforeach
                                     </div>
-                                @else
-                                    <p class="text-sm text-gray-400 text-center py-4">Tidak ada field untuk tahap ini.</p>
-                                @endif
+                                </div>
+                            @endif
+                        @else
+                            {{-- No sections: flat display --}}
+                            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                                <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-3">
+                                    <h3 class="text-white font-semibold text-sm"><i class="fas fa-file-alt mr-1.5"></i> Data
+                                        Formulir</h3>
+                                </div>
+                                <div class="p-6">
+                                    @if ($st->tahap->fields->isNotEmpty())
+                                        <div class="space-y-4">
+                                            @foreach ($st->tahap->fields->sortBy('urutan') as $field)
+                                                @php
+                                                    $fv = isset($st->loadedFieldValues)
+                                                        ? $st->loadedFieldValues[$field->id] ?? null
+                                                        : null;
+                                                    $displayValue = null;
+                                                    if ($fv) {
+                                                        if ($field->field_type === 'file') {
+                                                            $displayValue = $fv->value_file_path;
+                                                        } elseif ($field->field_type === 'url') {
+                                                            $displayValue = $fv->value_url;
+                                                        } elseif ($field->field_type === 'checkbox') {
+                                                            $decoded = json_decode($fv->value_text ?? '', true);
+                                                            $displayValue =
+                                                                is_array($decoded) && count($decoded) ? $decoded : null;
+                                                        } else {
+                                                            $displayValue = $fv->value_text;
+                                                        }
+                                                    }
+                                                @endphp
+                                                <div class="border-b border-gray-100 pb-3 last:border-0 last:pb-0">
+                                                    <p
+                                                        class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                                                        {{ $field->field_label }}
+                                                    </p>
+                                                    @if ($field->field_type === 'file' && $displayValue)
+                                                        <a href="{{ asset('storage/' . $displayValue) }}" target="_blank"
+                                                            class="inline-flex items-center text-sm text-teal-600 hover:underline">
+                                                            <i class="fas fa-download mr-1.5"></i>
+                                                            {{ $fv->original_filename ?? basename($displayValue) }}
+                                                        </a>
+                                                    @elseif($field->field_type === 'url' && $displayValue)
+                                                        <a href="{{ $displayValue }}" target="_blank"
+                                                            class="text-sm text-teal-600 hover:underline break-all">
+                                                            {{ $displayValue }}
+                                                        </a>
+                                                    @elseif($field->field_type === 'checkbox')
+                                                        @if ($displayValue)
+                                                            <ul class="list-none space-y-1">
+                                                                @foreach ($displayValue as $item)
+                                                                    <li
+                                                                        class="flex items-center gap-1.5 text-sm text-gray-800">
+                                                                        <i
+                                                                            class="fas fa-check-square text-teal-500 text-xs"></i>
+                                                                        {{ $item }}
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @else
+                                                            <p class="text-sm text-gray-300 italic">Belum diisi</p>
+                                                        @endif
+                                                    @elseif($displayValue)
+                                                        <p class="text-sm text-gray-800 whitespace-pre-wrap">
+                                                            {{ $displayValue }}</p>
+                                                    @else
+                                                        <p class="text-sm text-gray-300 italic">Belum diisi</p>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <p class="text-sm text-gray-400 text-center py-4">Tidak ada field untuk tahap ini.
+                                        </p>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         {{-- Anggota Tim (Tahap with has_anggota) --}}
                         @if ($st->tahap->has_anggota)
@@ -299,6 +483,106 @@
                     </div>
                 </div>
             @endif
+
+            {{-- ═══ Riwayat Perubahan Status ═══ --}}
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mt-8">
+                <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-gray-900">
+                        <i class="fas fa-bell mr-2 text-teal-500"></i>Notifikasi &amp; Riwayat Status
+                    </h2>
+                    @if ($submission->statusLogs->count() > 5)
+                        <span class="text-xs text-gray-400">{{ $submission->statusLogs->count() }} aktivitas</span>
+                    @endif
+                </div>
+                <div class="p-6">
+                    @if ($submission->statusLogs->count())
+                        <div class="relative">
+                            <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+                            <div class="space-y-0">
+                                @foreach ($submission->statusLogs->take(20) as $log)
+                                    @php
+                                        $dotColors = [
+                                            'draft' => 'bg-yellow-400',
+                                            'diajukan' => 'bg-blue-500',
+                                            'menunggu' => 'bg-gray-400',
+                                            'menunggu_direview' => 'bg-yellow-500',
+                                            'sedang_direview' => 'bg-purple-500',
+                                            'disetujui' => 'bg-green-500',
+                                            'perbaikan' => 'bg-orange-500',
+                                            'perbaikan_diperlukan' => 'bg-orange-500',
+                                            'selesai' => 'bg-teal-500',
+                                            'proses_tahap_selanjutnya' => 'bg-cyan-500',
+                                            'belum_diisi' => 'bg-gray-300',
+                                        ];
+                                        $dotColor = $dotColors[$log->status_ke] ?? 'bg-gray-400';
+                                        $roleColors = [
+                                            'dosen' => 'text-teal-600',
+                                            'admin' => 'text-indigo-600',
+                                            'system' => 'text-gray-500',
+                                        ];
+                                        $roleColor = $roleColors[$log->causer_role] ?? 'text-gray-500';
+                                        $roleBadge = match ($log->causer_role) {
+                                            'admin' => 'bg-indigo-100 text-indigo-700',
+                                            'dosen' => 'bg-teal-100 text-teal-700',
+                                            default => 'bg-gray-100 text-gray-600',
+                                        };
+                                    @endphp
+                                    <div class="relative pl-10 pb-5">
+                                        <div
+                                            class="absolute left-2.5 top-1 w-3 h-3 rounded-full {{ $dotColor }} ring-2 ring-white shadow-sm z-10">
+                                        </div>
+                                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1">
+                                            <div class="flex-1">
+                                                <p class="text-sm text-gray-800 font-medium leading-snug">
+                                                    @if ($log->tipe === 'tahap' && $log->tahap)
+                                                        <span
+                                                            class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-gray-100 text-gray-600 mr-1">
+                                                            T{{ $log->tahap->tahap_ke }}
+                                                        </span>
+                                                    @endif
+                                                    {{ $log->keterangan ?? $log->getStatusLabel($log->status_ke) }}
+                                                </p>
+                                                <div class="flex items-center gap-1.5 mt-1">
+                                                    <span
+                                                        class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold {{ str_replace('bg-', 'bg-', $dotColor) }} bg-opacity-20 {{ $roleColor }}">
+                                                        <i class="fas {{ $log->getStatusIcon() }} mr-1 text-[8px]"></i>
+                                                        {{ $log->getStatusLabel($log->status_ke) }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2 flex-shrink-0 mt-1 sm:mt-0">
+                                                <span
+                                                    class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold {{ $roleBadge }}">
+                                                    {{ ucfirst($log->causer_role ?? 'system') }}
+                                                </span>
+                                                <span class="text-[11px] text-gray-400 whitespace-nowrap">
+                                                    <i class="far fa-clock mr-0.5"></i>
+                                                    {{ $log->created_at->format('d M Y') }}
+                                                    <span
+                                                        class="font-semibold">{{ $log->created_at->format('H:i') }}</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            @if ($submission->statusLogs->count() > 20)
+                                <div class="pl-10 pt-2 text-xs text-gray-400">
+                                    <i class="fas fa-ellipsis-h mr-1"></i> +{{ $submission->statusLogs->count() - 20 }}
+                                    aktivitas lainnya
+                                </div>
+                            @endif
+                        </div>
+                    @else
+                        <div class="text-center py-8">
+                            <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-bell-slash text-xl text-gray-300"></i>
+                            </div>
+                            <p class="text-sm text-gray-400">Belum ada riwayat perubahan status</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
 
         </div>
     </div>

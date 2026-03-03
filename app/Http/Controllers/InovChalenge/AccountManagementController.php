@@ -275,6 +275,45 @@ class AccountManagementController extends Controller
     }
 
     /**
+     * Batch-approve multiple pending registrations at once.
+     */
+    public function batchApprove(Request $request)
+    {
+        $request->validate([
+            'registration_ids'   => 'required|array|min:1',
+            'registration_ids.*' => 'integer|exists:inov_chalenge_registrations,id',
+        ]);
+
+        $registrations = InovChalengeRegistration::whereIn('id', $request->registration_ids)
+            ->where('status', 'pending')
+            ->get();
+
+        if ($registrations->isEmpty()) {
+            return back()->with('error', 'Tidak ada pendaftaran pending yang dipilih.');
+        }
+
+        $count = 0;
+        foreach ($registrations as $registration) {
+            User::create([
+                'name'     => $registration->name,
+                'email'    => $registration->email,
+                'password' => $registration->password,
+                'role'     => $registration->role,
+            ]);
+
+            $registration->update([
+                'status'       => 'approved',
+                'processed_by' => Auth::id(),
+                'processed_at' => now(),
+            ]);
+
+            $count++;
+        }
+
+        return back()->with('success', "{$count} pendaftaran berhasil disetujui. Akun telah dibuat.");
+    }
+
+    /**
      * Decline a registration.
      */
     public function decline(Request $request, InovChalengeRegistration $registration)

@@ -165,6 +165,10 @@
                                         </p>
                                         <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
                                             <span class="text-[10px] text-gray-400">{{ $member->getTipeLabel() }}</span>
+                                            @if ($member->tipe_anggota === 'DUDI' && $member->user?->profile?->institusi)
+                                                <span class="text-[10px] text-gray-400">·
+                                                    {{ $member->user->profile->institusi }}</span>
+                                            @endif
                                             @if ($member->peran === 'Ketua')
                                                 <span
                                                     class="inline-flex items-center px-1.5 py-0 rounded text-[9px] font-bold bg-purple-100 text-purple-700">
@@ -249,7 +253,7 @@
                         <div class="p-5">
                             <form method="POST"
                                 action="{{ route('admin_inovasi.inovchalenge.submissions.updateTahapStatus', $st) }}"
-                                class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 @csrf
                                 @method('PATCH')
                                 <div>
@@ -263,14 +267,6 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-gray-600 mb-1">Nominal Evaluasi
-                                        (Rp)
-                                    </label>
-                                    <input type="number" name="nominal_evaluasi" value="{{ $st->nominal_evaluasi }}"
-                                        step="0.01" min="0"
-                                        class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-600 mb-1">Catatan Admin</label>
@@ -514,7 +510,8 @@
                         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
                             <div class="bg-gradient-to-r from-amber-500 to-amber-600 px-6 py-3">
                                 <h3 class="text-white font-semibold text-sm"><i class="fas fa-star mr-1.5"></i> Reviews
-                                    ({{ $tahapReviews->count() }})</h3>
+                                    ({{ $tahapReviews->count() }})
+                                </h3>
                             </div>
                             <div class="p-6 space-y-4">
                                 @foreach ($tahapReviews as $review)
@@ -611,6 +608,106 @@
                             </button>
                         @endif
                     </form>
+                </div>
+            </div>
+
+            {{-- ═══ Riwayat Perubahan Status ═══ --}}
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mt-8">
+                <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-gray-900">
+                        <i class="fas fa-bell mr-2 text-teal-500"></i>Notifikasi &amp; Riwayat Status
+                    </h2>
+                    @if ($submission->statusLogs->count() > 5)
+                        <span class="text-xs text-gray-400">{{ $submission->statusLogs->count() }} aktivitas</span>
+                    @endif
+                </div>
+                <div class="p-6">
+                    @if ($submission->statusLogs->count())
+                        <div class="relative">
+                            <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+                            <div class="space-y-0">
+                                @foreach ($submission->statusLogs->take(30) as $log)
+                                    @php
+                                        $dotColors = [
+                                            'draft' => 'bg-yellow-400',
+                                            'diajukan' => 'bg-blue-500',
+                                            'menunggu' => 'bg-gray-400',
+                                            'menunggu_direview' => 'bg-yellow-500',
+                                            'sedang_direview' => 'bg-purple-500',
+                                            'disetujui' => 'bg-green-500',
+                                            'perbaikan' => 'bg-orange-500',
+                                            'perbaikan_diperlukan' => 'bg-orange-500',
+                                            'selesai' => 'bg-teal-500',
+                                            'proses_tahap_selanjutnya' => 'bg-cyan-500',
+                                            'belum_diisi' => 'bg-gray-300',
+                                        ];
+                                        $dotColor = $dotColors[$log->status_ke] ?? 'bg-gray-400';
+                                        $roleColors = [
+                                            'dosen' => 'text-teal-600',
+                                            'admin' => 'text-indigo-600',
+                                            'system' => 'text-gray-500',
+                                        ];
+                                        $roleColor = $roleColors[$log->causer_role] ?? 'text-gray-500';
+                                        $roleBadge = match ($log->causer_role) {
+                                            'admin' => 'bg-indigo-100 text-indigo-700',
+                                            'dosen' => 'bg-teal-100 text-teal-700',
+                                            default => 'bg-gray-100 text-gray-600',
+                                        };
+                                    @endphp
+                                    <div class="relative pl-10 pb-5">
+                                        <div
+                                            class="absolute left-2.5 top-1 w-3 h-3 rounded-full {{ $dotColor }} ring-2 ring-white shadow-sm z-10">
+                                        </div>
+                                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1">
+                                            <div class="flex-1">
+                                                <p class="text-sm text-gray-800 font-medium leading-snug">
+                                                    @if ($log->tipe === 'tahap' && $log->tahap)
+                                                        <span
+                                                            class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-gray-100 text-gray-600 mr-1">
+                                                            T{{ $log->tahap->tahap_ke }}
+                                                        </span>
+                                                    @endif
+                                                    {{ $log->keterangan ?? $log->getStatusLabel($log->status_ke) }}
+                                                </p>
+                                                <div class="flex items-center gap-1.5 mt-1">
+                                                    <span
+                                                        class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold {{ str_replace('bg-', 'bg-', $dotColor) }} bg-opacity-20 {{ $roleColor }}">
+                                                        <i class="fas {{ $log->getStatusIcon() }} mr-1 text-[8px]"></i>
+                                                        {{ $log->getStatusLabel($log->status_ke) }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2 flex-shrink-0 mt-1 sm:mt-0">
+                                                <span
+                                                    class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold {{ $roleBadge }}">
+                                                    {{ ucfirst($log->causer_role ?? 'system') }}
+                                                </span>
+                                                <span class="text-[11px] text-gray-400 whitespace-nowrap">
+                                                    <i class="far fa-clock mr-0.5"></i>
+                                                    {{ $log->created_at->format('d M Y') }}
+                                                    <span
+                                                        class="font-semibold">{{ $log->created_at->format('H:i') }}</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            @if ($submission->statusLogs->count() > 30)
+                                <div class="pl-10 pt-2 text-xs text-gray-400">
+                                    <i class="fas fa-ellipsis-h mr-1"></i> +{{ $submission->statusLogs->count() - 30 }}
+                                    aktivitas lainnya
+                                </div>
+                            @endif
+                        </div>
+                    @else
+                        <div class="text-center py-8">
+                            <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-bell-slash text-xl text-gray-300"></i>
+                            </div>
+                            <p class="text-sm text-gray-400">Belum ada riwayat perubahan status</p>
+                        </div>
+                    @endif
                 </div>
             </div>
 

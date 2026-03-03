@@ -72,7 +72,11 @@ class ReviewerController extends Controller
             'session',
             'user',
             'submissionTahap.tahap.fields',
+            'submissionTahap.tahap.sections.fields',
+            'submissionTahap.tahap.unsectionedFields',
             'members.user',
+            'statusLogs.tahap',
+            'statusLogs.causer',
         ]);
 
         // Only show Tahap that have been submitted (diajukan)

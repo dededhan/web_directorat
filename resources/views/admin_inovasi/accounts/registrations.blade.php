@@ -48,6 +48,39 @@
             </button>
         </form>
 
+        {{-- Batch Approve (only for pending tab) --}}
+        @if (request('status', 'pending') === 'pending')
+            <form id="batchApproveForm" action="{{ route('admin_inovasi.accounts.registrations.batchApprove') }}"
+                method="POST" x-data="batchApproval()">
+                @csrf
+                @method('PATCH')
+
+                {{-- Batch action bar --}}
+                <div x-show="selectedIds.length > 0" x-transition
+                    class="sticky top-0 z-20 mb-4 flex items-center justify-between bg-teal-50 border border-teal-200 rounded-xl px-5 py-3 shadow-sm"
+                    x-cloak>
+                    <span class="text-sm font-semibold text-teal-800">
+                        <i class="fas fa-check-double mr-1"></i>
+                        <span x-text="selectedIds.length"></span> pendaftaran dipilih
+                    </span>
+                    <button type="submit"
+                        class="inline-flex items-center px-5 py-2 bg-green-600 text-white rounded-lg text-sm font-semibold hover:bg-green-700 transition shadow-sm"
+                        onclick="return confirm('Yakin ingin menyetujui ' + document.querySelectorAll('input[name=\'registration_ids[]\']:checked').length + ' pendaftaran yang dipilih?')">
+                        <i class="fas fa-check-double mr-1.5"></i> Setujui Semua yang Dipilih
+                    </button>
+                </div>
+
+                {{-- Select all toggle --}}
+                <div class="flex items-center gap-3 mb-3">
+                    <label
+                        class="inline-flex items-center gap-2 cursor-pointer text-sm text-gray-600 hover:text-gray-800 transition">
+                        <input type="checkbox" @change="toggleAll($event)" :checked="allSelected"
+                            class="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500">
+                        <span class="font-medium">Pilih Semua</span>
+                    </label>
+                </div>
+        @endif
+
         {{-- Registrations List --}}
         <div class="space-y-4">
             @forelse($registrations as $reg)
@@ -55,6 +88,14 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         {{-- Info --}}
                         <div class="flex items-start gap-4">
+                            @if ($reg->status === 'pending')
+                                <div class="flex items-center pt-1">
+                                    <input type="checkbox" name="registration_ids[]" value="{{ $reg->id }}"
+                                        class="batch-checkbox w-5 h-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500 cursor-pointer"
+                                        @change="toggleId({{ $reg->id }}, $event)"
+                                        :checked="selectedIds.includes({{ $reg->id }})">
+                                </div>
+                            @endif
                             <div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
                                 style="background: linear-gradient(135deg, #277177, #1d5559);">
                                 {{ strtoupper(substr($reg->name, 0, 1)) }}
@@ -65,6 +106,7 @@
                                 <div class="flex items-center gap-3 mt-2">
                                     @php
                                         $roleColors = [
+                                            'dosen' => 'bg-teal-100 text-teal-800',
                                             'alumni' => 'bg-green-100 text-green-800',
                                             'peneliti' => 'bg-indigo-100 text-indigo-800',
                                             'dudi' => 'bg-amber-100 text-amber-800',
@@ -124,7 +166,8 @@
                             @csrf
                             @method('PATCH')
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Alasan Penolakan
-                                (opsional)</label>
+                                (opsional)
+                            </label>
                             <textarea name="admin_notes" rows="2"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-red-400 focus:border-red-400"
                                 placeholder="Tuliskan alasan penolakan..."></textarea>
@@ -168,10 +211,44 @@
             @endforelse
         </div>
 
+        @if (request('status', 'pending') === 'pending')
+            </form>
+        @endif
+
         @if ($registrations->hasPages())
             <div class="pt-2">
                 {{ $registrations->links() }}
             </div>
         @endif
     </div>
+
+    {{-- Batch approval Alpine component --}}
+    <script>
+        function batchApproval() {
+            return {
+                selectedIds: [],
+                get allSelected() {
+                    const checkboxes = document.querySelectorAll('.batch-checkbox');
+                    return checkboxes.length > 0 && this.selectedIds.length === checkboxes.length;
+                },
+                toggleId(id, event) {
+                    if (event.target.checked) {
+                        if (!this.selectedIds.includes(id)) this.selectedIds.push(id);
+                    } else {
+                        this.selectedIds = this.selectedIds.filter(i => i !== id);
+                    }
+                },
+                toggleAll(event) {
+                    const checkboxes = document.querySelectorAll('.batch-checkbox');
+                    if (event.target.checked) {
+                        this.selectedIds = Array.from(checkboxes).map(cb => parseInt(cb.value));
+                        checkboxes.forEach(cb => cb.checked = true);
+                    } else {
+                        this.selectedIds = [];
+                        checkboxes.forEach(cb => cb.checked = false);
+                    }
+                }
+            }
+        }
+    </script>
 @endsection

@@ -27,7 +27,7 @@ class RegistrationController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|max:255|unique:users,email|unique:inov_chalenge_registrations,email',
             'password' => ['required', 'confirmed', Password::min(8)],
-            'role'     => 'required|in:alumni,peneliti,dudi,pppk,mahasiswa',
+            'role'     => 'required|in:dosen,alumni,peneliti,dudi,pppk,mahasiswa',
         ], [
             'name.required'      => 'Nama lengkap wajib diisi.',
             'email.required'     => 'Email wajib diisi.',

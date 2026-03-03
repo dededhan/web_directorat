@@ -140,6 +140,12 @@ Route::prefix('subdirektorat-inovasi/dosen/inovchalenge')
             ->name('team.show');
         Route::get('team-submissions/{submission}/tahap/{tahapId}', [DosenController::class, 'showMemberTahap'])
             ->name('team.tahap');
+
+        // Dosen invitation approve/reject (when added as Anggota)
+        Route::patch('invitations/{member}/approve', [DosenController::class, 'approveInvitation'])
+            ->name('invitations.approve');
+        Route::patch('invitations/{member}/reject', [DosenController::class, 'rejectInvitation'])
+            ->name('invitations.reject');
     });
 
 // ── Alumni Routes ─────────────────────────────────────────────────────────
@@ -198,6 +204,8 @@ Route::prefix('admin_inovasi/accounts')
             ->name('registrations');
         Route::patch('registrations/{registration}/approve', [AccountManagementController::class, 'approve'])
             ->name('registrations.approve');
+        Route::patch('registrations/batch-approve', [AccountManagementController::class, 'batchApprove'])
+            ->name('registrations.batchApprove');
         Route::patch('registrations/{registration}/decline', [AccountManagementController::class, 'decline'])
             ->name('registrations.decline');
     });
@@ -212,6 +220,10 @@ Route::prefix('inovchalenge/dashboard')
             ->name('dashboard');
         Route::put('profile', [RoleDashboardController::class, 'updateProfile'])
             ->name('profile.update');
+        Route::get('submissions/{submission}', [RoleDashboardController::class, 'showSubmission'])
+            ->name('submissions.show');
+        Route::get('submissions/{submission}/tahap/{tahapId}', [RoleDashboardController::class, 'showTahap'])
+            ->name('submissions.tahap');
         Route::patch('invitations/{member}/approve', [RoleDashboardController::class, 'approveInvitation'])
             ->name('invitations.approve');
         Route::patch('invitations/{member}/reject', [RoleDashboardController::class, 'rejectInvitation'])
