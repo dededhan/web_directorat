@@ -8,183 +8,368 @@
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="stylesheet" href="{{ asset('home.css') }}">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
+        body { font-family: 'Inter', sans-serif; }
+        .hero-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); }
+        .role-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .role-card:hover { transform: translateY(-2px); }
+        .role-card.active { transform: translateY(-2px); box-shadow: 0 8px 25px -5px rgba(39, 113, 119, 0.3); }
+        .input-field { transition: all 0.2s ease; }
+        .input-field:focus { box-shadow: 0 0 0 3px rgba(39, 113, 119, 0.15); }
+        .btn-submit { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 10px 25px -5px rgba(39, 113, 119, 0.4); }
+        .floating-shape { animation: float 6s ease-in-out infinite; }
+        .floating-shape-delay { animation: float 8s ease-in-out infinite; animation-delay: 2s; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
         }
     </style>
 </head>
 @include('layout.navbar_hilirisasi')
 
-<body>
+<body class="bg-gray-50">
 
-    <div class="min-h-screen flex items-center justify-center py-12 px-4" style="margin-top: 80px;">
-        <div class="w-full max-w-lg">
+    <div class="min-h-screen relative overflow-hidden" style="margin-top: 70px;">
+        {{-- Background decoration --}}
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-teal-400/20 to-emerald-300/10 rounded-full blur-3xl floating-shape"></div>
+            <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-blue-400/15 to-purple-300/10 rounded-full blur-3xl floating-shape-delay"></div>
+            <div class="absolute top-1/3 left-1/4 w-64 h-64 bg-gradient-to-br from-teal-500/10 to-cyan-400/5 rounded-full blur-2xl"></div>
+        </div>
 
-            {{-- Header --}}
-            <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
-                    style="background: linear-gradient(135deg, #277177, #1d5559);">
-                    <i class="fas fa-user-plus text-white text-2xl"></i>
-                </div>
-                <h1 class="text-3xl font-bold text-gray-800">Daftar Akun</h1>
-                <p class="text-gray-500 mt-2">Buat akun untuk berpartisipasi di UNJ Innovative Challenge</p>
-            </div>
+        <div class="relative z-10 flex items-center justify-center py-10 px-4 sm:px-6">
+            <div class="w-full max-w-5xl">
 
-            {{-- Success message --}}
-            @if (session('success'))
-                <div
-                    class="mb-6 p-4 rounded-lg bg-green-50 border border-green-200 text-green-700 flex items-start gap-3">
-                    <i class="fas fa-check-circle mt-0.5 text-green-500"></i>
-                    <div>
-                        <p class="font-semibold">Pendaftaran Berhasil!</p>
-                        <p class="text-sm mt-1">{{ session('success') }}</p>
-                    </div>
-                </div>
-            @endif
+                {{-- Two-column layout --}}
+                <div class="flex flex-col lg:flex-row gap-0 bg-white rounded-3xl shadow-2xl shadow-gray-200/60 overflow-hidden border border-gray-100">
 
-            {{-- Error summary --}}
-            @if ($errors->any())
-                <div class="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 text-red-700">
-                    <p class="font-semibold mb-1"><i class="fas fa-exclamation-triangle mr-1"></i> Terdapat kesalahan:
-                    </p>
-                    <ul class="list-disc list-inside text-sm space-y-1">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+                    {{-- Left panel - Branding --}}
+                    <div class="lg:w-5/12 relative bg-gradient-to-br from-[#1d5559] via-[#277177] to-[#2d8a8a] hero-pattern p-8 lg:p-10 flex flex-col justify-between text-white">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20"></div>
 
-            {{-- Registration Form --}}
-            <form action="{{ route('inovchalenge.register.submit') }}" method="POST"
-                class="bg-white rounded-xl shadow-lg border border-gray-100 p-8 space-y-6" x-data="{ selectedRole: '{{ old('role', '') }}' }">
-                @csrf
-
-                {{-- Role Selection --}}
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-3">
-                        <i class="fas fa-id-badge mr-1 text-teal-600"></i> Pilih Role
-                    </label>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        @foreach ([
-        'alumni' => ['label' => 'Alumni', 'icon' => 'fa-user-graduate'],
-        'peneliti' => ['label' => 'Peneliti', 'icon' => 'fa-microscope'],
-        'dudi' => ['label' => 'DUDI', 'icon' => 'fa-building'],
-        'pppk' => ['label' => 'PPPK', 'icon' => 'fa-user-tie'],
-        'mahasiswa' => ['label' => 'Mahasiswa', 'icon' => 'fa-graduation-cap'],
-    ] as $value => $info)
-                            <label class="cursor-pointer">
-                                <input type="radio" name="role" value="{{ $value }}" class="hidden peer"
-                                    x-model="selectedRole" {{ old('role') === $value ? 'checked' : '' }}>
-                                <div
-                                    class="flex flex-col items-center justify-center p-4 rounded-lg border-2 border-gray-200 transition-all duration-200
-                                        peer-checked:border-teal-500 peer-checked:bg-teal-50 peer-checked:shadow-md
-                                        hover:border-teal-300 hover:bg-gray-50">
-                                    <i class="fas {{ $info['icon'] }} text-2xl mb-2 text-gray-400 peer-checked:text-teal-600"
-                                        :class="selectedRole === '{{ $value }}' ? 'text-teal-600' : 'text-gray-400'"></i>
-                                    <span class="text-sm font-medium"
-                                        :class="selectedRole === '{{ $value }}' ? 'text-teal-700' : 'text-gray-600'">{{ $info['label'] }}</span>
+                        <div class="relative z-10">
+                            {{-- Logo --}}
+                            <div class="flex items-center gap-3 mb-10">
+                                <div class="w-12 h-12 bg-white/15 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/20">
+                                    <i class="fas fa-trophy text-xl text-yellow-300"></i>
                                 </div>
-                            </label>
-                        @endforeach
+                                <div>
+                                    <h3 class="text-lg font-bold leading-tight">Innovation</h3>
+                                    <p class="text-teal-200 text-xs font-medium tracking-wider">CHALLENGE UNJ</p>
+                                </div>
+                            </div>
+
+                            {{-- Heading --}}
+                            <h1 class="text-3xl lg:text-4xl font-extrabold leading-tight mb-4">
+                                Bergabung<br>
+                                <span class="text-teal-200">Sekarang!</span>
+                            </h1>
+                            <p class="text-teal-100/90 text-sm leading-relaxed mb-8 max-w-xs">
+                                Daftarkan diri Anda dan jadilah bagian dari ekosistem inovasi UNJ. Wujudkan ide kreatif menjadi solusi nyata.
+                            </p>
+
+                            {{-- Feature list --}}
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-lightbulb text-yellow-300 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-sm">Ajukan Inovasi</p>
+                                        <p class="text-teal-200/80 text-xs">Submit proposal dan kembangkan ide bersama tim</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-users text-blue-300 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-sm">Kolaborasi Tim</p>
+                                        <p class="text-teal-200/80 text-xs">Bentuk tim lintas disiplin untuk hasil maksimal</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-award text-orange-300 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-sm">Pendanaan & Mentoring</p>
+                                        <p class="text-teal-200/80 text-xs">Dapatkan dukungan dana dan bimbingan ahli</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Bottom decoration --}}
+                        <div class="relative z-10 mt-10 hidden lg:block">
+                            <div class="glass rounded-2xl p-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex -space-x-2">
+                                        <div class="w-8 h-8 rounded-full bg-teal-400 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/20">A</div>
+                                        <div class="w-8 h-8 rounded-full bg-blue-400 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/20">R</div>
+                                        <div class="w-8 h-8 rounded-full bg-purple-400 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/20">D</div>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-semibold text-white">Bergabung bersama inovator lainnya</p>
+                                        <p class="text-[10px] text-teal-200/80">dan ciptakan dampak nyata</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    @error('role')
-                        <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
-                    @enderror
-                </div>
 
-                {{-- Nama Lengkap --}}
-                <div>
-                    <label for="name" class="block text-sm font-semibold text-gray-700 mb-1">
-                        <i class="fas fa-user mr-1 text-teal-600"></i> Nama Lengkap
-                    </label>
-                    <input type="text" id="name" name="name" value="{{ old('name') }}"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
-                        placeholder="Masukkan nama lengkap" required>
-                    @error('name')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+                    {{-- Right panel - Form --}}
+                    <div class="lg:w-7/12 p-8 lg:p-10" x-data="registerForm()">
 
-                {{-- Email --}}
-                <div>
-                    <label for="email" class="block text-sm font-semibold text-gray-700 mb-1">
-                        <i class="fas fa-envelope mr-1 text-teal-600"></i> Email
-                    </label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
-                        placeholder="contoh@email.com" required>
-                    @error('email')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+                        {{-- Mobile header --}}
+                        <div class="lg:hidden text-center mb-6">
+                            <h2 class="text-2xl font-bold text-gray-900">Buat Akun Baru</h2>
+                            <p class="text-gray-500 text-sm mt-1">Isi formulir di bawah untuk mendaftar</p>
+                        </div>
 
-                {{-- Password --}}
-                <div>
-                    <label for="password" class="block text-sm font-semibold text-gray-700 mb-1">
-                        <i class="fas fa-lock mr-1 text-teal-600"></i> Password
-                    </label>
-                    <div class="relative" x-data="{ show: false }">
-                        <input :type="show ? 'text' : 'password'" id="password" name="password"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors pr-12"
-                            placeholder="Minimal 8 karakter" required>
-                        <button type="button" @click="show = !show"
-                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                            <i :class="show ? 'fa-eye-slash' : 'fa-eye'" class="fas"></i>
-                        </button>
+                        {{-- Desktop header --}}
+                        <div class="hidden lg:block mb-8">
+                            <h2 class="text-2xl font-bold text-gray-900">Buat Akun Baru</h2>
+                            <p class="text-gray-500 text-sm mt-1">Lengkapi data berikut untuk mendaftar di Innovation Challenge</p>
+                        </div>
+
+                        {{-- Success message --}}
+                        @if (session('success'))
+                            <div class="mb-6 p-4 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-check-circle text-green-500 text-lg"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-green-800 text-sm">Pendaftaran Berhasil!</p>
+                                    <p class="text-xs text-green-600 mt-0.5">{{ session('success') }}</p>
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- Error summary --}}
+                        @if ($errors->any())
+                            <div class="mb-6 p-4 rounded-2xl bg-gradient-to-r from-red-50 to-rose-50 border border-red-200">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <i class="fas fa-exclamation-triangle text-red-500"></i>
+                                    <p class="font-bold text-red-700 text-sm">Terdapat kesalahan</p>
+                                </div>
+                                <ul class="list-disc list-inside text-xs text-red-600 space-y-0.5">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        {{-- Registration Form --}}
+                        <form action="{{ route('inovchalenge.register.submit') }}" method="POST" class="space-y-6">
+                            @csrf
+
+                            {{-- Step indicator --}}
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-7 h-7 rounded-full bg-[#277177] text-white flex items-center justify-center text-xs font-bold">1</div>
+                                    <span class="text-xs font-semibold text-gray-700">Pilih Role</span>
+                                </div>
+                                <div class="flex-1 h-px bg-gray-200"></div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center"
+                                        :class="selectedRole ? 'bg-[#277177] text-white' : 'bg-gray-200 text-gray-400'">2</div>
+                                    <span class="text-xs font-semibold" :class="selectedRole ? 'text-gray-700' : 'text-gray-400'">Data Diri</span>
+                                </div>
+                            </div>
+
+                            {{-- Role Selection --}}
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
+                                    Daftar Sebagai
+                                </label>
+                                <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                                    @foreach ([
+                                        'alumni' => ['label' => 'Alumni', 'icon' => 'fa-user-graduate', 'color' => 'from-blue-500 to-blue-600'],
+                                        'peneliti' => ['label' => 'Peneliti', 'icon' => 'fa-microscope', 'color' => 'from-purple-500 to-purple-600'],
+                                        'dudi' => ['label' => 'DUDI', 'icon' => 'fa-building', 'color' => 'from-orange-500 to-orange-600'],
+                                        'pppk' => ['label' => 'PPPK', 'icon' => 'fa-user-tie', 'color' => 'from-indigo-500 to-indigo-600'],
+                                        'mahasiswa' => ['label' => 'Mahasiswa', 'icon' => 'fa-graduation-cap', 'color' => 'from-teal-500 to-teal-600'],
+                                    ] as $value => $info)
+                                        <label class="cursor-pointer role-card" :class="selectedRole === '{{ $value }}' ? 'active' : ''">
+                                            <input type="radio" name="role" value="{{ $value }}" class="hidden peer"
+                                                x-model="selectedRole" {{ old('role') === $value ? 'checked' : '' }}>
+                                            <div class="relative flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl border-2 transition-all duration-300 text-center"
+                                                :class="selectedRole === '{{ $value }}'
+                                                    ? 'border-[#277177] bg-gradient-to-br from-teal-50 to-emerald-50 shadow-lg'
+                                                    : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'">
+                                                <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center mb-2 transition-all duration-300"
+                                                    :class="selectedRole === '{{ $value }}'
+                                                        ? 'bg-gradient-to-br {{ $info['color'] }} shadow-md'
+                                                        : 'bg-gray-100'">
+                                                    <i class="fas {{ $info['icon'] }} text-sm sm:text-base transition-colors duration-300"
+                                                        :class="selectedRole === '{{ $value }}' ? 'text-white' : 'text-gray-400'"></i>
+                                                </div>
+                                                <span class="text-[11px] sm:text-xs font-semibold transition-colors duration-300"
+                                                    :class="selectedRole === '{{ $value }}' ? 'text-[#1d5559]' : 'text-gray-500'">{{ $info['label'] }}</span>
+                                                {{-- Checkmark --}}
+                                                <div x-show="selectedRole === '{{ $value }}'" x-transition
+                                                    class="absolute -top-1 -right-1 w-5 h-5 bg-[#277177] rounded-full flex items-center justify-center shadow-sm">
+                                                    <i class="fas fa-check text-white text-[8px]"></i>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    @endforeach
+                                </div>
+                                @error('role')
+                                    <p class="text-red-500 text-xs mt-2"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- Form fields (shown after role selection) --}}
+                            <div x-show="selectedRole" x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-1 translate-y-0"
+                                class="space-y-5">
+
+                                <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+
+                                {{-- Nama Lengkap --}}
+                                <div>
+                                    <label for="name" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                                        Nama Lengkap <span class="text-red-400">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                            <i class="fas fa-user text-sm"></i>
+                                        </div>
+                                        <input type="text" id="name" name="name" value="{{ old('name') }}"
+                                            class="input-field w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:border-[#277177] focus:ring-0 transition-all bg-gray-50/50 focus:bg-white @error('name') border-red-300 @enderror"
+                                            placeholder="Masukkan nama lengkap Anda" required>
+                                    </div>
+                                    @error('name')
+                                        <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                {{-- Email --}}
+                                <div>
+                                    <label for="email" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                                        Email <span class="text-red-400">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                            <i class="fas fa-envelope text-sm"></i>
+                                        </div>
+                                        <input type="email" id="email" name="email" value="{{ old('email') }}"
+                                            class="input-field w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:border-[#277177] focus:ring-0 transition-all bg-gray-50/50 focus:bg-white @error('email') border-red-300 @enderror"
+                                            placeholder="contoh@email.com" required>
+                                    </div>
+                                    @error('email')
+                                        <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                {{-- Password grid --}}
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {{-- Password --}}
+                                    <div>
+                                        <label for="password" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                                            Password <span class="text-red-400">*</span>
+                                        </label>
+                                        <div class="relative" x-data="{ show: false }">
+                                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                                <i class="fas fa-lock text-sm"></i>
+                                            </div>
+                                            <input :type="show ? 'text' : 'password'" id="password" name="password"
+                                                class="input-field w-full pl-11 pr-11 py-3 border-2 border-gray-200 rounded-xl text-sm focus:border-[#277177] focus:ring-0 transition-all bg-gray-50/50 focus:bg-white @error('password') border-red-300 @enderror"
+                                                placeholder="Min. 8 karakter" required>
+                                            <button type="button" @click="show = !show"
+                                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1">
+                                                <i :class="show ? 'fa-eye-slash' : 'fa-eye'" class="fas text-sm"></i>
+                                            </button>
+                                        </div>
+                                        @error('password')
+                                            <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    {{-- Konfirmasi Password --}}
+                                    <div>
+                                        <label for="password_confirmation" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                                            Konfirmasi <span class="text-red-400">*</span>
+                                        </label>
+                                        <div class="relative" x-data="{ show: false }">
+                                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                                <i class="fas fa-lock text-sm"></i>
+                                            </div>
+                                            <input :type="show ? 'text' : 'password'" id="password_confirmation"
+                                                name="password_confirmation"
+                                                class="input-field w-full pl-11 pr-11 py-3 border-2 border-gray-200 rounded-xl text-sm focus:border-[#277177] focus:ring-0 transition-all bg-gray-50/50 focus:bg-white"
+                                                placeholder="Ulangi password" required>
+                                            <button type="button" @click="show = !show"
+                                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1">
+                                                <i :class="show ? 'fa-eye-slash' : 'fa-eye'" class="fas text-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Submit --}}
+                                <div class="pt-2">
+                                    <button type="submit"
+                                        class="btn-submit w-full py-3.5 px-6 rounded-xl text-white font-bold text-sm tracking-wide bg-gradient-to-r from-[#1d5559] via-[#277177] to-[#2d8a8a] shadow-lg flex items-center justify-center gap-2">
+                                        <i class="fas fa-paper-plane"></i>
+                                        <span>Kirim Pendaftaran</span>
+                                    </button>
+                                </div>
+
+                                {{-- Login link --}}
+                                <p class="text-center text-sm text-gray-500">
+                                    Sudah punya akun?
+                                    <a href="{{ route('subdirektorat-inovasi.inovation_chalangge.index') }}"
+                                        class="text-[#277177] font-semibold hover:underline hover:text-[#1d5559] transition-colors">Masuk di sini</a>
+                                </p>
+                            </div>
+
+                            {{-- Placeholder when no role selected --}}
+                            <div x-show="!selectedRole" class="text-center py-8">
+                                <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-hand-pointer text-2xl text-gray-300"></i>
+                                </div>
+                                <p class="text-sm text-gray-400 font-medium">Pilih role di atas untuk melanjutkan pendaftaran</p>
+                            </div>
+                        </form>
+
+                        {{-- Info box --}}
+                        <div class="mt-6 p-4 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-info text-blue-500 text-xs"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-blue-800 text-xs">Informasi Penting</p>
+                                <p class="text-[11px] text-blue-600/80 mt-0.5 leading-relaxed">Setelah mendaftar, akun Anda akan ditinjau oleh admin. Anda akan dapat login setelah pendaftaran disetujui.</p>
+                            </div>
+                        </div>
                     </div>
-                    @error('password')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
                 </div>
 
-                {{-- Konfirmasi Password --}}
-                <div>
-                    <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 mb-1">
-                        <i class="fas fa-lock mr-1 text-teal-600"></i> Konfirmasi Password
-                    </label>
-                    <div class="relative" x-data="{ show: false }">
-                        <input :type="show ? 'text' : 'password'" id="password_confirmation"
-                            name="password_confirmation"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors pr-12"
-                            placeholder="Ulangi password" required>
-                        <button type="button" @click="show = !show"
-                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                            <i :class="show ? 'fa-eye-slash' : 'fa-eye'" class="fas"></i>
-                        </button>
-                    </div>
-                </div>
-
-                {{-- Submit --}}
-                <button type="submit"
-                    class="w-full py-3 px-6 rounded-lg text-white font-semibold text-base transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                    style="background: linear-gradient(135deg, #277177, #1d5559);">
-                    <i class="fas fa-paper-plane mr-2"></i> Kirim Pendaftaran
-                </button>
-
-                {{-- Login link --}}
-                <p class="text-center text-sm text-gray-500 mt-4">
-                    Sudah punya akun?
-                    <a href="{{ route('subdirektorat-inovasi.inovation_chalangge.index') }}"
-                        class="text-teal-600 font-semibold hover:underline">Kembali ke halaman utama</a>
-                </p>
-            </form>
-
-            {{-- Info box --}}
-            <div class="mt-6 p-4 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 text-sm">
-                <p class="font-semibold mb-1"><i class="fas fa-info-circle mr-1"></i> Informasi</p>
-                <p>Setelah mendaftar, akun Anda akan ditinjau oleh admin. Anda akan dapat login setelah pendaftaran
-                    disetujui.</p>
+                {{-- Footer --}}
+                <p class="text-center text-xs text-gray-400 mt-6">&copy; {{ date('Y') }} UNJ Innovation Challenge. All rights reserved.</p>
             </div>
         </div>
     </div>
 
+    <script>
+        function registerForm() {
+            return {
+                selectedRole: '{{ old('role', '') }}',
+            }
+        }
+    </script>
+
 </body>
-@include('layout.footer')
 
 </html>
