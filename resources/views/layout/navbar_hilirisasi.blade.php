@@ -10,13 +10,13 @@
         padding: 8px 0;
         margin-top: 5px;
     }
-    
+
     .dropdown-menu li {
         display: block;
         width: 100%;
     }
-    
-    .dropdown-menu a, 
+
+    .dropdown-menu a,
     .dropdown-menu button {
         display: flex;
         justify-content: space-between;
@@ -32,48 +32,49 @@
         text-align: left;
         cursor: pointer;
     }
-    
-    .dropdown-menu a:hover, 
+
+    .dropdown-menu a:hover,
     .dropdown-menu button:hover {
         background-color: rgba(0, 0, 0, 0.05);
     }
-    
+
     .nested-menu {
         position: absolute;
         top: 0;
         left: 100%;
         margin-top: -8px;
     }
-    
+
     /* For active menu items */
     .menu-active {
         background-color: rgba(0, 0, 0, 0.05);
     }
-    
+
     /* Mobile sidebar improvements */
     #mobile-sidebar {
         scrollbar-width: thin;
         scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.1);
     }
-    
+
     #mobile-sidebar::-webkit-scrollbar {
         width: 5px;
     }
-    
+
     #mobile-sidebar::-webkit-scrollbar-track {
         background: rgba(0, 0, 0, 0.1);
     }
-    
+
     #mobile-sidebar::-webkit-scrollbar-thumb {
         background-color: rgba(255, 255, 255, 0.3);
         border-radius: 10px;
     }
-    
+
     /* Smooth transition for dropdown menus */
-    .dropdown-menu, .nested-menu {
+    .dropdown-menu,
+    .nested-menu {
         transition: opacity 0.2s ease-in-out;
     }
-    
+
     /* Improve mobile navbar appearance */
     @media (max-width: 768px) {
         #mobile-navbar.solid-bg {
@@ -99,7 +100,8 @@
             <li><a href="{{ route('home') }}" class="text-white hover:text-yellow-400">Beranda</a></li>
 
             <li class="relative">
-                <a href="#" class="text-white hover:text-yellow-400 primary-dropdown-toggle" data-dropdown="tentang-dropdown">
+                <a href="#" class="text-white hover:text-yellow-400 primary-dropdown-toggle"
+                    data-dropdown="tentang-dropdown">
                     Tentang
                 </a>
                 <ul id="tentang-dropdown" class="dropdown-menu primary-dropdown hidden">
@@ -112,24 +114,32 @@
 
             <!-- Program Dropdown with Click-Based Behavior -->
             <li class="relative">
-                <a href="#" class="text-white hover:text-yellow-400 primary-dropdown-toggle" data-dropdown="program-dropdown">
+                <a href="#" class="text-white hover:text-yellow-400 primary-dropdown-toggle"
+                    data-dropdown="program-dropdown">
                     Program
                 </a>
                 <ul id="program-dropdown" class="dropdown-menu primary-dropdown hidden">
                     <li><a href="{{ route('sdgscenter') }}">SDGs Activity</a></li>
-                    <li><a href="{{ route('subdirektorat-inovasi.inkubator.inkubator_bisnis_pendidikan') }}">Inkubator Bisnis dan Pendidikan</a></li>
-                    <li><a href="{{ route('subdirektorat-inovasi.inkubator.ekosisteminovasi') }}">Ekosistem Inovasi UNJ</a></li>
+                    <li><a href="{{ route('subdirektorat-inovasi.inkubator.inkubator_bisnis_pendidikan') }}">Inkubator
+                            Bisnis dan Pendidikan</a></li>
+                    <li><a href="{{ route('subdirektorat-inovasi.inkubator.ekosisteminovasi') }}">Ekosistem Inovasi
+                            UNJ</a></li>
                     <li><a href="{{ route('subdirektorat-inovasi.inkubator.inovasiaward') }}">Innovator Award</a></li>
                 </ul>
             </li>
-            
+
             <li class="relative group">
                 <a href="#" class="text-white hover:text-yellow-400">Layanan</a>
-                <ul class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
-                    <li><a href="#" class="hover:text-yellow-400" data-bs-toggle="modal" data-bs-target="#loginModal">Pengujian Katsinov</a></li>
-                    <li><a href="#" class="hover:text-yellow-400" data-bs-toggle="modal" data-bs-target="#loginModal">Pendaftaran Inkubator Bisnis</a></li>
-                    <li><a href="#" class="hover:text-yellow-400" data-bs-toggle="modal" data-bs-target="#loginModal">Pengujian/Sertifikasi Produk Inovasi</a></li>
-                    <li><a href="#" class="hover:text-yellow-400" data-bs-toggle="modal" data-bs-target="#loginModal">Join Mitra Inovasi UNJ</a></li>
+                <ul
+                    class="absolute hidden group-hover:block bg-white text-black py-2 px-4 space-y-2 rounded-lg shadow-lg">
+                    <li><a href="#" class="hover:text-yellow-400" data-bs-toggle="modal"
+                            data-bs-target="#loginModal">Pengujian Katsinov</a></li>
+                    <li><a href="#" class="hover:text-yellow-400" data-bs-toggle="modal"
+                            data-bs-target="#loginModal">Pendaftaran Inkubator Bisnis</a></li>
+                    <li><a href="#" class="hover:text-yellow-400" data-bs-toggle="modal"
+                            data-bs-target="#loginModal">Pengujian/Sertifikasi Produk Inovasi</a></li>
+                    <li><a href="#" class="hover:text-yellow-400" data-bs-toggle="modal"
+                            data-bs-target="#loginModal">Join Mitra Inovasi UNJ</a></li>
                 </ul>
             </li>
             {{-- <li class="relative group">
@@ -140,36 +150,43 @@
 
             <!-- Inovasi UNJ Dropdown -->
             <li class="relative">
-                <a href="#" class="text-white hover:text-yellow-400 primary-dropdown-toggle" data-dropdown="inovasi-dropdown">
+                <a href="#" class="text-white hover:text-yellow-400 primary-dropdown-toggle"
+                    data-dropdown="inovasi-dropdown">
                     Inovasi UNJ
                 </a>
                 <ul id="inovasi-dropdown" class="dropdown-menu primary-dropdown hidden">
-                    <li><a href="#" class="hover:text-yellow-400" target="_blank" rel="noopener noreferrer">Riset UNJ</a></li>
+                    <li><a href="#" class="hover:text-yellow-400" target="_blank" rel="noopener noreferrer">Riset
+                            UNJ</a></li>
                     {{-- <li><a href="{{ route('riset.unj') }}">Riset UNJ</a></li> --}}
-                    <li><a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}">Produk Inovasi UNJ</a></li>
+                    <li><a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}">Produk
+                            Inovasi UNJ</a></li>
+                    <li><a href="{{ route('subdirektorat-inovasi.inovation_chalangge.index') }}">Innovation
+                            Challenge</a></li>
                 </ul>
             </li>
 
-            <li><a href="{{ route('documents.public.index') }}" class="text-white hover:text-yellow-400">Dokumen</a></li>
+            <li><a href="{{ route('documents.public.index') }}" class="text-white hover:text-yellow-400">Dokumen</a>
+            </li>
 
             <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400">SSO</a></li>
-            
+
             {{-- Language Switcher --}}
             <li class="relative">
                 <div class="flex items-center space-x-2">
-                    <a href="{{ route('language.switch', 'id') }}" 
-                       class="text-white hover:text-yellow-400 transition-colors px-2 py-1 rounded {{ app()->getLocale() === 'id' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                    <a href="{{ route('language.switch', 'id') }}"
+                        class="text-white hover:text-yellow-400 transition-colors px-2 py-1 rounded {{ app()->getLocale() === 'id' ? 'bg-yellow-400 text-gray-800' : '' }}">
                         ID
                     </a>
                     <span class="text-white">|</span>
-                    <a href="{{ route('language.switch', 'en') }}" 
-                       class="text-white hover:text-yellow-400 transition-colors px-2 py-1 rounded {{ app()->getLocale() === 'en' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                    <a href="{{ route('language.switch', 'en') }}"
+                        class="text-white hover:text-yellow-400 transition-colors px-2 py-1 rounded {{ app()->getLocale() === 'en' ? 'bg-yellow-400 text-gray-800' : '' }}">
                         EN
                     </a>
                 </div>
             </li>
-            
-            <li><a class="login text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
+
+            <li><a class="login text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a>
+            </li>
         </ul>
     </div>
 </nav>
@@ -181,7 +198,8 @@
         <div class="flex justify-between items-center py-4 px-4">
             <!-- Logo and University Name -->
             <div class="flex items-center">
-                <img alt="University logo" class="h-10 w-10" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
+                <img alt="University logo" class="h-10 w-10"
+                    src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
                 <h1 class="text-white text-xl font-bold ml-2">UNJ</h1>
             </div>
 
@@ -194,11 +212,13 @@
 </nav>
 
 <!-- Mobile Sidebar - Enhanced with Improved Nested Menus -->
-<div id="mobile-sidebar" class="fixed top-0 right-0 w-64 h-full bg-[#186862] z-40 transform translate-x-full md:translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto">
+<div id="mobile-sidebar"
+    class="fixed top-0 right-0 w-64 h-full bg-[#186862] z-40 transform translate-x-full md:translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto">
     <!-- Sidebar Header -->
     <div class="flex justify-between items-center p-4 border-b border-[#125a54]">
         <div class="flex items-center">
-            <img alt="University logo" class="h-8 w-8" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
+            <img alt="University logo" class="h-8 w-8"
+                src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
             <h1 class="text-white text-xl font-bold ml-2">UNJ</h1>
         </div>
         <button id="close-sidebar" class="text-white p-2 hover:bg-[#125a54] rounded-full">
@@ -217,28 +237,33 @@
 
             <li>
                 <div class="sidebar-dropdown">
-                    <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                    <button
+                        class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
                         Tentang
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <ul class="hidden bg-[#135a54]">
                         <li>
-                            <a href="{{ route('pimpinan.pimpinan') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                            <a href="{{ route('pimpinan.pimpinan') }}"
+                                class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 Pimpinan Direktorat
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('strukturorganisasi') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                            <a href="{{ route('strukturorganisasi') }}"
+                                class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 Struktur Organisasi
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('tupoksi.tupoksi') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                            <a href="{{ route('tupoksi.tupoksi') }}"
+                                class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 Tugas Pokok dan Fungsi
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('subdirektorat-inovasi.sejarah.sejarah') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                            <a href="{{ route('subdirektorat-inovasi.sejarah.sejarah') }}"
+                                class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 Profil
                             </a>
                         </li>
@@ -249,13 +274,15 @@
             <!-- Program Dropdown for Mobile -->
             <li>
                 <div class="sidebar-dropdown">
-                    <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                    <button
+                        class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
                         Program
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <ul class="hidden bg-[#135a54]">
                         <li>
-                            <a href="{{ route('sdgscenter') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                            <a href="{{ route('sdgscenter') }}"
+                                class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 SDGs Center
                             </a>
                         </li>
@@ -277,11 +304,12 @@
                     </ul>
                 </div>
             </li>
-            
+
             <!-- Layanan Dropdown for Mobile -->
             <li>
                 <div class="sidebar-dropdown">
-                    <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                    <button
+                        class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
                         Layanan
                         <i class="fas fa-chevron-down"></i>
                     </button>
@@ -309,64 +337,77 @@
                     </ul>
                 </div>
             </li>
-            
+
             <li>
-                <a href="{{ route('Berita.beritahome') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                <a href="{{ route('Berita.beritahome') }}"
+                    class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
                     Berita
                 </a>
             </li>
-            
+
             <!-- Inovasi UNJ Dropdown for Mobile -->
             <li>
                 <div class="sidebar-dropdown">
-                    <button class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                    <button
+                        class="flex justify-between items-center w-full text-white py-3 px-6 text-lg hover:bg-[#125a54]">
                         Inovasi UNJ
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <ul class="hidden bg-[#135a54]">
                         <li>
-                            <a href="{{ route('subdirektorat-inovasi.riset.unj') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                            <a href="{{ route('subdirektorat-inovasi.riset.unj') }}"
+                                class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 Riset UNJ
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                            <a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}"
+                                class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 Produk Inovasi UNJ
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('subdirektorat-inovasi.inovation_chalangge.index') }}"
+                                class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                                Innovation Challenge
                             </a>
                         </li>
                     </ul>
                 </div>
             </li>
-            
+
             <li>
-                <a href="{{ route('documents.public.index') }}" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                <a href="{{ route('documents.public.index') }}"
+                    class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
                     Dokumen
                 </a>
             </li>
-            
+
             <li>
                 <a href="https://sso.unj.ac.id/login" class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
                     SSO
                 </a>
             </li>
-            
+
             {{-- Mobile Language Switcher --}}
             <li class="px-6">
                 <div class="flex items-center justify-center space-x-3 py-3">
                     <span class="text-white text-sm"><i class="fas fa-globe w-6 mr-2"></i>Bahasa:</span>
-                    <a href="{{ route('language.switch', 'id') }}" 
-                       class="text-white hover:bg-white/10 px-3 py-1 rounded {{ app()->getLocale() === 'id' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                    <a href="{{ route('language.switch', 'id') }}"
+                        class="text-white hover:bg-white/10 px-3 py-1 rounded {{ app()->getLocale() === 'id' ? 'bg-yellow-400 text-gray-800' : '' }}">
                         ID
                     </a>
-                    <a href="{{ route('language.switch', 'en') }}" 
-                       class="text-white hover:bg-white/10 px-3 py-1 rounded {{ app()->getLocale() === 'en' ? 'bg-yellow-400 text-gray-800' : '' }}">
+                    <a href="{{ route('language.switch', 'en') }}"
+                        class="text-white hover:bg-white/10 px-3 py-1 rounded {{ app()->getLocale() === 'en' ? 'bg-yellow-400 text-gray-800' : '' }}">
                         EN
                     </a>
                 </div>
             </li>
-            
+
             <li class="px-6 my-6">
-                <a href="#" class="block text-center bg-white text-[#186862] py-2 rounded-md font-medium hover:bg-gray-100" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <a href="#"
+                    class="block text-center bg-white text-[#186862] py-2 rounded-md font-medium hover:bg-gray-100"
+                    data-bs-toggle="modal" data-bs-target="#loginModal">
                     Masuk
                 </a>
             </li>
@@ -375,7 +416,9 @@
 </div>
 
 <!-- Overlay for sidebar - Only on mobile -->
-<div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-0 md:hidden pointer-events-none transition-opacity duration-300 ease-in-out z-30"></div>
+<div id="sidebar-overlay"
+    class="fixed inset-0 bg-black opacity-0 md:hidden pointer-events-none transition-opacity duration-300 ease-in-out z-30">
+</div>
 
 <!-- JavaScript for mobile sidebar and click-based dropdowns -->
 <script>
@@ -387,7 +430,7 @@
         const sidebarOverlay = document.getElementById('sidebar-overlay');
         const mobileNavbar = document.getElementById('mobile-navbar');
         const dropdownButtons = document.querySelectorAll('.sidebar-dropdown button');
-        
+
         // Function to handle scroll effects
         function handleScroll() {
             if (window.scrollY > 10) {
@@ -448,20 +491,20 @@
             button.addEventListener('click', function() {
                 const dropdownMenu = this.nextElementSibling;
                 const icon = this.querySelector('i');
-                
+
                 // Check if this dropdown is currently hidden
                 const isClosed = dropdownMenu.classList.contains('hidden');
-                
+
                 // Close all dropdowns first
                 dropdownButtons.forEach(otherButton => {
                     const otherMenu = otherButton.nextElementSibling;
                     const otherIcon = otherButton.querySelector('i');
-                    
+
                     otherMenu.classList.add('hidden');
                     otherIcon.classList.remove('fa-chevron-up');
                     otherIcon.classList.add('fa-chevron-down');
                 });
-                
+
                 // Then open this dropdown if it was closed
                 if (isClosed) {
                     dropdownMenu.classList.remove('hidden');
@@ -478,22 +521,22 @@
             toggle.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 const targetId = this.getAttribute('data-dropdown');
                 const targetDropdown = document.getElementById(targetId);
-                
+
                 // Check if this dropdown is currently hidden
                 const isClosed = targetDropdown.classList.contains('hidden');
-                
+
                 // Close all other primary dropdowns first
                 document.querySelectorAll('.primary-dropdown').forEach(dropdown => {
                     dropdown.classList.add('hidden');
                 });
-                
+
                 // Then open this dropdown if it was closed
                 if (isClosed) {
                     targetDropdown.classList.remove('hidden');
-                    
+
                     // Add active class to the toggle
                     primaryDropdowns.forEach(t => {
                         t.classList.remove('text-yellow-400');
@@ -508,11 +551,12 @@
 
         // Close desktop dropdowns when clicking elsewhere on the page
         document.addEventListener('click', function(e) {
-            if (!e.target.closest('.dropdown-menu') && !e.target.classList.contains('primary-dropdown-toggle')) {
+            if (!e.target.closest('.dropdown-menu') && !e.target.classList.contains(
+                    'primary-dropdown-toggle')) {
                 document.querySelectorAll('.primary-dropdown').forEach(dropdown => {
                     dropdown.classList.add('hidden');
                 });
-                
+
                 // Remove active classes from all toggles
                 primaryDropdowns.forEach(toggle => {
                     toggle.classList.remove('text-yellow-400');
@@ -531,24 +575,24 @@
                 handleScroll();
             }
         });
-        
+
         // Run handleScroll on initial load
         handleScroll();
     });
     document.addEventListener('DOMContentLoaded', function() {
-    const navbar = document.querySelector('.navbar.sticky');
-    
-    if (navbar) {
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 0) {
-                navbar.style.position = 'fixed';
-                navbar.style.top = '0';
-                navbar.style.width = '100%';
-                navbar.style.zIndex = '50';
-            } else {
-                navbar.style.position = 'static';
-            }
-        });
-    }
-});
+        const navbar = document.querySelector('.navbar.sticky');
+
+        if (navbar) {
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 0) {
+                    navbar.style.position = 'fixed';
+                    navbar.style.top = '0';
+                    navbar.style.width = '100%';
+                    navbar.style.zIndex = '50';
+                } else {
+                    navbar.style.position = 'static';
+                }
+            });
+        }
+    });
 </script>

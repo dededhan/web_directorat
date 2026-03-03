@@ -23,7 +23,7 @@ class MemberController extends Controller
         $validated = $request->validate([
             'tipe_anggota'      => "required|in:{$tipeOptions}",
             'nama_lengkap'      => 'required|string|max:255',
-            'nik_nim_nip'       => 'nullable|string|max:100',
+            'nik_nim_nip'       => 'required|string|max:100',
             'institusi_fakultas' => 'nullable|string|max:255',
             'user_id'           => 'nullable|exists:users,id',
         ]);
@@ -40,11 +40,30 @@ class MemberController extends Controller
         // Set approval status based on type
         $approvalStatus = InovChalengeSubmissionMember::defaultApprovalStatus($validated['tipe_anggota']);
 
-        // If user_id provided for dosen/alumni, verify the user exists and pre-fill name
+        // If user_id provided for dosen/alumni, verify the user exists and pre-fill data from profile
         if (!empty($validated['user_id'])) {
-            $user = User::find($validated['user_id']);
+            // Check if this user is already a member of any submission in the same session
+            $alreadyInSession = InovChalengeSubmissionMember::where('user_id', $validated['user_id'])
+                ->whereHas('submission', fn($q) => $q->where('inov_chalenge_session_id', $session->id))
+                ->exists();
+
+            if ($alreadyInSession) {
+                return back()->with('error', 'User ini sudah terdaftar di tim lain pada sesi yang sama.');
+            }
+
+            $user = User::with('profile.fakultas', 'profile.prodi')->find($validated['user_id']);
             if ($user) {
                 $validated['nama_lengkap'] = $user->name;
+                // Auto-fill identifier from profile if not provided
+                if (empty($validated['nik_nim_nip']) && $user->profile?->identifier_number) {
+                    $validated['nik_nim_nip'] = $user->profile->identifier_number;
+                }
+                // Auto-fill fakultas from profile if not provided
+                if (empty($validated['institusi_fakultas']) && $user->profile?->fakultas) {
+                    $fakName = $user->profile->fakultas->name;
+                    $prodiName = $user->profile->prodi?->name;
+                    $validated['institusi_fakultas'] = $prodiName ? "{$fakName} / {$prodiName}" : $fakName;
+                }
             }
         }
 
@@ -113,14 +132,28 @@ class MemberController extends Controller
             return response()->json([]);
         }
 
-        $users = User::where('role', $type)
+        // Map member tipe to user role (handles DUDI→dudi, PPPK→pppk case difference)
+        $role = InovChalengeSubmissionMember::TIPE_TO_ROLE[$type] ?? $type;
+
+        $users = User::where('role', $role)
             ->where(function ($q) use ($query) {
                 $q->where('name', 'like', "%{$query}%")
                     ->orWhere('email', 'like', "%{$query}%");
             })
+            ->with(['profile.fakultas', 'profile.prodi'])
             ->select('id', 'name', 'email')
             ->limit(10)
-            ->get();
+            ->get()
+            ->map(function ($user) {
+                return [
+                    'id'    => $user->id,
+                    'name'  => $user->name,
+                    'email' => $user->email,
+                    'identifier_number' => $user->profile?->identifier_number ?? '',
+                    'fakultas'          => $user->profile?->fakultas?->name ?? '',
+                    'prodi'             => $user->profile?->prodi?->name ?? '',
+                ];
+            });
 
         return response()->json($users);
     }

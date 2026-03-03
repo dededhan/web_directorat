@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProposalHub | Direktorat Inovasi UNJ</title>
+    <title>Innovation Challenge | Direktorat Inovasi UNJ</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <link rel="stylesheet" href="{{ asset('home.css') }}">
@@ -68,7 +72,7 @@
             font-size: 3.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .ph-hero p {
@@ -80,8 +84,8 @@
 
         .ph-badge {
             display: inline-block;
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
             padding: 0.4rem 1.2rem;
             border-radius: 999px;
@@ -140,7 +144,7 @@
 
         .ph-stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
 
         .ph-stat-icon {
@@ -189,14 +193,16 @@
 
         .ph-service-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
             border-color: var(--ph-primary);
         }
 
         .ph-service-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0;
+            top: 0;
+            left: 0;
+            right: 0;
             height: 4px;
             background: var(--ph-primary);
         }
@@ -272,7 +278,7 @@
             border: 1px solid #e8e8e8;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
@@ -280,7 +286,7 @@
 
         .ph-opp-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
         }
 
         .ph-opp-header {
@@ -302,9 +308,20 @@
             margin-bottom: 0.6rem;
         }
 
-        .ph-opp-badge.open    { background: #d1fae5; color: #065f46; }
-        .ph-opp-badge.partner { background: #fef3c7; color: #92400e; }
-        .ph-opp-badge.inter   { background: #dbeafe; color: #1e40af; }
+        .ph-opp-badge.open {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .ph-opp-badge.partner {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .ph-opp-badge.inter {
+            background: #dbeafe;
+            color: #1e40af;
+        }
 
         .ph-opp-header h3 {
             font-size: 1rem;
@@ -399,9 +416,22 @@
             flex-wrap: wrap;
         }
 
-        .ph-map-info { flex: 1; min-width: 200px; }
-        .ph-map-info h3 { font-size: 1.1rem; font-weight: 700; color: var(--ph-secondary); margin-bottom: 0.4rem; }
-        .ph-map-info p { font-size: 0.9rem; color: #666; }
+        .ph-map-info {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .ph-map-info h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ph-secondary);
+            margin-bottom: 0.4rem;
+        }
+
+        .ph-map-info p {
+            font-size: 0.9rem;
+            color: #666;
+        }
 
         .ph-map-canvas {
             flex: 2;
@@ -440,7 +470,7 @@
             font-size: 0.85rem;
             font-weight: 500;
             color: #374151;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             gap: 0.4rem;
@@ -462,23 +492,38 @@
         .ph-cta::before {
             content: '';
             position: absolute;
-            right: -5rem; top: -5rem;
-            width: 20rem; height: 20rem;
-            background: rgba(255,255,255,0.05);
+            right: -5rem;
+            top: -5rem;
+            width: 20rem;
+            height: 20rem;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 50%;
         }
 
         .ph-cta::after {
             content: '';
             position: absolute;
-            left: -4rem; bottom: -4rem;
-            width: 15rem; height: 15rem;
-            background: rgba(255,255,255,0.04);
+            left: -4rem;
+            bottom: -4rem;
+            width: 15rem;
+            height: 15rem;
+            background: rgba(255, 255, 255, 0.04);
             border-radius: 50%;
         }
 
-        .ph-cta h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
-        .ph-cta p  { font-size: 1.1rem; line-height: 1.8; opacity: 0.9; max-width: 700px; margin: 0 auto 2rem; }
+        .ph-cta h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .ph-cta p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
 
         .ph-cta-buttons {
             display: flex;
@@ -500,10 +545,13 @@
             align-items: center;
             gap: 0.5rem;
             transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        .ph-btn-primary:hover { background: #e5a800; transform: translateY(-2px); }
+        .ph-btn-primary:hover {
+            background: #e5a800;
+            transform: translateY(-2px);
+        }
 
         .ph-btn-outline {
             background: transparent;
@@ -516,11 +564,14 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            border: 2px solid rgba(255,255,255,0.6);
+            border: 2px solid rgba(255, 255, 255, 0.6);
             transition: all 0.3s;
         }
 
-        .ph-btn-outline:hover { background: rgba(255,255,255,0.1); border-color: white; }
+        .ph-btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
 
         .ph-steps {
             display: grid;
@@ -532,12 +583,13 @@
 
         .ph-step {
             text-align: center;
-            color: rgba(255,255,255,0.85);
+            color: rgba(255, 255, 255, 0.85);
         }
 
         .ph-step-num {
-            width: 40px; height: 40px;
-            background: rgba(255,255,255,0.15);
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -547,256 +599,334 @@
             font-size: 1.1rem;
         }
 
-        .ph-step span { font-size: 0.85rem; font-weight: 500; }
+        .ph-step span {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
 
         @media (max-width: 768px) {
-            .ph-hero h1 { font-size: 2.4rem; }
-            .ph-section { padding: 1.8rem; }
-            .ph-cta h2 { font-size: 1.8rem; }
-            .ph-steps { grid-template-columns: 1fr; }
-            .ph-map-wrap { flex-direction: column; }
+            .ph-hero h1 {
+                font-size: 2.4rem;
+            }
+
+            .ph-section {
+                padding: 1.8rem;
+            }
+
+            .ph-cta h2 {
+                font-size: 1.8rem;
+            }
+
+            .ph-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .ph-map-wrap {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 @include('layout.navbar_hilirisasi')
+
 <body>
 
-<div class="ph-page">
-    <div class="ph-container">
+    <div class="ph-page">
+        <div class="ph-container">
 
-        {{-- Hero --}}
-        <div class="ph-hero">
-            <div class="ph-hero-content">
-                <div class="ph-badge"><i class="fas fa-lightbulb mr-1"></i> Sistem Manajemen Proposal Terintegrasi</div>
-                <h1>ProposalHub</h1>
-                <p>Platform terpusat untuk pengelolaan proposal penelitian dan pengabdian masyarakat Universitas Negeri Jakarta. Mempermudah proses pengajuan, pemantauan, dan pelaporan riset secara efisien.</p>
+            {{-- Hero --}}
+            <div class="ph-hero">
+                <div class="ph-hero-content">
+                    <div class="ph-badge"><i class="fas fa-trophy mr-1"></i> Program Seleksi Proposal Inovasi</div>
+                    <h1>UNJ Innovative Challenge</h1>
+                    <p>Program seleksi proposal inovasi yang diselenggarakan oleh Direktorat Inovasi dan Hilirisasi UNJ
+                        untuk mendukung pengembangan ide inovatif dari civitas akademika menjadi produk nyata berdampak.
+                    </p>
+                </div>
             </div>
+
+            {{-- Tentang Program --}}
+            <section class="ph-section">
+                <h2 class="ph-section-title">Tentang Program</h2>
+                <p class="ph-intro">UNJ Innovative Challenge adalah program unggulan dari Direktorat Inovasi dan
+                    Hilirisasi Universitas Negeri Jakarta yang bertujuan menyeleksi, mendanai, dan mendampingi
+                    proposal-proposal inovasi terbaik dari dosen, peneliti, dan alumni UNJ. Program ini dirancang untuk
+                    menjembatani ide inovatif menuju produk berdaya guna yang memberikan dampak nyata bagi masyarakat.
+                </p>
+
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                    <div
+                        style="display: flex; align-items: flex-start; gap: 1rem; padding: 1.2rem; background: var(--ph-light); border-radius: 10px; border-left: 4px solid var(--ph-primary);">
+                        <i class="fas fa-bullseye"
+                            style="font-size: 1.4rem; color: var(--ph-primary); margin-top: 0.15rem;"></i>
+                        <div>
+                            <h4
+                                style="font-weight: 700; color: var(--ph-secondary); margin-bottom: 0.3rem; font-size: 1rem;">
+                                Tujuan</h4>
+                            <p style="font-size: 0.9rem; color: #555; line-height: 1.7; margin: 0;">Mendorong
+                                terciptanya inovasi berbasis riset yang dapat dihilirisasi menjadi produk atau layanan
+                                berdampak bagi masyarakat.</p>
+                        </div>
+                    </div>
+                    <div
+                        style="display: flex; align-items: flex-start; gap: 1rem; padding: 1.2rem; background: var(--ph-light); border-radius: 10px; border-left: 4px solid var(--ph-accent);">
+                        <i class="fas fa-hand-holding-heart"
+                            style="font-size: 1.4rem; color: var(--ph-accent); margin-top: 0.15rem;"></i>
+                        <div>
+                            <h4
+                                style="font-weight: 700; color: var(--ph-secondary); margin-bottom: 0.3rem; font-size: 1rem;">
+                                Manfaat</h4>
+                            <p style="font-size: 0.9rem; color: #555; line-height: 1.7; margin: 0;">Pendanaan,
+                                pendampingan intensif, serta akses jejaring mitra industri dan dunia usaha untuk
+                                pengembangan inovasi.</p>
+                        </div>
+                    </div>
+                    <div
+                        style="display: flex; align-items: flex-start; gap: 1rem; padding: 1.2rem; background: var(--ph-light); border-radius: 10px; border-left: 4px solid var(--ph-primary);">
+                        <i class="fas fa-users-cog"
+                            style="font-size: 1.4rem; color: var(--ph-primary); margin-top: 0.15rem;"></i>
+                        <div>
+                            <h4
+                                style="font-weight: 700; color: var(--ph-secondary); margin-bottom: 0.3rem; font-size: 1rem;">
+                                Sasaran</h4>
+                            <p style="font-size: 0.9rem; color: #555; line-height: 1.7; margin: 0;">Dosen, peneliti,
+                                alumni, dan PPPK di lingkungan Universitas Negeri Jakarta yang memiliki ide inovasi
+                                potensial.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {{-- Tahapan Seleksi --}}
+            <section class="ph-section">
+                <h2 class="ph-section-title">Tahapan Seleksi</h2>
+                <p class="ph-intro">Proses seleksi terdiri dari 3 tahap utama untuk memastikan kualitas dan kelayakan
+                    setiap proposal inovasi.</p>
+                <div class="ph-service-grid">
+                    <div class="ph-service-card">
+                        <div class="ph-service-icon-wrap"><i class="fas fa-clipboard-check"></i></div>
+                        <h3>Tahap 1: Seleksi Administrasi</h3>
+                        <p>Pemeriksaan kelengkapan dokumen proposal dan kesesuaian format yang diisyaratkan.</p>
+                        <span class="ph-service-link"><i class="fas fa-file-word mr-1"></i> Format: DOCX</span>
+                    </div>
+                    <div class="ph-service-card">
+                        <div class="ph-service-icon-wrap"><i class="fas fa-presentation"></i></div>
+                        <h3>Tahap 2: Pitching</h3>
+                        <p>Presentasi ide inovasi di depan tim reviewer untuk penilaian kelayakan dan potensi dampak.
+                        </p>
+                        <span class="ph-service-link"><i class="fas fa-file-powerpoint mr-1"></i> Format:
+                            PPT/PPTX</span>
+                    </div>
+                    <div class="ph-service-card">
+                        <div class="ph-service-icon-wrap"><i class="fas fa-chart-line"></i></div>
+                        <h3>Tahap 3: Monitoring & Evaluasi</h3>
+                        <p>Pemantauan progres implementasi inovasi dan evaluasi hasil capaian secara berkala.</p>
+                        <span class="ph-service-link"><i class="fas fa-tasks mr-1"></i> Laporan Berkala</span>
+                    </div>
+                </div>
+            </section>
+
+            {{-- Siapa yang Bisa Mendaftar --}}
+            <section class="ph-section">
+                <h2 class="ph-section-title">Siapa yang Bisa Mendaftar?</h2>
+                <p class="ph-intro">Program ini terbuka untuk seluruh civitas akademika dan alumni Universitas Negeri
+                    Jakarta.</p>
+                <div class="ph-service-grid">
+                    <div class="ph-service-card">
+                        <div class="ph-service-icon-wrap"><i class="fas fa-chalkboard-teacher"></i></div>
+                        <h3>Dosen</h3>
+                        <p>Dosen aktif UNJ dari seluruh fakultas dan program studi.</p>
+                    </div>
+                    <div class="ph-service-card">
+                        <div class="ph-service-icon-wrap"><i class="fas fa-microscope"></i></div>
+                        <h3>Peneliti</h3>
+                        <p>Peneliti yang tergabung dalam unit-unit penelitian di lingkungan UNJ.</p>
+                    </div>
+                    <div class="ph-service-card">
+                        <div class="ph-service-icon-wrap"><i class="fas fa-user-graduate"></i></div>
+                        <h3>Alumni</h3>
+                        <p>Alumni UNJ yang memiliki ide inovasi dan ingin berkontribusi.</p>
+                    </div>
+                    <div class="ph-service-card">
+                        <div class="ph-service-icon-wrap"><i class="fas fa-user-tie"></i></div>
+                        <h3>PPPK</h3>
+                        <p>Pegawai Pemerintah dengan Perjanjian Kerja di lingkungan UNJ.</p>
+                    </div>
+                </div>
+            </section>
+
+            {{-- FAQ --}}
+            <section class="ph-section" x-data="{ activeIndex: null }">
+                <h2 class="ph-section-title">Frequently Asked Questions (FAQ)</h2>
+                <p class="ph-intro">Temukan jawaban atas pertanyaan yang sering diajukan tentang UNJ Innovative
+                    Challenge.</p>
+
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    {{-- FAQ 1 --}}
+                    <div style="border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; transition: box-shadow 0.3s;"
+                        :style="activeIndex === 0 ? 'box-shadow: 0 4px 15px rgba(39,113,119,0.15); border-color: #277177;' : ''">
+                        <button @click="activeIndex = activeIndex === 0 ? null : 0"
+                            style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.5rem; background: none; border: none; cursor: pointer; text-align: left;">
+                            <span style="font-weight: 600; font-size: 1.05rem; color: #1d5559;">
+                                <i class="fas fa-question-circle" style="color: #277177; margin-right: 0.5rem;"></i>
+                                Apa itu UNJ Innovative Challenge?
+                            </span>
+                            <i class="fas fa-chevron-down" style="color: #277177; transition: transform 0.3s;"
+                                :style="activeIndex === 0 ? 'transform: rotate(180deg);' : ''"></i>
+                        </button>
+                        <div x-show="activeIndex === 0" x-collapse
+                            style="padding: 0 1.5rem 1.2rem 1.5rem; color: #555; line-height: 1.8; font-size: 0.95rem;">
+                            UNJ Innovative Challenge adalah program seleksi proposal inovasi yang diselenggarakan oleh
+                            Direktorat Inovasi dan Hilirisasi UNJ. Program ini bertujuan untuk mendukung pengembangan
+                            ide inovatif dari civitas akademika menjadi produk nyata yang berdampak bagi masyarakat.
+                        </div>
+                    </div>
+
+                    {{-- FAQ 2 --}}
+                    <div style="border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; transition: box-shadow 0.3s;"
+                        :style="activeIndex === 1 ? 'box-shadow: 0 4px 15px rgba(39,113,119,0.15); border-color: #277177;' : ''">
+                        <button @click="activeIndex = activeIndex === 1 ? null : 1"
+                            style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.5rem; background: none; border: none; cursor: pointer; text-align: left;">
+                            <span style="font-weight: 600; font-size: 1.05rem; color: #1d5559;">
+                                <i class="fas fa-user-check" style="color: #277177; margin-right: 0.5rem;"></i>
+                                Siapa yang bisa mendaftar?
+                            </span>
+                            <i class="fas fa-chevron-down" style="color: #277177; transition: transform 0.3s;"
+                                :style="activeIndex === 1 ? 'transform: rotate(180deg);' : ''"></i>
+                        </button>
+                        <div x-show="activeIndex === 1" x-collapse
+                            style="padding: 0 1.5rem 1.2rem 1.5rem; color: #555; line-height: 1.8; font-size: 0.95rem;">
+                            Program ini terbuka untuk dosen, peneliti, dan alumni UNJ. Selain itu, PPPK (Pegawai
+                            Pemerintah dengan Perjanjian Kerja) di lingkungan UNJ juga dapat berpartisipasi. Setiap tim
+                            harus memiliki ketua yang merupakan dosen aktif UNJ.
+                        </div>
+                    </div>
+
+                    {{-- FAQ 3 --}}
+                    <div style="border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; transition: box-shadow 0.3s;"
+                        :style="activeIndex === 2 ? 'box-shadow: 0 4px 15px rgba(39,113,119,0.15); border-color: #277177;' : ''">
+                        <button @click="activeIndex = activeIndex === 2 ? null : 2"
+                            style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.5rem; background: none; border: none; cursor: pointer; text-align: left;">
+                            <span style="font-weight: 600; font-size: 1.05rem; color: #1d5559;">
+                                <i class="fas fa-list-ol" style="color: #277177; margin-right: 0.5rem;"></i>
+                                Apa saja tahapan seleksinya?
+                            </span>
+                            <i class="fas fa-chevron-down" style="color: #277177; transition: transform 0.3s;"
+                                :style="activeIndex === 2 ? 'transform: rotate(180deg);' : ''"></i>
+                        </button>
+                        <div x-show="activeIndex === 2" x-collapse
+                            style="padding: 0 1.5rem 1.2rem 1.5rem; color: #555; line-height: 1.8; font-size: 0.95rem;">
+                            Proses seleksi terdiri dari 3 tahap utama:
+                            <ol style="margin-top: 0.5rem; padding-left: 1.2rem;">
+                                <li><strong>Seleksi Administrasi</strong> — Pemeriksaan kelengkapan dokumen dan
+                                    kesesuaian format proposal.</li>
+                                <li><strong>Pitching</strong> — Presentasi ide inovasi di depan tim reviewer untuk
+                                    penilaian kelayakan.</li>
+                                <li><strong>Monitoring & Evaluasi</strong> — Pemantauan progres implementasi dan
+                                    evaluasi hasil capaian.</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    {{-- FAQ 4 --}}
+                    <div style="border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; transition: box-shadow 0.3s;"
+                        :style="activeIndex === 3 ? 'box-shadow: 0 4px 15px rgba(39,113,119,0.15); border-color: #277177;' : ''">
+                        <button @click="activeIndex = activeIndex === 3 ? null : 3"
+                            style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.5rem; background: none; border: none; cursor: pointer; text-align: left;">
+                            <span style="font-weight: 600; font-size: 1.05rem; color: #1d5559;">
+                                <i class="fas fa-file-alt" style="color: #277177; margin-right: 0.5rem;"></i>
+                                Format file apa yang diterima?
+                            </span>
+                            <i class="fas fa-chevron-down" style="color: #277177; transition: transform 0.3s;"
+                                :style="activeIndex === 3 ? 'transform: rotate(180deg);' : ''"></i>
+                        </button>
+                        <div x-show="activeIndex === 3" x-collapse
+                            style="padding: 0 1.5rem 1.2rem 1.5rem; color: #555; line-height: 1.8; font-size: 0.95rem;">
+                            Untuk tahap <strong>Seleksi Administrasi</strong>, dokumen proposal harus diunggah dalam
+                            format <strong>DOCX</strong>. Sedangkan untuk tahap <strong>Pitching</strong>, materi
+                            presentasi harus dalam format <strong>PPT atau PPTX</strong>. Pastikan file sesuai dengan
+                            template yang telah disediakan.
+                        </div>
+                    </div>
+
+                    {{-- FAQ 5 --}}
+                    <div style="border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; transition: box-shadow 0.3s;"
+                        :style="activeIndex === 4 ? 'box-shadow: 0 4px 15px rgba(39,113,119,0.15); border-color: #277177;' : ''">
+                        <button @click="activeIndex = activeIndex === 4 ? null : 4"
+                            style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.5rem; background: none; border: none; cursor: pointer; text-align: left;">
+                            <span style="font-weight: 600; font-size: 1.05rem; color: #1d5559;">
+                                <i class="fas fa-bell" style="color: #277177; margin-right: 0.5rem;"></i>
+                                Bagaimana cara mengetahui hasil seleksi?
+                            </span>
+                            <i class="fas fa-chevron-down" style="color: #277177; transition: transform 0.3s;"
+                                :style="activeIndex === 4 ? 'transform: rotate(180deg);' : ''"></i>
+                        </button>
+                        <div x-show="activeIndex === 4" x-collapse
+                            style="padding: 0 1.5rem 1.2rem 1.5rem; color: #555; line-height: 1.8; font-size: 0.95rem;">
+                            Hasil seleksi dapat dipantau secara <strong>real-time</strong> melalui dashboard dosen.
+                            Setiap perubahan status proposal akan diperbarui secara otomatis dan peserta juga akan
+                            mendapatkan notifikasi melalui sistem.
+                        </div>
+                    </div>
+
+                    {{-- FAQ 6 --}}
+                    <div style="border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; transition: box-shadow 0.3s;"
+                        :style="activeIndex === 5 ? 'box-shadow: 0 4px 15px rgba(39,113,119,0.15); border-color: #277177;' : ''">
+                        <button @click="activeIndex = activeIndex === 5 ? null : 5"
+                            style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.5rem; background: none; border: none; cursor: pointer; text-align: left;">
+                            <span style="font-weight: 600; font-size: 1.05rem; color: #1d5559;">
+                                <i class="fas fa-calendar-alt" style="color: #277177; margin-right: 0.5rem;"></i>
+                                Apakah ada batas waktu pendaftaran?
+                            </span>
+                            <i class="fas fa-chevron-down" style="color: #277177; transition: transform 0.3s;"
+                                :style="activeIndex === 5 ? 'transform: rotate(180deg);' : ''"></i>
+                        </button>
+                        <div x-show="activeIndex === 5" x-collapse
+                            style="padding: 0 1.5rem 1.2rem 1.5rem; color: #555; line-height: 1.8; font-size: 0.95rem;">
+                            Ya, setiap sesi Innovation Challenge memiliki <strong>periode pendaftaran</strong> yang
+                            telah ditentukan. Jadwal lengkap akan diumumkan melalui halaman utama Subdirektorat Inovasi
+                            dan notifikasi kepada seluruh civitas akademika UNJ. Pastikan untuk memantau informasi
+                            terbaru agar tidak melewatkan tenggat waktu.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {{-- CTA --}}
+            <div class="ph-cta">
+                <div style="position:relative;z-index:1;">
+                    <h2>Siap Berinovasi?</h2>
+                    <p>Wujudkan ide inovatif Anda menjadi produk nyata yang berdampak! Daftarkan proposal Anda di UNJ
+                        Innovative Challenge dan dapatkan pendanaan serta pendampingan dari Direktorat Inovasi dan
+                        Hilirisasi UNJ.</p>
+                    <div class="ph-cta-buttons">
+                        <button class="ph-btn-primary login" style="border:none;cursor:pointer;"><i
+                                class="fas fa-sign-in-alt"></i> Masuk</button>
+                        <a href="{{ route('inovchalenge.register.form') }}" class="ph-btn-outline"
+                            style="cursor:pointer;"><i class="fas fa-user-plus"></i> Daftar</a>
+                    </div>
+                    <div class="ph-steps">
+                        <div class="ph-step">
+                            <div class="ph-step-num">1</div>
+                            <span>Login</span>
+                        </div>
+                        <div class="ph-step">
+                            <div class="ph-step-num">2</div>
+                            <span>Ajukan Proposal</span>
+                        </div>
+                        <div class="ph-step">
+                            <div class="ph-step-num">3</div>
+                            <span>Ikuti Seleksi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-
-        {{-- Statistics --}}
-        <section class="ph-section">
-            <h2 class="ph-section-title">Statistik Proposal</h2>
-            <p class="ph-intro">Gambaran real-time ekosistem penelitian dan inovasi UNJ.</p>
-            <div class="ph-stats">
-                <div class="ph-stat-card">
-                    <div class="ph-stat-icon"><i class="fas fa-file-alt"></i></div>
-                    <div class="ph-stat-number">1.248</div>
-                    <div class="ph-stat-label">Proposal Aktif</div>
-                </div>
-                <div class="ph-stat-card">
-                    <div class="ph-stat-icon"><i class="fas fa-graduation-cap"></i></div>
-                    <div class="ph-stat-number">856</div>
-                    <div class="ph-stat-label">Hibah Penelitian</div>
-                </div>
-                <div class="ph-stat-card">
-                    <div class="ph-stat-icon"><i class="fas fa-university"></i></div>
-                    <div class="ph-stat-number">131</div>
-                    <div class="ph-stat-label">Institusi Mitra</div>
-                </div>
-                <div class="ph-stat-card">
-                    <div class="ph-stat-icon"><i class="fas fa-users"></i></div>
-                    <div class="ph-stat-number">3.681</div>
-                    <div class="ph-stat-label">Peneliti Aktif</div>
-                </div>
-            </div>
-        </section>
-
-        {{-- Administrative Services --}}
-        <section class="ph-section">
-            <h2 class="ph-section-title">Layanan Administratif</h2>
-            <p class="ph-intro">Alat-alat terpusat untuk mengelola siklus penelitian Anda secara efisien.</p>
-            <div class="ph-service-grid">
-                <div class="ph-service-card">
-                    <div class="ph-service-icon-wrap"><i class="fas fa-file-upload"></i></div>
-                    <h3>Pengajuan Proposal</h3>
-                    <p>Portal terintegrasi untuk mengajukan proposal penelitian dan pengabdian masyarakat baru.</p>
-                    <a href="#" class="ph-service-link">Akses Portal <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ph-service-card">
-                    <div class="ph-service-icon-wrap"><i class="fas fa-wallet"></i></div>
-                    <h3>Pemantauan Anggaran</h3>
-                    <p>Pelacakan real-time penggunaan hibah, pengeluaran, dan kepatuhan keuangan.</p>
-                    <a href="#" class="ph-service-link">Lihat Dashboard <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ph-service-card">
-                    <div class="ph-service-icon-wrap"><i class="fas fa-clipboard-check"></i></div>
-                    <h3>Laporan Pertanggungjawaban</h3>
-                    <p>Alat untuk membuat dan menyerahkan laporan kemajuan dan LPJ penelitian.</p>
-                    <a href="#" class="ph-service-link">Kirim Laporan <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ph-service-card">
-                    <div class="ph-service-icon-wrap"><i class="fas fa-gavel"></i></div>
-                    <h3>Klirens Etik</h3>
-                    <p>Proses pengajuan persetujuan etik untuk penelitian yang melibatkan subjek manusia atau hewan.</p>
-                    <a href="#" class="ph-service-link">Ajukan Sekarang <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-        </section>
-
-        {{-- Research Opportunities --}}
-        <section class="ph-section">
-            <h2 class="ph-section-title">Peluang Penelitian</h2>
-            <p class="ph-intro">Temukan proyek yang sedang berjalan dan cari mitra kolaborasi.</p>
-            <div class="ph-opportunity-grid">
-                <div class="ph-opp-card">
-                    <div class="ph-opp-header">
-                        <div>
-                            <span class="ph-opp-badge open">Terbuka untuk Kolaborasi</span>
-                            <h3>AI dalam Teknologi Pendidikan</h3>
-                        </div>
-                        <div class="ph-opp-icon-wrap"><i class="fas fa-brain"></i></div>
-                    </div>
-                    <div class="ph-opp-body">
-                        <div class="ph-opp-meta">
-                            <i class="fas fa-school"></i>
-                            <div>
-                                <div class="ph-opp-meta-label">Fakultas Pemimpin</div>
-                                <div class="ph-opp-meta-value">Fakultas Teknik</div>
-                            </div>
-                        </div>
-                        <div class="ph-opp-meta">
-                            <i class="fas fa-handshake"></i>
-                            <div>
-                                <div class="ph-opp-meta-label">Institusi Mitra</div>
-                                <div class="ph-opp-meta-value">Menunggu</div>
-                            </div>
-                        </div>
-                        <div class="ph-opp-meta">
-                            <i class="fas fa-user-plus"></i>
-                            <div>
-                                <div class="ph-opp-meta-label">Slot Tersedia</div>
-                                <div class="ph-opp-meta-value">2 Peneliti (Data Science)</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ph-opp-footer">
-                        <span>Diposting 2 hari lalu</span>
-                        <button>Lihat Detail <i class="fas fa-chevron-right"></i></button>
-                    </div>
-                </div>
-
-                <div class="ph-opp-card">
-                    <div class="ph-opp-header">
-                        <div>
-                            <span class="ph-opp-badge partner">Mencari Mitra</span>
-                            <h3>Perencanaan Kota Berkelanjutan</h3>
-                        </div>
-                        <div class="ph-opp-icon-wrap"><i class="fas fa-city"></i></div>
-                    </div>
-                    <div class="ph-opp-body">
-                        <div class="ph-opp-meta">
-                            <i class="fas fa-school"></i>
-                            <div>
-                                <div class="ph-opp-meta-label">Fakultas Pemimpin</div>
-                                <div class="ph-opp-meta-value">Ilmu Sosial</div>
-                            </div>
-                        </div>
-                        <div class="ph-opp-meta">
-                            <i class="fas fa-handshake"></i>
-                            <div>
-                                <div class="ph-opp-meta-label">Institusi Mitra</div>
-                                <div class="ph-opp-meta-value">Pemprov DKI Jakarta</div>
-                            </div>
-                        </div>
-                        <div class="ph-opp-meta">
-                            <i class="fas fa-user-plus"></i>
-                            <div>
-                                <div class="ph-opp-meta-label">Slot Tersedia</div>
-                                <div class="ph-opp-meta-value">1 Urban Ekologis</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ph-opp-footer">
-                        <span>Diposting 5 hari lalu</span>
-                        <button>Lihat Detail <i class="fas fa-chevron-right"></i></button>
-                    </div>
-                </div>
-
-                <div class="ph-opp-card">
-                    <div class="ph-opp-header">
-                        <div>
-                            <span class="ph-opp-badge inter">Lintas Departemen</span>
-                            <h3>Biomekanika Ilmu Olahraga</h3>
-                        </div>
-                        <div class="ph-opp-icon-wrap"><i class="fas fa-running"></i></div>
-                    </div>
-                    <div class="ph-opp-body">
-                        <div class="ph-opp-meta">
-                            <i class="fas fa-school"></i>
-                            <div>
-                                <div class="ph-opp-meta-label">Fakultas Pemimpin</div>
-                                <div class="ph-opp-meta-value">Ilmu Olahraga</div>
-                            </div>
-                        </div>
-                        <div class="ph-opp-meta">
-                            <i class="fas fa-handshake"></i>
-                            <div>
-                                <div class="ph-opp-meta-label">Institusi Mitra</div>
-                                <div class="ph-opp-meta-value">KONI Pusat</div>
-                            </div>
-                        </div>
-                        <div class="ph-opp-meta">
-                            <i class="fas fa-user-plus"></i>
-                            <div>
-                                <div class="ph-opp-meta-label">Slot Tersedia</div>
-                                <div class="ph-opp-meta-value">3 Asisten Pascasarjana</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ph-opp-footer">
-                        <span>Diposting 1 minggu lalu</span>
-                        <button>Lihat Detail <i class="fas fa-chevron-right"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Collaborative Map --}}
-            <div class="ph-map-wrap">
-                <div class="ph-map-info">
-                    <h3>Peta Kolaborasi Penelitian</h3>
-                    <p>Eksplorasi jaringan global mitra penelitian dan studi lapangan yang sedang berjalan.</p>
-                </div>
-                <div class="ph-map-canvas">
-                    <div class="ph-map-canvas-bg"></div>
-                    <div class="ph-map-dot" style="top:30%;left:27%;background:#ef4444;box-shadow:0 0 0 4px rgba(239,68,68,0.2);"></div>
-                    <div class="ph-map-dot" style="top:50%;left:53%;background:#277177;box-shadow:0 0 0 4px rgba(39,113,119,0.2);"></div>
-                    <div class="ph-map-dot" style="bottom:30%;right:25%;background:#f39c12;box-shadow:0 0 0 4px rgba(243,156,18,0.2);"></div>
-                    <div class="ph-map-label">
-                        <i class="fas fa-globe" style="color:#277177;"></i> Peta Interaktif Sedang Dimuat...
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        {{-- CTA --}}
-        <div class="ph-cta">
-            <div style="position:relative;z-index:1;">
-                <h2>Ajukan Inovasi Anda</h2>
-                <p>Siap mewujudkan ide Anda menjadi kenyataan? Mulai perjalanan proposal Anda hari ini bersama ProposalHub. Proses kami yang efisien memudahkan Anda mendapatkan pendanaan dan mengelola proyek penelitian.</p>
-                <div class="ph-cta-buttons">
-                    <a href="#" class="ph-btn-primary"><i class="fas fa-plus-circle"></i> Buat Proposal Baru</a>
-                    <a href="#" class="ph-btn-outline"><i class="fas fa-question-circle"></i> Lihat Panduan</a>
-                </div>
-                <div class="ph-steps">
-                    <div class="ph-step">
-                        <div class="ph-step-num">1</div>
-                        <span>Buat Akun</span>
-                    </div>
-                    <div class="ph-step">
-                        <div class="ph-step-num">2</div>
-                        <span>Tulis Proposal</span>
-                    </div>
-                    <div class="ph-step">
-                        <div class="ph-step-num">3</div>
-                        <span>Kirim untuk Review</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
-</div>
 
 </body>
 @include('layout.footer')
+
 </html>

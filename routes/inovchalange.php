@@ -8,12 +8,25 @@ use App\Http\Controllers\InovChalenge\MemberController;
 use App\Http\Controllers\InovChalenge\AlumniController;
 use App\Http\Controllers\InovChalenge\SubmissionAdminController;
 use App\Http\Controllers\InovChalenge\ReviewerController;
+use App\Http\Controllers\InovChalenge\RegistrationController;
+use App\Http\Controllers\InovChalenge\AccountManagementController;
+use App\Http\Controllers\InovChalenge\RoleDashboardController;
 
 /*
 |--------------------------------------------------------------------------
 | Innovation Challenge Routes
 |--------------------------------------------------------------------------
 */
+
+// ── Public Registration Routes ────────────────────────────────────────────
+Route::prefix('inovchalenge/register')
+    ->name('inovchalenge.register.')
+    ->group(function () {
+        Route::get('/', [RegistrationController::class, 'showForm'])
+            ->name('form');
+        Route::post('/', [RegistrationController::class, 'register'])
+            ->name('submit');
+    });
 
 // ── Admin Routes ──────────────────────────────────────────────────────────
 Route::prefix('admin_inovasi/inovchalenge')->name('admin_inovasi.inovchalenge.')
@@ -119,6 +132,14 @@ Route::prefix('subdirektorat-inovasi/dosen/inovchalenge')
             ->name('members.destroy');
         Route::get('members/search', [MemberController::class, 'searchUsers'])
             ->name('members.search');
+
+        // Member read-only view (non-Ketua dosen sees submission but cannot edit)
+        Route::get('team-submissions', [DosenController::class, 'memberSubmissions'])
+            ->name('team.index');
+        Route::get('team-submissions/{submission}', [DosenController::class, 'showMemberSubmission'])
+            ->name('team.show');
+        Route::get('team-submissions/{submission}/tahap/{tahapId}', [DosenController::class, 'showMemberTahap'])
+            ->name('team.tahap');
     });
 
 // ── Alumni Routes ─────────────────────────────────────────────────────────
@@ -150,4 +171,49 @@ Route::prefix('reviewer-inovchalenge')
             ->name('assignments.show');
         Route::post('assignments/{submission}/review/{tahapId}', [ReviewerController::class, 'storeReview'])
             ->name('assignments.review');
+    });
+
+// ── Admin Account Management Routes ──────────────────────────────────────
+Route::prefix('admin_inovasi/accounts')
+    ->name('admin_inovasi.accounts.')
+    ->middleware(['auth', 'role:admin_inovasi'])
+    ->group(function () {
+
+        // Account CRUD
+        Route::get('/', [AccountManagementController::class, 'index'])
+            ->name('index');
+        Route::get('create', [AccountManagementController::class, 'create'])
+            ->name('create');
+        Route::post('/', [AccountManagementController::class, 'store'])
+            ->name('store');
+        Route::get('{user}/edit', [AccountManagementController::class, 'edit'])
+            ->name('edit');
+        Route::put('{user}', [AccountManagementController::class, 'update'])
+            ->name('update');
+        Route::delete('{user}', [AccountManagementController::class, 'destroy'])
+            ->name('destroy');
+
+        // Registration approval
+        Route::get('registrations', [AccountManagementController::class, 'registrations'])
+            ->name('registrations');
+        Route::patch('registrations/{registration}/approve', [AccountManagementController::class, 'approve'])
+            ->name('registrations.approve');
+        Route::patch('registrations/{registration}/decline', [AccountManagementController::class, 'decline'])
+            ->name('registrations.decline');
+    });
+
+// ── Role-Specific Dashboard Routes (alumni, peneliti, dudi, pppk, mahasiswa) ──
+Route::prefix('inovchalenge/dashboard')
+    ->name('inovchalenge.role.')
+    ->middleware(['auth', 'role:alumni,peneliti,dudi,pppk,mahasiswa'])
+    ->group(function () {
+
+        Route::get('/', [RoleDashboardController::class, 'dashboard'])
+            ->name('dashboard');
+        Route::put('profile', [RoleDashboardController::class, 'updateProfile'])
+            ->name('profile.update');
+        Route::patch('invitations/{member}/approve', [RoleDashboardController::class, 'approveInvitation'])
+            ->name('invitations.approve');
+        Route::patch('invitations/{member}/reject', [RoleDashboardController::class, 'rejectInvitation'])
+            ->name('invitations.reject');
     });

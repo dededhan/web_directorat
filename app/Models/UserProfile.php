@@ -17,6 +17,8 @@ class UserProfile extends Model
         'identifier_number',
         'prodi_id',
         'fakultas_id',
+        'alamat',
+        'kode_pos',
     ];
 
 
@@ -30,9 +32,8 @@ class UserProfile extends Model
         return $this->belongsTo(Prodi::class);
     }
 
-        public function fakultas()
+    public function fakultas()
     {
         return $this->belongsTo(Fakultas::class, 'fakultas_id');
     }
 }
-

@@ -54,7 +54,10 @@ class LoginController extends Controller
                 'inovchalange' => 'admin.inov_challenge.dashboard',
                 'reviewer_inovchalange' => 'admin.inov_challenge.dashboard',
                 'reviewer_inovchalenge' => 'reviewer_inovchalenge.dashboard',
-                'alumni' => 'subdirektorat-inovasi.alumni.inovchalenge.invitations.index',
+                'alumni' => 'inovchalenge.role.dashboard',
+                'peneliti' => 'inovchalenge.role.dashboard',
+                'dudi' => 'inovchalenge.role.dashboard',
+                'pppk' => 'inovchalenge.role.dashboard',
                 default => 'admin.dashboard',
             };
 

@@ -158,6 +158,8 @@ class SubmissionAdminController extends Controller
 
         $oldAdminStatus = $submissionTahap->admin_status;
         $tahapKe = $submissionTahap->tahap->tahap_ke ?? '?';
+        $submissionId = $submissionTahap->inov_chalenge_submission_id;
+        $tahapId = $submissionTahap->inov_chalenge_tahap_id;
 
         $submissionTahap->update([
             'admin_status' => $request->admin_status,
@@ -171,8 +173,8 @@ class SubmissionAdminController extends Controller
             $keterangan .= ': ' . $request->catatan_admin;
         }
         InovChalengeStatusLog::logTahapStatus(
-            $submissionTahap->inov_chalenge_submission_id,
-            $submissionTahap->inov_chalenge_tahap_id,
+            $submissionId,
+            $tahapId,
             $oldAdminStatus,
             $request->admin_status,
             $keterangan,
@@ -183,6 +185,44 @@ class SubmissionAdminController extends Controller
         // If set to perbaikan, also reset dosen status to draft so they can re-edit
         if ($request->admin_status === 'perbaikan') {
             $submissionTahap->update(['status' => 'draft']);
+
+            // Notification log for dosen
+            InovChalengeStatusLog::logTahapStatus(
+                $submissionId,
+                $tahapId,
+                $oldAdminStatus,
+                'perbaikan',
+                "Tahap {$tahapKe} memerlukan perbaikan. Silakan revisi dan submit ulang.",
+                Auth::id(),
+                'admin'
+            );
+
+        }
+
+        // If lolos (disetujui/selesai), add progression notification
+        if (in_array($request->admin_status, ['disetujui', 'selesai'])) {
+            // Check if there's a next tahap
+            $sessionId = $submissionTahap->tahap->inov_chalenge_session_id;
+            $nextTahap = \App\Models\InovChalengeTahap::where('inov_chalenge_session_id', $sessionId)
+                ->where('tahap_ke', $tahapKe + 1)
+                ->first();
+
+            if ($nextTahap) {
+                $notifMsg = "Selamat! Anda dinyatakan lolos Tahap {$tahapKe}. Silakan lanjutkan ke Tahap " . ($tahapKe + 1) . ".";
+            } else {
+                $notifMsg = "Selamat! Anda dinyatakan lolos Tahap {$tahapKe}. Semua tahap telah selesai.";
+            }
+
+            InovChalengeStatusLog::logTahapStatus(
+                $submissionId,
+                $tahapId,
+                $oldAdminStatus,
+                $request->admin_status,
+                $notifMsg,
+                Auth::id(),
+                'admin'
+            );
+
         }
 
         return back()->with('success', 'Status tahap berhasil diperbarui.');

@@ -47,7 +47,42 @@ class InovChalengeSubmissionTahap extends Model
         $tahap = $this->tahap;
         $timingOk = $tahap ? $tahap->isOpen() : true;
 
-        return $statusOk && $timingOk;
+        // Gate: previous tahap must be "lolos" (disetujui/selesai) for tahap > 1
+        $prevOk = $this->isPreviousTahapLolos();
+
+        return $statusOk && $timingOk && $prevOk;
+    }
+
+    /**
+     * Check if the previous tahap (tahap_ke - 1) has been declared lolos
+     * (admin_status = disetujui or selesai). Always true for tahap_ke = 1.
+     */
+    public function isPreviousTahapLolos(): bool
+    {
+        $tahap = $this->tahap;
+        if (!$tahap || $tahap->tahap_ke <= 1) {
+            return true; // Tahap 1 has no prerequisite
+        }
+
+        // Find the previous tahap definition in the same session
+        $previousTahap = InovChalengeTahap::where('inov_chalenge_session_id', $tahap->inov_chalenge_session_id)
+            ->where('tahap_ke', $tahap->tahap_ke - 1)
+            ->first();
+
+        if (!$previousTahap) {
+            return true; // No previous tahap exists
+        }
+
+        // Find the dosen's submission_tahap row for that previous tahap
+        $previousSubmissionTahap = self::where('inov_chalenge_submission_id', $this->inov_chalenge_submission_id)
+            ->where('inov_chalenge_tahap_id', $previousTahap->id)
+            ->first();
+
+        if (!$previousSubmissionTahap) {
+            return false;
+        }
+
+        return in_array($previousSubmissionTahap->admin_status, ['disetujui', 'selesai']);
     }
 
     /**

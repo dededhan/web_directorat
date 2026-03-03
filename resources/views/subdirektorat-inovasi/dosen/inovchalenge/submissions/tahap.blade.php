@@ -3,7 +3,8 @@
 @section('content')
     @php
         $tahap = $submissionTahap->tahap;
-        $isEditable = $submissionTahap->isEditable();
+        $isReadOnly = $isReadOnly ?? false;
+        $isEditable = $isReadOnly ? false : $submissionTahap->isEditable();
         $hasSections = $tahap->sections->isNotEmpty();
         $tracking = $submissionTahap->getTrackingStatus();
         $trackingBadgeColors = [
@@ -41,7 +42,7 @@
             {{-- Top Bar --}}
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.show', $submission) }}"
+                    <a href="{{ $isReadOnly ? route('subdirektorat-inovasi.dosen.inovchalenge.team.show', $submission) : route('subdirektorat-inovasi.dosen.inovchalenge.submissions.show', $submission) }}"
                         class="w-9 h-9 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-700 hover:border-gray-300 transition shadow-sm">
                         <i class="fas fa-arrow-left text-sm"></i>
                     </a>
@@ -77,6 +78,19 @@
                     @endif
                 </div>
             </div>
+
+            {{-- Read-Only Notice (member view) --}}
+            @if ($isReadOnly)
+                <div
+                    class="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-xl flex items-center gap-3 text-indigo-700">
+                    <i class="fas fa-info-circle text-lg flex-shrink-0"></i>
+                    <div>
+                        <p class="font-semibold text-sm">Mode Read-Only (Anggota)</p>
+                        <p class="text-xs mt-0.5 text-indigo-600">Anda melihat formulir ini sebagai anggota tim. Data tidak
+                            dapat diubah.</p>
+                    </div>
+                </div>
+            @endif
 
             {{-- Flash --}}
             @if (session('success'))

@@ -21,6 +21,7 @@ class InovChalengeSubmissionMember extends Model
     public const TIPE_DUDI      = 'DUDI';
     public const TIPE_MAHASISWA = 'mahasiswa';
     public const TIPE_PPPK      = 'PPPK';
+    public const TIPE_PENELITI  = 'peneliti';
 
     public const TIPE_OPTIONS = [
         self::TIPE_DOSEN,
@@ -28,6 +29,7 @@ class InovChalengeSubmissionMember extends Model
         self::TIPE_DUDI,
         self::TIPE_MAHASISWA,
         self::TIPE_PPPK,
+        self::TIPE_PENELITI,
     ];
 
     /** Types that require approval from the invited member. */
@@ -36,12 +38,28 @@ class InovChalengeSubmissionMember extends Model
         self::TIPE_DUDI,
         self::TIPE_MAHASISWA,
         self::TIPE_PPPK,
+        self::TIPE_PENELITI,
     ];
 
-    /** Types that can be searched in the users table. */
+    /**
+     * Types that can be searched in the users table.
+     * All registered role types have system accounts.
+     */
     public const TIPE_SEARCHABLE = [
         self::TIPE_DOSEN,
         self::TIPE_ALUMNI,
+        self::TIPE_MAHASISWA,
+        self::TIPE_PPPK,
+        self::TIPE_PENELITI,
+        self::TIPE_DUDI,
+    ];
+
+    /**
+     * Map member tipe to user role (handles case differences).
+     */
+    public const TIPE_TO_ROLE = [
+        'DUDI' => 'dudi',
+        'PPPK' => 'pppk',
     ];
 
     /* ── Relationships ───────────────────────────────────────── */
@@ -93,6 +111,7 @@ class InovChalengeSubmissionMember extends Model
             'DUDI'      => 'DUDI',
             'mahasiswa' => 'Mahasiswa',
             'PPPK'      => 'PPPK',
+            'peneliti'  => 'Peneliti',
             default     => ucfirst($this->tipe_anggota),
         };
     }

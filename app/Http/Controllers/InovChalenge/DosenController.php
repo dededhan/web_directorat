@@ -6,13 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\InovChalengeSession;
 use App\Models\InovChalengeSubmission;
 use App\Models\InovChalengeSubmissionIdentitas;
+use App\Models\InovChalengeSubmissionMember;
 use App\Models\InovChalengeSubmissionTahap;
 use App\Models\InovChalengeFieldValue;
 use App\Models\InovChalengeStatusLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class DosenController extends Controller
 {
@@ -39,12 +39,21 @@ class DosenController extends Controller
 
         $session->load('tahap.fields');
 
-        // Check if dosen already has a submission for this session
+        // Check if dosen already has a submission (as ketua) for this session
         $existingSubmission = InovChalengeSubmission::where('inov_chalenge_session_id', $session->id)
             ->where('user_id', Auth::id())
             ->first();
 
-        return view('subdirektorat-inovasi.dosen.inovchalenge.sessions.show', compact('session', 'existingSubmission'));
+        // Check if dosen is already a member of any submission in this session
+        $existingMembership = null;
+        if (!$existingSubmission) {
+            $existingMembership = InovChalengeSubmissionMember::where('user_id', Auth::id())
+                ->whereHas('submission', fn($q) => $q->where('inov_chalenge_session_id', $session->id))
+                ->with('submission')
+                ->first();
+        }
+
+        return view('subdirektorat-inovasi.dosen.inovchalenge.sessions.show', compact('session', 'existingSubmission', 'existingMembership'));
     }
 
     /**
@@ -58,6 +67,84 @@ class DosenController extends Controller
             ->paginate(10);
 
         return view('subdirektorat-inovasi.dosen.inovchalenge.submissions.index', compact('submissions'));
+    }
+
+    /**
+     * List submissions where the current dosen is a team member (Anggota, not Ketua).
+     */
+    public function memberSubmissions()
+    {
+        $memberOf = InovChalengeSubmissionMember::where('user_id', Auth::id())
+            ->where('tipe_anggota', 'dosen')
+            ->where('peran', '!=', 'Ketua')
+            ->with(['submission.session', 'submission.submissionTahap.tahap', 'submission.user', 'submission.members'])
+            ->latest()
+            ->paginate(10);
+
+        return view('subdirektorat-inovasi.dosen.inovchalenge.submissions.member-index', compact('memberOf'));
+    }
+
+    /**
+     * Show a submission read-only for a dosen who is a team member (Anggota).
+     * They can see all data but cannot edit/fill/submit any forms.
+     */
+    public function showMemberSubmission(InovChalengeSubmission $submission)
+    {
+        // Verify current user is a member of this submission
+        $isMember = InovChalengeSubmissionMember::where('inov_chalenge_submission_id', $submission->id)
+            ->where('user_id', Auth::id())
+            ->where('peran', '!=', 'Ketua')
+            ->exists();
+
+        abort_if(!$isMember, 403, 'Anda bukan anggota tim dari submission ini.');
+
+        $submission->load([
+            'session',
+            'submissionTahap.tahap',
+            'members.user',
+            'identitas',
+            'reviewers',
+            'statusLogs.tahap',
+            'statusLogs.causer',
+        ]);
+
+        $hasReviewer = $submission->reviewers->isNotEmpty();
+
+        return view('subdirektorat-inovasi.dosen.inovchalenge.submissions.member-show', compact('submission', 'hasReviewer'));
+    }
+
+    /**
+     * Show a tahap read-only for a dosen team member (Anggota).
+     */
+    public function showMemberTahap(InovChalengeSubmission $submission, $tahapId)
+    {
+        $isMember = InovChalengeSubmissionMember::where('inov_chalenge_submission_id', $submission->id)
+            ->where('user_id', Auth::id())
+            ->where('peran', '!=', 'Ketua')
+            ->exists();
+
+        abort_if(!$isMember, 403, 'Anda bukan anggota tim dari submission ini.');
+
+        $submissionTahap = InovChalengeSubmissionTahap::where('inov_chalenge_submission_id', $submission->id)
+            ->where('inov_chalenge_tahap_id', $tahapId)
+            ->firstOrFail();
+
+        $submissionTahap->load(['tahap.sections.fields', 'tahap.unsectionedFields']);
+
+        $fieldValues = InovChalengeFieldValue::where('inov_chalenge_submission_id', $submission->id)
+            ->where('inov_chalenge_tahap_id', $tahapId)
+            ->get()
+            ->keyBy('inov_chalenge_tahap_field_id');
+
+        $submission->load('session');
+
+        // Force read-only by passing isReadOnly = true
+        return view('subdirektorat-inovasi.dosen.inovchalenge.submissions.tahap', [
+            'submission' => $submission,
+            'submissionTahap' => $submissionTahap,
+            'fieldValues' => $fieldValues,
+            'isReadOnly' => true,
+        ]);
     }
 
     /**
@@ -78,6 +165,17 @@ class DosenController extends Controller
                 ->with('error', 'Anda sudah memiliki submission untuk sesi ini.');
         }
 
+        // Check if already a member (anggota) of another submission in this session
+        $isMember = InovChalengeSubmissionMember::where('user_id', Auth::id())
+            ->whereHas('submission', fn($q) => $q->where('inov_chalenge_session_id', $session->id))
+            ->exists();
+
+        if ($isMember) {
+            return redirect()
+                ->route('subdirektorat-inovasi.dosen.inovchalenge.sessions.show', $session)
+                ->with('error', 'Anda sudah terdaftar sebagai anggota tim di sesi ini. Tidak dapat mengajukan submission baru.');
+        }
+
         return view('subdirektorat-inovasi.dosen.inovchalenge.sessions.show', [
             'session' => $session->load('tahap.fields'),
             'existingSubmission' => null,
@@ -92,7 +190,7 @@ class DosenController extends Controller
     {
         abort_if($session->status !== 'active', 404);
 
-        // Check duplicate
+        // Check duplicate (own submission)
         $existing = InovChalengeSubmission::where('inov_chalenge_session_id', $session->id)
             ->where('user_id', Auth::id())
             ->first();
@@ -101,6 +199,17 @@ class DosenController extends Controller
             return redirect()
                 ->route('subdirektorat-inovasi.dosen.inovchalenge.submissions.show', $existing)
                 ->with('error', 'Anda sudah memiliki submission untuk sesi ini.');
+        }
+
+        // Check if already a member of another submission in this session
+        $isMember = InovChalengeSubmissionMember::where('user_id', Auth::id())
+            ->whereHas('submission', fn($q) => $q->where('inov_chalenge_session_id', $session->id))
+            ->exists();
+
+        if ($isMember) {
+            return redirect()
+                ->route('subdirektorat-inovasi.dosen.inovchalenge.sessions.show', $session)
+                ->with('error', 'Anda sudah terdaftar sebagai anggota tim di sesi ini. Tidak dapat mengajukan submission baru.');
         }
 
         $submission = DB::transaction(function () use ($session) {
@@ -120,13 +229,25 @@ class DosenController extends Controller
                 ]);
             }
 
-            // Auto-add dosen as Ketua member
+            // Auto-add dosen as Ketua member with profile data
             $user = Auth::user();
+            $user->load('profile.fakultas', 'profile.prodi');
+
+            $institusi = null;
+            if ($user->profile?->fakultas) {
+                $institusi = $user->profile->fakultas->name;
+                if ($user->profile->prodi) {
+                    $institusi .= ' / ' . $user->profile->prodi->name;
+                }
+            }
+
             $submission->members()->create([
                 'user_id' => $user->id,
                 'peran' => 'Ketua',
                 'tipe_anggota' => 'dosen',
                 'nama_lengkap' => $user->name,
+                'nik_nim_nip' => $user->profile?->identifier_number,
+                'institusi_fakultas' => $institusi,
                 'approval_status' => 'not_required',
             ]);
 
@@ -178,11 +299,17 @@ class DosenController extends Controller
     {
         abort_if($submission->user_id !== Auth::id(), 403);
 
-        $user = Auth::user()->load('profile.fakultas');
-        $submission->load(['session', 'identitas', 'members.user']);
+        $user = Auth::user()->load('profile.fakultas', 'profile.prodi');
+        $submission->load(['session', 'identitas', 'members.user.profile.fakultas', 'members.user.profile.prodi']);
 
         $fakultasName = $user->profile?->fakultas?->name ?? '-';
+        $prodiName    = $user->profile?->prodi?->name ?? '-';
         $ketuaName    = $user->name;
+
+        $session = $submission->session;
+        $minAnggota = $session->min_anggota ?? 1;
+        $maxAnggota = $session->max_anggota ?? 4;
+        $currentCount = $submission->members->count();
 
         $skemaOptions = [
             'Hilirisasi Produk Riset Inovasi',
@@ -191,7 +318,7 @@ class DosenController extends Controller
 
         return view(
             'subdirektorat-inovasi.dosen.inovchalenge.submissions.identitas',
-            compact('submission', 'fakultasName', 'ketuaName', 'skemaOptions')
+            compact('submission', 'fakultasName', 'prodiName', 'ketuaName', 'skemaOptions', 'minAnggota', 'maxAnggota', 'currentCount')
         );
     }
 
@@ -250,6 +377,14 @@ class DosenController extends Controller
             return redirect()
                 ->route('subdirektorat-inovasi.dosen.inovchalenge.submissions.show', $submission)
                 ->with('error', 'Tahap ' . $tahapModel->tahap_ke . ' belum dibuka. Periode dimulai ' . $tahapModel->periode_awal->format('d M Y H:i') . '.');
+        }
+
+        // Gate: previous tahap must be lolos before accessing this one (for tahap > 1)
+        if (!$submissionTahap->isPreviousTahapLolos() && $tahapModel->tahap_ke > 1) {
+            $prevTahapKe = $tahapModel->tahap_ke - 1;
+            return redirect()
+                ->route('subdirektorat-inovasi.dosen.inovchalenge.submissions.show', $submission)
+                ->with('error', "Tahap {$tahapModel->tahap_ke} belum dapat diakses. Anda harus dinyatakan lolos Tahap {$prevTahapKe} terlebih dahulu.");
         }
 
         // Load existing field values keyed by field_id

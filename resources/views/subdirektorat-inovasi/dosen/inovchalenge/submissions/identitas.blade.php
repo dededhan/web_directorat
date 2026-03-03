@@ -91,6 +91,15 @@
                                 </div>
                             </div>
 
+                            {{-- Prodi (read-only) --}}
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Program Studi</label>
+                                <div
+                                    class="w-full rounded-lg border border-gray-200 bg-gray-50 text-sm px-3 py-2 text-gray-700">
+                                    {{ $prodiName }}
+                                </div>
+                            </div>
+
                             {{-- Skema Inovasi --}}
                             <div class="sm:col-span-2">
                                 <label class="block text-xs font-semibold text-gray-600 mb-1">
@@ -147,9 +156,29 @@
             {{-- ═══════════════════ SECTION B: ANGGOTA TIM ═══════════════════ --}}
             <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-6" x-data="memberManager()">
                 <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-indigo-500 to-indigo-600">
-                    <h2 class="text-lg font-bold text-white"><i class="fas fa-users mr-2"></i>Anggota Tim</h2>
-                    <p class="text-indigo-100 text-xs mt-0.5">Minimal 1 anggota non-Ketua diperlukan untuk membuka akses
-                        tahap.</p>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-lg font-bold text-white"><i class="fas fa-users mr-2"></i>Anggota Tim</h2>
+                            <p class="text-indigo-100 text-xs mt-0.5">Minimal {{ $minAnggota }} orang, maksimal
+                                {{ $maxAnggota }} orang (termasuk Ketua).</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold
+                                {{ $currentCount >= $minAnggota ? 'bg-green-500/20 text-green-100' : 'bg-yellow-500/20 text-yellow-100' }}">
+                                <i
+                                    class="fas {{ $currentCount >= $minAnggota ? 'fa-check-circle' : 'fa-exclamation-circle' }} mr-1 text-[10px]"></i>
+                                {{ $currentCount }}/{{ $maxAnggota }} anggota
+                            </span>
+                        </div>
+                    </div>
+                    @if ($currentCount < $minAnggota)
+                        <div class="mt-2 flex items-center gap-1.5 text-yellow-200 text-[11px]">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Tambahkan minimal {{ $minAnggota - $currentCount }} anggota lagi untuk memenuhi syarat
+                                minimum.</span>
+                        </div>
+                    @endif
                 </div>
                 <div class="p-6">
                     {{-- Member list --}}
@@ -163,15 +192,27 @@
                                     </div>
                                     <div>
                                         <p class="text-sm font-medium text-gray-900">{{ $member->nama_lengkap }}</p>
-                                        <p class="text-xs text-gray-400">
-                                            {{ $member->getTipeLabel() }}
+                                        <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-0.5">
+                                            <span class="text-[10px] text-gray-400">{{ $member->getTipeLabel() }}</span>
                                             @if ($member->nik_nim_nip)
-                                                · {{ $member->nik_nim_nip }}
+                                                <span class="text-[10px] text-gray-400">· NIM/NIP/NIK/NIDN:
+                                                    {{ $member->nik_nim_nip }}</span>
+                                            @elseif($member->user?->profile?->identifier_number)
+                                                <span class="text-[10px] text-gray-400">· NIM/NIP/NIK/NIDN:
+                                                    {{ $member->user->profile->identifier_number }}</span>
                                             @endif
-                                            @if ($member->institusi_fakultas)
-                                                · {{ $member->institusi_fakultas }}
+                                            @if ($member->user?->profile?->fakultas)
+                                                <span class="text-[10px] text-gray-400">·
+                                                    {{ $member->user->profile->fakultas->name }}</span>
+                                                @if ($member->user?->profile?->prodi)
+                                                    <span class="text-[10px] text-gray-400">/
+                                                        {{ $member->user->profile->prodi->name }}</span>
+                                                @endif
+                                            @elseif ($member->institusi_fakultas)
+                                                <span class="text-[10px] text-gray-400">·
+                                                    {{ $member->institusi_fakultas }}</span>
                                             @endif
-                                        </p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2">
@@ -208,85 +249,135 @@
 
                     {{-- Add member form --}}
                     <div class="border-t border-gray-100 pt-6">
-                        <h3 class="text-sm font-bold text-gray-700 mb-4">
-                            <i class="fas fa-user-plus mr-1.5 text-indigo-500"></i>Tambah Anggota
-                        </h3>
-                        <form method="POST"
-                            action="{{ route('subdirektorat-inovasi.dosen.inovchalenge.members.store', $submission) }}">
-                            @csrf
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs font-semibold text-gray-600 mb-1">
-                                        Tipe Anggota <span class="text-red-500">*</span>
-                                    </label>
-                                    <select name="tipe_anggota" x-model="tipeAnggota" @change="onTipeChange()"
-                                        class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                        required>
-                                        <option value="">-- Pilih --</option>
-                                        <option value="dosen">Dosen</option>
-                                        <option value="alumni">Alumni</option>
-                                        <option value="DUDI">DUDI</option>
+                        @if ($currentCount >= $maxAnggota)
+                            <div
+                                class="flex items-center gap-2 text-sm text-gray-500 bg-gray-50 rounded-xl px-4 py-3 border border-gray-200">
+                                <i class="fas fa-info-circle text-gray-400"></i>
+                                <span>Jumlah anggota sudah mencapai batas maksimal (<strong>{{ $maxAnggota }}</strong>
+                                    orang).</span>
+                            </div>
+                        @else
+                            <h3 class="text-sm font-bold text-gray-700 mb-4">
+                                <i class="fas fa-user-plus mr-1.5 text-indigo-500"></i>Tambah Anggota
+                                <span class="text-gray-400 font-normal text-xs ml-1">(sisa
+                                    {{ $maxAnggota - $currentCount }} slot)</span>
+                            </h3>
+                            <form method="POST"
+                                action="{{ route('subdirektorat-inovasi.dosen.inovchalenge.members.store', $submission) }}">
+                                @csrf
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                            Tipe Anggota <span class="text-red-500">*</span>
+                                        </label>
+                                        <select name="tipe_anggota" x-model="tipeAnggota" @change="onTipeChange()"
+                                            class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                            required>
+                                            <option value="">-- Pilih --</option>
+                                            <option value="dosen">Dosen</option>
+                                            <option value="alumni">Alumni</option>
+                                        <option value="peneliti">Peneliti</option>
                                         <option value="mahasiswa">Mahasiswa</option>
-                                        <option value="PPPK">PPPK</option>
-                                    </select>
-                                    <p x-show="tipeAnggota && tipeAnggota !== 'dosen'"
-                                        class="mt-1 text-[10px] text-amber-600">
-                                        <i class="fas fa-info-circle mr-0.5"></i>
-                                        <span
-                                            x-text="tipeAnggota === 'dosen' ? '' : 'Anggota tipe ini memerlukan persetujuan (approval)'"></span>
-                                    </p>
-                                </div>
-
-                                {{-- User search for dosen/alumni (types with system accounts) --}}
-                                <div x-show="tipeAnggota === 'dosen' || tipeAnggota === 'alumni'">
-                                    <label class="block text-xs font-semibold text-gray-600 mb-1">Cari User</label>
-                                    <div class="relative">
-                                        <input type="text" x-model="searchQuery" @input.debounce.300ms="searchUser()"
-                                            placeholder="Ketik nama atau email..."
-                                            class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                        {{-- Dropdown results --}}
-                                        <div x-show="searchResults.length > 0"
-                                            class="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-40 overflow-auto">
-                                            <template x-for="user in searchResults" :key="user.id">
-                                                <div @click="selectUser(user)"
-                                                    class="px-3 py-2 hover:bg-indigo-50 cursor-pointer text-sm border-b border-gray-50">
-                                                    <p class="font-medium text-gray-800" x-text="user.name"></p>
-                                                    <p class="text-xs text-gray-400" x-text="user.email"></p>
-                                                </div>
-                                            </template>
-                                        </div>
+                                        <option value="DUDI">DUDI</option>
+                                            <option value="PPPK">PPPK</option>
+                                        </select>
+                                        <p x-show="tipeAnggota && tipeAnggota !== 'dosen'"
+                                            class="mt-1 text-[10px] text-amber-600">
+                                            <i class="fas fa-info-circle mr-0.5"></i>
+                                            <span
+                                                x-text="tipeAnggota === 'dosen' ? '' : 'Anggota tipe ini memerlukan persetujuan (approval)'"></span>
+                                        </p>
                                     </div>
-                                    <input type="hidden" name="user_id" x-model="selectedUserId">
-                                </div>
 
-                                <div>
-                                    <label class="block text-xs font-semibold text-gray-600 mb-1">
-                                        Nama Lengkap <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="text" name="nama_lengkap" x-model="namaLengkap" required
-                                        class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                </div>
+                                {{-- User search for all registered types --}}
+                                <div x-show="['dosen','alumni','mahasiswa','peneliti','DUDI','PPPK'].includes(tipeAnggota)">
+                                        <label class="block text-xs font-semibold text-gray-600 mb-1">Cari User</label>
+                                        <div class="relative">
+                                            <input type="text" x-model="searchQuery"
+                                                @input.debounce.300ms="searchUser()"
+                                                placeholder="Ketik nama atau email..."
+                                                class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                            {{-- Dropdown results --}}
+                                            <div x-show="searchResults.length > 0"
+                                                class="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-auto">
+                                                <template x-for="user in searchResults" :key="user.id">
+                                                    <div @click="selectUser(user)"
+                                                        class="px-3 py-2 hover:bg-indigo-50 cursor-pointer text-sm border-b border-gray-50">
+                                                        <p class="font-medium text-gray-800" x-text="user.name"></p>
+                                                        <p class="text-xs text-gray-400" x-text="user.email"></p>
+                                                        <div class="flex flex-wrap gap-2 mt-0.5">
+                                                            <span x-show="user.identifier_number"
+                                                                class="text-[10px] text-indigo-500 bg-indigo-50 px-1.5 py-0.5 rounded"
+                                                                x-text="'ID: ' + user.identifier_number"></span>
+                                                            <span x-show="user.fakultas"
+                                                                class="text-[10px] text-teal-600 bg-teal-50 px-1.5 py-0.5 rounded"
+                                                                x-text="user.fakultas"></span>
+                                                            <span x-show="user.prodi"
+                                                                class="text-[10px] text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded"
+                                                                x-text="user.prodi"></span>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="user_id" x-model="selectedUserId">
+                                    </div>
 
-                                <div>
-                                    <label class="block text-xs font-semibold text-gray-600 mb-1">NIK/NIM/NIP</label>
-                                    <input type="text" name="nik_nim_nip"
-                                        class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                            Nama Lengkap <span class="text-red-500">*</span>
+                                        </label>
+                                        <input type="text" name="nama_lengkap" x-model="namaLengkap" required
+                                            class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    </div>
 
-                                <div>
-                                    <label
-                                        class="block text-xs font-semibold text-gray-600 mb-1">Institusi/Fakultas</label>
-                                    <input type="text" name="institusi_fakultas"
-                                        class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                            NIM/NIP/NIK/NIDN <span class="text-red-500">*</span>
+                                        </label>
+                                        <input type="text" name="nik_nim_nip" x-model="nikNimNip" required
+                                            class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                            placeholder="Wajib diisi">
+                                    </div>
+
+                                    {{-- Fakultas & Prodi (auto-filled for dosen/alumni, manual for others) --}}
+                                    <template x-if="tipeAnggota === 'dosen' || tipeAnggota === 'alumni'">
+                                        <div class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div>
+                                                <label
+                                                    class="block text-xs font-semibold text-gray-600 mb-1">Fakultas</label>
+                                                <input type="text" x-model="selectedFakultas" readonly
+                                                    class="w-full rounded-lg border-gray-300 bg-gray-50 text-sm cursor-not-allowed"
+                                                    placeholder="Otomatis dari profil">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold text-gray-600 mb-1">Program
+                                                    Studi</label>
+                                                <input type="text" x-model="selectedProdi" readonly
+                                                    class="w-full rounded-lg border-gray-300 bg-gray-50 text-sm cursor-not-allowed"
+                                                    placeholder="Otomatis dari profil">
+                                            </div>
+                                            <input type="hidden" name="institusi_fakultas" x-model="institusiFakultas">
+                                        </div>
+                                    </template>
+                                    <template x-if="tipeAnggota !== 'dosen' && tipeAnggota !== 'alumni'">
+                                        <div>
+                                            <label
+                                                class="block text-xs font-semibold text-gray-600 mb-1">Institusi/Fakultas</label>
+                                            <input type="text" name="institusi_fakultas" x-model="institusiFakultas"
+                                                class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                                placeholder="Opsional">
+                                        </div>
+                                    </template>
                                 </div>
-                            </div>
-                            <div class="mt-4">
-                                <button type="submit"
-                                    class="inline-flex items-center px-4 py-2 bg-indigo-500 text-white text-sm font-medium rounded-lg hover:bg-indigo-600 transition">
-                                    <i class="fas fa-plus mr-1.5"></i> Tambah Anggota
-                                </button>
-                            </div>
-                        </form>
+                                <div class="mt-4">
+                                    <button type="submit"
+                                        class="inline-flex items-center px-4 py-2 bg-indigo-500 text-white text-sm font-medium rounded-lg hover:bg-indigo-600 transition">
+                                        <i class="fas fa-plus mr-1.5"></i> Tambah Anggota
+                                    </button>
+                                </div>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -304,12 +395,20 @@
                 searchResults: [],
                 selectedUserId: '',
                 namaLengkap: '',
+                nikNimNip: '',
+                institusiFakultas: '',
+                selectedFakultas: '',
+                selectedProdi: '',
 
                 onTipeChange() {
                     this.searchQuery = '';
                     this.searchResults = [];
                     this.selectedUserId = '';
                     this.namaLengkap = '';
+                    this.nikNimNip = '';
+                    this.institusiFakultas = '';
+                    this.selectedFakultas = '';
+                    this.selectedProdi = '';
                 },
 
                 async searchUser() {
@@ -330,6 +429,16 @@
                 selectUser(user) {
                     this.selectedUserId = user.id;
                     this.namaLengkap = user.name;
+                    this.nikNimNip = user.identifier_number || '';
+                    // Separate fakultas & prodi
+                    this.selectedFakultas = user.fakultas || '';
+                    this.selectedProdi = user.prodi || '';
+                    // Also set combined for hidden input
+                    let inst = user.fakultas || '';
+                    if (user.prodi) {
+                        inst = inst ? inst + ' / ' + user.prodi : user.prodi;
+                    }
+                    this.institusiFakultas = inst;
                     this.searchQuery = user.name + ' (' + user.email + ')';
                     this.searchResults = [];
                 }
