@@ -142,6 +142,7 @@ class EmployerMeetingController extends Controller
 
     /**
      * Menyimpan data tambahan (bukti keuangan & nama responden).
+     * Mendukung save_type: 'draft' (simpan sebagian) atau 'final' (selesaikan).
      */
     public function update(Request $request, EmployerMeetingSubmission $employerMeeting)
     {
@@ -149,17 +150,27 @@ class EmployerMeetingController extends Controller
             abort(403, 'Akses Ditolak');
         }
 
-        // Jika status sudah selesai, file bersifat optional (untuk re-edit)
-        $isReEdit = $employerMeeting->status === 'selesai';
-        
-        $request->validate([
-            'bukti_keuangan_file' => ($isReEdit ? 'nullable' : 'required') . '|file|mimes:pdf|max:5120',
-            'laporan_kegiatan_file' => ($isReEdit ? 'nullable' : 'required') . '|file|mimes:pdf|max:5120',
-            'nama_qs_file' => ($isReEdit ? 'nullable' : 'required') . '|file|mimes:xlsx,xls|max:5120',
-        ]);
-        
+        $isReEdit  = $employerMeeting->status === 'selesai';
+        $saveAsDraft = !$isReEdit && $request->input('save_type') === 'draft';
+
+        if ($saveAsDraft) {
+            // Draft: semua file opsional — simpan apa yang diunggah saja
+            $request->validate([
+                'bukti_keuangan_file'  => 'nullable|file|mimes:pdf|max:5120',
+                'laporan_kegiatan_file' => 'nullable|file|mimes:pdf|max:5120',
+                'nama_qs_file'          => 'nullable|file|mimes:xlsx,xls|max:5120',
+            ]);
+        } else {
+            // Final atau re-edit: file wajib jika belum ada file sebelumnya
+            $request->validate([
+                'bukti_keuangan_file'  => ($isReEdit || $employerMeeting->bukti_keuangan_path  ? 'nullable' : 'required') . '|file|mimes:pdf|max:5120',
+                'laporan_kegiatan_file' => ($isReEdit || $employerMeeting->laporan_kegiatan_path ? 'nullable' : 'required') . '|file|mimes:pdf|max:5120',
+                'nama_qs_file'          => ($isReEdit || $employerMeeting->nama_qs_path          ? 'nullable' : 'required') . '|file|mimes:xlsx,xls|max:5120',
+            ]);
+        }
+
         $updateData = [];
-        
+
         // Update Bukti Keuangan jika ada file baru
         if ($request->hasFile('bukti_keuangan_file')) {
             if ($employerMeeting->bukti_keuangan_path) {
@@ -184,13 +195,21 @@ class EmployerMeetingController extends Controller
             $updateData['nama_qs_path'] = $request->file('nama_qs_file')->store('nama_qs/employer_meetings', 'public');
         }
 
-        // Set status to selesai only if it wasn't already
-        if (!$isReEdit) {
+        // Hanya ubah status ke selesai jika bukan draft dan belum selesai
+        if (!$saveAsDraft && !$isReEdit) {
             $updateData['status'] = 'selesai';
         }
 
-        $employerMeeting->update($updateData);
+        if (!empty($updateData)) {
+            $employerMeeting->update($updateData);
+        }
 
-        return redirect()->route('equity_fakultas.employer-meetings.index')->with('success', 'Data proposal berhasil dilengkapi.');
+        if ($saveAsDraft) {
+            return redirect()->route('equity_fakultas.employer-meetings.index')
+                ->with('success', 'Data berhasil disimpan sebagai draft. Silakan lengkapi file yang belum diunggah.');
+        }
+
+        return redirect()->route('equity_fakultas.employer-meetings.index')
+            ->with('success', 'Data proposal berhasil dilengkapi.');
     }
 }

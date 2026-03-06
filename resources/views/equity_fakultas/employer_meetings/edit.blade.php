@@ -41,8 +41,7 @@
                        id="bukti_keuangan_file" 
                        name="bukti_keuangan_file"
                        type="file"
-                       accept=".pdf"
-                       {{ $submission->status != 'selesai' ? 'required' : '' }}>
+                       accept=".pdf">
                 @error('bukti_keuangan_file')
                     <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
                 @enderror
@@ -76,8 +75,7 @@
                        id="laporan_kegiatan_file" 
                        name="laporan_kegiatan_file"
                        type="file"
-                       accept=".pdf"
-                       {{ $submission->status != 'selesai' ? 'required' : '' }}>
+                       accept=".pdf">
                 @error('laporan_kegiatan_file')
                     <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
                 @enderror
@@ -111,18 +109,28 @@
                        id="nama_qs_file" 
                        name="nama_qs_file"
                        type="file"
-                       accept=".xlsx,.xls"
-                       {{ $submission->status != 'selesai' ? 'required' : '' }}>
+                       accept=".xlsx,.xls">
                 <p class="text-gray-600 text-xs mt-1">Format yang diterima: Excel (.xlsx, .xls) untuk import/export data QS</p>
                 @error('nama_qs_file')
                     <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
                 @enderror
             </div>
 
+            <input type="hidden" id="save_type" name="save_type" value="final">
+
             <div class="flex items-center justify-between">
-                <button class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-                    {{ $submission->status == 'selesai' ? 'Simpan Perubahan' : 'Simpan dan Selesaikan' }}
-                </button>
+                <div class="flex items-center gap-3">
+                    <button class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                        {{ $submission->status == 'selesai' ? 'Simpan Perubahan' : 'Simpan dan Selesaikan' }}
+                    </button>
+                    @if($submission->status != 'selesai')
+                    <button type="submit"
+                            onclick="document.getElementById('save_type').value='draft'"
+                            class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        Simpan sebagai Draft
+                    </button>
+                    @endif
+                </div>
                 <a href="{{ route('equity_fakultas.employer-meetings.index') }}" class="inline-block align-baseline font-bold text-sm text-gray-500 hover:text-gray-800">
                     Batal
                 </a>

@@ -59,7 +59,7 @@
                                  </div>
                              @elseif ($submission->status == 'disetujui')
                                  <a href="{{ route('equity_fakultas.employer-meetings.edit', $submission->id) }}" class="text-teal-600 hover:text-teal-900 font-semibold">
-                                     Lengkapi Data
+                                     {{ ($submission->bukti_keuangan_path || $submission->laporan_kegiatan_path || $submission->nama_qs_path) ? 'Lanjutkan Draft' : 'Lengkapi Data' }}
                                  </a>
                              @elseif ($submission->status == 'selesai')
                                  <div class="flex items-center justify-center gap-2">
