@@ -7,6 +7,7 @@ use App\Models\EmployerMeetingSubmission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class EmployerMeetingController extends Controller
 {
@@ -42,7 +43,9 @@ class EmployerMeetingController extends Controller
             'proposal_file' => 'required|file|mimes:pdf,xlsx,xls|max:5120',
         ]);
 
-        $path = $request->file('proposal_file')->store('proposals/employer_meetings', 'public');
+        $proposalFile = $request->file('proposal_file');
+        $proposalName = 'employer-meetings_' . Str::slug(Auth::user()->name) . '_proposal_' . now()->format('Ymd_His') . '.' . $proposalFile->getClientOriginalExtension();
+        $path = $proposalFile->storeAs('employer_meetings', $proposalName, 'public');
 
         EmployerMeetingSubmission::create([
             'user_id' => Auth::id(),
@@ -86,7 +89,9 @@ class EmployerMeetingController extends Controller
             if ($employerMeeting->proposal_path) {
                 Storage::disk('public')->delete($employerMeeting->proposal_path);
             }
-            $data['proposal_path'] = $request->file('proposal_file')->store('proposals/employer_meetings', 'public');
+            $pFile = $request->file('proposal_file');
+            $pName = 'employer-meetings_' . Str::slug(Auth::user()->name) . '_proposal_' . now()->format('Ymd_His') . '.' . $pFile->getClientOriginalExtension();
+            $data['proposal_path'] = $pFile->storeAs('employer_meetings', $pName, 'public');
         }
 
         $employerMeeting->update($data);
@@ -170,13 +175,16 @@ class EmployerMeetingController extends Controller
         }
 
         $updateData = [];
+        $userSlug = Str::slug(Auth::user()->name);
 
         // Update Bukti Keuangan jika ada file baru
         if ($request->hasFile('bukti_keuangan_file')) {
             if ($employerMeeting->bukti_keuangan_path) {
                 Storage::disk('public')->delete($employerMeeting->bukti_keuangan_path);
             }
-            $updateData['bukti_keuangan_path'] = $request->file('bukti_keuangan_file')->store('bukti_keuangan/employer_meetings', 'public');
+            $bkFile = $request->file('bukti_keuangan_file');
+            $bkName = 'employer-meetings_' . $userSlug . '_bukti-keuangan_' . now()->format('Ymd_His') . '.' . $bkFile->getClientOriginalExtension();
+            $updateData['bukti_keuangan_path'] = $bkFile->storeAs('employer_meetings', $bkName, 'public');
         }
 
         // Update Laporan Kegiatan jika ada file baru
@@ -184,7 +192,9 @@ class EmployerMeetingController extends Controller
             if ($employerMeeting->laporan_kegiatan_path) {
                 Storage::disk('public')->delete($employerMeeting->laporan_kegiatan_path);
             }
-            $updateData['laporan_kegiatan_path'] = $request->file('laporan_kegiatan_file')->store('laporan_kegiatan/employer_meetings', 'public');
+            $lkFile = $request->file('laporan_kegiatan_file');
+            $lkName = 'employer-meetings_' . $userSlug . '_laporan-kegiatan_' . now()->format('Ymd_His') . '.' . $lkFile->getClientOriginalExtension();
+            $updateData['laporan_kegiatan_path'] = $lkFile->storeAs('employer_meetings', $lkName, 'public');
         }
 
         // Update Data QS jika ada file baru
@@ -192,7 +202,9 @@ class EmployerMeetingController extends Controller
             if ($employerMeeting->nama_qs_path) {
                 Storage::disk('public')->delete($employerMeeting->nama_qs_path);
             }
-            $updateData['nama_qs_path'] = $request->file('nama_qs_file')->store('nama_qs/employer_meetings', 'public');
+            $qsFile = $request->file('nama_qs_file');
+            $qsName = 'employer-meetings_' . $userSlug . '_data-qs_' . now()->format('Ymd_His') . '.' . $qsFile->getClientOriginalExtension();
+            $updateData['nama_qs_path'] = $qsFile->storeAs('employer_meetings', $qsName, 'public');
         }
 
         // Hanya ubah status ke selesai jika bukan draft dan belum selesai
