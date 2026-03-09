@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Akun | UNJ Innovative Challenge</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    @vite(['resources/css/app.css'])
+    <link href="{{ asset('fontawesome/css/all.min.css') }}" rel="stylesheet" />
+    <script src="{{ asset('fontawesome/all.min.js') }}" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="stylesheet" href="{{ asset('home.css') }}">
@@ -76,6 +77,30 @@
                 transform: translateY(-20px) rotate(5deg);
             }
         }
+
+        /* Force circular icons regardless of Tailwind load status */
+        .rounded-full { border-radius: 9999px !important; }
+        .rounded-2xl  { border-radius: 1rem; }
+        .rounded-xl   { border-radius: 0.75rem; }
+        .rounded-lg   { border-radius: 0.5rem; }
+        .rounded-md   { border-radius: 0.375rem; }
+
+        /* gradient backgrounds */
+        .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); }
+        .bg-gradient-to-r  { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
+        .from-\[\#1d5559\] { --tw-gradient-from: #1d5559; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(29,85,89,0)); }
+        .to-\[\#2d8a8a\]   { --tw-gradient-to: #2d8a8a; }
+        .from-cyan-500  { --tw-gradient-from: #06b6d4; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(6,182,212,0)); }
+        .to-cyan-600    { --tw-gradient-to: #0891b2; }
+        .from-blue-500  { --tw-gradient-from: #3b82f6; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(59,130,246,0)); }
+        .to-blue-600    { --tw-gradient-to: #2563eb; }
+        .from-orange-500 { --tw-gradient-from: #f97316; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(249,115,22,0)); }
+        .to-orange-600   { --tw-gradient-to: #ea580c; }
+        .from-teal-500  { --tw-gradient-from: #14b8a6; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(20,184,166,0)); }
+        .to-teal-600    { --tw-gradient-to: #0d9488; }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -2px rgba(0,0,0,.1); }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1); }
+        .text-white { color: #fff !important; }
     </style>
 </head>
 @include('layout.navbar_hilirisasi')
@@ -113,7 +138,7 @@
                             {{-- Logo --}}
                             <div class="flex items-center gap-3 mb-10">
                                 <div
-                                    class="w-12 h-12 bg-white/15 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/20">
+                                    class="w-12 h-12 bg-white/15 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/20">
                                     <i class="fas fa-trophy text-xl text-yellow-300"></i>
                                 </div>
                                 <div>
@@ -136,7 +161,7 @@
                             <div class="space-y-4">
                                 <div class="flex items-start gap-3">
                                     <div
-                                        class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
                                         <i class="fas fa-lightbulb text-yellow-300 text-xs"></i>
                                     </div>
                                     <div>
@@ -147,7 +172,7 @@
                                 </div>
                                 <div class="flex items-start gap-3">
                                     <div
-                                        class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
                                         <i class="fas fa-users text-blue-300 text-xs"></i>
                                     </div>
                                     <div>
@@ -158,7 +183,7 @@
                                 </div>
                                 <div class="flex items-start gap-3">
                                     <div
-                                        class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
                                         <i class="fas fa-award text-orange-300 text-xs"></i>
                                     </div>
                                     <div>
@@ -200,15 +225,24 @@
 
                         {{-- Mobile header --}}
                         <div class="lg:hidden text-center mb-6">
+                            <div class="w-14 h-14 bg-gradient-to-br from-[#1d5559] to-[#2d8a8a] rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+                                <i class="fas fa-user-plus text-white text-xl"></i>
+                            </div>
                             <h2 class="text-2xl font-bold text-gray-900">Buat Akun Baru</h2>
                             <p class="text-gray-500 text-sm mt-1">Isi formulir di bawah untuk mendaftar</p>
                         </div>
 
                         {{-- Desktop header --}}
                         <div class="hidden lg:block mb-8">
-                            <h2 class="text-2xl font-bold text-gray-900">Buat Akun Baru</h2>
-                            <p class="text-gray-500 text-sm mt-1">Lengkapi data berikut untuk mendaftar di Innovation
-                                Challenge</p>
+                            <div class="flex items-center gap-4 mb-1">
+                                <div class="w-12 h-12 bg-gradient-to-br from-[#1d5559] to-[#2d8a8a] rounded-full flex items-center justify-center shadow-md flex-shrink-0">
+                                    <i class="fas fa-user-plus text-white text-lg"></i>
+                                </div>
+                                <div>
+                                    <h2 class="text-2xl font-bold text-gray-900">Buat Akun Baru</h2>
+                                    <p class="text-gray-500 text-sm mt-0.5">Lengkapi data berikut untuk mendaftar di Innovation Challenge</p>
+                                </div>
+                            </div>
                         </div>
 
                         {{-- Success message --}}
@@ -216,7 +250,7 @@
                             <div
                                 class="mb-6 p-4 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 flex items-start gap-3">
                                 <div
-                                    class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
+                                    class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
                                     <i class="fas fa-check-circle text-green-500 text-lg"></i>
                                 </div>
                                 <div>
@@ -251,14 +285,14 @@
                                 <div class="flex items-center gap-2">
                                     <div
                                         class="w-7 h-7 rounded-full bg-[#277177] text-white flex items-center justify-center text-xs font-bold">
-                                        1</div>
+                                        <i class="fas fa-id-badge text-[10px]"></i></div>
                                     <span class="text-xs font-semibold text-gray-700">Pilih Role</span>
                                 </div>
                                 <div class="flex-1 h-px bg-gray-200"></div>
                                 <div class="flex items-center gap-2">
                                     <div class="w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center"
                                         :class="selectedRole ? 'bg-[#277177] text-white' : 'bg-gray-200 text-gray-400'">
-                                        2</div>
+                                        <i class="fas fa-user-edit text-[10px]"></i></div>
                                     <span class="text-xs font-semibold"
                                         :class="selectedRole ? 'text-gray-700' : 'text-gray-400'">Data Diri</span>
                                 </div>
@@ -286,7 +320,7 @@
                                                     ?
                                                     'border-[#277177] bg-gradient-to-br from-teal-50 to-emerald-50 shadow-lg' :
                                                     'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'">
-                                                <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center mb-2 transition-all duration-300"
+                                                <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center mb-2 transition-all duration-300"
                                                     :class="selectedRole === '{{ $value }}'
                                                         ?
                                                         'bg-gradient-to-br {{ $info['color'] }} shadow-md' :
@@ -432,7 +466,7 @@
                             {{-- Placeholder when no role selected --}}
                             <div x-show="!selectedRole" class="text-center py-8">
                                 <div
-                                    class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                    class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <i class="fas fa-hand-pointer text-2xl text-gray-300"></i>
                                 </div>
                                 <p class="text-sm text-gray-400 font-medium">Pilih role di atas untuk melanjutkan
@@ -443,7 +477,7 @@
                         {{-- Info box --}}
                         <div
                             class="mt-6 p-4 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 flex items-start gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
                                 <i class="fas fa-info text-blue-500 text-xs"></i>
                             </div>
                             <div>
