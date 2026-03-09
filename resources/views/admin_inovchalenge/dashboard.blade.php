@@ -72,11 +72,13 @@
 
         {{-- Quick Actions --}}
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fas fa-bolt text-yellow-500 mr-2"></i>Quick Actions</h2>
+            <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fas fa-bolt text-yellow-500 mr-2"></i>Quick Actions
+            </h2>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <a href="{{ route('admin_inovchalenge.inovchalenge.sessions.create') }}"
-                   class="flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50 transition group">
-                    <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center group-hover:bg-teal-200 transition">
+                    class="flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50 transition group">
+                    <div
+                        class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center group-hover:bg-teal-200 transition">
                         <i class="fas fa-plus text-teal-600"></i>
                     </div>
                     <div>
@@ -86,8 +88,9 @@
                 </a>
 
                 <a href="{{ route('admin_inovchalenge.accounts.create') }}"
-                   class="flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition group">
-                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition">
+                    class="flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition group">
+                    <div
+                        class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition">
                         <i class="fas fa-user-plus text-blue-600"></i>
                     </div>
                     <div>
@@ -97,8 +100,9 @@
                 </a>
 
                 <a href="{{ route('admin_inovchalenge.accounts.registrations') }}"
-                   class="flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-orange-300 hover:bg-orange-50 transition group">
-                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition">
+                    class="flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-orange-300 hover:bg-orange-50 transition group">
+                    <div
+                        class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition">
                         <i class="fas fa-user-check text-orange-600"></i>
                     </div>
                     <div>

@@ -59,7 +59,8 @@
                         required>
                         <option value="">-- Pilih Role --</option>
                         @foreach ($roleLabels as $roleKey => $roleLabel)
-                            <option value="{{ $roleKey }}" {{ old('role') === $roleKey ? 'selected' : '' }}>{{ $roleLabel }}</option>
+                            <option value="{{ $roleKey }}" {{ old('role') === $roleKey ? 'selected' : '' }}>
+                                {{ $roleLabel }}</option>
                         @endforeach
                     </select>
                     @error('role')

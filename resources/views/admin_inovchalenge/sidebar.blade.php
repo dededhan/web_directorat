@@ -67,7 +67,8 @@
                         $pendingRegCount = \App\Models\InovChalengeRegistration::where('status', 'pending')->count();
                     @endphp
                     @if ($pendingRegCount > 0)
-                        <span class="ml-auto inline-flex items-center justify-center w-5 h-5 text-xs font-bold rounded-full bg-red-500 text-white">
+                        <span
+                            class="ml-auto inline-flex items-center justify-center w-5 h-5 text-xs font-bold rounded-full bg-red-500 text-white">
                             {{ $pendingRegCount }}
                         </span>
                     @endif
@@ -86,7 +87,8 @@
                 <i class="fas fa-chevron-down transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
             </button>
             <div x-show="open" x-transition class="mt-2 pl-8 space-y-2" x-cloak>
-                <a href="#" class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200">
+                <a href="#"
+                    class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200">
                     <i class="fas fa-clipboard-list fa-fw w-5 text-center mr-2"></i>
                     Daftar Reviewer
                 </a>
