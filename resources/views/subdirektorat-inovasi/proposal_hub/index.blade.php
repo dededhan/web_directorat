@@ -642,6 +642,16 @@
                     <p>Program seleksi proposal inovasi yang diselenggarakan oleh Direktorat Inovasi dan Hilirisasi UNJ
                         untuk mendukung pengembangan ide inovatif dari civitas akademika menjadi produk nyata berdampak.
                     </p>
+                    <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                        <a href="{{ route('inovchalenge.register.form') }}"
+                            style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: #f59e0b; color: #fff; font-weight: 700; font-size: 0.95rem; border-radius: 0.75rem; text-decoration: none; box-shadow: 0 4px 14px rgba(245,158,11,0.4); transition: all 0.2s;">
+                            <i class="fas fa-user-plus"></i> Daftar
+                        </a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"
+                            style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.15); color: #fff; font-weight: 700; font-size: 0.95rem; border-radius: 0.75rem; border: 2px solid rgba(255,255,255,0.4); text-decoration: none; backdrop-filter: blur(4px); transition: all 0.2s;">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </div>
                 </div>
             </div>
 

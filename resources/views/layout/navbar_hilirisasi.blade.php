@@ -185,7 +185,11 @@
                 </div>
             </li>
 
-            <li><a class="login text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a>
+            <li>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"
+                    class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-yellow-400 text-gray-900 font-bold text-sm rounded-lg hover:bg-yellow-300 transition shadow-sm">
+                    <i class="fas fa-sign-in-alt text-xs"></i> Masuk
+                </a>
             </li>
         </ul>
     </div>
@@ -406,9 +410,9 @@
 
             <li class="px-6 my-6">
                 <a href="#"
-                    class="block text-center bg-white text-[#186862] py-2 rounded-md font-medium hover:bg-gray-100"
+                    class="block text-center bg-yellow-400 text-gray-900 py-2.5 rounded-lg font-bold hover:bg-yellow-300 transition shadow-sm"
                     data-bs-toggle="modal" data-bs-target="#loginModal">
-                    Masuk
+                    <i class="fas fa-sign-in-alt mr-1"></i> Masuk
                 </a>
             </li>
         </ul>

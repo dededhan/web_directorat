@@ -79,28 +79,91 @@
         }
 
         /* Force circular icons regardless of Tailwind load status */
-        .rounded-full { border-radius: 9999px !important; }
-        .rounded-2xl  { border-radius: 1rem; }
-        .rounded-xl   { border-radius: 0.75rem; }
-        .rounded-lg   { border-radius: 0.5rem; }
-        .rounded-md   { border-radius: 0.375rem; }
+        .rounded-full {
+            border-radius: 9999px !important;
+        }
+
+        .rounded-2xl {
+            border-radius: 1rem;
+        }
+
+        .rounded-xl {
+            border-radius: 0.75rem;
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+
+        .rounded-md {
+            border-radius: 0.375rem;
+        }
 
         /* gradient backgrounds */
-        .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); }
-        .bg-gradient-to-r  { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
-        .from-\[\#1d5559\] { --tw-gradient-from: #1d5559; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(29,85,89,0)); }
-        .to-\[\#2d8a8a\]   { --tw-gradient-to: #2d8a8a; }
-        .from-cyan-500  { --tw-gradient-from: #06b6d4; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(6,182,212,0)); }
-        .to-cyan-600    { --tw-gradient-to: #0891b2; }
-        .from-blue-500  { --tw-gradient-from: #3b82f6; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(59,130,246,0)); }
-        .to-blue-600    { --tw-gradient-to: #2563eb; }
-        .from-orange-500 { --tw-gradient-from: #f97316; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(249,115,22,0)); }
-        .to-orange-600   { --tw-gradient-to: #ea580c; }
-        .from-teal-500  { --tw-gradient-from: #14b8a6; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(20,184,166,0)); }
-        .to-teal-600    { --tw-gradient-to: #0d9488; }
-        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -2px rgba(0,0,0,.1); }
-        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1); }
-        .text-white { color: #fff !important; }
+        .bg-gradient-to-br {
+            background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+        }
+
+        .bg-gradient-to-r {
+            background-image: linear-gradient(to right, var(--tw-gradient-stops));
+        }
+
+        .from-\[\#1d5559\] {
+            --tw-gradient-from: #1d5559;
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(29, 85, 89, 0));
+        }
+
+        .to-\[\#2d8a8a\] {
+            --tw-gradient-to: #2d8a8a;
+        }
+
+        .from-cyan-500 {
+            --tw-gradient-from: #06b6d4;
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(6, 182, 212, 0));
+        }
+
+        .to-cyan-600 {
+            --tw-gradient-to: #0891b2;
+        }
+
+        .from-blue-500 {
+            --tw-gradient-from: #3b82f6;
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(59, 130, 246, 0));
+        }
+
+        .to-blue-600 {
+            --tw-gradient-to: #2563eb;
+        }
+
+        .from-orange-500 {
+            --tw-gradient-from: #f97316;
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(249, 115, 22, 0));
+        }
+
+        .to-orange-600 {
+            --tw-gradient-to: #ea580c;
+        }
+
+        .from-teal-500 {
+            --tw-gradient-from: #14b8a6;
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(20, 184, 166, 0));
+        }
+
+        .to-teal-600 {
+            --tw-gradient-to: #0d9488;
+        }
+
+        .shadow-md {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -2px rgba(0, 0, 0, .1);
+        }
+
+        .shadow-lg {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -4px rgba(0, 0, 0, .1);
+        }
+
+        .text-white {
+            color: #fff !important;
+        }
     </style>
 </head>
 @include('layout.navbar_hilirisasi')
@@ -225,7 +288,8 @@
 
                         {{-- Mobile header --}}
                         <div class="lg:hidden text-center mb-6">
-                            <div class="w-14 h-14 bg-gradient-to-br from-[#1d5559] to-[#2d8a8a] rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+                            <div
+                                class="w-14 h-14 bg-gradient-to-br from-[#1d5559] to-[#2d8a8a] rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
                                 <i class="fas fa-user-plus text-white text-xl"></i>
                             </div>
                             <h2 class="text-2xl font-bold text-gray-900">Buat Akun Baru</h2>
@@ -235,12 +299,14 @@
                         {{-- Desktop header --}}
                         <div class="hidden lg:block mb-8">
                             <div class="flex items-center gap-4 mb-1">
-                                <div class="w-12 h-12 bg-gradient-to-br from-[#1d5559] to-[#2d8a8a] rounded-full flex items-center justify-center shadow-md flex-shrink-0">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-br from-[#1d5559] to-[#2d8a8a] rounded-full flex items-center justify-center shadow-md flex-shrink-0">
                                     <i class="fas fa-user-plus text-white text-lg"></i>
                                 </div>
                                 <div>
                                     <h2 class="text-2xl font-bold text-gray-900">Buat Akun Baru</h2>
-                                    <p class="text-gray-500 text-sm mt-0.5">Lengkapi data berikut untuk mendaftar di Innovation Challenge</p>
+                                    <p class="text-gray-500 text-sm mt-0.5">Lengkapi data berikut untuk mendaftar di
+                                        Innovation Challenge</p>
                                 </div>
                             </div>
                         </div>
@@ -285,14 +351,16 @@
                                 <div class="flex items-center gap-2">
                                     <div
                                         class="w-7 h-7 rounded-full bg-[#277177] text-white flex items-center justify-center text-xs font-bold">
-                                        <i class="fas fa-id-badge text-[10px]"></i></div>
+                                        <i class="fas fa-id-badge text-[10px]"></i>
+                                    </div>
                                     <span class="text-xs font-semibold text-gray-700">Pilih Role</span>
                                 </div>
                                 <div class="flex-1 h-px bg-gray-200"></div>
                                 <div class="flex items-center gap-2">
                                     <div class="w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center"
                                         :class="selectedRole ? 'bg-[#277177] text-white' : 'bg-gray-200 text-gray-400'">
-                                        <i class="fas fa-user-edit text-[10px]"></i></div>
+                                        <i class="fas fa-user-edit text-[10px]"></i>
+                                    </div>
                                     <span class="text-xs font-semibold"
                                         :class="selectedRole ? 'text-gray-700' : 'text-gray-400'">Data Diri</span>
                                 </div>
@@ -457,7 +525,7 @@
                                 {{-- Login link --}}
                                 <p class="text-center text-sm text-gray-500">
                                     Sudah punya akun?
-                                    <a href="{{ route('subdirektorat-inovasi.inovation_chalangge.index') }}"
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"
                                         class="text-[#277177] font-semibold hover:underline hover:text-[#1d5559] transition-colors">Masuk
                                         di sini</a>
                                 </p>
@@ -477,7 +545,8 @@
                         {{-- Info box --}}
                         <div
                             class="mt-6 p-4 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 flex items-start gap-3">
-                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                            <div
+                                class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
                                 <i class="fas fa-info text-blue-500 text-xs"></i>
                             </div>
                             <div>
