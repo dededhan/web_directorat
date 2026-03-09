@@ -327,9 +327,25 @@
                                                         <div>
                                                             <p class="text-sm font-medium text-gray-900">
                                                                 {{ $member->nama_lengkap }}</p>
-                                                            <p class="text-xs text-gray-400">
-                                                                {{ ucfirst($member->tipe_anggota) }}{{ $member->peran ? ' — ' . $member->peran : '' }}
-                                                            </p>
+                                                            <div class="flex items-center gap-1.5 flex-wrap">
+                                                                <span class="text-xs text-gray-400">
+                                                                    {{ ucfirst($member->tipe_anggota) }}{{ $member->peran ? ' — ' . $member->peran : '' }}
+                                                                </span>
+                                                                @if ($member->peran_ic)
+                                                                    <span
+                                                                        class="inline-flex items-center px-1.5 py-0 rounded text-[9px] font-bold bg-teal-100 text-teal-700">
+                                                                        <i class="fas fa-tag mr-0.5 text-[7px]"></i>
+                                                                        {{ $member->peran_ic }}
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                            @if ($member->deskripsi_peran)
+                                                                <p class="text-[10px] text-gray-500 mt-0.5 italic">
+                                                                    <i
+                                                                        class="fas fa-quote-left text-[7px] mr-0.5 text-gray-300"></i>
+                                                                    {{ $member->deskripsi_peran }}
+                                                                </p>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                     @if ($member->tipe_anggota === 'alumni')

@@ -15,6 +15,9 @@ class InovChalengeSubmissionMember extends Model
         'responded_at' => 'datetime',
     ];
 
+    /* ── Peran IC constants (Hacker / Hustler / Hipster) ─────── */
+    public const PERAN_IC_OPTIONS = ['Hacker', 'Hustler', 'Hipster'];
+
     /* ── Tipe anggota constants ──────────────────────────────── */
     public const TIPE_DOSEN     = 'dosen';
     public const TIPE_ALUMNI    = 'alumni';

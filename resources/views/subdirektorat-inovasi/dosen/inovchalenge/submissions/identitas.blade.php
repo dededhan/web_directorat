@@ -194,6 +194,12 @@
                                         <p class="text-sm font-medium text-gray-900">{{ $member->nama_lengkap }}</p>
                                         <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-0.5">
                                             <span class="text-[10px] text-gray-400">{{ $member->getTipeLabel() }}</span>
+                                            @if ($member->peran_ic)
+                                                <span
+                                                    class="inline-flex items-center px-1.5 py-0 rounded text-[9px] font-bold bg-teal-100 text-teal-700">
+                                                    <i class="fas fa-tag mr-0.5 text-[7px]"></i> {{ $member->peran_ic }}
+                                                </span>
+                                            @endif
                                             @if ($member->nik_nim_nip)
                                                 <span class="text-[10px] text-gray-400">· NIM/NIP/NIK/NIDN:
                                                     {{ $member->nik_nim_nip }}</span>
@@ -216,6 +222,12 @@
                                                     {{ $member->institusi_fakultas }}</span>
                                             @endif
                                         </div>
+                                        @if ($member->deskripsi_peran)
+                                            <p class="text-[10px] text-gray-500 mt-1 italic">
+                                                <i class="fas fa-quote-left text-[7px] mr-0.5 text-gray-300"></i>
+                                                {{ $member->deskripsi_peran }}
+                                            </p>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2">
@@ -373,6 +385,30 @@
                                                 placeholder="Opsional">
                                         </div>
                                     </template>
+
+                                    {{-- Peran IC (Hacker / Hustler / Hipster) --}}
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                            Peran <span class="text-red-500">*</span>
+                                        </label>
+                                        <select name="peran_ic" required
+                                            class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                            <option value="">-- Pilih Peran --</option>
+                                            <option value="Hacker">Hacker</option>
+                                            <option value="Hustler">Hustler</option>
+                                            <option value="Hipster">Hipster</option>
+                                        </select>
+                                    </div>
+
+                                    {{-- Deskripsi Peran --}}
+                                    <div class="sm:col-span-2">
+                                        <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                            Deskripsi Peran <span class="text-red-500">*</span>
+                                        </label>
+                                        <textarea name="deskripsi_peran" required rows="2"
+                                            class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                            placeholder="Jelaskan peran anggota dalam tim..."></textarea>
+                                    </div>
                                 </div>
                                 <div class="mt-4">
                                     <button type="submit"

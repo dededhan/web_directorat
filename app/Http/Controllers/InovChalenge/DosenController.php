@@ -317,6 +317,8 @@ class DosenController extends Controller
         $skemaOptions = [
             'Hilirisasi Produk Riset Inovasi',
             'Hilirisasi Produk Kolaborasi Dosen dan Alumni',
+            'Hibah Komersialisasi Produk / Jasa Kepakaran Dosen (Income generating)',
+            'Kolaborasi DUDI (Industri)',
         ];
 
         return view(
@@ -334,7 +336,7 @@ class DosenController extends Controller
 
         $request->validate([
             'nama_produk'         => 'required|string|max:255',
-            'skema_inovasi'       => 'required|in:Hilirisasi Produk Riset Inovasi,Hilirisasi Produk Kolaborasi Dosen dan Alumni',
+            'skema_inovasi'       => 'required|in:Hilirisasi Produk Riset Inovasi,Hilirisasi Produk Kolaborasi Dosen dan Alumni,Hibah Komersialisasi Produk / Jasa Kepakaran Dosen (Income generating),Kolaborasi DUDI (Industri)',
             'bidang_utama_produk' => 'required|string|max:255',
         ]);
 

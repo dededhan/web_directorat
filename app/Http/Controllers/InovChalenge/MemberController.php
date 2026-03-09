@@ -19,6 +19,7 @@ class MemberController extends Controller
         abort_if($submission->user_id !== Auth::id(), 403);
 
         $tipeOptions = implode(',', InovChalengeSubmissionMember::TIPE_OPTIONS);
+        $peranIcOptions = implode(',', InovChalengeSubmissionMember::PERAN_IC_OPTIONS);
 
         $validated = $request->validate([
             'tipe_anggota'      => "required|in:{$tipeOptions}",
@@ -26,6 +27,8 @@ class MemberController extends Controller
             'nik_nim_nip'       => 'required|string|max:100',
             'institusi_fakultas' => 'nullable|string|max:255',
             'user_id'           => 'nullable|exists:users,id',
+            'peran_ic'          => "required|in:{$peranIcOptions}",
+            'deskripsi_peran'   => 'required|string|max:1000',
         ]);
 
         // Check max member limit
@@ -70,6 +73,8 @@ class MemberController extends Controller
         $submission->members()->create([
             'user_id'           => $validated['user_id'] ?? null,
             'peran'             => 'Anggota',
+            'peran_ic'          => $validated['peran_ic'],
+            'deskripsi_peran'   => $validated['deskripsi_peran'],
             'tipe_anggota'      => $validated['tipe_anggota'],
             'nama_lengkap'      => $validated['nama_lengkap'],
             'nik_nim_nip'       => $validated['nik_nim_nip'] ?? null,
@@ -89,10 +94,14 @@ class MemberController extends Controller
         abort_if($member->inov_chalenge_submission_id !== $submission->id, 404);
         abort_if($member->peran === 'Ketua', 403, 'Ketua tidak dapat diubah.');
 
+        $peranIcOptions = implode(',', InovChalengeSubmissionMember::PERAN_IC_OPTIONS);
+
         $validated = $request->validate([
             'nama_lengkap'      => 'required|string|max:255',
             'nik_nim_nip'       => 'nullable|string|max:100',
             'institusi_fakultas' => 'nullable|string|max:255',
+            'peran_ic'          => "required|in:{$peranIcOptions}",
+            'deskripsi_peran'   => 'required|string|max:1000',
         ]);
 
         $member->update($validated);
