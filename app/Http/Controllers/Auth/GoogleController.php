@@ -62,6 +62,7 @@ class GoogleController extends Controller
                     'prodi' =>  'prodis.dashboard',
                     'fakultas' =>'fakultas.dashboard',
                     'admin_pemeringkatan' => 'admin_pemeringkatan.dashboard',
+                    'admin_inovchalenge' => 'admin_inovchalenge.dashboard',
                     'dosen' => 'subdirektorat-inovasi.dosen.dashboard',
                     'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.dashboard',
                     'validator' => 'subdirektorat-inovasi.validator.dashboard',

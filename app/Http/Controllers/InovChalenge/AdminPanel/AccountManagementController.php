@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\InovChalenge;
+namespace App\Http\Controllers\InovChalenge\AdminPanel;
 
 use App\Http\Controllers\Controller;
 use App\Models\InovChalengeRegistration;
@@ -10,13 +10,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
+/**
+ * Account management controller for Admin InovChallenge panel.
+ * Same logic as the original AccountManagementController but uses admin_inovchalenge views/routes.
+ */
 class AccountManagementController extends Controller
 {
     /**
-     * Inovasi-related roles that this admin manages.
+     * Roles managed by admin_inovchalenge — only Innovation Challenge related roles.
      */
     private const MANAGED_ROLES = [
-        'admin_inovasi',
         'admin_inovchalenge',
         'dosen',
         'alumni',
@@ -25,15 +28,9 @@ class AccountManagementController extends Controller
         'pppk',
         'mahasiswa',
         'reviewer_inovchalenge',
-        'validator',
-        'registered_user',
     ];
 
-    /**
-     * Role labels for display.
-     */
     public const ROLE_LABELS = [
-        'admin_inovasi'         => 'Admin Inovasi',
         'admin_inovchalenge'    => 'Admin InovChallenge',
         'dosen'                 => 'Dosen',
         'alumni'                => 'Alumni',
@@ -42,15 +39,9 @@ class AccountManagementController extends Controller
         'pppk'                  => 'PPPK',
         'mahasiswa'             => 'Mahasiswa',
         'reviewer_inovchalenge' => 'Reviewer Inov Challenge',
-        'validator'             => 'Reviewer Katsinov',
-        'registered_user'       => 'Google User',
     ];
 
-    /**
-     * Role badge colors.
-     */
     public const ROLE_COLORS = [
-        'admin_inovasi'         => 'bg-purple-100 text-purple-700 border-purple-200',
         'admin_inovchalenge'    => 'bg-yellow-100 text-yellow-700 border-yellow-200',
         'dosen'                 => 'bg-blue-100 text-blue-700 border-blue-200',
         'alumni'                => 'bg-emerald-100 text-emerald-700 border-emerald-200',
@@ -59,16 +50,10 @@ class AccountManagementController extends Controller
         'pppk'                  => 'bg-orange-100 text-orange-700 border-orange-200',
         'mahasiswa'             => 'bg-cyan-100 text-cyan-700 border-cyan-200',
         'reviewer_inovchalenge' => 'bg-rose-100 text-rose-700 border-rose-200',
-        'validator'             => 'bg-violet-100 text-violet-700 border-violet-200',
-        'registered_user'       => 'bg-gray-100 text-gray-700 border-gray-200',
     ];
 
-    /**
-     * Role icons.
-     */
     public const ROLE_ICONS = [
-        'admin_inovasi'         => 'fa-user-shield',
-        'admin_inovchalenge'    => 'fa-trophy',
+        'admin_inovchalenge'    => 'fa-user-shield',
         'dosen'                 => 'fa-chalkboard-teacher',
         'alumni'                => 'fa-user-graduate',
         'peneliti'              => 'fa-microscope',
@@ -76,28 +61,12 @@ class AccountManagementController extends Controller
         'pppk'                  => 'fa-user-tie',
         'mahasiswa'             => 'fa-graduation-cap',
         'reviewer_inovchalenge' => 'fa-clipboard-check',
-        'validator'             => 'fa-star',
-        'registered_user'       => 'fa-google',
     ];
 
-    /**
-     * Roles available for registration (non-admin roles).
-     */
-    private const REGISTRABLE_ROLES = [
-        'alumni',
-        'peneliti',
-        'dudi',
-        'pppk',
-        'mahasiswa',
-    ];
+    // ──────────────────────────────────────────────────────────────────
+    //  Account CRUD
+    // ──────────────────────────────────────────────────────────────────
 
-    // ──────────────────────────────────────────────────────────────────────
-    //  Account Management (manage existing users)
-    // ──────────────────────────────────────────────────────────────────────
-
-    /**
-     * List all inovasi-related user accounts.
-     */
     public function index(Request $request)
     {
         $query = User::whereIn('role', self::MANAGED_ROLES);
@@ -125,20 +94,15 @@ class AccountManagementController extends Controller
         $roleColors = self::ROLE_COLORS;
         $roleIcons  = self::ROLE_ICONS;
 
-        return view('admin_inovasi.accounts.index', compact('users', 'roleCounts', 'roleLabels', 'roleColors', 'roleIcons'));
+        return view('admin_inovchalenge.accounts.index', compact('users', 'roleCounts', 'roleLabels', 'roleColors', 'roleIcons'));
     }
 
-    /**
-     * Show form to create a new user account.
-     */
     public function create()
     {
-        return view('admin_inovasi.accounts.create');
+        $roleLabels = self::ROLE_LABELS;
+        return view('admin_inovchalenge.accounts.create', compact('roleLabels'));
     }
 
-    /**
-     * Store a new user account.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -155,25 +119,19 @@ class AccountManagementController extends Controller
             'role'     => $request->role,
         ]);
 
-        return redirect()->route('admin_inovasi.accounts.index')
+        return redirect()->route('admin_inovchalenge.accounts.index')
             ->with('success', 'Akun berhasil dibuat.');
     }
 
-    /**
-     * Show form to edit an existing user account.
-     */
     public function edit(User $user)
     {
         abort_if(!in_array($user->role, self::MANAGED_ROLES), 403);
 
         $roleLabels = self::ROLE_LABELS;
 
-        return view('admin_inovasi.accounts.edit', compact('user', 'roleLabels'));
+        return view('admin_inovchalenge.accounts.edit', compact('user', 'roleLabels'));
     }
 
-    /**
-     * Update an existing user account.
-     */
     public function update(Request $request, User $user)
     {
         abort_if(!in_array($user->role, self::MANAGED_ROLES), 403);
@@ -184,7 +142,6 @@ class AccountManagementController extends Controller
             'role'  => 'required|in:' . implode(',', self::MANAGED_ROLES),
         ];
 
-        // Password is optional on edit
         if ($request->filled('password')) {
             $rules['password'] = [Password::min(8)];
         }
@@ -203,13 +160,10 @@ class AccountManagementController extends Controller
 
         $user->update($data);
 
-        return redirect()->route('admin_inovasi.accounts.index')
+        return redirect()->route('admin_inovchalenge.accounts.index')
             ->with('success', 'Akun berhasil diperbarui.');
     }
 
-    /**
-     * Delete a user account.
-     */
     public function destroy(User $user)
     {
         abort_if(!in_array($user->role, self::MANAGED_ROLES), 403, 'Tidak dapat menghapus akun ini.');
@@ -217,17 +171,14 @@ class AccountManagementController extends Controller
 
         $user->delete();
 
-        return redirect()->route('admin_inovasi.accounts.index')
+        return redirect()->route('admin_inovchalenge.accounts.index')
             ->with('success', 'Akun berhasil dihapus.');
     }
 
-    // ──────────────────────────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────────────
     //  Registration Approval
-    // ──────────────────────────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────────────
 
-    /**
-     * List pending registrations.
-     */
     public function registrations(Request $request)
     {
         $query = InovChalengeRegistration::query();
@@ -247,24 +198,19 @@ class AccountManagementController extends Controller
         }
 
         $registrations = $query->latest()->paginate(15)->withQueryString();
-
         $pendingCount = InovChalengeRegistration::where('status', 'pending')->count();
 
-        return view('admin_inovasi.accounts.registrations', compact('registrations', 'pendingCount'));
+        return view('admin_inovchalenge.accounts.registrations', compact('registrations', 'pendingCount'));
     }
 
-    /**
-     * Approve a registration — create User account.
-     */
     public function approve(Request $request, InovChalengeRegistration $registration)
     {
         abort_if($registration->status !== 'pending', 403, 'Pendaftaran ini sudah diproses.');
 
-        // Create actual user account
         User::create([
             'name'     => $registration->name,
             'email'    => $registration->email,
-            'password' => $registration->password, // already hashed
+            'password' => $registration->password,
             'role'     => $registration->role,
         ]);
 
@@ -278,9 +224,6 @@ class AccountManagementController extends Controller
         return back()->with('success', "Pendaftaran {$registration->name} berhasil disetujui. Akun telah dibuat.");
     }
 
-    /**
-     * Batch-approve multiple pending registrations at once.
-     */
     public function batchApprove(Request $request)
     {
         $request->validate([
@@ -317,9 +260,6 @@ class AccountManagementController extends Controller
         return back()->with('success', "{$count} pendaftaran berhasil disetujui. Akun telah dibuat.");
     }
 
-    /**
-     * Decline a registration.
-     */
     public function decline(Request $request, InovChalengeRegistration $registration)
     {
         abort_if($registration->status !== 'pending', 403, 'Pendaftaran ini sudah diproses.');

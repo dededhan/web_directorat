@@ -41,6 +41,7 @@ class LoginController extends Controller
                 'fakultas' => 'fakultas.dashboard',
                 'admin_pemeringkatan' => 'admin_pemeringkatan.dashboard',
                 'admin_inovasi' => 'admin_inovasi.dashboard',
+                'admin_inovchalenge' => 'admin_inovchalenge.dashboard',
                 'dosen' => 'subdirektorat-inovasi.dosen.dashboard',
                 'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.dashboard',
                 // 'kepala_sub_direktorat' => 'inovasi.admin_hilirisasi.dashboard',

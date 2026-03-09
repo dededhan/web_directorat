@@ -229,3 +229,101 @@ Route::prefix('inovchalenge/dashboard')
         Route::patch('invitations/{member}/reject', [RoleDashboardController::class, 'rejectInvitation'])
             ->name('invitations.reject');
     });
+
+// ── Admin InovChallenge Panel Routes ─────────────────────────────────────
+// Uses a dedicated `admin_inovchalenge` role (separate from admin_inovasi)
+use App\Http\Controllers\InovChalenge\AdminPanel\DashboardController as PanelDashboardController;
+use App\Http\Controllers\InovChalenge\AdminPanel\SessionController as PanelSessionController;
+use App\Http\Controllers\InovChalenge\AdminPanel\TahapController as PanelTahapController;
+use App\Http\Controllers\InovChalenge\AdminPanel\SubmissionAdminController as PanelSubmissionAdminController;
+use App\Http\Controllers\InovChalenge\AdminPanel\AccountManagementController as PanelAccountManagementController;
+
+Route::prefix('admin-inovchalenge')
+    ->name('admin_inovchalenge.')
+    ->middleware(['auth', 'role:admin_inovchalenge,admin_inovasi'])
+    ->group(function () {
+
+        // Dashboard
+        Route::get('dashboard', [PanelDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        // Sessions CRUD
+        Route::resource('inovchalenge/sessions', PanelSessionController::class)
+            ->names('inovchalenge.sessions');
+
+        // Session status actions
+        Route::patch('inovchalenge/sessions/{session}/activate', [PanelSessionController::class, 'activate'])
+            ->name('inovchalenge.sessions.activate');
+        Route::patch('inovchalenge/sessions/{session}/close', [PanelSessionController::class, 'close'])
+            ->name('inovchalenge.sessions.close');
+
+        // Tahap edit + update
+        Route::get('inovchalenge/tahap/{tahap}/edit', [PanelTahapController::class, 'edit'])
+            ->name('inovchalenge.tahap.edit');
+        Route::put('inovchalenge/tahap/{tahap}', [PanelTahapController::class, 'update'])
+            ->name('inovchalenge.tahap.update');
+
+        // Tahap fields CRUD
+        Route::post('inovchalenge/tahap/{tahap}/fields', [PanelTahapController::class, 'storeField'])
+            ->name('inovchalenge.tahap.fields.store');
+        Route::put('inovchalenge/fields/{field}', [PanelTahapController::class, 'updateField'])
+            ->name('inovchalenge.tahap.fields.update');
+        Route::delete('inovchalenge/fields/{field}', [PanelTahapController::class, 'destroyField'])
+            ->name('inovchalenge.tahap.fields.destroy');
+        Route::patch('inovchalenge/tahap/{tahap}/fields/reorder', [PanelTahapController::class, 'reorderFields'])
+            ->name('inovchalenge.tahap.fields.reorder');
+        Route::patch('inovchalenge/fields/{field}/move', [PanelTahapController::class, 'moveField'])
+            ->name('inovchalenge.tahap.fields.move');
+
+        // Tahap sections CRUD
+        Route::post('inovchalenge/tahap/{tahap}/sections', [PanelTahapController::class, 'storeSection'])
+            ->name('inovchalenge.tahap.sections.store');
+        Route::put('inovchalenge/sections/{section}', [PanelTahapController::class, 'updateSection'])
+            ->name('inovchalenge.tahap.sections.update');
+        Route::delete('inovchalenge/sections/{section}', [PanelTahapController::class, 'destroySection'])
+            ->name('inovchalenge.tahap.sections.destroy');
+        Route::patch('inovchalenge/tahap/{tahap}/sections/reorder', [PanelTahapController::class, 'reorderSections'])
+            ->name('inovchalenge.tahap.sections.reorder');
+
+        // Submissions management
+        Route::get('inovchalenge/sessions/{session}/submissions', [PanelSubmissionAdminController::class, 'index'])
+            ->name('inovchalenge.submissions.index');
+        Route::get('inovchalenge/sessions/{session}/submissions/{submission}', [PanelSubmissionAdminController::class, 'show'])
+            ->name('inovchalenge.submissions.show');
+        Route::patch('inovchalenge/sessions/{session}/submissions/{submission}/status', [PanelSubmissionAdminController::class, 'updateStatus'])
+            ->name('inovchalenge.submissions.updateStatus');
+        Route::patch('inovchalenge/sessions/{session}/submissions/{submission}/assign-reviewer', [PanelSubmissionAdminController::class, 'assignReviewer'])
+            ->name('inovchalenge.submissions.assignReviewer');
+        Route::patch('inovchalenge/submission-tahap/{submissionTahap}/status', [PanelSubmissionAdminController::class, 'updateTahapStatus'])
+            ->name('inovchalenge.submissions.updateTahapStatus');
+
+        // Member approval
+        Route::patch('inovchalenge/sessions/{session}/submissions/{submission}/members/{member}/approve', [PanelSubmissionAdminController::class, 'approveMember'])
+            ->name('inovchalenge.submissions.members.approve');
+        Route::patch('inovchalenge/sessions/{session}/submissions/{submission}/members/{member}/reject', [PanelSubmissionAdminController::class, 'rejectMember'])
+            ->name('inovchalenge.submissions.members.reject');
+
+        // Account management
+        Route::get('accounts', [PanelAccountManagementController::class, 'index'])
+            ->name('accounts.index');
+        Route::get('accounts/create', [PanelAccountManagementController::class, 'create'])
+            ->name('accounts.create');
+        Route::post('accounts', [PanelAccountManagementController::class, 'store'])
+            ->name('accounts.store');
+        Route::get('accounts/{user}/edit', [PanelAccountManagementController::class, 'edit'])
+            ->name('accounts.edit');
+        Route::put('accounts/{user}', [PanelAccountManagementController::class, 'update'])
+            ->name('accounts.update');
+        Route::delete('accounts/{user}', [PanelAccountManagementController::class, 'destroy'])
+            ->name('accounts.destroy');
+
+        // Registration approval
+        Route::get('accounts/registrations', [PanelAccountManagementController::class, 'registrations'])
+            ->name('accounts.registrations');
+        Route::patch('accounts/registrations/{registration}/approve', [PanelAccountManagementController::class, 'approve'])
+            ->name('accounts.registrations.approve');
+        Route::patch('accounts/registrations/batch-approve', [PanelAccountManagementController::class, 'batchApprove'])
+            ->name('accounts.registrations.batchApprove');
+        Route::patch('accounts/registrations/{registration}/decline', [PanelAccountManagementController::class, 'decline'])
+            ->name('accounts.registrations.decline');
+    });
