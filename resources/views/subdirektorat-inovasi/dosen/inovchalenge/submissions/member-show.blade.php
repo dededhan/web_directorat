@@ -297,6 +297,68 @@
                 @endforeach
             </div>
 
+            {{-- ═══ Komentar Review Per Tahap ═══ --}}
+            @if ($submission->reviews->isNotEmpty())
+                <div class="mb-8">
+                    <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-comments text-amber-500"></i> Komentar Review
+                    </h2>
+
+                    <div class="space-y-4">
+                        @foreach ($submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke) as $st)
+                            @php
+                                $tahapReviews = $submission->reviews->where(
+                                    'inov_chalenge_tahap_id',
+                                    $st->inov_chalenge_tahap_id,
+                                );
+                            @endphp
+                            @if ($tahapReviews->isNotEmpty())
+                                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                                    <div class="bg-gradient-to-r from-amber-500 to-amber-600 px-6 py-3">
+                                        <h3 class="text-white font-semibold text-sm">
+                                            <i class="fas fa-star mr-1.5"></i>
+                                            Review Tahap {{ $st->tahap->tahap_ke }} — {{ $st->tahap->nama_tahap }}
+                                            <span
+                                                class="ml-1 px-2 py-0.5 bg-white/20 rounded-full text-[10px] font-bold">{{ $tahapReviews->count() }}</span>
+                                        </h3>
+                                    </div>
+                                    <div class="p-6 space-y-4">
+                                        @foreach ($tahapReviews as $review)
+                                            <div class="border border-gray-100 rounded-xl p-4">
+                                                <div class="flex items-center gap-2 mb-2">
+                                                    <div
+                                                        class="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 text-xs font-bold">
+                                                        {{ strtoupper(substr($review->reviewer->name ?? 'R', 0, 1)) }}
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-sm font-medium text-gray-800">
+                                                            {{ $review->reviewer->name ?? 'Reviewer' }}</p>
+                                                        <p class="text-[10px] text-gray-400">
+                                                            {{ $review->updated_at->format('d M Y H:i') }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="ml-9 space-y-2">
+                                                    <p class="text-sm text-gray-700">
+                                                        <strong
+                                                            class="text-xs text-gray-400">Komentar:</strong><br>{{ $review->komentar }}
+                                                    </p>
+                                                    @if ($review->penilaian)
+                                                        <p class="text-sm text-gray-700">
+                                                            <strong class="text-xs text-gray-400">Catatan
+                                                                Tambahan:</strong><br>{{ $review->penilaian }}
+                                                        </p>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
             {{-- ═══ Riwayat Perubahan Status ═══ --}}
             <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mt-6">
                 <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">

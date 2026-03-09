@@ -106,6 +106,8 @@ class DosenController extends Controller
             'members.user',
             'identitas',
             'reviewers',
+            'reviews.reviewer',
+            'reviews.tahap',
             'statusLogs.tahap',
             'statusLogs.causer',
         ]);
@@ -285,6 +287,8 @@ class DosenController extends Controller
             'members.user',
             'identitas',
             'reviewers',
+            'reviews.reviewer',
+            'reviews.tahap',
             'statusLogs.tahap',
             'statusLogs.causer',
         ]);
