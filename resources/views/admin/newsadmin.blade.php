@@ -706,10 +706,10 @@
                     .then(data => {
                         document.getElementById('edit_kategori').value = data.kategori;
                         document.getElementById('edit_tanggal').value = data.tanggal;
-                        document.getElementById('edit_judul_berita').value = data.judul;
+                        document.getElementById('edit_judul_berita').value = data.judul_berita;
 
                         if (editBeritaEditor) {
-                            editBeritaEditor.setData(data.isi);
+                            editBeritaEditor.setData(data.isi_berita || '');
                         }
 
                         const currentImage = document.getElementById('current_image');
