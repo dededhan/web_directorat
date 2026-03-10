@@ -214,8 +214,8 @@
                             </a>
                         </div>
                         <a href="{{ route('inovchalenge.register.form') }}"
-                            class="text-center block mt-5 text-teal-800 text-sm hover:text-teal-900 hover:underline transition-all duration-300">Belum
-                            punya akun? Daftar di sini</a>
+                            class="text-center block mt-5 text-teal-800 text-sm hover:text-teal-900 hover:underline transition-all duration-300">Forgot
+                            your Password?</a>
 
                     </div>
                     <div class="right-panel">
@@ -252,7 +252,7 @@
                 if (errorType === 'account_not_found') {
                     icon = 'warning';
                     footer =
-                        '<a href="{{ route('register') }}" style="color: #0d9488; font-weight: 600;">Belum punya akun? Daftar di sini</a>';
+                        '<a href="{{ route('inovchalenge.register.form') }}" style="color: #0d9488; font-weight: 600;">Belum punya akun? Daftar di sini</a>';
                 } else if (errorType === 'wrong_password') {
                     icon = 'error';
                     footer = '<a href="#" style="color: #0d9488; font-weight: 600;">Lupa password? Reset di sini</a>';
