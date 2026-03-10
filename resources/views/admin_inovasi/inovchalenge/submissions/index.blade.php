@@ -160,10 +160,21 @@
                                         {{ $sub->reviewers_count }}
                                     </td>
                                     <td class="px-6 py-4 text-center">
-                                        <a href="{{ route('admin_inovasi.inovchalenge.submissions.show', [$session, $sub]) }}"
-                                            class="inline-flex items-center px-3 py-1.5 bg-teal-500 text-white text-xs font-medium rounded-lg hover:bg-teal-600 transition">
-                                            <i class="fas fa-eye mr-1"></i> Detail
-                                        </a>
+                                        <div class="flex items-center justify-center gap-1.5">
+                                            <a href="{{ route('admin_inovasi.inovchalenge.submissions.show', [$session, $sub]) }}"
+                                                class="inline-flex items-center px-3 py-1.5 bg-teal-500 text-white text-xs font-medium rounded-lg hover:bg-teal-600 transition">
+                                                <i class="fas fa-eye mr-1"></i> Detail
+                                            </a>
+                                            <form method="POST"
+                                                action="{{ route('admin_inovasi.inovchalenge.submissions.destroy', [$session, $sub]) }}"
+                                                onsubmit="return confirm('Yakin ingin menghapus submission dari {{ $sub->user->name }}? Semua data terkait akan ikut terhapus.')">
+                                                @csrf @method('DELETE')
+                                                <button type="submit"
+                                                    class="inline-flex items-center px-3 py-1.5 bg-red-500 text-white text-xs font-medium rounded-lg hover:bg-red-600 transition">
+                                                    <i class="fas fa-trash mr-1"></i> Hapus
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
@@ -214,8 +225,18 @@
                                     <span><i class="fas fa-users mr-0.5"></i> {{ $sub->members->count() }}</span>
                                     <span><i class="fas fa-user-check mr-0.5"></i> {{ $sub->reviewers_count }}</span>
                                 </div>
-                                <a href="{{ route('admin_inovasi.inovchalenge.submissions.show', [$session, $sub]) }}"
-                                    class="text-teal-600 text-xs font-medium hover:underline">Detail →</a>
+                                <div class="flex items-center gap-2">
+                                    <a href="{{ route('admin_inovasi.inovchalenge.submissions.show', [$session, $sub]) }}"
+                                        class="text-teal-600 text-xs font-medium hover:underline">Detail →</a>
+                                    <form method="POST"
+                                        action="{{ route('admin_inovasi.inovchalenge.submissions.destroy', [$session, $sub]) }}"
+                                        onsubmit="return confirm('Hapus submission ini?')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="text-red-500 text-xs font-medium hover:underline">
+                                            <i class="fas fa-trash mr-0.5"></i> Hapus
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     @empty

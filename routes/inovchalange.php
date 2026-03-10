@@ -75,6 +75,8 @@ Route::prefix('admin_inovasi/inovchalenge')->name('admin_inovasi.inovchalenge.')
             ->name('submissions.index');
         Route::get('sessions/{session}/submissions/{submission}', [SubmissionAdminController::class, 'show'])
             ->name('submissions.show');
+        Route::delete('sessions/{session}/submissions/{submission}', [SubmissionAdminController::class, 'destroy'])
+            ->name('submissions.destroy');
         Route::patch('sessions/{session}/submissions/{submission}/status', [SubmissionAdminController::class, 'updateStatus'])
             ->name('submissions.updateStatus');
         Route::patch('sessions/{session}/submissions/{submission}/assign-reviewer', [SubmissionAdminController::class, 'assignReviewer'])
@@ -290,6 +292,8 @@ Route::prefix('admin-inovchalenge')
             ->name('inovchalenge.submissions.index');
         Route::get('inovchalenge/sessions/{session}/submissions/{submission}', [PanelSubmissionAdminController::class, 'show'])
             ->name('inovchalenge.submissions.show');
+        Route::delete('inovchalenge/sessions/{session}/submissions/{submission}', [PanelSubmissionAdminController::class, 'destroy'])
+            ->name('inovchalenge.submissions.destroy');
         Route::patch('inovchalenge/sessions/{session}/submissions/{submission}/status', [PanelSubmissionAdminController::class, 'updateStatus'])
             ->name('inovchalenge.submissions.updateStatus');
         Route::patch('inovchalenge/sessions/{session}/submissions/{submission}/assign-reviewer', [PanelSubmissionAdminController::class, 'assignReviewer'])

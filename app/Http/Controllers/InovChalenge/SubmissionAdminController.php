@@ -229,6 +229,64 @@ class SubmissionAdminController extends Controller
     }
 
     /**
+     * Score ranking page — all submissions for a session ranked by average reviewer score.
+     */
+    public function scores(InovChalengeSession $session)
+    {
+        $session->load('tahap');
+        $tahapList = $session->tahap;
+
+        // Load all submissions with their reviews (including skor) and user
+        $submissions = InovChalengeSubmission::with([
+                'user',
+                'reviews' => fn($q) => $q->select('inov_chalenge_submission_id', 'inov_chalenge_tahap_id', 'reviewer_id', 'skor'),
+                'reviewers',
+                'identitas',
+            ])
+            ->withCount('reviewers')
+            ->where('inov_chalenge_session_id', $session->id)
+            ->get();
+
+        // Build score map: submission_id => [ tahap_id => avg_score, ..., 'total' => avg_all ]
+        $scoreMap = [];
+        foreach ($submissions as $sub) {
+            $tahapScores = [];
+            foreach ($tahapList as $tahap) {
+                $tahapReviews = $sub->reviews->where('inov_chalenge_tahap_id', $tahap->id)
+                    ->whereNotNull('skor');
+                $tahapScores[$tahap->id] = $tahapReviews->count() > 0
+                    ? round($tahapReviews->avg('skor'), 1)
+                    : null;
+            }
+            $allScores = collect($tahapScores)->filter(fn($v) => $v !== null);
+            $scoreMap[$sub->id] = [
+                'per_tahap' => $tahapScores,
+                'total'     => $allScores->count() > 0 ? round($allScores->avg(), 1) : null,
+                'reviewed'  => $sub->reviews->whereNotNull('skor')->count() > 0,
+            ];
+        }
+
+        // Sort by total score descending (null scores at bottom)
+        $submissions = $submissions->sortByDesc(function ($sub) use ($scoreMap) {
+            return $scoreMap[$sub->id]['total'] ?? -1;
+        })->values();
+
+        return view('admin_inovasi.inovchalenge.submissions.scores', compact('session', 'tahapList', 'submissions', 'scoreMap'));
+    }
+
+    /**
+     * Delete a submission (admin only).
+     */
+    public function destroy(InovChalengeSession $session, InovChalengeSubmission $submission)
+    {
+        abort_if($submission->inov_chalenge_session_id !== $session->id, 404);
+
+        $submission->delete();
+
+        return back()->with('success', 'Submission berhasil dihapus.');
+    }
+
+    /**
      * Approve a pending team member.
      */
     public function approveMember(InovChalengeSession $session, InovChalengeSubmission $submission, InovChalengeSubmissionMember $member)
