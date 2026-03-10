@@ -238,11 +238,11 @@ class SubmissionAdminController extends Controller
 
         // Load all submissions with their reviews (including skor) and user
         $submissions = InovChalengeSubmission::with([
-                'user',
-                'reviews' => fn($q) => $q->select('inov_chalenge_submission_id', 'inov_chalenge_tahap_id', 'reviewer_id', 'skor'),
-                'reviewers',
-                'identitas',
-            ])
+            'user',
+            'reviews' => fn($q) => $q->select('inov_chalenge_submission_id', 'inov_chalenge_tahap_id', 'reviewer_id', 'skor'),
+            'reviewers',
+            'identitas',
+        ])
             ->withCount('reviewers')
             ->where('inov_chalenge_session_id', $session->id)
             ->get();

@@ -25,10 +25,16 @@
                     <h1 class="text-2xl font-bold text-gray-900">Submissions</h1>
                     <p class="mt-1 text-sm text-gray-500">{{ $session->nama_sesi }}</p>
                 </div>
-                <a href="{{ route('admin_inovasi.inovchalenge.sessions.show', $session) }}"
-                    class="mt-4 sm:mt-0 inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-xl hover:bg-gray-200 transition">
-                    <i class="fas fa-arrow-left mr-2"></i> Kembali ke Sesi
-                </a>
+                <div class="mt-4 sm:mt-0 flex flex-wrap items-center gap-2">
+                    <a href="{{ route('admin_inovasi.inovchalenge.submissions.scores', $session) }}"
+                        class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-sm font-medium rounded-xl hover:from-yellow-500 hover:to-orange-600 shadow transition">
+                        <i class="fas fa-trophy mr-2"></i> Peringkat Skor
+                    </a>
+                    <a href="{{ route('admin_inovasi.inovchalenge.sessions.show', $session) }}"
+                        class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-xl hover:bg-gray-200 transition">
+                        <i class="fas fa-arrow-left mr-2"></i> Kembali ke Sesi
+                    </a>
+                </div>
             </div>
 
             {{-- Search --}}

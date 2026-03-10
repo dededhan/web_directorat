@@ -73,6 +73,8 @@ Route::prefix('admin_inovasi/inovchalenge')->name('admin_inovasi.inovchalenge.')
         // Submissions management (scoped per session)
         Route::get('sessions/{session}/submissions', [SubmissionAdminController::class, 'index'])
             ->name('submissions.index');
+        Route::get('sessions/{session}/submissions/scores', [SubmissionAdminController::class, 'scores'])
+            ->name('submissions.scores');
         Route::get('sessions/{session}/submissions/{submission}', [SubmissionAdminController::class, 'show'])
             ->name('submissions.show');
         Route::delete('sessions/{session}/submissions/{submission}', [SubmissionAdminController::class, 'destroy'])
@@ -290,6 +292,8 @@ Route::prefix('admin-inovchalenge')
         // Submissions management
         Route::get('inovchalenge/sessions/{session}/submissions', [PanelSubmissionAdminController::class, 'index'])
             ->name('inovchalenge.submissions.index');
+        Route::get('inovchalenge/sessions/{session}/submissions/scores', [PanelSubmissionAdminController::class, 'scores'])
+            ->name('inovchalenge.submissions.scores');
         Route::get('inovchalenge/sessions/{session}/submissions/{submission}', [PanelSubmissionAdminController::class, 'show'])
             ->name('inovchalenge.submissions.show');
         Route::delete('inovchalenge/sessions/{session}/submissions/{submission}', [PanelSubmissionAdminController::class, 'destroy'])

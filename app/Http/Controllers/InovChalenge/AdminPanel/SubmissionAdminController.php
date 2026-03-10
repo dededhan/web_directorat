@@ -72,4 +72,44 @@ class SubmissionAdminController extends BaseController
 
         return view('admin_inovchalenge.inovchalenge.submissions.show', compact('submission', 'availableReviewers', 'session', 'hasReviewer'));
     }
+
+    public function scores(InovChalengeSession $session)
+    {
+        $session->load('tahap');
+        $tahapList = $session->tahap;
+
+        $submissions = InovChalengeSubmission::with([
+            'user',
+            'reviews' => fn($q) => $q->select('inov_chalenge_submission_id', 'inov_chalenge_tahap_id', 'reviewer_id', 'skor'),
+            'reviewers',
+            'identitas',
+        ])
+            ->withCount('reviewers')
+            ->where('inov_chalenge_session_id', $session->id)
+            ->get();
+
+        $scoreMap = [];
+        foreach ($submissions as $sub) {
+            $tahapScores = [];
+            foreach ($tahapList as $tahap) {
+                $tahapReviews = $sub->reviews->where('inov_chalenge_tahap_id', $tahap->id)
+                    ->whereNotNull('skor');
+                $tahapScores[$tahap->id] = $tahapReviews->count() > 0
+                    ? round($tahapReviews->avg('skor'), 1)
+                    : null;
+            }
+            $allScores = collect($tahapScores)->filter(fn($v) => $v !== null);
+            $scoreMap[$sub->id] = [
+                'per_tahap' => $tahapScores,
+                'total'     => $allScores->count() > 0 ? round($allScores->avg(), 1) : null,
+                'reviewed'  => $sub->reviews->whereNotNull('skor')->count() > 0,
+            ];
+        }
+
+        $submissions = $submissions->sortByDesc(function ($sub) use ($scoreMap) {
+            return $scoreMap[$sub->id]['total'] ?? -1;
+        })->values();
+
+        return view('admin_inovchalenge.inovchalenge.submissions.scores', compact('session', 'tahapList', 'submissions', 'scoreMap'));
+    }
 }
