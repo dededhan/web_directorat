@@ -156,10 +156,7 @@
 
                             {{-- Bottom bar --}}
                             <div class="px-6 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
-                                <div class="flex items-center gap-1.5 text-xs text-gray-400">
-                                    <i class="fas fa-file-alt text-[10px]"></i>
-                                    {{ $session->submissions_count }} submission
-                                </div>
+                                
                                 <div class="flex items-center gap-1.5">
                                     <div class="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                                         <div class="h-full bg-gradient-to-r from-teal-400 to-teal-600 rounded-full"
