@@ -25,6 +25,16 @@ class LoginController extends Controller
             //'g-recaptcha-response' => ['', new Recaptcha()]
         ]);
 
+        // Check if account exists
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return back()->withInput($request->only('email'))
+                ->with('login_error', 'account_not_found')
+                ->with('error_title', 'Akun Tidak Ditemukan')
+                ->with('error_message', 'Email "' . $request->email . '" tidak terdaftar dalam sistem. Silakan periksa kembali email Anda atau daftar akun baru.');
+        }
+
         $authCredentials = $request->only('email', 'password');
 
         if (Auth::attempt($authCredentials)) {
@@ -76,9 +86,11 @@ class LoginController extends Controller
             return redirect(route($next));
         }
 
-        return back()->withErrors([
-            'email' => 'Invalid credentials.',
-        ])->with('error', 'Email atau password salah.'); // Flash message
+        // Account exists but password is wrong
+        return back()->withInput($request->only('email'))
+            ->with('login_error', 'wrong_password')
+            ->with('error_title', 'Password Salah')
+            ->with('error_message', 'Password yang Anda masukkan salah. Silakan coba lagi atau gunakan fitur "Lupa Password" untuk mereset password Anda.');
     }
 
     public function logout(Request $request)

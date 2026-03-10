@@ -86,7 +86,7 @@
             color: #aaa;
             z-index: 10;
         }
-        
+
         /* Gaya untuk ikon mata */
         .toggle-password {
             position: absolute;
@@ -96,7 +96,8 @@
             color: #aaa;
             cursor: pointer;
             z-index: 10;
-            padding: 5px; /* Area klik yang lebih besar */
+            padding: 5px;
+            /* Area klik yang lebih besar */
         }
 
         .decoration-icons {
@@ -154,6 +155,7 @@
             .left-panel {
                 padding: 20px;
             }
+
             .left-panel h1 {
                 font-size: 1.25rem;
             }
@@ -162,7 +164,8 @@
 </head>
 
 <body class="bg-gray-100">
-    <div class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden" id="loginModal" style="z-index: 99999; position: fixed; top: 0; left: 0; right: 0; bottom: 0;">
+    <div class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden" id="loginModal"
+        style="z-index: 99999; position: fixed; top: 0; left: 0; right: 0; bottom: 0;">
         <div class="modal-dialog w-full max-w-4xl mx-auto my-8">
             <div class="modal-content bg-white rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
                 <div class="modal-container">
@@ -177,20 +180,22 @@
                             <div class="input-group">
                                 <i class="fas fa-envelope left-icon"></i>
                                 <input type="email" name="email" placeholder="Email" required
+                                    value="{{ old('email') }}"
                                     class="w-full py-3 px-12 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:border-teal-800 focus:ring-2 focus:ring-teal-800 focus:ring-opacity-20 transition-all duration-300" />
                             </div>
                             <div class="input-group">
                                 <i class="fas fa-lock left-icon"></i>
-                                <input type="password" name="password" id="passwordInput" placeholder="Password" required
+                                <input type="password" name="password" id="passwordInput" placeholder="Password"
+                                    required
                                     class="w-full py-3 pl-12 pr-12 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:border-teal-800 focus:ring-2 focus:ring-teal-800 focus:ring-opacity-20 transition-all duration-300" />
                                 {{-- Ikon Mata untuk toggle password visibility --}}
-                                <i class="fas fa-eye toggle-password" id="togglePassword"></i> 
+                                <i class="fas fa-eye toggle-password" id="togglePassword"></i>
                             </div>
 
                             <div class="flex justify-center my-4">
                                 <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
                             </div>
-                            
+
                             @if ($errors->has('g-recaptcha-response'))
                                 <span class="text-red-500 text-sm block text-center mb-2">
                                     {{ $errors->first('g-recaptcha-response') }}
@@ -208,16 +213,15 @@
                                 SIGN IN WITH GOOGLE
                             </a>
                         </div>
-                        <a href="#"
-                            class="text-center block mt-5 text-teal-800 text-sm hover:text-teal-900 hover:underline transition-all duration-300">Forgot
-                            Your Password?</a>
+                        
                     </div>
                     <div class="right-panel">
                         <h2 class="text-3xl font-semibold mb-8 relative">UNJ Dashboard
                             <span class="absolute left-0 bottom-0 w-10 h-0.5 bg-yellow-400"
                                 style="bottom: -10px;"></span>
                         </h2>
-                        <p class="opacity-90 mt-4">Silakan login untuk mengakses berbagai fitur dan layanan administrasi universitas.</p>
+                        <p class="opacity-90 mt-4">Silakan login untuk mengakses berbagai fitur dan layanan administrasi
+                            universitas.</p>
                         <div class="decoration-icons">
                             <i class="fas fa-graduation-cap"></i>
                             <i class="fas fa-book"></i>
@@ -229,13 +233,55 @@
         </div>
     </div>
 
-    @if (session('error'))
+    @if (session('login_error'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: '{{ session('error') }}',
-                footer: '<a href="#">Why do I have this issue?</a>'
+            document.addEventListener('DOMContentLoaded', function() {
+                // Auto-open login modal when there's a login error
+                const modal = document.getElementById('loginModal');
+                if (modal) {
+                    modal.classList.remove('hidden');
+                }
+
+                const errorType = '{{ session('login_error') }}';
+                let icon = 'error';
+                let title = '{!! session('error_title', 'Terjadi Kesalahan') !!}';
+                let message = '{!! session('error_message', 'Terjadi kesalahan saat mencoba login. Silakan coba lagi.') !!}';
+                let footer = '';
+
+                if (errorType === 'account_not_found') {
+                    icon = 'warning';
+                    footer =
+                        '<a href="{{ route('register') }}" style="color: #0d9488; font-weight: 600;">Belum punya akun? Daftar di sini</a>';
+                } else if (errorType === 'wrong_password') {
+                    icon = 'error';
+                    footer = '<a href="#" style="color: #0d9488; font-weight: 600;">Lupa password? Reset di sini</a>';
+                }
+
+                Swal.fire({
+                    icon: icon,
+                    title: title,
+                    text: message,
+                    footer: footer,
+                    confirmButtonColor: '#0d9488',
+                    confirmButtonText: 'Coba Lagi',
+                    customClass: {
+                        popup: 'rounded-2xl',
+                    }
+                });
+            });
+        </script>
+    @elseif (session('error'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: '{{ session('error') }}',
+                    confirmButtonColor: '#0d9488',
+                    confirmButtonText: 'OK'
+                });
             });
         </script>
     @endif
@@ -244,7 +290,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('loginModal');
             const loginButtons = document.querySelectorAll('.login');
-            
+
             // Elemen untuk toggle password
             const passwordInput = document.getElementById('passwordInput');
             const togglePassword = document.getElementById('togglePassword');
@@ -255,7 +301,7 @@
                     // Cek tipe input: jika 'password', ubah ke 'text', jika 'text', ubah ke 'password'
                     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                     passwordInput.setAttribute('type', type);
-                    
+
                     // Ganti ikon mata
                     this.classList.toggle('fa-eye');
                     this.classList.toggle('fa-eye-slash'); // Menggunakan ikon mata tertutup
@@ -266,7 +312,7 @@
             const closeMobileSidebar = () => {
                 const mobileSidebar = document.getElementById('mobile-sidebar');
                 const sidebarOverlay = document.getElementById('sidebar-overlay');
-                
+
                 if (mobileSidebar) {
                     mobileSidebar.style.transform = 'translateX(100%)';
                 }
@@ -281,10 +327,10 @@
             loginButtons.forEach(button => {
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
-                    
+
                     // Tutup sidebar mobile sebelum menampilkan modal
                     closeMobileSidebar();
-                    
+
                     // Tampilkan modal
                     modal.classList.remove('hidden');
                 });
