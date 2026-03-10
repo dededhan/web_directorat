@@ -213,7 +213,10 @@
                                 SIGN IN WITH GOOGLE
                             </a>
                         </div>
-                        
+                        <a href="{{ route('inovchalenge.register.form') }}"
+                            class="text-center block mt-5 text-teal-800 text-sm hover:text-teal-900 hover:underline transition-all duration-300">Belum
+                            punya akun? Daftar di sini</a>
+
                     </div>
                     <div class="right-panel">
                         <h2 class="text-3xl font-semibold mb-8 relative">UNJ Dashboard
@@ -237,11 +240,8 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Auto-open login modal when there's a login error
+                // Keep login modal hidden while SweetAlert shows
                 const modal = document.getElementById('loginModal');
-                if (modal) {
-                    modal.classList.remove('hidden');
-                }
 
                 const errorType = '{{ session('login_error') }}';
                 let icon = 'error';
@@ -267,6 +267,17 @@
                     confirmButtonText: 'Coba Lagi',
                     customClass: {
                         popup: 'rounded-2xl',
+                        container: 'swal-on-top',
+                    },
+                    backdrop: 'rgba(0,0,0,0.6)',
+                    didOpen: () => {
+                        // Push SweetAlert above login modal
+                        const swalContainer = document.querySelector('.swal2-container');
+                        if (swalContainer) swalContainer.style.zIndex = '999999';
+                    },
+                    willClose: () => {
+                        // Re-show login modal after alert dismissed
+                        if (modal) modal.classList.remove('hidden');
                     }
                 });
             });
@@ -280,7 +291,11 @@
                     title: 'Oops...',
                     text: '{{ session('error') }}',
                     confirmButtonColor: '#0d9488',
-                    confirmButtonText: 'OK'
+                    confirmButtonText: 'OK',
+                    didOpen: () => {
+                        const swalContainer = document.querySelector('.swal2-container');
+                        if (swalContainer) swalContainer.style.zIndex = '999999';
+                    }
                 });
             });
         </script>
