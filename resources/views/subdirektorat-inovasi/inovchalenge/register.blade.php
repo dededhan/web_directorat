@@ -525,8 +525,8 @@
                                 {{-- Login link --}}
                                 <p class="text-center text-sm text-gray-500">
                                     Sudah punya akun?
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"
-                                        class="text-[#277177] font-semibold hover:underline hover:text-[#1d5559] transition-colors">Masuk
+                                    <a href="#"
+                                        class="login text-[#277177] font-semibold hover:underline hover:text-[#1d5559] transition-colors">Masuk
                                         di sini</a>
                                 </p>
                             </div>

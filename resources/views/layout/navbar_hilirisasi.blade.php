@@ -186,8 +186,8 @@
             </li>
 
             <li>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"
-                    class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-yellow-400 text-gray-900 font-bold text-sm rounded-lg hover:bg-yellow-300 transition shadow-sm">
+                <a href="#"
+                    class="login inline-flex items-center gap-1.5 px-4 py-1.5 bg-yellow-400 text-gray-900 font-bold text-sm rounded-lg hover:bg-yellow-300 transition shadow-sm">
                     <i class="fas fa-sign-in-alt text-xs"></i> Masuk
                 </a>
             </li>
@@ -410,8 +410,7 @@
 
             <li class="px-6 my-6">
                 <a href="#"
-                    class="block text-center bg-yellow-400 text-gray-900 py-2.5 rounded-lg font-bold hover:bg-yellow-300 transition shadow-sm"
-                    data-bs-toggle="modal" data-bs-target="#loginModal">
+                    class="login block text-center bg-yellow-400 text-gray-900 py-2.5 rounded-lg font-bold hover:bg-yellow-300 transition shadow-sm">
                     <i class="fas fa-sign-in-alt mr-1"></i> Masuk
                 </a>
             </li>
