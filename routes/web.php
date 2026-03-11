@@ -156,7 +156,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')->group(fu
     Route::view('/inkubator/inkubator_bisnis_pendidikan', 'subdirektorat-inovasi.inkubator.inkubator_bisnis_pendidikan')->name('inkubator.inkubator_bisnis_pendidikan');
     Route::view('/inkubator/ekosisteminovasi', 'subdirektorat-inovasi.inkubator.ekosisteminovasi')->name('inkubator.ekosisteminovasi');
     Route::view('/inkubator/inovasiaward', 'subdirektorat-inovasi.inkubator.inovasiaward')->name('inkubator.inovasiaward');
-    Route::view('/inovation-chalangge', 'subdirektorat-inovasi.proposal_hub.index')->name('inovation_chalangge.index');
+    Route::view('/inovation-challenge', 'subdirektorat-inovasi.proposal_hub.index')->name('inovation_challenge.index');
     Route::get('/risetunj/produk_inovasi', [ProdukInovasiController::class, 'publicIndex'])->name('riset_unj.produk_inovasi.produkinovasi');
     Route::get('/risetunj/produk_inovasi/{produk}', [ProdukInovasiController::class, 'show'])->name('riset_unj.produk_inovasi.show');
     Route::get('/landingpage', [BeritaController::class, 'landingPageInovasi'])->name('landingpage');
@@ -224,6 +224,9 @@ Route::redirect('/pemeringkatan/sulitest', '/pemeringkatan/unj-sustain-quest', 3
 
 // Sejarah Hilirisasi (
 Route::get('/sejarah-hilirisasi', [SejarahContentController::class, 'showPublic'])->name('subdirektorat-inovasi.sejarah.sejarah');
+
+// Redirect old typo URL to correct spelling
+Route::redirect('/subdirektorat-inovasi/inovation-chalangge', '/subdirektorat-inovasi/inovation-challenge', 301);
 
 Route::get('/subdirektorat-inovasi/riset-unj/produk-inovasi/mitra-kolaborasi', [MitraKolaborasiController::class, 'showPublicByCategory'])
     ->name('subdirektorat-inovasi.riset_unj.produk_inovasi.mitra-kolaborasi');
