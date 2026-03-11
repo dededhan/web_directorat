@@ -1,4 +1,4 @@
-@extends('subdirektorat-inovasi.dosen.index')
+@extends('subdirektorat-inovasi.tendik.index')
 
 @section('content')
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -10,7 +10,7 @@
                     <h1 class="text-2xl font-bold text-gray-900">Identitas Tim &amp; Status Produk</h1>
                     <p class="mt-1 text-sm text-gray-500">{{ $submission->session->nama_sesi }}</p>
                 </div>
-                <a href="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.show', $submission) }}"
+                <a href="{{ route('subdirektorat-inovasi.tendik.inovchalenge.submissions.show', $submission) }}"
                     class="mt-4 sm:mt-0 inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 font-medium text-sm rounded-xl hover:bg-gray-200 transition">
                     <i class="fas fa-arrow-left mr-2"></i> Kembali
                 </a>
@@ -54,7 +54,7 @@
                 </div>
                 <div class="p-6">
                     <form method="POST"
-                        action="{{ route('subdirektorat-inovasi.dosen.inovchalenge.submissions.identitas.save', $submission) }}">
+                        action="{{ route('subdirektorat-inovasi.tendik.inovchalenge.submissions.identitas.save', $submission) }}">
                         @csrf
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
@@ -82,22 +82,32 @@
                                 </div>
                             </div>
 
-                            {{-- Fakultas (read-only) --}}
+                            {{-- NIP / NIK Ketua (required, pre-filled from profile) --}}
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Fakultas</label>
-                                <div
-                                    class="w-full rounded-lg border border-gray-200 bg-gray-50 text-sm px-3 py-2 text-gray-700">
-                                    {{ $fakultasName }}
-                                </div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                    NIP / NIK <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" name="nip_ketua" required
+                                    value="{{ old('nip_ketua', $ketuaMember?->nik_nim_nip) }}"
+                                    class="w-full rounded-lg border-gray-300 text-sm focus:border-teal-500 focus:ring-teal-500 @error('nip_ketua') border-red-400 @enderror"
+                                    placeholder="Masukkan NIP / NIK Anda">
+                                @error('nip_ketua')
+                                    <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                                @enderror
                             </div>
 
-                            {{-- Prodi (read-only) --}}
+                            {{-- Unit Kerja (required, pre-filled from profile) --}}
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Program Studi</label>
-                                <div
-                                    class="w-full rounded-lg border border-gray-200 bg-gray-50 text-sm px-3 py-2 text-gray-700">
-                                    {{ $prodiName }}
-                                </div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                    Unit Kerja / Direktorat <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" name="unit_kerja" required
+                                    value="{{ old('unit_kerja', $ketuaMember?->institusi_fakultas) }}"
+                                    class="w-full rounded-lg border-gray-300 text-sm focus:border-teal-500 focus:ring-teal-500 @error('unit_kerja') border-red-400 @enderror"
+                                    placeholder="Contoh: Direktorat Inovasi dan Kewirausahaan">
+                                @error('unit_kerja')
+                                    <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             {{-- Skema Inovasi --}}
@@ -245,7 +255,7 @@
                                             {{ $badge['label'] }}
                                         </span>
                                         <form method="POST"
-                                            action="{{ route('subdirektorat-inovasi.dosen.inovchalenge.members.destroy', [$submission, $member]) }}"
+                                            action="{{ route('subdirektorat-inovasi.tendik.inovchalenge.members.destroy', [$submission, $member]) }}"
                                             onsubmit="return confirm('Hapus anggota ini?')">
                                             @csrf
                                             @method('DELETE')
@@ -278,7 +288,7 @@
                                     {{ $maxAnggota - $currentCount }} slot)</span>
                             </h3>
                             <form method="POST"
-                                action="{{ route('subdirektorat-inovasi.dosen.inovchalenge.members.store', $submission) }}">
+                                action="{{ route('subdirektorat-inovasi.tendik.inovchalenge.members.store', $submission) }}">
                                 @csrf
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
@@ -297,11 +307,11 @@
                                             <option value="DUDI">DUDI</option>
                                             <option value="PPPK">PPPK</option>
                                         </select>
-                                        <p x-show="tipeAnggota && tipeAnggota !== 'dosen'"
+                                        <p x-show="tipeAnggota && tipeAnggota !== 'tendik'"
                                             class="mt-1 text-[10px] text-amber-600">
                                             <i class="fas fa-info-circle mr-0.5"></i>
                                             <span
-                                                x-text="tipeAnggota === 'dosen' ? '' : 'Anggota tipe ini memerlukan persetujuan (approval)'"></span>
+                                                x-text="tipeAnggota === 'tendik' ? '' : 'Anggota tipe ini memerlukan persetujuan (approval)'"></span>
                                         </p>
                                     </div>
 
@@ -467,7 +477,7 @@
                     }
                     try {
                         const res = await fetch(
-                            `{{ route('subdirektorat-inovasi.dosen.inovchalenge.members.search') }}?q=${encodeURIComponent(this.searchQuery)}&type=${this.tipeAnggota}`
+                            `{{ route('subdirektorat-inovasi.tendik.inovchalenge.members.search') }}?q=${encodeURIComponent(this.searchQuery)}&type=${this.tipeAnggota}`
                         );
                         this.searchResults = await res.json();
                     } catch (e) {
@@ -480,12 +490,12 @@
                     this.namaLengkap = user.name;
                     this.nikNimNip = user.identifier_number || '';
                     if (this.tipeAnggota === 'tendik') {
-                        // Tendik: use institusi (Unit Kerja) from profile
+                        // For tendik: use institusi (Unit Kerja) from profile
                         this.institusiFakultas = user.institusi || '';
                         this.selectedFakultas = '';
                         this.selectedProdi = '';
                     } else {
-                        // Dosen/Alumni: use fakultas + prodi
+                        // For dosen/alumni: use fakultas + prodi
                         this.selectedFakultas = user.fakultas || '';
                         this.selectedProdi = user.prodi || '';
                         let inst = user.fakultas || '';

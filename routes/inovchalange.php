@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InovChalenge\SessionController;
 use App\Http\Controllers\InovChalenge\TahapController;
 use App\Http\Controllers\InovChalenge\DosenController;
+use App\Http\Controllers\InovChalenge\TendikController;
 use App\Http\Controllers\InovChalenge\MemberController;
 use App\Http\Controllers\InovChalenge\AlumniController;
 use App\Http\Controllers\InovChalenge\SubmissionAdminController;
@@ -149,6 +150,60 @@ Route::prefix('subdirektorat-inovasi/dosen/inovchalenge')
         Route::patch('invitations/{member}/approve', [DosenController::class, 'approveInvitation'])
             ->name('invitations.approve');
         Route::patch('invitations/{member}/reject', [DosenController::class, 'rejectInvitation'])
+            ->name('invitations.reject');
+    });
+
+// ── Tendik Routes ─────────────────────────────────────────────────────────
+Route::prefix('subdirektorat-inovasi/tendik/inovchalenge')
+    ->name('subdirektorat-inovasi.tendik.inovchalenge.')
+    ->middleware(['auth', 'role:tendik'])
+    ->group(function () {
+
+        Route::get('sessions', [TendikController::class, 'sessions'])
+            ->name('sessions.index');
+        Route::get('sessions/{session}', [TendikController::class, 'showSession'])
+            ->name('sessions.show');
+
+        Route::get('submissions', [TendikController::class, 'mySubmissions'])
+            ->name('submissions.index');
+        Route::post('sessions/{session}/submissions', [TendikController::class, 'store'])
+            ->name('submissions.store');
+        Route::get('submissions/{submission}', [TendikController::class, 'showSubmission'])
+            ->name('submissions.show');
+
+        Route::get('submissions/{submission}/identitas', [TendikController::class, 'showIdentitas'])
+            ->name('submissions.identitas');
+        Route::post('submissions/{submission}/identitas', [TendikController::class, 'saveIdentitas'])
+            ->name('submissions.identitas.save');
+        Route::get('submissions/{submission}/tahap/{tahapId}', [TendikController::class, 'showTahap'])
+            ->name('submissions.tahap');
+        Route::post('submissions/{submission}/tahap/{tahapId}/save', [TendikController::class, 'saveTahap'])
+            ->name('submissions.tahap.save');
+        Route::post('submissions/{submission}/tahap/{tahapId}/submit', [TendikController::class, 'submitTahap'])
+            ->name('submissions.tahap.submit');
+
+        // Team members
+        Route::post('submissions/{submission}/members', [MemberController::class, 'store'])
+            ->name('members.store');
+        Route::put('submissions/{submission}/members/{member}', [MemberController::class, 'update'])
+            ->name('members.update');
+        Route::delete('submissions/{submission}/members/{member}', [MemberController::class, 'destroy'])
+            ->name('members.destroy');
+        Route::get('members/search', [MemberController::class, 'searchUsers'])
+            ->name('members.search');
+
+        // Member read-only view
+        Route::get('team-submissions', [TendikController::class, 'memberSubmissions'])
+            ->name('team.index');
+        Route::get('team-submissions/{submission}', [TendikController::class, 'showMemberSubmission'])
+            ->name('team.show');
+        Route::get('team-submissions/{submission}/tahap/{tahapId}', [TendikController::class, 'showMemberTahap'])
+            ->name('team.tahap');
+
+        // Tendik invitation approve/reject
+        Route::patch('invitations/{member}/approve', [TendikController::class, 'approveInvitation'])
+            ->name('invitations.approve');
+        Route::patch('invitations/{member}/reject', [TendikController::class, 'rejectInvitation'])
             ->name('invitations.reject');
     });
 

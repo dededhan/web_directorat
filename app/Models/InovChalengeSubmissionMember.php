@@ -25,6 +25,7 @@ class InovChalengeSubmissionMember extends Model
     public const TIPE_MAHASISWA = 'mahasiswa';
     public const TIPE_PPPK      = 'PPPK';
     public const TIPE_PENELITI  = 'peneliti';
+    public const TIPE_TENDIK    = 'tendik';
 
     public const TIPE_OPTIONS = [
         self::TIPE_DOSEN,
@@ -33,6 +34,7 @@ class InovChalengeSubmissionMember extends Model
         self::TIPE_MAHASISWA,
         self::TIPE_PPPK,
         self::TIPE_PENELITI,
+        self::TIPE_TENDIK,
     ];
 
     /** Types that require approval from the invited member. */
@@ -43,6 +45,7 @@ class InovChalengeSubmissionMember extends Model
         self::TIPE_MAHASISWA,
         self::TIPE_PPPK,
         self::TIPE_PENELITI,
+        self::TIPE_TENDIK,
     ];
 
     /**
@@ -56,6 +59,7 @@ class InovChalengeSubmissionMember extends Model
         self::TIPE_PPPK,
         self::TIPE_PENELITI,
         self::TIPE_DUDI,
+        self::TIPE_TENDIK,
     ];
 
     /**
@@ -116,6 +120,7 @@ class InovChalengeSubmissionMember extends Model
             'mahasiswa' => 'Mahasiswa',
             'PPPK'      => 'PPPK',
             'peneliti'  => 'Peneliti',
+            'tendik'    => 'Tendik',
             default     => ucfirst($this->tipe_anggota),
         };
     }

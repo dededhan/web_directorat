@@ -22,7 +22,7 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required',
             // Temporarily disabled for testing
-            //'g-recaptcha-response' => ['', new Recaptcha()]
+            'g-recaptcha-response' => ['', new Recaptcha()]
         ]);
 
         // Check if account exists
@@ -53,6 +53,7 @@ class LoginController extends Controller
                 'admin_inovasi' => 'admin_inovasi.dashboard',
                 'admin_inovchalenge' => 'admin_inovchalenge.dashboard',
                 'dosen' => 'subdirektorat-inovasi.dosen.dashboard',
+                'tendik' => 'subdirektorat-inovasi.tendik.dashboard',
                 'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.dashboard',
                 // 'kepala_sub_direktorat' => 'inovasi.admin_hilirisasi.dashboard',
                 'validator' => 'validator.index', // Updated to use Validator V2

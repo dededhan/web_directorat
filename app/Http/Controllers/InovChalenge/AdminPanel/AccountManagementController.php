@@ -22,6 +22,7 @@ class AccountManagementController extends Controller
     private const MANAGED_ROLES = [
         'admin_inovchalenge',
         'dosen',
+        'tendik',
         'alumni',
         'peneliti',
         'dudi',
@@ -33,6 +34,7 @@ class AccountManagementController extends Controller
     public const ROLE_LABELS = [
         'admin_inovchalenge'    => 'Admin InovChallenge',
         'dosen'                 => 'Dosen',
+        'tendik'                => 'Tendik',
         'alumni'                => 'Alumni',
         'peneliti'              => 'Peneliti',
         'dudi'                  => 'DUDI',
@@ -44,6 +46,7 @@ class AccountManagementController extends Controller
     public const ROLE_COLORS = [
         'admin_inovchalenge'    => 'bg-yellow-100 text-yellow-700 border-yellow-200',
         'dosen'                 => 'bg-blue-100 text-blue-700 border-blue-200',
+        'tendik'                => 'bg-violet-100 text-violet-700 border-violet-200',
         'alumni'                => 'bg-emerald-100 text-emerald-700 border-emerald-200',
         'peneliti'              => 'bg-indigo-100 text-indigo-700 border-indigo-200',
         'dudi'                  => 'bg-amber-100 text-amber-700 border-amber-200',
@@ -55,6 +58,7 @@ class AccountManagementController extends Controller
     public const ROLE_ICONS = [
         'admin_inovchalenge'    => 'fa-user-shield',
         'dosen'                 => 'fa-chalkboard-teacher',
+        'tendik'                => 'fa-user-tie',
         'alumni'                => 'fa-user-graduate',
         'peneliti'              => 'fa-microscope',
         'dudi'                  => 'fa-building',

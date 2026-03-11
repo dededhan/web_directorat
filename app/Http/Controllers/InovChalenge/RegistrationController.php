@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\InovChalenge;
 
 use App\Http\Controllers\Controller;
+use App\Mail\InovChalengeRegistrationMail;
 use App\Models\InovChalengeRegistration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
 
 class RegistrationController extends Controller
@@ -27,7 +29,7 @@ class RegistrationController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|max:255|unique:users,email|unique:inov_chalenge_registrations,email',
             'password' => ['required', 'confirmed', Password::min(8)],
-            'role'     => 'required|in:dosen,alumni,peneliti,dudi,pppk,mahasiswa',
+            'role'     => 'required|in:dosen,alumni,peneliti,dudi,pppk,mahasiswa,tendik',
         ], [
             'name.required'      => 'Nama lengkap wajib diisi.',
             'email.required'     => 'Email wajib diisi.',
@@ -47,6 +49,14 @@ class RegistrationController extends Controller
             'role'     => $request->role,
             'status'   => 'pending',
         ]);
+
+        try {
+            Mail::to($request->email)
+                ->send(new InovChalengeRegistrationMail($request->name, $request->role));
+        } catch (\Exception $e) {
+            // Log error but do not block registration
+            logger()->error('InovChallenge registration email failed: ' . $e->getMessage());
+        }
 
         return redirect()->route('inovchalenge.register.form')
             ->with('success', 'Pendaftaran berhasil dikirim! Silakan tunggu persetujuan dari admin.');

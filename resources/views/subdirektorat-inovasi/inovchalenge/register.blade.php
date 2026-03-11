@@ -371,12 +371,13 @@
                                 <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
                                     Daftar Sebagai
                                 </label>
-                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
                                     @foreach ([
         'dosen' => ['label' => 'Dosen', 'icon' => 'fa-chalkboard-teacher', 'color' => 'from-cyan-500 to-cyan-600'],
         'alumni' => ['label' => 'Alumni', 'icon' => 'fa-user-graduate', 'color' => 'from-blue-500 to-blue-600'],
         'dudi' => ['label' => 'DUDI', 'icon' => 'fa-building', 'color' => 'from-orange-500 to-orange-600'],
         'mahasiswa' => ['label' => 'Mahasiswa', 'icon' => 'fa-graduation-cap', 'color' => 'from-teal-500 to-teal-600'],
+        'tendik' => ['label' => 'Tendik', 'icon' => 'fa-user-tie', 'color' => 'from-purple-500 to-purple-600'],
     ] as $value => $info)
                                         <label class="cursor-pointer role-card"
                                             :class="selectedRole === '{{ $value }}' ? 'active' : ''">

@@ -161,6 +161,7 @@ class MemberController extends Controller
                     'identifier_number' => $user->profile?->identifier_number ?? '',
                     'fakultas'          => $user->profile?->fakultas?->name ?? '',
                     'prodi'             => $user->profile?->prodi?->name ?? '',
+                    'institusi'         => $user->profile?->institusi ?? '',
                 ];
             });
 

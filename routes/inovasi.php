@@ -127,4 +127,15 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                     });
                 
             });
+
+        Route::prefix('tendik')->name('tendik.')
+            ->middleware(['auth', 'role:tendik'])
+            ->group(function () {
+                Route::get('/dashboard', function () {
+                    return redirect()->route('subdirektorat-inovasi.tendik.inovchalenge.sessions.index');
+                })->name('dashboard');
+
+                Route::get('/manageprofile', [\App\Http\Controllers\Tendik\TendikProfileController::class, 'edit'])->name('manageprofile.edit');
+                Route::put('/manageprofile', [\App\Http\Controllers\Tendik\TendikProfileController::class, 'update'])->name('manageprofile.update');
+            });
     });

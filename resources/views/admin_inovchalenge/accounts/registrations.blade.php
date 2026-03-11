@@ -107,6 +107,7 @@
                                     @php
                                         $roleColors = [
                                             'dosen' => 'bg-teal-100 text-teal-800',
+                                            'tendik' => 'bg-violet-100 text-violet-800',
                                             'alumni' => 'bg-green-100 text-green-800',
                                             'peneliti' => 'bg-indigo-100 text-indigo-800',
                                             'dudi' => 'bg-amber-100 text-amber-800',

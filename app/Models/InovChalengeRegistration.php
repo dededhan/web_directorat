@@ -19,6 +19,8 @@ class InovChalengeRegistration extends Model
      * Role labels for display.
      */
     public const ROLE_LABELS = [
+        'dosen'    => 'Dosen',
+        'tendik'   => 'Tendik',
         'alumni'   => 'Alumni',
         'peneliti' => 'Peneliti',
         'dudi'     => 'DUDI',

@@ -22,6 +22,7 @@ class RoleDashboardController extends Controller
         'dudi'      => 'DUDI',
         'pppk'      => 'PPPK',
         'mahasiswa' => 'Mahasiswa',
+        'tendik'    => 'Tendik',
     ];
 
     /**

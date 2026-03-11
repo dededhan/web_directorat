@@ -43,10 +43,12 @@
             <div class="h-16 flex items-center justify-center bg-gray-900 shadow-md">
                 @php
                     $roleIcons = [
+                        'dosen' => 'fa-chalkboard-teacher',
                         'alumni' => 'fa-user-graduate',
                         'peneliti' => 'fa-microscope',
                         'dudi' => 'fa-building',
                         'pppk' => 'fa-user-tie',
+                        'tendik' => 'fa-user-tie',
                         'mahasiswa' => 'fa-graduation-cap',
                     ];
                 @endphp
