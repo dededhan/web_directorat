@@ -701,7 +701,8 @@
                                 style="font-weight: 700; color: var(--ph-secondary); margin-bottom: 0.3rem; font-size: 1rem;">
                                 Sasaran</h4>
                             <p style="font-size: 0.9rem; color: #555; line-height: 1.7; margin: 0;">Dosen, peneliti,
-                                alumni, mahasiswa, tenaga kependidikan (tendik), dan mitra DUDI di lingkungan Universitas Negeri Jakarta yang memiliki ide inovasi
+                                alumni, mahasiswa, tenaga kependidikan (tendik), dan mitra DUDI di lingkungan
+                                Universitas Negeri Jakarta yang memiliki ide inovasi
                                 potensial.</p>
                         </div>
                     </div>
@@ -718,7 +719,7 @@
                         <div class="ph-service-icon-wrap"><i class="fas fa-clipboard-check"></i></div>
                         <h3>Tahap 1: Seleksi Administrasi</h3>
                         <p>Pemeriksaan kelengkapan dokumen proposal dan kesesuaian format yang diisyaratkan.</p>
-                        <span class="ph-service-link"><i class="fas fa-file-word mr-1"></i> Format: DOCX</span>
+                        <span class="ph-service-link"><i class="fas fa-file-word mr-1"></i> Format: PDF</span>
                     </div>
                     <div class="ph-service-card">
                         <div class="ph-service-icon-wrap"><i class="fas fa-presentation"></i></div>
@@ -740,34 +741,40 @@
             {{-- Siapa yang Bisa Mendaftar --}}
             <section class="ph-section">
                 <h2 class="ph-section-title">Siapa yang Bisa Mendaftar?</h2>
-                <p class="ph-intro">Program ini terbuka untuk dosen, mahasiswa, alumni, tenaga kependidikan (tendik), dan mitra dari Dunia Usaha Dunia
+                <p class="ph-intro">Program ini terbuka untuk dosen, mahasiswa, alumni, tenaga kependidikan (tendik),
+                    dan mitra dari Dunia Usaha Dunia
                     Industri (DUDI) yang ingin berinovasi bersama Universitas Negeri Jakarta.</p>
                 <div class="ph-service-grid">
                     <div class="ph-service-card">
                         <div class="ph-service-icon-wrap"><i class="fas fa-chalkboard-teacher"></i></div>
                         <h3>Dosen</h3>
-                        <p>Dosen aktif UNJ dari seluruh fakultas dan program studi yang memiliki ide inovatif dan ingin mengembangkan riset menjadi produk berdampak.</p>
+                        <p>Dosen aktif UNJ dari seluruh fakultas dan program studi yang memiliki ide inovatif dan ingin
+                            mengembangkan riset menjadi produk berdampak.</p>
                     </div>
                     <div class="ph-service-card">
                         <div class="ph-service-icon-wrap"><i class="fas fa-building"></i></div>
                         <h3>DUDI</h3>
-                        <p>Mitra dari Dunia Usaha Dunia Industri yang ingin berkolaborasi dalam pengembangan inovasi bersama civitas akademika UNJ.
+                        <p>Mitra dari Dunia Usaha Dunia Industri yang ingin berkolaborasi dalam pengembangan inovasi
+                            bersama civitas akademika UNJ.
                         </p>
                     </div>
                     <div class="ph-service-card">
                         <div class="ph-service-icon-wrap"><i class="fas fa-user-graduate"></i></div>
                         <h3>Alumni</h3>
-                        <p>Alumni UNJ yang memiliki ide inovasi dan ingin berkontribusi nyata bagi almamater dan masyarakat luas.</p>
+                        <p>Alumni UNJ yang memiliki ide inovasi dan ingin berkontribusi nyata bagi almamater dan
+                            masyarakat luas.</p>
                     </div>
                     <div class="ph-service-card">
                         <div class="ph-service-icon-wrap"><i class="fas fa-graduation-cap"></i></div>
                         <h3>Mahasiswa</h3>
-                        <p>Mahasiswa aktif UNJ yang ingin mengembangkan ide kreatif dan inovatif menjadi solusi nyata bagi masyarakat.</p>
+                        <p>Mahasiswa aktif UNJ yang ingin mengembangkan ide kreatif dan inovatif menjadi solusi nyata
+                            bagi masyarakat.</p>
                     </div>
                     <div class="ph-service-card">
                         <div class="ph-service-icon-wrap"><i class="fas fa-user-tie"></i></div>
                         <h3>Tendik</h3>
-                        <p>Tenaga Kependidikan UNJ yang memiliki gagasan inovatif dalam mendukung peningkatan layanan dan pengelolaan institusi.</p>
+                        <p>Tenaga Kependidikan UNJ yang memiliki gagasan inovatif dalam mendukung peningkatan layanan
+                            dan pengelolaan institusi.</p>
                     </div>
                 </div>
             </section>
@@ -912,29 +919,34 @@
 
             {{-- Panduan Innovation Challenge --}}
             <section class="ph-section" id="panduan">
-                <h2 class="ph-section-title"><i class="fas fa-book-open" style="margin-right:0.5rem;color:var(--ph-primary);"></i>Panduan Innovation Challenge</h2>
+                <h2 class="ph-section-title"><i class="fas fa-book-open"
+                        style="margin-right:0.5rem;color:var(--ph-primary);"></i>Panduan Innovation Challenge</h2>
                 <p class="ph-intro">
                     Unduh dan pelajari panduan lengkap UNJ Innovative Challenge sebelum mengajukan proposal Anda.
                     Panduan mencakup persyaratan peserta, format proposal, rubrik penilaian, alur seleksi, serta
                     template dokumen yang wajib digunakan pada setiap tahapan.
                 </p>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-                    
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+
                 </div>
 
-                <div style="text-align:center;padding:2rem;background:linear-gradient(135deg,rgba(39,113,119,0.06),rgba(243,156,18,0.06));border-radius:12px;border:1px dashed rgba(39,113,119,0.3);">
-                    <i class="fab fa-google-drive" style="font-size:3rem;color:#1a73e8;margin-bottom:1rem;display:block;"></i>
-                    <h3 style="font-size:1.3rem;font-weight:700;color:var(--ph-secondary);margin-bottom:0.5rem;">Akses Folder Panduan</h3>
+                <div
+                    style="text-align:center;padding:2rem;background:linear-gradient(135deg,rgba(39,113,119,0.06),rgba(243,156,18,0.06));border-radius:12px;border:1px dashed rgba(39,113,119,0.3);">
+                    <i class="fab fa-google-drive"
+                        style="font-size:3rem;color:#1a73e8;margin-bottom:1rem;display:block;"></i>
+                    <h3 style="font-size:1.3rem;font-weight:700;color:var(--ph-secondary);margin-bottom:0.5rem;">Akses
+                        Folder Panduan</h3>
                     <p style="font-size:0.95rem;color:#666;max-width:500px;margin:0 auto 1.5rem;">
-                        Semua dokumen panduan, template, dan materi pendukung Innovation Challenge tersedia di Google Drive berikut.
+                        Semua dokumen panduan, template, dan materi pendukung Innovation Challenge tersedia di Google
+                        Drive berikut.
                     </p>
                     <a href="https://drive.google.com/drive/folders/1uq3BRfL4gNd9S0KLv0GxBJVYcmwVlIQx?usp=drive_link"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       style="display:inline-flex;align-items:center;gap:0.6rem;padding:0.85rem 2rem;background:#1a73e8;color:#fff;font-weight:700;font-size:1rem;border-radius:10px;text-decoration:none;box-shadow:0 4px 16px rgba(26,115,232,0.35);transition:all 0.3s;"
-                       onmouseover="this.style.background='#1558b0';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(26,115,232,0.45)'"
-                       onmouseout="this.style.background='#1a73e8';this.style.transform='translateY(0)';this.style.boxShadow='0 4px 16px rgba(26,115,232,0.35)'">
+                        target="_blank" rel="noopener noreferrer"
+                        style="display:inline-flex;align-items:center;gap:0.6rem;padding:0.85rem 2rem;background:#1a73e8;color:#fff;font-weight:700;font-size:1rem;border-radius:10px;text-decoration:none;box-shadow:0 4px 16px rgba(26,115,232,0.35);transition:all 0.3s;"
+                        onmouseover="this.style.background='#1558b0';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(26,115,232,0.45)'"
+                        onmouseout="this.style.background='#1a73e8';this.style.transform='translateY(0)';this.style.boxShadow='0 4px 16px rgba(26,115,232,0.35)'">
                         <i class="fab fa-google-drive"></i>
                         Buka Panduan di Google Drive
                         <i class="fas fa-external-link-alt" style="font-size:0.8rem;"></i>

@@ -94,7 +94,7 @@
                             class="block px-4 py-2 text-sm hover:bg-gray-100">Riset UNJ</a></li>
                     <li><a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}"
                             class="block px-4 py-2 text-sm hover:bg-gray-100">Produk Inovasi UNJ</a></li>
-                    <li><a href="{{ route('subdirektorat-inovasi.inovation_challenge.index') }}"
+                    <li><a href="{{ route('subdirektorat-inovasi.innovation_challange.index') }}"
                             class="block px-4 py-2 text-sm hover:bg-gray-100">Innovation Challenge</a></li>
                 </ul>
             </li>
@@ -229,7 +229,7 @@
                         class="block text-white py-3 px-6 hover:bg-white/10">Riset UNJ</a></li>
                 <li><a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}"
                         class="block text-white py-3 px-6 hover:bg-white/10">Produk Inovasi UNJ</a></li>
-                <li><a href="{{ route('subdirektorat-inovasi.inovation_challenge.index') }}"
+                <li><a href="{{ route('subdirektorat-inovasi.innovation_challange.index') }}"
                         class="block text-white py-3 px-6 hover:bg-white/10">Innovation Challenge</a></li>
             </ul>
         </li>

@@ -173,7 +173,7 @@
                         UNJ</a>
                     <a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}"
                         class="hover:text-yellow-400">Produk Inovasi UNJ</a>
-                    <a href="{{ route('subdirektorat-inovasi.inovation_challenge.index') }}"
+                    <a href="{{ route('subdirektorat-inovasi.innovation_challange.index') }}"
                         class="hover:text-yellow-400">Innovation Challenge</a>
                 </ul>
             </li>
@@ -301,7 +301,7 @@
                     <li><a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}"
                             class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Produk
                             Inovasi UNJ</a></li>
-                    <li><a href="{{ route('subdirektorat-inovasi.inovation_challenge.index') }}"
+                    <li><a href="{{ route('subdirektorat-inovasi.innovation_challange.index') }}"
                             class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Innovation
                             Challenge</a></li>
                 </ul>

@@ -63,7 +63,7 @@
                     <li><a href="{{ route('riset.unj') }}" class="hover:text-yellow-400">Riset UNJ</a></li>
                     <li><a href="{{ route('subdirektorat-inovasi.riset_unj.produk_inovasi.produkinovasi') }}"
                             class="hover:text-yellow-400">Produk Inovasi UNJ</a></li>
-                    <li><a href="{{ route('subdirektorat-inovasi.inovation_challenge.index') }}"
+                    <li><a href="{{ route('subdirektorat-inovasi.innovation_challange.index') }}"
                             class="hover:text-yellow-400">Innovation Challenge</a></li>
                 </ul>
             </li>
@@ -245,7 +245,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('subdirektorat-inovasi.inovation_challenge.index') }}"
+                            <a href="{{ route('subdirektorat-inovasi.innovation_challange.index') }}"
                                 class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 Innovation Challenge
                             </a>
