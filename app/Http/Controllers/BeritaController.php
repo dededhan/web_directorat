@@ -406,7 +406,9 @@ class BeritaController extends Controller
 
         $instagramPosts = Instagram::orderBy('created_at', 'desc')->take(3)->get();
 
-        return view('home', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts'));
+        $rankings = Ranking::latest()->get();
+
+        return view('home', compact('regularNews', 'featuredNews', 'announcements', 'programLayanan', 'instagramPosts', 'rankings'));
     }
 
     /**

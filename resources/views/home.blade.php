@@ -688,6 +688,59 @@
         @endif
     </main>
 
+    {{-- UNJ Ranking Section --}}
+    <section class="unj-prestasi-container py-16 bg-slate-100">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800">UNJ dalam <span class="text-emerald-600">Ranking</span></h2>
+                <p class="text-gray-500 mt-2 text-sm">Pencapaian UNJ di berbagai lembaga pemeringkatan nasional &amp; internasional</p>
+                <div class="mt-4 h-1 w-24 bg-emerald-600 mx-auto rounded-full"></div>
+            </div>
+
+            @if(isset($rankings) && $rankings->count() > 0)
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-4 gap-5 max-w-5xl mx-auto">
+                    @foreach ($rankings->take(8) as $ranking)
+                        <a href="{{ route('pemeringkatan.ranking-unj.show', $ranking->slug) }}"
+                           class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col items-center text-center no-underline border border-gray-100">
+                            {{-- Branded top bar --}}
+                            <div class="w-full h-1 bg-teal-600 group-hover:bg-emerald-500 transition-colors duration-300"></div>
+                            {{-- Logo area --}}
+                            <div class="w-full flex items-center justify-center bg-gray-50 px-6 py-5" style="min-height: 130px;">
+                                <img src="{{ asset('storage/' . $ranking->gambar) }}"
+                                     alt="{{ $ranking->judul }}"
+                                     style="max-height: 110px; max-width: 100%; width: auto; object-fit: contain; display: block;">
+                            </div>
+                            {{-- Text area --}}
+                            <div class="px-4 py-4 w-full border-t border-gray-100">
+                                <p class="text-sm font-semibold text-gray-800 leading-snug mb-1">{{ $ranking->judul }}</p>
+                                @if($ranking->score_ranking)
+                                    <span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 mt-1">
+                                        {{ $ranking->score_ranking }}
+                                    </span>
+                                @endif
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+
+                @if($rankings->count() > 8)
+                <p class="text-center text-sm text-gray-400 mt-6">Menampilkan 8 dari {{ $rankings->count() }} ranking</p>
+                @endif
+
+                <div class="text-center mt-8">
+                    <a href="{{ route('pemeringkatan.ranking-unj.index') }}"
+                       class="inline-flex items-center gap-2 bg-teal-700 hover:bg-teal-800 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200">
+                        {{ app()->getLocale() === 'en' ? 'View All Rankings' : 'Lihat Semua Ranking' }}
+                        <i class="fas fa-arrow-right text-sm"></i>
+                    </a>
+                </div>
+            @else
+                <p class="text-center text-gray-500">Belum ada data ranking.</p>
+            @endif
+        </div>
+    </section>
+
+
     {{-- Programs & Services Section --}}
     <section class="program-section py-16 bg-gray-100">
         <div class="container mx-auto px-6">
@@ -774,6 +827,7 @@
             @endif
         </div>
     </section>
+
     
     {{-- UNJ in Numbers Section --}}
     <section class="unj-prestasi-container py-16 bg-slate-100">
