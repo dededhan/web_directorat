@@ -305,8 +305,7 @@
                                 </div>
                                 <div>
                                     <h2 class="text-2xl font-bold text-gray-900">Buat Akun Baru</h2>
-                                    <p class="text-gray-500 text-sm mt-0.5">Lengkapi data berikut untuk mendaftar di
-                                        Innovation Challenge</p>
+                                    <p class="text-gray-500 text-sm mt-0.5">Lengkapi data berikut untuk mendaftar</p>
                                 </div>
                             </div>
                         </div>
