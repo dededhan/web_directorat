@@ -16,6 +16,70 @@
             font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
             font-weight: 900 !important;
         }
+
+        .news-content {
+            color: #374151;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .news-content p {
+            margin-bottom: 1rem;
+        }
+
+        .news-content h1,
+        .news-content h2,
+        .news-content h3,
+        .news-content h4,
+        .news-content h5,
+        .news-content h6 {
+            color: #1A1A1A;
+            font-family: 'Lora', serif;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .news-content h1 { font-size: 2rem; }
+        .news-content h2 { font-size: 1.75rem; }
+        .news-content h3 { font-size: 1.5rem; }
+        .news-content h4 { font-size: 1.25rem; }
+
+        .news-content ul,
+        .news-content ol {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .news-content ul { list-style: disc; }
+        .news-content ol { list-style: decimal; }
+
+        .news-content li {
+            margin-bottom: 0.35rem;
+        }
+
+        .news-content blockquote {
+            margin: 1.25rem 0;
+            padding: 0.75rem 1rem;
+            border-left: 4px solid #B8860B;
+            background: #FFFBEB;
+            color: #4B5563;
+            font-style: italic;
+        }
+
+        .news-content a {
+            color: #B8860B;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            font-weight: 600;
+            transition: color 0.2s ease;
+            word-break: break-word;
+        }
+
+        .news-content a:hover {
+            color: #D4AC0D;
+        }
     </style>
 
     <script>
@@ -78,8 +142,8 @@
             </div>
 
             @if($news->description)
-            <div class="prose prose-lg max-w-none">
-                <div class="text-gray-700 leading-relaxed text-justify">
+            <div class="max-w-none">
+                <div class="news-content text-justify">
                     {!! $news->description !!}
                 </div>
             </div>
