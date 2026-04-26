@@ -101,7 +101,7 @@
                     @error('description')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
-                    <p class="mt-1 text-xs text-gray-500">Anda bisa menggunakan HTML sederhana seperti &lt;p&gt;, &lt;strong&gt;, &lt;em&gt;, dll.</p>
+                    <p class="mt-1 text-xs text-gray-500">Gunakan tombol editor untuk format teks (bold, italic, list, link), tidak perlu menulis tag HTML manual.</p>
                 </div>
 
                 <div class="mb-6">
@@ -165,7 +165,11 @@
     </div>
 </div>
 
-<script src="https://cdn.tiny.mce.com/1/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+@if(config('services.tinymce.api_key'))
+<script src="https://cdn.tiny.cloud/1/{{ config('services.tinymce.api_key') }}/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+@else
+<script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
+@endif
 <script>
 // Initialize TinyMCE
 tinymce.init({
