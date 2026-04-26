@@ -138,9 +138,9 @@
                                 <i class='bx bx-world text-indigo-500 mr-2'></i>
                                 Negara Tempat Pelaksanaan <span class="text-red-500 ml-1">*</span>
                             </label>
-                            <select name="negara_pelaksanaan" id="negara_pelaksanaan" required x-model="selectedCountry"
+                            <select name="negara_pelaksanaan" id="negara_pelaksanaan" required
                                     class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200 text-gray-900 shadow-sm">
-                                <option value="">Pilih Negara...</option>
+                                <option value="Indonesia" {{ old('negara_pelaksanaan', $report->negara_pelaksanaan ?? 'Indonesia') === 'Indonesia' ? 'selected' : '' }}>Indonesia</option>
                             </select>
                             @error('negara_pelaksanaan')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
@@ -255,7 +255,7 @@
                     <div>
                         <label for="bukti_pendaftaran" class="block text-sm font-bold text-gray-700 mb-2 flex items-center">
                             <i class='bx bx-file-blank text-blue-500 mr-2'></i>
-                            Bukti Pendaftaran/Registrasi @if(!$report->bukti_pendaftaran_path)<span class="text-red-500 ml-1">*</span>@endif
+                            Bukti Pendaftaran/Registrasi
                         </label>
                         @if($report->bukti_pendaftaran_path)
                             <div class="mb-2 p-2 bg-green-50 border border-green-200 rounded-lg text-sm">
@@ -274,7 +274,7 @@
                     <div>
                         <label for="bukti_loa" class="block text-sm font-bold text-gray-700 mb-2 flex items-center">
                             <i class='bx bx-file-blank text-purple-500 mr-2'></i>
-                            Bukti LoA (Letter of Acceptance) @if(!$report->bukti_loa_path)<span class="text-red-500 ml-1">*</span>@endif
+                            Bukti LoA (Letter of Acceptance)
                         </label>
                         @if($report->bukti_loa_path)
                             <div class="mb-2 p-2 bg-green-50 border border-green-200 rounded-lg text-sm">
@@ -293,7 +293,7 @@
                     <div>
                         <label for="rencana_anggaran" class="block text-sm font-bold text-gray-700 mb-2 flex items-center">
                             <i class='bx bx-file-blank text-green-500 mr-2'></i>
-                            Rencana Anggaran (Mengacu pada SBM) @if(!$report->rencana_anggaran)<span class="text-red-500 ml-1">*</span>@endif
+                            Rencana Anggaran (Mengacu pada SBM)
                         </label>
                         @if($report->rencana_anggaran)
                             <div class="mb-2 p-2 bg-green-50 border border-green-200 rounded-lg text-sm">
@@ -330,31 +330,7 @@ function presentingForm() {
     return {
         selectedSDGs: @json(json_decode($report->sdg_terkait ?? '[]', true)),
         selectedKeywords: @json(json_decode($report->keywords_sdg ?? '[]', true)),
-        selectedCountry: '{{ old("negara_pelaksanaan", $report->negara_pelaksanaan ?? "") }}',
         sdgKeywords: @json(config('sdg.keywords')),
-        
-        init() {
-            this.loadCountries();
-        },
-        
-        async loadCountries() {
-            try {
-                const response = await fetch('/api/countries');
-                const countries = await response.json();
-                const select = document.getElementById('negara_pelaksanaan');
-                countries.forEach(country => {
-                    const option = document.createElement('option');
-                    option.value = country.name;
-                    option.textContent = country.name;
-                    if (country.name === this.selectedCountry) {
-                        option.selected = true;
-                    }
-                    select.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Error loading countries:', error);
-            }
-        },
         
         updateKeywords() {
         }

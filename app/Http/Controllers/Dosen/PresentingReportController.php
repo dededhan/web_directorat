@@ -19,7 +19,7 @@ class PresentingReportController extends Controller
             'lembaga_penyelenggara' => 'required|string|max:255',
             'link_website' => 'required|url',
             'tempat_pelaksanaan' => 'required|string|max:255',
-            'negara_pelaksanaan' => 'required|string|max:255',
+            'negara_pelaksanaan' => 'required|in:Indonesia',
             'waktu_pelaksanaan_awal' => 'required|date',
             'waktu_pelaksanaan_akhir' => 'required|date|after_or_equal:waktu_pelaksanaan_awal',
             'judul_artikel' => 'required|string|max:500',
@@ -27,9 +27,9 @@ class PresentingReportController extends Controller
             'sdg_terkait.*' => 'in:SDG-1,SDG-2,SDG-3,SDG-4,SDG-5,SDG-6,SDG-7,SDG-8,SDG-9,SDG-10,SDG-11,SDG-12,SDG-13,SDG-14,SDG-15,SDG-16',
             'keywords_sdg' => 'required|array|min:1',
             'keywords_sdg.*' => 'string',
-            'bukti_pendaftaran' => 'required|file|mimes:pdf|max:10240',
-            'bukti_loa' => 'required|file|mimes:pdf|max:10240',
-            'rencana_anggaran' => 'required|file|mimes:pdf|max:10240',
+            'bukti_pendaftaran' => 'nullable|file|mimes:pdf|max:10240',
+            'bukti_loa' => 'nullable|file|mimes:pdf|max:10240',
+            'rencana_anggaran' => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
         $validated['presenting_session_id'] = $sessionId;
@@ -40,10 +40,14 @@ class PresentingReportController extends Controller
 
         if ($request->hasFile('bukti_pendaftaran')) {
             $validated['bukti_pendaftaran_path'] = $request->file('bukti_pendaftaran')->store('presenting/bukti_pendaftaran', 'public');
+        } else {
+            $validated['bukti_pendaftaran_path'] = '';
         }
 
         if ($request->hasFile('bukti_loa')) {
             $validated['bukti_loa_path'] = $request->file('bukti_loa')->store('presenting/bukti_loa', 'public');
+        } else {
+            $validated['bukti_loa_path'] = '';
         }
 
         if ($request->hasFile('rencana_anggaran')) {
@@ -88,7 +92,7 @@ class PresentingReportController extends Controller
             'lembaga_penyelenggara' => 'required|string|max:255',
             'link_website' => 'required|url',
             'tempat_pelaksanaan' => 'required|string|max:255',
-            'negara_pelaksanaan' => 'required|string|max:255',
+            'negara_pelaksanaan' => 'required|in:Indonesia',
             'waktu_pelaksanaan_awal' => 'required|date',
             'waktu_pelaksanaan_akhir' => 'required|date|after_or_equal:waktu_pelaksanaan_awal',
             'judul_artikel' => 'required|string|max:500',

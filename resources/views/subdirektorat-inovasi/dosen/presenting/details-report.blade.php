@@ -195,6 +195,7 @@ if (!function_exists('getStatusInfoDosen')) {
                         Dokumen Pendukung
                     </h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        @if($report->bukti_pendaftaran_path)
                         <a href="{{ asset('storage/' . $report->bukti_pendaftaran_path) }}" target="_blank" class="flex items-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl hover:from-blue-100 hover:to-blue-200 transition-all duration-200 group">
                             <i class='bx bx-file-blank text-blue-500 text-2xl mr-3 group-hover:scale-110 transition-transform'></i>
                             <div>
@@ -202,6 +203,8 @@ if (!function_exists('getStatusInfoDosen')) {
                                 <p class="text-xs text-gray-500">File PDF</p>
                             </div>
                         </a>
+                        @endif
+                        @if($report->bukti_loa_path)
                         <a href="{{ asset('storage/' . $report->bukti_loa_path) }}" target="_blank" class="flex items-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-200 rounded-xl hover:from-purple-100 hover:to-purple-200 transition-all duration-200 group">
                             <i class='bx bx-envelope text-purple-500 text-2xl mr-3 group-hover:scale-110 transition-transform'></i>
                             <div>
@@ -209,6 +212,8 @@ if (!function_exists('getStatusInfoDosen')) {
                                 <p class="text-xs text-gray-500">Letter of Acceptance</p>
                             </div>
                         </a>
+                        @endif
+                        @if($report->rencana_anggaran)
                         <a href="{{ asset('storage/' . $report->rencana_anggaran) }}" target="_blank" class="flex items-center p-4 bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-xl hover:from-green-100 hover:to-green-200 transition-all duration-200 group">
                             <i class='bx bx-dollar-circle text-green-500 text-2xl mr-3 group-hover:scale-110 transition-transform'></i>
                             <div>
@@ -216,6 +221,13 @@ if (!function_exists('getStatusInfoDosen')) {
                                 <p class="text-xs text-gray-500">Mengacu SBM</p>
                             </div>
                         </a>
+                        @endif
+
+                        @if(!$report->bukti_pendaftaran_path && !$report->bukti_loa_path && !$report->rencana_anggaran)
+                        <div class="sm:col-span-2 lg:col-span-3 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-500">
+                            Belum ada dokumen pendukung yang diunggah.
+                        </div>
+                        @endif
                     </div>
                 </div>
 

@@ -137,9 +137,9 @@
                                 <i class='bx bx-world text-indigo-500 mr-2'></i>
                                 Negara Tempat Pelaksanaan <span class="text-red-500 ml-1">*</span>
                             </label>
-                            <select name="negara_pelaksanaan" id="negara_pelaksanaan" required x-model="selectedCountry"
+                            <select name="negara_pelaksanaan" id="negara_pelaksanaan" required
                                     class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200 text-gray-900 shadow-sm">
-                                <option value="">Pilih Negara...</option>
+                                <option value="Indonesia" {{ old('negara_pelaksanaan', 'Indonesia') === 'Indonesia' ? 'selected' : '' }}>Indonesia</option>
                             </select>
                             @error('negara_pelaksanaan')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
@@ -249,9 +249,9 @@
                     <div>
                         <label for="bukti_pendaftaran" class="block text-sm font-bold text-gray-700 mb-2 flex items-center">
                             <i class='bx bx-file-blank text-blue-500 mr-2'></i>
-                            Bukti Pendaftaran/Registrasi <span class="text-red-500 ml-1">*</span>
+                            Bukti Pendaftaran/Registrasi
                         </label>
-                        <input type="file" name="bukti_pendaftaran" id="bukti_pendaftaran" required accept=".pdf"
+                        <input type="file" name="bukti_pendaftaran" id="bukti_pendaftaran" accept=".pdf"
                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200 text-gray-900 shadow-sm">
                         <p class="text-xs text-gray-500 mt-1">Format: PDF (Max: 10MB)</p>
                         @error('bukti_pendaftaran')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
@@ -260,9 +260,9 @@
                     <div>
                         <label for="bukti_loa" class="block text-sm font-bold text-gray-700 mb-2 flex items-center">
                             <i class='bx bx-file-blank text-purple-500 mr-2'></i>
-                            Bukti LoA (Letter of Acceptance) <span class="text-red-500 ml-1">*</span>
+                            Bukti LoA (Letter of Acceptance)
                         </label>
-                        <input type="file" name="bukti_loa" id="bukti_loa" required accept=".pdf"
+                        <input type="file" name="bukti_loa" id="bukti_loa" accept=".pdf"
                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200 text-gray-900 shadow-sm">
                         <p class="text-xs text-gray-500 mt-1">Format: PDF (Max: 10MB)</p>
                         @error('bukti_loa')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
@@ -271,9 +271,9 @@
                     <div>
                         <label for="rencana_anggaran" class="block text-sm font-bold text-gray-700 mb-2 flex items-center">
                             <i class='bx bx-file-blank text-green-500 mr-2'></i>
-                            Rencana Anggaran (Mengacu pada SBM) <span class="text-red-500 ml-1">*</span>
+                            Rencana Anggaran (Mengacu pada SBM)
                         </label>
-                        <input type="file" name="rencana_anggaran" id="rencana_anggaran" required accept=".pdf"
+                        <input type="file" name="rencana_anggaran" id="rencana_anggaran" accept=".pdf"
                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200 text-gray-900 shadow-sm">
                         <p class="text-xs text-gray-500 mt-1">Format: PDF (Max: 10MB)</p>
                         @error('rencana_anggaran')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
@@ -299,31 +299,7 @@
 function presentingForm() {
     return {
         selectedSDGs: [],
-        selectedCountry: '{{ old("negara_pelaksanaan") }}',
         sdgKeywords: @json(config('sdg.keywords')),
-        
-        init() {
-            this.loadCountries();
-        },
-        
-        async loadCountries() {
-            try {
-                const response = await fetch('/api/countries');
-                const countries = await response.json();
-                const select = document.getElementById('negara_pelaksanaan');
-                countries.forEach(country => {
-                    const option = document.createElement('option');
-                    option.value = country.name;
-                    option.textContent = country.name;
-                    if (country.name === this.selectedCountry) {
-                        option.selected = true;
-                    }
-                    select.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Error loading countries:', error);
-            }
-        },
         
         updateKeywords() {
         }
