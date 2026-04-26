@@ -179,7 +179,7 @@ tinymce.init({
         'searchreplace', 'visualblocks', 'code', 'fullscreen',
         'insertdatetime', 'table', 'help', 'wordcount'
     ],
-    toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist | removeformat | help',
+    toolbar: 'undo redo | blocks | bold italic link unlink | alignleft aligncenter alignright | bullist numlist | removeformat | help',
     content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 14px; }',
     valid_elements: 'p,br,strong,em,u,h1,h2,h3,h4,h5,h6,ul,ol,li,a[href|target],blockquote',
     valid_children: '+body[style]',
