@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminEquity;
 use App\Http\Controllers\Controller;
 use App\Models\ComdevProposal;      // Model Sesi
 use App\Models\ComdevSubmission;   // Model Proposal Dosen
+use App\Models\ComdevModuleRevisionFile;
 use App\Models\Fakultas;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SubmissionsExportcomdev;
+use Illuminate\Support\Facades\Storage;
 
 class ComdevSubmissionAdminController extends Controller
 {
@@ -69,6 +71,7 @@ class ComdevSubmissionAdminController extends Controller
         $submission->load(
             'files',
             'reviewers',
+            'revisionFiles',
             'sesi.modules.subChapters', // Untuk menampilkan struktur modul & sub-bab
             'reviews.reviewer',       // Memuat review DAN user yang mereview
             'reviews.module'          // Memuat modul yang direview
@@ -128,7 +131,7 @@ class ComdevSubmissionAdminController extends Controller
     public function updateModuleStatus(Request $request, ComdevSubmission $submission, ComdevModule $module)
     {
         $request->validate([
-            'status' => 'required|in:proses,lolos,tidaklolos,lolos_didanai,tidak_lolos_didanai',
+            'status' => 'required|in:proses,lolos,tidaklolos,butuh_perbaikan,lolos_didanai,tidak_lolos_didanai',
             'nominal_evaluasi' => 'nullable|numeric',
             'catatan_admin' => 'nullable|string',
         ]);
@@ -145,7 +148,7 @@ class ComdevSubmissionAdminController extends Controller
                 'nominal_disetujui' => $request->nominal_disetujui,
             ]
         );
-        if ($request->status == 'lolos' || $request->status == 'lolos_didanai') {
+        if ($request->status == 'lolos') {
             $nextModule = $submission->sesi->modules()
                 ->where('urutan', '>', $module->urutan)
                 ->orderBy('urutan')->first();
@@ -161,11 +164,104 @@ class ComdevSubmissionAdminController extends Controller
                 // Final, semua modul lolos
                 $submission->update(['status' => ComdevStatusEnum::SELESAI]);
             }
-        } elseif ($request->status == 'tidaklolos' || $request->status == 'tidak_lolos_didanai') {
+        } elseif ($request->status == 'tidaklolos') {
             $submission->update(['status' => ComdevStatusEnum::PERBAIKAN_DIPERLUKAN]);
+        } elseif ($request->status == 'butuh_perbaikan') {
+            $submission->update(['status' => ComdevStatusEnum::PERBAIKAN_DIPERLUKAN]);
+        } elseif ($request->status == 'lolos_didanai') {
+            // Treat funded approval similar to 'lolos' but mark submission as funded if final
+            $nextModule = $submission->sesi->modules()
+                ->where('urutan', '>', $module->urutan)
+                ->orderBy('urutan')->first();
+
+            if ($nextModule) {
+                $submission->moduleStatuses()->updateOrCreate(
+                    ['comdev_module_id' => $nextModule->id],
+                    ['status' => 'proses']
+                );
+                $submission->update(['status' => ComdevStatusEnum::PROSES_TAHAP_SELANJUTNYA]);
+            } else {
+                $submission->update(['status' => ComdevStatusEnum::LOLOS_DIDANAI]);
+            }
+        } elseif ($request->status == 'tidak_lolos_didanai') {
+            // Final non-funded outcome
+            $submission->update(['status' => ComdevStatusEnum::TIDAK_LOLOS_DIDANAI]);
         }
 
         return back()->with('success', 'Status Modul berhasil diperbarui.');
+    }
+
+    /**
+     * Review file perbaikan dari dosen.
+     * Admin bisa ACC (lolos) atau Reject (butuh perbaikan lagi).
+     */
+    public function reviewRevision(Request $request, ComdevSubmission $submission, ComdevModule $module)
+    {
+        $request->validate([
+            'revision_id' => 'required|exists:comdev_module_revision_files,id',
+            'action' => 'required|in:accept,reject',
+            'catatan_admin' => 'nullable|string',
+        ]);
+
+        $revision = ComdevModuleRevisionFile::findOrFail($request->revision_id);
+
+        // Pastikan revision ini milik submission dan module yang benar
+        abort_if($revision->comdev_submission_id !== $submission->id, 404);
+        abort_if($revision->comdev_module_id !== $module->id, 404);
+
+        if ($request->action === 'accept') {
+            // Update revision status
+            $revision->update([
+                'status' => 'accepted',
+                'catatan_admin' => $request->catatan_admin,
+            ]);
+
+            // Update module status ke lolos
+            $submission->moduleStatuses()->updateOrCreate(
+                ['comdev_module_id' => $module->id],
+                [
+                    'status' => 'lolos',
+                    'catatan_admin' => $request->catatan_admin,
+                ]
+            );
+
+            // Buka modul selanjutnya
+            $nextModule = $submission->sesi->modules()
+                ->where('urutan', '>', $module->urutan)
+                ->orderBy('urutan')->first();
+
+            if ($nextModule) {
+                $submission->moduleStatuses()->updateOrCreate(
+                    ['comdev_module_id' => $nextModule->id],
+                    ['status' => 'proses']
+                );
+                $submission->update(['status' => ComdevStatusEnum::PROSES_TAHAP_SELANJUTNYA]);
+            } else {
+                $submission->update(['status' => ComdevStatusEnum::SELESAI]);
+            }
+
+            return back()->with('success', 'File perbaikan diterima. Status modul berubah menjadi Lolos.');
+
+        } else {
+            // Reject - dosen harus upload lagi
+            $revision->update([
+                'status' => 'rejected',
+                'catatan_admin' => $request->catatan_admin,
+            ]);
+
+            // Status modul tetap butuh_perbaikan
+            $submission->moduleStatuses()->updateOrCreate(
+                ['comdev_module_id' => $module->id],
+                [
+                    'status' => 'butuh_perbaikan',
+                    'catatan_admin' => $request->catatan_admin,
+                ]
+            );
+
+            $submission->update(['status' => ComdevStatusEnum::PERBAIKAN_DIPERLUKAN]);
+
+            return back()->with('success', 'File perbaikan ditolak. Dosen akan diminta mengupload ulang.');
+        }
     }
     public function updateStatus(Request $request, ComdevProposal $comdev, ComdevSubmission $submission)
     {

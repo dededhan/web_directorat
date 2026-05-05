@@ -63,12 +63,17 @@ class ComdevSubmission extends Model
     {
         return $this->hasOne(ComdevSubmissionModuleStatus::class, 'comdev_submission_id')
             ->join('comdev_modules', 'comdev_submission_module_statuses.comdev_module_id', '=', 'comdev_modules.id')
-            ->whereNotIn('comdev_submission_module_statuses.status', ['lolos', 'lolos_didanai'])
+            ->where('comdev_submission_module_statuses.status', '!=', 'lolos')
             ->orderBy('comdev_modules.urutan', 'asc');
     }
     public function logbooks()
     {
         return $this->hasMany(Logbook::class, 'comdev_submission_id')->orderBy('activity_date', 'desc');
+    }
+
+    public function revisionFiles()
+    {
+        return $this->hasMany(ComdevModuleRevisionFile::class, 'comdev_submission_id');
     }
 
 }

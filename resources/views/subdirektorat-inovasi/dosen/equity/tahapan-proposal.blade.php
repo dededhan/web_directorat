@@ -92,9 +92,10 @@
         @if($statusInfo)
     <div class="mt-4 p-3 rounded-lg flex items-start
         @if($statusInfo->status == 'lolos') bg-green-50 border border-green-200
-        @elseif($statusInfo->status == 'lolos_didanai') bg-green-50 border border-green-200
+        @elseif($statusInfo->status == 'lolos_didanai') bg-emerald-50 border border-emerald-200
+        @elseif($statusInfo->status == 'tidak_lolos_didanai') bg-rose-50 border border-rose-200
         @elseif($statusInfo->status == 'tidaklolos') bg-red-50 border border-red-200
-        @elseif($statusInfo->status == 'tidak_lolos_didanai') bg-red-50 border border-red-200
+        @elseif($statusInfo->status == 'butuh_perbaikan') bg-orange-50 border border-orange-200
         @elseif($statusInfo->status == 'menunggu_direview') bg-blue-50 border border-blue-200
         @elseif($statusInfo->status == 'proses') bg-gray-50 border border-gray-200
         @else bg-yellow-50 border border-yellow-200 @endif
@@ -103,11 +104,13 @@
             @if($statusInfo->status == 'lolos')
                 <i class='bx bxs-check-circle text-2xl text-green-500'></i>
             @elseif($statusInfo->status == 'lolos_didanai')
-                <i class='bx bxs-check-circle text-2xl text-green-500'></i>
+                <i class='bx bxs-badge-check text-2xl text-emerald-600'></i>
+            @elseif($statusInfo->status == 'tidak_lolos_didanai')
+                <i class='bx bxs-x-square text-2xl text-rose-600'></i>
             @elseif($statusInfo->status == 'tidaklolos')
                 <i class='bx bxs-x-circle text-2xl text-red-500'></i>
-            @elseif($statusInfo->status == 'tidak_lolos_didanai')
-                <i class='bx bxs-x-circle text-2xl text-red-500'></i>
+            @elseif($statusInfo->status == 'butuh_perbaikan')
+                <i class='bx bxs-error text-2xl text-orange-500'></i>
             @elseif($statusInfo->status == 'menunggu_direview')
                 <i class='bx bxs-hourglass text-2xl text-blue-500'></i>
             @elseif($statusInfo->status == 'proses')
@@ -119,31 +122,41 @@
         <div class="ml-3 flex-grow">
             <p class="text-sm font-semibold 
                 @if($statusInfo->status == 'lolos') text-green-800
-                @elseif($statusInfo->status == 'lolos_didanai') text-green-800
+                @elseif($statusInfo->status == 'lolos_didanai') text-emerald-900
+                @elseif($statusInfo->status == 'tidak_lolos_didanai') text-rose-900
                 @elseif($statusInfo->status == 'tidaklolos') text-red-800
-                @elseif($statusInfo->status == 'tidak_lolos_didanai') text-red-800
+                @elseif($statusInfo->status == 'butuh_perbaikan') text-orange-800
                 @elseif($statusInfo->status == 'menunggu_direview') text-blue-800
                 @elseif($statusInfo->status == 'proses') text-gray-800
                 @else text-yellow-800 @endif
             ">
                 Status Tahap: 
-                @if($statusInfo->status == 'tidaklolos')
-                    Tidak Lolos
+                @if($statusInfo->status == 'lolos')
+                    Lolos
+                @elseif($statusInfo->status == 'lolos_didanai')
+                    Lolos Didanai
                 @elseif($statusInfo->status == 'tidak_lolos_didanai')
                     Tidak Lolos Didanai
+                @elseif($statusInfo->status == 'tidaklolos')
+                    Tidak Lolos
+                @elseif($statusInfo->status == 'butuh_perbaikan')
+                    Butuh Perbaikan
                 @elseif($statusInfo->status == 'menunggu_direview')
                     Menunggu Direview
                 @elseif($statusInfo->status == 'proses')
                     Sedang Proses
-                @elseif($statusInfo->status == 'lolos_didanai')
-                    Lolos Didanai
                 @else
-                    {{ str_replace('_', ' ', Str::title($statusInfo->status)) }}
+                    {{ ucfirst(str_replace('_',' ', $statusInfo->status)) }}
                 @endif
             </p>
             
-           
-            @if(in_array($statusInfo->status, ['lolos', 'lolos_didanai']) && $loop->first && $statusInfo->nominal_evaluasi > 0)
+            @if($statusInfo->status == 'butuh_perbaikan')
+                <p class="text-xs text-orange-600 mt-1">
+                    <i class='bx bx-info-circle'></i> Silakan upload file perbaikan di bawah ini.
+                </p>
+            @endif
+
+            @if(($statusInfo->status == 'lolos' || $statusInfo->status == 'lolos_didanai') && $loop->first && $statusInfo->nominal_evaluasi > 0)
                 <div class="mt-2 pt-2 border-t border-green-200">
                     <p class="text-xs text-gray-600">Nominal Disetujui:</p>
                     <p class="text-md font-bold text-green-900">
@@ -158,6 +171,96 @@
         </div>
     </div>
 @endif
+
+                                {{-- Section: Upload Perbaikan (hanya muncul jika status butuh_perbaikan) --}}
+                                @if($statusInfo && $statusInfo->status == 'butuh_perbaikan')
+                                    <div class="mt-4 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                                        <h4 class="text-sm font-bold text-orange-800 mb-3 flex items-center">
+                                            <i class='bx bx-upload text-lg mr-2'></i>Upload File Perbaikan
+                                        </h4>
+
+                                        {{-- Histori revisi sebelumnya --}}
+                                        @php $moduleRevs = isset($revisionFiles) ? ($revisionFiles[$module->id] ?? collect()) : collect(); @endphp
+                                        @if($moduleRevs->count() > 0)
+                                            <div class="mb-4">
+                                                <p class="text-xs font-semibold text-gray-600 mb-2">Histori Revisi:</p>
+                                                <div class="space-y-2">
+                                                    @foreach($moduleRevs->sortByDesc('revision_round') as $rev)
+                                                        <div class="flex flex-wrap items-center gap-2 p-2 rounded-md text-xs
+                                                            @if($rev->status === 'accepted') bg-green-100 border border-green-200
+                                                            @elseif($rev->status === 'rejected') bg-red-100 border border-red-200
+                                                            @else bg-yellow-100 border border-yellow-200 @endif">
+                                                            <span class="font-semibold">Ronde {{ $rev->revision_round }}:</span>
+                                                            @if($rev->type === 'file' && $rev->file_path)
+                                                                <a href="{{ route('subdirektorat-inovasi.dosen.equity.revision.preview', $rev->id) }}" target="_blank"
+                                                                    class="text-blue-600 hover:underline">{{ $rev->original_filename }}</a>
+                                                            @elseif($rev->type === 'link' && $rev->url)
+                                                                <a href="{{ $rev->url }}" target="_blank"
+                                                                    class="text-blue-600 hover:underline">{{ Str::limit($rev->url, 40) }}</a>
+                                                            @endif
+                                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+                                                                @if($rev->status === 'accepted') bg-green-200 text-green-800
+                                                                @elseif($rev->status === 'rejected') bg-red-200 text-red-800
+                                                                @else bg-yellow-200 text-yellow-800 @endif">
+                                                                @if($rev->status === 'accepted') Diterima
+                                                                @elseif($rev->status === 'rejected') Ditolak
+                                                                @else Menunggu @endif
+                                                            </span>
+                                                            @if($rev->catatan_admin)
+                                                                <span class="text-red-600 italic">Admin: {{ $rev->catatan_admin }}</span>
+                                                            @endif
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                        {{-- Cek apakah ada pending revision, jika iya jangan tampilkan form --}}
+                                        @php $hasPendingRevision = $moduleRevs->where('status', 'pending')->count() > 0; @endphp
+                                        @if($hasPendingRevision)
+                                            <div class="p-3 bg-yellow-100 border border-yellow-300 rounded-md text-xs text-yellow-800">
+                                                <i class='bx bx-time mr-1'></i>
+                                                File perbaikan Anda sedang menunggu review dari admin. Silakan tunggu keputusan admin.
+                                            </div>
+                                        @else
+                                            <form action="{{ route('subdirektorat-inovasi.dosen.equity.files.storeRevision', ['submission' => $submission->id, 'module' => $module->id]) }}"
+                                                method="POST" enctype="multipart/form-data" class="space-y-3" x-data="{ revType: 'file' }">
+                                                @csrf
+                                                <div>
+                                                    <label class="block text-xs font-medium text-gray-700 mb-1">Tipe File</label>
+                                                    <select name="type" x-model="revType"
+                                                        class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:ring-orange-500 focus:border-orange-500">
+                                                        <option value="file">Upload File PDF</option>
+                                                        <option value="link">Link URL</option>
+                                                    </select>
+                                                </div>
+
+                                                <div x-show="revType === 'file'" x-transition>
+                                                    <label class="block text-xs font-medium text-gray-700 mb-1">File Perbaikan (PDF, Maks: 5MB)</label>
+                                                    <input type="file" name="file_revisi" accept=".pdf"
+                                                        class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100">
+                                                </div>
+
+                                                <div x-show="revType === 'link'" x-transition>
+                                                    <label class="block text-xs font-medium text-gray-700 mb-1">URL Link Perbaikan</label>
+                                                    <input type="url" name="url" placeholder="https://..."
+                                                        class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:ring-orange-500 focus:border-orange-500">
+                                                </div>
+
+                                                <div>
+                                                    <label class="block text-xs font-medium text-gray-700 mb-1">Catatan Perbaikan (Opsional)</label>
+                                                    <textarea name="catatan_dosen" rows="2" placeholder="Jelaskan perbaikan yang telah dilakukan..."
+                                                        class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:ring-orange-500 focus:border-orange-500"></textarea>
+                                                </div>
+
+                                                <button type="submit"
+                                                    class="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 text-sm font-semibold transition">
+                                                    <i class='bx bx-upload mr-2'></i>Upload Perbaikan
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                @endif
                             </div>
                             <div class="border-b border-gray-200">
                                 <nav class="-mb-px flex px-6">

@@ -195,6 +195,7 @@
                             $allModules = $submission->sesi->modules()->with('subChapters')->orderBy('urutan')->get();
                             $statuses = $submission->moduleStatuses->keyBy('comdev_module_id');
                             $uploadedFiles = $submission->files->keyBy('comdev_sub_chapter_id');
+                            $allRevisionFiles = $submission->revisionFiles->groupBy('comdev_module_id');
                         @endphp
 
                         @forelse ($allModules as $module)
@@ -208,11 +209,17 @@
                                         <span
                                             class="px-3 py-1 text-xs font-semibold rounded-full 
                                             @if ($currentStatus && $currentStatus->status == 'lolos') bg-green-100 text-green-800
-                                            @elseif($currentStatus && $currentStatus->status == 'lolos_didanai') bg-green-100 text-green-800
+                                            @elseif($currentStatus && $currentStatus->status == 'lolos_didanai') bg-emerald-100 text-emerald-900
+                                            @elseif($currentStatus && $currentStatus->status == 'tidak_lolos_didanai') bg-rose-100 text-rose-900
                                             @elseif($currentStatus && $currentStatus->status == 'tidaklolos') bg-red-100 text-red-800
-                                            @elseif($currentStatus && $currentStatus->status == 'tidak_lolos_didanai') bg-red-100 text-red-800
+                                            @elseif($currentStatus && $currentStatus->status == 'butuh_perbaikan') bg-orange-100 text-orange-800
                                             @else bg-yellow-100 text-yellow-800 @endif">
-                                            Status: {{ $currentStatus ? str_replace('_', ' ', Str::title($currentStatus->status)) : 'Terkunci' }}
+                                            Status: 
+                                            @if($currentStatus && $currentStatus->status == 'butuh_perbaikan')
+                                                Butuh Perbaikan
+                                            @else
+                                                {{ $currentStatus ? ucfirst($currentStatus->status) : 'Terkunci' }}
+                                            @endif
                                         </span>
                                         <i class='bx bxs-chevron-down text-xl text-gray-500 transition-transform'
                                             :class="{ 'rotate-180': open }"></i>
@@ -283,6 +290,110 @@
                                             <li class="text-gray-400 italic">Tidak ada syarat dokumen untuk modul ini.</li>
                                         @endforelse
                                     </ul>
+
+                                    {{-- Section: File Perbaikan (Revisi) --}}
+                                    @php $moduleRevisions = $allRevisionFiles->get($module->id, collect()); @endphp
+                                    @if($moduleRevisions->count() > 0)
+                                        <div class="mt-6 mb-4">
+                                            <h4 class="text-sm font-semibold text-orange-700 mb-3 flex items-center">
+                                                <i class='bx bx-revision text-lg mr-2'></i>File Perbaikan dari Dosen
+                                            </h4>
+                                            <div class="space-y-3">
+                                                @foreach($moduleRevisions->sortByDesc('revision_round') as $revision)
+                                                    <div class="border rounded-lg p-4 
+                                                        @if($revision->status === 'accepted') bg-green-50 border-green-200
+                                                        @elseif($revision->status === 'rejected') bg-red-50 border-red-200
+                                                        @else bg-orange-50 border-orange-200 @endif">
+                                                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                                            <div class="flex items-center gap-2">
+                                                                <span class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-orange-200 text-orange-800">
+                                                                    Revisi Ronde {{ $revision->revision_round }}
+                                                                </span>
+                                                                <span class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full
+                                                                    @if($revision->status === 'accepted') bg-green-200 text-green-800
+                                                                    @elseif($revision->status === 'rejected') bg-red-200 text-red-800
+                                                                    @else bg-yellow-200 text-yellow-800 @endif">
+                                                                    @if($revision->status === 'accepted') <i class='bx bx-check mr-1'></i>Diterima
+                                                                    @elseif($revision->status === 'rejected') <i class='bx bx-x mr-1'></i>Ditolak
+                                                                    @else <i class='bx bx-time mr-1'></i>Menunggu Review @endif
+                                                                </span>
+                                                            </div>
+                                                            <span class="text-xs text-gray-500">{{ $revision->created_at->diffForHumans() }}</span>
+                                                        </div>
+
+                                                        {{-- File revisi --}}
+                                                        <div class="flex flex-wrap items-center gap-2 mb-2">
+                                                            @if($revision->type === 'file' && $revision->file_path)
+                                                                <a href="{{ route('subdirektorat-inovasi.dosen.equity.revision.preview', $revision->id) }}"
+                                                                    target="_blank"
+                                                                    class="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-md transition">
+                                                                    <i class='bx bx-show mr-1'></i> Lihat Perbaikan
+                                                                </a>
+                                                                <a href="{{ route('subdirektorat-inovasi.dosen.equity.revision.download', $revision->id) }}"
+                                                                    class="inline-flex items-center px-3 py-1 text-xs font-medium text-[#11A697] bg-teal-50 hover:bg-teal-100 rounded-md transition">
+                                                                    <i class='bx bxs-download mr-1'></i> Unduh
+                                                                </a>
+                                                                <span class="text-xs text-gray-600">{{ $revision->original_filename }}</span>
+                                                            @elseif($revision->type === 'link' && $revision->url)
+                                                                <a href="{{ $revision->url }}" target="_blank"
+                                                                    class="inline-flex items-center px-3 py-1 text-xs font-medium text-indigo-700 bg-indigo-100 hover:bg-indigo-200 rounded-md transition">
+                                                                    <i class='bx bx-link-external mr-1'></i> Buka Link Perbaikan
+                                                                </a>
+                                                            @endif
+                                                        </div>
+
+                                                        @if($revision->catatan_dosen)
+                                                            <p class="text-xs text-gray-600 mb-2"><strong>Catatan Dosen:</strong> {{ $revision->catatan_dosen }}</p>
+                                                        @endif
+
+                                                        @if($revision->catatan_admin)
+                                                            <p class="text-xs text-gray-600 mb-2"><strong>Catatan Admin:</strong> {{ $revision->catatan_admin }}</p>
+                                                        @endif
+
+                                                        {{-- Tombol ACC / Reject hanya untuk revisi yang pending --}}
+                                                        @if($revision->status === 'pending')
+                                                            <div class="flex flex-wrap gap-2 mt-3 pt-3 border-t border-orange-200">
+                                                                {{-- Form ACC --}}
+                                                                <form action="{{ route('admin_equity.comdev.submissions.reviewRevision', ['submission' => $submission->id, 'module' => $module->id]) }}"
+                                                                    method="POST" class="inline" x-data>
+                                                                    @csrf
+                                                                    <input type="hidden" name="revision_id" value="{{ $revision->id }}">
+                                                                    <input type="hidden" name="action" value="accept">
+                                                                    <input type="hidden" name="catatan_admin" value="">
+                                                                    <button type="submit" onclick="return confirm('Terima file perbaikan ini? Status modul akan berubah menjadi Lolos.')"
+                                                                        class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-xs font-semibold transition">
+                                                                        <i class='bx bx-check-circle mr-1'></i> ACC (Terima)
+                                                                    </button>
+                                                                </form>
+                                                                {{-- Form Reject dengan catatan --}}
+                                                                <div x-data="{ showReject: false }">
+                                                                    <button @click="showReject = !showReject" type="button"
+                                                                        class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-xs font-semibold transition">
+                                                                        <i class='bx bx-x-circle mr-1'></i> Reject (Tolak)
+                                                                    </button>
+                                                                    <div x-show="showReject" x-transition class="mt-2">
+                                                                        <form action="{{ route('admin_equity.comdev.submissions.reviewRevision', ['submission' => $submission->id, 'module' => $module->id]) }}"
+                                                                            method="POST" class="space-y-2">
+                                                                            @csrf
+                                                                            <input type="hidden" name="revision_id" value="{{ $revision->id }}">
+                                                                            <input type="hidden" name="action" value="reject">
+                                                                            <textarea name="catatan_admin" rows="2" placeholder="Catatan alasan penolakan..." required
+                                                                                class="block w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"></textarea>
+                                                                            <button type="submit" onclick="return confirm('Tolak file perbaikan ini? Dosen harus mengupload ulang.')"
+                                                                                class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 text-xs font-semibold transition">
+                                                                                <i class='bx bx-send mr-1'></i> Kirim Penolakan
+                                                                            </button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+
                                     <form
                                         action="{{ route('admin_equity.comdev.submissions.updateModuleStatus', ['submission' => $submission->id, 'module' => $module->id]) }}"
                                         method="POST" class="mt-4 space-y-3" x-data="{ status: '{{ $currentStatus->status ?? 'proses' }}' }">
@@ -294,14 +405,15 @@
                                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring-[#11A697]">
                                                     <option value="proses">Proses</option>
                                                     <option value="tidaklolos">Tidak Lolos</option>
-                                                    <option value="tidak_lolos_didanai">Tidak Lolos Didanai</option>
                                                     <option value="lolos">Lolos</option>
                                                     <option value="lolos_didanai">Lolos Didanai</option>
+                                                    <option value="tidak_lolos_didanai">Tidak Lolos Didanai</option>
+                                                    <option value="butuh_perbaikan">Butuh Perbaikan</option>
                                                 </select>
                                             </div>
                                            <div x-show="(status === 'lolos' || status === 'lolos_didanai') && {{ $loop->first ? 'true' : 'false' }}" x-transition>
                                                 <label class="block text-sm font-medium text-gray-700">Nominal Evaluasi
-                                                    (jika lolos / lolos didanai)
+                                                    (jika lolos atau didanai)
                                                 </label>
                                                 <input type="number" name="nominal_evaluasi"
                                                     value="{{ $currentStatus->nominal_evaluasi ?? '' }}"
@@ -314,6 +426,13 @@
                                                 (Opsional)</label>
                                             <textarea name="catatan_admin" rows="2"
                                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring-[#11A697]">{{ $currentStatus->catatan_admin ?? '' }}</textarea>
+                                        </div>
+                                        {{-- Pesan info jika status butuh_perbaikan --}}
+                                        <div x-show="status === 'butuh_perbaikan'" x-transition
+                                            class="p-3 bg-orange-50 border border-orange-200 rounded-lg text-xs text-orange-700">
+                                            <i class='bx bx-info-circle mr-1'></i>
+                                            <strong>Info:</strong> Dosen akan melihat form upload perbaikan di halaman tahapan.
+                                            Setelah dosen mengupload, Anda bisa ACC atau Reject file perbaikan dari sini.
                                         </div>
                                         <div class="text-right">
                                             <button type="submit"

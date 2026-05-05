@@ -49,6 +49,12 @@ class ComdevPropViewController extends Controller
         // Ambil status-status modul yang sudah ada untuk proposal ini
         $statuses = $submission->moduleStatuses->keyBy('comdev_module_id');
         
+        // Ambil revision files yang dikelompokkan per modul
+        $revisionFiles = $submission->revisionFiles()
+            ->orderBy('revision_round', 'desc')
+            ->get()
+            ->groupBy('comdev_module_id');
+
         $unlockedModules = collect(); // Koleksi untuk menyimpan modul yang "terbuka"
         $previousModulePassed = true; // Anggap modul "sebelum" yang pertama sudah lolos
 
@@ -76,14 +82,16 @@ class ComdevPropViewController extends Controller
             $unlockedModules->push($module);
             
             // Siapkan pengecekan untuk iterasi berikutnya
-            $previousModulePassed = in_array($status->status, ['lolos', 'lolos_didanai']);
+            // butuh_perbaikan juga dianggap "belum lolos" tapi modul tetap terbuka
+            $previousModulePassed = ($status->status === 'lolos');
         }
 
         // Kirim data ke view
         return view('subdirektorat-inovasi.dosen.equity.tahapan-proposal', [
             'submission' => $submission->load('reviews.reviewer', 'reviews.module'),
             'modules' => $unlockedModules, // Kirim HANYA modul yang sudah terbuka
-            'moduleStatuses' => $statuses 
+            'moduleStatuses' => $statuses,
+            'revisionFiles' => $revisionFiles,
         ]);
     }
 }
