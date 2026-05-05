@@ -92,7 +92,9 @@
         @if($statusInfo)
     <div class="mt-4 p-3 rounded-lg flex items-start
         @if($statusInfo->status == 'lolos') bg-green-50 border border-green-200
+        @elseif($statusInfo->status == 'lolos_didanai') bg-green-50 border border-green-200
         @elseif($statusInfo->status == 'tidaklolos') bg-red-50 border border-red-200
+        @elseif($statusInfo->status == 'tidak_lolos_didanai') bg-red-50 border border-red-200
         @elseif($statusInfo->status == 'menunggu_direview') bg-blue-50 border border-blue-200
         @elseif($statusInfo->status == 'proses') bg-gray-50 border border-gray-200
         @else bg-yellow-50 border border-yellow-200 @endif
@@ -100,7 +102,11 @@
         <div class="flex-shrink-0 pt-0.5">
             @if($statusInfo->status == 'lolos')
                 <i class='bx bxs-check-circle text-2xl text-green-500'></i>
+            @elseif($statusInfo->status == 'lolos_didanai')
+                <i class='bx bxs-check-circle text-2xl text-green-500'></i>
             @elseif($statusInfo->status == 'tidaklolos')
+                <i class='bx bxs-x-circle text-2xl text-red-500'></i>
+            @elseif($statusInfo->status == 'tidak_lolos_didanai')
                 <i class='bx bxs-x-circle text-2xl text-red-500'></i>
             @elseif($statusInfo->status == 'menunggu_direview')
                 <i class='bx bxs-hourglass text-2xl text-blue-500'></i>
@@ -113,7 +119,9 @@
         <div class="ml-3 flex-grow">
             <p class="text-sm font-semibold 
                 @if($statusInfo->status == 'lolos') text-green-800
+                @elseif($statusInfo->status == 'lolos_didanai') text-green-800
                 @elseif($statusInfo->status == 'tidaklolos') text-red-800
+                @elseif($statusInfo->status == 'tidak_lolos_didanai') text-red-800
                 @elseif($statusInfo->status == 'menunggu_direview') text-blue-800
                 @elseif($statusInfo->status == 'proses') text-gray-800
                 @else text-yellow-800 @endif
@@ -121,17 +129,21 @@
                 Status Tahap: 
                 @if($statusInfo->status == 'tidaklolos')
                     Tidak Lolos
+                @elseif($statusInfo->status == 'tidak_lolos_didanai')
+                    Tidak Lolos Didanai
                 @elseif($statusInfo->status == 'menunggu_direview')
                     Menunggu Direview
                 @elseif($statusInfo->status == 'proses')
                     Sedang Proses
+                @elseif($statusInfo->status == 'lolos_didanai')
+                    Lolos Didanai
                 @else
-                    {{ ucfirst($statusInfo->status) }}
+                    {{ str_replace('_', ' ', Str::title($statusInfo->status)) }}
                 @endif
             </p>
             
            
-            @if($statusInfo->status == 'lolos' && $loop->first && $statusInfo->nominal_evaluasi > 0)
+            @if(in_array($statusInfo->status, ['lolos', 'lolos_didanai']) && $loop->first && $statusInfo->nominal_evaluasi > 0)
                 <div class="mt-2 pt-2 border-t border-green-200">
                     <p class="text-xs text-gray-600">Nominal Disetujui:</p>
                     <p class="text-md font-bold text-green-900">

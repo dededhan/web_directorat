@@ -76,7 +76,7 @@ class ComdevPropViewController extends Controller
             $unlockedModules->push($module);
             
             // Siapkan pengecekan untuk iterasi berikutnya
-            $previousModulePassed = ($status->status === 'lolos');
+            $previousModulePassed = in_array($status->status, ['lolos', 'lolos_didanai']);
         }
 
         // Kirim data ke view

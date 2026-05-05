@@ -208,9 +208,11 @@
                                         <span
                                             class="px-3 py-1 text-xs font-semibold rounded-full 
                                             @if ($currentStatus && $currentStatus->status == 'lolos') bg-green-100 text-green-800
+                                            @elseif($currentStatus && $currentStatus->status == 'lolos_didanai') bg-green-100 text-green-800
                                             @elseif($currentStatus && $currentStatus->status == 'tidaklolos') bg-red-100 text-red-800
+                                            @elseif($currentStatus && $currentStatus->status == 'tidak_lolos_didanai') bg-red-100 text-red-800
                                             @else bg-yellow-100 text-yellow-800 @endif">
-                                            Status: {{ $currentStatus ? ucfirst($currentStatus->status) : 'Terkunci' }}
+                                            Status: {{ $currentStatus ? str_replace('_', ' ', Str::title($currentStatus->status)) : 'Terkunci' }}
                                         </span>
                                         <i class='bx bxs-chevron-down text-xl text-gray-500 transition-transform'
                                             :class="{ 'rotate-180': open }"></i>
@@ -292,12 +294,14 @@
                                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#11A697] focus:ring-[#11A697]">
                                                     <option value="proses">Proses</option>
                                                     <option value="tidaklolos">Tidak Lolos</option>
+                                                    <option value="tidak_lolos_didanai">Tidak Lolos Didanai</option>
                                                     <option value="lolos">Lolos</option>
+                                                    <option value="lolos_didanai">Lolos Didanai</option>
                                                 </select>
                                             </div>
-                                           <div x-show="status === 'lolos' && {{ $loop->first ? 'true' : 'false' }}" x-transition>
+                                           <div x-show="(status === 'lolos' || status === 'lolos_didanai') && {{ $loop->first ? 'true' : 'false' }}" x-transition>
                                                 <label class="block text-sm font-medium text-gray-700">Nominal Evaluasi
-                                                    (jika lolos)
+                                                    (jika lolos / lolos didanai)
                                                 </label>
                                                 <input type="number" name="nominal_evaluasi"
                                                     value="{{ $currentStatus->nominal_evaluasi ?? '' }}"

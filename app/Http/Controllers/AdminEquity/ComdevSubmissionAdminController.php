@@ -128,7 +128,7 @@ class ComdevSubmissionAdminController extends Controller
     public function updateModuleStatus(Request $request, ComdevSubmission $submission, ComdevModule $module)
     {
         $request->validate([
-            'status' => 'required|in:proses,lolos,tidaklolos',
+            'status' => 'required|in:proses,lolos,tidaklolos,lolos_didanai,tidak_lolos_didanai',
             'nominal_evaluasi' => 'nullable|numeric',
             'catatan_admin' => 'nullable|string',
         ]);
@@ -145,7 +145,7 @@ class ComdevSubmissionAdminController extends Controller
                 'nominal_disetujui' => $request->nominal_disetujui,
             ]
         );
-        if ($request->status == 'lolos') {
+        if ($request->status == 'lolos' || $request->status == 'lolos_didanai') {
             $nextModule = $submission->sesi->modules()
                 ->where('urutan', '>', $module->urutan)
                 ->orderBy('urutan')->first();
@@ -161,7 +161,7 @@ class ComdevSubmissionAdminController extends Controller
                 // Final, semua modul lolos
                 $submission->update(['status' => ComdevStatusEnum::SELESAI]);
             }
-        } elseif ($request->status == 'tidaklolos') {
+        } elseif ($request->status == 'tidaklolos' || $request->status == 'tidak_lolos_didanai') {
             $submission->update(['status' => ComdevStatusEnum::PERBAIKAN_DIPERLUKAN]);
         }
 
