@@ -140,6 +140,31 @@
                                                     class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border-2 border-amber-200">
                                                     <i class='bx bxs-time-five mr-1 text-xs'></i> Draft
                                                 </span>
+                                            @elseif ($submission->status->value == 'lolos_didanai')
+                                                <span
+                                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border-2 border-emerald-300">
+                                                    <i class='bx bxs-badge-check mr-1 text-xs'></i> Lolos Didanai
+                                                </span>
+                                            @elseif ($submission->status->value == 'tidak_lolos_didanai')
+                                                <span
+                                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-800 border-2 border-rose-300">
+                                                    <i class='bx bxs-x-circle mr-1 text-xs'></i> Tidak Lolos Didanai
+                                                </span>
+                                            @elseif ($submission->status->value == 'sedang_direview')
+                                                <span
+                                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border-2 border-blue-200">
+                                                    <i class='bx bxs-hourglass mr-1 text-xs'></i> Sedang Direview
+                                                </span>
+                                            @elseif ($submission->status->value == 'perbaikan_diperlukan')
+                                                <span
+                                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-800 border-2 border-orange-200">
+                                                    <i class='bx bxs-error mr-1 text-xs'></i> Perbaikan Diperlukan
+                                                </span>
+                                            @elseif ($submission->status->value == 'selesai')
+                                                <span
+                                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-800 border-2 border-teal-200">
+                                                    <i class='bx bxs-trophy mr-1 text-xs'></i> Selesai
+                                                </span>
                                             @else
                                                 <span
                                                     class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-800 border-2 border-gray-200">
@@ -299,6 +324,31 @@
                                         <span
                                             class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200">
                                             <i class='bx bxs-time-five mr-1 text-xs'></i> Draft
+                                        </span>
+                                    @elseif ($submission->status->value == 'lolos_didanai')
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                            <i class='bx bxs-badge-check mr-1 text-xs'></i> Lolos Didanai
+                                        </span>
+                                    @elseif ($submission->status->value == 'tidak_lolos_didanai')
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-rose-100 text-rose-800 border border-rose-300">
+                                            <i class='bx bxs-x-circle mr-1 text-xs'></i> Tidak Lolos Didanai
+                                        </span>
+                                    @elseif ($submission->status->value == 'sedang_direview')
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                                            <i class='bx bxs-hourglass mr-1 text-xs'></i> Sedang Direview
+                                        </span>
+                                    @elseif ($submission->status->value == 'perbaikan_diperlukan')
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200">
+                                            <i class='bx bxs-error mr-1 text-xs'></i> Perbaikan Diperlukan
+                                        </span>
+                                    @elseif ($submission->status->value == 'selesai')
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-800 border border-teal-200">
+                                            <i class='bx bxs-trophy mr-1 text-xs'></i> Selesai
                                         </span>
                                     @else
                                         <span

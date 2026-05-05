@@ -180,9 +180,48 @@
                                             {{ $submission->created_at->isoFormat('D MMMM YYYY, HH:mm') }}</td>
                                         <td class="px-6 py-5 text-s text-center text-gray-600">
                                             @if ($submission->status)
-                                                <span class="font-semibold">
-                                                    {{ str_replace('_', ' ', Str::title($submission->status->value)) }}
-                                                </span>
+                                                @php $sv = $submission->status->value; @endphp
+                                                @if ($sv == 'draft')
+                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                                                        <i class='bx bxs-time-five mr-1'></i> Draft
+                                                    </span>
+                                                @elseif ($sv == 'diajukan')
+                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800 border border-green-200">
+                                                        <i class='bx bxs-check-circle mr-1'></i> Diajukan
+                                                    </span>
+                                                @elseif ($sv == 'menunggu_direview')
+                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-100 text-sky-800 border border-sky-200">
+                                                        <i class='bx bxs-time mr-1'></i> Menunggu Direview
+                                                    </span>
+                                                @elseif ($sv == 'sedang_direview')
+                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">
+                                                        <i class='bx bxs-hourglass mr-1'></i> Sedang Direview
+                                                    </span>
+                                                @elseif ($sv == 'lolos_didanai')
+                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                                        <i class='bx bxs-badge-check mr-1'></i> Lolos Didanai
+                                                    </span>
+                                                @elseif ($sv == 'tidak_lolos_didanai')
+                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-800 border border-rose-300">
+                                                        <i class='bx bxs-x-circle mr-1'></i> Tidak Lolos Didanai
+                                                    </span>
+                                                @elseif ($sv == 'perbaikan_diperlukan')
+                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-800 border border-orange-200">
+                                                        <i class='bx bxs-error mr-1'></i> Perbaikan Diperlukan
+                                                    </span>
+                                                @elseif ($sv == 'proses_tahap_selanjutnya')
+                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">
+                                                        <i class='bx bxs-right-arrow-circle mr-1'></i> Proses Tahap Selanjutnya
+                                                    </span>
+                                                @elseif ($sv == 'selesai')
+                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-800 border border-teal-200">
+                                                        <i class='bx bxs-trophy mr-1'></i> Selesai
+                                                    </span>
+                                                @else
+                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-800 border border-gray-200">
+                                                        {{ str_replace('_', ' ', Str::title($sv)) }}
+                                                    </span>
+                                                @endif
                                             @else
                                                 <span class="text-gray-400 italic">-</span>
                                             @endif
@@ -241,10 +280,48 @@
                                 <h3 class="font-semibold text-gray-900 text-sm leading-snug flex-1 mr-3">
                                     {{ $submission->judul }}</h3>
                                 @if ($submission->status)
-                                    <span
-                                        class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
-                                        {{ str_replace('_', ' ', Str::title($submission->status->value)) }}
-                                    </span>
+                                    @php $sv = $submission->status->value; @endphp
+                                    @if ($sv == 'draft')
+                                        <span class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200">
+                                            <i class='bx bxs-time-five mr-1 text-xs'></i> Draft
+                                        </span>
+                                    @elseif ($sv == 'diajukan')
+                                        <span class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                                            <i class='bx bxs-check-circle mr-1 text-xs'></i> Diajukan
+                                        </span>
+                                    @elseif ($sv == 'menunggu_direview')
+                                        <span class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-sky-100 text-sky-800 border border-sky-200">
+                                            <i class='bx bxs-time mr-1 text-xs'></i> Menunggu Direview
+                                        </span>
+                                    @elseif ($sv == 'sedang_direview')
+                                        <span class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                                            <i class='bx bxs-hourglass mr-1 text-xs'></i> Sedang Direview
+                                        </span>
+                                    @elseif ($sv == 'lolos_didanai')
+                                        <span class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                            <i class='bx bxs-badge-check mr-1 text-xs'></i> Lolos Didanai
+                                        </span>
+                                    @elseif ($sv == 'tidak_lolos_didanai')
+                                        <span class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-rose-100 text-rose-800 border border-rose-300">
+                                            <i class='bx bxs-x-circle mr-1 text-xs'></i> Tidak Lolos Didanai
+                                        </span>
+                                    @elseif ($sv == 'perbaikan_diperlukan')
+                                        <span class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200">
+                                            <i class='bx bxs-error mr-1 text-xs'></i> Perbaikan Diperlukan
+                                        </span>
+                                    @elseif ($sv == 'proses_tahap_selanjutnya')
+                                        <span class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">
+                                            <i class='bx bxs-right-arrow-circle mr-1 text-xs'></i> Proses Tahap Selanjutnya
+                                        </span>
+                                    @elseif ($sv == 'selesai')
+                                        <span class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-800 border border-teal-200">
+                                            <i class='bx bxs-trophy mr-1 text-xs'></i> Selesai
+                                        </span>
+                                    @else
+                                        <span class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">
+                                            {{ str_replace('_', ' ', Str::title($sv)) }}
+                                        </span>
+                                    @endif
                                 @endif
                             </div>
                             <div class="space-y-2 text-xs text-gray-600 mb-4">
