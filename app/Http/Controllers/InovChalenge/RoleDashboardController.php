@@ -92,15 +92,17 @@ class RoleDashboardController extends Controller
 
         $user->update(['name' => $validated['name']]);
 
+        $isDudi = $user->role === 'dudi';
+
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
             [
                 'identifier_number' => $validated['identifier_number'],
-                'alamat'            => $validated['alamat'],
-                'kode_pos'          => $validated['kode_pos'],
-                'institusi'         => $validated['institusi'],
-                'fakultas_id'       => $validated['fakultas_id'],
-                'prodi_id'          => $validated['prodi_id'],
+                'alamat'            => $validated['alamat'] ?? null,
+                'kode_pos'          => $validated['kode_pos'] ?? null,
+                'institusi'         => $validated['institusi'] ?? null,
+                'fakultas_id'       => $isDudi ? null : ($validated['fakultas_id'] ?? null),
+                'prodi_id'          => $isDudi ? null : ($validated['prodi_id'] ?? null),
             ]
         );
 

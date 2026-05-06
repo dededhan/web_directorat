@@ -113,10 +113,16 @@ class AdminRespondenController extends Controller
                 'fppsi' => 'fpsi'
             ];
     
-
+            // Get all aliases that map to the selected faculty
             $aliases = array_keys($normalizationMap, $selectedFakultas);
             
+            // Create search terms including selected faculty and its aliases
             $searchTerms = array_merge($aliases, [$selectedFakultas]);
+            
+            // Add full faculty names for specific faculties
+            if ($selectedFakultas === 'feb') {
+                $searchTerms[] = 'fakultas ekonomi dan bisnis';
+            }
     
             $query->whereIn(DB::raw('LOWER(fakultas)'), array_unique($searchTerms));
         }

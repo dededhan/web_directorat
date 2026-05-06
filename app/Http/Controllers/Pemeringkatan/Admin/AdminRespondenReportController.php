@@ -143,10 +143,64 @@ class AdminRespondenReportController extends Controller
     private function normalizeFacultyName($faculty)
     {
         $faculty = strtolower(trim($faculty));
-        if (strpos($faculty, 'fe-') === 0) return 'feb';
-        $map = ['teknik' => 'ft', 'fpbs' => 'fbs', 'fkip' => 'fip', 'fis' => 'fish', 'fish' => 'fish', 'fe'  => 'feb', 'feb' => 'feb', 'fppsi' => 'fpsi', 'fpsi' => 'fpsi'];
-        if (array_key_exists($faculty, $map)) return $map[$faculty];
-        if (empty($faculty)) return 'tidak terdefinisi';
+        
+        // Handle empty or NA values - map to direktorat
+        if (empty($faculty) || $faculty === 'na') {
+            return 'direktorat';
+        }
+        
+        // Check for full faculty names first (keyword matching)
+        if (strpos($faculty, 'bahasa') !== false && strpos($faculty, 'seni') !== false) {
+            return 'fbs';
+        }
+        if (strpos($faculty, 'ekonomi') !== false && strpos($faculty, 'bisnis') !== false) {
+            return 'feb';
+        }
+        if (strpos($faculty, 'ilmu pendidikan') !== false) {
+            return 'fip';
+        }
+        if (strpos($faculty, 'ilmu sosial') !== false) {
+            return 'fish';
+        }
+        if (strpos($faculty, 'matematika') !== false && strpos($faculty, 'ilmu pengetahuan alam') !== false) {
+            return 'fmipa';
+        }
+        if (strpos($faculty, 'psikologi') !== false) {
+            return 'fpsi';
+        }
+        if (strpos($faculty, 'pascasarjana') !== false) {
+            return 'pascasarjana';
+        }
+        // Handle "Fakultas Teknik" specifically
+        if (strpos($faculty, 'fakultas') !== false && strpos($faculty, 'teknik') !== false) {
+            return 'ft';
+        }
+        
+        // Handle abbreviation mappings (case-insensitive)
+        $map = [
+            'fbs' => 'fbs',
+            'fpbs' => 'fbs',
+            'feb' => 'feb',
+            'fe' => 'feb',
+            'fip' => 'fip',
+            'fkip' => 'fip',
+            'fish' => 'fish',
+            'fis' => 'fish',
+            'fmipa' => 'fmipa',
+            'fpsi' => 'fpsi',
+            'fppsi' => 'fpsi',
+            'ft' => 'ft',
+            'teknik' => 'ft',
+            'fik' => 'fik',
+            'fikk' => 'fik',
+            'pascasarjana' => 'pascasarjana',
+        ];
+        
+        if (array_key_exists($faculty, $map)) {
+            return $map[$faculty];
+        }
+        
+        // Return as-is if no mapping found
         return $faculty;
     }
 
@@ -315,12 +369,9 @@ class AdminRespondenReportController extends Controller
                 $facultyTotals = $allFaculties->flip()->map(fn() => 0)->toArray();
 
                 foreach ($filteredRespondens as $responden) {
-                    if ($responden->user && in_array($responden->user->role, ['fakultas', 'prodi'])) {
-                        $facultyName = Str::contains($responden->user->name, '-') ? Str::before($responden->user->name, '-') : $responden->user->name;
-                        $normalizedFaculty = $this->normalizeFacultyName($facultyName);
-                        if (isset($facultyTotals[$normalizedFaculty])) {
-                            $facultyTotals[$normalizedFaculty]++;
-                        }
+                    $normalizedFaculty = $this->normalizeFacultyName($responden->fakultas);
+                    if (isset($facultyTotals[$normalizedFaculty])) {
+                        $facultyTotals[$normalizedFaculty]++;
                     }
                 }
                 $data = collect($facultyTotals)->mapWithKeys(fn($count, $faculty) => [strtoupper($faculty) => $count])->sortKeys();

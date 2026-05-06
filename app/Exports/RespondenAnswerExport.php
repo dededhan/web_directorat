@@ -68,6 +68,29 @@ class RespondenAnswerExport implements FromQuery, WithHeadings, WithMapping, Sho
             $query->where('job_title', $this->filters['job_title']);
         }
 
+        // Filter by fakultas (Input Source)
+        $fakultas = $this->filters['fakultas'] ?? null;
+        if (!empty($fakultas)) {
+            $query->whereHas('responden.user', function ($q) use ($fakultas) {
+                if ($fakultas === 'direktorat') {
+                    $q->where('role', 'admin_direktorat');
+                } else {
+                    // Match fakultas role with exact name OR prodi role where name starts with fakultas-
+                    $q->where(function ($subQ) use ($fakultas) {
+                        $subQ->where(function ($innerQ) use ($fakultas) {
+                            // Match fakultas role with exact name (case-sensitive)
+                            $innerQ->where('role', 'fakultas')
+                                   ->where('name', $fakultas);
+                        })->orWhere(function ($innerQ) use ($fakultas) {
+                            // Match prodi role where name starts with fakultas-
+                            $innerQ->where('role', 'prodi')
+                                   ->where('name', 'like', $fakultas . '-%');
+                        });
+                    });
+                }
+            });
+        }
+
         //i need more robust system for this
         $start = $this->filters['start_date'] ?? null;
         $end = $this->filters['end_date'] ?? null;

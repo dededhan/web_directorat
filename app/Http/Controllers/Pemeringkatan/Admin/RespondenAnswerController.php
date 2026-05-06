@@ -211,7 +211,7 @@ class RespondenAnswerController extends Controller
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'nullable|string|max:255',
                 'institution' => 'required|string|max:255',
-                'department' => 'nullable|string|max:255',
+                'department' => 'required|string|max:255',
                 'company_name' => 'nullable|string|max:255',
                 'position' => 'nullable|string|max:255',
                 'job_title' => 'required|string|max:255',
@@ -288,7 +288,7 @@ class RespondenAnswerController extends Controller
 
     public function export(Request $request)
     {
-        $filters = $request->only(['q', 'category', 'country', 'survey_2023', 'survey_2024', 'job_title', 'start_date', 'end_date']);
+        $filters = $request->only(['q', 'category', 'country', 'survey_2023', 'survey_2024', 'job_title', 'start_date', 'end_date', 'fakultas']);
         $fileName = 'qs-respondens-' . now()->format('Ymd-His') . '.xlsx';
         $export = new RespondenAnswerExport($filters);
         return Excel::download($export, $fileName);

@@ -7,6 +7,7 @@ use App\Models\InovChalengeRegistration;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
@@ -211,19 +212,35 @@ class AccountManagementController extends Controller
     {
         abort_if($registration->status !== 'pending', 403, 'Pendaftaran ini sudah diproses.');
 
-        User::create([
-            'name'     => $registration->name,
-            'email'    => $registration->email,
-            'password' => $registration->password,
-            'role'     => $registration->role,
-        ]);
+        $alreadyExists = User::where('email', $registration->email)->exists();
 
-        $registration->update([
-            'status'       => 'approved',
-            'admin_notes'  => $request->input('admin_notes'),
-            'processed_by' => Auth::id(),
-            'processed_at' => now(),
-        ]);
+        DB::transaction(function () use ($request, $registration, $alreadyExists) {
+            if (! $alreadyExists) {
+                User::create([
+                    'name'     => $registration->name,
+                    'email'    => $registration->email,
+                    'password' => $registration->password,
+                    'role'     => $registration->role,
+                ]);
+            }
+
+            $adminNotes = $request->input('admin_notes');
+            if ($alreadyExists) {
+                $autoNote = 'Email sudah terdaftar sebelumnya, tidak membuat akun baru.';
+                $adminNotes = trim(($adminNotes ? $adminNotes . ' | ' : '') . $autoNote);
+            }
+
+            $registration->update([
+                'status'       => 'approved',
+                'admin_notes'  => $adminNotes,
+                'processed_by' => Auth::id(),
+                'processed_at' => now(),
+            ]);
+        });
+
+        if ($alreadyExists) {
+            return back()->with('success', "Pendaftaran {$registration->name} disetujui. Email sudah ada, jadi akun baru tidak dibuat.");
+        }
 
         return back()->with('success', "Pendaftaran {$registration->name} berhasil disetujui. Akun telah dibuat.");
     }
@@ -243,25 +260,41 @@ class AccountManagementController extends Controller
             return back()->with('error', 'Tidak ada pendaftaran pending yang dipilih.');
         }
 
-        $count = 0;
+        $createdCount = 0;
+        $existingCount = 0;
         foreach ($registrations as $registration) {
-            User::create([
-                'name'     => $registration->name,
-                'email'    => $registration->email,
-                'password' => $registration->password,
-                'role'     => $registration->role,
-            ]);
+            DB::transaction(function () use ($registration, &$createdCount, &$existingCount) {
+                $alreadyExists = User::where('email', $registration->email)->exists();
 
-            $registration->update([
-                'status'       => 'approved',
-                'processed_by' => Auth::id(),
-                'processed_at' => now(),
-            ]);
+                if (! $alreadyExists) {
+                    User::create([
+                        'name'     => $registration->name,
+                        'email'    => $registration->email,
+                        'password' => $registration->password,
+                        'role'     => $registration->role,
+                    ]);
+                    $createdCount++;
+                } else {
+                    $existingCount++;
+                }
 
-            $count++;
+                $registration->update([
+                    'status'       => 'approved',
+                    'admin_notes'  => $alreadyExists
+                        ? trim(($registration->admin_notes ? $registration->admin_notes . ' | ' : '') . 'Email sudah terdaftar sebelumnya, tidak membuat akun baru.')
+                        : $registration->admin_notes,
+                    'processed_by' => Auth::id(),
+                    'processed_at' => now(),
+                ]);
+            });
         }
 
-        return back()->with('success', "{$count} pendaftaran berhasil disetujui. Akun telah dibuat.");
+        $message = "{$createdCount} pendaftaran disetujui dan akun dibuat.";
+        if ($existingCount > 0) {
+            $message .= " {$existingCount} pendaftaran disetujui tanpa buat akun baru karena email sudah terdaftar.";
+        }
+
+        return back()->with('success', $message);
     }
 
     public function decline(Request $request, InovChalengeRegistration $registration)

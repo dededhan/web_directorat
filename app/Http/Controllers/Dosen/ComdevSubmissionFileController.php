@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Dosen;
 use App\Http\Controllers\Controller;
 use App\Models\ComdevSubmission;
 use App\Models\ComdevSubChapter;
+use App\Models\ComdevModule;
 use App\Models\ComdevSubmissionFile;
+use App\Models\ComdevModuleRevisionFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -158,6 +160,137 @@ class ComdevSubmissionFileController extends Controller
         }
 
         return back()->with('success', 'Data berhasil disimpan.');
+    }
+
+    /**
+     * Menyimpan file perbaikan (revisi) yang diunggah oleh dosen.
+     */
+    public function storeRevision(Request $request, ComdevSubmission $submission, ComdevModule $module)
+    {
+        // Cek otorisasi
+        if ($submission->user_id !== Auth::id()) {
+            abort(403, 'AKSES DITOLAK');
+        }
+
+        // Cek bahwa modul ini memang butuh perbaikan
+        $moduleStatus = $submission->moduleStatuses()
+            ->where('comdev_module_id', $module->id)
+            ->first();
+
+        if (!$moduleStatus || $moduleStatus->status !== 'butuh_perbaikan') {
+            return back()->with('error', 'Modul ini tidak dalam status butuh perbaikan.');
+        }
+
+        // Hitung ronde revisi saat ini
+        $currentRound = ComdevModuleRevisionFile::where('comdev_submission_id', $submission->id)
+            ->where('comdev_module_id', $module->id)
+            ->max('revision_round') ?? 0;
+        $newRound = $currentRound + 1;
+
+        $rules = [
+            'type' => 'required|in:file,link',
+            'catatan_dosen' => 'nullable|string',
+        ];
+
+        if ($request->input('type') === 'file') {
+            $rules['file_revisi'] = 'required|file|mimes:pdf|max:5120';
+        } else {
+            $rules['url'] = 'required|url|max:2048';
+        }
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $data = [
+            'comdev_submission_id' => $submission->id,
+            'comdev_module_id' => $module->id,
+            'comdev_sub_chapter_id' => $request->input('sub_chapter_id'),
+            'user_id' => Auth::id(),
+            'type' => $request->input('type'),
+            'catatan_dosen' => $request->input('catatan_dosen'),
+            'revision_round' => $newRound,
+            'status' => 'pending',
+        ];
+
+        if ($request->input('type') === 'file' && $request->hasFile('file_revisi')) {
+            $file = $request->file('file_revisi');
+            $originalName = $file->getClientOriginalName();
+            $path = $file->storeAs(
+                'comdev_revisions/' . $submission->id . '/' . $module->id,
+                $originalName,
+                'public'
+            );
+            $data['file_path'] = $path;
+            $data['original_filename'] = $originalName;
+        } elseif ($request->input('type') === 'link') {
+            $data['url'] = $request->input('url');
+        }
+
+        ComdevModuleRevisionFile::create($data);
+
+        return back()->with('success', 'File perbaikan berhasil diunggah. Menunggu review admin.');
+    }
+
+    /**
+     * Preview file revisi (view in browser).
+     */
+    public function previewRevision(ComdevModuleRevisionFile $revision)
+    {
+        $user = Auth::user();
+        
+        $isOwner = $revision->user_id === $user->id;
+        $isAdmin = in_array($user->role, ['reviewer_equity', 'admin_equity', 'sub_admin_equity']);
+        
+        $canView = $isOwner || $isAdmin;
+        
+        if (!$canView) {
+            abort(403, 'Anda tidak memiliki izin untuk melihat file ini.');
+        }
+
+        if ($revision->type === 'link' && $revision->url) {
+            return redirect($revision->url);
+        }
+
+        if ($revision->type === 'file' && $revision->file_path) {
+            if (!Storage::disk('public')->exists($revision->file_path)) {
+                return back()->with('error', 'File tidak ditemukan di server.');
+            }
+
+            $filePath = Storage::disk('public')->path($revision->file_path);
+            return response()->file($filePath, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . $revision->original_filename . '"'
+            ]);
+        }
+
+        return back()->with('error', 'File tidak valid atau tidak ditemukan.');
+    }
+
+    /**
+     * Download file revisi.
+     */
+    public function downloadRevision(ComdevModuleRevisionFile $revision)
+    {
+        $user = Auth::user();
+        
+        $isOwner = $revision->user_id === $user->id;
+        $isAdmin = in_array($user->role, ['reviewer_equity', 'admin_equity', 'sub_admin_equity']);
+        
+        if (!$isOwner && !$isAdmin) {
+            abort(403, 'Anda tidak memiliki izin untuk mengunduh file ini.');
+        }
+
+        if ($revision->type === 'link') {
+            return back()->with('error', 'Link tidak dapat diunduh.');
+        }
+
+        if (!$revision->file_path || !Storage::disk('public')->exists($revision->file_path)) {
+            return back()->with('error', 'File tidak ditemukan di server.');
+        }
+
+        return Storage::disk('public')->download($revision->file_path, $revision->original_filename);
     }
 
     /**
