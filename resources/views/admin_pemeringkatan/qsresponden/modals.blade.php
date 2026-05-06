@@ -55,14 +55,16 @@
                                     <select name="fakultas" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
                                         <option value="">All Sources</option>
                                         <option value="direktorat">Direktorat</option>
-                                        <option value="fik">FIK</option>
-                                        <option value="feb">FEB</option>
-                                        <option value="fkip">FKIP</option>
-                                        <option value="faperta">FAPERTA</option>
-                                        <option value="fisip">FISIP</option>
-                                        <option value="fh">FH</option>
-                                        <option value="ft">FT</option>
-                                        <option value="fmipa">FMIPA</option>
+                                        <option value="FBS">FBS - Fakultas Bahasa dan Seni</option>
+                                        <option value="FE">FE - Fakultas Ekonomi</option>
+                                        <option value="FIKK">FIKK - Fakultas Ilmu Keolahragaan dan Kesehatan</option>
+                                        <option value="FIP">FIP - Fakultas Ilmu Pendidikan</option>
+                                        <option value="FIS">FIS - Fakultas Ilmu Sosial</option>
+                                        <option value="FMIPA">FMIPA - Fakultas Matematika dan IPA</option>
+                                        <option value="FPPSI">FPPSI - Fakultas Psikologi</option>
+                                        <option value="FT">FT - Fakultas Teknik</option>
+                                        <option value="PASCASARJANA">PASCASARJANA</option>
+                                        <option value="PROFESI">PROFESI</option>
                                     </select>
                                 </div>
                             </div>

@@ -125,7 +125,7 @@
                 </select>
                 <input type="text" class="form-control mt-2" id="institution_other_input" style="display: none;"
                     placeholder="Please specify your industry">
-                <input type="hidden" name="answer_institution" id="answer_institution_hidden">
+                <input type="hidden" name="answer_institution" id="answer_institution_hidden" required>
                 @error('answer_institution')
                     <div class="text-danger mt-1">{{ $message }}</div>
                 @enderror
@@ -139,7 +139,7 @@
             </div>
             <div class="form-group">
                 <label class="form-label">Position</label>
-                <input type="text" class="form-control" name="answer_position">
+                <input type="text" class="form-control" name="answer_position" required>
                 @error('answer_position')
                     {{ $message }}
                 @enderror
@@ -174,7 +174,7 @@
                 <input type="tel" class="form-control" name="answer_phone"
                     onkeypress="return event.charCode >= 48 && event.charCode <= 57" pattern="[0-9]+"
                     title="Please enter numbers only" required>
-                @error('phone')
+                @error('answer_phone')
                     {{ $message }}
                 @enderror
             </div>

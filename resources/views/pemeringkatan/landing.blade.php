@@ -348,40 +348,62 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 @forelse($sustainabilities as $activity)
-                    <a href="{{ $activity->link_kegiatan ?: '#' }}" 
-                       target="{{ $activity->link_kegiatan ? '_blank' : '_self' }}"
-                       class="sustainability-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
+                    <div class="sustainability-card bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col h-full">
                         @if($activity->photos->isNotEmpty())
-                            <div class="relative h-56 overflow-hidden">
+                            <div class="relative h-48 overflow-hidden bg-gradient-to-br from-teal-500 to-green-500 flex-shrink-0">
                                 <img src="{{ Storage::url($activity->photos->first()->path) }}" 
                                      alt="{{ $activity->judul_kegiatan }}" 
-                                     class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
-                                <div class="absolute top-4 right-4 bg-teal-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                                    {{ \Carbon\Carbon::parse($activity->tanggal_kegiatan)->format('d M Y') }}
-                                </div>
+                                     class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
                             </div>
                         @else
-                            <div class="relative h-56 bg-gradient-to-br from-teal-100 to-teal-200 flex items-center justify-center">
-                                <i class='bx bx-leaf text-6xl text-teal-600 opacity-50'></i>
+                            <div class="relative h-48 bg-gradient-to-br from-teal-500 to-green-500 flex items-center justify-center flex-shrink-0">
+                                <i class='bx bx-leaf text-6xl text-white opacity-30'></i>
                             </div>
                         @endif
-                        <div class="p-6 flex flex-col flex-1">
-                            <h3 class="text-xl font-bold text-gray-800 mb-3 line-clamp-2">{{ $activity->judul_kegiatan }}</h3>
-                            <p class="text-sm text-gray-600 mb-4 line-clamp-3">{{ Str::limit(strip_tags($activity->deskripsi_kegiatan), 120) }}</p>
-                            <div class="mt-auto space-y-2">
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <i class='bx bx-buildings text-teal-600 mr-2'></i>
-                                    <span class="font-medium">{{ strtoupper($activity->fakultas) }}</span>
-                                </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <!-- Badges -->
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    {{ \Carbon\Carbon::parse($activity->tanggal_kegiatan)->format('d M Y') }}
+                                </span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    {{ strtoupper($activity->fakultas) }}
+                                </span>
                                 @if($activity->prodi)
-                                    <div class="flex items-center text-sm text-gray-600">
-                                        <i class='bx bx-book-alt text-teal-600 mr-2'></i>
-                                        <span>{{ $activity->prodi }}</span>
-                                    </div>
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        {{ $activity->prodi }}
+                                    </span>
+                                @endif
+                            </div>
+
+                            <h3 class="text-lg font-bold text-gray-900 mb-3 line-clamp-2">{{ $activity->judul_kegiatan }}</h3>
+                            
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">{{ Str::limit(strip_tags($activity->deskripsi_kegiatan), 120) }}</p>
+                            
+                            <div class="flex flex-wrap gap-2 mt-auto">
+                                <a href="{{ route('pemeringkatan.sustainability.kegiatan') }}" 
+                                   class="flex-1 inline-flex items-center justify-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium rounded-lg transition-colors">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    Lihat Detail
+                                </a>
+                                @if($activity->link_kegiatan)
+                                    <a href="{{ $activity->link_kegiatan }}" 
+                                       target="_blank"
+                                       class="inline-flex items-center justify-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                    </a>
                                 @endif
                             </div>
                         </div>
-                    </a>
+                    </div>
                 @empty
                     <p class="col-span-full text-center text-gray-500">Belum ada kegiatan sustainability yang tersedia.</p>
                 @endforelse

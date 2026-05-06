@@ -1,5 +1,26 @@
 @extends('reviewer_equity.index')
-
+@if (session('success'))
+    <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 5000)" x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0"
+         class="fixed top-5 right-5 z-50 max-w-sm w-full bg-white shadow-xl rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden">
+        <div class="p-4">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <i class='bx bx-check-circle text-2xl text-green-500'></i>
+                </div>
+                <div class="ml-3 w-0 flex-1 pt-0.5">
+                    <p class="text-sm font-semibold text-gray-900">Penyimpanan Berhasil!</p>
+                    <p class="mt-1 text-sm text-gray-500">{{ session('success') }}</p>
+                </div>
+                <div class="ml-4 flex-shrink-0 flex">
+                    <button @click="show = false" type="button" class="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                        <span class="sr-only">Close</span>
+                        <i class='bx bx-x text-xl'></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 @section('content')
     {{-- Header Section with Gradient --}}
     <div class="mb-6 md:mb-8">
@@ -325,7 +346,7 @@
                                             @endif
 
                                             <div class="bg-gray-50 rounded-lg p-3 md:p-4 border-l-4 border-purple-400">
-                                                <p class="text-xs font-semibold text-purple-600 mb-2 uppercase tracking-wide">Komentar</p>
+                                                <p class="text-base font-semibold text-purple-600 mb-2 uppercase tracking-wide">Komentar</p>
                                                 @php
                                                     $komentar = $review->komentar;
                                                     $wordCount = str_word_count($komentar);
@@ -428,7 +449,7 @@
                                                         </label>
                                                         
                                                         @if(isset($kriteria['keterangan']) && $kriteria['keterangan'])
-                                                            <p class="text-xs text-gray-500 mb-2 flex items-start whitespace-pre-wrap">
+                                                            <p class="text-base text-gray-500 mb-2 flex items-start whitespace-pre-wrap">
                                                                 <i class='bx bx-info-circle mr-1 mt-0.5'></i>
                                                                 {{ $kriteria['keterangan'] }}
                                                             </p>
@@ -529,3 +550,24 @@
         </div>
     </div>
 @endsection
+
+@push('scripts') 
+{{-- Gunakan @push('scripts') jika layout Anda memiliki @stack('scripts') di bagian bawah --}}
+
+@if (session('success'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'success',
+            title: 'Penyimpanan Berhasil! 🎉',
+            text: "{{ session('success') }}",
+            showConfirmButton: false,
+            timer: 4500, // Menghilangkan alert setelah 4.5 detik
+            timerProgressBar: true,
+            position: 'top-end' // Biasanya SweetAlert muncul di tengah, 'top-end' meniru toast
+        });
+    });
+</script>
+@endif
+
+@endpush

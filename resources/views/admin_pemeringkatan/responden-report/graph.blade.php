@@ -4,16 +4,11 @@
     <div class="p-4 sm:p-6 lg:p-8 xl:p-10 2xl:p-12 bg-gray-50 min-h-full font-sans">
         <div class="max-w-[1920px] mx-auto">
 
-        {{-- Header with Print Button --}}
+        {{-- Header --}}
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 print:hidden">
             <div>
                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Laporan Grafik Responden</h1>
             </div>
-            <button id="print-button"
-                class="mt-4 sm:mt-0 flex items-center gap-2 bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
-                <i class='bx bxs-printer text-xl'></i>
-                <span>Cetak Laporan</span>
-            </button>
         </div>
 
 
@@ -177,7 +172,7 @@
 
             // Loading State Management
             function showLoading() {
-                document.querySelectorAll('#start_date, #end_date, #fakultas_filter, #reset-filter-button, #print-button').forEach(el => {
+                document.querySelectorAll('#start_date, #end_date, #fakultas_filter, #reset-filter-button').forEach(el => {
                     el.disabled = true;
                 });
                 document.querySelectorAll('canvas').forEach(canvas => {
@@ -186,7 +181,7 @@
             }
 
             function hideLoading() {
-                document.querySelectorAll('#start_date, #end_date, #fakultas_filter, #reset-filter-button, #print-button').forEach(el => {
+                document.querySelectorAll('#start_date, #end_date, #fakultas_filter, #reset-filter-button').forEach(el => {
                     el.disabled = false;
                 });
                 document.querySelectorAll('canvas').forEach(canvas => {
@@ -764,8 +759,7 @@
                 fetchDataAndRenderCharts();
             });
 
-            // Print button
-            document.getElementById('print-button').addEventListener('click', () => window.print());
+
 
             // Initial setup
             restoreFilters();

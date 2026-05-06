@@ -186,19 +186,21 @@
                                                 </a>
                                                 
 
-                                                @if(auth()->user()->role !== 'sub_admin_equity')
+                                              
                                                                                                 <a href="{{ route('admin_equity.comdev.modules.index', $session->id) }}"
                                                     class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
                                                     role="menuitem">
                                                     <i class='bx bx-cog mr-3 text-lg text-purple-500'></i>
                                                     Manajemen Modul
                                                 </a>
+                                                           @if(auth()->user()->role !== 'sub_admin_equity')
                                                 <a href="{{ route('admin_equity.comdev.edit', $session->id) }}"
                                                     class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-yellow-50 hover:text-yellow-700 transition-colors"
                                                     role="menuitem">
                                                     <i class='bx bxs-edit mr-3 text-lg text-yellow-500'></i>
                                                     Edit Sesi
                                                 </a>
+                                       
                                                 <form method="POST" action="{{ route('admin_equity.comdev.destroy', $session->id) }}" x-ref="deleteForm{{$session->id}}" class="block">
                                                     @csrf
                                                     @method('DELETE')

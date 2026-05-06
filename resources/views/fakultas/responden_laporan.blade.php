@@ -10,11 +10,7 @@
                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Laporan Responden Fakultas</h1>
                 <p class="text-sm text-gray-500 mt-1">Grafik ringkasan data responden untuk fakultas Anda.</p>
             </div>
-            <button id="print-button"
-                class="mt-4 sm:mt-0 flex items-center gap-2 bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
-                <i class='bx bxs-printer text-xl'></i>
-                <span>Cetak Laporan</span>
-            </button>
+
         </div>
 
         <div class="bg-white p-4 rounded-xl shadow-lg mb-6 print:hidden">

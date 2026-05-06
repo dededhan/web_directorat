@@ -1,7 +1,7 @@
 @extends('equity_fakultas.index')
 
 @section('content')
-<div class="flex justify-between items-center mb-6">
+<!-- <div class="flex justify-between items-center mb-6">
     <h3 class="text-3xl font-medium text-gray-700">Manajemen Proposal: Joint Supervision</h3>
     {{-- Ganti route ke joint-supervision.create --}}
     <a href="{{ route('equity_fakultas.joint-supervision.create') }}"
@@ -9,7 +9,7 @@
         <i class='bx bxs-file-plus mr-2'></i>
         Ajukan Proposal Baru
     </a>
-</div>
+</div> -->
 
 <div class="bg-white rounded-lg shadow-md overflow-hidden">
     <div class="overflow-x-auto">

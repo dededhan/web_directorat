@@ -6,7 +6,7 @@
     <div class="mb-6">
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-bold text-gray-800">KATSINOV V2 - Innovation Assessment</h1>
+                <h1 class="text-3xl font-bold text-gray-800">KATSINOV - Innovation Assessment</h1>
                 <p class="text-gray-600 mt-1">Sistem penilaian inovasi dengan workflow management</p>
             </div>
             <div class="flex items-center gap-3">
@@ -20,13 +20,7 @@
                         Atur Threshold
                     </a>
                 @endif
-                <a href="{{ route('admin.katsinov-v2.create') }}" 
-                   class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-300 flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                    </svg>
-                    Tambah Katsinov Baru
-                </a>
+                
             </div>
         </div>
     </div>

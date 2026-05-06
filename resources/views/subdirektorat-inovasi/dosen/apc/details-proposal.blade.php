@@ -44,7 +44,7 @@
                         <p class="text-lg font-bold text-green-600">Rp {{ number_format($submission->biaya_publikasi, 0, ',', '.') }}</p>
                     </div>
                     <div class="lg:col-span-2">
-                        <label class="block text-xs font-bold uppercase text-gray-500 mb-2">Link ScimagoJR</label>
+                        <label class="block text-xs font-bold uppercase text-gray-500 mb-2">Link Scopus</label>
                         <a href="{{ $submission->link_scimagojr }}" target="_blank" class="text-teal-600 hover:text-teal-800 hover:underline break-all text-sm">{{ $submission->link_scimagojr }}</a>
                     </div>
                     <div>

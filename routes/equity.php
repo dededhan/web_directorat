@@ -35,6 +35,8 @@ use App\Http\Controllers\EquityFakultas\EquityFakultasController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/equity/files/{file}/preview', [ComdevSubmissionFileController::class, 'preview'])->name('subdirektorat-inovasi.dosen.equity.files.preview');
     Route::get('/equity/files/{file}/download', [ComdevSubmissionFileController::class, 'download'])->name('subdirektorat-inovasi.dosen.equity.files.download');
+    Route::get('/equity/revision/{revision}/preview', [ComdevSubmissionFileController::class, 'previewRevision'])->name('subdirektorat-inovasi.dosen.equity.revision.preview');
+    Route::get('/equity/revision/{revision}/download', [ComdevSubmissionFileController::class, 'downloadRevision'])->name('subdirektorat-inovasi.dosen.equity.revision.download');
 });
 
 
@@ -128,7 +130,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
     Route::resource('/comdev', \App\Http\Controllers\ComdevController::class);
     Route::prefix('comdev/{comdev}/submissions')->name('comdev.submissions.')->group(function () {
         Route::get('/', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'index'])->name('index');
-        Route::get('/export', [EquityExportController::class, 'exportComdev'])->name('export');
+        Route::get('/export', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'export'])->name('export');
         Route::get('/{submission}', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'show'])->name('show');
         Route::delete('/{submission}', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'destroy'])->name('destroy');
         Route::post('/{submission}/assign-reviewer', [\App\Http\Controllers\AdminEquity\ComdevSubmissionAdminController::class, 'assignReviewer'])->name('assignReviewer');
@@ -138,6 +140,7 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
     Route::post('/comdev/{sesi}/modules/store-template', [ComdevModuleController::class, 'storeTemplate'])->name('comdev.modules.storeTemplate');
     Route::put('/modules/{module}', [ComdevModuleController::class, 'updateModule'])->name('comdev.modules.update');
     Route::put('/submissions/{submission}/modules/{module}/status', [ComdevSubmissionAdminController::class, 'updateModuleStatus'])->name('comdev.submissions.updateModuleStatus');
+    Route::post('/submissions/{submission}/modules/{module}/review-revision', [ComdevSubmissionAdminController::class, 'reviewRevision'])->name('comdev.submissions.reviewRevision');
     Route::put('/subchapters/{subChapter}', [ComdevModuleController::class, 'updateSubChapter'])->name('comdev.subchapters.update');
     Route::put('/comdev/{comdev}/submissions/{submission}/status', [ComdevSubmissionAdminController::class, 'updateStatus'])
         ->name('comdev.submissions.updateStatus');
@@ -436,6 +439,7 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
 
                 // UPLOAD FILE UNGGAH
                 Route::post('/equity/proposal/{submission}/subchapter/{subChapter}/files', [ComdevSubmissionFileController::class, 'store'])->name('equity.files.store');
+                Route::post('/equity/proposal/{submission}/module/{module}/revision', [ComdevSubmissionFileController::class, 'storeRevision'])->name('equity.files.storeRevision');
                 Route::delete('/equity/files/{file}', [ComdevSubmissionFileController::class, 'destroy'])->name('equity.files.destroy');
                 Route::get('/equity/templates/{templateName}/download', [ComdevSubmissionFileController::class, 'downloadTemplate'])->name('equity.templates.download');
 

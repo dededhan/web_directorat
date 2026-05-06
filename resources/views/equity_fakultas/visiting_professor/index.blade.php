@@ -1,14 +1,14 @@
 @extends('equity_fakultas.index')
 
 @section('content')
-<div class="flex justify-between items-center mb-6">
+<!-- <div class="flex justify-between items-center mb-6">
     <h3 class="text-3xl font-medium text-gray-700">Manajemen Proposal: Visiting Top Professor</h3>
     <a href="{{ route('equity_fakultas.visiting-professors.create') }}"
        class="inline-flex items-center px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white font-bold rounded-lg shadow-md transition-colors duration-200">
         <i class='bx bxs-file-plus mr-2'></i>
         Ajukan Proposal Baru
     </a>
-</div>
+</div> -->
 
 {{-- Notifikasi Sukses --}}
 @if (session('success'))

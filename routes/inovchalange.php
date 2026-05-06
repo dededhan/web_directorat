@@ -349,6 +349,8 @@ Route::prefix('admin-inovchalenge')
             ->name('inovchalenge.submissions.index');
         Route::get('inovchalenge/sessions/{session}/submissions/scores', [PanelSubmissionAdminController::class, 'scores'])
             ->name('inovchalenge.submissions.scores');
+        Route::get('inovchalenge/sessions/{session}/submissions/scores/export', [PanelSubmissionAdminController::class, 'exportExcel'])
+            ->name('inovchalenge.submissions.scores.export');
         Route::get('inovchalenge/sessions/{session}/submissions/{submission}', [PanelSubmissionAdminController::class, 'show'])
             ->name('inovchalenge.submissions.show');
         Route::delete('inovchalenge/sessions/{session}/submissions/{submission}', [PanelSubmissionAdminController::class, 'destroy'])

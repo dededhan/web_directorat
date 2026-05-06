@@ -67,7 +67,7 @@
             </div>
             <div class="form-group">
                 <label class="form-label">Department</label>
-                <input type="text" class="form-control" name="answer_department">
+                <input type="text" class="form-control" name="answer_department" required>
                 @error('answer_department')
                     {{ $message }}
                 @enderror

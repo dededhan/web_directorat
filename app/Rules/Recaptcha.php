@@ -22,7 +22,7 @@ class Recaptcha implements Rule
         }
 
         $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => env('RECAPTCHA_SECRET_KEY'),
+            'secret' => "6LeX5m4rAAAAANyFjXTKxERPhw2UiO7-n_SSWkM4",
             'response' => $value,
             'remoteip' => request()->ip(),
         ]);

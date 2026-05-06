@@ -698,8 +698,8 @@
             </div>
 
             @if(isset($rankings) && $rankings->count() > 0)
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-4 gap-5 max-w-5xl mx-auto">
-                    @foreach ($rankings->take(8) as $ranking)
+                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-5">
+                    @foreach ($rankings->take(10) as $ranking)
                         <a href="{{ route('pemeringkatan.ranking-unj.show', $ranking->slug) }}"
                            class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col items-center text-center no-underline border border-gray-100">
                             {{-- Branded top bar --}}
@@ -723,8 +723,8 @@
                     @endforeach
                 </div>
 
-                @if($rankings->count() > 8)
-                <p class="text-center text-sm text-gray-400 mt-6">Menampilkan 8 dari {{ $rankings->count() }} ranking</p>
+                @if($rankings->count() > 10)
+                <p class="text-center text-sm text-gray-400 mt-6">Menampilkan 10 dari {{ $rankings->count() }} ranking</p>
                 @endif
 
                 <div class="text-center mt-8">

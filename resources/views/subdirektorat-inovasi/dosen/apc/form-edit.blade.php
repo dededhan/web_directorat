@@ -91,7 +91,7 @@
                         <div class="lg:col-span-2">
                             <label for="link_scimagojr" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
                                 <i class='bx bx-link text-purple-500 mr-2'></i>
-                                Link ScimagoJR
+                                Link Scopus
                             </label>
                             <input type="url" 
                                    name="link_scimagojr" 

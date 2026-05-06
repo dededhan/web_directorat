@@ -10,12 +10,12 @@
                 <ol class="list-none p-0 inline-flex items-center space-x-2">
                     <li><a href="{{ route('admin_equity.dashboard') }}" class="hover:text-teal-600">Dashboard</a></li>
                     <li><i class='bx bx-chevron-right text-base text-gray-400'></i></li>
-                    <li class="font-medium text-gray-800">Visiting Professors</li>
+                    <li class="font-medium text-gray-800">Employer Meetings</li>
                 </ol>
             </nav>
             <div>
                 <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Manajemen Proposal: Employer meetings</h1>
-                <p class="mt-2 text-gray-600 text-base">Kelola semua pengajuan proposal dari fakultas untuk program Visiting Professors.</p>
+                <p class="mt-2 text-gray-600 text-base">Kelola semua pengajuan proposal dari fakultas untuk program Employer Meetings.</p>
             </div>
         </header>
 

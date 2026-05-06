@@ -137,15 +137,6 @@
                                 class="btn-primary w-full py-3 rounded-lg text-white font-medium tracking-wide mt-3">SIGN
                                 IN</button>
                         </form>
-                        <!-- Google Sign-in Button -->
-                        <div class="mt-4">
-                            <a href="{{ route('login.google') }}"
-                                class="w-full py-3 flex items-center justify-center rounded-lg bg-white border border-gray-300 text-gray-700 font-medium tracking-wide mt-3 text-center transition-all duration-300 hover:bg-gray-50">
-                                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo"
-                                    class="h-5 mr-2">
-                                SIGN IN WITH GOOGLE
-                            </a>
-                        </div>
                         <a href="#"
                             class="text-center block mt-5 text-teal-800 text-sm hover:text-teal-900 hover:underline transition-all duration-300">Forgot
                             Your Password?</a>

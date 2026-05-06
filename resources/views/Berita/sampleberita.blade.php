@@ -454,7 +454,7 @@
             <div class="section-content">
                 @foreach($latestNews as $latest)
                 <div class="news-item">
-                    <h3><a href="{{ route('Berita.show', ['slug' => Str::slug($latest->judul)]) }}">{{ $latest->judul }}</a></h3>
+                    <h3><a href="{{ route('Berita.show', ['slug' => $latest->slug]) }}">{{ $latest->judul }}</a></h3>
                     <div class="date">{{ date('F d, Y', strtotime($latest->tanggal)) }} • {{ ucfirst($latest->kategori) }}</div>
                 </div>
                 @endforeach
@@ -467,7 +467,7 @@
                 @foreach($popularNews as $popular)
                 <div class="popular-item">
                     <span class="post-date">🗓 {{ date('M d, Y', strtotime($popular->tanggal)) }}</span>
-                    <a href="{{ route('Berita.show', ['slug' => Str::slug($popular->judul)]) }}" class="post-title">{{ $popular->judul }}</a>
+                    <a href="{{ route('Berita.show', ['slug' => $popular->slug]) }}" class="post-title">{{ $popular->judul }}</a>
                 </div>
                 @endforeach
             </div>

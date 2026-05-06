@@ -110,7 +110,7 @@
             </div>
         </div>
     </main>
-@endsection
+
 
 @push('scripts')
     @vite(['resources/js/home.js', 'resources/js/mobile.js'])

@@ -205,8 +205,8 @@
                                     <i class="fas fa-trophy text-xl text-yellow-300"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-bold leading-tight">Innovation</h3>
-                                    <p class="text-teal-200 text-xs font-medium tracking-wider">CHALLENGE UNJ</p>
+                                    <h3 class="text-lg font-bold leading-tight">Registrasi</h3>
+                                    <p class="text-teal-200 text-xs font-medium tracking-wider"></p>
                                 </div>
                             </div>
 
@@ -560,7 +560,7 @@
                 </div>
 
                 {{-- Footer --}}
-                <p class="text-center text-xs text-gray-400 mt-6">&copy; {{ date('Y') }} UNJ Innovation Challenge.
+                <p class="text-center text-xs text-gray-400 mt-6">&copy; {{ date('Y') }} DITISIP.
                     All rights reserved.</p>
             </div>
         </div>
