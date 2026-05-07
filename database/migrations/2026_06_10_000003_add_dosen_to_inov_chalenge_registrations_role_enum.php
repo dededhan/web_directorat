@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -10,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('inov_chalenge_registrations')) {
+            return;
+        }
+
         DB::statement("ALTER TABLE inov_chalenge_registrations MODIFY COLUMN role ENUM('dosen','alumni','peneliti','dudi','pppk','mahasiswa') NOT NULL");
     }
 
@@ -18,6 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (!Schema::hasTable('inov_chalenge_registrations')) {
+            return;
+        }
+
         DB::statement("ALTER TABLE inov_chalenge_registrations MODIFY COLUMN role ENUM('alumni','peneliti','dudi','pppk','mahasiswa') NOT NULL");
     }
 };
