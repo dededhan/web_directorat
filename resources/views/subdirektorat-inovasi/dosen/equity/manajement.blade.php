@@ -32,7 +32,7 @@
             </header>
 
             {{-- Konten Utama - Daftar Proposal --}}
-            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-visible">
                 <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 lg:px-8 py-6">
                     <div class="flex items-center justify-between text-white">
                         <h2 class="text-xl lg:text-2xl font-bold flex items-center">
