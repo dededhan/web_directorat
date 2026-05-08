@@ -261,10 +261,16 @@
             <div class="pt-3">
                 <h3 x-show="open || mobileOpen" class="px-3 pb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Pengaturan</h3>
                 <a href="{{ route('admin_equity.manageuser.index') }}"
-                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 hover:bg-gray-700"
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.manageuser.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
                    :class="{'justify-center': !open && !mobileOpen}">
                     <i class='bx bxs-user-account text-2xl flex-shrink-0'></i>
                     <span x-show="open || mobileOpen" class="font-medium">Manajemen Pengguna</span>
+                </a>
+                <a href="{{ route('admin_equity.manageprodi.index') }}"
+                   class="flex items-center space-x-4 rounded-lg p-3 transition-colors duration-200 {{ request()->routeIs('admin_equity.manageprodi.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }}"
+                   :class="{'justify-center': !open && !mobileOpen}">
+                    <i class='bx bxs-book-content text-2xl flex-shrink-0'></i>
+                    <span x-show="open || mobileOpen" class="font-medium">Manajemen Prodi</span>
                 </a>
             </div>
                 @endif

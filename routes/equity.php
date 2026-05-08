@@ -14,6 +14,7 @@ use App\Models\ComdevSubmission;
 use App\Http\Controllers\ReviewerEquity\ComdevReviewerController;
 use App\Http\Controllers\Dosen\ComdevLogbookController;
 use App\Http\Controllers\AdminEquity\AdminEquityUserController;
+use App\Http\Controllers\AdminEquity\AdminEquityProdiController;
 use App\Http\Controllers\Dosen\DosenProfileController;
 use App\Http\Controllers\AdminEquity\ApcSessionController;
 use App\Http\Controllers\AdminEquity\ApcSubmissionAdminController;
@@ -125,6 +126,11 @@ Route::prefix('admin_equity')->name('admin_equity.')->middleware(['auth', 'role:
 
     Route::resource('manageuser', AdminEquityUserController::class)
         ->parameters(['manageuser' => 'user']);
+
+    Route::resource('manageprodi', AdminEquityProdiController::class)
+        ->parameters(['manageprodi' => 'prodi'])
+        ->only(['index', 'create', 'store', 'edit', 'update'])
+        ->middleware('role:admin_equity');
 
 
     Route::resource('/comdev', \App\Http\Controllers\ComdevController::class);
