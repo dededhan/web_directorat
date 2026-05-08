@@ -316,28 +316,26 @@ Route::prefix('equity_fakultas')
         Route::resource('employer-meetings', \App\Http\Controllers\EquityFakultas\EmployerMeetingController::class);
 });
 
-Route::prefix('reviewer_equity')->name('reviewer_equity.')->middleware(['auth', 'role:reviewer_equity'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('reviewer_equity.dashboard');
-    })->name('dashboard');
+Route::prefix('reviewer_equity')
+    ->name('reviewer_equity.')
+    ->middleware(['auth', 'role:reviewer_equity,reviewer_hibah,reviewer_student_exchange'])
+    ->group(function () {
+        Route::get('/dashboard', function () {
+            return view('reviewer_equity.dashboard');
+        })->name('dashboard');
 
-    Route::get('manageprofile', [App\Http\Controllers\Dosen\DosenProfileController::class, 'edit'])->name('manageprofile.edit');
-    Route::put('manageprofile', [App\Http\Controllers\Dosen\DosenProfileController::class, 'update'])->name('manageprofile.update');
+        Route::get('manageprofile', [App\Http\Controllers\Dosen\DosenProfileController::class, 'edit'])->name('manageprofile.edit');
+        Route::put('manageprofile', [App\Http\Controllers\Dosen\DosenProfileController::class, 'update'])->name('manageprofile.update');
 
-    Route::get('/comdev/assignments', [ComdevReviewerController::class, 'index'])->name('comdev.assignments.index');
-    Route::get('/comdev/assignments/{submission}', [ComdevReviewerController::class, 'show'])->name('comdev.assignments.show');
-    Route::post('/comdev/assignments/{submission}/module/{module}/review', [ComdevReviewerController::class, 'storeReview'])->name('comdev.assignments.storeReview');
-});
+        Route::middleware(['role:reviewer_equity'])->group(function () {
+            Route::get('/comdev/assignments', [ComdevReviewerController::class, 'index'])->name('comdev.assignments.index');
+            Route::get('/comdev/assignments/{submission}', [ComdevReviewerController::class, 'show'])->name('comdev.assignments.show');
+            Route::post('/comdev/assignments/{submission}/module/{module}/review', [ComdevReviewerController::class, 'storeReview'])->name('comdev.assignments.storeReview');
+        });
+    });
 
 // Reviewer Hibah Routes - Using reviewer_equity namespace for views
 Route::prefix('reviewer_hibah')->name('reviewer_equity.')->middleware(['auth', 'role:reviewer_hibah'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('reviewer_equity.dashboard');
-    })->name('dashboard');
-
-    Route::get('/manageprofile', [App\Http\Controllers\Dosen\DosenProfileController::class, 'edit'])->name('manageprofile.edit');
-    Route::put('/manageprofile', [App\Http\Controllers\Dosen\DosenProfileController::class, 'update'])->name('manageprofile.update');
-
     // Hibah Modul Review
     Route::prefix('hibah-modul')->name('hibah_modul.')->group(function () {
         Route::get('/', [\App\Http\Controllers\ReviewerEquity\ReviewModulHibahController::class, 'index'])->name('index');
@@ -349,13 +347,6 @@ Route::prefix('reviewer_hibah')->name('reviewer_equity.')->middleware(['auth', '
 
 // Reviewer Student Exchange Routes - Using reviewer_equity namespace for views
 Route::prefix('reviewer_student_exchange')->name('reviewer_equity.')->middleware(['auth', 'role:reviewer_student_exchange'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('reviewer_equity.dashboard');
-    })->name('dashboard');
-
-    Route::get('/manageprofile', [App\Http\Controllers\Dosen\DosenProfileController::class, 'edit'])->name('manageprofile.edit');
-    Route::put('/manageprofile', [App\Http\Controllers\Dosen\DosenProfileController::class, 'update'])->name('manageprofile.update');
-
     // Student Exchange Review
     Route::prefix('student-exchange')->name('student_exchange.')->group(function () {
         Route::get('/', [\App\Http\Controllers\ReviewerEquity\ReviewStudentExchangeController::class, 'index'])->name('index');
