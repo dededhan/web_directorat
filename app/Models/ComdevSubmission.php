@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Enums\ComdevStatusEnum;
 
 class ComdevSubmission extends Model
@@ -23,6 +24,55 @@ class ComdevSubmission extends Model
         'luaran_wajib' => 'array',
         'luaran_opsional' => 'array',
     ];
+
+    protected function sdgsFokus(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $this->normalizeArrayValue($value)
+        );
+    }
+
+    protected function sdgsPendukung(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $this->normalizeArrayValue($value)
+        );
+    }
+
+    private function normalizeArrayValue($value): array
+    {
+        if (is_array($value)) {
+            return $value;
+        }
+
+        if ($value === null) {
+            return [];
+        }
+
+        if (is_string($value)) {
+            $trimmed = trim($value);
+            if ($trimmed === '') {
+                return [];
+            }
+
+            $decoded = json_decode($trimmed, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                return $decoded;
+            }
+
+            return [$trimmed];
+        }
+
+        if ($value instanceof \Illuminate\Support\Collection) {
+            return $value->all();
+        }
+
+        if (is_iterable($value)) {
+            return iterator_to_array($value);
+        }
+
+        return [];
+    }
 
     public function user()
     {
