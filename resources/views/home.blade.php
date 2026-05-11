@@ -595,6 +595,94 @@
     </div>
 
     <main class="container mx-auto py-12 px-6">
+
+        {{-- Programs & Services Section --}}
+        <section class="program-section pt-0 pb-12">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-teal-800">{{ __('messages.our_programs') }}</h2>
+                    <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan Pemeringkatan</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+                    @forelse($programLayanan->take(3) as $program)
+                        <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
+                            <div class="relative h-48 bg-teal-600 flex items-center justify-center">
+                                @if ($program->image)
+                                    <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}" class="w-full h-full object-cover">
+                                @else
+                                    <i class="{{ $program->icon ?? 'fas fa-cogs' }} text-5xl text-white"></i>
+                                @endif
+                            </div>
+                            <div class="p-6 flex flex-col flex-grow">
+                                <h3 class="font-bold text-teal-800 text-xl mb-3">{{ $program->getTranslatedTitle() }}</h3>
+                                <div class="text-gray-600 mb-4 text-sm flex-grow min-h-[80px]">
+                                    {!! Str::limit(strip_tags($program->getTranslatedDescription()), 120) !!}
+                                </div>
+                                <div class="mt-4 pt-4 border-t border-gray-100">
+                                    @if (!empty($program->url))
+                                        <a href="{{ $program->url }}" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
+                                            {{ app()->getLocale() === 'en' ? 'Access Program' : 'Akses Program' }}
+                                        </a>
+                                    @else
+                                        <button type="button" class="login w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
+                                            {{ app()->getLocale() === 'en' ? 'Access Program' : 'Akses Program' }}
+                                        </button>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <p class="col-span-full text-center text-gray-500">Belum ada program layanan yang tersedia.</p>
+                    @endforelse
+                </div>
+
+                @if (count($programLayanan) > 3)
+                <div class="program-carousel-container relative px-10">
+                        <div class="swiper-container program-carousel">
+                            <div class="swiper-wrapper">
+                                @foreach ($programLayanan->skip(3) as $program)
+                                    <div class="swiper-slide h-auto">
+                                        {{-- KARTU INI SEKARANG IDENTIK DENGAN PROGRAM & LAYANAN UTAMA --}}
+                                        <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full">
+                                            <div class="relative h-48 bg-teal-600 flex items-center justify-center">
+                                                @if ($program->image)
+                                                    <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}" class="w-full h-full object-cover">
+                                                @else
+                                                    <i class="{{ $program->icon ?? 'fas fa-cogs' }} text-5xl text-white"></i>
+                                                @endif
+                                            </div>
+                                            <div class="p-6 flex flex-col flex-grow">
+                                                <h3 class="font-bold text-teal-800 text-xl mb-3">{{ $program->getTranslatedTitle() }}</h3>
+                                                <div class="text-gray-600 mb-4 text-sm flex-grow min-h-[80px]">
+                                                    {!! Str::limit(strip_tags($program->getTranslatedDescription()), 120) !!}
+                                                </div>
+                                                <div class="mt-4 pt-4 border-t border-gray-100">
+                                                    @if (!empty($program->url))
+                                                        <a href="{{ $program->url }}" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
+                                                            {{ app()->getLocale() === 'en' ? 'Access Program' : 'Akses Program' }}
+                                                        </a>
+                                                    @else
+                                                        <button type="button" class="login w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
+                                                            {{ app()->getLocale() === 'en' ? 'Access Program' : 'Akses Program' }}
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        {{-- Navigation Buttons & Pagination --}}
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-pagination mt-8 relative"></div>
+                    </div>
+                @endif
+            </div>
+        </section>
+
         {{-- Latest News Section (Regular News) --}}
         <div class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-bold text-teal-800">{{ __('messages.latest_news') }}</h2>
@@ -739,95 +827,6 @@
             @endif
         </div>
     </section>
-
-
-    {{-- Programs & Services Section --}}
-    <section class="program-section py-16 bg-gray-100">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-teal-800">{{ __('messages.our_programs') }}</h2>
-                <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Program dan Layanan Direktorat Inovasi, Sistem Informasi dan Pemeringkatan</p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-                @forelse($programLayanan->take(3) as $program)
-                    <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
-                        <div class="relative h-48 bg-teal-600 flex items-center justify-center">
-                            @if ($program->image)
-                                <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}" class="w-full h-full object-cover">
-                            @else
-                                <i class="{{ $program->icon ?? 'fas fa-cogs' }} text-5xl text-white"></i>
-                            @endif
-                        </div>
-                        <div class="p-6 flex flex-col flex-grow">
-                            <h3 class="font-bold text-teal-800 text-xl mb-3">{{ $program->getTranslatedTitle() }}</h3>
-                            <div class="text-gray-600 mb-4 text-sm flex-grow min-h-[80px]">
-                                {!! Str::limit(strip_tags($program->getTranslatedDescription()), 120) !!}
-                            </div>
-                            <div class="mt-4 pt-4 border-t border-gray-100">
-                                @if (!empty($program->url))
-                                    <a href="{{ $program->url }}" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
-                                        {{ app()->getLocale() === 'en' ? 'Access Program' : 'Akses Program' }}
-                                    </a>
-                                @else
-                                    <button type="button" class="login w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
-                                        {{ app()->getLocale() === 'en' ? 'Access Program' : 'Akses Program' }}
-                                    </button>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                    <p class="col-span-full text-center text-gray-500">Belum ada program layanan yang tersedia.</p>
-                @endforelse
-            </div>
-
-            @if (count($programLayanan) > 3)
-            <div class="program-carousel-container relative px-10">
-                    <div class="swiper-container program-carousel">
-                        <div class="swiper-wrapper">
-                            @foreach ($programLayanan->skip(3) as $program)
-                                <div class="swiper-slide h-auto">
-                                    {{-- KARTU INI SEKARANG IDENTIK DENGAN PROGRAM & LAYANAN UTAMA --}}
-                                    <div class="program-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full">
-                                        <div class="relative h-48 bg-teal-600 flex items-center justify-center">
-                                            @if ($program->image)
-                                                <img src="{{ asset('storage/' . $program->image) }}" alt="{{ $program->judul }}" class="w-full h-full object-cover">
-                                            @else
-                                                <i class="{{ $program->icon ?? 'fas fa-cogs' }} text-5xl text-white"></i>
-                                            @endif
-                                        </div>
-                                        <div class="p-6 flex flex-col flex-grow">
-                                            <h3 class="font-bold text-teal-800 text-xl mb-3">{{ $program->getTranslatedTitle() }}</h3>
-                                            <div class="text-gray-600 mb-4 text-sm flex-grow min-h-[80px]">
-                                                {!! Str::limit(strip_tags($program->getTranslatedDescription()), 120) !!}
-                                            </div>
-                                            <div class="mt-4 pt-4 border-t border-gray-100">
-                                                @if (!empty($program->url))
-                                                    <a href="{{ $program->url }}" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
-                                                        {{ app()->getLocale() === 'en' ? 'Access Program' : 'Akses Program' }}
-                                                    </a>
-                                                @else
-                                                    <button type="button" class="login w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2.5 px-6 rounded-lg font-semibold text-sm transition-colors">
-                                                        {{ app()->getLocale() === 'en' ? 'Access Program' : 'Akses Program' }}
-                                                    </button>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    {{-- Navigation Buttons & Pagination --}}
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-pagination mt-8 relative"></div>
-                </div>
-            @endif
-        </div>
-    </section>
-
     
     {{-- UNJ in Numbers Section --}}
     <section class="unj-prestasi-container py-16 bg-slate-100">
