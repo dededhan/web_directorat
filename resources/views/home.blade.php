@@ -563,7 +563,7 @@
 <body class="font-sans bg-gray-50">
 
     {{-- Include the responsive navbar --}}
-    @include('layout.navbar')
+    @include('layout.navbarSearch')
 
     {{-- A spacer div to push content below the fixed navbar. Height matches navbar height. --}}
     <div class="h-16"></div>
@@ -923,30 +923,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }, { passive: true });
     }
-
-    // --- Desktop Navbar Dropdown Logic ---
-    const desktopDropdownToggles = document.querySelectorAll('.desktop-dropdown-toggle');
-    desktopDropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', function (e) {
-            e.preventDefault();
-            const menu = this.nextElementSibling;
-            document.querySelectorAll('.desktop-dropdown-menu').forEach(otherMenu => {
-                if (otherMenu !== menu) {
-                    otherMenu.classList.add('hidden');
-                }
-            });
-            menu.classList.toggle('hidden');
-        });
-    });
-
-    // Close desktop dropdowns when clicking outside
-    window.addEventListener('click', function(e) {
-        if (!e.target.closest('.desktop-dropdown-toggle')) {
-            document.querySelectorAll('.desktop-dropdown-menu').forEach(menu => {
-                menu.classList.add('hidden');
-            });
-        }
-    });
 
     // --- Mobile Sidebar Logic ---
     const mobileMenuToggle = document.getElementById('mobile-menu-toggle');

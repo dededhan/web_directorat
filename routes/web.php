@@ -27,9 +27,14 @@ use App\Http\Controllers\Auth\SulitestLoginController;
 use App\Http\Controllers\RisetUnjController;
 use App\Http\Controllers\MitraKolaborasiController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\SearchController;
 
 // Language switching route
 Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
+
+// Global Search Routes (accessible without login)
+Route::get('/search', [SearchController::class, 'index'])->name('search.index');
+Route::get('/api/search/autocomplete', [SearchController::class, 'autocomplete'])->name('search.autocomplete');
 
 Route::get('/', [BeritaController::class, 'homeNews'])->name('home');
 
