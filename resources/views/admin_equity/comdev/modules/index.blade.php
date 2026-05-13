@@ -11,6 +11,44 @@
     editingSubChapterId: null,
     editingModuleId: null,
     formPenilaian: [],
+    reviewerCriteriaTemplate: [
+        {
+            label: 'Relevansi dengan SDGs (3, 4, 8, 10)',
+            type: 'number',
+            bobot: 10,
+            keterangan: ''
+        },
+        {
+            label: 'Analisis Situasi',
+            type: 'number',
+            bobot: 15,
+            keterangan: 'a) Kondisi Mitra Sasaran saat ini\nb) Persoalan umum yang dihadapi mitra sasaran'
+        },
+        {
+            label: 'Permasalahan prioritas Mitra dan Solusi yang ditawarkan',
+            type: 'number',
+            bobot: 20,
+            keterangan: 'a) Terdapat permasalahan mitra\nb) Solusi yang ditawarkan\nc) Langkah-langkah pemecahan masalah'
+        },
+        {
+            label: 'Target Luaran',
+            type: 'number',
+            bobot: 20,
+            keterangan: 'a) Jenis luaran\nb) Spesifikasinya sesuai kegiatan yang diusulkan'
+        },
+        {
+            label: 'Ketepatan Metode',
+            type: 'number',
+            bobot: 25,
+            keterangan: 'a) Pendekatan untuk mengatasi masalah\nb) Rencana kegiatan\nc) Kontribusi partisipasi mitra Nasional\nd) Kontribusi partisipasi mitra Internasional'
+        },
+        {
+            label: 'Kelayakan',
+            type: 'number',
+            bobot: 10,
+            keterangan: 'a) Kesesuaian template\nb) Rekam jejak pengusul\nc) Mahasiswa yang dilibatkan\nd) Rencana biaya\ne) Sarana dan prasarana\nf) Mahasiswa yang dilibatkan\ng) Rencana biaya'
+        }
+    ],
     addKriteria() {
         this.formPenilaian.push({
             label: '',
@@ -19,12 +57,18 @@
             keterangan: ''
         });
     },
+    useReviewerTemplate() {
+        this.formPenilaian = JSON.parse(JSON.stringify(this.reviewerCriteriaTemplate));
+    },
     removeKriteria(index) {
         this.formPenilaian.splice(index, 1);
     },
     initEditModule(moduleId, existingForm) {
         this.editingModuleId = moduleId;
         this.formPenilaian = existingForm && existingForm.length > 0 ? JSON.parse(JSON.stringify(existingForm)) : [];
+    },
+    init() {
+        window.comdevReviewerCriteriaTemplate = JSON.parse(JSON.stringify(this.reviewerCriteriaTemplate));
     }
 }">
     {{-- Header dan Breadcrumbs --}}
@@ -115,9 +159,14 @@
                         <div class="border-t pt-6">
                             <div class="flex justify-between items-center mb-4">
                                 <h4 class="text-md font-bold text-gray-800">Form Penilaian Reviewer</h4>
-                                <button type="button" @click="addKriteria()" class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition">
-                                    <i class='bx bx-plus text-lg mr-1'></i> Tambah Kriteria
-                                </button>
+                                <div class="flex items-center gap-2">
+                                    <button type="button" @click="useReviewerTemplate()" class="inline-flex items-center px-3 py-1.5 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700 transition">
+                                        <i class='bx bx-list-ul text-lg mr-1'></i> Template Kriteria
+                                    </button>
+                                    <button type="button" @click="addKriteria()" class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition">
+                                        <i class='bx bx-plus text-lg mr-1'></i> Tambah Kriteria
+                                    </button>
+                                </div>
                             </div>
 
                             <div class="space-y-4">
@@ -342,6 +391,9 @@
                 keterangan: ''
             });
         },
+        useNewModuleTemplate() {
+            this.newModuleForm = JSON.parse(JSON.stringify(window.comdevReviewerCriteriaTemplate || []));
+        },
         removeNewKriteria(index) {
             this.newModuleForm.splice(index, 1);
         }
@@ -393,9 +445,14 @@
                     <div class="border-t pt-6">
                         <div class="flex justify-between items-center mb-4">
                             <h4 class="text-md font-bold text-gray-800">Form Penilaian Reviewer</h4>
-                            <button type="button" @click="addNewKriteria()" class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition">
-                                <i class='bx bx-plus text-lg mr-1'></i> Tambah Kriteria
-                            </button>
+                            <div class="flex items-center gap-2">
+                                <button type="button" @click="useNewModuleTemplate()" class="inline-flex items-center px-3 py-1.5 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700 transition">
+                                    <i class='bx bx-list-ul text-lg mr-1'></i> Template Kriteria
+                                </button>
+                                <button type="button" @click="addNewKriteria()" class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition">
+                                    <i class='bx bx-plus text-lg mr-1'></i> Tambah Kriteria
+                                </button>
+                            </div>
                         </div>
 
                         <div class="space-y-4">

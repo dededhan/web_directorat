@@ -42,6 +42,44 @@ class ComdevModuleController extends Controller
                 ]
             ],
             [
+                'form_penilaian' => [
+                    [
+                        'label' => 'Relevansi dengan SDGs (3, 4, 8, 10)',
+                        'type' => 'number',
+                        'bobot' => 10,
+                        'keterangan' => null,
+                    ],
+                    [
+                        'label' => 'Analisis Situasi',
+                        'type' => 'number',
+                        'bobot' => 15,
+                        'keterangan' => "a) Kondisi Mitra Sasaran saat ini\nb) Persoalan umum yang dihadapi mitra sasaran",
+                    ],
+                    [
+                        'label' => 'Permasalahan prioritas Mitra dan Solusi yang ditawarkan',
+                        'type' => 'number',
+                        'bobot' => 20,
+                        'keterangan' => "a) Terdapat permasalahan mitra\nb) Solusi yang ditawarkan\nc) Langkah-langkah pemecahan masalah",
+                    ],
+                    [
+                        'label' => 'Target Luaran',
+                        'type' => 'number',
+                        'bobot' => 20,
+                        'keterangan' => "a) Jenis luaran\nb) Spesifikasinya sesuai kegiatan yang diusulkan",
+                    ],
+                    [
+                        'label' => 'Ketepatan Metode',
+                        'type' => 'number',
+                        'bobot' => 25,
+                        'keterangan' => "a) Pendekatan untuk mengatasi masalah\nb) Rencana kegiatan\nc) Kontribusi partisipasi mitra Nasional\nd) Kontribusi partisipasi mitra Internasional",
+                    ],
+                    [
+                        'label' => 'Kelayakan',
+                        'type' => 'number',
+                        'bobot' => 10,
+                        'keterangan' => "a) Kesesuaian template\nb) Rekam jejak pengusul\nc) Mahasiswa yang dilibatkan\nd) Rencana biaya\ne) Sarana dan prasarana\nf) Mahasiswa yang dilibatkan\ng) Rencana biaya",
+                    ],
+                ],
                 'urutan' => 2, 'nama_modul' => 'Perbaikan Proposal', 'deskripsi' => 'Tahap untuk melakukan perbaikan proposal berdasarkan hasil evaluasi.',
                 'sub_chapters' => [
                     ['urutan' => 1, 'nama_sub_bab' => 'Proposal Perbaikan'],
@@ -78,6 +116,7 @@ class ComdevModuleController extends Controller
                 'urutan' => $moduleData['urutan'],
                 'nama_modul' => $moduleData['nama_modul'],
                 'deskripsi' => $moduleData['deskripsi'],
+                'form_penilaian' => $moduleData['form_penilaian'] ?? null,
             ]);
 
             if (!empty($moduleData['sub_chapters'])) {
