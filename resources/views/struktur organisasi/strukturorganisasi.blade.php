@@ -95,8 +95,8 @@
         'y' => 593,
         'w' => 200,
         'h' => 200,
-        'photo' => 'images/vera.jpg',
-        'name' => 'Dr. Vera Utami Gede Putri, M.Ds',
+        'photo' => 'images/ervina-maulida.jpg',
+        'name' => 'Ervina Maulida, S.Pd., M.B.A',
         'roles' => ['Staf Ahli WR III', 'Bid. Inovasi dan Hilirisasi'],
       ],
       [
