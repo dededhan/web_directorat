@@ -198,6 +198,24 @@
 <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-40 opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out block md:hidden"></div>
 
 <style>
+    .fas,
+    .fab,
+    .far,
+    .fa,
+    [class^="fa-"],
+    [class*=" fa-"] {
+        font-family: "Font Awesome 5 Free", "Font Awesome 5 Brands", "FontAwesome" !important;
+    }
+
+    .fas,
+    .fa {
+        font-weight: 900;
+    }
+
+    .fab {
+        font-weight: 400;
+    }
+
     input[type="search"]::-webkit-search-cancel-button {
         -webkit-appearance: none;
         appearance: none;
