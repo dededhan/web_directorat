@@ -324,6 +324,30 @@ if (!function_exists('getStatusInfoAdmin')) {
                         </a>
                         @endif
 
+                        @if($report->submission->manuscript_path)
+                        <a href="{{ asset('storage/' . $report->submission->manuscript_path) }}" 
+                           target="_blank"
+                           class="flex items-center p-4 bg-gradient-to-br from-teal-50 to-teal-100 border-2 border-teal-200 rounded-xl hover:from-teal-100 hover:to-teal-200 transition-all duration-200 group">
+                            <i class='bx bx-file-blank text-teal-600 text-2xl mr-3 group-hover:scale-110 transition-transform'></i>
+                            <div>
+                                <p class="font-semibold text-gray-800 text-sm">PDF Manuskrip Artikel</p>
+                                <p class="text-xs text-gray-500">Unduh Dokumen</p>
+                            </div>
+                        </a>
+                        @endif
+
+                        @if($report->submission->manuscript_link)
+                        <a href="{{ $report->submission->manuscript_link }}" 
+                           target="_blank"
+                           class="flex items-center p-4 bg-gradient-to-br from-indigo-50 to-indigo-100 border-2 border-indigo-200 rounded-xl hover:from-indigo-100 hover:to-indigo-200 transition-all duration-200 group">
+                            <i class='bx bx-link-external text-indigo-600 text-2xl mr-3 group-hover:scale-110 transition-transform'></i>
+                            <div>
+                                <p class="font-semibold text-gray-800 text-sm">Tautan Manuskrip</p>
+                                <p class="text-xs text-gray-500">Buka Tautan Eksternal</p>
+                            </div>
+                        </a>
+                        @endif
+
                         @if($report->submission->bukti_partner_riset_path)
                         <a href="{{ asset('storage/' . $report->submission->bukti_partner_riset_path) }}" 
                            target="_blank"

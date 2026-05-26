@@ -154,6 +154,54 @@
                         @error('ppt')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                     </div>
 
+                    {{-- Manuskrip Artikel --}}
+                    <div class="bg-gradient-to-br from-teal-50 to-indigo-50 border border-teal-100 rounded-2xl p-4 lg:p-6 shadow-sm">
+                        <div class="flex items-center text-sm font-bold text-gray-800 mb-2">
+                            <i class='bx bx-book-open text-teal-600 mr-2 text-lg'></i>
+                            Manuskrip Artikel <span class="text-red-500 ml-1">*</span>
+                        </div>
+                        <p class="text-xs text-gray-600 mb-4 leading-relaxed">
+                            Unggah file PDF manuskrip artikel Anda <strong>dan/atau</strong> masukkan tautan (URL) artikel manuskrip. <span class="font-semibold text-teal-700">Minimal salah satu kolom ini wajib diisi.</span>
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="manuscript_pdf" class="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wider">
+                                    Unggah File PDF Manuskrip
+                                </label>
+                                @if($submission && $submission->manuscript_path)
+                                    <div class="mb-2 p-2 bg-green-50 border border-green-200 rounded-lg text-sm flex items-center justify-between">
+                                        <a href="{{ asset('storage/' . $submission->manuscript_path) }}" target="_blank" class="text-green-700 hover:underline flex items-center">
+                                            <i class='bx bx-file-blank mr-2 text-base'></i>
+                                            Lihat file manuskrip
+                                        </a>
+                                        <label class="inline-flex items-center text-xs text-red-500 cursor-pointer hover:text-red-700 select-none">
+                                            <input type="checkbox" name="delete_manuscript_pdf" value="1" class="rounded border-gray-300 text-red-600 focus:ring-red-500 mr-1">
+                                            Hapus File
+                                        </label>
+                                    </div>
+                                @endif
+                                <input type="file" name="manuscript_pdf" id="manuscript_pdf" accept=".pdf"
+                                       class="w-full px-3 py-2 border-2 border-gray-200 bg-white rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200 text-gray-900 shadow-sm text-sm">
+                                <p class="text-[10px] text-gray-500 mt-1">Format: PDF (Max: 10MB)</p>
+                            </div>
+
+                            <div>
+                                <label for="manuscript_link" class="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wider">
+                                    Tautan / URL Manuskrip
+                                </label>
+                                <input type="url" name="manuscript_link" id="manuscript_link" 
+                                       value="{{ old('manuscript_link', $submission ? $submission->manuscript_link : '') }}"
+                                       placeholder="https://example.com/artikel-anda"
+                                       class="w-full px-3 py-2 border-2 border-gray-200 bg-white rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200 text-gray-900 shadow-sm text-sm">
+                                <p class="text-[10px] text-gray-500 mt-1">Contoh: https://ojs.nama-journal.org/index.php/article</p>
+                            </div>
+                        </div>
+                        
+                        @error('manuscript_pdf')<p class="text-red-500 text-xs mt-2">{{ $message }}</p>@enderror
+                        @error('manuscript_link')<p class="text-red-500 text-xs mt-2">{{ $message }}</p>@enderror
+                    </div>
+
                     <div>
                         <label for="bukti_partner_riset" class="block text-sm font-bold text-gray-700 mb-2 flex items-center">
                             <i class='bx bx-group text-purple-500 mr-2'></i>

@@ -17,6 +17,8 @@ class PresentingSubmission extends Model
         'bukti_partner_riset_path',
         'sp_setneg_path',
         'responden_internasional_qs',
+        'manuscript_path',
+        'manuscript_link',
     ];
 
     protected $casts = [

@@ -58,6 +58,12 @@ class PresentingSubmissionController extends Controller
             'sp_setneg' => 'nullable|file|mimes:pdf|max:10240',
             'responden_internasional_qs' => 'nullable|array',
             'responden_internasional_qs.*' => 'nullable|string|max:255',
+            'manuscript_pdf' => 'required_without:manuscript_link|nullable|file|mimes:pdf|max:10240',
+            'manuscript_link' => 'required_without:manuscript_pdf|nullable|url|max:255',
+        ], [
+            'manuscript_pdf.required_without' => 'Anda harus mengunggah file PDF manuskrip atau memasukkan tautan (URL) manuskrip.',
+            'manuscript_link.required_without' => 'Anda harus memasukkan tautan (URL) manuskrip atau mengunggah file PDF manuskrip.',
+            'manuscript_link.url' => 'Format tautan (URL) manuskrip tidak valid. Pastikan dimulai dengan http:// atau https://',
         ]);
 
         $data = ['presenting_report_id' => $report->id];
@@ -90,6 +96,14 @@ class PresentingSubmissionController extends Controller
 
         if ($request->hasFile('sp_setneg')) {
             $data['sp_setneg_path'] = $request->file('sp_setneg')->store('presenting/sp_setneg', 'public');
+        }
+
+        if ($request->hasFile('manuscript_pdf')) {
+            $data['manuscript_path'] = $request->file('manuscript_pdf')->store('presenting/manuscript', 'public');
+        }
+
+        if ($request->filled('manuscript_link')) {
+            $data['manuscript_link'] = $request->input('manuscript_link');
         }
 
         $data['responden_internasional_qs'] = $responden->isNotEmpty() ? $responden->values()->all() : null;
@@ -130,7 +144,22 @@ class PresentingSubmissionController extends Controller
             'sp_setneg' => 'nullable|file|mimes:pdf|max:10240',
             'responden_internasional_qs' => 'nullable|array',
             'responden_internasional_qs.*' => 'nullable|string|max:255',
+            'manuscript_pdf' => 'nullable|file|mimes:pdf|max:10240',
+            'manuscript_link' => 'nullable|url|max:255',
+        ], [
+            'manuscript_link.url' => 'Format tautan (URL) manuskrip tidak valid. Pastikan dimulai dengan http:// atau https://',
         ]);
+
+        // Pastikan salah satu manuskrip (PDF lama/baru atau Tautan baru/lama) terisi
+        $hasManuscript = ($submission->manuscript_path && !$request->boolean('delete_manuscript_pdf')) 
+            || $request->hasFile('manuscript_pdf') 
+            || $request->filled('manuscript_link');
+
+        if (!$hasManuscript) {
+            return back()->withErrors([
+                'manuscript_pdf' => 'Anda harus mengunggah file PDF manuskrip atau memasukkan tautan (URL) manuskrip.',
+            ])->withInput();
+        }
 
         $data = [];
 
@@ -178,6 +207,20 @@ class PresentingSubmissionController extends Controller
             }
             $data['sp_setneg_path'] = $request->file('sp_setneg')->store('presenting/sp_setneg', 'public');
         }
+
+        if ($request->hasFile('manuscript_pdf')) {
+            if ($submission->manuscript_path) {
+                Storage::disk('public')->delete($submission->manuscript_path);
+            }
+            $data['manuscript_path'] = $request->file('manuscript_pdf')->store('presenting/manuscript', 'public');
+        } elseif ($request->boolean('delete_manuscript_pdf')) {
+            if ($submission->manuscript_path) {
+                Storage::disk('public')->delete($submission->manuscript_path);
+            }
+            $data['manuscript_path'] = null;
+        }
+
+        $data['manuscript_link'] = $request->input('manuscript_link');
 
         $data['responden_internasional_qs'] = $responden->isNotEmpty() ? $responden->values()->all() : null;
 
