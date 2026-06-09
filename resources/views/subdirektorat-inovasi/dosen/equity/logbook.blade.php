@@ -3,7 +3,26 @@
 @extends('subdirektorat-inovasi.dosen.index')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" x-data="{ showForm: false }">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" 
+     x-data="{ 
+         showForm: {{ $errors->any() ? 'true' : 'false' }},
+         confirmDelete(id) {
+             Swal.fire({
+                 title: 'Apakah Anda yakin?',
+                 text: 'Catatan logbook ini akan dihapus permanen!',
+                 icon: 'warning',
+                 showCancelButton: true,
+                 confirmButtonColor: '#d33',
+                 cancelButtonColor: '#3085d6',
+                 confirmButtonText: 'Ya, hapus!',
+                 cancelButtonText: 'Batal'
+             }).then((result) => {
+                 if (result.isConfirmed) {
+                     document.getElementById('delete-form-' + id).submit();
+                 }
+             });
+         }
+     }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {{-- Breadcrumb dan Judul --}}
         <header class="mb-10">
@@ -65,7 +84,6 @@
                                     <th class="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-[15%]">Tgl Kegiatan</th>
                                     <th class="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-[35%]">Catatan</th>
                                     <th class="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-[15%]">Persen Capaian</th>
-                                    <th class="px-4 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-[10%]">Opsi</th>
                                     <th class="px-4 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-[20%]">Aksi</th>
                                 </tr>
                             </thead>
@@ -88,13 +106,18 @@
                                         </div>
                                     </td>
                                     <td class="px-4 py-5 text-center align-middle">
-                                        {{-- Tombol Opsi (jika diperlukan) --}}
-                                    </td>
-                                    <td class="px-4 py-5 text-center space-x-2 align-middle">
-                                        {{-- Tombol Aksi (Detail, Edit, Hapus) --}}
-                                        <button class="inline-flex items-center px-3 py-1 bg-blue-500 text-white text-xs font-semibold rounded-md hover:bg-blue-600">Detail</button>
-                                        <button class="inline-flex items-center px-3 py-1 bg-green-500 text-white text-xs font-semibold rounded-md hover:bg-green-600">Edit</button>
-                                        <button class="inline-flex items-center px-3 py-1 bg-red-500 text-white text-xs font-semibold rounded-md hover:bg-red-600">Hapus</button>
+                                        <div class="flex items-center justify-center space-x-2 whitespace-nowrap">
+                                            {{-- Tombol Detail --}}
+                                            <a href="{{ route('subdirektorat-inovasi.dosen.logbook.show', $logbook->id) }}" class="inline-flex items-center px-3 py-1.5 bg-blue-500 text-white text-xs font-bold rounded-lg hover:bg-blue-600 transition-colors shadow-sm">
+                                                <i class='bx bx-show mr-1'></i> Detail
+                                            </a>
+                                            <a href="{{ route('subdirektorat-inovasi.dosen.logbook.edit', $logbook->id) }}" class="inline-flex items-center px-3 py-1.5 bg-teal-500 text-white text-xs font-bold rounded-lg hover:bg-teal-600 transition-colors shadow-sm">
+                                                <i class='bx bx-edit mr-1'></i> Edit
+                                            </a>
+                                            <button class="inline-flex items-center px-3 py-1.5 bg-rose-500 text-white text-xs font-bold rounded-lg hover:bg-rose-600 transition-colors shadow-sm">
+                                                <i class='bx bx-trash mr-1'></i> Hapus
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -133,6 +156,17 @@
                                 </div>
                             </div>
                             {{-- Tombol Opsi Mobile --}}
+                            <div class="flex gap-2 mt-3 pt-3 border-t">
+                                <a href="{{ route('subdirektorat-inovasi.dosen.logbook.show', $logbook->id) }}" class="flex-1 justify-center inline-flex items-center px-3 py-2 bg-blue-500 text-white text-xs font-bold rounded-lg hover:bg-blue-600 shadow-sm">
+                                    <i class='bx bx-show mr-1'></i> Detail
+                                </a>
+                                <a href="{{ route('subdirektorat-inovasi.dosen.logbook.edit', $logbook->id) }}" class="flex-1 justify-center inline-flex items-center px-3 py-2 bg-teal-500 text-white text-xs font-bold rounded-lg hover:bg-teal-600 shadow-sm">
+                                    <i class='bx bx-edit mr-1'></i> Edit
+                                </a>
+                                <button @click="confirmDelete({{ $logbook->id }})" class="flex-1 justify-center inline-flex items-center px-3 py-2 bg-rose-500 text-white text-xs font-bold rounded-lg hover:bg-rose-600 shadow-sm">
+                                    <i class='bx bx-trash mr-1'></i> Hapus
+                                </button>
+                            </div>
                         </div>
                         @endforeach
                     </div>
@@ -158,23 +192,27 @@
                         </div>
                         <div>
                             <label for="activity_date" class="block text-sm font-medium text-gray-600 mb-1">Tanggal Kegiatan</label>
-                            <input type="date" id="activity_date" name="activity_date" class="w-full md:w-1/2 bg-white border border-gray-200 rounded-lg" required>
+                            <input type="date" id="activity_date" name="activity_date" value="{{ old('activity_date') }}" class="w-full md:w-1/2 bg-white border border-gray-200 rounded-lg @error('activity_date') border-red-500 @enderror" required>
+                            @error('activity_date') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label for="notes" class="block text-sm font-medium text-gray-600 mb-1">Catatan</label>
-                            <textarea id="notes" name="notes" rows="4" class="w-full bg-white border border-gray-200 rounded-lg" required></textarea>
+                            <textarea id="notes" name="notes" rows="4" class="w-full bg-white border border-gray-200 rounded-lg @error('notes') border-red-500 @enderror" required>{{ old('notes') }}</textarea>
+                            @error('notes') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label for="attachment" class="block text-sm font-medium text-gray-600 mb-1">File Lampiran (Opsional)</label>
-                            <input type="file" id="attachment" name="attachment" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
+                            <input type="file" id="attachment" name="attachment" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100 @error('attachment') border-red-500 @enderror">
                             <p class="text-xs text-gray-500 mt-1">PDF, DOCX, XLSX, PNG, JPG hingga 2MB</p>
+                            @error('attachment') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label for="progress_percentage" class="block text-sm font-medium text-gray-600 mb-1">Persentase Capaian Fisik</label>
                             <div class="relative w-full md:w-1/2">
-                                <input type="number" id="progress_percentage" name="progress_percentage" placeholder="0" min="0" max="100" class="w-full bg-white border border-gray-200 rounded-lg" required>
+                                <input type="number" id="progress_percentage" name="progress_percentage" value="{{ old('progress_percentage') }}" placeholder="0" min="0" max="100" class="w-full bg-white border border-gray-200 rounded-lg @error('progress_percentage') border-red-500 @enderror" required>
                                 <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-gray-500">%</span>
                             </div>
+                            @error('progress_percentage') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
                         </div>
                         <div class="mt-8 pt-6 border-t border-gray-200 flex items-center justify-end gap-3">
                             <button @click="showForm = false" type="button" class="px-5 py-2 bg-white border border-gray-200 text-gray-800 text-sm font-semibold rounded-lg">Batal</button>
@@ -186,4 +224,28 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#11A697'
+            });
+        @endif
+
+        @if($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal Menyimpan!',
+                text: 'Silakan periksa kembali form isian Anda. Pastikan persentase capaian lebih besar atau sama dengan logbook sebelumnya.',
+                confirmButtonColor: '#dc2626'
+            });
+        @endif
+    });
+</script>
+@endpush
 @endsection

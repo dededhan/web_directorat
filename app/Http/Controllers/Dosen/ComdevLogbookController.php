@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ComdevSubmission;
 use App\Models\Logbook;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ComdevLogbookController extends Controller
 {
@@ -51,7 +52,12 @@ class ComdevLogbookController extends Controller
 
         // Handle file upload jika ada
         if ($request->hasFile('attachment')) {
-            $path = $request->file('attachment')->store('logbook_attachments', 'public');
+            $file = $request->file('attachment');
+            $ext = $file->getClientOriginalExtension();
+            $date = now()->format('Y-m-d');
+            $timestamp = now()->timestamp;
+            $filename = "logbook_{$submission->id}_{$date}_{$timestamp}.{$ext}";
+            $path = $file->storeAs('logbook_attachments', $filename, 'public');
             $validated['attachment_path'] = $path;
         }
 
@@ -61,5 +67,89 @@ class ComdevLogbookController extends Controller
         // Kembali ke halaman logbook dengan pesan sukses
         return redirect()->route('subdirektorat-inovasi.dosen.equity.logbook', $submission->id)
             ->with('success', 'Catatan logbook berhasil ditambahkan.');
+    }
+
+    /**
+     * Menampilkan detail logbook.
+     */
+    public function show(Logbook $logbook)
+    {
+        $logbook->load('comdevSubmission');
+        return view('subdirektorat-inovasi.dosen.equity.logbook_detail', [
+            'logbook' => $logbook,
+            'submission' => $logbook->comdevSubmission,
+        ]);
+    }
+
+    /**
+     * Menampilkan form edit logbook.
+     */
+    public function edit(Logbook $logbook)
+    {
+        $logbook->load('comdevSubmission');
+        return view('subdirektorat-inovasi.dosen.equity.logbook_edit', [
+            'logbook' => $logbook,
+            'submission' => $logbook->comdevSubmission,
+        ]);
+    }
+
+    /**
+     * Mengupdate logbook yang ada.
+     */
+    public function update(Request $request, Logbook $logbook)
+    {
+        $submission = $logbook->comdevSubmission;
+
+        // Cari logbook sebelumnya berdasarkan tanggal (untuk validasi persentase)
+        $previousLogbook = $submission->logbooks()
+            ->where('activity_date', '<', $logbook->activity_date)
+            ->orderBy('activity_date', 'desc')
+            ->first();
+
+        $minPercentage = $previousLogbook ? $previousLogbook->progress_percentage : 0;
+
+        $validated = $request->validate([
+            'activity_date' => 'required|date',
+            'notes' => 'required|string|min:1',
+            'progress_percentage' => "required|integer|min:{$minPercentage}|max:100",
+            'attachment' => 'nullable|file|mimes:pdf,docx,xlsx,png,jpg|max:2048',
+        ], [
+            'progress_percentage.min' => "Persentase capaian tidak boleh lebih rendah dari logbook sebelumnya ({$minPercentage}%).",
+        ]);
+
+        // Handle file upload
+        if ($request->hasFile('attachment')) {
+            // Hapus file lama jika ada
+            if ($logbook->attachment_path) {
+                Storage::disk('public')->delete($logbook->attachment_path);
+            }
+            $file = $request->file('attachment');
+            $ext = $file->getClientOriginalExtension();
+            $date = now()->format('Y-m-d');
+            $timestamp = now()->timestamp;
+            $filename = "logbook_{$submission->id}_{$date}_{$timestamp}.{$ext}";
+            $path = $file->storeAs('logbook_attachments', $filename, 'public');
+            $validated['attachment_path'] = $path;
+        }
+
+        $logbook->update($validated);
+
+        return redirect()->route('subdirektorat-inovasi.dosen.equity.logbook', $submission->id)
+                         ->with('success', 'Catatan logbook berhasil diperbarui.');
+    }
+
+    /**
+     * Menghapus logbook.
+     */
+    public function destroy(Logbook $logbook)
+    {
+        // Hapus file attachment jika ada
+        if ($logbook->attachment_path) {
+            Storage::disk('public')->delete($logbook->attachment_path);
+        }
+
+        $logbook->delete();
+
+        return redirect()->back()->with('success', 'Catatan logbook berhasil dihapus.');
     }
 }

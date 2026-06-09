@@ -74,7 +74,8 @@ class ComdevSubmissionAdminController extends Controller
             'revisionFiles',
             'sesi.modules.subChapters', // Untuk menampilkan struktur modul & sub-bab
             'reviews.reviewer',       // Memuat review DAN user yang mereview
-            'reviews.module'          // Memuat modul yang direview
+            'reviews.module',          // Memuat modul yang direview
+            'logbooks'                // Memuat logbook kegiatan
         );
 
         $reviewers = User::where('role', 'reviewer_equity')->get(); // Ambil semua user reviewer

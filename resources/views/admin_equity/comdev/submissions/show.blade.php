@@ -450,6 +450,73 @@
                     </div>
                 </div>
 
+                {{-- Card Logbook Kegiatan --}}
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+                    <div class="p-5 border-b bg-[#11A697] text-white flex justify-between items-center">
+                        <h2 class="text-xl font-semibold flex items-center">
+                            <i class='bx bx-list-check text-2xl mr-3'></i>Logbook Kegiatan (Dosen)
+                        </h2>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-xs font-bold">
+                            Total: {{ $submission->logbooks->count() }}
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        @if($submission->logbooks->count() > 0)
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Tgl Kegiatan</th>
+                                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Catatan</th>
+                                            <th class="px-4 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Capaian</th>
+                                            <th class="px-4 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Lampiran</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        @foreach($submission->logbooks as $logbook)
+                                            <tr class="hover:bg-gray-50 transition-colors">
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    {{ $logbook->activity_date->format('d/m/Y') }}
+                                                </td>
+                                                <td class="px-4 py-4 text-sm text-gray-700">
+                                                    <div class="max-w-xs break-words">
+                                                        {{ $logbook->notes }}
+                                                    </div>
+                                                </td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-center">
+                                                    <div class="flex flex-col items-center">
+                                                        <span class="text-xs font-bold text-[#11A697] mb-1">{{ $logbook->progress_percentage }}%</span>
+                                                        <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                                                            <div class="bg-[#11A697] h-1.5 rounded-full" style="width: {{ $logbook->progress_percentage }}%"></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
+                                                    @if($logbook->attachment_path)
+                                                        <a href="{{ Storage::url($logbook->attachment_path) }}" target="_blank" 
+                                                           class="inline-flex items-center px-2 py-1 bg-teal-50 text-teal-700 rounded border border-teal-200 hover:bg-teal-100 transition">
+                                                            <i class='bx bx-paperclip mr-1'></i> Lihat
+                                                        </a>
+                                                    @else
+                                                        <span class="text-gray-400 italic text-xs">Tidak ada</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="text-center py-8">
+                                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                    <i class='bx bx-list-ul text-3xl text-gray-400'></i>
+                                </div>
+                                <p class="text-gray-500 text-sm italic">Belum ada catatan logbook yang diisi oleh dosen.</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
                 {{-- Card Reviewer --}}
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">

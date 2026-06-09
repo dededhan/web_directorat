@@ -393,6 +393,22 @@ Route::prefix('subdirektorat-inovasi')->name('subdirektorat-inovasi.')
                 Route::post('/equity/logbook/{submission}', [ComdevLogbookController::class, 'store'])
                     ->name('logbook.store');
 
+                // Route untuk mendapatkan detail satu logbook via AJAX/API (sekarang return view)
+                Route::get('/equity/logbook/detail/{logbook}', [ComdevLogbookController::class, 'show'])
+                    ->name('logbook.show');
+
+                // Route untuk mengedit logbook
+                Route::get('/equity/logbook/edit/{logbook}', [ComdevLogbookController::class, 'edit'])
+                    ->name('logbook.edit');
+
+                // Route untuk mengupdate logbook
+                Route::put('/equity/logbook/update/{logbook}', [ComdevLogbookController::class, 'update'])
+                    ->name('logbook.update');
+
+                // Route untuk menghapus logbook
+                Route::delete('/equity/logbook/delete/{logbook}', [ComdevLogbookController::class, 'destroy'])
+                    ->name('logbook.destroy');
+
 
 
                 // I've replaced the old static route with this new dynamic one.
