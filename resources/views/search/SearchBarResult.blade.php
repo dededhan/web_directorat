@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ __('Hasil Pencarian') }} - {{ config('app.name') }}</title>
+    <title>{{ __('Hasil Pencarian') }}</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <link rel="stylesheet" href="{{ asset('berita.css') }}">
     <link rel="stylesheet" href="{{ asset('unj-navbar.css') }}">
@@ -37,7 +37,7 @@
 </head>
 <body class="font-sans bg-gray-50">
     {{-- Include the responsive navbar --}}
-    @include('layout.navbarSearch')
+    @include('layout.navbar')
 
     {{-- A spacer div to push content below the fixed navbar. Height matches navbar height. --}}
     <div class="h-24"></div>

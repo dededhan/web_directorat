@@ -54,7 +54,7 @@
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
-  @include('layout.navbarSearch')
+  @include('layout.navbar')
   <div class="h-16"></div>
 
   @php

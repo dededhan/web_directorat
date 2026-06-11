@@ -563,7 +563,7 @@
 <body class="font-sans bg-gray-50">
 
     {{-- Include the responsive navbar --}}
-    @include('layout.navbarSearch')
+    @include('layout.navbar')
 
     {{-- A spacer div to push content below the fixed navbar. Height matches navbar height. --}}
     <div class="h-16"></div>
