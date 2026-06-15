@@ -105,6 +105,22 @@
     .navbar:not(.scrolled) {
         background-color: #277177 !important;
     }
+
+    input[type="search"]::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+        appearance: none;
+        display: none;
+    }
+
+    #navbar-search-input::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+        opacity: 1;
+        transition: opacity 0.3s ease;
+    }
+
+    #navbar-search-input.placeholder-fade::placeholder {
+        opacity: 0.3;
+    }
 </style>
 
 <nav class="navbar hidden md:block sticky top-0 z-50 bg-[#277177] shadow-md">
@@ -115,7 +131,7 @@
                 src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" />
             <img alt="DITISIP Logo" class="h-12 w-auto mx-2"
                 src="{{ asset('images/logoditisip.png') }}"/>
-            <h1 class="text-white text-xl lg:text-2xl font-bold">Subdirektorat Pemeringkatan dan Sistem Informasi</h1>
+            <h1 class="text-white text-lg lg:text-xl font-bold">Subdirektorat Pemeringkatan dan Sistem Informasi</h1>
         </a>
     </div>
         <ul class="flex space-x-6 items-center">
@@ -177,9 +193,33 @@
             </li>
             
             <li><a class="login text-white cursor-pointer hover:text-yellow-400 transition-colors duration-200" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a></li>
+
+            {{-- Search Icon --}}
+            <li>
+                <button type="button" id="open-search" class="text-white hover:text-yellow-400 transition-colors text-lg">
+                    <i class="fas fa-search"></i>
+                </button>
+            </li>
         </ul>
     </div>
 </nav>
+
+{{-- Search Bar --}}
+<div id="navbar-search-overlay" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div id="navbar-search-panel" class="relative w-full max-w-4xl p-6 opacity-0 scale-95 transition-all duration-300 ease-out">
+        <button id="close-search" type="button" class="absolute top-[-55px] right-4 md:top-[-18px] md:right-[-60px] flex items-center justify-center w-12 h-12 rounded-full border border-white/70 text-white text-xl hover:border-white hover:bg-white/10 transition duration-300 focus:outline-none">
+            <i class="fas fa-times"></i>
+        </button>
+        <form action="{{ route('search.index') }}" method="GET" class="w-full flex justify-center">
+            <div class="relative w-full max-w-3xl">
+                <input type="search" name="q" id="navbar-search-input" placeholder="Search..." autofocus class="w-full bg-transparent border-2 border-white/80 rounded-full px-8 py-5 pr-16 text-white placeholder:text-white text-lg outline-none backdrop-blur-sm focus:border-white focus:ring-2 focus:ring-white/20"/>
+                <button type="submit" class="absolute right-6 top-1/2 -translate-y-1/2 text-white text-xl hover:text-yellow-400 transition">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
 <nav class="navbar bg-[#186862] md:hidden fixed top-0 w-full z-50 transition-colors duration-300" id="mobile-navbar">
     <div class="flex justify-between items-center py-4 px-4">
@@ -189,9 +229,17 @@
                 src="{{ asset('images/logoditisip.png') }}"/>
             <h1 class="text-white text-xs sm:text-sm font-bold leading-tight">Subdirektorat Sistem Informasi dan Pemeringkatan</h1>
         </a>
-        <button id="mobile-menu-toggle" class="text-white focus:outline-none z-50">
-            <i id="menu-icon" class="fas fa-bars text-2xl"></i>
-        </button>
+        <div class="flex items-center gap-2">
+            {{-- Search Icon Mobile --}}
+            <button id="open-search-mobile" class="text-white p-2 hover:bg-white/10 rounded-lg transition-colors focus:outline-none">
+                <i class="fas fa-search text-lg"></i>
+            </button>
+
+            {{-- Hamburger --}}
+            <button id="mobile-menu-toggle" class="text-white p-2 hover:bg-white/10 rounded-lg transition-colors focus:outline-none">
+                <i id="menu-icon" class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
     </div>
 </nav>
 
@@ -287,6 +335,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const sidebarOverlay = document.getElementById('sidebar-overlay');
     const closeSidebarBtn = document.getElementById('close-sidebar');
     const menuIcon = document.getElementById('menu-icon');
+    const searchOverlay = document.getElementById('navbar-search-overlay');
+    const searchPanel = document.getElementById('navbar-search-panel');
+    const openSearchButton = document.getElementById('open-search');
+    const openSearchMobileButton = document.getElementById('open-search-mobile');
+    const closeSearchButton = document.getElementById('close-search');
+    const searchInput = document.getElementById('navbar-search-input');
 
     const openSidebar = () => {
         if (mobileSidebar && sidebarOverlay) {
@@ -424,5 +478,92 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(closeSidebar, 100);
         });
     });
+
+    function openSearchOverlay() {
+        searchOverlay.classList.remove('pointer-events-none', 'opacity-0');
+        searchOverlay.classList.add('opacity-100');
+
+        searchPanel.classList.remove('opacity-0', 'scale-95');
+        searchPanel.classList.add('opacity-100', 'scale-100');
+
+        document.body.classList.add('overflow-hidden');
+
+        if (searchInput) {
+            setTimeout(() => searchInput.focus(), 150);
+        }
+    }
+
+    function closeSearchOverlay() {
+        searchOverlay.classList.remove('opacity-100');
+        searchOverlay.classList.add('opacity-0');
+
+        searchPanel.classList.remove('opacity-100', 'scale-100');
+        searchPanel.classList.add('opacity-0', 'scale-95');
+
+        document.body.classList.remove('overflow-hidden');
+
+        setTimeout(() => {
+            searchOverlay.classList.add('pointer-events-none');
+        }, 300);
+    }
+
+    const placeholders = [
+        'Cari Berita...',
+        'Cari Produk Inovasi...',
+        'Cari Program / Layanan...',
+        'Cari Dokumen...'
+    ];
+
+    let placeholderIndex = 0;
+
+    if (searchInput) {
+        searchInput.setAttribute('placeholder', placeholders[0]);
+
+        setInterval(() => {
+            searchInput.classList.add('placeholder-fade');
+
+            setTimeout(() => {
+                placeholderIndex =
+                    (placeholderIndex + 1) % placeholders.length;
+
+                searchInput.setAttribute(
+                    'placeholder',
+                    placeholders[placeholderIndex]
+                );
+
+                searchInput.classList.remove('placeholder-fade');
+            }, 300);
+
+        }, 4000);
+    }
+
+    if (openSearchButton) {
+        openSearchButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            openSearchOverlay();
+        });
+    }
+
+    if (openSearchMobileButton) {
+        openSearchMobileButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            openSearchOverlay();
+        });
+    }
+
+    if (closeSearchButton) {
+        closeSearchButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            closeSearchOverlay();
+        });
+    }
+
+    if (searchOverlay) {
+        searchOverlay.addEventListener('click', function(e) {
+            if (e.target === searchOverlay) {
+                closeSearchOverlay();
+            }
+        });
+    }
 });
 </script>
