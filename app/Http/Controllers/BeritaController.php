@@ -231,6 +231,12 @@ class BeritaController extends Controller
     {
 
         $berita = Berita::findOrFail($id);
+        
+        // Add translated fields for the JSON response
+        // This ensures the frontend popup shows the correct language
+        $berita->judul = $berita->getTranslatedTitle();
+        $berita->isi = $berita->getTranslatedContent();
+        
         return response()->json($berita);
     }
     

@@ -83,8 +83,49 @@ class TranslationService
             return null;
         }
         
+        // If no tags are present, just translate the text directly
+        if ($html === strip_tags($html)) {
+            return $this->translate($html, $useCache);
+        }
 
-        $plainText = strip_tags($html);
-        return $this->translate($plainText, $useCache);
+        try {
+            // Use DOMDocument to translate only text nodes while preserving tags
+            $dom = new \DOMDocument();
+            
+            // Suppress errors for malformed HTML
+            libxml_use_internal_errors(true);
+            
+            // Load HTML with a wrapper to handle fragments and ensure UTF-8
+            // mb_convert_encoding to HTML-ENTITIES is a reliable way to load UTF-8 into DOMDocument
+            $wrappedHtml = '<div>' . $html . '</div>';
+            $dom->loadHTML(mb_convert_encoding($wrappedHtml, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            
+            $xpath = new \DOMXPath($dom);
+            $textNodes = $xpath->query('//text()');
+            
+            foreach ($textNodes as $node) {
+                $text = $node->nodeValue;
+                // Only translate nodes that contain non-whitespace text
+                if (trim($text) !== '') {
+                    $node->nodeValue = $this->translate($text, $useCache);
+                }
+            }
+            
+            // Save the translated HTML and remove the wrapper <div>...</div>
+            $translatedHtml = $dom->saveHTML($dom->documentElement);
+            
+            // Remove the <div> and </div> wrapper tags (first 5 and last 6 chars)
+            if (strpos($translatedHtml, '<div>') === 0) {
+                $translatedHtml = substr($translatedHtml, 5, -6);
+            }
+            
+            libxml_clear_errors();
+            return $translatedHtml;
+            
+        } catch (\Exception $e) {
+            Log::warning('HTML translation failed, falling back to basic translation: ' . $e->getMessage());
+            // Fallback: strip tags and translate as plain text to ensure something is returned
+            return $this->translate(strip_tags($html), $useCache);
+        }
     }
 }

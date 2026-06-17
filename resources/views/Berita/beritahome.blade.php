@@ -769,8 +769,8 @@ img, iframe, .card-img {
                             <div class="card-meta">
                                 <span class="card-date">{{ date('d F Y', strtotime($berita->tanggal)) }}</span>
                             </div>
-                            {{-- <a href="{{ route('Berita.show', ['slug' => Str::slug($berita->judul)]) }}" class="read-more">Baca Selengkapnya</a> --}}
-                            <a href="{{ route('Berita.show', ['slug' => $berita->slug]) }}" class="read-more">Baca Selengkapnya</a>                        </div>
+                            <a href="{{ route('Berita.show', ['slug' => $berita->slug]) }}" class="read-more" data-id="{{ $berita->id }}">Baca Selengkapnya</a>
+                        </div>
                     </div>
                 @empty
                     <div class="no-results">
@@ -786,6 +786,26 @@ img, iframe, .card-img {
             </div>
         </section>
     </main>
+
+    <!-- News Popup -->
+    <div id="newsPopup" class="news-popup-overlay">
+        <div class="news-popup">
+            <div class="popup-header">
+                <img id="popupImg" src="" alt="" class="popup-img">
+                <button id="popupClose" class="popup-close">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div id="popupLoading" class="popup-loading">
+                <div class="popup-spinner"></div>
+                <p>Memuat berita...</p>
+            </div>
+            <div id="popupContent" class="popup-content">
+                <!-- Content will be loaded via AJAX -->
+            </div>
+        </div>
+    </div>
+
     @include('layout.footer')
 
 
@@ -936,9 +956,12 @@ img, iframe, .card-img {
         
         // Add event listeners
         readMoreButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function(e) {
                 const beritaId = this.getAttribute('data-id');
-                openPopup(beritaId);
+                if (beritaId) {
+                    e.preventDefault();
+                    openPopup(beritaId);
+                }
             });
         });
         
