@@ -141,6 +141,13 @@
                             <select name="negara_pelaksanaan" id="negara_pelaksanaan" required
                                     class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200 text-gray-900 shadow-sm">
                                 <option value="Indonesia" {{ old('negara_pelaksanaan', $report->negara_pelaksanaan ?? 'Indonesia') === 'Indonesia' ? 'selected' : '' }}>Indonesia</option>
+                                <option value="Malaysia" {{ old('negara_pelaksanaan', $report->negara_pelaksanaan ?? 'Indonesia') === 'Malaysia' ? 'selected' : '' }}>Malaysia</option>
+                                <option value="Singapore" {{ old('negara_pelaksanaan', $report->negara_pelaksanaan ?? 'Indonesia') === 'Singapore' ? 'selected' : '' }}>Singapore</option>
+                                <option value="Thailand" {{ old('negara_pelaksanaan', $report->negara_pelaksanaan ?? 'Indonesia') === 'Thailand' ? 'selected' : '' }}>Thailand</option>
+                                <option value="Philippines" {{ old('negara_pelaksanaan', $report->negara_pelaksanaan ?? 'Indonesia') === 'Philippines' ? 'selected' : '' }}>Philippines</option>
+                                <option value="United States" {{ old('negara_pelaksanaan', $report->negara_pelaksanaan ?? 'Indonesia') === 'United States' ? 'selected' : '' }}>United States</option>
+                                <option value="United Kingdom" {{ old('negara_pelaksanaan', $report->negara_pelaksanaan ?? 'Indonesia') === 'United Kingdom' ? 'selected' : '' }}>United Kingdom</option>
+                                <option value="Other" {{ old('negara_pelaksanaan', $report->negara_pelaksanaan ?? 'Indonesia') === 'Other' ? 'selected' : '' }}>Other</option>
                             </select>
                             @error('negara_pelaksanaan')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
