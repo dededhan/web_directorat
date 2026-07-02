@@ -58,17 +58,6 @@
                                     class="inline-flex items-center px-5 py-2.5 bg-white text-teal-700 font-bold text-sm rounded-xl hover:bg-teal-50 transition shadow-sm">
                                     <i class="fas fa-folder-open mr-2"></i> Lihat Submission
                                 </a>
-                            @elseif(isset($existingMembership) && $existingMembership)
-                                <div class="text-right">
-                                    <div
-                                        class="inline-flex items-center px-4 py-2 bg-white/20 text-white text-sm font-semibold rounded-xl mb-2">
-                                        <i class="fas fa-users mr-2"></i> Anda sudah menjadi anggota tim
-                                    </div>
-                                    <a href="{{ route('subdirektorat-inovasi.tendik.inovchalenge.team.show', $existingMembership->submission) }}"
-                                        class="block inline-flex items-center px-5 py-2.5 bg-white text-teal-700 font-bold text-sm rounded-xl hover:bg-teal-50 transition shadow-sm">
-                                        <i class="fas fa-eye mr-2"></i> Lihat Tim Saya
-                                    </a>
-                                </div>
                             @else
                                 <form
                                     action="{{ route('subdirektorat-inovasi.tendik.inovchalenge.submissions.store', $session) }}"

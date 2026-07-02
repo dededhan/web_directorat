@@ -219,17 +219,18 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition">
+                                    <div class="flex items-center space-x-1">
                                         <button @click="editing = true" type="button"
-                                                class="p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition">
-                                            <i class="fas fa-edit text-sm"></i>
+                                                class="inline-flex items-center px-2.5 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition">
+                                            <i class="fas fa-edit mr-1"></i> Edit
                                         </button>
                                         <form method="POST"
                                               action="{{ route('admin_inovchalenge.inovchalenge.tahap.fields.destroy', $field) }}"
                                               onsubmit="return confirm('Hapus field ini?')">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition">
-                                                <i class="fas fa-trash text-sm"></i>
+                                            <button type="submit"
+                                                    class="inline-flex items-center px-2.5 py-1.5 text-xs font-medium text-red-600 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition">
+                                                <i class="fas fa-trash mr-1"></i> Hapus
                                             </button>
                                         </form>
                                     </div>
@@ -431,17 +432,18 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition">
+                                <div class="flex items-center space-x-1">
                                     <button @click="editing = true" type="button"
-                                            class="p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition">
-                                        <i class="fas fa-edit text-sm"></i>
+                                            class="inline-flex items-center px-2.5 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition">
+                                        <i class="fas fa-edit mr-1"></i> Edit
                                     </button>
                                     <form method="POST"
                                           action="{{ route('admin_inovchalenge.inovchalenge.tahap.fields.destroy', $field) }}"
                                           onsubmit="return confirm('Hapus field ini?')">
                                         @csrf @method('DELETE')
-                                        <button type="submit" class="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition">
-                                            <i class="fas fa-trash text-sm"></i>
+                                        <button type="submit"
+                                                class="inline-flex items-center px-2.5 py-1.5 text-xs font-medium text-red-600 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition">
+                                            <i class="fas fa-trash mr-1"></i> Hapus
                                         </button>
                                     </form>
                                 </div>

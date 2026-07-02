@@ -98,7 +98,7 @@
                                             <i class="fas fa-edit text-sm"></i>
                                         </a>
                                         {{-- Activate / Close --}}
-                                        @if($session->status === 'draft')
+                                        @if($session->status !== 'active')
                                             <form method="POST" action="{{ route('admin_inovchalenge.inovchalenge.sessions.activate', $session) }}">
                                                 @csrf @method('PATCH')
                                                 <button type="submit" title="Aktifkan"
@@ -106,7 +106,7 @@
                                                     <i class="fas fa-play text-sm"></i>
                                                 </button>
                                             </form>
-                                        @elseif($session->status === 'active')
+                                        @else
                                             <form method="POST" action="{{ route('admin_inovchalenge.inovchalenge.sessions.close', $session) }}">
                                                 @csrf @method('PATCH')
                                                 <button type="submit" title="Tutup"
@@ -167,11 +167,29 @@
                                 <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Draft</span>
                             @endif
                         </div>
-                        <div class="mt-3 flex items-center space-x-3">
+                        <div class="mt-3 flex items-center flex-wrap gap-3">
                             <a href="{{ route('admin_inovchalenge.inovchalenge.sessions.show', $session) }}"
                                class="text-sm text-teal-600 font-medium hover:underline">Lihat</a>
                             <a href="{{ route('admin_inovchalenge.inovchalenge.sessions.edit', $session) }}"
                                class="text-sm text-blue-600 font-medium hover:underline">Edit</a>
+                            @if ($session->status !== 'active')
+                                <form method="POST"
+                                    action="{{ route('admin_inovchalenge.inovchalenge.sessions.activate', $session) }}">
+                                    @csrf @method('PATCH')
+                                    <button type="submit" class="text-sm text-green-600 font-medium hover:underline">
+                                        <i class="fas fa-play mr-1 text-xs"></i>Aktifkan
+                                    </button>
+                                </form>
+                            @else
+                                <form method="POST"
+                                    action="{{ route('admin_inovchalenge.inovchalenge.sessions.close', $session) }}">
+                                    @csrf @method('PATCH')
+                                    <button type="submit"
+                                        class="text-sm text-orange-600 font-medium hover:underline">
+                                        <i class="fas fa-stop mr-1 text-xs"></i>Tutup
+                                    </button>
+                                </form>
+                            @endif
                         </div>
                     </div>
                 @empty

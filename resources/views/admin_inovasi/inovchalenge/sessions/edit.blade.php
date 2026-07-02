@@ -164,7 +164,7 @@
                             @endif
                         </div>
                         <div class="flex space-x-2">
-                            @if ($session->status === 'draft')
+                            @if ($session->status !== 'active')
                                 <form method="POST"
                                     action="{{ route('admin_inovasi.inovchalenge.sessions.activate', $session) }}">
                                     @csrf @method('PATCH')
@@ -173,7 +173,7 @@
                                         <i class="fas fa-play mr-1"></i> Aktifkan
                                     </button>
                                 </form>
-                            @elseif($session->status === 'active')
+                            @else
                                 <form method="POST"
                                     action="{{ route('admin_inovasi.inovchalenge.sessions.close', $session) }}">
                                     @csrf @method('PATCH')

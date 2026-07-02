@@ -45,13 +45,13 @@ class MemberController extends Controller
 
         // If user_id provided for dosen/alumni, verify the user exists and pre-fill data from profile
         if (!empty($validated['user_id'])) {
-            // Check if this user is already a member of any submission in the same session
-            $alreadyInSession = InovChalengeSubmissionMember::where('user_id', $validated['user_id'])
-                ->whereHas('submission', fn($q) => $q->where('inov_chalenge_session_id', $session->id))
+            // Check if this user is already a member of this specific submission
+            $alreadyInSubmission = InovChalengeSubmissionMember::where('user_id', $validated['user_id'])
+                ->where('inov_chalenge_submission_id', $submission->id)
                 ->exists();
 
-            if ($alreadyInSession) {
-                return back()->with('error', 'User ini sudah terdaftar di tim lain pada sesi yang sama.');
+            if ($alreadyInSubmission) {
+                return back()->with('error', 'User ini sudah terdaftar di tim ini.');
             }
 
             $user = User::with('profile.fakultas', 'profile.prodi')->find($validated['user_id']);

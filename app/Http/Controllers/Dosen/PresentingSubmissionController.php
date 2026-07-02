@@ -35,20 +35,38 @@ class PresentingSubmissionController extends Controller
 
     public function store(Request $request, PresentingReport $report)
     {
+        \Illuminate\Support\Facades\Log::info('PresentingSubmissionController::store entry', [
+            'user_id' => Auth::id(),
+            'report_id' => $report->id,
+            'files' => collect($request->allFiles())->map(fn($file) => [
+                'name' => $file->getClientOriginalName(),
+                'mime' => $file->getMimeType(),
+                'size' => $file->getSize(),
+            ])->all(),
+        ]);
+
         if ($report->user_id !== Auth::id()) {
+            \Illuminate\Support\Facades\Log::warning('PresentingSubmissionController::store ACCESS DENIED', [
+                'user_id' => Auth::id(),
+                'report_user_id' => $report->user_id
+            ]);
             abort(403, 'AKSES DITOLAK');
         }
 
         $session = $report->session;
         if (!$session || $session->computed_status !== 'Buka') {
+            \Illuminate\Support\Facades\Log::warning('PresentingSubmissionController::store session closed');
             return redirect()->route('subdirektorat-inovasi.dosen.presenting.manajemen')
                 ->with('error', 'Sesi sudah ditutup. Laporan akhir tidak dapat diubah.');
         }
 
         if ($report->status !== 'disetujui') {
+            \Illuminate\Support\Facades\Log::warning('PresentingSubmissionController::store report not approved');
             return redirect()->route('subdirektorat-inovasi.dosen.presenting.manajemen')
                 ->with('error', 'Anda hanya bisa melengkapi laporan akhir setelah pengajuan disetujui.');
         }
+
+        \Illuminate\Support\Facades\Log::info('PresentingSubmissionController::store validating request');
 
         $validated = $request->validate([
             'bukti_perjalanan' => 'required|file|mimes:pdf|max:10240',
@@ -65,6 +83,8 @@ class PresentingSubmissionController extends Controller
             'manuscript_link.required_without' => 'Anda harus memasukkan tautan (URL) manuskrip atau mengunggah file PDF manuskrip.',
             'manuscript_link.url' => 'Format tautan (URL) manuskrip tidak valid. Pastikan dimulai dengan http:// atau https://',
         ]);
+
+        \Illuminate\Support\Facades\Log::info('PresentingSubmissionController::store validation passed');
 
         $data = ['presenting_report_id' => $report->id];
 
@@ -108,7 +128,15 @@ class PresentingSubmissionController extends Controller
 
         $data['responden_internasional_qs'] = $responden->isNotEmpty() ? $responden->values()->all() : null;
 
-        PresentingSubmission::create($data);
+        \Illuminate\Support\Facades\Log::info('PresentingSubmissionController::store inserting to database', [
+            'data_keys' => array_keys($data),
+        ]);
+
+        $submission = PresentingSubmission::create($data);
+
+        \Illuminate\Support\Facades\Log::info('PresentingSubmissionController::store successfully created submission', [
+            'submission_id' => $submission->id,
+        ]);
 
         return redirect()->route('subdirektorat-inovasi.dosen.presenting.manajemen')->with('success', 'Laporan akhir berhasil diajukan!');
     }

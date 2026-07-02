@@ -43,15 +43,7 @@ class TendikController extends Controller
             ->where('user_id', Auth::id())
             ->first();
 
-        $existingMembership = null;
-        if (!$existingSubmission) {
-            $existingMembership = InovChalengeSubmissionMember::where('user_id', Auth::id())
-                ->whereHas('submission', fn($q) => $q->where('inov_chalenge_session_id', $session->id))
-                ->with('submission')
-                ->first();
-        }
-
-        return view('subdirektorat-inovasi.tendik.inovchalenge.sessions.show', compact('session', 'existingSubmission', 'existingMembership'));
+        return view('subdirektorat-inovasi.tendik.inovchalenge.sessions.show', compact('session', 'existingSubmission'));
     }
 
     /**
@@ -154,6 +146,7 @@ class TendikController extends Controller
     {
         abort_if($session->status !== 'active', 404);
 
+        // Check duplicate (own submission)
         $existing = InovChalengeSubmission::where('inov_chalenge_session_id', $session->id)
             ->where('user_id', Auth::id())
             ->first();
@@ -162,16 +155,6 @@ class TendikController extends Controller
             return redirect()
                 ->route('subdirektorat-inovasi.tendik.inovchalenge.submissions.show', $existing)
                 ->with('error', 'Anda sudah memiliki submission untuk sesi ini.');
-        }
-
-        $isMember = InovChalengeSubmissionMember::where('user_id', Auth::id())
-            ->whereHas('submission', fn($q) => $q->where('inov_chalenge_session_id', $session->id))
-            ->exists();
-
-        if ($isMember) {
-            return redirect()
-                ->route('subdirektorat-inovasi.tendik.inovchalenge.sessions.show', $session)
-                ->with('error', 'Anda sudah terdaftar sebagai anggota tim di sesi ini. Tidak dapat mengajukan submission baru.');
         }
 
         $submission = DB::transaction(function () use ($session) {
