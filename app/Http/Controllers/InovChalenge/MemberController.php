@@ -93,6 +93,7 @@ class MemberController extends Controller
         abort_if($submission->user_id !== Auth::id(), 403);
         abort_if($member->inov_chalenge_submission_id !== $submission->id, 404);
         abort_if($member->peran === 'Ketua', 403, 'Ketua tidak dapat diubah.');
+        abort_if($member->approval_status === 'approved', 403, 'Anggota yang sudah disetujui hanya dapat diubah oleh Admin.');
 
         $peranIcOptions = implode(',', InovChalengeSubmissionMember::PERAN_IC_OPTIONS);
 
@@ -117,6 +118,7 @@ class MemberController extends Controller
         abort_if($submission->user_id !== Auth::id(), 403);
         abort_if($member->inov_chalenge_submission_id !== $submission->id, 404);
         abort_if($member->peran === 'Ketua', 403, 'Ketua tidak dapat dihapus.');
+        abort_if($member->approval_status === 'approved', 403, 'Anggota yang sudah disetujui hanya dapat dihapus oleh Admin.');
 
         $member->delete();
 

@@ -362,11 +362,19 @@ Route::prefix('admin-inovchalenge')
         Route::patch('inovchalenge/submission-tahap/{submissionTahap}/status', [PanelSubmissionAdminController::class, 'updateTahapStatus'])
             ->name('inovchalenge.submissions.updateTahapStatus');
 
-        // Member approval
+        // Member approval & management
         Route::patch('inovchalenge/sessions/{session}/submissions/{submission}/members/{member}/approve', [PanelSubmissionAdminController::class, 'approveMember'])
             ->name('inovchalenge.submissions.members.approve');
         Route::patch('inovchalenge/sessions/{session}/submissions/{submission}/members/{member}/reject', [PanelSubmissionAdminController::class, 'rejectMember'])
             ->name('inovchalenge.submissions.members.reject');
+        Route::post('inovchalenge/sessions/{session}/submissions/{submission}/members', [PanelSubmissionAdminController::class, 'storeMember'])
+            ->name('inovchalenge.submissions.members.store');
+        Route::put('inovchalenge/sessions/{session}/submissions/{submission}/members/{member}', [PanelSubmissionAdminController::class, 'updateMember'])
+            ->name('inovchalenge.submissions.members.update');
+        Route::delete('inovchalenge/sessions/{session}/submissions/{submission}/members/{member}', [PanelSubmissionAdminController::class, 'destroyMember'])
+            ->name('inovchalenge.submissions.members.destroy');
+        Route::get('inovchalenge/members/search', [PanelSubmissionAdminController::class, 'searchUsers'])
+            ->name('inovchalenge.members.search');
 
         // Account management
         Route::get('accounts', [PanelAccountManagementController::class, 'index'])

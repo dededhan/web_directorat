@@ -131,7 +131,7 @@
             </div>
 
             {{-- ═══ Anggota Tim (top level) ═══ --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6" x-data="memberManager()">
                 <div class="px-5 py-3 border-b border-gray-100 flex items-center justify-between">
                     <h2 class="text-sm font-bold text-gray-700 flex items-center gap-2">
                         <i class="fas fa-users text-purple-500"></i> Anggota Tim
@@ -139,15 +139,26 @@
                             {{ $submission->members->count() }} orang
                         </span>
                     </h2>
-                    @php
-                        $pendingCount = $submission->members->where('approval_status', 'pending')->count();
-                    @endphp
-                    @if ($pendingCount > 0)
-                        <span
-                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-700">
-                            <i class="fas fa-clock mr-1 text-[8px]"></i> {{ $pendingCount }} Menunggu Approval
-                        </span>
-                    @endif
+                    <div class="flex items-center gap-2">
+                        @php
+                            $maxAnggota = $submission->session->max_anggota ?? 10;
+                            $currentCount = $submission->members->count();
+                        @endphp
+                        @if ($currentCount < $maxAnggota)
+                            <button @click="showForm = !showForm" class="text-xs text-purple-600 hover:text-purple-800 font-medium flex items-center gap-1">
+                                <i class="fas fa-user-plus text-[11px]"></i> Kelola / Tambah Anggota
+                            </button>
+                        @endif
+                        @php
+                            $pendingCount = $submission->members->where('approval_status', 'pending')->count();
+                        @endphp
+                        @if ($pendingCount > 0)
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-700">
+                                <i class="fas fa-clock mr-1 text-[8px]"></i> {{ $pendingCount }} Menunggu Approval
+                            </span>
+                        @endif
+                    </div>
                 </div>
                 <div class="px-5 py-3">
                     @if ($submission->members->count())
@@ -195,25 +206,37 @@
                                             </p>
                                         @endif
                                     </div>
-                                    {{-- Admin approve/reject for pending --}}
-                                    @if ($member->peran !== 'Ketua' && $member->approval_status === 'pending')
-                                        <div class="flex gap-1 ml-auto flex-shrink-0">
+                                    {{-- Admin approve/reject and delete --}}
+                                    @if ($member->peran !== 'Ketua')
+                                        <div class="flex gap-1 ml-auto flex-shrink-0 items-center">
+                                            @if ($member->approval_status === 'pending')
+                                                <form method="POST"
+                                                    action="{{ route('admin_inovchalenge.inovchalenge.submissions.members.approve', [$session, $submission, $member]) }}"
+                                                    class="inline">@csrf @method('PATCH')
+                                                    <button type="submit"
+                                                        class="w-6 h-6 rounded-md bg-green-500 text-white text-[10px] hover:bg-green-600 transition flex items-center justify-center"
+                                                        title="Approve">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                </form>
+                                                <form method="POST"
+                                                    action="{{ route('admin_inovchalenge.inovchalenge.submissions.members.reject', [$session, $submission, $member]) }}"
+                                                    class="inline">@csrf @method('PATCH')
+                                                    <button type="submit"
+                                                        class="w-6 h-6 rounded-md bg-red-500 text-white text-[10px] hover:bg-red-600 transition flex items-center justify-center"
+                                                        title="Reject">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
                                             <form method="POST"
-                                                action="{{ route('admin_inovchalenge.inovchalenge.submissions.members.approve', [$session, $submission, $member]) }}"
-                                                class="inline">@csrf @method('PATCH')
+                                                action="{{ route('admin_inovchalenge.inovchalenge.submissions.members.destroy', [$session, $submission, $member]) }}"
+                                                onsubmit="return confirm('Hapus anggota ini?')"
+                                                class="inline">@csrf @method('DELETE')
                                                 <button type="submit"
-                                                    class="w-6 h-6 rounded-md bg-green-500 text-white text-[10px] hover:bg-green-600 transition flex items-center justify-center"
-                                                    title="Approve">
-                                                    <i class="fas fa-check"></i>
-                                                </button>
-                                            </form>
-                                            <form method="POST"
-                                                action="{{ route('admin_inovchalenge.inovchalenge.submissions.members.reject', [$session, $submission, $member]) }}"
-                                                class="inline">@csrf @method('PATCH')
-                                                <button type="submit"
-                                                    class="w-6 h-6 rounded-md bg-red-500 text-white text-[10px] hover:bg-red-600 transition flex items-center justify-center"
-                                                    title="Reject">
-                                                    <i class="fas fa-times"></i>
+                                                    class="w-6 h-6 rounded-md bg-red-600 text-white text-[10px] hover:bg-red-700 transition flex items-center justify-center"
+                                                    title="Hapus Anggota">
+                                                    <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
                                         </div>
@@ -223,6 +246,160 @@
                         </div>
                     @else
                         <p class="text-sm text-gray-400 text-center py-2">Belum ada anggota</p>
+                    @endif
+
+                    {{-- Add member form for admin --}}
+                    @if ($currentCount < $maxAnggota)
+                        <div class="border-t border-gray-100 pt-6 mt-6" x-show="showForm" x-transition x-cloak>
+                            <h3 class="text-sm font-bold text-gray-700 mb-4">
+                                <i class="fas fa-user-plus mr-1.5 text-purple-500"></i>Tambah Anggota oleh Admin
+                                <span class="text-gray-400 font-normal text-xs ml-1">(sisa
+                                    {{ $maxAnggota - $currentCount }} slot)</span>
+                            </h3>
+                            <form method="POST"
+                                action="{{ route('admin_inovchalenge.inovchalenge.submissions.members.store', [$session, $submission]) }}">
+                                @csrf
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                            Tipe Anggota <span class="text-red-500">*</span>
+                                        </label>
+                                        <select name="tipe_anggota" x-model="tipeAnggota" @change="onTipeChange()"
+                                            class="w-full rounded-lg border-gray-300 text-sm focus:border-purple-500 focus:ring-purple-500"
+                                            required>
+                                            <option value="">-- Pilih --</option>
+                                            <option value="dosen">Dosen</option>
+                                            <option value="tendik">Tendik</option>
+                                            <option value="alumni">Alumni</option>
+                                            <option value="peneliti">Peneliti</option>
+                                            <option value="mahasiswa">Mahasiswa</option>
+                                            <option value="DUDI">DUDI</option>
+                                            <option value="PPPK">PPPK</option>
+                                        </select>
+                                    </div>
+
+                                    {{-- User search for all registered types --}}
+                                    <div
+                                        x-show="['dosen','tendik','alumni','mahasiswa','peneliti','DUDI','PPPK'].includes(tipeAnggota)">
+                                        <label class="block text-xs font-semibold text-gray-600 mb-1">Cari User</label>
+                                        <div class="relative">
+                                            <input type="text" x-model="searchQuery"
+                                                @input.debounce.300ms="searchUser()"
+                                                placeholder="Ketik nama atau email..."
+                                                class="w-full rounded-lg border-gray-300 text-sm focus:border-purple-500 focus:ring-purple-500">
+                                            {{-- Dropdown results --}}
+                                            <div x-show="searchResults.length > 0"
+                                                class="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-auto">
+                                                <template x-for="user in searchResults" :key="user.id">
+                                                    <div @click="selectUser(user)"
+                                                        class="px-3 py-2 hover:bg-purple-50 cursor-pointer text-sm border-b border-gray-50">
+                                                        <p class="font-medium text-gray-800" x-text="user.name"></p>
+                                                        <p class="text-xs text-gray-400" x-text="user.email"></p>
+                                                        <div class="flex flex-wrap gap-2 mt-0.5">
+                                                            <span x-show="user.identifier_number"
+                                                                class="text-[10px] text-purple-500 bg-purple-50 px-1.5 py-0.5 rounded"
+                                                                x-text="'ID: ' + user.identifier_number"></span>
+                                                            <span x-show="user.fakultas"
+                                                                class="text-[10px] text-teal-600 bg-teal-50 px-1.5 py-0.5 rounded"
+                                                                x-text="user.fakultas"></span>
+                                                            <span x-show="user.prodi"
+                                                                class="text-[10px] text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded"
+                                                                x-text="user.prodi"></span>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="user_id" x-model="selectedUserId">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                            Nama Lengkap <span class="text-red-500">*</span>
+                                        </label>
+                                        <input type="text" name="nama_lengkap" x-model="namaLengkap" required
+                                            class="w-full rounded-lg border-gray-300 text-sm focus:border-purple-500 focus:ring-purple-500">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                            NIM/NIP/NIK/NIDN <span class="text-red-500">*</span>
+                                        </label>
+                                        <input type="text" name="nik_nim_nip" x-model="nikNimNip" required
+                                            class="w-full rounded-lg border-gray-300 text-sm focus:border-purple-500 focus:ring-purple-500"
+                                            placeholder="Wajib diisi">
+                                    </div>
+
+                                    {{-- Auto-fill for dosen/alumni: Fakultas + Prodi --}}
+                                    <template x-if="tipeAnggota === 'dosen' || tipeAnggota === 'alumni'">
+                                        <div class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="block text-xs font-semibold text-gray-600 mb-1">Fakultas</label>
+                                                <input type="text" x-model="selectedFakultas" readonly
+                                                    class="w-full rounded-lg border-gray-300 bg-gray-50 text-sm cursor-not-allowed"
+                                                    placeholder="Otomatis dari profil">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold text-gray-600 mb-1">Program Studi</label>
+                                                <input type="text" x-model="selectedProdi" readonly
+                                                    class="w-full rounded-lg border-gray-300 bg-gray-50 text-sm cursor-not-allowed"
+                                                    placeholder="Otomatis dari profil">
+                                            </div>
+                                            <input type="hidden" name="institusi_fakultas" x-model="institusiFakultas">
+                                        </div>
+                                    </template>
+                                    {{-- Auto-fill for tendik: Unit Kerja --}}
+                                    <template x-if="tipeAnggota === 'tendik'">
+                                        <div class="sm:col-span-2">
+                                            <label class="block text-xs font-semibold text-gray-600 mb-1">Unit Kerja / Direktorat</label>
+                                            <input type="text" x-model="institusiFakultas" readonly
+                                                class="w-full rounded-lg border-gray-300 bg-gray-50 text-sm cursor-not-allowed"
+                                                placeholder="Otomatis dari profil tendik">
+                                            <input type="hidden" name="institusi_fakultas" x-model="institusiFakultas">
+                                        </div>
+                                    </template>
+                                    <template x-if="tipeAnggota !== 'dosen' && tipeAnggota !== 'tendik' && tipeAnggota !== 'alumni'">
+                                        <div>
+                                            <label
+                                                class="block text-xs font-semibold text-gray-600 mb-1">Institusi/Fakultas</label>
+                                            <input type="text" name="institusi_fakultas" x-model="institusiFakultas"
+                                                class="w-full rounded-lg border-gray-300 text-sm focus:border-purple-500 focus:ring-purple-500"
+                                                placeholder="Opsional">
+                                        </div>
+                                    </template>
+
+                                    {{-- Peran IC (Hacker / Hustler / Hipster) --}}
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                            Peran <span class="text-red-500">*</span>
+                                        </label>
+                                        <select name="peran_ic" required
+                                            class="w-full rounded-lg border-gray-300 text-sm focus:border-purple-500 focus:ring-purple-500">
+                                            <option value="">-- Pilih Peran --</option>
+                                            <option value="Hacker">Hacker</option>
+                                            <option value="Hustler">Hustler</option>
+                                            <option value="Hipster">Hipster</option>
+                                        </select>
+                                    </div>
+
+                                    {{-- Deskripsi Peran --}}
+                                    <div class="sm:col-span-2">
+                                        <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                            Deskripsi Peran <span class="text-red-500">*</span>
+                                        </label>
+                                        <textarea name="deskripsi_peran" required rows="2"
+                                            class="w-full rounded-lg border-gray-300 text-sm focus:border-purple-500 focus:ring-purple-500"
+                                            placeholder="Jelaskan peran anggota dalam tim..."></textarea>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <button type="submit"
+                                        class="inline-flex items-center px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition">
+                                        <i class="fas fa-plus mr-1.5"></i> Tambah Anggota
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -727,3 +904,69 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        function memberManager() {
+            return {
+                showForm: false,
+                tipeAnggota: '',
+                searchQuery: '',
+                searchResults: [],
+                selectedUserId: '',
+                namaLengkap: '',
+                nikNimNip: '',
+                institusiFakultas: '',
+                selectedFakultas: '',
+                selectedProdi: '',
+
+                onTipeChange() {
+                    this.searchQuery = '';
+                    this.searchResults = [];
+                    this.selectedUserId = '';
+                    this.namaLengkap = '';
+                    this.nikNimNip = '';
+                    this.institusiFakultas = '';
+                    this.selectedFakultas = '';
+                    this.selectedProdi = '';
+                },
+
+                async searchUser() {
+                    if (this.searchQuery.length < 2) {
+                        this.searchResults = [];
+                        return;
+                    }
+                    try {
+                        const res = await fetch(
+                            `{{ route('admin_inovchalenge.inovchalenge.members.search') }}?q=${encodeURIComponent(this.searchQuery)}&type=${this.tipeAnggota}`
+                        );
+                        this.searchResults = await res.json();
+                    } catch (e) {
+                        this.searchResults = [];
+                    }
+                },
+
+                selectUser(user) {
+                    this.selectedUserId = user.id;
+                    this.namaLengkap = user.name;
+                    this.nikNimNip = user.identifier_number || '';
+                    if (this.tipeAnggota === 'tendik') {
+                        this.institusiFakultas = user.institusi || '';
+                        this.selectedFakultas = '';
+                        this.selectedProdi = '';
+                    } else {
+                        this.selectedFakultas = user.fakultas || '';
+                        this.selectedProdi = user.prodi || '';
+                        let inst = user.fakultas || '';
+                        if (user.prodi) {
+                            inst = inst ? inst + ' / ' + user.prodi : user.prodi;
+                        }
+                        this.institusiFakultas = inst;
+                    }
+                    this.searchQuery = user.name + ' (' + user.email + ')';
+                    this.searchResults = [];
+                }
+            };
+        }
+    </script>
+@endpush

@@ -244,16 +244,42 @@
                                             <i class="{{ $badge['icon'] }} mr-1 text-[9px]"></i>
                                             {{ $badge['label'] }}
                                         </span>
-                                        <form method="POST"
-                                            action="{{ route('subdirektorat-inovasi.dosen.inovchalenge.members.destroy', [$submission, $member]) }}"
-                                            onsubmit="return confirm('Hapus anggota ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-400 hover:text-red-600 text-xs p-1"
-                                                title="Hapus">
-                                                <i class="fas fa-trash-alt"></i>
+
+                                        @if ($member->approval_status === 'approved')
+                                            <span class="text-gray-400 text-xs p-1" title="Hanya Admin yang dapat mengubah/menghapus anggota disetujui">
+                                                <i class="fas fa-lock"></i> Approved
+                                            </span>
+                                        @else
+                                            {{-- Edit --}}
+                                            <button type="button"
+                                                @click="startEdit({
+                                                    id: {{ $member->id }},
+                                                    tipe_anggota: '{{ $member->tipe_anggota }}',
+                                                    nama_lengkap: '{{ addslashes($member->nama_lengkap) }}',
+                                                    nik_nim_nip: '{{ $member->nik_nim_nip }}',
+                                                    institusi_fakultas: '{{ addslashes($member->institusi_fakultas) }}',
+                                                    user_id: '{{ $member->user_id }}',
+                                                    peran_ic: '{{ $member->peran_ic }}',
+                                                    deskripsi_peran: '{{ addslashes(str_replace(["\r", "\n"], ' ', $member->deskripsi_peran)) }}',
+                                                    user: {{ $member->user ? json_encode(['name' => $member->user->name, 'email' => $member->user->email]) : 'null' }}
+                                                }, '{{ route('subdirektorat-inovasi.dosen.inovchalenge.members.update', [$submission, $member]) }}')"
+                                                class="text-blue-500 hover:text-blue-700 text-xs p-1"
+                                                title="Edit">
+                                                <i class="fas fa-edit"></i>
                                             </button>
-                                        </form>
+
+                                            {{-- Delete --}}
+                                            <form method="POST"
+                                                action="{{ route('subdirektorat-inovasi.dosen.inovchalenge.members.destroy', [$submission, $member]) }}"
+                                                onsubmit="return confirm('Hapus anggota ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-400 hover:text-red-600 text-xs p-1"
+                                                    title="Hapus">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        @endif
                                     @endif
                                 </div>
                             </div>
@@ -262,24 +288,29 @@
                         @endforelse
                     </div>
 
-                    {{-- Add member form --}}
+                    {{-- Add/Edit member form --}}
                     <div class="border-t border-gray-100 pt-6">
                         @if ($currentCount >= $maxAnggota)
-                            <div
+                            <div x-show="!isEditMode"
                                 class="flex items-center gap-2 text-sm text-gray-500 bg-gray-50 rounded-xl px-4 py-3 border border-gray-200">
                                 <i class="fas fa-info-circle text-gray-400"></i>
                                 <span>Jumlah anggota sudah mencapai batas maksimal (<strong>{{ $maxAnggota }}</strong>
                                     orang).</span>
                             </div>
-                        @else
-                            <h3 class="text-sm font-bold text-gray-700 mb-4">
-                                <i class="fas fa-user-plus mr-1.5 text-indigo-500"></i>Tambah Anggota
-                                <span class="text-gray-400 font-normal text-xs ml-1">(sisa
+                        @endif
+
+                        <div x-show="isEditMode || {{ $currentCount < $maxAnggota ? 'true' : 'false' }}">
+                            <h3 class="text-sm font-bold text-gray-700 mb-4" id="member-form-section">
+                                <i class="fas mr-1.5" :class="isEditMode ? 'fa-edit text-blue-500' : 'fa-user-plus text-indigo-500'"></i>
+                                <span x-text="isEditMode ? 'Edit Anggota' : 'Tambah Anggota'"></span>
+                                <span class="text-gray-400 font-normal text-xs ml-1" x-show="!isEditMode">(sisa
                                     {{ $maxAnggota - $currentCount }} slot)</span>
                             </h3>
                             <form method="POST"
-                                action="{{ route('subdirektorat-inovasi.dosen.inovchalenge.members.store', $submission) }}">
+                                :action="isEditMode ? editActionUrl : '{{ route('subdirektorat-inovasi.dosen.inovchalenge.members.store', $submission) }}'">
                                 @csrf
+                                <input type="hidden" name="_method" :value="formMethod">
+
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-xs font-semibold text-gray-600 mb-1">
@@ -287,6 +318,7 @@
                                         </label>
                                         <select name="tipe_anggota" x-model="tipeAnggota" @change="onTipeChange()"
                                             class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                            :disabled="isEditMode"
                                             required>
                                             <option value="">-- Pilih --</option>
                                             <option value="dosen">Dosen</option>
@@ -297,26 +329,28 @@
                                             <option value="DUDI">DUDI</option>
                                             <option value="PPPK">PPPK</option>
                                         </select>
-                                        <p x-show="tipeAnggota && tipeAnggota !== 'dosen'"
+                                        <p x-show="tipeAnggota && tipeAnggota !== 'dosen' && !isEditMode"
                                             class="mt-1 text-[10px] text-amber-600">
                                             <i class="fas fa-info-circle mr-0.5"></i>
-                                            <span
-                                                x-text="tipeAnggota === 'dosen' ? '' : 'Anggota tipe ini memerlukan persetujuan (approval)'"></span>
+                                            <span>Anggota tipe ini memerlukan persetujuan (approval)</span>
                                         </p>
                                     </div>
 
                                     {{-- User search for all registered types --}}
                                     <div
-                                        x-show="['dosen','tendik','alumni','mahasiswa','peneliti','DUDI','PPPK'].includes(tipeAnggota)">
+                                        x-show="['dosen','tendik','alumni','mahasiswa','peneliti','DUDI','PPPK'].includes(tipeAnggota)"
+                                        x-cloak>
                                         <label class="block text-xs font-semibold text-gray-600 mb-1">Cari User</label>
                                         <div class="relative">
                                             <input type="text" x-model="searchQuery"
                                                 @input.debounce.300ms="searchUser()"
+                                                :disabled="isEditMode"
                                                 placeholder="Ketik nama atau email..."
                                                 class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500">
                                             {{-- Dropdown results --}}
                                             <div x-show="searchResults.length > 0"
-                                                class="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-auto">
+                                                class="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-auto"
+                                                x-cloak>
                                                 <template x-for="user in searchResults" :key="user.id">
                                                     <div @click="selectUser(user)"
                                                         class="px-3 py-2 hover:bg-indigo-50 cursor-pointer text-sm border-b border-gray-50">
@@ -400,7 +434,7 @@
                                         <label class="block text-xs font-semibold text-gray-600 mb-1">
                                             Peran <span class="text-red-500">*</span>
                                         </label>
-                                        <select name="peran_ic" required
+                                        <select name="peran_ic" x-model="peranIc" required
                                             class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500">
                                             <option value="">-- Pilih Peran --</option>
                                             <option value="Hacker">Hacker</option>
@@ -414,19 +448,25 @@
                                         <label class="block text-xs font-semibold text-gray-600 mb-1">
                                             Deskripsi Peran <span class="text-red-500">*</span>
                                         </label>
-                                        <textarea name="deskripsi_peran" required rows="2"
+                                        <textarea name="deskripsi_peran" x-model="deskripsiPeran" required rows="2"
                                             class="w-full rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
                                             placeholder="Jelaskan peran anggota dalam tim..."></textarea>
                                     </div>
                                 </div>
-                                <div class="mt-4">
+                                <div class="mt-4 flex gap-2">
                                     <button type="submit"
-                                        class="inline-flex items-center px-4 py-2 bg-indigo-500 text-white text-sm font-medium rounded-lg hover:bg-indigo-600 transition">
-                                        <i class="fas fa-plus mr-1.5"></i> Tambah Anggota
+                                        class="inline-flex items-center px-4 py-2 text-white text-sm font-semibold rounded-lg transition"
+                                        :class="isEditMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-indigo-500 hover:bg-indigo-600'">
+                                        <i class="fas mr-1.5" :class="isEditMode ? 'fa-save' : 'fa-plus'"></i>
+                                        <span x-text="isEditMode ? 'Simpan Perubahan' : 'Tambah Anggota'"></span>
+                                    </button>
+                                    <button type="button" x-show="isEditMode" @click="cancelEdit()"
+                                        class="inline-flex items-center px-4 py-2 bg-gray-250 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-250 transition border border-gray-200">
+                                        Batal
                                     </button>
                                 </div>
                             </form>
-                        @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -448,6 +488,13 @@
                 institusiFakultas: '',
                 selectedFakultas: '',
                 selectedProdi: '',
+
+                // Edit state
+                isEditMode: false,
+                formMethod: 'POST',
+                editActionUrl: '',
+                peranIc: '',
+                deskripsiPeran: '',
 
                 onTipeChange() {
                     this.searchQuery = '';
@@ -480,12 +527,10 @@
                     this.namaLengkap = user.name;
                     this.nikNimNip = user.identifier_number || '';
                     if (this.tipeAnggota === 'tendik') {
-                        // Tendik: use institusi (Unit Kerja) from profile
                         this.institusiFakultas = user.institusi || '';
                         this.selectedFakultas = '';
                         this.selectedProdi = '';
                     } else {
-                        // Dosen/Alumni: use fakultas + prodi
                         this.selectedFakultas = user.fakultas || '';
                         this.selectedProdi = user.prodi || '';
                         let inst = user.fakultas || '';
@@ -496,6 +541,42 @@
                     }
                     this.searchQuery = user.name + ' (' + user.email + ')';
                     this.searchResults = [];
+                },
+
+                startEdit(member, updateUrl) {
+                    this.isEditMode = true;
+                    this.formMethod = 'PUT';
+                    this.editActionUrl = updateUrl;
+
+                    this.tipeAnggota = member.tipe_anggota;
+                    this.namaLengkap = member.nama_lengkap;
+                    this.nikNimNip = member.nik_nim_nip;
+                    this.institusiFakultas = member.institusi_fakultas;
+                    this.selectedUserId = member.user_id || '';
+
+                    if (member.user) {
+                        this.searchQuery = member.user.name + ' (' + member.user.email + ')';
+                    } else {
+                        this.searchQuery = '';
+                    }
+
+                    this.peranIc = member.peran_ic;
+                    this.deskripsiPeran = member.deskripsi_peran;
+
+                    // Scroll to form smoothly
+                    const targetEl = document.getElementById('member-form-section');
+                    if (targetEl) {
+                        targetEl.scrollIntoView({ behavior: 'smooth' });
+                    }
+                },
+
+                cancelEdit() {
+                    this.isEditMode = false;
+                    this.formMethod = 'POST';
+                    this.editActionUrl = '';
+                    this.onTipeChange();
+                    this.peranIc = '';
+                    this.deskripsiPeran = '';
                 }
             };
         }
