@@ -17,12 +17,6 @@ class PresentingSubmissionController extends Controller
             abort(403, 'AKSES DITOLAK');
         }
 
-        $session = $report->session;
-        if (!$session || $session->computed_status !== 'Buka') {
-            return redirect()->route('subdirektorat-inovasi.dosen.presenting.manajemen')
-                ->with('error', 'Sesi sudah ditutup. Laporan akhir tidak dapat diubah.');
-        }
-
         if ($report->status !== 'disetujui') {
             return redirect()->route('subdirektorat-inovasi.dosen.presenting.manajemen')
                 ->with('error', 'Anda hanya bisa melengkapi laporan akhir setelah pengajuan disetujui.');
@@ -51,13 +45,6 @@ class PresentingSubmissionController extends Controller
                 'report_user_id' => $report->user_id
             ]);
             abort(403, 'AKSES DITOLAK');
-        }
-
-        $session = $report->session;
-        if (!$session || $session->computed_status !== 'Buka') {
-            \Illuminate\Support\Facades\Log::warning('PresentingSubmissionController::store session closed');
-            return redirect()->route('subdirektorat-inovasi.dosen.presenting.manajemen')
-                ->with('error', 'Sesi sudah ditutup. Laporan akhir tidak dapat diubah.');
         }
 
         if ($report->status !== 'disetujui') {
@@ -145,12 +132,6 @@ class PresentingSubmissionController extends Controller
     {
         if ($report->user_id !== Auth::id()) {
             abort(403, 'AKSES DITOLAK');
-        }
-
-        $session = $report->session;
-        if (!$session || $session->computed_status !== 'Buka') {
-            return redirect()->route('subdirektorat-inovasi.dosen.presenting.manajemen')
-                ->with('error', 'Sesi sudah ditutup. Laporan akhir tidak dapat diubah.');
         }
 
         if ($report->status !== 'disetujui') {

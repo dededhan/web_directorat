@@ -246,7 +246,7 @@
                                                              ">
                                                             <div class="py-1" role="menu">
                                                                 <a href="{{ route('subdirektorat-inovasi.dosen.presenting.details', $report) }}" class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"><i class='bx bx-show-alt mr-3 text-lg text-blue-500'></i>Lihat Detail</a>
-                                                                @if ($isSessionOpen && $report->status === 'disetujui')
+                                                                @if ($report->status === 'disetujui')
                                                                     <a href="{{ route('subdirektorat-inovasi.dosen.presenting.submission.form', $report) }}" class="flex items-center w-full px-4 py-3 text-sm text-teal-700 hover:bg-teal-50 transition-colors"><i class='bx bx-edit mr-3 text-lg text-teal-600'></i>Update Laporan Akhir</a>
                                                                 @elseif ($isSessionOpen && in_array($report->status, ['diajukan', 'ditolak']))
                                                                     <a href="{{ route('subdirektorat-inovasi.dosen.presenting.edit', $report) }}" class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-yellow-50 hover:text-yellow-700 transition-colors"><i class='bx bx-edit-alt mr-3 text-lg text-yellow-600'></i>Edit Laporan</a>
@@ -326,7 +326,7 @@
                                         <a href="{{ route('subdirektorat-inovasi.dosen.presenting.details', $report) }}" class="flex items-center justify-center w-full px-4 py-2 bg-teal-50 border-2 border-teal-200 rounded-xl text-sm font-medium text-teal-700 hover:bg-teal-100 hover:border-teal-300 transition-all">
                                             <i class='bx bx-show-alt mr-2'></i> Lihat Detail
                                         </a>
-                                        @if ($isSessionOpen && $report->status === 'disetujui')
+                                        @if ($report->status === 'disetujui')
                                             <a href="{{ route('subdirektorat-inovasi.dosen.presenting.submission.form', $report) }}" class="flex items-center justify-center w-full px-4 py-2 bg-indigo-50 border-2 border-indigo-200 rounded-xl text-sm font-medium text-indigo-700 hover:bg-indigo-100 hover:border-indigo-300 transition-all">
                                                 <i class='bx bx-edit mr-2'></i> Update Laporan Akhir
                                             </a>
