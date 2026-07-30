@@ -27,6 +27,7 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\SejarahContentController;
 use App\Http\Controllers\Pemeringkatan\SdgInitiativeController;
 use App\Http\Controllers\Pemeringkatan\AdminMataKuliahController;
+use App\Http\Controllers\StructureOrganizationController;
 
 //public routes
 Route::prefix('pemeringkatan')->name('pemeringkatan.')->group(function () {
@@ -39,9 +40,8 @@ Route::prefix('pemeringkatan')->name('pemeringkatan.')->group(function () {
         return view('pemeringkatan.tupoksi.index');
     })->name('tupoksi');
     
-    Route::get('/struktur-organisasi', function () {
-        return view('pemeringkatan.struktur-organisasi.index');
-    })->name('struktur-organisasi');
+    Route::get('/struktur-organisasi', [StructureOrganizationController::class, 'show'])->name('struktur-organisasi');
+    Route::get('/struktur-organisasi/api/tree', [StructureOrganizationController::class, 'getTree'])->name('struktur-organisasi.tree');
     
     Route::get('/sejarah', [SejarahContentController::class, 'showPublic'])->name('sejarah');
     
@@ -289,6 +289,20 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
         
         // Mata Kuliah Sustainability
         Route::resource('/mata-kuliah-sustainability', \App\Http\Controllers\Pemeringkatan\AdminMataKuliahController::class);
+
+        // Manajemen Struktur Organisasi
+        Route::prefix('structure-organization')->name('structure-organization.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Pemeringkatan\Admin\StructureOrganizationController::class, 'index'])->name('index');
+            Route::post('/', [\App\Http\Controllers\Pemeringkatan\Admin\StructureOrganizationController::class, 'store'])->name('store');
+            Route::get('/tree', [\App\Http\Controllers\Pemeringkatan\Admin\StructureOrganizationController::class, 'getTree'])->name('tree');
+            Route::get('/{structureOrgMember}', [\App\Http\Controllers\Pemeringkatan\Admin\StructureOrganizationController::class, 'show'])->name('show');
+            Route::put('/{structureOrgMember}', [\App\Http\Controllers\Pemeringkatan\Admin\StructureOrganizationController::class, 'update'])->name('update');
+            Route::delete('/{structureOrgMember}', [\App\Http\Controllers\Pemeringkatan\Admin\StructureOrganizationController::class, 'destroy'])->name('destroy');
+            // Geser urutan
+            Route::post('/{structureOrgMember}/move-left', [\App\Http\Controllers\Pemeringkatan\Admin\StructureOrganizationController::class, 'moveLeft'])->name('move-left');
+            Route::post('/{structureOrgMember}/move-right', [\App\Http\Controllers\Pemeringkatan\Admin\StructureOrganizationController::class, 'moveRight'])->name('move-right');
+            Route::post('/reorder', [\App\Http\Controllers\Pemeringkatan\Admin\StructureOrganizationController::class, 'reorder'])->name('reorder');
+        });
         
         // User Management - Fakultas, Prodi, Admin Pemeringkatan only
         Route::resource('/manageuser', \App\Http\Controllers\Pemeringkatan\Admin\ManageUserController::class)
@@ -328,4 +342,3 @@ Route::prefix('sulitest')->name('sulitest.')->group(function () {
         Route::get('/pengaturan-akun/get-prodi/{fakultasId}', [SulitestController::class, 'getProdiByFakultas'])->name('pengaturan-akun.get-prodi');
     });
 });
-

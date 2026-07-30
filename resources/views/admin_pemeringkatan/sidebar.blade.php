@@ -198,10 +198,6 @@
             </div>
         </div>
 
-
-      
-
-
         {{-- User Management --}}
         <a href="{{ route('admin_pemeringkatan.manageuser.index') }}" 
            class="flex items-center px-4 py-2.5 rounded-lg transition-colors duration-200 {{ request()->routeIs('admin_pemeringkatan.manageuser.*') ? 'bg-teal-600 text-white' : 'hover:bg-gray-700 hover:text-white' }}">
@@ -209,8 +205,12 @@
             <span class="ml-4">Manajemen User</span>
         </a>
 
-       
-
+        {{-- Manajemen Struktur Organisasi --}}
+        <a href="{{ route('admin_pemeringkatan.structure-organization.index') }}" 
+           class="flex items-center px-4 py-2.5 rounded-lg transition-colors duration-200 {{ request()->routeIs('admin_pemeringkatan.structure-organization.*') ? 'bg-teal-600 text-white' : 'hover:bg-gray-700 hover:text-white' }}">
+            <i class="fas fa-project-diagram fa-fw w-6 text-center"></i>
+            <span class="ml-4">Struktur Organisasi</span>
+        </a>
   
     </nav>
 
@@ -224,4 +224,3 @@
         </form>
     </div>
 </aside>
-

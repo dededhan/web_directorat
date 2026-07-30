@@ -11,7 +11,7 @@
      <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -57,16 +57,69 @@
     
 
     <script>
+        window.Alert = {
+            success(message) {
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: message,
+                    icon: 'success',
+                    timer: 3000,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
+            },
+
+            error(message) {
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: message,
+                    icon: 'error',
+                    timer: 3000,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
+            },
+
+            warning(message) {
+                Swal.fire({
+                    title: 'Peringatan!',
+                    text: message,
+                    icon: 'warning',
+                    timer: 3000,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
+            },
+
+            async confirm(title, text) {
+                return await Swal.fire({
+                    title,
+                    text,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#dc2626',
+                    cancelButtonColor: '#6b7280',
+                    reverseButtons: true
+                });
+            }
+        };
+
+        // Session Flash Message
         @if(session('success'))
-            Swal.fire({
-                title: 'Berhasil!',
-                text: '{{ session('success') }}',
-                icon: 'success',
-                timer: 3000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-end'
-            });
+            Alert.success(@json(session('success')));
+        @endif
+
+        @if(session('error'))
+            Alert.error(@json(session('error')));
+        @endif
+
+        @if(session('warning'))
+            Alert.warning(@json(session('warning')));
         @endif
     </script>
     @stack('scripts')
