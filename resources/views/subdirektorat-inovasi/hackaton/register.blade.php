@@ -90,7 +90,7 @@
 								<div><label for="password_confirmation" class="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-500">Konfirmasi <span class="text-red-400">*</span></label><div class="relative"><i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-400"></i><input :type="showConfirmation ? 'text' : 'password'" id="password_confirmation" name="password_confirmation" required class="input-field w-full rounded-xl border-2 border-gray-200 bg-gray-50/50 py-3 pl-11 pr-11 text-sm focus:border-amber-500 focus:bg-white focus:outline-none" placeholder="Ulangi password"><button type="button" @click="showConfirmation = !showConfirmation" class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400"><i class="fas" :class="showConfirmation ? 'fa-eye-slash' : 'fa-eye'"></i></button></div></div>
 							</div>
 							<button type="submit" class="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#8a4b08] via-[#d97706] to-[#f59e0b] px-6 py-3.5 text-sm font-bold tracking-wide text-white shadow-lg transition hover:brightness-105"><i class="fas fa-paper-plane"></i> Kirim Pendaftaran</button>
-							<p class="text-center text-sm text-gray-500">Sudah punya akun? <a href="#" class="login font-semibold text-amber-700 hover:underline">Masuk di sini</a></p>
+							<p class="text-center text-sm text-gray-500">Sudah punya akun? <a href="{{ route('hackaton.dashboard') }}" class="font-semibold text-amber-700 hover:underline">Masuk di sini</a></p>
 						</form>
 					</section>
 				</div>

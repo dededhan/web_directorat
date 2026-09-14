@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Hackaton\Admin\DashboardController as HackatonDashboardController;
 use App\Http\Controllers\Hackaton\Admin\RegistrationController as HackatonAdminRegistrationController;
+use App\Http\Controllers\Hackaton\ParticipantDashboardController;
 use App\Http\Controllers\Hackaton\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,10 @@ Route::prefix('hackaton/register')
 		Route::get('/', [RegistrationController::class, 'showForm'])->name('form');
 		Route::post('/', [RegistrationController::class, 'register'])->name('submit');
 	});
+
+Route::get('hackaton/dashboard', [ParticipantDashboardController::class, 'index'])
+	->middleware(['auth', 'role:hackaton_dosen,hackaton_tendik,hackaton_alumni,hackaton_peneliti,hackaton_dudi,hackaton_pppk,hackaton_mahasiswa'])
+	->name('hackaton.dashboard');
 
 Route::prefix('admin-hackaton')
 	->name('admin_hackaton.')

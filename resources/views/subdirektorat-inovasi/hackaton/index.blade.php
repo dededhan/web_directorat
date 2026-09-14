@@ -34,6 +34,7 @@
 					<p class="mx-auto mt-5 max-w-2xl text-base leading-8 text-amber-50 sm:text-lg">Ruang kolaborasi untuk mengubah ide kreatif menjadi solusi inovatif yang menjawab tantangan nyata.</p>
 					<div class="mt-8 flex flex-wrap justify-center gap-3">
 						<a href="{{ route('hackaton.register.form') }}" class="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-bold text-amber-800 shadow-lg transition hover:bg-amber-50"><i class="fas fa-user-plus"></i> Daftar Sekarang</a>
+						<a href="{{ route('hackaton.dashboard') }}" class="inline-flex items-center gap-2 rounded-xl border-2 border-white/50 bg-white/10 px-6 py-3 font-bold text-white transition hover:bg-white/20"><i class="fas fa-sign-in-alt"></i> {{ auth()->check() ? 'Buka Dashboard' : 'Masuk Peserta' }}</a>
 						<a href="#tentang" class="inline-flex items-center gap-2 rounded-xl border-2 border-white/50 bg-white/10 px-6 py-3 font-bold text-white transition hover:bg-white/20"><i class="fas fa-info-circle"></i> Pelajari Program</a>
 					</div>
 				</div>

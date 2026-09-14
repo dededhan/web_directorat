@@ -53,6 +53,13 @@ class LoginController extends Controller
                 'admin_inovasi' => 'admin_inovasi.dashboard',
                 'admin_inovchalenge' => 'admin_inovchalenge.dashboard',
                 'admin_hackaton' => 'admin_hackaton.dashboard',
+                'hackaton_dosen',
+                'hackaton_tendik',
+                'hackaton_alumni',
+                'hackaton_peneliti',
+                'hackaton_dudi',
+                'hackaton_pppk',
+                'hackaton_mahasiswa' => 'hackaton.dashboard',
                 'dosen' => 'subdirektorat-inovasi.dosen.dashboard',
                 'tendik' => 'subdirektorat-inovasi.tendik.dashboard',
                 'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.dashboard',
@@ -85,7 +92,7 @@ class LoginController extends Controller
                 }
             }
 
-            return redirect(route($next));
+            return redirect()->intended(route($next));
         }
 
         // Account exists but password is wrong

@@ -47,7 +47,9 @@ class RegistrationController extends Controller
                     'name' => $registration->name,
                     'email' => $registration->email,
                     'password' => $registration->password,
-                    'role' => $registration->role,
+                    'role' => str_starts_with($registration->role, 'hackaton_')
+                        ? $registration->role
+                        : 'hackaton_' . $registration->role,
                     'status' => 'active',
                 ]);
             }
