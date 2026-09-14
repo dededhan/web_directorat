@@ -52,6 +52,7 @@ class LoginController extends Controller
                 'admin_pemeringkatan' => 'admin_pemeringkatan.dashboard',
                 'admin_inovasi' => 'admin_inovasi.dashboard',
                 'admin_inovchalenge' => 'admin_inovchalenge.dashboard',
+                'admin_hackaton' => 'admin_hackaton.dashboard',
                 'dosen' => 'subdirektorat-inovasi.dosen.dashboard',
                 'tendik' => 'subdirektorat-inovasi.tendik.dashboard',
                 'admin_hilirisasi' => 'subdirektorat-inovasi.admin_hilirisasi.dashboard',

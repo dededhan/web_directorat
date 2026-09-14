@@ -273,4 +273,5 @@ require __DIR__ . '/admin.php';
 require __DIR__ . '/pemeringkatan.php';
 require __DIR__ . '/inovasi.php';
 require __DIR__ . '/inovchalange.php';
+require __DIR__ . '/hackaton.php';
 require __DIR__ . '/equity.php';

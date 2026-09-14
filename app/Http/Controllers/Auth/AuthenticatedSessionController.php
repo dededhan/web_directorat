@@ -53,6 +53,9 @@ class AuthenticatedSessionController extends Controller
         if ($user->role === 'admin_inovchalenge') {
             return redirect()->intended(route('admin_inovchalenge.dashboard'));
         }
+        if ($user->role === 'admin_hackaton') {
+            return redirect()->intended(route('admin_hackaton.dashboard'));
+        }
         if ($user->role === 'alumni') {
             return redirect()->intended(route('subdirektorat-inovasi.alumni.inovchalenge.invitations.index'));
         }

@@ -178,6 +178,7 @@
                             Inovasi UNJ</a></li>
                     <li><a href="{{ route('subdirektorat-inovasi.innovation_challange.index') }}">Innovation
                             Challenge</a></li>
+                        <li><a href="{{ route('hackaton.info') }}">Hackaton UNJ</a></li>
                 </ul>
             </li>
 
@@ -421,6 +422,12 @@
                             <a href="{{ route('subdirektorat-inovasi.innovation_challange.index') }}"
                                 class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 Innovation Challenge
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('hackaton.info') }}"
+                                class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                                Hackaton UNJ
                             </a>
                         </li>
                     </ul>
