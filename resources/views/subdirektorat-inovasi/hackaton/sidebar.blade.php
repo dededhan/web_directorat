@@ -16,6 +16,40 @@
             <i class="fas fa-home fa-fw w-6 text-center"></i>
             <span class="ml-4">Dashboard</span>
         </a>
+
+        @if(in_array(auth()->user()->role, ['hackaton_dosen', 'hackaton_tendik', 'dosen', 'tendik']))
+            <a href="{{ route('hackaton.sessions.index') }}"
+                class="flex items-center rounded-lg px-4 py-2.5 transition-colors duration-200 {{ request()->routeIs('hackaton.sessions.*') ? 'bg-amber-500 text-gray-900 font-semibold' : 'hover:bg-gray-800 hover:text-white' }}">
+                <i class="fas fa-calendar-alt fa-fw w-6 text-center"></i>
+                <span class="ml-4">Sesi Hackaton</span>
+            </a>
+
+            <a href="{{ route('hackaton.submissions.index') }}"
+                class="flex items-center rounded-lg px-4 py-2.5 transition-colors duration-200 {{ request()->routeIs('hackaton.submissions.*') ? 'bg-amber-500 text-gray-900 font-semibold' : 'hover:bg-gray-800 hover:text-white' }}">
+                <i class="fas fa-file-alt fa-fw w-6 text-center"></i>
+                <span class="ml-4">Proposal Saya</span>
+            </a>
+
+            <a href="{{ route('hackaton.members.team_index') }}"
+                class="flex items-center rounded-lg px-4 py-2.5 transition-colors duration-200 {{ request()->routeIs('hackaton.members.team_index') ? 'bg-amber-500 text-gray-900 font-semibold' : 'hover:bg-gray-800 hover:text-white' }}">
+                <i class="fas fa-users fa-fw w-6 text-center"></i>
+                <span class="ml-4">Proposal Tim Lain</span>
+            </a>
+        @endif
+
+        @if(in_array(auth()->user()->role, ['reviewer_hackaton', 'reviewer_inovchalenge']))
+            <a href="{{ route('hackaton.reviewer.dashboard') }}"
+                class="flex items-center rounded-lg px-4 py-2.5 transition-colors duration-200 {{ request()->routeIs('hackaton.reviewer.dashboard') ? 'bg-amber-500 text-gray-900 font-semibold' : 'hover:bg-gray-800 hover:text-white' }}">
+                <i class="fas fa-chart-pie fa-fw w-6 text-center"></i>
+                <span class="ml-4">Dashboard Reviewer</span>
+            </a>
+            <a href="{{ route('hackaton.reviewer.assignments.index') }}"
+                class="flex items-center rounded-lg px-4 py-2.5 transition-colors duration-200 {{ request()->routeIs('hackaton.reviewer.assignments.*') ? 'bg-amber-500 text-gray-900 font-semibold' : 'hover:bg-gray-800 hover:text-white' }}">
+                <i class="fas fa-clipboard-check fa-fw w-6 text-center"></i>
+                <span class="ml-4">Tugas Penilaian</span>
+            </a>
+        @endif
+
         <a href="{{ route('hackaton.info') }}"
             class="flex items-center rounded-lg px-4 py-2.5 transition-colors duration-200 {{ request()->routeIs('hackaton.info') ? 'bg-amber-500 text-gray-900 font-semibold' : 'hover:bg-gray-800 hover:text-white' }}">
             <i class="fas fa-info-circle fa-fw w-6 text-center"></i>

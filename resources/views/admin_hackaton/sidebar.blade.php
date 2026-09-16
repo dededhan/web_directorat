@@ -25,6 +25,18 @@
                 <span class="mr-3 text-[10px]">02</span>
                 <span>Pendaftaran</span>
             </a>
+
+            <a href="{{ route('admin_hackaton.sessions.index') }}"
+                class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ request()->routeIs('admin_hackaton.sessions.*', 'admin_hackaton.tahap.*') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
+                <span class="mr-3 text-[10px]">03</span>
+                <span>Sesi Hackaton</span>
+            </a>
+
+            <a href="{{ route('admin_hackaton.accounts.index') }}"
+                class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ request()->routeIs('admin_hackaton.accounts.*') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
+                <span class="mr-3 text-[10px]">04</span>
+                <span>Kelola Akun</span>
+            </a>
         </div>
     </nav>
 

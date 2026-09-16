@@ -141,6 +141,7 @@
                     <li><a href="{{ route('subdirektorat-inovasi.inkubator.ekosisteminovasi') }}">Ekosistem Inovasi
                             UNJ</a></li>
                     <li><a href="{{ route('subdirektorat-inovasi.inkubator.inovasiaward') }}">Innovator Award</a></li>
+                    <li><a href="{{ route('hackaton.info') }}">Hackaton UNJ</a></li>
                 </ul>
             </li>
 
@@ -351,6 +352,11 @@
                         <li>
                             <a href="#" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
                                 Innovator Award
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('hackaton.info') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
+                                Hackaton UNJ
                             </a>
                         </li>
                     </ul>
