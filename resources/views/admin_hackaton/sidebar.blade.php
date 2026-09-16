@@ -1,35 +1,39 @@
-<aside class="flex w-64 flex-shrink-0 flex-col bg-gray-900 text-gray-300 transition-all duration-300"
+<aside class="flex w-64 flex-shrink-0 flex-col border-r border-black bg-black text-white transition-all duration-300"
     :class="{ '-ml-64': !sidebarOpen }" x-show="sidebarOpen" x-transition:enter="transition ease-in-out duration-300"
     x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
     x-transition:leave="transition ease-in-out duration-300" x-transition:leave-start="translate-x-0"
     x-transition:leave-end="-translate-x-full" x-cloak>
 
-    <div class="flex h-16 flex-shrink-0 items-center justify-center border-b border-gray-800">
-        <i class="fas fa-lightbulb mr-3 text-2xl text-amber-400"></i>
-        <span class="text-lg font-semibold text-white">Admin Hackaton</span>
+    <div class="flex min-h-24 flex-shrink-0 items-end border-b border-white px-6 pb-5">
+        <div>
+            <p class="mb-2 text-[10px] font-bold uppercase tracking-[0.3em] text-white/60">UNJ / 2026</p>
+            <span class="editorial-serif text-2xl font-semibold">Admin<br>Hackaton</span>
+        </div>
     </div>
 
-    <nav class="flex-1 space-y-2 overflow-y-auto px-4 py-6">
-        <a href="{{ route('admin_hackaton.dashboard') }}"
-            class="flex items-center rounded-lg px-4 py-2.5 transition-colors duration-200 {{ request()->routeIs('admin_hackaton.dashboard') ? 'bg-amber-500 text-gray-900' : 'hover:bg-gray-800 hover:text-white' }}">
-            <i class="fas fa-home fa-fw w-6 text-center"></i>
-            <span class="ml-4">Dashboard</span>
-        </a>
+    <nav class="flex-1 overflow-y-auto px-4 py-8">
+        <p class="mb-3 px-2 text-[10px] font-bold uppercase tracking-[0.25em] text-white/50">Navigasi</p>
+        <div class="border-t border-white">
+            <a href="{{ route('admin_hackaton.dashboard') }}"
+                class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ request()->routeIs('admin_hackaton.dashboard') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
+                <span class="mr-3 text-[10px]">01</span>
+                <span>Dashboard</span>
+            </a>
 
-        <a href="{{ route('admin_hackaton.registrations.index') }}"
-            class="flex items-center rounded-lg px-4 py-2.5 transition-colors duration-200 {{ request()->routeIs('admin_hackaton.registrations.*') ? 'bg-amber-500 text-gray-900' : 'hover:bg-gray-800 hover:text-white' }}">
-            <i class="fas fa-user-clock fa-fw w-6 text-center"></i>
-            <span class="ml-4">Pendaftaran</span>
-        </a>
+            <a href="{{ route('admin_hackaton.registrations.index') }}"
+                class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ request()->routeIs('admin_hackaton.registrations.*') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
+                <span class="mr-3 text-[10px]">02</span>
+                <span>Pendaftaran</span>
+            </a>
+        </div>
     </nav>
 
-    <div class="flex-shrink-0 border-t border-gray-800 p-4">
+    <div class="flex-shrink-0 border-t border-white p-4">
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit"
-                class="flex w-full items-center rounded-lg px-4 py-2.5 transition-colors duration-200 hover:bg-red-600 hover:text-white">
-                <i class="fas fa-sign-out-alt fa-fw w-6 text-center"></i>
-                <span class="ml-4">Logout</span>
+            <button type="submit" class="flex w-full items-center px-2 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] transition-colors hover:bg-white hover:text-black">
+                <span class="mr-3 text-[10px]">↳</span>
+                <span>Keluar</span>
             </button>
         </form>
     </div>
