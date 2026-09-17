@@ -7,7 +7,7 @@
     <style>
         @page {
             size: A4 portrait;
-            margin: 20mm 20mm 20mm 20mm;
+            margin: 25mm 20mm 20mm 20mm;
         }
 
         body {
@@ -19,73 +19,10 @@
             padding: 0;
         }
 
-        .header-kop {
-            width: 100%;
-            border-bottom: 2px solid #000;
-            padding-bottom: 8px;
-            margin-bottom: 18px;
-        }
-
-        .kop-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .kop-table td {
-            border: none;
-            padding: 0;
-            vertical-align: middle;
-        }
-
-        .kop-logo {
-            width: 75px;
-            text-align: center;
-        }
-
-        .kop-logo img {
-            width: 70px;
-            height: auto;
-        }
-
-        .kop-text {
-            text-align: center;
-            padding-left: 10px;
-        }
-
-        .kop-text .instansi-kemdikbud {
-            font-size: 12pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #1a4d2e;
-            margin-bottom: 2px;
-        }
-
-        .kop-text .instansi-univ {
-            font-size: 14pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 2px;
-        }
-
-        .kop-text .instansi-unit {
-            font-size: 10.5pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: #222;
-            margin-bottom: 2px;
-        }
-
-        .kop-text .instansi-alamat {
-            font-size: 8.5pt;
-            color: #444;
-        }
-
         .doc-title-container {
             text-align: center;
-            margin-top: 10px;
-            margin-bottom: 20px;
+            margin-top: 0;
+            margin-bottom: 25px;
         }
 
         .doc-title {
@@ -94,16 +31,7 @@
             text-transform: uppercase;
             letter-spacing: 1.5px;
             text-decoration: underline;
-            margin: 0 0 4px 0;
-        }
-
-        .doc-subtitle {
-            font-size: 10.5pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
             margin: 0;
-            color: #333;
         }
 
         /* TABLE FORMAT */
@@ -155,23 +83,11 @@
             padding-left: 18px !important;
         }
 
-        .sub-bullet {
-            width: 16px;
-            text-align: center;
-        }
-
         /* SIGNATURES SECTION */
-        .date-container {
-            text-align: right;
-            margin-top: 15px;
-            margin-bottom: 12px;
-            font-size: 11pt;
-        }
-
         table.sig-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 5px;
+            margin-top: 20px;
         }
 
         table.sig-table td {
@@ -183,19 +99,19 @@
         }
 
         .sig-col-left {
-            width: 50%;
+            width: 58%;
             text-align: left;
             padding-right: 15px;
         }
 
         .sig-col-right {
-            width: 50%;
+            width: 42%;
             text-align: left;
-            padding-left: 25px;
+            padding-left: 15px;
         }
 
         .sig-space {
-            height: 68px;
+            height: 65px;
         }
 
         .sig-name {
@@ -211,29 +127,9 @@
 </head>
 <body>
 
-    {{-- KOP SURAT RESMI UNJ --}}
-    <div class="header-kop">
-        <table class="kop-table">
-            <tr>
-                <td class="kop-logo">
-                    @if(!empty($logoBase64))
-                        <img src="{{ $logoBase64 }}" alt="Logo UNJ">
-                    @endif
-                </td>
-                <td class="kop-text">
-                    <div class="instansi-kemdikbud">KEMENTERIAN PENDIDIKAN TINGGI, SAINS, DAN TEKNOLOGI</div>
-                    <div class="instansi-univ">UNIVERSITAS NEGERI JAKARTA</div>
-                    <div class="instansi-unit">DIREKTORAT INOVASI, SISTEM INFORMASI, DAN PEMERINGKATAN</div>
-                    <div class="instansi-alamat">Gedung Rektorat UNJ Lantai 3, Jl. Rawamangun Muka, Jakarta Timur 13220</div>
-                </td>
-            </tr>
-        </table>
-    </div>
-
     {{-- TITLE --}}
     <div class="doc-title-container">
         <h1 class="doc-title">LEMBAR PENGESAHAN</h1>
-        <p class="doc-subtitle">PROGRAM HACKATHON INOVASI UNIVERSITAS NEGERI JAKARTA</p>
     </div>
 
     {{-- TABLE CONTENT --}}
@@ -317,13 +213,14 @@
         </tbody>
     </table>
 
-    {{-- TANGGAL & TEMPAT (POSITION IN RIGHT) --}}
-    <div class="date-container">
-        {{ $tanggal_tempat ?: 'Jakarta, ' . date('d F Y') }}
-    </div>
-
-    {{-- TANDA TANGAN (MENGETAHUI LEFT, KETUA TIM RIGHT) --}}
+    {{-- TANDA TANGAN (MENGETAHUI LEFT, KETUA TIM & TANGGAL RIGHT) --}}
     <table class="sig-table">
+        <tr>
+            <td class="sig-col-left"></td>
+            <td class="sig-col-right" style="padding-bottom: 12px;">
+                {{ $tanggal_tempat ?: 'Jakarta, ' . date('d F Y') }}
+            </td>
+        </tr>
         <tr>
             <td class="sig-col-left">
                 Mengetahui,<br>
