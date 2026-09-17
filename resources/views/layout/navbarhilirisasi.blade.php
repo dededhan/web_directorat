@@ -160,8 +160,6 @@
                             UNJ</a></li>
                     <li><a class="hover:text-yellow-400"
                             href="{{ route('subdirektorat-inovasi.inkubator.inovasiaward') }}">Innovator Award</a></li>
-                    <li><a class="hover:text-yellow-400"
-                            href="{{ route('hackaton.info') }}">Hackathon UNJ</a></li>
                 </ul>
             </li>
 
@@ -199,6 +197,8 @@
             <li class="relative group">
                 <a href="{{ route('documents.public.index') }}" class="text-white hover:text-yellow-400">Dokumen</a>
             </li>
+
+            <li><a href="{{ route('hackaton.info') }}" class="text-white hover:text-yellow-400">Hackathon UNJ</a></li>
 
             <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400">SSO</a></li>
             <li><a class="login text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Masuk</a>
@@ -308,9 +308,6 @@
                     <li><a href="{{ route('subdirektorat-inovasi.inkubator.inovasiaward') }}"
                             class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Innovator
                             Award</a></li>
-                    <li><a href="{{ route('hackaton.info') }}"
-                            class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Hackathon
-                            UNJ</a></li>
                 </ul>
             </li>
 
@@ -362,6 +359,9 @@
 
             <li><a href="{{ route('documents.public.index') }}"
                     class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Dokumen</a>
+            </li>
+            <li><a href="{{ route('hackaton.info') }}"
+                    class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">Hackathon UNJ</a>
             </li>
             <li><a href="https://sso.unj.ac.id/login" target="_blank"
                     class="block text-white py-3 px-6 text-lg hover:bg-[#125a54] transition-colors duration-200">SSO</a>

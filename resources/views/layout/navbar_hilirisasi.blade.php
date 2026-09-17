@@ -141,7 +141,6 @@
                     <li><a href="{{ route('subdirektorat-inovasi.inkubator.ekosisteminovasi') }}">Ekosistem Inovasi
                             UNJ</a></li>
                     <li><a href="{{ route('subdirektorat-inovasi.inkubator.inovasiaward') }}">Innovator Award</a></li>
-                    <li><a href="{{ route('hackaton.info') }}">Hackathon UNJ</a></li>
                 </ul>
             </li>
 
@@ -179,12 +178,13 @@
                             Inovasi UNJ</a></li>
                     <li><a href="{{ route('subdirektorat-inovasi.innovation_challange.index') }}">Innovation
                             Challenge</a></li>
-                        <li><a href="{{ route('hackaton.info') }}">Hackathon UNJ</a></li>
                 </ul>
             </li>
 
             <li><a href="{{ route('documents.public.index') }}" class="text-white hover:text-yellow-400">Dokumen</a>
             </li>
+
+            <li><a href="{{ route('hackaton.info') }}" class="text-white hover:text-yellow-400">Hackathon UNJ</a></li>
 
             <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400">SSO</a></li>
 
@@ -354,11 +354,6 @@
                                 Innovator Award
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('hackaton.info') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Hackathon UNJ
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </li>
@@ -430,12 +425,6 @@
                                 Innovation Challenge
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('hackaton.info') }}"
-                                class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Hackathon UNJ
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </li>
@@ -444,6 +433,13 @@
                 <a href="{{ route('documents.public.index') }}"
                     class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
                     Dokumen
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('hackaton.info') }}"
+                    class="block text-white py-3 px-6 text-lg hover:bg-[#125a54]">
+                    Hackathon UNJ
                 </a>
             </li>
 

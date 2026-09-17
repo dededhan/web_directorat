@@ -83,6 +83,27 @@
                 position: 'top-end'
             });
         @endif
+
+        @if (session('error'))
+            Swal.fire({
+                title: 'Gagal!',
+                text: '{{ session('error') }}',
+                icon: 'error',
+                timer: 4000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end'
+            });
+        @endif
+
+        @if ($errors->any())
+            Swal.fire({
+                title: 'Perhatian!',
+                html: '{!! implode("<br>", $errors->all()) !!}',
+                icon: 'error',
+                confirmButtonColor: '#277177'
+            });
+        @endif
     </script>
 
     <!-- Bootstrap JS Bundle -->

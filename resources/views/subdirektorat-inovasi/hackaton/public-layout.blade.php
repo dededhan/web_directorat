@@ -24,7 +24,7 @@
             --hackaton-green: #047857;
             --hackaton-green-dark: #065f46;
         }
-        * { box-shadow: none !important; border-radius: 0 !important; }
+        *:not(#loginModal):not(#loginModal *) { box-shadow: none !important; border-radius: 0 !important; }
         html { scroll-behavior: smooth; }
         body { background: var(--wash); color: var(--ink); font-family: 'Inter', Helvetica, Arial, sans-serif; }
         h1, h2, h3, .editorial-serif { font-family: 'Playfair Display', Georgia, serif; }
@@ -34,6 +34,8 @@
     @stack('head')
 </head>
 <body>
+    @include('layout.loginpopup')
+
     @include('subdirektorat-inovasi.hackaton.public-navbar')
 
     <main>

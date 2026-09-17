@@ -12,6 +12,11 @@
             <a href="{{ route('hackaton.info') }}#tentang" class="text-sm font-bold text-gray-700 underline-offset-4 hover:text-gray-950 hover:underline">Tentang</a>
             <a href="{{ route('hackaton.info') }}#alur" class="text-sm font-bold text-gray-700 underline-offset-4 hover:text-gray-950 hover:underline">Alur</a>
             <a href="{{ route('hackaton.register.form') }}" class="bg-emerald-700 px-5 py-3 text-sm font-black text-white hover:bg-emerald-800">Daftar sekarang</a>
+            @if(auth()->check())
+                <a href="{{ route('hackaton.dashboard') }}" class="text-sm font-bold text-gray-700 underline-offset-4 hover:text-gray-950 hover:underline">Dashboard</a>
+            @else
+                <button type="button" class="login text-sm font-bold text-gray-700 underline-offset-4 hover:text-gray-950 hover:underline cursor-pointer">Masuk</button>
+            @endif
             <a href="{{ route('subdirektorat-inovasi.landingpage') }}" class="text-sm font-bold text-gray-700 underline-offset-4 hover:text-gray-950 hover:underline">Kembali ke Direktorat Inovasi</a>
         </div>
 
@@ -24,6 +29,11 @@
                     <a href="{{ route('hackaton.info') }}#tentang" class="border-b border-gray-300 py-2 text-sm font-bold text-gray-950">Tentang</a>
                     <a href="{{ route('hackaton.info') }}#alur" class="border-b border-gray-300 py-2 text-sm font-bold text-gray-950">Alur</a>
                     <a href="{{ route('hackaton.register.form') }}" class="bg-emerald-700 px-4 py-3 text-center text-sm font-black text-white">Daftar sekarang</a>
+                    @if(auth()->check())
+                        <a href="{{ route('hackaton.dashboard') }}" class="border-b border-gray-300 py-2 text-sm font-bold text-gray-950">Dashboard</a>
+                    @else
+                        <button type="button" class="login border-b border-gray-300 py-2 text-left text-sm font-bold text-gray-950 cursor-pointer">Masuk</button>
+                    @endif
                     <a href="{{ route('subdirektorat-inovasi.landingpage') }}" class="border-2 border-gray-950 px-4 py-3 text-center text-sm font-black text-gray-950">Kembali ke Direktorat Inovasi</a>
                 </div>
             </div>

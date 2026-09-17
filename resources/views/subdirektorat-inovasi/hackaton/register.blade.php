@@ -75,7 +75,13 @@
                         </div>
                     </div>
                     <button type="submit" class="min-h-12 w-full bg-emerald-700 px-6 py-3 text-base font-black text-white hover:bg-emerald-800">Kirim pendaftaran <span aria-hidden="true" class="ml-2">→</span></button>
-                    <p class="text-center text-base text-gray-700">Sudah punya akun? <a href="{{ route('hackaton.dashboard') }}" class="font-black text-emerald-700 underline-offset-4 hover:text-emerald-800 hover:underline">Masuk di sini</a></p>
+                    <p class="text-center text-base text-gray-700">Sudah punya akun? 
+                        @if(auth()->check())
+                            <a href="{{ route('hackaton.dashboard') }}" class="font-black text-emerald-700 underline-offset-4 hover:text-emerald-800 hover:underline">Buka dashboard</a>
+                        @else
+                            <button type="button" class="login font-black text-emerald-700 underline-offset-4 hover:text-emerald-800 hover:underline cursor-pointer bg-transparent border-0 p-0 inline">Masuk di sini</button>
+                        @endif
+                    </p>
                 </form>
             </section>
         </div>
