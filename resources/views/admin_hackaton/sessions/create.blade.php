@@ -8,7 +8,7 @@
                 <a href="{{ route('admin_hackaton.sessions.index') }}" class="hover:underline">Admin Hackaton / Sesi</a> / Buat Baru
             </p>
             <h1 class="text-3xl font-black text-gray-950 sm:text-4xl">Buat Sesi Hackaton Baru</h1>
-            <p class="mt-2 text-base text-gray-700">Sistem akan secara otomatis membuat 3 tahap (Tahap 1, 2, 3) yang dapat Anda atur form buildernya.</p>
+            <p class="mt-2 text-base text-gray-700">Tahapan evaluasi awal akan dibuat otomatis dan dapat Anda tambah, ubah, atau sesuaikan kapan saja.</p>
         </div>
 
         <form action="{{ route('admin_hackaton.sessions.store') }}" method="POST" class="border-2 border-gray-950 bg-white p-6 sm:p-8 space-y-6">
@@ -103,7 +103,7 @@
                     Batal
                 </a>
                 <button type="submit" class="bg-gray-950 px-6 py-3 text-sm font-bold uppercase tracking-wider text-white hover:bg-gray-800 transition">
-                    Simpan Sesi & Buat 3 Tahap
+                    Simpan Sesi & Lanjutkan
                 </button>
             </div>
         </form>

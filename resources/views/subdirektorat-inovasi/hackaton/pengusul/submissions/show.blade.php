@@ -73,10 +73,10 @@
             </a>
         </div>
 
-        {{-- 3 Tahap Cards --}}
+        {{-- Tahap Cards --}}
         <div class="space-y-4">
             <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-                <i class="fas fa-tasks text-amber-500"></i> Progres Pengisian & Evaluasi 3 Tahap
+                <i class="fas fa-tasks text-amber-500"></i> Progres Pengisian & Evaluasi Tahapan ({{ $submission->submissionTahap->count() }} Tahap)
             </h2>
 
             <div class="space-y-4">

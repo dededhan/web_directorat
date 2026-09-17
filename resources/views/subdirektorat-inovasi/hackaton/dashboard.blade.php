@@ -289,7 +289,7 @@
                                 </p>
                             </div>
 
-                            {{-- 3 Tahap Mini Status --}}
+                            {{-- Tahap Mini Status --}}
                             <div class="flex items-center gap-4">
                                 <div class="flex items-center gap-1.5">
                                     @foreach ($sub->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke ?? 0) as $st)

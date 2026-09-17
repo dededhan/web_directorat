@@ -97,18 +97,94 @@
             </div>
         @endif
 
-        {{-- 3 Tahap Cards & Form Builder Section --}}
-        <div class="space-y-4">
-            <div class="flex items-center justify-between border-b-2 border-gray-950 pb-3">
+        {{-- Dynamic Tahap Cards & Form Builder Section --}}
+        <div class="space-y-4" x-data="{ showAddTahap: false }">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b-2 border-gray-950 pb-3 gap-3">
                 <div>
-                    <h2 class="text-2xl font-black text-gray-950">Tahapan Evaluasi Hackaton</h2>
-                    <p class="text-sm text-gray-600">Sistem terstruktur menjadi 3 tahap evaluasi bertingkat. Atur isian form tiap tahap.</p>
+                    <h2 class="text-2xl font-black text-gray-950">Tahapan Evaluasi Hackaton ({{ $session->tahap->count() }} Tahap)</h2>
+                    <p class="text-sm text-gray-600">Sistem terstruktur dinamis bertingkat. Tambah, atur jadwal, atau sesuaikan form tiap tahap.</p>
                 </div>
+                <button type="button" @click="showAddTahap = !showAddTahap"
+                    class="bg-gray-950 hover:bg-gray-800 text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 flex items-center gap-2 self-start sm:self-auto transition">
+                    <i class="fas fa-plus"></i> Tambah Tahap Baru
+                </button>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                @foreach ($session->tahap as $tahap)
-                    <div class="border-2 border-gray-950 bg-white flex flex-col justify-between overflow-hidden">
+            {{-- Form Tambah Tahap Baru --}}
+            <div x-show="showAddTahap" x-cloak class="border-2 border-dashed border-gray-950 bg-amber-50 p-6 space-y-4">
+                <div class="flex items-center justify-between border-b border-amber-300 pb-2">
+                    <h3 class="text-sm font-black uppercase tracking-wider text-gray-950 flex items-center gap-2">
+                        <i class="fas fa-layer-group"></i> Tambah Tahap {{ $session->tahap->count() + 1 }}
+                    </h3>
+                    <button type="button" @click="showAddTahap = false" class="text-gray-500 hover:text-black">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form action="{{ route('admin_hackaton.tahap.store', $session) }}" method="POST" class="space-y-4">
+                    @csrf
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-1">
+                                Nama Tahap <span class="text-rose-600">*</span>
+                            </label>
+                            <input type="text" name="nama_tahap" required
+                                placeholder="Contoh: Tahap {{ $session->tahap->count() + 1 }} - Pitching / Presentasi"
+                                class="w-full border-2 border-gray-950 bg-white px-3 py-2 text-sm focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-1">
+                                Deskripsi / Instruksi Singkat
+                            </label>
+                            <input type="text" name="deskripsi"
+                                placeholder="Petunjuk khusus pengusul untuk tahap ini..."
+                                class="w-full border-2 border-gray-950 bg-white px-3 py-2 text-sm focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-1">
+                                Periode Mulai (Opsional)
+                            </label>
+                            <input type="datetime-local" name="periode_awal"
+                                class="w-full border-2 border-gray-950 bg-white px-3 py-2 text-sm focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-1">
+                                Periode Selesai (Opsional)
+                            </label>
+                            <input type="datetime-local" name="periode_akhir"
+                                class="w-full border-2 border-gray-950 bg-white px-3 py-2 text-sm focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+                        <div class="flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-800">
+                                <input type="checkbox" name="has_anggota" value="1" class="w-4 h-4 border-2 border-gray-950">
+                                Aktifkan Pengisian Anggota
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-800">
+                                <input type="checkbox" name="has_fakultas" value="1" class="w-4 h-4 border-2 border-gray-950">
+                                Aktifkan Pilihan Fakultas
+                            </label>
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="button" @click="showAddTahap = false" class="px-4 py-2 text-xs font-bold uppercase text-gray-700 hover:text-black">
+                                Batal
+                            </button>
+                            <button type="submit" class="bg-gray-950 text-white px-5 py-2 text-xs font-bold uppercase hover:bg-gray-800 transition">
+                                Simpan Tahap
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @forelse ($session->tahap as $tahap)
+                    <div class="border-2 border-gray-950 bg-white flex flex-col justify-between overflow-hidden shadow-sm">
                         <div>
                             {{-- Header Card --}}
                             <div class="border-b-2 border-gray-950 bg-gray-100 p-5 flex items-center justify-between">
@@ -119,7 +195,7 @@
                                     <div>
                                         <h3 class="font-black text-gray-950 text-base leading-tight">{{ $tahap->nama_tahap }}</h3>
                                         <span class="text-[10px] uppercase tracking-wider font-bold text-gray-500">
-                                            Tahap {{ $tahap->tahap_ke }} of 3
+                                            Tahap {{ $tahap->tahap_ke }} of {{ $session->tahap->count() }}
                                         </span>
                                     </div>
                                 </div>
@@ -134,7 +210,7 @@
                                     <p class="font-bold uppercase tracking-wider text-gray-500 text-[10px]">Jadwal Pelaksanaan</p>
                                     <p class="mt-1 text-gray-800 font-medium">
                                         @if ($tahap->periode_awal && $tahap->periode_akhir)
-                                            {{ $tahap->periode_awal->format('d M Y') }} — {{ $tahap->periode_akhir->format('d M Y') }}
+                                            {{ $tahap->periode_awal->format('d M Y H:i') }} — {{ $tahap->periode_akhir->format('d M Y H:i') }}
                                         @else
                                             <span class="text-gray-400 italic">Mengikuti jadwal umum sesi</span>
                                         @endif
@@ -158,15 +234,30 @@
                         </div>
 
                         {{-- Footer Actions --}}
-                        <div class="border-t-2 border-gray-950 p-4 bg-gray-50 flex items-center justify-between">
-                            <span class="text-xs text-gray-500 font-semibold">Konfigurasi Form</span>
+                        <div class="border-t-2 border-gray-950 p-4 bg-gray-50 flex items-center justify-between gap-2">
+                            <div>
+                                @if ($session->tahap->count() > 1)
+                                    <form action="{{ route('admin_hackaton.tahap.destroy', $tahap) }}" method="POST" class="inline"
+                                        onsubmit="return confirm('Hapus Tahap {{ $tahap->tahap_ke }} ({{ $tahap->nama_tahap }}) beserta seluruh form dan isian di dalamnya?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="border border-rose-400 bg-white text-rose-700 hover:bg-rose-50 text-xs font-bold px-2.5 py-2 transition" title="Hapus Tahap">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
                             <a href="{{ route('admin_hackaton.tahap.edit', $tahap) }}"
-                                class="inline-flex items-center gap-1 bg-gray-950 text-white text-xs font-bold uppercase tracking-wider px-3 py-2 hover:bg-gray-800 transition">
-                                <i class="fas fa-sliders-h text-[10px]"></i> Edit Form Builder
+                                class="inline-flex items-center gap-1.5 bg-gray-950 text-white text-xs font-bold uppercase tracking-wider px-3 py-2 hover:bg-gray-800 transition">
+                                <i class="fas fa-sliders-h text-[10px]"></i> Edit Form & Tahap
                             </a>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <div class="col-span-full border-2 border-dashed border-gray-400 p-8 text-center bg-gray-50">
+                        <p class="text-sm font-bold text-gray-500">Belum ada tahap yang dibuat untuk sesi ini.</p>
+                    </div>
+                @endforelse
             </div>
         </div>
     </div>

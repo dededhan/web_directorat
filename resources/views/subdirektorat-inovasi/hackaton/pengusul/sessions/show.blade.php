@@ -177,13 +177,13 @@
             </div>
         </div>
 
-        {{-- 3 Tahapan Overview --}}
+        {{-- Tahapan Overview --}}
         <div class="space-y-4">
             <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-                <i class="fas fa-stream text-amber-500"></i> Alur 3 Tahapan Evaluasi
+                <i class="fas fa-stream text-amber-500"></i> Alur Tahapan Evaluasi ({{ $session->tahap->count() }} Tahap)
             </h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 @foreach ($session->tahap as $thp)
                     <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm space-y-3">
                         <div class="flex items-center justify-between">

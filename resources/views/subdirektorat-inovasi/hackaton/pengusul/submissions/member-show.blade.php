@@ -78,9 +78,9 @@
             </div>
         </div>
 
-        {{-- 3 Tahap Status --}}
+        {{-- Tahap Status --}}
         <div class="space-y-4">
-            <h2 class="text-lg font-bold text-gray-900">Progres 3 Tahap Evaluasi</h2>
+            <h2 class="text-lg font-bold text-gray-900">Progres Tahapan Evaluasi</h2>
             <div class="space-y-3">
                 @foreach ($submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke ?? 0) as $st)
                     @php

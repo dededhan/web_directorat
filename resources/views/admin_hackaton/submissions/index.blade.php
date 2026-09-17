@@ -61,7 +61,7 @@
                             <th class="p-4">Ketua Tim / Pengusul</th>
                             <th class="p-4">Produk & Skema</th>
                             <th class="p-4 text-center">Anggota</th>
-                            <th class="p-4 text-center">Progress 3 Tahap</th>
+                            <th class="p-4 text-center">Progress Tahapan</th>
                             <th class="p-4 text-center">Reviewer</th>
                             <th class="p-4 text-right">Aksi</th>
                         </tr>

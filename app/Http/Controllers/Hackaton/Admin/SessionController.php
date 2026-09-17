@@ -53,7 +53,7 @@ class SessionController extends Controller
 
         return redirect()
             ->route('admin_hackaton.sessions.show', $session)
-            ->with('success', 'Sesi Hackaton berhasil dibuat dengan 3 tahap.');
+            ->with('success', 'Sesi Hackaton berhasil dibuat.');
     }
 
     public function show(HackatonSession $session)

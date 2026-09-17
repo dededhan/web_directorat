@@ -65,6 +65,17 @@
                     </div>
                 </div>
 
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                    <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-800">
+                        <input type="checkbox" name="has_anggota" value="1" {{ old('has_anggota', $tahap->has_anggota) ? 'checked' : '' }} class="w-4 h-4 border-2 border-gray-950">
+                        Aktifkan Pengisian Anggota
+                    </label>
+                    <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-800">
+                        <input type="checkbox" name="has_fakultas" value="1" {{ old('has_fakultas', $tahap->has_fakultas) ? 'checked' : '' }} class="w-4 h-4 border-2 border-gray-950">
+                        Aktifkan Pilihan Fakultas
+                    </label>
+                </div>
+
                 <div class="flex justify-end pt-2">
                     <button type="submit" class="bg-gray-950 hover:bg-gray-800 text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5">
                         Simpan Pengaturan Tahap

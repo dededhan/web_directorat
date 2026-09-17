@@ -26,10 +26,10 @@
             </div>
         </div>
 
-        {{-- Tracker 3 Tahap Horizontal --}}
+        {{-- Tracker Tahapan Horizontal --}}
         <div class="border-2 border-gray-950 bg-white p-6">
-            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">Linimasa Progres 3 Tahap</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">Linimasa Progres Tahapan</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 @foreach ($submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke ?? 0) as $st)
                     @php
                         $tk = $st->tahap->tahap_ke ?? $loop->iteration;
@@ -273,9 +273,9 @@
             </div>
         </div>
 
-        {{-- Tabs 3 Tahap Evaluasi & Penilaian --}}
+        {{-- Tabs Tahapan Evaluasi & Penilaian --}}
         <div class="space-y-4">
-            <div class="flex border-b-2 border-gray-950">
+            <div class="flex flex-wrap border-b-2 border-gray-950">
                 @foreach ($submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke ?? 0) as $st)
                     @php
                         $tk = $st->tahap->tahap_ke ?? $loop->iteration;

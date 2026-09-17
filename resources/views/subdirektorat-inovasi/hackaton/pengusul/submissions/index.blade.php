@@ -50,7 +50,7 @@
                             </div>
                         </div>
 
-                        {{-- 3 Tahap Status Pills --}}
+                        {{-- Tahap Status Pills --}}
                         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                             <div class="flex items-center gap-2">
                                 @foreach ($sub->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke ?? 0) as $st)

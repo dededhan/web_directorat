@@ -3,13 +3,57 @@
 namespace App\Http\Controllers\Hackaton\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\HackatonSession;
 use App\Models\HackatonTahap;
 use App\Models\HackatonTahapField;
 use App\Models\HackatonTahapSection;
+use App\Models\HackatonSubmissionTahap;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TahapController extends Controller
 {
+    public function store(Request $request, HackatonSession $session)
+    {
+        $validated = $request->validate([
+            'nama_tahap'    => 'required|string|max:255',
+            'deskripsi'     => 'nullable|string',
+            'periode_awal'  => 'nullable|date',
+            'periode_akhir' => 'nullable|date|after_or_equal:periode_awal',
+            'has_anggota'   => 'nullable|boolean',
+            'has_fakultas'  => 'nullable|boolean',
+        ]);
+
+        $maxTahapKe = HackatonTahap::where('hackaton_session_id', $session->id)->max('tahap_ke') ?? 0;
+        $nextTahapKe = $maxTahapKe + 1;
+
+        DB::transaction(function () use ($session, $validated, $nextTahapKe) {
+            $tahap = $session->tahap()->create([
+                'tahap_ke'      => $nextTahapKe,
+                'nama_tahap'    => $validated['nama_tahap'],
+                'deskripsi'     => $validated['deskripsi'] ?? null,
+                'periode_awal'  => $validated['periode_awal'] ?? null,
+                'periode_akhir' => $validated['periode_akhir'] ?? null,
+                'has_anggota'   => $validated['has_anggota'] ?? false,
+                'has_fakultas'  => $validated['has_fakultas'] ?? false,
+            ]);
+
+            // Sync with existing submissions in this session if any
+            $submissions = $session->submissions;
+            foreach ($submissions as $submission) {
+                HackatonSubmissionTahap::firstOrCreate([
+                    'hackaton_submission_id' => $submission->id,
+                    'hackaton_tahap_id'      => $tahap->id,
+                ], [
+                    'status'                 => 'belum_diisi',
+                    'admin_status'           => 'menunggu',
+                ]);
+            }
+        });
+
+        return back()->with('success', "Tahap {$nextTahapKe} ({$validated['nama_tahap']}) berhasil ditambahkan.");
+    }
+
     public function edit(HackatonTahap $tahap)
     {
         $tahap->load(['session', 'sections.fields', 'unsectionedFields']);
@@ -24,11 +68,50 @@ class TahapController extends Controller
             'deskripsi'     => 'nullable|string',
             'periode_awal'  => 'nullable|date',
             'periode_akhir' => 'nullable|date|after_or_equal:periode_awal',
+            'has_anggota'   => 'nullable|boolean',
+            'has_fakultas'  => 'nullable|boolean',
         ]);
+
+        $validated['has_anggota'] = $request->boolean('has_anggota');
+        $validated['has_fakultas'] = $request->boolean('has_fakultas');
 
         $tahap->update($validated);
 
         return back()->with('success', 'Tahap berhasil diperbarui.');
+    }
+
+    public function destroy(HackatonTahap $tahap)
+    {
+        $session = $tahap->session;
+
+        // Check if there are submissions submitted on this tahap
+        $hasSubmittedData = HackatonSubmissionTahap::where('hackaton_tahap_id', $tahap->id)
+            ->whereIn('status', ['draft', 'diajukan'])
+            ->exists();
+
+        if ($hasSubmittedData) {
+            return back()->with('error', 'Tahap tidak dapat dihapus karena sudah memiliki data pengajuan dari peserta.');
+        }
+
+        DB::transaction(function () use ($tahap, $session) {
+            $deletedTahapKe = $tahap->tahap_ke;
+            $sessionId = $tahap->hackaton_session_id;
+
+            $tahap->delete();
+
+            // Re-order remaining tahap_ke so there are no gaps
+            $remainingTahaps = HackatonTahap::where('hackaton_session_id', $sessionId)
+                ->orderBy('tahap_ke')
+                ->get();
+
+            foreach ($remainingTahaps as $index => $item) {
+                $item->update(['tahap_ke' => $index + 1]);
+            }
+        });
+
+        return redirect()
+            ->route('admin_hackaton.sessions.show', $session)
+            ->with('success', 'Tahap berhasil dihapus.');
     }
 
     // --- Field CRUD ---

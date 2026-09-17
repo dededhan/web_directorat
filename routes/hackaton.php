@@ -63,10 +63,14 @@ Route::prefix('admin-hackathon')
             ->name('sessions.close');
 
         // Tahap & Form Builder
+        Route::post('sessions/{session}/tahap', [HackatonAdminTahapController::class, 'store'])
+            ->name('tahap.store');
         Route::get('tahap/{tahap}/edit', [HackatonAdminTahapController::class, 'edit'])
             ->name('tahap.edit');
         Route::put('tahap/{tahap}', [HackatonAdminTahapController::class, 'update'])
             ->name('tahap.update');
+        Route::delete('tahap/{tahap}', [HackatonAdminTahapController::class, 'destroy'])
+            ->name('tahap.destroy');
 
         Route::post('tahap/{tahap}/fields', [HackatonAdminTahapController::class, 'storeField'])
             ->name('tahap.fields.store');
