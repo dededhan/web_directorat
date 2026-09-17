@@ -20,12 +20,33 @@
 @endphp
 
 <div>
-    <label for="{{ $fieldKey }}" class="block text-xs font-bold uppercase tracking-wider text-gray-800 mb-1.5">
-        {{ $field->field_label }}
-        @if ($field->is_required)
-            <span class="text-rose-600">*</span>
+    <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+        <label for="{{ $fieldKey }}" class="block text-xs font-bold uppercase tracking-wider text-gray-800">
+            {{ $field->field_label }}
+            @if ($field->is_required)
+                <span class="text-rose-600">*</span>
+            @endif
+        </label>
+
+        @if ($field->template_url || $field->template_file)
+            <div class="flex flex-wrap items-center gap-2">
+                @if ($field->template_file)
+                    <a href="{{ asset('storage/' . $field->template_file) }}" target="_blank" download
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-lg text-xs font-semibold transition">
+                        <i class="fas fa-file-download text-amber-600"></i>
+                        <span>{{ $field->template_file_name ?: 'Unduh Template' }}</span>
+                    </a>
+                @endif
+                @if ($field->template_url)
+                    <a href="{{ $field->template_url }}" target="_blank" rel="noopener noreferrer"
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 rounded-lg text-xs font-semibold transition">
+                        <i class="fas fa-external-link-alt text-[10px] text-blue-600"></i>
+                        <span>Buka Link Template</span>
+                    </a>
+                @endif
+            </div>
         @endif
-    </label>
+    </div>
 
     @switch($field->field_type)
         @case('text')

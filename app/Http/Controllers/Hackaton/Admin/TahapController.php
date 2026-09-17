@@ -10,6 +10,7 @@ use App\Models\HackatonTahapSection;
 use App\Models\HackatonSubmissionTahap;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class TahapController extends Controller
 {
@@ -127,13 +128,16 @@ class TahapController extends Controller
         }
 
         $validated = $request->validate([
-            'field_label'       => 'required|string|max:255',
-            'field_type'        => 'required|in:text,textarea,number,date,dropdown,checkbox,file,url',
-            'field_options'     => 'nullable|array',
-            'field_options.*'   => 'nullable|string|max:255',
-            'field_options_raw' => 'nullable|string',
-            'is_required'       => 'boolean',
-            'section_id'        => 'nullable|integer|exists:hackaton_tahap_sections,id',
+            'field_label'        => 'required|string|max:255',
+            'field_type'         => 'required|in:text,textarea,number,date,dropdown,checkbox,file,url',
+            'field_options'      => 'nullable|array',
+            'field_options.*'    => 'nullable|string|max:255',
+            'field_options_raw'  => 'nullable|string',
+            'template_url'       => 'nullable|string|max:1000',
+            'template_file'      => 'nullable|file|max:20480',
+            'template_file_name' => 'nullable|string|max:255',
+            'is_required'        => 'boolean',
+            'section_id'         => 'nullable|integer|exists:hackaton_tahap_sections,id',
         ]);
 
         if (!in_array($validated['field_type'], ['dropdown', 'checkbox'])) {
@@ -142,6 +146,17 @@ class TahapController extends Controller
             $validated['field_options'] = array_values(
                 array_filter($validated['field_options'] ?? [], fn($v) => $v !== null && $v !== '')
             ) ?: null;
+        }
+
+        $templateFilePath = null;
+        $templateFileName = null;
+
+        if ($request->hasFile('template_file')) {
+            $file = $request->file('template_file');
+            $templateFilePath = $file->store('hackaton/templates', 'public');
+            $templateFileName = $request->filled('template_file_name')
+                ? $request->input('template_file_name')
+                : $file->getClientOriginalName();
         }
 
         $sectionId = $validated['section_id'] ?? null;
@@ -154,6 +169,9 @@ class TahapController extends Controller
             'field_label'               => $validated['field_label'],
             'field_type'                => $validated['field_type'],
             'field_options'             => $validated['field_options'],
+            'template_url'              => $validated['template_url'] ?? null,
+            'template_file'             => $templateFilePath,
+            'template_file_name'        => $templateFileName,
             'is_required'               => $request->boolean('is_required', true),
             'urutan'                    => $maxUrutan + 1,
             'hackaton_tahap_section_id' => $sectionId,
@@ -173,12 +191,16 @@ class TahapController extends Controller
         }
 
         $validated = $request->validate([
-            'field_label'       => 'required|string|max:255',
-            'field_type'        => 'required|in:text,textarea,number,date,dropdown,checkbox,file,url',
-            'field_options'     => 'nullable|array',
-            'field_options.*'   => 'string|max:255',
-            'field_options_raw' => 'nullable|string',
-            'is_required'       => 'boolean',
+            'field_label'          => 'required|string|max:255',
+            'field_type'           => 'required|in:text,textarea,number,date,dropdown,checkbox,file,url',
+            'field_options'        => 'nullable|array',
+            'field_options.*'      => 'string|max:255',
+            'field_options_raw'    => 'nullable|string',
+            'template_url'         => 'nullable|string|max:1000',
+            'template_file'        => 'nullable|file|max:20480',
+            'template_file_name'   => 'nullable|string|max:255',
+            'remove_template_file' => 'nullable|boolean',
+            'is_required'          => 'boolean',
         ]);
 
         if (!in_array($validated['field_type'], ['dropdown', 'checkbox'])) {
@@ -191,11 +213,34 @@ class TahapController extends Controller
 
         $validated['is_required'] = $request->boolean('is_required');
 
+        $templateFilePath = $field->template_file;
+        $templateFileName = $request->filled('template_file_name') ? $request->input('template_file_name') : $field->template_file_name;
+
+        if ($request->boolean('remove_template_file')) {
+            if ($field->template_file && Storage::disk('public')->exists($field->template_file)) {
+                Storage::disk('public')->delete($field->template_file);
+            }
+            $templateFilePath = null;
+            $templateFileName = null;
+        } elseif ($request->hasFile('template_file')) {
+            if ($field->template_file && Storage::disk('public')->exists($field->template_file)) {
+                Storage::disk('public')->delete($field->template_file);
+            }
+            $file = $request->file('template_file');
+            $templateFilePath = $file->store('hackaton/templates', 'public');
+            $templateFileName = $request->filled('template_file_name')
+                ? $request->input('template_file_name')
+                : $file->getClientOriginalName();
+        }
+
         $field->update([
-            'field_label'   => $validated['field_label'],
-            'field_type'    => $validated['field_type'],
-            'field_options' => $validated['field_options'],
-            'is_required'   => $validated['is_required'],
+            'field_label'        => $validated['field_label'],
+            'field_type'         => $validated['field_type'],
+            'field_options'      => $validated['field_options'],
+            'template_url'       => $validated['template_url'] ?? null,
+            'template_file'      => $templateFilePath,
+            'template_file_name' => $templateFileName,
+            'is_required'        => $validated['is_required'],
         ]);
 
         return back()->with('success', 'Field berhasil diperbarui.');
@@ -203,6 +248,10 @@ class TahapController extends Controller
 
     public function destroyField(HackatonTahapField $field)
     {
+        if ($field->template_file && Storage::disk('public')->exists($field->template_file)) {
+            Storage::disk('public')->delete($field->template_file);
+        }
+
         $field->delete();
 
         return back()->with('success', 'Field berhasil dihapus.');

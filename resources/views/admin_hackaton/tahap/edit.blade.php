@@ -153,7 +153,7 @@
 
                     {{-- Form Tambah Field ke Seksi Ini --}}
                     <div x-show="showAddField" x-cloak class="border-b-2 border-gray-950 bg-amber-50 p-4">
-                        <form action="{{ route('admin_hackaton.tahap.fields.store', $tahap) }}" method="POST" class="space-y-3">
+                        <form action="{{ route('admin_hackaton.tahap.fields.store', $tahap) }}" method="POST" enctype="multipart/form-data" class="space-y-3">
                             @csrf
                             <input type="hidden" name="section_id" value="{{ $section->id }}">
 
@@ -185,6 +185,29 @@
                                     class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white focus:outline-none"></textarea>
                             </div>
 
+                            {{-- Link & File Template dari Admin --}}
+                            <div class="border-t border-amber-200 pt-3 space-y-3">
+                                <div class="text-[11px] font-black uppercase tracking-wider text-amber-950 flex items-center gap-1.5">
+                                    <i class="fas fa-paperclip text-amber-700"></i>
+                                    Link / File Dokumen Template (Opsional untuk Panduan Pengusul)
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-1">Link Template / Teks</label>
+                                        <input type="text" name="template_url" placeholder="https://drive.google.com/... atau tautan template"
+                                            class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white focus:outline-none">
+                                        <p class="text-[10px] text-gray-500 mt-0.5">Tautan URL atau petunjuk template untuk pengusul.</p>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-1">Unggah File Template</label>
+                                        <input type="file" name="template_file"
+                                            class="w-full border-2 border-gray-950 px-3 py-1.5 text-xs bg-white focus:outline-none">
+                                        <input type="text" name="template_file_name" placeholder="Nama/Judul Template (Opsional, cth: Template Proposal)"
+                                            class="w-full border-2 border-gray-950 px-3 py-1.5 text-xs bg-white focus:outline-none mt-1.5">
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="flex items-center justify-between pt-2">
                                 <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-800">
                                     <input type="checkbox" name="is_required" value="1" checked class="w-4 h-4 border-2 border-gray-950">
@@ -211,17 +234,27 @@
                                             <span class="text-[10px] font-semibold text-gray-500 bg-gray-50 px-1.5 py-0.5 border border-gray-200">Opsional</span>
                                         @endif
                                     </div>
-                                    <div class="flex items-center gap-3 text-xs text-gray-500">
+                                    <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
                                         <span><i class="fas fa-tag mr-1 text-[10px]"></i> Tipe: <strong>{{ strtoupper($field->field_type) }}</strong></span>
                                         @if ($field->field_options)
                                             <span>Opsi: {{ implode(', ', (array) $field->field_options) }}</span>
+                                        @endif
+                                        @if ($field->template_url)
+                                            <a href="{{ $field->template_url }}" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 hover:underline">
+                                                <i class="fas fa-link text-[10px]"></i> Link Template
+                                            </a>
+                                        @endif
+                                        @if ($field->template_file)
+                                            <a href="{{ asset('storage/' . $field->template_file) }}" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 hover:underline">
+                                                <i class="fas fa-file-download text-[10px]"></i> Template: {{ $field->template_file_name ?: basename($field->template_file) }}
+                                            </a>
                                         @endif
                                     </div>
                                 </div>
 
                                 <div class="flex items-center gap-2">
                                     <button type="button"
-                                        @click="openEditModal({{ $field->id }}, {{ json_encode($field->field_label) }}, {{ json_encode($field->field_type) }}, {{ json_encode($field->field_options ?? []) }}, {{ $field->is_required ? 'true' : 'false' }})"
+                                        @click="openEditModal({{ $field->id }}, {{ json_encode($field->field_label) }}, {{ json_encode($field->field_type) }}, {{ json_encode($field->field_options ?? []) }}, {{ $field->is_required ? 'true' : 'false' }}, {{ json_encode($field->template_url ?? '') }}, {{ json_encode($field->template_file ?? '') }}, {{ json_encode($field->template_file_name ?? '') }})"
                                         class="p-2 text-xs font-bold text-gray-700 hover:text-black border border-gray-300 bg-white" title="Edit Field">
                                         <i class="fas fa-edit"></i>
                                     </button>
@@ -257,7 +290,7 @@
                 </div>
 
                 <div x-show="showAddUnsectioned" x-cloak class="border-b-2 border-gray-950 bg-amber-50 p-4" x-data="{ addType: 'text' }">
-                    <form action="{{ route('admin_hackaton.tahap.fields.store', $tahap) }}" method="POST" class="space-y-3">
+                    <form action="{{ route('admin_hackaton.tahap.fields.store', $tahap) }}" method="POST" enctype="multipart/form-data" class="space-y-3">
                         @csrf
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                             <div class="sm:col-span-2">
@@ -287,6 +320,29 @@
                                 class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white focus:outline-none"></textarea>
                         </div>
 
+                        {{-- Link & File Template dari Admin --}}
+                        <div class="border-t border-amber-200 pt-3 space-y-3">
+                            <div class="text-[11px] font-black uppercase tracking-wider text-amber-950 flex items-center gap-1.5">
+                                <i class="fas fa-paperclip text-amber-700"></i>
+                                Link / File Dokumen Template (Opsional untuk Panduan Pengusul)
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-1">Link Template / Teks</label>
+                                    <input type="text" name="template_url" placeholder="https://drive.google.com/... atau tautan template"
+                                        class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white focus:outline-none">
+                                    <p class="text-[10px] text-gray-500 mt-0.5">Tautan URL atau petunjuk template untuk pengusul.</p>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-1">Unggah File Template</label>
+                                    <input type="file" name="template_file"
+                                        class="w-full border-2 border-gray-950 px-3 py-1.5 text-xs bg-white focus:outline-none">
+                                    <input type="text" name="template_file_name" placeholder="Nama/Judul Template (Opsional, cth: Template Pitch Deck)"
+                                        class="w-full border-2 border-gray-950 px-3 py-1.5 text-xs bg-white focus:outline-none mt-1.5">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="flex items-center justify-between pt-2">
                             <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-800">
                                 <input type="checkbox" name="is_required" value="1" checked class="w-4 h-4 border-2 border-gray-950">
@@ -312,17 +368,27 @@
                                         <span class="text-[10px] font-semibold text-gray-500 bg-gray-50 px-1.5 py-0.5 border border-gray-200">Opsional</span>
                                     @endif
                                 </div>
-                                <div class="flex items-center gap-3 text-xs text-gray-500">
+                                <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
                                     <span><i class="fas fa-tag mr-1 text-[10px]"></i> Tipe: <strong>{{ strtoupper($field->field_type) }}</strong></span>
                                     @if ($field->field_options)
                                         <span>Opsi: {{ implode(', ', (array) $field->field_options) }}</span>
+                                    @endif
+                                    @if ($field->template_url)
+                                        <a href="{{ $field->template_url }}" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 hover:underline">
+                                            <i class="fas fa-link text-[10px]"></i> Link Template
+                                        </a>
+                                    @endif
+                                    @if ($field->template_file)
+                                        <a href="{{ asset('storage/' . $field->template_file) }}" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 hover:underline">
+                                            <i class="fas fa-file-download text-[10px]"></i> Template: {{ $field->template_file_name ?: basename($field->template_file) }}
+                                        </a>
                                     @endif
                                 </div>
                             </div>
 
                             <div class="flex items-center gap-2">
                                 <button type="button"
-                                    @click="openEditModal({{ $field->id }}, {{ json_encode($field->field_label) }}, {{ json_encode($field->field_type) }}, {{ json_encode($field->field_options ?? []) }}, {{ $field->is_required ? 'true' : 'false' }})"
+                                    @click="openEditModal({{ $field->id }}, {{ json_encode($field->field_label) }}, {{ json_encode($field->field_type) }}, {{ json_encode($field->field_options ?? []) }}, {{ $field->is_required ? 'true' : 'false' }}, {{ json_encode($field->template_url ?? '') }}, {{ json_encode($field->template_file ?? '') }}, {{ json_encode($field->template_file_name ?? '') }})"
                                     class="p-2 text-xs font-bold text-gray-700 hover:text-black border border-gray-300 bg-white" title="Edit Field">
                                     <i class="fas fa-edit"></i>
                                 </button>
@@ -345,13 +411,13 @@
 
         {{-- Modal Edit Field --}}
         <div x-show="editModalOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-            <div class="w-full max-w-lg border-4 border-gray-950 bg-white p-6 space-y-4" @click.away="editModalOpen = false">
+            <div class="w-full max-w-lg border-4 border-gray-950 bg-white p-6 space-y-4 max-h-[90vh] overflow-y-auto" @click.away="editModalOpen = false">
                 <div class="flex items-center justify-between border-b-2 border-gray-950 pb-3">
                     <h3 class="font-black text-gray-950 text-base uppercase tracking-wider">Edit Field</h3>
                     <button type="button" @click="editModalOpen = false" class="text-gray-500 hover:text-black text-lg">✕</button>
                 </div>
 
-                <form :action="'{{ url('admin-hackathon/fields') }}/' + editingField.id" method="POST" class="space-y-4">
+                <form :action="'{{ url('admin-hackathon/fields') }}/' + editingField.id" method="POST" enctype="multipart/form-data" class="space-y-4">
                     @csrf
                     @method('PUT')
 
@@ -379,6 +445,40 @@
                         <label class="block text-xs font-bold uppercase tracking-wider text-gray-900">Opsi Pilihan (1 opsi per baris)</label>
                         <textarea name="field_options_raw" rows="3" x-model="editingField.field_options_raw"
                             class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white focus:outline-none"></textarea>
+                    </div>
+
+                    {{-- Template URL & File in Modal --}}
+                    <div class="border-t-2 border-gray-200 pt-3 space-y-3">
+                        <div class="text-xs font-black uppercase tracking-wider text-amber-950 flex items-center gap-1.5">
+                            <i class="fas fa-paperclip text-amber-700"></i>
+                            Link / File Dokumen Template (Opsional)
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-1">Link Template / Teks</label>
+                            <input type="text" name="template_url" x-model="editingField.template_url" placeholder="https://... atau petunjuk singkat"
+                                class="w-full border-2 border-gray-950 px-3 py-2 text-sm bg-white focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-1">File Template</label>
+                            <template x-if="editingField.template_file">
+                                <div class="mb-2 p-2 bg-gray-50 border border-gray-300 flex items-center justify-between text-xs">
+                                    <span class="text-gray-700 font-semibold flex items-center gap-1.5 truncate mr-2">
+                                        <i class="fas fa-file text-amber-600"></i>
+                                        <span x-text="editingField.template_file_name || 'File Template Saat Ini'"></span>
+                                    </span>
+                                    <label class="inline-flex items-center gap-1 text-[11px] text-rose-700 font-bold cursor-pointer shrink-0">
+                                        <input type="checkbox" name="remove_template_file" value="1" class="w-3.5 h-3.5">
+                                        Hapus File Template
+                                    </label>
+                                </div>
+                            </template>
+                            <input type="file" name="template_file"
+                                class="w-full border-2 border-gray-950 px-3 py-1.5 text-xs bg-white focus:outline-none">
+                            <input type="text" name="template_file_name" x-model="editingField.template_file_name" placeholder="Nama/Judul Template (Opsional)"
+                                class="w-full border-2 border-gray-950 px-3 py-1.5 text-xs bg-white focus:outline-none mt-1.5">
+                            <p class="text-[10px] text-gray-500 mt-0.5">Unggah file baru jika ingin mengganti file template yang ada.</p>
+                        </div>
                     </div>
 
                     <div>
@@ -409,12 +509,18 @@
                     field_type: 'text',
                     field_options_raw: '',
                     is_required: true,
+                    template_url: '',
+                    template_file: null,
+                    template_file_name: '',
                 },
-                openEditModal(id, label, type, options, isRequired) {
+                openEditModal(id, label, type, options, isRequired, templateUrl, templateFile, templateFileName) {
                     this.editingField.id = id;
                     this.editingField.field_label = label || '';
                     this.editingField.field_type = type || 'text';
                     this.editingField.is_required = Boolean(isRequired);
+                    this.editingField.template_url = templateUrl || '';
+                    this.editingField.template_file = templateFile || null;
+                    this.editingField.template_file_name = templateFileName || '';
                     if (Array.isArray(options) && options.length > 0) {
                         this.editingField.field_options_raw = options.join('\n');
                     } else {
