@@ -17,9 +17,14 @@
                 </h1>
                 <p class="mt-1 text-xs text-gray-500">Sesi: <strong>{{ $submission->session->nama_sesi }}</strong></p>
             </div>
-            <a href="{{ route('hackaton.submissions.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-xs font-semibold rounded-xl text-gray-700 hover:bg-gray-50 transition shadow-sm">
-                <i class="fas fa-arrow-left mr-1.5"></i> Kembali
-            </a>
+            <div class="flex flex-wrap items-center gap-2">
+                <a href="{{ route('hackaton.submissions.lembar_pengesahan', $submission) }}" class="inline-flex items-center px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-xs font-bold rounded-xl text-white transition shadow-sm border border-emerald-800">
+                    <i class="fas fa-file-signature mr-1.5 text-sm"></i> Lembar Pengesahan
+                </a>
+                <a href="{{ route('hackaton.submissions.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-xs font-semibold rounded-xl text-gray-700 hover:bg-gray-50 transition shadow-sm">
+                    <i class="fas fa-arrow-left mr-1.5"></i> Kembali
+                </a>
+            </div>
         </div>
 
         {{-- Tema Inovasi Terpilih --}}
@@ -70,6 +75,28 @@
 
             <a href="{{ route('hackaton.submissions.identitas', $submission) }}" class="inline-flex items-center px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white text-xs font-bold rounded-xl transition shadow">
                 <i class="fas fa-edit mr-1.5"></i> Kelola Identitas & Anggota
+            </a>
+        </div>
+
+        {{-- Lembar Pengesahan Card --}}
+        <div class="bg-white rounded-2xl border border-emerald-200 p-6 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-gradient-to-r from-emerald-50/40 via-white to-white">
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl shrink-0 border border-emerald-300">
+                    <i class="fas fa-file-signature"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-base font-bold text-gray-900">Lembar Pengesahan Proposal</h2>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">Template PDF Resmi</span>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Ketik dan sesuaikan isian Judul Inovasi, Kategori Focus Challenge, Ketua Tim, Anggota Tim, serta Pengesahan Mengetahui untuk mencetak Lembar Pengesahan ke dalam format PDF resmi.
+                    </p>
+                </div>
+            </div>
+
+            <a href="{{ route('hackaton.submissions.lembar_pengesahan', $submission) }}" class="inline-flex items-center px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition shadow shrink-0">
+                <i class="fas fa-file-signature mr-2"></i> Template Lembar Pengesahan
             </a>
         </div>
 

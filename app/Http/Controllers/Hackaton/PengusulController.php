@@ -10,9 +10,11 @@ use App\Models\HackatonSubmissionMember;
 use App\Models\HackatonSubmissionTahap;
 use App\Models\HackatonSubmissionFieldValue;
 use App\Models\HackatonStatusLog;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class PengusulController extends Controller
 {
@@ -150,13 +152,22 @@ class PengusulController extends Controller
      */
     public function showSubmission(HackatonSubmission $submission)
     {
-        abort_if($submission->user_id !== Auth::id(), 403);
+        $user = Auth::user();
+        $isOwner = $submission->user_id === $user->id;
+        $isMember = $submission->members()->where('user_id', $user->id)->exists();
+        $isAdmin = in_array($user->role ?? '', ['admin_hackaton', 'superadmin']) || ($user->hasRole('admin_hackaton') ?? false);
+        $isReviewer = $submission->reviewers()->where('users.id', $user->id)->exists();
+
+        abort_unless($isOwner || $isMember || $isAdmin || $isReviewer, 403, 'Anda tidak memiliki akses ke proposal ini.');
 
         $submission->load([
             'session',
             'submissionTahap.tahap',
-            'members.user',
+            'members.user.profile.fakultas',
+            'members.user.profile.prodi',
             'identitas',
+            'user.profile.fakultas',
+            'user.profile.prodi',
             'reviewers',
             'reviews.reviewer',
             'reviews.tahap',
@@ -166,7 +177,248 @@ class PengusulController extends Controller
 
         $hasReviewer = $submission->reviewers->isNotEmpty();
 
-        return view('subdirektorat-inovasi.hackaton.pengusul.submissions.show', compact('submission', 'hasReviewer'));
+        $ketuaMember = $submission->members->firstWhere('peran', 'Ketua');
+        $anggotaMembers = $submission->members->where('peran', '!=', 'Ketua')->values();
+
+        $defaultKetuaNama = $ketuaMember?->nama_lengkap ?? $submission->user?->name ?? '';
+        $defaultKetuaNik = $ketuaMember?->nik_nim_nip ?? $submission->user?->profile?->identifier_number ?? '';
+
+        $defaultKetuaInstansi = $ketuaMember?->institusi_fakultas;
+        if (empty($defaultKetuaInstansi) && $submission->user?->profile) {
+            $prodi = $submission->user->profile->prodi?->name;
+            $fakultas = $submission->user->profile->fakultas?->name;
+            $parts = array_filter([$prodi, $fakultas, 'Universitas Negeri Jakarta']);
+            $defaultKetuaInstansi = implode(' / ', $parts);
+        }
+        if (empty($defaultKetuaInstansi)) {
+            $defaultKetuaInstansi = 'Universitas Negeri Jakarta';
+        }
+
+        $defaultKetuaPekerjaan = $ketuaMember ? ($ketuaMember->getTipeLabel() . ' UNJ') : 'Dosen UNJ';
+        $defaultKetuaNoHp = $submission->user?->profile?->no_hp ?? '';
+        $defaultKetuaEmail = $submission->user?->email ?? '';
+
+        $defaultAnggotaList = [];
+        foreach ($anggotaMembers as $m) {
+            $roleLabel = $m->getTipeLabel() ?? 'Anggota Tim';
+            $inst = $m->institusi_fakultas ? ' / ' . $m->institusi_fakultas : ' / Dosen UNJ';
+            $defaultAnggotaList[] = $m->nama_lengkap . $inst;
+        }
+
+        $lembarPengesahanInitial = [
+            'judul_inovasi' => $submission->identitas?->nama_produk ?? ('Proposal: ' . ($submission->session?->nama_sesi ?? 'Inovasi')),
+            'kategori_focus_challenge' => $submission->tema_label ?? $submission->tema ?? ($submission->session?->nama_sesi ?? 'DeepTech Challenge'),
+            'ketua_nama' => $defaultKetuaNama,
+            'ketua_nik_nim_nip' => $defaultKetuaNik,
+            'ketua_instansi' => $defaultKetuaInstansi,
+            'ketua_pekerjaan' => $defaultKetuaPekerjaan,
+            'ketua_no_hp' => $defaultKetuaNoHp,
+            'ketua_email' => $defaultKetuaEmail,
+            'anggota_tim' => !empty($defaultAnggotaList) ? $defaultAnggotaList : [''],
+            'tanggal_tempat' => 'Jakarta, ' . \Carbon\Carbon::now()->translatedFormat('d F Y'),
+            'mengetahui_jabatan' => 'Dekan / Pimpinan Instansi',
+            'mengetahui_nama' => '',
+            'mengetahui_nip' => '',
+            'ketua_ttd_nama' => $defaultKetuaNama,
+            'ketua_ttd_nip' => $defaultKetuaNik,
+        ];
+
+        return view('subdirektorat-inovasi.hackaton.pengusul.submissions.show', compact('submission', 'hasReviewer', 'lembarPengesahanInitial'));
+    }
+
+    /**
+     * Show dedicated Lembar Pengesahan page.
+     */
+    public function showLembarPengesahan(HackatonSubmission $submission)
+    {
+        $user = Auth::user();
+        $isOwner = $submission->user_id === $user->id;
+        $isMember = $submission->members()->where('user_id', $user->id)->exists();
+        $isAdmin = in_array($user->role ?? '', ['admin_hackaton', 'superadmin']) || ($user->hasRole('admin_hackaton') ?? false);
+        $isReviewer = $submission->reviewers()->where('users.id', $user->id)->exists();
+
+        abort_unless($isOwner || $isMember || $isAdmin || $isReviewer, 403, 'Anda tidak memiliki akses ke proposal ini.');
+
+        $submission->load([
+            'session',
+            'members.user.profile.fakultas',
+            'members.user.profile.prodi',
+            'identitas',
+            'user.profile.fakultas',
+            'user.profile.prodi',
+        ]);
+
+        $ketuaMember = $submission->members->firstWhere('peran', 'Ketua');
+        $anggotaMembers = $submission->members->where('peran', '!=', 'Ketua')->values();
+
+        $defaultKetuaNama = $ketuaMember?->nama_lengkap ?? $submission->user?->name ?? '';
+        $defaultKetuaNik = $ketuaMember?->nik_nim_nip ?? $submission->user?->profile?->identifier_number ?? '';
+
+        $defaultKetuaInstansi = $ketuaMember?->institusi_fakultas;
+        if (empty($defaultKetuaInstansi) && $submission->user?->profile) {
+            $prodi = $submission->user->profile->prodi?->name;
+            $fakultas = $submission->user->profile->fakultas?->name;
+            $parts = array_filter([$prodi, $fakultas, 'Universitas Negeri Jakarta']);
+            $defaultKetuaInstansi = implode(' / ', $parts);
+        }
+        if (empty($defaultKetuaInstansi)) {
+            $defaultKetuaInstansi = 'Universitas Negeri Jakarta';
+        }
+
+        $defaultKetuaPekerjaan = $ketuaMember ? ($ketuaMember->getTipeLabel() . ' UNJ') : 'Dosen UNJ';
+        $defaultKetuaNoHp = $submission->user?->profile?->no_hp ?? '';
+        $defaultKetuaEmail = $submission->user?->email ?? '';
+
+        $defaultAnggotaList = [];
+        foreach ($anggotaMembers as $m) {
+            $roleLabel = $m->getTipeLabel() ?? 'Anggota Tim';
+            $inst = $m->institusi_fakultas ? ' / ' . $m->institusi_fakultas : ' / Dosen UNJ';
+            $defaultAnggotaList[] = $m->nama_lengkap . $inst;
+        }
+
+        $lembarInitial = [
+            'judul_inovasi' => $submission->identitas?->nama_produk ?? ('Proposal: ' . ($submission->session?->nama_sesi ?? 'Inovasi')),
+            'kategori_focus_challenge' => $submission->tema_label ?? $submission->tema ?? ($submission->session?->nama_sesi ?? 'DeepTech Challenge'),
+            'ketua_nama' => $defaultKetuaNama,
+            'ketua_nik_nim_nip' => $defaultKetuaNik,
+            'ketua_instansi' => $defaultKetuaInstansi,
+            'ketua_pekerjaan' => $defaultKetuaPekerjaan,
+            'ketua_no_hp' => $defaultKetuaNoHp,
+            'ketua_email' => $defaultKetuaEmail,
+            'anggota_tim' => !empty($defaultAnggotaList) ? $defaultAnggotaList : [''],
+            'tanggal_tempat' => 'Jakarta, ' . \Carbon\Carbon::now()->translatedFormat('d F Y'),
+            'mengetahui_jabatan' => 'Dekan / Pimpinan Instansi',
+            'mengetahui_nama' => '',
+            'mengetahui_nip' => '',
+            'ketua_ttd_nama' => $defaultKetuaNama,
+            'ketua_ttd_nip' => $defaultKetuaNik,
+        ];
+
+        return view('subdirektorat-inovasi.hackaton.pengusul.submissions.lembar_pengesahan', compact('submission', 'lembarInitial'));
+    }
+
+    /**
+     * Generate Lembar Pengesahan as PDF.
+     */
+    public function generateLembarPengesahanPdf(Request $request, HackatonSubmission $submission)
+    {
+        $user = Auth::user();
+        $isOwner = $submission->user_id === $user->id;
+        $isMember = $submission->members()->where('user_id', $user->id)->exists();
+        $isAdmin = in_array($user->role ?? '', ['admin_hackaton', 'superadmin']) || ($user->hasRole('admin_hackaton') ?? false);
+        $isReviewer = $submission->reviewers()->where('users.id', $user->id)->exists();
+
+        abort_unless($isOwner || $isMember || $isAdmin || $isReviewer, 403, 'Anda tidak memiliki akses ke dokumen submission ini.');
+
+        $submission->load([
+            'session',
+            'identitas',
+            'user.profile.fakultas',
+            'user.profile.prodi',
+            'members.user.profile.fakultas',
+            'members.user.profile.prodi',
+        ]);
+
+        $ketuaMember = $submission->members->firstWhere('peran', 'Ketua');
+        $anggotaMembers = $submission->members->where('peran', '!=', 'Ketua')->values();
+
+        // Defaults from submission if input is empty
+        $defaultJudul = $submission->identitas?->nama_produk ?? ('Proposal: ' . ($submission->session?->nama_sesi ?? 'Inovasi'));
+        $defaultKategori = $submission->tema_label ?? $submission->tema ?? ($submission->session?->nama_sesi ?? 'Focus Challenge');
+        
+        $defaultKetuaNama = $ketuaMember?->nama_lengkap ?? $submission->user?->name ?? '';
+        $defaultKetuaNik = $ketuaMember?->nik_nim_nip ?? $submission->user?->profile?->identifier_number ?? '';
+
+        $defaultKetuaInstansi = $ketuaMember?->institusi_fakultas;
+        if (empty($defaultKetuaInstansi) && $submission->user?->profile) {
+            $prodi = $submission->user->profile->prodi?->name;
+            $fakultas = $submission->user->profile->fakultas?->name;
+            $parts = array_filter([$prodi, $fakultas, 'Universitas Negeri Jakarta']);
+            $defaultKetuaInstansi = implode(' / ', $parts);
+        }
+        if (empty($defaultKetuaInstansi)) {
+            $defaultKetuaInstansi = 'Universitas Negeri Jakarta';
+        }
+
+        $defaultKetuaPekerjaan = $ketuaMember ? ($ketuaMember->getTipeLabel() . ' UNJ') : 'Dosen UNJ';
+        $defaultKetuaNoHp = $submission->user?->profile?->no_hp ?? '';
+        $defaultKetuaEmail = $submission->user?->email ?? '';
+
+        $defaultAnggotaList = [];
+        foreach ($anggotaMembers as $m) {
+            $roleLabel = $m->getTipeLabel() ?? 'Anggota Tim';
+            $inst = $m->institusi_fakultas ? ' / ' . $m->institusi_fakultas : ' / Dosen UNJ';
+            $defaultAnggotaList[] = $m->nama_lengkap . $inst;
+        }
+
+        $judul_inovasi = $request->input('judul_inovasi', $defaultJudul);
+        $kategori_focus_challenge = $request->input('kategori_focus_challenge', $defaultKategori);
+
+        $ketua_nama = $request->input('ketua_nama', $defaultKetuaNama);
+        $ketua_nik_nim_nip = $request->input('ketua_nik_nim_nip', $defaultKetuaNik);
+        $ketua_instansi = $request->input('ketua_instansi', $defaultKetuaInstansi);
+        $ketua_pekerjaan = $request->input('ketua_pekerjaan', $defaultKetuaPekerjaan);
+        $ketua_no_hp = $request->input('ketua_no_hp', $defaultKetuaNoHp);
+        $ketua_email = $request->input('ketua_email', $defaultKetuaEmail);
+
+        $rawAnggota = $request->input('anggota_tim');
+        if (is_array($rawAnggota)) {
+            $anggota_tim = array_values(array_filter(array_map('trim', $rawAnggota), fn($val) => filled($val)));
+        } else {
+            $anggota_tim = $defaultAnggotaList;
+        }
+
+        $tanggal_tempat = $request->input('tanggal_tempat', 'Jakarta, ' . \Carbon\Carbon::now()->translatedFormat('d F Y'));
+
+        $mengetahui_jabatan = $request->input('mengetahui_jabatan', 'Dekan / Pimpinan Instansi');
+        $mengetahui_nama = $request->input('mengetahui_nama', '');
+        $mengetahui_nip = $request->input('mengetahui_nip', '');
+
+        $ketua_ttd_nama = $request->input('ketua_ttd_nama', $ketua_nama);
+        $ketua_ttd_nip = $request->input('ketua_ttd_nip', $ketua_nik_nim_nip);
+
+        // Base64 Logo UNJ for PDF
+        $logoBase64 = null;
+        $logoPath = public_path('images/logos/Logo Baru UNJ.png');
+        if (!file_exists($logoPath)) {
+            $logoPath = public_path('images/logoditisip.png');
+        }
+        if (file_exists($logoPath)) {
+            $mime = mime_content_type($logoPath) ?: 'image/png';
+            $logoBase64 = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($logoPath));
+        }
+
+        $data = compact(
+            'submission',
+            'judul_inovasi',
+            'kategori_focus_challenge',
+            'ketua_nama',
+            'ketua_nik_nim_nip',
+            'ketua_instansi',
+            'ketua_pekerjaan',
+            'ketua_no_hp',
+            'ketua_email',
+            'anggota_tim',
+            'tanggal_tempat',
+            'mengetahui_jabatan',
+            'mengetahui_nama',
+            'mengetahui_nip',
+            'ketua_ttd_nama',
+            'ketua_ttd_nip',
+            'logoBase64'
+        );
+
+        $pdf = Pdf::loadView('subdirektorat-inovasi.hackaton.pengusul.submissions.lembar_pengesahan_pdf', $data);
+        $pdf->setPaper('a4', 'portrait');
+
+        $safeTitle = Str::slug($judul_inovasi ?: 'Proposal-Hackathon', '-');
+        $filename = 'Lembar-Pengesahan-' . ($safeTitle ?: 'Hackathon') . '.pdf';
+
+        if ($request->has('download') && $request->input('download') == '1') {
+            return $pdf->download($filename);
+        }
+
+        return $pdf->stream($filename);
     }
 
     /**

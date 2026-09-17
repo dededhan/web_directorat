@@ -144,7 +144,7 @@ Route::redirect('admin-hackaton', '/admin-hackathon', 301);
 Route::redirect('admin-hackaton/{any}', '/admin-hackathon/{any}', 301)->where('any', '.*');
 
 // ── Portal Terpadu Semua Role Peserta & Reviewer ────────────────────────
-$allParticipantAndReviewerRoles = 'hackaton_dosen,hackaton_tendik,hackaton_alumni,hackaton_peneliti,hackaton_dudi,hackaton_pppk,hackaton_mahasiswa,reviewer_hackaton,reviewer_inovchalenge,dosen,tendik';
+$allParticipantAndReviewerRoles = 'hackaton_dosen,hackaton_tendik,hackaton_alumni,hackaton_peneliti,hackaton_dudi,hackaton_pppk,hackaton_mahasiswa,reviewer_hackaton,reviewer_inovchalenge,dosen,tendik,admin_hackaton,superadmin';
 
 Route::prefix('hackathon')
     ->name('hackaton.')
@@ -169,8 +169,8 @@ Route::prefix('hackathon')
         Route::get('team-submissions/{submission}/tahap/{tahapId}', [ParticipantDashboardController::class, 'showTahap'])
             ->name('team.tahap');
 
-        // ── Khusus Pengusul (Dosen & Tendik) ────────────────────────────
-        Route::middleware(['role:hackaton_dosen,hackaton_tendik,dosen,tendik'])->group(function () {
+        // ── Khusus Pengusul (Dosen, Tendik & Admin) ─────────────────────
+        Route::middleware(['role:hackaton_dosen,hackaton_tendik,dosen,tendik,admin_hackaton,superadmin'])->group(function () {
             // Sessions browsing
             Route::get('sessions', [PengusulController::class, 'sessions'])
                 ->name('sessions.index');
@@ -184,6 +184,10 @@ Route::prefix('hackathon')
                 ->name('submissions.store');
             Route::get('submissions/{submission}', [PengusulController::class, 'showSubmission'])
                 ->name('submissions.show');
+            Route::get('submissions/{submission}/lembar-pengesahan', [PengusulController::class, 'showLembarPengesahan'])
+                ->name('submissions.lembar_pengesahan');
+            Route::match(['get', 'post'], 'submissions/{submission}/lembar-pengesahan/pdf', [PengusulController::class, 'generateLembarPengesahanPdf'])
+                ->name('submissions.lembar_pengesahan.pdf');
 
             // Identitas Tim (Gate step)
             Route::get('submissions/{submission}/identitas', [PengusulController::class, 'showIdentitas'])

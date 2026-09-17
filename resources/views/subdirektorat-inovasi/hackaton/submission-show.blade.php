@@ -69,10 +69,16 @@
                     </span>
                 </div>
             </div>
-            <a href="{{ route('hackaton.dashboard') }}"
-                class="mt-4 sm:mt-0 inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 font-medium text-sm rounded-xl hover:bg-gray-200 transition">
-                <i class="fas fa-arrow-left mr-2"></i> Kembali ke Dashboard
-            </a>
+            <div class="mt-4 sm:mt-0 flex items-center gap-2">
+                <a href="{{ route('hackaton.submissions.lembar_pengesahan', $submission) }}"
+                    class="inline-flex items-center px-4 py-2 bg-emerald-700 text-white font-medium text-sm rounded-xl hover:bg-emerald-800 transition shadow-sm">
+                    <i class="fas fa-file-signature mr-2"></i> Lembar Pengesahan
+                </a>
+                <a href="{{ route('hackaton.dashboard') }}"
+                    class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 font-medium text-sm rounded-xl hover:bg-gray-200 transition">
+                    <i class="fas fa-arrow-left mr-2"></i> Kembali ke Dashboard
+                </a>
+            </div>
         </div>
 
         {{-- Read-Only Notice --}}

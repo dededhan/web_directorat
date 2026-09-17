@@ -1,7 +1,17 @@
 @extends('admin_hackaton.index')
 
 @section('contentadmin_hackaton')
-    <div class="space-y-8" x-data="{ activeTahapTab: 1, showAssignReviewer: false, showAddMember: false }">
+    <script>
+        function adminSubmissionDetails() {
+            return {
+                activeTahapTab: 1,
+                showAssignReviewer: false,
+                showAddMember: false
+            };
+        }
+    </script>
+
+    <div class="space-y-8" x-data="adminSubmissionDetails()">
         {{-- Breadcrumb & Header --}}
         <div class="border-b-4 border-gray-950 pb-6 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
             <div>
@@ -20,6 +30,9 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
+                <a href="{{ route('hackaton.submissions.lembar_pengesahan', $submission) }}" class="border-2 border-emerald-800 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 transition shadow-sm inline-flex items-center">
+                    <i class="fas fa-file-signature mr-1.5"></i> Lembar Pengesahan
+                </a>
                 <a href="{{ route('admin_hackaton.submissions.index', $session) }}" class="border-2 border-gray-950 bg-white hover:bg-gray-100 text-gray-950 text-xs font-bold uppercase tracking-wider px-4 py-2.5">
                     <i class="fas fa-arrow-left mr-1"></i> Kembali ke Daftar
                 </a>
