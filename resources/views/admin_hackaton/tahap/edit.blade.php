@@ -220,7 +220,8 @@
                                 </div>
 
                                 <div class="flex items-center gap-2">
-                                    <button type="button" @click="openEditModal(@json($field))"
+                                    <button type="button"
+                                        @click="openEditModal({{ $field->id }}, {{ json_encode($field->field_label) }}, {{ json_encode($field->field_type) }}, {{ json_encode($field->field_options ?? []) }}, {{ $field->is_required ? 'true' : 'false' }})"
                                         class="p-2 text-xs font-bold text-gray-700 hover:text-black border border-gray-300 bg-white" title="Edit Field">
                                         <i class="fas fa-edit"></i>
                                     </button>
@@ -255,7 +256,7 @@
                     </button>
                 </div>
 
-                <div x-show="showAddUnsectioned" x-cloak class="border-b-2 border-gray-950 bg-amber-50 p-4">
+                <div x-show="showAddUnsectioned" x-cloak class="border-b-2 border-gray-950 bg-amber-50 p-4" x-data="{ addType: 'text' }">
                     <form action="{{ route('admin_hackaton.tahap.fields.store', $tahap) }}" method="POST" class="space-y-3">
                         @csrf
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -266,7 +267,7 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-1">Tipe Field *</label>
-                                <select name="field_type" class="w-full border-2 border-gray-950 px-3 py-2 text-sm bg-white focus:outline-none">
+                                <select name="field_type" x-model="addType" class="w-full border-2 border-gray-950 px-3 py-2 text-sm bg-white focus:outline-none">
                                     <option value="text">Text</option>
                                     <option value="textarea">Textarea</option>
                                     <option value="number">Number</option>
@@ -277,6 +278,13 @@
                                     <option value="checkbox">Checkbox</option>
                                 </select>
                             </div>
+                        </div>
+
+                        {{-- Options Builder for Dropdown / Checkbox --}}
+                        <div x-show="['dropdown', 'checkbox'].includes(addType)" class="space-y-2">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-900">Opsi Pilihan (Baris Baru)</label>
+                            <textarea name="field_options_raw" rows="3" placeholder="Masukkan 1 opsi per baris..."
+                                class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white focus:outline-none"></textarea>
                         </div>
 
                         <div class="flex items-center justify-between pt-2">
@@ -304,11 +312,17 @@
                                         <span class="text-[10px] font-semibold text-gray-500 bg-gray-50 px-1.5 py-0.5 border border-gray-200">Opsional</span>
                                     @endif
                                 </div>
-                                <p class="text-xs text-gray-500">Tipe: <strong>{{ strtoupper($field->field_type) }}</strong></p>
+                                <div class="flex items-center gap-3 text-xs text-gray-500">
+                                    <span><i class="fas fa-tag mr-1 text-[10px]"></i> Tipe: <strong>{{ strtoupper($field->field_type) }}</strong></span>
+                                    @if ($field->field_options)
+                                        <span>Opsi: {{ implode(', ', (array) $field->field_options) }}</span>
+                                    @endif
+                                </div>
                             </div>
 
                             <div class="flex items-center gap-2">
-                                <button type="button" @click="openEditModal(@json($field))"
+                                <button type="button"
+                                    @click="openEditModal({{ $field->id }}, {{ json_encode($field->field_label) }}, {{ json_encode($field->field_type) }}, {{ json_encode($field->field_options ?? []) }}, {{ $field->is_required ? 'true' : 'false' }})"
                                     class="p-2 text-xs font-bold text-gray-700 hover:text-black border border-gray-300 bg-white" title="Edit Field">
                                     <i class="fas fa-edit"></i>
                                 </button>
@@ -369,7 +383,7 @@
 
                     <div>
                         <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-800">
-                            <input type="checkbox" name="is_required" value="1" :checked="editingField.is_required" class="w-4 h-4 border-2 border-gray-950">
+                            <input type="checkbox" name="is_required" value="1" x-model="editingField.is_required" class="w-4 h-4 border-2 border-gray-950">
                             Wajib Diisi (Required)
                         </label>
                     </div>
@@ -389,11 +403,20 @@
                 showAddSection: false,
                 newFieldType: 'text',
                 editModalOpen: false,
-                editingField: {},
-                openEditModal(field) {
-                    this.editingField = Object.assign({}, field);
-                    if (field.field_options && Array.isArray(field.field_options)) {
-                        this.editingField.field_options_raw = field.field_options.join('\n');
+                editingField: {
+                    id: '',
+                    field_label: '',
+                    field_type: 'text',
+                    field_options_raw: '',
+                    is_required: true,
+                },
+                openEditModal(id, label, type, options, isRequired) {
+                    this.editingField.id = id;
+                    this.editingField.field_label = label || '';
+                    this.editingField.field_type = type || 'text';
+                    this.editingField.is_required = Boolean(isRequired);
+                    if (Array.isArray(options) && options.length > 0) {
+                        this.editingField.field_options_raw = options.join('\n');
                     } else {
                         this.editingField.field_options_raw = '';
                     }

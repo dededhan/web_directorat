@@ -118,13 +118,22 @@ class TahapController extends Controller
 
     public function storeField(Request $request, HackatonTahap $tahap)
     {
+        // If field_options_raw is provided as newline-delimited string, convert to array
+        if ($request->filled('field_options_raw') && !$request->has('field_options')) {
+            $options = preg_split('/\r\n|\r|\n/', (string) $request->input('field_options_raw'));
+            $request->merge([
+                'field_options' => array_values(array_filter(array_map('trim', $options), fn($v) => $v !== ''))
+            ]);
+        }
+
         $validated = $request->validate([
-            'field_label'     => 'required|string|max:255',
-            'field_type'      => 'required|in:text,textarea,number,date,dropdown,checkbox,file,url',
-            'field_options'   => 'nullable|array',
-            'field_options.*' => 'nullable|string|max:255',
-            'is_required'     => 'boolean',
-            'section_id'      => 'nullable|integer|exists:hackaton_tahap_sections,id',
+            'field_label'       => 'required|string|max:255',
+            'field_type'        => 'required|in:text,textarea,number,date,dropdown,checkbox,file,url',
+            'field_options'     => 'nullable|array',
+            'field_options.*'   => 'nullable|string|max:255',
+            'field_options_raw' => 'nullable|string',
+            'is_required'       => 'boolean',
+            'section_id'        => 'nullable|integer|exists:hackaton_tahap_sections,id',
         ]);
 
         if (!in_array($validated['field_type'], ['dropdown', 'checkbox'])) {
@@ -145,7 +154,7 @@ class TahapController extends Controller
             'field_label'               => $validated['field_label'],
             'field_type'                => $validated['field_type'],
             'field_options'             => $validated['field_options'],
-            'is_required'               => $validated['is_required'] ?? true,
+            'is_required'               => $request->boolean('is_required', true),
             'urutan'                    => $maxUrutan + 1,
             'hackaton_tahap_section_id' => $sectionId,
         ]);
@@ -155,12 +164,21 @@ class TahapController extends Controller
 
     public function updateField(Request $request, HackatonTahapField $field)
     {
+        // If field_options_raw is provided as newline-delimited string, convert to array
+        if ($request->has('field_options_raw') && !$request->has('field_options')) {
+            $options = preg_split('/\r\n|\r|\n/', (string) $request->input('field_options_raw'));
+            $request->merge([
+                'field_options' => array_values(array_filter(array_map('trim', $options), fn($v) => $v !== ''))
+            ]);
+        }
+
         $validated = $request->validate([
-            'field_label'     => 'required|string|max:255',
-            'field_type'      => 'required|in:text,textarea,number,date,dropdown,checkbox,file,url',
-            'field_options'   => 'nullable|array',
-            'field_options.*' => 'string|max:255',
-            'is_required'     => 'boolean',
+            'field_label'       => 'required|string|max:255',
+            'field_type'        => 'required|in:text,textarea,number,date,dropdown,checkbox,file,url',
+            'field_options'     => 'nullable|array',
+            'field_options.*'   => 'string|max:255',
+            'field_options_raw' => 'nullable|string',
+            'is_required'       => 'boolean',
         ]);
 
         if (!in_array($validated['field_type'], ['dropdown', 'checkbox'])) {
@@ -171,9 +189,14 @@ class TahapController extends Controller
             ) ?: null;
         }
 
-        $validated['is_required'] = $validated['is_required'] ?? false;
+        $validated['is_required'] = $request->boolean('is_required');
 
-        $field->update($validated);
+        $field->update([
+            'field_label'   => $validated['field_label'],
+            'field_type'    => $validated['field_type'],
+            'field_options' => $validated['field_options'],
+            'is_required'   => $validated['is_required'],
+        ]);
 
         return back()->with('success', 'Field berhasil diperbarui.');
     }
