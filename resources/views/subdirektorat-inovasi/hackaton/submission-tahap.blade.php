@@ -7,17 +7,41 @@
     <title>Detail Dokumen Tahap | Hackaton</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
-        [x-cloak] {
-            display: none !important;
+        [x-cloak] { display: none !important; }
+        :root {
+            --ink: #000000;
+            --paper: #ffffff;
+            --wash: #f4f4f2;
+            --line: #000000;
+            --muted: #666666;
+            --hackaton-green: #047857;
+            --hackaton-green-dark: #065f46;
         }
+        * { box-shadow: none !important; border-radius: 0 !important; }
+        body { background: var(--wash); color: var(--ink); font-family: 'Inter', Helvetica, Arial, sans-serif; }
+        h1, h2, h3, .editorial-serif { font-family: 'Playfair Display', Georgia, serif; }
+        a, button, input, select, textarea { font: inherit; }
+        button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+        .text-amber-300, .text-amber-400, .text-amber-500, .text-amber-600, .text-amber-700, .text-amber-800, .text-amber-900, .text-amber-950 { color: var(--hackaton-green) !important; }
+        .bg-amber-50 { background-color: #ecfdf5 !important; } .bg-amber-100 { background-color: #d1fae5 !important; } .bg-amber-200 { background-color: #a7f3d0 !important; } .bg-amber-300 { background-color: #6ee7b7 !important; } .bg-amber-400 { background-color: #34d399 !important; } .bg-amber-500 { background-color: var(--hackaton-green) !important; } .bg-amber-600 { background-color: var(--hackaton-green-dark) !important; }
+        .border-amber-200, .border-amber-300, .border-amber-400, .border-amber-500 { border-color: #6ee7b7 !important; }
+        .hover\:bg-amber-600:hover { background-color: var(--hackaton-green-dark) !important; } .hover\:bg-amber-100:hover { background-color: #d1fae5 !important; } .hover\:border-amber-300:hover { border-color: #6ee7b7 !important; }
+        .focus\:border-amber-500:focus { border-color: var(--hackaton-green) !important; } .focus\:ring-amber-500:focus { --tw-ring-color: var(--hackaton-green) !important; } .ring-amber-400 { --tw-ring-color: #34d399 !important; }
+        a.bg-amber-500, button.bg-amber-500 { background-color: var(--hackaton-green) !important; color: #fff !important; }
+        [class*="bg-gradient"][class*="from-gray-50"] { background-image: none !important; background-color: var(--wash) !important; }
+        [class*="bg-gradient"][class*="from-amber"], [class*="bg-gradient"][class*="from-orange"] { background-image: none !important; background-color: var(--hackaton-green) !important; }
+        [class*="bg-gradient"][class*="from-rose"], [class*="bg-gradient"][class*="from-red"] { background-image: none !important; background-color: #e11d48 !important; }
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+<body class="bg-[#f4f4f2] min-h-screen">
     @php
         $tahap = $submissionTahap->tahap;
         $isReadOnly = true;

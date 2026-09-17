@@ -5,24 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard Peserta | Hackaton UNJ')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        [x-cloak] { display: none !important; }
         :root {
-            --hackaton-ink: #111827;
-            --hackaton-muted: #4b5563;
-            --hackaton-paper: #ffffff;
-            --hackaton-wash: #f8f9fa;
+            --ink: #000000;
+            --paper: #ffffff;
+            --wash: #f4f4f2;
+            --line: #000000;
+            --muted: #666666;
             --hackaton-green: #047857;
             --hackaton-green-dark: #065f46;
         }
-        * { box-shadow: none !important; border-radius: 0 !important; }
-        body { background: var(--hackaton-wash); color: var(--hackaton-ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
-        a, button, input, select, textarea { font: inherit; }
-        a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--hackaton-green); outline-offset: 2px; }
+
+        [x-cloak] { display: none !important; }
+        * { border-radius: 0 !important; box-shadow: none !important; }
+        body { background: var(--wash); color: var(--ink); font-family: 'Inter', Helvetica, Arial, sans-serif; }
+        h1, h2, h3, .editorial-serif { font-family: 'Playfair Display', Georgia, serif; }
+        button, a, input, select, textarea { font-family: inherit; }
+        button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
         /* Accent remap: amber/orange -> UNJ green (single accent) */
         .text-amber-300, .text-amber-400, .text-amber-500, .text-amber-600, .text-amber-700, .text-amber-800, .text-amber-900, .text-amber-950 { color: var(--hackaton-green) !important; }
@@ -43,7 +49,7 @@
         a.bg-amber-500, button.bg-amber-500 { background-color: var(--hackaton-green) !important; color: #fff !important; }
 
         /* Light body gradients -> solid off-white */
-        [class*="bg-gradient"][class*="from-gray-50"] { background-image: none !important; background-color: var(--hackaton-wash) !important; }
+        [class*="bg-gradient"][class*="from-gray-50"] { background-image: none !important; background-color: var(--wash) !important; }
 
         /* Zero gradients: flatten decorative gradients to solid */
         [class*="bg-gradient"][class*="from-amber"],
@@ -54,15 +60,15 @@
         [class*="bg-gradient"][class*="via-gray-800"] { background-image: none !important; background-color: #111827 !important; }
     </style>
 </head>
-<body class="bg-[#f8f9fa] font-sans">
-    <div x-data="{ sidebarOpen: true }" class="flex min-h-screen bg-[#f8f9fa]">
+<body>
+    <div x-data="{ sidebarOpen: true }" class="flex min-h-screen border-t-4 border-black bg-[#f4f4f2]">
         @include('subdirektorat-inovasi.hackaton.sidebar')
 
-        <div class="flex-1 flex flex-col min-w-0">
+        <div class="flex min-w-0 flex-1 flex-col">
             @include('subdirektorat-inovasi.hackaton.navbar')
 
-            <main class="flex-1 overflow-y-auto p-6">
-                <div class="max-w-7xl mx-auto">
+            <main class="flex-1 overflow-y-auto px-5 py-8 sm:px-8 lg:px-12">
+                <div class="mx-auto max-w-7xl">
                     @yield('content_hackaton')
                 </div>
             </main>
