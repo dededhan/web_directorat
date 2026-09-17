@@ -60,6 +60,18 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="link" class="form-label">Hyperlink / URL <span class="text-muted small fw-normal">(Optional)</span></label>
+                        <input type="text" class="form-control @error('link') is-invalid @enderror" name="link"
+                            id="link" value="{{ old('link') }}" placeholder="https://example.com or /subdirektorat-inovasi/hackaton">
+                        @error('link')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <div class="form-text text-muted">Optional: When visitors click this image in the carousel/gallery, they will be redirected to this link.</div>
+                    </div>
+                </div>
+
                 <div class="mb-3 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary">Save Gallery Item</button>
                 </div>
@@ -79,6 +91,7 @@
                                 <th>No</th>
                                 <th>Category</th>
                                 <th>Image</th>
+                                <th>Hyperlink</th>
                                 <th>Added Date</th>
                                 <th>Actions</th>
                             </tr>
@@ -100,9 +113,20 @@
                                     <td>
                                         <button class="btn btn-sm btn-info view-image"
                                             data-image="{{ asset('storage/' . $gallery->image) }}"
-                                            data-title="Gallery Image">
+                                            data-title="Gallery Image"
+                                            data-link="{{ $gallery->link }}">
                                             View Image
                                         </button>
+                                    </td>
+                                    <td>
+                                        @if($gallery->link)
+                                            <a href="{{ $gallery->link }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1" title="{{ $gallery->link }}">
+                                                <i class='bx bx-link-external'></i>
+                                                <span>{{ Str::limit($gallery->link, 25) }}</span>
+                                            </a>
+                                        @else
+                                            <span class="text-muted fst-italic">-</span>
+                                        @endif
                                     </td>
                                     <td>{{ $gallery->created_at->format('Y-m-d H:i') }}</td>
                                     <td>
@@ -143,7 +167,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <img id="modalImage" src="" class="img-fluid" alt="Gallery Image">
+                    <img id="modalImage" src="" class="img-fluid rounded mb-3" alt="Gallery Image">
+                    <div id="modalLinkContainer" class="d-none mt-2 text-center">
+                        <span class="text-muted me-2 small">Hyperlink:</span>
+                        <a id="modalLink" href="" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary">
+                            <i class='bx bx-link-external me-1'></i><span id="modalLinkText">Visit Link</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -182,6 +212,14 @@
                                     <img id="current_image" src="" class="img-fluid mt-2"
                                         style="max-height: 200px;" alt="Current Image">
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="edit_link" class="form-label">Hyperlink / URL <span class="text-muted small fw-normal">(Optional)</span></label>
+                                <input type="text" class="form-control" name="link" id="edit_link"
+                                    placeholder="https://example.com or /subdirektorat-inovasi/hackaton">
+                                <div class="form-text text-muted">Optional: When visitors click this image, they will be redirected to this link.</div>
                             </div>
                         </div>
                     </form>
@@ -240,9 +278,21 @@
                 button.addEventListener('click', function() {
                     const imageUrl = this.dataset.image;
                     const title = this.dataset.title;
+                    const link = this.dataset.link;
 
                     document.getElementById('imageModalLabel').textContent = title;
                     document.getElementById('modalImage').src = imageUrl;
+
+                    const linkContainer = document.getElementById('modalLinkContainer');
+                    const linkEl = document.getElementById('modalLink');
+                    const linkText = document.getElementById('modalLinkText');
+                    if (link && link.trim() !== '') {
+                        linkEl.href = link;
+                        linkText.textContent = link;
+                        linkContainer.classList.remove('d-none');
+                    } else {
+                        linkContainer.classList.add('d-none');
+                    }
 
                     const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
                     imageModal.show();
@@ -280,6 +330,7 @@
                         .then(data => {
                             // Populate the edit form
                             document.getElementById('edit_category').value = data.category;
+                            document.getElementById('edit_link').value = data.link || '';
 
                             // Set the current image
                             const currentImage = document.getElementById('current_image');

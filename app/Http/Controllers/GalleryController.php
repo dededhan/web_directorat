@@ -44,62 +44,69 @@ class GalleryController extends Controller
     }
 
     public function store(Request $request)
-{
-    try {
-        // Validate the request
-        $request->validate([
-            'category' => 'required|in:direktorat,inovasi,pemeringkatan',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:102400',
-        ]);
+    {
+        try {
+            // Validate the request
+            $request->validate([
+                'category' => 'required|in:direktorat,inovasi,pemeringkatan',
+                'image' => 'required|image|mimes:jpeg,png,jpg|max:102400',
+                'link' => 'nullable|string|max:2048',
+            ]);
 
-        // Ensure directory exists
-        if (!Storage::disk('public')->exists('gallery-images')) {
-            Storage::disk('public')->makeDirectory('gallery-images');
-        }
+            // Ensure directory exists
+            if (!Storage::disk('public')->exists('gallery-images')) {
+                Storage::disk('public')->makeDirectory('gallery-images');
+            }
 
-        // Check if image exists and is valid
-        if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $fileName = time() . '_' . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
-            
-            // Add more detailed error handling during upload
-            try {
-                $imagePath = $request->file('image')->storeAs(
-                    'gallery-images',
-                    $fileName,
-                    'public'
-                );
+            // Check if image exists and is valid
+            if ($request->hasFile('image') && $request->file('image')->isValid()) {
+                $fileName = time() . '_' . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
                 
-                // Create the gallery record with the image path
-                Gallery::create([
-                    'category' => $request->category,
-                    'image' => $imagePath
-                ]);
+                // Add more detailed error handling during upload
+                try {
+                    $imagePath = $request->file('image')->storeAs(
+                        'gallery-images',
+                        $fileName,
+                        'public'
+                    );
+                    
+                    $link = $request->filled('link') ? trim($request->link) : null;
+                    if ($link && !preg_match('~^(?:f|ht)tps?://|^/~i', $link) && !str_starts_with($link, '#')) {
+                        $link = 'https://' . $link;
+                    }
 
-                $routePrefix = $this->getRoutePrefix();
-                return redirect()->route($routePrefix . '.gallery.index')
-                    ->with('success', 'Gallery item successfully saved!');
-            } catch (\Exception $uploadEx) {
-                \Log::error('Image upload failed: ' . $uploadEx->getMessage());
+                    // Create the gallery record with the image path and optional link
+                    Gallery::create([
+                        'category' => $request->category,
+                        'image' => $imagePath,
+                        'link' => $link,
+                    ]);
+
+                    $routePrefix = $this->getRoutePrefix();
+                    return redirect()->route($routePrefix . '.gallery.index')
+                        ->with('success', 'Gallery item successfully saved!');
+                } catch (\Exception $uploadEx) {
+                    \Log::error('Image upload failed: ' . $uploadEx->getMessage());
+                    return redirect()->back()
+                        ->with('error', 'Image upload failed: ' . $uploadEx->getMessage())
+                        ->withInput();
+                }
+            } else {
+                // Handle the case where image upload failed
+                \Log::error('Image validation failed');
                 return redirect()->back()
-                    ->with('error', 'Image upload failed: ' . $uploadEx->getMessage())
+                    ->with('error', 'Image upload failed. Please ensure the file is valid.')
                     ->withInput();
             }
-        } else {
-            // Handle the case where image upload failed
-            \Log::error('Image validation failed');
+        } catch (\Exception $e) {
+            // Log the error and return with error message
+            \Log::error('Error storing gallery item: ' . $e->getMessage());
+            \Log::error('Stack trace: ' . $e->getTraceAsString());
             return redirect()->back()
-                ->with('error', 'Image upload failed. Please ensure the file is valid.')
+                ->with('error', 'Failed to add gallery item: ' . $e->getMessage())
                 ->withInput();
         }
-    } catch (\Exception $e) {
-        // Log the error and return with error message
-        \Log::error('Error storing gallery item: ' . $e->getMessage());
-        \Log::error('Stack trace: ' . $e->getTraceAsString());
-        return redirect()->back()
-            ->with('error', 'Failed to add gallery item: ' . $e->getMessage())
-            ->withInput();
     }
-}
 
     /**
      * Get gallery item details for editing
@@ -126,10 +133,17 @@ class GalleryController extends Controller
             $validated = $request->validate([
                 'category' => 'required|in:direktorat,inovasi,pemeringkatan',
                 'image' => 'nullable|image|max:102400', // 100MB max
+                'link' => 'nullable|string|max:2048',
             ]);
 
             // Update the category
             $gallery->category = $validated['category'];
+
+            $link = $request->filled('link') ? trim($request->link) : null;
+            if ($link && !preg_match('~^(?:f|ht)tps?://|^/~i', $link) && !str_starts_with($link, '#')) {
+                $link = 'https://' . $link;
+            }
+            $gallery->link = $link;
 
             // Handle image update if a new one was uploaded
             if ($request->hasFile('image') && $request->file('image')->isValid()) {
