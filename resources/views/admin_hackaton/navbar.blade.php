@@ -6,7 +6,7 @@
         </button>
         <div class="hidden border-l border-black pl-5 sm:block">
             <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-gray-500">Panel administrasi</p>
-            <p class="mt-1 text-xs font-semibold uppercase tracking-[0.12em]">Program Hackaton UNJ</p>
+            <p class="mt-1 text-xs font-semibold uppercase tracking-[0.12em]">Program HackAthon UNJ</p>
         </div>
     </div>
 

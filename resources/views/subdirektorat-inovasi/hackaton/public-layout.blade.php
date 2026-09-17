@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Hackaton UNJ')</title>
-    <meta name="description" content="Informasi dan pendaftaran Hackaton UNJ.">
+    <title>@yield('title', 'HackAthon UNJ')</title>
+    <meta name="description" content="Informasi dan pendaftaran HackAthon UNJ.">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">

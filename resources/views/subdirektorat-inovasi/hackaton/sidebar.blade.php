@@ -7,7 +7,7 @@
     <div class="flex min-h-24 flex-shrink-0 items-end border-b border-white px-6 pb-5">
         <div>
             <p class="mb-2 text-[10px] font-bold uppercase tracking-[0.3em] text-white/60">UNJ / 2026</p>
-            <span class="editorial-serif text-2xl font-semibold">Peserta<br>Hackaton</span>
+            <span class="editorial-serif text-2xl font-semibold">Peserta<br>HackAthon</span>
         </div>
     </div>
 
@@ -24,7 +24,7 @@
                 <a href="{{ route('hackaton.sessions.index') }}"
                     class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ request()->routeIs('hackaton.sessions.*') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
                     <span class="mr-3 text-[10px]">02</span>
-                    <span>Sesi Hackaton</span>
+                    <span>Sesi HackAthon</span>
                 </a>
 
                 <a href="{{ route('hackaton.submissions.index') }}"
@@ -57,7 +57,7 @@
             <a href="{{ route('hackaton.info') }}"
                 class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ request()->routeIs('hackaton.info') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
                 <span class="mr-3 text-[10px]">↳</span>
-                <span>Informasi Hackaton</span>
+                <span>Informasi HackAthon</span>
             </a>
         </div>
     </nav>

@@ -7,7 +7,7 @@
         <div class="mb-8 flex flex-col gap-3 border-b-4 border-gray-950 pb-8 sm:flex-row sm:items-end sm:justify-between">
             <div>
                 <p class="mb-3 text-sm font-black uppercase tracking-[0.2em] text-emerald-700">Pendaftaran peserta</p>
-                <h1 class="text-4xl font-black leading-tight text-gray-950 sm:text-5xl">Buat akun Hackaton</h1>
+                <h1 class="text-4xl font-black leading-tight text-gray-950 sm:text-5xl">Buat akun HackAthon</h1>
                 <p class="mt-3 max-w-2xl text-lg leading-relaxed text-gray-700">Lengkapi data berikut. Pendaftaran akan ditinjau oleh admin sebelum akun diaktifkan.</p>
             </div>
             <a href="{{ route('hackaton.info') }}" class="text-base font-black text-emerald-700 underline-offset-4 hover:text-emerald-800 hover:underline">← Kembali ke informasi</a>
@@ -17,7 +17,7 @@
             <aside class="border-2 border-gray-950 bg-white p-6 lg:p-8">
                 <p class="text-sm font-black uppercase tracking-[0.16em] text-gray-600">Sebelum mendaftar</p>
                 <h2 class="mt-4 text-3xl font-black leading-tight text-gray-950">Mulai dari ide Anda.</h2>
-                <p class="mt-4 text-base leading-relaxed text-gray-700">Bergabung dalam ruang kolaborasi untuk membangun solusi inovatif bersama Hackaton UNJ.</p>
+                <p class="mt-4 text-base leading-relaxed text-gray-700">Bergabung dalam ruang kolaborasi untuk membangun solusi inovatif bersama HackAthon UNJ.</p>
                 <ul class="mt-8 space-y-5 text-base font-bold text-gray-950">
                     <li class="flex items-start gap-3"><span class="text-emerald-700" aria-hidden="true">01</span><span>Kolaborasi lintas bidang</span></li>
                     <li class="flex items-start gap-3"><span class="text-emerald-700" aria-hidden="true">02</span><span>Kembangkan solusi berdampak</span></li>

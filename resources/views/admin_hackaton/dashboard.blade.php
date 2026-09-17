@@ -3,9 +3,9 @@
 @section('contentadmin_hackaton')
     <div class="space-y-8">
         <section class="border-b-4 border-gray-950 pb-8">
-            <p class="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-gray-600">Admin Hackaton / Ringkasan</p>
+            <p class="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-gray-600">Admin HackAthon / Ringkasan</p>
             <h1 class="max-w-4xl text-4xl font-black leading-tight tracking-tight text-gray-950 sm:text-5xl">
-                Dashboard pendaftaran Hackaton
+                Dashboard pendaftaran HackAthon
             </h1>
             <p class="mt-4 max-w-2xl text-lg leading-relaxed text-gray-700">
                 Pantau peserta yang masuk dan lanjutkan proses verifikasi dari satu tempat.
